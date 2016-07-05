@@ -10,13 +10,13 @@ FactoryGirl.define do
 
     factory :professor do
       transient do
-        course nil
+        course_object Course.first
       end
 
-      after :create do |professor, factory|
+      after :create do |professor, evaluator|
         FactoryGirl.create :course_membership,
           user: professor,
-          course: factory.course,
+          course: evaluator.course_object,
           role: "professor"
       end
     end

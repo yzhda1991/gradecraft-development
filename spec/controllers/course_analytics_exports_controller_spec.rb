@@ -1,9 +1,10 @@
 require "rails_spec_helper"
+require "./app/presenters/course_analytics_exports/base"
 
 RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
   let(:course) { create(:course) }
-  let(:professor) { create(:professor, course: course) }
+  let(:professor) { create(:professor, course_object: course) }
 
   let(:course_analytics_export) do
     create(:course_analytics_export, course: course)
@@ -13,14 +14,17 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
     create_list(:course_analytics_export, 2, course: course)
   end
 
-  let(:presenter_class) { Presenters::CourseAnalyticsExports::Base }
+  let(:presenter) do
+    controller.instance_eval { presenter }
+  end
+
+  let(:presenter_class) { ::Presenters::CourseAnalyticsExports::Base }
 
   before do
     login_user professor
     allow(controller).to receive_messages \
       current_course: course,
-      current_user: professor,
-      presenter: presenter
+      current_user: professor
   end
 
   describe "POST #create" do
@@ -28,6 +32,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
     context "the presenter successfully creates and enqueues the export" do
       it "sets the job success flash message" do
+        allow(presenter).to receive(:create_and_enqueue_export) { true }
         subject
         expect(flash[:success]).to match(/Your course analytics export is being prepared/)
       end
@@ -35,12 +40,14 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
     context "the presenter failes to create and enqueue the export" do
       it "sets the job failure flash message" do
+        allow(presenter).to receive(:create_and_enqueue_export) { false }
         subject
         expect(flash[:alert]).to match(/Your course analytics export failed to build/)
       end
     end
 
     it "redirects to the assignment page for the given assignment" do
+      allow(presenter).to receive(:create_and_enqueue_export) { true }
       subject
       expect(response).to redirect_to(assignment_path(assignment))
     end
@@ -75,7 +82,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
     let(:result) { get :download, id: course_analytics_export.id }
 
     before do
-      allow(controller.presenter).to receive_messages \
+      allow(presenter).to receive_messages \
         stream_export: "some data", filename: "some_filename.txt"
     end
 
@@ -87,17 +94,27 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
   end
 
   describe "secure downloads" do
+    let(:secure_token) { create(:secure_token, target: course_analytics_export) }
+
+    let(:secure_download_params) do
+      {
+        secure_token_uuid: secure_token.uuid,
+        secret_key: secure_token.random_secret_key,
+        id: course_analytics_export.id
+      }
+    end
+
     describe "GET #secure_download" do
       let(:result) { get :secure_download, secure_download_params }
 
       before do
-        allow(controller.presenter).to receive_messages \
+        allow(presenter).to receive_messages \
           stream_export: "some data", filename: "some_filename.txt"
       end
 
       context "the secure download authenticates" do
         before do
-          allow(controller.presenter)
+          allow(presenter)
             .to receive(:secure_download_authenticates?) { true }
         end
 
@@ -110,13 +127,13 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
       context "the secure download doesn't authenticate" do
         before do
-          allow(controller.presenter)
+          allow(presenter)
             .to receive(:secure_download_authenticates?) { false }
         end
 
         context "the request was for a valid token that has expired" do
           it "alerts the user that their token has expired" do
-            allow(controller.presenter).to receive(:secure_token_expired?) { true }
+            allow(presenter).to receive(:secure_token_expired?) { true }
             result
             expect(flash[:alert]).to match /email link.*expired/
           end
@@ -124,7 +141,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
         context "the request completely failed to authenticate" do
           it "alerts the user that their request was invalid" do
-            allow(controller.presenter).to receive(:secure_token_expired?) { false }
+            allow(presenter).to receive(:secure_token_expired?) { false }
             result
             expect(flash[:alert]).to match /does not exist/
           end
@@ -139,16 +156,6 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
       describe "skipped filters" do
         let(:result) { get :secure_download, secure_download_params }
-
-        let(:secure_token) { create(:secure_token, target: course_analytics_export) }
-
-        let(:secure_download_params) do
-          {
-            secure_token_uuid: secure_token.uuid,
-            secret_key: secure_token.random_secret_key,
-            id: course_analytics_export.id
-          }
-        end
 
         it "doesn't require login" do
           expect(controller).not_to receive(:require_login)
