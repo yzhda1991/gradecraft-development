@@ -13,10 +13,10 @@ FactoryGirl.define do
         course nil
       end
 
-      course_membership do
-        CourseMembership.find_or_create_by \
-          user: self,
-          course: course,
+      after :create do |professor, factory|
+        FactoryGirl.create :course_membership,
+          user: professor,
+          course: factory.course,
           role: "professor"
       end
     end
