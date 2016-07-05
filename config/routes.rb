@@ -349,5 +349,14 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  resources :course_analytics_exports, only: [:create, :destroy] do
+    member do
+      get :download
+      get '/secure_download/:secure_token_uuid/secret_key/:secret_key',
+        action: "secure_download", as: "secure_download"
+    end
+  end
+
+  # root, bro
   root to: "pages#home"
 end
