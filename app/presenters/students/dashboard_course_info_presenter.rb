@@ -12,6 +12,10 @@ class Students::DashboardCourseInfoPresenter < Showtime::Presenter
   end
 
   def has_info?
-    course.instructors_of_record.present? || course.office_hours.present? || course.office.present? || course.office_hours.present? || (current_user_is_student? && student.team_leaders(course).present?) || (current_user_is_student? && current_user.team_for_course(course).present?) || course.syllabus.present? || course.phone.present? || course.class_email.present? || course.twitter_handle.present? || course.twitter_hashtag.present? || course.meeting_times.present?
+    if student
+      course.instructors_of_record.present? || course.office_hours.present? || course.office.present? || course.office_hours.present? || student.team_leaders(course).present? || student.team_for_course(course).present? || course.syllabus.present? || course.phone.present? || course.class_email.present? || course.twitter_handle.present? || course.twitter_hashtag.present? || course.meeting_times.present?
+    else
+      course.instructors_of_record.present? || course.office_hours.present? || course.office.present? || course.office_hours.present? || course.syllabus.present? || course.phone.present? || course.class_email.present? || course.twitter_handle.present? || course.twitter_hashtag.present? || course.meeting_times.present?
+    end
   end
 end
