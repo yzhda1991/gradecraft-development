@@ -89,22 +89,22 @@ ActiveRecord::Schema.define(version: 20160624165722) do
   end
 
   create_table "assignments", force: :cascade do |t|
-    t.string   "name",                         limit: 255
+    t.string   "name",                                                            null: false
     t.text     "description"
     t.integer  "full_points"
     t.datetime "due_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "course_id"
-    t.integer  "assignment_type_id"
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
+    t.integer  "course_id",                                                       null: false
+    t.integer  "assignment_type_id",                                              null: false
     t.string   "grade_scope",                  limit: 255, default: "Individual", null: false
-    t.boolean  "required"
-    t.boolean  "accepts_submissions"
-    t.boolean  "student_logged"
+    t.boolean  "required",                                 default: false,        null: false
+    t.boolean  "accepts_submissions",                      default: false,        null: false
+    t.boolean  "student_logged",                           default: false,        null: false
     t.boolean  "release_necessary",                        default: false,        null: false
     t.datetime "open_at"
-    t.boolean  "visible",                                  default: true
-    t.boolean  "resubmissions_allowed"
+    t.boolean  "visible",                                  default: true,         null: false
+    t.boolean  "resubmissions_allowed",                    default: false,        null: false
     t.integer  "max_submissions"
     t.datetime "accepts_submissions_until"
     t.datetime "accepts_resubmissions_until"
@@ -114,23 +114,23 @@ ActiveRecord::Schema.define(version: 20160624165722) do
     t.string   "media_credit",                 limit: 255
     t.string   "media_caption",                limit: 255
     t.string   "mass_grade_type",              limit: 255
-    t.boolean  "include_in_timeline",                      default: true
-    t.boolean  "include_in_predictor",                     default: true
+    t.boolean  "include_in_timeline",                      default: true,         null: false
+    t.boolean  "include_in_predictor",                     default: true,         null: false
     t.integer  "position"
-    t.boolean  "include_in_to_do",                         default: true
-    t.boolean  "use_rubric",                               default: true
-    t.boolean  "accepts_attachments",                      default: true
-    t.boolean  "accepts_text",                             default: true
-    t.boolean  "accepts_links",                            default: true
-    t.boolean  "pass_fail",                                default: false
-    t.boolean  "hide_analytics"
-    t.boolean  "visible_when_locked",                      default: true
-    t.boolean  "show_name_when_locked",                    default: true
-    t.boolean  "show_points_when_locked",                  default: true
-    t.boolean  "show_description_when_locked",             default: true
-    t.integer  "threshold_points",                         default: 0
+    t.boolean  "include_in_to_do",                         default: true,         null: false
+    t.boolean  "use_rubric",                               default: true,         null: false
+    t.boolean  "accepts_attachments",                      default: true,         null: false
+    t.boolean  "accepts_text",                             default: true,         null: false
+    t.boolean  "accepts_links",                            default: true,         null: false
+    t.boolean  "pass_fail",                                default: false,        null: false
+    t.boolean  "hide_analytics",                           default: false,        null: false
+    t.boolean  "visible_when_locked",                      default: true,         null: false
+    t.boolean  "show_name_when_locked",                    default: false,        null: false
+    t.boolean  "show_points_when_locked",                  default: false,        null: false
+    t.boolean  "show_description_when_locked",             default: false,        null: false
+    t.integer  "threshold_points",                         default: 0,            null: false
     t.text     "purpose"
-    t.boolean  "show_purpose_when_locked",                 default: true
+    t.boolean  "show_purpose_when_locked",                 default: true,         null: false
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree

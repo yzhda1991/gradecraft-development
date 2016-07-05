@@ -1438,7 +1438,6 @@ the speed, and the route.― Jay Cross",
 
 #------------------------------------------------------------------------------#
 
-
 @assignments[:weighting_one_sample_assignment] = {
   quotes: {
     assignment_created: nil,

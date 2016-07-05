@@ -58,10 +58,15 @@ class Assignment < ActiveRecord::Base
 
   before_save :reset_default_for_nil_values
 
-  # Check to make sure the assignment has a name before saving
-  validates :course_id, presence: true
-  validates_presence_of :name
-  validates_presence_of :assignment_type_id
+  validates_presence_of :name, :course_id, :assignment_type_id, :grade_scope, :threshold_points
+
+  validates_inclusion_of :student_logged, :required, :accepts_submissions,
+  :release_necessary, :visible, :resubmissions_allowed, :include_in_timeline,
+  :include_in_predictor, :include_in_to_do, :use_rubric, :accepts_attachments,
+  :accepts_text, :accepts_links, :pass_fail, :hide_analytics, :visible_when_locked,
+  :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
+  :show_purpose_when_locked, in: [true, false]
+
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
   scope :group_assignments, -> { where grade_scope: "Group" }
