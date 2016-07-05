@@ -53,9 +53,10 @@ class TeamsController < ApplicationController
     @name = "#{@team.name}"
     @team.destroy
     respond_to do |format|
-      format.html { redirect_to teams_url,
+      format.html do
+        redirect_to teams_url,
         notice: "#{(term_for :team).titleize} #{@name} successfully deleted"
-      }
+      end
     end
   end
 end

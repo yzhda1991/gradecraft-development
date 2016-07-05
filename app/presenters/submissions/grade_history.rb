@@ -20,20 +20,20 @@ module Submissions::GradeHistory
       .remove("name" => "file")
       .remove("name" => "store_dir")
       .remove("name" => "id")
-      .transform { |history|
+      .transform do |history|
         if history.version.item_type == "SubmissionFile"
           history.changeset["event"] = "upload"
         end
-      }
+      end
       .rename("SubmissionFile" => "Attachment")
-      .include { |history|
+      .include do |history|
         if history.changeset["object"] == "Grade" && only_student_visible_grades
           grade = history.version.reify
           GradeProctor.new(grade).viewable?
         else
           true
         end
-      }
+      end
       .changesets
   end
 end
