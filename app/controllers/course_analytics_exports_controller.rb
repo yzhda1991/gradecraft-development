@@ -10,16 +10,16 @@ class CourseAnalyticsExportsController < ApplicationController
       flash[:success] = "Your course analytics export is being prepared. " \
                         "You'll receive an email when it's complete."
     else
-      flash[:alert] = "Your submissions export failed to build. " \
+      flash[:alert] = "Your course analytics export failed to build. " \
                       "An administrator has been contacted about the issue."
     end
 
-    redirect_to assignment_path(assignment)
+    redirect_to analytics_students_path
   end
 
   def destroy
     if presenter.destroy_export
-      flash[:success] = "Assignment export successfully deleted from server"
+      flash[:success] = "Course analytics export successfully deleted from server"
     else
       flash[:alert] = "Unable to delete the submissions export from the server"
     end
