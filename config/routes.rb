@@ -44,7 +44,6 @@ GradeCraft::Application.routes.draw do
     get :user_pageview_events
     get :prediction_averages
     get :assignment_prediction_averages
-    get :export
   end
 
   post "analytics_events/predictor_event"

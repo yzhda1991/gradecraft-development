@@ -71,8 +71,7 @@ describe AnalyticsController do
         :role_pageview_events,
         :user_pageview_events,
         :prediction_averages,
-        :assignment_prediction_averages,
-        :export
+        :assignment_prediction_averages
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)
