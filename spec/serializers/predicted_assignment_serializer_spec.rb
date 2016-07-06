@@ -159,7 +159,7 @@ describe PredictedAssignmentSerializer do
         end
 
         it "is false if accept submission field is nil" do
-          allow(assignment).to receive(:accepts_submissions?).and_return nil
+          allow(assignment).to receive(:accepts_submissions?).and_return false
           allow(assignment).to receive(:submissions_closed?).and_return false
           allow(user).to receive(:submission_for_assignment).and_return nil
           expect(subject[:accepting_submissions]).to eq(false)
