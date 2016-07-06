@@ -13,8 +13,9 @@ class Courses::ImportController < ApplicationController
 
   def assignments
     @provider = params[:provider]
-    @assignments = LMSImporter::CourseImporter.new(@provider,
+    importer = LMSImporter::CourseImporter.new(@provider,
                                                ENV["#{@provider.upcase}_ACCESS_TOKEN"])
-      .assignments(params[:id])
+    @course = importer.course(params[:id])
+    @assignments = importer.assignments(params[:id])
   end
 end
