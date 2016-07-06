@@ -6,9 +6,16 @@ module LMSImporter
       @client = Canvas::API.new(access_token)
     end
 
+    def course(id)
+      @course || begin
+        client.get_data("/courses/#{id}") { |course| @course = course }
+      end
+      @course
+    end
+
     def courses
       @courses || begin
-        @courses= []
+        @courses = []
         client.get_data("/courses", enrollment_type: "teacher") do |courses|
           @courses += courses
         end

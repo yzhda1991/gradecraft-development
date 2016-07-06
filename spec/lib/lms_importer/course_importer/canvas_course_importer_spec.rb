@@ -28,6 +28,22 @@ describe LMSImporter::CanvasCourseImporter do
     end
   end
 
+  describe "#course" do
+    subject { described_class.new access_token }
+
+    it "retrieves the course for the id from the api" do
+      stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 200, body: { name: "This is a course" }.to_json,
+                   headers: {})
+
+      course = subject.course(123)
+
+      expect(course).to_not be_nil
+      expect(course["name"]).to eq "This is a course"
+    end
+  end
+
   describe "#courses" do
     subject { described_class.new access_token }
 

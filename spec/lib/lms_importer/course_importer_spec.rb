@@ -24,6 +24,15 @@ describe LMSImporter::CourseImporter do
     end
   end
 
+  describe "#course" do
+    subject { described_class.new :canvas, access_token }
+
+    it "delegates to the provider" do
+      expect(subject.provider).to receive(:course).with(123)
+      subject.course(123)
+    end
+  end
+
   describe "#courses" do
     subject { described_class.new :canvas, access_token }
 

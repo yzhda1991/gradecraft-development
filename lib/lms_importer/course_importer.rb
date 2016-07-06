@@ -14,6 +14,10 @@ module LMSImporter
       raise InvalidProviderError.new(provider)
     end
 
+    def course(id)
+      provider.course(id)
+    end
+
     def courses
       provider.courses
     end
