@@ -167,6 +167,7 @@ GradeCraft::Application.routes.draw do
         get :providers
       end
       get "/:provider/import" => "courses/import#courses", as: :provider_import
+      get "/:provider/import/:id/assignments" => "courses/import#assignments", as: :provider_import_assignments
     end
     member do
       get :timeline_settings

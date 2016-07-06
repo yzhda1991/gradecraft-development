@@ -13,9 +13,10 @@
         %th.button-column
     %tbody
       - @courses.each do |course|
-        %td=course["name"]
-        %td= course["syllabus_body"]
-        %td
-          .right
-            %ul.button-bar
-              %li= link_to glyph("file-text") + "Select Assignments to Import", "#", class: "button"
+        %tr
+          %td= course["name"]
+          %td= course["syllabus_body"]
+          %td
+            .right
+              %ul.button-bar
+                %li= link_to glyph("file-text") + "Select Assignments to Import", provider_import_assignments_courses_path(@provider, course["id"]), class: "button"
