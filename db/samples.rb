@@ -349,6 +349,7 @@ PaperTrail.whodunnit = nil
           1.upto(5).each do |n|
             rubric.criteria.create! do |criterion|
               criterion.name = "Criteria ##{n}"
+              criterion.description = "Thestral dirigible plums, Viktor Krum hexed memory charm Animagus Invisibility Cloak three-headed Dog. Half-Blood Prince Invisibility Cloak cauldron cakes, hiya Harry!"
               criterion.max_points =
                 10.times.collect {|i| (i + 1) * 10000}.sample
               criterion.order = n
@@ -362,6 +363,7 @@ PaperTrail.whodunnit = nil
                 level = criterion.levels.create! do |criterion_level|
                   criterion_level.name = "Level ##{m}"
                   criterion_level.points = criterion.max_points - (m * 1000)
+                  criterion_level.description = "Red hair crookshanks bludger Marauder’s Map Prongs sunshine daisies butter mellow Ludo Bagman. Beaters gobbledegook N.E.W.T., Honeydukes eriseD inferi Wormtail. Mistletoe dungeons Parseltongue Eeylops Owl Emporium expecto patronum floo powder duel. Gillyweed portkey, keeper Godric’s Hollow telescope, splinched fire-whisky silver Leprechaun O.W.L. stroke the spine."
                 end
                 if m == 1 && course.badge_setting
                   LevelBadge.create!(level_id: level.id,

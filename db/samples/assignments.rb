@@ -31,9 +31,9 @@
     accepts_submissions_until: nil,
     resubmissions_allowed: false,
     accepts_text: false,
-    description: nil,
+    description: "Basilisk venom Umbridge swiveling blue eye Levicorpus, nitwit blubber oddment tweak. Chasers Winky quills The Boy Who Lived bat spleens cupboard under the stairs flying motorcycle. Sirius Black Holyhead Harpies, you’ve got dirt on your nose. Floating candles Sir Cadogan The Sight three hoops disciplinary hearing. Grindlewald pig’s tail Sorcerer's Stone biting teacup. Side-along dragon-scale suits Filch 20 points, Mr. Potter.",
     grade_scope: "Individual",
-    hide_analytics: nil,
+    hide_analytics: false,
     mass_grade_type: nil,
     release_necessary: false,
     student_logged: false,
@@ -592,6 +592,26 @@ not added to total",
 on hover",
     due_at: 1.week.ago,
     full_points: 15000,
+  }
+}
+
+@assignments[:predictor_past_assignment_with_prediction] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Past Assignment no Grade but Prediction",
+    description: "Displays a Slider. Displays the info icon with this text \
+on hover",
+    due_at: 1.week.ago,
+    accepts_submissions: true,
+    accepts_submissions_until: 1.week.ago,
+    full_points: 15000,
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
