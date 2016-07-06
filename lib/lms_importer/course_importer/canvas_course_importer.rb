@@ -16,6 +16,16 @@ module LMSImporter
       @courses
     end
 
+    def assignments(course_id)
+      @assignments || begin
+        @assignments = []
+        client.get_data("/courses/#{course_id}/assignments") do |assignments|
+          @assignments += assignments
+        end
+      end
+      @assignments
+    end
+
     private
 
     attr_reader :client

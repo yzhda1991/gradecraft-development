@@ -17,5 +17,9 @@ module LMSImporter
     def courses
       provider.courses
     end
+
+    def assignments(course_id)
+      provider.assignments(course_id)
+    end
   end
 end
