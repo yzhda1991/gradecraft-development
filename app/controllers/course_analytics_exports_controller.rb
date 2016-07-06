@@ -7,10 +7,10 @@ class CourseAnalyticsExportsController < ApplicationController
 
   def create
     if presenter.create_and_enqueue_export
-      flash[:success] = "Your course analytics export is being prepared. " \
+      flash[:success] = "Your #{presenter.resource_name} is being prepared. " \
                         "You'll receive an email when it's complete."
     else
-      flash[:alert] = "Your course analytics export failed to build. " \
+      flash[:alert] = "Your #{presenter.resource_name} failed to build. " \
                       "An administrator has been contacted about the issue."
     end
 
@@ -19,9 +19,9 @@ class CourseAnalyticsExportsController < ApplicationController
 
   def destroy
     if presenter.destroy_export
-      flash[:success] = "Course analytics export successfully deleted from server"
+      flash[:success] = "#{presenter.resource_name.capitalize} successfully deleted from server"
     else
-      flash[:alert] = "Unable to delete the submissions export from the server"
+      flash[:alert] = "Unable to delete the #{presenter.resource_name} from the server"
     end
 
     redirect_to exports_path

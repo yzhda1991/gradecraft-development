@@ -15,7 +15,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
   end
 
   let(:presenter) do
-    controller.instance_eval { presenter }
+    double(presenter_class).as_null_object
   end
 
   let(:presenter_class) { ::Presenters::CourseAnalyticsExports::Base }
@@ -24,7 +24,9 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
     login_user professor
     allow(controller).to receive_messages \
       current_course: course,
-      current_user: professor
+      current_user: professor,
+      presenter: presenter
+    allow(presenter).to receive(:resource_name) { "course analytics export" }
   end
 
   describe "POST #create" do
@@ -60,7 +62,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
       it "notifies the user of success" do
         allow_any_instance_of(presenter_class).to receive(:destroy_export) { true }
         subject
-        expect(flash[:success]).to match(/Assignment export successfully deleted/)
+        expect(flash[:success]).to match(/Course analytics export successfully deleted/)
       end
     end
 
