@@ -602,8 +602,7 @@ on hover",
   assignment_type: :predictor,
   attributes: {
     name: "Past Assignment no Grade but Prediction",
-    description: "Displays a Slider. Displays the info icon with this text \
-on hover",
+    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions: true,
     accepts_submissions_until: 1.week.ago,
