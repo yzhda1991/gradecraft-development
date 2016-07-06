@@ -104,20 +104,6 @@ class AssignmentsController < ApplicationController
     sort_position_for :assignment
   end
 
-  # GET /assignments/import
-  def import_canvas
-    @title = "Import Assignments"
-    canvas = Canvas::API.new ENV['CANVAS_ACCESS_TOKEN']
-    canvas.get_data("/courses/#{params[:id]}") do |course|
-      @course = course
-    end
-
-    @assignments = []
-    canvas.get_data("/courses/#{params[:id]}/assignments") do |assignments|
-      @assignments += assignments
-    end
-  end
-
   def destroy
     assignment = current_course.assignments.find(params[:id])
     assignment.destroy
