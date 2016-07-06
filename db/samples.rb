@@ -351,6 +351,11 @@ PaperTrail.whodunnit = nil
             config[:attributes].key?(attr) ? config[:attributes][attr] :
               @assignment_default_config[:attributes][attr]
         end
+        # remove dates for competency course
+        if course_config[:no_due_dates]
+          a.open_at = nil
+          a.due_at = nil
+        end
         a.assignment_type =
           course_config[:assignment_types][assignment_type_name]
         a.course = course

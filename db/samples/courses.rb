@@ -332,6 +332,7 @@ Dracula",
   },
   grade_levels: ["Arp", "Breton", "Dali", "Duchamp", "Earnst", "Giacometti",
     "Magritte", "Masson", "Miro", "Oppenheim", "Ray", "Tanguy"].shuffle,
+  no_due_dates: true,
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
