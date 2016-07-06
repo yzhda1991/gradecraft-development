@@ -1,4 +1,4 @@
-require "webmock/rspec"
+require "api_spec_helper"
 require "./lib/canvas"
 
 describe Canvas::API do

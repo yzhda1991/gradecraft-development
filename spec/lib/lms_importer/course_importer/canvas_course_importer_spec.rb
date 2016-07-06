@@ -1,4 +1,4 @@
-require "webmock/rspec"
+require "api_spec_helper"
 require "./lib/lms_importer"
 
 describe LMSImporter::CanvasCourseImporter do
