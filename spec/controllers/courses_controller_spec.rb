@@ -154,6 +154,20 @@ describe CoursesController do
       end
     end
 
+    describe "POST copy with students" do
+      let(:course_with_students) { create(:student_course_membership, course: @course).course }
+
+      it "creates a duplicate course" do
+        expect{ post :copy, id: course_with_students.id, copy_type: "with_students" }.to change(Course, :count).by(1)
+      end
+
+      it "copies the student" do
+        post :copy, id: course_with_students.id, copy_type: "with_students"
+        duplicated = Course.last
+        expect(duplicated.students.map(&:id)).to eq(course_with_students.students.map(&:id))
+      end
+    end
+
     describe "POST update" do
       it "updates the course" do
         params = { name: "new name" }
@@ -185,7 +199,6 @@ describe CoursesController do
     end
 
     describe "POST timeline settings update" do
-
       it "changes the list of all assignments for the course and their timeline info " do
         @assignment = create(:assignment, course: @course)
         params = { "course" => { "assignments_attributes" => { "0" => { "media"=>"", "thumbnail"=>"", "media_credit"=>"", "media_caption"=>"Testing", "id"=> @assignment.id } } }, id: @course.id}

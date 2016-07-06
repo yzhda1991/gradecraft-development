@@ -3,6 +3,7 @@ class CoursesController < ApplicationController
 
   before_filter :ensure_staff?
 
+  # rubocop:disable AndOr
   def index
     @title = "Course Index"
     @courses = current_user.courses
@@ -31,18 +32,19 @@ class CoursesController < ApplicationController
   end
 
   def copy
-    course = Course.find(params[:id])
-    duplicated = course.copy
+    @course = Course.find(params[:id])
+    duplicated = @course.copy(params[:copy_type], {})
     if duplicated.save
-      if !current_user_is_admin?
+      if !current_user_is_admin? && current_user.role(duplicated).nil?
         duplicated.course_memberships.create(user: current_user, role: current_role)
       end
+      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
       session[:course_id] = duplicated.id
       redirect_to course_path(duplicated.id),
-        notice: "#{course.name} successfully copied"
+        notice: "#{@course.name} successfully copied" and return
     else
       redirect_to courses_path,
-        alert: "#{course.name} was not successfully copied"
+        alert: "#{@course.name} was not successfully copied" and return
     end
   end
 

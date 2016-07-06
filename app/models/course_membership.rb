@@ -5,6 +5,7 @@ class CourseMembership < ActiveRecord::Base
   # adds logging helpers for rescued-out errors
   include ModelAddons::ImprovedLogging
   include ModelAddons::AdvancedRescue
+  include Copyable
 
   attr_accessible :auditing, :character_profile, :course, :course_id,
     :instructor_of_record, :user, :user_id, :role, :last_login_at
