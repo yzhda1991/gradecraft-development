@@ -7,18 +7,5 @@ FactoryGirl.define do
     password { "secret" }
 
     after :create, &:activate!
-
-    factory :professor do
-      transient do
-        course_object Course.first
-      end
-
-      after :create do |professor, evaluator|
-        FactoryGirl.create :course_membership,
-          user: professor,
-          course: evaluator.course_object,
-          role: "professor"
-      end
-    end
   end
 end
