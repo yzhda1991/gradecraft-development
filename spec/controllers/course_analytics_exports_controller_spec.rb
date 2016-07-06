@@ -76,13 +76,16 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
     let(:result) { get :download, id: course_analytics_export.id }
 
     before do
-      allow(presenter).to receive_messages \
-        stream_export: "some data", export_filename: "some_filename.txt"
+      allow(presenter).to receive(:send_data_options) { ["options"] }
     end
 
     it "streams the s3 object to the client" do
-      expect(controller).to receive(:send_data)
-        .with "some data", filename: "some_filename.txt"
+      expect(controller).to receive(:send_data).with "options" do
+        # expressly render nothing so that the controller doesn't attempt
+        # to render the template
+        controller.render nothing: true
+      end
+
       result
     end
   end
@@ -102,8 +105,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
       let(:result) { get :secure_download, secure_download_params }
 
       before do
-        allow(presenter).to receive_messages \
-          stream_export: "some data", export_filename: "some_filename.txt"
+        allow(presenter).to receive(:send_data_options) { ["options"] }
       end
 
       context "the secure download authenticates" do
@@ -113,8 +115,12 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
         end
 
         it "streams the s3 object to the client" do
-          expect(controller).to receive(:send_data)
-            .with "some data", filename: "some_filename.txt"
+          expect(controller).to receive(:send_data).with "options" do
+            # expressly render nothing so that the controller doesn't attempt
+            # to render the template
+            controller.render nothing: true
+          end
+
           result
         end
       end
