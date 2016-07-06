@@ -5,12 +5,12 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %table
+  %table.dynatable.no-table-header
     %thead
       %tr
         %th{scope: "col"} Name
         %th{scope: "col"} Description
-        %th.button-column
+        %th{"data-dynatable-no-sort" => "true"}.button-column
     %tbody
       - @courses.each do |course|
         %tr
