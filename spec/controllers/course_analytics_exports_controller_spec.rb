@@ -143,7 +143,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
           it "alerts the user that their request was invalid" do
             allow(presenter).to receive(:secure_token_expired?) { false }
             result
-            expect(flash[:alert]).to match /does not exist/
+            expect(flash[:alert]).to match /The email link you used has expired/
           end
         end
 

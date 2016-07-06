@@ -34,7 +34,6 @@ class CourseAnalyticsExportsController < ApplicationController
   def secure_download
     if presenter.secure_download_authenticates?
       send_data(*presenter.send_data_options) and return
-      send_data presenter.stream_export, filename: presenter.export_filename and return
     else
       if presenter.token_expired?
         flash[:alert] = "The email link you used has expired."
