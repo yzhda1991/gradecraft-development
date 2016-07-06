@@ -5,27 +5,19 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
   let(:course) { create(:course) }
   let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:course_analytics_export) { create(:course_analytics_export, course: course) }
 
-  let(:course_analytics_export) do
-    create(:course_analytics_export, course: course)
-  end
-
-  let(:course_analytics_exports) do
-    create_list(:course_analytics_export, 2, course: course)
-  end
-
-  let(:presenter) do
-    double(presenter_class).as_null_object
-  end
-
+  let(:presenter) { double(presenter_class).as_null_object }
   let(:presenter_class) { ::Presenters::CourseAnalyticsExports::Base }
 
   before do
     login_user professor
+
     allow(controller).to receive_messages \
       current_course: course,
       current_user: professor,
       presenter: presenter
+
     allow(presenter).to receive(:resource_name) { "course analytics export" }
   end
 
@@ -60,7 +52,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
     context "the export is successfully destroyed" do
       it "notifies the user of success" do
-        allow_any_instance_of(presenter_class).to receive(:destroy_export) { true }
+        allow(presenter).to receive(:destroy_export) { true }
         subject
         expect(flash[:success]).to match(/Course analytics export successfully deleted/)
       end
@@ -68,7 +60,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
     context "the export is not destroyed" do
       it "notifies the user of the failure" do
-        allow_any_instance_of(presenter_class).to receive(:destroy_export) { false }
+        allow(presenter).to receive(:destroy_export) { false }
         subject
         expect(flash[:alert]).to match(/Unable to delete the course analytics export/)
       end
@@ -85,12 +77,12 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
     before do
       allow(presenter).to receive_messages \
-        stream_export: "some data", filename: "some_filename.txt"
+        stream_export: "some data", export_filename: "some_filename.txt"
     end
 
     it "streams the s3 object to the client" do
       expect(controller).to receive(:send_data)
-        .with "some_data", filename: "some_filename.txt"
+        .with "some data", filename: "some_filename.txt"
       result
     end
   end
@@ -111,7 +103,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
       before do
         allow(presenter).to receive_messages \
-          stream_export: "some data", filename: "some_filename.txt"
+          stream_export: "some data", export_filename: "some_filename.txt"
       end
 
       context "the secure download authenticates" do
@@ -122,7 +114,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
         it "streams the s3 object to the client" do
           expect(controller).to receive(:send_data)
-            .with "some_data", filename: "some_filename.txt"
+            .with "some data", filename: "some_filename.txt"
           result
         end
       end

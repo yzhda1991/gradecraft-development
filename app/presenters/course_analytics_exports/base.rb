@@ -51,6 +51,10 @@ module Presenters
         authenticator.valid_token_expired?
       end
 
+      def send_data_options
+        [stream_export, filename: export_filename]
+      end
+
       private
 
       def authenticator
