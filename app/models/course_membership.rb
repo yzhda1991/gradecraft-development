@@ -25,10 +25,6 @@ class CourseMembership < ActiveRecord::Base
 
   validates :instructor_of_record, instructor_of_record: true
 
-  def copy(attributes={})
-    super(attributes)
-  end
-
   def assign_role_from_lti(auth_hash)
     return unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
 

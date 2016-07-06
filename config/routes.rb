@@ -162,7 +162,6 @@ GradeCraft::Application.routes.draw do
   resources :courses do
     collection do
       post :copy
-      post :copy_with_students
     end
     member do
       get :timeline_settings

@@ -50,7 +50,7 @@ describe Course do
 
   describe "#copy" do
     let(:course) { create :course }
-    subject { course.copy }
+    subject { course.copy nil }
 
     it "makes a duplicated copy of itself" do
       expect(subject).to_not eq course
@@ -92,22 +92,22 @@ describe Course do
     end
   end
 
-  describe "#copy_with_students" do
+  describe "#copy with students" do
     let!(:student) { create(:student_course_membership, course: subject).user }
     subject { create :course }
 
     it "turns off the create_admin_memberships callback" do
       expect_any_instance_of(Course).to_not receive(:create_admin_memberships)
-      subject.copy_with_students
+      subject.copy "with_students"
     end
 
     it "turns back on the create_admin_memberships callback" do
-      subject.copy_with_students
+      subject.copy "with_students"
       expect(Course._create_callbacks.map(&:filter)).to include :create_admin_memberships
     end
 
     it "copies the students" do
-      duplicated = subject.copy_with_students
+      duplicated = subject.copy "with_students"
       expect(duplicated.reload.users).to include student
     end
   end

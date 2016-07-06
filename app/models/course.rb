@@ -160,15 +160,17 @@ class Course < ActiveRecord::Base
     super.presence || "Player"
   end
 
-  def copy(attributes={})
-    copy_with_associations(attributes, [])
-  end
-
-  def copy_with_students(attributes={})
-    Course.skip_callback(:create, :after, :create_admin_memberships)
-    copy_with_associations(attributes, [:course_memberships])
-  ensure
-    Course.set_callback(:create, :after, :create_admin_memberships)
+  def copy(copy_type, attributes={})
+    if copy_type != "with_students"
+      copy_with_associations(attributes, [])
+    else
+      begin
+        Course.skip_callback(:create, :after, :create_admin_memberships)
+        copy_with_associations(attributes, [:course_memberships])
+      ensure
+        Course.set_callback(:create, :after, :create_admin_memberships)
+      end
+    end
   end
 
   def has_teams?

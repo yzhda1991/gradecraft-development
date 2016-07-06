@@ -154,16 +154,15 @@ describe CoursesController do
       end
     end
 
-    describe "POST copy_with_students" do
-      let(:course_with_students) { create(:student_course_membership, user: student, course: @course).course }
-      let(:student) { create :user }
+    describe "POST copy with students" do
+      let(:course_with_students) { create(:student_course_membership, course: @course).course }
 
       it "creates a duplicate course" do
-        expect{ post :copy_with_students, id: course_with_students.id }.to change(Course, :count).by(1)
+        expect{ post :copy, id: course_with_students.id, copy_type: "with_students" }.to change(Course, :count).by(1)
       end
 
       it "copies the student" do
-        post :copy_with_students, id: course_with_students.id
+        post :copy, id: course_with_students.id, copy_type: "with_students"
         duplicated = Course.last
         expect(duplicated.students.map(&:id)).to eq(course_with_students.students.map(&:id))
       end

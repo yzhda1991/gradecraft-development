@@ -33,14 +33,19 @@ class CoursesController < ApplicationController
 
   def copy
     @course = Course.find(params[:id])
-    duplicated = @course.copy
-    validate_copy(duplicated)
-  end
-
-  def copy_with_students
-    @course = Course.find(params[:id])
-    duplicated = @course.copy_with_students
-    validate_copy(duplicated)
+    duplicated = @course.copy(params[:copy_type], {})
+    if duplicated.save
+      if !current_user_is_admin? && current_user.role(duplicated).nil?
+        duplicated.course_memberships.create(user: current_user, role: current_role)
+      end
+      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
+      session[:course_id] = duplicated.id
+      redirect_to course_path(duplicated.id),
+        notice: "#{@course.name} successfully copied" and return
+    else
+      redirect_to courses_path,
+        alert: "#{@course.name} was not successfully copied" and return
+    end
   end
 
   def create
@@ -107,23 +112,6 @@ class CoursesController < ApplicationController
         redirect_to courses_url,
         notice: "Course #{@name} successfully deleted"
       end
-    end
-  end
-
-  private
-
-  def validate_copy(duplicated)
-    if duplicated.save
-      if !current_user_is_admin? && current_user.role(duplicated).nil?
-        duplicated.course_memberships.create(user: current_user, role: current_role)
-      end
-      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
-      session[:course_id] = duplicated.id
-      redirect_to course_path(duplicated.id),
-        notice: "#{@course.name} successfully copied" and return
-    else
-      redirect_to courses_path,
-        alert: "#{@course.name} was not successfully copied" and return
     end
   end
 end
