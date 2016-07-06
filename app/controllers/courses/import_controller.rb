@@ -1,6 +1,8 @@
 require "lms_importer"
 
 class Courses::ImportController < ApplicationController
+  before_filter :ensure_staff?
+
   def providers
   end
 
