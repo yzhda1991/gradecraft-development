@@ -6,7 +6,7 @@
 
 # Add all attributes that will be passed on any challenge creation here, with a
 # default value
-# All assignment types will use defaults when individual attributes aren't
+# All challenges will use defaults when individual attributes aren't
 # supplied
 
 @challenge_default_config = {
@@ -16,6 +16,7 @@
   },
   attributes: {
     name: "Generic Challenge",
+    description: "Prefect’s bathroom Trelawney veela squashy armchairs, SPEW: Gamp’s Elemental Law of Transfiguration. Magic Nagini bezoar, Hippogriffs Headless Hunt giant squid petrified. Beuxbatons flying half-blood revision schedule, Great Hall aurors Minerva McGonagall Polyjuice Potion. Restricted section the Burrow Wronski Feint gnomes, quidditch robes detention, chocolate frogs. Errol parchment knickerbocker glory Avada Kedavra Shell Cottage beaded bag portrait vulture-hat. Twin cores, Aragog crimson gargoyles, Room of Requirement counter-clockwise Shrieking Shack. Snivellus second floor bathrooms vanishing cabinet Wizard Chess, are you a witch or not?",
     open_at: nil,
     due_at: nil,
     full_points: 1000000,

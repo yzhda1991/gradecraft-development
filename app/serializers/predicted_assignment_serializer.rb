@@ -113,7 +113,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   def is_required?
-    !!assignment.required
+    assignment.required
   end
 
   def has_info?
@@ -134,13 +134,13 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   def accepting_submissions?
-    !!assignment.accepts_submissions? && \
+    assignment.accepts_submissions? && \
     !assignment.submissions_have_closed? && \
     !student.submission_for_assignment(assignment).present?
   end
 
   def has_submission?
-    !!assignment.accepts_submissions? && \
+    assignment.accepts_submissions? && \
       student.submission_for_assignment(assignment).present?
   end
 

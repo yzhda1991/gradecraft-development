@@ -11,7 +11,7 @@
 @course_default_config = {
   quotes: {
     course_created: "A new course has been created",
-    grade_sceme_elements_created:
+    grade_scheme_elements_created:
       "Grade scheme elements have been added for the course",
     teams_created: "Teams have been added for the course",
     badges_created: "Badges have been added for the course",
@@ -320,5 +320,28 @@ Dracula",
     team_setting: true,
     twitter_handle: "si110",
     twitter_hashtag: "si101",
+  }
+}
+
+@courses[:no_dates_no_info] = {
+  quotes: {
+    course_created: "“To live is the rarest thing in the world. Most people \
+    exist, that is all.” ― Oscar Wilde",
+    grade_sceme_elements_created: " ",
+    teams_created: " ",
+  },
+  grade_levels: ["Arp", "Breton", "Dali", "Duchamp", "Earnst", "Giacometti",
+    "Magritte", "Masson", "Miro", "Oppenheim", "Ray", "Tanguy"].shuffle,
+  no_due_dates: true,
+  attributes: {
+    academic_history_visible: true,
+    accepts_submissions: true,
+    courseno: "GC105",
+    grading_philosophy: "In this course, there are no due dates, and no sequencing \
+    to the assignments. Show us you've completed the necessary competencies in any \
+    way you like.",
+    name: "Course with No Dates",
+    semester: "Fall",
+    team_setting: true,
   }
 }

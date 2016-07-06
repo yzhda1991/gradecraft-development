@@ -3,6 +3,7 @@ require "./db/samples/badges.rb"
 require "./db/samples/assignment_types.rb"
 require "./db/samples/assignments.rb"
 require "./db/samples/challenges.rb"
+require "./db/samples/events.rb"
 
 # ---------------------------- Shared Methods --------------------------------#
 
@@ -121,6 +122,7 @@ end
   config[:assignment_types] = {}
   config[:assignments] = {}
   config[:challenges] = {}
+  config[:events] = {}
 end
 
 # ---------------------------- Create Students! ------------------------------#
@@ -160,6 +162,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:teams_badges_points][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -174,6 +179,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:power_ups_locks_weighting_config][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -188,6 +196,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:leaderboards_team_challenges][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -204,23 +215,38 @@ User.create! do |u|
       cm.course = config[:course]
       cm.role = "gsi"
     end
-    u.student_academic_histories.create! do |ah|
-      ah.course = config[:course]
-      ah.major = majors.sample
-      ah.gpa =
-        [1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.33, 3.5, 3.75, 4.0, 4.1].sample
-      ah.current_term_credits = rand(12)
-      ah.accumulated_credits = rand(40)
-      ah.year_in_school = [1, 2, 3, 4, 5, 6, 7].sample
-      ah.state_of_residence = "Michigan"
-      ah.high_school = "Farwell Timberland Alternative High School"
-      ah.athlete = [false, true].sample
-      ah.act_score = (1..32).to_a.sample
-      ah.sat_score = 100 * rand(10)
+    u.team_leaderships.create! do |tm|
+      tm.team_id = config[:course].teams.sample.id
     end
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
   end
 end.activate!
 puts "In learning you will teach, and in teaching you will learn. ―Phil Collins"
+
+# Generate sample GSI
+User.create! do |u|
+  u.username = "cedric.diggory"
+  u.first_name = "Cedric"
+  u.last_name = "Diggory"
+  u.email = "cedric.diggory@hogwarts.edu"
+  u.password = "pleasantlyspringy"
+  u.save!
+  @courses.each do |name,config|
+    u.course_memberships.create! do |cm|
+      cm.course = config[:course]
+      cm.role = "gsi"
+    end
+    u.team_leaderships.create! do |tm|
+      tm.team_id = config[:course].teams.sample.id
+    end
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+  end
+end.activate!
+puts "Hey, listen... About the badges. I've asked them not to wear them. ―Cedric Diggory"
 
 # Create demo academic history content
 @students.each do |s|
@@ -325,6 +351,11 @@ PaperTrail.whodunnit = nil
             config[:attributes].key?(attr) ? config[:attributes][attr] :
               @assignment_default_config[:attributes][attr]
         end
+        # remove dates for competency course
+        if course_config[:no_due_dates]
+          a.open_at = nil
+          a.due_at = nil
+        end
         a.assignment_type =
           course_config[:assignment_types][assignment_type_name]
         a.course = course
@@ -338,6 +369,7 @@ PaperTrail.whodunnit = nil
           1.upto(5).each do |n|
             rubric.criteria.create! do |criterion|
               criterion.name = "Criteria ##{n}"
+              criterion.description = "Thestral dirigible plums, Viktor Krum hexed memory charm Animagus Invisibility Cloak three-headed Dog. Half-Blood Prince Invisibility Cloak cauldron cakes, hiya Harry!"
               criterion.max_points =
                 10.times.collect {|i| (i + 1) * 10000}.sample
               criterion.order = n
@@ -351,6 +383,7 @@ PaperTrail.whodunnit = nil
                 level = criterion.levels.create! do |criterion_level|
                   criterion_level.name = "Level ##{m}"
                   criterion_level.points = criterion.max_points - (m * 1000)
+                  criterion_level.description = "Red hair crookshanks bludger Marauder’s Map Prongs sunshine daisies butter mellow Ludo Bagman. Beaters gobbledegook N.E.W.T., Honeydukes eriseD inferi Wormtail. Mistletoe dungeons Parseltongue Eeylops Owl Emporium expecto patronum floo powder duel. Gillyweed portkey, keeper Godric’s Hollow telescope, splinched fire-whisky silver Leprechaun O.W.L. stroke the spine."
                 end
                 if m == 1 && course.badge_setting
                   LevelBadge.create!(level_id: level.id,
@@ -516,6 +549,27 @@ end
     end
   end
   puts_success :challenge, challenge_name, :challenge_created
+end
+
+# ---------------------------- Create Events! ----------------------------#
+
+@events.each do |event_name,config|
+  @courses.each do |course_name,course_config|
+    course_config[:course].tap do |course|
+      event = Event.create! do |e|
+        @event_default_config[:attributes].keys.each do |attr|
+          e[attr] =
+            config[:attributes].key?(attr) ? config[:attributes][attr] :
+              @event_default_config[:attributes][attr]
+        end
+        e.course = course
+      end
+      # Store models on each course in the @courses hash
+      @courses[course_name][:events][event_name] = event
+      puts_success :event, event_name, :event_created
+    end
+  end
+  puts_success :event, event_name, :event_created
 end
 
 @students.each do |s|
