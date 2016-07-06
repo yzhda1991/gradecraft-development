@@ -162,6 +162,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:teams_badges_points][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -176,6 +179,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:power_ups_locks_weighting_config][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -190,6 +196,9 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = @courses[:leaderboards_team_challenges][:course]
     cm.role = "professor"
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
+    FlaggedUser.toggle! cm.course, u, @students.sample.id
   end
 end.activate!
 
@@ -209,6 +218,9 @@ User.create! do |u|
     u.team_leaderships.create! do |tm|
       tm.team_id = config[:course].teams.sample.id
     end
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
   end
 end.activate!
 puts "In learning you will teach, and in teaching you will learn. ―Phil Collins"
@@ -229,6 +241,9 @@ User.create! do |u|
     u.team_leaderships.create! do |tm|
       tm.team_id = config[:course].teams.sample.id
     end
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
+    FlaggedUser.toggle! config[:course], u, @students.sample.id
   end
 end.activate!
 puts "Hey, listen... About the badges. I've asked them not to wear them. ―Cedric Diggory"
