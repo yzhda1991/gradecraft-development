@@ -103,7 +103,6 @@ $('#course-planner').click(function() {
   $('.my-planner').hide();
 });
 
-
 //Find event with closest date
 if($("#dashboard-timeline").length) {
   $.ajax({
