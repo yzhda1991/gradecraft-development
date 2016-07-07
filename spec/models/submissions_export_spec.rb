@@ -4,9 +4,6 @@ require_relative "../support/uni_mock/rails"
 RSpec.describe SubmissionsExport do
   subject { described_class.new }
 
-  let(:s3_manager) { double(S3Manager::Manager) }
-  let(:s3_object_key) { double(:s3_object_key) }
-
   let(:course) { create(:course) }
   let(:professor) { create(:user) }
   let(:team) { create(:team) }

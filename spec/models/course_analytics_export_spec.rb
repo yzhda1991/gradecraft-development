@@ -1,3 +1,5 @@
+require "export"
+require "s3_manager"
 require "active_record_spec_helper"
 
 describe CourseAnalyticsExport do

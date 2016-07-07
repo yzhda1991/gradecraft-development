@@ -1,3 +1,6 @@
+require "s3_manager"
+require "export"
+
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   # Note that if this record is an ActiveRecord::Base descendant then a

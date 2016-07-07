@@ -1,3 +1,5 @@
+require "active_support"
+
 # Meant for inclusion in ActiveRecord files that are persisting CarrierWave objects via S3
 module S3Manager
   module Carrierwave
