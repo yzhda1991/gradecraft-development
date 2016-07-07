@@ -42,7 +42,9 @@ module LMSImporter
     end
 
     def import_assignments(course_id, assignment_ids, course)
-      assignment = self.assignment(course_id, assignment_ids)
+      [assignment_ids].flatten.uniq.compact.each do |assignment_id|
+        assignment = self.assignment(course_id, assignment_id)
+      end
     end
 
     private
