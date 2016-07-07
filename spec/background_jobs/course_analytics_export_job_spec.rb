@@ -9,8 +9,10 @@ describe CourseAnalyticsExportJob do
   end
 
   it "uses the course_analytics_exports queue" do
+    expect(subject.queue).to eq :course_analytics_exports
   end
 
   it "performs the job with the CourseAnalyticsExportPerformer" do
+    expect(subject.performer_class).to eq CourseAnalyticsExportPerformer
   end
 end
