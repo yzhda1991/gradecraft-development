@@ -1,5 +1,5 @@
 .col-30
-  .panel.todo.dashboard-module= render partial: "students/dashboard/dashboard_to_do_list"
+  .panel.todo.dashboard-module= render partial: "students/dashboard/dashboard_to_do_list", locals: { presenter: presenter }
 
 .col-40
   - if @events.present?
