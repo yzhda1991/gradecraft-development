@@ -1,6 +1,6 @@
 require "canvas"
 
-module LMSImporter
+module ActiveLMS
   class CanvasCourseImporter
     def initialize(access_token)
       @client = Canvas::API.new(access_token)

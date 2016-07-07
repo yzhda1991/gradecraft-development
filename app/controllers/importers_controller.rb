@@ -1,4 +1,4 @@
-require "lms_importer"
+require "active_lms"
 
 class ImportersController < ApplicationController
   before_filter :ensure_staff?
@@ -8,14 +8,14 @@ class ImportersController < ApplicationController
 
   def courses
     @provider = params[:importer_id]
-    @courses = LMSImporter::CourseImporter.new(@provider,
+    @courses = ActiveLMS::CourseImporter.new(@provider,
                                                ENV["#{@provider.upcase}_ACCESS_TOKEN"])
       .courses
   end
 
   def assignments
     @provider = params[:importer_id]
-    importer = LMSImporter::CourseImporter.new(@provider,
+    importer = ActiveLMS::CourseImporter.new(@provider,
                                                ENV["#{@provider.upcase}_ACCESS_TOKEN"])
     @course = importer.course(params[:id])
     @assignments = importer.assignments(params[:id])
@@ -26,7 +26,7 @@ class ImportersController < ApplicationController
     course_id = params[:id]
     assignment_ids = params[:assignment_ids]
 
-    imported = LMSImporter::CourseImporter.new(@provider,
+    imported = ActiveLMS::CourseImporter.new(@provider,
                                                ENV["#{@provider.upcase}_ACCESS_TOKEN"])
       .import_assignments(course_id, assignment_ids, current_course)
 

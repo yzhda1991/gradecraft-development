@@ -1,14 +1,14 @@
 require "active_support"
 require_relative "course_importer/canvas_course_importer"
 
-module LMSImporter
+module ActiveLMS
   class CourseImporter
     include ActiveSupport::Inflector
 
     attr_reader :provider
 
     def initialize(provider, access_token)
-      klass = constantize("LMSImporter::#{camelize(provider)}CourseImporter")
+      klass = constantize("ActiveLMS::#{camelize(provider)}CourseImporter")
       @provider = klass.new access_token
     rescue NameError
       raise InvalidProviderError.new(provider)

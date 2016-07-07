@@ -1,17 +1,17 @@
-require "./lib/lms_importer"
+require "./lib/active_lms"
 
-describe LMSImporter::CourseImporter do
+describe ActiveLMS::CourseImporter do
   let(:access_token) { "BLAH" }
 
   describe "#initialize" do
     it "initializes with a provider" do
       expect(described_class.new(:canvas, access_token).provider).to \
-        be_kind_of LMSImporter::CanvasCourseImporter
+        be_kind_of ActiveLMS::CanvasCourseImporter
     end
 
     it "raises an InvalidProviderError with an invalid provider name" do
       expect { described_class.new(:blah, access_token) }.to \
-        raise_error LMSImporter::InvalidProviderError, "blah is not a supported provider"
+        raise_error ActiveLMS::InvalidProviderError, "blah is not a supported provider"
     end
   end
 
@@ -39,16 +39,6 @@ describe LMSImporter::CourseImporter do
     it "delegates to the provider" do
       expect(subject.provider).to receive(:courses)
       subject.courses
-    end
-  end
-
-  describe "#import_assignments" do
-    let(:course) { double(:course) }
-    subject { described_class.new :canvas, access_token }
-
-    it "delegates to the provider" do
-      expect(subject.provider).to receive(:import_assignments).with(123, 456, course)
-      subject.import_assignments(123, 456, course)
     end
   end
 end
