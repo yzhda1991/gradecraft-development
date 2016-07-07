@@ -57,9 +57,6 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 FactoryGirl::SyntaxRunner.send(:include, FileHelpers)
 
-# Enable external API access unless it is explicitly turned off with api_spec_helper
-WebMock.allow_net_connect!
-
 RSpec.configure do |config|
   config.include FileHelpers
   config.before(:suite) do
@@ -68,6 +65,8 @@ RSpec.configure do |config|
       DatabaseCleaner.clean_with(:truncation)
       FactoryGirl.factories.clear
       FactoryGirl.find_definitions
+      # Enable external API access unless it is explicitly turned off with api_spec_helper
+      WebMock.allow_net_connect!
     end
   end
 
