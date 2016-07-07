@@ -15,23 +15,23 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     properties[:assignments]
   end
 
-  def to_do_assignment?(assignment)
-    assignment.include_in_to_do? && assignment.visible_for_student?(student)
+  def to_do?(assignment)
+    assignment.soon? && assignment.include_in_to_do? && assignment.visible_for_student?(student)
   end
 
-  def assignment_available?(assignment)
+  def submittable?(assignment)
     assignment.accepts_submissions? && assignment.is_unlocked_for_student?(student)
   end
 
-  def assignment_starred?(assignment)
+  def starred?(assignment)
     assignment.is_predicted_by_student?(student)
   end
 
-  def assignment_individual?(assignment)
-    assignment.is_individual?
+  def my_planner(assignment)
+    to_do?(assignment) && starred?(assignment)
   end
 
-  def assignment_submitted?
+  def submitted?(assignment)
     student.submission_for_assignment(assignment).present?
   end
 end

@@ -8,19 +8,19 @@
     %ul.todo-list-assignments
       - cache multi_cache_key :student_dashboard_todo_list, current_student, current_course do
         - presenter.assignments.each do |assignment|
-          - if assignment.soon? && presenter.to_do_assignment?(assignment)
-            %li{:class => presenter.assignment_starred?(assignment) ? "assignment-item starred" : "assignment-item"}
-              - if presenter.assignment_available?(assignment)
+          - if presenter.to_do?(assignment)
+            %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
+              - if presenter.submittable?(assignment)
                 - if assignment.is_individual?
                   .right= render "students/submissions", assignment: assignment
                 - else
                   .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
-              - if assignment.is_predicted_by_student?(current_student)
+              - if presenter.starred?(assignment)
                 %a.starred
                   %i.fa.fa-star.fa-fw.yellow
                 .display_on_hover.hover-style
                   You have included this #{term_for :assignment} in your grade prediction
-              - if current_student.submission_for_assignment(assignment).present?
+              - if presenter.submitted?(assignment)
                 %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment
                 .small.uppercase= "#{assignment.assignment_type.name}"
               - else
