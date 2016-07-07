@@ -28,6 +28,52 @@ RSpec.describe S3Manager::Resource do
     end
   end
 
+  describe "#rebuild_s3_object_key" do
+    before do
+      allow(subject).to receive_messages(
+        build_s3_object_key: "new-key",
+        export_filename: "some_filename.txt"
+      )
+    end
+
+    it "builds a new s3_object_key and caches it" do
+      subject.rebuild_s3_object_key
+      expect(subject[:s3_object_key]).to eq "new-key"
+    end
+  end
+
+  describe "#build_s3_object_key" do
+    subject { create(:submissions_export) }
+    let(:result) { subject.build_s3_object_key("stuff.zip") }
+
+    let(:expected_base_s3_key) do
+      "exports/courses/40/assignments/50" \
+      "/#{subject.created_at_date}" \
+      "/#{subject.created_at_in_microseconds}/stuff.zip"
+    end
+
+    before do
+      allow(subject).to receive_messages(course_id: 40, assignment_id: 50)
+      stub_const "ENV", { "AWS_S3_DEVELOPER_TAG" => "jeff-moses" }
+    end
+
+    context "env is development" do
+      before { stub_env "development" }
+
+      it "prepends the developer tag to the store dirs and joins them" do
+        expect(result).to eq ["jeff-moses", expected_base_s3_key].join("/")
+      end
+    end
+
+    context "env is anything but development" do
+      before { stub_env "sumpin-else" }
+
+      it "joins the store dirs and doesn't use the developer tag" do
+        expect(result).to eq expected_base_s3_key
+      end
+    end
+  end
+
   describe "#s3_manager" do
     let(:result) { subject.s3_manager }
 
