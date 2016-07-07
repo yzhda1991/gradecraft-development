@@ -21,7 +21,8 @@ GradeCraft::Application.routes.draw do
   #15. Uploads
   #16. Events
   #17. Predictor
-  #18. Exports
+  #18. Importers
+  #19. Exports
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -160,14 +161,7 @@ GradeCraft::Application.routes.draw do
 
   #8. Courses
   resources :courses do
-    collection do
-      post :copy
-      resource :import, only: [], controller: :import, module: :courses do
-        get :providers
-      end
-      get "/:provider/import" => "courses/import#courses", as: :provider_import
-      get "/:provider/import/:id/assignments" => "courses/import#assignments", as: :provider_import_assignments
-    end
+    post :copy, on: :collection
     member do
       get :timeline_settings
       put :timeline_settings, to: "courses#timeline_settings_update"
@@ -331,16 +325,15 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #17. Importers
+  #18. Importers
   resources :importers, only: :index do
     get :courses
     get "/courses/:id/assignments", to: :assignments, as: :assignments
   end
 
-  #18. Exports
+  #19. Exports
   resources :exports, only: :index
 
-  #19. SubmissionsExports
   resources :submissions_exports, only: [:create, :destroy] do
     member do
       get :download
