@@ -8,6 +8,26 @@ RSpec.describe S3Manager::Resource do
   let(:s3_object_key) { "some-fake-key" }
   let(:temp_file) { Tempfile.new("some-file") }
 
+  describe "callbacks" do
+    subject { create(:submissions_export) }
+
+    describe "rebuilding the s3 object key before save" do
+      context "export_filename changed" do
+        it "rebuilds the s3 object key" do
+          expect(subject).to receive(:rebuild_s3_object_key)
+          subject.update_attributes export_filename: "some_filename.txt"
+        end
+      end
+
+      context "export_filename did not change" do
+        it "doesn't rebuild the s3 object key" do
+          expect(subject).not_to receive(:rebuild_s3_object_key)
+          subject.update_attributes team_id: 5
+        end
+      end
+    end
+  end
+
   describe "#s3_manager" do
     let(:result) { subject.s3_manager }
 

@@ -1,10 +1,7 @@
-require "s3_manager"
-require "export"
-
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
-  include Export::Model::ActiveRecord
+  include Export::Model
 
   attr_accessible :course_id, :professor_id, :last_export_started_at,
                   :last_export_completed_at, :last_completed_step

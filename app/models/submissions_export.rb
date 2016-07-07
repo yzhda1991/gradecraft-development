@@ -1,7 +1,7 @@
 class SubmissionsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
-  include Export::Model::ActiveRecord
+  include Export::Model
 
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at,
