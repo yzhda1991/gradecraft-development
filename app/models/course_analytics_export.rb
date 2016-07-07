@@ -1,3 +1,6 @@
+require "s3_manager"
+require "export"
+
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
@@ -16,13 +19,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
 
   # tell s3 which directory structure to use for exports
   def s3_object_key_prefix
-    [
-      "exports",
-      "courses",
-      course_id,
-      "course_analytics_exports",
-      created_at_date,
-      created_at_in_microseconds
-    ].join "/"
+    "exports/courses/#{course_id}/course_analytics_exports/" \
+      "#{created_at_date}/#{created_at_in_microseconds}"
   end
 end
