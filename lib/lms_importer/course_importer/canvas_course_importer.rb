@@ -7,44 +7,43 @@ module LMSImporter
     end
 
     def course(id)
-      @course || begin
-        client.get_data("/courses/#{id}") { |course| @course = course }
-      end
-      @course
+      course = nil
+      client.get_data("/courses/#{id}") { |data| course = data }
+      course
     end
 
     def courses
       @courses || begin
         @courses = []
-        client.get_data("/courses", enrollment_type: "teacher") do |courses|
-          @courses += courses
+        client.get_data("/courses", enrollment_type: "teacher") do |data|
+          @courses += data
         end
       end
       @courses
     end
 
-    def assignments(course_id)
-      @assignments || begin
-        @assignments = []
-        client.get_data("/courses/#{course_id}/assignments") do |assignments|
-          @assignments += assignments
+    def assignments(course_id, assignment_ids=nil)
+      assignments = []
+
+      if assignment_ids.nil?
+        client.get_data("/courses/#{course_id}/assignments") do |data|
+          assignments += data
+        end
+      else
+        [assignment_ids].flatten.uniq.compact.each do |assignment_id|
+          assignments << self.assignment(course_id, assignment_id)
         end
       end
-      @assignments
+
+      assignments
     end
 
     def assignment(course_id, assignment_id)
       assignment = nil
-      client.get_data("/courses/#{course_id}/assignments/#{assignment_id}") do |a|
-        assignment = a
+      client.get_data("/courses/#{course_id}/assignments/#{assignment_id}") do |data|
+        assignment = data
       end
       assignment
-    end
-
-    def import_assignments(course_id, assignment_ids, course)
-      [assignment_ids].flatten.uniq.compact.each do |assignment_id|
-        assignment = self.assignment(course_id, assignment_id)
-      end
     end
 
     private
