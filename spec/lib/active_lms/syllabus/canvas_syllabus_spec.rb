@@ -1,7 +1,7 @@
 require "api_spec_helper"
 require "./lib/active_lms"
 
-describe ActiveLMS::CanvasCourseImporter, type: :disable_external_api do
+describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   let(:access_token) { "BLAH" }
 
   describe "#initialize" do

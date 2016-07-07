@@ -8,15 +8,15 @@ class ImportersController < ApplicationController
 
   def courses
     @provider = params[:importer_id]
-    @courses = ActiveLMS::CourseImporter.new(@provider,
-                                               ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    @courses = ActiveLMS::Syllabus.new(@provider,
+                                       ENV["#{@provider.upcase}_ACCESS_TOKEN"])
       .courses
   end
 
   def assignments
     @provider = params[:importer_id]
-    importer = ActiveLMS::CourseImporter.new(@provider,
-                                               ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    importer = ActiveLMS::Syllabus.new(@provider,
+                                       ENV["#{@provider.upcase}_ACCESS_TOKEN"])
     @course = importer.course(params[:id])
     @assignments = importer.assignments(params[:id])
   end
@@ -26,8 +26,8 @@ class ImportersController < ApplicationController
     course_id = params[:id]
     assignment_ids = params[:assignment_ids]
 
-    imported = ActiveLMS::CourseImporter.new(@provider,
-                                               ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    imported = ActiveLMS::Syllabus.new(@provider,
+                                       ENV["#{@provider.upcase}_ACCESS_TOKEN"])
       .import_assignments(course_id, assignment_ids, current_course)
 
     redirect_to assignments_path, notice: "You successfully imported #{imported.size} #{@provider.capitalize} #{"assignment".pluralize(imported.size)}"

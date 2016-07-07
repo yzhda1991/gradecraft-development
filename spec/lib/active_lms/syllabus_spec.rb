@@ -1,12 +1,12 @@
 require "./lib/active_lms"
 
-describe ActiveLMS::CourseImporter do
+describe ActiveLMS::Syllabus do
   let(:access_token) { "BLAH" }
 
   describe "#initialize" do
     it "initializes with a provider" do
       expect(described_class.new(:canvas, access_token).provider).to \
-        be_kind_of ActiveLMS::CanvasCourseImporter
+        be_kind_of ActiveLMS::CanvasSyllabus
     end
 
     it "raises an InvalidProviderError with an invalid provider name" do
