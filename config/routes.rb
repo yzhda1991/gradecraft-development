@@ -331,6 +331,12 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  #17. Importers
+  resources :importers, only: :index do
+    get :courses
+    get "/courses/:id/assignments", to: :assignments, as: :assignments
+  end
+
   #18. Exports
   resources :exports, only: :index
 
