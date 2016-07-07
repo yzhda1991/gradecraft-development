@@ -1,4 +1,4 @@
-%ul.todo-list-assignments.list_class
+%ul{:class => "todo-list-assignments #{list_class}"}
   - cache multi_cache_key :student_dashboard_todo_list, current_student, current_course do
     - assignment_list.each do |assignment|
       %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
