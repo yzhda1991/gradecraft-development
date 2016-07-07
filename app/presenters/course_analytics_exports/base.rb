@@ -18,8 +18,7 @@ module Presenters
       end
 
       def export_job
-        @export_job ||= ::CourseAnalyticsExportJob.new \
-          course_analytics_export_id: @export.id
+        @export_job ||= ::CourseAnalyticsExportJob.new export_id: @export.id
       end
 
       def export

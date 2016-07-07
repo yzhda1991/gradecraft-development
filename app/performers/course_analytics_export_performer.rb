@@ -2,7 +2,10 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   attr_reader :export, :professor, :course
 
   def setup
-    @export = CourseAnalyticsExportsExport.find attrs[:export_id]
+    @export = CourseAnalyticsExport.find attrs[:export_id]
+    @professor = @export.professor
+    @course = @export.course
+
     export.update_export_started_time
   end
 
@@ -24,7 +27,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   def success_mailer
     ExportsMailer.course_analytics_export_success \
       professor,
-      course_analtyics_export,
+      export,
       secure_token
   end
 
