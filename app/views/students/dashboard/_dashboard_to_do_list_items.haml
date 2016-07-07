@@ -11,7 +11,7 @@
           %a.starred
             %i.fa.fa-star.fa-fw.yellow
           .display_on_hover.hover-style
-            You have included this #{term_for :assignment} in your grade prediction
+            You have included this #{(term_for :assignment).downcase} in your grade prediction
         - if presenter.submitted?(assignment)
           %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment
           .small.uppercase= "#{assignment.assignment_type.name}"
@@ -20,11 +20,9 @@
             %span.bold.assignment-name= link_to assignment.name, grade_path(Grade.find_or_create(assignment.id, current_student.id))
           - else
             %span.bold.assignment-name= "Locked #{(term_for :assignment ).titleize}"
-            %span.italic= "You must unlock this #{term_for :assignment } to learn more about it"
+            %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
           .small.uppercase= "#{assignment.assignment_type.name}"
           .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
-.my-planner-alert.hidden
-  %p
-    You have not predicted any #{(term_for :assignments).downcase}! Check out the
-    = link_to 'grade predictor', predictor_path 
-    to add #{(term_for :assignments).downcase} to this planner.
+  - if assignment_list.empty?
+    %li.my-planner-alert
+      = presenter.empty_message(list_class)

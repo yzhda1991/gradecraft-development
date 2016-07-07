@@ -42,4 +42,13 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
   def submitted?(assignment)
     student.submission_for_assignment(assignment).present?
   end
+
+  def empty_message(list_class)
+    assignment_term = course.assignment_term.downcase.pluralize
+    if list_class == "course-planner"
+      "You don't have any #{assignment_term} due in the next week!"
+    elsif list_class == "my-planner"
+      "You have not predicted any #{assignment_term}! Check out the grade predictor to add #{assignment_term} to this planner."
+    end
+  end
 end
