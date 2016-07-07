@@ -1,10 +1,11 @@
 require "export"
 require_relative "../../support/test_classes/export_model_test"
+require_relative "../../support/uni_mock/rails"
 
 describe Export::Model do
   include UniMock::StubRails
 
-  describe ExportModel do
+  describe ExportModelTest do
 
     describe "#downloadable?" do
       let(:result) { subject.downloadable? }
