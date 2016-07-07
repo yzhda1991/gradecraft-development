@@ -1,6 +1,6 @@
-%ul.todo-list-assignments
+%ul.todo-list-assignments.list_class
   - cache multi_cache_key :student_dashboard_todo_list, current_student, current_course do
-    - presenter.to_do_assignments.each do |assignment|
+    - assignment_list.each do |assignment|
       %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
         - if presenter.submittable?(assignment)
           - if assignment.is_individual?
