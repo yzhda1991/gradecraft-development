@@ -58,4 +58,24 @@ describe LMSImporter::CanvasCourseImporter, type: :disable_external_api do
       expect(courses.first["name"]).to eq "This is a course"
     end
   end
+
+  describe "#import_assignments" do
+    let(:course) { double(:course) }
+    subject { described_class.new access_token }
+
+    it "retrieves the assignment details from the api" do
+      stub = stub_request(:get,
+        "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 200, body: [{ name: "This is an assignment" }].to_json,
+                   headers: {})
+
+      subject.import_assignments(123, 456, course)
+
+      expect(stub).to have_been_requested
+    end
+
+    xit "handles multiple assignment ids"
+    xit "does not process double assignment ids"
+  end
 end

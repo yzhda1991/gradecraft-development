@@ -23,11 +23,12 @@ class ImportersController < ApplicationController
 
   def assignments_import
     @provider = params[:provider]
+    course_id = params[:id]
     assignment_ids = params[:assignment_ids]
 
     imported = LMSImporter::CourseImporter.new(@provider,
                                                ENV["#{@provider.upcase}_ACCESS_TOKEN"])
-      .import_assignments(assignment_ids, current_course)
+      .import_assignments(course_id, assignment_ids, current_course)
 
     redirect_to assignments_path, notice: "You successfully imported #{imported.size} #{@provider.capitalize} #{"assignment".pluralize(imported.size)}"
   end

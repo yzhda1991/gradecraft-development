@@ -41,4 +41,14 @@ describe LMSImporter::CourseImporter do
       subject.courses
     end
   end
+
+  describe "#import_assignments" do
+    let(:course) { double(:course) }
+    subject { described_class.new :canvas, access_token }
+
+    it "delegates to the provider" do
+      expect(subject.provider).to receive(:import_assignments).with(123, 456, course)
+      subject.import_assignments(123, 456, course)
+    end
+  end
 end
