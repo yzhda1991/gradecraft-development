@@ -8,9 +8,9 @@
     %ul.todo-list-assignments
       - cache multi_cache_key :student_dashboard_todo_list, current_student, current_course do
         - presenter.assignments.each do |assignment|
-          - if presenter.to_do_assignment?
-            %li{:class => assignment.is_predicted_by_student?(current_student) ? "assignment-item starred" : "assignment-item"}
-              - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
+          - if assignment.soon? && presenter.to_do_assignment?(assignment)
+            %li{:class => presenter.assignment_starred?(assignment) ? "assignment-item starred" : "assignment-item"}
+              - if presenter.assignment_available?(assignment)
                 - if assignment.is_individual?
                   .right= render "students/submissions", assignment: assignment
                 - else

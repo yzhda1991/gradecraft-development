@@ -5,4 +5,4 @@
   = render "layouts/alerts"
 
   #student-dashboard
-    = render "students/student_dashboard"
+    = render partial: "students/student_dashboard", locals: { presenter: presenter }
