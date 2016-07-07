@@ -15,6 +15,10 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     properties[:assignments]
   end
 
+  def to_do_assignments
+    assignments.select{ |assignment| assignment.include_in_to_do == true && assignment.visible_for_student?(student)== true && assignment.soon? == true }
+  end
+
   def to_do?(assignment)
     assignment.soon? && assignment.include_in_to_do? && assignment.visible_for_student?(student)
   end
@@ -27,8 +31,12 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     assignment.is_predicted_by_student?(student)
   end
 
-  def my_planner(assignment)
+  def my_planner?(assignment)
     to_do?(assignment) && starred?(assignment)
+  end
+
+  def my_planner_assignments
+    assignments.select{ |assignment| my_planner?(assignment) }
   end
 
   def submitted?(assignment)
