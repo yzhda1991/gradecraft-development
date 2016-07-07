@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, except: [:index]
 
   # rubocop:disable AndOr
   def index

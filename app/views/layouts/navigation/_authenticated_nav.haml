@@ -1,14 +1,13 @@
-%li.dropdown#mycourses
-  %a.section-title{:href => "#", :title => "My Courses"} 
-    My Courses
-    %i.fa.fa-caret-down.hidden-sm
-  %ul.subnav#course-list
-    = render partial: "layouts/navigation/course_list"
-%li.dropdown.my-account       
-  %a.section-title{:href => "#", :title => "My account management"} 
+%li.has-form{role: "search"}
+  %label.sr-only{:for => "search-input"}
+    Search Courses
+  %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "My Courses", label: false }
+  %a.alert.button{ :href => "#" } Go
+%li.dropdown.my-account
+  %a.section-title{:href => "#", :title => "My account management"}
     - if current_user.avatar_file_name.present?
       %img.profile-pic{:src => current_user.avatar_file_name, :height => 20}
-    = current_user.public_name
+    = current_user.name
     %i.fa.fa-caret-down.hidden-2m
   %ul.subnav#account-info
     = render partial: "layouts/navigation/account_info"
