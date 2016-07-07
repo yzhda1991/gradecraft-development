@@ -22,7 +22,7 @@ class ImportersController < ApplicationController
   end
 
   def assignments_import
-    @provider = params[:provider]
+    @provider = params[:importer_id]
     course_id = params[:id]
     assignment_ids = params[:assignment_ids]
 
