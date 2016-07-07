@@ -20,7 +20,7 @@ class InfoController < ApplicationController
 
   def timeline_events
     @events = Timeline.new(current_course).events_by_due_date
-    render(partial: "info/  timeline", handlers: [:jbuilder], formats: [:js])
+    render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 
   def earned_badges
