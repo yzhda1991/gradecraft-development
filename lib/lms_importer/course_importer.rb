@@ -8,7 +8,7 @@ module LMSImporter
     attr_reader :provider
 
     def initialize(provider, access_token)
-      klass = constantize("LMSImporter::#{classify("#{provider}CourseImporter")}")
+      klass = constantize("LMSImporter::#{camelize(provider)}CourseImporter")
       @provider = klass.new access_token
     rescue NameError
       raise InvalidProviderError.new(provider)
