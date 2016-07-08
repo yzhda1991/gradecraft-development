@@ -36,6 +36,7 @@ describe "info/dashboard" do
 
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   context "as a professor" do
