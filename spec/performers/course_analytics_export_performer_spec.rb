@@ -37,4 +37,75 @@ describe CourseAnalyticsExportPerformer do
       subject
     end
   end
+
+  describe "#do_the_work" do
+    before do
+      # let's stub out #build_the_export and #deliver mailer so it doesn' take
+      # until Tuesday to run the suite
+      #
+      allow(subject).to receive_messages \
+        build_the_export: ["the-export"],
+        deliver_mailer: true
+    end
+
+    it "builds the export" do
+      expect(subject).to receive(:build_the_export)
+      subject.do_the_work
+    end
+
+    it "delivers the mailer" do
+      expect(subject).to receive(:deliver_mailer)
+      subject.do_the_work
+    end
+
+    it "updates the export with the update completed time" do
+      expect(subject.export).to receive(:update_export_completed_time)
+      subject.do_the_work
+    end
+  end
+
+  describe "#deliver_mailer" do
+    let(:mailer) { double(:mailer).as_null_object }
+
+    before do
+      allow(subject).to receive_messages \
+        success_mailer: mailer,
+        failure_mailer: mailer
+    end
+
+    context "the export archive has been successfully uploaded to s3" do
+      it "uses the success mailer" do
+        allow(subject.export).to receive(:s3_object_exists?) { true }
+        expect(subject).to receive(:success_mailer)
+        subject.deliver_mailer
+      end
+    end
+
+    context "the export archive failed to upload to s3" do
+      it "users the failure mailer" do
+        allow(subject.export).to receive(:s3_object_exists?) { false }
+        expect(subject).to receive(:failure_mailer)
+        subject.deliver_mailer
+      end
+    end
+
+    it "delivers the mailer" do
+      expect(mailer).to receive(:deliver_now)
+      subject.deliver_mailer
+    end
+  end
+
+  describe "#success_mailer" do
+  end
+
+  describe "#failure_mailer" do
+  end
+
+  describe "#secure_token" do
+  end
+
+  # let's leave the specs out of here for now since this isn't the focus of
+  # this branch.
+  describe "#build_the_export" do
+  end
 end

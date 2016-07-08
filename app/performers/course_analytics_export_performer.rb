@@ -16,9 +16,6 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
     export.update_export_completed_time
   end
 
-  def upload_archive_to_s3
-  end
-
   def deliver_mailer
     mailer = export.s3_object_exists? ? success_mailer : failure_mailer
     mailer.deliver_now
@@ -61,14 +58,14 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
     # with the word 'and'
     #
     course_number = Formatter::Filename.new(
-      current_course.courseno.gsub(/\/+/,"-").gsub("&", "and")
+      course.courseno.gsub(/\/+/,"-").gsub("&", "and")
     ).url_safe.filename
 
     # create a named directory to generate the files in
     export_dir = FileUtils.mkdir \
       File.join(export_tmpdir, course_number)
 
-    id = current_course.id
+    id = course.id
 
     begin
       events = Analytics::Event.where(course_id: id)
