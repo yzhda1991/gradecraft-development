@@ -1,4 +1,5 @@
 require "active_lms"
+require_relative "../importers/assignment_importers"
 
 class ImportersController < ApplicationController
   before_filter :ensure_staff?
@@ -19,17 +20,18 @@ class ImportersController < ApplicationController
                                        ENV["#{@provider.upcase}_ACCESS_TOKEN"])
     @course = importer.course(params[:id])
     @assignments = importer.assignments(params[:id])
+    @assignment_types = current_course.assignment_types
   end
 
   def assignments_import
     @provider = params[:importer_id]
-    course_id = params[:id]
-    assignment_ids = params[:assignment_ids]
 
-    imported = ActiveLMS::Syllabus.new(@provider,
-                                       ENV["#{@provider.upcase}_ACCESS_TOKEN"])
-      .import_assignments(course_id, assignment_ids, current_course)
+    assignments = ActiveLMS::Syllabus.new(@provider,
+                                          ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+      .assignments(params[:id], params[:assignment_ids])
+    results = CanvasAssignmentImporter.new(assignments).import(current_course,
+                                                               params[:assignment_type_id])
 
-    redirect_to assignments_path, notice: "You successfully imported #{imported.size} #{@provider.capitalize} #{"assignment".pluralize(imported.size)}"
+    redirect_to assignments_path, notice: "You successfully imported #{results.successful.size} #{@provider.capitalize} #{"assignment".pluralize(results.successful.size)}"
   end
 end
