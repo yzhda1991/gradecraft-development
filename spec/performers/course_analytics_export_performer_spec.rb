@@ -125,7 +125,7 @@ describe CourseAnalyticsExportPerformer do
 
     it "builds a mailer for course analytics export failure" do
       expect(ExportsMailer).to receive(:course_analytics_export_failure)
-        .with(professor, export, subject.secure_token)
+        .with(professor, export)
 
       subject.failure_mailer
     end
@@ -141,12 +141,10 @@ describe CourseAnalyticsExportPerformer do
 
     context "no secure token exists" do
       it "creates a new secure token and caches it" do
-        expect(SecureToken).to receive(:create).with \
-          user_id: professor.id,
-          course_id: course.id,
-          target: export
-
         expect(subject.secure_token.class).to eq SecureToken
+        expect(subject.secure_token.user_id).to eq professor.id
+        expect(subject.secure_token.course_id).to eq course.id
+        expect(subject.secure_token.target).to eq export
       end
     end
   end

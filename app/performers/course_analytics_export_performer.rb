@@ -31,7 +31,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   def failure_mailer
     ExportsMailer.course_analytics_export_failure \
       professor,
-      course
+      export
   end
 
   def secure_token
