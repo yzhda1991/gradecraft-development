@@ -9,6 +9,8 @@ describe CourseAnalyticsExportPerformer do
   subject { described_class.new export_id: export.id }
 
   let(:export) { create :course_analytics_export }
+  let(:professor) { export.professor }
+  let(:course) { export.course }
 
   it "has some readable attributes" do
     expect(subject.export).to eq export
@@ -96,12 +98,57 @@ describe CourseAnalyticsExportPerformer do
   end
 
   describe "#success_mailer" do
+    before do
+      # stub this out because we're going to test the mailer in the mailer
+      # spec, not in the performer spec. let's just make sure it's being
+      # called
+      allow(ExportsMailer).to receive(:course_analytics_export_success)
+        .and_return true
+    end
+
+    it "builds a mailer for course analytics export success" do
+      expect(ExportsMailer).to receive(:course_analytics_export_success)
+        .with(professor, export, subject.secure_token)
+
+      subject.success_mailer
+    end
   end
 
   describe "#failure_mailer" do
+    before do
+      # stub this out because we're going to test the mailer in the mailer
+      # spec, not in the performer spec. let's just make sure it's being
+      # called
+      allow(ExportsMailer).to receive(:course_analytics_export_failure)
+        .and_return true
+    end
+
+    it "builds a mailer for course analytics export failure" do
+      expect(ExportsMailer).to receive(:course_analytics_export_failure)
+        .with(professor, export, subject.secure_token)
+
+      subject.failure_mailer
+    end
   end
 
   describe "#secure_token" do
+    context "a secure token exists" do
+      it "uses the existing token" do
+        subject.instance_variable_set :@secure_token, "some-token"
+        expect(subject.secure_token).to eq "some-token"
+      end
+    end
+
+    context "no secure token exists" do
+      it "creates a new secure token and caches it" do
+        expect(SecureToken).to receive(:create).with \
+          user_id: professor.id,
+          course_id: course.id,
+          target: export
+
+        expect(subject.secure_token.class).to eq SecureToken
+      end
+    end
   end
 
   # let's leave the specs out of here for now since this isn't the focus of

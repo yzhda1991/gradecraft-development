@@ -29,7 +29,9 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   end
 
   def failure_mailer
-    ExportsMailer.submissions_export_failure professor, course
+    ExportsMailer.course_analytics_export_failure \
+      professor,
+      course
   end
 
   def secure_token
@@ -41,7 +43,9 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
 
   private
 
-  # this was ripped directly out of AnalyticsController#export
+  # this was ripped directly out of AnalyticsController#export and will not
+  # be tested or modified on this branch. see branch:
+  # 2118-
   #
   def build_the_export
     # check whether we need to use S3fs
