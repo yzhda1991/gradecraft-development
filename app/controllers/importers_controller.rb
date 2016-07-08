@@ -29,9 +29,8 @@ class ImportersController < ApplicationController
     assignments = ActiveLMS::Syllabus.new(@provider,
                                           ENV["#{@provider.upcase}_ACCESS_TOKEN"])
       .assignments(params[:id], params[:assignment_ids])
-    results = CanvasAssignmentImporter.new(assignments).import(current_course,
-                                                               params[:assignment_type_id])
-
-    redirect_to assignments_path, notice: "You successfully imported #{results.successful.size} #{@provider.capitalize} #{"assignment".pluralize(results.successful.size)}"
+    @result = CanvasAssignmentImporter.new(assignments).import current_course,
+                                                               params[:assignment_type_id]
+    render :assignments_import_results
   end
 end
