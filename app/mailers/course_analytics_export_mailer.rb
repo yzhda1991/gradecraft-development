@@ -1,69 +1,53 @@
 class CourseAnalyticsExportsMailer < ApplicationMailer
   layout "mailers/exports_layout"
 
-  attr_accessor :professor, :course, :export
+  attr_accessor :professor, :course, :export, :status
 
   # the SecureTokenHelper brings in the #secure_downloads_url method which we
   # need for building the secure download method on success emails
   add_template_helper(SecureTokenHelper)
 
-  def export_started(professor, course)
-    mail_submissions_export("is being created", professor, assignment)
+  def export_started(professor:, course:)
+    self.professor = professor
+    self.course = course
+
+    send_mail status: "is being created"
   end
 
-  def submissions_export_success(professor, assignment, submissions_export,
-                                 secure_token)
-    cache_success_mailer_attrs(submissions_export, secure_token)
-    mail_submissions_export("is ready", professor, assignment)
+  def export_success(professor:, export:, token:)
+    self.professor = professor
+    self.export = export
+    self.secure_token = token
+
+    send_mail status: "is ready"
   end
 
-  def submissions_export_failure(professor, assignment)
-    mail_submissions_export("failed to build", professor, assignment)
+  def export_failure(professor:, course:)
+    self.professor = professor
+    self.course = course
+
+    send_mail status: "failed to build"
   end
 
-  private
+  protected
 
-  def set_export_ivars(course, user)
-    @course = course
-    @user = user
-  end
+  def send_mail(status:)
+    self.status = status
 
-  def csv_attachment(content)
-    { mime_type: "text/csv", content: content }
-  end
-
-  def send_export_email(subject)
-    mail(to: @user.email, bcc: ADMIN_EMAIL, subject: subject) do |format|
-      format.html
-      format.text
-    end
-  end
-
-  def mail_submissions_export(message, professor, assignment)
-    cache_submission_attrs(professor, assignment)
-    mail_message_with_subject "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} #{message}"
-  end
-
-  def mail_message_with_subject(subject)
-    mail(default_attrs.merge(subject: subject)) do |format|
+    mail mailer_attrs do |format|
       format.text
       format.html
     end
   end
 
-  def default_attrs
-    { to: professor.email, bcc: ExportsMailer::ADMIN_EMAIL }
+  def mailer_attrs
+    { to: professor.email, bcc: ADMIN_EMAIL, subject: subject.call }
   end
 
-  def cache_success_mailer_attrs(submissions_export, secure_token)
-    @submissions_export = submissions_export
-    @secure_token = secure_token
-  end
-
-  def cache_submission_attrs(professor, assignment)
-    @professor = professor
-    @assignment = assignment
-    @course = assignment.course
+  def subject
+    Proc.new do
+      "Course Analytics Export for " \
+        "#{course.courseno} - #{course.name} #{status}"
+    end
   end
 end
-
