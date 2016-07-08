@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 
 # specs for submission notifications that are sent to students
-describe NotificationMailer do
+describe ExportsMailer do
   # brings in helpers for default emails and parts
   extend Toolkits::Mailers::EmailToolkit::Definitions
   define_email_context # defined in EmailToolkit::Definitions

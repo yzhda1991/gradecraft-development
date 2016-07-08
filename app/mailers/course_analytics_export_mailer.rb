@@ -14,19 +14,20 @@ class CourseAnalyticsExportsMailer < ApplicationMailer
     send_mail status: "is being created"
   end
 
-  def export_success(professor:, export:, token:)
-    self.professor = professor
-    self.export = export
-    self.secure_token = token
-
-    send_mail status: "is ready"
-  end
-
   def export_failure(professor:, course:)
     self.professor = professor
     self.course = course
 
     send_mail status: "failed to build"
+  end
+
+  def export_success(professor:, export:, token:)
+    self.professor = professor
+    self.export = export
+    self.course = export.course
+    self.secure_token = token
+
+    send_mail status: "is ready"
   end
 
   protected
@@ -41,13 +42,11 @@ class CourseAnalyticsExportsMailer < ApplicationMailer
   end
 
   def mailer_attrs
-    { to: professor.email, bcc: ADMIN_EMAIL, subject: subject.call }
+    { to: professor.email, bcc: ADMIN_EMAIL, subject: subject }
   end
 
   def subject
-    Proc.new do
-      "Course Analytics Export for " \
-        "#{course.courseno} - #{course.name} #{status}"
-    end
+    "Course Analytics Export for " \
+      "#{course.courseno} - #{course.name} #{status}"
   end
 end
