@@ -15,7 +15,6 @@
   # multiply points by the student's assignment type weight if weighted
   # points is optional, defaults to total_points for Assignment Type
   weightedPoints = (assignmentType, points)->
-    points = points || assignmentType.total_points
     if assignmentType.student_weightable
       if assignmentType.student_weight > 0
         points = points * assignmentType.student_weight
@@ -27,7 +26,7 @@
     weightedPoints(assignmentType, assignmentType.final_points_for_student)
 
   maxPossiblePoints = (assignmentType)->
-    total = weightedPoints(assignmentType)
+    total = weightedPoints(assignmentType, assignmentType.total_points)
     if assignmentType.is_capped
       total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
