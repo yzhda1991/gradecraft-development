@@ -8,25 +8,25 @@
         %span.course= "#{current_course.courseno} "
         %span.course_name= "#{current_course.name} "
         %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
-    - if current_user_is_student?
-      = render partial: "students/student_profile_tabs"
-    - elsif current_user_is_staff?
-      = render partial: "layouts/navigation/staff_subnav"
-    %hr
-    - if presenter.has_info?
-      %a.course-info-btn-mobile
-        %h5 Course Info
-        = glyph("chevron-down")
-      %ul.course-info
-        = render partial: "layouts/navigation/class_info"
+      - if current_user_is_student?
+        = render partial: "students/student_profile_tabs"
+      - elsif current_user_is_staff?
+        = render partial: "layouts/navigation/staff_subnav"
       %hr
-    %h5 My Courses
-    %ul.course-list
-      = render partial: "layouts/navigation/course_list"
-    %hr
-    %ul.account-info
-      = render partial: "layouts/navigation/account_info"
-    %hr
+      - if presenter.has_info?
+        %a.course-info-btn-mobile
+          %h5 Course Info
+          = glyph("chevron-down")
+        %ul.course-info
+          = render partial: "layouts/navigation/class_info"
+        %hr
+      %h5 My Courses
+      %ul.course-list
+        = render partial: "layouts/navigation/course_list"
+      %hr
+      %ul.account-info
+        = render partial: "layouts/navigation/account_info"
+      %hr
 
   .layout-right-content
     %header
