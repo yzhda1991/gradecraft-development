@@ -1,31 +1,31 @@
 class CourseAnalyticsExportsMailer < ApplicationMailer
   layout "mailers/exports_layout"
 
-  attr_accessor :professor, :course, :export, :status
+  attr_reader :professor, :course, :export, :status
 
   # the SecureTokenHelper brings in the #secure_downloads_url method which we
   # need for building the secure download method on success emails
   add_template_helper(SecureTokenHelper)
 
   def export_started(professor:, course:)
-    self.professor = professor
-    self.course = course
+    @professor = professor
+    @course = course
 
     send_mail status: "is being created"
   end
 
   def export_failure(professor:, course:)
-    self.professor = professor
-    self.course = course
+    @professor = professor
+    @course = course
 
     send_mail status: "failed to build"
   end
 
   def export_success(professor:, export:, token:)
-    self.professor = professor
-    self.export = export
-    self.course = export.course
-    self.secure_token = token
+    @professor = professor
+    @export = export
+    @course = export.course
+    @secure_token = token
 
     send_mail status: "is ready"
   end
@@ -33,7 +33,7 @@ class CourseAnalyticsExportsMailer < ApplicationMailer
   protected
 
   def send_mail(status:)
-    self.status = status
+    @status = status
 
     mail mailer_attrs do |format|
       format.text

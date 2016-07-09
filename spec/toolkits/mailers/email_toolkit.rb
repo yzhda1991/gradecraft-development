@@ -5,8 +5,8 @@ module Toolkits
       module Definitions
         def define_email_context
           let(:email) { ActionMailer::Base.deliveries.last }
-          let(:sender) { ExportsMailer::SENDER_EMAIL }
-          let(:admin_email) { ExportsMailer::ADMIN_EMAIL }
+          let(:sender) { described_class::SENDER_EMAIL }
+          let(:admin_email) { described_class::ADMIN_EMAIL }
           let(:text_part) { email.body.parts.detect {|part| part.content_type.match "text/plain" }}
           let(:html_part) { email.body.parts.detect {|part| part.content_type.match "text/html" }}
         end

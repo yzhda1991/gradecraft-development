@@ -1,16 +1,14 @@
 require "rails_spec_helper"
 
 # specs for submission notifications that are sent to students
-describe ExportsMailer do
+describe CourseAnalyticsExportsMailer do
+
   # brings in helpers for default emails and parts
   extend Toolkits::Mailers::EmailToolkit::Definitions
   define_email_context # defined in EmailToolkit::Definitions
 
   # brings in shared examples for emails and parts
   include Toolkits::Mailers::EmailToolkit::SharedExamples
-
-  # include SubmissionsExport-specific shared examples
-  include Toolkits::Mailers::ExportsMailerToolkit::SharedExamples
 
   # include the #secure_downloads_url so we can test that it's being included
   include SecureTokenHelper
@@ -54,6 +52,8 @@ describe ExportsMailer do
       subject { text_part.body }
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a submissions export email without archive data"
+
+      # should not have an html footer
       it_behaves_like "an email text part"
     end
 
@@ -61,6 +61,8 @@ describe ExportsMailer do
       subject { html_part.body }
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a submissions export email without archive data"
+
+      # should have an html footer
       it_behaves_like "an email html part"
     end
   end
