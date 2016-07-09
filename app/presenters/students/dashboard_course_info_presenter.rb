@@ -13,7 +13,7 @@ class Students::DashboardCourseInfoPresenter < Showtime::Presenter
 
   def has_info?
     if student
-      has_student_info? && has_course_info?
+      has_student_info? || has_course_info?
     else
       has_course_info?
     end
