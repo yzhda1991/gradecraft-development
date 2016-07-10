@@ -5,14 +5,14 @@ class CoursesController < ApplicationController
 
   # rubocop:disable AndOr
   def index
-    @title = "Course Index"
+    @title = "My Courses"
     @courses = current_user.courses
     # Used to return the course list to search
     respond_to do |format|
-      format.html { }
-      format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
-                                                         :year, :semester])
-                                                       }
+      format.html
+      format.json do
+        render json: @courses.to_json(only: [:id, :name, :courseno, :year, :semester])
+      end
     end
   end
 
