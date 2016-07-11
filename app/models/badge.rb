@@ -29,6 +29,9 @@ class Badge < ActiveRecord::Base
 
   validates_presence_of :course, :name
   validates_numericality_of :full_points, allow_blank: true
+  validates_inclusion_of :visible, :can_earn_multiple_times, :visible_when_locked,
+    :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
+    in: [true, false]
 
   scope :visible, -> { where(visible: true) }
 

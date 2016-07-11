@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160624165722) do
+ActiveRecord::Schema.define(version: 20160711040554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,21 +147,20 @@ ActiveRecord::Schema.define(version: 20160624165722) do
   end
 
   create_table "badges", force: :cascade do |t|
-    t.string   "name",                         limit: 255
+    t.string   "name",                                                    null: false
     t.text     "description"
     t.integer  "full_points"
-    t.integer  "course_id"
-    t.integer  "assignment_id"
+    t.integer  "course_id",                                               null: false
     t.string   "icon",                         limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "visible",                                  default: true
-    t.boolean  "can_earn_multiple_times",                  default: true
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.boolean  "visible",                                  default: true, null: false
+    t.boolean  "can_earn_multiple_times",                  default: true, null: false
     t.integer  "position"
-    t.boolean  "visible_when_locked",                      default: true
-    t.boolean  "show_name_when_locked",                    default: true
+    t.boolean  "visible_when_locked",                      default: true, null: false
+    t.boolean  "show_name_when_locked",                    default: true, null: false
     t.boolean  "show_points_when_locked",                  default: true
-    t.boolean  "show_description_when_locked",             default: true
+    t.boolean  "show_description_when_locked",             default: true, null: false
   end
 
   create_table "challenge_files", force: :cascade do |t|
