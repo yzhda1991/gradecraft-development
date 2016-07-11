@@ -38,102 +38,198 @@ describe CourseAnalyticsExportsMailer do
       ).deliver_now
     end
 
-    it_behaves_like "a gradecraft email to a professor"
+    it "is sent from gradecraft's default mailer email" do
+      expect(email.from).to eq [sender]
+    end
+
+    it "is sent to the professor's email" do
+      expect(email.to).to eq [professor.email]
+    end
 
     it "BCC's to the gradecraft admin" do
       expect(email.bcc).to eq [admin_email]
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Course Analytics Export for #{course.courseno} - #{course.name} is being created"
+      expect(email.subject).to eq \
+        "Course Analytics Export for #{course.courseno} - #{course.name} " \
+        "is being created"
     end
 
     describe "text part body" do
       subject { text_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email without archive data"
 
-      # should not have an html footer
-      it_behaves_like "an email text part"
-    end
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
 
-    describe "html part body" do
-      subject { html_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email without archive data"
+      it "includes the course name" do
+        should include course.name
+      end
 
-      # should have an html footer
-      it_behaves_like "an email html part"
-    end
-  end
-
-  describe "#export_success" do
-    let(:deliver_email) do
-      ExportsMailer
-        .submissions_export_success(professor, assignment, submissions_export, secure_token)
-        .deliver_now
-    end
-
-    it_behaves_like "a gradecraft email to a professor"
-
-    it "BCC's to the gradecraft admin" do
-      expect(email.bcc).to eq [admin_email]
-    end
-
-    it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{ assignment_term } #{assignment.name} is ready"
-    end
-
-    describe "text part body" do
-      subject { text_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email with archive data"
-      it_behaves_like "an email text part"
-
-      it "includes the secure download url" do
-        expect(subject).to include secure_download_url(secure_token)
+      it "doesn't declare a doctype" do
+        should not include "DOCTYPE"
       end
     end
 
     describe "html part body" do
       subject { html_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email with archive data"
-      it_behaves_like "an email html part"
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "declares a doctype" do
+        should include "DOCTYPE"
+      end
+    end
+  end
+
+
+  describe "#export_success" do
+    let(:deliver_email) do
+       described_class.export_success(
+         professor: professor,
+         export: export,
+         token: secure_token
+       ).deliver_now
+    end
+
+    it "is sent from gradecraft's default mailer email" do
+      expect(email.from).to eq [sender]
+    end
+
+    it "is sent to the professor's email" do
+      expect(email.to).to eq [professor.email]
+    end
+
+    it "BCC's to the gradecraft admin" do
+      expect(email.bcc).to eq [admin_email]
+    end
+
+    it "has the correct subject" do
+      expect(email.subject).to eq \
+        "Course Analytics Export for #{course.courseno} - #{course.name} " \
+        "is ready"
+    end
+
+    describe "text part body" do
+      subject { text_part.body }
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "doesn't declare a doctype" do
+        should not include "DOCTYPE"
+      end
 
       it "includes the secure download url" do
         expect(subject).to include secure_download_url(secure_token)
+      end
+
+      it "includes the archive url" do
+        should include exports_path
+      end
+
+      it "includes the archive format" do
+        should include "ZIP"
+      end
+    end
+
+    describe "html part body" do
+      subject { html_part.body }
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "declares a doctype" do
+        should include "DOCTYPE"
+      end
+
+      it "includes the secure download url" do
+        expect(subject).to include secure_download_url(secure_token)
+      end
+
+      it "includes the archive url" do
+        should include exports_path
+      end
+
+      it "includes the archive format" do
+        should include "ZIP"
       end
     end
   end
 
   describe "#export_failure" do
     let(:deliver_email) do
-      ExportsMailer
-        .submissions_export_failure(professor, assignment)
-        .deliver_now
+       described_class.export_failure(
+         professor: professor,
+         course: course
+       ).deliver_now
     end
 
-    it_behaves_like "a gradecraft email to a professor"
+    it "is sent from gradecraft's default mailer email" do
+      expect(email.from).to eq [sender]
+    end
+
+    it "is sent to the professor's email" do
+      expect(email.to).to eq [professor.email]
+    end
 
     it "BCC's to the gradecraft admin" do
       expect(email.bcc).to eq [admin_email]
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{ assignment_term } #{assignment.name} failed to build"
+      expect(email.subject).to eq \
+        "Course Analytics Export for #{course.courseno} - #{course.name} " \
+        "failed to build"
     end
 
     describe "text part body" do
       subject { text_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "an email text part"
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "doesn't declare a doctype" do
+        should not include "DOCTYPE"
+      end
     end
 
     describe "html part body" do
       subject { html_part.body }
-      it_behaves_like "a complete submissions export email body"
-      it_behaves_like "an email html part"
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "declares a doctype" do
+        should include "DOCTYPE"
+      end
     end
   end
 
