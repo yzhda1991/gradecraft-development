@@ -22,6 +22,7 @@
             %span.bold.assignment-name= "Locked #{(term_for :assignment ).titleize}"
             %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
           .small.uppercase= "#{assignment.assignment_type.name}"
+        - if assignment.due_at?.present?
           .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
   - if assignment_list.empty?
     %li.my-planner-alert

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "rails_spec_helper"
 
-describe "info/dashboard", focus: true do
+describe "info/dashboard"
 
   let(:view_context) { double(:view_context, current_user: @student_1) }
   let(:presenter) { Students::DashboardCoursePlannerPresenter.new({
