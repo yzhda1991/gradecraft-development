@@ -61,7 +61,7 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
       if due_dates?
         "You don't have any #{assignment_term} due in the next week!"
       else
-        "This class flexible assignment due dates. Check your course rules to learn when to turn in certain assignment."
+        "This class has flexible assignment due dates. Check your course rules to learn when to turn in certain assignment."
       end
     elsif list_class == "my-planner-list"
       "You have not predicted any #{assignment_term}! Check out the grade predictor to add #{assignment_term} to this planner."
