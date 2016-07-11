@@ -1,7 +1,15 @@
 # encoding: utf-8
 require "rails_spec_helper"
 
-describe "info/dashboard" do
+describe "info/dashboard", focus: true do
+
+  let(:view_context) { double(:view_context, current_user: @student_1) }
+  let(:presenter) { Students::DashboardCoursePlannerPresenter.build({
+    student: @student_1,
+    assignments: @assignments,
+    course: @course,
+    view_context: view_context
+  })}
 
   before(:all) do
     @course = create(:course_accepting_groups)
