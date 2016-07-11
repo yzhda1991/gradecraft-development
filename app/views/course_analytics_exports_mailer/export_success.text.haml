@@ -1,8 +1,8 @@
 Dear #{@professor.first_name},
 
-Your requested analytics export in course #{course.courseno} - #{course.name} was successfully created.
+Your requested analytics export in course #{@course.courseno} - #{@course.name} was successfully created.
 
-You can download your completed ZIP archive here: #{secure_download_url(secure_token)}. This link will expire after one week.
+You can download your completed ZIP archive here: #{secure_download_url(@secure_token)}. This link will expire after one week.
 
 Alternatively the analytics export can be downloaded on the downloads page here: #{exports_url}.
 

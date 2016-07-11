@@ -32,7 +32,7 @@ describe CourseAnalyticsExportsMailer do
 
   describe "#export_started" do
     let(:deliver_email) do
-      ExportsMailer.export_started(
+      described_class.export_started(
         professor: professor,
         course: course
       ).deliver_now
@@ -68,7 +68,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "doesn't declare a doctype" do
-        should not include "DOCTYPE"
+        should_not include "DOCTYPE"
       end
     end
 
@@ -129,7 +129,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "doesn't declare a doctype" do
-        should not include "DOCTYPE"
+        should_not include "DOCTYPE"
       end
 
       it "includes the secure download url" do
@@ -212,7 +212,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "doesn't declare a doctype" do
-        should not include "DOCTYPE"
+        should_not include "DOCTYPE"
       end
     end
 
