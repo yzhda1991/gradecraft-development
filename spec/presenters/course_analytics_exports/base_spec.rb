@@ -36,6 +36,20 @@ describe Presenters::CourseAnalyticsExports::Base do
   end
 
   describe "#create_export" do
+    before do
+      allow(subject).to receive_messages \
+        current_user: professor,
+        current_course: course
+    end
+
+    it "creates a new export and sets it to @export" do
+      export = subject.create_export
+      expect(export.class).to eq CourseAnalyticsExport
+      expect(export.course_id).to eq course.id
+      expect(export.professor_id).to eq professor.id
+      expect(export.valid?).to be_truthy
+      expect(subject.instance_variable_get :@export).to eq export
+    end
   end
 
   describe "#export_job" do

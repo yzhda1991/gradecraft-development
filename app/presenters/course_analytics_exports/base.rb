@@ -13,6 +13,8 @@ module Presenters
         create_export && export_job.enqueue
       end
 
+      # create the export and cache it to @export so when we're looking for it
+      # later we don't create a new one
       def create_export
         @export = ::CourseAnalyticsExport.create \
           course_id: current_course.id,
@@ -32,8 +34,12 @@ module Presenters
         false
       end
 
-      def course
-        @course ||= current_course
+      def current_course
+        properties.current_course
+      end
+
+      def current_user
+        properties.current_user
       end
 
       def stream_export
