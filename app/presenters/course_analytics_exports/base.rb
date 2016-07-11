@@ -3,6 +3,8 @@ require "showtime"
 module Presenters
   module CourseAnalyticsExports
     class Base < Showtime::Presenter
+      # let's know what to call our export so we don't have to do it over
+      # and over in the controller or elsewhere
       def resource_name
         "course analytics export"
       end
