@@ -67,7 +67,7 @@ describe Presenters::CourseAnalyticsExports::Base do
       expect(subject.instance_variable_get :@export_job).to eq export_job
 
       # now that we've built one, we shouldn't be building another one
-      expect(CourseAnalyticsExportJob).not_to receive(:create)
+      expect(CourseAnalyticsExportJob).not_to receive(:new)
       subject.export_job
     end
   end
@@ -142,7 +142,7 @@ describe Presenters::CourseAnalyticsExports::Base do
 
     describe "#send_data_options" do
       it "returns the un-splatted options we want to use for send_data" do
-        allow(subject).to receive_messages \
+        allow(export).to receive_messages \
           stream_export: "the-data",
           filename: "filez.txt"
 
