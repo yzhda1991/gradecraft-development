@@ -1,0 +1,8 @@
+%h2{:align => "center"}
+  %strong Dear #{ @professor.first_name },
+
+%h3{:align => "center"} Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" in course #{ @course.name } is being created.
+%p
+%p{:align => "center"}
+  You'll be notified when your ZIP archive is ready to download.
+%hr/
