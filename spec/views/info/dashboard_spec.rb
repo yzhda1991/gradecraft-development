@@ -4,7 +4,7 @@ require "rails_spec_helper"
 describe "info/dashboard", focus: true do
 
   let(:view_context) { double(:view_context, current_user: @student_1) }
-  let(:presenter) { Students::DashboardCoursePlannerPresenter.build({
+  let(:presenter) { Students::DashboardCoursePlannerPresenter.new({
     student: @student_1,
     assignments: @assignments,
     course: @course,
