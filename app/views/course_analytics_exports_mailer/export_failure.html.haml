@@ -1,9 +1,12 @@
 %h2{:align => "center"}
-  %strong Dear #{ @professor.first_name },
-%h3{:align => "center"} Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" in course #{ @course.name } failed to complete.
+  %strong Dear #{professor.first_name},
+%h3{:align => "center"} Your requested analytics export for course #{course.courseno} - #{course.name} failed to complete.
 
 %p
 %p{:align => "center"}
   Our system administrators have been notified of the problem, but you may send an additional email to
-  %a{:href => "mailto: #{ ExportsMailer::ADMIN_EMAIL }"} #{ExportsMailer::ADMIN_EMAIL}
+  %a{:href => "mailto: #{ADMIN_EMAIL}"} #{ADMIN_EMAIL}
   if you'd like.
+
+%p Sincerely,
+%p The GradeCraft Team

@@ -1,8 +1,12 @@
 %h2{:align => "center"}
-  %strong Dear #{ @professor.first_name },
+  %strong Dear #{professor.first_name},
 
-%h3{:align => "center"} Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" in course #{ @course.name } is being created.
+Your requested analytics export for course #{course.courseno} - #{course.name} is being generated.
+
 %p
 %p{:align => "center"}
   You'll be notified when your ZIP archive is ready to download.
 %hr/
+
+%p Sincerely,
+%p The GradeCraft Team

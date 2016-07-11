@@ -1,10 +1,10 @@
-Dear #{ @professor.first_name },
+Dear #{@professor.first_name},
 
-Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" was successfully created for course #{ @course.name }.
+Your requested analytics export in course #{course.courseno} - #{course.name} was successfully created.
 
-You can download your completed ZIP archive here: #{ secure_download_url(@secure_token) }. This link will expire after one week.
+You can download your completed ZIP archive here: #{secure_download_url(secure_token)}. This link will expire after one week.
 
-Alternatively you can download the submissions archive on the submissions downloads page here: #{ exports_url }.
+Alternatively the analytics export can be downloaded on the downloads page here: #{exports_url}.
 
 Sincerely,
-GradeCraft
+The GradeCraft Team
