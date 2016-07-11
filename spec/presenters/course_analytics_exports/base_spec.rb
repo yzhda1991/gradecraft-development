@@ -85,47 +85,70 @@ describe Presenters::CourseAnalyticsExports::Base do
   end
 
   describe "#destroy_export" do
-    before(:each) do
-      # :each also caches the export so we can work with it later
-      allow(export).to receive(:delete_object_from_s3) { "whtevrz" }
-    end
-
-    context "the export is successfully destroyed" do
-      before(:each) do
-        allow(export).to receive(:destroy) { true }
-      end
-
-      it "returns the output of export.destroy" do
-        # then, let's hope that the export can destroy normally on its own
-        expect(subject.destroy_export).to eq true
-      end
-
-      it "deletes the object from s3" do
-        expect(export).to receive(:delete_object_from_s3)
-        export.destroy_export
-      end
-    end
-
-    context "the export is not destroyed" do
-      before(:each) do
-        # :each also caches the export so we can work with it later
-        allow(export).to receive(:destroy) { false }
-      end
-
-      it "returns false" do
-        expect(subject.destroy_export).to eq false
-      end
-
-      it "doesn't delete the object from s3" do
-        expect(export).not_to receive(:delete_object_from_s3)
-        subject.destroy_export
-      end
+    it "destroys the export" do
+      expect(export).to receive(:destroy)
+      subject.destroy_export
     end
   end
 
-  describe "#course" do
+  describe "#current_course" do
+    it "returns the current_course from properties" do
+      allow(subject.properties).to receive(:current_course) { "the-course" }
+      expect(subject.current_course).to eq "the-course"
+    end
+  end
+
+  describe "#current_user" do
+    it "returns the current_user from properties" do
+      allow(subject.properties).to receive(:current_user) { "the-user" }
+      expect(subject.current_user).to eq "the-user"
+    end
   end
 
   describe "#stream_export" do
+    it "streams the s3 object and returns the stream" do
+      allow(export).to receive(:stream_s3_object_body) { "the-stream" }
+      expect(subject.stream_export).to eq "the-stream"
+    end
+  end
+
+  describe "#export_filename" do
+    it "returns the filename of the export" do
+      allow(export).to receive(:export_filename) { "the-filename" }
+      expect(subject.export_filename).to eq "the-filename"
+    end
+  end
+
+  describe "token authentication" do
+    let(:authenticator) { double(:an_authenticator).as_null_object }
+
+    before(:each) do
+      allow(subject).to receive(:authenticator) { authenticator }
+    end
+
+    describe "#secure_download_authenticates?" do
+      it "checks whether the secure download has authenticated" do
+        allow(authenticator).to receive(:authenticates?) { "auth-response" }
+        expect(subject.secure_download_authenticates?).to eq "auth-response"
+      end
+    end
+
+    describe "#secure_download_expired?" do
+      it "checks whether the auth is valid, but the token expired" do
+        allow(authenticator).to receive(:valid_token_expired?) { "probably" }
+        expect(subject.valid_token_expired?).to eq "probably"
+      end
+    end
+
+    describe "#send_data_options" do
+      it "returns the un-splatted options we want to use for send_data" do
+        allow(subject).to receive_messages \
+          stream_export: "the-data",
+          filename: "filez.txt"
+
+        expect(subject.send_data_options).to eq \
+          ["the-data", { filename: "filez.txt" }]
+      end
+    end
   end
 end

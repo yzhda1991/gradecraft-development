@@ -32,8 +32,7 @@ module Presenters
       # destroying an export should probably automatically delete it from s3
       # as well. let's modify that behavior in a future PR.
       def destroy_export
-        return export.destroy if export.delete_object_from_s3
-        false
+        export.destroy
       end
 
       def current_course

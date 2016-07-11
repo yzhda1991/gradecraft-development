@@ -3,7 +3,7 @@ require "s3_manager"
 require "active_record_spec_helper"
 
 describe CourseAnalyticsExport do
-  subject { described_class.new course_id: course.id }
+  subject { create :course_analytics_export, course_id: course.id }
   let(:course) { create :course }
 
   it "includes S3Manager::Rescource" do
@@ -25,6 +25,14 @@ describe CourseAnalyticsExport do
     it "builds a path for the s3 object" do
       expect(subject.s3_object_key_prefix).to eq \
         "exports/courses/#{course.id}/course_analytics_exports/some-date/12345"
+    end
+  end
+
+  describe "#destroy" do
+    context "after success" do
+      it "removes the object from s3" do
+        pending
+      end
     end
   end
 end

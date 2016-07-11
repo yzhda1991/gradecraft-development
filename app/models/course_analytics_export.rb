@@ -24,6 +24,9 @@ class CourseAnalyticsExport < ActiveRecord::Base
 
   validates :course_id, presence: true
 
+  # if we destroy the export successfully clean the data off of S3
+  after_destroy :delete_object_from_s3
+
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
   #
