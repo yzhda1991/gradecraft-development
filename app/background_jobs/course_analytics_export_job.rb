@@ -1,3 +1,4 @@
+require "resque_job"
 require_relative "../performers/course_analytics_export_performer"
 
 class CourseAnalyticsExportJob < ResqueJob::Base

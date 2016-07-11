@@ -22,13 +22,15 @@ module Presenters
       end
 
       def export_job
-        @export_job ||= ::CourseAnalyticsExportJob.new export_id: @export.id
+        @export_job ||= ::CourseAnalyticsExportJob.new export_id: export.id
       end
 
       def export
         @export ||= ::CourseAnalyticsExport.find params[:id]
       end
 
+      # destroying an export should probably automatically delete it from s3
+      # as well. let's modify that behavior in a future PR.
       def destroy_export
         return export.destroy if export.delete_object_from_s3
         false
