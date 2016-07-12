@@ -5,6 +5,7 @@ img.profile-pic
   position: relative
   margin: 0 0 -5px -5px
   padding: 0
+  border-radius: 5px
 
 a.site-title
   color: $color-blue-1
@@ -67,7 +68,7 @@ ul.subnav.logged-out
     background-color: $color-grey-3
 
   .button:hover
-    background-color: $color-blue-1
+    background-color: $color_blue_1
 
 .the-nav .nav-pill.right.public-nav
   margin-top: .4em
@@ -109,6 +110,19 @@ ul.subnav.logged-out
 
   .the-nav .nav-pill.right
     z-index: 100
+    .course-info-btn, .my-account
+      top: -1.1rem
+    .my-account
+      margin-left: .25rem
+    .course-info-btn
+      margin-right: .25rem
+    ul.typeahead.dropdown-menu.course-result
+      width: 185px
+      padding: 0
+      font-size: .8rem
+      li
+        padding: 0
+        margin: 0
   .the-nav .nav-pill.left
     height: 45px
     overflow: hidden
@@ -135,7 +149,8 @@ ul.subnav.logged-out
       margin-left: .5rem
       color: $color-blue-3
       text-transform: uppercase
-
+    &.button
+      color: $color-white
     .tagline
       margin-left: .5rem
       color: $color-green-2
@@ -147,10 +162,10 @@ ul.subnav.logged-out
   /* Active State */
   .the-nav > .nav > li:hover > a
     color: $color-white
-    background-color: $color-blue-2
+    background-color: $color-blue-3
   .the-nav > .nav > li:hover > a.no-hover
     background-color: $color-blue-1
-    color: $color-blue-4
+    color: $color-white
   .the-nav > .nav > li:hover .subnav
     display: block
 
@@ -200,7 +215,7 @@ ul.subnav.logged-out
   .nav.nav-pill
     padding: 0
     margin: 0
-  
+
   .nav > li a
     display: block
     padding: .5rem
@@ -321,7 +336,7 @@ ul.subnav.logged-out
   .offscreen-sidebar.animating.closing
     transform: translate3d(-280px, 0, 0)
     -webkit-transform: translate3d(-280px, 0, 0)
-  
+
   .offscreen-sidebar.menu-visible
     left: 0
 
@@ -353,7 +368,7 @@ ul.subnav.logged-out
   .navbar > .mobile-nav > .right
     width: 100%
     margin-right: 0
-  
+
   .login-buttons
     margin: 0 auto
     width: 100%
@@ -427,7 +442,7 @@ ul.subnav.logged-out
       padding: 0em
       color: $color-blue-3
 
-.course-info-card:after, 
+.course-info-card:after,
 .course-info-card:before
   bottom: 100%
   left: 50%
@@ -444,7 +459,7 @@ ul.subnav.logged-out
   border-width: 8px
   margin-left: -8px
 
-.course-info-card:before 
+.course-info-card:before
   border-color: rgba(238, 238, 238, 0)
   border-width: 16px
   margin-left: -16px

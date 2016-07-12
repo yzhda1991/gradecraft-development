@@ -1,15 +1,8 @@
-.hide-for-small
-  %li.has-form{role: "search"}
-    %label.sr-only{:for => "search-input"}
-      Search #{term_for :students}
-    %input#student-search.students-search-query.search-input{ data: { autocompleteUrl: autocomplete_student_name_students_path }, type: "text", placeholder: "Search #{term_for :students}", label: false }
-    %a.alert.button{ :href => "#" } Go
-
-  %li.has-form{role: "search"}
-    %label.sr-only{:for => "search-input"}
-      Search Courses
-    %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "Search Courses", label: false }
-    %a.alert.button{ :href => "#" } Go
+%li.has-form{role: "search"}
+  %label.sr-only{:for => "search-input"}
+    Search #{term_for :students}
+  %input#student-search.students-search-query.search-input{ data: { autocompleteUrl: autocomplete_student_name_students_path }, type: "text", placeholder: "Search #{term_for :students}", label: false }
+  %a.alert.button{ :href => "#" } Go
 
 %h5 Overview
 %li= link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
@@ -85,15 +78,6 @@
 %li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 %li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path
 %li= link_to_unless_current glyph(:calendar) + "Calendar Events", events_path
-
-
-- if LTIProvider.present?
-  .hide-for-small
-    %hr
-
-    %h5 Tools
-    - LTIProvider.all.each do |tool|
-      %li= link_to_unless_current glyph("external-link-square") + "#{tool.name}", launch_lti_provider_path(tool)
 
 - if current_user_is_admin?
   .hide-for-small

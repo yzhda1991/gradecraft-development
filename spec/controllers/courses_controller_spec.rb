@@ -17,7 +17,7 @@ describe CoursesController do
     describe "GET index" do
       it "returns all courses the professor has an association with" do
         get :index
-        expect(assigns(:title)).to eq("Course Index")
+        expect(assigns(:title)).to eq("My Courses")
         expect(assigns(:courses)).to eq([@course])
         expect(response).to render_template(:index)
       end
@@ -224,9 +224,27 @@ describe CoursesController do
     end
     before(:each) { login_user(@student) }
 
+    describe "GET index" do
+      it "returns all courses the student has an association with" do
+        get :index
+        expect(assigns(:title)).to eq("My Courses")
+        expect(assigns(:courses)).to eq([@course])
+        expect(response).to render_template(:index)
+      end
+
+      # Powers the course search utility
+      context "with json format" do
+        it "returns all courses in json format" do
+          get :index, format: :json
+          json = JSON.parse(response.body)
+          expect(json.length).to eq 1
+          expect(json[0].keys).to eq ["id", "name", "courseno", "year", "semester"]
+        end
+      end
+    end
+
     describe "protected routes" do
       [
-        :index,
         :new,
         :create,
         :copy
