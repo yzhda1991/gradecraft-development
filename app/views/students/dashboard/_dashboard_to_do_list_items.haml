@@ -26,4 +26,12 @@
           .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
   - if assignment_list.empty?
     %li.my-planner-alert
-      = presenter.empty_message(list_class)
+      - if list_class == "course-planner-list"
+        - if presenter.due_dates?
+          You don't have any #{(term_for :assignment).downcase} due in the next week!
+        - else
+          This class has flexible assignment due dates. Check your course rules to learn when to turn in certain assignment.
+      - elsif list_class == "my-planner-list"
+        You have not predicted any #{(term_for :assignment).downcase}! Check out the 
+        = link_to "grade predictor", predictor_path
+        to add #{(term_for :assignment).downcase} to this planner.
