@@ -5,4 +5,8 @@ class S3ResourceTest
   def initialize(options={})
     @s3_object_key = options[:s3_object_key]
   end
+
+  def export_filename
+    "some-other-filename"
+  end
 end

@@ -1,8 +1,13 @@
-require_relative "../../../lib/s3_manager/resource"
+require "active_record_spec_helper"
+require "s3_manager/resource"
+require "support/uni_mock/rails"
 require_relative "../../support/test_classes/lib/s3_manager/s3_resource_test"
 
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new s3_object_key: s3_object_key }
+
+  # add some helpers for stubbing the environment
+  include UniMock::StubRails
 
   let(:s3_manager) { double(S3Manager::Manager).as_null_object }
   let(:s3_object_key) { "some-fake-key" }
@@ -38,7 +43,7 @@ RSpec.describe S3Manager::Resource do
 
     it "builds a new s3_object_key and caches it" do
       subject.rebuild_s3_object_key
-      expect(subject[:s3_object_key]).to eq "new-key"
+      expect(subject.s3_object_key).to eq "new-key"
     end
   end
 

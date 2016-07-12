@@ -8,7 +8,7 @@ module S3Manager
         # changed for the resource, but only if the target resources is a
         # descendant of ActiveRecord::Base
         #
-        if defined?(ActiveRecord) && base.ancestors #.include? "ActiveRecord::Base"
+        if defined?(ActiveRecord) && base.ancestors.include?(ActiveRecord::Base)
           before_save :rebuild_s3_object_key, if: :export_filename_changed?
         end
       end
@@ -56,7 +56,7 @@ module S3Manager
     end
 
     def rebuild_s3_object_key
-      self[:s3_object_key] = build_s3_object_key export_filename
+      self.s3_object_key = build_s3_object_key export_filename
     end
 
     def build_s3_object_key(object_filename)
