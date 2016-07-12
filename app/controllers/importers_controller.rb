@@ -1,5 +1,4 @@
-require "active_lms"
-require_relative "../importers/assignment_importers"
+require_relative "../services/imports_lms_assignments"
 
 class ImportersController < ApplicationController
   before_filter :ensure_staff?

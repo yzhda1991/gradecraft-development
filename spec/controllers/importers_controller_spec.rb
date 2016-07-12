@@ -30,7 +30,14 @@ describe ImportersController do
           assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
       end
 
-      xit "renders the results"
+      it "renders the results" do
+        allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
+
+        post :assignments_import, importer_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
+
+        expect(response).to render_template :assignments_import_results
+      end
 
       context "with an invalid request" do
         xit "re-renders the template with the error"

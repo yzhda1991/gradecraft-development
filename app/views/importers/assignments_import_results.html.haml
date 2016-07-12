@@ -5,22 +5,22 @@
 .pageContent
   = render "layouts/alerts"
 
-  - unless @result.unsuccessful.empty?
+  - unless @result.import_result.unsuccessful.empty?
     %h4.subtitle
-      = "#{@result.unsuccessful.count} #{"Assignment".pluralize(@result.unsuccessful.count)} Not Imported"
+      = "#{@result.import_result.unsuccessful.count} #{"Assignment".pluralize(@result.import_result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
         %tr
           %th Data
           %th Error(s)
       %tbody
-        - @result.unsuccessful.each do |row|
+        - @result.import_result.unsuccessful.each do |row|
           %tr
             %td= row[:data]
             %td= row[:errors]
 
   %h4.subtitle
-    = "#{@result.successful.count} #{"Assignment".pluralize(@result.successful.count)} Imported Successfully"
+    = "#{@result.import_result.successful.count} #{"Assignment".pluralize(@result.import_result.successful.count)} Imported Successfully"
   %table.dynatable
     %thead
       %tr
@@ -28,7 +28,7 @@
         %th Assignment Type
         %th Name
     %tbody
-      - @result.successful.each do |assignment|
+      - @result.import_result.successful.each do |assignment|
         %tr
           %td= link_to assignment.course.name, course_path(assignment.course)
           %td= link_to assignment.assignment_type.name, assignment_type_path(assignment.assignment_type)
