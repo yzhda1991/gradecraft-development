@@ -19,6 +19,7 @@ class CanvasAssignmentImporter
         assignment.pass_fail = true if canvas_assignment["grading_type"] == "pass_fail"
 
         if assignment.save
+          link_imported canvas_assignment["id"], assignment
           successful << assignment
         else
           unsuccessful << { data: canvas_assignment,
@@ -28,5 +29,14 @@ class CanvasAssignmentImporter
     end
 
     self
+  end
+
+  private
+
+  def link_imported(provider_id, assignment)
+    imported = ImportedAssignment.find_or_initialize_by(provider: :canvas,
+                                                        provider_id: provider_id)
+    imported.assignment = assignment
+    imported.save
   end
 end

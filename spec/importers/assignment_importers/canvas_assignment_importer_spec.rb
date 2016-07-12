@@ -15,6 +15,7 @@ describe CanvasAssignmentImporter do
       let(:assignment_type) { create :assignment_type }
       let(:canvas_assignment) do
         {
+          id: canvas_assignment_id,
           name: "This is an assignment from Canvas",
           description: "This is the description",
           due_at: "2012-07-01T23:59:00-06:00",
@@ -22,6 +23,7 @@ describe CanvasAssignmentImporter do
           grading_type: "points"
         }.stringify_keys
       end
+      let(:canvas_assignment_id) { "ASSIGNMENT_1" }
       let(:course) { create :course }
       subject { described_class.new([canvas_assignment]) }
 
@@ -54,6 +56,15 @@ describe CanvasAssignmentImporter do
         subject.import(course, assignment_type.id)
 
         expect(assignment.assignment_type).to eq assignment_type
+      end
+
+      it "creates a link to the assignment id in canvas" do
+        subject.import(course, assignment_type.id)
+
+        imported_assignment = ImportedAssignment.unscoped.last
+        expect(imported_assignment.assignment).to eq assignment
+        expect(imported_assignment.provider).to eq "canvas"
+        expect(imported_assignment.provider_id).to eq canvas_assignment_id
       end
 
       it "contains a successful row if the assignment is valid" do
