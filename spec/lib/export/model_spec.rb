@@ -37,7 +37,7 @@ describe Export::Model do
     end
 
     describe "#created_at_date" do
-      subject { create(:submissions_export) }
+      subject { create :course_analytics_export }
       let(:result) { subject.created_at_date }
 
       context "created_at is present" do
@@ -55,7 +55,7 @@ describe Export::Model do
     end
 
     describe "#created_at_in_microseconds" do
-      subject { create(:submissions_export) }
+      subject { create :course_analytics_export }
       let(:result) { subject.created_at_in_microseconds }
 
       context "created_at is present" do
@@ -69,24 +69,6 @@ describe Export::Model do
           allow(subject).to receive(:created_at) { nil }
           expect(result).to be_nil
         end
-      end
-    end
-
-    describe "#s3_object_key_prefix" do
-      subject { create(:submissions_export) }
-      let(:result) { subject.s3_object_key_prefix }
-      let(:expected_object_key_prefix) do
-        [
-          "exports", "courses", 40, "assignments", 50,
-          subject.created_at_date,
-          subject.created_at_in_microseconds
-        ]
-      end
-
-      it "returns the expected pieces" do
-        allow(subject).to \
-          receive_messages(course_id: 40, assignment_id: 50)
-        expect(result).to eq expected_object_key_prefix.join("/")
       end
     end
 

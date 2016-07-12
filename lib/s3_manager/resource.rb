@@ -1,3 +1,5 @@
+require_relative "manager"
+
 module S3Manager
   module Resource
     def self.included(base)
@@ -6,14 +8,14 @@ module S3Manager
         # changed for the resource, but only if the target resources is a
         # descendant of ActiveRecord::Base
         #
-        if base.ancestors.include? ActiveRecord::Base
+        if defined?(ActiveRecord) && base.ancestors #.include? "ActiveRecord::Base"
           before_save :rebuild_s3_object_key, if: :export_filename_changed?
         end
       end
     end
 
     def s3_manager
-      @s3_manager ||= S3Manager::Manager.new
+      @s3_manager ||= ::S3Manager::Manager.new
     end
 
     def upload_file_to_s3(file_path)
@@ -43,7 +45,7 @@ module S3Manager
     end
 
     def s3_object_summary
-      @s3_object_summary ||= S3Manager::Manager::ObjectSummary
+      @s3_object_summary ||= ::S3Manager::Manager::ObjectSummary
         .new(s3_object_key, s3_manager)
     end
 
