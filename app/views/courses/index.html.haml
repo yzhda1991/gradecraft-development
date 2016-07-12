@@ -8,10 +8,11 @@
       %a{:href => new_course_path }
         %i.fa.fa-plus
         New Course
-    %li
-      %a{:href => importers_path }
-        %i.fa.fa-cloud-download
-        Import Courses
+    -#
+      %li
+        %a{:href => importers_path }
+          %i.fa.fa-cloud-download
+          Import Courses
 
 .pageContent
   = render partial: "layouts/alerts"
