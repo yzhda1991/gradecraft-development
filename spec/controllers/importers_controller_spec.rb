@@ -3,15 +3,16 @@ require "./app/services/imports_lms_assignments"
 
 describe ImportersController do
   describe "POST assignments_import" do
+    let(:course_id) { "COURSE_ID" }
+    let(:provider) { :canvas }
+
     context "as a professor" do
       let(:access_token) { "BLAH" }
       let(:assignment_ids) { [{ "name" => "Assignment 1" }] }
       let(:assignment_type) { create :assignment_type }
-      let(:course_id) { "COURSE_ID" }
       let(:course) { create :course }
       let(:professor) { professor_membership.user }
       let(:professor_membership) { create :professor_course_membership, course: course }
-      let(:provider) { :canvas }
       let(:result) { double(:result, success?: true, message: "") }
 
       before do
@@ -53,7 +54,11 @@ describe ImportersController do
     end
 
     context "as a student" do
-      xit "redirects to the root url"
+      it "redirects to the root url" do
+        post :assignments_import, importer_id: provider, id: course_id
+
+        expect(response).to redirect_to root_path
+      end
     end
   end
 end
