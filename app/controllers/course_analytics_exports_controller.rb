@@ -1,3 +1,6 @@
+# pull in the presenter that we need to bring this all together
+require "./app/presenters/course_analytics_exports/base"
+
 class CourseAnalyticsExportsController < ApplicationController
   before_filter :ensure_staff?, except: :secure_download
 
@@ -49,7 +52,7 @@ class CourseAnalyticsExportsController < ApplicationController
   private
 
   def presenter
-    @presenter ||= Presenters::CourseAnalyticsExports::Base.new \
+    @presenter ||= ::Presenters::CourseAnalyticsExports::Base.new \
       params: params,
       current_course: current_course,
       current_user: current_user
