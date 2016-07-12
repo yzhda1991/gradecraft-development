@@ -65,7 +65,7 @@ class Assignment < ActiveRecord::Base
   :include_in_predictor, :include_in_to_do, :use_rubric, :accepts_attachments,
   :accepts_text, :accepts_links, :pass_fail, :hide_analytics, :visible_when_locked,
   :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
-  :show_purpose_when_locked, in: [true, false]
+  :show_purpose_when_locked, in: [true, false], message: "must be true or false"
 
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
