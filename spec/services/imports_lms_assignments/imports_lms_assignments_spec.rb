@@ -4,7 +4,7 @@ require "./app/services/imports_lms_assignments/imports_lms_assignments"
 
 describe Services::Actions::ImportsLMSAssignments do
   let(:assignment) { Assignment.unscoped.last }
-  let(:assignments) { [{ "name" => "Assignment 1" }] }
+  let(:assignments) { [{ "id" => "ASSIGNMENT_1", "name" => "Assignment 1" }] }
   let(:assignment_type) { create :assignment_type, course: course }
   let(:course) { create :course }
   let(:provider) { :canvas }
