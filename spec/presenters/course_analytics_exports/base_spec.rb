@@ -120,7 +120,10 @@ describe Presenters::CourseAnalyticsExports::Base do
   end
 
   describe "#export_filename" do
+    let(:export) { double(:export).as_null_object }
+
     it "returns the filename of the export" do
+      allow(subject).to receive(:export) { export }
       allow(export).to receive(:export_filename) { "the-filename" }
       expect(subject.export_filename).to eq "the-filename"
     end
