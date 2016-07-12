@@ -85,22 +85,28 @@ describe Presenters::CourseAnalyticsExports::Base do
   end
 
   describe "#destroy_export" do
+    # stub out the s3 client so we don't lag with S3 calls
+    let(:s3_client) { double(:s3_client).as_null_object }
+
     it "destroys the export" do
-      expect(export).to receive(:destroy)
-      subject.destroy_export
+      allow(export).to receive_messages \
+        destroy: "stuff-blowed-up",
+        client: s3_client
+
+      expect(subject.destroy_export).to eq "stuff-blowed-up"
     end
   end
 
   describe "#current_course" do
     it "returns the current_course from properties" do
-      allow(subject.properties).to receive(:current_course) { "the-course" }
+      subject.properties[:current_course] = "the-course"
       expect(subject.current_course).to eq "the-course"
     end
   end
 
   describe "#current_user" do
     it "returns the current_user from properties" do
-      allow(subject.properties).to receive(:current_user) { "the-user" }
+      subject.properties[:current_user] = "the-user"
       expect(subject.current_user).to eq "the-user"
     end
   end
@@ -136,15 +142,15 @@ describe Presenters::CourseAnalyticsExports::Base do
     describe "#secure_download_expired?" do
       it "checks whether the auth is valid, but the token expired" do
         allow(authenticator).to receive(:valid_token_expired?) { "probably" }
-        expect(subject.valid_token_expired?).to eq "probably"
+        expect(subject.secure_download_expired?).to eq "probably"
       end
     end
 
     describe "#send_data_options" do
       it "returns the un-splatted options we want to use for send_data" do
-        allow(export).to receive_messages \
+        allow(subject).to receive_messages \
           stream_export: "the-data",
-          filename: "filez.txt"
+          export_filename: "filez.txt"
 
         expect(subject.send_data_options).to eq \
           ["the-data", { filename: "filez.txt" }]

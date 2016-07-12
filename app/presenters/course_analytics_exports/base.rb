@@ -36,11 +36,11 @@ module Presenters
       end
 
       def current_course
-        properties.current_course
+        properties[:current_course]
       end
 
       def current_user
-        properties.current_user
+        properties[:current_user]
       end
 
       def stream_export
@@ -60,7 +60,7 @@ module Presenters
       end
 
       def send_data_options
-        [stream_export, filename: export_filename]
+        [stream_export, { filename: export_filename }]
       end
 
       private
