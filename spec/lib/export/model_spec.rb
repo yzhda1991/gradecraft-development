@@ -1,3 +1,4 @@
+require "active_record_spec_helper"
 require "./app/models/course_analytics_export"
 require_relative "../../support/uni_mock/rails"
 
