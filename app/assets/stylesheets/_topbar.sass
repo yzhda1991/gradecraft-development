@@ -68,7 +68,7 @@ ul.subnav.logged-out
     background-color: $color-grey-3
 
   .button:hover
-    background-color: $color-blue-1
+    background-color: $color_blue_1
 
 .the-nav .nav-pill.right.public-nav
   margin-top: .4em
@@ -149,7 +149,8 @@ ul.subnav.logged-out
       margin-left: .5rem
       color: $color-blue-3
       text-transform: uppercase
-
+    &.button
+      color: $color-white
     .tagline
       margin-left: .5rem
       color: $color-green-2
@@ -161,10 +162,10 @@ ul.subnav.logged-out
   /* Active State */
   .the-nav > .nav > li:hover > a
     color: $color-white
-    background-color: $color-blue-2
+    background-color: $color-blue-3
   .the-nav > .nav > li:hover > a.no-hover
     background-color: $color-blue-1
-    color: $color-blue-4
+    color: $color-white
   .the-nav > .nav > li:hover .subnav
     display: block
 
