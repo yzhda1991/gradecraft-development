@@ -86,13 +86,11 @@ describe Presenters::CourseAnalyticsExports::Base do
 
   describe "#destroy_export" do
     # stub out the s3 client so we don't lag with S3 calls
-    let(:s3_client) { double(:s3_client).as_null_object }
+    let(:export) { double(:export).as_null_object }
 
     it "destroys the export" do
-      allow(export).to receive_messages \
-        destroy: "stuff-blowed-up",
-        client: s3_client
-
+      allow(subject).to receive(:export) { export }
+      allow(export).to receive(:destroy) { "stuff-blowed-up" }
       expect(subject.destroy_export).to eq "stuff-blowed-up"
     end
   end
@@ -112,7 +110,10 @@ describe Presenters::CourseAnalyticsExports::Base do
   end
 
   describe "#stream_export" do
+    let(:export) { double(:export).as_null_object }
+
     it "streams the s3 object and returns the stream" do
+      allow(subject).to receive(:export) { export }
       allow(export).to receive(:stream_s3_object_body) { "the-stream" }
       expect(subject.stream_export).to eq "the-stream"
     end
