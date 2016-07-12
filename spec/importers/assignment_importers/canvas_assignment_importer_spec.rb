@@ -15,7 +15,11 @@ describe CanvasAssignmentImporter do
       let(:assignment_type) { create :assignment_type }
       let(:canvas_assignment) do
         {
-          name: "This is an assignment from Canvas"
+          name: "This is an assignment from Canvas",
+          description: "This is the description",
+          due_at: "2012-07-01T23:59:00-06:00",
+          points_possible: 123,
+          grading_type: "points"
         }.stringify_keys
       end
       let(:course) { create :course }
@@ -24,8 +28,20 @@ describe CanvasAssignmentImporter do
       it "creates the assignment" do
         expect { subject.import(course, assignment_type.id) }.to \
           change { Assignment.count }.by 1
-        expect(assignment.name).to eq "This is an assignment from Canvas"
         expect(assignment.course).to eq course
+        expect(assignment.description).to eq "This is the description"
+        expect(assignment.due_at).to eq DateTime.new(2012, 7, 1, 23, 59, 0, "-6")
+        expect(assignment.name).to eq "This is an assignment from Canvas"
+        expect(assignment.full_points).to eq 123
+      end
+
+      it "updates to a pass/fail assignment if the grading type is pass fail" do
+        canvas_assignment["grading_type"] = "pass_fail"
+
+        subject.import(course, assignment_type.id)
+
+        expect(assignment.pass_fail).to eq true
+        expect(assignment.full_points).to eq 0
       end
 
       it "adds the assignment to the course" do
