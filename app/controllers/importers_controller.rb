@@ -29,7 +29,15 @@ class ImportersController < ApplicationController
       ENV["#{@provider.upcase}_ACCESS_TOKEN"], params[:id], params[:assignment_ids],
       current_course, params[:assignment_type_id]
 
-    render :assignments_import_results
+    if @result.success?
+      render :assignments_import_results
+    else
+      @course = syllabus.course(params[:id])
+      @assignments = syllabus.assignments(params[:id])
+      @assignment_types = current_course.assignment_types
+
+      render :assignments, alert: @result.message
+    end
   end
 
   private

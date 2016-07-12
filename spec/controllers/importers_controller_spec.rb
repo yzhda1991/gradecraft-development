@@ -12,12 +12,13 @@ describe ImportersController do
       let(:professor) { professor_membership.user }
       let(:professor_membership) { create :professor_course_membership, course: course }
       let(:provider) { :canvas }
-      let(:result) { double(:result, success?: true) }
+      let(:result) { double(:result, success?: true, message: "") }
 
       before do
+        ENV["CANVAS_ACCESS_TOKEN"] = access_token
         login_user(professor)
         allow(controller).to receive(:current_course).and_return course
-        ENV["CANVAS_ACCESS_TOKEN"] = access_token
+        allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
       end
 
       it "imports the selected assignments" do
@@ -31,8 +32,6 @@ describe ImportersController do
       end
 
       it "renders the results" do
-        allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
-
         post :assignments_import, importer_id: provider, id: course_id,
           assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
 
@@ -40,7 +39,16 @@ describe ImportersController do
       end
 
       context "with an invalid request" do
-        xit "re-renders the template with the error"
+        it "re-renders the template with the error" do
+          allow(result).to receive(:success?).and_return false
+          syllabus = double(course: {}, assignments: [])
+          allow(controller).to receive(:syllabus).and_return syllabus
+
+          post :assignments_import, importer_id: provider, id: course_id,
+            assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
+
+          expect(response).to render_template :assignments
+        end
       end
     end
 
