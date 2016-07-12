@@ -93,22 +93,15 @@ $(document).ready(function() {
 // Filter my planner items in "due this week" module
 $('#my-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
-  $('.todo-list-assignments li').filter(function() {
-   return $(this).find('a.starred').length === 0;
-  }).css('display', 'none');
-  if ($('.todo-list-assignments a.starred').length === 0) {
-    $('.my-planner-alert').toggleClass('hidden');
-  }
+  $('.my-planner-list').show();
+  $('.course-planner-list').hide();
 });
 
 $('#course-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
-  $('.todo-list-assignments li').css('display', '');
-  if ($('.todo-list-assignments a.starred').length === 0) {
-    $('.my-planner-alert').toggleClass('hidden');
-  }
+  $('.course-planner-list').show();
+  $('.my-planner-list').hide();
 });
-
 
 //Find event with closest date
 if($("#dashboard-timeline").length) {

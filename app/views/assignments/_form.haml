@@ -129,7 +129,7 @@
     .form-item
       = f.label :include_in_to_do, "Due this Week"
       = f.check_box :include_in_to_do
-      .form_label Can #{term_for :students} see this #{term_for :assignment} in the "Due this Week" panel?
+      .form_label Can #{term_for :students} see this #{term_for :assignment} in the "Course Events" panel?
 
     - if ! current_course.hide_analytics?
       .form-item

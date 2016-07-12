@@ -3,6 +3,14 @@ require "rails_spec_helper"
 
 describe "info/dashboard" do
 
+  let(:view_context) { double(:view_context, current_user: @student_1) }
+  let(:presenter) { Students::DashboardCoursePlannerPresenter.new({
+    student: @student_1,
+    assignments: @assignments,
+    course: @course,
+    view_context: view_context
+  })}
+
   before(:all) do
     @course = create(:course_accepting_groups)
     @professor = create(:user)
@@ -36,6 +44,7 @@ describe "info/dashboard" do
 
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   context "as a professor" do

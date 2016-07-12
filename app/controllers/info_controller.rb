@@ -10,7 +10,12 @@ class InfoController < ApplicationController
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
     @events = Timeline.new(current_course).events_by_due_date
-    render :dashboard
+    render :dashboard, Students::DashboardCoursePlannerPresenter.build({
+      student: current_student,
+      assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
+      course: current_course,
+      view_context: view_context
+    })
   end
 
   def timeline_events
