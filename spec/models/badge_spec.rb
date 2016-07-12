@@ -19,6 +19,42 @@ describe Badge do
       expect(subject).to_not be_valid
       expect(subject.errors[:course]).to include "can't be blank"
     end
+
+    it "is invalid without a visible state" do
+      subject.visible = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:visible]).to include "is not included in the list"
+    end
+
+    it "is invalid without a can_earn_multiple_times state" do
+      subject.can_earn_multiple_times = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:can_earn_multiple_times]).to include "is not included in the list"
+    end
+
+    it "is invalid without a visible_when_locked state" do
+      subject.visible_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:visible_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without a show_name_when_locked state" do
+      subject.show_name_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_name_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without a show_points_when_locked state" do
+      subject.show_points_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_points_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without a show_description_when_locked state" do
+      subject.show_description_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_description_when_locked]).to include "is not included in the list"
+    end
   end
 
   describe "#can_earn_multiple_times" do

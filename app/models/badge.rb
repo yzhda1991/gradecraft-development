@@ -37,10 +37,6 @@ class Badge < ActiveRecord::Base
 
   default_scope { order("position ASC") }
 
-  def can_earn_multiple_times
-    super || false
-  end
-
   # indexed badges
   def awarded_count
     earned_badges.student_visible.count
