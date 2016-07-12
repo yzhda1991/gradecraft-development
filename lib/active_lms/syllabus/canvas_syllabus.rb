@@ -46,6 +46,9 @@ module ActiveLMS
       assignment
     end
 
+    def grades(assignment_ids)
+    end
+
     private
 
     attr_reader :client
