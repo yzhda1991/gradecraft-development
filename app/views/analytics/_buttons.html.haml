@@ -2,8 +2,7 @@
   %ul
     %li= link_to glyph("file-zip-o") + "#{term_for :assignment} Analytics", per_assign_path
 
-    %li= link_to_unless_current glyph(:user) + "#{term_for :student} Analytics",
-      course_analytics_export_path(course_id: current_course.id), method: :post
+    %li= link_to_unless_current glyph(:user) + "#{term_for :student} Analytics", course_analytics_exports_path, method: :post
 
     %li= link_to_unless_current glyph(:user) + "#{term_for :team_leader} Analytics",
       analytics_staff_path
