@@ -1,10 +1,18 @@
+require_relative "../presenters/exports/base"
+
 class ExportsController < ApplicationController
   before_filter :ensure_staff?
 
   def index
-    @submissions_exports = current_course
-      .submissions_exports
-      .order("updated_at DESC")
-      .includes(:assignment, :course, :team)
+    render :index, locals: { presenter: presenter }
+  end
+
+  protected
+
+  def presenter
+    @presenter ||= ::Presenters::Exports::Base.new \
+      params: params,
+      current_course: current_course,
+      current_user: current_user
   end
 end

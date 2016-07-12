@@ -81,6 +81,7 @@ class Course < ActiveRecord::Base
     c.has_many :teams
     c.has_many :course_memberships
     c.has_many :submissions_exports
+    c.has_many :course_analytics_exports
     c.has_many :events
   end
 
