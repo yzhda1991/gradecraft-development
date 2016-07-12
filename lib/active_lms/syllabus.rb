@@ -26,8 +26,8 @@ module ActiveLMS
       provider.assignments(course_id, assignment_ids)
     end
 
-    def grades(assignment_ids)
-      provider.grades(assignment_ids)
+    def grades(course_id, assignment_ids)
+      provider.grades(course_id, assignment_ids)
     end
   end
 end
