@@ -26,7 +26,7 @@ module ActiveLMS
       assignments = []
 
       if assignment_ids.nil?
-        client.get_data("/courses/#{course_id}/assignments") do |data|
+        client.get_data("/courses/#{course_id}/assignments", published: true) do |data|
           assignments += data
         end
       else

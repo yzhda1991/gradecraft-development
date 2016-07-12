@@ -17,7 +17,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
     it "retrieves the assignments for the course from the api" do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/assignments")
-        .with(query: { "access_token" => access_token })
+        .with(query: { "published" => "true", "access_token" => access_token })
         .to_return(status: 200, body: [{ name: "This is an assignment" }].to_json,
                    headers: {})
 
