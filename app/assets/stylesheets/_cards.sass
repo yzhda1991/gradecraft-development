@@ -1,0 +1,42 @@
+@import color
+@import layout
+
+$card-bg: $color-white
+$card-cap-bg: $color-blue-2
+$card-border-width: 1px
+$card-border-color: $color-blue-1
+$card-spacer-x: 1.25rem
+$card-spacer-y: .75rem
+
+.card
+  position: relative
+  display: inline-block
+  border: $card-border-width solid $card-border-color
+  border-radius: $global-radius
+  min-height: 8%
+  max-width: 280px
+  min-width: 17.5rem
+  margin-bottom: $card-spacer-y
+
+  .card-cap
+    background: $card-cap-bg
+    padding: $card-spacer-x 0
+    width: 100%
+
+    img
+      display: block
+      margin: 0 auto
+
+  .card-block
+    padding: $card-spacer-x
+
+  .card-link
+    + .card-link
+      margin-left: $card-spacer-x
+
+  .card-text
+    background: $card-bg
+
+  .card-title
+    background: $card-bg
+    margin-bottom: $card-spacer-y

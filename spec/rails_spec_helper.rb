@@ -65,6 +65,8 @@ RSpec.configure do |config|
       DatabaseCleaner.clean_with(:truncation)
       FactoryGirl.factories.clear
       FactoryGirl.find_definitions
+      # Enable external API access unless it is explicitly turned off with api_spec_helper
+      WebMock.allow_net_connect!
     end
   end
 

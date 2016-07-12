@@ -39,6 +39,7 @@ gem 'fast_blank'
 gem 'fog'
 gem 'font-awesome-rails'
 gem 'haml'
+gem 'httparty'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
 gem 'jquery-rails'
@@ -147,6 +148,7 @@ group :test do
   gem 'rspec-html-matchers'
   gem 'selenium-webdriver'
   gem 'simplecov'
+  gem 'webmock'
 end
 
 group :tasks do

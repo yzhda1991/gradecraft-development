@@ -1,3 +1,5 @@
+require "canvas"
+
 class AssignmentsController < ApplicationController
   include AssignmentsHelper
   include SortsPosition
