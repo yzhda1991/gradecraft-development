@@ -12,6 +12,8 @@
           %th{scope: "col"} Course
           %th{scope: "col"} Name
           %th{scope: "col"} Description
+          %th{scope: "col"} Due
+          %th{scope: "col"} Points
           %th{"data-dynatable-no-sort" => "true"}
             %button.button.select-all= "Check"
             %button.button.select-none= "Uncheck"
@@ -21,6 +23,8 @@
             %td= @course["name"]
             %td= assignment["name"]
             %td= assignment["description"].html_safe
+            %td= assignment["due_at"]
+            %td= assignment["points_possible"]
             %td.center= check_box_tag "assignment_ids[]", assignment["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-assignments-command']" }
 
     .submit-buttons
