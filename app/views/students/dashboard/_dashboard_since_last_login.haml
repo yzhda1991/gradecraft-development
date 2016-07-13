@@ -1,19 +1,24 @@
 .card-header
   %h3 Weekly Stats
-.card-body
-  %p Total points earned this week:
-  %span= number_with_delimiter(current_student.points_earned_for_course_this_week(current_course))
-  %p Grades received this week:
-  %ul
-    - current_student.grades_released_for_course_this_week(current_course).each do |grade|
-      %li
-        #{link_to grade.assignment.name, grade.assignment}:
-        %span= number_with_delimiter(grade.final_points)
+.card-body.weekly-stats-module
+  .module-section
+    %p 
+      Total points earned this week:
+      =number_with_delimiter(current_student.points_earned_for_course_this_week(current_course))
 
-- if current_course.has_badges?
-  %p #{term_for :badges} earned this week
-  %ul
-    - current_student.earned_badges_for_course_this_week(current_course).each do |badge|
-      %li
-        %img{:src => badge.icon, :width => 25 }
-        %span #{badge.name} #{term_for :badge} earned
+  .module-section
+    %p Grades received this week:
+    %ul
+      - current_student.grades_released_for_course_this_week(current_course).each do |grade|
+        %li
+          #{link_to grade.assignment.name, grade.assignment}:
+          %span= number_with_delimiter(grade.final_points)
+
+  .module-section
+    - if current_course.has_badges?
+      %p #{term_for :badges} earned this week:
+      %ul
+        - current_student.earned_badges_for_course_this_week(current_course).each do |badge|
+          %li
+            %img{:src => badge.icon, :width => 25 }
+            %span #{badge.name} #{term_for :badge} earned
