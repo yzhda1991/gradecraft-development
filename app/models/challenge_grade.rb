@@ -1,7 +1,7 @@
 class ChallengeGrade < ActiveRecord::Base
   include GradeStatus
 
-  attr_accessible :name, :score, :challenge_id, :text_feedback, :team_id,
+  attr_accessible :name, :score, :challenge_id, :feedback, :team_id,
     :final_points, :team, :challenge
 
   belongs_to :course
@@ -15,6 +15,7 @@ class ChallengeGrade < ActiveRecord::Base
   releasable_through :challenge
 
   validates :challenge_id, uniqueness: { scope: :team_id }
+  validates_presence_of :team_id
 
   def score
     super.presence || nil

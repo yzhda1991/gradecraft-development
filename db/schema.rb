@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160711040554) do
+ActiveRecord::Schema.define(version: 20160713121529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,43 +175,41 @@ ActiveRecord::Schema.define(version: 20160711040554) do
   end
 
   create_table "challenge_grades", force: :cascade do |t|
-    t.integer  "challenge_id"
+    t.integer  "challenge_id",             null: false
     t.integer  "score"
-    t.string   "feedback",      limit: 255
-    t.string   "status",        limit: 255
-    t.integer  "team_id"
+    t.string   "status",       limit: 255
+    t.integer  "team_id",                  null: false
     t.integer  "final_points"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.text     "text_feedback"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.text     "feedback"
   end
 
   create_table "challenge_score_levels", force: :cascade do |t|
-    t.integer  "challenge_id"
-    t.string   "name",         limit: 255
-    t.integer  "points"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "challenge_id", null: false
+    t.string   "name",         null: false
+    t.integer  "points",       null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "challenges", force: :cascade do |t|
-    t.string   "name",                     limit: 255
+    t.string   "name",                                            null: false
     t.text     "description"
     t.integer  "full_points"
     t.datetime "due_at"
-    t.integer  "course_id"
-    t.string   "points_predictor_display", limit: 255
-    t.boolean  "visible",                              default: true
-    t.boolean  "accepts_submissions"
-    t.boolean  "release_necessary"
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.integer  "course_id",                                       null: false
+    t.boolean  "visible",                         default: true,  null: false
+    t.boolean  "accepts_submissions",             default: true,  null: false
+    t.boolean  "release_necessary",               default: false, null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.datetime "open_at"
-    t.string   "mass_grade_type",          limit: 255
-    t.string   "media",                    limit: 255
-    t.string   "thumbnail",                limit: 255
-    t.string   "media_credit",             limit: 255
-    t.string   "media_caption",            limit: 255
+    t.string   "mass_grade_type",     limit: 255
+    t.string   "media",               limit: 255
+    t.string   "thumbnail",           limit: 255
+    t.string   "media_credit",        limit: 255
+    t.string   "media_caption",       limit: 255
   end
 
   create_table "course_memberships", force: :cascade do |t|

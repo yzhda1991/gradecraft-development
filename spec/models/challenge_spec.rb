@@ -29,6 +29,24 @@ describe Challenge do
       subject.open_at = Date.today + 1
       expect(subject).to be_invalid
     end
+
+    it "is invalid without a visibility setting" do
+      subject.visible = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:visible]).to include "must be true or false"
+    end
+
+    it "is invalid without a submission setting" do
+      subject.accepts_submissions = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:accepts_submissions]).to include "must be true or false"
+    end
+
+    it "is invalid without a release setting" do
+      subject.release_necessary = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:release_necessary]).to include "must be true or false"
+    end
   end
 
   describe "#copy" do

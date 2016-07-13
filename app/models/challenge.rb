@@ -39,6 +39,9 @@ class Challenge < ActiveRecord::Base
   scope :visible, -> { where visible: TRUE }
 
   validates_presence_of :course, :name
+  validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
+  in: [true, false], message: "must be true or false"
+  
   validate :positive_points, :open_before_close
 
   def has_levels?
