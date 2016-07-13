@@ -2,6 +2,7 @@ require "./lib/showtime"
 
 class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
   include Showtime::ViewContext
+  include Submissions::GradeHistory
 
   def course
     properties[:course]
@@ -15,8 +16,16 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     properties[:assignments]
   end
 
+  def due_dates?
+    assignments.any?{ |assignment| assignment.due_at? }
+  end
+
+  def grade_for(assignment)
+    student.grade_for_assignment(assignment)
+  end
+
   def to_do?(assignment)
-    assignment.include_in_to_do? && assignment.visible_for_student?(student)
+    assignment.include_in_to_do? && assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
   end
 
   def to_do_assignments
@@ -32,7 +41,11 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def my_planner?(assignment)
-    to_do?(assignment) && starred?(assignment)
+    if due_dates?
+      course_planner?(assignment) && starred?(assignment)
+    else
+      to_do?(assignment) && starred?(assignment)
+    end
   end
 
   def my_planner_assignments
@@ -49,9 +62,5 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
 
   def submitted?(assignment)
     student.submission_for_assignment(assignment).present?
-  end
-
-  def due_dates?
-    assignments.any?{ |assignment| assignment.due_at? }
   end
 end

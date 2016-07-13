@@ -28,10 +28,10 @@
     %li.my-planner-alert
       - if list_class == "course-planner-list"
         - if presenter.due_dates?
-          You don't have any #{(term_for :assignment).downcase} due in the next week!
+          You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
         - else
-          This class has flexible assignment due dates. Check your course rules to learn when to turn in certain assignment.
+          This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
       - elsif list_class == "my-planner-list"
-        You have not predicted any #{(term_for :assignment).downcase}! Check out the 
+        You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the 
         = link_to "grade predictor", predictor_path
-        to add #{(term_for :assignment).downcase} to this planner.
+        to add #{(term_for :assignment).downcase.pluralize} to this planner.
