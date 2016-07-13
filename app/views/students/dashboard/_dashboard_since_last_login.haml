@@ -2,12 +2,18 @@
   %h3 Weekly Stats
 .card-body
   %p Total points earned this week:
-  %span= current_student.points_earned_for_course_this_week(current_course)
+  %span= number_with_delimiter(current_student.points_earned_for_course_this_week(current_course))
   %p Grades received this week:
-  - current_student.grades_released_for_course_this_week(current_course).each do |grade|
-    %p
-      %span= grade.assignment_id
-      %span= grade.final_points
+  %ul
+    - current_student.grades_released_for_course_this_week(current_course).each do |grade|
+      %li
+        #{link_to grade.assignment.name, grade.assignment}:
+        %span= number_with_delimiter(grade.final_points)
 
-  %p Badges earned this week
-  %span= current_student.earned_badges_for_course_this_week(current_course)
+- if current_course.has_badges?
+  %p #{term_for :badges} earned this week
+  %ul
+    - current_student.earned_badges_for_course_this_week(current_course).each do |badge|
+      %li
+        %img{:src => badge.icon, :width => 25 }
+        %span #{badge.name} #{term_for :badge} earned
