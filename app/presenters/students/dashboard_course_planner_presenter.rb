@@ -15,6 +15,10 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     properties[:assignments]
   end
 
+  def due_dates?
+    assignments.any?{ |assignment| assignment.due_at? }
+  end
+
   def to_do?(assignment)
     assignment.include_in_to_do? && assignment.visible_for_student?(student)
   end
@@ -32,7 +36,11 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def my_planner?(assignment)
-    to_do?(assignment) && starred?(assignment)
+    if due_dates?
+      course_planner?(assignment) && starred?(assignment)
+    else
+      to_do?(assignment) && starred?(assignment)
+    end
   end
 
   def my_planner_assignments
@@ -49,9 +57,5 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
 
   def submitted?(assignment)
     student.submission_for_assignment(assignment).present?
-  end
-
-  def due_dates?
-    assignments.any?{ |assignment| assignment.due_at? }
   end
 end
