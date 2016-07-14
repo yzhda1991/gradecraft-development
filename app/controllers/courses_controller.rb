@@ -40,7 +40,7 @@ class CoursesController < ApplicationController
       end
       duplicated.recalculate_student_scores unless duplicated.student_count.zero?
       session[:course_id] = duplicated.id
-      redirect_to course_path(duplicated.id),
+      redirect_to edit_course_path(duplicated.id),
         notice: "#{@course.name} successfully copied" and return
     else
       redirect_to courses_path,

@@ -83,10 +83,10 @@ describe AssignmentsController do
           eq 1
       end
 
-      it "redirects to the duplicated assignment" do
+      it "redirects to the edit page for the duplicated assignment" do
         post :copy, id: @assignment.id
         duplicated = Assignment.last
-        expect(response).to redirect_to(assignment_path(duplicated))
+        expect(response).to redirect_to(edit_assignment_path(duplicated))
       end
     end
 

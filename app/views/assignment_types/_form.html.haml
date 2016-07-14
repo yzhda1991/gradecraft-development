@@ -23,7 +23,7 @@
       / Do only X number of highest grades count?
       = f.label :top_grades_counted, :label => "Count Highest Grades"
       = f.text_field :top_grades_counted, data: { autonumeric: true, "m-dec" => "0" }
-      .form_label{id: "assignment_type_top_grades_counted"} Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here.
+      .form_label{id: "assignment_type_top_grades_counted"} Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here (Set to 0 if not).
 
     .form-item
       = f.label :student_weightable, "Student Weighted"
