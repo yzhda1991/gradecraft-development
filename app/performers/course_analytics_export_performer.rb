@@ -59,17 +59,9 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
     # create a working tmpdir for the export
     export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
 
-    # create a url-safe course number for the export's root directory
-    # be sure to replace forward-slashes with hyphens and ampersands
-    # with the word 'and'
-    #
-    course_number = Formatter::Filename.new(
-      course.courseno.gsub(/\/+/,"-").gsub("&", "and")
-    ).url_safe.filename
-
     # create a named directory to generate the files in
     export_dir = FileUtils.mkdir \
-      File.join(export_tmpdir, course_number)
+      File.join(export_tmpdir, export.formatted_course_number)
 
     id = course.id
 
@@ -122,22 +114,21 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
         export_model.new(data).generate_csv export_dir
       end
 
-      # this is going to be the downloaded filename of the final archive
-      export_filename = "#{ course_number }_anayltics_export_" \
-                        "#{ Time.now.strftime('%Y-%m-%d') }.zip"
-
       # create a place to store our final archive, for now
       output_dir = Dir.mktmpdir nil, s3fs_prefix
 
       # expand the export filename against our temporary directory path
-      export_filepath = File.join(output_dir, export_filename)
+      export_filepath = File.join(output_dir, export.export_filename)
 
-      # generate the actual zip file here
-      Archive::Zip.archive(export_filepath, export_dir)
+      begin
+        # generate the actual zip file here
+        Archive::Zip.archive(export_filepath, export_dir)
 
-      # we're not sending the file to the controller anymore, so let's
-      # just upload it to s3
-      export.upload_file_to_s3 export_filepath
+      ensure
+        # we're not sending the file to the controller anymore, so let's
+        # just upload it to s3
+        export.upload_file_to_s3 export_filepath
+      end
     ensure
       # get rid of any tempfiles we were using as well
       FileUtils.remove_entry_secure export_dir, output_dir
