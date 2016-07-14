@@ -344,7 +344,7 @@ class User < ActiveRecord::Base
     grades = grades_for_course(course).where("updated_at > ? ", 7.days.ago)
     viewable_grades = []
     grades.each do |grade|
-      viewable_grades << grade if GradeProctor.new(grade).viewable?
+      viewable_grades << grade if GradeProctor.new(grade).viewable? && !grade.excluded_from_course_score
     end
     return viewable_grades
   end
