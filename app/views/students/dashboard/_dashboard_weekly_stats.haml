@@ -5,7 +5,7 @@
     .module-section
       - if presenter.has_points_this_week?
         %p Total points earned this week:
-        %p= number_with_delimiter(presenter.points_this_week)
+        %p.week-points= number_with_delimiter(presenter.points_this_week)
 
     .module-section
       - if presenter.has_grades_this_week?
