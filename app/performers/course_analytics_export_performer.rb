@@ -19,6 +19,8 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   def deliver_mailer
     mailer = export.s3_object_exists? ? success_mailer : failure_mailer
     mailer.deliver_now
+
+    export.update_attributes last_completed_step: "deliver_mailer"
   end
 
   def success_mailer
@@ -139,6 +141,8 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
     ensure
       # get rid of any tempfiles we were using as well
       FileUtils.remove_entry_secure export_dir, output_dir
+
+      export.update_attributes last_completed_step: "build_the_export"
     end
   end
 end
