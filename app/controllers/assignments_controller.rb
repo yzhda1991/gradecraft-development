@@ -57,7 +57,7 @@ class AssignmentsController < ApplicationController
   def copy
     assignment = current_course.assignments.find(params[:id])
     duplicated = assignment.copy
-    redirect_to assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
+    redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
   end
 
   def create
