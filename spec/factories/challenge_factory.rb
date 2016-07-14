@@ -4,5 +4,7 @@ FactoryGirl.define do
     name { Faker::Lorem.word }
     release_necessary false
     full_points { rand(200) + 100 }
+    visible true
+    accepts_submissions true
   end
 end
