@@ -1,5 +1,3 @@
-require_relative "../presenters/exports/base"
-
 class ExportsController < ApplicationController
   before_filter :ensure_staff?
 

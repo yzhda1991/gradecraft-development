@@ -24,14 +24,14 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   end
 
   def success_mailer
-    ExportsMailer.course_analytics_export_success \
+    CourseAnalyticsExportsMailer.course_analytics_export_success \
       professor,
       export,
       secure_token
   end
 
   def failure_mailer
-    ExportsMailer.course_analytics_export_failure \
+    CourseAnalyticsExportsMailer.course_analytics_export_failure \
       professor,
       export
   end
