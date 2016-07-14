@@ -7,10 +7,7 @@
       .event-slide
         .slide-header
           %h4.event-name= link_to event.name, event
-        - if event.open_at && event.due_at?
-          %p.event-date= glyph(:calendar) + "#{event.open_at} - #{event.due_at}"
-        -if !event.open_at && event.due_at?
-          %p.event-date= glyph(:calendar) + "Due: #{event.due_at}"
+        %p.event-date= glyph(:calendar) + presenter.dates_for(event)
         .slide-body
           .event-image
             %img{:src => event.media }
@@ -18,3 +15,7 @@
             %p
               = truncate(sanitize(event.description, :tags => %w(br a)), :length => 200, :omission => "...")
               = link_to "Read More", event
+          .assignments-due
+            %ul
+              - presenter.assignments_due_on(event).each do |assignment|
+                %li= link_to assignment.name, assignment
