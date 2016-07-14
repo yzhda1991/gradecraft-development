@@ -32,7 +32,7 @@ class Students::DashboardWeeklyStatsPresenter < Showtime::Presenter
   end
 
   def has_badges_this_week?
-  student.earned_badges_for_course_this_week(course).any?
+    student.earned_badges_for_course_this_week(course).any?
   end
 
   def has_weekly_stats?
