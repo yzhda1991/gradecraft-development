@@ -37,7 +37,7 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html do redirect_to @assignment_type, flash: {
+        format.html do redirect_to assignment_types_path, flash: {
           success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" }
         end
       else
