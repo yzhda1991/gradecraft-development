@@ -28,7 +28,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
   after_destroy :delete_object_from_s3
 
   # let's save the name of the export so we don't have to do it later
-  after_create :cache_export_filename
+  before_create :cache_export_filename
 
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
@@ -50,9 +50,14 @@ class CourseAnalyticsExport < ActiveRecord::Base
   end
 
   def url_safe_filename
+    # if we need to generate a new filename for some reason, use the created_at
+    # date, otherwise let's presume this is a new export and just use Time.now
+    # for parsing a date in the format YYYY-MM-DD
+    filename_time = created_at || Time.now
+
     # this is going to be the downloaded filename of the final archive
     "#{ formatted_course_number }_anayltics_export_" \
-    "#{ created_at.strftime('%Y-%m-%d') }.zip"
+    "#{ filename_time.strftime('%Y-%m-%d') }.zip"
   end
 
   protected
