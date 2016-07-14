@@ -37,7 +37,8 @@ module S3Manager
     end
 
     def delete_object_from_s3
-      s3_manager.delete_object(s3_object_key)
+      return false unless s3_object_exists?
+      s3_manager.delete_object s3_object_key
     end
 
     def s3_object_exists?
