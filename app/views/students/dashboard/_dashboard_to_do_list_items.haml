@@ -25,7 +25,7 @@
         - if assignment.due_at?.present?
           .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
   - if assignment_list.empty?
-    %li.my-planner-alert
+    %li.dashboard-message
       - if list_class == "course-planner-list"
         - if presenter.due_dates?
           You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!

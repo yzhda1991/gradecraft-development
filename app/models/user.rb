@@ -335,6 +335,25 @@ class User < ActiveRecord::Base
     GradeProctor.new(grade).viewable?
   end
 
+  def grades_for_course(course)
+    grades.where(course: course)
+  end
+
+  # Returning all of the grades a student has received this week
+  def grades_released_for_course_this_week(course)
+    grades = grades_for_course(course).where("updated_at > ? ", 7.days.ago)
+    viewable_grades = []
+    grades.each do |grade|
+      viewable_grades << grade if GradeProctor.new(grade).viewable? && !grade.excluded_from_course_score
+    end
+    return viewable_grades
+  end
+
+  # Returning the total number of points for all grades released this week
+  def points_earned_for_course_this_week(course)
+    grades_released_for_course_this_week(course).sum(&:final_points)
+  end
+
   # Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
     grades.where(assignment_id: assignment.id).first || grades.new(assignment: assignment)
@@ -370,6 +389,11 @@ class User < ActiveRecord::Base
 
   def earned_badges_for_course(course)
     earned_badges.where(course: course)
+  end
+
+  # returns all badges a student has earned for a particular course this week
+  def earned_badges_for_course_this_week(course)
+    earned_badges_for_course(course).where("created_at > ? ", 7.days.ago)
   end
 
   def earned_badge_for_badge(badge)
