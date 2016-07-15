@@ -128,12 +128,12 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
         # we're not sending the file to the controller anymore, so let's
         # just upload it to s3
         export.upload_file_to_s3 export_filepath
+
+        export.update_attributes last_completed_step: "build_the_export"
       end
     ensure
       # get rid of any tempfiles we were using as well
       FileUtils.remove_entry_secure export_dir, output_dir
-
-      export.update_attributes last_completed_step: "build_the_export"
     end
   end
 end
