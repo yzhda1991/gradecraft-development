@@ -33,9 +33,9 @@ class CanvasAssignmentImporter
 
   private
 
-  def link_imported(provider_id, assignment)
+  def link_imported(provider_resource_id, assignment)
     imported = ImportedAssignment.find_or_initialize_by(provider: :canvas,
-                                                        provider_id: provider_id)
+      provider_resource_id: provider_resource_id)
     imported.assignment = assignment
     imported.save
   end

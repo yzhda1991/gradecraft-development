@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714030855) do
+ActiveRecord::Schema.define(version: 20160715152003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -467,10 +467,10 @@ ActiveRecord::Schema.define(version: 20160714030855) do
 
   create_table "imported_assignments", force: :cascade do |t|
     t.integer  "assignment_id"
-    t.string   "provider",      null: false
-    t.string   "provider_id",   null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.string   "provider",             null: false
+    t.string   "provider_resource_id", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   add_index "imported_assignments", ["assignment_id"], name: "index_imported_assignments_on_assignment_id", using: :btree

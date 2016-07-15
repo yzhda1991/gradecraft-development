@@ -64,7 +64,8 @@ describe CanvasAssignmentImporter do
         imported_assignment = ImportedAssignment.unscoped.last
         expect(imported_assignment.assignment).to eq assignment
         expect(imported_assignment.provider).to eq "canvas"
-        expect(imported_assignment.provider_id).to eq canvas_assignment_id
+        expect(imported_assignment.provider_resource_id).to \
+          eq canvas_assignment_id
       end
 
       it "contains a successful row if the assignment is valid" do
