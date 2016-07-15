@@ -17,4 +17,4 @@
               = link_to "Read More", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
-              %li= link_to assignment.name, assignment
+              %li #{link_to assignment.name, assignment} due today! 
