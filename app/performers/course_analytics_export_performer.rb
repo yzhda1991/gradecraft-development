@@ -12,8 +12,8 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     build_the_export
-    deliver_mailer
-    export.update_export_completed_time
+    # deliver_mailer
+    # export.update_export_completed_time
   end
 
   def deliver_mailer

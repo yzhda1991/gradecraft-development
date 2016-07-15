@@ -27,7 +27,7 @@ module S3Manager
       end
 
       def valid_summary_attrs?
-        summary_client_attributes.values.any? &:nil?
+        summary_client_attributes.values.none? &:nil?
       end
 
       def wait_until_exists(waiter=nil)

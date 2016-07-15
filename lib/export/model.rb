@@ -6,7 +6,8 @@ module Export
     end
 
     def update_export_completed_time
-      update_attributes last_export_completed_at: Time.now
+      update_attributes last_export_completed_at: Time.now,
+        last_completed_step: "complete"
     end
 
     def created_at_in_microseconds

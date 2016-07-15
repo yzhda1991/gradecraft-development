@@ -42,6 +42,7 @@ module S3Manager
     end
 
     def s3_object_exists?
+      return false unless s3_object_key
       s3_object_summary.exists?
     end
 
