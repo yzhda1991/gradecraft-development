@@ -46,7 +46,13 @@ module ActiveLMS
       assignment
     end
 
-    def grades(assignment_ids)
+    def grades(course_id, assignment_ids)
+      grades = []
+      client.get_data("/courses/#{course_id}/students/submissions",
+                      assignment_ids: assignment_ids, include: ["user"]) do |data|
+        grades += data
+      end
+      grades
     end
 
     private
