@@ -43,9 +43,15 @@
     color: $color-white
     padding: 0.25rem 0.5rem
 
+    h3
+      margin: 0
+      padding: 0
+      font-size: .9rem
+
   .card-body
     padding: 0.5em
 
+  /* Styles the assignment planner module */
   .todo .card-body
     padding: 0
 
@@ -94,6 +100,11 @@
   .course-planner-list
     display: none
 
+  .form_label
+    color: $color-grey-2
+    font-style: normal
+    font-weight: 300
+
   /* Styles the small version of the grading scheme */
   .bar_magic
     border-radius: 5px
@@ -122,32 +133,24 @@
       a:hover
         background-color: $color-green-2
 
-
-  h3
-    margin: 0
+  /* Styling the badges module */
+  ul.badge-grid
+    margin: 0.5rem auto
     padding: 0
-    font-size: .9rem
 
-  .form_label
-    color: $color-grey-2
-    font-style: normal
-    font-weight: 300
-
-  ul.block-grid
-    margin: 0.5rem auto !important
-    width: 100%
-    padding: 0
     li
       width: 10%
       display: inline-block
       list-style-type: none
       margin-bottom: .5rem
+
       img
         width: 100%
-      img:hover
-        opacity: 1 !important
 
-/* Styling the bar charts on the syllabus page */
+        &:hover
+          opacity: 1 !important
+
+/* Styling the bar chart in your status module */
 #userBarTotal
   clear: both
   padding: 0
@@ -157,7 +160,7 @@
   .highcharts-grid
     margin-left: -1rem
 
-/* Styles the hover state on the box plot on the student dashboard */
+/* Styles the hover state on the box plot in points distribution module */
 .jqstooltip
   box-sizing: content-box
   height: auto !important
