@@ -7,7 +7,7 @@ class MultipliedGradebookExporter < GradebookExporter
   end
 
   def doubled_assignment_name_columns(course)
-    course.assignments.collect do |assignment|
+    course.assignments.ordered.collect do |assignment|
       [ assignment.name, assignment.name ]
     end.flatten
   end
@@ -22,7 +22,7 @@ class MultipliedGradebookExporter < GradebookExporter
 
     # add the grades for the necessary assignments
     # TODO: improve the performance here
-    course.assignments.inject(student_data) do |memo, assignment|
+    course.assignments.ordered.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       if GradeProctor.new(grade).viewable?
         memo << grade.raw_points

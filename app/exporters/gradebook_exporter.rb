@@ -17,7 +17,7 @@ class GradebookExporter
   end
 
   def assignment_name_columns(course)
-    course.assignments.collect(&:name)
+    course.assignments.ordered.collect(&:name)
   end
 
   def gradebook_columns(course)
@@ -38,7 +38,7 @@ class GradebookExporter
 
     # add the grades for the necessary assignments
     # TODO: improve the performance here
-    course.assignments.inject(student_data) do |memo, assignment|
+    course.assignments.ordered.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       score = GradeProctor.new(grade).viewable? ? grade.raw_points : ""
       memo << score
