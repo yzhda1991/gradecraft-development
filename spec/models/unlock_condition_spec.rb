@@ -397,6 +397,34 @@ describe UnlockCondition do
     end
   end
 
+  describe "with a condition state of 'Passed'" do
+    it "returns true if the grade is passed and student visible" do
+      student = create(:user)
+      create(
+        :grade, assignment: assignment, student: student,
+                pass_fail_status: "Pass", status: "Released"
+      )
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment.id, condition_type: "Assignment",
+        condition_state: "Passed"
+      )
+      expect(unlock_condition.is_complete?(student)).to eq(true)
+    end
+
+    it "returns false if the grade is failed and student visible" do
+      student = create(:user)
+      create(
+        :grade, assignment: assignment, student: student,
+                pass_fail_status: "Fail", status: "Released"
+      )
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment.id, condition_type: "Assignment",
+        condition_state: "Passed"
+      )
+      expect(unlock_condition.is_complete?(student)).to eq(false)
+    end
+  end
+
   describe "#is_complete_for_group(group)" do
     let(:course) { create(:course) }
     let(:student) { create(:user) }

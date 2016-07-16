@@ -69,6 +69,8 @@ class UnlockCondition < ActiveRecord::Base
       "Read the feedback for"
     elsif condition_state == "Earned"
       "Earn"
+    elsif condition_state == "Passed"
+      "Pass"
     end
   end
 
@@ -81,6 +83,8 @@ class UnlockCondition < ActiveRecord::Base
       "Reading the feedback for"
     elsif condition_state == "Earned"
       "Earning"
+    elsif condition_state == "Earned"
+      "Passing"
     end
   end
 
@@ -93,6 +97,8 @@ class UnlockCondition < ActiveRecord::Base
       "Read the feedback for"
     elsif condition_state == "Earned"
       "Earned"
+    elsif condition_state == "Passed"
+      "Passed"
     end
   end
 
@@ -126,6 +132,8 @@ class UnlockCondition < ActiveRecord::Base
       check_submission_condition(student)
     elsif condition_state == "Grade Earned"
       check_grade_earned_condition(student)
+    elsif condition_state == "Passed"
+      check_passed_condition(student)
     elsif condition_state == "Feedback Read"
       check_feedback_read_condition(student)
     end
@@ -166,6 +174,12 @@ class UnlockCondition < ActiveRecord::Base
     else
       return false
     end
+  end
+
+  def check_passed_condition(student)
+    grade = student.grade_for_assignment_id(condition_id).first
+    return true if grade.pass_fail_status == "Pass"
+    return false
   end
 
   def check_if_grade_earned_meets_condition_value(grade)
