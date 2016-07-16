@@ -52,7 +52,7 @@ class InfoController < ApplicationController
     end
     @students = students.to_a.sort_by {|student| student.score}.reverse
     if @students.length <= 10
-      @top_ten_students = students
+      @top_ten_students = @students
     elsif @students.length <= 20
       @top_ten_students = @students[0..9]
       @count = @students.length
