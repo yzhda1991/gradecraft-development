@@ -677,21 +677,6 @@ describe User do
     end
   end
 
-  describe "#weight_count(course)" do
-    let(:student) { create :user }
-
-    before do
-      create(:course_membership, user: student, course: course)
-      create(:assignment_type_weight, student: student, course: course)
-      create(:assignment_type_weight, student: student, course: course)
-      create(:assignment_type_weight, student: student, course: course)
-    end
-
-    it "should return the summed weight count for a course, for a student" do
-      expect(student.weight_count(course)).to eq(3)
-    end
-  end
-
   describe "#group_for_assignment(assignment)" do
     let!(:create_group) { world.create_group }
     let(:group) { world.group }
