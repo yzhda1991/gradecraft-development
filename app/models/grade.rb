@@ -150,7 +150,7 @@ class Grade < ActiveRecord::Base
   def calculate_final_points
     return nil unless raw_points.present?
     final_points = raw_points + adjustment_points
-    final_points > assignment.threshold_points ? final_points : 0
+    final_points >= assignment.threshold_points ? final_points : 0
   end
 
   # points with student's weighting
