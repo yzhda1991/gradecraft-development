@@ -167,7 +167,7 @@ GradeCraft::Application.routes.draw do
       put :timeline_settings, to: "courses#timeline_settings_update"
     end
   end
-  resources :course_memberships, only: [:create, :destroy]
+  resources :course_memberships, only: [:create, :delete, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
 
   #9. Groups
