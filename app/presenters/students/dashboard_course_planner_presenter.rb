@@ -28,10 +28,6 @@ class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
     assignment.include_in_to_do? && assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
   end
 
-  def to_do_assignments
-    assignments.select{ |assignment| to_do?(assignment) }
-  end
-
   def course_planner?(assignment)
     to_do?(assignment) && assignment.soon?
   end

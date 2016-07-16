@@ -16,7 +16,7 @@ class Students::SyllabusPresenter < Showtime::Presenter
   end
 
   def assignments_for(assignment_type)
-    assignment_type.assignments.includes(:assignment_type, :unlock_conditions)
+    assignment_type.assignments.includes(:assignment_type, :unlock_conditions).ordered
   end
 
   def assignment_visible?(assignment)

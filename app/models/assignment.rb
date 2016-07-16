@@ -77,12 +77,11 @@ class Assignment < ActiveRecord::Base
   # Sorting assignments by different properties
   scope :chronological, -> { order("due_at ASC") }
   scope :alphabetical, -> { order("name ASC") }
+  scope :ordered, -> { order("position ASC") }
   acts_as_list scope: :assignment_type
 
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where("assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL") }
-
-  default_scope { order("position ASC") }
 
   delegate :student_weightable?, to: :assignment_type
 
