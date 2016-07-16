@@ -1,7 +1,7 @@
 class UnlockState < ActiveRecord::Base
 
   attr_accessible :unlockable_id, :unlockable_type, :student_id,
-    :instructor_unlocked, :unlocked
+    :instructor_unlocked, :unlocked, :unlockable
 
   belongs_to :unlockable, polymorphic: true
   belongs_to :student, class_name: "User"
