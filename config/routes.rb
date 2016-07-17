@@ -11,17 +11,17 @@ GradeCraft::Application.routes.draw do
   #5. Assignment Type Weights
   #6. Badges
   #7. Challenges
-  #8. Courses
-  #9. Groups
-  #10. Informational Pages
-  #11. Grade Schemes
-  #12. Teams
-  #13. Users
-  #14. User Auth
-  #15. Uploads
-  #16. Events
-  #17. Predictor
-  #18. Importers
+  #8. Importers
+  #9. Courses
+  #10. Groups
+  #11. Informational Pages
+  #12. Grade Schemes
+  #13. Teams
+  #14. Users
+  #15. User Auth
+  #16. Uploads
+  #17. Events
+  #18. Predictor
   #19. Exports
 
   #1. Analytics & Charts
@@ -158,7 +158,17 @@ GradeCraft::Application.routes.draw do
 
   resources :challenge_grades, except: [:index, :new, :create]
 
-  #8. Courses
+  #8. Importers
+  namespace :courses do
+    resources :importers, only: :index do
+      get :courses
+      get "/courses/:id/assignments", to: :assignments, as: :assignments
+      post "/courses/:id/assignments/import", to: :assignments_import,
+        as: :assignments_import
+    end
+  end
+
+  #9. Courses
   resources :courses do
     post :copy, on: :collection
     get :course_details, on: :member
@@ -175,10 +185,10 @@ GradeCraft::Application.routes.draw do
   resources :course_memberships, only: [:create, :delete, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
 
-  #9. Groups
+  #10. Groups
   resources :groups
 
-  #10. Informational Pages
+  #11. Informational Pages
   controller :info do
     get :dashboard
     get :earned_badges
@@ -203,7 +213,7 @@ GradeCraft::Application.routes.draw do
     get :um_pilot
   end
 
-  #11. Grade Schemes
+  #12. Grade Schemes
   resources :grade_scheme_elements, only: :index do
     collection do
       get :mass_edit
@@ -211,10 +221,10 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #12. Teams
+  #13. Teams
   resources :teams
 
-  #13. Users
+  #14. Users
   %w{students gsis professors admins}.each do |role|
     get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
       role: role.singularize
@@ -258,7 +268,7 @@ GradeCraft::Application.routes.draw do
 
   resources :staff, only: [:index, :show]
 
-  #14. User Auth
+  #15. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
@@ -277,15 +287,15 @@ GradeCraft::Application.routes.draw do
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
-  #15. Uploads
+  #16. Uploads
   resource :uploads, only: [] do
     get :remove
   end
 
-  #16. Events
+  #17. Events
   resources :events
 
-  #17. API Calls
+  #18. API Calls
 
   namespace :api, defaults: { format: :json } do
 
@@ -328,13 +338,6 @@ GradeCraft::Application.routes.draw do
       get "predicted_earned_challenges", to: "predicted_earned_challenges#index"
       get "predicted_earned_grades", to: "predicted_earned_grades#index"
     end
-  end
-
-  #18. Importers
-  resources :importers, only: :index do
-    get :courses
-    get "/courses/:id/assignments", to: :assignments, as: :assignments
-    post "/courses/:id/assignments/import", to: :assignments_import, as: :assignments_import
   end
 
   #19. Exports

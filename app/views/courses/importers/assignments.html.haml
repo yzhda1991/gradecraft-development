@@ -1,11 +1,11 @@
-= content_nav_for Course, ["Import Assignments", importers_path], @provider.capitalize
+= content_nav_for Course, ["Import Assignments", courses_importers_path], @provider.capitalize
 
 %h3.pagetitle= "Assignment Import from #{@provider.capitalize}"
 
 .pageContent
   = render partial: "layouts/alerts"
 
-  = form_tag importer_assignments_import_path(@provider, @course["id"]) do
+  = form_tag courses_importer_assignments_import_path(@provider, @course["id"]) do
     %table.dynatable.no-table-header
       %thead
         %tr

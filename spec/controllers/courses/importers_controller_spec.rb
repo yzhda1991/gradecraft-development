@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "./app/services/imports_lms_assignments"
 
-describe ImportersController do
+describe Courses::ImportersController do
   describe "POST assignments_import" do
     let(:course_id) { "COURSE_ID" }
     let(:provider) { :canvas }
