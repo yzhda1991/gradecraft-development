@@ -54,9 +54,16 @@ module Submissions
       submission.submitted_at
     end
 
-    def open_for_editing?
-      assignment.open? &&
-        (!grade.present? || assignment.resubmissions_allowed?)
+    def open_for_editing?(student)
+      student.present? &&
+      assignment.accepts_submissions? &&
+      !assignment.submissions_have_closed? &&
+      ( assignment.is_unlocked_for_student?(student) ||
+        ( assignment.has_groups? &&
+          assignment.is_unlocked_for_group?(
+            student.group_for_assignment(assignment))
+        )
+      )
     end
 
     def title
