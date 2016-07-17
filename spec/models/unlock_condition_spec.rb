@@ -397,6 +397,31 @@ describe UnlockCondition do
     end
   end
 
+  describe "#is_complete? course conditions" do
+    describe "with a condition state of Earned X Points minimum" do
+      let(:course) { create :course }
+      let(:student) { create :user }
+      let :unlock_condition do
+        UnlockCondition.create(
+          condition_id: course.id,
+          condition_type: "Course",
+          condition_state: "Earned",
+          condition_value: 100000
+        )
+      end
+
+      it "return false if student has not earned enough points" do
+        course_membership = create(:student_course_membership, score: 0, user: student, course: course)
+        expect(unlock_condition.is_complete?(student)).to eq(false)
+      end
+
+      it "return true if student has met the minimum number of points" do
+        course_membership = create(:student_course_membership, score: 100000, user: student, course: course)
+        expect(unlock_condition.is_complete?(student)).to eq(true)
+      end
+    end
+  end
+
   describe "with a condition state of 'Passed'" do
     it "returns true if the grade is passed and student visible" do
       student = create(:user)

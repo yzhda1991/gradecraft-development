@@ -50,6 +50,7 @@
     var parent = $(select).closest('.conditions');
     var assignmentSelector = parent.find('#assignments-list');
     var badgeSelector = parent.find('#badges-list');
+    var courseMembershipSelector = parent.find('#courses-list');
     var val = $(select).val();
     if(val === 'Assignment') {
       assignmentSelector.show();
@@ -60,6 +61,9 @@
       badgeSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', true);
       });
+      courseMembershipSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', false);
+      });
     } else if(val === 'Badge') {
       assignmentSelector.hide();
       badgeSelector.show();
@@ -68,6 +72,22 @@
       });
       assignmentSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', true);
+      });
+      courseMembershipSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', false);
+      });
+    } else if(val === 'Course') {
+      assignmentSelector.hide();
+      badgeSelector.hide();
+      badgeSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true);
+      });
+      assignmentSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true);
+      });
+      courseMembershipSelector.show();
+      courseMembershipSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', false);
       });
     } else {
       var allFields = [assignmentSelector, badgeSelector];

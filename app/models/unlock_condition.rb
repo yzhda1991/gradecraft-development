@@ -24,6 +24,8 @@ class UnlockCondition < ActiveRecord::Base
       check_badge_condition(student)
     elsif condition_type == "Assignment"
       check_assignment_condition(student)
+    elsif condition_type == "Course"
+      check_course_membership_condition(student)
     end
   end
 
@@ -33,16 +35,20 @@ class UnlockCondition < ActiveRecord::Base
 
   # Human readable sentence to describe what students need to do to unlock this
   def requirements_description_sentence
-    "#{condition_state_do} the #{condition.name} #{condition_type}"
+    if condition_type == "Course"
+      "#{ condition_state_do } #{ condition_value } points in this course"
+    else
+      "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
+    end
   end
 
   def requirements_completed_sentence
-    "#{condition_state_past} the #{condition.name} #{condition_type}"
+    "#{ condition_state_past } the #{ condition.name } #{ condition_type }" unless condition_type == "Course"
   end
 
   # Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
-    "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
+    "#{ condition_state_doing } it unlocks the #{ unlockable.name } #{ unlockable_type }"
   end
 
   # Counting how many students in a group have done the work to unlock an
@@ -83,7 +89,7 @@ class UnlockCondition < ActiveRecord::Base
       "Reading the feedback for"
     elsif condition_state == "Earned"
       "Earning"
-    elsif condition_state == "Earned"
+    elsif condition_state == "Passed"
       "Passing"
     end
   end
@@ -198,6 +204,12 @@ class UnlockCondition < ActiveRecord::Base
     return false unless grade.present? && grade.feedback_read?
     return true unless condition_date?
     return false unless grade.feedback_read_at < condition_date
+    return true
+  end
+
+  def check_course_membership_condition(student)
+    course_membership = student.course_memberships.where(course_id: condition_id).first
+    return false unless course_membership.score >= condition_value
     return true
   end
 

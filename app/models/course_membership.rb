@@ -25,6 +25,8 @@ class CourseMembership < ActiveRecord::Base
 
   validates :instructor_of_record, instructor_of_record: true
 
+  after_save :check_unlockables
+
   def assign_role_from_lti(auth_hash)
     return unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
 
@@ -54,6 +56,15 @@ class CourseMembership < ActiveRecord::Base
 
   def staff?
     professor? || gsi? || admin?
+  end
+
+  def check_unlockables
+    if self.course.is_a_condition?
+      unlock_conditions = UnlockCondition.where(condition: self.course).each do |condition|
+        unlockable = condition.unlockable
+        unlockable.check_unlock_status(user)
+      end
+    end
   end
 
   private

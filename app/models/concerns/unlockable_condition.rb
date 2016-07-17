@@ -14,7 +14,7 @@ module UnlockableCondition
   end
 
   def check_unlock_status(student)
-    unlocked = unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
+    unlocked = self.unlock_condition_count_to_meet == self.unlock_condition_count_met_for(student)
     unlock_state = unlock_states.where(student_id: student.id).first if unlocked
     unlock_state ||= unlock_states.build(student_id: student.id,
                                          unlockable_id: self.id,
@@ -74,7 +74,7 @@ module UnlockableCondition
   end
 
   def unlock_condition_count_met_for(student)
-    unlock_conditions.select { |c| c.is_complete?(student) }.size
+    self.unlock_conditions.select { |c| c.is_complete?(student) }.size
   end
 
   def visible_for_student?(student)
