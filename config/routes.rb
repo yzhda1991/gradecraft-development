@@ -159,7 +159,7 @@ GradeCraft::Application.routes.draw do
   resources :challenge_grades, except: [:index, :new, :create]
 
   #8. Importers
-  namespace :courses do
+  namespace :assignments do
     resources :importers, only: :index do
       get :courses
       get "/courses/:id/assignments", to: :assignments, as: :assignments
