@@ -48,7 +48,7 @@ class Assignment < ActiveRecord::Base
   has_many :submissions, dependent: :destroy
 
   has_many :criterion_grades, dependent: :destroy
-  has_many :imported_assignments, dependent: :destroy
+  has_one :imported_assignment, dependent: :destroy
 
   # Instructor uploaded resource files
   has_many :assignment_files, dependent: :destroy
