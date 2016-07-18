@@ -17,55 +17,51 @@
       elements.push({
         letter: ''
         level: ''
-        lowest_points: ''
-        highest_points: ''
+        lowest_points: 0
+        highest_points: 1
       })
+
+    nextHighestElement = (index) ->
+      return null if index == 0
+      elements[index - 1]
+
+    nextLowestElement = (index) ->
+      return null if index == elements.length - 1
+      elements[index + 1]
 
     checkLowRange = (value, index) ->
       (value < elements[parseInt(index)].highest_points)
 
     # update the grade scheme element immediately lower than the active one
-    updateLowerElement = (index, newValue) ->
-      # don't update if we're changing the value on the last element
-      if (index != elements.length - 1)
-        # index + 1 here gives us the next element in the array.
-        # set its value to one less than the lowest_points value on
-        # the active element.
-        elements[index + 1].highest_points = newValue - 1
+    updateLowerElement = (activeElement, elementIndex, newValue) ->
+      lowerElement = nextLowestElement(elementIndex)
 
-    # this method will update the previous grade scheme element in the
-    # collection if its lowest_points value is lower than the highest points
-    # value for the previous element
-    #
-    updatePreviousElementIfLower = (element, index, modelValue) ->
-      if (modelValue < element.highest_points || element.highest_points == '')
-        updateLowerElement(index, modelValue)
-        true
+      # if there's no lower element then there's nothing to update
+      if lowerElement
+
+        if (newValue < lowerElement.highest_points || lowerElement.highest_points == '')
+          # index + 1 here gives us the next element in the array.
+          # set its value to one less than the lowest_points value on
+          # the active element.
+          lowerElement.highest_points = newValue - 1
+          true
+        else
+          false
+
       else
-        false
+        true
 
     # update the grade scheme element immediately higher than the active one
     updateHigherElement = (index, newValue) ->
+      higherElement = nextHighestElement(index)
       # don't update if we're changing the value on the first element
-      if (index != 0)
+      if higherElement && newValue > higherElement.lowest_points
         # index - 1 gets us the higher element. set its value to one more
         # than the highest_points value on the active element
-        elements[index - 1].lowest_points = newValue + 1
-
-    # this method will update the subsequent grade scheme element in the
-    # collection if its highest_points value is greater than the lowest points
-    # value for the subsequent element
-    #
-    updateNextElementIfHigher = (element, index, modelValue) ->
-      if (modelValue > element.lowest_points)
-        updateHigherElement(index, modelValue)
+        higherElement.lowest_points = newValue + 1
         true
       else
-        false
-
-    update_scheme = (index, newValue) ->
-      if(index != elements.length-1)
-        elements[index+1].highest_points = newValue-1
+        true
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
@@ -92,12 +88,15 @@
         checkLowRange: checkLowRange
         updateHigherElement: updateHigherElement
         updateLowerElement: updateLowerElement
-        updatePreviousElementIfLower: updatePreviousElementIfLower
-        updateNextElementIfHigher: updateNextElementIfHigher
         elements: elements
         remove: remove
         addNew: addNew
         addFirst: addFirst
-        update_scheme: update_scheme
+        # update_scheme: update_scheme
     }
+
+    # update_scheme = (index, newValue) ->
+    #   if(index != elements.length-1)
+    #     elements[index+1].highest_points = newValue-1
+
 ]
