@@ -80,6 +80,10 @@ GradeCraft::Application.routes.draw do
       end
     end
 
+    namespace :grades do
+      resources :importers, only: :index
+    end
+
     resources :groups, only: [], module: :assignments do
       get :grade, on: :member
       put :graded, on: :member
