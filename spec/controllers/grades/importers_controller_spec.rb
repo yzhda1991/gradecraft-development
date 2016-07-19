@@ -48,6 +48,17 @@ describe Grades::ImportersController do
         expect(flash[:notice]).to eq("File is missing")
         expect(response).to redirect_to(assignment_grades_importer_path(world.assignment, :csv))
       end
+
+      it "enqueues the resque job to update the grades" do
+        world.student.reload.update_attribute :email, "robert@example.com"
+        second_student = create(:user, username: "jimmy")
+        second_student.courses << world.course
+        ResqueSpec.reset!
+
+        post :upload, assignment_id: world.assignment.id, importer_id: :csv, file: file
+
+        expect(GradeUpdaterJob).to have_queue_size_of(2)
+      end
     end
   end
 
