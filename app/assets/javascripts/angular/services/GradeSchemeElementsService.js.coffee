@@ -2,6 +2,11 @@
     elements = []
     deletedIds = []
 
+    # we're doing so much index juggling here that we should really create a
+    # factory for both the overall grade scheme elements collection, as well as
+    # for the individual grade scheme elements so we don't have to do all of
+    # this work inside of the service object.
+
     remove = (index) ->
       deletedIds.push(elements.splice(index, 1)[0].id)
 
@@ -28,26 +33,26 @@
       }
 
     highestPoints = (index) ->
-      prevElement = elements[index - 1]
-
-      if prevElement
-        points = prevElement.lowest_points
-        if points >= 0
-          points - 1
-
+      if prevElement = previousElement(index)
+        if prevElement.lowest_points >= 0
+          prevElement.lowest_points - 1
       else
         0
 
     lowestPoints = (index) ->
-      nextElement = elements[index]
-
-      if nextElement
-        points = nextElement.highest_points
-        if points >= 0
-          points + 1
-
+      if nextElement = elements[index]
+        if nextElement.highest_points >= 0
+          nextelement.highest_points + 1
       else
         0
+
+    updatePreviousElement = (index)->
+      if elements[index].highest_points > elements[index - 1].lowest_points
+        elements[index - 1].lowest_points = elements[index].highest_points + 1
+
+    updateNextElement = (index)->
+      if elements[index].lowest_points < elements[index + 1].highest_points
+        elements[index + 1].highest_points = elements[index].lowest_points - 1
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->

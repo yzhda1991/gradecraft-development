@@ -10,15 +10,17 @@
   %input.low-range(type='number'
                    ng-model='element.lowest_points'
                    ng-model-options='{allowInvalid: true}'
+                   ng-keyup='gradeService.updateNextElement($index)'
                    name='lowest_points'
                    min='{{gradeService.elements[$index + 1].highest_points}}'
-                   max='{{element.highest_points}}'
-                   ng-change)
+                   max='{{element.highest_points}}')
 
   %span.form_label High Point Threshold
   %input.high-range(type='number'
                     ng-model='element.highest_points'
                     ng-model-options='{allowInvalid: true}'
+                    ng-keyup='gradeService.updatePreviousElement($index)'
+                    index='{{$index}}'
                     name='highest_points'
                     min='{{element.lowest_points}}'
                     max='{{gradeService.elements[$index - 1].lowest_points}}')
