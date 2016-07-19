@@ -8,10 +8,6 @@
       %a{:href => new_assignment_path }
         = glyph(:plus)
         New #{(term_for :assignment).titleize}
-    %li
-      %a{:href => settings_assignments_path }
-        = glyph(:dashboard)
-        Review #{(term_for :assignment).titleize} Settings
 
 .pageContent
   = render partial: "layouts/alerts"

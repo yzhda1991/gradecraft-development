@@ -11,6 +11,17 @@
   .italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
   .italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
+  %li.hide-for-small
+    %a{href: export_assignment_grades_path(presenter.assignment, format: :csv) }
+      = glyph(:download)
+      Download Grades
+
+  - if presenter.grade_with_rubric?
+    - if presenter.grades.present?
+      %li
+        %a{href: export_earned_levels_assignment_grades_path(presenter.assignment, format: :csv) }
+          Download Rubric Grades
+
   - if current_user_is_student? && presenter.prediction_for(presenter.assignment)
     = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
 
