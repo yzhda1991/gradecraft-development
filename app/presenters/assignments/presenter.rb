@@ -32,6 +32,10 @@ class Assignments::Presenter < Showtime::Presenter
       Grade.new(assignment_id: assignment.id)
   end
 
+  def prediction_for(assignment)
+    grade_for(assignment).predicted_points
+  end
+
   def grades
     assignment.grades
   end

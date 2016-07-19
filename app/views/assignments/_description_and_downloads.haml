@@ -11,8 +11,12 @@
   .italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
   .italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
-  - if presenter.assignment_accepting_submissions?(current_student)
-    .no-bullet= render partial: "students/submissions", locals: { assignment: presenter.assignment }
+  - if current_user_is_student? && presenter.prediction_for(presenter.assignment)
+    = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
+
+  - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_submission_for?(current_student)
+    %br
+    = render partial: "students/submissions", locals: { assignment: presenter.assignment }
 
   - if presenter.student_logged?(current_user)
     = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }

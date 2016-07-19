@@ -90,8 +90,8 @@ class Grade < ActiveRecord::Base
 
   def predicted_points
     PredictedEarnedGrade.where(
-      student_id: self.student.id,
-      assignment_id: self.assignment.id).first.try(:predicted_points) || 0
+      student_id: self.student_id,
+      assignment_id: self.assignment_id).first.try(:predicted_points) || 0
   end
 
   def assignment_weight

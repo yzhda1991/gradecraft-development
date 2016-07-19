@@ -1,1 +1,5 @@
-.bold= "Your Goal: #{points grade.predicted_points}"
+.bold
+  - if grade.assignment.pass_fail?
+    = "Your Goal: #{ grade.predicted_points ? "Pass" : "Fail"}"
+  - else
+    = "Your Goal: #{points grade.predicted_points}"
