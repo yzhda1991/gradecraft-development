@@ -87,21 +87,6 @@ class CoursesController < ApplicationController
     end
   end
 
-  def timeline_settings
-    @course = current_course
-    @assignments = @course.assignments.includes(:assignment_type)
-    @title = "Timeline Settings"
-  end
-
-  def timeline_settings_update
-    @course = current_course
-    if @course.update_attributes(params[:course])
-      redirect_to dashboard_path
-    else
-      render action: "timeline_settings", course: @course
-    end
-  end
-
   def destroy
     @course = Course.find(params[:id])
     @name = @course.name

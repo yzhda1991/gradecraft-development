@@ -188,33 +188,6 @@ describe CoursesController do
         expect{ get :destroy, id: @course }.to change(Course,:count).by(-1)
       end
     end
-
-    describe "GET timeline settings" do
-      it "displays a list of all assignments for the course and their timeline info " do
-        get :timeline_settings, id: @course.id
-        expect(assigns(:title)).to eq("Timeline Settings")
-        expect(assigns(:course)).to eq(@course)
-        expect(response).to render_template(:timeline_settings)
-      end
-    end
-
-    describe "POST timeline settings update" do
-      it "changes the list of all assignments for the course and their timeline info " do
-        @assignment = create(:assignment, course: @course)
-        params = { "course" => { "assignments_attributes" => { "0" => { "media"=>"", "thumbnail"=>"", "media_credit"=>"", "media_caption"=>"Testing", "id"=> @assignment.id } } }, id: @course.id}
-        post :timeline_settings_update, params
-        expect(@assignment.reload.media_caption).to eq("Testing")
-        expect(response).to redirect_to dashboard_path
-      end
-
-      it "redirects to the edit timeline settings page if it fails" do
-        @assignment = create(:assignment, course: @course)
-        params = { "course" => { "assignments_attributes" => { "0" => { "media"=>"", "thumbnail"=>"", "media_credit"=>"", "media_caption"=>"Testing", "id"=> nil} } }, id: @course.id}
-        post :timeline_settings_update, params
-        expect(@assignment.reload.media_caption).to eq(nil)
-        expect(response).to render_template(:timeline_settings)
-      end
-    end
   end
 
   context "as student" do
@@ -261,8 +234,6 @@ describe CoursesController do
         :show,
         :update,
         :destroy,
-        :timeline_settings,
-        :timeline_settings_update,
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "1"}).to redirect_to(:root)
