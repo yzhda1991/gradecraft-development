@@ -25,9 +25,6 @@
                     min='{{element.lowest_points}}'
                     max='{{gradeService.elements[$index - 1].lowest_points}}')
 
-  %span.max_points Max Points
-  .max-points {{gradeService.maxPointsLimit(index) | number:0}}
-
   .right
     %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
       Remove
