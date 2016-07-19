@@ -10,7 +10,7 @@
   %input.low-range(type='number'
                    ng-model='element.lowest_points'
                    ng-model-options='{allowInvalid: true}'
-                   ng-keyup='gradeService.updateNextElement($index)'
+                   ng-keyup='elements[$index + 1].highest_points = element.lowest_points - 1'
                    name='lowest_points'
                    min='{{gradeService.elements[$index + 1].highest_points}}'
                    max='{{element.highest_points}}')
@@ -19,7 +19,7 @@
   %input.high-range(type='number'
                     ng-model='element.highest_points'
                     ng-model-options='{allowInvalid: true}'
-                    ng-keyup='gradeService.updatePreviousElement($index)'
+                    ng-keyup='elements[$index - 1].lowest_points = element.highest_points + 1'
                     index='{{$index}}'
                     name='highest_points'
                     min='{{element.lowest_points}}'
