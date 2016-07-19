@@ -20,13 +20,8 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def is_complete?(student)
-    if condition_type == "Badge"
-      check_badge_condition(student)
-    elsif condition_type == "Assignment"
-      check_assignment_condition(student)
-    elsif condition_type == "Course"
-      check_course_membership_condition(student)
-    end
+    method = "check_#{condition_type.underscore}_condition"
+    self.send method, student
   end
 
   def is_complete_for_group?(group)
@@ -55,11 +50,9 @@ class UnlockCondition < ActiveRecord::Base
   # assignment
   def count_unlocked_in_group(group)
     unlocked_count = 0
-    return false unless group.present?
+    return 0 unless group.present?
     group.students.each do |student|
-      if self.is_complete?(student)
-        unlocked_count += 1
-      end
+      unlocked_count += group.students.count { |student| self.is_complete?(student) }
     end
     return unlocked_count
   end
@@ -131,18 +124,11 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_assignment_condition(student)
-    if condition_state == "Submitted"
-      check_submission_condition(student)
-    elsif condition_state == "Grade Earned"
-      check_grade_earned_condition(student)
-    elsif condition_state == "Passed"
-      check_passed_condition(student)
-    elsif condition_state == "Feedback Read"
-      check_feedback_read_condition(student)
-    end
+    method = "check_#{ condition_state.parameterize('_') }_condition"
+    self.send method, student
   end
 
-  def check_submission_condition(student)
+  def check_submitted_condition(student)
     assignment = Assignment.find(condition_id)
     if student.has_group_for_assignment? assignment
       group = student.group_for_assignment(assignment)
@@ -200,7 +186,7 @@ class UnlockCondition < ActiveRecord::Base
     grade.feedback_read_at < condition_date
   end
 
-  def check_course_membership_condition(student)
+  def check_course_condition(student)
     course_membership = student.course_memberships.where(course_id: condition_id).first
     course_membership.score >= condition_value
   end
