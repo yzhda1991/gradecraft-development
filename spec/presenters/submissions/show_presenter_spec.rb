@@ -197,7 +197,7 @@ describe Submissions::ShowPresenter do
         end
       end
 
-      context "grade is present but re-submissions are allowed" do
+      context "grade is present and re-submissions are allowed" do
         it "returns true" do
           allow(grade).to receive(:present?) { true }
           allow(assignment).to receive(:resubmissions_allowed?) { true }
@@ -205,7 +205,7 @@ describe Submissions::ShowPresenter do
         end
       end
 
-      context "grades is not present and re-submissions are not allowed" do
+      context "grades is present but re-submissions are not allowed" do
         it "returns false" do
           allow(grade).to receive(:present?) { true }
           allow(assignment).to receive(:resubmissions_allowed?) { false }

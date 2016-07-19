@@ -27,6 +27,7 @@ describe "submissions/show" do
       presenter: presenter
     )
     group.assignments << assignment
+    allow(view).to receive(:current_student).and_return(group.students.first)
   end
 
   it "renders successfully for a group submission" do

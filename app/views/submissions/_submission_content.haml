@@ -1,5 +1,5 @@
 // Allow students to edit the submission if that's still possible
-= render partial: "submissions/components/edit", locals: { presenter: presenter } if presenter.open_for_editing?(current_student)
+= render partial: "submissions/components/edit", locals: { presenter: presenter } if presenter.open_for_editing?
 
 // Displaying when the assignment was submitted and if it was late/resubmitted
 = render partial: "submissions/components/dates_and_state", locals: { presenter: presenter }
