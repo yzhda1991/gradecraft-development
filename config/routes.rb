@@ -81,6 +81,8 @@ GradeCraft::Application.routes.draw do
       resources :importers, only: [:index, :show] do
         get :download
         post :upload
+        get :courses
+        get "/courses/:id/assignments", to: :assignments, as: :assignments
       end
     end
 

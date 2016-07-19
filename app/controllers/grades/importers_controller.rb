@@ -15,6 +15,13 @@ class Grades::ImportersController < ApplicationController
     end
   end
 
+  # GET /assignments/:assignment_id/grades/importers/:importer_id/courses
+  def courses
+    @assignment = Assignment.find params[:assignment_id]
+    @provider = params[:importer_id]
+    @courses = syllabus.courses
+  end
+
   # GET /assignments/:assignment_id/grades/importers
   def index
     @assignment = Assignment.find params[:assignment_id]
@@ -50,5 +57,10 @@ class Grades::ImportersController < ApplicationController
   # Schedule the `GradeUpdater` for all grades provided
   def enqueue_multiple_grade_update_jobs(grade_ids)
     grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
+  end
+
+  def syllabus
+    @syllabus ||= ActiveLMS::Syllabus.new(@provider,
+                                          ENV["#{@provider.upcase}_ACCESS_TOKEN"])
   end
 end
