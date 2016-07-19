@@ -1,9 +1,17 @@
 .grade-scheme-row
+
   %span.form_label Grade Letter
-  %input.letter{'name' => 'letter', 'ng-model' => 'element.letter'}
+  %input.letter(name='letter' ng-model='element.letter')
+
   %span.form_label Level name
-  %input.level{'name' => 'level', 'ng-model' => 'element.level'}
-  %ranges{'grade-scheme-ranges' => '','index' => '$index', 'ng-model' => 'element'}
+  %input.level(name='level' ng-model='element.level')
+
+  %ranges(grade-scheme-ranges index='$index', ng-model='element')
+
   .right
-    %button{:type => 'button', class: 'remove-element button alert', 'ng-click' => 'gradeService.remove($index)'} Remove <i class="fa fa-times" ></i>
-  %button{:type => 'button', class: 'add-element button', 'ng-click' => 'gradeService.addNew($index)'} <i class="fa fa-plus" ></i> Add A Level
+    %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
+      Remove
+      %i.fa.fa-times
+
+  %button.add-element.button(type='button' ng-click='gradeService.addNew($index)')
+    %i.fa.fa-plus Add A Level

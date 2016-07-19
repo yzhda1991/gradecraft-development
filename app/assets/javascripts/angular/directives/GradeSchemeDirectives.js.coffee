@@ -6,19 +6,8 @@
   }
   controller: ($scope) ->
 
-
-    # this.lowest_points = (modelValue, viewValue) ->
-    #   if (modelValue < $scope.element.highest_points || $scope.element.highest_points == '')
-    #     GradeSchemeElementsService.update_scheme($scope.index, modelValue)
-    #     true
-    #   else
-    #     false
-
-    # this.highest_points = (modelValue, viewValue) ->
-    #   if (modelValue > $scope.element.lowest_points && modelValue)
-    #     true
-    #   else
-    #     false
+    this.alertTheQueen = () ->
+      alert("the queen!! the queen!!")
 
     this.lowest_points = (modelValue, viewValue) ->
       # update the previous grade scheme element if our lowest_points value has

@@ -18,7 +18,7 @@
         letter: ''
         level: ''
         lowest_points: 0
-        highest_points: 1
+        highest_points: 100
       })
 
     nextHighestElement = (index) ->
