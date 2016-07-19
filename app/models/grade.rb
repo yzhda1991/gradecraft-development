@@ -123,14 +123,8 @@ class Grade < ActiveRecord::Base
 
   def check_unlockables
     if self.assignment.is_a_condition?
-      unlock_conditions = UnlockCondition.where(condition_id: self.assignment.id, condition_type: "Assignment").each do |condition|
-        if condition.unlockable_type == "Assignment"
-          unlockable = Assignment.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        elsif condition.unlockable_type == "Badge"
-          unlockable = Badge.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        end
+      self.assignment.unlock_conditions.map(&:unlockable).each do |unlockable|
+        unlockable.check_unlock_status(student)
       end
     end
   end

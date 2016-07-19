@@ -122,15 +122,12 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_if_badge_earned_enough_times(student)
     badge_count = student.earned_badges_for_badge_count(condition_id)
-    return false unless badge_count >= condition_value
-    return true
+    badge_count >= condition_value
   end
 
   def check_if_badge_earned_enough_times_by_date(student)
     badge_count = student.earned_badges_for_badge_count(condition_id)
-    return false unless badge_count >= condition_value &&
-      student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date
-    return true
+    badge_count >= condition_value && student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date
   end
 
   def check_assignment_condition(student)
@@ -184,14 +181,11 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_passed_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
-    return true if grade.pass_fail_status == "Pass"
-    return false
+    grade.pass_fail_status == "Pass"
   end
 
   def check_if_grade_earned_meets_condition_value(grade)
-    return false unless GradeProctor.new(grade).viewable? &&
-        grade.score >= condition_value
-    return true
+    GradeProctor.new(grade).viewable? && grade.score >= condition_value
   end
 
   def check_if_grade_earned_met_condition_date(grade)
@@ -203,22 +197,18 @@ class UnlockCondition < ActiveRecord::Base
     grade = student.grade_for_assignment_id(condition_id).first
     return false unless grade.present? && grade.feedback_read?
     return true unless condition_date?
-    return false unless grade.feedback_read_at < condition_date
-    return true
+    grade.feedback_read_at < condition_date
   end
 
   def check_course_membership_condition(student)
     course_membership = student.course_memberships.where(course_id: condition_id).first
-    return false unless course_membership.score >= condition_value
-    return true
+    course_membership.score >= condition_value
   end
 
   # Checking if the number of students who have completed the condition match
   # the size of the group, returning true if so.
   def check_condition_for_each_student(group)
     unlocked_count = count_unlocked_in_group(group)
-    return false unless unlocked_count == group.students.count
-    return true
+    unlocked_count == group.students.count
   end
-
 end
