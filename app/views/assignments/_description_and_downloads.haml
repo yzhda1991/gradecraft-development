@@ -21,12 +21,19 @@
   - if presenter.student_logged?(current_user)
     = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }
 
+
+  %hr.dotted
+  %h4.uppercase Downloads
   - if presenter.assignment.assignment_files.present?
-    %hr.dotted
-    %h4.uppercase Downloads
     %ul
-      - presenter.assignment.assignment_files.each do |af|
-        %li= link_to af.filename, af.url
+    - presenter.assignment.assignment_files.each do |af|
+      %li= link_to af.filename, af.url
+  - if current_user_is_staff?
+    = link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
+
+    - if presenter.grade_with_rubric? && presenter.grades.present?
+      .clear= link_to glyph(:download) + "Download Rubric Grades", export_earned_levels_assignment_grades_path(presenter.assignment, format: :csv)
+
 
   - if current_student.present?
     - @group = current_student.group_for_assignment(presenter.assignment)

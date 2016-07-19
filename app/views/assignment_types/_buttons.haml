@@ -4,5 +4,4 @@
       %li= link_to glyph(:plus) + "New #{term_for :assignment_type}", new_assignment_type_path
     - if @assignment_type.present? && @assignment_type.persisted?
       %li= link_to glyph(:edit) + "Edit", edit_assignment_type_path(@assignment_type)
-      %li= link_to glyph(:eye) + "See #{@assignment_type.name}", assignment_type_path(@assignment_type)
       %li= link_to glyph(:heartbeat) + "#{@assignment_type.name} Performance", all_grades_assignment_type_path(@assignment_type)
