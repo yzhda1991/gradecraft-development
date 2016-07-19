@@ -34,8 +34,6 @@
         points = prevElement.lowest_points
         if points >= 0
           points - 1
-        else if ! Number.isInteger(points)
-          alert(points)
 
       else
         0
@@ -47,8 +45,6 @@
         points = nextElement.highest_points
         if points >= 0
           points + 1
-        else if ! Number.isInteger(points)
-          alert(points)
 
       else
         0
