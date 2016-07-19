@@ -6,6 +6,12 @@
     display: none !important
 
 @media (max-width: $media-medium-max)
+  .sidebar
+    p.has-form
+
+      input[type=text]
+        width: 220px 
+
   .offscreen-sidebar
     position: fixed
     background-color: $color-grey-6
@@ -43,15 +49,6 @@
       font-weight: 400
       padding: .25rem 0 .25rem .5rem
 
-    hr
-      border: none
-      border-bottom: 1px dashed $color-grey-5
-      margin: .5rem 0
-      width: 100%
-
-    input[type=text]
-      width: 235px
-
     a.button
       color: $color-white
       font-size: 0.8rem
@@ -61,6 +58,9 @@
       color: $color-white
       padding: .5rem .75rem
       font-size: 1rem
+
+    .search
+      padding: .5rem
 
     .course-info-btn-mobile
       position: relative
@@ -90,6 +90,13 @@
 
     ul.course-info.open
       max-height: 500px
+
+  .offscreen-sidebar, .staff-sidenav
+    hr
+      border: none
+      border-bottom: 1px dashed $color-grey-5
+      margin: .5rem 0
+      width: 100%
 
   .offscreen-sidebar.animating
     transition: transform 0.25s ease-in-out
