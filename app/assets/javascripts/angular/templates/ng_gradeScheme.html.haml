@@ -7,10 +7,10 @@
   %input.level(name='level' ng-model='element.level')
 
   %span.form_label Low Point Threshold
-  %input.low-range(type='number' ng-model='element.lowest_points' index='{{index}}' name='lowest_points' max='{{element.highest_points}}')
+  %input.low-range(type='number' ng-model='element.lowest_points' ng-model-options='{allowInvalid: true}' index='{{index}}' name='lowest_points' max='{{element.highest_points}}' ng-change)
 
   %span.form_label High Point Threshold
-  %input.high-range(type='number' ng-model='element.highest_points' index='{{index}}' name='highest_points' min='{{element.lowest_points}}')
+  %input.high-range(type='number' ng-model='element.highest_points' ng-model-options='{allowInvalid: true}' index='{{index}}' name='highest_points' min='{{element.lowest_points}}')
 
   .right
     %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
