@@ -5,19 +5,29 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %table
-    %thead
-      %tr
-        %th{scope: "col"} Course
-        %th{scope: "col"} Name
-        %th{scope: "col"} Description
-        %th.button-column
-    %tbody
-      - @assignments.each do |assignment|
+  = form_tag importer_assignments_import_path(@provider, @course["id"]) do
+    %table.dynatable.no-table-header
+      %thead
         %tr
-          %td= @course["name"]
-          %td= assignment["name"]
-          %td= assignment["description"].html_safe
-          %td
-            .right
-              %ul.button-bar
+          %th{scope: "col"} Course
+          %th{scope: "col"} Name
+          %th{scope: "col"} Description
+          %th{scope: "col"} Due
+          %th{scope: "col"} Points
+          %th{"data-dynatable-no-sort" => "true"}
+            %button.button.select-all= "Check"
+            %button.button.select-none= "Uncheck"
+      %tbody
+        - @assignments.each do |assignment|
+          %tr
+            %td= @course["name"]
+            %td= assignment["name"]
+            %td= assignment["description"].html_safe
+            %td= assignment["due_at"]
+            %td= assignment["points_possible"]
+            %td.center= check_box_tag "assignment_ids[]", assignment["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-assignments-command']" }
+
+    .submit-buttons
+      .right
+        %p= select_tag :assignment_type_id, options_from_collection_for_select(@assignment_types, :id, :name), prompt: "Select an assignment type"
+        %p= submit_tag "Import Selected Assignments into #{current_course.name}", class: "button disabled", disabled: true, data: { behavior: "selected-assignments-command" }

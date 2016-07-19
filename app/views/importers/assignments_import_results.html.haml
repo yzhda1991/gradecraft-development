@@ -1,0 +1,35 @@
+= content_nav_for Course, ["Import Assignments", importers_path], @provider.capitalize
+
+%h3.pagetitle= "#{@provider.capitalize} Assignment Import Results"
+
+.pageContent
+  = render "layouts/alerts"
+
+  - unless @result.import_result.unsuccessful.empty?
+    %h4.subtitle
+      = "#{@result.import_result.unsuccessful.count} #{"Assignment".pluralize(@result.import_result.unsuccessful.count)} Not Imported"
+    %table.dynatable
+      %thead
+        %tr
+          %th Data
+          %th Error(s)
+      %tbody
+        - @result.import_result.unsuccessful.each do |row|
+          %tr
+            %td= row[:data]
+            %td= row[:errors]
+
+  %h4.subtitle
+    = "#{@result.import_result.successful.count} #{"Assignment".pluralize(@result.import_result.successful.count)} Imported Successfully"
+  %table.dynatable
+    %thead
+      %tr
+        %th Course
+        %th Assignment Type
+        %th Name
+    %tbody
+      - @result.import_result.successful.each do |assignment|
+        %tr
+          %td= link_to assignment.course.name, course_path(assignment.course)
+          %td= link_to assignment.assignment_type.name, assignment_type_path(assignment.assignment_type)
+          %td= link_to assignment.name, assignment_path(assignment)

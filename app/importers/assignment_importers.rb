@@ -1,0 +1,1 @@
+require_relative "assignment_importers/canvas_assignment_importer"
