@@ -3,17 +3,6 @@ class Assignments::GradesController < ApplicationController
   before_filter :ensure_student?, only: :self_log
   before_filter :save_referer, only: :edit_status
 
-  # rubocop:disable AndOr
-  # GET /assignments/:assignment_id/grades/download
-  # Sends a CSV file to the user with the current grades for all students
-  # in the course for the asisgnment
-  def download
-    assignment = current_course.assignments.find(params[:assignment_id])
-    respond_to do |format|
-      format.csv { send_data GradeExporter.new.export_grades(assignment, current_course.students), filename: "#{ assignment.name } Import Grades - #{ Date.today}.csv" }
-    end
-  end
-
   # GET /assignments/:assignment_id/grades/edit_status
   # For changing the status of a group of grades passed in grade_ids
   # ("In Progress" => "Graded", or "Graded" => "Released")
@@ -59,30 +48,6 @@ class Assignments::GradesController < ApplicationController
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|
       format.csv { send_data CriterionGradesExporter.new.export(assignment.course, assignment.rubric), filename: "#{ assignment.name } Rubric Grades - #{ Date.today }.csv" }
-    end
-  end
-
-  # GET /assignments/:assignment_id/grades/import
-  def import
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Import Grades for #{@assignment.name}"
-  end
-
-  # POST /assignments/:assignment_id/grades/upload
-  def upload
-    @assignment = current_course.assignments.find(params[:assignment_id])
-
-    if params[:file].blank?
-      redirect_to assignment_grades_importer_path(@assignment, :csv), notice: "File is missing"
-    else
-      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
-
-      # @mz TODO: add specs
-      grade_ids = @result.successful.map(&:id)
-
-      enqueue_multiple_grade_update_jobs(grade_ids)
-
-      render :import_results
     end
   end
 

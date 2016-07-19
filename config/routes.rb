@@ -66,11 +66,8 @@ GradeCraft::Application.routes.draw do
     # single resources should go directly on the grades controller
     resources :grades, only: [:index], module: :assignments do
       collection do
-        get :download
         get :export
         get :export_earned_levels
-        get :import
-        post :upload
         get :mass_edit
         put :mass_update
         get :edit_status

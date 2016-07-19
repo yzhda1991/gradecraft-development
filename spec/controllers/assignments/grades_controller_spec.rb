@@ -20,14 +20,6 @@ describe Assignments::GradesController do
     end
     before (:each) { login_user(@professor) }
 
-    describe "GET download" do
-      it "returns sample csv data" do
-        get :download, assignment_id: @assignment, format: :csv
-        expect(response.body).to \
-          include("First Name,Last Name,Email,Score,Feedback")
-      end
-    end
-
     describe "GET edit_status" do
       it "assigns params" do
         get :edit_status, { assignment_id: @assignment.id, grade_ids: [@grade.id] }
@@ -72,42 +64,6 @@ describe Assignments::GradesController do
 
         expect(response.body).to \
           include("First Name,Last Name,Email,Username,Team")
-      end
-    end
-
-    describe "GET import" do
-      it "displays the import page" do
-        get :import, { assignment_id: @assignment.id}
-        expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(response).to render_template(:import)
-      end
-    end
-
-    describe "POST upload" do
-      render_views
-
-      let(:file) { fixture_file "grades.csv", "text/csv" }
-
-      it "renders the results from the import" do
-        @student.reload.update_attribute :email, "robert@example.com"
-        second_student = create(:user, username: "jimmy")
-        second_student.courses << @course
-        post :upload, assignment_id: @assignment.id, file: file
-        expect(response).to render_template :import_results
-        expect(response.body).to include "2 Grades Imported Successfully"
-      end
-
-      it "renders any errors that have occured" do
-        post :upload, assignment_id: @assignment.id, file: file
-        expect(response.body).to include "3 Grades Not Imported"
-        expect(response.body).to include "Student not found in course"
-      end
-
-      it "adds error and redirects without a file" do
-        post :upload, assignment_id: @assignment.id
-        expect(flash[:notice]).to eq("File is missing")
-        expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
 
@@ -267,13 +223,6 @@ describe Assignments::GradesController do
       end
     end
 
-    describe "GET download" do
-      it "redirects back to the root" do
-        expect(get :download, assignment_id: @assignment, format: :csv).to \
-          redirect_to(:root)
-      end
-    end
-
     describe "GET edit_status" do
       it "redirects back to the root" do
         expect(get :edit_status, assignment_id: @assignment).to \
@@ -291,20 +240,6 @@ describe Assignments::GradesController do
     describe "GET export" do
       it "redirects back to the root" do
         expect(get :export, assignment_id: @assignment, format: :csv).to \
-          redirect_to(:root)
-      end
-    end
-
-    describe "GET import" do
-      it "redirects back to the root" do
-        expect(get :import, { assignment_id: @assignment }).to \
-          redirect_to(:root)
-      end
-    end
-
-    describe "POST upload" do
-      it "redirects back to the root" do
-        expect(post :upload, { assignment_id: @assignment }).to \
           redirect_to(:root)
       end
     end
