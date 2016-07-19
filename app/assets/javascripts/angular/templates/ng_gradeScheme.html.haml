@@ -12,6 +12,7 @@
                    ng-model-options='{allowInvalid: true}'
                    index='{{index}}'
                    name='lowest_points'
+                   min='{{gradeService.minPointsFor(index)}}'
                    max='{{element.highest_points}}'
                    ng-change)
 
@@ -21,7 +22,8 @@
                     ng-model-options='{allowInvalid: true}'
                     index='{{index}}'
                     name='highest_points'
-                    min='{{element.lowest_points}}')
+                    min='{{element.lowest_points}}'
+                   max='{{gradeService.highestPoints(index)}}')
 
   .right
     %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
