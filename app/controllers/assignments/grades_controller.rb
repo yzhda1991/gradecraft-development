@@ -73,7 +73,7 @@ class Assignments::GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:assignment_id])
 
     if params[:file].blank?
-      redirect_to assignment_path(@assignment), notice: "File is missing"
+      redirect_to assignment_grades_importer_path(@assignment, :csv), notice: "File is missing"
     else
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 

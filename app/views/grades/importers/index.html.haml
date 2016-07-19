@@ -15,7 +15,7 @@
         %p.card-text
           Upload a .csv file with grade information for students to import the student grades.
 
-        = link_to "Import Grades from CSV", assignments_importer_courses_path(:canvas), class: "card-link button"
+        = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
 
     .card{style: "height: 300px;"}
       .card-cap

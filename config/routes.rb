@@ -81,7 +81,10 @@ GradeCraft::Application.routes.draw do
     end
 
     namespace :grades do
-      resources :importers, only: :index
+      resources :importers, only: [:index, :show] do
+        get :download
+        post :upload
+      end
     end
 
     resources :groups, only: [], module: :assignments do
