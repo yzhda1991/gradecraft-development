@@ -49,18 +49,6 @@
       else
         0
 
-    minPointsFor = (index) ->
-      # in this context the next element position is index + 1 instead of just
-      # index since we're not creating a new element
-      nextElement = elements[index + 1]
-
-      if nextElement
-        points = nextElement.highest_points
-        if points >= 0
-          points + 1
-      else
-        0
-
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
         angular.copy(response.grade_scheme_elements, elements)

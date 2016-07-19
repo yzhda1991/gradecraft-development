@@ -12,7 +12,7 @@
                    ng-model-options='{allowInvalid: true}'
                    index='{{index}}'
                    name='lowest_points'
-                   min='{{gradeService.minPointsFor(index)}}'
+                   min='{{gradeService.elements[$index + 1].highest_points}}'
                    max='{{element.highest_points}}'
                    ng-change)
 
@@ -23,7 +23,10 @@
                     index='{{index}}'
                     name='highest_points'
                     min='{{element.lowest_points}}'
-                   max='{{gradeService.highestPoints(index)}}')
+                    max='{{gradeService.elements[$index - 1].lowest_points}}')
+
+  %span.max_points Max Points
+  .max-points {{gradeService.maxPointsLimit(index) | number:0}}
 
   .right
     %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
