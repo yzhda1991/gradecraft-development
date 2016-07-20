@@ -32,8 +32,18 @@
         lowest_points: lowestPoints(index)
       }
 
+    updatePreviousElement = (index) ->
+      currentElement = elements[index]
+      previousElement = elements[index - 1]
+
+      if currentElement.highest_points > previousElement.lowest_points
+        previousElement.lowest_points = currentElement.highest_points + 1
+
+        angular.copy(response.grade_scheme_elements, elements)
+
+
     highestPoints = (index) ->
-      if prevElement = previousElement(index)
+      if prevElement = elements[index - 1]
         if prevElement.lowest_points >= 0
           prevElement.lowest_points - 1
       else
@@ -42,17 +52,9 @@
     lowestPoints = (index) ->
       if nextElement = elements[index]
         if nextElement.highest_points >= 0
-          nextelement.highest_points + 1
+          nextElement.highest_points + 1
       else
         0
-
-    updatePreviousElement = (index)->
-      if elements[index].highest_points > elements[index - 1].lowest_points
-        elements[index - 1].lowest_points = elements[index].highest_points + 1
-
-    updateNextElement = (index)->
-      if elements[index].lowest_points < elements[index + 1].highest_points
-        elements[index + 1].highest_points = elements[index].lowest_points - 1
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
@@ -64,6 +66,7 @@
         grade_scheme_elements_attributes: elements
         deleted_ids: deletedIds
       }
+
       $http.put('/grade_scheme_elements/mass_update', data).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, elements)
