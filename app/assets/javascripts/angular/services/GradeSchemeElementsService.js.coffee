@@ -32,27 +32,17 @@
         lowest_points: lowestPoints(index)
       }
 
-    updatePreviousElement = (index) ->
-      currentElement = elements[index]
-      previousElement = elements[index - 1]
-
-      if currentElement.highest_points > previousElement.lowest_points
-        previousElement.lowest_points = currentElement.highest_points + 1
-
-        angular.copy(response.grade_scheme_elements, elements)
-
-
     highestPoints = (index) ->
-      if prevElement = elements[index - 1]
-        if prevElement.lowest_points >= 0
-          prevElement.lowest_points - 1
+      prevElement = elements[index - 1]
+      if prevElement && prevElement.lowest_points > 0
+        prevElement.lowest_points - 1
       else
         0
 
     lowestPoints = (index) ->
-      if nextElement = elements[index]
-        if nextElement.highest_points >= 0
-          nextElement.highest_points + 1
+      nextElement = elements[index]
+      if nextElement && nextElement.highest_points > 0
+        nextElement.highest_points + 1
       else
         0
 
