@@ -17,8 +17,40 @@
       nextElement = $scope.grade_scheme_elements[index + 1]
 
       if nextElement
-        newPoints = currentElement.lowest_points - 1
-        nextElement.highest_points = newPoints > 0 ? newPoints : 0
+        if currentElement.lowest_points > 0
+          nextElement.highest_points = currentElement.lowest_points - 1
+        else
+          nextElement.highest_points = 0
+
+    $scope.highPointsMin = (index) ->
+      element = $scope.grade_scheme_elements[index]
+
+      if element && element.lowest_points >= 0
+        element.lowest_points + 1
+      else
+        null
+
+    $scope.highPointsMax = (index) ->
+      prevElement = $scope.grade_scheme_elements[index - 1]
+      if prevElement
+        prevElement.lowest_points - 1
+      else
+        null
+
+    $scope.lowPointsMin = (index) ->
+      nextElement = $scope.grade_scheme_elements[index + 1]
+      if nextElement
+        nextElement.highest_points + 1
+      else
+        null
+
+    $scope.lowPointsMax = (index) ->
+      element = $scope.grade_scheme_elements[index]
+
+      if element && element.highest_points > 0
+        element.highest_points - 1
+      else
+        null
 
     return
 ]
