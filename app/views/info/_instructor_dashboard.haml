@@ -1,0 +1,15 @@
+.col-30
+  .panel.todo.dashboard-module.to-do-list
+
+.col-40
+  - if @events.present?
+    .panel.dashboard-module= render partial: "students/dashboard/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
+
+  .panel.dashboard-module.weekly-stats
+
+.col-30
+  - if current_course.grade_scheme_elements.present?
+    .panel.dashboard-module.grading-scheme
+
+  - if ! current_course.hide_analytics?
+    .panel.dashboard-module.grade-distribution
