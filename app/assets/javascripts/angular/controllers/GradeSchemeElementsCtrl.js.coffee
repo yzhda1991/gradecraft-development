@@ -10,7 +10,10 @@
       previousElement = $scope.grade_scheme_elements[index - 1]
 
       if previousElement
-        previousElement.lowest_points = currentElement.highest_points + 1
+        if currentElement.highest_points
+          previousElement.lowest_points = currentElement.highest_points + 1
+        else
+          previousElement.lowest_points = null
 
     $scope.updateNextElement = (index)->
       currentElement = $scope.grade_scheme_elements[index]
@@ -20,7 +23,7 @@
         if currentElement.lowest_points > 0
           nextElement.highest_points = currentElement.lowest_points - 1
         else
-          nextElement.highest_points = 0
+          nextElement.highest_points = null
 
     $scope.highPointsMin = (index) ->
       element = $scope.grade_scheme_elements[index]
