@@ -34,7 +34,7 @@ class EarnedBadge < ActiveRecord::Base
 
   def check_unlockables
     if self.badge.is_a_condition?
-      self.badge.unlock_conditions.map(&:unlockable).each do |unlockable|
+      self.badge.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
     end

@@ -76,7 +76,7 @@
         $(input).attr('disabled', true);
       });
       courseSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true;
+        $(input).attr('disabled', true);
       });
     } else if(val === 'Course') {
       assignmentSelector.hide();

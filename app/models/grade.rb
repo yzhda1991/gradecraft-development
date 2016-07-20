@@ -123,7 +123,7 @@ class Grade < ActiveRecord::Base
 
   def check_unlockables
     if self.assignment.is_a_condition?
-      self.assignment.unlock_conditions.map(&:unlockable).each do |unlockable|
+      self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
     end

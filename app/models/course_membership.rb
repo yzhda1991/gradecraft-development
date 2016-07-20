@@ -60,7 +60,7 @@ class CourseMembership < ActiveRecord::Base
 
   def check_unlockables
     if self.course.is_a_condition?
-      self.course.unlock_conditions.map(&:unlockable).each do |unlockable|
+      self.course.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(user)
       end
     end
