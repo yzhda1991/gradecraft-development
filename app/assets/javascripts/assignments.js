@@ -50,31 +50,33 @@
     var parent = $(select).closest('.conditions');
     var assignmentSelector = parent.find('#assignments-list');
     var badgeSelector = parent.find('#badges-list');
-    var courseMembershipSelector = parent.find('#courses-list');
+    var courseSelector = parent.find('#courses-list');
     var val = $(select).val();
     if(val === 'Assignment') {
       assignmentSelector.show();
       badgeSelector.hide();
+      courseSelector.hide();
       assignmentSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', false);
       });
       badgeSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', true);
       });
-      courseMembershipSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
+      courseSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true);
       });
     } else if(val === 'Badge') {
       assignmentSelector.hide();
       badgeSelector.show();
+      courseSelector.hide();
       badgeSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', false);
       });
       assignmentSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', true);
       });
-      courseMembershipSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
+      courseSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true;
       });
     } else if(val === 'Course') {
       assignmentSelector.hide();
@@ -85,14 +87,15 @@
       assignmentSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', true);
       });
-      courseMembershipSelector.show();
-      courseMembershipSelector.find('select, input').each(function(i, input){
+      courseSelector.show();
+      courseSelector.find('select, input').each(function(i, input){
         $(input).attr('disabled', false);
       });
     } else {
-      var allFields = [assignmentSelector, badgeSelector];
+      var allFields = [assignmentSelector, badgeSelector, courseSelector];
       assignmentSelector.hide();
       badgeSelector.hide();
+      courseSelector.show();
       $.each(allFields, function(i, group){
         group.find('select, input').each(function(i, input){
           $(input).prop('disabled', true);

@@ -133,7 +133,7 @@ describe Badge do
     end
   end
 
-  describe "#is_unlocked_for_student?(student)" do
+  describe "#is_unlocked_for_student?(student)", focus: true do
     it "returns true if a student has met the necessary requirements to unlock the badge" do
       locked_badge = create(:badge)
       badge = create(:badge)

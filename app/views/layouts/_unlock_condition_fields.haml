@@ -13,10 +13,10 @@
     = f.input :condition_value, :label => "Number of Times Earned"
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => f.try(:condition_date) }, :label => "Done By"
   #courses-list{:style => "display: none"}
-    = f.input :condition_value, :label => "Points Earned"
+    = f.input :condition_id, :collection => [["#{current_course.name}", current_course.id]], label: "Course", include_blank: false
+    = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
+    = f.input :condition_value, :label => "Min Points"
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => f.try(:condition_date) }, :label => "Done By"
-    = f.hidden_field :condition_state, :value => "Earned"
-    = f.hidden_field :condition_id, :value => current_course.id
   .right
     = f.hidden_field :_destroy, class: "destroy"
     = link_to "Delete Condition", "#", class: "remove-unlock-condition button right"
