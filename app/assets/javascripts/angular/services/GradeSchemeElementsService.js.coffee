@@ -18,8 +18,8 @@
       elements.push({
         letter: ''
         level: ''
-        lowest_points: 0
-        highest_points: 100
+        lowest_points: ''
+        highest_points: ''
       })
 
     # build a new element for the given index, taking its values from the

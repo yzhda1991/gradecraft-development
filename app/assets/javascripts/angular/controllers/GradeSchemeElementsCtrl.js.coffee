@@ -17,7 +17,8 @@
       nextElement = $scope.grade_scheme_elements[index + 1]
 
       if nextElement
-        nextElement.highest_points = currentElement.lowest_points - 1
+        newPoints = currentElement.lowest_points - 1
+        nextElement.highest_points = newPoints > 0 ? newPoints : 0
 
     return
 ]
