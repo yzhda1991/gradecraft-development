@@ -37,14 +37,14 @@
       if prevElement && prevElement.lowest_points > 0
         prevElement.lowest_points - 1
       else
-        0
+        null
 
     lowestPoints = (index) ->
       nextElement = elements[index]
       if nextElement && nextElement.highest_points > 0
         nextElement.highest_points + 1
       else
-        0
+        null
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
