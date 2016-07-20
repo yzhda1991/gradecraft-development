@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class Students::DashboardCoursePlannerPresenter < Showtime::Presenter
+class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   include Showtime::ViewContext
   include Submissions::GradeHistory
 
