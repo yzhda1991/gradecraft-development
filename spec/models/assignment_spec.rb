@@ -326,7 +326,7 @@ describe Assignment do
 
     it "returns a new unlock state if the goal of unlockables does not meet the number of unlocks" do
       subject.unlock_conditions.create! condition_id: subject.id,
-        condition_type: subject.class, condition_state: "Blah"
+        condition_type: subject.class, condition_state: "Grade Earned"
       expect(subject.check_unlock_status(student)).to be_an_instance_of UnlockState
       expect(subject.unlock_states.last).to_not be_unlocked
     end
@@ -334,7 +334,7 @@ describe Assignment do
     context "when the number of conditions are met" do
       it "returns the updated unlock state when it is found" do
         condition = subject.unlock_conditions.create condition_id: subject.id,
-          condition_type: subject.class, condition_state: "Blah"
+          condition_type: subject.class, condition_state: "Earned"
         allow(condition).to receive(:is_complete?).with(student).and_return true
         state = subject.unlock_states.create(student_id: student.id,
                                              unlocked: false)
@@ -344,7 +344,7 @@ describe Assignment do
 
       it "returns a new unlock state if it did not exist" do
         condition = subject.unlock_conditions.create condition_id: subject.id,
-          condition_type: subject.class, condition_state: "Blah"
+          condition_type: subject.class, condition_state: "Submitted"
         allow(condition).to receive(:is_complete?).with(student).and_return true
         expect(subject.check_unlock_status(student)).to eq \
           subject.unlock_states.last
@@ -546,16 +546,16 @@ describe Assignment do
 
     it "returns zero if none of the conditions were met for the student" do
       condition = subject.unlock_conditions.create condition_id: subject.id,
-          condition_type: subject.class, condition_state: "Blah"
+          condition_type: subject.class, condition_state: "Grade Earned"
       expect(subject.unlock_condition_count_met_for(student)).to be_zero
     end
 
     it "returns the number of conditions that were complete for the student" do
       met_condition = subject.unlock_conditions.create condition_id: subject.id,
-          condition_type: subject.class, condition_state: "Blah"
+          condition_type: subject.class, condition_state: "Submitted"
       allow(met_condition).to receive(:is_complete?).with(student).and_return true
       condition = subject.unlock_conditions.create condition_id: subject.id,
-          condition_type: subject.class, condition_state: "Blah"
+          condition_type: subject.class, condition_state: "Grade Earned"
       expect(subject.unlock_condition_count_met_for(student)).to eq 1
     end
   end

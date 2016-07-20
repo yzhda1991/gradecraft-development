@@ -139,7 +139,7 @@ describe "assignments/predictor_data" do
 
   it "includes unlock keys when assignment is an unlock condition" do
     badge = create(:badge)
-    unlock_key = create(:unlock_condition, unlockable: badge, condition: @assignment)
+    unlock_key = create(:unlock_condition, unlockable: badge, condition: @assignment, condition_state: 'Grade Earned')
     render
     json = JSON.parse(response.body)
     expect(json["assignments"][0]["unlock_keys"]).to eq(["#{badge.name} is unlocked by #{unlock_key.condition_state} #{@assignment.name}"])

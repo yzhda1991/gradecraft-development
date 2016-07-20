@@ -10,7 +10,11 @@
 - presenter.assignments_for(assignment_type).each do |assignment|
   - if presenter.assignment_visible?(assignment)
     %tr
-      %td= link_to assignment.name, assignment_path(assignment) if presenter.name_visible?(assignment)
+      %td
+        - if presenter.name_visible?(assignment)
+          = link_to assignment.name, assignment_path(assignment)
+        - else
+          %i= "The name for this #{term_for :assignment} has been hidden until you unlock it"
       %td= render partial: "students/syllabus/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
       %td
         - if presenter.points_visible?(assignment)

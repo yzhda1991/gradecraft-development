@@ -3,6 +3,7 @@ require_relative "role"
 class Course < ActiveRecord::Base
   include Copyable
   include UploadsMedia
+  include UnlockableCondition
 
   after_create :create_admin_memberships
 
