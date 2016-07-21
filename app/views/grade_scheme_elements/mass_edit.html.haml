@@ -7,12 +7,22 @@
   - if ! current_course.grade_scheme_elements.present?
     .italic Start by adding your highest level, and work your way down
 
-  .element-container(ng-app='gradecraft' ng-controller='GradeSchemeElementsCtrl')
+  .element-container(ng-form
+                     name="gradeSchemeForm"
+                     ng-app='gradecraft'
+                     ng-controller='GradeSchemeElementsCtrl')
 
     .grade-scheme-elements
-      .grade-scheme-element(ng-repeat='element in grade_scheme_elements' ng-include="'ng_gradeScheme.html'")
-      %button.button.right(ng-click='gradeService.addFirst()' ng-hide='gradeService.elements.length > 0') Add Your Highest Grade
+      .grade-scheme-element(ng-repeat='element in grade_scheme_elements'
+                            ng-include="'ng_gradeScheme.html'")
 
-    .submit-button
-      %button.button.right(type='submit' ng-click='gradeService.postGradeSchemeElements()') Submit
-      %br
+      %button.button.right(ng-click='gradeService.addFirst()'
+                           ng-hide='gradeService.elements.length > 0') Add Your Highest Grade
+
+      .submit-button.right
+        %button.button.right(type='submit'
+                             ng-click='gradeService.postGradeSchemeElements()'
+                             ng-disabled="gradeSchemeForm.$invalid") Submit
+
+        .required-notice.right
+          Fix any conflicts and fill in empty fields before saving.

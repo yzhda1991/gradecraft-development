@@ -11,6 +11,7 @@
                    ng-model='element.lowest_points'
                    ng-model-options='{allowInvalid: true}'
                    ng-change='updateNextElement($index)'
+                   required
                    name='lowest_points'
                    min='{{lowPointsMin($index)}}'
                    max='{{lowPointsMax($index)}}')
@@ -20,7 +21,7 @@
                     ng-model='element.highest_points'
                     ng-model-options='{allowInvalid: true}'
                     ng-change='updatePreviousElement($index)'
-                    index='{{$index}}'
+                    required
                     name='highest_points'
                     min='{{highPointsMin($index)}}'
                     max='{{highPointsMax($index)}}')
