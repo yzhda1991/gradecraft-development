@@ -35,11 +35,11 @@
                 = label_tag do
                   // Checking to see if the grade is actually graded before setting the default value to 0
                   - if @assignment.grade_select? && @assignment.has_levels?
-                    = gf.select :raw_points, options_from_collection_for_select(@assignment_score_levels, :value, :formatted_name, grade.try(:raw_points)), include_blank: true
+                    = gf.select :raw_points, options_from_collection_for_select(@assignment_score_levels, :points, :formatted_name, grade.try(:raw_points)), include_blank: true
                   - elsif @assignment.grade_radio? && @assignment.has_levels?
                     - @assignment_score_levels.each do |assignment_score_level|
-                      = gf.label :raw_points, "#{assignment_score_level.formatted_name}", value: assignment_score_level.value
-                      = gf.radio_button :raw_points, assignment_score_level.value, class: "radio_inline"
+                      = gf.label :raw_points, "#{assignment_score_level.formatted_name}", value: assignment_score_level.points
+                      = gf.radio_button :raw_points, assignment_score_level.points, class: "radio_inline"
                   - elsif @assignment.grade_checkboxes?
                     = gf.check_box :raw_points, {}, @assignment.full_points, nil
                   - elsif @assignment.pass_fail?
