@@ -5,6 +5,14 @@
     $scope.gradeService = GradeSchemeElementsService
     $scope.grade_scheme_elements = $scope.gradeService.elements
 
+    # these can't be performed in the service without injecting the scope into
+    # the service and then applying the scope from within the service, which
+    # kind of violates the purpose of the scope.
+    #
+    # additionally these could be performed in the high-points and low-points
+    # directives, but this works for now and probably isn't worth the additional
+    # time to implement the directives properly.
+    #
     $scope.updatePreviousElement = (index)->
       currentElement = $scope.grade_scheme_elements[index]
       previousElement = $scope.grade_scheme_elements[index - 1]
