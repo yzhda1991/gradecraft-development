@@ -11,12 +11,10 @@ module Export
     end
 
     def object_key_microseconds
-      return unless created_at
       filename_time.to_f.to_s.tr(".","")
     end
 
     def object_key_date
-      return unless created_at
       filename_time.strftime("%F")
     end
 
