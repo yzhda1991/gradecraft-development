@@ -6,6 +6,9 @@ class CourseAnalyticsExport < ActiveRecord::Base
   # Note that if this record is an ActiveRecord::Base descendant then a
   # callback for :rebuild_s3_object_key is added for on: :save
   #
+  # Let's define all of the callbacks here, actually, so we don't have to do it
+  # on every export model.
+  #
   include S3Manager::Resource
 
   # give this resource additional methods that aren't s3-specific but that
@@ -23,14 +26,6 @@ class CourseAnalyticsExport < ActiveRecord::Base
   has_many :secure_tokens, as: :target, dependent: :destroy
 
   validates :course_id, presence: true
-
-  # let's save the name of the export so we don't have to do it later
-  before_save :cache_export_filename
-
-  before_save :rebuild_s3_object_key, if: :export_filename_changed?
-
-  # if we destroy the export successfully clean the data off of S3
-  after_destroy :delete_object_from_s3
 
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
@@ -61,9 +56,4 @@ class CourseAnalyticsExport < ActiveRecord::Base
     "#{ filename_time.strftime('%Y-%m-%d') }.zip"
   end
 
-  protected
-
-  def cache_export_filename
-    self[:export_filename] = url_safe_filename
-  end
 end
