@@ -24,20 +24,20 @@ class CourseAnalyticsExport < ActiveRecord::Base
 
   validates :course_id, presence: true
 
-  # if we destroy the export successfully clean the data off of S3
-  after_destroy :delete_object_from_s3
-
   # let's save the name of the export so we don't have to do it later
-  before_create :cache_export_filename
+  before_save :cache_export_filename
 
   before_save :rebuild_s3_object_key, if: :export_filename_changed?
+
+  # if we destroy the export successfully clean the data off of S3
+  after_destroy :delete_object_from_s3
 
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
   #
   def s3_object_key_prefix
     "exports/courses/#{course_id}/course_analytics_exports/" \
-      "#{created_at_date}/#{created_at_in_microseconds}"
+      "#{key_generated_at_date}/#{created_at_in_microseconds}"
   end
 
   def formatted_course_number
@@ -65,6 +65,6 @@ class CourseAnalyticsExport < ActiveRecord::Base
   protected
 
   def cache_export_filename
-    self.export_filename = url_safe_filename
+    self[:export_filename] = url_safe_filename
   end
 end

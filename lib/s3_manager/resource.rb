@@ -46,7 +46,7 @@ module S3Manager
     end
 
     def rebuild_s3_object_key
-      self.s3_object_key = build_s3_object_key export_filename
+      self[:s3_object_key] = build_s3_object_key export_filename
     end
 
     def build_s3_object_key(object_filename)

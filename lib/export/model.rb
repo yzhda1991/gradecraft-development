@@ -10,14 +10,18 @@ module Export
         last_completed_step: "complete"
     end
 
-    def created_at_in_microseconds
+    def key_generated_at_in_microseconds
       return unless created_at
-      created_at.to_f.to_s.tr(".","")
+      key_generated_at.to_f.to_s.tr(".","")
     end
 
-    def created_at_date
+    def key_generated_at_date
       return unless created_at
-      created_at.strftime("%F")
+      key_generated_at.strftime("%F")
+    end
+
+    def key_generated_at
+      @key_generated_at ||= created_at || Time.now
     end
 
     def downloadable?
