@@ -46,14 +46,10 @@ class CourseAnalyticsExport < ActiveRecord::Base
     Formatter::Filename.new(course_number).url_safe.filename
   end
 
+  # this is going to be the downloaded filename of the final archive
+  #
   def url_safe_filename
-    # if we need to generate a new filename for some reason, use the created_at
-    # date, otherwise let's presume this is a new export and just use Time.now
-    # for parsing a date in the format YYYY-MM-DD
-
-    # this is going to be the downloaded filename of the final archive
     "#{ formatted_course_number }_anayltics_export_" \
     "#{ filename_time.strftime('%Y-%m-%d') }.zip"
   end
-
 end
