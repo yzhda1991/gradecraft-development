@@ -19,14 +19,14 @@
     description: "Prefect’s bathroom Trelawney veela squashy armchairs, SPEW: Gamp’s Elemental Law of Transfiguration. Magic Nagini bezoar, Hippogriffs Headless Hunt giant squid petrified. Beuxbatons flying half-blood revision schedule, Great Hall aurors Minerva McGonagall Polyjuice Potion. Restricted section the Burrow Wronski Feint gnomes, quidditch robes detention, chocolate frogs. Errol parchment knickerbocker glory Avada Kedavra Shell Cottage beaded bag portrait vulture-hat. Twin cores, Aragog crimson gargoyles, Room of Requirement counter-clockwise Shrieking Shack. Snivellus second floor bathrooms vanishing cabinet Wizard Chess, are you a witch or not?",
     open_at: nil,
     due_at: nil,
-    full_points: 1000000,
+    full_points: 100000,
     accepts_submissions: false,
     release_necessary: false,
     visible: true,
   },
   grades: false,
   grade_attributes: {
-    score: Proc.new { rand(100000)},
+    score: Proc.new { rand(10000)},
     status: nil,
   }
 }

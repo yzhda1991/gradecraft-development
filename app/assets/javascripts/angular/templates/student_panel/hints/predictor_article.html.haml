@@ -1,0 +1,16 @@
+%h1 Assignment Details
+%p Click the info icon in the top right corner of a card to view details for that assignment here!
+%article.predictor-article-example
+  .predictor-article-card.info-hint
+    .predictor-article-title
+      My Assignment
+      .info-icon
+        %i.fa.fa-fw.fa-info-circle
+        .info-hint-pulse
+
+    .predictor-article-title-stripe
+    .predictor-article-date
+    .predictor-article-main
+      .article-graded
+        .grade
+  .hide-hint-link{'ng-click'=>"clearInfoHint()"} Okay, got it!

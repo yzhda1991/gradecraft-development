@@ -1,0 +1,11 @@
+%section.predictor-section{'ng-if'=>'badges.length > 0'}
+  .collapse-toggler.clear
+    .collapse-arrow
+    .predictor-section-title
+      .predictor-section-title-name
+        {{termFor("badges")}}
+      .predictor-section-title-predicted-points.badges
+        {{badgesPredictedPoints() | number}}
+
+  .collapsable.predictor-articles
+    %article.predictor-article{'ng-repeat' => 'badge in badges', 'article'=>'badge'}

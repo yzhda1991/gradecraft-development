@@ -24,14 +24,20 @@ describe API::Students::PredictedEarnedChallengesController do
       it "adds visible grades to the challenge data" do
         grade = create(:graded_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, student_id: world.student.id
-        expect(assigns(:challenges).last.grade).to eq({score: grade.score })
+        expect(assigns(:challenges).last.grade).to eq({
+          score: grade.score,
+          final_points: grade.score
+        })
       end
 
       it "adds grades as nil when not visible to student" do
         world.challenge.update(release_necessary: true)
         grade = create(:grades_not_released_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, student_id: world.student.id
-        expect(assigns(:challenges).last.grade).to eq({ score: nil })
+        expect(assigns(:challenges).last.grade).to eq({
+          score: nil,
+          final_points: nil
+        })
       end
 
       it "assigns the challenges with no call to update" do
@@ -54,7 +60,8 @@ describe API::Students::PredictedEarnedChallengesController do
       :name,
       :description,
       :full_points,
-      :visible
+      :visible,
+      :due_at
     ]
   end
 end

@@ -1,0 +1,3 @@
+.icon{'ng-if' => 'article[iconName]', 'ng-class' => 'iconName'}
+  %i.fa.fa-fw{'class'=>'{{iconHtml[iconName].icon}}'}
+  %span{'ng-bind-html'=>'iconHtml[iconName].tooltip | list'}

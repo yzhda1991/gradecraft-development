@@ -8,36 +8,52 @@ $predictor-font-size-3 : 1rem
 $predictor-font-size-4 : .85rem
 $predictor-font-size-5 : .55rem
 
+// widths and margins for cards
+// Needed to  make x numbers of columns
+$card-width-4 : 22%
+$card-margin-4 : 10px 15px
+$card-width-3 : 29%
+$card-margin-3 : 10px 15px
+$card-width-2 : 46%
+$card-margin-2 : 3px 5px
+$card-width-1 : 100%
+$card-margin-1 : 3px 0 5px 0
+
 .predictor-inner.inner-wrap
   background-color: rgba(255,255,255,0.8)
 
+#predictor-loading-message
+    position: fixed
+    z-index: 20
+    padding: 1rem 1rem
+    top: 90px
+    height: 100px
+    width: 400px
+    background-color: white
+
 #predictor-main-content
-  // Clear tabs:
-  margin-top: 0rem
   padding-bottom: 1rem
-  border-radius: $global-radius
-  overflow: hidden
 
 // SVG
 
-.graphics-wrap
-  height: 138px
+#predictor-graph-spacer
+  height: 54px
 
-.graphics-screen
+#predictor-post-graphic-spacer
+  height: 150px
+
+
+.predictor-graph
   height: 150px
   width: 100%
-
-.graphics-screen.sticky-item.stuck
-  background-color: $color-white
-  max-width: 1500px
-  z-index: 100
+  max-width: 1100px
   position: fixed
-  top: 45px
+  background-color: $color-white
+  z-index: 5
 
-#predictor-graphic
+#predictor-graph-svg
   width: 100%
   height: 140px
-  margin: 0
   background-color: $color-white
   .grade-point-axis
     path, line
@@ -69,18 +85,35 @@ $predictor-font-size-5 : .55rem
     font-weight: bold
     -webkit-transform: translate(10px,130px) /* Safari */
 
+#predictor-post-graph-spacer
+  height: 145px
+
 // ICONS AND TOOLTIPS
 
-.icon
-  position: relative
-  display: block
-  float: left
-  width: 20px
+.predictor-article-main-icons
+  font-size: $predictor-font-size-4
+  margin-top: 6px
+  .icon-text
+    margin: 0
+    text-transform: uppercase
+  .icon
+    i
+      padding: 0
+      margin-right: -3px
+    float: right
+    margin: 0 15px 0 -12px
+    &.is_locked
+      margin-left: 0
+
+.icon.is_required
+  color: $color-yellow-1
+.icon.is_late
+  color: $color-red-1
 
 .predictor-badge-icon
   max-width: 80px
   float: left
-  margin: 1px 0 0 $predictor-font-size-3
+  margin: -20px 0 0 $predictor-font-size-3
 
 .assignment-type-tooltip
   a
@@ -94,8 +127,6 @@ $predictor-font-size-5 : .55rem
 // SECTIONS
 #predictor-main-header, .predictor-section
   height: 33px
-  clear: both
-  margin-top: -6px
   .coin:hover
     background-color: $color-yellow-1
 
@@ -230,33 +261,41 @@ $predictor-font-size-5 : .55rem
 
 .collapsable
   clear: both
-  padding: 0 0 0 1.5rem
+  padding: 0 0 0 0.25rem
 
-article.predictor-article
+.predictor-article-card
   display: block
   margin-bottom: $predictor-font-size-3
   background-color: lighten($color-grey-6, 5%)
   float: left
-  margin: 3px
-  height: 9.5rem
-  //default width, changes with screensize
-  width: 19%
+  height: 154px
+  //default width for largest
+  width: $card-width-4
+  margin: $card-margin-4
   select
     margin: 0
+  &.focus-article
+    outline: 3px solid $color-blue-3
 
 .predictor-article-title
   background-color: $color-blue-3
   color: $txt-color-inverse
-  padding: 3px 0 0 .5rem
+  padding: 2px 0 1px 4px
   overflow: hidden
   height: 2rem
   line-height: 2rem
-  font-size: $predictor-font-size-3
+  font-size: $predictor-font-size-4
+  .info-icon
+    float: right
+    padding: 7px 4px 0 0
+    font-size: $predictor-font-size-3
+    margin-right: -4px
+    position: relative
+    cursor: pointer
 
-.predictor-article-icons
-  height: $predictor-font-size-3
+.predictor-article-title-stripe
   background-color: $color-blue-4
-  padding: .25rem
+  padding: .2rem
 
 .badge-predicted
   width: 50%
@@ -264,80 +303,44 @@ article.predictor-article
 
 .predictor-article-date
   height: $predictor-font-size-2
-  padding: .25rem
-  font-size: $predictor-font-size-4
+  margin: 5px 0 0 4px
+  font-size: $predictor-font-size-5
+  color: $color-blue-3
 
 .predictor-article-main
-  padding-top: 8px
-  margin-top: -7px
+  padding-top: 5px
+  height: 50px
 
-article.predictor-article.status-late
-  background-color: $color-yellow-1
-  .predictor-article-title
-    background-color: $color-red-1
-  .predictor-article-icons
-    background-color: $color-orange-1
-  .ui-slider .ui-slider-handle
-    background-color: $color-red-1
-  .ui-slider .ui-slider-range
-    background-color: $color-orange-1
-  .slider.ui-widget-content
-    background-color: $color-yellow-1
-  .slider.ui-widget-content
-    border: 1px solid $color-red-1
-  .predictor-counter-switch
-    .switch-socket
-      background-color: $color-orange-1
-    .switch-up-button
-      border-bottom: 18px solid $color-red-1
-    .switch-down-button
-      border-top: 18px solid $color-red-1
-    .switch-down-button.disabled
-      border-top: 18px solid $color-orange-1
-  .predictor-binary-switch
-    .switch-handle
-      background-color: $color-red-1
-    .switch-socket
-      background-color: $color-orange-1
-    .switch-socket.on
-      background-color: $color-orange-1
-
-article.predictor-article.status-locked
-  // background-color: $color-yellow-1
-  .predictor-article-title
-    background-color: $color-purple-2
-  .predictor-article-icons
-    background-color: lighten( $color-purple-2, 15%)
-
-
-article.predictor-article.status-graded
+.predictor-article-card.status-completed
   background-color: lighten($color-green-2, 30%)
   .predictor-article-title
     background-color: $color-green-1
-  .predictor-article-icons
+  .predictor-article-title-stripe
     background-color: lighten($color-green-2, 10%)
+  &.focus-article
+    outline: 3px solid $color-green-1
 
-article.predictor-article.status-graded.status-no-points
+.predictor-article-card.status-completed.status-no-points
   background-color: $color-grey-6
   .predictor-article-title
     background-color: $color-grey-4
-  .predictor-article-icons
+  .predictor-article-title-stripe
     background-color: $color-grey-5
+  &.focus-article
+    outline: 3px solid $color-grey-4
 
-.article-graded .grade, .pass-fail-prediction, .badge-complete .value
+.article-completed, .pass-fail-prediction
   text-align: center
   font-size: $predictor-font-size-2
   color: $color-blue-2
 
-.article-graded.excluded
+.article-completed.excluded
   .grade
     color: $color-red-1
   .excluded
     color: $color-red-1
+    font-size: $predictor-font-size-4
     text-align: center
-
-.badge-complete .value
-  padding-top: 30px
 
 .article-predicted .grade
   text-align: center
@@ -345,16 +348,25 @@ article.predictor-article.status-graded.status-no-points
   color: $color-blue-2
   .value
     font-size: $predictor-font-size-3
+    padding: 15px
   .name
     font-size: $predictor-font-size-4
-    margin: -5px
+    margin-top: -20px
+
+/*  Badge Articles */
+.predictor-article-card.type-badges
+  .predictor-article-date
+    margin: 10px 0 0 0
+    height: 0
+  .article-completed .value
+    padding-top: 20px
 
 /* Slider Widget */
 
-article.predictor-article
-  .slider.ui-widget-content
-    background: lighten($color-white, 0%)
-    border: 1px solid $color-blue-3
+.predictor-article-card
+  .ui-widget-content
+    background: $color-grey-5
+    border: none
     width: 80%
     margin-left: 10%
     border-radius: 1rem
@@ -373,10 +385,28 @@ article.predictor-article
       position: absolute
       top: -5px
       margin-left: -12px
-      background: $color-blue-1
+      background: $color-blue-3
       border-radius: 1rem
 
-article.predictor-article .ui-slider.below-threshold .ui-slider-range
+  input.predicted-points
+    font-size: $predictor-font-size-3
+    font-family: 'Open Sans', sans-serif
+    color: $color-blue-1
+    background-color: rgba(255, 255, 255, 0)
+    border: none
+    padding: 1px
+    &:focus
+     border: .5px solid $color-blue-4
+     padding: 0px
+     outline: none
+    &.below-threshold:focus
+      border: .5px solid $color-red-1
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none
+      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+
+.predictor-article-card .ui-slider.below-threshold .ui-slider-range
   background-color: $color-red-1
 
 /* Binary Switch */
@@ -388,9 +418,8 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
   width: 40px
   height: 14px
   position: relative
-  background: $color-white
+  background: $color-grey-5
   border-radius: 1rem
-  border: 1px solid $color-blue-3
   margin: auto
 
 .predictor-binary-switch .switch-handle
@@ -399,7 +428,7 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
   position: absolute
   top: -4px
   left: -1px
-  background: $color-blue-1
+  background: $color-blue-3
   border-radius: 1rem
 
 .predictor-binary-switch .switch-socket.on
@@ -407,6 +436,8 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
   border: 1px solid $color-blue-3
   .switch-handle
     left: 20px
+
+
 
 /* Counter widget for Badges */
 
@@ -465,41 +496,16 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
   border-top: none !important
   border-bottom: none !important
 
-
-/* Professor View, fix for svg graphic with sidebar */
-
-#predictor-main-content.with-sidebar #predictor-graphic
-  width: 100%
-
-
 /* MEDIA QUERIES */
 
-// small
-@media (max-width: $media-small-max)
-  #predictor-graphic
-    height: 175px
-    .grade-point-axis text
-      font-size: $predictor-font-size-5
-    #svg-keys
-      font-size: $predictor-font-size-4
-    #svg-predicted-key
-      transform: translate(10px,120px)
-      -webkit-transform: translate(10px,120px)
-    #svg-predicted-grade
-      transform: translate(10px, 160px)
-      -webkit-transform: translate(10px, 160px)
-  .collapse-arrow.doubled
-    margin: 35px 0 0 0
-  article.predictor-article
-    width: 100%
-  .predictor-section-title
-    font-size: $predictor-font-size-2
-    .coins
-      font-size: $predictor-font-size-1
-  .predictor-section-title-name
-    line-height: 1.8
-    .desktop-only
-      display: none
+// override default width before media query overrides
+@media (min-width: $media-large-max)
+  .mainContainer.staff
+    .predictor-article-card
+      width: $card-width-3
+      margin: $card-margin-3
+
+@mixin mobile-headers-mixin
   .predictor-section-title-max-points, .predictor-section-title-predicted-points.badges
     clear: both
     float: none
@@ -512,7 +518,7 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     display: block
     height: 2.25rem
     width: 110%
-    padding: 10px 0 0 25px
+    padding: 10px 0 0 0
     margin-left: -10px
   .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
     text-align: left
@@ -520,50 +526,88 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     .icon
       margin: 0
       font-size: $predictor-font-size-1
+
   #predictor-main-header
-    height: 66px
-    margin-top: 0px
-    padding-top: 30px
+    height: 38px
+    margin: 8px 0 1px 0
+  .predictor-section-title
+    font-size: $predictor-font-size-2
+    max-width: $media-small-max
+    overflow: hidden
+    .coins
+      font-size: $predictor-font-size-1
+  .predictor-section-title-name
+    line-height: 1.8
+    height: 0px;
+    .desktop-only
+      display: none
+  #predictor-main-header.with-weights
+    height: 74px
   .predictor-section
     height: 70px
+    margin-bottom: 1px
     .collapse-arrow
       margin-left: 8px
+  .predictor-section.with-weights
+    height: 80px
+    .predictor-section-title-name
+      height: 2rem
+    .collapsable
+      padding-top: 0px
   .collapsable
-    padding-top: 0px
-    padding-left: .1rem
-    padding-right: .5rem
-  #predictor-main-content.with-sidebar #predictor-graphic
-    width: 100%
+    padding: 35px 5px 0 5px
+
+@mixin mobile-graph-mixin
+  #predictor-graph-svg
+    height: 175px
+    .grade-point-axis text
+      font-size: $predictor-font-size-5
+    #svg-keys
+      font-size: $predictor-font-size-4
+    #svg-predicted-key
+      transform: translate(10px,120px)
+      -webkit-transform: translate(10px,120px)
+    #svg-predicted-grade
+      transform: translate(10px, 160px)
+      -webkit-transform: translate(10px, 160px)
+  #predictor-post-graph-spacer
+    height: 175px
+
+// small
+@media (max-width: $media-small-max)
+  @include mobile-headers-mixin
+  @include mobile-graph-mixin
+  #predictor-graph-spacer
+    height: 0
+  .predictor-article-card
+    width: $card-width-1
+    margin: $card-margin-1
+    .info-icon
+      display: none
+  .collapse-arrow.doubled
+    margin: 35px 0 0 0
+
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max + 5rem)
-  article.predictor-article
-    width: 48%
-  .predictor-section-title-predicted-points
-    clear: both
-    float: none
-  #predictor-main-header, .predictor-section
-    height: 70px
-  .predictor-section
-    //margin-top: 3px
-  .collapsable
-    padding-top: 7px
-  #predictor-main-content.with-sidebar #predictor-graphic
-    width: 100%
+  @include mobile-headers-mixin
+  @include mobile-graph-mixin
+  .predictor-article-card
+    width: $card-width-2
+    margin: $card-margin-2
+  .mainContainer.staff
+    .predictor-article-card
+      width: $card-width-1
+      margin: $card-margin-1
+
 
 // large
 @media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
-  article.predictor-article
-    width: 19%
-  #predictor-main-content.with-sidebar
-    article.predictor-article
-      width: 32%
-
-// x-large
-@media (min-width: $media-large-max)
-  article.predictor-article
-    width: 16%
-  #predictor-main-content.with-sidebar
-    #predictor-graphic
-    article.predictor-article
-      width: 19%
+  .predictor-article-card
+    width: $card-width-3
+    margin: $card-margin-3
+  #predictor-main-header, .predictor-section
+  .mainContainer.staff
+    .predictor-article-card
+      width: $card-width-2
+      margin: $card-margin-2

@@ -8,7 +8,7 @@
   '720kb.tooltips',
   'restangular',
   'ui.sortable',
-  'ui.slider',
+  'puElasticInput',
   'ui.router',
   'ng-rails-csrf',
   'ngResource',

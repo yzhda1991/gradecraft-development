@@ -1,0 +1,5 @@
+#student-panel-widget
+  .student-panel-hint-box{'ng-if'=>'showingHint()'}
+    .predictor-hint{'ng-if'=>'context=="predictor"', 'ng-include'=>"'student_panel/hints/predictor_article.html'"}
+
+.student-panel-article{'ng-if'=>'context=="predictor" && focusArticle()', 'article'=>'focusArticle()', 'icons'=>'["is_rubric_graded", "accepting_submissions", "has_submission", "has_threshold", "closed_without_submission", "is_earned_by_group"]'}

@@ -31,7 +31,8 @@
     accepts_submissions_until: nil,
     resubmissions_allowed: false,
     accepts_text: false,
-    description: "Basilisk venom Umbridge swiveling blue eye Levicorpus, nitwit blubber oddment tweak. Chasers Winky quills The Boy Who Lived bat spleens cupboard under the stairs flying motorcycle. Sirius Black Holyhead Harpies, you’ve got dirt on your nose. Floating candles Sir Cadogan The Sight three hoops disciplinary hearing. Grindlewald pig’s tail Sorcerer's Stone biting teacup. Side-along dragon-scale suits Filch 20 points, Mr. Potter.",
+    description: "Basilisk venom Umbridge swiveling blue eye Levicorpus, nitwit blubber oddment tweak. Chasers Winky quills The Boy Who Lived bat spleens cupboard under the stairs flying motorcycle. Sirius Black Holyhead Harpies, you’ve got dirt on your nose. Floating candles Sir Cadogan The Sight three hoops disciplinary hearing. Grindlewald pig’s tail Sorcerer's Stone biting teacup. Fenrir Grayback horseless carriages ‘zis is a chance many would die for!",
+    purpose: "Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat side of silver dagger, releases juice better than cutting. Full moon Whomping Willow three turns should do it lemon drops.",
     grade_scope: "Individual",
     hide_analytics: false,
     mass_grade_type: nil,
@@ -40,6 +41,7 @@
     threshold_points: 0,
     visible: true,
     pass_fail: false,
+    required: false,
   },
   grades: false,
   # only used if :grades is true:
@@ -911,6 +913,28 @@ to proceed with growing up. ― John Taylor Gatto",
     threshold_points: 15000,
   },
   assignment_score_levels: true,
+}
+
+@assignments[:predictor_assignment_with_icons] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Assignment With Icons and Levels",
+    description:
+      "Should have a required, late, and locked icon in main widget, and score levels",
+    due_at: 2.weeks.ago + 0.05,
+    accepts_submissions: true,
+    required: true
+  },
+  assignment_score_levels: true,
+  unlock_condition: true,
+  unlock_attributes: {
+    condition: :badge_unlock_assignment_condition,
+    condition_type: "Badge",
+    condition_state: "Earned"
+  }
 }
 
 #------------------------------------------------------------------------------#

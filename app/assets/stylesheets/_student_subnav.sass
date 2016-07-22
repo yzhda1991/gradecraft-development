@@ -6,11 +6,12 @@
   margin: 10px 0 0 0
   padding: 0.75rem 0rem
   display: block
-  position: relative
+  position: fixed
   overflow: hidden
-  width: auto
+  width: 100%
+  max-width: 1500px
   background-color: $color-blue-2
-  opacity: .9
+  z-index: 20
 
   ul
     margin: 0
@@ -48,6 +49,12 @@
     h5, hr
       display: none
 
+/* On faculty view, accomodate left side column */
+.mainContainer.staff
+  .sub-nav
+    max-width: 1248px
+    margin-top: 13px
+
 /* Setting the active tab and hover color */
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover
   background-color: $color-blue-3
@@ -65,7 +72,7 @@ li .announcement-notification-badge
   margin: 0
   right: 2px
 
-@media (max-width: $media-medium-max)
+@media (max-width: $media-small-max)
   .sub-nav
     display: none
 

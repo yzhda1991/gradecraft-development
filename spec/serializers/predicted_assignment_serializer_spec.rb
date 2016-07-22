@@ -83,7 +83,15 @@ describe PredictedAssignmentSerializer do
     it "returns a list of human readable unlock conditions" do
       uc = build(:unlock_condition)
       allow(assignment).to receive(:unlock_conditions).and_return [uc]
-      expect(subject.unlock_conditions).to eq(["#{uc.name} must be #{uc.condition_state}"])
+      expect(subject.unlock_conditions).to eq(["Earn the #{uc.name} Assignment"])
+    end
+  end
+
+  describe "#unlocked_conditions" do
+    it "returns a list of human readable unlocked conditions" do
+      uc = build(:unlock_condition)
+      allow(assignment).to receive(:unlock_conditions).and_return [uc]
+      expect(subject.unlocked_conditions).to eq(["Earned the #{uc.name} Assignment"])
     end
   end
 
@@ -91,7 +99,7 @@ describe PredictedAssignmentSerializer do
     it "returns a list of human readable unlock conditions" do
       key = build(:unlock_condition)
       allow(assignment).to receive(:unlock_keys).and_return [key]
-      expect(subject.unlock_keys).to eq(["#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"])
+      expect(subject.unlock_keys).to eq(["Earning it unlocks the #{key.unlockable.name} Badge"])
     end
   end
 
@@ -102,6 +110,7 @@ describe PredictedAssignmentSerializer do
       %w( accepts_submissions_until
           assignment_type_id
           description
+          purpose
           due_at
           id
           name
@@ -135,6 +144,17 @@ describe PredictedAssignmentSerializer do
         it "is false if assignment has no description" do
           allow(assignment).to receive(:description).and_return nil
           expect(subject[:has_info]).to eq(false)
+        end
+      end
+
+      describe "has_levels" do
+        it "is true when assignment has levels" do
+          assignment.assignment_score_levels.build name: "First level", points: 456
+          expect(subject[:has_levels]).to eq(true)
+        end
+
+        it "is false if assignment has no levels" do
+          expect(subject[:has_levels]).to eq(false)
         end
       end
 

@@ -41,7 +41,8 @@ module PredictorData
       :name,
       :visible,
       :description,
-      :full_points
+      :full_points,
+      :due_at
     ).map do |challenge|
       prediction =
         challenge.find_or_create_predicted_earned_challenge(@student.id)
@@ -59,10 +60,15 @@ module PredictorData
       if grade.present? && ChallengeGradeProctor.new(grade).viewable?
         challenge.grade = {
           score: grade.score,
+          # The Predictor js calculates points off of Assignment final_points,
+          # We can use the same templates for Challenges if we treat
+          # the score as the Challenge final_points
+          final_points: grade.score
         }
       else
         challenge.grade = {
           score: nil,
+          final_points: nil
         }
       end
       challenge

@@ -1,0 +1,123 @@
+@import color
+@import layout
+
+.student-panel-wrap
+  height: auto
+
+#student-main-column
+  width: auto
+  overflow: hidden
+
+.student-panel
+  width: 400px
+  float: right
+  height: 500px
+  position: relative
+  .align-box
+    width: 100px
+    height: 100px
+    background-color: black;
+  .student-panel-hint-box
+    width: 360px
+    margin-left: 20px
+    background-color: $color-blue-5
+    padding: 10px 5px 5px 5px
+
+  #student-panel-widget, .student-panel-article
+    z-index: 50
+    position: fixed
+    top: 89px
+    width: 400px
+  h2
+    text-transform: uppercase
+    color: $color-grey-2
+    font-size: 1rem
+    margin: .5rem 1rem
+
+  p.student-panel-text-block
+    margin: .25rem 1rem
+
+  .info-hint-pulse
+      border: 3px solid $color-blue-4
+      -webkit-border-radius: 30px
+      height: 18px
+      width: 18px
+      position: absolute
+      left: -1px
+      top: 3px
+      -webkit-animation: pulsate 2s linear
+      -webkit-animation-iteration-count: infinite;
+      opacity: 0.0
+  .hide-hint-link
+    text-align: right
+    color: $color-blue-3
+    cursor: pointer
+
+  .student-panel-article-description,
+  .student-panel-article-purpose,
+    color: $color-grey-4
+
+  .student-panel-article-main-icons
+    margin: .5rem 1rem
+
+  .student-panel-article-icons
+    margin: .5rem 1rem 1rem 1rem
+    color: $color-grey-4
+    .icon i
+      color: $color-grey-2
+    .icon span
+      text-transform: uppercase
+
+  ul.icon-list
+    margin: 0
+    list-style: none
+    font-style: oblique
+
+  .student-panel-article-type
+    color: $color-blue-3
+    font-size: 1.25rem
+    text-transform: capitalize
+
+  .student-panel-article-title
+    color: $color-blue-3
+    font-size: .85rem
+
+  .predictor-article-card
+    width: 250px !important
+    margin-left: 70px
+    float: none
+    .predictor-article-title
+      overflow: visible
+
+.student-panel-article-header
+  background-color: $color-blue-3
+  color: white
+  padding: 1.5rem 1rem
+  text-align: center
+  .article-title
+    font-size: 1.25rem
+  .full-points, .due-date
+    font-size: 1rem
+    padding-top: .5rem
+    text-transform: uppercase
+
+.student-panel-article-header.status-completed
+  background-color: $color-green-1
+
+.student-panel-article-header.status-completed.status-no-points
+   background-color: $color-grey-4
+
+.student-panel-button
+  margin: 1rem
+
+
+@media (max-width: $media-small-max)
+  .student-panel
+    display: none
+
+@-webkit-keyframes pulsate
+    0% {-webkit-transform: scale(1, 1); opacity: 0.0;}
+    25% {opacity: 0.8}
+    50% {-webkit-transform: scale(2, 2); opacity: 0.0;}
+    100% {opacity: 0.0}
+
