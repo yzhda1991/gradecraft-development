@@ -143,7 +143,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   def is_due_in_future?
-    assignment.due_at.present? && assignment.due_at >= Time.now()
+    assignment.due_at.present? && assignment.due_at >= Time.now
   end
 
   def accepting_submissions?

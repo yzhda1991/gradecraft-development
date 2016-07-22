@@ -167,7 +167,7 @@
 
   #------ API CALLS -----------------------------------------------------------#
 
-  # TODO: GradeSchemeElementController GET method should be updated with
+  # GradeSchemeElementController GET method should be updated with
   # this code to use the api route, then used as a dependency for this Service
   getGradeSchemeElements = ()->
     $http.get("/api/grade_scheme_elements").success((res)->
