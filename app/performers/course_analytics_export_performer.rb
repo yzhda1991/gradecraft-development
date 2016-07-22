@@ -12,7 +12,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     build_the_export
-    deliver_mailer
+    # deliver_mailer
     export.update_export_completed_time
   end
 
@@ -68,12 +68,12 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
     # create a working tmpdir for the export
     export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
 
-
     last_step "export tmpdir"
 
     # create a named directory to generate the files in
-    export_dir = FileUtils.mkdir \
+    export_dir = FileUtils.mkdir_p(
       File.join(export_tmpdir, export.formatted_course_number)
+    ).first
 
     last_step "export_dir"
 

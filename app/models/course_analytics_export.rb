@@ -30,6 +30,8 @@ class CourseAnalyticsExport < ActiveRecord::Base
   # let's save the name of the export so we don't have to do it later
   before_create :cache_export_filename
 
+  before_save :rebuild_s3_object_key, if: :export_filename_changed?
+
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
   #

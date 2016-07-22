@@ -152,5 +152,8 @@ describe CourseAnalyticsExportPerformer do
   # let's leave the specs out of here for now since this isn't the focus of
   # this branch.
   describe "#build_the_export" do
+    it "doesn't fail" do
+      expect { subject.instance_eval { build_the_export } }.not_to raise_error
+    end
   end
 end
