@@ -31,4 +31,34 @@ class SubmissionsExport < ActiveRecord::Base
     "exports/courses/#{course_id}/assignments/#{assignment_id}/" \
       "#{created_at_date}/#{created_at_in_microseconds}"
   end
+
+  def url_safe_filename
+    complete_filename = "#{export_file_basename}.zip"
+    Formatter::Filename.new(complete_filename).url_safe.filename
+  end
+
+  # methods for building and formatting the archive filename
+  def export_file_basename
+    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub("\s+"," ")
+  end
+
+  def filename_timestamp
+    filename_time.strftime("%Y-%m-%d - %l%M%p").gsub("\s+"," ")
+  end
+
+  def archive_basename
+    [formatted_assignment_name, formatted_team_name].compact.join " - "
+  end
+
+  def formatted_assignment_name
+    @formatted_assignment_name ||= Formatter::Filename.titleize assignment.name
+  end
+
+  def formatted_team_name
+    @team_name ||= Formatter::Filename.titleize(team.name) if has_team?
+  end
+
+  def has_team?
+    self.team_id.present?
+  end
 end
