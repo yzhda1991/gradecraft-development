@@ -59,6 +59,6 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def has_team?
-    self.team_id.present?
+    team_id.present?
   end
 end
