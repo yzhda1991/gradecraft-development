@@ -37,7 +37,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
   #
   def s3_object_key_prefix
     "exports/courses/#{course_id}/course_analytics_exports/" \
-      "#{key_generated_at_date}/#{created_at_in_microseconds}"
+      "#{object_key_date}/#{object_key_microseconds}"
   end
 
   def formatted_course_number
@@ -55,7 +55,6 @@ class CourseAnalyticsExport < ActiveRecord::Base
     # if we need to generate a new filename for some reason, use the created_at
     # date, otherwise let's presume this is a new export and just use Time.now
     # for parsing a date in the format YYYY-MM-DD
-    filename_time = created_at || Time.now
 
     # this is going to be the downloaded filename of the final archive
     "#{ formatted_course_number }_anayltics_export_" \

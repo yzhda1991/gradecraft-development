@@ -10,18 +10,21 @@ module Export
         last_completed_step: "complete"
     end
 
-    def key_generated_at_in_microseconds
+    def object_key_microseconds
       return unless created_at
-      key_generated_at.to_f.to_s.tr(".","")
+      filename_time.to_f.to_s.tr(".","")
     end
 
-    def key_generated_at_date
+    def object_key_date
       return unless created_at
-      key_generated_at.strftime("%F")
+      filename_time.strftime("%F")
     end
 
-    def key_generated_at
-      @key_generated_at ||= created_at || Time.now
+    def filename_time
+      # if we need to generate a new filename for some reason, use the created_at
+      # date, otherwise let's presume this is a new export and just use Time.now
+      # for parsing a date in the format YYYY-MM-DD
+      @filename_time ||= created_at || Time.now
     end
 
     def downloadable?
