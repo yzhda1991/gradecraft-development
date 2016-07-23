@@ -19,9 +19,9 @@
   # WEIGHTS
 
   $scope.unusedWeightsRange = ()->
-    _.range($scope.weights.unusedWeights())
+    AssignmentTypeService.unusedWeightsRange()
 
   $scope.weightsAvailable = ()->
-    $scope.weights.unusedWeights() && $scope.weights.open
+    AssignmentTypeService.weightsAvailable()
 
 ]

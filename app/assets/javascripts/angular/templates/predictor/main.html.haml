@@ -1,0 +1,33 @@
+.student-panel-wrap
+  .student-panel{'context'=>'"predictor"'}
+
+  #student-main-column
+
+    #predictor-loading-message{'ng-if'=>'loading'}
+
+      %h2
+        %i.fa.fa-spinner.fa-spin.fa-fw
+        Loading Predictor...
+
+    #predictor-graph-section{'ng-if'=>'!loading'}
+      #predictor-graph-spacer
+      .predictor-graph
+      #predictor-post-graph-spacer
+
+    #predictor-main-header{'ng-class'=>'{"with-weights": weightsAvailable()}'}
+
+      .collapse-all-toggler
+        .collapse-arrow.outdent
+        .predictor-section-title
+          .predictor-section-title-predicted-points{'ng-if'=>'weightsAvailable()'}
+            .predictor-title-right-span
+              Unused {{termFor(weights)}} :
+            .predictor-section-title-weights
+              .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
+
+    .predictor-section-assignment-types
+
+    .predictor-section-badges
+
+    .predictor-section-challenges
+

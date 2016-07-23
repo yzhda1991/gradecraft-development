@@ -11,6 +11,7 @@ json.data @assignments do |assignment|
 
     json.score_levels assignment.score_levels unless assignment.score_levels.empty?
     json.unlock_conditions assignment.unlock_conditions unless assignment.unlock_conditions.empty?
+    json.unlocked_conditions assignment.unlocked_conditions unless assignment.unlocked_conditions.empty?
     json.unlock_keys assignment.unlock_keys unless assignment.unlock_keys.empty?
 
     json.prediction assignment.prediction

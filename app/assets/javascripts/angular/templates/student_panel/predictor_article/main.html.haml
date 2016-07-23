@@ -1,0 +1,30 @@
+%header.student-panel-article-header{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints()}'}
+  .article-title {{article.name}}
+  .full-points full points: {{article.full_points}}
+  .due-date{'ng-if' => 'article.due_at'} due: {{article.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+
+%section.student-panel-article-main-icons
+  .predictor-article-main-icons
+    .icon.is_required{'ng-if' => 'article.is_required'}
+      %i.fa.fa-fw.fa-asterisk
+      %span.icon-text required
+    .icon.is_late{'ng-if' => 'article.is_late'}
+      %i.fa.fa-fw.fa-clock-o
+      %span.icon-text late
+    .icon.is_locked{'ng-if' => 'article.is_locked'}
+      %i.fa.fa-fw.fa-lock
+      %span.icon-text locked
+
+%section.student-panel-article-description{'ng-if'=>'article.has_info'}
+  %h2 Guidelines
+  %p.student-panel-text-block {{article.description}}
+
+%section.student-panel-article-purpose{'ng-if'=>'article.purpose'}
+  %h2 Purpose
+  %p.student-panel-text-block {{article.purpose}}
+
+%section.student-panel-article-icons
+  .student-panel-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'article'}
+  .condition-icons{'ng-include'=> true, 'src' => "'student_panel/predictor_article/condition_icons.html'"}
+
+%a.button.student-panel-button{:href => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page

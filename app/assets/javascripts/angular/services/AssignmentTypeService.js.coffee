@@ -1,9 +1,12 @@
+# Manages state of AssignmentsTypes and Weights including API calls.
+# Can be used independently, or via another service (see PredictorService)
+
 @gradecraft.factory 'AssignmentTypeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
-  update = GradeCraftAPI.update
-  termFor = GradeCraftAPI.termFor
+  update = {}
 
   assignmentTypes = []
+
   weights = {
     default_weight: 1,
     unusedWeights: ()->
@@ -25,21 +28,30 @@
   weightedEarnedPoints = (assignmentType)->
     weightedPoints(assignmentType, assignmentType.final_points_for_student)
 
-  maxPossiblePoints = (assignmentType)->
+  weightedTotalPoints = (assignmentType)->
     total = weightedPoints(assignmentType, assignmentType.total_points)
     if assignmentType.is_capped
       total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
 
+  #---------------- Weights Calculations --------------------------------------#
+
+  # returns array [0, 1, 2, 3] for iterating coins
+  unusedWeightsRange = ()->
+    _.range(weights.unusedWeights())
+
+  weightsAvailable = ()->
+    weights.unusedWeights() && weights.open
+
   #----------------- API Calls ------------------------------------------------#
 
   getAssignmentTypes = (studentId)->
-    $http.get(GradeCraftAPI.uri_prefix(studentId) + "assignment_types").success((res)->
+    $http.get(GradeCraftAPI.uriPrefix(studentId) + "assignment_types").success((res)->
       _.each(res.data, (assignment_type)->
         assignmentTypes.push(assignment_type.attributes)
       )
-      termFor.assignmentType = res.meta.term_for_assignment_type
-      termFor.weights = res.meta.term_for_weights
+      GradeCraftAPI.setTermFor("assignmentType", res.meta.term_for_assignment_type)
+      GradeCraftAPI.setTermFor("weights", res.meta.term_for_weights)
       update.weights = res.meta.update_weights
       weights.open = !res.meta.weights_close_at ||
         Date.parse(res.meta.weights_close_at) >= Date.now()
@@ -78,11 +90,13 @@
   return {
       assignmentTypes: assignmentTypes
       weights: weights
-      termFor: termFor
 
       weightedPoints: weightedPoints
       weightedEarnedPoints: weightedEarnedPoints
-      maxPossiblePoints: maxPossiblePoints
+      weightedTotalPoints: weightedTotalPoints
+
+      unusedWeightsRange: unusedWeightsRange
+      weightsAvailable: weightsAvailable
 
       getAssignmentTypes: getAssignmentTypes
       postAssignmentTypeWeight: postAssignmentTypeWeight

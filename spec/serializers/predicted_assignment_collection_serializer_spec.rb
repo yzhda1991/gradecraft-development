@@ -22,6 +22,7 @@ describe PredictedAssignmentCollectionSerializer do
        :accepts_submissions_until,
        :assignment_type_id,
        :description,
+       :purpose,
        :due_at,
        :grade_scope,
        :id,

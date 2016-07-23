@@ -99,7 +99,7 @@ describe "assignments/predictor_data" do
       @assignment.update_attributes(accepts_submissions: true, due_at: 2.days.ago)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["is_late"]).to eq true
+      expect(json["assignments"][0]["is_late"]).to be_truthy
     end
 
     it "adds is_locked to model" do
@@ -107,7 +107,7 @@ describe "assignments/predictor_data" do
         receive(:is_unlocked_for_student?).and_return(false)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["is_locked"]).to eq true
+      expect(json["assignments"][0]["is_locked"]).to be_truthy
     end
 
     it "adds has_been_unlocked to model" do
@@ -117,7 +117,7 @@ describe "assignments/predictor_data" do
         receive(:is_unlocked_for_student?).and_return(true)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["has_been_unlocked"]).to eq true
+      expect(json["assignments"][0]["has_been_unlocked"]).to be_truthy
     end
 
     it "adds is_a_condition to model" do
@@ -142,7 +142,8 @@ describe "assignments/predictor_data" do
     unlock_key = create(:unlock_condition, unlockable: badge, condition: @assignment, condition_state: 'Grade Earned')
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["unlock_keys"]).to eq(["#{badge.name} is unlocked by #{unlock_key.condition_state} #{@assignment.name}"])
+    # ["Earning a grade for it unlocks the stroman Badge"]
+    expect(json["assignments"][0]["unlock_keys"]).to eq(["Earning a grade for it unlocks the #{badge.name} Badge"])
   end
 
   it "includes unlock conditions when assignment is a unlockable" do
@@ -150,7 +151,7 @@ describe "assignments/predictor_data" do
     unlock_condition = create(:unlock_condition, unlockable: @assignment, unlockable_type: "Assignment", condition: badge, condition_type: "Badge")
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["unlock_conditions"]).to eq(["#{badge.name} must be #{unlock_condition.condition_state}"])
+    expect(json["assignments"][0]["unlock_conditions"]).to eq(["Earn the #{badge.name} Badge"])
   end
 
   it "includes the assignment score levels" do

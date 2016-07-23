@@ -8,6 +8,7 @@ class API::GradeSchemeElementsController < ApplicationController
                              .order_by_highest_points.select(
                                :id,
                                :lowest_points,
+                               :highest_points,
                                :letter,
                                :level)
     if @grade_scheme_elements.present?

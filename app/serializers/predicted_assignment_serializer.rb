@@ -57,13 +57,19 @@ class PredictedAssignmentSerializer < SimpleDelegator
 
   def unlock_conditions
     assignment.unlock_conditions.map do |condition|
-      "#{condition.name} must be #{condition.condition_state}"
+      condition.requirements_description_sentence
+    end
+  end
+
+  def unlocked_conditions
+    assignment.unlock_conditions.map do |condition|
+      condition.requirements_completed_sentence
     end
   end
 
   def unlock_keys
     assignment.unlock_keys.map do |key|
-      "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+      key.key_description_sentence
     end
   end
 
@@ -83,6 +89,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
       %w( accepts_submissions_until
           assignment_type_id
           description
+          purpose
           due_at
           id
           name
@@ -104,9 +111,11 @@ class PredictedAssignmentSerializer < SimpleDelegator
       is_rubric_graded: is_rubric_graded?,
       has_submission: has_submission?,
       has_threshold: has_threshold?,
+      has_levels: has_levels?,
       is_a_condition: is_a_condition?,
       is_earned_by_group: is_earned_by_group?,
       is_late: is_late?,
+      is_due_in_future: is_due_in_future?,
       is_locked: is_locked?,
       is_required: is_required?,
     }
@@ -133,6 +142,10 @@ class PredictedAssignmentSerializer < SimpleDelegator
       !student.submission_for_assignment(assignment).present?
   end
 
+  def is_due_in_future?
+    assignment.due_at.present? && assignment.due_at >= Time.now
+  end
+
   def accepting_submissions?
     assignment.accepts_submissions? && \
     !assignment.submissions_have_closed? && \
@@ -146,6 +159,10 @@ class PredictedAssignmentSerializer < SimpleDelegator
 
   def has_threshold?
     assignment.threshold_points && assignment.threshold_points > 0
+  end
+
+  def has_levels?
+    assignment.assignment_score_levels.present?
   end
 
   def closed_without_sumbission?
