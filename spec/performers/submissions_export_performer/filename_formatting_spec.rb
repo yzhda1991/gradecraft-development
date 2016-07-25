@@ -8,36 +8,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   subject { performer }
 
-  describe "#filename_time" do
-    subject { performer.instance_eval { filename_time }}
-    let(:course) { create(:course, time_zone: "Bogota") }
-
-    before(:each) do
-      performer.instance_variable_set(:@filename_time, nil)
-      performer.instance_variable_set(:@course, course)
-    end
-
-    it "sets the timezone from the @course" do
-      subject
-      expect(Time.zone.name).to eq("Bogota")
-    end
-
-    it "gets the time now" do
-      expect(Time).to receive_message_chain(:zone, :now)
-      subject
-    end
-
-    describe "returning the actual time" do
-      let(:some_time) { Date.parse("Feb 20 1835").to_time }
-      before { allow(Time).to receive_message_chain(:zone, :now) { some_time } }
-
-      it "should return the proper time" do
-        subject
-        expect(performer.instance_variable_get(:@filename_time)).to eq(some_time)
-      end
-    end
-  end
-
   describe "student_directory_file_path" do
     let(:student_double) { double(:student) }
     let(:result) do
@@ -58,73 +28,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "builds the correct path relative to the student directory" do
       expect(result).to eq("/this/great/path/whats_up.doc")
-    end
-  end
-
-  describe "archive_basename" do
-    let(:result) { subject.archive_basename }
-
-    before do
-      allow(subject).to receive_messages(
-        formatted_assignment_name: "The Assignment",
-        formatted_team_name: "The Team"
-      )
-    end
-
-    it "combines the formatted assignment and team names" do
-      expect(result).to eq "The Assignment - The Team"
-    end
-
-    context "Team name is nil" do
-      it "compacts out the team name" do
-        allow(subject).to receive(:formatted_team_name) { nil }
-        expect(result).to eq "The Assignment"
-      end
-    end
-  end
-
-  describe "#formatted_team_name" do
-    let(:result) { subject.formatted_team_name }
-
-    # make sure that stale instance variables don't interfere with caching
-    before(:each) { subject.instance_variable_set(:@team_name, nil) }
-
-    context "team_present? is false and @team_name is nil" do
-      before do
-        allow(subject).to receive(:team_present?) { false }
-      end
-
-      it "returns nil" do
-        expect(result).to be_nil
-      end
-
-      it "doesn't set a @team_name" do
-        result
-        expect(subject.instance_variable_get(:@team_name)).to be_nil
-      end
-    end
-
-    context "team_present? is true" do
-      before do
-        allow(subject).to receive(:team_present?) { true }
-        allow(subject).to receive_message_chain(:team, :name) { "Super Team" }
-      end
-
-      it "titleizes the team name" do
-        expect(Formatter::Filename).to receive(:titleize).with "Super Team"
-        result
-      end
-
-      it "sets a @team_name" do
-        result
-        expect(subject.instance_variable_get(:@team_name)).to eq "Super Team"
-      end
-
-      it "caches the team name" do
-        result
-        expect(Formatter::Filename).not_to receive(:titleize)
-        result
-      end
     end
   end
 
