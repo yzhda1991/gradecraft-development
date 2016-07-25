@@ -208,7 +208,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "expanded_archive_base_path" do
     subject { performer.instance_eval { expanded_archive_base_path }}
     before do
-      allow(performer).to receive(:export_file_basename) { "the_best_filename" }
+      allow(performer.submissions_export).to receive(:export_file_basename) { "the_best_filename" }
       allow(performer).to receive(:archive_tmp_dir) { "/archive/tmp/dir" }
     end
 
