@@ -8,48 +8,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   subject { performer }
 
-  describe "export_file_basename" do
-    subject { performer.instance_eval { export_file_basename }}
-    let(:filename_timestamp) { "2020-10-15 - 1230PM" }
-
-    before(:each) do
-      performer.instance_variable_set(:@export_file_basename, nil)
-      allow(performer).to receive(:archive_basename) { "some_great_submissions" }
-      allow(performer).to receive(:filename_timestamp) { filename_timestamp }
-    end
-
-    it "includes the fileized_assignment_name" do
-      expect(subject).to match(/^some_great_submissions/)
-    end
-
-    it "is appended with a YYYY-MM-DD formatted timestamp" do
-      expect(subject).to match(/2020-10-15/)
-    end
-
-    it "caches the filename" do
-      subject
-      expect(performer).not_to receive(:archive_basename)
-      subject
-    end
-
-    it "sets the filename to an @export_file_basename" do
-      subject
-      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_submissions - #{filename_timestamp}")
-    end
-  end
-
-  describe "#filename_timestamp" do
-    subject { performer.instance_eval { filename_timestamp }}
-    let(:filename_time) { Date.parse("Jan 20 1995").to_time }
-    before do
-      allow(performer).to receive(:filename_time) { filename_time }
-    end
-
-    it "formats the filename time" do
-      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %l%M%p"))
-    end
-  end
-
   describe "#filename_time" do
     subject { performer.instance_eval { filename_time }}
     let(:course) { create(:course, time_zone: "Bogota") }

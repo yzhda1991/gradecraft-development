@@ -124,7 +124,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_root_dir_path
-    @archive_root_dir_path ||= File.expand_path(export_file_basename, tmp_dir)
+    @archive_root_dir_path ||= File.expand_path(submissions_export.export_file_basename, tmp_dir)
   end
 
   def csv_file_path
@@ -229,7 +229,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def expanded_archive_base_path
-    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
+    @expanded_archive_base_path ||= File.expand_path(submissions_export.export_file_basename, archive_tmp_dir)
   end
 
   ## creating student directories

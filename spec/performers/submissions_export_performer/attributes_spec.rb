@@ -40,8 +40,7 @@ RSpec.describe "SubmissionsExport attributes", type: :background_job do
   describe "#base_export_attributes" do
     before do
       allow(performer).to receive_messages({
-        submissions_snapshot: {some: "hash"},
-        export_file_basename: "really_bad_file"
+        submissions_snapshot: {some: "hash"}
       })
     end
 
@@ -59,10 +58,6 @@ RSpec.describe "SubmissionsExport attributes", type: :background_job do
 
     it "should include the submissions snapshot" do
       expect(subject[:submissions_snapshot]).to eq({some: "hash"})
-    end
-
-    it "should include the export filename" do
-      expect(subject[:export_filename]).to eq("really_bad_file.zip")
     end
   end
 end
