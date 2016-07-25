@@ -29,7 +29,7 @@ class SubmissionsExport < ActiveRecord::Base
   # tell s3 which directory structure to use for exports
   def s3_object_key_prefix
     "exports/courses/#{course_id}/assignments/#{assignment_id}/" \
-      "#{created_at_date}/#{created_at_in_microseconds}"
+      "#{object_key_date}/#{object_key_microseconds}"
   end
 
   def url_safe_filename

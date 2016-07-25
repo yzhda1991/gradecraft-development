@@ -36,9 +36,9 @@ describe Export::Model do
       end
     end
 
-    describe "#created_at_date" do
+    describe "#object_key_date" do
       subject { create :course_analytics_export }
-      let(:result) { subject.created_at_date }
+      let(:result) { subject.object_key_date }
 
       context "created_at is present" do
         it "formats the created_at date" do
@@ -54,9 +54,9 @@ describe Export::Model do
       end
     end
 
-    describe "#created_at_in_microseconds" do
+    describe "#object_key_microseconds" do
       subject { create :course_analytics_export }
-      let(:result) { subject.created_at_in_microseconds }
+      let(:result) { subject.object_key_microseconds }
 
       context "created_at is present" do
         it "formats the created_at time in microseconds" do

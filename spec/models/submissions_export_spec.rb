@@ -9,14 +9,14 @@ RSpec.describe SubmissionsExport do
   end
 
   it "includes Export::Model::ActiveRecord" do
-    expect(subject).to respond_to :created_at_in_microseconds
+    expect(subject).to respond_to :object_key_microseconds
   end
 
   describe "#s3_object_key_prefix" do
     before do
       allow(subject).to receive_messages \
-        created_at_date: "some-date",
-        created_at_in_microseconds: "12345",
+        object_key_date: "some-date",
+        object_key_microseconds: "12345",
         course_id: 99,
         assignment_id: 100
     end

@@ -53,8 +53,8 @@ RSpec.describe S3Manager::Resource do
 
     let(:expected_base_s3_key) do
       "exports/courses/40/assignments/50" \
-      "/#{subject.created_at_date}" \
-      "/#{subject.created_at_in_microseconds}/stuff.zip"
+      "/#{subject.object_key_date}" \
+      "/#{subject.object_key_microseconds}/stuff.zip"
     end
 
     before do
