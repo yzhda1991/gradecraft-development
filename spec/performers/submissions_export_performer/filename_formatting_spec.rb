@@ -68,8 +68,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "#archive_root_dir_path" do
     let(:tmp_dir) { Dir.mktmpdir }
-    let(:expected_outcome) { File.expand_path(export_base_filename, tmp_dir) }
-    let(:export_base_filename) { performer.instance_eval { export_file_basename }}
+    let(:expected_outcome) { File.expand_path(export_file_basename, tmp_dir) }
+    let(:export_file_basename) { performer.submissions_export.export_file_basename }
     subject { performer.instance_eval { archive_root_dir_path }}
 
     before(:each) { allow(performer).to receive(:tmp_dir) { tmp_dir }}
@@ -80,7 +80,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "caches the root dir path" do
       subject
-      expect(File).not_to receive(:expand_path).with(export_base_filename, tmp_dir)
+      expect(File).not_to receive(:expand_path).with(export_file_basename, tmp_dir)
       subject
     end
 
