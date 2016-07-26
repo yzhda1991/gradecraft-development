@@ -50,8 +50,15 @@
     .course-site
       background-color: $color-blue-1
       color: $color-white
-      padding: 1rem 2rem 1rem .75rem
+      padding: .75rem 2.5rem .75rem .75rem
       font-size: 1rem
+
+    .course, .course-name
+      margin: 0
+
+    .course-name
+      font-weight: 300
+      font-size: .8rem
 
     .search
       display: none
@@ -71,9 +78,10 @@
         transition: all 0.2s ease-in-out
 
     .course-site i
-      top: 20px
+      top: 40px
+      color: $color-white
 
-    .course-info-btn-mobile.open i
+    .course-info-btn-mobile.open i, .course-switcher-btn.open i
       transform: rotate(180deg)
 
     ul.course-info
@@ -87,6 +95,16 @@
 
     ul.course-info.open
       max-height: 500px
+
+    .course-list-container
+      display: none
+      background-color: $color-grey-6
+      height: auto
+      overflow: auto
+
+    .course-list-container.open
+      display: block
+
 
   .offscreen-sidebar, .staff-sidenav
     hr

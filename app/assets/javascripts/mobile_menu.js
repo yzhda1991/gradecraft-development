@@ -33,6 +33,12 @@ $(".btn-navbar-left, .nav-flyout-contentmask").click(function() {
   animateMobileMenu();
 });
 
+// course switcher in mobile nav
+$(".course-switcher-btn").click(function(){
+    $(".course-list-container, .course-switcher-btn").toggleClass("open");
+    $(".mobile-menu-content").toggle();
+});
+
 // course info accordion in mobile nav
 $(".course-info-btn-mobile").click(function(){
     $(".course-info, .course-info-btn-mobile").toggleClass("open");
