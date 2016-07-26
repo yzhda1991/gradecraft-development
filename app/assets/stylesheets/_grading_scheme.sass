@@ -68,6 +68,35 @@ p.predictor-description
 .right.radius.label
   margin-left: 1rem
 
+/* for the grade scheme elements mass edit form */
+.grade-scheme-elements
+  .low-range, .high-range
+    &.ng-invalid-max, &.ng-invalid-min
+      background: red
+      border: 1px solid red
+
+  input.low-range, .high-range
+    width: 150px !important
+
+  .add-element
+    display: none
+
+  .grade-scheme-row:hover .add-element
+    display: block
+
+  .required-notice
+    display: none
+    margin-right: 10px
+    color: $color-red-1
+
+  button[type=submit][disabled]
+    color: $color-grey-5
+    opacity: 0.7
+
+.ng-invalid
+  .required-notice
+    display: block
+
 @media (max-width: $media-medium-max)
   .bar_magic.current
     .left-points
