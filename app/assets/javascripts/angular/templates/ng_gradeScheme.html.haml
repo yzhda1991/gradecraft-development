@@ -13,7 +13,6 @@
                    ng-change='updateNextElement($index)'
                    required
                    name='lowest_points'
-                   min='{{lowPointsMin($index)}}'
                    max='{{lowPointsMax($index)}}')
 
   %span.form_label High Point Threshold
@@ -23,8 +22,7 @@
                     ng-change='updatePreviousElement($index)'
                     required
                     name='highest_points'
-                    min='{{highPointsMin($index)}}'
-                    max='{{highPointsMax($index)}}')
+                    min='{{highPointsMin($index)}}')
 
   .right
     %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
