@@ -102,12 +102,12 @@ describe CourseAnalyticsExportPerformer do
       # stub this out because we're going to test the mailer in the mailer
       # spec, not in the performer spec. let's just make sure it's being
       # called
-      allow(ExportsMailer).to receive(:course_analytics_export_success)
+      allow(CourseAnalyticsExportsMailer).to receive(:export_success)
         .and_return true
     end
 
     it "builds a mailer for course analytics export success" do
-      expect(ExportsMailer).to receive(:course_analytics_export_success)
+      expect(CourseAnalyticsExportsMailer).to receive(:export_success)
         .with(professor, export, subject.secure_token)
 
       subject.success_mailer
@@ -119,12 +119,12 @@ describe CourseAnalyticsExportPerformer do
       # stub this out because we're going to test the mailer in the mailer
       # spec, not in the performer spec. let's just make sure it's being
       # called
-      allow(ExportsMailer).to receive(:course_analytics_export_failure)
+      allow(CourseAnalyticsExportsMailer).to receive(:export_failure)
         .and_return true
     end
 
     it "builds a mailer for course analytics export failure" do
-      expect(ExportsMailer).to receive(:course_analytics_export_failure)
+      expect(CourseAnalyticsExportsMailer).to receive(:export_failure)
         .with(professor, export)
 
       subject.failure_mailer
