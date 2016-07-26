@@ -1,0 +1,5 @@
+%p.has-form{role: "search"}
+  %label.sr-only{:for => "search-input"}
+    Search #{term_for :students}
+  %input#student-search.students-search-query.search-input{ data: { autocompleteUrl: autocomplete_student_name_students_path }, type: "text", placeholder: "Search #{term_for :students}", label: false }
+  %a.alert.button{ :href => "#" } Go

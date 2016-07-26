@@ -97,9 +97,6 @@ ul.subnav.logged-out
 
 /* Large Screen Styles*/
 @media (min-width: $media-large-min)
-  .offscreen-sidebar, .nav-flyout-contentmask
-    display: none !important
-
   .navbar
     height: auto
 
@@ -110,19 +107,21 @@ ul.subnav.logged-out
 
   .the-nav .nav-pill.right
     z-index: 100
-    .course-info-btn, .my-account
-      top: -1.1rem
+
     .my-account
       margin-left: .25rem
+
     .course-info-btn
       margin-right: .25rem
+
     ul.typeahead.dropdown-menu.course-result
       width: 185px
       padding: 0
       font-size: .8rem
       li
-        padding: 0
+        padding: .5rem
         margin: 0
+
   .the-nav .nav-pill.left
     height: 45px
     overflow: hidden
@@ -237,131 +236,6 @@ ul.subnav.logged-out
 
   li.dropdown a.section-title
     color: $color-blue-3
-
-  /* In app mobile left flyout menu styles */
-  .offscreen-sidebar
-    position: fixed
-    background-color: $color-grey-6
-    width: 280px
-    height: 100%
-    z-index: 100
-    overflow-y: auto
-    -webkit-overflow-scrolling: touch
-    left: -280px
-
-    ul
-      list-style-type: none
-      margin: 0
-      padding: 0
-    li
-      padding: .4em
-    li, li a
-      color: $color-grey-2
-      text-transform: capitalize
-      font-size: 1rem
-      font-weight: 300
-      &.active
-        background-color: $color-blue-3
-        color: $color-white
-    a
-      display: block
-      &:hover
-        color: $color-blue-3
-        text-decoration: none
-
-    h5
-      color: $color-blue-3
-      text-transform: uppercase
-      font-size: 1rem
-      font-weight: 400
-      padding: .25rem 0 .25rem .5rem
-
-    hr
-      border: none
-      border-bottom: 1px dashed $color-grey-5
-      margin: .5rem 0
-      width: 100%
-
-    input[type=text]
-      width: 235px
-
-    a.button
-      color: $color-white
-      font-size: 0.8rem
-
-    .course-site
-      background-color: $color-blue-1
-      color: $color-white
-      padding: .5rem .75rem
-      font-size: 1rem
-
-    .course-info-btn-mobile
-      position: relative
-      cursor: pointer
-
-      i
-        position: absolute
-        top: 8px
-        right: 8px
-        -webkit-transition: all 0.2s ease-in-out
-        -moz-transition: all 0.2s ease-in-out
-        -o-transition: all 0.2s ease-in-out
-        -ms-transition: all 0.2s ease-in-out
-        transition: all 0.2s ease-in-out
-
-    .course-info-btn-mobile.open i
-      transform: rotate(180deg)
-
-    ul.course-info
-      max-height: 0px
-      overflow: hidden
-      -webkit-transition: all 0.5s ease-in-out
-      -moz-transition: all 0.5s ease-in-out
-      -o-transition: all 0.5s ease-in-out
-      -ms-transition: all 0.5s ease-in-out
-      transition: all 0.5s ease-in-out
-
-    ul.course-info.open
-      max-height: 500px
-
-  .offscreen-sidebar.animating
-    transition: transform 0.25s ease-in-out
-    -webkit-transition: -webkit-transform 0.25s ease-in-out
-
-  .offscreen-sidebar.animating.opening
-    transform: translate3d(280px, 0, 0)
-    -webkit-transform: translate3d(280px, 0, 0)
-
-  .offscreen-sidebar.animating.closing
-    transform: translate3d(-280px, 0, 0)
-    -webkit-transform: translate3d(-280px, 0, 0)
-
-  .offscreen-sidebar.menu-visible
-    left: 0
-
-  .nav-flyout-contentmask
-    display: none
-    position: fixed
-    top: 0
-    bottom: 0
-    left: 0
-    right: 0
-    z-index: 99
-    overflow: hidden
-    height: 100vh
-    background-color: rgba(0,0,0, .7)
-
-  .btn-navbar-left
-    position: absolute
-    top: 14px
-    left: 8px
-    font-size: 1.1rem
-    display: block
-    z-index: 1
-    color: $color-green-2
-    &:hover
-      color: $color-green-2
-      text-decoration: none
 
 @media (max-width: $media-small-max)
   .navbar > .mobile-nav > .right

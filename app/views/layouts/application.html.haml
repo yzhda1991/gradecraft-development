@@ -12,7 +12,7 @@
     = yield(:head)
 
   %body(class="#{body_class}")
-    = render partial: "layouts/top_bar", locals: { presenter: Students::DashboardCourseInfoPresenter.new(course: current_course, student: current_student) }
+    = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
     - if current_user
       %a.nav-flyout-contentmask
       .inner-wrap.clearfix
