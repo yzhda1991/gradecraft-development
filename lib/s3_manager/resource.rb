@@ -35,6 +35,7 @@ module S3Manager
     end
 
     def upload_file_to_s3(file_path)
+      return false unless s3_object_key
       s3_manager.put_encrypted_object(s3_object_key, file_path)
     end
 

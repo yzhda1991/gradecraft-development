@@ -404,7 +404,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def upload_archive_to_s3
-    @submissions_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
+    @submissions_export.upload_file_to_s3 "#{expanded_archive_base_path}.zip"
   end
 
   def check_s3_upload_success
