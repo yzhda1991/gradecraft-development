@@ -50,23 +50,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  # @submissions_export[:team_id].present?
-  describe "team_present?" do
-    before(:each) { performer.instance_variable_set(:@submissions_export, submissions_export) }
-
-    context "the @submissions_export has a team_id" do
-      let(:submissions_export) { create(:submissions_export, team_id: nil) }
-      subject { performer.instance_eval { team_present? }}
-      it { should be_falsey }
-    end
-
-    context "the @submissions_export doesn't have a team_id" do
-      let(:submissions_export) { create(:submissions_export, team_id: team.id) }
-      subject { performer_with_team.instance_eval { team_present? }}
-      it { should be_truthy }
-    end
-  end
-
   describe "confirm_export_csv_integrity" do
     subject { performer.instance_eval { confirm_export_csv_integrity }}
     let(:tmp_dir) { Dir.mktmpdir }
