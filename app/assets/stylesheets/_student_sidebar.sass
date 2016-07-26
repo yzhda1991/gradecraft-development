@@ -7,6 +7,7 @@
 #student-main-column
   width: auto
   overflow: hidden
+  border-right: 1px solid $color-grey-6
 
 .student-panel
   width: 400px
@@ -16,12 +17,12 @@
   .align-box
     width: 100px
     height: 100px
-    background-color: black;
+    background-color: black
   .student-panel-hint-box
-    width: 360px
-    margin-left: 20px
+    width: 100%
     background-color: $color-blue-5
-    padding: 10px 5px 5px 5px
+    padding: 1rem
+    box-sizing: border-box
 
   #student-panel-widget, .student-panel-article
     z-index: 50
@@ -35,7 +36,7 @@
     margin: .5rem 1rem
 
   p.student-panel-text-block
-    margin: .25rem 1rem
+    padding: 1rem
 
   .info-hint-pulse
       border: 3px solid $color-blue-4
@@ -46,7 +47,7 @@
       left: -1px
       top: 3px
       -webkit-animation: pulsate 2s linear
-      -webkit-animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite
       opacity: 0.0
   .hide-hint-link
     text-align: right
@@ -94,11 +95,12 @@
   color: white
   padding: 1.5rem 1rem
   text-align: center
+  font-weight: 300
   .article-title
-    font-size: 1.25rem
+    font-size: 1.2rem
+    padding-bottom: .5rem
   .full-points, .due-date
-    font-size: 1rem
-    padding-top: .5rem
+    font-size: 0.8rem
     text-transform: uppercase
 
 .student-panel-article-header.status-completed
