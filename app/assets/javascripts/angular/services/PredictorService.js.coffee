@@ -2,17 +2,23 @@
 # points of control for AssignmentTypes, Assignments, Badges, and Challenges
 # Includes calculations for summing points that involve cross-model interaction
 
-@gradecraft.factory 'PredictorService', ['$http', 'GradeCraftAPI', 'AssignmentTypeService', 'AssignmentService', 'BadgeService', 'ChallengeService', ($http, GradeCraftAPI, AssignmentTypeService, AssignmentService, BadgeService, ChallengeService) ->
+@gradecraft.factory 'PredictorService', ['$http', 'GradeCraftAPI', 'GradeSchemeElementsService', 'AssignmentTypeService', 'AssignmentService', 'BadgeService', 'ChallengeService', ($http, GradeCraftAPI, GradeSchemeElementsService, AssignmentTypeService, AssignmentService, BadgeService, ChallengeService) ->
 
   update = {}
-  gradeSchemeElements = []
-  _totalPoints  = 0
-
-  totalPoints = ()->
-    _totalPoints
 
   termFor = (article)->
     GradeCraftAPI.termFor(article)
+
+
+  #------ GRADE SCHEME ELEMENTS -----------------------------------------------#
+
+  gradeSchemeElements = GradeSchemeElementsService.elements
+
+  totalPoints = ()->
+    GradeSchemeElementsService.totalPoints()
+
+  getGradeSchemeElements = ()->
+    GradeSchemeElementsService.getGradeSchemeElements()
 
   #------ ASSIGNMENT TYPES ----------------------------------------------------#
 
@@ -167,14 +173,6 @@
 
   #------ API CALLS -----------------------------------------------------------#
 
-  # GradeSchemeElementController GET method should be updated with
-  # this code to use the api route, then used as a dependency for this Service
-  getGradeSchemeElements = ()->
-    $http.get("/api/grade_scheme_elements").success((res)->
-      GradeCraftAPI.loadMany(gradeSchemeElements,res)
-      _totalPoints = res.meta.total_points
-    )
-
   # Agnostic call to update any article that has a nested prediction.
   postPredictedArticle = (article)->
     switch article.type
@@ -191,6 +189,9 @@
       allPointsPredicted: allPointsPredicted
       allPointsEarned: allPointsEarned
       predictedGradeLevel: predictedGradeLevel
+
+      getGradeSchemeElements: getGradeSchemeElements
+      gradeSchemeElements: gradeSchemeElements
 
       assignmentTypes: assignmentTypes
       getAssignmentTypes: getAssignmentTypes
@@ -218,8 +219,5 @@
       getChallenges: getChallenges
       challengesFullPoints: challengesFullPoints
       challengesPredictedPoints: challengesPredictedPoints
-
-      getGradeSchemeElements: getGradeSchemeElements
-      gradeSchemeElements: gradeSchemeElements
   }
 ]

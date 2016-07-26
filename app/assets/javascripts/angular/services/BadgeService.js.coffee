@@ -20,11 +20,11 @@
 
   # GET index list of badges including a student's earned and predictions
   getBadges = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_badges').success( (res)->
-      GradeCraftAPI.loadMany(badges,res)
-      GradeCraftAPI.setTermFor("badges", res.meta.term_for_badges)
-      GradeCraftAPI.setTermFor("badge", res.meta.term_for_badge)
-      update.badges = res.meta.update_badges
+    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_badges').success( (response)->
+      GradeCraftAPI.loadMany(badges,response)
+      GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
+      GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
+      update.badges = response.meta.update_badges
     )
 
   # PUT a badge prediction
