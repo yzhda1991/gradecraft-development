@@ -49,7 +49,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
   # this is going to be the downloaded filename of the final archive
   #
   def url_safe_filename
-    "#{ formatted_course_number }_anayltics_export_" \
+    "#{ formatted_course_number }_analytics_export_" \
     "#{ filename_time.strftime('%Y-%m-%d') }.zip"
   end
 end

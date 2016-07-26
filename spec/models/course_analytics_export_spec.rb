@@ -28,11 +28,22 @@ describe CourseAnalyticsExport do
     end
   end
 
-  describe "#destroy" do
-    context "after success" do
-      it "removes the object from s3" do
-        pending
-      end
+  describe "#formatted_course_number" do
+    it "formats the course number for use in a url-safe filename" do
+      allow(subject.course).to receive(:courseno) { "some//bad&//courseno" }
+      expect(subject.formatted_course_number).to eq "some-badand-courseno"
+    end
+  end
+
+  describe "#url_safe_filename" do
+    it "returns a url safe filename" do
+      filename_time = Date.parse("jan 8 1998").to_time
+      allow(subject).to receive_messages \
+        filename_time: filename_time,
+        formatted_course_number: "some-courseno"
+
+      expect(subject.url_safe_filename)
+        .to eq "some-courseno_analytics_export_1998-01-08.zip"
     end
   end
 end
