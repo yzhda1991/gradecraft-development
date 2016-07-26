@@ -4,6 +4,7 @@
       %span.course= "#{current_course.courseno} "
       %span.course_name= "#{current_course.name} "
       %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
+      = glyph("chevron-down")
     - if current_user_is_student?
       .search
         = render partial: "layouts/navigation/course_search"
