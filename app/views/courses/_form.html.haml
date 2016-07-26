@@ -194,11 +194,6 @@
       .form_label{id: "txtMaxWeighted"} Is there a maximum number of assignment types they can weight?
 
     .form-item
-      = f.label :default_weight, "Default Weight"
-      = f.text_field :default_weight, {"aria-describedby" => "txtDefaultWeight"}
-      .form_label{id: "txtDefaultWeight"} What amount should the assignment types that the student doesn't select to boost be multiplied by?
-
-    .form-item
       = f.label :weight_term
       = f.text_field :weight_term, {"aria-describedby" => "txtWeightTerm"}
       .form_label{id: "txtWeightTerm"} What do you want to call these weights/multipliers?

@@ -8,7 +8,6 @@
   assignmentTypes = []
 
   weights = {
-    default_weight: 1,
     unusedWeights: ()->
       return 0
   }
@@ -22,7 +21,7 @@
       if assignmentType.student_weight > 0
         points = points * assignmentType.student_weight
       else
-        points = points * weights.default_weight
+        points
     points
 
   weightedEarnedPoints = (assignmentType)->
@@ -59,7 +58,6 @@
       weights.weights_close_at = res.meta.weights_close_at
       weights.max_weights_per_assignment_type = res.meta.max_weights_per_assignment_type
       weights.max_assignment_types_weighted = res.meta.max_assignment_types_weighted
-      weights.default_weight = res.meta.default_weight
 
       weights.unusedWeights = ()->
         used = 0

@@ -215,7 +215,6 @@ education there is. ― Isaac Asimov",
     weight_attributes: {
       max_assignment_types_weighted: 2,
       max_weights_per_assignment_type: 4,
-      default_weight: 0.5,
     }
   }
 }

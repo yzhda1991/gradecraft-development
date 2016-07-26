@@ -56,7 +56,7 @@ class Course < ActiveRecord::Base
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
     :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,
-    :max_weights_per_assignment_type, :assignments, :default_weight,
+    :max_weights_per_assignment_type, :assignments,
     :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :assignment_term, :challenge_term, :badge_term, :grading_philosophy,
@@ -100,7 +100,6 @@ class Course < ActiveRecord::Base
   validates_numericality_of :total_weights, allow_blank: true
   validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
   validates_numericality_of :max_assignment_types_weighted, allow_blank: true
-  validates_numericality_of :default_weight, allow_blank: true
   validates_numericality_of :full_points, allow_blank: true
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }

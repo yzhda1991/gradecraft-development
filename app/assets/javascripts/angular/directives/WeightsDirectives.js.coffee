@@ -37,8 +37,6 @@
         @article.student_weight > 0
       scope.weightsOpen = ()->
         AssignmentTypeService.weights.open
-      scope.defaultMultiplier = ()->
-        AssignmentTypeService.weights.default_weight
   }
 ]
 

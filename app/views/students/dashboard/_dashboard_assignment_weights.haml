@@ -22,5 +22,3 @@
         %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
       - if current_course.weights_close_at.present?
         %li You must make your decision by <b>#{current_course.weights_close_at}</b>
-      - if current_course.default_weight.present?
-        %li Any #{(term_for :assignment_types).downcase} you do not place #{ ( term_for :weights).titleize } on but have grades for will be multiplied by #{current_course.default_weight}.

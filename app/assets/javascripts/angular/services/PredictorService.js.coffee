@@ -55,7 +55,7 @@
   assignmentTypePointTotal = (assignmentType, includeWeights, includeCaps, includePredicted)->
     if includePredicted
       subset = assignmentsForAssignmentType(assignments,assignmentType.id)
-      total = assignmentsSubsetPredictedPoints(subset)
+      total = AssignmentService.assignmentsSubsetPredictedPoints(subset)
     else
       # Use weighted calculation sent from API
       total = weightedEarnedPoints(assignmentType)
@@ -64,6 +64,13 @@
       total = weightedPoints(assignmentType, total)
     if assignmentType.is_capped and includeCaps
       total = if total > assignmentType.total_points then assignmentType.total_points else total
+    total
+
+  assignmentsWeightedPredictedPoints = ()->
+    total = 0
+    _.each(assignmentTypes, (assignmentType)->
+      total += assignmentTypePointTotal(assignmentType, true, false, true)
+    )
     total
 
   # Total predicted points above and beyond the assignment type max points
@@ -85,12 +92,6 @@
 
   getAssignments= (studentId)->
     AssignmentService.getAssignments(studentId)
-
-  assignmentsSubsetPredictedPoints = (assignments)->
-   AssignmentService.assignmentsSubsetPredictedPoints(assignments)
-
-  assignmentsPredictedPoints = ()->
-   AssignmentService.assignmentsPredictedPoints()
 
   #------ BADGES --------------------------------------------------------------#
 
@@ -137,7 +138,7 @@
 
   # Total points predicted for all assignments, badges, and challenges
   allPointsPredicted = ()->
-    total = assignmentsPredictedPoints()
+    total = assignmentsWeightedPredictedPoints()
     total += badgesPredictedPoints()
     total += challengesPredictedPoints()
     total
@@ -208,8 +209,6 @@
 
       assignments: assignments
       getAssignments: getAssignments
-      assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
-      assignmentsPredictedPoints: assignmentsPredictedPoints
 
       badges: badges
       getBadges: getBadges

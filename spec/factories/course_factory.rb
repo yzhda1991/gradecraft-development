@@ -14,7 +14,6 @@ FactoryGirl.define do
       total_weights 6
       max_weights_per_assignment_type 4
       max_assignment_types_weighted 2
-      default_weight 3
     end
 
     factory :invalid_course do

@@ -21,5 +21,4 @@ json.meta do
   json.weights_close_at current_course.try(:weights_close_at)
   json.max_weights_per_assignment_type current_course.max_weights_per_assignment_type
   json.max_assignment_types_weighted current_course.max_assignment_types_weighted
-  json.default_weight current_course.default_weight
 end
