@@ -180,6 +180,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
     describe "#presenter" do
       context "no @presenter has been built" do
         before(:each) do
+          allow(controller).to receive(:presenter).and_call_original
           controller.instance_variable_set :@presenter, nil
         end
 
