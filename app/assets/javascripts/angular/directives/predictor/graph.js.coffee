@@ -12,6 +12,15 @@
 
     link: (scope, el, attr)->
 
+      scope.allPointsEarned = ()->
+        PredictorService.allPointsEarned()
+
+      scope.allPointsPredicted = ()->
+        PredictorService.allPointsPredicted()
+
+      scope.predictedGradeLevel = ()->
+        PredictorService.predictedGradeLevel()
+
       # Dertermine the bounds and the scale for postioning the graph elements
       scope.GraphsStats = ()->
         # add 10% to the graph above the highest grade
