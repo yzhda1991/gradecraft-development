@@ -14,13 +14,14 @@ RSpec.describe S3Manager::Resource do
   let(:temp_file) { Tempfile.new("some-file") }
 
   describe "callbacks" do
-    subject { create(:submissions_export) }
+    subject { create :submissions_export, export_filename: "stuffs_bro.txt" }
 
     describe "rebuilding the s3 object key before save" do
       context "export_filename changed" do
         it "rebuilds the s3 object key" do
           expect(subject).to receive(:rebuild_s3_object_key)
-          subject.update_attributes export_filename: "some_filename.txt"
+          subject.export_filename = "some_filename.txt"
+          subject.save
         end
       end
 

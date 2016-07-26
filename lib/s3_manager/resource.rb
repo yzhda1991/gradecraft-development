@@ -11,11 +11,11 @@ module S3Manager
         #
         if defined?(ActiveRecord) && base.ancestors.include?(ActiveRecord::Base)
 
-         # let's save the name of the export so we don't have to do it later.
-         # also this needs to be done before we rebuild the export filename
-         # as otherwise the object key rebuild won't trigger
+         # let's save the name of the export on create so we don't have to do
+         # it later. also this needs to be done before we rebuild the export
+         # filename as otherwise the object key rebuild won't trigger
          #
-         before_save :cache_export_filename
+         before_create :cache_export_filename, unless: :export_filename
 
          # let's build and save this on create even though we don't have the
          # created_at timestamp from the creation itself, this prevents us from
@@ -74,12 +74,12 @@ module S3Manager
     end
 
     def rebuild_s3_object_key
-      self[:s3_object_key] = build_s3_object_key export_filename
+      self.s3_object_key = build_s3_object_key export_filename
     end
 
     def build_s3_object_key(object_filename)
       key_pieces = [ s3_object_key_prefix, object_filename ]
-      key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
+      key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env == "development"
       key_pieces.join "/"
     end
 
