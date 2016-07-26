@@ -4,18 +4,20 @@ RSpec.describe ExportsController, type: :controller do
 
   let(:course) { create :course }
   let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:presenter) { double(:presenter).as_null_object }
 
   before do
     login_user(professor)
     allow(controller).to receive_messages \
       current_course: course,
-      current_user: professor
+      current_user: professor,
+      presenter: presenter
   end
 
   describe "GET #index" do
-    it "should get the relevant submissions exports" do
+    it "renders the index and injects the presenter locally" do
       get :index
-      expect(assigns(:submissions_exports)).to eq(course.submissions_exports.order("updated_at DESC"))
+      expect(response).to render_template(:index)
     end
   end
 
@@ -30,7 +32,7 @@ RSpec.describe ExportsController, type: :controller do
       end
 
       it "builds a new presenter with the params, course and user" do
-        expect(presenter_class).to receive(:new).with \
+        expect(::Presenters::Exports::Base).to receive(:new).with \
           params: controller.params,
           current_course: course,
           current_user: professor
