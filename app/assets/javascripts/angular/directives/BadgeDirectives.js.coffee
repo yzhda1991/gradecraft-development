@@ -5,7 +5,7 @@
     scope: {
       target: '='
     }
-    templateUrl: 'ng_badge_show.html'
+    templateUrl: 'badge/show.html'
 
   }
 ]

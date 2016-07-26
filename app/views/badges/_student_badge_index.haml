@@ -1,16 +1,1 @@
-.badge-index-container.clearfix
-  - presenter.badges.each do |badge|
-    .badge-icon-container
-      = render partial: "badges/components/icon", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
-
-      %p.badge-name
-        = render partial: "badges/components/name",
-          locals: { badge: badge, title: badge.name }
-
-      .gold-stars{:class => ("hidden" unless presenter.earned_badges_count(badge) > 0)}
-        %i.fa.fa-star.fa-fw
-          .earned-count
-            = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
-
-.info-side-panel.clearfix.hide-for-medium.hide-for-small
-  #badge-info-panel{"ng-app" => "gradecraft", "ng-init" => "init()", "ng-controller" => "BadgeCtrl", "ng-include" => true, "src" => "'ng_badge_main.html'"}
+#student-main-content{"ng-app" => "gradecraft", "ng-init" => "init()", "ng-controller" => "BadgeCtrl", "ng-include" =>"'badges/main.html'"}

@@ -1,14 +1,14 @@
-@gradecraft.controller 'BadgeCtrl', ['$scope', '$q', 'PredictorService', ($scope, $q, PredictorService) ->
+@gradecraft.controller 'BadgeCtrl', ['$scope', '$q', 'BadgeService', ($scope, $q, BadgeService) ->
 
   $scope.init = ()->
     $scope.services().then(()->
       console.log('complete')
     )
-  $scope.badges = PredictorService.badges
-  $scope.termFor = PredictorService.termFor
+  $scope.badges = BadgeService.badges
+  $scope.termFor = BadgeService.termFor
 
   $scope.services = ()->
-    promises = [PredictorService.getBadges(),]
+    promises = [BadgeService.getBadges(),]
     return $q.all(promises)
 
   $scope.foo = ()->
