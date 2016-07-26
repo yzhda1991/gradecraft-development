@@ -7,6 +7,7 @@ describe Export::Model do
 
   # test a class that is actually using this module
   describe CourseAnalyticsExport do
+    subject { create :course_analytics_export }
 
     describe "#downloadable?" do
       let(:result) { subject.downloadable? }
@@ -37,38 +38,18 @@ describe Export::Model do
     end
 
     describe "#object_key_date" do
-      subject { create :course_analytics_export }
-      let(:result) { subject.object_key_date }
-
-      context "created_at is present" do
-        it "formats the created_at date" do
-          expect(result).to eq subject.created_at.strftime("%F")
-        end
-      end
-
-      context "created_at is nil" do
-        it "returns nil" do
-          allow(subject).to receive(:created_at) { nil }
-          expect(result).to be_nil
-        end
+      it "formats the created_at date" do
+        time_now = Date.parse("Oct 20 2020").to_time
+        allow(subject).to receive(:filename_time) { time_now }
+        expect(subject.object_key_date).to eq time_now.strftime("%F")
       end
     end
 
     describe "#object_key_microseconds" do
-      subject { create :course_analytics_export }
-      let(:result) { subject.object_key_microseconds }
-
-      context "created_at is present" do
-        it "formats the created_at time in microseconds" do
-          expect(result).to eq subject.created_at.to_f.to_s.delete(".")
-        end
-      end
-
-      context "created_at is nil" do
-        it "returns nil" do
-          allow(subject).to receive(:created_at) { nil }
-          expect(result).to be_nil
-        end
+      it "formats the created_at time in microseconds" do
+        time_now = Date.parse("Oct 20 2020").to_time
+        allow(subject).to receive(:filename_time) { time_now }
+        expect(subject.object_key_microseconds).to eq time_now.to_f.to_s.tr(".", "")
       end
     end
 
@@ -80,7 +61,7 @@ describe Export::Model do
 
       it "calls update_attributes on the submissions export with the export time" do
         expect(subject).to receive(:update_attributes)
-          .with(last_export_completed_at: sometime)
+          .with(last_export_completed_at: sometime, last_completed_step: "complete")
         result
       end
 
