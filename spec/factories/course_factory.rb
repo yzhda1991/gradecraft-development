@@ -3,7 +3,7 @@ FactoryGirl.define do
     name { Faker::Internet.domain_word }
     courseno { Faker::Internet.domain_word }
     semester "Fall"
-    badge_setting false
+    has_badges false
 
     factory :course_accepting_groups do
       min_group_size 2

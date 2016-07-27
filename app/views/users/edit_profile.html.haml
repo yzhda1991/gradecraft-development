@@ -34,7 +34,7 @@
             = f.label :display_name, "Pseudonym"
             = f.text_field :display_name
             .form-item What would you like your name to be on the leaderboards?
-        - if current_course.team_roles?
+        - if current_course.has_team_roles?
           .form-item
             = f.label :team_role, "#{term_for :team} Role"
             = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false

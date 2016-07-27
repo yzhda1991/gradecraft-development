@@ -112,8 +112,8 @@
       .form_label{id: "txtSections"}  Will you have section assignments in your course?
 
     .form-item
-      = f.label :badge_setting, "Badges"
-      = f.check_box :badge_setting
+      = f.label :has_badges, "Badges"
+      = f.check_box :has_badges
       .form_label Do you want to use badges in your course?
 
     .form-item
@@ -132,8 +132,8 @@
       .form_label{id: "txtCharacterRoles"} Do students create a new name for themselves?
 
     .form-item
-      = f.label :team_roles, "Character Roles"
-      = f.check_box :team_roles, {"aria-describedby" => "txtTeamRoles"}
+      = f.label :has_team_roles, "Character Roles"
+      = f.check_box :has_team_roles, {"aria-describedby" => "txtTeamRoles"}
       .form_label{id: "txtTeamRoles"} Do students self-declare their role within the section?
 
     .form-item
@@ -168,7 +168,7 @@
     .form-item
       .textarea
         .form_label What would you like to tell students about how they should expected to be graded?
-        = f.text_area :grading_philosophy, class: "froala"
+        = f.text_area :gameful_philosophy, class: "froala"
 
   %section
     %h4 Multipliers

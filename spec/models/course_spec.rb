@@ -427,7 +427,7 @@ describe Course do
     end
 
     it "has badges if they're turned on" do
-      subject.badge_setting = true
+      subject.has_badges = true
       expect(subject.has_badges?).to eq(true)
     end
   end
@@ -554,14 +554,14 @@ describe Course do
     end
   end
 
-  describe "#team_roles?" do
+  describe "#has_team_roles?" do
     it "turns team roles for students in their profile settings to true if the instructor turns them on" do
-      subject.team_roles = true
-      expect(subject.team_roles?).to eq(true)
+      subject.has_team_roles = true
+      expect(subject.has_team_roles?).to eq(true)
     end
     it "returns false for team roles if the instructor has not turned them on" do
-      subject.team_roles = false
-      expect(subject.team_roles?).to eq(false)
+      subject.has_team_roles = false
+      expect(subject.has_team_roles?).to eq(false)
     end
   end
 

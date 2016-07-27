@@ -74,8 +74,8 @@
     %h4 BADGES
     %p.clear
       %b Badges will be used:
-      = @course.badge_setting? ? "Yes" : "No"
-    - if @course.badge_setting?
+      = @course.has_badges? ? "Yes" : "No"
+    - if @course.has_badges?
       %p
         %b Badges will be called:
         = @course.badge_term.pluralize
@@ -113,7 +113,7 @@
         = @course.group_term.pluralize
       %p
         %b Students self-declare their group roles:
-        = @course.team_roles? ? "Yes" : "No"
+        = @course.has_team_roles? ? "Yes" : "No"
       %p
         %b Max Group Size:
         = @course.max_group_size

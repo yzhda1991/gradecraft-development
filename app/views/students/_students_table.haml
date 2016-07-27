@@ -9,7 +9,7 @@
         %th Screenname
       - if current_course.has_teams?
         %th #{current_course.team_term}
-      - if current_course.team_roles?
+      - if current_course.has_team_roles?
         %th Role
       %th{scope: "col"} Score
       %th Grade
@@ -32,7 +32,7 @@
           %td
             - if student.team_for_course(current_course)
               = link_to student.team_for_course(current_course).name, team_path(id: student.team_for_course(current_course).id)
-        - if current_course.team_roles?
+        - if current_course.has_team_roles?
           %td= student.try(:team_role)
         %td
           - if student.respond_to?(:grades)

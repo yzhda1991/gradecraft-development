@@ -16,7 +16,7 @@ end
 
 def add_unlock_conditions(model, config, course_config)
   # Skip Badge unlock conditions on courses without badges
-  unless !course_config[:attributes][:badge_setting] &&
+  unless !course_config[:attributes][:has_badges] &&
     config[:unlock_attributes][:condition_type] == "Badge"
 
     model.unlock_conditions.create! do |uc|
@@ -264,7 +264,7 @@ end
 
 @badges.each do |badge_name, config|
   @courses.each do |course_name, course_config|
-    next unless course_config[:attributes][:badge_setting] == true
+    next unless course_config[:attributes][:has_badges] == true
     course_config[:course].tap do |course|
       badge = Badge.create! do |b|
         @badge_default_config[:attributes].keys.each do |attr|
@@ -377,7 +377,7 @@ PaperTrail.whodunnit = nil
               LevelBadge.create!(
                 level_id: criterion.levels.first.id,
                 badge_id: course_config[:badges][:visible_level_badge].id
-              ) if course.badge_setting
+              ) if course.has_badges
 
               1.upto(5).each do |m|
                 level = criterion.levels.create! do |criterion_level|
@@ -385,7 +385,7 @@ PaperTrail.whodunnit = nil
                   criterion_level.points = criterion.max_points - (m * 1000)
                   criterion_level.description = "Red hair crookshanks bludger Marauder’s Map Prongs sunshine daisies butter mellow Ludo Bagman. Beaters gobbledegook N.E.W.T., Honeydukes eriseD inferi Wormtail. Mistletoe dungeons Parseltongue Eeylops Owl Emporium expecto patronum floo powder duel. Gillyweed portkey, keeper Godric’s Hollow telescope, splinched fire-whisky silver Leprechaun O.W.L. stroke the spine."
                 end
-                if m == 1 && course.badge_setting
+                if m == 1 && course.has_badges
                   LevelBadge.create!(level_id: level.id,
                     badge_id: course_config[:badges][:invisible_level_badge].id)
                 end

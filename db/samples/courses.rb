@@ -37,14 +37,14 @@
     accepts_submissions: false,
     add_team_score_to_student: false,
     assignment_term: nil,
-    badge_setting: false,
+    has_badges: false,
     badge_term: nil,
     challenge_term: nil,
     character_names: false,
     character_profiles: false,
     class_email: nil,
     course_number: "ABC101",
-    grading_philosophy: nil,
+    gameful_philosophy: nil,
     group_setting: false,
     in_team_leaderboard: false,
     location: nil,
@@ -61,7 +61,7 @@
     semester: "Winter",
     tagline: nil,
     team_challenges: false,
-    team_roles: false,
+    has_team_roles: false,
     team_score_average: false,
     team_setting: false,
     team_term: nil,
@@ -108,11 +108,11 @@ the cheese. ― Willie Nelson",
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
-    badge_setting: true,
+    has_badges: true,
     badge_term: "Badge",
     class_email: "staff-educ222@umich.edu",
     course_number: "GC101",
-    grading_philosophy: "I believe a grading system should put the learner in
+    gameful_philosophy: "I believe a grading system should put the learner in
       control of their own destiny, promote autonomy, and reward effort and
       risk-taking. Whereas most grading systems start you off with 100% and
       then chips away at that “perfect grade” by averaging in each successive
@@ -173,11 +173,11 @@ education there is. ― Isaac Asimov",
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
-    badge_setting: true,
+    has_badges: true,
     badge_term: "Power Up",
     class_email: "staff-educ222@umich.edu",
     course_number: "GC102",
-    grading_philosophy: grading_philosophy = "Think of how video games work.
+    gameful_philosophy: gameful_philosophy = "Think of how video games work.
       This course works along the same logic. There are some things everyone
       will have to do to make progress. In this course, the readings,
       reading-related homework, lectures and discussion sections are those
@@ -245,7 +245,7 @@ shape of the spoon. ― E.M. Forster",
     character_profiles: true,
     class_email: "staff-si110@umich.edu",
     course_number: "GC103",
-    grading_philosophy: "In this course, we accrue 'XP' which are points that
+    gameful_philosophy: "In this course, we accrue 'XP' which are points that
       you gain to get to different grade levels. If you can gather 950,000 XP,
       you will receive an A, not to mention the admiration of those around you.
       Because you’re in charge of figuring out how many XP you need to get the
@@ -269,7 +269,7 @@ shape of the spoon. ― E.M. Forster",
     phone: "777-777-7777",
     semester: "Fall",
     team_challenges: true,
-    team_roles: true,
+    has_team_roles: true,
     team_score_average: true,
     team_setting: true,
     teams_visible: true,
@@ -294,7 +294,7 @@ Dracula",
     accepts_submissions: true,
     class_email: "staff-si110@umich.edu",
     course_number: "GC104",
-    grading_philosophy: "In this course, we accrue 'XP' which are points that
+    gameful_philosophy: "In this course, we accrue 'XP' which are points that
       you gain to get to different grade levels. If you can gather 950,000 XP,
       you will receive an A, not to mention the admiration of those around you.
       Because you’re in charge of figuring out how many XP you need to get the
@@ -336,7 +336,7 @@ Dracula",
     academic_history_visible: true,
     accepts_submissions: true,
     course_number: "GC105",
-    grading_philosophy: "In this course, there are no due dates, and no sequencing \
+    gameful_philosophy: "In this course, there are no due dates, and no sequencing \
     to the assignments. Show us you've completed the necessary competencies in any \
     way you like.",
     name: "Course with No Dates",

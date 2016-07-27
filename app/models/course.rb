@@ -49,17 +49,17 @@ class Course < ActiveRecord::Base
   end
 
   attr_accessible :course_number, :name,
-    :semester, :year, :badge_setting, :team_setting, :instructors_of_record_ids,
+    :semester, :year, :has_badges, :team_setting, :instructors_of_record_ids,
     :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :course_rules, :group_setting, :syllabus,
-    :character_names, :team_roles, :character_profiles, :hide_analytics,
+    :character_names, :has_team_roles, :character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
     :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,
     :max_weights_per_assignment_type, :assignments,
     :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
-    :meeting_times, :assignment_term, :challenge_term, :badge_term, :grading_philosophy,
+    :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
     :team_score_average, :team_challenges, :team_leader_term,
     :max_assignment_types_weighted, :full_points, :in_team_leaderboard,
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
@@ -190,7 +190,7 @@ class Course < ActiveRecord::Base
   end
 
   def has_badges?
-    badge_setting == true
+    has_badges == true
   end
 
   def valuable_badges?
@@ -243,8 +243,8 @@ class Course < ActiveRecord::Base
     weights_close_at.nil? || weights_close_at > Time.now
   end
 
-  def team_roles?
-    team_roles == true
+  def has_team_roles?
+    has_team_roles == true
   end
 
   def has_submissions?
