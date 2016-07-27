@@ -1,6 +1,15 @@
-@gradecraft.factory 'GradeSchemeElementsService', ['$http', ($http) ->
+@gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+
+    # It would be my preference to change this from elements
+    # to gradeSchemeElements
     elements = []
     deletedIds = []
+
+    _totalPoints  = 0
+
+    totalPoints = ()->
+      _totalPoints
+
 
     # we're doing so much index juggling here that we should really create a
     # factory for both the overall grade scheme elements collection, as well as
@@ -47,10 +56,10 @@
         null
 
     getGradeSchemeElements = ()->
-      $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
-        angular.copy(response.grade_scheme_elements, elements)
-      ) 
-
+      $http.get("/api/grade_scheme_elements").success((response)->
+        GradeCraftAPI.loadMany(elements,response)
+        _totalPoints = response.meta.total_points
+      )
 
     postGradeSchemeElements = ()->
       data = {
@@ -70,6 +79,7 @@
     return {
         getGradeSchemeElements: getGradeSchemeElements
         postGradeSchemeElements: postGradeSchemeElements
+        totalPoints: totalPoints
         elements: elements
         remove: remove
         addNew: addNew
