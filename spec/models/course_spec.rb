@@ -12,9 +12,9 @@ describe Course do
     end
 
     it "requires a course number" do
-      subject.courseno = nil
+      subject.course_number = nil
       expect(subject).to_not be_valid
-      expect(subject.errors[:courseno]).to include "can't be blank"
+      expect(subject.errors[:course_number]).to include "can't be blank"
     end
 
     it "requires a numeric for max group size" do
@@ -490,14 +490,14 @@ describe Course do
 
   describe "#formatted_short_name" do
     it "uses the course number if that's all that's present" do
-      expect(subject.formatted_short_name).to eq(subject.courseno)
+      expect(subject.formatted_short_name).to eq(subject.course_number)
     end
 
     it "creates a formatted short name that includes the course number, semester, and year if they're present" do
       subject.semester = "Fall"
       subject.year = "2015"
 
-      expect(subject.formatted_short_name).to eq("#{subject.courseno} #{(subject.semester).capitalize.first[0]}#{subject.year}")
+      expect(subject.formatted_short_name).to eq("#{subject.course_number} #{(subject.semester).capitalize.first[0]}#{subject.year}")
     end
 
   end

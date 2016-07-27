@@ -11,7 +11,7 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: @courses.to_json(only: [:id, :name, :courseno, :year, :semester])
+        render json: @courses.to_json(only: [:id, :name, :course_number, :year, :semester])
       end
     end
   end

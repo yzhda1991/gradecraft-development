@@ -48,7 +48,7 @@ class Course < ActiveRecord::Base
     User.students_by_team(self, team)
   end
 
-  attr_accessible :courseno, :name,
+  attr_accessible :course_number, :name,
     :semester, :year, :badge_setting, :team_setting, :instructors_of_record_ids,
     :team_term, :user_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :homepage_message, :group_setting, :syllabus,
@@ -93,7 +93,7 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
-  validates_presence_of :name, :courseno
+  validates_presence_of :name, :course_number
   validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
   validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
 
@@ -106,7 +106,7 @@ class Course < ActiveRecord::Base
 
   validate :max_more_than_min
 
-  scope :alphabetical, -> { order("courseno ASC") }
+  scope :alphabetical, -> { order("course_number ASC") }
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
@@ -114,7 +114,7 @@ class Course < ActiveRecord::Base
     criteria = { lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
     where(criteria).first || create!(criteria) do |c|
       c.lti_uid = auth_hash["extra"]["raw_info"]["context_id"]
-      c.courseno = auth_hash["extra"]["raw_info"]["context_label"]
+      c.course_number = auth_hash["extra"]["raw_info"]["context_label"]
       c.name = auth_hash["extra"]["raw_info"]["context_title"]
       c.year = Date.today.year
     end
@@ -219,9 +219,9 @@ class Course < ActiveRecord::Base
 
   def formatted_short_name
     if semester.present? && year.present?
-      "#{self.courseno} #{(self.semester).capitalize.first[0]}#{self.year}"
+      "#{self.course_number} #{(self.semester).capitalize.first[0]}#{self.year}"
     else
-      "#{courseno}"
+      "#{course_number}"
     end
   end
 

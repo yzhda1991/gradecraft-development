@@ -28,7 +28,7 @@ class NotificationMailer < ApplicationMailer
     @challenge = challenge_grade.challenge
     @course = challenge_grade.course
     team.students.each do |s|
-      mail(to: s.email, subject: "#{@course.courseno} - #{@challenge.name} Graded") do |format|
+      mail(to: s.email, subject: "#{@course.course_number} - #{@challenge.name} Graded") do |format|
         @student = s
         format.text
         format.html
@@ -38,21 +38,21 @@ class NotificationMailer < ApplicationMailer
 
   def grade_released(grade_id)
     grade_ivars(grade_id)
-    send_student_email "#{@course.courseno} - #{@assignment.name} Graded"
+    send_student_email "#{@course.course_number} - #{@assignment.name} Graded"
   end
 
   def earned_badge_awarded(earned_badge_id)
     @earned_badge = EarnedBadge.find earned_badge_id
     @student = @earned_badge.student
     @course = @earned_badge.course
-    send_student_email "#{@course.courseno} - You've earned a new #{@course.badge_term}!"
+    send_student_email "#{@course.course_number} - You've earned a new #{@course.badge_term}!"
   end
 
   def group_status_updated(group_id)
     @group = Group.find group_id
     @course = @group.course
     @group.students.each do |group_member|
-      mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
+      mail(to: group_member.email, subject: "#{@course.course_number} - Group #{@group.approved}") do |format|
         @student = group_member
         format.text
         format.html
@@ -65,7 +65,7 @@ class NotificationMailer < ApplicationMailer
     @course = @group.course
     @group_members = @group.students
     @group_members.each do |gm|
-      mail(to: gm.email, subject: "#{@course.courseno} - New Group") do |format|
+      mail(to: gm.email, subject: "#{@course.course_number} - New Group") do |format|
         @student = gm
         format.text
         format.html
@@ -78,7 +78,7 @@ class NotificationMailer < ApplicationMailer
   def send_assignment_email_to_professor(professor, submission_id, subject)
     submission_ivars_with_student(submission_id)
     @professor = professor
-    mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - #{subject}") do |format|
+    mail(to: @professor.email, subject: "#{@course[:course_number]} - #{@assignment.name} - #{subject}") do |format|
       format.text
       format.html
     end
@@ -86,7 +86,7 @@ class NotificationMailer < ApplicationMailer
 
   def send_assignment_email_to_user(submission_id, subject)
     submission_ivars_with_user(submission_id)
-    mail(to: @user.email, subject: "#{@course.courseno} - #{@assignment.name} #{subject}") do |format|
+    mail(to: @user.email, subject: "#{@course.course_number} - #{@assignment.name} #{subject}") do |format|
       format.text
       format.html
     end

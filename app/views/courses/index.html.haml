@@ -41,7 +41,7 @@
     %tbody
       - @courses.each do |course|
         %tr
-          %td= course.courseno
+          %td= course.course_number
           %td= link_to course.name, change_current_course_path(course_id: course.id)
           %td= course.year
           %td= course.semester

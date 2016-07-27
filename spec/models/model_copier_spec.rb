@@ -18,9 +18,9 @@ describe ModelCopier do
     end
 
     it "duplicates the attributes" do
-      model.courseno = "BLAH"
+      model.course_number = "BLAH"
 
-      expect(subject.courseno).to eq "BLAH"
+      expect(subject.course_number).to eq "BLAH"
     end
 
     it "saves the duplicated model" do
@@ -52,10 +52,10 @@ describe ModelCopier do
 
     context "with attributes" do
       it "copies the attribute values" do
-        model.courseno = "BLAH"
-        subject = described_class.new(model).copy attributes: { courseno: "BLEH" }
+        model.course_number = "BLAH"
+        subject = described_class.new(model).copy attributes: { course_number: "BLEH" }
 
-        expect(subject.courseno).to eq "BLEH"
+        expect(subject.course_number).to eq "BLEH"
       end
     end
 

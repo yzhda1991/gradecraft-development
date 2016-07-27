@@ -43,7 +43,7 @@
     character_names: false,
     character_profiles: false,
     class_email: nil,
-    courseno: "ABC101",
+    course_number: "ABC101",
     grading_philosophy: nil,
     group_setting: false,
     in_team_leaderboard: false,
@@ -111,7 +111,7 @@ the cheese. ― Willie Nelson",
     badge_setting: true,
     badge_term: "Badge",
     class_email: "staff-educ222@umich.edu",
-    courseno: "GC101",
+    course_number: "GC101",
     grading_philosophy: "I believe a grading system should put the learner in
       control of their own destiny, promote autonomy, and reward effort and
       risk-taking. Whereas most grading systems start you off with 100% and
@@ -176,7 +176,7 @@ education there is. ― Isaac Asimov",
     badge_setting: true,
     badge_term: "Power Up",
     class_email: "staff-educ222@umich.edu",
-    courseno: "GC102",
+    course_number: "GC102",
     grading_philosophy: grading_philosophy = "Think of how video games work.
       This course works along the same logic. There are some things everyone
       will have to do to make progress. In this course, the readings,
@@ -244,7 +244,7 @@ shape of the spoon. ― E.M. Forster",
     character_names: true,
     character_profiles: true,
     class_email: "staff-si110@umich.edu",
-    courseno: "GC103",
+    course_number: "GC103",
     grading_philosophy: "In this course, we accrue 'XP' which are points that
       you gain to get to different grade levels. If you can gather 950,000 XP,
       you will receive an A, not to mention the admiration of those around you.
@@ -293,7 +293,7 @@ Dracula",
     academic_history_visible: true,
     accepts_submissions: true,
     class_email: "staff-si110@umich.edu",
-    courseno: "GC104",
+    course_number: "GC104",
     grading_philosophy: "In this course, we accrue 'XP' which are points that
       you gain to get to different grade levels. If you can gather 950,000 XP,
       you will receive an A, not to mention the admiration of those around you.
@@ -335,7 +335,7 @@ Dracula",
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
-    courseno: "GC105",
+    course_number: "GC105",
     grading_philosophy: "In this course, there are no due dates, and no sequencing \
     to the assignments. Show us you've completed the necessary competencies in any \
     way you like.",
