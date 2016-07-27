@@ -54,10 +54,10 @@
       .form_label Do students do this individually or as a group?
 
     .form-item
-      = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @assignment.min_group_size || 3 ] }
+      = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @assignment.try(:min_group_size) || 2 ] }
 
     .form-item
-      = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.max_group_size || 6 ] }
+      = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.try(:max_group_size) || 5 ] }
 
     .form-item
       = f.label :mass_grade_type, "Quick Grade Style"

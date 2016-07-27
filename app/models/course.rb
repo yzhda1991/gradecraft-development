@@ -115,46 +115,6 @@ class Course < ActiveRecord::Base
     end
   end
 
-  def assignment_term
-    super.presence || "Assignment"
-  end
-
-  def badge_term
-    super.presence || "Badge"
-  end
-
-  def challenge_term
-    super.presence || "Challenge"
-  end
-
-  def fail_term
-    super.presence || "Fail"
-  end
-
-  def group_term
-    super.presence || "Group"
-  end
-
-  def pass_term
-    super.presence || "Pass"
-  end
-
-  def team_term
-    super.presence || "Team"
-  end
-
-  def team_leader_term
-    super.presence || "Team Leader"
-  end
-
-  def weight_term
-    super.presence || "Multiplier"
-  end
-
-  def student_term
-    super.presence || "Player"
-  end
-
   def copy(copy_type, attributes={})
     if copy_type != "with_students"
       copy_with_associations(attributes, [])
@@ -166,22 +126,6 @@ class Course < ActiveRecord::Base
         Course.set_callback(:create, :after, :create_admin_memberships)
       end
     end
-  end
-
-  def has_teams?
-    has_teams == true
-  end
-
-  def teams_visible?
-    teams_visible == true
-  end
-
-  def in_team_leaderboard?
-    has_in_team_leaderboard == true
-  end
-
-  def has_badges?
-    has_badges == true
   end
 
   def valuable_badges?
@@ -220,14 +164,6 @@ class Course < ActiveRecord::Base
 
   def assignment_weight_open?
     weights_close_at.nil? || weights_close_at > Time.now
-  end
-
-  def has_team_roles?
-    has_team_roles == true
-  end
-
-  def has_submissions?
-    accepts_submissions == true
   end
 
   def element_for_score(score)

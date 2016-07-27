@@ -5,7 +5,7 @@
       %th First Name
       %th Last Name
       %th Avatar
-      - if current_course.has_in_team_leaderboard? || current_course.has_character_names?
+      - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
         %th Screenname
       - if current_course.has_teams?
         %th #{current_course.team_term}
@@ -25,7 +25,7 @@
         %td
           - if student.avatar_file_name.present?
             %img.img-rounded{:src => student.avatar_file_name, :width => 30}
-        - if current_course.has_in_team_leaderboard? || current_course.has_character_names?
+        - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
           %td
             = student.display_name
         - if current_course.has_teams?

@@ -309,7 +309,7 @@ describe Course do
     end
 
     it "returns Team Leader if no team_leader_term is present" do
-      expect(subject.team_leader_term).to eq("Team Leader")
+      expect(subject.team_leader_term).to eq("TA")
     end
   end
 
@@ -331,7 +331,7 @@ describe Course do
     end
 
     it "returns User if no student_term is present" do
-      expect(subject.student_term).to eq("Player")
+      expect(subject.student_term).to eq("Student")
     end
   end
 
@@ -358,8 +358,8 @@ describe Course do
   end
 
   describe "#teams_visible?" do
-    it "does not have team visible by default" do
-      expect(subject.teams_visible?).to eq(false)
+    it "has team visible by default" do
+      expect(subject.teams_visible?).to eq(true)
     end
 
     it "has team visible if it's turned on" do
@@ -368,14 +368,14 @@ describe Course do
     end
   end
 
-  describe "#has_in_team_leaderboard?" do
+  describe "#has_in_team_leaderboards?" do
     it "does not have in-team leaderboards turned on by default" do
-      expect(subject.has_in_team_leaderboard?).to eq(false)
+      expect(subject.has_in_team_leaderboards?).to eq(false)
     end
 
     it "has in-team leaderboards if they're turned on" do
-      subject.has_in_team_leaderboard = true
-      expect(subject.has_in_team_leaderboard?).to eq(true)
+      subject.has_in_team_leaderboards = true
+      expect(subject.has_in_team_leaderboards?).to eq(true)
     end
   end
 
@@ -501,14 +501,14 @@ describe Course do
     end
   end
 
-  describe "#has_submissions?" do
+  describe "#accepts_submissions?" do
     it "returns true if the instructor has turned submissions on" do
       subject.accepts_submissions = true
-      expect(subject.has_submissions?).to eq(true)
+      expect(subject.accepts_submissions?).to eq(true)
     end
     it "returns false for submissions if the instructor has not turned them on" do
       subject.accepts_submissions = false
-      expect(subject.has_submissions?).to eq(false)
+      expect(subject.accepts_submissions?).to eq(false)
     end
   end
 

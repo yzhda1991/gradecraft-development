@@ -37,7 +37,7 @@
       = @course.year
     %p
       %b GradeCraft will accept assignment submissions for this course:
-      = @course.has_submissions? ? "Yes" : "No"
+      = @course.accepts_submissions? ? "Yes" : "No"
     %p
       %b Course Status:
       = @course.status? ? "Active" : "Archived"
