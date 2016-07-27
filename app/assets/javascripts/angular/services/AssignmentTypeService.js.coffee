@@ -12,17 +12,19 @@
       return 0
   }
 
+  termFor = (article)->
+    GradeCraftAPI.termFor(article)
+
+
   #---------------- Assignment Type Point Calculations ------------------------#
 
   # multiply points by the student's assignment type weight if weighted
   # points is optional, defaults to total_points for Assignment Type
   weightedPoints = (assignmentType, points)->
     if assignmentType.student_weightable
-      if assignmentType.student_weight > 0
-        points = points * assignmentType.student_weight
-      else
-        points
-    points
+      points * assignmentType.student_weight
+    else
+      points
 
   weightedEarnedPoints = (assignmentType)->
     weightedPoints(assignmentType, assignmentType.final_points_for_student)
@@ -86,6 +88,7 @@
         )
 
   return {
+      termFor: termFor
       assignmentTypes: assignmentTypes
       weights: weights
 

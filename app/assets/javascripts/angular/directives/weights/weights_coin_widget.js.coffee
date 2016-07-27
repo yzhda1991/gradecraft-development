@@ -16,6 +16,8 @@
     }
     templateUrl: 'weights/coins.html'
     link: (scope, el, attr)->
+      scope.termFor = (term)->
+        AssignmentTypeService.termFor(term)
       scope.increment = ()->
         @article.student_weight += 1
         AssignmentTypeService.postAssignmentTypeWeight(@article.id,@article.student_weight)
@@ -37,37 +39,5 @@
         @article.student_weight > 0
       scope.weightsOpen = ()->
         AssignmentTypeService.weights.open
-  }
-]
-
-# manages the sum of possible points for an assignment type, and weights it
-# with the current weight for that assignment type
-@gradecraft.directive 'weightedTotalPoints', [ 'AssignmentTypeService', (AssignmentTypeService)->
-
-  return {
-    restrict: 'C'
-    scope: {
-      article: '='
-    }
-    templateUrl: 'weights/weighted_total_points.html'
-    link: (scope, el, attr)->
-      scope.weightedTotalPoints = ()->
-        AssignmentTypeService.weightedTotalPoints(@article)
-  }
-]
-
-# Manages the sum of a student's earned points for an assignment type, and
-# weights it with the current weight for that assignment type
-@gradecraft.directive 'weightedEarnedPoints', [ 'AssignmentTypeService', (AssignmentTypeService)->
-
-  return {
-    restrict: 'C'
-    scope: {
-      article: '='
-    }
-    templateUrl: 'weights/weighted_earned_points.html'
-    link: (scope, el, attr)->
-      scope.weightedEarnedPoints = ()->
-        AssignmentTypeService.weightedEarnedPoints(@article)
   }
 ]

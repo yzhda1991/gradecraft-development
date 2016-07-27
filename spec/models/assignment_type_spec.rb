@@ -132,11 +132,11 @@ describe AssignmentType do
       expect(assignment_type.weighted_total_for_student(student)).to eq(300)
     end
 
-    it "returns the weighted total if the student has *not* assigned weight to it (point total * default weight)" do
+    it "returns zero for total if the student has *not* assigned weight to it" do
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course, full_points: 100)
 
-      expect(assignment_type.weighted_total_for_student(student)).to eq(50)
+      expect(assignment_type.weighted_total_for_student(student)).to eq(0)
     end
   end
 

@@ -23,7 +23,7 @@
     PredictorService.termFor(article)
 
   $scope.unusedWeightsRange = ()->
-   PredictorService.unusedWeightsRange()
+    PredictorService.unusedWeightsRange()
 
   $scope.weightsAvailable = ()->
     PredictorService.weightsAvailable()

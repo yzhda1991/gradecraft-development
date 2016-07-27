@@ -151,7 +151,7 @@ class Grade < ActiveRecord::Base
   def calculate_score
     return nil unless raw_points.present?
     weighting = assignment_type.student_weightable? ? assignment_weight : 1
-    (final_points * weighting).round
+    final_points * weighting
   end
 
   # Calculate all stored points fields before save
