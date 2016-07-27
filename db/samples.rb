@@ -104,7 +104,7 @@ puts "Children must be taught how to think, not what to think. ― Margaret Mead
   puts_success :course, course_name, :grade_sceme_elements_created
 
   # Add the course teams if the course has teams
-  if config[:attributes][:team_setting]
+  if config[:attributes][:has_teams]
     team_names = config[:team_names] || @course_default_config[:team_names]
     teams = team_names.map do |team_name|
       course.teams.create! do |t|

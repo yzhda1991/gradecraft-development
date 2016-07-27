@@ -49,7 +49,7 @@ class Course < ActiveRecord::Base
   end
 
   attr_accessible :course_number, :name,
-    :semester, :year, :has_badges, :team_setting, :instructors_of_record_ids,
+    :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
     :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :course_rules, :group_setting, :syllabus,
     :character_names, :has_team_roles, :character_profiles, :hide_analytics,
@@ -174,7 +174,7 @@ class Course < ActiveRecord::Base
   end
 
   def has_teams?
-    team_setting == true
+    has_teams == true
   end
 
   def has_team_challenges?

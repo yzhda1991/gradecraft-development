@@ -84,8 +84,8 @@
     %h4 SECTIONS
     %p.clear
       %b Students will be grouped into sections:
-      = @course.team_setting? ? "Yes" : "No"
-    -if @course.team_setting?
+      = @course.has_teams? ? "Yes" : "No"
+    -if @course.has_teams?
       %p
         %b These sections will be called:
         = @course.team_term.pluralize

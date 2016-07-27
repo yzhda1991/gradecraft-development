@@ -371,7 +371,7 @@ describe Course do
     end
 
     it "has teams if they're turned on" do
-      subject.team_setting = true
+      subject.has_teams = true
       expect(subject.has_teams?).to eq(true)
     end
   end
