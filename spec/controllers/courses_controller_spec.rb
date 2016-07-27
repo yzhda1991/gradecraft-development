@@ -28,7 +28,7 @@ describe CoursesController do
           get :index, format: :json
           json = JSON.parse(response.body)
           expect(json.length).to eq 1
-          expect(json[0].keys).to eq ["id", "name", "courseno",
+          expect(json[0].keys).to eq ["id", "name", "course_number",
                                       "year", "semester"]
         end
       end
@@ -211,7 +211,7 @@ describe CoursesController do
           get :index, format: :json
           json = JSON.parse(response.body)
           expect(json.length).to eq 1
-          expect(json[0].keys).to eq ["id", "name", "courseno", "year", "semester"]
+          expect(json[0].keys).to eq ["id", "name", "course_number", "year", "semester"]
         end
       end
     end

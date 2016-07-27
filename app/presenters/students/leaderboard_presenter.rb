@@ -6,7 +6,7 @@ class Students::LeaderboardPresenter < Showtime::Presenter
   end
 
   def display_pseudonyms?
-    course.in_team_leaderboard? || course.has_character_names?
+    course.has_in_team_leaderboard? || course.has_character_names?
   end
 
   def earned_badges

@@ -48,7 +48,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "#{course.courseno} - #{assignment.name} Submitted"
+      expect(email.subject).to eq "#{course.course_number} - #{assignment.name} Submitted"
     end
 
     describe "text part body" do
@@ -90,7 +90,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "#{course.courseno} - #{assignment.name} Submission Updated"
+      expect(email.subject).to eq "#{course.course_number} - #{assignment.name} Submission Updated"
     end
 
     describe "text part body" do

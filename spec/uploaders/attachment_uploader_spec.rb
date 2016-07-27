@@ -100,9 +100,9 @@ RSpec.describe AttachmentUploader do
     let(:course) { create(:course) }
 
     context "model has a course method" do
-      it "returns a string with the format of <courseno-course_id>" do
+      it "returns a string with the format of <course_number-course_id>" do
         allow(model).to receive(:course) { course }
-        expect(result).to eq("#{course.courseno}-#{course.id}")
+        expect(result).to eq("#{course.course_number}-#{course.id}")
       end
     end
 

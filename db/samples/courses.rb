@@ -46,7 +46,7 @@
     course_number: "ABC101",
     gameful_philosophy: nil,
     group_setting: false,
-    in_team_leaderboard: false,
+    has_in_team_leaderboard: false,
     location: nil,
     max_group_size: nil,
     media: nil,
@@ -261,7 +261,7 @@ shape of the spoon. ― E.M. Forster",
       assignment is by definition average work, which would receive something
       around the B category. If your goal is to get an A, you will have to go
       above and beyond on some of these Quests.",
-    in_team_leaderboard: true,
+    has_in_team_leaderboard: true,
     location: "2245 North Quad",
     meeting_times: "TTh 12:00-1:30",
     name: "Course with Leaderboards and Team Challenges",

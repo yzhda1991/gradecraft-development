@@ -398,14 +398,14 @@ describe Course do
     end
   end
 
-  describe "#in_team_leaderboard?" do
+  describe "#has_in_team_leaderboard?" do
     it "does not have in-team leaderboards turned on by default" do
-      expect(subject.in_team_leaderboard?).to eq(false)
+      expect(subject.has_in_team_leaderboard?).to eq(false)
     end
 
     it "has in-team leaderboards if they're turned on" do
-      subject.in_team_leaderboard = true
-      expect(subject.in_team_leaderboard?).to eq(true)
+      subject.has_in_team_leaderboard = true
+      expect(subject.has_in_team_leaderboard?).to eq(true)
     end
   end
 

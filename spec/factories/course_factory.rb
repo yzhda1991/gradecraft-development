@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :course do
     name { Faker::Internet.domain_word }
-    courseno { Faker::Internet.domain_word }
+    course_number { Faker::Internet.domain_word }
     semester "Fall"
     has_badges false
 
