@@ -52,7 +52,7 @@ class Course < ActiveRecord::Base
     :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
     :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :course_rules, :group_setting, :syllabus,
-    :character_names, :has_team_roles, :character_profiles, :hide_analytics,
+    :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
     :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,

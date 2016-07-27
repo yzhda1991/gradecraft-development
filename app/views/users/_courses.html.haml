@@ -14,7 +14,7 @@
           .form-item
             = cmf.label :role, "Select Role"
             = cmf.select :role, available_roles(cmf.object.course)
-          - if cmf.object.course.character_profiles?
+          - if cmf.object.course.has_character_profiles?
             .form-item
               = cmf.input :character_profile, class: "froala"
           .form-item

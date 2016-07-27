@@ -9,7 +9,7 @@
       %tr
         %th Rank
         %th Pseudonym
-        - if current_course.character_profiles?
+        - if current_course.has_character_profiles?
           %th Character Profile
         - if current_course.has_team_roles?
           %th Role
@@ -20,7 +20,7 @@
           %tr{class: ("complete" if student == current_student) }
             %td{"data-title" => "Rank"}= index + 1
             %td= student.display_name
-            - if current_course.character_profiles?
+            - if current_course.has_character_profiles?
               %td= student.character_profile(current_course)
             - if current_course.has_team_roles?
               %td= student.team_role
