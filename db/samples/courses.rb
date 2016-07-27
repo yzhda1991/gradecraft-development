@@ -69,7 +69,7 @@
     total_weights: 0,
     twitter_handle: nil,
     twitter_hashtag: nil,
-    user_term: nil,
+    student_term: nil,
     year: Date.today.year,
   }
 }
@@ -143,7 +143,7 @@ the cheese. ― Willie Nelson",
     teams_visible: true,
     twitter_handle: "barryfishman",
     twitter_hashtag: "EDUC222",
-    user_term: "Learner",
+    student_term: "Learner",
   }
 }
 

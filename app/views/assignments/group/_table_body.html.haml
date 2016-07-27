@@ -19,7 +19,7 @@
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
           %tr
-            %th= "#{current_course.user_term}s"
+            %th= "#{current_course.student_term}s"
             %th Score
             - if group_presenter.assignment.assignment_type.student_weightable?
               %th Multiplied Scores

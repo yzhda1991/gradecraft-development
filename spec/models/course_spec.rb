@@ -354,14 +354,14 @@ describe Course do
     end
   end
 
-  describe "#user_term" do
-    it "returns the set user_term if present" do
-      subject.user_term = "User"
-      expect(subject.user_term).to eq("User")
+  describe "#student_term" do
+    it "returns the set student_term if present" do
+      subject.student_term = "User"
+      expect(subject.student_term).to eq("User")
     end
 
-    it "returns User if no user_term is present" do
-      expect(subject.user_term).to eq("Player")
+    it "returns User if no student_term is present" do
+      expect(subject.student_term).to eq("Player")
     end
   end
 

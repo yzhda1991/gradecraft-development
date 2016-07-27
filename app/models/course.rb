@@ -50,7 +50,7 @@ class Course < ActiveRecord::Base
 
   attr_accessible :course_number, :name,
     :semester, :year, :badge_setting, :team_setting, :instructors_of_record_ids,
-    :team_term, :user_term, :section_leader_term, :group_term, :lti_uid,
+    :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :homepage_message, :group_setting, :syllabus,
     :character_names, :team_roles, :character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
@@ -156,7 +156,7 @@ class Course < ActiveRecord::Base
     super.presence || "Multiplier"
   end
 
-  def user_term
+  def student_term
     super.presence || "Player"
   end
 
