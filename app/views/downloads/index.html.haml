@@ -1,4 +1,4 @@
-= content_nav_for SubmissionsExport
+= content_nav_for "Downloads"
 
 %h3.pagetitle= @title
 
@@ -6,9 +6,9 @@
   = render partial: "layouts/alerts"
 
   .export_type#submissions_exports
-    = render partial: "exports/submissions_exports",
+    = render partial: "downloads/submissions_exports",
       locals: { presenter: presenter }
 
   .export_type#course_analytics_exports
-    = render partial: "exports/course_analytics_exports",
+    = render partial: "downloads/course_analytics_exports",
       locals: { presenter: presenter }

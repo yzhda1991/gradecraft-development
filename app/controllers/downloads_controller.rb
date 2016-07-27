@@ -1,6 +1,6 @@
-require_relative "../presenters/exports/base"
+require_relative "../presenters/downloads/base"
 
-class ExportsController < ApplicationController
+class DownloadsController < ApplicationController
   before_filter :ensure_staff?
 
   def index
@@ -10,7 +10,7 @@ class ExportsController < ApplicationController
   protected
 
   def presenter
-    @presenter ||= ::Presenters::Exports::Base.new \
+    @presenter ||= ::Presenters::Downloads::Base.new \
       params: params,
       current_course: current_course,
       current_user: current_user

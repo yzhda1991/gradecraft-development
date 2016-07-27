@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-RSpec.describe ExportsController, type: :controller do
+RSpec.describe DownloadsController, type: :controller do
 
   let(:course) { create :course }
   let(:professor) { create(:professor_course_membership, course: course).user }
@@ -32,7 +32,7 @@ RSpec.describe ExportsController, type: :controller do
       end
 
       it "builds a new presenter with the params, course and user" do
-        expect(::Presenters::Exports::Base).to receive(:new).with \
+        expect(::Presenters::Downloads::Base).to receive(:new).with \
           params: controller.params,
           current_course: course,
           current_user: professor

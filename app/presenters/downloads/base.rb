@@ -1,7 +1,7 @@
 require "showtime"
 
 module Presenters
-  module Exports
+  module Downloads
     class Base < Showtime::Presenter
 
       def submissions_exports

@@ -338,7 +338,7 @@ GradeCraft::Application.routes.draw do
   end
 
   #19. Exports
-  resources :exports, only: :index
+  resources :downloads, only: :index
 
   resources :submissions_exports, only: [:create, :destroy] do
     member do
