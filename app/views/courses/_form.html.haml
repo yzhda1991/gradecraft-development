@@ -34,13 +34,6 @@
     .form-item
       = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
 
-
-    .form-item
-      = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @course.min_group_size || 3 ] }
-
-    .form-item
-      = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @course.max_group_size || 6 ] }
-
   %section
     %h4.uppercase Class Details
     .form-item
@@ -82,8 +75,6 @@
       = f.file_field :syllabus
       - if current_course.syllabus.present?
         .italic= link_to "Current Syllabus", current_course.syllabus_url
-
-    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @course }
 
   - unless @course.new_record?
     %section

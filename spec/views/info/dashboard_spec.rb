@@ -12,7 +12,7 @@ describe "info/dashboard" do
   })}
 
   before(:all) do
-    @course = create(:course_accepting_groups)
+    @course = create(:course)
     @professor = create(:user)
     @professor.courses << @course
     @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")

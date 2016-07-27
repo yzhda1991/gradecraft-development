@@ -14,7 +14,7 @@ module Toolkits
 
       def setup_default_env
         @students = []
-        @course = create(:course_accepting_groups)
+        @course = create(:course)
         @professor = create_professor_for_course # also adds professor to course
         @assignment = create_assignment_for_course # also creates @assignment_type
         @students += create_students_for_course(2)

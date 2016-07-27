@@ -146,11 +146,10 @@ describe CoursesController do
         expect(duplicated.course_memberships[0].user).to eq @professor
       end
 
-      it "redirects to the courses path if the copy fails" do
-        @course.update_attribute :max_group_size, 0
+      it "redirects to the course edit path if the copy fails" do
+        @course.update_attribute :full_points, "a"
         post :copy, id: @course.id
-        expect(response).to redirect_to courses_path
-        expect(flash[:alert]).to eq "#{@course.reload.name} was not successfully copied"
+        expect(response).to redirect_to edit_course_path(Course.unscoped.last)
       end
     end
 

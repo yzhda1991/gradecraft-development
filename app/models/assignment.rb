@@ -19,7 +19,7 @@ class Assignment < ActiveRecord::Base
     :required, :resubmissions_allowed, :show_description_when_locked,
     :show_purpose_when_locked, :show_name_when_locked,
     :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
-    :visible, :visible_when_locked
+    :visible, :visible_when_locked, :min_group_size, :max_group_size
 
   attr_accessor :current_student_grade
 
@@ -69,6 +69,9 @@ class Assignment < ActiveRecord::Base
   :show_purpose_when_locked, in: [true, false], message: "must be true or false"
 
   validate :open_before_close, :submissions_after_due, :submissions_after_open
+  validate :max_more_than_min
+  validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
 
   scope :group_assignments, -> { where grade_scope: "Group" }
 
@@ -344,6 +347,12 @@ class Assignment < ActiveRecord::Base
   def submissions_after_open
     if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
       errors.add :base, "Submission accept date must be after open date."
+    end
+  end
+
+  def max_more_than_min
+    if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
+      errors.add :base, "Maximum group size must be greater than minimum group size."
     end
   end
 

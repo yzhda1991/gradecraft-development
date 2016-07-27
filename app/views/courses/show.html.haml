@@ -112,14 +112,8 @@
         %b Groups will be called:
         = @course.group_term.pluralize
       %p
-        %b Students self-declare their group roles:
+        %b Students self-declare their team roles:
         = @course.has_team_roles? ? "Yes" : "No"
-      %p
-        %b Max Group Size:
-        = @course.max_group_size
-      %p
-        %b Min Group Size:
-        = @course.min_group_size
 
   .panel
     %h4 STUDENTS

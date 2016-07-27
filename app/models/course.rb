@@ -2,7 +2,6 @@ require_relative "role"
 
 class Course < ActiveRecord::Base
   include Copyable
-  include UploadsMedia
   include UnlockableCondition
 
   after_create :create_admin_memberships
@@ -51,13 +50,13 @@ class Course < ActiveRecord::Base
   attr_accessible :course_number, :name,
     :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
     :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
-    :user_id, :course_id, :course_rules, :group_setting, :syllabus,
+    :user_id, :course_id, :course_rules, :syllabus,
     :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
-    :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,
+    :weight_term, :fail_term, :pass_term,
     :max_weights_per_assignment_type, :assignments,
-    :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
+    :accepts_submissions, :tagline, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
     :team_score_average, :has_team_challenges, :team_leader_term,
@@ -94,8 +93,6 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :course_number
-  validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
-  validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
 
   validates_numericality_of :total_weights, allow_blank: true
   validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
@@ -103,8 +100,6 @@ class Course < ActiveRecord::Base
   validates_numericality_of :full_points, allow_blank: true
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
-
-  validate :max_more_than_min
 
   scope :alphabetical, -> { order("course_number ASC") }
   scope :active, -> { where(status: true) }
@@ -191,18 +186,6 @@ class Course < ActiveRecord::Base
 
   def valuable_badges?
     badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
-  end
-
-  def has_groups?
-    group_setting == true
-  end
-
-  def min_group_size
-    super.presence || 2
-  end
-
-  def max_group_size
-    super.presence || 6
   end
 
   def formatted_tagline
@@ -330,12 +313,6 @@ class Course < ActiveRecord::Base
 
   def awarded_course_badge_count
     earned_badges.count
-  end
-
-  def max_more_than_min
-    if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
-      errors.add :base, "Maximum group size must be greater than minimum group size."
-    end
   end
 
   private

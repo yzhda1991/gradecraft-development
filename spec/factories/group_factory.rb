@@ -4,7 +4,7 @@ FactoryGirl.define do
       (0..3).each { group.students << create(:user) }
       group.assignments << create(:assignment, grade_scope: "Group")
     end
-    association :course, factory: :course_accepting_groups
+    association :course, factory: :course
     name { Faker::Lorem.word }
     approved "Pending"
   end

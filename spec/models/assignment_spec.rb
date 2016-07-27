@@ -185,6 +185,66 @@ describe Assignment do
       expect(subject).to_not be_valid
       expect(subject.errors[:base]).to include "Submission accept date must be after due date."
     end
+
+    it "requires a numeric for max group size" do
+      subject.max_group_size = "a"
+      expect(subject).to_not be_valid
+      expect(subject.errors[:max_group_size]).to include "is not a number"
+    end
+
+    it "allows for a nil max group size" do
+      subject.max_group_size = nil
+      expect(subject).to be_valid
+      expect(subject.errors[:max_group_size]).to be_empty
+    end
+
+    it "requires the max group size to be greater than 0" do
+      subject.max_group_size = 0
+      expect(subject).to_not be_valid
+      expect(subject.errors[:max_group_size]).to include "must be greater than or equal to 1"
+    end
+
+    it "requires a numeric for min group size" do
+      subject.min_group_size = "a"
+      expect(subject).to_not be_valid
+      expect(subject.errors[:min_group_size]).to include "is not a number"
+    end
+
+    it "allows for a nil min group size" do
+      subject.min_group_size = nil
+      expect(subject).to be_valid
+      expect(subject.errors[:min_group_size]).to be_empty
+    end
+  end
+
+  describe "#min_group_size" do
+    it "sets the default min group size at 2" do
+      expect(subject.min_group_size).to eq(1)
+    end
+
+    it "accepts the instructor's setting here if it exists" do
+      subject.min_group_size = 3
+      expect(subject.min_group_size).to eq(3)
+    end
+  end
+
+  describe "#max_group_size" do
+    it "sets the default max group size at 6" do
+      expect(subject.max_group_size).to eq(5)
+    end
+
+    it "accepts the instructor's setting here if it exists" do
+      subject.max_group_size = 8
+      expect(subject.max_group_size).to eq(8)
+    end
+  end
+
+  describe "#max_more_than_min" do
+    it "errors out if the max group size is smaller than the minimum" do
+      subject.max_group_size = 2
+      subject.min_group_size = 5
+      expect !subject.valid?
+    end
   end
 
   describe "#graded_or_released_scores" do

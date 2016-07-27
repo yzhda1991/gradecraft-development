@@ -16,36 +16,6 @@ describe Course do
       expect(subject).to_not be_valid
       expect(subject.errors[:course_number]).to include "can't be blank"
     end
-
-    it "requires a numeric for max group size" do
-      subject.max_group_size = "a"
-      expect(subject).to_not be_valid
-      expect(subject.errors[:max_group_size]).to include "is not a number"
-    end
-
-    it "allows for a nil max group size" do
-      subject.max_group_size = nil
-      expect(subject).to be_valid
-      expect(subject.errors[:max_group_size]).to be_empty
-    end
-
-    it "requires the max group size to be greater than 0" do
-      subject.max_group_size = 0
-      expect(subject).to_not be_valid
-      expect(subject.errors[:max_group_size]).to include "must be greater than or equal to 1"
-    end
-
-    it "requires a numeric for min group size" do
-      subject.min_group_size = "a"
-      expect(subject).to_not be_valid
-      expect(subject.errors[:min_group_size]).to include "is not a number"
-    end
-
-    it "allows for a nil min group size" do
-      subject.min_group_size = nil
-      expect(subject).to be_valid
-      expect(subject.errors[:min_group_size]).to be_empty
-    end
   end
 
   describe "#copy" do
@@ -443,40 +413,6 @@ describe Course do
     end
   end
 
-  describe "#has_groups?" do
-    it "does not have badges turned on by default" do
-      expect(subject.has_groups?).to eq(false)
-    end
-
-    it "has badges if they're turned on" do
-      subject.group_setting = true
-      expect(subject.has_groups?).to eq(true)
-    end
-
-  end
-
-  describe "#min_group_size" do
-    it "sets the default min group size at 2" do
-      expect(subject.min_group_size).to eq(2)
-    end
-
-    it "accepts the instructor's setting here if it exists" do
-      subject.min_group_size = 3
-      expect(subject.min_group_size).to eq(3)
-    end
-  end
-
-  describe "#max_group_size" do
-    it "sets the default max group size at 6" do
-      expect(subject.max_group_size).to eq(6)
-    end
-
-    it "accepts the instructor's setting here if it exists" do
-      subject.max_group_size = 8
-      expect(subject.max_group_size).to eq(8)
-    end
-  end
-
   describe "#formatted_tagline" do
     it "returns an empty string if no tagline is present" do
       expect(subject.formatted_tagline).to eq(" ")
@@ -744,14 +680,6 @@ describe Course do
       earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
       earned_badge_3 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
       expect(subject.awarded_course_badge_count).to eq(3)
-    end
-  end
-
-  describe "#max_more_than_min" do
-    it "errors out if the max group size is smaller than the minimum" do
-      subject.max_group_size = 2
-      subject.min_group_size = 5
-      expect !subject.valid?
     end
   end
 
