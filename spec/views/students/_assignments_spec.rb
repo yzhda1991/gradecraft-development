@@ -42,7 +42,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "renders with team_challenges and team_score_average" do
-      @course.update(team_challenges: true)
+      @course.update(has_team_challenges: true)
       @course.update(team_score_average: true)
       render
     end

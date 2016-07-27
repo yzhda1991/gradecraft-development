@@ -508,7 +508,7 @@ end
 
 @challenges.each do |challenge_name,config|
   @courses.each do |course_name,course_config|
-    next unless course_config[:attributes][:team_challenges]
+    next unless course_config[:attributes][:has_team_challenges]
     course_config[:course].tap do |course|
       challenge = Challenge.create! do |c|
         @challenge_default_config[:attributes].keys.each do |attr|

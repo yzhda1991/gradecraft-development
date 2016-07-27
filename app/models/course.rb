@@ -60,7 +60,7 @@ class Course < ActiveRecord::Base
     :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
-    :team_score_average, :team_challenges, :team_leader_term,
+    :team_score_average, :has_team_challenges, :team_leader_term,
     :max_assignment_types_weighted, :full_points, :in_team_leaderboard,
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
     :assignments_attributes, :start_date, :end_date
@@ -175,10 +175,6 @@ class Course < ActiveRecord::Base
 
   def has_teams?
     has_teams == true
-  end
-
-  def has_team_challenges?
-    team_challenges == true
   end
 
   def teams_visible?

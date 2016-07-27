@@ -34,7 +34,7 @@ describe Timeline do
       let!(:challenge_not_due) { create :challenge, course: course, due_at: nil }
 
       context "that accepts team challenges" do
-        before { course.update_attributes team_challenges: true }
+        before { course.update_attributes has_team_challenges: true }
 
         it "includes the challenges" do
           expect(subject.events).to eq [challenge]

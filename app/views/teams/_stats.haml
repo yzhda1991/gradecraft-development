@@ -4,7 +4,7 @@
       %th Rank
       %th Name
       %th{ "data-dynatable-column" => "averageScore"} Mean Student Score
-      - if current_course.team_challenges?
+      - if current_course.has_team_challenges?
         %th{ "data-dynatable-column" => "score" } #{term_for :challenge} Score
       %th{ "data-dynatable-column" => "students" } #{term_for :students}
       %th #{term_for :team_leaders}
@@ -17,7 +17,7 @@
         %td= index + 1
         %td= link_to team.name, team
         %td= points team.average_score
-        - if current_course.team_challenges?
+        - if current_course.has_team_challenges?
           %td= points team.challenge_grade_score
         %td= team.member_count
         %td

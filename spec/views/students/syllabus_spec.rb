@@ -32,7 +32,7 @@ describe "students/syllabus" do
 
   it "shows the challenge div" do
     @challenge = create(:challenge, course: @course)
-    @course.team_challenges = true
+    @course.has_team_challenges = true
     @course.add_team_score_to_student = true
     @team = create(:team, course: @course)
     @team.students << @student
@@ -42,7 +42,7 @@ describe "students/syllabus" do
 
   it "does not show the challenge div if they're not added to student scores" do
     @challenge = create(:challenge, course: @course)
-    @course.team_challenges = true
+    @course.has_team_challenges = true
     @course.add_team_score_to_student = false
     @team = create(:team, course: @course)
     @team.students << @student

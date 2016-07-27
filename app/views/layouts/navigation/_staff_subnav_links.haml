@@ -28,7 +28,7 @@
 %li= link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
 - if current_course.has_badges?
   %li= link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
-- if current_course.team_challenges?
+- if current_course.has_team_challenges?
   %li= link_to_unless_current glyph(:trophy) + "#{term_for :challenges}", challenges_path
 
 %hr

@@ -382,7 +382,7 @@ describe Course do
     end
 
     it "has team challenges if they're turned on" do
-      subject.team_challenges = true
+      subject.has_team_challenges = true
       expect(subject.has_team_challenges?).to eq(true)
     end
   end
