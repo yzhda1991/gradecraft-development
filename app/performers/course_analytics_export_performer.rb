@@ -12,7 +12,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     build_the_export
-    deliver_mailer
+    # deliver_mailer
     export.update_export_completed_time
   end
 
@@ -41,10 +41,6 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
       user_id: professor[:id],
       course_id: course[:id],
       target: export
-  end
-
-  def last_step(step_name)
-    export.update_attributes last_completed_step: step_name
   end
 
   private
@@ -117,7 +113,6 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
         CourseUserAggregateExport
       ].each do |export_model|
         export_model.new(data).generate_csv export_dir
-        last_step export_model.to_s
       end
 
       # create a place to store our final archive, for now

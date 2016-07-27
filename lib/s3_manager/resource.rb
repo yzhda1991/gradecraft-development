@@ -15,7 +15,7 @@ module S3Manager
          # it later. also this needs to be done before we rebuild the export
          # filename as otherwise the object key rebuild won't trigger
          #
-         before_create :cache_export_filename, unless: :export_filename
+         before_save :cache_export_filename, unless: :export_filename
 
          # let's build and save this on create even though we don't have the
          # created_at timestamp from the creation itself, this prevents us from
