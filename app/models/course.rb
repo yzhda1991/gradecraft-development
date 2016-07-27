@@ -51,7 +51,7 @@ class Course < ActiveRecord::Base
   attr_accessible :course_number, :name,
     :semester, :year, :badge_setting, :team_setting, :instructors_of_record_ids,
     :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
-    :user_id, :course_id, :homepage_message, :group_setting, :syllabus,
+    :user_id, :course_id, :course_rules, :group_setting, :syllabus,
     :character_names, :team_roles, :character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
