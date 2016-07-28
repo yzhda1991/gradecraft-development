@@ -28,6 +28,17 @@ class SubmissionsExport < ActiveRecord::Base
   validates :course_id, presence: true
   validates :assignment_id, presence: true
 
+  # this should be moved into the Exports::Model module, or a new
+  # SecureToken::Target module, but since SecureToken still lives in /app/models
+  # it feels weird to have to include an app resource to test /lib
+  #
+  def generate_secure_token
+    SecureToken.create \
+      user_id: professor.id,
+      course_id: course.id,
+      target: self
+  end
+
   # tell s3 which directory structure to use for exports
   def s3_object_key_prefix
     "exports/courses/#{course_id}/assignments/#{assignment_id}/" \

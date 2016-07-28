@@ -2,7 +2,7 @@ require "active_record_spec_helper"
 require "formatter"
 
 RSpec.describe SubmissionsExport do
-  subject { described_class.new }
+  subject { build :submissions_export }
 
   it "includes S3Manager::Rescource" do
     expect(subject).to respond_to :stream_s3_object_body
@@ -11,6 +11,16 @@ RSpec.describe SubmissionsExport do
 
   it "includes Export::Model::ActiveRecord" do
     expect(subject).to respond_to :object_key_microseconds
+  end
+
+  describe "#generate_secure_token" do
+    it "creates a new secure token with the export data" do
+      token = subject.generate_secure_token
+      expect(token.class).to eq SecureToken
+      expect(token.user_id).to eq subject.professor.id
+      expect(token.course_id).to eq subject.course.id
+      expect(token.target).to eq subject
+    end
   end
 
   describe "#s3_object_key_prefix" do

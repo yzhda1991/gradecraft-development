@@ -17,8 +17,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def do_the_work
     if work_resources_present?
       run_performer_steps
-      # deliver_outcome_mailer
-      @submissions_export.update_export_completed_time
+      deliver_outcome_mailer
+
+      submissions_export.update_export_completed_time
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -434,8 +435,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_export_successful_mailer
+    token = @submissions_export.generate_secure_token
     ExportsMailer.submissions_export_success(professor, @assignment, \
-      @submissions_export, secure_token).deliver_now
+      @submissions_export, token).deliver_now
   end
 
   def deliver_team_export_successful_mailer
@@ -451,21 +453,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def deliver_team_export_failure_mailer
     ExportsMailer.team_submissions_export_failure(@professor, @assignment, \
       @team).deliver_now
-  end
-
-  def secure_token
-    # be sure to add the user_id and course_id here in the event that we'd like
-    # to revoke the secure token later in the event that, say, the staff member
-    # is removed from the course or from the system
-    #
-    # also let's cache this to make sure that there are never any more generated
-    # than absolutely need to be
-    #
-    @secure_token ||= SecureToken.create(
-      user_id: professor[:id],
-      course_id: course[:id],
-      target: submissions_export
-    )
   end
 
   def expand_messages(messages={})
