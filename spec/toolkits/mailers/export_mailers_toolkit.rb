@@ -36,7 +36,7 @@ module Toolkits
           end
 
           it "includes the archive url" do
-            should include exports_path
+            should include downloads_path
           end
         end
 
@@ -46,7 +46,7 @@ module Toolkits
           end
 
           it "doesn't include the archive url" do
-            should_not include exports_path
+            should_not include downloads_path
           end
         end
       end

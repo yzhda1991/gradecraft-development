@@ -137,7 +137,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "includes the archive url" do
-        should include exports_path
+        should include downloads_path
       end
 
       it "includes the archive format" do
@@ -165,7 +165,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "includes the archive url" do
-        should include exports_path
+        should include downloads_path
       end
 
       it "includes the archive format" do

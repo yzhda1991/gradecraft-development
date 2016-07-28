@@ -17,7 +17,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def do_the_work
     if work_resources_present?
       run_performer_steps
-      deliver_outcome_mailer
+      # deliver_outcome_mailer
       @submissions_export.update_export_completed_time
     else
       if logger
@@ -408,7 +408,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def check_s3_upload_success
-    @check_s3_upload_success ||= @submissions_export.s3_object_exists?
+    @check_s3_upload_success ||= submissions_export.s3_object_exists?
   end
 
   private

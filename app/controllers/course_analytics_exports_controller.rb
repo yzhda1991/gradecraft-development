@@ -27,7 +27,7 @@ class CourseAnalyticsExportsController < ApplicationController
       flash[:alert] = "Unable to delete the #{presenter.resource_name} from the server"
     end
 
-    redirect_to exports_path
+    redirect_to downloads_path
   end
 
   def download
