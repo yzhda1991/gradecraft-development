@@ -3,15 +3,13 @@
 .pageContent
   = render "layouts/alerts"
 
-  %h4.italic.not_bold
-    = render partial: "teams/leaderboard"
-    - if @team.present?
-      - if current_course.in_team_leaderboard? || @team.in_team_leaderboard?
-        = render partial: "teams/in_team_rankings", locals: { team: @team }
+  %h4.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
+  - if @team.banner.present?
+    %img.clear{:src => @team.banner, :height => 200 }
 
-      %h4.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
-      - if @team.banner.present?
-        %img.clear{:src => @team.banner, :height => 200 }
+  = render partial: "teams/leaderboard" if current_course.teams_visible?
 
-    - if current_course.challenges.present?
-      = render partial: "challenges/student_index"
+  - if @team.present? && current_course.in_team_leaderboard?
+    = render partial: "teams/in_team_rankings", locals: { team: @team }
+
+  = render partial: "challenges/student_index" if current_course.challenges.present?
