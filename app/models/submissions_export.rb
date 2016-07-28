@@ -36,7 +36,7 @@ class SubmissionsExport < ActiveRecord::Base
 
   def url_safe_filename
     complete_filename = "#{export_file_basename}.zip"
-    Formatter::Filename.new(complete_filename).url_safe.filename
+    Formatter::Filename.new(complete_filename).filename
   end
 
   # methods for building and formatting the archive filename

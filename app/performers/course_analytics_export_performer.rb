@@ -12,7 +12,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     build_the_export
-    # deliver_mailer
+    deliver_mailer
     export.update_export_completed_time
   end
 
@@ -25,9 +25,9 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
 
   def success_mailer
     CourseAnalyticsExportsMailer.export_success \
-      professor,
-      export,
-      secure_token
+      professor: professor,
+      export: export,
+      token: secure_token
   end
 
   def failure_mailer
