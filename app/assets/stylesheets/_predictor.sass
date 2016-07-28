@@ -132,8 +132,6 @@ $card-margin-1 : 3px 0 5px 0
 
 #predictor-main-header
   background-color: $color-blue-1
-  .coin
-    margin-top: 2px
 .predictor-section
   background-color: $color-blue-2
   .coin
@@ -219,11 +217,25 @@ $card-margin-1 : 3px 0 5px 0
   .coins
     float: left
     padding: 0 10px 0 10px
-  .coin, .coin-non-interactive, .coin-slot
+  .coin-stack
     float: left
+    margin-left: 20px
+    position: relative
+    .coin-stack-count
+      position: absolute
+      color: $color-orange-1
+      left: -16px
+      top: -1px
+    &:hover .coin-stack-count
+      visibility: hidden
+  .coin, .coin-non-interactive, .coin-slot
+    float: right
     width: 25px
     height: 25px
     @include rounded-corners(14px)
+  .coin
+      margin: 2px 0 0 -23px
+  .coin-non-interactive, .coin-slot
     margin: 2px 0 0 2px
   .coin, .coin-non-interactive
     background-color: $color-yellow-1
@@ -244,10 +256,11 @@ $card-margin-1 : 3px 0 5px 0
     color: $color-blue-2
     margin: 1px 0 0 -3px
     visibility: hidden
-  .coin-slot:hover .coin-add-icon
-    visibility: visible
   .coin-slot:hover
-    background-color: $color-blue-3
+    border: 2px solid $color-orange-1
+    background-color: $color-yellow-1
+    .coin-add-icon
+      visibility: visible
   .no-coins-slot
     font-size: $predictor-font-size-3
     background-color: $color-blue-3

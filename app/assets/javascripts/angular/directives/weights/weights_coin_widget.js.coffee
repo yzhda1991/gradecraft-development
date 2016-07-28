@@ -28,6 +28,9 @@
         _.range(AssignmentTypeService.weights.unusedWeights())
       scope.usedWeights = ()->
         _.range(@article.student_weight)
+      # coin iterator for coins stacked behind the top coin
+      scope.coinBackStack = ()->
+        _.range(@article.student_weight - 1)
       scope.weightsAvailable = ()->
         if @article.student_weight < 1
           return false if AssignmentTypeService.weights.unusedTypes() < 1

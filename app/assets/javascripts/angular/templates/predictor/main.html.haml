@@ -23,7 +23,9 @@
             .predictor-title-right-span
               Unused {{termFor("weights")}} :
             .predictor-section-title-weights
-              .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
+              .coin-stack
+                .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
+                .coin-stack-count {{unusedWeightsRange().length}}
 
     .predictor-section-assignment-types
 

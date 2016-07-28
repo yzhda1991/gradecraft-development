@@ -1,8 +1,13 @@
 .coins{{'ng-if'=>'weightsOpen()'}}
-  .coin{{'ng-click'=>'decrement()', 'ng-repeat' => 'coin in usedWeights()'}}
-    %i.coin-remove-icon.fa.fa-fw.fa-times-circle
   .coin-slot{{'ng-click'=>'increment()', 'ng-if' => 'weightsAvailable()'}}
     %i.coin-add-icon.fa.fa-fw.fa-plus-circle
+
+  .coin-stack{{'ng-if' => 'article.student_weight'}}
+    .coin{{'ng-repeat'=>'coin in coinBackStack()'}}
+    .coin{{'ng-click'=>'decrement()'}}
+      .coin-stack-count {{article.student_weight}}
+      %i.coin-remove-icon.fa.fa-fw.fa-times-circle
+
   .no-coins-slot{{'ng-if' => 'usedWeights() == 0 && !weightsAvailable()'}} no {{termFor("weights")}}
 
 .coins{{'ng-if'=>'!weightsOpen()'}}
