@@ -134,8 +134,6 @@ $card-margin-1 : 3px 0 5px 0
   background-color: $color-blue-1
 .predictor-section
   background-color: $color-blue-2
-  .coin
-    margin-top: -1px
 
 .collapse-arrow
   width: 0
@@ -250,7 +248,7 @@ $card-margin-1 : 3px 0 5px 0
     visibility: visible
   .coin-slot
     background-color: $color-blue-2
-    border: 2px solid $color-blue-4
+    border: 2px solid $color-orange-1
     @include transition(all, .5s, ease-out)
   .coin-add-icon
     color: $color-blue-2
@@ -268,6 +266,12 @@ $card-margin-1 : 3px 0 5px 0
     margin: 4px 0 0 10px
     border-radius: 6px
     line-height: normal
+
+#predictor-main-header .predictor-section-title-weights
+  .coin-stack
+    &:hover .coin-stack-count
+      visibility: visible
+
 
 
 // ARTICLES
