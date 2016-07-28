@@ -13,16 +13,9 @@ describe CourseAnalyticsExportsMailer do
   # include the #secure_downloads_url so we can test that it's being included
   include SecureTokenHelper
 
-  let(:export) { create(:course_analytics_export) }
+  let(:export) { create :course_analytics_export }
   let(:professor) { export.professor }
   let(:course) { export.course }
-
-  let(:secure_token) do
-    create :secure_token,
-      user_id: professor.id,
-      course_id: course.id,
-      target: export
-  end
 
   let(:archive_data) do
     { format: "zip", url: "http://aws.com/some-archive-hash" }
@@ -32,10 +25,7 @@ describe CourseAnalyticsExportsMailer do
 
   describe "#export_started" do
     let(:deliver_email) do
-      described_class.export_started(
-        professor: professor,
-        course: course
-      ).deliver_now
+      described_class.export_started(export: export).deliver_now
     end
 
     it "is sent from gradecraft's default mailer email" do
@@ -92,11 +82,13 @@ describe CourseAnalyticsExportsMailer do
 
   describe "#export_success" do
     let(:deliver_email) do
-       described_class.export_success(
-         professor: professor,
-         export: export,
-         token: secure_token
-       ).deliver_now
+      described_class.export_success(export: export, token: token).deliver_now
+    end
+
+    let(:token) do
+      SecureToken.create target: export,
+        user_id: professor.id,
+        course_id: course.id
     end
 
     it "is sent from gradecraft's default mailer email" do
@@ -133,7 +125,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "includes the secure download url" do
-        expect(subject).to include secure_download_url(secure_token)
+        expect(subject).to include secure_download_url(token)
       end
 
       it "includes the archive url" do
@@ -161,7 +153,7 @@ describe CourseAnalyticsExportsMailer do
       end
 
       it "includes the secure download url" do
-        expect(subject).to include secure_download_url(secure_token)
+        expect(subject).to include secure_download_url(token)
       end
 
       it "includes the archive url" do
@@ -176,10 +168,7 @@ describe CourseAnalyticsExportsMailer do
 
   describe "#export_failure" do
     let(:deliver_email) do
-       described_class.export_failure(
-         professor: professor,
-         course: course
-       ).deliver_now
+       described_class.export_failure(export: export).deliver_now
     end
 
     it "is sent from gradecraft's default mailer email" do

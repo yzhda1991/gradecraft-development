@@ -97,43 +97,30 @@ describe CourseAnalyticsExportPerformer do
     end
   end
 
-  describe "#success_mailer" do
-    before do
+  describe "sending mailers" do
+    let(:mailer_class) { CourseAnalyticsExportsMailer }
+
+    before(:each) do
       # stub this out because we're going to test the mailer in the mailer
       # spec, not in the performer spec. let's just make sure it's being
-      # called
-      allow(CourseAnalyticsExportsMailer).to receive(:export_success)
-        .and_return true
+      # called but don't actually call it
+      allow(mailer_class).to receive_messages \
+        export_success: true, export_failure: true
     end
 
     it "builds a mailer for course analytics export success" do
       token = double(:secure_token)
-      allow(export).to receive(:generate_secure_token) { token }
+      allow(subject.export).to receive(:generate_secure_token) { token }
 
-      expect(CourseAnalyticsExportsMailer).to receive(:export_success)
-        .with \
-          professor: professor,
-          export: export,
-          token: token
+      expect(mailer_class).to receive(:export_success)
+        .with export: export, token: token
 
       subject.success_mailer
     end
-  end
-
-  describe "#failure_mailer" do
-    before do
-      # stub this out because we're going to test the mailer in the mailer
-      # spec, not in the performer spec. let's just make sure it's being
-      # called
-      allow(CourseAnalyticsExportsMailer).to receive(:export_failure)
-        .and_return true
-    end
 
     it "builds a mailer for course analytics export failure" do
-      expect(CourseAnalyticsExportsMailer).to receive(:export_failure)
-        .with \
-          professor: professor,
-          course: course
+      expect(mailer_class).to receive(:export_failure)
+        .with export: export
 
       subject.failure_mailer
     end

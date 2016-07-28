@@ -25,7 +25,6 @@ describe CourseAnalyticsExport do
     end
   end
 
-
   describe "#s3_object_key_prefix" do
     before do
       allow(subject).to receive_messages \
