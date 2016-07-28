@@ -1,9 +1,8 @@
 require "active_record_spec_helper"
 require "toolkits/sanitization_toolkit"
 
-describe Group, focus: true do
-  let(:assignment) { create :assignment, max_group_size: 4 }
-  subject { create(:group, assignment: assignment ) }
+describe Group do
+  subject { create(:group) }
 
   it_behaves_like "a model that needs sanitization", :text_proposal
 
