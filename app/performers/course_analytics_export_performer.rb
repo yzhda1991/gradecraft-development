@@ -13,6 +13,7 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   def do_the_work
     build_the_export
     deliver_mailer
+
     export.update_export_completed_time
   end
 

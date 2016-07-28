@@ -23,63 +23,6 @@ describe CourseAnalyticsExportsMailer do
 
   before(:each) { deliver_email }
 
-  describe "#export_started" do
-    let(:deliver_email) do
-      described_class.export_started(export: export).deliver_now
-    end
-
-    it "is sent from gradecraft's default mailer email" do
-      expect(email.from).to eq [sender]
-    end
-
-    it "is sent to the professor's email" do
-      expect(email.to).to eq [professor.email]
-    end
-
-    it "BCC's to the gradecraft admin" do
-      expect(email.bcc).to eq [admin_email]
-    end
-
-    it "has the correct subject" do
-      expect(email.subject).to eq \
-        "Course Analytics Export for #{course.courseno} - #{course.name} " \
-        "is being created"
-    end
-
-    describe "text part body" do
-      subject { text_part.body }
-
-      it "includes the professor's first name" do
-        should include professor.first_name
-      end
-
-      it "includes the course name" do
-        should include course.name
-      end
-
-      it "doesn't declare a doctype" do
-        should_not include "DOCTYPE"
-      end
-    end
-
-    describe "html part body" do
-      subject { html_part.body }
-
-      it "includes the professor's first name" do
-        should include professor.first_name
-      end
-
-      it "includes the course name" do
-        should include course.name
-      end
-
-      it "declares a doctype" do
-        should include "DOCTYPE"
-      end
-    end
-  end
-
-
   describe "#export_success" do
     let(:deliver_email) do
       described_class.export_success(export: export, token: token).deliver_now

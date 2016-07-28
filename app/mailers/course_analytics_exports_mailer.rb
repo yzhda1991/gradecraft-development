@@ -7,13 +7,6 @@ class CourseAnalyticsExportsMailer < ApplicationMailer
   # need for building the secure download method on success emails
   add_template_helper(SecureTokenHelper)
 
-  def export_started(export:)
-    @professor = export.professor
-    @course = export.course
-
-    send_mail status: "is being created"
-  end
-
   def export_failure(export:)
     @professor = export.professor
     @course = export.course
