@@ -44,6 +44,15 @@
   weightsAvailable = ()->
     weights.unusedWeights() && weights.open
 
+  weightsAvailableForArticle = (article)->
+    if article.student_weight < 1
+      return false if weights.unusedTypes() < 1
+    if weights.max_weights_per_assignment_type
+      article.student_weight < weights.max_weights_per_assignment_type && weights.unusedWeights() > 0
+    else
+      weights.unusedWeights() > 0
+
+
   #----------------- API Calls ------------------------------------------------#
 
   getAssignmentTypes = (studentId)->
@@ -98,6 +107,7 @@
 
       unusedWeightsRange: unusedWeightsRange
       weightsAvailable: weightsAvailable
+      weightsAvailableForArticle: weightsAvailableForArticle
 
       getAssignmentTypes: getAssignmentTypes
       postAssignmentTypeWeight: postAssignmentTypeWeight
