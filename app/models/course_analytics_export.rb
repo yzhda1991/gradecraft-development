@@ -27,6 +27,10 @@ class CourseAnalyticsExport < ActiveRecord::Base
 
   validates :course_id, presence: true
 
+  def generate_secure_token
+    SecureToken.create user_id: professor.id, course_id: course.id, target: self
+  end
+
   # tell s3 which directory structure to use for exports. the created_at_*
   # methods here are included from Export::Model
   #
