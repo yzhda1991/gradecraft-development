@@ -22,7 +22,7 @@ describe StudentsController do
     describe "GET index" do
       it "returns the students for the current course" do
         get :index
-        expect(assigns(:title)).to eq("Player Roster")
+        expect(assigns(:title)).to eq("Student Roster")
         expect(assigns(:students)).to eq([@student])
         expect(response).to render_template(:index)
       end

@@ -60,7 +60,7 @@ class Course < ActiveRecord::Base
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
     :team_score_average, :has_team_challenges, :team_leader_term,
-    :max_assignment_types_weighted, :full_points, :has_in_team_leaderboard,
+    :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
     :assignments_attributes, :start_date, :end_date
 
