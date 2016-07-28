@@ -435,7 +435,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_export_successful_mailer
-    token = @submissions_export.generate_secure_token
     ExportsMailer.submissions_export_success(professor, @assignment, \
       @submissions_export, token).deliver_now
   end
@@ -443,6 +442,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def deliver_team_export_successful_mailer
     ExportsMailer.team_submissions_export_success(professor, @assignment, \
       @team, @submissions_export, secure_token).deliver_now
+  end
+
+  def secure_token
+    @secure_token ||= submissions_export.generate_secure_token
   end
 
   def deliver_export_failure_mailer

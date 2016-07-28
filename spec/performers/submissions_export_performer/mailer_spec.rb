@@ -93,7 +93,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         performer.instance_variable_set "@#{attr}", send(attr)
       end
 
-      allow(performer).to receive(:secure_token) { secure_token }
+      allow(performer.submissions_export).to receive(:generate_secure_token)
+        .and_return secure_token
+
       allow(mailer_double).to receive(:deliver_now)
     end
 
