@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "editing a course's options" do
+feature "editing a course's basic settings" do
   context "as a professor" do
     let(:course) { create :course, name: "Course Name"}
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
@@ -13,7 +13,7 @@ feature "editing a course's options" do
 
     scenario "successfully" do
       within(".sidebar-container .staff-sidenav") do
-        click_link "Options"
+        click_link "Basic Settings"
       end
 
       within(".pageContent") do

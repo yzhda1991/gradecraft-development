@@ -2,7 +2,6 @@ require_relative "role"
 
 class Course < ActiveRecord::Base
   include Copyable
-  include UploadsMedia
   include UnlockableCondition
 
   after_create :create_admin_memberships
@@ -48,20 +47,20 @@ class Course < ActiveRecord::Base
     User.students_by_team(self, team)
   end
 
-  attr_accessible :courseno, :name,
-    :semester, :year, :badge_setting, :team_setting, :instructors_of_record_ids,
-    :team_term, :user_term, :section_leader_term, :group_term, :lti_uid,
-    :user_id, :course_id, :homepage_message, :group_setting, :syllabus,
-    :character_names, :team_roles, :character_profiles, :hide_analytics,
+  attr_accessible :course_number, :name,
+    :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
+    :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
+    :user_id, :course_id, :course_rules, :syllabus,
+    :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
     :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
-    :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,
+    :weight_term, :fail_term, :pass_term,
     :max_weights_per_assignment_type, :assignments,
-    :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
+    :accepts_submissions, :tagline, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
-    :meeting_times, :assignment_term, :challenge_term, :badge_term, :grading_philosophy,
-    :team_score_average, :team_challenges, :team_leader_term,
-    :max_assignment_types_weighted, :full_points, :in_team_leaderboard,
+    :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
+    :team_score_average, :has_team_challenges, :team_leader_term,
+    :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
     :assignments_attributes, :start_date, :end_date
 
@@ -93,9 +92,7 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
-  validates_presence_of :name, :courseno
-  validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
-  validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_presence_of :name, :course_number
 
   validates_numericality_of :total_weights, allow_blank: true
   validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
@@ -104,9 +101,7 @@ class Course < ActiveRecord::Base
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
 
-  validate :max_more_than_min
-
-  scope :alphabetical, -> { order("courseno ASC") }
+  scope :alphabetical, -> { order("course_number ASC") }
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
@@ -114,50 +109,10 @@ class Course < ActiveRecord::Base
     criteria = { lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
     where(criteria).first || create!(criteria) do |c|
       c.lti_uid = auth_hash["extra"]["raw_info"]["context_id"]
-      c.courseno = auth_hash["extra"]["raw_info"]["context_label"]
+      c.course_number = auth_hash["extra"]["raw_info"]["context_label"]
       c.name = auth_hash["extra"]["raw_info"]["context_title"]
       c.year = Date.today.year
     end
-  end
-
-  def assignment_term
-    super.presence || "Assignment"
-  end
-
-  def badge_term
-    super.presence || "Badge"
-  end
-
-  def challenge_term
-    super.presence || "Challenge"
-  end
-
-  def fail_term
-    super.presence || "Fail"
-  end
-
-  def group_term
-    super.presence || "Group"
-  end
-
-  def pass_term
-    super.presence || "Pass"
-  end
-
-  def team_term
-    super.presence || "Team"
-  end
-
-  def team_leader_term
-    super.presence || "Team Leader"
-  end
-
-  def weight_term
-    super.presence || "Multiplier"
-  end
-
-  def user_term
-    super.presence || "Player"
   end
 
   def copy(copy_type, attributes={})
@@ -173,40 +128,8 @@ class Course < ActiveRecord::Base
     end
   end
 
-  def has_teams?
-    team_setting == true
-  end
-
-  def has_team_challenges?
-    team_challenges == true
-  end
-
-  def teams_visible?
-    teams_visible == true
-  end
-
-  def in_team_leaderboard?
-    in_team_leaderboard == true
-  end
-
-  def has_badges?
-    badge_setting == true
-  end
-
   def valuable_badges?
     badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
-  end
-
-  def has_groups?
-    group_setting == true
-  end
-
-  def min_group_size
-    super.presence || 2
-  end
-
-  def max_group_size
-    super.presence || 6
   end
 
   def formatted_tagline
@@ -219,9 +142,9 @@ class Course < ActiveRecord::Base
 
   def formatted_short_name
     if semester.present? && year.present?
-      "#{self.courseno} #{(self.semester).capitalize.first[0]}#{self.year}"
+      "#{self.course_number} #{(self.semester).capitalize.first[0]}#{self.year}"
     else
-      "#{courseno}"
+      "#{course_number}"
     end
   end
 
@@ -241,14 +164,6 @@ class Course < ActiveRecord::Base
 
   def assignment_weight_open?
     weights_close_at.nil? || weights_close_at > Time.now
-  end
-
-  def team_roles?
-    team_roles == true
-  end
-
-  def has_submissions?
-    accepts_submissions == true
   end
 
   def element_for_score(score)
@@ -334,12 +249,6 @@ class Course < ActiveRecord::Base
 
   def awarded_course_badge_count
     earned_badges.count
-  end
-
-  def max_more_than_min
-    if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
-      errors.add :base, "Maximum group size must be greater than minimum group size."
-    end
   end
 
   private

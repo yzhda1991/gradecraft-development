@@ -5,7 +5,7 @@ feature "creating a new group" do
     let(:course) { create :course }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
-    let!(:assignment) { create :assignment, grade_scope: "Group", course: course }
+    let!(:assignment) { create :group_assignment, course: course, min_group_size: 2, max_group_size: 5 }
     let(:student_1) { create :user, first_name: "Hermione", last_name: "Granger"}
     let!(:course_membership_2) { create :student_course_membership, user: student_1, course: course }
     let(:student_2) { create :user, first_name: "Ron", last_name: "Weasley"}

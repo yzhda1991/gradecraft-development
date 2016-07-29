@@ -1,0 +1,26 @@
+= content_nav_for @course, "Onboarding Setup"
+
+%h3.pagetitle= @title
+
+.pageContent
+  = render partial: "layouts/alerts", locals: { model: @course }
+
+  = simple_form_for(@course, :validate => false)  do |f|
+    %section
+      %h4 Gameful Philosophy
+      .form-item
+        .textarea
+          .form_label What would you like to tell students about how they should expected to be graded?
+          = f.text_area :gameful_philosophy, class: "froala"
+
+    %section
+      %h4 Course Rules
+      .form-item
+        .textarea
+          .form_label What would you like to tell students about how they should expected to be graded?
+          = f.text_area :course_rules, class: "froala"
+
+    .submit-buttons
+      %ul
+        %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
+        %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

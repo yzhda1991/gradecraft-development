@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 describe Assignments::GradesController do
   before(:all) do
-    @course = create(:course_accepting_groups)
+    @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @student = create(:user)
     @student.courses << @course

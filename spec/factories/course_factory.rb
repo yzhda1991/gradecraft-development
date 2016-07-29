@@ -1,14 +1,9 @@
 FactoryGirl.define do
   factory :course do
     name { Faker::Internet.domain_word }
-    courseno { Faker::Internet.domain_word }
+    course_number { Faker::Internet.domain_word }
     semester "Fall"
-    badge_setting false
-
-    factory :course_accepting_groups do
-      min_group_size 2
-      max_group_size 10
-    end
+    has_badges false
 
     factory :course_with_weighting do
       total_weights 6

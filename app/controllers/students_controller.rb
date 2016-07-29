@@ -8,7 +8,7 @@ class StudentsController < ApplicationController
   # Lists all students in the course,
   # broken out by those being graded and auditors
   def index
-    @title = "#{(current_course.user_term).singularize} Roster"
+    @title = "#{(current_course.student_term).singularize} Roster"
 
     @teams = current_course.teams
 
@@ -22,7 +22,7 @@ class StudentsController < ApplicationController
 
   # Displays all students flagged by the current user
   def flagged
-    @title = "Flagged #{(current_course.user_term).pluralize}"
+    @title = "Flagged #{(current_course.student_term).pluralize}"
     @students = FlaggedUser.flagged current_course, current_user
   end
 

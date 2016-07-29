@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing a team challenge grade" do
   context "as a professor" do
-    let(:course) { create :course, team_challenges: true }
+    let(:course) { create :course, has_team_challenges: true }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
     let!(:challenge) { create :challenge, name: "Team Challenge Name", course: course }

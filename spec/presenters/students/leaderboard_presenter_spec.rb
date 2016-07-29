@@ -8,7 +8,7 @@ describe Students::LeaderboardPresenter do
   describe "#display_pseudonyms?" do
     it "is displayed if the course is shown in the leaderboard or it has character names" do
       allow(course).to \
-        receive_messages(in_team_leaderboard?: true, character_names?: false)
+        receive_messages(has_in_team_leaderboards?: true, has_character_names?: false)
       expect(subject).to be_display_pseudonyms
     end
   end

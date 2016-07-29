@@ -1,7 +1,7 @@
 .offscreen-sidebar
   .sidebar
     .course-site
-      %p.course= "#{current_course.courseno} " + "#{current_course.try(:semester)} #{current_course.try(:year)}"
+      %p.course= "#{current_course.course_number} " + "#{current_course.try(:semester)} #{current_course.try(:year)}"
       %p.course-name= "#{current_course.name} "
       %a.course-switcher-btn= glyph("caret-down")
     .course-list-container

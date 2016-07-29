@@ -51,7 +51,7 @@ describe NotificationMailer do
       end
 
       it "has the correct subject" do
-        expect(email.subject).to eq "#{course.courseno} - You've earned a new #{course.badge_term}!"
+        expect(email.subject).to eq "#{course.course_number} - You've earned a new #{course.badge_term}!"
       end
     end
 

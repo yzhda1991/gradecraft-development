@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726143628) do
+ActiveRecord::Schema.define(version: 20160727153458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 20160726143628) do
     t.integer  "threshold_points",                         default: 0,            null: false
     t.text     "purpose"
     t.boolean  "show_purpose_when_locked",                 default: true,         null: false
+    t.integer  "min_group_size",                           default: 1,            null: false
+    t.integer  "max_group_size",                           default: 5,            null: false
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
@@ -228,31 +230,27 @@ ActiveRecord::Schema.define(version: 20160726143628) do
   add_index "course_memberships", ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
-    t.string   "name",                            limit: 255
-    t.string   "courseno",                        limit: 255
+    t.string   "name",                                                                                                       null: false
+    t.string   "course_number",                                                                                              null: false
     t.string   "year",                            limit: 255
     t.string   "semester",                        limit: 255
-    t.datetime "created_at",                                                                         null: false
-    t.datetime "updated_at",                                                                         null: false
-    t.boolean  "badge_setting",                               default: true
-    t.boolean  "team_setting",                                default: false
-    t.string   "user_term",                       limit: 255
-    t.string   "team_term",                       limit: 255
-    t.string   "homepage_message",                limit: 255
-    t.boolean  "status",                                      default: true
-    t.boolean  "group_setting"
+    t.datetime "created_at",                                                                                                 null: false
+    t.datetime "updated_at",                                                                                                 null: false
+    t.boolean  "has_badges",                                                          default: false,                        null: false
+    t.boolean  "has_teams",                                                           default: false,                        null: false
+    t.string   "student_term",                                                        default: "Student",                    null: false
+    t.string   "team_term",                                                           default: "Team",                       null: false
+    t.text     "course_rules"
+    t.boolean  "status",                                                              default: true,                         null: false
     t.datetime "weights_close_at"
-    t.boolean  "team_roles"
-    t.string   "team_leader_term",                limit: 255
-    t.string   "group_term",                      limit: 255
-    t.boolean  "accepts_submissions"
-    t.boolean  "teams_visible"
-    t.string   "weight_term",                     limit: 255
-    t.boolean  "predictor_setting"
-    t.integer  "max_group_size"
-    t.integer  "min_group_size"
+    t.boolean  "has_team_roles",                                                      default: false,                        null: false
+    t.string   "team_leader_term",                                                    default: "TA",                         null: false
+    t.string   "group_term",                                                          default: "Group",                      null: false
+    t.boolean  "accepts_submissions",                                                 default: true,                         null: false
+    t.boolean  "teams_visible",                                                       default: true,                         null: false
+    t.string   "weight_term",                                                         default: "Multiplier",                 null: false
+    t.decimal  "default_weight",                              precision: 4, scale: 1, default: 1.0
     t.string   "tagline",                         limit: 255
-    t.boolean  "academic_history_visible"
     t.string   "office",                          limit: 255
     t.string   "phone",                           limit: 255
     t.string   "class_email",                     limit: 255
@@ -261,31 +259,28 @@ ActiveRecord::Schema.define(version: 20160726143628) do
     t.string   "location",                        limit: 255
     t.string   "office_hours",                    limit: 255
     t.text     "meeting_times"
-    t.string   "media",                           limit: 255
-    t.string   "media_credit",                    limit: 255
-    t.string   "media_caption",                   limit: 255
-    t.string   "badge_term",                      limit: 255
-    t.string   "assignment_term",                 limit: 255
-    t.string   "challenge_term",                  limit: 255
-    t.text     "grading_philosophy"
+    t.string   "badge_term",                                                          default: "Badge",                      null: false
+    t.string   "assignment_term",                                                     default: "Assignment",                 null: false
+    t.string   "challenge_term",                                                      default: "Challenge",                  null: false
+    t.text     "gameful_philosophy"
     t.integer  "total_weights"
     t.integer  "max_weights_per_assignment_type"
-    t.boolean  "character_profiles"
+    t.boolean  "has_character_profiles",                                              default: false,                        null: false
     t.string   "lti_uid",                         limit: 255
-    t.boolean  "team_score_average"
-    t.boolean  "team_challenges"
+    t.boolean  "team_score_average",                                                  default: false,                        null: false
+    t.boolean  "has_team_challenges",                                                 default: false,                        null: false
     t.integer  "max_assignment_types_weighted"
     t.integer  "full_points"
-    t.boolean  "in_team_leaderboard"
-    t.boolean  "add_team_score_to_student",                   default: false
+    t.boolean  "has_in_team_leaderboards",                                            default: false,                        null: false
+    t.boolean  "add_team_score_to_student",                                           default: false,                        null: false
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "pass_term",                       limit: 255
-    t.string   "fail_term",                       limit: 255
+    t.string   "pass_term",                                                           default: "Pass",                       null: false
+    t.string   "fail_term",                                                           default: "Fail",                       null: false
     t.string   "syllabus"
-    t.boolean  "hide_analytics"
-    t.string   "character_names"
-    t.string   "time_zone",                                   default: "Eastern Time (US & Canada)"
+    t.boolean  "hide_analytics",                                                      default: false,                        null: false
+    t.boolean  "has_character_names",                                                 default: false,                        null: false
+    t.string   "time_zone",                                                           default: "Eastern Time (US & Canada)"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree

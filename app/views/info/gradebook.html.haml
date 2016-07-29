@@ -19,7 +19,7 @@
             %th{scope: "col"} Badge Score
           %th{scope: "col"} Total Score
           %th{scope: "col"} Final Grade
-          %th{scope: "col"} #{current_course.user_term}
+          %th{scope: "col"} #{current_course.student_term}
       %tbody
         - current_course.students.each do |student|
           %tr

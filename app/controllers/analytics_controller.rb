@@ -208,7 +208,7 @@ class AnalyticsController < ApplicationController
         # with the word 'and'
         #
         course_number = Formatter::Filename.new(
-          current_course.courseno.gsub(/\/+/,"-").gsub("&", "and")
+          current_course.course_number.gsub(/\/+/,"-").gsub("&", "and")
         ).url_safe.filename
 
         # create a named directory to generate the files in

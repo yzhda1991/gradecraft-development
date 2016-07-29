@@ -1,5 +1,5 @@
-- if course.grading_philosophy.present?
+- if course.gameful_philosophy.present?
   %p
-  %p= raw course.grading_philosophy
+  %p= raw course.gameful_philosophy
   - if !course.instructors_of_record.empty?
     %h6= "-- #{"Prof".pluralize(course.instructors_of_record.count)}. #{course.instructors_of_record.map(&:last_name).join(", ") }"

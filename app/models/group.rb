@@ -63,13 +63,15 @@ class Group < ActiveRecord::Base
   # Checking to make sure any constraints the instructor has set up around
   # min/max group members are honored
   def min_group_number_met
-    if self.students.to_a.size < course.min_group_size
+    return false unless self.assignments.present?
+    if self.students.to_a.size < self.assignments.first.min_group_size
       errors.add :base, "You don't have enough group members."
     end
   end
 
   def max_group_number_not_exceeded
-    if self.students.to_a.size > course.max_group_size
+    return false unless self.assignments.present?
+    if self.students.to_a.size > self.assignments.first.max_group_size
       errors.add :base, "You have too many group members."
     end
   end

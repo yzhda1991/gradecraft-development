@@ -19,7 +19,7 @@
       = @course.name
     %p
       %b Course Number:
-      = @course.courseno
+      = @course.course_number
     %p
       %b Semester:
       = @course.semester.capitalize
@@ -37,7 +37,7 @@
       = @course.year
     %p
       %b GradeCraft will accept assignment submissions for this course:
-      = @course.has_submissions? ? "Yes" : "No"
+      = @course.accepts_submissions? ? "Yes" : "No"
     %p
       %b Course Status:
       = @course.status? ? "Active" : "Archived"
@@ -74,8 +74,8 @@
     %h4 BADGES
     %p.clear
       %b Badges will be used:
-      = @course.badge_setting? ? "Yes" : "No"
-    - if @course.badge_setting?
+      = @course.has_badges? ? "Yes" : "No"
+    - if @course.has_badges?
       %p
         %b Badges will be called:
         = @course.badge_term.pluralize
@@ -84,8 +84,8 @@
     %h4 SECTIONS
     %p.clear
       %b Students will be grouped into sections:
-      = @course.team_setting? ? "Yes" : "No"
-    -if @course.team_setting?
+      = @course.has_teams? ? "Yes" : "No"
+    -if @course.has_teams?
       %p
         %b These sections will be called:
         = @course.team_term.pluralize
@@ -112,20 +112,14 @@
         %b Groups will be called:
         = @course.group_term.pluralize
       %p
-        %b Students self-declare their group roles:
-        = @course.team_roles? ? "Yes" : "No"
-      %p
-        %b Max Group Size:
-        = @course.max_group_size
-      %p
-        %b Min Group Size:
-        = @course.min_group_size
+        %b Students self-declare their team roles:
+        = @course.has_team_roles? ? "Yes" : "No"
 
   .panel
     %h4 STUDENTS
     %p.clear
       %b Students will be called:
-      = @course.user_term.pluralize
+      = @course.student_term.pluralize
 
   .panel
     %h4 MULTIPLIERS

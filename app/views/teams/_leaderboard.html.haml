@@ -9,7 +9,7 @@
     - @teams.each do |team|
       %tr
         %td= team.name
-        - if current_course.team_challenges?
+        - if current_course.has_team_challenges?
           %td.points= team.challenge_grade_score
         - else
           %td.points= team.average_score

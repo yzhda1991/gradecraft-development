@@ -5,7 +5,7 @@ describe GradesController do
   include PredictorEventJobsToolkit
 
   before(:all) do
-    @course = create(:course_accepting_groups)
+    @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @student = create(:user)
     @student.courses << @course

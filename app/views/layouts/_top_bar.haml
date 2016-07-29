@@ -1,7 +1,6 @@
 - if ! current_user
   = render partial: "layouts/navigation/top_bar_logged_out"
 - else
-
   = render partial: "layouts/navigation/offscreen_sidebar", locals: { presenter: presenter }
 
   .layout-right-content
@@ -11,7 +10,7 @@
           %ul.nav.nav-pill.left
             %li.course-site
               %a.no-hover.site-title{:href => dashboard_path}
-                %span.course= "#{current_course.courseno} "
+                %span.course= "#{current_course.course_number} "
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
           %ul.nav.nav-pill.right

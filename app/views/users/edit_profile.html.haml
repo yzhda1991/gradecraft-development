@@ -29,18 +29,18 @@
         = f.time_zone_select :time_zone
 
       - if @user.is_student?(current_course)
-        - if current_course.teams_visible? && (current_course.in_team_leaderboard? || (current_student.team_for_course(current_course).present? && current_student.team_for_course(current_course).in_team_leaderboard?)) || current_course.character_names?
+        - if current_course.teams_visible? && (current_course.has_in_team_leaderboards? || (current_student.team_for_course(current_course).present? && current_student.team_for_course(current_course).has_in_team_leaderboards?)) || current_course.has_character_names?
           .form-item
             = f.label :display_name, "Pseudonym"
             = f.text_field :display_name
             .form-item What would you like your name to be on the leaderboards?
-        - if current_course.team_roles?
+        - if current_course.has_team_roles?
           .form-item
             = f.label :team_role, "#{term_for :team} Role"
             = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false
             .form_label What will you contribute to your #{term_for :team}?
 
-        - if current_course.character_profiles?
+        - if current_course.has_character_profiles?
           .form-item
             = f.simple_fields_for :course_memberships, @course_membership do |p|
               = p.label :character_profile

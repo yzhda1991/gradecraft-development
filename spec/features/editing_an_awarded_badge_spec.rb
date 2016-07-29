@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing an awarded a badge" do
   context "as a professor" do
-    let(:course) { create :course, badge_setting: true }
+    let(:course) { create :course, has_badges: true }
     let!(:course_membership) do
       create :professor_course_membership, user: professor, course: course
     end

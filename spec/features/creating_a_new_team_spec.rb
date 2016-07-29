@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "creating a new team" do
   context "as a professor" do
-    let(:course) { create :course, team_setting: true}
+    let(:course) { create :course, has_teams: true}
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
 

@@ -12,39 +12,9 @@ describe Course do
     end
 
     it "requires a course number" do
-      subject.courseno = nil
+      subject.course_number = nil
       expect(subject).to_not be_valid
-      expect(subject.errors[:courseno]).to include "can't be blank"
-    end
-
-    it "requires a numeric for max group size" do
-      subject.max_group_size = "a"
-      expect(subject).to_not be_valid
-      expect(subject.errors[:max_group_size]).to include "is not a number"
-    end
-
-    it "allows for a nil max group size" do
-      subject.max_group_size = nil
-      expect(subject).to be_valid
-      expect(subject.errors[:max_group_size]).to be_empty
-    end
-
-    it "requires the max group size to be greater than 0" do
-      subject.max_group_size = 0
-      expect(subject).to_not be_valid
-      expect(subject.errors[:max_group_size]).to include "must be greater than or equal to 1"
-    end
-
-    it "requires a numeric for min group size" do
-      subject.min_group_size = "a"
-      expect(subject).to_not be_valid
-      expect(subject.errors[:min_group_size]).to include "is not a number"
-    end
-
-    it "allows for a nil min group size" do
-      subject.min_group_size = nil
-      expect(subject).to be_valid
-      expect(subject.errors[:min_group_size]).to be_empty
+      expect(subject.errors[:course_number]).to include "can't be blank"
     end
   end
 
@@ -339,7 +309,7 @@ describe Course do
     end
 
     it "returns Team Leader if no team_leader_term is present" do
-      expect(subject.team_leader_term).to eq("Team Leader")
+      expect(subject.team_leader_term).to eq("TA")
     end
   end
 
@@ -354,14 +324,14 @@ describe Course do
     end
   end
 
-  describe "#user_term" do
-    it "returns the set user_term if present" do
-      subject.user_term = "User"
-      expect(subject.user_term).to eq("User")
+  describe "#student_term" do
+    it "returns the set student_term if present" do
+      subject.student_term = "User"
+      expect(subject.student_term).to eq("User")
     end
 
-    it "returns User if no user_term is present" do
-      expect(subject.user_term).to eq("Player")
+    it "returns User if no student_term is present" do
+      expect(subject.student_term).to eq("Student")
     end
   end
 
@@ -371,7 +341,7 @@ describe Course do
     end
 
     it "has teams if they're turned on" do
-      subject.team_setting = true
+      subject.has_teams = true
       expect(subject.has_teams?).to eq(true)
     end
   end
@@ -382,14 +352,14 @@ describe Course do
     end
 
     it "has team challenges if they're turned on" do
-      subject.team_challenges = true
+      subject.has_team_challenges = true
       expect(subject.has_team_challenges?).to eq(true)
     end
   end
 
   describe "#teams_visible?" do
-    it "does not have team visible by default" do
-      expect(subject.teams_visible?).to eq(false)
+    it "has team visible by default" do
+      expect(subject.teams_visible?).to eq(true)
     end
 
     it "has team visible if it's turned on" do
@@ -398,14 +368,14 @@ describe Course do
     end
   end
 
-  describe "#in_team_leaderboard?" do
+  describe "#has_in_team_leaderboards?" do
     it "does not have in-team leaderboards turned on by default" do
-      expect(subject.in_team_leaderboard?).to eq(false)
+      expect(subject.has_in_team_leaderboards?).to eq(false)
     end
 
     it "has in-team leaderboards if they're turned on" do
-      subject.in_team_leaderboard = true
-      expect(subject.in_team_leaderboard?).to eq(true)
+      subject.has_in_team_leaderboards = true
+      expect(subject.has_in_team_leaderboards?).to eq(true)
     end
   end
 
@@ -427,7 +397,7 @@ describe Course do
     end
 
     it "has badges if they're turned on" do
-      subject.badge_setting = true
+      subject.has_badges = true
       expect(subject.has_badges?).to eq(true)
     end
   end
@@ -440,40 +410,6 @@ describe Course do
     it "registers as having valuable has badges with points if they exist" do
       badge = create(:badge, full_points: 1000, course: subject)
       expect(subject.valuable_badges?).to eq(true)
-    end
-  end
-
-  describe "#has_groups?" do
-    it "does not have badges turned on by default" do
-      expect(subject.has_groups?).to eq(false)
-    end
-
-    it "has badges if they're turned on" do
-      subject.group_setting = true
-      expect(subject.has_groups?).to eq(true)
-    end
-
-  end
-
-  describe "#min_group_size" do
-    it "sets the default min group size at 2" do
-      expect(subject.min_group_size).to eq(2)
-    end
-
-    it "accepts the instructor's setting here if it exists" do
-      subject.min_group_size = 3
-      expect(subject.min_group_size).to eq(3)
-    end
-  end
-
-  describe "#max_group_size" do
-    it "sets the default max group size at 6" do
-      expect(subject.max_group_size).to eq(6)
-    end
-
-    it "accepts the instructor's setting here if it exists" do
-      subject.max_group_size = 8
-      expect(subject.max_group_size).to eq(8)
     end
   end
 
@@ -490,14 +426,14 @@ describe Course do
 
   describe "#formatted_short_name" do
     it "uses the course number if that's all that's present" do
-      expect(subject.formatted_short_name).to eq(subject.courseno)
+      expect(subject.formatted_short_name).to eq(subject.course_number)
     end
 
     it "creates a formatted short name that includes the course number, semester, and year if they're present" do
       subject.semester = "Fall"
       subject.year = "2015"
 
-      expect(subject.formatted_short_name).to eq("#{subject.courseno} #{(subject.semester).capitalize.first[0]}#{subject.year}")
+      expect(subject.formatted_short_name).to eq("#{subject.course_number} #{(subject.semester).capitalize.first[0]}#{subject.year}")
     end
 
   end
@@ -554,25 +490,25 @@ describe Course do
     end
   end
 
-  describe "#team_roles?" do
+  describe "#has_team_roles?" do
     it "turns team roles for students in their profile settings to true if the instructor turns them on" do
-      subject.team_roles = true
-      expect(subject.team_roles?).to eq(true)
+      subject.has_team_roles = true
+      expect(subject.has_team_roles?).to eq(true)
     end
     it "returns false for team roles if the instructor has not turned them on" do
-      subject.team_roles = false
-      expect(subject.team_roles?).to eq(false)
+      subject.has_team_roles = false
+      expect(subject.has_team_roles?).to eq(false)
     end
   end
 
-  describe "#has_submissions?" do
+  describe "#accepts_submissions?" do
     it "returns true if the instructor has turned submissions on" do
       subject.accepts_submissions = true
-      expect(subject.has_submissions?).to eq(true)
+      expect(subject.accepts_submissions?).to eq(true)
     end
     it "returns false for submissions if the instructor has not turned them on" do
       subject.accepts_submissions = false
-      expect(subject.has_submissions?).to eq(false)
+      expect(subject.accepts_submissions?).to eq(false)
     end
   end
 
@@ -744,14 +680,6 @@ describe Course do
       earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
       earned_badge_3 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
       expect(subject.awarded_course_badge_count).to eq(3)
-    end
-  end
-
-  describe "#max_more_than_min" do
-    it "errors out if the max group size is smaller than the minimum" do
-      subject.max_group_size = 2
-      subject.min_group_size = 5
-      expect !subject.valid?
     end
   end
 

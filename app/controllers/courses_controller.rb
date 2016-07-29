@@ -2,6 +2,9 @@ class CoursesController < ApplicationController
   include CoursesHelper
 
   before_filter :ensure_staff?, except: [:index]
+  before_action :find_course, only: [:show, :edit, :multiplier_settings,
+    :custom_terms, :course_details, :player_settings, :student_onboarding_setup,
+  :copy, :update, :destroy]
 
   # rubocop:disable AndOr
   def index
@@ -11,14 +14,13 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: @courses.to_json(only: [:id, :name, :courseno, :year, :semester])
+        render json: @courses.to_json(only: [:id, :name, :course_number, :year, :semester])
       end
     end
   end
 
   def show
     @title = "Course Settings"
-    @course = Course.find(params[:id])
   end
 
   def new
@@ -28,11 +30,29 @@ class CoursesController < ApplicationController
 
   def edit
     @title = "Editing Basic Settings"
-    @course = Course.find(params[:id])
+  end
+
+  def multiplier_settings
+    @title = "Multiplier Settings"
+  end
+
+  def custom_terms
+    @title = "Custom Terms"
+  end
+
+  def course_details
+    @title = "Course Details"
+  end
+
+  def player_settings
+    @title = "#{term_for :student} Settings"
+  end
+
+  def student_onboarding_setup
+    @title = "Student Onboarding Setup"
   end
 
   def copy
-    @course = Course.find(params[:id])
     duplicated = @course.copy(params[:copy_type], {})
     if duplicated.save
       if !current_user_is_admin? && current_user.role(duplicated).nil?
@@ -50,7 +70,6 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(params[:course])
-    @title = "Create a New Course"
 
     respond_to do |format|
       if @course.save
@@ -71,9 +90,6 @@ class CoursesController < ApplicationController
   end
 
   def update
-    @course = Course.find(params[:id])
-    @title = "Editing Basic Settings"
-
     respond_to do |format|
       if @course.update_attributes(params[:course])
         bust_course_list_cache current_user
@@ -88,7 +104,6 @@ class CoursesController < ApplicationController
   end
 
   def destroy
-    @course = Course.find(params[:id])
     @name = @course.name
     @course.destroy
 
@@ -98,5 +113,11 @@ class CoursesController < ApplicationController
         notice: "Course #{@name} successfully deleted"
       end
     end
+  end
+
+  private
+
+  def find_course
+    @course = Course.find(params[:id])
   end
 end
