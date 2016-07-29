@@ -5,10 +5,10 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .export_type#submissions_exports
+  .download_type#submissions_exports
     = render partial: "downloads/submissions_exports",
       locals: { presenter: presenter }
 
-  .export_type#course_analytics_exports
+  .download_type#course_analytics_exports
     = render partial: "downloads/course_analytics_exports",
       locals: { presenter: presenter }
