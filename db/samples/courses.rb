@@ -35,10 +35,10 @@
   attributes: {
     accepts_submissions: false,
     add_team_score_to_student: false,
-    assignment_term: nil,
+    assignment_term: "Assignment",
     has_badges: false,
-    badge_term: nil,
-    challenge_term: nil,
+    badge_term: "Badge",
+    challenge_term: "Challenge",
     has_character_names: false,
     has_character_profiles: false,
     class_email: nil,
@@ -57,12 +57,12 @@
     has_team_roles: false,
     team_score_average: false,
     has_teams: false,
-    team_term: nil,
+    team_term: "Team",
     teams_visible: false,
     total_weights: 0,
     twitter_handle: nil,
     twitter_hashtag: nil,
-    student_term: nil,
+    student_term: "Student",
     year: Date.today.year,
   }
 }

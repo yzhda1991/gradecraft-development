@@ -162,6 +162,16 @@ GradeCraft::Application.routes.draw do
   #8. Courses
   resources :courses do
     post :copy, on: :collection
+    get :course_details, on: :member
+    post :course_details, action: :update, on: :member
+    get :custom_terms, on: :member
+    post :custom_terms, action: :update, on: :member
+    get :multiplier_settings, on: :member
+    post :multiplier_settings, action: :update, on: :member
+    get :player_settings, on: :member
+    post :player_settings, action: :update, on: :member
+    get :student_onboarding_setup, on: :member
+    post :student_onboarding_setup, action: :update, on: :member
   end
   resources :course_memberships, only: [:create, :delete, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
