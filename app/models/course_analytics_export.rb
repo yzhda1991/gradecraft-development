@@ -2,12 +2,8 @@ require "s3_manager"
 require "export"
 
 class CourseAnalyticsExport < ActiveRecord::Base
-  # treat this resource as if it's responsible for managing an object on s3
-  # Note that if this record is an ActiveRecord::Base descendant then a
-  # callback for :rebuild_s3_object_key is added for on: :save
-  #
-  # Let's define all of the callbacks here, actually, so we don't have to do it
-  # on every export model.
+  # treat this resource as if it's responsible for managing an object on s3.
+  # If this is an active_record descendent than add some callbacks.
   #
   include S3Manager::Resource
 
@@ -17,7 +13,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
   include Export::Model
 
   attr_accessible :course_id, :professor_id, :last_export_started_at,
-                  :last_export_completed_at, :last_completed_step
+    :last_export_completed_at, :last_completed_step
 
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
@@ -26,6 +22,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
   has_many :secure_tokens, as: :target, dependent: :destroy
 
   validates :course_id, presence: true
+  validates :professor_id, presence: true
 
   # this should be moved into the Exports::Model module, or a new
   # SecureToken::Target module, but since SecureToken still lives in /app/models
@@ -35,7 +32,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
     SecureToken.create user_id: professor.id, course_id: course.id, target: self
   end
 
-  # tell s3 which directory structure to use for exports. the created_at_*
+  # tell s3 which directory structure to use for exports. the object_key
   # methods here are included from Export::Model
   #
   def s3_object_key_prefix
