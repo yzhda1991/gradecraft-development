@@ -35,9 +35,14 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
 
   private
 
-  # this was ripped directly out of AnalyticsController#export and will not
-  # be tested or modified on this branch. see branch:
-  # 2118-
+  # this was moved directly from the legacy AnalyticsController#export method
+  # and has been rewritten on the following branch:
+  #
+  # 2118-refactor_analytics_controller_export
+  #
+  # Because this is being completely rewritten on this branch it's being left
+  # in its original state here and is being tested only only to ensure that
+  # the method does not fail when called.
   #
   def build_the_export
     # check whether we need to use S3fs

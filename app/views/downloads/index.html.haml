@@ -6,9 +6,13 @@
   = render partial: "layouts/alerts"
 
   .download_type#submissions_exports
-    = render partial: "downloads/submissions_exports",
+    %h2 Submissions Exports
+
+    = render partial: "downloads/submissions_exports/table",
       locals: { presenter: presenter }
 
   .download_type#course_analytics_exports
-    = render partial: "downloads/course_analytics_exports",
+    %h2 Course Analytics Exports
+
+    = render partial: "downloads/course_analytics_exports/table",
       locals: { presenter: presenter }
