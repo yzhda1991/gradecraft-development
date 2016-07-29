@@ -8,10 +8,13 @@
   assignmentTypes = []
 
   weights = {
-    default_weight: 1,
     unusedWeights: ()->
       return 0
   }
+
+  termFor = (article)->
+    GradeCraftAPI.termFor(article)
+
 
   #---------------- Assignment Type Point Calculations ------------------------#
 
@@ -19,11 +22,9 @@
   # points is optional, defaults to total_points for Assignment Type
   weightedPoints = (assignmentType, points)->
     if assignmentType.student_weightable
-      if assignmentType.student_weight > 0
-        points = points * assignmentType.student_weight
-      else
-        points = points * weights.default_weight
-    points
+      points * assignmentType.student_weight
+    else
+      points
 
   weightedEarnedPoints = (assignmentType)->
     weightedPoints(assignmentType, assignmentType.final_points_for_student)
@@ -43,6 +44,15 @@
   weightsAvailable = ()->
     weights.unusedWeights() && weights.open
 
+  weightsAvailableForArticle = (article)->
+    if article.student_weight < 1
+      return false if weights.unusedTypes() < 1
+    if weights.max_weights_per_assignment_type
+      article.student_weight < weights.max_weights_per_assignment_type && weights.unusedWeights() > 0
+    else
+      weights.unusedWeights() > 0
+
+
   #----------------- API Calls ------------------------------------------------#
 
   getAssignmentTypes = (studentId)->
@@ -59,7 +69,6 @@
       weights.weights_close_at = res.meta.weights_close_at
       weights.max_weights_per_assignment_type = res.meta.max_weights_per_assignment_type
       weights.max_assignment_types_weighted = res.meta.max_assignment_types_weighted
-      weights.default_weight = res.meta.default_weight
 
       weights.unusedWeights = ()->
         used = 0
@@ -88,6 +97,7 @@
         )
 
   return {
+      termFor: termFor
       assignmentTypes: assignmentTypes
       weights: weights
 
@@ -97,6 +107,7 @@
 
       unusedWeightsRange: unusedWeightsRange
       weightsAvailable: weightsAvailable
+      weightsAvailableForArticle: weightsAvailableForArticle
 
       getAssignmentTypes: getAssignmentTypes
       postAssignmentTypeWeight: postAssignmentTypeWeight

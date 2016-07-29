@@ -11,7 +11,6 @@ describe "api/assignment_types/index" do
       weights_close_at: Time.now,
       max_weights_per_assignment_type: 4,
       max_assignment_types_weighted: 2,
-      default_weight: 0.5
     )
     assignment_type = create(:assignment_type, course: @course, student_weightable: true, max_points: 1234)
     @assignment_types = [assignment_type]
@@ -51,6 +50,5 @@ describe "api/assignment_types/index" do
     expect(@course.weights_close_at.to_json).to include(@json["meta"]["weights_close_at"])
     expect(@json["meta"]["max_weights_per_assignment_type"]).to eq(@course.max_weights_per_assignment_type)
     expect(@json["meta"]["max_assignment_types_weighted"]).to eq(@course.max_assignment_types_weighted)
-    expect(@json["meta"]["default_weight"]).to eq(@course.default_weight)
   end
 end

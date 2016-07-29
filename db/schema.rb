@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715152003) do
+ActiveRecord::Schema.define(version: 20160726143628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,14 +232,14 @@ ActiveRecord::Schema.define(version: 20160715152003) do
     t.string   "courseno",                        limit: 255
     t.string   "year",                            limit: 255
     t.string   "semester",                        limit: 255
-    t.datetime "created_at",                                                                                                 null: false
-    t.datetime "updated_at",                                                                                                 null: false
-    t.boolean  "badge_setting",                                                       default: true
-    t.boolean  "team_setting",                                                        default: false
+    t.datetime "created_at",                                                                         null: false
+    t.datetime "updated_at",                                                                         null: false
+    t.boolean  "badge_setting",                               default: true
+    t.boolean  "team_setting",                                default: false
     t.string   "user_term",                       limit: 255
     t.string   "team_term",                       limit: 255
     t.string   "homepage_message",                limit: 255
-    t.boolean  "status",                                                              default: true
+    t.boolean  "status",                                      default: true
     t.boolean  "group_setting"
     t.datetime "weights_close_at"
     t.boolean  "team_roles"
@@ -251,7 +251,6 @@ ActiveRecord::Schema.define(version: 20160715152003) do
     t.boolean  "predictor_setting"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
-    t.decimal  "default_weight",                              precision: 4, scale: 1, default: 1.0
     t.string   "tagline",                         limit: 255
     t.boolean  "academic_history_visible"
     t.string   "office",                          limit: 255
@@ -278,7 +277,7 @@ ActiveRecord::Schema.define(version: 20160715152003) do
     t.integer  "max_assignment_types_weighted"
     t.integer  "full_points"
     t.boolean  "in_team_leaderboard"
-    t.boolean  "add_team_score_to_student",                                           default: false
+    t.boolean  "add_team_score_to_student",                   default: false
     t.datetime "start_date"
     t.datetime "end_date"
     t.string   "pass_term",                       limit: 255
@@ -286,7 +285,7 @@ ActiveRecord::Schema.define(version: 20160715152003) do
     t.string   "syllabus"
     t.boolean  "hide_analytics"
     t.string   "character_names"
-    t.string   "time_zone",                                                           default: "Eastern Time (US & Canada)"
+    t.string   "time_zone",                                   default: "Eastern Time (US & Canada)"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree

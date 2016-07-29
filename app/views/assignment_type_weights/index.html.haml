@@ -16,9 +16,6 @@
           %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
         - if current_course.max_assignment_types_weighted?
           %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
-        - if current_course.default_weight
-          %li Any #{(term_for :assignment_types).downcase} you do not place #{ ( term_for :weights).titleize } on but have grades for will be multiplied by #{current_course.default_weight}. For example, this would adjust a 1000 point Essay to be worth #{ (1000 * current_course.default_weight).to_i } points.
-
 
     #weights-widget{"ng-app" => "gradecraft", "ng-init" => "init(#{params[:student_id]})", "ng-controller" => "WeightsCtrl", "ng-include" => true,  "src" => "'weights/main.html'"}
 

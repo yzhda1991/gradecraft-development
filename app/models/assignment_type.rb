@@ -26,11 +26,10 @@ class AssignmentType < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])
   end
 
-  # weights default to 1 if not weightable, and
-  # 0 if weightable but not weighted by the student
+  # weights default to 0 if weightable but not weighted by the student
   def weight_for_student(student)
     return 1 unless student_weightable?
-    weights.where(student: student).first.try(:weight) || course.default_weight
+    weights.where(student: student).first.try(:weight) || 0
   end
 
   def is_capped?
@@ -58,6 +57,7 @@ class AssignmentType < ActiveRecord::Base
     assignments.map{ |a| a.full_points || 0 }.sum
   end
 
+  # total points a student can earn for this assignment type
   def total_points_for_student(student)
     if max_points > 0
       max_points
@@ -71,11 +71,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def weighted_total_for_student(student)
-    if weight_for_student(student) >= 1
-      (total_points * weight_for_student(student)).to_i
-    else
-      (total_points * course.default_weight).to_i
-    end
+    total_points * weight_for_student(student)
   end
 
   def visible_score_for_student(student)

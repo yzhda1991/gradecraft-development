@@ -125,7 +125,7 @@ class Assignment < ActiveRecord::Base
   # Custom point total if the class has weighted assignments
   def full_points_for_student(student)
     return 0 unless full_points
-    (full_points * assignment_type.weight_for_student(student)).round
+    full_points * assignment_type.weight_for_student(student)
   end
 
   # Checking to see if an assignment is due soon
