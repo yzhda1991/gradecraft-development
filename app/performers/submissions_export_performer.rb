@@ -436,7 +436,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def deliver_export_successful_mailer
     ExportsMailer.submissions_export_success(professor, @assignment, \
-      @submissions_export, token).deliver_now
+      @submissions_export, secure_token).deliver_now
   end
 
   def deliver_team_export_successful_mailer
