@@ -1,4 +1,5 @@
 @gradecraft.controller 'BadgeCtrl', ['$scope', '$q', 'BadgeService', ($scope, $q, BadgeService) ->
+  $scope.context = 'badges'
 
   $scope.init = ()->
     $scope.services().then(()->

@@ -10,7 +10,7 @@
       article: '='
       icons: '='
     }
-    templateUrl: 'student_panel/predictor_article/main.html'
+    templateUrl: 'student_panel/panel_article/main.html'
     link: (scope, el, attr)->
       scope.articleTerm = ()->
         switch @article.type
