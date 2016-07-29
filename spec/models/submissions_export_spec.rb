@@ -39,32 +39,32 @@ RSpec.describe SubmissionsExport do
   end
 
   describe "export_file_basename" do
-    let(:result) { subject.instance_eval { export_file_basename }}
-    let(:filename_timestamp) { "2020-10-15 - 1230PM" }
-
     before(:each) do
-      subject.instance_variable_set(:@export_file_basename, nil)
-      allow(subject).to receive(:archive_basename) { "some_great_submissions" }
-      allow(subject).to receive(:filename_timestamp) { filename_timestamp }
+      allow(subject).to receive_messages \
+        archive_basename: "some_great_submissions",
+        filename_timestamp: "2000-01-01 - 123AM"
+
+      subject.instance_variable_set :@export_file_basename, nil
     end
 
     it "includes the fileized_assignment_name" do
-      expect(result).to match(/^some_great_submissions/)
+      expect(subject.export_file_basename).to match /^some_great_submissions/
     end
 
     it "is appended with a YYYY-MM-DD formatted timestamp" do
-      expect(result).to match(/2020-10-15/)
+      expect(subject.export_file_basename).to match /2000-01-01/
     end
 
     it "caches the filename" do
-      result
-      expect(subject).not_to receive(:archive_basename)
-      result
+      subject.export_file_basename
+      expect(subject).not_to receive :archive_basename
+      subject.export_file_basename
     end
 
     it "sets the filename to an @export_file_basename" do
-      result
-      expect(subject.instance_variable_get(:@export_file_basename)).to eq("some_great_submissions - #{filename_timestamp}")
+      subject.export_file_basename
+      expect(subject.instance_variable_get :@export_file_basename)
+        .to eq "some_great_submissions - 2000-01-01 - 123AM"
     end
   end
 
