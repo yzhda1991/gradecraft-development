@@ -83,9 +83,9 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
 
       user_ids = events.collect(&:user_id).compact.uniq
 
-      assignment_ids = events.select {
-        |event| event.respond_to? :assignment_id
-      }.collect(&:assignment_id).compact.uniq
+      assignment_ids = events.select do |event|
+        event.respond_to? :assignment_id
+      end.collect(&:assignment_id).compact.uniq
 
       users = User.where(id: user_ids).select(:id, :username)
 
