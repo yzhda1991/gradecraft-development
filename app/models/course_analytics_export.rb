@@ -1,5 +1,6 @@
 require "s3_manager"
 require "export"
+require "formatter"
 
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3.

@@ -1,3 +1,5 @@
+require "s3_manager"
+require "export"
 require "formatter"
 
 class SubmissionsExport < ActiveRecord::Base
@@ -33,10 +35,7 @@ class SubmissionsExport < ActiveRecord::Base
   # it feels weird to have to include an app resource to test /lib
   #
   def generate_secure_token
-    SecureToken.create \
-      user_id: professor.id,
-      course_id: course.id,
-      target: self
+    SecureToken.create user_id: professor.id, course_id: course.id, target: self
   end
 
   # tell s3 which directory structure to use for exports
@@ -46,8 +45,7 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def url_safe_filename
-    complete_filename = "#{export_file_basename}.zip"
-    Formatter::Filename.new(complete_filename).filename
+    Formatter::Filename.new("#{export_file_basename}.zip").filename
   end
 
   # methods for building and formatting the archive filename
