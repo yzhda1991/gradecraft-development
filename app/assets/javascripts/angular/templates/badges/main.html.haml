@@ -10,6 +10,8 @@
         Loading Badges...
 
     .badge-index-section
-      .badge-section{'ng-repeat'=>'badge in badges'}
-        .badge-name {{badge.name}}
-
+      .badge-icon-container{'ng-repeat'=>'badge in badges'}
+        %img.badge-icon{:src => "{{badge.icon}}"}
+        %p.badge-name {{badge.name}}
+        .gold-stars
+          %i.fa.fa-fw.fa-star
