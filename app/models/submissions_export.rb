@@ -50,15 +50,15 @@ class SubmissionsExport < ActiveRecord::Base
 
   # methods for building and formatting the archive filename
   def export_file_basename
-    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub("\s+"," ")
+    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub(/\s+/," ")
   end
 
   def filename_timestamp
-    filename_time.strftime("%Y-%m-%d - %l%M%p").gsub("\s+"," ")
+    filename_time.strftime("%Y-%m-%d - %l%M%p").strip
   end
 
   def archive_basename
-    [formatted_assignment_name, formatted_team_name].compact.join " - "
+    [formatted_assignment_name, formatted_team_name].compact.join(" - ").strip
   end
 
   def formatted_assignment_name

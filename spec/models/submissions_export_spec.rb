@@ -69,14 +69,15 @@ RSpec.describe SubmissionsExport do
   end
 
   describe "#filename_timestamp" do
-    let(:result) { subject.instance_eval { filename_timestamp }}
+    let(:result) { subject.filename_timestamp }
     let(:filename_time) { Date.parse("Jan 20 1995").to_time }
+
     before do
       allow(subject).to receive(:filename_time) { filename_time }
     end
 
     it "formats the filename time" do
-      expect(result).to match(filename_time.strftime("%Y-%m-%d - %l%M%p"))
+      expect(result).to match(filename_time.strftime "%Y-%m-%d - %l%M%p")
     end
   end
 
@@ -84,21 +85,26 @@ RSpec.describe SubmissionsExport do
     let(:result) { subject.archive_basename }
 
     before do
-      allow(subject).to receive_messages(
+      allow(subject).to receive_messages \
         formatted_assignment_name: "The Assignment",
         formatted_team_name: "The Team"
-      )
     end
 
     it "combines the formatted assignment and team names" do
       expect(result).to eq "The Assignment - The Team"
     end
 
-    context "Team name is nil" do
-      it "compacts out the team name" do
-        allow(subject).to receive(:formatted_team_name) { nil }
-        expect(result).to eq "The Assignment"
-      end
+    it "strips out whitespace" do
+      allow(subject).to receive_messages \
+        formatted_assignment_name: "           The Assignment",
+        formatted_team_name: "The Team    "
+
+      expect(result).to eq "The Assignment - The Team"
+    end
+
+    it "compacts out nil team names" do
+      allow(subject).to receive(:formatted_team_name) { nil }
+      expect(result).to eq "The Assignment"
     end
   end
 
