@@ -70,5 +70,37 @@ describe Export::Model do
         expect(subject.last_export_completed_at).to eq(sometime)
       end
     end
+
+    describe "#filename_time" do
+      context "subject has a created_at timestamp" do
+        it "uses the created_at datetime" do
+          # make sure there's no cached time to screw with us
+          subject.instance_variable_set :@filename_time, nil
+          expect(subject.filename_time).to eq subject.created_at
+        end
+      end
+
+      context "export has not been created" do
+        # note that this is being built instead of created
+        subject { build :course_analytics_export }
+        let(:right_now) { Date.parse("oct 20 2020").to_time }
+
+        it "just uses right now if the export hasn't been created" do
+          allow(Time).to receive(:now) { right_now }
+          expect(subject.filename_time).to eq right_now
+        end
+      end
+    end
+
+    describe "#filename_timestamp" do
+      let(:result) { subject.filename_timestamp }
+      let(:filename_time) { Date.parse("Jan 20 1995").to_time }
+
+      it "formats the filename time" do
+        allow(subject).to receive(:filename_time) { filename_time }
+        expect(result).to eq "1995-01-20 - 1200AM"
+      end
+    end
+
   end
 end

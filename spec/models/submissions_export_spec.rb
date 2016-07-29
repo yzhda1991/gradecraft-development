@@ -68,19 +68,6 @@ RSpec.describe SubmissionsExport do
     end
   end
 
-  describe "#filename_timestamp" do
-    let(:result) { subject.filename_timestamp }
-    let(:filename_time) { Date.parse("Jan 20 1995").to_time }
-
-    before do
-      allow(subject).to receive(:filename_time) { filename_time }
-    end
-
-    it "formats the filename time" do
-      expect(result).to match(filename_time.strftime "%Y-%m-%d - %l%M%p")
-    end
-  end
-
   describe "archive_basename" do
     let(:result) { subject.archive_basename }
 

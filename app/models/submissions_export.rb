@@ -53,10 +53,6 @@ class SubmissionsExport < ActiveRecord::Base
     @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub(/\s+/," ")
   end
 
-  def filename_timestamp
-    filename_time.strftime("%Y-%m-%d - %l%M%p").strip
-  end
-
   def archive_basename
     [formatted_assignment_name, formatted_team_name].compact.join(" - ").strip
   end

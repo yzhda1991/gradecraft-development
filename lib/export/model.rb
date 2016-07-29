@@ -25,6 +25,10 @@ module Export
       @filename_time ||= created_at || Time.now
     end
 
+    def filename_timestamp
+      filename_time.strftime "%Y-%m-%d - %l%M%p"
+    end
+
     def downloadable?
       !!last_export_completed_at
     end
