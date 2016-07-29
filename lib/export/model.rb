@@ -26,7 +26,7 @@ module Export
     end
 
     def filename_timestamp
-      filename_time.strftime "%Y-%m-%d - %l%M%p"
+      filename_time.strftime("%Y-%m-%d - %l%M%p").gsub /\s+/, " "
     end
 
     def downloadable?

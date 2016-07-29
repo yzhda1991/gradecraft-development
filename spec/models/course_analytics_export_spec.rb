@@ -50,10 +50,10 @@ describe CourseAnalyticsExport do
       filename_time = Date.parse("jan 8 1998").to_time
       allow(subject).to receive_messages \
         filename_time: filename_time,
-        formatted_course_number: "some-courseno"
+        formatted_course_number: "AB200"
 
       expect(subject.url_safe_filename)
-        .to eq "some-courseno_analytics_export_1998-01-08.zip"
+        .to eq "AB200 Analytics Export - 1998-01-08 - 1200AM.zip"
     end
   end
 end

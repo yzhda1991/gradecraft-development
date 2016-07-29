@@ -55,6 +55,6 @@ class CourseAnalyticsExport < ActiveRecord::Base
   # this is going to be the downloaded filename of the final archive
   #
   def url_safe_filename
-    "#{formatted_course_number}_analytics_export_#{filename_timestamp}.zip"
+    "#{formatted_course_number} Analytics Export - #{filename_timestamp}.zip"
   end
 end
