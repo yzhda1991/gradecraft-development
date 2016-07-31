@@ -10,7 +10,10 @@
           .meter
             %i.fa.fa-lock
             %span= element.name
-            %span=points element.lowest_points
+            %span= points element.lowest_points
+            - if element.unlock_conditions.present?
+              = render partial: "students/unlock_icons", locals: { student: current_student, gse: element }
+
       - elsif current_student.cached_score_for_course(current_course) >= element.highest_points
         .progress.bar_magic.success.center
           .meter
@@ -30,5 +33,3 @@
           .right.right-points
             %span Points to next level:
             %span.bold= points element.points_to_next_level(current_student, current_course)
-
-    = render partial: "courses/grading_philosophy", locals: { course: current_course }

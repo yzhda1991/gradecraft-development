@@ -16,6 +16,7 @@
   %table{"aria-describedby" => "tableCaption"}
     %thead
       %tr
+        %th{scope: "col"} Locked?
         %th{scope: "col"} Grade
         %th{scope: "col"} Level
         %th{scope: "col"} Low Points
@@ -23,6 +24,7 @@
     %tbody
       - @grade_scheme_elements.each do |element|
         %tr
+          %td= glyph(:lock) if element.unlock_conditions.present?
           %td= element.letter
           %td= element.level
           %td{data: { :"sort-value" => "#{element.lowest_points }" }}= points element.lowest_points

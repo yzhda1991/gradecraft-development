@@ -1,6 +1,8 @@
 # Provides the mapping between student's progress and the overall course grade
 class GradeSchemeElement < ActiveRecord::Base
   include Copyable
+  include UnlockableCondition
+
   attr_accessible :letter, :lowest_points, :highest_points, :level, :description,
                   :course_id, :course, :updated_at
 

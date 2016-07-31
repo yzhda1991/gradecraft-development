@@ -1,0 +1,11 @@
+- if ! gse.is_unlocked_for_student?(student)
+  .unlock_conditions
+    %h3.bold This Level is Locked
+    .small.italic In order to unlock it you must:
+    - gse.unlock_conditions.each do |condition|
+      .condition= condition.requirements_description_sentence
+-# do we want to remind students of the conditions to unlock once they've completed them? 
+-# - else
+-#   .met_unlock_conditions
+-#     %h3.bold You have Unlocked this Level
+-#     .small.italic To fully achieve it, you must earn #{points gse.lowest_points} points
