@@ -16,18 +16,21 @@
   %table{"aria-describedby" => "tableCaption"}
     %thead
       %tr
-        %th{scope: "col"} Locked?
         %th{scope: "col"} Grade
         %th{scope: "col"} Level
         %th{scope: "col"} Low Points
         %th{scope: "col"} High Points
+        %th{scope: "col"} Locked?
     %tbody
       - @grade_scheme_elements.each do |element|
         %tr
-          %td= glyph(:lock) if element.unlock_conditions.present?
           %td= element.letter
           %td= element.level
           %td{data: { :"sort-value" => "#{element.lowest_points }" }}= points element.lowest_points
           %td{data: { :"sort-value" => "#{element.highest_points }" }}= points element.highest_points
+          %td
+            - if element.unlock_conditions.present?
+              - element.unlock_conditions.each do |uc|
+                .condition= glyph(:lock) + uc.requirements_description_sentence
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }
