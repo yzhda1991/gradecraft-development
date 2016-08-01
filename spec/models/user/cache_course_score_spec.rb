@@ -7,8 +7,8 @@ describe User do
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, course: course, student: student) }
 
-  describe "#cache_course_score" do
-    subject { student.cache_course_score(course.id) }
+  describe "#cache_course_score_and_level" do
+    subject { student.cache_course_score_and_level(course.id) }
 
     it "fetches the proper course membership" do
       expect(student).to receive(:fetch_course_membership) { course_membership }
