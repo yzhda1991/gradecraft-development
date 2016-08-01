@@ -10,9 +10,10 @@ describe Presenters::Downloads::Base do
 
   let(:export) { create :submissions_export }
   let(:course) { export.course }
-  let(:user) { export.professor }
 
   describe "#submissions_exports" do
+    let(:user) { export.professor }
+
     it "gets the ordered exports from the course" do
       expect(course).to receive_message_chain \
         :submissions_exports,
@@ -29,6 +30,7 @@ describe Presenters::Downloads::Base do
 
   describe "#course_analytics_exports" do
     let(:export) { create :course_analytics_export }
+    let(:user) { export.owner }
 
     it "gets the ordered exports from the course" do
       expect(course).to receive_message_chain \
