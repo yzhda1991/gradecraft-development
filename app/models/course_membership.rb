@@ -57,17 +57,17 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def check_and_update_student_earned_level
-    update_attribute :earned_grade_scheme_element_id, earned_grade_scheme_element.id
+    update_attribute :earned_grade_scheme_element_id, earned_grade_scheme_element.try(:id)
   end
 
   def earned_grade_scheme_element
-    last_earned = []
+    elements_earned = []
     course.grade_scheme_elements.order_by_lowest_points.each do |gse|
       if gse.is_unlocked_for_student?(user) && gse.lowest_points < score
-        last_earned = gse
+        last_earned << gse
       end
     end
-    return last_earned
+    return elements_earned.last
   end
 
   def staff?
