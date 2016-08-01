@@ -8,12 +8,11 @@ describe Presenters::Downloads::Base do
       current_user: user
   end
 
-  let(:export) { create :submissions_export }
   let(:course) { export.course }
+  let(:export) { create :submissions_export }
+  let(:user) { export.professor }
 
   describe "#submissions_exports" do
-    let(:user) { export.professor }
-
     it "gets the ordered exports from the course" do
       expect(course).to receive_message_chain \
         :submissions_exports,
