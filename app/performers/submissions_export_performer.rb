@@ -18,7 +18,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     if work_resources_present?
       run_performer_steps
       deliver_outcome_mailer
-      @submissions_export.update_export_completed_time
+
+      submissions_export.update_export_completed_time
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -66,25 +67,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     {
       student_ids: @students.collect(&:id),
       submissions_snapshot: submissions_snapshot,
-      export_filename: "#{export_file_basename}.zip",
       last_export_started_at: Time.now
     }
   end
 
   def attributes
     base_export_attributes
-  end
-
-  def archive_basename
-    [formatted_assignment_name, formatted_team_name].compact.join " - "
-  end
-
-  def formatted_assignment_name
-    @formatted_assignment_name ||= Formatter::Filename.titleize assignment.name
-  end
-
-  def formatted_team_name
-    @team_name ||= Formatter::Filename.titleize(team.name) if team_present?
   end
 
   def submission_binary_file_path(student, submission_file, index)
@@ -120,10 +108,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @submissions = fetch_submissions
   end
 
-  def team_present?
-    @submissions_export[:team_id].present?
-  end
-
   def s3_manager
     @s3_manager ||= @submissions_export.s3_manager || S3Manager::Manager.new
   end
@@ -141,7 +125,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_root_dir_path
-    @archive_root_dir_path ||= File.expand_path(export_file_basename, tmp_dir)
+    @archive_root_dir_path ||= File.expand_path(submissions_export.export_file_basename, tmp_dir)
   end
 
   def csv_file_path
@@ -168,26 +152,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # methods for building and formatting the archive filename
-  def export_file_basename
-    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub("\s+"," ")
-  end
-
-  def filename_timestamp
-    filename_time.strftime("%Y-%m-%d - %l%M%p").gsub("\s+"," ")
-  end
-
-  def filename_time
-    Time.zone = @course.time_zone
-    @filename_time ||= Time.zone.now
-  end
-
   def fetch_course
     @course = @assignment.course
   end
 
   def fetch_students_for_csv
-    if team_present?
+    if submissions_export.has_team?
       @students_for_csv = User.students_by_team(@course, @team)
     else
       @students_for_csv = User.with_role_in_course("student", @course)
@@ -195,7 +165,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def fetch_students
-    if team_present?
+    if submissions_export.has_team?
       @students = @assignment.students_with_text_or_binary_files_on_team(@team)
     else
       @students = @assignment.students_with_text_or_binary_files
@@ -203,7 +173,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def fetch_submissions
-    if team_present?
+    if submissions_export.has_team?
       @submissions = @assignment.student_submissions_with_files_for_team(@team)
     else
       @submissions = @assignment.student_submissions_with_files
@@ -260,7 +230,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def expanded_archive_base_path
-    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
+    @expanded_archive_base_path ||= File.expand_path(submissions_export.export_file_basename, archive_tmp_dir)
   end
 
   ## creating student directories
@@ -341,11 +311,16 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_text_file_path(student)
-    File.expand_path(submission_text_filename(student), student_directory_path(student))
+    File.expand_path submission_text_filename(student),
+      student_directory_path(student)
   end
 
   def submission_text_filename(student)
-    [ formatted_student_name(student), formatted_assignment_name, "Submission Text.txt" ].join(" - ")
+    [
+      formatted_student_name(student),
+      submissions_export.formatted_assignment_name,
+      "Submission Text.txt"
+    ].join(" - ")
   end
 
   def formatted_student_name(student)
@@ -430,11 +405,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def upload_archive_to_s3
-    @submissions_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
+    @submissions_export.upload_file_to_s3 "#{expanded_archive_base_path}.zip"
   end
 
   def check_s3_upload_success
-    @check_s3_upload_success ||= @submissions_export.s3_object_exists?
+    @check_s3_upload_success ||= submissions_export.s3_object_exists?
   end
 
   private
@@ -469,6 +444,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       @team, @submissions_export, secure_token).deliver_now
   end
 
+  def secure_token
+    @secure_token ||= submissions_export.generate_secure_token
+  end
+
   def deliver_export_failure_mailer
     ExportsMailer.submissions_export_failure(@professor, @assignment)
       .deliver_now
@@ -477,21 +456,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def deliver_team_export_failure_mailer
     ExportsMailer.team_submissions_export_failure(@professor, @assignment, \
       @team).deliver_now
-  end
-
-  def secure_token
-    # be sure to add the user_id and course_id here in the event that we'd like
-    # to revoke the secure token later in the event that, say, the staff member
-    # is removed from the course or from the system
-    #
-    # also let's cache this to make sure that there are never any more generated
-    # than absolutely need to be
-    #
-    @secure_token ||= SecureToken.create(
-      user_id: professor[:id],
-      course_id: course[:id],
-      target: submissions_export
-    )
   end
 
   def expand_messages(messages={})

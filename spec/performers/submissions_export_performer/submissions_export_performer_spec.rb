@@ -50,23 +50,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  # @submissions_export[:team_id].present?
-  describe "team_present?" do
-    before(:each) { performer.instance_variable_set(:@submissions_export, submissions_export) }
-
-    context "the @submissions_export has a team_id" do
-      let(:submissions_export) { create(:submissions_export, team_id: nil) }
-      subject { performer.instance_eval { team_present? }}
-      it { should be_falsey }
-    end
-
-    context "the @submissions_export doesn't have a team_id" do
-      let(:submissions_export) { create(:submissions_export, team_id: team.id) }
-      subject { performer_with_team.instance_eval { team_present? }}
-      it { should be_truthy }
-    end
-  end
-
   describe "confirm_export_csv_integrity" do
     subject { performer.instance_eval { confirm_export_csv_integrity }}
     let(:tmp_dir) { Dir.mktmpdir }
@@ -231,39 +214,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         expect(submissions_export).to receive(:s3_object_exists?)
         subject
       end
-    end
-  end
-
-  describe "#secure_token" do
-    let(:result) { performer.instance_eval { secure_token } }
-    let!(:professor) { create(:user) }
-    let!(:course) { create(:course) }
-
-    before do
-      allow(performer).to receive_messages(
-        professor: professor,
-        course: course,
-        submissions_export: submissions_export
-      )
-    end
-
-    it "creates a secure token with the professor and course ids" do
-      expect(result.user_id).to eq professor.id
-      expect(result.course_id).to eq course.id
-      expect(result.target).to eq performer.submissions_export
-      expect(result.class).to eq SecureToken
-      expect(result).to be_valid
-    end
-
-    it "caches the secure token" do
-      result
-      expect(SecureToken).not_to receive(:create)
-      result
-    end
-
-    it "sets the secure token to @secure_token" do
-      result
-      expect(performer.instance_variable_get(:@secure_token)).to eq result
     end
   end
 end

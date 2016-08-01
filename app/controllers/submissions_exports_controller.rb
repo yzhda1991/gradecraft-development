@@ -23,7 +23,7 @@ class SubmissionsExportsController < ApplicationController
       flash[:alert] = "Unable to delete the submissions export from the server"
     end
 
-    redirect_to exports_path
+    redirect_to downloads_path
   end
 
   def download

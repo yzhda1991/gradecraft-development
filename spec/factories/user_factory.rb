@@ -6,6 +6,6 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password { "secret" }
 
-    after(:create) { |user| user.activate! }
+    after :create, &:activate!
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727153458) do
+ActiveRecord::Schema.define(version: 20160801153720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -212,6 +212,20 @@ ActiveRecord::Schema.define(version: 20160727153458) do
     t.string   "thumbnail",           limit: 255
     t.string   "media_credit",        limit: 255
     t.string   "media_caption",       limit: 255
+  end
+
+  create_table "course_analytics_exports", force: :cascade do |t|
+    t.integer  "course_id",                             null: false
+    t.integer  "owner_id",                              null: false
+    t.text     "export_filename"
+    t.text     "s3_object_key"
+    t.text     "s3_bucket_name"
+    t.text     "performer_error_log",      default: [], null: false, array: true
+    t.datetime "last_export_started_at"
+    t.datetime "last_export_completed_at"
+    t.string   "last_completed_step"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
   end
 
   create_table "course_memberships", force: :cascade do |t|

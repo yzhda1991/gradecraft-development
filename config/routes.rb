@@ -44,7 +44,6 @@ GradeCraft::Application.routes.draw do
     get :user_pageview_events
     get :prediction_averages
     get :assignment_prediction_averages
-    get :export
   end
 
   post "analytics_events/predictor_event"
@@ -339,7 +338,7 @@ GradeCraft::Application.routes.draw do
   end
 
   #19. Exports
-  resources :exports, only: :index
+  resources :downloads, only: :index
 
   resources :submissions_exports, only: [:create, :destroy] do
     member do
@@ -349,5 +348,14 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  resources :course_analytics_exports, only: [:create, :destroy] do
+    member do
+      get :download
+      get '/secure_download/:secure_token_uuid/secret_key/:secret_key',
+        action: "secure_download", as: "secure_download"
+    end
+  end
+
+  # root, bro
   root to: "pages#home"
 end

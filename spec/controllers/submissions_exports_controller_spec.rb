@@ -86,7 +86,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
 
     it "redirects to the exports path" do
       subject
-      expect(response).to redirect_to(exports_path)
+      expect(response).to redirect_to(downloads_path)
     end
   end
 

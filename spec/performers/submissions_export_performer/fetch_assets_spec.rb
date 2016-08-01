@@ -34,7 +34,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer_with_team.instance_eval { fetch_students }}
 
       before(:each) do
-        allow(performer_with_team).to receive(:team_present?) { true }
+        allow(performer_with_team.submissions_export).to receive(:has_team?) { true }
         performer_with_team.instance_variable_set(:@assignment, assignment)
         performer_with_team.instance_variable_set(:@team, team)
         allow(assignment).to receive(:students_with_text_or_binary_files_on_team) { students }
@@ -56,7 +56,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { fetch_students }}
 
       before(:each) do
-        allow(performer).to receive(:team_present?) { false }
+        allow(performer.submissions_export).to receive(:has_team?) { false }
         performer.instance_variable_set(:@team, nil)
         allow(assignment).to receive(:students_with_text_or_binary_files) { students }
         performer.instance_variable_set(:@assignment, assignment)
@@ -80,7 +80,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer_with_team.instance_eval { fetch_students_for_csv }}
 
       before(:each) do
-        allow(performer_with_team).to receive(:team_present?) { true }
+        allow(performer_with_team.submissions_export).to receive(:has_team?) { true }
         performer_with_team.instance_variable_set(:@course, course)
         allow(User).to receive(:students_by_team) { students }
       end
@@ -101,7 +101,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { fetch_students_for_csv }}
 
       before(:each) do
-        allow(performer).to receive(:team_present?) { false }
+        allow(performer.submissions_export).to receive(:has_team?) { false }
         performer.instance_variable_set(:@course, course)
         allow(User).to receive(:with_role_in_course) { students }
       end
@@ -124,7 +124,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer_with_team.instance_eval { fetch_submissions }}
 
       before(:each) do
-        allow(performer_with_team).to receive(:team_present?) { true }
+        allow(performer_with_team.submissions_export).to receive(:has_team?) { true }
         performer_with_team.instance_variable_set(:@assignment, assignment)
         performer_with_team.instance_variable_set(:@team, team)
         allow(assignment).to receive(:student_submissions_with_files_for_team) { submissions }
@@ -146,7 +146,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { fetch_submissions }}
 
       before(:each) do
-        allow(performer).to receive(:team_present?) { false }
+        allow(performer.submissions_export).to receive(:has_team?) { false }
         performer.instance_variable_set(:@assignment, assignment)
         performer.instance_variable_set(:@team, team)
         allow(assignment).to receive(:student_submissions_with_files) { submissions }

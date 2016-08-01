@@ -131,7 +131,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     describe "submission_text_filename", inspect: true do
       before do
-        allow(performer).to receive(:formatted_assignment_name) { "the_day_the_earth_stood_still" }
+        allow(performer.submissions_export)
+          .to receive(:formatted_assignment_name)
+          .and_return "the_day_the_earth_stood_still"
       end
 
       subject { performer.instance_eval { submission_text_filename(@some_student) }}
@@ -141,7 +143,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "uses the formatted_assignment_name" do
-        expect(performer).to receive(:formatted_assignment_name)
+        expect(performer.submissions_export).to receive(:formatted_assignment_name)
         subject
       end
 

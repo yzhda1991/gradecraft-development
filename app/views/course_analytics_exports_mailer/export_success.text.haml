@@ -1,0 +1,12 @@
+Dear #{@owner.first_name},
+\ 
+Your requested analytics export in course #{@course.course_number} - #{@course.name} was successfully created.
+\ 
+You can download your completed ZIP archive using the link below. The link will expire after one week:
+\ 
+#{secure_download_url(@secure_token)}
+\ 
+Alternatively the analytics export can be downloaded on the downloads page here: #{downloads_url}.
+\ 
+Sincerely,
+The GradeCraft Team

@@ -17,7 +17,7 @@
   %li= link_to_unless_current glyph(:shield) + "Awarded #{current_course.badge_term} Chart", earned_badges_path
 
 %li
-  = link_to_unless_current glyph("file-archive-o") + "Submission Downloads", exports_path
+  = link_to_unless_current glyph("file-archive-o") + "Downloads", downloads_path
 %li= link_to_unless_current glyph("star-half-empty") + "Top 10/Bottom 10", top_10_path
 %li= link_to_unless_current glyph("bar-chart") + "Analytics", analytics_students_path
 %li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path

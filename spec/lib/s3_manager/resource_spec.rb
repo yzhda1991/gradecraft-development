@@ -1,12 +1,84 @@
-require_relative "../../../lib/s3_manager/resource"
+require "active_record_spec_helper"
+require "s3_manager/resource"
+require "support/uni_mock/rails"
 require_relative "../../support/test_classes/lib/s3_manager/s3_resource_test"
 
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new s3_object_key: s3_object_key }
 
+  # add some helpers for stubbing the environment
+  include UniMock::StubRails
+
   let(:s3_manager) { double(S3Manager::Manager).as_null_object }
   let(:s3_object_key) { "some-fake-key" }
   let(:temp_file) { Tempfile.new("some-file") }
+
+  describe "callbacks" do
+    subject { create :submissions_export, export_filename: "stuffs_bro.txt" }
+
+    describe "rebuilding the s3 object key before save" do
+      context "export_filename changed" do
+        it "rebuilds the s3 object key" do
+          expect(subject).to receive(:rebuild_s3_object_key)
+          subject.export_filename = "some_filename.txt"
+          subject.save
+        end
+      end
+
+      context "export_filename did not change" do
+        it "doesn't rebuild the s3 object key" do
+          expect(subject).not_to receive(:rebuild_s3_object_key)
+          subject.update_attributes team_id: 5
+        end
+      end
+    end
+  end
+
+  describe "#rebuild_s3_object_key" do
+    before do
+      allow(subject).to receive_messages(
+        build_s3_object_key: "new-key",
+        export_filename: "some_filename.txt"
+      )
+    end
+
+    it "builds a new s3_object_key and caches it" do
+      subject.rebuild_s3_object_key
+      expect(subject.s3_object_key).to eq "new-key"
+    end
+  end
+
+  describe "#build_s3_object_key" do
+    subject { create(:submissions_export) }
+    let(:result) { subject.build_s3_object_key("stuff.zip") }
+
+    let(:expected_base_s3_key) do
+      "exports/courses/40/assignments/50" \
+      "/#{subject.object_key_date}" \
+      "/#{subject.object_key_microseconds}/stuff.zip"
+    end
+
+    before do
+      allow(subject).to receive_messages(course_id: 40, assignment_id: 50)
+      stub_const "ENV", { "AWS_S3_DEVELOPER_TAG" => "jeff-moses" }
+    end
+
+    context "env is development" do
+      before { stub_env "development" }
+
+      it "prepends the developer tag to the store dirs and joins them" do
+        expect(result).to eq ["jeff-moses", expected_base_s3_key].join("/")
+      end
+    end
+
+    context "env is anything but development" do
+      before { stub_env "sumpin-else" }
+
+      it "joins the store dirs and doesn't use the developer tag" do
+        expect(result).to eq expected_base_s3_key
+      end
+    end
+  end
 
   describe "#s3_manager" do
     let(:result) { subject.s3_manager }

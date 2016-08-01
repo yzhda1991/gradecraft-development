@@ -1,3 +1,9 @@
+require_relative "basics"
+require_relative "encryption"
+require_relative "kms"
+require_relative "object_summary"
+require_relative "common"
+
 module S3Manager
   class Manager
     include S3Manager::Basics
