@@ -277,15 +277,17 @@ class User < ActiveRecord::Base
   ### EARNED LEVELS AND GRADE LETTERS
 
   def grade_for_course(course)
-    @grade_for_course ||= course.element_for_score(cached_score_for_course(course))
+    cm = course_memberships.where(course_id: course.id).first
+    return cm.grade_scheme_element if cm.grade_scheme_element.present?
+    return cm.earned_grade_scheme_element
   end
 
   def grade_level_for_course(course)
-    @grade_level ||= Course.find(course.id).grade_level_for_score(cached_score_for_course(course))
+    @grade_level ||= grade_for_course(course).level
   end
 
   def grade_letter_for_course(course)
-    @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
+    @grade_letter_for_course ||= grade_for_course(course).letter
   end
 
   def get_element_level(course, direction)

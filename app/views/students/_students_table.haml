@@ -36,7 +36,7 @@
           %td= student.try(:team_role)
         %td
           - if student.respond_to?(:grades)
-            = points current_course.score_for_student(student)
+            = points student.score_for_course(current_course)
         %td
           - if student.grade_for_course(current_course).present?
             = student.grade_for_course(current_course).name

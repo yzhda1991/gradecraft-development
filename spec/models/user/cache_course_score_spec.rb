@@ -30,7 +30,7 @@ describe User do
 
       it "returns the the recalculated student score" do
         allow(course_membership).to receive(:recalculate_and_update_student_score) { 58000 }
-        expect(subject).to eq(58000)
+        expect(subject).to eq(true)
       end
     end
 

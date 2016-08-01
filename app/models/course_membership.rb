@@ -64,7 +64,7 @@ class CourseMembership < ActiveRecord::Base
     elements_earned = []
     course.grade_scheme_elements.order_by_lowest_points.each do |gse|
       if gse.is_unlocked_for_student?(user) && gse.lowest_points < score
-        last_earned << gse
+        elements_earned << gse
       end
     end
     return elements_earned.last

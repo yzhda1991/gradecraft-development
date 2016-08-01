@@ -512,30 +512,6 @@ describe Course do
     end
   end
 
-  describe "#grade_level_for_score(score)" do
-    it "returns the grade level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
-      expect(subject.grade_level_for_score(9990)).to eq("Awful")
-    end
-  end
-
-  describe "#grade_letter_for_score(score)" do
-    it "returns the grade letter that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
-      expect(subject.grade_letter_for_score(9990)).to eq("F")
-    end
-  end
-
-  describe "#element_for_score(score)" do
-    it "returns the level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
-      expect(subject.element_for_score(10000)).to eq(high_grade_scheme_element)
-    end
-  end
-
   describe "#membership_for_student(student)" do
     it "returns the membership relationship for a student" do
       student = create(:user)
@@ -570,14 +546,6 @@ describe Course do
       assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(true)
-    end
-  end
-
-  describe "#score_for_student(student)" do
-    it "returns a student's score for a specific course" do
-      student = create(:user)
-      course_membership = create(:student_course_membership, score: 101, user: student, course: subject)
-      expect(subject.score_for_student(student)).to eq(101)
     end
   end
 
