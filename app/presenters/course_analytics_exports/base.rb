@@ -16,9 +16,10 @@ module Presenters
       # create the export and cache it to @export so when we're looking for it
       # later we don't create a new one
       def create_export
-        @export = ::CourseAnalyticsExport.create \
+        @export = ::CourseAnalyticsExport.create({
           course_id: current_course.id,
           owner_id: current_user.id
+        }, without_protection: true)
       end
 
       def export_job

@@ -44,8 +44,10 @@ describe Presenters::CourseAnalyticsExports::Base do
     end
 
     it "creates a new export and sets it to @export" do
-      expect(CourseAnalyticsExport).to receive(:create)
-        .with course_id: course.id, owner_id: owner.id
+      expect(CourseAnalyticsExport).to receive(:create).with(
+        { course_id: course.id, owner_id: owner.id }, without_protection: true
+      )
+
       subject.create_export
     end
 
