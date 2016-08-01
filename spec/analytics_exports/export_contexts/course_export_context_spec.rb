@@ -3,6 +3,7 @@ require "./app/analytics_aggregates/course_user_pageview"
 require "./app/analytics_aggregates/course_user_page_pageview"
 require "./app/analytics_aggregates/course_user_login"
 require "./app/analytics_exports/export_contexts/course_export_context"
+require "active_record_spec_helper"
 
 describe CourseExportContext do
   subject { described_class.new course: course }
@@ -135,19 +136,51 @@ describe CourseExportContext do
 
   describe "#user_logins" do
     it "fetches data from the CourseUserLogin aggregate and caches it" do
-      pending
+      expect(CourseUserLogin).to receive(:data)
+        .with(:all_time, nil, { course_id: course.id })
+
+      expect(subject.instance_variable_get :@user_logins)
+        .to eq subject.user_logins
+    end
+
+    it "doesn't re-build cached logins" do
+      # cache some hypothetical logins
+      subject.instance_variable_set :@user_logins, ["some", "logins"]
+      expect(CourseUserLogin).not_to receive(:data)
+      subject.user_logins
     end
   end
 
   describe "#users" do
     it "fetches all users with ids matching the user_ids array" do
-      pending
+      users = create_list :user, 2
+      allow(subject).to receive(:user_ids) { users.collect(&:id) }
+      expect(subject.users).to include users.first, users.last
+    end
+
+    it "doesn't re-fetch the cached users" do
+      subject.instance_variable_set :@users, ["some", "users"]
+      expect(User).not_to receive(:where)
+      subject.users
     end
   end
 
   describe "#user_ids" do
-    it "builds an array of user_ids from the fetched events and caches it" do
-      pending
+    it "builds an array of unique user_ids from the fetched events and caches it" do
+      events = [
+        double(:event, user_id: 1),
+        double(:event, user_id: 2),
+        double(:event, user_id: 2)
+      ]
+
+      allow(subject).to receive(:events) { events }
+      expect(subject.user_ids).to eq [1, 2]
+    end
+
+    it "doesn't re-build the user_ids array if cached" do
+      subject.instance_variable_set :@user_ids, [1, 2, 3]
+      expect(subject).not_to receive(:events)
+      subject.user_ids
     end
   end
 
