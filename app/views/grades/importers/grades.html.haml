@@ -1,0 +1,16 @@
+= content_nav_for Course, ["Import Grades", assignment_grades_importers_path(@assignment)], @provider.capitalize
+
+%h3.pagetitle= "Grade Import from #{@provider.capitalize}"
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  %table.dynatable.no-table-header
+    %thead
+      %tr
+        %th{scope: "col"} Course
+        %th{scope: "col"} Assignment
+        %th{scope: "col"} Student Name
+        %th{scope: "col"} Score
+        %th{scope: "col"} Feedback
+    %tbody

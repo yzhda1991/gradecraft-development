@@ -1,8 +1,9 @@
-= content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider.capitalize
+= content_nav_for Course, ["Import Grades", assignment_grades_importers_path(@assignment)], @provider.capitalize
 
-%h3.pagetitle= "Assignment Import from #{@provider.capitalize}"
+%h3.pagetitle= "Grade Import from #{@provider.capitalize}"
 
 .pageContent
   = render partial: "layouts/alerts"
 
-  = render partial: "importers/assignments_table"
+  = partial_with "importers/assignments_table", locals: { path: assignment_grades_importer_grades_path(@assignment, @provider, @course["id"]) } do
+    %p= submit_tag "Select grades from assignments to import", class: "button disabled", disabled: true, data: { behavior: "selected-assignments-command" }

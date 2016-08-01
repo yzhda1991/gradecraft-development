@@ -4,6 +4,7 @@ class Grades::ImportersController < ApplicationController
   before_filter :ensure_staff?
 
   def assignments
+    @assignment = Assignment.find params[:assignment_id]
     @provider = params[:importer_id]
     @course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
@@ -28,6 +29,11 @@ class Grades::ImportersController < ApplicationController
     @assignment = Assignment.find params[:assignment_id]
     @provider = params[:importer_id]
     @courses = syllabus.courses
+  end
+
+  def grades
+    @assignment = Assignment.find params[:assignment_id]
+    @provider = params[:importer_id]
   end
 
   # GET /assignments/:assignment_id/grades/importers
