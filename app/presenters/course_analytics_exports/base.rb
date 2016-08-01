@@ -29,8 +29,6 @@ module Presenters
         @export ||= ::CourseAnalyticsExport.find params[:id]
       end
 
-      # destroying an export should probably automatically delete it from s3
-      # as well. let's modify that behavior in a future PR.
       def destroy_export
         export.destroy
       end
