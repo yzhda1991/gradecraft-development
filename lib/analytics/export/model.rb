@@ -19,7 +19,9 @@ module Analytics
       # Using cattr_accessor lets us add setters and getters on the class
       # so this data can be shared between multiple objects.
       #
-      cattr_accessor :export_mapping
+      def self.export_mapping(mapping)
+        @export_mapping = mapping
+      end
 
       # every Analytics::Export class will have both a context and a set of
       # export_records. The context is the larger set of records that have

@@ -1,10 +1,8 @@
 require 'analytics'
 
-class AnalyticsExportModelTest
-  include Analytics::Export::Model
+class AnalyticsExportModelTest < Analytics::Export::Model
 
-  rows_by :fossils
-  set_schema dinosaurs: :waffles
+  export_mapping dinosaurs: :waffles
 
   def initialize(loaded_data)
     @loaded_data = loaded_data

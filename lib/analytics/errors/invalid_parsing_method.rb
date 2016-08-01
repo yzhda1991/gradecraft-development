@@ -1,9 +1,9 @@
 module Analytics
   module Errors
     class InvalidParsingError < StandardError
-      attr_reader :parsing_method, :export, :message
+      attr_reader :parsing_method, :record, :export, :message
 
-      def initialize(parsing_method:, record: record, export:, message: nil)
+      def initialize(parsing_method:, record:, export:, message: nil)
         @parsing_method = parsing_method
         @record = record
         @export = export
