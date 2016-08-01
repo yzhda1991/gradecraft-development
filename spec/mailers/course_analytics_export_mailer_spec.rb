@@ -48,7 +48,7 @@ describe CourseAnalyticsExportsMailer do
 
     it "has the correct subject" do
       expect(email.subject).to eq \
-        "Course Analytics Export for #{course.courseno} - #{course.name} " \
+        "Course Analytics Export for #{course.course_number} - #{course.name} " \
         "is ready"
     end
 
@@ -128,7 +128,7 @@ describe CourseAnalyticsExportsMailer do
 
     it "has the correct subject" do
       expect(email.subject).to eq \
-        "Course Analytics Export for #{course.courseno} - #{course.name} " \
+        "Course Analytics Export for #{course.course_number} - #{course.name} " \
         "failed to build"
     end
 

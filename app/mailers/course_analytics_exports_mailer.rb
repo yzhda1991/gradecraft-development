@@ -40,6 +40,6 @@ class CourseAnalyticsExportsMailer < ApplicationMailer
 
   def subject
     "Course Analytics Export for " \
-      "#{course.courseno} - #{course.name} #{status}"
+      "#{course.course_number} - #{course.name} #{status}"
   end
 end

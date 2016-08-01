@@ -40,8 +40,8 @@ describe CourseAnalyticsExport do
 
   describe "#formatted_course_number" do
     it "formats the course number for use in a url-safe filename" do
-      allow(subject.course).to receive(:courseno) { "some//bad&//courseno" }
-      expect(subject.formatted_course_number).to eq "some-badand-courseno"
+      allow(subject.course).to receive(:course_number) { "some//bad&//course_number" }
+      expect(subject.formatted_course_number).to eq "some-badand-course_number"
     end
   end
 

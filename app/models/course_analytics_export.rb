@@ -46,7 +46,7 @@ class CourseAnalyticsExport < ActiveRecord::Base
     # the root directory of the final export archive. be sure to replace
     # forward-slashes with hyphens and replace ampersands with "and"
     #
-    course_number = course.courseno.gsub(/\/+/,"-").gsub("&", "and")
+    course_number = course.course_number.gsub(/\/+/,"-").gsub("&", "and")
 
     # then run it through our global url-safe filename formatter
     Formatter::Filename.new(course_number).url_safe.filename
