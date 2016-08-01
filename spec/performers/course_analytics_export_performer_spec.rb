@@ -9,13 +9,13 @@ describe CourseAnalyticsExportPerformer do
   subject { described_class.new export_id: export.id }
 
   let(:export) { create :course_analytics_export }
-  let(:professor) { export.professor }
+  let(:owner) { export.owner }
   let(:course) { export.course }
 
   it "has some readable attributes" do
     expect(subject.export).to eq export
     expect(subject.course).to eq export.course
-    expect(subject.professor).to eq export.professor
+    expect(subject.owner).to eq export.owner
   end
 
   describe "#setup" do
@@ -31,7 +31,7 @@ describe CourseAnalyticsExportPerformer do
     it "assigns some export attributes to the performer" do
       subject
       expect(subject.course).to eq export.course
-      expect(subject.professor).to eq export.professor
+      expect(subject.owner).to eq export.owner
     end
 
     it "updates the export started time" do

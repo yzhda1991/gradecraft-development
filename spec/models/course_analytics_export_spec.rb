@@ -19,7 +19,7 @@ describe CourseAnalyticsExport do
     it "creates a new secure token with the export data" do
       token = subject.generate_secure_token
       expect(token.class).to eq SecureToken
-      expect(token.user_id).to eq subject.professor.id
+      expect(token.user_id).to eq subject.owner.id
       expect(token.course_id).to eq course.id
       expect(token.target).to eq subject
     end

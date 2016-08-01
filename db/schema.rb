@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727153458) do
+ActiveRecord::Schema.define(version: 20160801153720) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -215,7 +216,7 @@ ActiveRecord::Schema.define(version: 20160727153458) do
 
   create_table "course_analytics_exports", force: :cascade do |t|
     t.integer  "course_id",                             null: false
-    t.integer  "professor_id",                          null: false
+    t.integer  "owner_id",                              null: false
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_bucket_name"

@@ -1,9 +1,9 @@
 class CourseAnalyticsExportPerformer < ResqueJob::Performer
-  attr_reader :export, :professor, :course
+  attr_reader :export, :owner, :course
 
   def setup
     @export = CourseAnalyticsExport.find attrs[:export_id]
-    @professor = @export.professor
+    @owner = @export.owner
     @course = @export.course
 
     export.update_export_started_time

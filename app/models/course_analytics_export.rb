@@ -13,24 +13,24 @@ class CourseAnalyticsExport < ActiveRecord::Base
   #
   include Export::Model
 
-  attr_accessible :course_id, :professor_id, :last_export_started_at,
+  attr_accessible :course_id, :owner_id, :last_export_started_at,
     :last_export_completed_at, :last_completed_step
 
   belongs_to :course
-  belongs_to :professor, class_name: "User", foreign_key: "professor_id"
+  belongs_to :owner, class_name: "User", foreign_key: "owner_id"
 
   # secure tokens allow for one-click downloads of the file from an email
   has_many :secure_tokens, as: :target, dependent: :destroy
 
   validates :course_id, presence: true
-  validates :professor_id, presence: true
+  validates :owner_id, presence: true
 
   # this should be moved into the Exports::Model module, or a new
   # SecureToken::Target module, but since SecureToken still lives in /app/models
   # it feels weird to have to include an app resource to test /lib
   #
   def generate_secure_token
-    SecureToken.create user_id: professor.id, course_id: course.id, target: self
+    SecureToken.create user_id: owner.id, course_id: course.id, target: self
   end
 
   # tell s3 which directory structure to use for exports. the object_key
