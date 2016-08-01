@@ -1,6 +1,7 @@
 class CourseMembership < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :user, touch: true
+  belongs_to :grade_scheme_element, foreign_key: "earned_grade_scheme_element_id"
 
   # adds logging helpers for rescued-out errors
   include ModelAddons::ImprovedLogging
@@ -8,7 +9,8 @@ class CourseMembership < ActiveRecord::Base
   include Copyable
 
   attr_accessible :auditing, :character_profile, :course, :course_id,
-    :instructor_of_record, :user, :user_id, :role, :last_login_at
+    :instructor_of_record, :user, :user_id, :role, :last_login_at,
+    :earned_grade_scheme_element_id
 
   Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }
@@ -52,6 +54,20 @@ class CourseMembership < ActiveRecord::Base
     assignment_type_totals_for_student +
     student_earned_badge_score +
     conditional_student_team_score
+  end
+
+  def check_and_update_student_earned_level
+    update_attribute :earned_grade_scheme_element_id, earned_grade_scheme_element.id
+  end
+
+  def earned_grade_scheme_element
+    last_earned = []
+    course.grade_scheme_elements.order_by_lowest_points.each do |gse|
+      if gse.is_unlocked_for_student?(user) && gse.lowest_points < score
+        last_earned = gse
+      end
+    end
+    return last_earned
   end
 
   def staff?
