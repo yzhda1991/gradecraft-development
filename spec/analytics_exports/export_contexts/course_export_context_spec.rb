@@ -185,8 +185,22 @@ describe CourseExportContext do
   end
 
   describe "#assignment_ids" do
-    it "builds an array of all unique event assignment_ids and caches it" do
-      pending
+    it "builds an array of unique assignment_ids from the fetched events and caches it" do
+      events = [
+        double(:event, assignment_id: 1),
+        double(:event, some_other_id: 10),
+        double(:event, assignment_id: 2),
+        double(:event, assignment_id: 3)
+      ]
+
+      allow(subject).to receive(:events) { events }
+      expect(subject.assignment_ids).to eq [1, 2, 3]
+    end
+
+    it "doesn't re-build the assignment_ids array if cached" do
+      subject.instance_variable_set :@assignment_ids, [1, 2, 3]
+      expect(subject).not_to receive(:events)
+      subject.assignment_ids
     end
   end
 end
