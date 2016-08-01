@@ -1,5 +1,13 @@
+require "active_lms"
+
 class Grades::ImportersController < ApplicationController
   before_filter :ensure_staff?
+
+  def assignments
+    @provider = params[:importer_id]
+    @course = syllabus.course(params[:id])
+    @assignments = syllabus.assignments(params[:id])
+  end
 
   # rubocop:disable AndOr
   # GET /assignments/:assignment_id/grades/download

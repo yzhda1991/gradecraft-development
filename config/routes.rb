@@ -53,6 +53,15 @@ GradeCraft::Application.routes.draw do
   resources :announcements, except: [:destroy, :edit, :update]
 
   #3. Assignments, Submissions, Tasks, Grades
+  namespace :assignments do
+    resources :importers, only: :index do
+      get :courses
+      get "/courses/:id/assignments", to: :assignments, as: :assignments
+      post "/courses/:id/assignments/import", to: :assignments_import,
+        as: :assignments_import
+    end
+  end
+
   resources :assignments do
     collection do
       post :sort
@@ -163,16 +172,6 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :challenge_grades, except: [:index, :new, :create]
-
-  #8. Importers
-  namespace :assignments do
-    resources :importers, only: :index do
-      get :courses
-      get "/courses/:id/assignments", to: :assignments, as: :assignments
-      post "/courses/:id/assignments/import", to: :assignments_import,
-        as: :assignments_import
-    end
-  end
 
   #9. Courses
   resources :courses do

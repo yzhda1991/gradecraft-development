@@ -5,5 +5,4 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  = partial_with "importers/assignments_table" do
-    %p= select_tag :assignment_type_id, options_from_collection_for_select(@assignment_types, :id, :name), prompt: "Select an assignment type"
+  = render partial: "importers/assignments_table"
