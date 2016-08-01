@@ -14,7 +14,7 @@ describe CourseAnalyticsExportsMailer do
   include SecureTokenHelper
 
   let(:export) { create :course_analytics_export }
-  let(:professor) { export.professor }
+  let(:owner) { export.owner }
   let(:course) { export.course }
 
   let(:archive_data) do
@@ -30,7 +30,7 @@ describe CourseAnalyticsExportsMailer do
 
     let(:token) do
       SecureToken.create target: export,
-        user_id: professor.id,
+        user_id: owner.id,
         course_id: course.id
     end
 
@@ -38,8 +38,8 @@ describe CourseAnalyticsExportsMailer do
       expect(email.from).to eq [sender]
     end
 
-    it "is sent to the professor's email" do
-      expect(email.to).to eq [professor.email]
+    it "is sent to the owner's email" do
+      expect(email.to).to eq [owner.email]
     end
 
     it "BCC's to the gradecraft admin" do
@@ -55,8 +55,8 @@ describe CourseAnalyticsExportsMailer do
     describe "text part body" do
       subject { text_part.body }
 
-      it "includes the professor's first name" do
-        should include professor.first_name
+      it "includes the owner's first name" do
+        should include owner.first_name
       end
 
       it "includes the course name" do
@@ -83,8 +83,8 @@ describe CourseAnalyticsExportsMailer do
     describe "html part body" do
       subject { html_part.body }
 
-      it "includes the professor's first name" do
-        should include professor.first_name
+      it "includes the owner's first name" do
+        should include owner.first_name
       end
 
       it "includes the course name" do
@@ -118,8 +118,8 @@ describe CourseAnalyticsExportsMailer do
       expect(email.from).to eq [sender]
     end
 
-    it "is sent to the professor's email" do
-      expect(email.to).to eq [professor.email]
+    it "is sent to the owner's email" do
+      expect(email.to).to eq [owner.email]
     end
 
     it "BCC's to the gradecraft admin" do
@@ -135,8 +135,8 @@ describe CourseAnalyticsExportsMailer do
     describe "text part body" do
       subject { text_part.body }
 
-      it "includes the professor's first name" do
-        should include professor.first_name
+      it "includes the owner's first name" do
+        should include owner.first_name
       end
 
       it "includes the course name" do
@@ -151,8 +151,8 @@ describe CourseAnalyticsExportsMailer do
     describe "html part body" do
       subject { html_part.body }
 
-      it "includes the professor's first name" do
-        should include professor.first_name
+      it "includes the owner's first name" do
+        should include owner.first_name
       end
 
       it "includes the course name" do

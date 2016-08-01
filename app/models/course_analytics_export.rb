@@ -13,8 +13,8 @@ class CourseAnalyticsExport < ActiveRecord::Base
   #
   include Export::Model
 
-  attr_accessible :course_id, :owner_id, :last_export_started_at,
-    :last_export_completed_at, :last_completed_step
+  attr_accessible :last_export_started_at, :last_export_completed_at,
+    :last_completed_step
 
   belongs_to :course
   belongs_to :owner, class_name: "User", foreign_key: "owner_id"
