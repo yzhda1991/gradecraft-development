@@ -8,7 +8,7 @@ describe Presenters::CourseAnalyticsExports::Base do
 
   let(:export) { create :course_analytics_export }
   let(:course) { export.course }
-  let(:professor) { export.professor }
+  let(:owner) { export.owner }
 
   let(:params) do
     { id: export.id }
@@ -39,13 +39,13 @@ describe Presenters::CourseAnalyticsExports::Base do
   describe "#create_export" do
     before do
       allow(subject).to receive_messages \
-        current_user: professor,
+        current_user: owner,
         current_course: course
     end
 
     it "creates a new export and sets it to @export" do
       expect(CourseAnalyticsExport).to receive(:create)
-        .with course_id: course.id, professor_id: professor.id
+        .with course_id: course.id, owner_id: owner.id
       subject.create_export
     end
 

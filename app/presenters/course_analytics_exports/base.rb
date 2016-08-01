@@ -18,7 +18,7 @@ module Presenters
       def create_export
         @export = ::CourseAnalyticsExport.create \
           course_id: current_course.id,
-          professor_id: current_user.id
+          owner_id: current_user.id
       end
 
       def export_job
