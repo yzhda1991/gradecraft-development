@@ -1,19 +1,41 @@
 require "rails_spec_helper"
 require "./app/services/imports_lms_assignments"
 
+<<<<<<< 368bab70ccf3bc351f92be8e9bccab10142da169:spec/controllers/assignments/importers_controller_spec.rb
 describe Assignments::ImportersController do
+=======
+describe ImportersController do
+  let(:course) { create :course }
+  let(:professor) { professor_membership.user }
+  let(:professor_membership) { create :professor_course_membership, course: course }
+  let(:provider) { :canvas }
+
+  describe "GET courses" do
+    context "as a professor" do
+      before { login_user(professor) }
+
+      context "without an existing authentication" do
+        it "redirects to authorize with canvas" do
+          get :courses, importer_id: provider
+
+          expect(response).to redirect_to "/auth/canvas"
+        end
+      end
+    end
+  end
+
+>>>>>>> Require that the user be authenticated before interacting with canvas:spec/controllers/importers_controller_spec.rb
   describe "POST assignments_import" do
     let(:course_id) { "COURSE_ID" }
-    let(:provider) { :canvas }
 
     context "as a professor" do
       let(:access_token) { "BLAH" }
       let(:assignment_ids) { [{ "name" => "Assignment 1" }] }
       let(:assignment_type) { create :assignment_type }
-      let(:course) { create :course }
-      let(:professor) { professor_membership.user }
-      let(:professor_membership) { create :professor_course_membership, course: course }
       let(:result) { double(:result, success?: true, message: "") }
+      let!(:user_authorization) do
+        create :user_authorization, :canvas, user: professor, access_token: access_token
+      end
 
       before do
         ENV["CANVAS_ACCESS_TOKEN"] = access_token
