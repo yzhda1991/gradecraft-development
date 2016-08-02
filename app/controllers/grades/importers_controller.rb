@@ -17,10 +17,10 @@ class Grades::ImportersController < ApplicationController
   def download
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|
-      format.csv {
+      format.csv do
         send_data GradeExporter.new.export_grades(assignment, current_course.students),
           filename: "#{ assignment.name } Import Grades - #{ Date.today}.csv"
-      }
+      end
     end
   end
 
@@ -45,8 +45,9 @@ class Grades::ImportersController < ApplicationController
   # GET /assignments/:assignment_id/grades/importers/:id
   def show
     @assignment = Assignment.find params[:assignment_id]
+    provider = params[:id]
 
-    render params[:id]
+    render "#{provider}"
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_id/upload
@@ -59,7 +60,6 @@ class Grades::ImportersController < ApplicationController
     else
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 
-      # @mz TODO: add specs
       grade_ids = @result.successful.map(&:id)
       enqueue_multiple_grade_update_jobs(grade_ids)
 
