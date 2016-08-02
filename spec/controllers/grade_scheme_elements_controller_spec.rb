@@ -14,7 +14,7 @@ describe GradeSchemeElementsController do
     end
 
     before(:each) do
-      @grade_scheme_element = create(:grade_scheme_element, course: @course)
+      @grade_scheme_element = create(:grade_scheme_element, letter: "A", course: @course)
       login_user(@professor)
     end
 
@@ -22,6 +22,22 @@ describe GradeSchemeElementsController do
       it "assigns all grade scheme elements" do
         get :index
         expect(assigns(:grade_scheme_elements)).to eq([@grade_scheme_element])
+      end
+    end
+
+    describe "GET edit" do
+      it "renders the edit grade scheme form" do
+        get :edit, id: @grade_scheme_element.id
+        expect(assigns(:grade_scheme_element)).to eq(@grade_scheme_element)
+        expect(response).to render_template(:edit)
+      end
+    end
+
+    describe "PUT update" do
+      it "updates the grade scheme element with unlock conditions" do
+        grade_scheme_element_params = { letter: "B" }
+        put :update, { id: @grade_scheme_element.id, grade_scheme_element: grade_scheme_element_params }
+        expect(@grade_scheme_element.reload.letter).to eq("B")
       end
     end
 
