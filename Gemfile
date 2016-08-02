@@ -138,7 +138,7 @@ group :test do
   gem 'capybara', '~> 2.5.0'
   gem 'codeclimate-test-reporter'
   gem 'database_cleaner', '~> 1.5.1'
-  gem 'faker', '~> 1.4.3'
+  gem 'faker'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'capybara-select2'
   gem 'launchy'
