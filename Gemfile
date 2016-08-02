@@ -63,7 +63,7 @@ gem 'nokogiri'
 gem 'oauth', git: 'https://github.com/venturit/oauth-ruby.git', branch: 'master'
 gem 'oink'
 gem 'oj'
-gem 'omniauth'
+gem 'omniauth-canvas'
 gem 'omniauth-kerberos'
 gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch: 'master'
 
