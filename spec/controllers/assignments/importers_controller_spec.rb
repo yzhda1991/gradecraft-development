@@ -38,7 +38,6 @@ describe ImportersController do
       end
 
       before do
-        ENV["CANVAS_ACCESS_TOKEN"] = access_token
         login_user(professor)
         allow(controller).to receive(:current_course).and_return course
         allow(Services::ImportsLMSAssignments).to receive(:import).and_return result

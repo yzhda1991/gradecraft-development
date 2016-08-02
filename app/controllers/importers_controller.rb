@@ -2,7 +2,7 @@ require_relative "../services/imports_lms_assignments"
 
 class ImportersController < ApplicationController
   before_filter :ensure_staff?
-  before_filter :require_authentication, except: :index
+  before_filter :require_authorization, except: :index
 
   # GET /importers
   def index
@@ -27,7 +27,7 @@ class ImportersController < ApplicationController
     @provider = params[:importer_id]
 
     @result = Services::ImportsLMSAssignments.import @provider,
-      ENV["#{@provider.upcase}_ACCESS_TOKEN"], params[:id], params[:assignment_ids],
+      authorization(@provider).access_token, params[:id], params[:assignment_ids],
       current_course, params[:assignment_type_id]
 
     if @result.success?
@@ -43,12 +43,12 @@ class ImportersController < ApplicationController
 
   private
 
-  def require_authentication
+  def require_authorization
     provider = params[:importer_id]
-    require_authentication_with provider
+    require_authorization_with provider
   end
 
-  def require_authentication_with(provider)
+  def require_authorization_with(provider)
     authorization = UserAuthorization.for(current_user, provider)
     if authorization.nil?
       session[:return_to] = importer_courses_path(provider)
@@ -56,8 +56,11 @@ class ImportersController < ApplicationController
     end
   end
 
+  def authorization(provider)
+    UserAuthorization.for(current_user, provider)
+  end
+
   def syllabus
-    @syllabus ||= ActiveLMS::Syllabus.new(@provider,
-                                          ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    @syllabus ||= ActiveLMS::Syllabus.new(@provider, authorization(@provider).access_token)
   end
 end
