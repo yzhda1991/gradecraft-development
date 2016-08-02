@@ -17,12 +17,5 @@
         %th{scope: "col"} Graded At
     %tbody
       - @grades.each do |grade|
-        - user = lms_user(@syllabus, grade["user_id"])
-        %tr
-          %td= grade["course"]["name"]
-          %td= grade["assignment"]["name"]
-          %td= grade["user"]["name"]
-          %td= user["primary_email"]
-          %td= lms_user_match?(user["primary_email"]) ? "Yes" : "No"
-          %td= grade["score"]
-          %td= grade["graded_at"]
+        = render partial: "grade_row", locals: { grade: grade,
+                                                 user: lms_user(@syllabus, grade["user_id"])}
