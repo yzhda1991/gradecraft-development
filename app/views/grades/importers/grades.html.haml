@@ -11,6 +11,18 @@
         %th{scope: "col"} Course
         %th{scope: "col"} Assignment
         %th{scope: "col"} Student Name
+        %th{scope: "col"} Student Email
+        %th{scope: "col"} Gradecraft Match?
         %th{scope: "col"} Score
-        %th{scope: "col"} Feedback
+        %th{scope: "col"} Graded At
     %tbody
+      - @grades.each do |grade|
+        - user = lms_user(@syllabus, grade["user_id"])
+        %tr
+          %td= grade["course"]["name"]
+          %td= grade["assignment"]["name"]
+          %td= grade["user"]["name"]
+          %td= user["primary_email"]
+          %td= lms_user_match?(user["primary_email"]) ? "Yes" : "No"
+          %td= grade["score"]
+          %td= grade["graded_at"]
