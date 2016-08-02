@@ -9,6 +9,20 @@ class GradeSchemeElementsController < ApplicationController
                              .grade_scheme_elements.order_by_highest_points
   end
 
+  def edit
+    @grade_scheme_element = current_course.grade_scheme_elements.find(params[:id])
+  end
+
+  def update
+    @grade_scheme_element = current_course.grade_scheme_elements.find(params[:id])
+    if @grade_scheme_element.update_attributes(params[:grade_scheme_element])
+      redirect_to grade_scheme_elements_path,
+        notice: "#{@grade_scheme_element.name} successfully updated"
+    else
+      render action: "edit"
+    end
+  end
+
   # Edit all the grade scheme items for a course
   def mass_edit
     @title = "Edit Grade Scheme"

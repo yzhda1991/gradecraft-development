@@ -221,6 +221,7 @@ GradeCraft::Application.routes.draw do
 
   #12. Grade Schemes
   resources :grade_scheme_elements, only: :index do
+  resources :grade_scheme_elements, only: [:index, :edit, :show, :update] do
     collection do
       get :mass_edit
       put :mass_update

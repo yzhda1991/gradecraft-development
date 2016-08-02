@@ -283,11 +283,11 @@ class User < ActiveRecord::Base
   end
 
   def grade_level_for_course(course)
-    @grade_level ||= grade_for_course(course).level
+    @grade_level ||= grade_for_course(course).try(:level)
   end
 
   def grade_letter_for_course(course)
-    @grade_letter_for_course ||= grade_for_course(course).letter
+    @grade_letter_for_course ||= grade_for_course(course).try(:letter)
   end
 
   def get_element_level(course, direction)
