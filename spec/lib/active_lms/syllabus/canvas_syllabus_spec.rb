@@ -108,7 +108,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
     it "retrieves the grades from the api" do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
-        .with(query: { "assignment_ids" => [456, 789], "include" => ["user"],
+        .with(query: { "assignment_ids" => [456, 789], "student_ids" => "all",
+                       "include" => ["assignment", "course", "user"],
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ score: 87 }].to_json, headers: {})
 
@@ -116,6 +117,22 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
       expect(grades.count).to eq 1
       expect(grades.first["score"]).to eq 87
+    end
+  end
+
+  describe "#user" do
+    subject { described_class.new access_token }
+
+    it "retrieves the user for the id from the api" do
+      stub_request(:get, "https://canvas.instructure.com/api/v1/users/123/profile")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 200, body: { name: "Jimmy Page" }.to_json,
+                   headers: {})
+
+      user = subject.user(123)
+
+      expect(user).to_not be_nil
+      expect(user["name"]).to eq "Jimmy Page"
     end
   end
 end
