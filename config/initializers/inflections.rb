@@ -10,6 +10,7 @@
 # end
 #
 ActiveSupport::Inflector.inflections(:en) do |inflect|
+  inflect.acronym "LMS"
   inflect.acronym "LTI"
   inflect.acronym "API"
   inflect.irregular "criterion", "criteria"
