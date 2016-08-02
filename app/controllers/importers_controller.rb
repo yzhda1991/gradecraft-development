@@ -50,7 +50,10 @@ class ImportersController < ApplicationController
 
   def require_authentication_with(provider)
     authorization = UserAuthorization.for(current_user, provider)
-    return redirect_to "/auth/#{provider}" if authorization.nil?
+    if authorization.nil?
+      session[:return_to] = importer_courses_path(provider)
+      redirect_to "/auth/#{provider}"
+    end
   end
 
   def syllabus
