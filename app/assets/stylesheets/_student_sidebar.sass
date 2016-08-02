@@ -12,8 +12,9 @@
 .student-panel
   width: 400px
   float: right
-  height: 500px
+  height: 100%
   position: relative
+  font-weight: 300
   .align-box
     width: 100px
     height: 100px
@@ -23,6 +24,9 @@
     background-color: $color-blue-5
     padding: 1rem
     box-sizing: border-box
+    text-align: center
+  section
+    margin-bottom: 2rem
 
   #student-panel-widget, .student-panel-article
     z-index: 50
@@ -33,10 +37,10 @@
     text-transform: uppercase
     color: $color-grey-2
     font-size: 1rem
-    margin: .5rem 1rem
+    margin: 1rem 1rem 0.5rem 1rem
 
   p.student-panel-text-block
-    padding: 1rem
+    margin: 0.5rem 1rem
 
   .info-hint-pulse
       border: 3px solid $color-blue-4
@@ -53,6 +57,7 @@
     text-align: right
     color: $color-blue-3
     cursor: pointer
+    margin-top: 1rem
 
   .student-panel-article-description,
   .student-panel-article-purpose,
@@ -62,12 +67,15 @@
     margin: .5rem 1rem
 
   .student-panel-article-icons
-    margin: .5rem 1rem 1rem 1rem
+    font-size: 0.75rem
     color: $color-grey-4
     .icon i
       color: $color-grey-2
     .icon span
       text-transform: uppercase
+
+  .student-panel-article-icon, .condition-icons
+    margin: 0.25rem 1rem
 
   ul.icon-list
     margin: 0
@@ -85,15 +93,16 @@
 
   .predictor-article-card
     width: 250px !important
-    margin-left: 70px
+    margin: 0 auto
     float: none
     .predictor-article-title
       overflow: visible
+      text-align: left
 
 .student-panel-article-header
   background-color: $color-blue-3
   color: white
-  padding: 1.5rem 1rem
+  padding: 1.25rem 1rem
   text-align: center
   font-weight: 300
   .article-title
@@ -110,7 +119,7 @@
    background-color: $color-grey-4
 
 .student-panel-button
-  margin: 1rem
+  margin: 2rem 1rem
 
 
 @media (max-width: $media-small-max)
