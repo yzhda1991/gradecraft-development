@@ -1,3 +1,5 @@
+ENV["CANVAS_BASE_URL"] = "https://canvas.instructure.com"
+
 require "api_spec_helper"
 require "./lib/canvas"
 
