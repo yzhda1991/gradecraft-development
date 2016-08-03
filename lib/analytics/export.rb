@@ -1,5 +1,4 @@
 require_relative "export/model"
-require_relative "export/organizer"
 require_relative "export/builder"
 
 module Analytics

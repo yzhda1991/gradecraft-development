@@ -8,8 +8,8 @@ module Analytics
   module Export
     class Builder
       attr_reader :export_data, :export_classes, :filename, :directory_name,
-                  :export_tmpdir, :export_root_dir, :final_archive_tmpdir,
-                  :final_export_filepath, :complete
+                  :export_tmpdir, :export_root_dir, :final_export_tmpdir,
+                  :complete
 
       def initialize(export_data:, export_classes:, filename: nil, directory_name: nil)
         @export_data = export_data
@@ -18,7 +18,7 @@ module Analytics
         @directory_name = directory_name || "exported_files"
       end
 
-      def generate!
+      def build_archive!
         make_directories
         generate_csvs
         build_zip_archive
@@ -28,8 +28,8 @@ module Analytics
       #
       def make_directories
         @export_tmpdir = S3fs.mktmpdir
-        @export_root_dir = FileUtils.mkdir File.join(export_tmpdir, directory_name)
         @final_archive_tmpdir = S3fs.mktmpdir
+        FileUtils.mkdir export_root_dir
       end
 
       # iterate over the classes that we've been given and generate them in the
@@ -49,9 +49,13 @@ module Analytics
           # generate the actual zip file here
           Archive::Zip.archive final_export_filepath, export_root_dir
         ensure
-          @complete = true
+          # we're not sending the file to the controller anymore, so let's
+          # just upload it to s3
+          export.upload_file_to_s3 export_filepath
 
-          # return the filepath once we're done generating the archive
+          export.update_attributes last_completed_step: "build_the_export"
+
+          # return the final export path
           final_export_filepath
         end
       end
@@ -60,8 +64,12 @@ module Analytics
         @final_export_filepath ||= File.join final_export_tmpdir, filename
       end
 
+      def export_root_dir
+        @export_root_dir ||= File.join export_tmpdir, directory_name
+      end
+
       def remove_tempdirs
-        FileUtils.remove_entry_secure export_root_dir, final_archive_tmpdir
+        FileUtils.remove_entry_secure export_root_dir, final_export_tmpdir
       end
     end
   end

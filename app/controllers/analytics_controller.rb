@@ -182,15 +182,6 @@ class AnalyticsController < ApplicationController
     render json: MultiJson.dump(data)
   end
 
-  def export
-    respond_to do |format|
-      format.zip do
-        organizer = CourseExportOrganizer.new course: current_course
-        organizer.generate!
-      end
-    end
-  end
-
   private
 
   def set_granularity_and_range

@@ -45,6 +45,10 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   # the method does not fail when called.
   #
   def build_the_export
+    export.build_archive!
+    organizer = CourseAnalyticsExport.new course: current_course
+    organizer.generate!
+
     # check whether we need to use S3fs
     use_s3fs = %w[staging production].include? Rails.env
 
