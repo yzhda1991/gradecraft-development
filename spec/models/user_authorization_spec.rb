@@ -7,11 +7,13 @@ describe UserAuthorization do
         provider: "canvas",
         credentials: {
           token: "BLAH",
-          expires_at: (Time.now + (30 * 24 * 60 * 60)).to_i,
+          refresh_token: "REFRESH",
+          expires_at: expires_at.to_i,
           expires: true
         }
       }.deep_stringify_keys
     end
+    let(:expires_at) { Time.now + (30 * 24 * 60 * 60) }
     let(:user) { create :user }
 
     it "creates an authorization for the specified user" do
@@ -21,6 +23,8 @@ describe UserAuthorization do
       expect(authorization.user_id).to eq user.id
       expect(authorization.provider).to eq "canvas"
       expect(authorization.access_token).to eq "BLAH"
+      expect(authorization.refresh_token).to eq "REFRESH"
+      expect(authorization.expires_at.to_i).to eq expires_at.to_i
     end
 
     it "updates the authorization information if one already exists" do

@@ -8,11 +8,13 @@ describe AuthorizationsController do
           provider: provider,
           credentials: {
             token: "BLAH",
-            expires_at: (Time.now + (30 * 24 * 60 * 60)).to_i,
+            refresh_token: "REFRESH",
+            expires_at: expires_at.to_i,
             expires: true
           }
         }.deep_stringify_keys
       end
+      let(:expires_at) { Time.now + (30 * 24 * 60 * 60) }
       let(:professor) { professor_membership.user }
       let(:professor_membership) { create :professor_course_membership }
       let(:provider) { :canvas }
@@ -29,6 +31,7 @@ describe AuthorizationsController do
           authorization = UserAuthorization.unscoped.last
 
           expect(authorization).to_not be_nil
+          expect(authorization.user_id).to eq professor.id
         end
 
         it "redirects back to the referrer" do
