@@ -128,6 +128,7 @@ describe CourseAnalyticsExportPerformer do
 
   describe "#build_the_export" do
     it "tells the export to build an archive" do
+      allow(subject.export).to receive(:upload_builder_archive_to_s3) { "cool" }
       expect(subject.export).to receive(:build_archive!)
       subject.instance_eval { build_the_export }
     end
