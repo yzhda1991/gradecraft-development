@@ -1,8 +1,11 @@
+require_relative "active_lms"
+
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :canvas, ENV["CANVAS_CLIENT_ID"], ENV["CANVAS_CLIENT_SECRET"],
+  provider :canvas, ActiveLMS.configuration.providers[:canvas].client_id,
+    ActiveLMS.configuration.providers[:canvas].client_secret,
     setup: lambda { |env|
-      env["omniauth.strategy"].options[:client_options].site =
-        "#{ENV["CANVAS_BASE_URL"]}/login/canvas"
+      env["omniauth.strategy"].options[:client_options]
+        .merge! ActiveLMS.configuration.providers[:canvas].client_options
   }
   provider :developer unless Rails.env.production?
   provider :lti, :oauth_credentials => { ENV["LTI_CONSUMER_KEY"] => ENV["LTI_CONSUMER_SECRET"] }
