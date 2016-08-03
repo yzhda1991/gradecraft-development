@@ -36,6 +36,20 @@ describe UserAuthorization do
     end
   end
 
+  describe "#expired?" do
+    it "returns true if the authorization expiration date is in the past" do
+      subject.expires_at = 2.days.ago
+
+      expect(subject).to be_expired
+    end
+
+    it "returns false if the authorization expiration date is in the future" do
+      subject.expires_at = 2.days.from_now
+
+      expect(subject).to_not be_expired
+    end
+  end
+
   describe ".for" do
     let(:user) { create :user }
 

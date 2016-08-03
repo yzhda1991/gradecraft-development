@@ -13,6 +13,10 @@ class UserAuthorization < ActiveRecord::Base
     authorization
   end
 
+  def expired?
+    self.expires_at < DateTime.now
+  end
+
   def self.for(user, provider)
     where(user_id: user.id, provider: provider).first
   end
