@@ -738,8 +738,10 @@ ActiveRecord::Schema.define(version: 20160811183259) do
     t.integer  "user_id"
     t.string   "provider"
     t.string   "access_token"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "refresh_token"
+    t.datetime "expires_at"
   end
 
   add_index "user_authorizations", ["user_id", "provider"], name: "index_user_authorizations_on_user_id_and_provider", unique: true, using: :btree
