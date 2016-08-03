@@ -43,6 +43,10 @@ class CourseAnalyticsExport < ActiveRecord::Base
     export_builder.build_archive!
   end
 
+  def upload_builder_archive_to_s3
+    upload_file_to_s3 export_builder.final_export_filepath
+  end
+
   def export_builder
     @export_builder ||= Analytics::Export::Builder.new \
       export_data: export_context.export_data,

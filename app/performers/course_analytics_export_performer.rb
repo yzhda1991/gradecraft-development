@@ -36,6 +36,12 @@ class CourseAnalyticsExportPerformer < ResqueJob::Performer
   private
 
   def build_the_export
-    export.build_archive!
+    begin
+      export.build_archive!
+    ensure
+      # once we've successfully built the export on s3fs, let's upload it
+      export.upload_builder_archive_to_s3
+      export.update_attributes last_completed_step: "build_the_export"
+    end
   end
 end

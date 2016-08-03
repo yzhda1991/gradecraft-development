@@ -28,7 +28,7 @@ module Analytics
       #
       def make_directories
         @export_tmpdir = S3fs.mktmpdir
-        @final_archive_tmpdir = S3fs.mktmpdir
+        @final_export_tmpdir = S3fs.mktmpdir
         FileUtils.mkdir export_root_dir
       end
 
@@ -49,12 +49,6 @@ module Analytics
           # generate the actual zip file here
           Archive::Zip.archive final_export_filepath, export_root_dir
         ensure
-          # we're not sending the file to the controller anymore, so let's
-          # just upload it to s3
-          export.upload_file_to_s3 export_filepath
-
-          export.update_attributes last_completed_step: "build_the_export"
-
           # return the final export path
           final_export_filepath
         end
