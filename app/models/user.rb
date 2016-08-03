@@ -73,6 +73,7 @@ class User < ActiveRecord::Base
 
   mount_uploader :avatar_file_name, ImageUploader
 
+  has_many :authorizations, class_name: "UserAuthorization", dependent: :destroy
   has_many :course_memberships, dependent: :destroy
   has_many :courses, through: :course_memberships
   has_many :course_users, through: :courses, source: "users"
