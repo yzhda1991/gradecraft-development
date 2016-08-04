@@ -3,6 +3,7 @@
     %th= "#{term_for :assignment}"
     %th
     %th Points
+    %th= "Your Goal" if current_user_is_student?
     %th Due
     %th
     %th
@@ -23,8 +24,7 @@
           - else
             // Checking to see if this assignment type is student weightable
             = render partial: "grades/components/score", locals: { grade: presenter.grade_for(assignment), assignment_type: assignment_type, assignment: assignment }
-          - if current_user_is_student?
-            = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(assignment) }
+        %td= render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(assignment) } if current_user_is_student?
       %td= render partial: "students/syllabus/components/due_at", locals: { assignment: assignment }
       %td
         %span
