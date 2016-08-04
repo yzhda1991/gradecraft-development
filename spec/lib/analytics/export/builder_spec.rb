@@ -73,4 +73,28 @@ describe Analytics::Export::Builder do
       end
     end
   end
+
+  describe "#build_archive!" do
+    before do
+      allow(subject).to receive_messages \
+        make_directories: true,
+        generate_csvs: true,
+        build_zip_archive: true
+    end
+
+    it "makes the directories" do
+      expect(subject).to receive(:make_directories)
+      subject.build_archive!
+    end
+
+    it "generates the csvs" do
+      expect(subject).to receive(:generate_csvs)
+      subject.build_archive!
+    end
+
+    it "builds the final zip archive" do
+      expect(subject).to receive(:build_zip_archive)
+      subject.build_archive!
+    end
+  end
 end
