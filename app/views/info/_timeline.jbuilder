@@ -4,12 +4,6 @@ json.set! :timeline do
   json.set! :type, "default"
   json.set! :text, current_course.formatted_tagline
 
-  json.set! :asset do
-    json.set! :media, current_course.media_url if current_course.media
-    json.set! :credit, current_course.media_credit
-    json.set! :caption, current_course.media_caption
-  end
-
   json.set! :date do
     json.array! @events do |event|
       if event.open_at && event.due_at

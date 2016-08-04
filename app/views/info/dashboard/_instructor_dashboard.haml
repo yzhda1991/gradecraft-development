@@ -3,7 +3,7 @@
 
 .col-40
   - if @events.present?
-    .panel.dashboard-module= render partial: "students/dashboard/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
+    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
   .panel.dashboard-module.weekly-stats
 
