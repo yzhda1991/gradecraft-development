@@ -1,3 +1,5 @@
+require "omniauth-canvas"
+
 class UserAuthorization < ActiveRecord::Base
   belongs_to :user
 
@@ -19,5 +21,16 @@ class UserAuthorization < ActiveRecord::Base
 
   def self.for(user, provider)
     where(user_id: user.id, provider: provider).first
+  end
+
+  def refresh!(options={})
+    return false if self.refresh_token.blank?
+    klass = OmniAuth::Strategies.const_get(self.provider.to_s.camelize)
+    strategy = klass.new nil, options
+    token = OAuth2::AccessToken.new strategy.client, self.access_token,
+      { refresh_token: self.refresh_token }
+    token = token.refresh!
+    self.update_attributes access_token: token.token, refresh_token: token.refresh_token,
+      expires_at: (DateTime.now + token.expires_in.to_i.seconds)
   end
 end

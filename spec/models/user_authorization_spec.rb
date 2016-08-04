@@ -1,6 +1,7 @@
 require "active_record_spec_helper"
+require "api_spec_helper"
 
-describe UserAuthorization do
+describe UserAuthorization, type: :disable_external_api do
   describe ".create_by_auth_hash" do
     let(:canvas_auth_hash) do
       {
@@ -61,6 +62,43 @@ describe UserAuthorization do
 
     it "returns nil if the authorization does not exist" do
       expect(described_class.for(user, :canvas)).to be_nil
+    end
+  end
+
+  describe "#refresh!" do
+    let(:response) do
+      {
+        access_token: "NEW_TOKEN",
+        refresh_token: "CHANGED!",
+        expires_in: 3600
+      }.deep_stringify_keys
+    end
+    subject { build :user_authorization, :canvas, refresh_token: "REFRESH" }
+
+    before do
+      @request = stub_request(:post, "https://canvas.instructure.com/login/oauth2/token")
+        .with(body: { "client_id" => "CLIENT_ID", "client_secret" => "SECRET",
+                      "grant_type" => "refresh_token", "refresh_token" => "REFRESH" })
+        .to_return(status: 200, body: URI.encode_www_form(response),
+                   headers: { "Content-Type" => "application/x-www-form-urlencoded" })
+    end
+
+    it "receives a new access token from the provider" do
+      allow(OmniAuth::Strategies).to receive(:const_get).with("Canvas")
+        .and_return(OmniAuth::Strategies::Canvas)
+      subject.refresh!({ client_id: "CLIENT_ID", client_secret: "SECRET" })
+
+      expect(subject.reload.access_token).to eq "NEW_TOKEN"
+      expect(subject.refresh_token).to eq "CHANGED!"
+      expect(subject.expires_at).to be > DateTime.now
+    end
+
+    it "does not make an call to the provider if the refresh token is not available" do
+      subject.refresh_token = nil
+
+      subject.refresh!({ client_id: "CLIENT_ID", client_secret: "SECRET" })
+
+      expect(@request).to_not have_been_made
     end
   end
 end
