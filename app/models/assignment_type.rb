@@ -119,7 +119,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   # Counting how many submissions have happened this week - used for instructor dashboard
-  def submissions_this_week
+  def submissions_this_week_count
     submissions.where("submissions.updated_at > ? ", 7.days.ago).count
   end
 

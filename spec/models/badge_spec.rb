@@ -345,4 +345,13 @@ describe Badge do
       expect(badge.earned_badge_total_points(student)).to eq(1000)
     end
   end
+
+  describe "#earned_badges_this_week_count" do
+    it "returns the count of submissions for this assignment type this week" do
+      earlier_earned_badge = create(:earned_badge, badge: subject, updated_at: 8.days.ago)
+      earned_badge = create(:earned_badge, badge: subject)
+      earned_badge_2 = create(:earned_badge, badge: subject)
+      expect(subject.earned_badges_this_week_count).to eq(2)
+    end
+  end
 end

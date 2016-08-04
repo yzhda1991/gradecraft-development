@@ -71,7 +71,7 @@ class Badge < ActiveRecord::Base
     ).pluck("points").map(&:to_i).sum
   end
 
-  def earned_badges_this_week
+  def earned_badges_this_week_count
     earned_badges.where("earned_badges.updated_at > ? ", 7.days.ago).count
   end
 end
