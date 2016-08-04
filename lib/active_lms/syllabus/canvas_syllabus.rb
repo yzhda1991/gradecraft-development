@@ -48,9 +48,10 @@ module ActiveLMS
 
     def grades(course_id, assignment_ids)
       grades = []
-      client.get_data("/courses/#{course_id}/students/submissions",
-                      assignment_ids: assignment_ids, student_ids: "all",
-                      include: ["assignment", "course", "user"]) do |data|
+      params = { assignment_ids: assignment_ids,
+                 student_ids: "all",
+                 include: ["assignment", "course", "user"] }
+      client.get_data("/courses/#{course_id}/students/submissions", params) do |data|
         grades += data
       end
       grades
