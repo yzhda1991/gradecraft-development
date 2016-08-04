@@ -8,8 +8,7 @@ module Analytics
   module Export
     class Builder
       attr_reader :export_data, :export_classes, :filename, :directory_name,
-                  :export_tmpdir, :export_root_dir, :final_export_tmpdir,
-                  :complete
+                  :export_tmpdir, :export_root_dir, :final_export_tmpdir
 
       def initialize(export_data:, export_classes:, filename: nil, directory_name: nil)
         @export_data = export_data
