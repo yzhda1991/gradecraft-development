@@ -118,6 +118,11 @@ class AssignmentType < ActiveRecord::Base
     end
   end
 
+  # Counting how many submissions have happened this week - used for instructor dashboard
+  def submissions_this_week
+    submissions.where("submissions.updated_at > ? ", 7.days.ago).count
+  end
+
   def max_points_for_student(student)
     score = score_for_student(student)
     return max_points if score > max_points

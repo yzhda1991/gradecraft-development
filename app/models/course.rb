@@ -252,6 +252,14 @@ class Course < ActiveRecord::Base
     earned_badges.count
   end
 
+  # box plot for instructor dashboard
+  def scores
+    scores = course_memberships.being_graded.pluck(:score)
+    return {
+      scores: scores
+    }
+  end
+
   private
 
   def create_admin_memberships
