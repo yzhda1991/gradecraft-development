@@ -17,11 +17,7 @@
 
 %section.student-panel-article-description{'ng-if'=>'article.has_info'}
   %h2 Guidelines
-  %p.student-panel-text-block {{article.description}}
-
-%section.student-panel-article-purpose{'ng-if'=>'article.purpose'}
-  %h2 Purpose
-  %p.student-panel-text-block {{article.purpose}}
+  %p.student-panel-text-block {{article.description | limitTo:600}}
 
 %section.student-panel-article-icons
   %h2 Additional Details
