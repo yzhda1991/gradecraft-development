@@ -1,5 +1,5 @@
 require "active_record_spec_helper"
-require "./app/presenters/students/dashboard_course_events_presenter.rb"
+require "./app/presenters/info/dashboard_course_events_presenter.rb"
 
 describe Info::DashboardCourseEventsPresenter do
   let(:course) { create(:course) }
