@@ -253,10 +253,9 @@ $card-margin-1 : 3px 0 5px 0
     @include transition(all, .5s, ease-out)
   .coin-add-icon
     color: $color-blue-2
-    margin: 1px 0 0 -3px
+    margin: 0 0 0 -2px
     visibility: hidden
   .coin-slot:hover
-    border: 2px solid $color-orange-1
     background-color: $color-yellow-1
     .coin-add-icon
       visibility: visible
@@ -524,16 +523,9 @@ $card-margin-1 : 3px 0 5px 0
   .predictor-section-title-max-points, .predictor-section-title-predicted-points.badges
     clear: both
     float: none
-  .predictor-section-title-predicted-points
-    line-height: 1.8
   .predictor-section-title-predicted-points.weightable
-    float: none
-    clear: both
     background-color: $color-blue-2
     display: block
-    height: 2.25rem
-    width: 110%
-    padding: 10px 0 0 0
     margin-left: -10px
   .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
     text-align: left
@@ -543,34 +535,19 @@ $card-margin-1 : 3px 0 5px 0
       font-size: $predictor-font-size-1
 
   #predictor-main-header
-    height: 38px
     margin: 8px 0 1px 0
   .predictor-section-title
-    font-size: $predictor-font-size-2
-    max-width: $media-small-max
     overflow: hidden
-    .coins
-      font-size: $predictor-font-size-1
   .predictor-section-title-name
-    line-height: 1.8
-    height: 0px;
     .desktop-only
       display: none
-  #predictor-main-header.with-weights
-    height: 74px
   .predictor-section
-    height: 70px
     margin-bottom: 1px
-    .collapse-arrow
-      margin-left: 8px
   .predictor-section.with-weights
-    height: 80px
     .predictor-section-title-name
       height: 2rem
     .collapsable
       padding-top: 0px
-  .collapsable
-    padding: 35px 5px 0 5px
 
 @mixin mobile-graph-mixin
   #predictor-graph-svg
@@ -608,8 +585,8 @@ $card-margin-1 : 3px 0 5px 0
   @include mobile-headers-mixin
   @include mobile-graph-mixin
   .predictor-article-card
-    width: $card-width-2
-    margin: $card-margin-2
+    width: 32%
+    margin: 8px 3px
   .mainContainer.staff
     .predictor-article-card
       width: $card-width-1
