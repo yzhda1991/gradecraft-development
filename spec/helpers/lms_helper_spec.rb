@@ -3,24 +3,28 @@ require "rails_spec_helper"
 describe LMSHelper do
   describe "#lms_user_match?" do
     let(:course) { create :course }
-    let(:email) { "jimmy@example.com" }
-    let(:membership) { create :student_course_membership, user: student, course: course }
-    let(:student) { create :user, email: email }
 
-    it "returns false if the user does not exist" do
-      expect(helper.lms_user_match?("blah@blah.com", course)).to eq false
+    context "the user does not exist" do
+      it "returns false" do
+        expect(helper.lms_user_match?("blah@blah.com", course)).to eq false
+      end
     end
 
-    it "returns false if the user does not belong to the course" do
-      student
+    context "the user exists" do
+      let(:email) { "jimmy@example.com" }
+      let!(:student) { create :user, email: email }
 
-      expect(helper.lms_user_match?(email, course)).to eq false
-    end
+      it "returns false if the user does not belong to the course" do
+        expect(helper.lms_user_match?(email, course)).to eq false
+      end
 
-    it "returns true if the user exists and belongs to the course" do
-      membership
+      context "the user belongs to the course" do
+        let!(:membership) { create :student_course_membership, user: student, course: course }
 
-      expect(helper.lms_user_match?(email, course)).to eq true
+        it "returns true if the user exists and belongs to the course" do
+          expect(helper.lms_user_match?(email, course)).to eq true
+        end
+      end
     end
   end
 end
