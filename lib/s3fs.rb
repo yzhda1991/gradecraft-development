@@ -18,14 +18,18 @@ module S3fs
     #
     def available?
       # check whether we need to use S3fs
-      %w[staging production].include? Rails.env
+      %w[staging production].include? rails_env
     end
 
     # this is the format for our s3fs tmpdirs. This could additionally be
     # be defined in an s3fs initializer.
     #
     def tmpdir_prefix
-      available? ? "/s3mnt/tmp/#{Rails.env}" : nil
+      available? ? "/s3mnt/tmp/#{rails_env}" : nil
+    end
+
+    def rails_env
+      ENV["RAILS_ENV"]
     end
   end
 end

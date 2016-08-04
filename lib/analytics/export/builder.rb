@@ -1,3 +1,5 @@
+require "s3fs"
+
 # This is the base class for the ExportBuilder classes that will ultimately
 # construct our final export files. By separating this logic out into a
 # dedicated class, we can create individiual builder classes that arrange our
@@ -28,7 +30,7 @@ module Analytics
       def make_directories
         @export_tmpdir = S3fs.mktmpdir
         @final_export_tmpdir = S3fs.mktmpdir
-        FileUtils.mkdir export_root_dir
+        FileUtils.mkdir_p export_root_dir
       end
 
       # iterate over the classes that we've been given and generate them in the
