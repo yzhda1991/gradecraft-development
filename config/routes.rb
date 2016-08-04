@@ -24,8 +24,6 @@ GradeCraft::Application.routes.draw do
   #18. Predictor
   #19. Exports
 
-  get "/auth/:provider/callback", to: "authorizations#create"
-
   #1. Analytics & Charts
   namespace :analytics do
     root action: :index
@@ -281,6 +279,7 @@ GradeCraft::Application.routes.draw do
 
   #15. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
+  get "/auth/:provider/callback", to: "authorizations#create"
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
   get :login, to: "user_sessions#new", as: :login
