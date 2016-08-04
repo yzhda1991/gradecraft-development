@@ -75,7 +75,8 @@ class Grades::ImportersController < ApplicationController
   end
 
   def syllabus
-    @syllabus ||= ActiveLMS::Syllabus.new(@provider,
-                                          ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    @syllabus ||= ActiveLMS::Syllabus.new \
+      @provider,
+      ENV["#{@provider.upcase}_ACCESS_TOKEN"]
   end
 end
