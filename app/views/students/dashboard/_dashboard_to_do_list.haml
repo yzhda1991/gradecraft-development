@@ -1,9 +1,0 @@
-.text-center
-  .card-header
-    %h3 #{term_for :assignment} Planner
-  .card-body#todo-list
-    .planner-filter.clearfix
-      = link_to "My Planner", "#", class: "filter-button button selected", id: "my-planner"
-      = link_to "Course Planner", "#", class: "filter-button button", id: "course-planner"
-    = render partial: "students/dashboard/dashboard_to_do_list_items", locals: { presenter: presenter, assignment_list: presenter.course_planner_assignments, list_class: "course-planner-list" }
-    = render partial: "students/dashboard/dashboard_to_do_list_items", locals: { presenter: presenter, assignment_list: presenter.my_planner_assignments, list_class: "my-planner-list" }

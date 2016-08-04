@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class Students::DashboardWeeklyStatsPresenter < Showtime::Presenter
+class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def course

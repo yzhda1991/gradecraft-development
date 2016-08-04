@@ -1,4 +1,4 @@
 - if current_user_is_staff? && ! current_course.assignments.present?
   = render partial: "course_creation_wizard"
 - else
-  #dashboard-timeline= render partial: "#{current_user.role(current_course)}_dashboard", locals: { presenter: presenter }
+  #dashboard-timeline= render partial: "info/dashboard/#{current_user.role(current_course)}_dashboard", locals: { presenter: presenter }
