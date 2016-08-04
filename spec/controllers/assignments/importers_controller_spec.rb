@@ -21,6 +21,21 @@ describe ImportersController do
           expect(response).to redirect_to "/auth/canvas"
         end
       end
+
+      context "with an expired authentication" do
+        let(:access_token) { "BLAH" }
+        let!(:user_authorization) do
+          create :user_authorization, :canvas, user: professor, access_token: access_token,
+            expires_at: 2.days.ago
+        end
+
+        it "retrieves a refresh token" do
+          allow_any_instance_of(ActiveLMS::Syllabus).to receive(:courses).and_return []
+          expect_any_instance_of(UserAuthorization).to receive(:refresh!)
+
+          get :courses, importer_id: provider
+        end
+      end
     end
   end
 
@@ -34,7 +49,8 @@ describe ImportersController do
       let(:assignment_type) { create :assignment_type }
       let(:result) { double(:result, success?: true, message: "") }
       let!(:user_authorization) do
-        create :user_authorization, :canvas, user: professor, access_token: access_token
+        create :user_authorization, :canvas, user: professor, access_token: access_token,
+          expires_at: 2.days.from_now
       end
 
       before do
