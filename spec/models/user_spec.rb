@@ -353,7 +353,19 @@ describe User do
   end
 
   describe "#scores_for_course(course)" do
-    skip "implement"
+    let(:course_2) { create :course }
+    let(:student) { create :user }
+
+    before do
+      create(:student_course_membership, course: course_2, score: 100)
+      create(:student_course_membership, course: course_2, score: 200)
+      create(:student_course_membership, course: course_2, score: 300)
+      create(:course_membership, course: course_2, user: student, score: 500)
+    end
+
+    it "returns the scores of all students being graded in the course plus the user's own score" do
+      expect(student.scores_for_course(course_2)).to eq({:scores => [100, 200, 300, 500], :user_score => [500]})
+    end
   end
 
   describe "#grade_for_course(course)" do
