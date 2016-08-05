@@ -39,8 +39,12 @@ module Analytics
       # filetype-agnostic approach.
       #
       def generate_csvs
-        export_classes.each do |export_class|
-          export_class.new(export_data).generate_csv export_root_dir
+        exporters.each {|exporter| exporter.generate_csv export_root_dir }
+      end
+
+      def exporters
+        @exporters ||= export_classes.collect do |export_class|
+          export_class.new export_data
         end
       end
 

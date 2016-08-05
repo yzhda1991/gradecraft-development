@@ -1,4 +1,5 @@
 require "analytics"
+require "exports_spec_helper"
 
 describe Analytics::Export::Builder do
   subject do
@@ -119,6 +120,59 @@ describe Analytics::Export::Builder do
     it "makes a directory for the export_root" do
       expect(FileUtils).to receive(:mkdir_p).with export_root_dir
       subject.make_directories
+    end
+  end
+
+  describe "#generate_csvs" do
+    let(:exporters) do
+      (1..2).collect { double(:exporter).as_null_object }
+    end
+
+    before do
+      allow(subject).to receive_messages \
+        exporters: exporters,
+        export_root_dir: Dir.mktmpdir
+    end
+
+    it "builds an array of exporters with data from the export classes" do
+      exporters.each do |exporter|
+        expect(exporter).to receive(:generate_csv).with subject.export_root_dir
+      end
+
+      subject.generate_csvs
+    end
+  end
+
+  describe "#exporters" do
+    let(:export_classes) { [CourseEventExport, CoursePredictorExport] }
+    let(:export_data) { { users: [], assignments: [] } }
+
+    before do
+      allow(subject).to receive_messages \
+        export_classes: export_classes,
+        export_data: export_data,
+        export_root_dir: Dir.mktmpdir
+    end
+
+    it "builds an array of exporters with data from the export classes" do
+      first_export = subject.exporters.first
+      expect(first_export.class).to eq export_classes.first
+      expect(first_export.data).to eq export_data
+
+      last_export = subject.exporters.last
+      expect(last_export.class).to eq export_classes.last
+      expect(last_export.data).to eq export_data
+
+      expect(subject.exporters.class).to eq Array
+    end
+
+    it "caches the exporters" do
+      subject.exporters
+      expect(export_classes.first).not_to receive(:new)
+      expect(export_classes.last).not_to receive(:new)
+      subject.exporters
+
+      expect(subject.instance_variable_get(:@exporters).class).to eq Array
     end
   end
 end
