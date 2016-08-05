@@ -60,15 +60,17 @@ module Analytics
       end
 
       def final_export_filepath
-        @final_export_filepath ||= File.join final_export_tmpdir, filename
+        File.join final_export_tmpdir, filename
       end
 
       def export_root_dir
-        @export_root_dir ||= File.join export_tmpdir, directory_name
+        File.join export_tmpdir, directory_name
       end
 
       def remove_tempdirs
-        FileUtils.remove_entry_secure export_root_dir, final_export_tmpdir
+        [export_root_dir, final_export_tmpdir].each do |tmpdir|
+          FileUtils.remove_entry_secure tmpdir
+        end
       end
     end
   end

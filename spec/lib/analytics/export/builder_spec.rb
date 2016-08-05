@@ -32,13 +32,12 @@ describe Analytics::Export::Builder do
       expect(subject.directory_name).to eq "some_dirname"
     end
 
-    it "has a readable directory variables" do
+    it "has a readable tmpdir" do
       subject.instance_variable_set :@export_tmpdir, "/export/tmp/dir"
       expect(subject.export_tmpdir).to eq "/export/tmp/dir"
+    end
 
-      subject.instance_variable_set :@export_root_dir, "/export/root/dir"
-      expect(subject.export_root_dir).to eq "/export/root/dir"
-
+    it "has a readable final export tmpdir" do
       subject.instance_variable_set :@final_export_tmpdir, "/final/tmp/dir"
       expect(subject.final_export_tmpdir).to eq "/final/tmp/dir"
     end
@@ -194,6 +193,56 @@ describe Analytics::Export::Builder do
 
     it "returns the final_export_path on completion" do
       expect(subject.build_zip_archive).to eq filepath
+    end
+  end
+
+  describe "#final_export_filepath" do
+    let(:final_export_tmpdir) { Dir.mktmpdir }
+
+    before do
+      allow(subject).to receive_messages \
+        final_export_tmpdir: final_export_tmpdir,
+        filename: "archive.zip"
+    end
+
+    it "returns the absolute path of the final archive file" do
+      expect(subject.final_export_filepath).to eq \
+        File.join(final_export_tmpdir, "archive.zip")
+    end
+  end
+
+  describe "#export_root_dir" do
+    let(:export_tmpdir) { Dir.mktmpdir }
+
+    before do
+      allow(subject).to receive_messages \
+        export_tmpdir: export_tmpdir,
+        directory_name: "some_dir"
+    end
+
+    it "returns the absolute path of the export root directory" do
+      expect(subject.export_root_dir).to eq \
+        File.join(export_tmpdir, "some_dir")
+    end
+  end
+
+  describe "#remove_tempdirs" do
+    let(:export_root_dir) { Dir.mktmpdir }
+    let(:final_export_tmpdir) { Dir.mktmpdir }
+
+    before do
+      allow(subject).to receive_messages \
+        export_root_dir: export_root_dir,
+        final_export_tmpdir: final_export_tmpdir
+    end
+
+    it "removes the tmpdirs" do
+      expect(Dir.exists? export_root_dir).to eq true
+      expect(Dir.exists? final_export_tmpdir).to eq true
+
+      subject.remove_tempdirs
+      expect(Dir.exists? export_root_dir).to eq false
+      expect(Dir.exists? final_export_tmpdir).to eq false
     end
   end
 end
