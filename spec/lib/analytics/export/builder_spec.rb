@@ -1,4 +1,5 @@
 require "analytics"
+require "archive/zip"
 require "exports_spec_helper"
 
 describe Analytics::Export::Builder do
@@ -173,6 +174,26 @@ describe Analytics::Export::Builder do
       subject.exporters
 
       expect(subject.instance_variable_get(:@exporters).class).to eq Array
+    end
+  end
+
+  describe "#build_zip_archive" do
+    let(:export_root_dir) { Dir.mktmpdir }
+    let(:filepath) { File.join export_root_dir, "test.zip" }
+
+    before do
+      allow(subject).to receive_messages \
+        export_root_dir: export_root_dir,
+        final_export_filepath: filepath
+    end
+
+    it "builds an archive from the export root directory" do
+      expect(Archive::Zip).to receive(:archive).with(filepath, export_root_dir)
+      subject.build_zip_archive
+    end
+
+    it "returns the final_export_path on completion" do
+      expect(subject.build_zip_archive).to eq filepath
     end
   end
 end
