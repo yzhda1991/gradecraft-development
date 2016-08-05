@@ -55,7 +55,7 @@ module Analytics
           Archive::Zip.archive final_export_filepath, export_root_dir
         ensure
           # return the final export path
-          final_export_filepath
+          return final_export_filepath
         end
       end
 
