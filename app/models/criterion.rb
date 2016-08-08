@@ -7,9 +7,7 @@ class Criterion < ActiveRecord::Base
   has_many :criterion_grades
   belongs_to :full_credit_level,
     foreign_key: :full_credit_level_id, class_name: "Level"
-  attr_accessible :description, :full_credit_level_id, :max_points,
-    :meets_expectations_level_id, :meets_expectations_points,
-    :name, :order, :rubric_id
+
   attr_accessor :add_default_levels
 
   after_initialize :set_defaults

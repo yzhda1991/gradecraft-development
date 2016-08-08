@@ -6,7 +6,7 @@ class CriteriaController < ApplicationController
   respond_to :json
 
   def create
-    @criterion = Criterion.create params[:criterion]
+    @criterion = Criterion.create criterion_params
     respond_with @criterion, layout: false, serializer: ExistingCriterionSerializer
   end
 
@@ -17,7 +17,7 @@ class CriteriaController < ApplicationController
   end
 
   def update
-    @criterion.update_attributes params[:criterion]
+    @criterion.update_attributes criterion_params
     respond_with @criterion, layout: false
   end
 
@@ -27,6 +27,11 @@ class CriteriaController < ApplicationController
   end
 
   private
+
+  def criterion_params
+    params.require(:criterion).permit :description, :full_credit_level_id, :max_points,
+      :meets_expectations_level_id, :meets_expectations_points, :name, :order, :rubric_id
+  end
 
   def serialized_criterion
     ExistingCriterionSerializer.new(@criterion.includes(:levels)).to_json
