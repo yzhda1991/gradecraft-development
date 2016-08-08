@@ -1,11 +1,13 @@
 require "analytics/export"
-require "./app/models/course_analytics_export"
+require "./spec/support/test_classes/lib/analytics/export/analytics_export_buildable_test"
 
 describe Analytics::Export::Buildable do
   # since this is a module intended for inclusion, let's test a class that's
   # actually using these behaviors
   #
-  describe CourseAnalyticsExport do
+  describe AnalyticsExportBuildableTest do
+    subject { described_class.new }
+
     describe "#build_archive!" do
       it "calls #build_archive! on the export builder" do
         builder = double :builder, build_archive!: "..going.."
@@ -15,21 +17,19 @@ describe Analytics::Export::Buildable do
     end
 
     describe "#export_builder" do
+      let(:builder_attrs) do
+        { export_data: "data", export_classes: ["a class"] }
+      end
+
       before do
-        allow(subject).to receive_messages \
-          export_context: double(:context, export_data: "some data"),
-          export_classes: "some classes",
-          url_safe_filename: "the_filename.txt",
-          formatted_course_number: "ECO500"
+        allow(subject).to receive(:export_builder_attrs) { builder_attrs }
       end
 
       it "builds a new export builder" do
         builder = subject.export_builder
         expect(builder.class).to eq Analytics::Export::Builder
-        expect(builder.export_data).to eq "some data"
-        expect(builder.export_classes).to eq "some classes"
-        expect(builder.filename).to eq "the_filename.txt"
-        expect(builder.directory_name).to eq "ECO500"
+        expect(builder.export_data).to eq "data"
+        expect(builder.export_classes).to eq ["a class"]
       end
 
       it "caches the builder" do
@@ -39,5 +39,23 @@ describe Analytics::Export::Buildable do
           .to eq subject.export_builder
       end
     end
+
+    describe "#export_builder_attrs" do
+      it "returns a hash of attributes to use for the builder" do
+        allow(subject).to receive_messages \
+          export_data: "some data",
+          export_classes: "some classes",
+          filename: "the_filename.txt",
+          directory_name: "ECO500"
+
+        expect(subject.export_builder_attrs).to eq({
+          export_data: "some data",
+          export_classes: "some classes",
+          filename: "the_filename.txt",
+          directory_name: "ECO500"
+        })
+      end
+    end
   end
+
 end
