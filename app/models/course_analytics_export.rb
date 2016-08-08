@@ -1,6 +1,8 @@
 require "s3_manager"
 require "export"
 require "formatter"
+require "analytics/export"
+require_relative "../analytics_exports/export_contexts/course_export_context"
 
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3.
@@ -12,6 +14,11 @@ class CourseAnalyticsExport < ActiveRecord::Base
   # assist in the export process
   #
   include Export::Model
+
+  # give this resource methods that allow export construction via the
+  # Analytics::Export::Builder class.
+  #
+  include Analytics::Export::Buildable
 
   attr_accessible :last_export_started_at, :last_export_completed_at,
     :last_completed_step
@@ -31,6 +38,26 @@ class CourseAnalyticsExport < ActiveRecord::Base
   #
   def generate_secure_token
     SecureToken.create user_id: owner.id, course_id: course.id, target: self
+  end
+
+  # classes that we're going to include in the export
+  def export_classes
+    [CourseEventExport, CoursePredictorExport, CourseUserAggregateExport]
+  end
+
+  # overwrite the default export_builder_attrs so we can declare
+  def export_builder_attrs
+    {
+      export_data: export_context.export_data,
+      export_classes: export_classes,
+      filename: url_safe_filename,
+      directory_name: formatted_course_number # root directory name
+    }
+  end
+
+  # the export context contains all of the data we need to build the
+  def export_context
+    @export_context ||= CourseExportContext.new course: course
   end
 
   # tell s3 which directory structure to use for exports. the object_key

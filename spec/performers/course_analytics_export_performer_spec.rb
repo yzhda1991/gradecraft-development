@@ -126,11 +126,26 @@ describe CourseAnalyticsExportPerformer do
     end
   end
 
-  # let's leave the specs out of here for now since this isn't the focus of
-  # this branch.
   describe "#build_the_export" do
-    it "doesn't fail" do
-      expect { subject.instance_eval { build_the_export } }.not_to raise_error
+    before do
+      allow(subject.export).to receive_messages \
+        upload_builder_archive_to_s3: true,
+        build_archive!: true
+    end
+
+    it "tells the export to build an archive" do
+      expect(subject.export).to receive(:build_archive!)
+      subject.instance_eval { build_the_export }
+    end
+
+    it "uploads the builder archive to s3" do
+      expect(subject.export).to receive(:upload_builder_archive_to_s3)
+      subject.instance_eval { build_the_export }
+    end
+
+    it "updates the export completed time" do
+      expect(subject.export).to receive(:update_export_completed_time)
+      subject.instance_eval { build_the_export }
     end
   end
 end

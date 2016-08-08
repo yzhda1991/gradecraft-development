@@ -7,6 +7,10 @@ describe CoursePredictorExport do
     { users: [], assignments: [] }
   end
 
+  it "includes Analytics::Export::Model" do
+    expect(subject).to respond_to(:schema_records)
+  end
+
   describe "#assignment_name" do
     let(:result) { subject.assignment_name event, 20 }
     let(:event) { double(:event) }
