@@ -11,8 +11,8 @@
 
     .badge-index-section
       .badge-icon-container{'ng-repeat' => 'badge in badges'}
-        %img.badge-icon{'src'=> '{{badge.icon}}', 'ng-click'=>'changeFocusArticle(article)'}
+        %img.badge-icon{'src'=> '{{badge.icon}}', 'ng-click'=>'changeFocusArticle(badge)'}
         %p.badge-name {{badge.name}}
         .gold-stars
           %i.fa.fa-fw.fa-star
-            .earned-count {{badge.totalEarnedBadges()}} 
+            .earned-count {{badge.earned_badge_count}} 

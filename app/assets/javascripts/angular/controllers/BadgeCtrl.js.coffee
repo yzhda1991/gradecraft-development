@@ -1,9 +1,8 @@
-@gradecraft.controller 'BadgeCtrl', ['$scope', '$q', 'BadgeService', ($scope, $q, BadgeService) ->
-  $scope.context = 'badges'
+@gradecraft.controller 'BadgeCtrl', ['$scope', '$q', 'BadgeService', 'StudentPanelService', ($scope, $q, BadgeService, StudentPanelService) ->
 
   $scope.init = ()->
     $scope.services().then(()->
-      console.log('complete')
+      StudentPanelService.changeFocusArticle($scope.badges[0])
     )
   $scope.badges = BadgeService.badges
   $scope.termFor = BadgeService.termFor
@@ -12,8 +11,8 @@
     promises = [BadgeService.getBadges(),]
     return $q.all(promises)
 
-  $scope.foo = ()->
-    console.log('foo')
+  $scope.changeFocusArticle = (article)->
+    StudentPanelService.changeFocusArticle(article)
 
   return
 ]
