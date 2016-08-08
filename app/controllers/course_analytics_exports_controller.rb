@@ -51,6 +51,8 @@ class CourseAnalyticsExportsController < ApplicationController
     end
   end
 
+  private
+
   def presenter
     @presenter ||= ::Presenters::CourseAnalyticsExports::Base.new \
       params: params,
