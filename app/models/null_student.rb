@@ -41,6 +41,22 @@ class NullStudentGrades
     self
   end
 
+  def student_visible(*)
+    self
+  end
+
+  def not_nil(*)
+    self
+  end
+
+  def included_in_course_score(*)
+    self
+  end
+
+  def pluck(*)
+    []
+  end
+
   def first
     NullGrade.new
   end
@@ -53,6 +69,14 @@ class NullTeam
 
   def challenge_grades
     NullStudentGrades.new
+  end
+
+  def course
+    NullCourse.new
+  end
+
+  def course_id
+    0
   end
 end
 
