@@ -18,4 +18,8 @@ class AnalyticsExportBuildableTest
   def directory_name
     "ECO500"
   end
+
+  def upload_file_to_s3(filepath)
+    filepath
+  end
 end
