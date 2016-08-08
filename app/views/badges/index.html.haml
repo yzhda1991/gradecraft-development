@@ -4,10 +4,13 @@
 
 = render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
 
-.pageContent.clearfix
-  = render "layouts/alerts"
+- if current_user_is_student?
+  = render partial: "badges/student_badge_index", locals: { presenter: presenter }
 
-  - if current_user_is_staff?
+- elsif current_user_is_staff?
+  .pageContent
+    = render "layouts/alerts"
+
     %table.badge-index-table.second-row-header{:class => ("student-index" if presenter.view_student_context?)}
       %thead
         %tr
@@ -69,6 +72,3 @@
               %td
                 - if !presenter.view_student_context?
                   = render partial: "badges/buttons", locals: { badge: badge }
-
-  - else
-    = render partial: "badges/student_badge_index", locals: { presenter: presenter }

@@ -7,7 +7,7 @@
 # example:
 #   .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'assignment', 'article_type'=>'assignment'}
 # Does not handle locked/unlocked icons, which include lists of lock conditions
-@gradecraft.directive 'studentPanelArticleIcon', [ 'PredictorService', (PredictorService)->
+@gradecraft.directive 'studentPanelArticleIcon', [ 'StudentPanelService', (StudentPanelService)->
 
   return {
     restrict: 'C'
@@ -20,9 +20,9 @@
 
       scope.articleTerm = ()->
         if @article.type == "assignments"
-          PredictorService.termFor("assignment")
+          StudentPanelService.termFor("assignment")
         else if @article.type == "badges"
-          PredictorService.termFor("badge")
+          StudentPanelService.termFor("badge")
         else
           "item"
 

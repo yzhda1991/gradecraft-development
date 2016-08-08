@@ -15,8 +15,8 @@
       %i.fa.fa-fw.fa-lock
       %span.icon-text locked
 
-%section.student-panel-article-icon
-  %img.student-panel-icon{'src'=> '{{article.icon}}'}
+%section.student-panel-article-image{'ng-if'=>'article.type === "badges"'}
+  %img{'ng-src'=>'{{article.icon}}', 'ng-class'=>"(article.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')"}
 
 %section.student-panel-article-description{'ng-if'=>'article.has_info'}
   %h2 Guidelines

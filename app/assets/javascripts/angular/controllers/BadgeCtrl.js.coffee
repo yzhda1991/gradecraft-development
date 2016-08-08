@@ -14,5 +14,8 @@
   $scope.changeFocusArticle = (article)->
     StudentPanelService.changeFocusArticle(article)
 
+  $scope.isFocusArticle = (article)->
+    StudentPanelService.isFocusArticle(article)
+
   return
 ]
