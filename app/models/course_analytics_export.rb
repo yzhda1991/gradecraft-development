@@ -15,6 +15,11 @@ class CourseAnalyticsExport < ActiveRecord::Base
   #
   include Export::Model
 
+  # give this resource methods that allow export construction via the
+  # Analytics::Export::Builder class.
+  #
+  include Analytics::Export::Buildable
+
   attr_accessible :last_export_started_at, :last_export_completed_at,
     :last_completed_step
 
@@ -40,20 +45,14 @@ class CourseAnalyticsExport < ActiveRecord::Base
     [CourseEventExport, CoursePredictorExport, CourseUserAggregateExport]
   end
 
-  def build_archive!
-    export_builder.build_archive!
-  end
-
-  def upload_builder_archive_to_s3
-    upload_file_to_s3 export_builder.final_export_filepath
-  end
-
-  def export_builder
-    @export_builder ||= Analytics::Export::Builder.new \
+  # overwrite the default export_builder_attrs so we can declare
+  def export_builder_attrs
+    {
       export_data: export_context.export_data,
       export_classes: export_classes,
       filename: url_safe_filename,
       directory_name: formatted_course_number # root directory name
+    }
   end
 
   # the export context contains all of the data we need to build the
