@@ -47,23 +47,6 @@ class Course < ActiveRecord::Base
     User.students_by_team(self, team)
   end
 
-  attr_accessible :course_number, :name,
-    :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
-    :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
-    :user_id, :course_id, :course_rules, :syllabus,
-    :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
-    :total_weights, :weights_close_at, :has_public_badges,
-    :assignment_weight_type, :has_submissions, :teams_visible,
-    :weight_term, :fail_term, :pass_term,
-    :max_weights_per_assignment_type, :assignments,
-    :accepts_submissions, :tagline, :office, :phone,
-    :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
-    :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
-    :team_score_average, :has_team_challenges, :team_leader_term,
-    :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
-    :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
-    :assignments_attributes, :start_date, :end_date
-
   with_options dependent: :destroy do |c|
     c.has_many :student_academic_histories
     c.has_many :assignment_types
@@ -178,7 +161,7 @@ class Course < ActiveRecord::Base
   def assignment_weight_spent_for_student(student)
     assignment_weight_for_student(student) >= total_weights.to_i
   end
-  
+
   # Descriptive stats of the grades
   def minimum_course_score
     CourseMembership.where(course: self, auditing: false,
@@ -244,13 +227,13 @@ class Course < ActiveRecord::Base
       scores: scores
     }
   end
-  
+
   def earned_grade_scheme_elements_by_student_count
     elements = []
-    grade_scheme_elements.order_by_lowest_points.each do |gse| 
+    grade_scheme_elements.order_by_lowest_points.each do |gse|
       elements << [gse.name, gse.count_students_earned]
     end
-    return { 
+    return {
       elements: elements
     }
   end

@@ -25,7 +25,7 @@ class ChallengesController < ApplicationController
   end
 
   def create
-    @challenge = current_course.challenges.create(params[:challenge])
+    @challenge = current_course.challenges.create(challenge_params)
 
     respond_to do |format|
       if @challenge.save
@@ -41,7 +41,7 @@ class ChallengesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @challenge.update_attributes(params[:challenge])
+      if @challenge.update_attributes(challenge_params)
         format.html do
           redirect_to challenges_path,
           notice: "Challenge #{@challenge.name} successfully updated"
@@ -65,6 +65,15 @@ class ChallengesController < ApplicationController
   end
 
   private
+
+  def challenge_params
+    params.require(:challenge).permit :name, :description, :visible, :full_points,
+      :due_at, :open_at, :accepts_submissions, :release_necessary,
+      :course, :team, :challenge, :challenge_file_ids,
+      :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
+      :challenge_score_levels_attributes, :challenge_score_level,
+      challenge_files_attributes: [:id, file: []]
+  end
 
   def find_challenge
     @challenge = current_course.challenges.includes(:challenge_score_levels).find(params[:id])

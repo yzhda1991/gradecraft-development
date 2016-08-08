@@ -67,9 +67,8 @@ RSpec.describe Assignments::GradesController, type: :controller, background_job:
 
         context "grade attributes fail to update" do
           # pass an invalid assignment name to fail the update
-          # TODO: FIX this, I have no idea why it won't stub
           let(:request_attrs) {{ assignment_id: assignment.id, assignment: { name: nil }}}
-          before { allow(assignment).to receive_messages(update_attributes: false) }
+          before { allow_any_instance_of(Assignment).to receive_messages(update_attributes: false) }
 
           it_behaves_like "a failed resque job", GradeUpdaterJob
         end

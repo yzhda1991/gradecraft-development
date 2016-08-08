@@ -96,7 +96,7 @@ class Assignments::GradesController < ApplicationController
       grade_params.merge!(graded_at: DateTime.now)
     end if params[:assignment][:grades_attributes].present?
     @assignment = current_course.assignments.find(params[:assignment_id])
-    if @assignment.update_attributes(params[:assignment])
+    if @assignment.update_attributes(assignment_params)
       # @mz TODO: add specs
       enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
@@ -106,7 +106,8 @@ class Assignments::GradesController < ApplicationController
         respond_with @assignment
       end
     else
-      redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]), notice: "Oops! There was an error while saving the grades!"
+      redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]),
+        notice: "Oops! There was an error while saving the grades!"
     end
   end
 
@@ -161,6 +162,13 @@ class Assignments::GradesController < ApplicationController
   end
 
   private
+
+  def assignment_params
+    params.require(:assignment).permit grades_attributes: [:graded_by_id, :graded_at,
+                                                           :instructor_modified, :student_id,
+                                                           :raw_points, :status, :pass_fail_status,
+                                                           :id]
+  end
 
   # Schedule the `GradeUpdater` for all grades provided
   def enqueue_multiple_grade_update_jobs(grade_ids)

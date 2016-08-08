@@ -2,8 +2,6 @@ module UnlockableCondition
   extend ActiveSupport::Concern
 
   included do
-    attr_accessible :unlock_conditions, :unlock_conditions_attributes
-
     has_many :unlock_conditions, as: :unlockable, dependent: :destroy
     has_many :unlock_keys, class_name: "UnlockCondition",
       foreign_key: :condition_id, dependent: :destroy

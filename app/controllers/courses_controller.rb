@@ -21,7 +21,7 @@ class CoursesController < ApplicationController
   end
 
   def course_creation_wizard
-    
+
   end
 
   def show
@@ -56,8 +56,8 @@ class CoursesController < ApplicationController
   def student_onboarding_setup
     @title = "Student Onboarding Setup"
   end
-  
-  def badges 
+
+  def badges
     if @course.has_public_badges?
       @title = @course.name
       @badges = @course.badges
@@ -83,7 +83,7 @@ class CoursesController < ApplicationController
   end
 
   def create
-    @course = Course.new(params[:course])
+    @course = Course.new(course_params)
 
     respond_to do |format|
       if @course.save
@@ -105,7 +105,7 @@ class CoursesController < ApplicationController
 
   def update
     respond_to do |format|
-      if @course.update_attributes(params[:course])
+      if @course.update_attributes(course_params)
         bust_course_list_cache current_user
         format.html do
           redirect_to @course,
@@ -130,6 +130,25 @@ class CoursesController < ApplicationController
   end
 
   private
+
+  def course_params
+    params.require(:course).permit :course_number, :name,
+      :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
+      :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
+      :user_id, :course_id, :course_rules, :syllabus,
+      :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
+      :total_weights, :weights_close_at, :has_public_badges,
+      :assignment_weight_type, :has_submissions, :teams_visible,
+      :weight_term, :fail_term, :pass_term,
+      :max_weights_per_assignment_type, :assignments,
+      :accepts_submissions, :tagline, :office, :phone,
+      :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
+      :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
+      :team_score_average, :has_team_challenges, :team_leader_term,
+      :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
+      :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
+      :assignments_attributes, :start_date, :end_date
+  end
 
   def find_course
     @course = Course.find(params[:id])

@@ -1,8 +1,6 @@
 class AssignmentFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  attr_accessible :file, :filename, :filepath, :assignment_id
-
   belongs_to :assignment
 
   validates :filename, presence: true, length: { maximum: 50 }

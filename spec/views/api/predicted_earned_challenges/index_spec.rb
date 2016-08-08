@@ -49,7 +49,6 @@ describe "api/predicted_earned_challenges/index" do
 
   describe "passes boolean states for icons" do
     it "adds has_info to model" do
-      @challenge.update(required: true)
       render
       @json = JSON.parse(response.body)
       expect(@json["data"][0]["attributes"]["has_info"]).to be_truthy

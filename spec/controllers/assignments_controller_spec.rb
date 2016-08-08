@@ -91,9 +91,9 @@ describe AssignmentsController do
     end
 
     describe "POST create" do
-      it "creates the assignment with valid attributes"  do
+      it "creates the assignment with valid attributes" do
         params = attributes_for(:assignment)
-        params[:assignment_type_id] = @assignment_type
+        params[:assignment_type_id] = @assignment_type.id
         expect{ post :create, assignment: params }.to change(Assignment,:count).by(1)
       end
 
@@ -101,7 +101,8 @@ describe AssignmentsController do
         Assignment.delete_all
         params = attributes_for(:assignment)
         params[:assignment_type_id] = @assignment_type
-        params.merge! assignment_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
+        params.merge! assignment_files_attributes: {"0" => {
+          "file" => [fixture_file("test_file.txt", "txt")] }}
         post :create, assignment: params
         assignment = Assignment.where(name: params[:name]).last
         expect expect(assignment.assignment_files.count).to eq(1)

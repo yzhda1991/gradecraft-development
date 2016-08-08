@@ -32,7 +32,7 @@ class AssignmentTypesController < ApplicationController
   # Create a new assignment type
   def create
     @assignment_type =
-      current_course.assignment_types.new(params[:assignment_type])
+      current_course.assignment_types.new(assignment_type_params)
     @title = "Create a New #{term_for :assignment_type}"
 
     respond_to do |format|
@@ -49,7 +49,7 @@ class AssignmentTypesController < ApplicationController
   # Update assignment type
   def update
     @title = "Editing #{@assignment_type.name}"
-    @assignment_type.update_attributes(params[:assignment_type])
+    @assignment_type.update_attributes(assignment_type_params)
 
     respond_to do |format|
       if @assignment_type.save
@@ -118,6 +118,11 @@ class AssignmentTypesController < ApplicationController
   end
 
   private
+
+  def assignment_type_params
+    params.require(:assignment_type).permit(:max_points, :name, :description, :student_weightable,
+                                            :position, :top_grades_counted)
+  end
 
   def find_assignment_type
     @assignment_type = current_course.assignment_types.find(params[:id])
