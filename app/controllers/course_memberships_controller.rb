@@ -5,7 +5,7 @@ class CourseMembershipsController < ApplicationController
 
   def create
     @course_membership =
-      current_course.course_memberships.create(params[:course_membership])
+      current_course.course_memberships.create(course_membership_params)
     @course_membership.save
 
     respond_with @course_membership
@@ -18,5 +18,13 @@ class CourseMembershipsController < ApplicationController
 
     redirect_to students_path,
       notice: "#{course_membership.user.name} was successfully removed from course."
+  end
+
+  private
+
+  def course_membership_params
+    params.require(:course_membership).permit :auditing, :character_profile,
+      :course_id, :instructor_of_record, :user_id, :role, :last_login_at,
+      :earned_grade_scheme_element_id
   end
 end
