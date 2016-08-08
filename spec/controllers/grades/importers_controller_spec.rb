@@ -46,7 +46,7 @@ describe Grades::ImportersController do
         expect(GradeUpdaterJob).to have_queue_size_of(2)
       end
 
-      context "with students that are no a part of the current course" do
+      context "with students that are not part of the current course" do
         it "renders any errors that have occured" do
           post :upload, assignment_id: world.assignment.id, importer_id: :csv, file: file
 
