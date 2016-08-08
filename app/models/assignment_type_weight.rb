@@ -1,6 +1,4 @@
 class AssignmentTypeWeight < ActiveRecord::Base
-  attr_accessible :assignment_type_id, :course_id, :student_id,:weight
-
   belongs_to :student, class_name: "User", touch: true
   belongs_to :assignment_type
   belongs_to :course

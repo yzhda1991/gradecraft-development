@@ -12,7 +12,7 @@ class Grade < ActiveRecord::Base
     :grade_file, :grade_file_ids, :grade_files_attributes, :graded_at,
     :graded_by_id, :group, :group_id, :group_type, :instructor_modified,
     :is_custom_value, :pass_fail_status, :full_points, :raw_points, :student,
-    :student_id, :submission, :submission_id, :task, :task_id, :team_id
+    :student_id, :submission, :submission_id, :task, :task_id, :team_id, :status
 
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true

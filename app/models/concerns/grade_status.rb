@@ -4,8 +4,6 @@ module GradeStatus
   extend ActiveSupport::Concern
 
   included do
-    attr_accessible :status
-
     scope :graded, -> { where status: "Graded" }
     scope :graded_or_released, -> { where(status: ["Graded", "Released"]) }
     scope :in_progress, -> { where status: "In Progress" }

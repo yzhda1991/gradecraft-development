@@ -19,7 +19,7 @@ class ChallengeGradesController < ApplicationController
   # POST /challenges_grades/:id
   def update
     @team = @challenge_grade.team
-    if @challenge_grade.update_attributes(params[:challenge_grade])
+    if @challenge_grade.update_attributes(challenge_grade_params)
 
       if ChallengeGradeProctor.new(@challenge_grade).viewable?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
@@ -49,6 +49,11 @@ class ChallengeGradesController < ApplicationController
   end
 
   private
+
+  def challenge_grade_params
+    params.require(:challenge_grade).permit :name, :score, :status, :challenge_id, :feedback,
+      :team_id, :final_points
+  end
 
   def find_challenge
     find_challenge_grade

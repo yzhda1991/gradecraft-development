@@ -1,8 +1,6 @@
 class ChallengeFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  attr_accessible :file, :filename, :filepath, :challenge_id
-
   belongs_to :challenge
 
   validates :filename, presence: true, length: { maximum: 50 }

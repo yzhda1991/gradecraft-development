@@ -24,7 +24,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
     end
 
     describe "#update" do
-      let(:params) { attributes_for(:challenge_grade) }
+      let(:params) { attributes_for(:challenge_grade).merge(challenge_id: challenge.id) }
       subject { post :update, id: challenge_grade.id, challenge_grade: params }
 
       before do
@@ -32,7 +32,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
       end
 
       context "challenge grade attributes are successfully updated" do
-        before { allow(challenge_grade).to receive(:update_attributes) { true } }
+        before { allow_any_instance_of(ChallengeGrade).to receive(:update_attributes) { true } }
 
         context "challenge grade is released" do
           let(:challenge_grade) { create(:released_challenge_grade, challenge_grade_attributes) }
