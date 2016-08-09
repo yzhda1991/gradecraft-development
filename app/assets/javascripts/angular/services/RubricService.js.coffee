@@ -74,15 +74,12 @@
         window.location = returnURL
     ).error(
       (data)->
-        if data.errors.length
-          console.log(data.errors[0].detail)
+        console.log(data)
     )
 
 
 
   postGradeFiles = (grade, files)->
-    console.log("Uploading:");
-    console.dir(files)
     fd = new FormData();
     angular.forEach(files, (file, index)->
       fd.append("grade_files[]", file)
@@ -98,8 +95,7 @@
         console.log(data)
     ).error(
       (data)->
-        if data.errors.length
-          console.log(data.errors[0].detail)
+        console.log(data)
     )
 
   thresholdPoints = ()->
