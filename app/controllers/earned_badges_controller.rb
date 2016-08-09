@@ -36,7 +36,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    result = Services::CreatesEarnedBadge.award params[:earned_badge]
+    result = Services::CreatesEarnedBadge.award earned_badge_params
 
     if result.success?
       redirect_to badge_path(result.earned_badge.badge),
@@ -50,7 +50,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def update
-    if @earned_badge.update_attributes(params[:earned_badge])
+    if @earned_badge.update_attributes(earned_badge_params)
       if @badge.full_points?
         ScoreRecalculatorJob.new(user_id: @earned_badge.student_id,
                                  course_id: current_course.id).enqueue
@@ -109,6 +109,12 @@ class EarnedBadgesController < ApplicationController
   end
 
   private
+
+  def earned_badge_params
+    params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
+      :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
+      :student_visible, :_destroy
+  end
 
   def find_badge
     @badge = current_course.badges.find(params[:badge_id])

@@ -11,7 +11,6 @@ describe Services::Actions::CreatesEarnedBadge do
       badge_id: world.badge.id,
       assignment_id: world.assignment.id,
       grade_id: world.grade.id,
-      score: 800,
       student_visible: true,
       feedback: "You are so awesome!"
     }
