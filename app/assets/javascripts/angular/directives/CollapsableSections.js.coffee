@@ -8,7 +8,7 @@
   restrict : 'C',
   link: (scope, elm, attrs) ->
     elm.bind('click', (event)->
-      if angular.element(event.target).hasClass('collapse-arrow')
+      unless angular.element(event.target).is('.coins, .coin-slot, .coin-stack, .coin-remove-icon, .coin-add-icon')
         elm.siblings().toggleClass('collapsed')
         elm.toggleClass('collapsed')
     )
