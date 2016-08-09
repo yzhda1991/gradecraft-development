@@ -124,9 +124,8 @@ class AssignmentsController < ApplicationController
   def assignment_params
     params.require(:assignment).permit :accepts_attachments, :accepts_links, :accepts_submissions,
       :accepts_submissions_until, :accepts_text, :assignment_file,
-      :assignment_file_ids, :assignment_files_attributes, :assignment_score_level,
-      :assignment_score_levels_attributes, :assignment_type, :assignment_type_id,
-      :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
+      :assignment_file_ids, :assignment_score_level,
+      :assignment_type_id, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
       :include_in_predictor, :include_in_timeline, :include_in_to_do,
       :mass_grade_type, :name, :open_at, :pass_fail,
       :full_points, :purpose, :release_necessary,
@@ -136,6 +135,8 @@ class AssignmentsController < ApplicationController
       :visible, :visible_when_locked, :min_group_size, :max_group_size,
       unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
         :condition_type, :condition_state, :condition_value, :condition_date],
-      assignment_files_attributes: [:id, file: []]
+      assignment_files_attributes: [:id, file: []],
+      assignment_score_levels_attributes: [:id, :name, :points],
+      assignment_groups_attributes: [:group_id]
   end
 end
