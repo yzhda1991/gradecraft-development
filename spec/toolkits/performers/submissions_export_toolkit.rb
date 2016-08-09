@@ -25,7 +25,8 @@ module Toolkits
             create(:submissions_export, course: course, professor: professor, assignment: assignment, team: team)
           end
 
-          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id, submissions_export_id: submissions_export.id }}
+          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id,
+                             submissions_export_id: submissions_export.id }}
           let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
 
           let(:performer) { SubmissionsExportPerformer.new(job_attrs) }

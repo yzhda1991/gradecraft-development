@@ -4,15 +4,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
-  subject { performer }
-
   describe "#setup" do
     subject { performer.setup }
-    let(:submissions_export_attributes) {{submissions_export_id: submissions_export.id}}
-
-    before do
-      allow(performer).to receive(:submissions_export_attributes) { submissions_export_attributes }
-    end
 
     describe "ensuring s3fs parent dir" do
       before(:each) { allow(performer).to receive(:s3fs_tmp_dir_path) { Dir.mktmpdir } }
@@ -48,7 +41,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "creates an submissions export record from the attributes" do
       allow(SubmissionsExport).to receive(:find) { submissions_export }
-      expect(submissions_export).to receive(:update_attributes)
+      expect(submissions_export).to receive(:update_attributes).at_least(:once)
       subject
     end
 
