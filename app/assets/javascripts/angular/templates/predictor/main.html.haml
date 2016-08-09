@@ -14,18 +14,16 @@
       .predictor-graph
       #predictor-post-graph-spacer
 
-    #predictor-main-header{'ng-class'=>'{"with-weights": weightsAvailable()}'}
-
-      .collapse-all-toggler
-        .collapse-arrow.outdent
-        .predictor-section-title
-          .predictor-section-title-predicted-points{'ng-if'=>'weightsAvailable()'}
-            .predictor-title-right-span
-              Unused {{termFor("weights")}} :
-            .predictor-section-title-weights
-              .coin-stack
-                .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
-                .coin-stack-count {{unusedWeightsRange().length}}
+    #predictor-main-header.collapse-all-toggler{'ng-class'=>'{"with-weights": weightsAvailable()}'}
+      .collapse-arrow.outdent
+      .predictor-section-title
+        .predictor-section-title-predicted-points{'ng-if'=>'weightsAvailable()'}
+          .predictor-title-right-span
+            Unused {{termFor("weights")}} :
+          .predictor-section-title-weights
+            .coin-stack
+              .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
+              .coin-stack-count {{unusedWeightsRange().length}}
 
     .predictor-section-assignment-types
 
