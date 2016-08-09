@@ -15,7 +15,7 @@ class SubmissionsController < ApplicationController
 
   def create
     assignment = current_course.assignments.find(params[:assignment_id])
-    submission = assignment.submissions.new(params[:submission].merge(submitted_at: DateTime.now))
+    submission = assignment.submissions.new(submission_params.merge(submitted_at: DateTime.now))
     if submission.save
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
@@ -44,7 +44,7 @@ class SubmissionsController < ApplicationController
     submission = assignment.submissions.find(params[:id])
 
     respond_to do |format|
-      if submission.update_attributes(params[:submission].merge(submitted_at: DateTime.now))
+      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now))
         path = assignment.has_groups? ? { group_id: submission.group_id } :
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
@@ -87,5 +87,11 @@ class SubmissionsController < ApplicationController
       group_id: params[:group_id],
       view_context: view_context
     }
+  end
+
+  def submission_params
+    params.require(:submission).permit :task_id, :assignment_id, :assignment_type_id,
+      :group_id, :link, :student_id, :creator_id, :text_comment, :submitted_at,
+      :course_id, :submission_file_ids, submission_files_attributes: [:id, file: []]
   end
 end

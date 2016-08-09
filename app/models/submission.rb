@@ -1,10 +1,4 @@
 class Submission < ActiveRecord::Base
-  attr_accessible :task, :task_id, :assignment, :assignment_id,
-    :assignment_type_id, :group, :group_id, :link, :student, :student_id,
-    :creator, :creator_id, :text_comment, :submission_file, :submitted_at,
-    :submission_files_attributes, :submission_files, :course_id, :updated_at,
-    :submission_file_ids
-
   include Historical
   include MultipleFileAttributes
   include Sanitizable
