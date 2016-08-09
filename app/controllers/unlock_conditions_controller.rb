@@ -4,18 +4,17 @@
 # conditions
 
 class UnlockConditionsController < ApplicationController
-
   before_filter :ensure_staff?
 
   def create
     @unlock_condition =
-      current_course.unlock_condition.new(params[:unlock_condition])
+      current_course.unlock_condition.new(unlock_condition_params)
     @unlock_condition.save
   end
 
   def update
     @unlock_condition = current_course.unlock_conditions.find(params[:id])
-    @unlock_condition.update_attributes(params[:unlock_condition])
+    @unlock_condition.update_attributes(unlock_condition_params)
     respond_with @unlock_condition
   end
 
@@ -24,4 +23,10 @@ class UnlockConditionsController < ApplicationController
     @unlock_condition.destroy
   end
 
+  private
+
+  def unlock_condition_params
+    params.require(:unlock_condition).permit :unlockable_id, :unlockable_type, :condition_id,
+      :condition_type, :condition_state, :condition_value, :condition_date
+  end
 end

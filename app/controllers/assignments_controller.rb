@@ -134,6 +134,8 @@ class AssignmentsController < ApplicationController
       :show_purpose_when_locked, :show_name_when_locked,
       :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
       :visible, :visible_when_locked, :min_group_size, :max_group_size,
-      :unlock_conditions_attributes, assignment_files_attributes: [:id, file: []]
+      unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date],
+      assignment_files_attributes: [:id, file: []]
   end
 end

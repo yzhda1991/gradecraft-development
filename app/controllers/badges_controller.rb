@@ -79,7 +79,9 @@ class BadgesController < ApplicationController
       :badge_file_ids, :badge_files_attributes, :badge_file, :position,
       :visible_when_locked, :course_id, :course, :show_name_when_locked,
       :show_points_when_locked, :show_description_when_locked,
-      :unlock_conditions_attributes, badge_files_attributes: [:id, file: []])
+      unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date],
+      badge_files_attributes: [:id, file: []])
   end
 
   def find_badge

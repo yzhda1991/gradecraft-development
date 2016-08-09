@@ -147,7 +147,9 @@ class CoursesController < ApplicationController
       :team_score_average, :has_team_challenges, :team_leader_term,
       :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
       :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
-      :assignments_attributes, :start_date, :end_date
+      :assignments_attributes, :start_date, :end_date,
+      unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date]
   end
 
   def find_course
