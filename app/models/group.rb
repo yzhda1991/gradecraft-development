@@ -3,10 +3,6 @@ class Group < ActiveRecord::Base
 
   APPROVED_STATUSES = ["Pending", "Approved", "Rejected"]
 
-  attr_accessible :name, :approved, :assignment_id, :assignment_ids,
-    :student_ids, :assignment_groups_attributes, :group_membership_attributes,
-    :text_feedback, :proposals_attributes, :proposal, :approved
-
   attr_reader :student_tokens
 
   belongs_to :course
