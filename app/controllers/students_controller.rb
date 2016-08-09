@@ -34,6 +34,7 @@ class StudentsController < ApplicationController
   # Students' primary page: displays all assignments and
   # team challenges in course
   def syllabus
+    self.current_student = current_course.students.where(id: params[:id]).first
     render :syllabus, Students::SyllabusPresenter.build({
       student: current_student,
       assignment_types: current_course.assignment_types.includes(:assignments),
@@ -64,6 +65,7 @@ class StudentsController < ApplicationController
 
   # Displaying the course grading scheme and professor's grading philosophy
   def grading_scheme
+    self.current_student = current_course.students.where(id: params[:id]).first
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_highest_points
     @title = "Your Course Progress"
   end

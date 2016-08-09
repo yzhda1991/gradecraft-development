@@ -264,6 +264,8 @@ GradeCraft::Application.routes.draw do
     member do
       get :grade_index
       get :predictor
+      get :syllabus
+      get :grading_scheme
       get :recalculate
       get :teams
     end

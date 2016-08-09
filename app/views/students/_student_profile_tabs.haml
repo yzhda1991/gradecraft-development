@@ -3,11 +3,11 @@
   - if current_user_is_staff?
     %li{class: ("active" if current_page?(student_path(current_student))) }
       = link_to_unless_current "Dashboard", student_path(current_student)
-    %li{class: ("active" if current_page?(student_path(current_student))) }
-      = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
+    %li{class: ("active" if current_page?(syllabus_student_path(current_student))) }
+      = link_to_unless_current "#{term_for :assignments}", syllabus_student_path(current_student)
     - if current_course.grade_scheme_elements.present?
-      %li{class: ("active" if current_page?(grading_scheme_path(student_id: current_student))) }
-        = link_to_unless_current "Grading Scheme", grading_scheme_path(student_id: current_student)
+      %li{class: ("active" if current_page?(grading_scheme_student_path(current_student))) }
+        = link_to_unless_current "Grading Scheme", grading_scheme_student_path(current_student)
     %li{class: ("active" if current_page?(predictor_student_path(current_student))) }
       = link_to_unless_current glyph("tasks") + "Grade Predictor", predictor_student_path(current_student)
     - if current_course.has_badges?
