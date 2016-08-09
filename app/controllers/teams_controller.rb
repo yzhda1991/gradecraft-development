@@ -28,7 +28,7 @@ class TeamsController < ApplicationController
   end
 
   def create
-    @team =  current_course.teams.new(params[:team])
+    @team =  current_course.teams.new(team_params)
     @team.save
     @team.team_memberships.build
     respond_with @team, notice: "Team #{@team.name} successfully created"
@@ -44,7 +44,7 @@ class TeamsController < ApplicationController
 
   def update
     @team = current_course.teams.find(params[:id])
-    @team.update_attributes(params[:team])
+    @team.update_attributes(team_params)
     respond_with @team, notice: "Team #{@team.name} successfully updated"
   end
 
@@ -58,5 +58,13 @@ class TeamsController < ApplicationController
         notice: "#{(term_for :team).titleize} #{@name} successfully deleted"
       end
     end
+  end
+
+  private
+
+  def team_params
+    params.require(:team).permit :name, :course, :course_id, :student_ids, :average_score,
+      :banner, :rank, :leader_ids, :challenge_grade_score,
+      team_memberships_attributes: [:student_id, :team_id]
   end
 end
