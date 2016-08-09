@@ -78,6 +78,30 @@
           console.log(data.errors[0].detail)
     )
 
+
+
+  postGradeFiles = (grade, files)->
+    console.log("Uploading:");
+    console.dir(files)
+    fd = new FormData();
+    angular.forEach(files, (file, index)->
+      fd.append("grade_files[]", file)
+    )
+
+    $http.post(
+      "/api/grades/#{grade.id}/grade_files",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).success(
+      (data)->
+        console.log(data)
+    ).error(
+      (data)->
+        if data.errors.length
+          console.log(data.errors[0].detail)
+    )
+
   thresholdPoints = ()->
     thresholdPoints
 
@@ -94,6 +118,7 @@
       getBadges: getBadges,
       getGrade: getGrade,
       putRubricGradeSubmission: putRubricGradeSubmission,
+      postGradeFiles: postGradeFiles,
       assignment: assignment,
       badges: badges,
       criteria: criteria,
