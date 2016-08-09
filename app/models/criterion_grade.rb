@@ -1,7 +1,4 @@
 class CriterionGrade < ActiveRecord::Base
-  attr_accessible :points, :criterion_id, :level_id,
-    :student_id, :assignment_id, :comments, :student, :assignment, :criterion
-
   belongs_to :criterion
   belongs_to :level
   belongs_to :student, class_name: "User"
