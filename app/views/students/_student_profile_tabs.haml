@@ -2,6 +2,8 @@
   %h5 Navigation
   - if current_user_is_staff?
     %li{class: ("active" if current_page?(student_path(current_student))) }
+      = link_to_unless_current "Dashboard", student_path(current_student)
+    %li{class: ("active" if current_page?(student_path(current_student))) }
       = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
     - if current_course.grade_scheme_elements.present?
       %li{class: ("active" if current_page?(grading_scheme_path(student_id: current_student))) }

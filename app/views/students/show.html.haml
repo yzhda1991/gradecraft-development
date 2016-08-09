@@ -3,5 +3,4 @@
 .pageContent
   = render "layouts/alerts"
 
-  = render partial: "students/syllabus/assignments", locals: { presenter: presenter }
-  = render partial: "students/syllabus/challenges"
+  #dashboard-timeline= render partial: "info/dashboard/student_dashboard", locals: { presenter: presenter }
