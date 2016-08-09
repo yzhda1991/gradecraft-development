@@ -1,7 +1,4 @@
 class PredictedEarnedGrade < ActiveRecord::Base
-
-  attr_accessible :student_id, :assignment_id, :predicted_points
-
   belongs_to :assignment
   belongs_to :student, class_name: "User"
 
