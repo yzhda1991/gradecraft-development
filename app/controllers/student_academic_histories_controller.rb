@@ -15,7 +15,7 @@ class StudentAcademicHistoriesController < ApplicationController
 
   def create
     @academic_history =
-      @student.student_academic_histories.new(params[:student_academic_history])
+      @student.student_academic_histories.new(student_academic_history_params)
     if @academic_history.save
       flash[:notice] =  "#{@student.name}'s Academic History profile was successfully created"
       redirect_to student_path(@student)
@@ -30,7 +30,7 @@ class StudentAcademicHistoriesController < ApplicationController
 
   def update
     @academic_history = @student.student_academic_histories.where(course_id: current_course).first
-    @academic_history.update_attributes(params[:student_academic_history])
+    @academic_history.update_attributes(student_academic_history_params)
 
     if @academic_history.save
       flash[:notice] =  "#{@student.name}'s Academic History profile was successfully updated"
@@ -55,6 +55,12 @@ class StudentAcademicHistoriesController < ApplicationController
 
   def find_student
     @student = current_course.students.find(params[:student_id])
+  end
+
+  def student_academic_history_params
+    params.require(:student_academic_history).permit :student_id, :major, :gpa,
+      :current_term_credits, :accumulated_credits, :year_in_school, :state_of_residence,
+      :high_school, :athlete, :act_score, :sat_score, :course_id
   end
 
 end
