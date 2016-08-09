@@ -165,11 +165,11 @@ class UsersController < ApplicationController
       :team_role, :team_id, :lti_uid, :course_team_ids, :internal,
       earned_badges_attributes: [:points, :feedback, :student_id, :badge_id,
         :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-        :student_visible, :_destroy],
-      course_memberships_attributes: [:auditing, :character_profile, :course, :course_id,
-        :instructor_of_record, :user_id, :role, :last_login_at],
+        :student_visible, :id, :_destroy],
+      course_memberships_attributes: [:auditing, :character_profile, :course_id,
+        :instructor_of_record, :user_id, :role, :last_login_at, :id, :_destroy],
       student_academic_history_attributes: [:student_id, :major, :gpa,
         :current_term_credits, :accumulated_credits, :year_in_school, :state_of_residence,
-        :high_school, :athlete, :act_score, :sat_score, :course_id]
+        :high_school, :athlete, :act_score, :sat_score, :course_id, :id, :_destroy]
   end
 end

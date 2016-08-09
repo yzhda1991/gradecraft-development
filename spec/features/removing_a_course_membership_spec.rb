@@ -16,7 +16,7 @@ feature "removing a course membership" do
       before(:each) { visit edit_user_path(student) }
 
       scenario "successfully" do
-        EditUserPage.new(student).submit(courses: [admin_course_membership.course])
+        EditUserPage.new(student).submit(courses: [course])
         expect(current_path).to eq user_path(student)
 
         expect(student.reload.course_memberships).to be_empty
