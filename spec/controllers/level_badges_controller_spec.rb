@@ -17,7 +17,8 @@ describe LevelBadgesController do
 
     describe "POST create" do
       it "creates a new level badge" do
-        params = attributes_for(:level_badge)
+        level = create :level
+        params = attributes_for(:level_badge).merge(level_id: level.id)
         expect{ post :create, level_badge: params }.to change(LevelBadge,:count).by(1)
       end
     end
