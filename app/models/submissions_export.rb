@@ -14,11 +14,6 @@ class SubmissionsExport < ActiveRecord::Base
   #
   include Export::Model
 
-  attr_accessible :course_id, :professor_id, :team_id, :assignment_id,
-    :submissions_snapshot, :s3_object_key, :export_filename, :s3_bucket,
-    :last_export_started_at, :last_export_completed_at, :student_ids,
-    :performer_error_log, :last_completed_step
-
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
   belongs_to :team
