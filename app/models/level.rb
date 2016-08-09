@@ -11,9 +11,6 @@ class Level < ActiveRecord::Base
 
   scope :ordered, -> { order("points ASC") }
 
-  attr_accessible :name, :description, :points, :criterion_id,
-    :full_credit, :no_credit, :meets_expectations, :sort_order
-
   include DisplayHelpers
 
   def above_expectations?

@@ -6,7 +6,7 @@ class LevelsController < ApplicationController
   respond_to :html, :json
 
   def create
-    @level = Level.create params[:level]
+    @level = Level.create level_params
     respond_with @level, layout: false
   end
 
@@ -16,12 +16,17 @@ class LevelsController < ApplicationController
   end
 
   def update
-    @level.update_attributes params[:level]
+    @level.update_attributes level_params
     respond_with @level, layout: false
   end
 
   private
-  
+
+  def level_params
+    params.require(:level).permit :name, :description, :points, :criterion_id, :full_credit,
+      :no_credit, :meets_expectations, :sort_order
+  end
+
   def find_level
     @level = Level.find params[:id]
   end
