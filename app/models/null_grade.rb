@@ -79,6 +79,14 @@ class NullGrade
   def student
     NullStudent.new
   end
+
+  def team
+    NullTeam.new
+  end
+
+  def challenge
+    NullAssignment.new
+  end
 end
 
 class NullAssignment
