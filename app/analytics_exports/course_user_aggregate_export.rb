@@ -3,7 +3,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
   attr_reader :events, :predictor_events, :users,
               :user_pageviews, :user_logins, :user_predictor_pageviews
 
-  set_schema username: :username,
+  export_mapping username: :username,
              role: :user_role,
              user_id: :user_id,
              total_pageviews: :pageviews,

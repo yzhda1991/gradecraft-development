@@ -1,5 +1,3 @@
-require_relative "model/class_methods"
-
 module Analytics
   module Export
     # let's make this a class instead of a module because it's more straight-
