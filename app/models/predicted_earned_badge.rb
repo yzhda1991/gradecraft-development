@@ -1,7 +1,4 @@
 class PredictedEarnedBadge < ActiveRecord::Base
-
-  attr_accessible :student_id, :badge_id, :predicted_times_earned
-
   belongs_to :badge
   belongs_to :student, class_name: "User"
 
