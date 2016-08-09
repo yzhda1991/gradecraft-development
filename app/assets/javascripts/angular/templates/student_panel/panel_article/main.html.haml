@@ -1,7 +1,8 @@
 %header.student-panel-article-header{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints()}'}
   .article-title {{article.name}}
-  .full-points full points: {{article.full_points}}
+  .full-points full points: {{article.full_points | number}}
   .due-date{'ng-if' => 'article.due_at'} due: {{article.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+  .times-earned{'ng-if'=>'article.type === "badges"'} times earned: {{article.earned_badge_count}}
 
 %section.student-panel-article-main-icons
   .predictor-article-main-icons
@@ -19,8 +20,8 @@
   %img{'ng-src'=>'{{article.icon}}', 'ng-class'=>"(article.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')"}
 
 %section.student-panel-article-description{'ng-if'=>'article.has_info'}
-  %h2 Guidelines
-  %p.student-panel-text-block {{article.description | limitTo:600}}
+  %h2 Description
+  %p.student-panel-text-block {{article.description | limitTo:500}}...
 
 %section.student-panel-article-icons
   .student-panel-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'article'}

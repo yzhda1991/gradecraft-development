@@ -1,5 +1,5 @@
 .student-panel-wrap
-  .student-panel{'context'=>'"badges"'}
+  .student-panel.badge-panel{'context'=>'"badges"'}
 
   #student-main-column
 
@@ -11,7 +11,8 @@
 
     .badge-index-section
       .badge-icon-container{'ng-repeat'=>'badge in badges', 'ng-class'=>'{"focus-article": isFocusArticle(badge)}'}
-        %img{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')", 'ng-src'=>'{{badge.icon}}', 'ng-click'=>'changeFocusArticle(badge)'}
+        %a.mobile-click{:href => "badges/{{badge.id}}"}
+        %img{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'badge-icon unearned' : 'badge-icon')", 'ng-src'=>'{{badge.icon}}', 'ng-click'=>'changeFocusArticle(badge)'}
         %p.badge-name {{badge.name}}
         .gold-stars
           %i.fa.fa-fw.fa-star

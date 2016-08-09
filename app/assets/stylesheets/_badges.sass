@@ -4,7 +4,7 @@
 @import animation
 
 
-/* Badge Show Page */
+/* Badge Show Pages */
 .student
   .badge-show-page, .earned-badge
     max-width: 960px
@@ -49,18 +49,13 @@
     .badge-title
       font-size: 1.25rem
 
-.info-side-panel
-  height: 100%
-  float: left
-  width: 25%
-  border-left: 1px solid $color-grey-5
-  box-sizing: border-box
-  padding: 0 1rem
+.mobile-click
+  display: none
 
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
 
-.badge-name
+.badge-name, .mobile-click
   font-size: .7rem
   margin: 0px
   width: 110px
@@ -91,8 +86,9 @@ button#remove-badges, button#add-badges
   margin: 1rem
   position: relative
 
-  img
+  .badge-icon
     width: 80px
+    max-height: 80px
     display: block
     margin: 0 auto
     cursor: pointer
@@ -183,6 +179,13 @@ button#remove-badges, button#add-badges
   .badge-index-table
     .button-bar li:not(:last-of-type) a.button
       margin-right: 0
+
+  .mobile-click
+    display: block
+    width: 110px
+    height: 94px
+    position: absolute
+    z-index: 2
 
   .badge-index-container
     width: 100%
