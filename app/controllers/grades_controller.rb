@@ -32,8 +32,7 @@ class GradesController < ApplicationController
   def update
     grade = Grade.find params[:id]
 
-    grade_params = params[:grade].merge(graded_at: DateTime.now, instructor_modified: true)
-    if grade.update_attributes grade_params
+    if grade.update_attributes grade_params.merge(graded_at: DateTime.now, instructor_modified: true)
       if GradeProctor.new(grade).viewable?
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
@@ -63,7 +62,7 @@ class GradesController < ApplicationController
     @grade.instructor_modified = false
     @grade.graded_at = nil
 
-    @grade.update_attributes(params[:grade])
+    @grade.update_attributes(grade_params)
 
     if @grade.save
       score_recalculator(@grade.student)
@@ -135,6 +134,17 @@ class GradesController < ApplicationController
   end
 
   private
+
+  def grade_params
+    params.require(:grade).permit :_destroy, :adjustment_points, :adjustment_points_feedback,
+      :assignment_id, :assignment_type_id, :assignments_attributes, :course_id,
+      :earned_badges_attributes, :excluded_by, :excluded_date, :excluded_from_course_score,
+      :feedback, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
+      :final_points, :grade_file_ids, :grade_files_attributes, :graded_at, :graded_by_id,
+      :group_id, :group_type, :instructor_modified, :is_custom_value, :pass_fail_status,
+      :full_points, :raw_points, :student_id, :submission_id, :task_id, :team_id, :status,
+      grade_files_attributes: [:id, file: []]
+  end
 
   def temp_view_context
     @temp_view_context ||= ApplicationController.new.view_context

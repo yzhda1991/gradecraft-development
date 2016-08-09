@@ -137,7 +137,7 @@ describe GradesController do
 
       it "redirects on failure" do
         allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
-        put :update, { id: @grade.id, grade: {}}
+        put :update, { id: @grade.id, grade: { full_points: 100 }}
         expect(response).to redirect_to(edit_grade_path(@grade))
       end
     end
@@ -150,7 +150,7 @@ describe GradesController do
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :remove, { id: @grade.id }
+        post :remove, { id: @grade.id, grade: { full_points: 13 }}
         expect(response.status).to eq(400)
       end
     end

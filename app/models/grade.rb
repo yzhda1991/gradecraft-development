@@ -4,16 +4,6 @@ class Grade < ActiveRecord::Base
   include MultipleFileAttributes
   include Sanitizable
 
-  attr_accessible :_destroy, :adjustment_points, :adjustment_points_feedback,
-    :assignment, :assignment_id, :assignment_type_id, :assignments_attributes,
-    :course_id, :earned_badges, :earned_badges_attributes, :excluded_by,
-    :excluded_date, :excluded_from_course_score, :feedback, :feedback_read,
-    :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at, :final_points,
-    :grade_file, :grade_file_ids, :grade_files_attributes, :graded_at,
-    :graded_by_id, :group, :group_id, :group_type, :instructor_modified,
-    :is_custom_value, :pass_fail_status, :full_points, :raw_points, :student,
-    :student_id, :submission, :submission_id, :task, :task_id, :team_id, :status
-
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
   belongs_to :assignment_type, touch: true
