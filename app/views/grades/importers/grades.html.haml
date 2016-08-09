@@ -1,6 +1,6 @@
-= content_nav_for Course, ["Import Grades", assignment_grades_importers_path(@assignment)], @provider.capitalize
+= content_nav_for Course, ["Import Grades", assignment_grades_importers_path(@assignment)], @provider_name.capitalize
 
-%h3.pagetitle= "Grade Import from #{@provider.capitalize}"
+%h3.pagetitle= "Grade Import from #{@provider_name.capitalize}"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -10,7 +10,7 @@
       %div There are no grades to import for these assignments.
       %div
         You can
-        =link_to "modify your assignment selection", assignment_grades_importer_assignments_path(@assignment, @provider, params[:id])
+        =link_to "modify your assignment selection", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
         to find grades to import.
   -else
     %table.dynatable.no-table-header

@@ -1,6 +1,6 @@
-= content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider.capitalize
+= content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider_name.capitalize
 
-%h3.pagetitle= "Import from #{@provider.capitalize}"
+%h3.pagetitle= "Import from #{@provider_name.capitalize}"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -19,4 +19,4 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph("file-text") + "Select Assignments to Import", assignments_importer_assignments_path(@provider, course["id"]), class: "button"
+                %li= link_to glyph("file-text") + "Select Assignments to Import", assignments_importer_assignments_path(@provider_name, course["id"]), class: "button"

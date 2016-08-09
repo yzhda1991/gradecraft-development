@@ -1,6 +1,6 @@
-= content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider.capitalize
+= content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider_name.capitalize
 
-%h3.pagetitle= "#{@provider.capitalize} Assignment Import Results"
+%h3.pagetitle= "#{@provider_name.capitalize} Assignment Import Results"
 
 .pageContent
   = render "layouts/alerts"

@@ -12,7 +12,7 @@ describe Grades::ImportersController do
 
     describe "GET download" do
       it "returns sample csv data" do
-        get :download, assignment_id: world.assignment.id, importer_id: :csv, format: :csv
+        get :download, assignment_id: world.assignment.id, importer_provider_id: :csv, format: :csv
 
         expect(response.body).to \
           include("First Name,Last Name,Email,Score,Feedback")
@@ -29,7 +29,7 @@ describe Grades::ImportersController do
         second_student = create(:user, username: "jimmy")
         second_student.courses << world.course
 
-        post :upload, assignment_id: world.assignment.id, importer_id: :csv, file: file
+        post :upload, assignment_id: world.assignment.id, importer_provider_id: :csv, file: file
 
         expect(response).to render_template :import_results
         expect(response.body).to include "2 Grades Imported Successfully"
@@ -41,14 +41,14 @@ describe Grades::ImportersController do
         second_student.courses << world.course
         ResqueSpec.reset!
 
-        post :upload, assignment_id: world.assignment.id, importer_id: :csv, file: file
+        post :upload, assignment_id: world.assignment.id, importer_provider_id: :csv, file: file
 
         expect(GradeUpdaterJob).to have_queue_size_of(2)
       end
 
       context "with students that are not part of the current course" do
         it "renders any errors that have occured" do
-          post :upload, assignment_id: world.assignment.id, importer_id: :csv, file: file
+          post :upload, assignment_id: world.assignment.id, importer_provider_id: :csv, file: file
 
           expect(response.body).to include "3 Grades Not Imported"
           expect(response.body).to include "Student not found in course"
@@ -57,7 +57,7 @@ describe Grades::ImportersController do
 
       context "without a file to import with" do
         it "renders the missing file error" do
-          post :upload, assignment_id: world.assignment.id, importer_id: :csv
+          post :upload, assignment_id: world.assignment.id, importer_provider_id: :csv
 
           expect(flash[:notice]).to eq("File is missing")
           expect(response).to redirect_to(assignment_grades_importer_path(world.assignment, :csv))
@@ -71,21 +71,21 @@ describe Grades::ImportersController do
 
     describe "GET download" do
       it "redirects back to the root" do
-        expect(get :download, { assignment_id: world.assignment.id, importer_id: :csv }).to \
+        expect(get :download, { assignment_id: world.assignment.id, importer_provider_id: :csv }).to \
           redirect_to(:root)
       end
     end
 
     describe "GET show" do
       it "redirects back to the root" do
-        expect(get :show, { assignment_id: world.assignment.id, id: :csv }).to \
+        expect(get :show, { assignment_id: world.assignment.id, provider_id: :csv }).to \
           redirect_to(:root)
       end
     end
 
     describe "POST upload" do
       it "redirects back to the root" do
-        expect(post :upload, { assignment_id: world.assignment.id, importer_id: :csv }).to \
+        expect(post :upload, { assignment_id: world.assignment.id, importer_provider_id: :csv }).to \
           redirect_to(:root)
       end
     end

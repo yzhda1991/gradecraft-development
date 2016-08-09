@@ -17,6 +17,6 @@
       Columns should be in the following order:
       %br #{term_for :student}'s first name, #{term_for :student}'s last name, #{term_for :student}'s email or username, score, and any text feedback you'd like to include. #{link_to "Download Sample File", assignment_grades_importer_download_path(@assignment, :csv, format: "csv"), class: "bold"}
 
-    = form_tag({action: :upload, importer_id: params[:id]}, :multipart => true) do
+    = form_tag({action: :upload, importer_provider_id: params[:provider_id]}, :multipart => true) do
       = file_field_tag "file"
       = submit_tag("Import", class: "button")

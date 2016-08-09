@@ -7,26 +7,26 @@ class Assignments::ImportersController < ApplicationController
   def index
   end
 
-  # GET /assignments/importers/:importer_id/courses
+  # GET /assignments/importers/:importer_provider_id/courses
   def courses
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
     @courses = syllabus.courses
   end
 
-  # GET /assignments/importers/:importer_id/courses/:id/assignments
+  # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
     @course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
     @assignment_types = current_course.assignment_types
   end
 
-  # POST /assignments/importers/:importer_id/courses/:id/assignments
+  # POST /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments_import
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
 
-    @result = Services::ImportsLMSAssignments.import @provider,
-      ENV["#{@provider.upcase}_ACCESS_TOKEN"], params[:id], params[:assignment_ids],
+    @result = Services::ImportsLMSAssignments.import @provider_name,
+      ENV["#{@provider_name.upcase}_ACCESS_TOKEN"], params[:id], params[:assignment_ids],
       current_course, params[:assignment_type_id]
 
     if @result.success?
@@ -43,7 +43,7 @@ class Assignments::ImportersController < ApplicationController
   private
 
   def syllabus
-    @syllabus ||= ActiveLMS::Syllabus.new(@provider,
-                                          ENV["#{@provider.upcase}_ACCESS_TOKEN"])
+    @syllabus ||= ActiveLMS::Syllabus.new(@provider_name,
+                                          ENV["#{@provider_name.upcase}_ACCESS_TOKEN"])
   end
 end

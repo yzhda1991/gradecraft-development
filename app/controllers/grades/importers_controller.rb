@@ -5,7 +5,7 @@ class Grades::ImportersController < ApplicationController
 
   def assignments
     @assignment = Assignment.find params[:assignment_id]
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
     @course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
   end
@@ -24,16 +24,16 @@ class Grades::ImportersController < ApplicationController
     end
   end
 
-  # GET /assignments/:assignment_id/grades/importers/:importer_id/courses
+  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses
   def courses
     @assignment = Assignment.find params[:assignment_id]
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
     @courses = syllabus.courses
   end
 
   def grades
     @assignment = Assignment.find params[:assignment_id]
-    @provider = params[:importer_id]
+    @provider_name = params[:importer_provider_id]
     @grades = syllabus.grades(params[:id], params[:assignment_ids])
   end
 
@@ -50,12 +50,12 @@ class Grades::ImportersController < ApplicationController
     render "#{provider}"
   end
 
-  # POST /assignments/:assignment_id/grades/importers/:importer_id/upload
+  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
   def upload
     @assignment = current_course.assignments.find(params[:assignment_id])
 
     if params[:file].blank?
-      redirect_to assignment_grades_importer_path(@assignment, params[:importer_id]),
+      redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
         notice: "File is missing"
     else
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
@@ -76,7 +76,7 @@ class Grades::ImportersController < ApplicationController
 
   def syllabus
     @syllabus ||= ActiveLMS::Syllabus.new \
-      @provider,
-      ENV["#{@provider.upcase}_ACCESS_TOKEN"]
+      @provider_name,
+      ENV["#{@provider_name.upcase}_ACCESS_TOKEN"]
   end
 end

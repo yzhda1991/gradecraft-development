@@ -1,6 +1,6 @@
 = content_nav_for @assignment, ["Import Grades", assignment_grades_importers_path(@assignment)], "From Canvas"
 
-%h3.pagetitle= "Import from #{@provider.capitalize}"
+%h3.pagetitle= "Import from #{@provider_name.capitalize}"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -19,4 +19,4 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph("file-text") + "Select Assignments to Import", assignment_grades_importer_assignments_path(@assignment, @provider, course["id"]), class: "button"
+                %li= link_to glyph("file-text") + "Select Assignments to Import", assignment_grades_importer_assignments_path(@assignment, @provider_name, course["id"]), class: "button"
