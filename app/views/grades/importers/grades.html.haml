@@ -1,0 +1,29 @@
+= content_nav_for Course, ["Import Grades", assignment_grades_importers_path(@assignment)], @provider_name.capitalize
+
+%h3.pagetitle= "Grade Import from #{@provider_name.capitalize}"
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  - if @grades.empty?
+    %div
+      %div There are no grades to import for these assignments.
+      %div
+        You can
+        =link_to "modify your assignment selection", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
+        to find grades to import.
+  -else
+    %table.dynatable.no-table-header
+      %thead
+        %tr
+          %th{scope: "col"} Course
+          %th{scope: "col"} Assignment
+          %th{scope: "col"} Student Name
+          %th{scope: "col"} Student Email
+          %th{scope: "col"} Gradecraft Match?
+          %th{scope: "col"} Score
+          %th{scope: "col"} Graded At
+      %tbody
+        - @grades.each do |grade|
+          = render partial: "grade_row", locals: { grade: grade,
+                                                   user: lms_user(@syllabus, grade["user_id"])}

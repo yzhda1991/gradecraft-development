@@ -25,5 +25,13 @@ module ActiveLMS
     def assignments(course_id, assignment_ids=nil)
       provider.assignments(course_id, assignment_ids)
     end
+
+    def grades(course_id, assignment_ids)
+      provider.grades(course_id, assignment_ids)
+    end
+
+    def user(id)
+      provider.user(id)
+    end
   end
 end

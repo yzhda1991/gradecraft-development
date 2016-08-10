@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801153720) do
+ActiveRecord::Schema.define(version: 20160803140803) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -738,6 +738,19 @@ ActiveRecord::Schema.define(version: 20160801153720) do
   add_index "unlock_states", ["student_id"], name: "index_unlock_states_on_student_id", using: :btree
   add_index "unlock_states", ["unlockable_id", "unlockable_type"], name: "index_unlock_states_on_unlockable_id_and_unlockable_type", using: :btree
 
+  create_table "user_authorizations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "provider"
+    t.string   "access_token"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "refresh_token"
+    t.datetime "expires_at"
+  end
+
+  add_index "user_authorizations", ["user_id", "provider"], name: "index_user_authorizations_on_user_id_and_provider", unique: true, using: :btree
+  add_index "user_authorizations", ["user_id"], name: "index_user_authorizations_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "username",                        limit: 255,                                        null: false
     t.string   "email",                           limit: 255
@@ -817,4 +830,5 @@ ActiveRecord::Schema.define(version: 20160801153720) do
   add_foreign_key "imported_assignments", "assignments"
   add_foreign_key "secure_tokens", "courses"
   add_foreign_key "secure_tokens", "users"
+  add_foreign_key "user_authorizations", "users"
 end

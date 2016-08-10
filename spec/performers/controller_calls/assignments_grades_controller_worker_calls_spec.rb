@@ -74,42 +74,6 @@ RSpec.describe Assignments::GradesController, type: :controller, background_job:
           it_behaves_like "a failed resque job", GradeUpdaterJob
         end
       end
-
-      describe "POST #upload" do
-        subject { post :upload, request_attrs }
-        before { enroll_and_login_professor }
-        let(:file) { fixture_file "grades.csv", "text/csv" }
-        let(:result_double) { double(:import_result) }
-
-        context "params[:file] is present" do
-          # only call the job if a file is present
-          let(:request_attrs) {{
-            id: assignment.id,
-            file: file,
-            assignment_id: assignment.id
-          }}
-
-          before do
-            # establishing state for controller to trigger job
-            allow(controller).to receive_message_chain(:current_course, :assignments, :find) { assignment }
-            allow(course).to receive(:students) { students }
-            allow(professor).to receive(:admin?) { true } # let's call the prof an admin for now
-            # stub away before filters
-            allow(request).to receive_message_chain(:format, :html?) { false } # increment_page_views
-            allow(controller).to receive_message_chain(:current_student, :present?) { false } # course_scores
-            # some more stubs
-            allow(controller).to receive_message_chain(:current_course, :students) { students }
-            allow(GradeImporter).to receive_message_chain(:new, :import) { result_double }
-            allow(result_double).to receive(:successful).and_return(grades)
-          end
-
-          let(:batch_attributes) do
-            [{ grade_id: grades.first.id }, { grade_id: grades.last.id }]
-          end
-
-          it_behaves_like "a batch of successful resque jobs", 2, GradeUpdaterJob
-        end
-      end
     end
   end
 

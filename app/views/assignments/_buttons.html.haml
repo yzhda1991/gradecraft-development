@@ -22,7 +22,7 @@
           %li.hide-for-small= link_to glyph("file-zip-o") + "Download All Submissions", submissions_exports_path(assignment_id: presenter.assignment.id), method: :post
 
       %li.hide-for-small
-        %a{:href => import_assignment_grades_path(presenter.assignment) }
+        %a{:href => assignment_grades_importers_path(presenter.assignment) }
           = glyph(:upload)
           Import Grades
       %li.hide-for-small

@@ -1,0 +1,30 @@
+= content_nav_for @assignment, "Import Grades"
+
+%h3.pagetitle= "Grade Import"
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  %section
+    .card{style: "height: 300px;"}
+      .card-cap
+        %img{src: "/images/csv-logo.png", height: "46px"}
+      .card-block
+        %h4.card-title CSV
+        .card-text
+        %p.card-text
+          Upload a .csv file with grade information for students to import the student grades.
+
+        = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
+
+    .card{style: "height: 300px;"}
+      .card-cap
+        %img{src: "/images/canvas-logo.png"}
+      .card-block
+        %h4.card-title Canvas LMS
+        .card-text
+        %p.card-text
+          An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
+
+        = link_to "Import Canvas Grades", assignment_grades_importer_courses_path(@assignment, :canvas), class: "card-link button"
+        = link_to "More Info", "http://canvaslms.com", target: "_blank", class: "card-link"

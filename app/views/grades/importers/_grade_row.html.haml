@@ -1,0 +1,8 @@
+%tr
+  %td= grade["course"]["name"]
+  %td= grade["assignment"]["name"]
+  %td= grade["user"]["name"]
+  %td= user["primary_email"]
+  %td= lms_user_match?(user["primary_email"], current_course) ? "Yes" : "No"
+  %td= grade["score"]
+  %td= grade["graded_at"]

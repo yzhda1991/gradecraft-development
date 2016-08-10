@@ -1,6 +1,6 @@
-= content_nav_for Course, "Import"
+= content_nav_for Course, "Import Assignments"
 
-%h3.pagetitle= "Course Import"
+%h3.pagetitle= "Assignment Import"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -13,7 +13,7 @@
         %h4.card-title Canvas LMS
         .card-text
         %p.card-text
-          An open-source LMS from Instructure. Import any course and the assignments you are enrolled as a teacher.
+          An open-source LMS from Instructure. Import any assignment for courses you are enrolled as a teacher.
 
-        = link_to "Import Canvas Courses", importer_courses_path(:canvas), class: "card-link button"
+        = link_to "Import Canvas Assignments", assignments_importer_courses_path(:canvas), class: "card-link button"
         = link_to "More Info", "http://canvaslms.com", target: "_blank", class: "card-link"

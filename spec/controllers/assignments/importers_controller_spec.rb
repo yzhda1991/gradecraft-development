@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "./app/services/imports_lms_assignments"
 
-describe ImportersController do
+describe Assignments::ImportersController do
   describe "POST assignments_import" do
     let(:course_id) { "COURSE_ID" }
     let(:provider) { :canvas }
@@ -28,12 +28,12 @@ describe ImportersController do
                                 assignment_ids, course, assignment_type.id.to_s)
                           .and_return result
 
-        post :assignments_import, importer_id: provider, id: course_id,
+        post :assignments_import, importer_provider_id: provider, id: course_id,
           assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
       end
 
       it "renders the results" do
-        post :assignments_import, importer_id: provider, id: course_id,
+        post :assignments_import, importer_provider_id: provider, id: course_id,
           assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
 
         expect(response).to render_template :assignments_import_results
@@ -45,7 +45,7 @@ describe ImportersController do
           syllabus = double(course: {}, assignments: [])
           allow(controller).to receive(:syllabus).and_return syllabus
 
-          post :assignments_import, importer_id: provider, id: course_id,
+          post :assignments_import, importer_provider_id: provider, id: course_id,
             assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
 
           expect(response).to render_template :assignments
@@ -55,7 +55,7 @@ describe ImportersController do
 
     context "as a student" do
       it "redirects to the root url" do
-        post :assignments_import, importer_id: provider, id: course_id
+        post :assignments_import, importer_provider_id: provider, id: course_id
 
         expect(response).to redirect_to root_path
       end
