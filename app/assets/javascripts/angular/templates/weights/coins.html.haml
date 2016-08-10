@@ -6,7 +6,7 @@
     .coin{{'ng-repeat'=>'coin in coinBackStackRange()'}}
     .coin{{'ng-click'=>'decrement()'}}
       .coin-stack-count {{article.student_weight}}
-      %i.coin-remove-icon.fa.fa-fw.fa-times-circle
+      %i.coin-remove-icon.fa.fa-fw.fa-times
 
   .no-coins-slot{{'ng-if' => '! hasWeights() && !weightsAvailableForArticle()'}} no {{termFor("weights")}}
 

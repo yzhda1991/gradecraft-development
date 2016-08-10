@@ -8,7 +8,7 @@
   $scope.termFor = BadgeService.termFor
 
   $scope.services = ()->
-    promises = [BadgeService.getBadges(),]
+    promises = [BadgeService.getBadges()]
     return $q.all(promises)
 
   $scope.changeFocusArticle = (article)->
