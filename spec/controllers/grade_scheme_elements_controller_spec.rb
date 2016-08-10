@@ -34,7 +34,7 @@ describe GradeSchemeElementsController do
     end
 
     describe "PUT update" do
-      it "updates the grade scheme element with unlock conditions" do
+      it "updates the grade scheme element" do
         grade_scheme_element_params = { letter: "B" }
         put :update, { id: @grade_scheme_element.id, grade_scheme_element: grade_scheme_element_params }
         expect(@grade_scheme_element.reload.letter).to eq("B")
