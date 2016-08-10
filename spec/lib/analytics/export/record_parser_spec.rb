@@ -1,7 +1,7 @@
-require "analytics/export/record_parser"
+require "analytics/export/parsers"
 require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
 
-describe Analytics::Export::RecordParser do
+describe Analytics::Export::Parsers::Column do
   subject { described_class.new export: export, records: records }
   let(:export) { AnalyticsExportModelTest.new loaded: "data" }
   let(:records) { [{ id: 1 }, { id: 2 }] }

@@ -2,7 +2,7 @@ class CoursePredictorExport < Analytics::Export::Model
 
   attr_accessor :users, :assignments
 
-  export_mapping username: :username,
+  column_mapping username: :username,
                  role: :user_role,
                  user_id: :user_id,
                  assignment: :assignment_name,
