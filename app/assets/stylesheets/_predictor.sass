@@ -13,12 +13,12 @@ $predictor-font-size-6: .55rem
 // Needed to  make x numbers of columns
 $card-width-4 : 22%
 $card-margin-4 : 10px 15px
-$card-width-3 : 29%
-$card-margin-3 : 10px 15px
-$card-width-2 : 46%
-$card-margin-2 : 3px 5px
-$card-width-1 : 100%
-$card-margin-1 : 3px 0 5px 0
+$card-width-3 : 24%
+$card-margin-3 : 8px 3px
+$card-width-2 : 32%
+$card-margin-2 : 8px 3px
+$card-width-1 : 48%
+$card-margin-1 : 3px
 
 .predictor-inner.inner-wrap
   background-color: rgba(255,255,255,0.8)
@@ -512,8 +512,8 @@ $card-margin-1 : 3px 0 5px 0
 @media (min-width: $media-large-max)
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-3
-      margin: $card-margin-3
+      width: 32%
+      margin: 8px 3px
 
 @mixin mobile-headers-mixin
   .predictor-section-title-predicted-points.weightable
@@ -561,8 +561,8 @@ $card-margin-1 : 3px 0 5px 0
   @include mobile-headers-mixin
   @include mobile-graph-mixin
   .predictor-article-card
-    width: 48%
-    margin: 3px
+    width: $card-width-1
+    margin: $card-margin-1
     .info-icon
       display: none
   .collapse-arrow.doubled
@@ -574,21 +574,23 @@ $card-margin-1 : 3px 0 5px 0
   @include mobile-headers-mixin
   @include mobile-graph-mixin
   .predictor-article-card
-    width: 32%
-    margin: 8px 3px
+    width: $card-width-2
+    margin: $card-margin-2
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-1
-      margin: $card-margin-1
+      width: $card-width-2
+      margin: $card-margin-2
+    .student-panel
+      display: none
 
 
 // large
 @media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
   .predictor-article-card
-    width: 24%
-    margin: 8px 3px
+    width: $card-width-3
+    margin: $card-margin-3
   #predictor-main-header, .predictor-section
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-2
-      margin: $card-margin-2
+      width: $card-width-1
+      margin: $card-margin-1
