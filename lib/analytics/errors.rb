@@ -1,4 +1,4 @@
-require_relative "errors/invalid_parsing_method"
+require_relative "errors/invalid_parsing_strategy"
 
 module Analytics
   module Errors

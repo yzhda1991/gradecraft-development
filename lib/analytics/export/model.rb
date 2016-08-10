@@ -13,8 +13,8 @@ module Analytics
       # either an attribute on the record-row, or a method that provides
       # additional filtering for the data before populating it
       #
-      def self.export_mapping(mapping)
-        @export_mapping = mapping
+      def self.column_mapping(mapping)
+        @column_mapping = mapping
       end
 
       # every Analytics::Export class will have both a context and a set of
@@ -35,23 +35,19 @@ module Analytics
         @context = context
       end
 
-      def parsed_export_records
-        @parsed_export_records ||= Analytics::Export::RecordParser.new(
-          export: self,
-          records: export_records
-        ).parse_records!
+      def parsed_columns
+        @parsed_columns ||= Analytics::Export::ColumnParser.new(self).parse!
       end
 
       # let's update the arguments here so that they're at least keyword
       # arguments so we don't have to use nil as a placeholder in the event that
       # we want to use a set of parsed records but not a file_name
       #
-      def generate_csv(path, file_name=nil, parsed_export_records=nil)
+      def generate_csv(path, filename: nil)
         Analytics::Export::CSV.new(
           export: self,
           path: path,
-          filename: file_name,
-          parsed_export_records: parsed_export_records
+          filename: filename
         ).generate!
       end
     end

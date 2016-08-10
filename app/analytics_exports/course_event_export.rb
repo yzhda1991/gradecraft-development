@@ -9,7 +9,7 @@ class CourseEventExport < Analytics::Export::Model
   # final export called "role", and we should use the "user_role" method to get
   # the data that we want for the records in that column.
   #
-  export_mapping username: :username,
+  column_mapping username: :username,
                  role: :user_role,
                  user_id: :user_id,
                  page: :page,
