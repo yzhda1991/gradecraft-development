@@ -9,13 +9,9 @@ module Analytics
     # each subclass.
     #
     class Model
-      # this will be defined in the format of { column_name: :export_method }.
-      # export_method in this case could be either a method on the record that
-      # we're exporting, or a method on the export class itself that's being
-      # tasked with filtering the data that's coming out of the export.
-      #
-      # Using cattr_accessor lets us add setters and getters on the class
-      # so this data can be shared between multiple objects.
+      # set the hash that defines how each column will be populated with
+      # either an attribute on the record-row, or a method that provides
+      # additional filtering for the data before populating it
       #
       def self.export_mapping(mapping)
         @export_mapping = mapping
@@ -25,8 +21,7 @@ module Analytics
       # export_records. The context is the larger set of records that have
       # been queried for to perform the overall export so that individual
       # queries for the same data don't have to be made if multiple exports
-      # are performed. Currently context will just be a hash but this is
-      # slated to be changed to a dedicated class in an upcoming pull request.
+      # are performed.
       #
       # export_records are the set of records that will act as the basis for
       # the data rendered in the CSV by the export itself. Each export_record

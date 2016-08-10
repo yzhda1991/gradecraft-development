@@ -1,7 +1,5 @@
 class CourseEventExport < Analytics::Export::Model
 
-  attr_reader :users
-
   # this is the mapping of the columns in our export to the key that should
   # be used to filter or render the data in the row. For example:
   #
