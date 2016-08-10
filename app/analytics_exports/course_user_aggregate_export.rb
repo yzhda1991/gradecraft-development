@@ -13,26 +13,21 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   def initialize(context:)
     @context = context
-    @export_records = context.export_data[:users]
+
+    # since this is a user aggregate, let's use the user records as the focus of
+    # the export, as output rows, rather than the events themselves
+    @export_records = context.users
   end
 
-  def export_data
-    context.export_data
-  end
-
-  # let's double-check whether all of these defaulted hash instantiations have
-  # any impact on the final export. It seems like these could all just be hash
-  # literals
-  #
   def roles
-    @roles ||= events.inject(Hash.new("")) do |memo, event|
+    @roles ||= context.events.inject(Hash.new("")) do |memo, event|
       memo[event.user_id] = event.user_role
       memo
     end
   end
 
   def user_predictor_event_counts
-    @user_predictor_event_counts ||= predictor_events
+    @user_predictor_event_counts ||= context.predictor_events
       .inject(Hash.new(0)) do |memo, predictor_event|
         memo[predictor_event.user_id] += 1
         memo
@@ -40,7 +35,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
   end
 
   def parsed_user_pageviews
-    @parsed_user_pageviews ||= user_pageviews.inject(Hash.new(0)) do |memo, pageview|
+    @parsed_user_pageviews ||= context.user_pageviews.inject(Hash.new(0)) do |memo, pageview|
       # pageview.pages raises an error w/ mongoid > 4.0.0
       memo[pageview.user_id] = pageview.raw_attributes["pages"]["_all"]["all_time"]
       memo
@@ -48,29 +43,20 @@ class CourseUserAggregateExport < Analytics::Export::Model
   end
 
   def parsed_user_logins
-    @parsed_user_logins ||= user_logins.inject(Hash.new(0)) do |memo, login|
+    @parsed_user_logins ||= context.user_logins.inject(Hash.new(0)) do |memo, login|
       memo[login.user_id] = login["all_time"]["count"]
       memo
     end
   end
 
   def user_predictor_sessions
-    @user_predictor_sessions ||= user_predictor_pageviews.inject(Hash.new(0)) do |memo, predictor_pageview|
+    @user_predictor_sessions ||= context.user_predictor_pageviews.inject(Hash.new(0)) do |memo, predictor_pageview|
       memo[predictor_pageview.user_id] = predictor_pageview["all_time"]
       memo
     end
   end
 
-  # these are helper methods to help filter values per-user. In reality there's
-  # probably a disconnect here in how this 'schema' is being defined and how the
-  # data is ultimately being assembled.
-  #
-  # Instead of generating a hash of records for every column that we need to
-  # display, then filtering all of them, I wonder if it makes more sense to
-  # just construct a single hash, or to use a hash of procs that can be run
-  # against all of these records one time so we don't need to generate a bunch
-  # of different hashes and then put them back together.
-  #
+  # column filters for
   def user_role(user)
     roles[user.id]
   end

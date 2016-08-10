@@ -50,8 +50,9 @@ class CourseExportContext
   end
 
   def user_logins
-    @user_logins ||= CourseUserLogin.data :all_time, nil,
+    @user_logins ||= CourseUserLogin.data(:all_time, nil,
       { course_id: course.id }
+    )[:results]
   end
 
   # ActiveRecord queries
