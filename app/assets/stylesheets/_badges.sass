@@ -6,16 +6,18 @@
 
 /* Student Badge Show Page */
 .student
-  .badge-show-page, .earned-badge
-    max-width: 960px
-    margin: 0 auto 1em
+  h3.pagetitle.badge-page
+    display: none
+
+  .badge-show-page
     font-weight: 300
 
     .badge-container
       text-align: center
 
-    .badge-description, .earned-badge
-      margin-bottom: 1rem
+    section
+      max-width: 720px
+      margin: 1rem auto
 
     .badge-icon
       width: 150px
@@ -26,23 +28,32 @@
 .staff
   .badge-show-page
     font-weight: 300
-    display: flex
-    align-items: center
-
-    .badge-icon-container
-      float: left
 
     .badge-icon
       width: 100%
       max-width: 120px
+      @media (max-width: $media-small-max)
+        margin: 0 auto
+        display: block
 
     .badge-description
-      width: 75%
-      float: left
+      width: 65%
       margin: 0 0 1rem 1rem
+      @media (max-width: $media-small-max)
+        margin: 0
+
+    .badge-icon-container, .badge-description
+      float: left
+      @media (max-width: $media-small-max)
+        width: 100%
+        float: none
 
     .badge-title, .count
       display: none
+
+    .team-filter
+      width: 100%
+      text-align: right
 
 /* Student Badge Index Page */
 .badge-container
@@ -52,6 +63,12 @@
 
 .mobile-click
   display: none
+  @media (max-width: $media-medium-max)
+    display: block
+    width: 110px
+    height: 94px
+    position: absolute
+    z-index: 2
 
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
@@ -87,7 +104,7 @@ button#remove-badges, button#add-badges
   margin: 1rem
   position: relative
 
-  .badge-icon
+  img
     width: 80px
     max-height: 80px
     display: block
@@ -96,6 +113,8 @@ button#remove-badges, button#add-badges
 
   &.focus-article
     background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
 
   &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
     background-color: $color-blue-3
@@ -156,61 +175,35 @@ button#remove-badges, button#add-badges
 .badge-index-table
   .sort-column, .lock-icon-column
     width: 20px
+
   .icon-column
     width: 10%
     text-align: center
+
   .earned-column
     width: 100px
+
   .description-column
   &.student-index
     .button-column
       min-width: 0px
       width: 10px
+
   .button-bar li a.button
     display: block
     margin: .25em
     border-radius: 0.1875rem
+    @media (max-width: 800px)
+      display: inline-block
+
+  .button-bar li:not(:last-of-type) a.button
+    @media (max-width: $media-medium-max)
+      margin-right: 0
+    @media (max-width: 800px)
+      margin-right: .5rem
+
   .badge-icon
     width: 80%
     max-width: 100px
     display: block
     margin: 0 auto
-
-@media (max-width: $media-medium-max)
-  .badge-index-table
-    .button-bar li:not(:last-of-type) a.button
-      margin-right: 0
-
-  .mobile-click
-    display: block
-    width: 110px
-    height: 94px
-    position: absolute
-    z-index: 2
-
-  .badge-index-container
-    width: 100%
-
-@media (max-width: 800px)
-    .badge-index-table
-      .button-bar li a.button
-        display: inline-block
-      .button-bar li:not(:last-of-type) a.button
-        margin-right: .5rem
-
-@media (max-width: $media-small-max)
-  .staff
-    .badge-show-page
-      display: block
-      margin-bottom: 1rem
-
-      .badge-icon-container, .badge-description
-        width: 100%
-        float: none
-
-      .badge-description
-        margin: 0
-
-      .badge-icon
-        margin: 0 auto
-        display: block
