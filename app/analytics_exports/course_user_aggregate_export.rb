@@ -13,31 +13,11 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   def initialize(context:)
     @context = context
-    @events = context[:mongoid][:events]
-    @predictor_events = context[:mongoid][:predictor_events]
+    @export_records = context.export_data[:users]
+  end
 
-    # these are the additional records we queried from ActiveRecord to use for
-    # adding context and data to our export columns related to assignments
-    # and users
-    #
-    @users = context[:active_record][:users]
-
-    # in this case we're using ActiveRecord User objects for the basis of our
-    # export instead of Analytics::Event records out of Mongoid. We're still
-    # using the mongoid data, but it's being referenced in each row from by the
-    # id from the corresponding user.
-    #
-    @export_records = users
-
-    # this is the data from the data aggregates that we queried in the original
-    # context when the export was triggered. The entire data aggregate suite
-    # really needs to be picked apart and improved due to its current density,
-    # but for now that won't stop us from using the data that it helps to
-    # assemble across various metrics.
-    #
-    @user_pageviews = context[:data_aggregates][:user_pageviews]
-    @user_logins = context[:data_aggregates][:user_logins]
-    @user_predictor_pageviews = context[:data_aggregates][:user_predictor_pageviews]
+  def export_data
+    context.export_data
   end
 
   # let's double-check whether all of these defaulted hash instantiations have

@@ -18,27 +18,6 @@ class CourseExportContext
     @course = course
   end
 
-  # this is the data hash that we're going to pass into the export classes
-  # so they can figure out what they ultimately need to present.
-  #
-  # In the adjacent 2132 branch we've started moving this more toward a context-
-  # oriented approach in which we'll just pass the context directly into the
-  # export classes and will pull the data off of that, but for now in order to
-  # maintain the integrity of the Analytics::Export::Model classes we need to
-  # provide the export data from this hash.
-  #
-  def export_data
-    @export_data ||= {
-      events: events,
-      predictor_events: predictor_events,
-      user_pageviews: user_pageviews[:results],
-      user_predictor_pageviews: user_predictor_pageviews[:results],
-      user_logins: user_logins[:results],
-      users: users,
-      assignments: assignments
-    }
-  end
-
   # Mongoid queries
   #
   def events
@@ -58,30 +37,16 @@ class CourseExportContext
 
   # Queries using our Analytics::Aggregate classes.
   #
-  # This whole process is kind of a black box right now because the
-  # Analytics::Aggregate library is very dense, so it's not immediately clear
-  # with more work than is warranted in this PR how to condense some of the
-  # query overhead of this data.
-  #
-  # Perhaps we can reimagine Analytics::Aggregate as an all-ruby filtering
-  # process for Mongoid collections so that we can, for example, just fetch
-  # all of the pageviews one time and then get the aggregate data that we need
-  # from it without making multiple queries.
-  #
-  # Or rather, perhaps we can share more of the filtering overhead between
-  # mongo and ruby to reduce the amount of time that all of this raw querying
-  # takes on such enormous amounts of data.
-  #
   def user_pageviews
-    @user_pageviews ||= CourseUserPageview.data :all_time, nil,
-      { course_id: course.id },
-      { page: "_all" }
+    @user_pageviews ||= CourseUserPageview.data(:all_time, nil,
+      { course_id: course.id }, { page: "_all" }
+    )[:results]
   end
 
   def user_predictor_pageviews
-    @user_predictor_pageviews ||=
-      CourseUserPagePageview.data :all_time, nil,
-        { course_id: course.id, page: /predictor/ }
+    @user_predictor_pageviews ||= CourseUserPagePageview.data(:all_time, nil,
+      { course_id: course.id, page: /predictor/ }
+    )[:results]
   end
 
   def user_logins
