@@ -57,16 +57,17 @@ describe CourseMembership do
     end
 
     it "does not return an element if it is still locked" do
-
+      badge = create(:badge, course: course)
+      UnlockCondition.create(
+        condition_id: badge.id,
+        condition_type: "Badge",
+        condition_state: "Earned",
+        unlockable_id: gse.id,
+        unlockable_type: "GradeSchemeElement"
+      )
+      allow(course_membership).to receive(:score) { 8200 }
+      expect(course_membership.earned_grade_scheme_element).to eq(low_gse)
     end
-  # #   elements_earned = []
-  # #   course.grade_scheme_elements.order_by_lowest_points.each do |gse|
-  # #     if gse.is_unlocked_for_student?(user) && gse.lowest_points < score
-  # #       elements_earned << gse
-  # #     end
-  # #   end
-  # #   return elements_earned.last
-  #
   end
 
   describe "#assignment_type_totals_for_student" do
