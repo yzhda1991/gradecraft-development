@@ -167,18 +167,6 @@ class Course < ActiveRecord::Base
     weights_close_at.nil? || weights_close_at > Time.now
   end
 
-  def element_for_score(score)
-    grade_scheme_elements.where("lowest_points <= ? AND highest_points >= ?", score, score).first
-  end
-
-  def grade_level_for_score(score)
-    element_for_score(score).try(:level)
-  end
-
-  def grade_letter_for_score(score)
-    element_for_score(score).try(:letter)
-  end
-
   def membership_for_student(student)
     course_memberships.detect { |m| m.user_id == student.id }
   end
@@ -190,11 +178,7 @@ class Course < ActiveRecord::Base
   def assignment_weight_spent_for_student(student)
     assignment_weight_for_student(student) >= total_weights.to_i
   end
-
-  def score_for_student(student)
-    course_memberships.where(user_id: student).first.score
-  end
-
+  
   # Descriptive stats of the grades
   def minimum_course_score
     CourseMembership.where(course: self, auditing: false,

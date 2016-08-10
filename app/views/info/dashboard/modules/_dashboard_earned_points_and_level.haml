@@ -3,12 +3,11 @@
     %h3.subtitle Your Status
   .card-body
     You have earned
-    %span.bold #{points current_student.cached_score_for_course(current_course)} points
-    - if current_student.grade_level_for_course(current_course).present?
+    %span.bold #{points presenter.score } points
+    - if presenter.earned_level.present?
       / Display current level if it is present
       %br
-      You have achieved the
-      %span.bold= link_to "#{current_student.grade_level_for_course(current_course)} level", grading_scheme_path
+      %span.bold= link_to "#{ presenter.earned_level_sentence }", grading_scheme_path
     - cache multi_cache_key :student_dashboard_total_score, current_student, current_course do
       - scores = total_scores_for_chart current_student, current_course
       #data-predictor{"data-predictor" =>  scores.to_json}

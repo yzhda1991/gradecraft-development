@@ -277,15 +277,17 @@ class User < ActiveRecord::Base
   ### EARNED LEVELS AND GRADE LETTERS
 
   def grade_for_course(course)
-    @grade_for_course ||= course.element_for_score(cached_score_for_course(course))
+    cm = course_memberships.where(course_id: course.id).first
+    return cm.grade_scheme_element if cm.grade_scheme_element.present?
+    return cm.earned_grade_scheme_element
   end
 
   def grade_level_for_course(course)
-    @grade_level ||= Course.find(course.id).grade_level_for_score(cached_score_for_course(course))
+    @grade_level ||= grade_for_course(course).try(:level)
   end
 
   def grade_letter_for_course(course)
-    @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
+    @grade_letter_for_course ||= grade_for_course(course).try(:letter)
   end
 
   def get_element_level(course, direction)
@@ -346,10 +348,11 @@ class User < ActiveRecord::Base
   end
 
   # Powers the worker to recalculate student scores
-  def cache_course_score(course_id)
+  def cache_course_score_and_level(course_id)
     course_membership = fetch_course_membership(course_id)
     unless course_membership.nil?
       course_membership.recalculate_and_update_student_score
+      course_membership.check_and_update_student_earned_level
     end
   end
 

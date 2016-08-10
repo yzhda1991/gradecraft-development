@@ -47,7 +47,7 @@ class Grade < ActiveRecord::Base
 
   delegate :name, :description, :due_at, :assignment_type, :course, to: :assignment
 
-  after_destroy :save_student_and_team_scores
+  after_destroy :cache_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
   scope :order_by_highest_score, -> { order("score DESC") }
@@ -102,19 +102,9 @@ class Grade < ActiveRecord::Base
     feedback.present?
   end
 
-  # @mz todo: port this over to cache_team_and_student_scores once
-  # related methods have tests
-  # want to make sure that nothing depends on the output of this method
-  def save_student_and_team_scores
-    self.student.cache_course_score(self.course.id)
-    if self.course.has_teams? && self.student.team_for_course(self.course).present?
-      self.student.team_for_course(self.course).average_score
-    end
-  end
-
   # @mz TODO: add specs
   def cache_student_and_team_scores
-    { cached_student_score: cache_student_score,
+    { cached_student_score: cache_student_score_and_level,
       cached_team_score: cache_team_score,
       student_id: self.student.try(:id),
       team_id: cached_student_team.try(:id)
@@ -161,17 +151,6 @@ class Grade < ActiveRecord::Base
     self.score = calculate_score
   end
 
-  def save_student
-    return unless self.raw_points_changed? || self.status_changed?
-    student.save
-  end
-
-  def save_team
-    if course.has_teams? && student.team_for_course(course).present?
-      student.team_for_course(course).save
-    end
-  end
-
   def cache_associations
     self.student_id ||= submission.try(:student_id)
     self.task_id ||= submission.try(:task_id)
@@ -200,9 +179,8 @@ class Grade < ActiveRecord::Base
   end
 
   # @mz TODO: add specs
-  def cache_student_score
-    @student = self.student
-    @student_update_successful = @student.cache_course_score(self.course.id)
+  def cache_student_score_and_level
+    student.cache_course_score_and_level(self.course.id)
   end
 
   # @mz TODO: add specs, improve the syntax here
@@ -229,7 +207,6 @@ class Grade < ActiveRecord::Base
         failure_attrs.merge! grade: self.attributes
       end
     end
-
     failure_attrs
   end
 end

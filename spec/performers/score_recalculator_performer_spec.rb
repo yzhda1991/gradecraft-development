@@ -32,8 +32,8 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
           subject
         end
 
-        it "should return the result of cache_course_score" do
-          allow(student).to receive(:cache_course_score).with(course.id) { cache_score_result }
+        it "should return the result of cache_course_score_and_level" do
+          allow(student).to receive(:cache_course_score_and_level).with(course.id) { cache_score_result }
           expect(performer).to receive(:require_success).and_return(cache_score_result)
           subject
         end
@@ -50,7 +50,7 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
 
           context "block outcome fails" do
             it "should add the :failure outcome message to @outcome_messages" do
-              allow(@student).to receive(:cache_course_score) { false }
+              allow(@student).to receive(:cache_course_score_and_level) { false }
               @performer.do_the_work
               expect(@performer.outcome_messages.first).to match("Failed to cache student")
             end
@@ -58,7 +58,7 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
 
           context "block outcome succeeds" do
             it "should add the :succeeds outcome message to @outcome_messages" do
-              allow(@student).to receive(:cache_course_score) { true }
+              allow(@student).to receive(:cache_course_score_and_level) { true }
               @performer.do_the_work
               expect(@performer.outcome_messages.last).to match("Successfully cached student")
             end

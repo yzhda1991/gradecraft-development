@@ -4,6 +4,7 @@ describe CourseMembership do
   let(:course_membership) { build(:student_course_membership, course: course, user: student) }
   let(:course) { build(:course) }
   let(:student) { build(:user) }
+  let!(:gse) { create(:grade_scheme_element, course: course, lowest_points: 8000, highest_points: 9000) }
 
   describe "#recalculate_and_update_student_score" do
     subject { course_membership.recalculate_and_update_student_score }
@@ -32,6 +33,40 @@ describe CourseMembership do
 
     it "adds the relevant components of the student score" do
       expect(course_membership.recalculated_student_score).to eq(1800)
+    end
+  end
+
+  describe "#check_and_update_student_earned_level" do
+    subject { course_membership.check_and_update_student_earned_level }
+
+    it "updates the earned level value" do
+      expect(course_membership.earned_grade_scheme_element_id).to eq(nil)
+      allow(course_membership).to receive(:score) { 8200 }
+      subject
+      expect(course_membership.reload.earned_grade_scheme_element_id).to eq(gse.id)
+    end
+  end
+
+  describe "#earned_grade_scheme_element" do
+    let!(:low_gse) { create(:grade_scheme_element, course: course, lowest_points: 7000, highest_points: 7999) }
+    let!(:high_gse) { create(:grade_scheme_element, course: course, lowest_points: 9001, highest_points: 10000) }
+
+    it "returns the element that matches the highest points the student has earned" do
+      allow(course_membership).to receive(:score) { 8200 }
+      expect(course_membership.earned_grade_scheme_element).to eq(gse)
+    end
+
+    it "does not return an element if it is still locked" do
+      badge = create(:badge, course: course)
+      UnlockCondition.create(
+        condition_id: badge.id,
+        condition_type: "Badge",
+        condition_state: "Earned",
+        unlockable_id: gse.id,
+        unlockable_type: "GradeSchemeElement"
+      )
+      allow(course_membership).to receive(:score) { 8200 }
+      expect(course_membership.earned_grade_scheme_element).to eq(low_gse)
     end
   end
 
