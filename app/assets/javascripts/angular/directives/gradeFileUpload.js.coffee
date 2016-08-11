@@ -8,7 +8,7 @@
       element.bind('change', ()->
         scope.$apply(()->
           model.assign(scope, element[0].files)
-          RubricService.postGradeFiles(RubricService.grade, element[0].files)
+          RubricService.postGradeFiles(element[0].files)
         );
       );
     };

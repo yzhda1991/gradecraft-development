@@ -79,7 +79,7 @@
 
 
 
-  postGradeFiles = (grade, files)->
+  postGradeFiles = (files)->
     fd = new FormData();
     angular.forEach(files, (file, index)->
       fd.append("grade_files[]", file)
