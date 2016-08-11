@@ -18,9 +18,14 @@ describe InfoController do
 
     describe "GET dashboard" do
       it "retrieves the dashboard" do
-        @assignment = create(:assignment, course: @course)
+        @assignment = create(:assignment_with_due_at, course: @course)
         get :dashboard
         expect(response).to render_template(:dashboard)
+      end
+
+      it "redirects to the course creation wizard if there are no assignments created" do
+        get :dashboard
+        expect(response).to redirect_to course_creation_wizard_path
       end
     end
 

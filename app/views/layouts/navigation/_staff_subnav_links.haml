@@ -17,7 +17,7 @@
   %li= link_to_unless_current glyph(:shield) + "Awarded #{current_course.badge_term} Chart", earned_badges_path
 
 %li
-  = link_to_unless_current glyph("file-archive-o") + "Downloads", downloads_path
+  = link_to_unless_current glyph("file-archive-o") + "Course Data Exports", downloads_path
 %li= link_to_unless_current glyph("star-half-empty") + "Top 10/Bottom 10", top_10_path
 %li= link_to_unless_current glyph("bar-chart") + "Analytics", analytics_students_path
 %li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path
@@ -32,20 +32,6 @@
   %li= link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
 - if current_course.has_team_challenges?
   %li= link_to_unless_current glyph(:trophy) + "#{term_for :challenges}", challenges_path
-
-%hr
-
-%h5 Downloads
-%li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(id: current_course.id, format: "csv")
-%li= link_to glyph(:table) + "Full Gradebook", gradebook_path(id: current_course.id, format: "csv")
-- if current_course.student_weighted?
-  %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(id: current_course.id, format: "csv")
-%li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: current_course.id, format: "csv")
-
-- if current_course.has_badges?
-  %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(id: current_course.id, format: "csv")
-
-%li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(id: current_course.id, format: "csv")
 
 %hr
 

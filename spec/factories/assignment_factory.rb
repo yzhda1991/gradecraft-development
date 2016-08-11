@@ -40,5 +40,9 @@ FactoryGirl.define do
       grade_scope "Individual"
       accepts_submissions true
     end
+
+    factory :assignment_with_due_at do
+      due_at Date.today
+    end
   end
 end

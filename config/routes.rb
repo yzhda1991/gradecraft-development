@@ -190,6 +190,7 @@ GradeCraft::Application.routes.draw do
   end
   resources :course_memberships, only: [:create, :delete, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
+  get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups
   resources :groups

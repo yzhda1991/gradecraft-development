@@ -14,7 +14,7 @@
           .event-description
             %p
               = truncate(sanitize(event.description, :tags => %w(br a)), :length => 200, :omission => "...")
-              = link_to "Read More", event
+              = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
-              %li #{link_to assignment.name, assignment} due today! 
+              %li #{link_to assignment.name, assignment} due today!

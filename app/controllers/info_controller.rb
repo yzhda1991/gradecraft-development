@@ -10,6 +10,8 @@ class InfoController < ApplicationController
   # Displays student and instructor dashboard
   def dashboard
     @events = Timeline.new(current_course).events_by_due_date
+    # rubocop:disable AndOr
+    redirect_to course_creation_wizard_path and return if current_user_is_staff? && !@events.present?
     render :dashboard, Info::DashboardCoursePlannerPresenter.build({
       student: current_student,
       assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),

@@ -19,6 +19,10 @@ class CoursesController < ApplicationController
     end
   end
 
+  def course_creation_wizard
+    
+  end
+
   def show
     @title = "Course Settings"
   end
