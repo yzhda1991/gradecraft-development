@@ -74,8 +74,28 @@
         window.location = returnURL
     ).error(
       (data)->
-        if data.errors.length
-          console.log(data.errors[0].detail)
+        console.log(data)
+    )
+
+
+
+  postGradeFiles = (files)->
+    fd = new FormData();
+    angular.forEach(files, (file, index)->
+      fd.append("grade_files[]", file)
+    )
+
+    $http.post(
+      "/api/grades/#{grade.id}/grade_files",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).success(
+      (data)->
+        console.log(data)
+    ).error(
+      (data)->
+        console.log(data)
     )
 
   thresholdPoints = ()->
@@ -94,6 +114,7 @@
       getBadges: getBadges,
       getGrade: getGrade,
       putRubricGradeSubmission: putRubricGradeSubmission,
+      postGradeFiles: postGradeFiles,
       assignment: assignment,
       badges: badges,
       criteria: criteria,

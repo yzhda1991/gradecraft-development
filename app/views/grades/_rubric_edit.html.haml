@@ -93,6 +93,11 @@
         %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
+    .feedback-upload
+      %input(type="file" multiple="true" grade-file-upload="feedbackFiles")
+    .clear
+    %br
+
     .summary_feedback
       %h3.text-right Overall Feedback
       %textarea(ng-model="grade.feedback" froala="froalaSummaryOptions")
