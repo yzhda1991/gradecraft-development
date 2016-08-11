@@ -25,7 +25,11 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def to_do?(assignment)
-    assignment.include_in_to_do? && assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
+    if student
+      assignment.include_in_to_do? && assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
+    else
+      assignment.include_in_to_do?
+    end
   end
 
   def course_planner?(assignment)
