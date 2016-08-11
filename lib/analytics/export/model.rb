@@ -29,26 +29,43 @@ module Analytics
       # by the export process for a more specific presentation beyond simply
       # rendering the collection of events in its raw form.
       #
-      attr_accessor :context, :export_records
+      attr_accessor :context, :export_records, :filename
 
-      def initialize(context:)
+      def initialize(context:, filename: nil)
         @context = context
+        @filename = filename
       end
 
       def parsed_columns
         @parsed_columns ||= Analytics::Export::ColumnParser.new(self).parse!
       end
 
-      # let's update the arguments here so that they're at least keyword
-      # arguments so we don't have to use nil as a placeholder in the event that
-      # we want to use a set of parsed records but not a file_name
-      #
-      def generate_csv(path, filename: nil)
-        Analytics::Export::CSV.new(
-          export: self,
-          path: path,
-          filename: filename
-        ).generate!
+      # reorganize the data by column into rows by transposing the values
+      def parsed_rows
+        return nil unless parsed_columns
+        @parsed_rows ||= parsed_columns.values.transpose
+      end
+
+      # generate a 'header' row for the CSV file by pulling the column names
+      # from the schema that we defined with set_schema
+      def column_names
+        self.class.column_mapping.keys
+      end
+
+      def default_filename
+        "#{self.class.name.underscore}.csv"
+      end
+
+      def write_csv(directory_path)
+        csv_filepath = File.join directory_path, (filename || default_filename)
+
+        ::CSV.open(csv_filepath, "wb") do |csv|
+          # add the header names for each column
+          csv << column_names
+
+          # add all of the rows
+          parsed_rows.each {|row| csv << row }
+        end
       end
     end
   end
