@@ -39,7 +39,7 @@ module Analytics
       # filetype-agnostic approach.
       #
       def generate_csvs
-        exporters.each {|exporter| exporter.generate_csv export_root_dir }
+        exporters.each {|exporter| exporter.write_csv export_root_dir }
       end
 
       def exporters
