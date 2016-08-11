@@ -128,8 +128,9 @@ FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
       return $sce.trustAsHtml(input)
     else if Array.isArray(input)
       return $sce.trustAsHtml("<ul><li>" + input.join('</li><li>') + "</li></ul>")
+]
 
-@gradecraft.filter 'html', ($sce) ->
+@gradecraft.filter 'html', ['$sce', ($sce)->
   (val) ->
     return $sce.trustAsHtml val
 ]
