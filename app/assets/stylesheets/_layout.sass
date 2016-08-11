@@ -44,6 +44,9 @@ body
 
 .student.mainContent
   width: 100%
+  margin-top: 3.3rem
+  @media (max-width: $media-small-max)
+    margin-top: 0
 
 .right
   float: right
@@ -119,8 +122,6 @@ a:hover + .display_on_hover
     margin-bottom: 1rem
 
 @media (max-width: $media-medium-max)
-  .student.mainContent
-    width: 100%
   .mainContainer.staff
     width: 100%
   .box
@@ -135,5 +136,4 @@ a:hover + .display_on_hover
   .mainContainer.staff
     width: 100%
   .badge-icon
-    height: 25px
     width: 25px

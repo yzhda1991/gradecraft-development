@@ -6,18 +6,19 @@ $predictor-font-size-1 : 1.5rem
 $predictor-font-size-2 : 1.25rem
 $predictor-font-size-3 : 1rem
 $predictor-font-size-4 : .85rem
-$predictor-font-size-5 : .55rem
+$predictor-font-size-5 : .75rem
+$predictor-font-size-6: .55rem
 
 // widths and margins for cards
 // Needed to  make x numbers of columns
 $card-width-4 : 22%
 $card-margin-4 : 10px 15px
-$card-width-3 : 29%
-$card-margin-3 : 10px 15px
-$card-width-2 : 46%
-$card-margin-2 : 3px 5px
-$card-width-1 : 100%
-$card-margin-1 : 3px 0 5px 0
+$card-width-3 : 24%
+$card-margin-3 : 8px 3px
+$card-width-2 : 32%
+$card-margin-2 : 8px 3px
+$card-width-1 : 48%
+$card-margin-1 : 3px
 
 .predictor-inner.inner-wrap
   background-color: rgba(255,255,255,0.8)
@@ -36,15 +37,11 @@ $card-margin-1 : 3px 0 5px 0
 
 // SVG
 
-#predictor-graph-spacer
-  height: 54px
-
 #predictor-post-graphic-spacer
   height: 150px
 
 
 .predictor-graph
-  height: 150px
   width: 100%
   max-width: 1100px
   position: fixed
@@ -91,7 +88,7 @@ $card-margin-1 : 3px 0 5px 0
 // ICONS AND TOOLTIPS
 
 .predictor-article-main-icons
-  font-size: $predictor-font-size-4
+  font-size: $predictor-font-size-5
   margin-top: 6px
   .icon-text
     margin: 0
@@ -111,9 +108,9 @@ $card-margin-1 : 3px 0 5px 0
   color: $color-red-1
 
 .predictor-badge-icon
-  max-width: 80px
+  max-width: 75px
   float: left
-  margin: -20px 0 0 $predictor-font-size-3
+  margin: -20px 0 0 0.5rem
 
 .assignment-type-tooltip
   a
@@ -126,29 +123,32 @@ $card-margin-1 : 3px 0 5px 0
 
 // SECTIONS
 #predictor-main-header, .predictor-section
-  height: 33px
+  height: 25px
   .coin:hover
     background-color: $color-yellow-1
 
 #predictor-main-header
   background-color: $color-blue-1
+  margin-bottom: 1px
 .predictor-section
   background-color: $color-blue-2
+  margin-bottom: 1px
+
+.collapse-toggler, .collapse-all-toggler
+  position: relative
 
 .collapse-arrow
   width: 0
   height: 0
-  float: left
-  margin: 10px 8px 0 24px
-  border-left: 8px solid transparent
-  border-right: 8px solid transparent
-  border-top: 13px solid $color-blue-4
+  position: absolute
+  top: 9px
+  left: 6px
+  border-left: 5px solid transparent
+  border-right: 5px solid transparent
+  border-top: 8px solid $color-blue-4
   -webkit-backface-visibility: hidden
   &:hover
     cursor: pointer
-
-.collapse-arrow.outdent
-  margin: 9px 7px 0 8px
 
 .collapsed
   .collapse-arrow
@@ -156,15 +156,14 @@ $card-margin-1 : 3px 0 5px 0
     -webkit-transform: rotate(-90deg)
 
 .predictor-section-title
-  font-size: $predictor-font-size-1
+  font-size: $predictor-font-size-3
   color: white
-  line-height: 1.4
-  margin-bottom: 0.5rem
-  padding: 0 .5rem
+  padding: 0 0.5rem
 
 .predictor-section-title-name
   float: left
   text-transform: capitalize
+  margin-left: 0.75rem
 
 .predictor-section-title-max-points
   font-size: $predictor-font-size-3
@@ -222,17 +221,17 @@ $card-margin-1 : 3px 0 5px 0
     .coin-stack-count
       position: absolute
       color: $color-orange-1
-      left: -16px
-      top: -1px
+      left: -10px
+      top: 1px
     &:hover .coin-stack-count
       visibility: hidden
   .coin, .coin-non-interactive, .coin-slot
     float: right
-    width: 25px
-    height: 25px
-    @include rounded-corners(14px)
+    width: 18px
+    height: 18px
+    border-radius: 50%
   .coin
-      margin: 2px 0 0 -23px
+      margin: 2px 0 0 -16px
   .coin-non-interactive, .coin-slot
     margin: 2px 0 0 2px
   .coin, .coin-non-interactive
@@ -241,7 +240,7 @@ $card-margin-1 : 3px 0 5px 0
     @include transition(all, .5s, ease-out)
   .coin-remove-icon
     color: $color-yellow-1
-    margin: 1px 0 0 -3px
+    margin: 1px 0 0 -2px
   .coin:hover
     background-color: $color-orange-1
   .coin:hover .coin-remove-icon
@@ -252,20 +251,17 @@ $card-margin-1 : 3px 0 5px 0
     @include transition(all, .5s, ease-out)
   .coin-add-icon
     color: $color-blue-2
-    margin: 1px 0 0 -3px
+    margin: 1px 0 0 -1.5px
     visibility: hidden
   .coin-slot:hover
-    border: 2px solid $color-orange-1
     background-color: $color-yellow-1
     .coin-add-icon
       visibility: visible
   .no-coins-slot
-    font-size: $predictor-font-size-3
+    font-size: $predictor-font-size-4
     background-color: $color-blue-3
-    padding: 2px 5px
-    margin: 4px 0 0 10px
-    border-radius: 6px
-    line-height: normal
+    padding: 0 5px
+    border-radius: 2px
 
 #predictor-main-header .predictor-section-title-weights
   .coin-stack
@@ -285,7 +281,7 @@ $card-margin-1 : 3px 0 5px 0
   margin-bottom: $predictor-font-size-3
   background-color: lighten($color-grey-6, 5%)
   float: left
-  height: 154px
+  height: 140px
   //default width for largest
   width: $card-width-4
   margin: $card-margin-4
@@ -297,17 +293,16 @@ $card-margin-1 : 3px 0 5px 0
 .predictor-article-title
   background-color: $color-blue-3
   color: $txt-color-inverse
-  padding: 2px 0 1px 4px
+  padding: 0.25rem 1.25rem 0.25rem 0.25rem
+  font-size: $predictor-font-size-5
+  position: relative
+  height: 1.1rem
   overflow: hidden
-  height: 2rem
-  line-height: 2rem
-  font-size: $predictor-font-size-4
   .info-icon
-    float: right
-    padding: 7px 4px 0 0
+    position: absolute
+    top: 5px
+    right: -3px
     font-size: $predictor-font-size-3
-    margin-right: -4px
-    position: relative
     cursor: pointer
 
 .predictor-article-title-stripe
@@ -321,8 +316,7 @@ $card-margin-1 : 3px 0 5px 0
 .predictor-article-date
   height: $predictor-font-size-2
   margin: 5px 0 0 4px
-  font-size: $predictor-font-size-5
-  color: $color-blue-3
+  font-size: $predictor-font-size-6
 
 .predictor-article-main
   padding-top: 5px
@@ -348,7 +342,7 @@ $card-margin-1 : 3px 0 5px 0
 
 .article-completed, .pass-fail-prediction
   text-align: center
-  font-size: $predictor-font-size-2
+  font-size: $predictor-font-size-3
   color: $color-blue-2
 
 .article-completed.excluded
@@ -361,14 +355,14 @@ $card-margin-1 : 3px 0 5px 0
 
 .article-predicted .grade
   text-align: center
-  font-size: $predictor-font-size-2
+  font-size: $predictor-font-size-3
   color: $color-blue-2
   .value
     font-size: $predictor-font-size-3
-    padding: 15px
+    padding: 15px 10px
   .name
-    font-size: $predictor-font-size-4
-    margin-top: -20px
+    font-size: 0.75rem
+    margin-top: -15px
 
 /*  Badge Articles */
 .predictor-article-card.type-badges
@@ -397,10 +391,10 @@ $card-margin-1 : 3px 0 5px 0
       border-radius: 1rem
 
     .ui-slider-handle
-      width: 22px
-      height: 22px
+      width: 20px
+      height: 20px
       position: absolute
-      top: -5px
+      top: -4px
       margin-left: -12px
       background: $color-blue-3
       border-radius: 1rem
@@ -421,15 +415,15 @@ $card-margin-1 : 3px 0 5px 0
   input::-webkit-outer-spin-button, input::-webkit-inner-spin-button
       /* display: none; <- Crashes Chrome on hover */
       -webkit-appearance: none
-      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      margin: 0; /* <-- Apparently some margin are still there even though it is hidden */
 
 .predictor-article-card .ui-slider.below-threshold .ui-slider-range
   background-color: $color-red-1
 
 /* Binary Switch */
 
-.predictor-binary-switch.badge
-  margin: 17px 0
+// .predictor-binary-switch.badge
+//   margin: 17px 0
 
 .predictor-binary-switch .switch-socket
   width: 40px
@@ -440,10 +434,10 @@ $card-margin-1 : 3px 0 5px 0
   margin: auto
 
 .predictor-binary-switch .switch-handle
-  width: 22px
-  height: 22px
+  width: 20px
+  height: 20px
   position: absolute
-  top: -4px
+  top: -3px
   left: -1px
   background: $color-blue-3
   border-radius: 1rem
@@ -452,7 +446,7 @@ $card-margin-1 : 3px 0 5px 0
   background: $color-blue-3
   border: 1px solid $color-blue-3
   .switch-handle
-    left: 20px
+    left: 22px
 
 
 
@@ -491,12 +485,11 @@ $card-margin-1 : 3px 0 5px 0
     // necessary to override .disabled in forms
     background-color: transparent
   .time-earned-prediction
-    font-size: $predictor-font-size-2
-    line-height: 1.5rem
+    font-size: $predictor-font-size-4
     text-align: center
     padding: 10px 12px 0 20px
   .badge-total-prediction
-    font-size: $predictor-font-size-1
+    font-size: $predictor-font-size-3
     clear: both
     text-align: center
 
@@ -519,23 +512,13 @@ $card-margin-1 : 3px 0 5px 0
 @media (min-width: $media-large-max)
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-3
-      margin: $card-margin-3
+      width: 32%
+      margin: 8px 3px
 
 @mixin mobile-headers-mixin
-  .predictor-section-title-max-points, .predictor-section-title-predicted-points.badges
-    clear: both
-    float: none
-  .predictor-section-title-predicted-points
-    line-height: 1.8
   .predictor-section-title-predicted-points.weightable
-    float: none
-    clear: both
     background-color: $color-blue-2
     display: block
-    height: 2.25rem
-    width: 110%
-    padding: 10px 0 0 0
     margin-left: -10px
   .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
     text-align: left
@@ -545,40 +528,23 @@ $card-margin-1 : 3px 0 5px 0
       font-size: $predictor-font-size-1
 
   #predictor-main-header
-    height: 38px
     margin: 8px 0 1px 0
+    height: 30px
   .predictor-section-title
-    font-size: $predictor-font-size-2
-    max-width: $media-small-max
     overflow: hidden
-    .coins
-      font-size: $predictor-font-size-1
+    font-size: 0.8rem
+    padding: 0.3rem 0.5rem
   .predictor-section-title-name
-    line-height: 1.8
-    height: 0px;
     .desktop-only
       display: none
-  #predictor-main-header.with-weights
-    height: 74px
   .predictor-section
-    height: 70px
-    margin-bottom: 1px
-    .collapse-arrow
-      margin-left: 8px
-  .predictor-section.with-weights
-    height: 80px
-    .predictor-section-title-name
-      height: 2rem
-    .collapsable
-      padding-top: 0px
-  .collapsable
-    padding: 35px 5px 0 5px
+    height: auto
 
 @mixin mobile-graph-mixin
   #predictor-graph-svg
     height: 175px
     .grade-point-axis text
-      font-size: $predictor-font-size-5
+      font-size: $predictor-font-size-6
     #svg-keys
       font-size: $predictor-font-size-4
     #svg-predicted-key
@@ -594,8 +560,6 @@ $card-margin-1 : 3px 0 5px 0
 @media (max-width: $media-small-max)
   @include mobile-headers-mixin
   @include mobile-graph-mixin
-  #predictor-graph-spacer
-    height: 0
   .predictor-article-card
     width: $card-width-1
     margin: $card-margin-1
@@ -614,8 +578,10 @@ $card-margin-1 : 3px 0 5px 0
     margin: $card-margin-2
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-1
-      margin: $card-margin-1
+      width: $card-width-2
+      margin: $card-margin-2
+    .student-panel
+      display: none
 
 
 // large
@@ -626,5 +592,5 @@ $card-margin-1 : 3px 0 5px 0
   #predictor-main-header, .predictor-section
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-2
-      margin: $card-margin-2
+      width: $card-width-1
+      margin: $card-margin-1

@@ -3,61 +3,86 @@
 @import ribbon_mixins
 @import animation
 
-/* Student sidebar */
 
-.badge-icon
-  width: 80%
-  max-width: 100px
+/* Student Badge Show Page */
+.student
+  h3.pagetitle.badge-page
+    display: none
 
-.student-badge-display
-  text-align: center
-  h4
-    text-align: left
+  .badge-show-page
+    font-weight: 300
 
+    .badge-container
+      text-align: center
+
+    section
+      max-width: 720px
+      margin: 1rem auto
+
+    .badge-icon
+      width: 150px
+      display: block
+      margin: 0 auto
+
+/* staff badge show page */
+.staff
+  .badge-show-page
+    font-weight: 300
+
+    .badge-icon
+      width: 100%
+      max-width: 120px
+      @media (max-width: $media-small-max)
+        margin: 0 auto
+        display: block
+
+    .badge-description
+      width: 65%
+      margin: 0 0 1rem 1rem
+      @media (max-width: $media-small-max)
+        margin: 0
+
+    .badge-icon-container, .badge-description
+      float: left
+      @media (max-width: $media-small-max)
+        width: 100%
+        float: none
+
+    .badge-title, .count
+      display: none
+
+    .team-filter
+      width: 100%
+      text-align: right
+
+/* Student Badge Index Page */
 .badge-container
-  .badge-icon
-    float: left
   .badge-description
     .badge-title
       font-size: 1.25rem
 
+.mobile-click
+  display: none
+  @media (max-width: $media-medium-max)
+    display: block
+    width: 110px
+    height: 94px
+    position: absolute
+    z-index: 2
+
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
-.badge-card
-  position: relative
-  min-height: 8%
-  max-height: 7.85rem
-  max-width: 280px
-  min-width: 17.5rem
-  background-color: $color-blue-3
-  border-radius: $global-radius
-  padding: .5rem
-  display: inline-block
-  margin: 0 .25rem .25rem 0
 
-  &.available
-    background-color: $color-blue-2
-
-  .card-ribbon
-    position: relative
-    border: 1px dashed $color-white
-    border-radius: $global-radius
-    min-height: 5%
-    max-height: 6.7rem
-    padding: .5rem .15rem .5rem .5rem
-    overflow: hidden
-    color: $color-white
-    font-size: .65rem
-
-    .points
-      text-transform: uppercase
-      font-weight: bold
-
-    .date
-      font-style: italic
+.badge-name
+  font-size: .7rem
+  margin: 0px
+  width: 110px
+  text-align: center
+  line-height: .9rem
 
 .earned-count
   font-size: .7rem
+  font-family: Open Sans
   font-weight: normal
   width: 1rem
   margin-top: -1.35rem
@@ -73,18 +98,23 @@ button#remove-badges, button#add-badges
   @include transition-duration(0.3s)
   @include transition-timing-function(ease)
 
-.grade-badge
+.grade-badge,
+.badge-index-section .badge-icon-container
   float: left
+  margin: 1rem
   position: relative
-  width: 5rem
-  margin: 0 3rem 3rem 2rem
-
-  &.hexagon
-    cursor: pointer
-    cursor: hand
 
   img
     width: 80px
+    max-height: 80px
+    display: block
+    margin: 0 auto
+    cursor: pointer
+
+  &.focus-article
+    background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
 
   &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
     background-color: $color-blue-3
@@ -123,74 +153,15 @@ button#remove-badges, button#add-badges
     @include transition-duration(2s)
     @include transition-timing-function(ease)
 
-  .ribbon
-    width: 100px
-    position: absolute
-    margin-top: -20px
-    margin-left: -10px
-    text-align: center
-    z-index: 100
-    background: $color-red-1
-    background: -webkit-gradient(linear, left top, left bottom, from(#d64b4b), to(#ab2c2c))
-    background: -webkit-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -moz-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -ms-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -o-linear-gradient(top, #d64b4b, #ab2c2c)
-    background-image: -ms-linear-gradient(top, #d64b4b 0%, #ab2c2c 100%)
-    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-
-  /* ends to the red ribbon */
-  .ribbon-ends
-    &:before, &:after
-      content: ''
-      position: absolute
-      display: block
-      bottom: -2em
-      border: 1.1em solid #c23a3a
-      z-index: 1
-    &:before
-      left: -2.5em
-      border-right-width: 1.5em
-      border-left-color: transparent
-      -webkit-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-      -moz-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-      box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-    &:after
-      right: -2.5em
-      border-left-width: 1.5em
-      border-right-color: transparent
-      -webkit-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-      -moz-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-      box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-
-  .ribbon-stitches-top
-    z-index: 2410
-    margin-top: 2px
-    border-top: 1px dashed rgba(0, 0, 0, 0.2)
-    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
-    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
-    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5)
-
-  .ribbon-stitches-bottom
-    z-index: 2410
-    margin-bottom: 3px
-    border-top: 1px dashed rgba(0, 0, 0, 0.2)
-    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
-    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
-    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3)
-
   .available
     opacity: .5
 
   .gold-stars
     position: absolute
     top: 10px
-    right: -20px
+    right: 0px
     font-size: 2rem
     color: $color-yellow-1
-    z-index: 100 !important
 
     i.fa-fw
       z-index: 600 !important
@@ -199,149 +170,40 @@ button#remove-badges, button#add-badges
     .gold-stars
       @include opacity(0.6)
 
-  .badges-earned
-    @include ribbon
 
+/* badge index table on instructor side */
 .badge-index-table
   .sort-column, .lock-icon-column
     width: 20px
+
   .icon-column
-    width: 15%
+    width: 10%
     text-align: center
-  .button-column
-    min-width: 300px
+
   .earned-column
     width: 100px
+
   .description-column
   &.student-index
     .button-column
       min-width: 0px
       width: 10px
 
+  .button-bar li a.button
+    display: block
+    margin: .25em
+    border-radius: 0.1875rem
+    @media (max-width: 800px)
+      display: inline-block
 
-.badge-table
-  float: left
-  position: relative
+  .button-bar li:not(:last-of-type) a.button
+    @media (max-width: $media-medium-max)
+      margin-right: 0
+    @media (max-width: 800px)
+      margin-right: .5rem
 
-  &.hexagon
-    @include transition-property("background, opacity")
-    @include transition-duration(0.6s)
-    @include transition-timing-function(ease)
-    width: 32%
-    height: 4%
-    z-index: 100
-    margin: 10% 10% 30% 10%
-    background-color: $color-yellow-1
-
-    &:before, &:after
-      content: ""
-      position: absolute
-      z-index: 1
-      width: 75%
-      height: 202%
-      -webkit-transform: scaleY(0.5774) rotate(-45deg)
-      -ms-transform: scaleY(0.5774) rotate(-45deg)
-      transform: scaleY(0.5774) rotate(-45deg)
-      background-color: $color-blue-3
-      left: 10px
-
-    &:before
-      top: -30px
-
-    &:after
-      bottom: -43.0330px
-
-  .ribbon
-    width: 120%
-    position: absolute
-    margin-top: 30px
-    margin-left: -10px
-    text-align: center
-    z-index: 100
-    background: $color-red-1
-    background: -webkit-gradient(linear, left top, left bottom, from(#d64b4b), to(#ab2c2c))
-    background: -webkit-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -moz-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -ms-linear-gradient(top, #d64b4b, #ab2c2c)
-    background: -o-linear-gradient(top, #d64b4b, #ab2c2c)
-    background-image: -ms-linear-gradient(top, #d64b4b 0%, #ab2c2c 100%)
-    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-
-  /* ends to the red ribbon */
-  .ribbon-ends
-    &:before, &:after
-      content: ''
-      position: absolute
-      display: block
-      bottom: -2em
-      border: 1.1em solid #c23a3a
-      z-index: 1
-    &:before
-      left: -2.5em
-      border-right-width: 1.5em
-      border-left-color: transparent
-      -webkit-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-      -moz-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-      box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
-    &:after
-      right: -2.5em
-      border-left-width: 1.5em
-      border-right-color: transparent
-      -webkit-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-      -moz-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-      box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
-
-  .ribbon-stitches-top
-    z-index: 2410
-    margin-top: 2px
-    border-top: 1px dashed rgba(0, 0, 0, 0.2)
-    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
-    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
-    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5)
-
-  .ribbon-stitches-bottom
-    z-index: 2410
-    margin-bottom: 3px
-    border-top: 1px dashed rgba(0, 0, 0, 0.2)
-    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
-    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
-    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3)
-
-  img
-    width: 100%
+  .badge-icon
+    width: 80%
+    max-width: 100px
+    display: block
     margin: 0 auto
-    z-index: 80
-    position: absolute
-    margin: -14px 0 0 2px
-
-  .available
-    opacity: .5
-
-  .gold-stars
-    position: absolute
-    top: -10px
-    right: -20px
-    font-size: 2rem
-    color: $color-yellow-1
-    z-index: 100 !important
-
-    i.fa-fw
-      z-index: 600 !important
-
-  &.unearned
-    .gold-stars
-      @include opacity(0.6)
-
-  .badges-earned
-    @include ribbon
-
-.badge-name
-  font-size: .7rem
-  margin: 0px
-  color: $color-black
-  text-shadow: #d65c5c 0 1px 0
-  padding: 2px 10px
-  font-weight: bold
-  line-height: .9rem

@@ -4,17 +4,12 @@
 
 - if badges.present?
 
-  .grade-badge.hexagon.awarded(title="{{badge.full_points}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="badge.deleteEarnedStudentBadge()" hide-after-fade)
+  .grade-badge.awarded(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="badge.deleteEarnedStudentBadge()" hide-after-fade)
 
     %img(ng-src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="earned")
 
-    .ribbon
-      .ribbon-stitches-top
-      .ribbon-content
-        .badge-name {{badge.name}}
-      .ribbon-stitches-bottom
-    .ribbon-ends
+    %p.badge-name {{badge.name}}
+
     .gold-stars
       %i.fa.fa-star.fa-fw
         .earned-count {{badge.totalEarnedBadges()}}
-      .badges-earned.blue

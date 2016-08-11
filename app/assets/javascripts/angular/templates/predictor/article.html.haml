@@ -1,6 +1,6 @@
 .predictor-article-card{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints(), "focus-article": isFocusArticle()}'}
 
-  .predictor-article-title{'title' => '{{article.name}}', 'ng-click'=>'changeFocusArticle(article)'}
+  .predictor-article-title{'title' => '{{article.name}}', 'ng-click'=>'changeFocusArticle()'}
     {{article.name | limitTo:29}}
     .info-icon
       %i.fa.fa-fw.fa-info-circle

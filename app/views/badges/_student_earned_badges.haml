@@ -1,6 +1,7 @@
 - presenter.earned_badges.each do |badge|
   .earned-badge
     .earned-badge-date
-      = "Awarded #{ badge.created_at.strftime("%b %d") }"
+      %h2 Awarded
+      = glyph(:calendar) + "#{ badge.created_at.strftime("%A, %B %d, %Y") }"
     .earned-badge-feedback
-      = "Feedback #{ raw badge.feedback }"
+      = "#{ raw badge.feedback }"

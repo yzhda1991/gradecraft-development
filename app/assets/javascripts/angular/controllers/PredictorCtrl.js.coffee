@@ -3,7 +3,6 @@
 @gradecraft.controller 'PredictorCtrl', ['$scope', '$q', 'PredictorService', ($scope, $q, PredictorService) ->
 
   $scope.loading = true
-  $scope.context = 'predictor'
 
   $scope.init = (student_id)->
     $scope.student_id = student_id

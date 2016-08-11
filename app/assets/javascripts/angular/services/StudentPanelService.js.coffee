@@ -1,7 +1,10 @@
 # Manages state for the student side panel. Only in place on the Predictor Page
 # for now, but built to accomodate side panels on other pages.
 
-@gradecraft.factory 'StudentPanelService', [ ()->
+@gradecraft.factory 'StudentPanelService', [ 'GradeCraftAPI', (GradeCraftAPI)->
+
+  termFor = (article)->
+    GradeCraftAPI.termFor(article)
 
   # Show the helpful hint when the page loads
   _showHint = true
@@ -26,6 +29,7 @@
     _focusArticle
 
   return {
+    termFor: termFor
     showingHint: showingHint
     focusArticle: focusArticle
     clearInfoHint: clearInfoHint
