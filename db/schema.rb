@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801153720) do
+ActiveRecord::Schema.define(version: 20160811183259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -328,23 +328,18 @@ ActiveRecord::Schema.define(version: 20160801153720) do
   add_index "criterion_grades", ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
 
   create_table "earned_badges", force: :cascade do |t|
-    t.integer  "badge_id"
+    t.integer  "badge_id",                        null: false
     t.integer  "submission_id"
-    t.integer  "course_id"
-    t.integer  "student_id"
-    t.integer  "task_id"
+    t.integer  "course_id",                       null: false
+    t.integer  "student_id",                      null: false
     t.integer  "grade_id"
-    t.integer  "group_id"
-    t.string   "group_type",         limit: 255
-    t.integer  "points"
+    t.integer  "points",          default: 0,     null: false
     t.text     "feedback"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "shared"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "assignment_id"
-    t.integer  "criterion_grade_id"
     t.integer  "level_id"
-    t.boolean  "student_visible",                default: false
+    t.boolean  "student_visible", default: false, null: false
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree

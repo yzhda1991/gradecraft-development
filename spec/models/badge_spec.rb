@@ -339,8 +339,8 @@ describe Badge do
       student = create(:user)
       badge = create(:badge, full_points: 1000)
       second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      second_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
+      earned_badge = create(:earned_badge, badge: badge, points: 1000, student: student, student_visible: true)
+      second_earned_badge = create(:earned_badge, badge: second_badge, points: 200, student: student, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
       expect(badge.earned_badge_total_points(student)).to eq(1000)
     end
