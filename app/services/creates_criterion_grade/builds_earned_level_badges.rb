@@ -40,7 +40,7 @@ module Services
             EarnedBadge.new(course_id: assignment.course.id, assignment_id: assignment.id,
                             student_id: student.id, student_visible: visible_status,
                             badge_id: level_badge.badge.id, level_id: level_badge.level.id,
-                            score: level_badge.badge.full_points)
+                            points: level_badge.badge.full_points)
           end
         end
 
