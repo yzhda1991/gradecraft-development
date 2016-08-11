@@ -65,8 +65,25 @@ class CourseExportContext
     @assignments ||= Assignment.where(id: assignment_ids).select :id, :name
   end
 
-  # Methods parsing the ids from the ActiveRecord queries
+  # Parsed user and assignment data from ActiveRecord queries
   #
+  # { user_id => "some_username" }
+  def usernames
+    @usernames ||= users.inject({}) do |memo, user|
+      memo[user.id] = user.username
+      memo
+    end
+  end
+
+  # { assignment_id => "some_assignment_name" }
+  #
+  def assignment_names
+    @assignment_names ||= assignments.inject({}) do |hash, assignment|
+      hash[assignment.id] = assignment.name
+      hash
+    end
+  end
+
   def user_ids
     @user_ids ||= events.collect(&:user_id).compact.uniq
   end

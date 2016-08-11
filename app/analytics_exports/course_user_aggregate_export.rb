@@ -5,7 +5,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   column_mapping username: :username,
                  role: :user_role,
-                 user_id: :user_id,
+                 user_id: :id,
                  total_pageviews: :pageviews,
                  total_logins: :logins,
                  total_predictor_events: :predictor_events,
@@ -56,7 +56,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
     end
   end
 
-  # column filters for
+  # column filters
   def user_role(user)
     roles[user.id]
   end
@@ -75,9 +75,5 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   def predictor_sessions(user)
     user_predictor_sessions[user.id]
-  end
-
-  def user_id(user)
-    user.id
   end
 end

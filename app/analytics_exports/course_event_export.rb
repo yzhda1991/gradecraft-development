@@ -22,18 +22,11 @@ class CourseEventExport < Analytics::Export::Model
     @export_records = context.events
   end
 
-  def usernames
-    @usernames ||= context.users.inject({}) do |memo, user|
-      memo[user.id] = user.username
-      memo
-    end
-  end
-
   # these are the methods being used to filter the 'row' values for the final
   # export CSV.
   #
   def username(event)
-    usernames[event.user_id] || "[user id: #{event.user_id}]"
+    context.usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
   def page(event)

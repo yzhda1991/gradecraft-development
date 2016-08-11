@@ -47,7 +47,7 @@ module Analytics
               message = progress_message(index)
               print message.formatted_message if message.printable?
 
-              cell = Parsers::Cell.new \
+              cell_parser = Parsers::Cell.new \
                 strategy: parsing_strategy,
                 record: record,
                 export: export
