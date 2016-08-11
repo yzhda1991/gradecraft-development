@@ -16,7 +16,11 @@ feature "downloading assignment type summary file" do
       @assignment_type = create(:assignment_type, course: course)
 
       within(".sidebar-container") do
-        click_link "Assignment type Summaries"
+        click_link "Course Data Exports"
+      end
+
+      within(".pageContent") do
+        click_link "Assignment Type Summaries"
       end
 
       expect(page.response_headers["Content-Type"]).to eq("text/csv")

@@ -14,6 +14,10 @@ feature "downloading final grades file" do
     scenario "successfully" do
 
       within(".sidebar-container") do
+        click_link "Course Data Exports"
+      end
+
+      within(".pageContent") do
         click_link "Final Grades"
       end
 
