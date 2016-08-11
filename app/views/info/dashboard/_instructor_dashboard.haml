@@ -6,7 +6,7 @@
   - if @events.present?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
-  .panel.dashboard-module.weekly-stats
+  .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
 
   - if current_course.grade_scheme_elements.present?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grading_scheme"

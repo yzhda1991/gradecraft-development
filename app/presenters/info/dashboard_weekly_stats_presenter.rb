@@ -11,28 +11,48 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     properties[:student]
   end
 
+  def badges
+    properties[:badges]
+  end
+
   def points_this_week
-    student.points_earned_for_course_this_week(course)
+    if student
+      student.points_earned_for_course_this_week(course)
+    end
   end
 
   def grades_this_week
-    student.grades_released_for_course_this_week(course)
+    if student
+      student.grades_released_for_course_this_week(course)
+    end
   end
 
   def badges_this_week
-    student.earned_badges_for_course_this_week(course)
+    if student
+      student.earned_badges_for_course_this_week(course)
+    else
+      badge.earned_badges_this_week_count
+    end
   end
 
   def has_points_this_week?
-    student.points_earned_for_course_this_week(course).present?
+    if student
+      student.points_earned_for_course_this_week(course).present?
+    end
   end
 
   def has_grades_this_week?
-    student.grades_released_for_course_this_week(course).any?
+    if student
+      student.grades_released_for_course_this_week(course).any?
+    end
   end
 
   def has_badges_this_week?
-    student.earned_badges_for_course_this_week(course).any?
+    if student
+      student.earned_badges_for_course_this_week(course).any?
+    else
+      badge.earned_badges_this_week_count > 0
+    end
   end
 
   def has_weekly_stats?
