@@ -4,10 +4,10 @@
   .card-body
     - if current_user_is_student?
       %h4.not_bold.italic= "You've earned #{points current_student.cached_score_for_course(current_course)} points"
-      #student_grade_distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
+      #grade_distro.student-distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
       #gradeDistro
     - else
-      #student_grade_distro{"data-scores"=> current_course.scores.to_json}
+      #grade_distro.instructor-distro{"data-scores"=> current_course.scores.to_json}
       #gradeDistro
       .italic = "Scores: #{current_course.scores}"
     .italic= "Class Average: #{points current_course.average_course_score} points"
