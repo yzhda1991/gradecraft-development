@@ -76,11 +76,20 @@
     &.starred
       background-color: transparentize($color-blue-4, .8)
 
-    .button
+    .button, .student-stats
       position: absolute
       top: 50%
       transform: translateY(-50%)
       right: 8px
+
+    .count
+      display: inline
+      padding: .25rem
+      margin: .2rem
+      background-color: transparentize($color-blue-4, .8)
+      border-radius: 2px
+      &.submissions-count
+        background-color: transparentize($color-green-2, .8)
 
     a
       font-weight: 400
@@ -91,6 +100,22 @@
 
     a
       font-weight: 400
+
+  .planner-subheader
+    border-bottom: 1px solid $color-grey-6
+    text-align: right
+    padding: 0 1rem
+    font-size: 0.65rem
+
+    .predictions-label, .submissions-label
+      padding: .25rem
+      margin: .2rem
+
+    .predictions-label
+      background-color: transparentize($color-blue-4, .8)
+
+    .submissions-label
+      background-color: transparentize($color-green-2, .8)
 
   .dashboard-message
     background-color: transparentize($color-blue-4, .8)
