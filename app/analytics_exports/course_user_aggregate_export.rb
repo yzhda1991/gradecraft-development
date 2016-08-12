@@ -22,22 +22,30 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   # column filters
   def user_role(user)
-    roles[user.id]
+    context_filter.roles[user.id]
   end
 
   def pageviews(user)
-    parsed_user_pageviews[user.id]
+    context_filter.parsed_user_pageviews[user.id]
   end
 
   def logins(user)
-    user_logins[user.id]
+    context_filter.user_logins[user.id]
   end
 
   def predictor_events(user)
-    user_predictor_event_counts[user.id]
+    context_filter.user_predictor_event_counts[user.id]
   end
 
   def predictor_sessions(user)
-    user_predictor_sessions[user.id]
+    context_filter.user_predictor_sessions[user.id]
+  end
+
+  # add a context filter for the context itself, since we don't want to
+  # re-query for all the data it provides, but we also don't want to
+  # jam it into the export model
+  #
+  def context_filter
+    @context_filter ||= UserAggregateContextFilter.new context
   end
 end
