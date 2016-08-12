@@ -10,3 +10,6 @@
           = assignment.submissions.count
       - if assignment.due_at?.present?
         .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
+  - if assignment_list.empty?
+    %li.dashboard-message
+      No #{(term_for :assignment).downcase.pluralize} are due in the next week!

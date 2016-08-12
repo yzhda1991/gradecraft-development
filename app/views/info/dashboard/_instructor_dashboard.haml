@@ -1,13 +1,13 @@
-.col-30
-  .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
-
 .col-40
+  - if presenter.due_dates?
+    .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
+
+.col-60
   - if @events.present?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
   .panel.dashboard-module.weekly-stats
 
-.col-30
   - if current_course.grade_scheme_elements.present?
     .panel.dashboard-module.grading-scheme
 
