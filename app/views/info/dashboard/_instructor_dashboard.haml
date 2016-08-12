@@ -9,7 +9,7 @@
 
 .col-30
   - if current_course.grade_scheme_elements.present?
-    .panel.dashboard-module.grading-scheme
+    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
   - if ! current_course.hide_analytics?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"

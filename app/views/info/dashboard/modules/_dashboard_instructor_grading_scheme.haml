@@ -1,0 +1,5 @@
+- current_course.grade_scheme_elements.reverse.each do |element|
+  .progress.bar_magic.transparent.center
+    .meter
+      %span= element.name
+      %span= points element.lowest_points
