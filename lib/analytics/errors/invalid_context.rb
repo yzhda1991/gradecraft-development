@@ -1,11 +1,11 @@
 module Analytics
   module Errors
-    class InvalidContext < StandardError
+    class InvalidContextType < StandardError
       attr_reader :context_filter, :context
 
-      def initialize(context_filter:, context:, message: nil)
+      def initialize(context_filter:, context_type:, message: nil)
         @context_filter = context_filter
-        @context = context
+        @context_type = context_type
         @message = message
       end
 
@@ -15,9 +15,9 @@ module Analytics
 
       def default_message
         "The context filter #{context_filter.inspect} does not accept export " \
-          "contexts of class #{context.class.inspect} as valid. Please pass " \
-          "only contexts of valid classes into the context filter, or add the " \
-          "given context class to the list of valid context types."
+          "contexts of type #{context_type.inspect}. Please pass " \
+          "only valid context types into the context filter, or add the " \
+          "given context type to accepts_context_types on the filter class."
       end
     end
   end

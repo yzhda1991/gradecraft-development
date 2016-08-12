@@ -4,7 +4,7 @@ class CoursePredictorExport < Analytics::Export::Model
   # generate this export? These records will translate to rows on the final
   # export csv.
   #
-  context_focus :predictor_events
+  export_records :predictor_events
 
   # map the column name to the attribute or method name on the record that we'd
   # like to use to populate each row

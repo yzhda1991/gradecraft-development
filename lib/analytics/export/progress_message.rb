@@ -1,9 +1,9 @@
 module Analytics
   module Export
-    class Message
+    class ProgressMessage
       attr_reader :record_number, :total_records
 
-      def initialize(record_index:, total_records:)
+      def initialize(record_index:, total_records:, print_every: 10)
         # the record_number is the base-one position for the record relative to the
         # total number of records, whereas the index is base-zero. This helps us do
         # comparisons against the total number of records without having to
@@ -12,14 +12,12 @@ module Analytics
 
         # this is the total number of records in the export
         @total_records = total_records
+
+        # by default only records with an index divisible by 10 are printable
+        @print_every = print_every
       end
 
-      # print the progress message to show how far along we are in the export
-      def formatted_message
-        "\r       #{progress_message}"
-      end
-
-      def progress_message
+      def to_s
         "record #{record_number} of #{total_records} (#{percent_complete}%)"
       end
 
@@ -30,12 +28,13 @@ module Analytics
 
         # the record should be messageable if it's divisible by five, or if it's
         # the last record in the records array
-        record_number % 5 == 0 || record_number == total_records
+        record_number % print_every == 0 || record_number == total_records
       end
 
       def percent_complete
         (record_number * 100.0 / total_records).round
       end
+
     end
   end
 end

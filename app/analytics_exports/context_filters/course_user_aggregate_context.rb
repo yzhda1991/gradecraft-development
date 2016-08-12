@@ -1,6 +1,6 @@
 class UserAggregateContextFilter < Analytics::Export::ContextFilter
 
-  valid_contexts :course_export_context
+  accepts_context_types :course_export_context
 
   def roles
     @roles ||= context.events.inject(Hash.new("")) do |memo, event|

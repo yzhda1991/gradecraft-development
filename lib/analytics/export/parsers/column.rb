@@ -38,14 +38,14 @@ module Analytics
 
         # construct a hash that builds an empty array for the default value
         def parse!
-          puts " => Parsing export data by column..."
+          puts "=> Parsing export data by column..."
 
           column_mapping.each do |column_name, parsing_strategy|
-            puts "    => parsing column :#{column_name} as :#{parsing_strategy}"
+            puts "  => parsing column :#{column_name} as :#{parsing_strategy}"
 
             parsed_columns[column_name] = records.each_with_index.collect do |record, index|
               message = progress_message(index)
-              print message.formatted_message if message.printable?
+              print "    =>#{message.to_s}" if message.printable?
 
               cell_parser = Parsers::Cell.new \
                 strategy: parsing_strategy,
@@ -58,9 +58,10 @@ module Analytics
         end
 
         def progress_message(index)
-          Analytics::Export::Message.new \
+          Analytics::Export::ProgressMessage.new \
             record_index: index,
-            total_records: records.size
+            total_records: records.size,
+            print_every: 5
         end
       end
     end

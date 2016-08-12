@@ -7,7 +7,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
   # generate this export? These records will translate to rows on the final
   # export csv.
   #
-  context_focus :users
+  export_records :users
 
   # map the column name to the attribute or method name on the record that we'd
   # like to use to populate each row
