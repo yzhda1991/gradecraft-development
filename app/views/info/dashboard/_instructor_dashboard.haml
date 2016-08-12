@@ -12,4 +12,4 @@
     .panel.dashboard-module.grading-scheme
 
   - if ! current_course.hide_analytics?
-    .panel.dashboard-module.grade-distribution
+    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
