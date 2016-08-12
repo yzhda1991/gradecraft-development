@@ -17,6 +17,13 @@ module Analytics
         @column_mapping = mapping
       end
 
+      # define the method that gives us the array of records we'd like to
+      # pull from the context to define our export rows.
+      #
+      def self.context_focus(method_name)
+        @context_focus = method_name
+      end
+
       # every Analytics::Export class will have both a context and a set of
       # export_records. The context is the larger set of records that have
       # been queried for to perform the overall export so that individual
@@ -34,6 +41,7 @@ module Analytics
       def initialize(context:, filename: nil)
         @context = context
         @filename = filename
+        @export_records = context.send self.class.context_focus
       end
 
       def parsed_columns

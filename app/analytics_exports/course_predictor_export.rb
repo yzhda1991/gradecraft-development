@@ -1,7 +1,14 @@
 class CoursePredictorExport < Analytics::Export::Model
 
-  attr_accessor :users, :assignments
+  # what is the base set of records we'd like to use from the context to
+  # generate this export? These records will translate to rows on the final
+  # export csv.
+  #
+  context_focus :predictor_events
 
+  # map the column name to the attribute or method name on the record that we'd
+  # like to use to populate each row
+  #
   column_mapping username: :username,
                  role: :user_role,
                  user_id: :user_id,
@@ -11,18 +18,9 @@ class CoursePredictorExport < Analytics::Export::Model
                  possible: :possible_points,
                  date_time: :formatted_event_timestamp
 
-  def initialize(context:)
-    @context = context
 
-    # the subject of this export are the predictor events
-    @export_records = context.predictor_events
-  end
-
-  # since these filtering mechanisms for pulling usernames out of users
-  # and assignment_names out of assignments are being used in multiple exports,
-  # I wonder whether these should also be extracted into some kind of export
-  # presenter helper module so we can keep all of this logic in one place.
-
+  # filters for individual columns in the export
+  #
   def formatted_event_timestamp(event)
     event.created_at.to_formatted_s :db
   end
