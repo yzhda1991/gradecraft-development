@@ -1,6 +1,6 @@
 = content_nav_for Badge if !current_student
 
-%h3.pagetitle= presenter.title
+%h3.pagetitle= presenter.title if !current_student
 
 = render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
 
