@@ -5,7 +5,7 @@
 = render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
 
 - if current_user_is_student?
-  = render partial: "badges/student_badge_index", locals: { presenter: presenter }
+  .pageContent= render partial: "badges/student_badge_index", locals: { presenter: presenter }
 
 - elsif current_user_is_staff?
   .pageContent
