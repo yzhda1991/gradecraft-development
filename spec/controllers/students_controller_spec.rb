@@ -43,7 +43,7 @@ describe StudentsController do
     describe "GET show" do
       it "shows the student page" do
         get :show, {id: @student.id}
-        expect(response).to render_template(:show)
+        expect(response).to render_template("info/dashboard/_student_dashboard")
       end
     end
 
