@@ -45,9 +45,9 @@ class StudentsController < ApplicationController
 
   # Displaying student profile to instructors
   def show
-    self.current_student = current_course.students.where(id: params[:id]).first
     @events = Timeline.new(current_course).events_by_due_date
-    render "info/dashboard/_student_dashboard", Info::DashboardCoursePlannerPresenter.build({
+    self.current_student = current_course.students.where(id: params[:id]).first
+    render "show", Info::DashboardCoursePlannerPresenter.build({
       student: current_student,
       assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
       course: current_course,
