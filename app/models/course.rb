@@ -238,7 +238,8 @@ class Course < ActiveRecord::Base
 
   # box plot for instructor dashboard
   def scores
-    scores = course_memberships.being_graded.pluck(:score)
+    scores = CourseMembership.where(course: self, auditing: false,
+      role: "student").pluck("score")
     return {
       scores: scores
     }
