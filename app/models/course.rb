@@ -243,6 +243,16 @@ class Course < ActiveRecord::Base
       scores: scores
     }
   end
+  
+  def earned_grade_scheme_elements_by_student_count
+    elements = []
+    grade_scheme_elements.each do |gse| 
+      elements << [gse.name, gse.count_students_earned]
+    end
+    return { 
+      elements: elements.reverse
+    }    
+  end
 
   private
 
