@@ -7,13 +7,15 @@
 #student-main-column
   width: auto
   overflow: hidden
-
+  
 .student-panel
   width: 400px
   float: right
   height: 100%
   position: relative
   font-weight: 300
+  z-index: 18
+  // top: 2.3rem
   border-left: 1px solid $color-grey-6
   .align-box
     width: 100px
@@ -31,7 +33,7 @@
   #student-panel-widget, .student-panel-article
     z-index: 50
     position: fixed
-    top: 89px
+    // top: 80px
     width: 400px
   h2
     text-transform: uppercase
@@ -44,7 +46,7 @@
     max-width: 120px
     margin: 1rem auto
 
-  p.student-panel-text-block
+  .student-panel-text-block
     margin: 0.5rem 1rem
     font-size: 0.8rem
 
@@ -65,9 +67,11 @@
     cursor: pointer
     margin-top: 1rem
 
-  .student-panel-article-description,
-  .student-panel-article-purpose,
-    color: $color-grey-4
+  .student-panel-article-description
+    color: $color-grey-2
+    a
+      padding: 1rem
+      font-size: 0.8rem
 
   .student-panel-article-main-icons
     margin: .5rem 1rem
@@ -140,4 +144,3 @@
     25% {opacity: 0.8}
     50% {-webkit-transform: scale(2, 2); opacity: 0.0;}
     100% {opacity: 0.0}
-

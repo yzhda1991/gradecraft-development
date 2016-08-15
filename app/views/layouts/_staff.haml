@@ -5,8 +5,9 @@
 .mainContainer.staff{role: "main"}
 
   - if current_student.present?
+    %h2.profileTitle= current_student.name
     = content_nav do
-      = render partial: "students/student_profile_tabs"
+      = render partial: "layouts/navigation/student_profile_tabs"
 
   / Page content
   .mainContent= render partial: "layouts/content"

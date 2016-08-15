@@ -20,11 +20,6 @@ describe "students/syllabus" do
     allow(view).to receive(:presenter).and_return presenter
   end
 
-  it "renders pagetitle" do
-    render
-    assert_select ".pagetitle", count: 1
-  end
-
   it "shows the assignment type div" do
     render
     assert_select ".assignment_type", contains: "#{ @assignment_types[0].name }",  count: 1

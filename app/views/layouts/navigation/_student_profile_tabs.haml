@@ -2,10 +2,12 @@
   %h5 Navigation
   - if current_user_is_staff?
     %li{class: ("active" if current_page?(student_path(current_student))) }
-      = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
+      = link_to_unless_current "Dashboard", student_path(current_student)
+    %li{class: ("active" if current_page?(syllabus_student_path(current_student))) }
+      = link_to_unless_current "#{term_for :assignments}", syllabus_student_path(current_student)
     - if current_course.grade_scheme_elements.present?
-      %li{class: ("active" if current_page?(grading_scheme_path(student_id: current_student))) }
-        = link_to_unless_current "Grading Scheme", grading_scheme_path(student_id: current_student)
+      %li{class: ("active" if current_page?(grading_scheme_student_path(current_student))) }
+        = link_to_unless_current "Grading Scheme", grading_scheme_student_path(current_student)
     %li{class: ("active" if current_page?(predictor_student_path(current_student))) }
       = link_to_unless_current glyph("tasks") + "Grade Predictor", predictor_student_path(current_student)
     - if current_course.has_badges?
@@ -27,14 +29,12 @@
     - if current_course.has_badges?
       %li{class: ("active" if current_page?(badges_path)) }
         = link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
-    - if current_course.announcements.present?
-      %li{class: (current_page?(announcements_path)? "active" : "announcement-nav") }
-        - unread_count = unread_count_for current_student, current_course
-        - if unread_count > 0
-          = link_to_unless_current "Announcements", announcements_path
-          %div.notification-badge.announcement-notification-badge= unread_count
-        - else
-          = link_to_unless_current "Announcements", announcements_path
     - if current_course.teams_visible? || current_course.has_in_team_leaderboards?
       %li{class: ("active" if current_page?(my_team_path)) }
         = link_to_unless_current glyph(:users) + "#{term_for :teams}", my_team_path
+    - if current_course.announcements.present?
+      %li{class: (current_page?(announcements_path)? "active" : "announcement-nav") }
+        - unread_count = unread_count_for current_student, current_course
+        = link_to_unless_current "Announcements", announcements_path
+        - if unread_count > 0
+          %div.notification-badge.announcement-notification-badge= unread_count

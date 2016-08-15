@@ -22,7 +22,7 @@ describe "students/grading_scheme" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Grading Scheme", count: 1
+    assert_select "span", text: "Your rank:", count: 1
   end
 
 end

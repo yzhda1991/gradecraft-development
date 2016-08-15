@@ -2,11 +2,18 @@
 @import layout
 
 /* Tabs on the student dashboard */
+
+dl
+  margin: 0
+
+.staff .sub-nav
+  margin-top: 3.375rem
+  max-width: 1248px
+
 .sub-nav
-  margin: 10px 0 0 0
-  padding: 0.75rem 0rem
-  display: block
+  padding: 0.5rem 0rem
   position: fixed
+  display: block
   overflow: hidden
   width: 100%
   max-width: 1500px
@@ -24,7 +31,6 @@
 
     i
       display: none
-
 
   /* Individual Tabs */
   .navbar-nav
@@ -48,12 +54,6 @@
 
     h5, hr
       display: none
-
-/* On faculty view, accomodate left side column */
-.mainContainer.staff
-  .sub-nav
-    max-width: 1248px
-    margin-top: 13px
 
 /* Setting the active tab and hover color */
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover
