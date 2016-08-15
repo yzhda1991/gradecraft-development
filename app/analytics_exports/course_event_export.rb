@@ -28,6 +28,7 @@ class CourseEventExport < Analytics::Export::Model
   end
 
   def formatted_event_timestamp(event)
+    # this is the equivalent of %Y-%m-%d %H:%M:%S
     event.created_at.strftime "%F %T"
   end
 end
