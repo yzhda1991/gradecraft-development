@@ -1,7 +1,7 @@
 module Analytics
   module Errors
     class InvalidContextType < StandardError
-      attr_reader :context_filter, :context
+      attr_reader :context_filter, :context_type
 
       def initialize(context_filter:, context_type:, message: nil)
         @context_filter = context_filter
@@ -10,7 +10,7 @@ module Analytics
       end
 
       def to_s
-        message || default_message
+        @message || default_message
       end
 
       def default_message

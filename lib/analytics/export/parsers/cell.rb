@@ -28,7 +28,7 @@ module Analytics
           # otherwise see if the record itself has an attribute that matches
           # the parsing strategy
           #
-          return record_strategy if record.respond_to? parsing_straegy
+          return record_strategy if record.respond_to? parsing_strategy
 
           # if neither of these exist then we've probably made a mistake in
           # defining our column_mapping. let's raise an error so know about it

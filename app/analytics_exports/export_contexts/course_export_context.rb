@@ -1,13 +1,8 @@
-# for now let's just move all of the data that we need to fetch to generate the
-# course analytics export files into a single context so that they're just kind
-# of contained here and we don't have to deal with them any further for now.
-#
-# We need to break these out into more organized sub-categories so we can at
-# least keep the mongoid records, the active_record records, and the analytics
-# aggregates data together in each respective grouping.
-#
-# For now, though, we've got it all here so it's at least segregated from the
-# rest of the course analytics export process.
+# The notion of this class is that it can query all of the data necessary
+# to perform our course analytics exports. We've added an additional
+# ContextFilter class for export classes that need to refine this data further,
+# so this should just be core mongo and ActiveRecord data that could be
+# re-used in any course-related analytics export.
 #
 class CourseExportContext
   attr_reader :course
