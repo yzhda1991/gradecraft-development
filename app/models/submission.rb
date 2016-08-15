@@ -3,7 +3,6 @@ class Submission < ActiveRecord::Base
   include MultipleFileAttributes
   include Sanitizable
 
-  belongs_to :task, touch: true
   belongs_to :assignment, touch: true
   belongs_to :student, class_name: "User", touch: true
   belongs_to :creator, class_name: "User", touch: true
@@ -44,7 +43,6 @@ class Submission < ActiveRecord::Base
 
   before_validation :cache_associations
 
-  validates_uniqueness_of :task, scope: :student, allow_nil: true
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
   validates_length_of :link, maximum: 255
   validates :assignment, presence: true
@@ -142,11 +140,6 @@ class Submission < ActiveRecord::Base
   private
 
   def cache_associations
-    if task
-      self.assignment_id ||= task.assignment_id
-      self.assignment_type ||= task.assignment_type
-      self.course_id ||= task.assignment.course_id
-    end
     self.assignment_id ||= assignment.id
     self.assignment_type ||= assignment.assignment_type
     self.course_id ||= assignment.course_id
