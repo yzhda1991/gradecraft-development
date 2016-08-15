@@ -11,8 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< e1a4840de6706c9169db0c0379d8e5dbb56cb90f
 ActiveRecord::Schema.define(version: 20160907000216) do
 
+=======
+ActiveRecord::Schema.define(version: 20160830154453) do
+  
+>>>>>>> Cleaned up events and flagged states
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -346,23 +351,23 @@ ActiveRecord::Schema.define(version: 20160907000216) do
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
 
   create_table "events", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",          null: false
     t.text     "description"
     t.datetime "open_at"
-    t.datetime "due_at"
+    t.datetime "due_at",        null: false
     t.text     "media"
     t.text     "thumbnail"
     t.text     "media_credit"
     t.string   "media_caption"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "course_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "course_id",     null: false
   end
 
   create_table "flagged_users", force: :cascade do |t|
-    t.integer  "course_id"
-    t.integer  "flagger_id"
-    t.integer  "flagged_id"
+    t.integer  "course_id",  null: false
+    t.integer  "flagger_id", null: false
+    t.integer  "flagged_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
