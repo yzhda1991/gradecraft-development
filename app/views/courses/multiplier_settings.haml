@@ -7,7 +7,7 @@
 
   = simple_form_for(@course, :validate => false)  do |f|
     %section
-      %p Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will get a boost (through their dashboard) and those assignment type's points are multiplied by the number of multipliers that the student allocates. Any assignment type that isn't chosen to be weighted is then zeroed out - students cannot earn points from them. 
+      %p Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will get a boost (through their dashboard) and those assignment type's points are multiplied by the number of multipliers that the student allocates. Any assignment type that isn't chosen to be weighted is then zeroed out - students cannot earn points from them.
 
       %hr.dotted
 
@@ -29,11 +29,6 @@
         = f.label :max_assignment_types_weighted, "Max Assignment Types"
         = f.number_field :max_assignment_types_weighted, {"aria-describedby" => "txtMaxWeighted"}
         .form_label{id: "txtMaxWeighted"} Is there a maximum number of assignment types they can weight?
-
-      .form-item
-        = f.label :default_weight, "Default Weight"
-        = f.text_field :default_weight, {"aria-describedby" => "txtDefaultWeight"}
-        .form_label{id: "txtDefaultWeight"} What amount should the assignment types that the student doesn't select to boost be multiplied by?
 
       .form-item
         = f.label :weight_term
