@@ -16,8 +16,12 @@ ActiveRecord::Schema.define(version: 20160907000216) do
 
 =======
 ActiveRecord::Schema.define(version: 20160830154453) do
+<<<<<<< 10f22badb029b0dc266d654ca1231a093796fc0b
   
 >>>>>>> Cleaned up events and flagged states
+=======
+
+>>>>>>> Cleaned up criteria and gse
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -307,13 +311,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
 
   create_table "criteria", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                                    null: false
     t.text     "description"
     t.integer  "max_points"
-    t.integer  "rubric_id"
-    t.integer  "order"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "rubric_id",                               null: false
+    t.integer  "order",                                   null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "full_credit_level_id"
     t.integer  "level_count",                 default: 0
     t.integer  "meets_expectations_level_id"
@@ -322,13 +326,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
 
   create_table "criterion_grades", force: :cascade do |t|
     t.integer  "points"
-    t.integer  "criterion_id"
-    t.integer  "level_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "assignment_id"
-    t.integer  "student_id"
-    t.text     "comments"
+    t.integer  "criterion_id",  null: false
+    t.integer  "level_id",      null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "assignment_id", null: false
+    t.integer  "student_id",    null: false
+    t.text     "comments",      null: false
   end
 
   add_index "criterion_grades", ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
@@ -389,13 +393,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
 
   create_table "grade_scheme_elements", force: :cascade do |t|
     t.string   "level"
-    t.integer  "lowest_points"
+    t.integer  "lowest_points",  null: false
     t.string   "letter"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.text     "description"
     t.integer  "highest_points"
-    t.integer  "course_id"
+    t.integer  "course_id",      null: false
   end
 
   create_table "grades", force: :cascade do |t|
