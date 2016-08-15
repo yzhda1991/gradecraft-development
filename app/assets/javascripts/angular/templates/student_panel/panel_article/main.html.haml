@@ -21,9 +21,9 @@
 
 %section.student-panel-article-description{'ng-if'=>'article.has_info'}
   %h2 Description
-  %p.student-panel-text-block{ 'ng-bind-html'=> 'article.description | html' } 
-    {{article.description | limitTo:500}}...
-    %a{:href => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
+  .student-panel-text-block{ 'ng-bind-html'=> 'article.description | html' } 
+    {{article.description | limitTo:500}}... 
+    %a{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
 
 %section.student-panel-article-icons
   .student-panel-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'article'}
