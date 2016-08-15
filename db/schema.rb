@@ -391,10 +391,9 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.string   "level"
     t.integer  "lowest_points"
     t.string   "letter"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "grade_scheme_id"
-    t.string   "description"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.text     "description"
     t.integer  "highest_points"
     t.integer  "course_id"
   end
