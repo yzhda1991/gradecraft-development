@@ -55,4 +55,29 @@ describe UserAggregateContextFilter do
       expect(subject.parsed_user_pageviews).to eq({ 1 => 200, 2 => 300 })
     end
   end
+
+  describe "#parsed_user_logins" do
+    it "builds a hash of user_ids mapped to all-time user logins" do
+      logins = []
+      logins << double(:login, user_id: 1, "[]": { "count" => 200 })
+      logins << double(:login, user_id: 2, "[]": { "count" => 400 })
+
+      allow(subject.context).to receive(:user_logins) { logins }
+
+      expect(subject.parsed_user_logins).to eq({ 1 => 200, 2 => 400 })
+    end
+  end
+
+  describe "#user_predictor_sessions" do
+    it "builds a hash of user_ids mapped to all-time user logins" do
+      pageviews = []
+      pageviews << double(:pageview, user_id: 10, "[]": 2000)
+      pageviews << double(:pageview, user_id: 20, "[]": 4000)
+
+      allow(subject.context).to receive(:user_predictor_pageviews) { pageviews }
+
+      expect(subject.user_predictor_sessions).to eq({ 10 => 2000, 20 => 4000 })
+    end
+  end
+
 end
