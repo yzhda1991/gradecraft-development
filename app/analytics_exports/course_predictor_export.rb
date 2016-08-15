@@ -22,7 +22,8 @@ class CoursePredictorExport < Analytics::Export::Model
   # filters for individual columns in the export
   #
   def formatted_event_timestamp(event)
-    event.created_at.to_formatted_s :db
+    # this is the equivalent of %Y-%m-%d %H:%M:%S
+    event.created_at.strftime "%F %T"
   end
 
   def username(event)

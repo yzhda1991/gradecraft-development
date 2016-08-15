@@ -2,20 +2,11 @@ require "analytics"
 require "./app/analytics_exports/course_predictor_export"
 
 describe CoursePredictorExport do
-  subject { described_class.new users: users, assignments: assignments }
-
-  let(:users) do
-    [double(:user, id: 1, username: "anna"),
-     double(:user, id: 2, username: "barry")]
-  end
+  subject { described_class.new context: context }
+  let(:context) { double(:context).as_null_object }
 
   it "includes Analytics::Export::Model" do
-    expect(subject).to respond_to(:schema_records)
-  end
-
-  let(:assignments) do
-    [double(:assignment, id: 3, name: "writing"),
-     double(:assignment, id: 4, name: "rithmatic")]
+    expect(subject.class).to respond_to(:column_mapping)
   end
 
   describe "#assignment_name" do
@@ -53,120 +44,6 @@ describe CoursePredictorExport do
           expect(result).to eq "[assignment id: 50]"
         end
       end
-    end
-  end
-
-  it "includes Analytics::Export::Model" do
-    expect(subject).to respond_to :parsed_schema_records
-  end
-
-  describe "accessible attributes" do
-    it "has accessible usernames" do
-      subject.usernames = %w[user names]
-      expect(subject.usernames).to eq %w[user names]
-    end
-
-    it "has accessible assignment names" do
-      subject.assignment_names = %w[user names]
-      expect(subject.assignment_names).to eq %w[user names]
-    end
-  end
-
-  describe "readable attributes" do
-    it "has a readable loaded_data attribute" do
-      subject.instance_variable_set(:@loaded_data, "data!!")
-      expect(subject.loaded_data).to eq "data!!"
-    end
-  end
-
-  describe "rows_by definition" do
-    it "filters the rows by events" do
-      expect(described_class.rows).to eq :events
-    end
-  end
-
-  describe "export schema" do
-    it "uses a schema for exporting the records" do
-      sanitized_schema = described_class.schema.tap {|h| h.delete :date_time }
-      expect(sanitized_schema).to eq({
-        username: :username,
-        role: :user_role,
-        user_id: :user_id,
-        assignment: :assignment_name,
-        assignment_id: :assignment_id,
-        prediction: :predicted_points,
-        possible: :possible_points,
-      })
-    end
-  end
-
-  describe "#initialize" do
-    it "sets the loaded data" do
-      expect(subject.loaded_data)
-        .to eq({ users: users, assignments: assignments })
-    end
-
-    it "gets and caches the usernames" do
-      expect_any_instance_of(described_class)
-        .to receive(:get_and_cache_usernames)
-      subject
-    end
-
-    it "gets and caches assignment names" do
-      expect_any_instance_of(described_class)
-        .to receive(:get_and_cache_assignment_names)
-      subject
-    end
-  end
-
-  describe "#get_and_cache_usernames" do
-    let(:result) { subject.get_and_cache_usernames }
-
-    it "builds a hash of format { user_id: username }" do
-      expect(result).to eq({ 1 => "anna", 2 => "barry" })
-    end
-
-    it "sets the result to @usernames" do
-      result
-      expect(subject.instance_variable_get(:@usernames))
-        .to eq({ 1 => "anna", 2 => "barry" })
-    end
-
-    it "caches the value" do
-      result
-      expect(subject.loaded_data[:users]).not_to receive(:inject)
-      result
-    end
-  end
-
-  describe "#get_and_cache_usernames" do
-    let(:result) { subject.get_and_cache_assignment_names }
-
-    it "builds a hash of format { assignment_id: assignment name }" do
-      expect(result).to eq({ 3 => "writing", 4 => "rithmatic" })
-    end
-
-    it "sets the result to @usernames" do
-      result
-      expect(subject.instance_variable_get(:@assignment_names))
-        .to eq({ 3 => "writing", 4 => "rithmatic" })
-    end
-
-    it "caches the value" do
-      result
-      expect(subject.loaded_data[:users]).not_to receive(:inject)
-      result
-    end
-  end
-
-  describe "#filter" do
-    let(:events) do
-      [double(:event, event_type: "predictor"),
-       double(:event, event_type: "something else")]
-    end
-
-    it "selects the events that have a predictor event type" do
-      expect(subject.filter events).to eq [events.first]
     end
   end
 

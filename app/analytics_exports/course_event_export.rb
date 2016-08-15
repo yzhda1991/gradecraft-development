@@ -28,6 +28,6 @@ class CourseEventExport < Analytics::Export::Model
   end
 
   def formatted_event_timestamp(event)
-    event.created_at.to_formatted_s :db
+    event.created_at.strftime "%F %T"
   end
 end

@@ -32,18 +32,33 @@ describe CourseEventExport do
 
     it "takes the username from context#usernames if one exists" do
       event = double(:event, user_id: 20)
-      expect(subject.username(event)).to eq "herman"
+      expect(subject.username event).to eq "herman"
     end
 
     it "just provides the user_id if no username was found" do
       event = double(:event, user_id: 9000)
-      expect(subject.username(event)).to eq "[user id: 9000]"
+      expect(subject.username event).to eq "[user id: 9000]"
     end
   end
 
   describe "#page" do
+    it "uses the event page if one exists" do
+      event = double(:event, page: "http://somepage.com")
+      expect(subject.page event).to eq "http://somepage.com"
+    end
+
+    it "tells us if the event has no page" do
+      event = double(:event)
+      expect(subject.page event).to eq "[n/a]"
+    end
   end
 
   describe "#formatted_event_timestamp" do
+    it "returns a formated created_at timestamp" do
+      parsed_time = Date.parse("Mar 20 2010").to_time
+      event = double(:event, created_at: parsed_time)
+
+      expect(subject.formatted_event_timestamp event).to eq "2010-03-20 00:00:00"
+    end
   end
 end

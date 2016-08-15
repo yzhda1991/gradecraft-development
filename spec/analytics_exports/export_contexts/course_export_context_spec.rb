@@ -165,6 +165,12 @@ describe CourseExportContext do
     end
   end
 
+  describe "#usernames" do
+    it "builds a hash of format { user_id => user_name }" do
+      expect(subject.usernames).to eq({ 3 => "alice", 4 => "beth" })
+    end
+  end
+
   describe "#user_ids" do
     it "builds an array of unique user_ids from the fetched events and caches it" do
       events = [
