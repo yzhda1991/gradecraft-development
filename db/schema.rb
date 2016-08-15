@@ -433,10 +433,8 @@ ActiveRecord::Schema.define(version: 20160818022703) do
     t.integer  "adjustment_points",                      default: 0,     null: false
     t.text     "adjustment_points_feedback"
     t.boolean  "excluded_from_course_score",             default: false
-    t.datetime "excluded_date"
-    t.integer  "excluded_by"
-    t.integer  "excluded_by_id"
     t.datetime "excluded_at"
+    t.integer  "excluded_by_id"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -584,17 +582,6 @@ ActiveRecord::Schema.define(version: 20160818022703) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
-
-  create_table "shared_earned_badges", force: :cascade do |t|
-    t.integer  "course_id"
-    t.text     "student_name"
-    t.integer  "user_id"
-    t.string   "icon",         limit: 255
-    t.string   "name",         limit: 255
-    t.integer  "badge_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
