@@ -1,10 +1,10 @@
 class CourseEventExport < Analytics::Export::Model
 
   # what is the base set of records we'd like to use from the context to
-  # generate this export? These records will translate to rows on the final
+  # generate this export. These records will translate to rows on the final
   # export csv.
   #
-  export_records :events
+  export_focus :events
 
   # map the column name to the attribute or method name on the record that we'd
   # like to use to populate each row
@@ -15,7 +15,8 @@ class CourseEventExport < Analytics::Export::Model
                  page: :page,
                  date_time: :formatted_event_timestamp
 
-  # these are the methods being used to filter the 'row' values for the final
+  # these are the methods being used to filter the data on any column for which
+  # the method name matches the column parser name
   # export CSV.
   #
   def username(event)

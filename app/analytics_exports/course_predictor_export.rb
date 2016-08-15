@@ -1,10 +1,10 @@
 class CoursePredictorExport < Analytics::Export::Model
 
   # what is the base set of records we'd like to use from the context to
-  # generate this export? These records will translate to rows on the final
+  # generate this export. These records will translate to rows on the final
   # export csv.
   #
-  export_records :predictor_events
+  export_focus :predictor_events
 
   # map the column name to the attribute or method name on the record that we'd
   # like to use to populate each row

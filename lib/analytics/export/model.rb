@@ -20,8 +20,8 @@ module Analytics
       # define the method that gives us the array of records we'd like to
       # pull from the context to define our export rows.
       #
-      def self.export_records(method_name)
-        @export_records = method_name
+      def self.export_focus(method_name)
+        @export_focus = method_name
       end
 
       # every Analytics::Export class will have both a context and a set of
@@ -36,12 +36,14 @@ module Analytics
       # by the export process for a more specific presentation beyond simply
       # rendering the collection of events in its raw form.
       #
-      attr_accessor :context, :export_records, :filename
+      attr_accessor :context, :export_records, :filename, :export_focus, :column_mapping
 
       def initialize(context:, filename: nil)
         @context = context
         @filename = filename
-        @export_records = context.send self.class.export_records
+        @export_focus = self.class.instance_variable_get :@export_focus
+        @column_mapping = self.class.instance_variable_get :@column_mapping
+        @export_records = context.send export_focus
       end
 
       def parsed_columns

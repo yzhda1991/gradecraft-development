@@ -4,10 +4,10 @@ class CourseUserAggregateExport < Analytics::Export::Model
               :user_pageviews, :user_logins, :user_predictor_pageviews
 
   # what is the base set of records we'd like to use from the context to
-  # generate this export? These records will translate to rows on the final
+  # generate this export. These records will translate to rows on the final
   # export csv.
   #
-  export_records :users
+  export_focus :users
 
   # map the column name to the attribute or method name on the record that we'd
   # like to use to populate each row
