@@ -1,3 +1,5 @@
+require_relative "./context_filters/user_aggregate_context_filter"
+
 class CourseUserAggregateExport < Analytics::Export::Model
 
   attr_reader :events, :predictor_events, :users,
