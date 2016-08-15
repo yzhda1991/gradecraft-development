@@ -18,9 +18,8 @@ class UserAggregateContextFilter < Analytics::Export::ContextFilter
   end
 
   def parsed_user_pageviews
-    @parsed_user_pageviews ||= context.user_pageviews.inject(Hash.new(0)) do |memo, pageview|
-      # pageview.pages raises an error w/ mongoid > 4.0.0
-      memo[pageview.user_id] = pageview.raw_attributes["pages"]["_all"]["all_time"]
+    @parsed_user_pageviews ||= context.user_pageviews.inject(Hash.new(0)) do |memo, aggregate_result|
+      memo[aggregate_result.user_id] = aggregate_result.raw_attributes["pages"]["_all"]["all_time"]
       memo
     end
   end

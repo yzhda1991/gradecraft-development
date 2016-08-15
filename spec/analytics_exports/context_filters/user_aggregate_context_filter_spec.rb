@@ -25,4 +25,34 @@ describe UserAggregateContextFilter do
       expect(subject.roles).to eq({ 1 => "hedgehog", 2 => "badger" })
     end
   end
+
+  describe "#user_predictor_event_counts" do
+    it "builds a hash with a count of total predictor events by user_id" do
+      events = []
+      3.times { events << double(:event, user_id: 1) }
+      5.times { events << double(:event, user_id: 2) }
+
+      allow(subject.context).to receive(:predictor_events) { events }
+
+      expect(subject.user_predictor_event_counts).to eq({ 1 => 3, 2 => 5 })
+    end
+  end
+
+  describe "#parsed_user_pageviews" do
+    it "builds a hash of user_ids mapped to all-time user pageviews" do
+      aggregate_results = []
+
+      aggregate_results << double(:result, \
+        user_id: 1,
+        raw_attributes: { "pages" => { "_all" => { "all_time" => 200 } } })
+
+      aggregate_results << double(:result, \
+        user_id: 2,
+        raw_attributes: { "pages" => { "_all" => { "all_time" => 300 } } })
+
+      allow(subject.context).to receive(:user_pageviews) { aggregate_results }
+
+      expect(subject.parsed_user_pageviews).to eq({ 1 => 200, 2 => 300 })
+    end
+  end
 end
