@@ -9,7 +9,6 @@
     - else
       #grade_distro.instructor-distro{"data-scores"=> current_course.scores.to_json}
       #gradeDistro
-      .italic = "Scores: #{current_course.scores}"
     .italic= "Class Average: #{points current_course.average_course_score} points"
     .italic= "Low Score: #{points current_course.minimum_course_score} points"
     .italic= "High Score: #{points current_course.maximum_course_score} points"
