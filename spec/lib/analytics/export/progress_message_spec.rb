@@ -1,6 +1,6 @@
-require "analytics/export/message"
+require "analytics/export/progress_message"
 
-describe Analytics::Export::Message do
+describe Analytics::Export::ProgressMessage do
   subject do
     described_class.new record_index: 19, total_records: 40
   end
