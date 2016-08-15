@@ -1,8 +1,15 @@
 require "active_record_spec_helper"
 
 describe GradeSchemeElement do
+  
+  let(:student) { create :user }
+  let(:course) { create :course}
 
-  subject { build(:grade_scheme_element) }
+  subject { create(:grade_scheme_element, course: course) }
+
+  before do
+    create(:course_membership, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id )
+  end
 
   context "validations" do
     it "is valid with a low range, a high range, and a course" do
@@ -76,13 +83,6 @@ describe GradeSchemeElement do
   end
 
   describe "#points_to_next_level(student, course)" do
-    let(:student) { create :user }
-    let(:course) { create :course}
-
-    before do
-      create(:course_membership, user: student, course: course, score: 82 )
-    end
-
     it "returns the difference between the current level high range and the student's
     total score + 1 point - the value to achieve the next level" do
       subject.highest_points = 100
@@ -92,13 +92,6 @@ describe GradeSchemeElement do
   end
 
   describe "#progress_percent(student)" do
-    let(:student) { create :user }
-    let(:course) { create :course}
-
-    before do
-      create(:course_membership, user: student, course: course, score: 82 )
-    end
-
     it "returns the level's percent complete value for the student" do
       subject.highest_points = 100
       subject.lowest_points = 0
@@ -128,6 +121,12 @@ describe GradeSchemeElement do
 
     it "returns false if the score is higher the high range" do
       expect(subject).to_not be_within_range 2000
+    end
+  end
+  
+  describe "#count_students_earned" do 
+    it "returns the number of students who have earned this grade scheme element" do 
+      expect(subject.count_students_earned).to eq(1)
     end
   end
 end

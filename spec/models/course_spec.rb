@@ -668,4 +668,14 @@ describe Course do
       expect(subject.scores).to eq({:scores => [100, 200, 300]})
     end
   end
+  
+  describe "#earned_grade_scheme_elements_by_student_count" do 
+    it "returns the number of students who have earned each grade scheme element" do
+      gse = create(:grade_scheme_element_high, course: subject)
+      gse2 = create(:grade_scheme_element_low, course: subject)
+      course_membership = create(:student_course_membership, course: subject, earned_grade_scheme_element_id: gse.id)
+      course_membership = create(:student_course_membership, course: subject, earned_grade_scheme_element_id: gse2.id)
+      expect(subject.earned_grade_scheme_elements_by_student_count).to eq({:elements => [["#{gse2.name}", 1], ["#{gse.name}", 1]]})
+    end
+  end
 end
