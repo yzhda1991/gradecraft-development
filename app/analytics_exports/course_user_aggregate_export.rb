@@ -2,9 +2,6 @@ require_relative "./context_filters/user_aggregate_context_filter"
 
 class CourseUserAggregateExport < Analytics::Export::Model
 
-  attr_reader :events, :predictor_events, :users,
-              :user_pageviews, :user_logins, :user_predictor_pageviews
-
   # what is the base set of records we'd like to use from the context to
   # generate this export. These records will translate to rows on the final
   # export csv.
@@ -22,9 +19,19 @@ class CourseUserAggregateExport < Analytics::Export::Model
                  total_predictor_events: :predictor_events,
                  total_predictor_sessions: :predictor_sessions
 
-  # column filters
+  # filters add an extra layer of parsing on top of the base context queries
+  #
+  context_filters :user_aggregate
+
+  # add and alias for the filter since we're using it globally
+  def context_filter
+    user_aggregate_context_filter
+  end
+
+  # column parsing methods
+  #
   def user_role(user)
-    context_filter.roles[user.id]
+    context_filter.user_roles[user.id]
   end
 
   def pageviews(user)
@@ -41,13 +48,5 @@ class CourseUserAggregateExport < Analytics::Export::Model
 
   def predictor_sessions(user)
     context_filter.user_predictor_sessions[user.id]
-  end
-
-  # add a context filter for the context itself, since we don't want to
-  # re-query for all the data it provides, but we also don't want to
-  # jam it into the export model
-  #
-  def context_filter
-    @context_filter ||= UserAggregateContextFilter.new context
   end
 end

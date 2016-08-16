@@ -15,12 +15,14 @@ class CourseEventExport < Analytics::Export::Model
                  page: :page,
                  date_time: :formatted_event_timestamp
 
-  # these are the methods being used to filter the data on any column for which
-  # the method name matches the column parser name
-  # export CSV.
+  # filters add an extra layer of parsing on top of the base context queries
+  #
+  context_filters :users
+
+  # column parsing methods
   #
   def username(event)
-    context.usernames[event.user_id] || "[user id: #{event.user_id}]"
+    users_context_filter.usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
   def page(event)

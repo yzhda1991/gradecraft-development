@@ -25,9 +25,9 @@ class CourseExportContext
   # anwyay.
   #
   def predictor_events
-    @predictor_events ||= Analytics::Event.where \
-      course_id: course.id,
-      event_type: "predictor"
+    @predictor_events ||= events.collect do |event|
+      event.event_type == "predictor"
+    end
   end
 
   # Queries using our Analytics::Aggregate classes.
@@ -53,40 +53,19 @@ class CourseExportContext
   # ActiveRecord queries
   #
   def users
-    @users ||= User.where(id: user_ids).select :id, :username
+    return @users if @users
+    user_ids = events.collect(&:user_id).compact.uniq
+    @users = User.where(id: user_ids).select :id, :username
   end
 
   def assignments
-    @assignments ||= Assignment.where(id: assignment_ids).select :id, :name
-  end
+    return @assignments if @assignments
 
-  # Parsed user and assignment data from ActiveRecord queries
-  #
-  # { user_id => "some_username" }
-  def usernames
-    @usernames ||= users.inject({}) do |memo, user|
-      memo[user.id] = user.username
-      memo
-    end
-  end
-
-  # { assignment_id => "some_assignment_name" }
-  #
-  def assignment_names
-    @assignment_names ||= assignments.inject({}) do |hash, assignment|
-      hash[assignment.id] = assignment.name
-      hash
-    end
-  end
-
-  def user_ids
-    @user_ids ||= events.collect(&:user_id).compact.uniq
-  end
-
-  def assignment_ids
-    @assignment_ids ||= events.inject([]) do |memo, event|
-      memo << event.assignment_id if event.respond_to? :assignment_id
-      memo
+    # get the ids of all assignments in the course that have an event
+    assignment_ids = events.collect do |event|
+      event.assignment_id if event.respond_to? :assignment_id
     end.compact.uniq
+
+    @assignments = Assignment.where(id: assignment_ids).select :id, :name
   end
 end

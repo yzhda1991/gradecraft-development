@@ -18,8 +18,11 @@ class CoursePredictorExport < Analytics::Export::Model
                  possible: :possible_points,
                  date_time: :formatted_event_timestamp
 
+  # filters add an extra layer of parsing on top of the base context queries
+  #
+  context_filters :users, :assignments
 
-  # filters for individual columns in the export
+  # column parsing methods
   #
   def formatted_event_timestamp(event)
     # this is the equivalent of %Y-%m-%d %H:%M:%S
@@ -28,12 +31,12 @@ class CoursePredictorExport < Analytics::Export::Model
 
   def username(event)
     return nil unless user_id = event.try(:user_id)
-    context.usernames[user_id] || "[user id: #{event.user_id}]"
+    users_context_filter.usernames[user_id] || "[user id: #{event.user_id}]"
   end
 
   def assignment_name(event)
     return "[assignment id: nil]" unless event.respond_to? :assignment_id
     assignment_id = event.assignment_id.to_i
-    context.assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
+    assignments_context_filter.assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
   end
 end
