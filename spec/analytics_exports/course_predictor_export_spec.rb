@@ -4,6 +4,14 @@ require "./app/analytics_exports/course_predictor_export"
 describe CoursePredictorExport do
   subject { described_class.new context: context }
   let(:context) { double(:context).as_null_object }
+  let(:context_filters) do
+    { users: double(:filter).as_null_object,
+      assignments: double(:filter).as_null_object }
+  end
+
+  before do
+    allow(subject).to receive(:context_filters) { context_filters }
+  end
 
   it "includes Analytics::Export::Model" do
     expect(subject.class).to respond_to(:column_mapping)
@@ -45,7 +53,8 @@ describe CoursePredictorExport do
 
     context "event has an assignment_id" do
       before do
-        allow(context).to receive(:assignment_names).and_return({ 40 => "good assignment" })
+        allow(context_filters[:assignments])
+          .to receive(:assignment_names).and_return({ 40 => "good assignment" })
       end
 
       it "takes the assignment name from context#assignment_names if one exists" do
@@ -62,7 +71,8 @@ describe CoursePredictorExport do
 
   describe "#username" do
     before do
-      allow(context).to receive(:usernames).and_return({ 20 => "herman" })
+      allow(context_filters[:users])
+        .to receive(:usernames).and_return({ 20 => "herman" })
     end
 
     it "returns nil if the event has no user_id" do
