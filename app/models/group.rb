@@ -7,7 +7,7 @@ class Group < ActiveRecord::Base
 
   belongs_to :course
 
-  has_many :assignment_groups, dependent: :destroy
+  has_many :assignment_groups, dependent: :destroy, inverse_of: :group
   has_many :assignments, through: :assignment_groups
   accepts_nested_attributes_for :assignment_groups
 

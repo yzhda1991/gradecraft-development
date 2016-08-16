@@ -73,11 +73,11 @@ class GroupsController < ApplicationController
   private
 
   def group_params
-    params.require(:group).permit :name, :approved, :assignment_id,
+    params.require(:group).permit :name, :approved,
       :text_feedback, :proposals_attributes, :proposal, :approved,
-      proposal_attributes: [:approved, :title, :proposal],
-      assignment_groups_attributes: [:assignment_id, :group_id],
-      group_membership_attributes: [:accepted, :group_id, :student_id],
+      proposal_attributes: [:approved, :title, :proposal, :id],
+      assignment_groups_attributes: [:assignment_id, :group_id, :id],
+      group_membership_attributes: [:accepted, :group_id, :student_id, :id],
       assignment_ids: [], student_ids: []
   end
 
