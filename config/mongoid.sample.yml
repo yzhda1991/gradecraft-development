@@ -1,0 +1,44 @@
+development:
+  sessions:
+    default:
+      database: gradecraft_development
+      hosts:
+        - localhost:27017
+
+test:
+  sessions:
+    default:
+      database: gradecraft_test
+      hosts:
+        - localhost:27017
+      options:
+        read: :primary_preferred
+        # In the test environment we lower the retries and retry interval to
+        # low amounts for fast failures.
+        max_retries: 1
+        retry_interval: 0
+
+
+# This anchor can be used by the staging and production Rails environments to
+# configure with environmental variables.
+default: &default
+  sessions:
+    default:
+      database: <%= ENV["GC_MONGODB_DATABASE"] %>
+      hosts:
+        - <%= ENV["GC_MONGODB_HOST"] %>
+      username: <%= ENV["GC_MONGODB_USERNAME"] %>
+      password: <%= ENV["GC_MONGODB_PASSWORD"] %>
+      options:
+        pool_size: <%= ENV["GC_MONGODB_POOL_SIZE"] %>
+        pool_timeout: <%= ENV["GC_MONGODB_POOL_TIMEOUT"] %>
+        retry_interval: <%= ENV["GC_MONGODB_RETRY_INTERVAL"] %>
+        timeout: <%= ENV["GC_MONGODB_TIMEOUT"] %>
+        max_retries: <%= ENV["GC_MONGODB_MAX_RETRIES"] %>
+        refresh_interval: <%= ENV["GC_MONGODB_REFRESH_INTERVAL"] %>
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
