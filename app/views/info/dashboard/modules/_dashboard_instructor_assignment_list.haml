@@ -1,0 +1,15 @@
+%ul{:class => "todo-list-assignments"}
+  - assignment_list.each do |assignment|
+    %li.assignment-item
+      %span.bold.assignment-name= link_to assignment.name, assignment
+      .small.uppercase= "#{assignment.assignment_type.name}"
+      .right.student-stats
+        %p.count.predicted-count
+          = assignment.predicted_count
+        %p.count.submissions-count
+          = assignment.submissions.count
+      - if assignment.due_at?.present?
+        .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
+  - if assignment_list.empty?
+    %li.dashboard-message
+      No #{(term_for :assignment).downcase.pluralize} are due in the next week!
