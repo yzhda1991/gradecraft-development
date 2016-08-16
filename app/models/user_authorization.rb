@@ -24,12 +24,13 @@ class UserAuthorization < ActiveRecord::Base
 
   def refresh!(options={})
     return false if self.refresh_token.blank?
-    klass = OmniAuth::Strategies.const_get(self.provider.to_s.camelize)
-    strategy = klass.new nil, options
-    token = OAuth2::AccessToken.new strategy.client, self.access_token,
-      { refresh_token: self.refresh_token }
-    token = token.refresh!
-    self.update_attributes access_token: token.token, refresh_token: token.refresh_token,
+
+    strategy = provider_class.new nil, options
+    token = refreshed_token(strategy)
+
+    self.update_attributes \
+      access_token: token.token,
+      refresh_token: token.refresh_token,
       expires_at: (DateTime.now + token.expires_in.to_i.seconds)
   end
 
@@ -37,5 +38,17 @@ class UserAuthorization < ActiveRecord::Base
     self.refresh!({ client_id: config.client_id,
                     client_secret: config.client_secret,
                     client_options: config.client_options })
+  end
+
+  private
+
+  def provider_class
+    OmniAuth::Strategies.const_get self.provider.to_s.camelize
+  end
+
+  def refreshed_token(strategy)
+    token = OAuth2::AccessToken.new strategy.client,
+      self.access_token, { refresh_token: self.refresh_token }
+    token.refresh!
   end
 end
