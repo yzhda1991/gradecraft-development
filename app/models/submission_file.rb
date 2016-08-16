@@ -3,7 +3,7 @@ class SubmissionFile < ActiveRecord::Base
   include S3Manager::Streaming
   include Historical
 
-  belongs_to :submission
+  belongs_to :submission, inverse_of: :submission_files
 
   mount_uploader :file, AttachmentUploader
   process_in_background :file
