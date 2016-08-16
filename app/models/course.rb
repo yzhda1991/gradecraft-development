@@ -252,7 +252,27 @@ class Course < ActiveRecord::Base
     end
     return { 
       elements: elements.reverse
-    }    
+    }
+  end
+  
+  def assignment_types_submitted_by_student_count
+    submissions = []
+    assignment_types.each do |at| 
+      submissions << [at.name, at.submissions_this_week_count]
+    end
+    return {
+      assignment_types: submissions
+    }
+  end
+  
+  def badges_earned_by_student_count
+    earned_badges = []
+    badges.each do |badge| 
+      earned_badges << [badge.name, badge.earned_badges_this_week_count]
+    end
+    return {
+      badges: earned_badges
+    }
   end
 
   private
