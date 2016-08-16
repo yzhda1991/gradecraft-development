@@ -19,6 +19,11 @@ describe CourseUserAggregateExport do
     expect(described_class.instance_variable_get :@export_focus).to eq :users
   end
 
+  it "uses the users context filter" do
+    filter_names = described_class.instance_variable_get :@context_filter_names
+    expect(filter_names).to eq [:user_aggregate]
+  end
+
   it "has a column mapping" do
     expect(described_class.instance_variable_get :@column_mapping).to eq(
       {

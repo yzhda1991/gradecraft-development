@@ -1,3 +1,5 @@
+require_relative "context_filters/users_context_filter"
+
 class CourseEventExport < Analytics::Export::Model
 
   # what is the base set of records we'd like to use from the context to

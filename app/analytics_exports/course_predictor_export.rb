@@ -1,3 +1,6 @@
+require_relative "./context_filters/users_context_filter"
+require_relative "./context_filters/assignments_context_filter"
+
 class CoursePredictorExport < Analytics::Export::Model
 
   # what is the base set of records we'd like to use from the context to

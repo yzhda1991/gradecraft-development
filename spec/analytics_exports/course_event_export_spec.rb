@@ -4,6 +4,13 @@ require "./app/analytics_exports/course_event_export"
 describe CourseEventExport do
   subject { described_class.new context: context }
   let(:context) { double(:some_context).as_null_object }
+  let(:users_context_filter) { double(:context_filter).as_null_object }
+
+  before do
+    allow(subject).to receive(:context_filters).and_return({
+      users: users_context_filter
+    })
+  end
 
   it "includes Analytics::Export::Model" do
     expect(subject.class).to respond_to(:column_mapping)
@@ -11,6 +18,11 @@ describe CourseEventExport do
 
   it "uses events as the focus of the export" do
     expect(described_class.instance_variable_get :@export_focus).to eq :events
+  end
+
+  it "uses the users context filter" do
+    filter_names = described_class.instance_variable_get :@context_filter_names
+    expect(filter_names).to eq [:users]
   end
 
   it "has a column mapping" do
@@ -27,7 +39,8 @@ describe CourseEventExport do
 
   describe "#username" do
     before do
-      allow(context).to receive(:usernames).and_return({ 20 => "herman" })
+      allow(users_context_filter).to receive(:usernames)
+        .and_return({ 20 => "herman" })
     end
 
     it "takes the username from context#usernames if one exists" do

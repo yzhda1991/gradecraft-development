@@ -1,4 +1,4 @@
-require "active_suppor/inflector"
+require "active_support/inflector"
 
 module Analytics
   module Export
@@ -42,7 +42,8 @@ module Analytics
       # by the export process for a more specific presentation beyond simply
       # rendering the collection of events in its raw form.
       #
-      attr_accessor :context, :export_records, :filename, :export_focus, :column_mapping
+      attr_accessor :context, :export_records, :filename, :export_focus,
+        :column_mapping
 
       def initialize(context:, filename: nil)
         @context = context
@@ -50,8 +51,6 @@ module Analytics
         @export_focus = self.class.instance_variable_get :@export_focus
         @column_mapping = self.class.instance_variable_get :@column_mapping
         @export_records = context.send export_focus
-
-        define_context_filter_methods
       end
 
       def parsed_columns
@@ -74,22 +73,6 @@ module Analytics
         "#{self.class.name.underscore}.csv"
       end
 
-      def define_context_filter_methods
-        self.class.context_filter_names.each do |filter_name|
-          method_name = "#{filter_name}_context_filter"
-
-          define_method(method_name) do
-            ivar = instance_variable_get "@#{method_name}"
-            # if we've already built and cached a filter, just return it
-            return ivar if ivar
-
-            # otherwise build a new filter and set it to @method_name
-            context_filter = method_name.constantize.new(context)
-            instance_variable_set "@#{method_name}", context_filter
-          end
-        end
-      end
-
       # build a hash of context filters according to the class prefixes we've
       # defined in ClassName.context_filters.
       #
@@ -97,12 +80,11 @@ module Analytics
       # which is intended to feel like a params[] object in a rails controller
       #
       def context_filters
-        # get the list of filters we defined without the _context_filter suffix
-        filter_names = self.class.context_filter_names
+        filter_names = self.class.instance_variable_get :@context_filter_names
 
         @context_filters ||= filter_names.inject({}) do |memo, filter_name|
           # re-add the context_filter suffix when we're fetching the class
-          filter_class = "#{filter_name}_context_filter".constantize
+          filter_class = "#{filter_name}_context_filter".camelize.constantize
 
           # build the filter instance using the context
           memo[filter_name] = filter_class.new(context)

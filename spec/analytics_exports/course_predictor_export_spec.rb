@@ -13,6 +13,11 @@ describe CoursePredictorExport do
     expect(described_class.instance_variable_get :@export_focus).to eq :predictor_events
   end
 
+  it "uses the users context filter" do
+    filter_names = described_class.instance_variable_get :@context_filter_names
+    expect(filter_names).to eq [:users, :assignments]
+  end
+
   it "has a column mapping" do
     expect(described_class.instance_variable_get :@column_mapping).to eq(
       {
