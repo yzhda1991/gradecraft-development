@@ -18,7 +18,7 @@ class Badge < ActiveRecord::Base
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, reject_if: proc { |a| a.points.blank? }
 
   multiple_files :badge_files
-  has_many :badge_files, dependent: :destroy
+  has_many :badge_files, dependent: :destroy, inverse_of: :badge
   accepts_nested_attributes_for :badge_files
 
   validates_presence_of :course, :name

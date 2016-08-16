@@ -1,7 +1,7 @@
 class BadgeFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  belongs_to :badge
+  belongs_to :badge, inverse_of: :badge_files
 
   validates :filename, presence: true, length: { maximum: 50 }
 
