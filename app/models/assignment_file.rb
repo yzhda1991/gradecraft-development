@@ -1,7 +1,7 @@
 class AssignmentFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  belongs_to :assignment
+  belongs_to :assignment, inverse_of: :assignment_files
 
   validates :filename, presence: true, length: { maximum: 50 }
 

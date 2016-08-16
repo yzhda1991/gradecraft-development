@@ -38,7 +38,7 @@ class Assignment < ActiveRecord::Base
   has_one :imported_assignment, dependent: :destroy
 
   # Instructor uploaded resource files
-  has_many :assignment_files, dependent: :destroy
+  has_many :assignment_files, dependent: :destroy, inverse_of: :assignment
   accepts_nested_attributes_for :assignment_files
 
   # Strip points from pass/fail assignments
