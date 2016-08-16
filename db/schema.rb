@@ -439,24 +439,22 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
-    t.integer  "group_id"
-    t.integer  "student_id"
+    t.integer  "group_id",   null: false
+    t.integer  "student_id", null: false
     t.string   "accepted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "course_id"
-    t.string   "group_type"
+    t.integer  "course_id",  null: false
   end
 
   add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
-  add_index "group_memberships", ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
   add_index "group_memberships", ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "course_id"
+    t.string   "name",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "course_id",     null: false
     t.string   "approved"
     t.text     "text_feedback"
     t.text     "text_proposal"
@@ -662,6 +660,25 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.string   "last_completed_step"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.string   "name",                limit: 255
+    t.text     "description"
+    t.datetime "due_at"
+    t.boolean  "accepts_submissions"
+    t.boolean  "group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "course_id"
+    t.string   "assignment_type",     limit: 255
+    t.string   "type",                limit: 255
+    t.string   "taskable_type",       limit: 255
+  end
+
+  add_index "tasks", ["assignment_id", "assignment_type"], name: "index_tasks_on_assignment_id_and_assignment_type", using: :btree
+  add_index "tasks", ["course_id"], name: "index_tasks_on_course_id", using: :btree
+  add_index "tasks", ["id", "type"], name: "index_tasks_on_id_and_type", using: :btree
+
   create_table "team_leaderships", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "leader_id"
@@ -687,6 +704,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
+  end
+
+  create_table "themes", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "filename",   limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "unlock_conditions", force: :cascade do |t|

@@ -18,7 +18,6 @@ module Services
         grade.adjustment_points = context[:attributes]["grade"]["adjustment_points"]
         grade.adjustment_points_feedback = context[:attributes]["grade"]["adjustment_points_feedback"]
         grade.group_id = context[:attributes]["group_id"] if context[:attributes]["group_id"]
-        grade.group_type = "Group" if context[:attributes]["group_id"]
         context[:grade] = grade
       end
     end
