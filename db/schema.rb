@@ -483,21 +483,21 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "imported_grades", ["grade_id"], name: "index_imported_grades_on_grade_id", using: :btree
 
   create_table "level_badges", force: :cascade do |t|
-    t.integer  "level_id"
-    t.integer  "badge_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "level_id",   null: false
+    t.integer  "badge_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "levels", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                               null: false
     t.text     "description"
     t.integer  "points"
-    t.integer  "criterion_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "full_credit",        default: false
-    t.boolean  "no_credit",          default: false
+    t.integer  "criterion_id",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "full_credit",        default: false, null: false
+    t.boolean  "no_credit",          default: false, null: false
     t.integer  "sort_order"
     t.boolean  "meets_expectations", default: false
   end
@@ -513,31 +513,31 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "predicted_earned_badges", force: :cascade do |t|
-    t.integer  "badge_id"
-    t.integer  "student_id"
-    t.integer  "predicted_times_earned", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "badge_id",                           null: false
+    t.integer  "student_id",                         null: false
+    t.integer  "predicted_times_earned", default: 0, null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   add_index "predicted_earned_badges", ["badge_id", "student_id"], name: "index_predidcted_badge_on_student_badge", unique: true, using: :btree
 
   create_table "predicted_earned_challenges", force: :cascade do |t|
-    t.integer  "challenge_id"
-    t.integer  "student_id"
-    t.integer  "predicted_points", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "challenge_id",                 null: false
+    t.integer  "student_id",                   null: false
+    t.integer  "predicted_points", default: 0, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "predicted_earned_challenges", ["challenge_id", "student_id"], name: "index_predidcted_challenge_on_student_challenge", unique: true, using: :btree
 
   create_table "predicted_earned_grades", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.integer  "student_id"
-    t.integer  "predicted_points", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "assignment_id",                null: false
+    t.integer  "student_id",                   null: false
+    t.integer  "predicted_points", default: 0, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "predicted_earned_grades", ["assignment_id", "student_id"], name: "index_predidcted_grade_on_student_assignment", unique: true, using: :btree
@@ -660,25 +660,6 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.string   "last_completed_step"
   end
 
-  create_table "tasks", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.string   "name",                limit: 255
-    t.text     "description"
-    t.datetime "due_at"
-    t.boolean  "accepts_submissions"
-    t.boolean  "group"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "course_id"
-    t.string   "assignment_type",     limit: 255
-    t.string   "type",                limit: 255
-    t.string   "taskable_type",       limit: 255
-  end
-
-  add_index "tasks", ["assignment_id", "assignment_type"], name: "index_tasks_on_assignment_id_and_assignment_type", using: :btree
-  add_index "tasks", ["course_id"], name: "index_tasks_on_course_id", using: :btree
-  add_index "tasks", ["id", "type"], name: "index_tasks_on_id_and_type", using: :btree
-
   create_table "team_leaderships", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "leader_id"
@@ -704,13 +685,6 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
-  end
-
-  create_table "themes", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "filename",   limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
   end
 
   create_table "unlock_conditions", force: :cascade do |t|
