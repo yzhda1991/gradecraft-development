@@ -3,43 +3,7 @@
 .card-body
 
   -if current_user_is_student?
-    - if presenter.current_element && presenter.next_element.present?
-      .progress.bar_magic.transparent.center
-        .meter
-          %i.fa.fa-lock
-          %span= presenter.next_element.name
-          %span=points presenter.next_element.lowest_points
-
-    - if presenter.current_element.present?
-      .progress.bar_magic.current.center
-        %span.your-rank Your rank:
-        %span.your-rank= presenter.current_element.name
-        .striped-bar-container
-          .striped{ style: "width: #{ presenter.progress_percent }%;" }
-        .left-points
-          %span Your Points:
-          %span.bold=points presenter.score_for_course
-        .right-points
-          %span Points to next level:
-          %span.bold= points presenter.points_to_next_level
-    - else
-      .progress.bar_magic.transparent.center
-        .meter
-          %i.fa.fa-lock
-          %span= presenter.first_element.name
-          %span=points presenter.first_element.lowest_points
-
-      .progress.bar_magic.current.center.no-level
-        %span.your-rank Your rank: Not on the board yet!
-
-
-    - if presenter.current_element && presenter.previous_element.present?
-      .progress.bar_magic.success.center
-        .meter
-          %i.fa.fa-star
-          %span= presenter.previous_element.name
-          %span has already been achieved!
-          %span=points presenter.previous_element.lowest_points
+    = render partial: "info/dashboard/modules/dashboard_student_grading_scheme", locals: { presenter: presenter }
 
   - else
     = render partial: "info/dashboard/modules/dashboard_instructor_grading_scheme"
