@@ -10,7 +10,7 @@ class Grade < ActiveRecord::Base
   belongs_to :student, class_name: "User", touch: true
   belongs_to :team, touch: true
   belongs_to :submission
-  belongs_to :group, polymorphic: true, touch: true # Optional
+  belongs_to :group, touch: true # Optional
   belongs_to :graded_by, class_name: "User", touch: true
 
   has_one :imported_grade, dependent: :destroy

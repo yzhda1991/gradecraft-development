@@ -11,7 +11,6 @@ class DropUnusedFieldsFromGrades < ActiveRecord::Migration
     remove_column :grades, :group_type
     remove_column :grades, :admin_notes
     remove_column :grades, :team_id
-    remove_column :grades, :assignment_type_id
     
     change_column :grades, :assignment_id, :integer, null: false
     change_column :grades, :course_id, :integer, null: false

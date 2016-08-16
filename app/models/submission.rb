@@ -141,7 +141,6 @@ class Submission < ActiveRecord::Base
 
   def cache_associations
     self.assignment_id ||= assignment.id
-    self.assignment_type ||= assignment.assignment_type
     self.course_id ||= assignment.course_id
   end
 end

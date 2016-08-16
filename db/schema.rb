@@ -405,6 +405,7 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   create_table "grades", force: :cascade do |t|
     t.integer  "raw_points"
     t.integer  "assignment_id",                              null: false
+    t.integer  "assignment_type_id",                         null: false
     t.text     "feedback"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
@@ -585,21 +586,6 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "student_academic_histories", force: :cascade do |t|
-    t.integer "student_id"
-    t.string  "major"
-    t.decimal "gpa"
-    t.integer "current_term_credits"
-    t.integer "accumulated_credits"
-    t.string  "year_in_school"
-    t.string  "state_of_residence"
-    t.string  "high_school"
-    t.boolean "athlete"
-    t.integer "act_score"
-    t.integer "sat_score"
-    t.integer "course_id"
-  end
-
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",                          null: false
     t.integer  "submission_id",                     null: false
@@ -616,21 +602,14 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.integer  "student_id"
-    t.string   "feedback"
-    t.string   "comment"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.integer  "assignment_id", null: false
+    t.integer  "student_id",    null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "link"
     t.text     "text_comment"
-    t.integer  "creator_id"
     t.integer  "group_id"
-    t.datetime "released_at"
-    t.integer  "task_id"
-    t.integer  "course_id"
-    t.integer  "assignment_type_id"
-    t.string   "assignment_type"
+    t.integer  "course_id",     null: false
     t.datetime "submitted_at"
     t.boolean  "late",                           default: false, null: false
   end
@@ -638,8 +617,6 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
   add_index "submissions", ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
   add_index "submissions", ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
-  add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
-  add_index "submissions", ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
   add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
 
   create_table "submissions_exports", force: :cascade do |t|
