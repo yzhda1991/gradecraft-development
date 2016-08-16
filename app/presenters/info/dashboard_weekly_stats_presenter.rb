@@ -50,8 +50,6 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
   def has_badges_this_week?
     if student
       student.earned_badges_for_course_this_week(course).any?
-    else
-      badge.earned_badges_this_week_count > 0
     end
   end
 

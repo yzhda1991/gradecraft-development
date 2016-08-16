@@ -2,7 +2,7 @@
   .card-header
     %h3 #{term_for :assignment} Planner
   .card-body#todo-list
-    - if current_user_is_student?
+    - if current_student.present?
       .planner-filter.clearfix
         = link_to "My Planner", "#", class: "filter-button button selected", id: "my-planner"
         = link_to "Course Planner", "#", class: "filter-button button", id: "course-planner"
