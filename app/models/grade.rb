@@ -29,7 +29,7 @@ class Grade < ActiveRecord::Base
   multiple_files :grade_files
   releasable_through :assignment
 
-  has_many :grade_files, dependent: :destroy
+  has_many :grade_files, dependent: :destroy, inverse_of: :grade
   accepts_nested_attributes_for :grade_files
 
   validates_presence_of :assignment, :assignment_type, :course, :student
