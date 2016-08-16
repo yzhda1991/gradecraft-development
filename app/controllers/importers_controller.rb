@@ -49,14 +49,14 @@ class ImportersController < ApplicationController
   end
 
   def require_authorization_with(provider)
-    authorization = UserAuthorization.for(current_user, provider)
+    auth = authorization(provider)
 
-    if authorization.nil?
+    if auth.nil?
       session[:return_to] = importer_courses_path(provider)
       redirect_to "/auth/#{provider}"
-    elsif authorization.expired?
+    elsif auth.expired?
       config = ActiveLMS.configuration.providers[provider.to_sym]
-      authorization.refresh_with_config! config
+      auth.refresh_with_config! config
     end
   end
 
