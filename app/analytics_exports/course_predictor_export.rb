@@ -31,12 +31,12 @@ class CoursePredictorExport < Analytics::Export::Model
 
   def username(event)
     return nil unless user_id = event.try(:user_id)
-    users_context_filter.usernames[user_id] || "[user id: #{event.user_id}]"
+    context_filters[:users].usernames[user_id] || "[user id: #{event.user_id}]"
   end
 
   def assignment_name(event)
     return "[assignment id: nil]" unless event.respond_to? :assignment_id
     assignment_id = event.assignment_id.to_i
-    assignments_context_filter.assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
+    context_filters[:assignments].assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
   end
 end

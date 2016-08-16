@@ -22,7 +22,7 @@ class CourseEventExport < Analytics::Export::Model
   # column parsing methods
   #
   def username(event)
-    users_context_filter.usernames[event.user_id] || "[user id: #{event.user_id}]"
+    context_filters[:users].usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
   def page(event)

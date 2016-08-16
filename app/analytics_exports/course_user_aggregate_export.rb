@@ -23,30 +23,25 @@ class CourseUserAggregateExport < Analytics::Export::Model
   #
   context_filters :user_aggregate
 
-  # add and alias for the filter since we're using it globally
-  def context_filter
-    user_aggregate_context_filter
-  end
-
   # column parsing methods
   #
   def user_role(user)
-    context_filter.user_roles[user.id]
+    context_filters[:user_aggregate].user_roles[user.id]
   end
 
   def pageviews(user)
-    context_filter.parsed_user_pageviews[user.id]
+    context_filters[:user_aggregate].parsed_user_pageviews[user.id]
   end
 
   def logins(user)
-    context_filter.user_logins[user.id]
+    context_filters[:user_aggregate].user_logins[user.id]
   end
 
   def predictor_events(user)
-    context_filter.user_predictor_event_counts[user.id]
+    context_filters[:user_aggregate].user_predictor_event_counts[user.id]
   end
 
   def predictor_sessions(user)
-    context_filter.user_predictor_sessions[user.id]
+    context_filters[:user_aggregate].user_predictor_sessions[user.id]
   end
 end

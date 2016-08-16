@@ -1,3 +1,5 @@
+require "active_suppor/inflector"
+
 module Analytics
   module Export
     # let's make this a class instead of a module because it's more straight-
@@ -24,6 +26,10 @@ module Analytics
         @export_focus = method_name
       end
 
+      def self.context_filters(*filter_names)
+        @context_filter_names = filter_names
+      end
+
       # every Analytics::Export class will have both a context and a set of
       # export_records. The context is the larger set of records that have
       # been queried for to perform the overall export so that individual
@@ -44,6 +50,8 @@ module Analytics
         @export_focus = self.class.instance_variable_get :@export_focus
         @column_mapping = self.class.instance_variable_get :@column_mapping
         @export_records = context.send export_focus
+
+        define_context_filter_methods
       end
 
       def parsed_columns
@@ -64,6 +72,42 @@ module Analytics
 
       def default_filename
         "#{self.class.name.underscore}.csv"
+      end
+
+      def define_context_filter_methods
+        self.class.context_filter_names.each do |filter_name|
+          method_name = "#{filter_name}_context_filter"
+
+          define_method(method_name) do
+            ivar = instance_variable_get "@#{method_name}"
+            # if we've already built and cached a filter, just return it
+            return ivar if ivar
+
+            # otherwise build a new filter and set it to @method_name
+            context_filter = method_name.constantize.new(context)
+            instance_variable_set "@#{method_name}", context_filter
+          end
+        end
+      end
+
+      # build a hash of context filters according to the class prefixes we've
+      # defined in ClassName.context_filters.
+      #
+      # Individual filters will be fetchable as context_filters[:filter_name],
+      # which is intended to feel like a params[] object in a rails controller
+      #
+      def context_filters
+        # get the list of filters we defined without the _context_filter suffix
+        filter_names = self.class.context_filter_names
+
+        @context_filters ||= filter_names.inject({}) do |memo, filter_name|
+          # re-add the context_filter suffix when we're fetching the class
+          filter_class = "#{filter_name}_context_filter".constantize
+
+          # build the filter instance using the context
+          memo[filter_name] = filter_class.new(context)
+          memo
+        end
       end
 
       def write_csv(directory_path)
