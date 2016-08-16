@@ -1,7 +1,7 @@
 class ChallengeFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  belongs_to :challenge
+  belongs_to :challenge, inverse_of: :challenge_files
 
   validates :filename, presence: true, length: { maximum: 50 }
 

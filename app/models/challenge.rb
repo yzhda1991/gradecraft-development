@@ -23,7 +23,7 @@ class Challenge < ActiveRecord::Base
   score_levels :challenge_score_levels
 
   multiple_files :challenge_files
-  has_many :challenge_files, dependent: :destroy
+  has_many :challenge_files, dependent: :destroy, inverse_of: :challenge
   accepts_nested_attributes_for :challenge_files
 
   scope :with_dates, -> { where("challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL") }
