@@ -638,28 +638,27 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "team_leaderships", force: :cascade do |t|
-    t.integer  "team_id"
-    t.integer  "leader_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "team_id",    null: false
+    t.integer  "leader_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_memberships", force: :cascade do |t|
-    t.integer  "team_id"
-    t.integer  "student_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "team_id",    null: false
+    t.integer  "student_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "course_id"
+    t.string   "name",                                  null: false
+    t.integer  "course_id",                             null: false
     t.integer  "rank"
     t.integer  "challenge_grade_score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "teams_leaderboard",     default: false
-    t.boolean  "in_team_leaderboard",   default: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.boolean  "in_team_leaderboard",   default: false, null: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
   end
@@ -720,14 +719,8 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.datetime "avatar_updated_at"
     t.string   "first_name"
     t.string   "last_name"
-    t.integer  "rank"
     t.string   "display_name"
-    t.boolean  "private_display",                 default: false
     t.integer  "current_course_id"
-    t.string   "final_grade"
-    t.integer  "visit_count"
-    t.integer  "predictor_views"
-    t.integer  "page_views"
     t.string   "team_role"
     t.datetime "last_login_at"
     t.datetime "last_logout_at"
