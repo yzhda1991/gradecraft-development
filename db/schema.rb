@@ -554,9 +554,9 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "rubrics", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "assignment_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "secure_tokens", force: :cascade do |t|
