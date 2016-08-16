@@ -1,6 +1,10 @@
+.chart-labels
+  %span Level
+  %span.right # of Students
 - current_course.grade_scheme_elements.reverse.each do |element|
-  .progress.bar_magic.transparent.center
+  .progress.bar_magic.transparent
     .meter
       %span= element.name
       %span= points element.lowest_points
-      %span= element.count_students_earned
+      %span.student-count= element.count_students_earned
+    .fill-bar.bar_magic{:style => "width: #{(element.count_students_earned) / (current_course.student_count) * 100}%;"}
