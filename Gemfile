@@ -70,7 +70,6 @@ gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch:
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'
-gem 'protected_attributes'
 gem 'puma'
 gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
