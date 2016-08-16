@@ -56,9 +56,7 @@ class ImportersController < ApplicationController
       redirect_to "/auth/#{provider}"
     elsif authorization.expired?
       config = ActiveLMS.configuration.providers[provider.to_sym]
-      authorization.refresh!({ client_id: config.client_id,
-                               client_secret: config.client_secret,
-                               client_options: config.client_options })
+      authorization.refresh_with_config! config
     end
   end
 

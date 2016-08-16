@@ -101,4 +101,18 @@ describe UserAuthorization, type: :disable_external_api do
       expect(@request).to_not have_been_made
     end
   end
+
+  describe "#refresh_with_config!" do
+    let(:config) { double(:config,
+                          client_id: "CLIENT",
+                          client_secret: "SECRET",
+                          client_options: {}) }
+
+    it "refreshes the access token with the configuration options" do
+      expect(subject).to receive(:refresh!)
+        .with({ client_id: "CLIENT", client_secret: "SECRET", client_options: {} })
+
+      subject.refresh_with_config!(config)
+    end
+  end
 end

@@ -33,4 +33,10 @@ class UserAuthorization < ActiveRecord::Base
     self.update_attributes access_token: token.token, refresh_token: token.refresh_token,
       expires_at: (DateTime.now + token.expires_in.to_i.seconds)
   end
+
+  def refresh_with_config!(config)
+    self.refresh!({ client_id: config.client_id,
+                    client_secret: config.client_secret,
+                    client_options: config.client_options })
+  end
 end
