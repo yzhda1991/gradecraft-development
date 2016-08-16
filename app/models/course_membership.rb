@@ -1,6 +1,6 @@
 class CourseMembership < ActiveRecord::Base
   belongs_to :course, touch: true
-  belongs_to :user, touch: true
+  belongs_to :user, touch: true, inverse_of: :course_memberships
   belongs_to :grade_scheme_element, foreign_key: "earned_grade_scheme_element_id"
 
   # adds logging helpers for rescued-out errors
