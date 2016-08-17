@@ -11,17 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< e1a4840de6706c9169db0c0379d8e5dbb56cb90f
 ActiveRecord::Schema.define(version: 20160907000216) do
-
-=======
-ActiveRecord::Schema.define(version: 20160830154453) do
-<<<<<<< 10f22badb029b0dc266d654ca1231a093796fc0b
-  
->>>>>>> Cleaned up events and flagged states
-=======
-
->>>>>>> Cleaned up criteria and gse
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -311,13 +301,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
 
   create_table "criteria", force: :cascade do |t|
-    t.string   "name",                                    null: false
+    t.string   "name"
     t.text     "description"
     t.integer  "max_points"
-    t.integer  "rubric_id",                               null: false
-    t.integer  "order",                                   null: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.integer  "rubric_id"
+    t.integer  "order"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "full_credit_level_id"
     t.integer  "level_count",                 default: 0
     t.integer  "meets_expectations_level_id"
@@ -326,13 +316,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
 
   create_table "criterion_grades", force: :cascade do |t|
     t.integer  "points"
-    t.integer  "criterion_id",  null: false
-    t.integer  "level_id",      null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "assignment_id", null: false
-    t.integer  "student_id",    null: false
-    t.text     "comments",      null: false
+    t.integer  "criterion_id"
+    t.integer  "level_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "assignment_id"
+    t.integer  "student_id"
+    t.text     "comments"
   end
 
   add_index "criterion_grades", ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
@@ -393,31 +383,43 @@ ActiveRecord::Schema.define(version: 20160830154453) do
 
   create_table "grade_scheme_elements", force: :cascade do |t|
     t.string   "level"
-    t.integer  "lowest_points",  null: false
+    t.integer  "lowest_points"
     t.string   "letter"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.text     "description"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "grade_scheme_id"
+    t.string   "description"
     t.integer  "highest_points"
-    t.integer  "course_id",      null: false
+    t.integer  "course_id"
   end
 
   create_table "grades", force: :cascade do |t|
     t.integer  "raw_points"
-    t.integer  "assignment_id",                              null: false
-    t.integer  "assignment_type_id",                         null: false
+    t.integer  "assignment_id"
     t.text     "feedback"
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "complete"
+    t.boolean  "semis"
+    t.boolean  "finals"
+    t.string   "type"
     t.string   "status"
+    t.boolean  "attempted"
+    t.boolean  "substantial"
     t.integer  "final_points"
     t.integer  "submission_id"
-    t.integer  "course_id",                                  null: false
-    t.integer  "student_id",                                 null: false
+    t.integer  "course_id"
+    t.boolean  "shared"
+    t.integer  "student_id"
+    t.integer  "task_id"
     t.integer  "group_id"
+    t.string   "group_type"
     t.integer  "score"
+    t.integer  "assignment_type_id"
     t.integer  "full_points"
+    t.text     "admin_notes"
     t.integer  "graded_by_id"
+    t.integer  "team_id"
     t.integer  "predicted_score",            default: 0,     null: false
     t.boolean  "instructor_modified",        default: false
     t.string   "pass_fail_status"
@@ -435,9 +437,13 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
+  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
+  add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
+  add_index "grades", ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
+  add_index "grades", ["task_id"], name: "index_grades_on_task_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "group_id"
@@ -446,16 +452,18 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "course_id"
+    t.string   "group_type"
   end
 
   add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
+  add_index "group_memberships", ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
   add_index "group_memberships", ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
-    t.string   "name",          null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.integer  "course_id",     null: false
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "course_id"
     t.string   "approved"
     t.text     "text_feedback"
     t.text     "text_proposal"
@@ -484,21 +492,21 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "imported_grades", ["grade_id"], name: "index_imported_grades_on_grade_id", using: :btree
 
   create_table "level_badges", force: :cascade do |t|
-    t.integer  "level_id",   null: false
-    t.integer  "badge_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "level_id"
+    t.integer  "badge_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "levels", force: :cascade do |t|
-    t.string   "name",                               null: false
+    t.string   "name"
     t.text     "description"
     t.integer  "points"
-    t.integer  "criterion_id",                       null: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.boolean  "full_credit",        default: false, null: false
-    t.boolean  "no_credit",          default: false, null: false
+    t.integer  "criterion_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "full_credit",        default: false
+    t.boolean  "no_credit",          default: false
     t.integer  "sort_order"
     t.boolean  "meets_expectations", default: false
   end
@@ -514,31 +522,31 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "predicted_earned_badges", force: :cascade do |t|
-    t.integer  "badge_id",                           null: false
-    t.integer  "student_id",                         null: false
-    t.integer  "predicted_times_earned", default: 0, null: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.integer  "badge_id"
+    t.integer  "student_id"
+    t.integer  "predicted_times_earned", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "predicted_earned_badges", ["badge_id", "student_id"], name: "index_predidcted_badge_on_student_badge", unique: true, using: :btree
 
   create_table "predicted_earned_challenges", force: :cascade do |t|
-    t.integer  "challenge_id",                 null: false
-    t.integer  "student_id",                   null: false
-    t.integer  "predicted_points", default: 0, null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "challenge_id"
+    t.integer  "student_id"
+    t.integer  "predicted_points", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "predicted_earned_challenges", ["challenge_id", "student_id"], name: "index_predidcted_challenge_on_student_challenge", unique: true, using: :btree
 
   create_table "predicted_earned_grades", force: :cascade do |t|
-    t.integer  "assignment_id",                null: false
-    t.integer  "student_id",                   null: false
-    t.integer  "predicted_points", default: 0, null: false
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "assignment_id"
+    t.integer  "student_id"
+    t.integer  "predicted_points", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "predicted_earned_grades", ["assignment_id", "student_id"], name: "index_predidcted_grade_on_student_assignment", unique: true, using: :btree
@@ -555,9 +563,9 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "rubrics", force: :cascade do |t|
-    t.integer  "assignment_id", null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "assignment_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "secure_tokens", force: :cascade do |t|
@@ -586,6 +594,21 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
+  create_table "student_academic_histories", force: :cascade do |t|
+    t.integer "student_id"
+    t.string  "major"
+    t.decimal "gpa"
+    t.integer "current_term_credits"
+    t.integer "accumulated_credits"
+    t.string  "year_in_school"
+    t.string  "state_of_residence"
+    t.string  "high_school"
+    t.boolean "athlete"
+    t.integer "act_score"
+    t.integer "sat_score"
+    t.integer "course_id"
+  end
+
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",                          null: false
     t.integer  "submission_id",                     null: false
@@ -602,14 +625,21 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "assignment_id", null: false
-    t.integer  "student_id",    null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "assignment_id"
+    t.integer  "student_id"
+    t.string   "feedback"
+    t.string   "comment"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "link"
     t.text     "text_comment"
+    t.integer  "creator_id"
     t.integer  "group_id"
-    t.integer  "course_id",     null: false
+    t.datetime "released_at"
+    t.integer  "task_id"
+    t.integer  "course_id"
+    t.integer  "assignment_type_id"
+    t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",                           default: false, null: false
   end
@@ -617,6 +647,8 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
   add_index "submissions", ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
   add_index "submissions", ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
+  add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
+  add_index "submissions", ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
   add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
 
   create_table "submissions_exports", force: :cascade do |t|
@@ -638,27 +670,28 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   end
 
   create_table "team_leaderships", force: :cascade do |t|
-    t.integer  "team_id",    null: false
-    t.integer  "leader_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "team_id"
+    t.integer  "leader_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "team_memberships", force: :cascade do |t|
-    t.integer  "team_id",    null: false
-    t.integer  "student_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "team_id"
+    t.integer  "student_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string   "name",                                  null: false
-    t.integer  "course_id",                             null: false
+    t.string   "name"
+    t.integer  "course_id"
     t.integer  "rank"
     t.integer  "challenge_grade_score"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.boolean  "in_team_leaderboard",   default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "teams_leaderboard",     default: false
+    t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
   end
@@ -719,8 +752,14 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.datetime "avatar_updated_at"
     t.string   "first_name"
     t.string   "last_name"
+    t.integer  "rank"
     t.string   "display_name"
+    t.boolean  "private_display",                 default: false
     t.integer  "current_course_id"
+    t.string   "final_grade"
+    t.integer  "visit_count"
+    t.integer  "predictor_views"
+    t.integer  "page_views"
     t.string   "team_role"
     t.datetime "last_login_at"
     t.datetime "last_logout_at"

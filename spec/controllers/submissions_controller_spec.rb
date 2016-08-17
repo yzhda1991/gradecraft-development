@@ -26,7 +26,7 @@ describe SubmissionsController do
     end
 
     before(:each) do
-      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
+      @submission = create(:submission, assignment_id: @assignment.id, student_id: @student.id, course_id: @course.id)
       login_user(@professor)
     end
 
@@ -79,8 +79,8 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
-      it "creates the submission with valid attributes" do
-        params = attributes_for(:submission)
+      it "creates the submission with valid attributes"  do
+        params = attributes_for(:submission).merge(student_id: @student.id)
         expect{ post :create, assignment_id: @assignment.id, submission: params }.to change(Submission,:count).by(1)
       end
 
@@ -136,8 +136,7 @@ describe SubmissionsController do
   context "as a student" do
     before do
       @submission = create(:submission, assignment_id: @assignment.id,
-                           assignment_type: "Assignment", student_id: @student.id,
-                           course_id: @course.id)
+                           student_id: @student.id, course_id: @course.id)
       login_user(@student)
     end
 
