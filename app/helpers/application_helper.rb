@@ -9,6 +9,10 @@ module ApplicationHelper
     end
   end
 
+  def current_user_in_preview_mode?
+    session[:previewing_agent].present?
+  end
+
   # Adding current user role to page class
   def body_class
     classes = []

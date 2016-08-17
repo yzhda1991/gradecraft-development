@@ -6,13 +6,16 @@
   .layout-right-content
     %header
       .navbar.container
-        %nav.the-nav.nav-collapse.clearfix{role: "navigation"}
+        %nav.the-nav.nav-collapse{class: ("preview-mode" if current_user_in_preview_mode?), role: "navigation"}
           %ul.nav.nav-pill.left
             %li.course-site
               %a.no-hover.site-title{:href => dashboard_path}
                 %span.course= "#{current_course.course_number} "
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
+
+          - if current_user_in_preview_mode?
+            .release-preview-link= link_to glyph('eye-slash') + "Exit Student Preview", exit_student_preview_path
           %ul.nav.nav-pill.right
             - if presenter.has_info?
               %li.course-info-btn
