@@ -48,7 +48,7 @@ class Grades::ImportersController < ApplicationController
   # GET /assignments/:assignment_id/grades/importers/:id
   def show
     @assignment = Assignment.find params[:assignment_id]
-    provider = params[:id]
+    provider = params[:provider_id]
 
     render "#{provider}"
   end
