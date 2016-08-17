@@ -6,10 +6,12 @@
   - if @events.present?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
-  .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
+  .flex-column
+    - if current_course.grade_scheme_elements.present?
+      .panel.dashboard-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
 
-  - if current_course.grade_scheme_elements.present?
-    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grading_scheme"
+    .stacked-column
+      - if ! current_course.hide_analytics?
+        .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
 
-  - if ! current_course.hide_analytics?
-    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
+      .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
