@@ -687,7 +687,7 @@ describe Course do
       assignment_2 = create(:assignment, assignment_type: assignment_type_2, course: subject)
       submission = create(:submission, assignment: assignment)
       submission_2 = create(:submission, assignment: assignment_2)
-      expect(subject.assignment_types_submitted_by_student_count).to eq({:assignment_types => [["#{assignment_type.name}", 1], ["#{assignment_type_2.name}", 1]]})
+      expect(subject.assignment_types_submitted_by_student_count).to eq({:assignment_types => [["#{assignment_type}", 1], ["#{assignment_type_2}", 1]]})
     end
   end
   
@@ -697,7 +697,7 @@ describe Course do
       badge2 = create(:badge, course: subject)
       earned_badge = create(:earned_badge, badge: badge)
       earned_badge = create(:earned_badge, badge: badge2)
-      expect(subject.badges_earned_by_student_count).to eq({:badges => [["#{badge.name}", 1], ["#{badge2.name}", 1]]})
+      expect(subject.badges_earned_by_student_count).to eq({:badges => [["#{badge}", 1], ["#{badge2}", 1]]})
     end
   end
 end
