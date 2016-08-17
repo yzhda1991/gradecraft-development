@@ -268,7 +268,7 @@ class Course < ActiveRecord::Base
   def badges_earned_by_student_count
     earned_badges = []
     badges.each do |badge| 
-      earned_badges << [badge.name, badge.earned_badges_this_week_count]
+      earned_badges << [badge, badge.earned_badges_this_week_count]
     end
     return {
       badges: earned_badges

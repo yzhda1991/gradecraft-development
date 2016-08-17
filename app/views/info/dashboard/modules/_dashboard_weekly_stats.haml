@@ -18,12 +18,20 @@
 
     .module-section
       - if current_course.has_badges? && presenter.has_badges_this_week?
-        %p #{term_for :badges} earned this week:
-        %ul
-          - presenter.badges_this_week.each do |badge|
-            %li
-              %img{:src => badge.icon, :width => 25 }
-              %span #{badge.name} #{(term_for :badge).downcase} earned
+        - if current_student.present?
+          %p #{term_for :badges} earned this week:
+          %ul
+            - presenter.badges_this_week.each do |badge|
+              %li
+                %img{:src => badge.icon, :width => 25 }
+                %span #{badge.name} #{(term_for :badge).downcase} earned
+        - else
+          %p #{term_for :badges} awarded this week:
+          %ul
+            - presenter.badges_this_week.each do |badge|
+              - if badge[1] != 0
+                %li #{badge[0].name} #{badge[1]}
+              
   - else
     .module-section.dashboard-message
       %p You have not earned anything in the last week!
