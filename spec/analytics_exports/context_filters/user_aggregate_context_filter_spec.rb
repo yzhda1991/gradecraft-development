@@ -13,7 +13,7 @@ describe UserAggregateContextFilter do
     expect(subject).to respond_to :validate_context_type
   end
 
-  describe "#roles" do
+  describe "#user_roles" do
     it "builds a hash mapping user_id to user_role for each event" do
       events = [
         double(:event, user_id: 1, user_role: "hedgehog"),
@@ -22,7 +22,7 @@ describe UserAggregateContextFilter do
 
       allow(subject.context).to receive(:events) { events }
 
-      expect(subject.roles).to eq({ 1 => "hedgehog", 2 => "badger" })
+      expect(subject.user_roles).to eq({ 1 => "hedgehog", 2 => "badger" })
     end
   end
 
