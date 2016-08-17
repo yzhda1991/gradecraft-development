@@ -7,7 +7,7 @@ require "active_record_spec_helper"
 
 describe CourseExportContext do
   subject { described_class.new course: course }
-  let(:course) { double(:course, id: 5) }
+  let(:course) { create :course }
 
   it "has a readable course" do
     subject.instance_variable_set :@course, "some_course"
@@ -22,7 +22,7 @@ describe CourseExportContext do
 
   describe "#events" do
     it "queries and caches events for the course" do
-      allow(Analytics::Event).to receive(:where).with(course_id: 5)
+      allow(Analytics::Event).to receive(:where).with(course_id: course.id)
         .and_return ["event"]
 
       # it returns the event for the course
@@ -52,49 +52,31 @@ describe CourseExportContext do
 
   describe "#user_pageviews" do
     it "fetches data for a CourseUserPageview aggregate and caches it" do
-      allow(CourseUserPageview).to receive(:data)
-        .with(:all_time, nil, { course_id: 5 }, { page: "_all" })
-        .and_return ["user_pageview"]
+      allow(CourseUserPageview).to receive(:data) { { results: "pageview stuff" } }
+      expect(CourseUserPageview).to receive(:data)
+        .with(:all_time, nil, { course_id: course.id }, { page: "_all" })
 
-      # it returns a list of user pageview events for the course
-      expect(subject.user_pageviews).to eq ["user_pageview"]
-
-      # it sets them to @user_pageviews
-      expect(subject.instance_variable_get :@user_pageviews)
-        .to eq ["user_pageview"]
-
-      # and considers them cached
-      expect(CourseUserPageview).not_to receive(:data)
-      subject.user_pageviews
+      expect(subject.user_pageviews).to eq "pageview stuff"
     end
   end
 
   describe "#user_predictor_pageviews" do
     it "fetches data from the CourseUserPagePageview aggregate and caches it" do
-      allow(CourseUserPagePageview).to receive(:data)
-        .with(:all_time, nil, { course_id: 5 , page: /predictor/ })
-        .and_return ["user_predictor_pageview"]
+      allow(CourseUserPagePageview).to receive(:data) { { results: "pageview stuff" } }
+      expect(CourseUserPagePageview).to receive(:data)
+        .with(:all_time, nil, { course_id: course.id }, { page: /predictor/ })
 
-      # it returns a list of user predictor pageview events for the course
-      expect(subject.user_predictor_pageviews).to eq ["user_predictor_pageview"]
-
-      # it sets them to @user_predictor_pageviews
-      expect(subject.instance_variable_get :@user_predictor_pageviews)
-        .to eq ["user_predictor_pageview"]
-
-      # and considers them cached
-      expect(CourseUserPagePageview).not_to receive(:data)
-      subject.user_predictor_pageviews
+      expect(subject.user_predictor_pageviews).to eq "pageview stuff"
     end
   end
 
   describe "#user_logins" do
     it "fetches data from the CourseUserLogin aggregate and caches it" do
+      allow(CourseUserLogin).to receive(:data) { { results: "login stuff" } }
       expect(CourseUserLogin).to receive(:data)
         .with(:all_time, nil, { course_id: course.id })
 
-      expect(subject.instance_variable_get :@user_logins)
-        .to eq subject.user_logins
+      expect(subject.user_logins).to eq "login stuff"
     end
 
     it "doesn't re-build cached logins" do
@@ -106,7 +88,7 @@ describe CourseExportContext do
   end
 
   describe "#users" do
-    let(:users) { create_list 2, :user }
+    let(:users) { create_list :user, 2 }
 
     it "queries Postgres for a collection of users with a course event" do
       events = [
@@ -114,52 +96,24 @@ describe CourseExportContext do
         double(:event, user_id: users.last.id)
       ]
 
-      subject.users
+      allow(subject).to receive(:events) { events }
+
+      expect(subject.users.map(&:id).sort).to eq users.map(&:id).sort
     end
   end
 
-  describe "#usernames" do
-    it "builds a hash of format { user_id => user_name }" do
-      expect(subject.usernames).to eq({ 3 => "alice", 4 => "beth" })
-    end
-  end
+  describe "#assignments" do
+    let(:assignments) { create_list :assignment, 2 }
 
-  describe "#user_ids" do
-    it "builds an array of unique user_ids from the fetched events and caches it" do
+    it "queries Postgres for a collection of assignments with a course event" do
       events = [
-        double(:event, user_id: 1),
-        double(:event, user_id: 2),
-        double(:event, user_id: 2)
+        double(:event, assignment_id: assignments.first.id),
+        double(:event, assignment_id: assignments.last.id)
       ]
 
       allow(subject).to receive(:events) { events }
-      expect(subject.user_ids).to eq [1, 2]
-    end
 
-    it "doesn't re-build the user_ids array if cached" do
-      subject.instance_variable_set :@user_ids, [1, 2, 3]
-      expect(subject).not_to receive(:events)
-      subject.user_ids
-    end
-  end
-
-  describe "#assignment_ids" do
-    it "builds an array of unique assignment_ids from the fetched events and caches it" do
-      events = [
-        double(:event, assignment_id: 1),
-        double(:event, some_other_id: 10),
-        double(:event, assignment_id: 2),
-        double(:event, assignment_id: 3)
-      ]
-
-      allow(subject).to receive(:events) { events }
-      expect(subject.assignment_ids).to eq [1, 2, 3]
-    end
-
-    it "doesn't re-build the assignment_ids array if cached" do
-      subject.instance_variable_set :@assignment_ids, [1, 2, 3]
-      expect(subject).not_to receive(:events)
-      subject.assignment_ids
+      expect(subject.assignments.map(&:id).sort).to eq assignments.map(&:id).sort
     end
   end
 end

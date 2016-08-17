@@ -26,7 +26,7 @@ class CourseExportContext
   # for through #events, we can just filter them here in ruby
   #
   def predictor_events
-    @predictor_events ||= events.collect do |event|
+    @predictor_events ||= events.select do |event|
       event.event_type == "predictor"
     end
   end
@@ -35,20 +35,17 @@ class CourseExportContext
   #
   def user_pageviews
     @user_pageviews ||= CourseUserPageview.data(:all_time, nil,
-      { course_id: course.id }, { page: "_all" }
-    )[:results]
+      { course_id: course.id }, { page: "_all" })[:results]
   end
 
   def user_predictor_pageviews
-    @user_predictor_pageviews ||= CourseUserPagePageview.data(:all_time, nil,
-      { course_id: course.id, page: /predictor/ }
-    )[:results]
+    @user_predictor_pageviews = CourseUserPagePageview.data(:all_time, nil,
+      { course_id: course.id }, { page: /predictor/ })[:results]
   end
 
   def user_logins
     @user_logins ||= CourseUserLogin.data(:all_time, nil,
-      { course_id: course.id }
-    )[:results]
+      { course_id: course.id })[:results]
   end
 
   # ActiveRecord queries
