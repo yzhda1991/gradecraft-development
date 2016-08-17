@@ -440,12 +440,12 @@ ActiveRecord::Schema.define(version: 20160830154453) do
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
-    t.integer  "group_id",   null: false
-    t.integer  "student_id", null: false
+    t.integer  "group_id"
+    t.integer  "student_id"
     t.string   "accepted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "course_id",  null: false
+    t.integer  "course_id"
   end
 
   add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
