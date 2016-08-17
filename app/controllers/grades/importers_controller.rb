@@ -54,7 +54,7 @@ class Grades::ImportersController < ApplicationController
     @assignment = Assignment.find params[:assignment_id]
     provider = params[:provider_id]
 
-    render "#{provider}"
+    render "#{provider}" if %w(canvas csv).include? provider
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
