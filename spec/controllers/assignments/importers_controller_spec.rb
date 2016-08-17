@@ -1,10 +1,7 @@
 require "rails_spec_helper"
 require "./app/services/imports_lms_assignments"
 
-<<<<<<< 368bab70ccf3bc351f92be8e9bccab10142da169:spec/controllers/assignments/importers_controller_spec.rb
 describe Assignments::ImportersController do
-=======
-describe ImportersController do
   let(:course) { create :course }
   let(:professor) { professor_membership.user }
   let(:professor_membership) { create :professor_course_membership, course: course }
@@ -16,7 +13,7 @@ describe ImportersController do
 
       context "without an existing authentication" do
         it "redirects to authorize with canvas" do
-          get :courses, importer_id: provider
+          get :courses, importer_provider_id: provider
 
           expect(response).to redirect_to "/auth/canvas"
         end
@@ -33,13 +30,12 @@ describe ImportersController do
           allow_any_instance_of(ActiveLMS::Syllabus).to receive(:courses).and_return []
           expect_any_instance_of(UserAuthorization).to receive(:refresh!)
 
-          get :courses, importer_id: provider
+          get :courses, importer_provider_id: provider
         end
       end
     end
   end
 
->>>>>>> Require that the user be authenticated before interacting with canvas:spec/controllers/importers_controller_spec.rb
   describe "POST assignments_import" do
     let(:course_id) { "COURSE_ID" }
 

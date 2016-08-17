@@ -1,7 +1,10 @@
 require "active_lms"
 
 class Grades::ImportersController < ApplicationController
+  include OAuthProvider
+
   before_filter :ensure_staff?
+  before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
   def assignments
     @assignment = Assignment.find params[:assignment_id]
@@ -77,6 +80,6 @@ class Grades::ImportersController < ApplicationController
   def syllabus
     @syllabus ||= ActiveLMS::Syllabus.new \
       @provider_name,
-      ENV["#{@provider_name.upcase}_ACCESS_TOKEN"]
+      authorization(@provider_name)
   end
 end
