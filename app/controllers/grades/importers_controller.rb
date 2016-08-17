@@ -80,6 +80,6 @@ class Grades::ImportersController < ApplicationController
   def syllabus
     @syllabus ||= ActiveLMS::Syllabus.new \
       @provider_name,
-      authorization(@provider_name)
+      authorization(@provider_name).access_token
   end
 end

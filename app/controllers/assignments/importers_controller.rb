@@ -46,6 +46,8 @@ class Assignments::ImportersController < ApplicationController
   private
 
   def syllabus
-    @syllabus ||= ActiveLMS::Syllabus.new(@provider_name, authorization(@provider_name))
+    @syllabus ||= ActiveLMS::Syllabus.new \
+      @provider_name,
+      authorization(@provider_name).access_token
   end
 end
