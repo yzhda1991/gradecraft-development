@@ -16,15 +16,13 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
   end
 
   def points_this_week
-    if student
-      student.points_earned_for_course_this_week(course)
-    end
+    return if !student
+    student.points_earned_for_course_this_week(course)
   end
 
   def grades_this_week
-    if student
-      student.grades_released_for_course_this_week(course)
-    end
+    return if !student
+    student.grades_released_for_course_this_week(course)
   end
 
   def badges_this_week
@@ -40,15 +38,13 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
   end
 
   def has_points_this_week?
-    if student
-      student.points_earned_for_course_this_week(course).present?
-    end
+    return if !student
+    student.points_earned_for_course_this_week(course).present?
   end
 
   def has_grades_this_week?
-    if student
-      student.grades_released_for_course_this_week(course).any?
-    end
+    return if !student
+    student.grades_released_for_course_this_week(course).any?
   end
 
   def has_badges_this_week?
