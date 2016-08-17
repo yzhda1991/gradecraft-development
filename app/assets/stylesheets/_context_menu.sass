@@ -2,7 +2,7 @@
 @import layout
 
 .context_menu
-  background-color: $color-blue-3
+  background-color: $color-blue-4
   margin: 0
   width: 100%
 
@@ -18,7 +18,7 @@
       font-size: .7rem
       display: inline-block
       border-right: 1px solid darken($color-blue-3, 20%)
-      color: $color-blue-4
+      color: $color-blue-2
       border-radius: 0 !important
       &:first-child
         border-left: 1px solid darken($color-blue-3, 20%)
@@ -27,8 +27,11 @@
         background-color: $color-blue-1
 
       & a
-        color: $color-white
+        color: $color-blue-2
         display: block
+        &:hover
+          color: $color-blue-4
+          text-decoration: none
 
 @media (max-width: 1200px)
   .context_menu ul li
