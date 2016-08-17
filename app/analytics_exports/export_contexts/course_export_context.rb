@@ -15,14 +15,15 @@ class CourseExportContext
 
   # Mongoid queries
   #
+  # This returns all mongo events that exist for the course
+  #
   def events
     @events ||= Analytics::Event.where course_id: course.id
   end
 
-  # This one can probably just be performed by filtering through the events
-  # records with a ruby select method without having to hit the database again
-  # since #events is just grabbing all of our Analytics events for the course
-  # anwyay.
+  # Parse out the events and return only the predictor ones. This could be
+  # performed through a mongo query, but since the events will also be queried
+  # for through #events, we can just filter them here in ruby
   #
   def predictor_events
     @predictor_events ||= events.collect do |event|

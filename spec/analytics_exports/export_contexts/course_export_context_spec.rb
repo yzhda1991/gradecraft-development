@@ -20,47 +20,6 @@ describe CourseExportContext do
     end
   end
 
-  describe "#export_data" do
-    let(:stubbed_attrs) do
-      {
-        events: ["event"],
-        predictor_events: ["predictor_event"],
-        user_pageviews: { results: ["user_pageview"] },
-        user_predictor_pageviews: { results: ["user_predictor_pageview"] },
-        user_logins: { results: ["user_logins"] },
-        users: ["user"],
-        assignments: ["assignment"]
-      }
-    end
-
-    before { allow(subject).to receive_messages(stubbed_attrs) }
-
-    it "builds and caches an @export_data hash" do
-      # note that the aggregate records have been collapsed down to provide
-      # the value of the :results hash rather than the hash itself
-      #
-      expected_result = {
-        events: ["event"],
-        predictor_events: ["predictor_event"],
-        user_pageviews: ["user_pageview"],
-        user_predictor_pageviews: ["user_predictor_pageview"],
-        user_logins: ["user_logins"],
-        users: ["user"],
-        assignments: ["assignment"]
-      }
-
-      # the output should have provided the result
-      expect(subject.export_data).to eq expected_result
-
-      # and it should have been set to @export_data
-      expect(subject.instance_variable_get :@export_data).to eq expected_result
-
-      # and now that it's cached it shouldn't have to query anything again
-      expect(subject).not_to receive(:events)
-      subject.export_data
-    end
-  end
-
   describe "#events" do
     it "queries and caches events for the course" do
       allow(Analytics::Event).to receive(:where).with(course_id: 5)
@@ -80,19 +39,14 @@ describe CourseExportContext do
 
   describe "#predictor_events" do
     it "queries and caches predictor events for the course" do
-      allow(Analytics::Event).to receive(:where)
-        .with(course_id: 5, event_type: "predictor") { ["predictor_event"] }
+      events = [
+        double(:event, event_type: "predictor"),
+        double(:event, event_type: "sumpin' else")
+      ]
 
-      # it returns the predictor event for the course
-      expect(subject.predictor_events).to eq ["predictor_event"]
+      allow(subject).to receive(:events) { events }
 
-      # it sets the predictor events array to @preditor_events
-      expect(subject.instance_variable_get :@predictor_events)
-        .to eq ["predictor_event"]
-
-      # and doesn't need to fetch it anymore
-      expect(Analytics::Event).not_to receive(:where)
-      subject.predictor_events
+      expect(subject.predictor_events).to eq [events.first]
     end
   end
 
@@ -152,15 +106,14 @@ describe CourseExportContext do
   end
 
   describe "#users" do
-    it "fetches all users with ids matching the user_ids array" do
-      users = create_list :user, 2
-      allow(subject).to receive(:user_ids) { users.collect(&:id) }
-      expect(subject.users).to include users.first, users.last
-    end
+    let(:users) { create_list 2, :user }
 
-    it "doesn't re-fetch the cached users" do
-      subject.instance_variable_set :@users, ["some", "users"]
-      expect(User).not_to receive(:where)
+    it "queries Postgres for a collection of users with a course event" do
+      events = [
+        double(:event, user_id: users.first.id),
+        double(:event, user_id: users.last.id)
+      ]
+
       subject.users
     end
   end
