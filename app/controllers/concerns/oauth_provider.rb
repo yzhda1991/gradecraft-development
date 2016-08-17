@@ -1,7 +1,11 @@
 module OAuthProvider
   extend ActiveSupport::Concern
 
-  private
+  protected
+
+  def set_unauthorized_path(path)
+    session[:return_to] = path
+  end
 
   def require_authorization
     provider = params[:importer_provider_id]
@@ -12,8 +16,8 @@ module OAuthProvider
     auth = authorization(provider)
 
     if auth.nil?
-      session[:return_to] = assignments_importers_path(provider)
-      redirect_to "/auth/#{provider}"
+      redirect_to "/auth/#{provider}",
+        notice: "You could not be authorized with #{provider.capitalize}."
     elsif auth.expired?
       config = ActiveLMS.configuration.providers[provider.to_sym]
       auth.refresh_with_config! config

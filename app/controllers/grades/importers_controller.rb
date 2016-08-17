@@ -4,6 +4,10 @@ class Grades::ImportersController < ApplicationController
   include OAuthProvider
 
   before_filter :ensure_staff?
+  before_filter except: [:download, :index, :show, :upload] do |controller|
+    path = assignment_grades_importers_path(params[:assignment_id])
+    controller.set_unauthorized_path path
+  end
   before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
   def assignments
@@ -34,6 +38,7 @@ class Grades::ImportersController < ApplicationController
     @courses = syllabus.courses
   end
 
+  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
