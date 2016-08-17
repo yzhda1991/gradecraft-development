@@ -15,12 +15,14 @@ class CriterionGrade < ActiveRecord::Base
   validates :assignment_id, presence: true
   validates :criterion_id, presence: true
   validates :student_id, presence: true
+  validates :level_id, presence: true
 
-  def self.find_or_create(assignment_id, criterion_id, student_id)
+  def self.find_or_create(assignment_id, criterion_id, student_id, level_id)
     CriterionGrade.find_or_create_by(
       assignment_id: assignment_id,
       criterion_id: criterion_id,
-      student_id: student_id
+      student_id: student_id,
+      level_id: level_id
     )
   end
 end

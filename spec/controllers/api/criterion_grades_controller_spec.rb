@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe API::CriterionGradesController do
+describe API::CriterionGradesController, focus: true do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 

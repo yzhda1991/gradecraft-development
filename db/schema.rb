@@ -316,12 +316,12 @@ ActiveRecord::Schema.define(version: 20160907000216) do
 
   create_table "criterion_grades", force: :cascade do |t|
     t.integer  "points"
-    t.integer  "criterion_id"
-    t.integer  "level_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "assignment_id"
-    t.integer  "student_id"
+    t.integer  "criterion_id",  null: false
+    t.integer  "level_id",      null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "assignment_id", null: false
+    t.integer  "student_id",    null: false
     t.text     "comments"
   end
 
