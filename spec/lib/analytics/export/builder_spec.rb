@@ -8,13 +8,14 @@ describe Analytics::Export::Builder do
   end
 
   let(:builder_attrs) do
-    { export_data: {}, export_classes: [] }
+    { export_context: export_context, export_classes: [] }
   end
+  let(:export_context) { double(:context).as_null_object }
 
   describe "readable attributes" do
     it "has several readable attributes" do
-      subject.instance_variable_set :@export_data, "some data"
-      expect(subject.export_data).to eq "some data"
+      subject.instance_variable_set :@export_context, "some data"
+      expect(subject.export_context).to eq "some data"
     end
 
     it "has readable export classes" do
@@ -44,8 +45,8 @@ describe Analytics::Export::Builder do
   end
 
   describe "#initialize" do
-    it "sets the export_data" do
-      expect(subject.export_data).to eq({})
+    it "sets the export_context" do
+      expect(subject.export_context).to eq export_context
     end
 
     it "sets the export classes" do
@@ -136,7 +137,7 @@ describe Analytics::Export::Builder do
 
     it "builds an array of exporters with data from the export classes" do
       exporters.each do |exporter|
-        expect(exporter).to receive(:generate_csv).with subject.export_root_dir
+        expect(exporter).to receive(:write_csv).with subject.export_root_dir
       end
 
       subject.generate_csvs
@@ -145,23 +146,22 @@ describe Analytics::Export::Builder do
 
   describe "#exporters" do
     let(:export_classes) { [CourseEventExport, CoursePredictorExport] }
-    let(:export_data) { { users: [], assignments: [] } }
 
     before do
       allow(subject).to receive_messages \
         export_classes: export_classes,
-        export_data: export_data,
+        export_context: export_context,
         export_root_dir: Dir.mktmpdir
     end
 
     it "builds an array of exporters with data from the export classes" do
       first_export = subject.exporters.first
       expect(first_export.class).to eq export_classes.first
-      expect(first_export.data).to eq export_data
+      expect(first_export.context).to eq export_context
 
       last_export = subject.exporters.last
       expect(last_export.class).to eq export_classes.last
-      expect(last_export.data).to eq export_data
+      expect(last_export.context).to eq export_context
 
       expect(subject.exporters.class).to eq Array
     end
