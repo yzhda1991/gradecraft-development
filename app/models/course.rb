@@ -258,7 +258,7 @@ class Course < ActiveRecord::Base
   def assignment_types_submitted_by_student_count
     submissions = []
     assignment_types.each do |at| 
-      submissions << [at.name, at.submissions_this_week_count]
+      submissions << [at, at.submissions_this_week_count]
     end
     return {
       assignment_types: submissions

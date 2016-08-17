@@ -35,6 +35,10 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     end
   end
 
+  def submissions_this_week
+    course.assignment_types_submitted_by_student_count[:assignment_types]
+  end
+
   def has_points_this_week?
     if student
       student.points_earned_for_course_this_week(course).present?
@@ -53,6 +57,10 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     else
       course.badges_earned_by_student_count.any?
     end
+  end
+
+  def has_submissions_this_week?
+    submissions_this_week.any?
   end
 
   def has_weekly_stats?
