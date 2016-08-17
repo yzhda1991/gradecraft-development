@@ -17,19 +17,20 @@ describe Analytics::Export::Buildable do
   end
 
   describe "#export_builder" do
-    let(:builder_attrs) do
-      { export_data: "data", export_classes: ["a class"] }
-    end
-
     before do
-      allow(subject).to receive(:export_builder_attrs) { builder_attrs }
+      allow(subject).to receive_messages({
+        context: "some context",
+        export_classes: "some classes",
+        filename: "the_filename.txt",
+        directory_name: "ECO500"
+      })
     end
 
     it "builds a new export builder" do
       builder = subject.export_builder
       expect(builder.class).to eq Analytics::Export::Builder
-      expect(builder.export_data).to eq "data"
-      expect(builder.export_classes).to eq ["a class"]
+      expect(builder.export_context).to eq "some context"
+      expect(builder.export_classes).to eq "some classes"
     end
 
     it "caches the builder" do
@@ -37,23 +38,6 @@ describe Analytics::Export::Buildable do
       expect(Analytics::Export::Builder).not_to receive(:new)
       expect(subject.instance_variable_get :@export_builder)
         .to eq subject.export_builder
-    end
-  end
-
-  describe "#export_builder_attrs" do
-    it "returns a hash of attributes to use for the builder" do
-      allow(subject).to receive_messages \
-        export_data: "some data",
-        export_classes: "some classes",
-        filename: "the_filename.txt",
-        directory_name: "ECO500"
-
-      expect(subject.export_builder_attrs).to eq({
-        export_data: "some data",
-        export_classes: "some classes",
-        filename: "the_filename.txt",
-        directory_name: "ECO500"
-      })
     end
   end
 
