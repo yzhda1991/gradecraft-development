@@ -1,10 +1,13 @@
-ENV["CANVAS_BASE_URL"] = "https://canvas.instructure.com"
-
 require "api_spec_helper"
 require "./lib/canvas"
 
 describe Canvas::API, type: :disable_external_api do
   let(:access_token) { "BLAH" }
+
+  before do
+    allow(Canvas::API).to \
+      receive(:base_uri).and_return "https://canvas.instructure.com/api/v1"
+  end
 
   describe "#initialize" do
     it "initializes with an access token" do

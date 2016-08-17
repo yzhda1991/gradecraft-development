@@ -3,6 +3,7 @@ require "./lib/active_lms"
 describe ActiveLMS do
   describe ".configure" do
     it "sets the configuration for ActiveLMS" do
+      ActiveLMS.configuration.providers.clear
       ActiveLMS.configure do |config|
         config.provider :canvas do |canvas|
           canvas.client_id = "CLIENT ID"
