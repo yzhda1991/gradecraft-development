@@ -15,7 +15,7 @@ module PredictorData
       :icon
     ).map do |badge|
       prediction = badge.find_or_create_predicted_earned_badge(student.id)
-      if current_user_is_student?
+      if current_user_is_student? && !current_user_in_preview_mode?
         badge.prediction = {
           id: prediction.id,
           predicted_times_earned: prediction.times_earned_including_actual
@@ -46,7 +46,7 @@ module PredictorData
     ).map do |challenge|
       prediction =
         challenge.find_or_create_predicted_earned_challenge(@student.id)
-      if current_user_is_student?
+      if current_user_is_student? && !current_user_in_preview_mode?
         challenge.prediction = {
           id: prediction.id, predicted_points: prediction.predicted_points
         }
