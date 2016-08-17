@@ -3,7 +3,7 @@ module OAuthProvider
 
   protected
 
-  def set_unauthorized_path(path)
+  def unauthorized_path(path)
     session[:return_to] = path
   end
 

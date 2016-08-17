@@ -5,7 +5,7 @@ class Assignments::ImportersController < ApplicationController
 
   before_filter :ensure_staff?
   before_filter except: :index do |controller|
-    controller.set_unauthorized_path assignments_importers_path
+    controller.unauthorized_path assignments_importers_path
   end
   before_filter :require_authorization, except: :index
 

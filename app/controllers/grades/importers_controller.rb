@@ -5,8 +5,7 @@ class Grades::ImportersController < ApplicationController
 
   before_filter :ensure_staff?
   before_filter except: [:download, :index, :show, :upload] do |controller|
-    path = assignment_grades_importers_path(params[:assignment_id])
-    controller.set_unauthorized_path path
+    controller.unauthorized_path assignment_grades_importers_path(params[:assignment_id])
   end
   before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
