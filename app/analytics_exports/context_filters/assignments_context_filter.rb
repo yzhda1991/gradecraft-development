@@ -4,7 +4,7 @@ class AssignmentsContextFilter < Analytics::Export::ContextFilter
   accepts_context_types :course_export_context
 
   def assignment_names
-    @assignment_names ||= assignments.inject({}) do |memo, assignment|
+    @assignment_names ||= context.assignments.inject({}) do |memo, assignment|
       memo[assignment.id] = assignment.name
       memo
     end
