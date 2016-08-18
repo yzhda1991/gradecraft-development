@@ -290,4 +290,22 @@ describe CoursesController do
       end
     end
   end
+  
+  context "as a public user" do 
+    describe "GET badges" do
+      it "returns the public badges show page" do
+        get :badges, id: @course.id
+        expect(assigns(:title)).to eq("#{@course.name}")
+        expect(assigns(:course)).to eq(@course)
+        expect(response).to render_template(:badges)
+      end
+      
+      it "reroutes to the dashboard if course has public badges turned off" do
+        @course.has_public_badges = false
+        @course.save
+        get :badges, id: @course.id
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
 end
