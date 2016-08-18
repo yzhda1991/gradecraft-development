@@ -154,6 +154,7 @@ GradeCraft::Application.routes.draw do
   #6. Badges
   resources :badges do
     post :sort, on: :collection
+    get "export_structure", on: :collection
     resources :earned_badges do
       get :mass_edit, on: :collection
       post :mass_earn, on: :collection
@@ -202,6 +203,7 @@ GradeCraft::Application.routes.draw do
     get :export_earned_badges
     get :final_grades
     get :gradebook
+    get :submissions
     get :grading_status
     get :multiplied_gradebook
     get :multiplier_choices
@@ -225,6 +227,7 @@ GradeCraft::Application.routes.draw do
     collection do
       get :mass_edit
       put :mass_update
+      get :export_structure
     end
   end
 

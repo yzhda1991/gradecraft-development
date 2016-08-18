@@ -68,6 +68,13 @@ describe GradeSchemeElementsController do
         expect(response.status).to eq(500)
       end
     end
+    
+    describe "GET export_structure" do
+      it "retrieves the export_structure download" do
+        get :export_structure, id: @course.id, format: :csv
+        expect(response.body).to include("Level ID,Letter Grade,Level Name,Lowest Points,Highest Points")
+      end
+    end
   end
 
   context "as student" do

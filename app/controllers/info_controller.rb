@@ -130,6 +130,13 @@ class InfoController < ApplicationController
     @assignment_types = current_course.assignment_types
     @teams = current_course.teams
   end
+  
+  def submissions
+    course = current_user.courses.find_by(id: params[:id])
+    respond_to do |format|
+      format.csv { send_data SubmissionExporter.new.export(course), filename: "#{ course.name } Submissions - #{ Date.today }.csv" }
+    end
+  end
 
   private
 

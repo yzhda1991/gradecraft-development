@@ -116,6 +116,13 @@ describe BadgesController do
         expect{ get :destroy, id: another_badge }.to change(Badge,:count).by -1
       end
     end
+    
+    describe "GET export_structure" do
+      it "retrieves the export_structure download" do
+        get :export_structure, id: @course.id, format: :csv
+        expect(response.body).to include("Badge ID,Name,Point Total,Description,Times Earned")
+      end
+    end
   end
 
   context "as student" do

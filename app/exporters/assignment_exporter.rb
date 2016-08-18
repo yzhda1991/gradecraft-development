@@ -14,6 +14,6 @@ class AssignmentExporter
 
   def baseline_headers
     ["Assignment ID", "Name", "Point Total", "Description", "Open At",
-      "Due At", "Accept Until"  ]
+      "Due At", "Accept Until" ]
   end
 end
