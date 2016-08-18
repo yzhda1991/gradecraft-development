@@ -122,9 +122,7 @@
 
       # points below threshold revert to zero
       scope.pointsSnappedToThreshold = (points)->
-        if isNaN(points)
-          return 0
-        else if scope.pointsAreBelowThreshold(points)
+        if scope.pointsAreBelowThreshold(points)
           return 0
         else
           return points
@@ -138,6 +136,7 @@
 
 
       scope.snapAndSave = (points)->
+        points = if isNaN(points) then 0 else points
         scope.snap(points)
         scope.save()
 
