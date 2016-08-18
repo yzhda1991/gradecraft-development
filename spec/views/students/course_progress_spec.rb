@@ -12,7 +12,8 @@ describe "students/grading_scheme" do
     @grade_scheme_element_2 = create(:grade_scheme_element_high, course: @course)
     @course.grade_scheme_elements <<[@grade_scheme_element_1, @grade_scheme_element_2]
     @grade_scheme_elements = @course.grade_scheme_elements
-    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: "100000")
+    @membership = CourseMembership.where(user: @student, course: @course)
+      .first.update(score: "10000")
   end
 
   before(:each) do
