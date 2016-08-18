@@ -63,6 +63,13 @@ class BadgesController < ApplicationController
     redirect_to badges_path,
       notice: "#{@name} #{term_for :badge} successfully deleted"
   end
+  
+  def export_structure
+    course = current_user.courses.find_by(id: params[:id])
+    respond_to do |format|
+      format.csv { send_data BadgeExporter.new.export(course), filename: "#{ course.name } #{ (term_for :badges).titleize } - #{ Date.today }.csv" }
+    end
+  end
 
   private
 

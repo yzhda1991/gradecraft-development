@@ -67,4 +67,11 @@ class GradeSchemeElementsController < ApplicationController
       end
     end
   end
+  
+  def export_structure
+    course = current_user.courses.find_by(id: params[:id])
+    respond_to do |format|
+      format.csv { send_data GradeSchemeExporter.new.export(course), filename: "#{ course.name } Grading Scheme - #{ Date.today }.csv" }
+    end
+  end
 end
