@@ -52,6 +52,21 @@ describe API::PredictedEarnedGradesController do
     end
   end
 
+  context "as faculty previewing as student" do
+    before do
+      login_user(world.student)
+      allow(controller).to receive(:current_course).and_return(world.course)
+      session[:previewing_agent] = professor.id
+    end
+
+    describe "GET index" do
+      it "assigns the professor and not student as user" do
+        get :index, format: :json
+        expect(assigns(:assignments).current_user).to eq(professor)
+      end
+    end
+  end
+
   # helper methods:
   def predictor_challenge_attributes
     [

@@ -33,7 +33,7 @@ describe API::PredictedEarnedChallengesController do
 
     describe "GET index" do
       it "assigns the challenges with call to update" do
-        get :index, format: :json, id: world.student.id
+        get :index, format: :json
         expect(assigns(:student)).to eq(world.student)
         expect(assigns(:challenges)[0].attributes.length).to eq(predictor_challenge_attributes.length)
         predictor_challenge_attributes do |attr|
@@ -45,7 +45,7 @@ describe API::PredictedEarnedChallengesController do
 
       it "adds the prediction data to the challenge data" do
         prediction = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
-        get :index, format: :json, id: world.student.id
+        get :index, format: :json
         expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, predicted_points: prediction.predicted_points })
       end
 
@@ -61,7 +61,7 @@ describe API::PredictedEarnedChallengesController do
       it "adds grades as nil when not visible to student" do
         world.challenge.update(release_necessary: true)
         grade = create(:grades_not_released_challenge_grade, challenge: world.challenge, team: world.team)
-        get :index, format: :json, id: world.student.id
+        get :index, format: :json
         expect(assigns(:challenges)[0].grade).to eq({
           score: nil,
           final_points: nil
@@ -81,6 +81,24 @@ describe API::PredictedEarnedChallengesController do
       it "renders a 404 if prediction not found" do
         put :update, id: 0, predicted_points: 0, format: :json
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  context "as faculty previewing as student" do
+    before do
+      login_user(world.student)
+      allow(controller).to receive(:current_course).and_return(world.course)
+      allow(world.course).to receive(:add_team_score_to_student).and_return(true)
+      allow(world.student).to receive(:team_for_course).and_return(world.team)
+      session[:previewing_agent] = professor.id
+    end
+
+    describe "GET index" do
+      it "removes prediction info from models" do
+        prediction = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
+        get :index, format: :json
+        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, predicted_points: 0 })
       end
     end
   end

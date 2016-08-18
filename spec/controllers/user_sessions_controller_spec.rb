@@ -1,0 +1,48 @@
+require 'rails_spec_helper'
+
+describe UserSessionsController do
+  let(:professor) { create(:professor_course_membership).user }
+  let(:student) { create :user }
+
+  describe "POST create" do
+    context "user is successfully logged in" do
+      it "records the course login event" do
+        allow(subject).to receive(:login) { student }
+        expect(subject).to receive(:record_course_login_event)
+        post :create, user: student.attributes
+      end
+    end
+
+    context "user is not logged in" do
+      it "does not record the course login event" do
+        allow(subject).to receive(:login) { nil }
+        expect(subject).to_not receive(:record_course_login_event)
+        post :create, user: student.attributes
+      end
+    end
+  end
+
+  describe "enter_student_preview" do
+    it "stores the professor id in sessions" do
+      login_user(professor)
+      get :enter_student_preview, student_id: student.id
+      expect(session[:previewing_agent]).to eq(professor.id)
+    end
+
+    it "logs in as student" do
+      login_user(professor)
+      get :enter_student_preview, student_id: student.id
+      expect(session[:user_id]).to eq(student.id.to_s)
+    end
+  end
+
+  describe "exit_student_preview" do
+    it "returns session to faculty" do
+      allow(subject).to receive(:login) { student }
+      session[:previewing_agent] = professor.id
+      get :exit_student_preview
+      expect(session[:previewing_agent]).to be_nil
+      expect(session[:user_id]).to eq(professor.id.to_s)
+    end
+  end
+end

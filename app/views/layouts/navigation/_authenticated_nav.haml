@@ -1,4 +1,5 @@
-- if current_user_is_student?
+-# do not allow faculty to switch courses in preview mode!
+- if current_user_is_student? && !current_user_in_preview_mode?
   = render partial: "layouts/navigation/course_search"
 %li.dropdown.my-account
   %a.section-title{:href => "#", :title => "My account management"}

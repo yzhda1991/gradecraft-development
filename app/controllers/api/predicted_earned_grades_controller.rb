@@ -5,7 +5,6 @@ class API::PredictedEarnedGradesController < ApplicationController
 
   # GET api/predicted_earned_grades
   def index
-
     # restrict predictions for professor viewing student in preview mode
     if current_user_in_preview_mode?
       user = User.find(session[:previewing_agent])
