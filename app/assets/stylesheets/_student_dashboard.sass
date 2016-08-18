@@ -37,20 +37,39 @@
     width: 60%
 
   .flex-column
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
     display: flex
+    -webkit-box-orient: horizontal
+    -webkit-box-direction: normal
+    -webkit-flex-direction: row
+    -ms-flex-direction: row
     flex-direction: row
 
   .flex-row
     margin-right: 1rem
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
     flex: 1
 
   .stacked-column
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
     display: flex
     flex-flow: column
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
     flex: 1
 
   .stacked-module
-    flex: 1
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1 auto
 
   .dashboard-module
     margin-bottom: 1.25rem
