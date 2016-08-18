@@ -19,8 +19,9 @@ class AssignmentType < ActiveRecord::Base
   validate :positive_max_points
 
   scope :student_weightable, -> { where(student_weightable: true) }
+  scope :submitted_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }
 
-  default_scope { order "position" }
+  scope :ordered, -> { order("position ASC") }
 
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])

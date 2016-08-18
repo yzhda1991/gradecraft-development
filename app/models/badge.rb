@@ -34,8 +34,9 @@ class Badge < ActiveRecord::Base
     in: [true, false], message: "must be true or false"
 
   scope :visible, -> { where(visible: true) }
+  scope :earned_this_week, -> { includes(:earned_badges).where("earned_badges.updated_at > ?", 7.days.ago).references(:earned_badges) }
 
-  default_scope { order("position ASC") }
+  scope :ordered, -> { order("position ASC") }
 
   # indexed badges
   def awarded_count

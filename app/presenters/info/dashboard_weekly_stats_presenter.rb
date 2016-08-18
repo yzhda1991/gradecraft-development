@@ -29,12 +29,12 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     if student
       student.earned_badges_for_course_this_week(course)
     else
-      course.badges_earned_by_student_count[:badges]
+      course.badges.earned_this_week
     end
   end
 
   def submissions_this_week
-    course.assignment_types_submitted_by_student_count[:assignment_types]
+    course.assignment_types.submitted_this_week
   end
 
   def has_points_this_week?
@@ -51,7 +51,7 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     if student
       student.earned_badges_for_course_this_week(course).any?
     else
-      course.badges_earned_by_student_count.any?
+      course.badges.earned_this_week.any?
     end
   end
 

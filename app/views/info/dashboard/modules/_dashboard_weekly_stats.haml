@@ -20,25 +20,20 @@
       .module-section
         %p #{term_for :assignments} submitted this week:
         %ul
-          - presenter.submissions_this_week.each do |at|
-            %li #{at[0].name}: #{at[0].submissions_this_week_count}
+          - presenter.submissions_this_week.each do |assignment_type|
+            %li #{assignment_type.name}: #{ assignment_type.submissions_this_week_count }
 
     - if current_course.has_badges? && presenter.has_badges_this_week?
       .module-section
-        - if current_student.present?
-          %p #{term_for :badges} earned this week:
-          %ul
-            - presenter.badges_this_week.each do |badge|
-              %li
-                %img{:src => badge.icon, :width => 25 }
-                %span #{badge.name} #{(term_for :badge).downcase} earned
-        - else
-          %p #{term_for :badges} awarded this week:
-          %ul
-            - presenter.badges_this_week.each do |badge|
-              %li 
-                %img{:src => badge[0].icon} 
-                %span #{badge[0].name}: #{badge[0].earned_badges_this_week_count}
+        %p #{term_for :badges} earned this week:
+        %ul
+          - presenter.badges_this_week.each do |badge|
+            %li
+              %img{:src => badge.icon, :width => 25 }
+              - if current_student.present?
+                %span #{badge.name} #{ (term_for :badge).downcase } earned
+              - elsif current_user_is_staff?
+                %span #{badge.name}: #{ badge.earned_badges_this_week_count }
               
   - else
     .module-section.dashboard-message

@@ -254,22 +254,6 @@ class Course < ActiveRecord::Base
       elements: elements.reverse
     }
   end
-  
-  def assignment_types_submitted_by_student_count
-    submissions = []
-    assignment_types.each do |at| 
-      submissions << [at] if at.submissions_this_week_count > 0
-    end
-    return { assignment_types: submissions }
-  end
-  
-  def badges_earned_by_student_count
-    earned_badges = []
-    badges.each do |badge| 
-      earned_badges << [badge] if badge.earned_badges_this_week_count > 0
-    end
-    return { badges: earned_badges }
-  end
 
   private
 
