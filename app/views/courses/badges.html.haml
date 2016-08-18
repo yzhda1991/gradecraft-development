@@ -1,0 +1,15 @@
+.page
+  .hero-section
+    %h1= @title
+  .main-section
+    %table
+      %thead
+        %th Icon
+        %th Name
+        %th Description
+      %tbody
+        - @badges.each do |badge|
+          %tr
+            %td= image_tag(badge.icon, width: 40, alt: badge.name)
+            %td= badge.name
+            %td= badge.description

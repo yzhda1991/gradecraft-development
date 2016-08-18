@@ -55,6 +55,12 @@
       = f.label :has_badges, "Badges"
       = f.check_box :has_badges
       .form_label Do you want to use badges in your course?
+      
+    - if current_user_is_admin?
+      .form-item
+        = f.label :has_public_badges, "Public Badges"
+        = f.check_box :has_public_badges
+        .form_label Can students export the badges earned in your course?
 
     .form-item
       = f.label :teams_visible, "Section Leaderboard"
