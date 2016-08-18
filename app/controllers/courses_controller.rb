@@ -1,10 +1,11 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  before_filter :ensure_staff?, except: [:index]
+  skip_before_filter :require_login, only: [:badges]
+  before_filter :ensure_staff?, except: [:index, :badges]
   before_action :find_course, only: [:show, :edit, :multiplier_settings,
     :custom_terms, :course_details, :player_settings, :student_onboarding_setup,
-  :copy, :update, :destroy]
+  :copy, :update, :destroy, :badges]
 
   # rubocop:disable AndOr
   def index
@@ -54,6 +55,15 @@ class CoursesController < ApplicationController
 
   def student_onboarding_setup
     @title = "Student Onboarding Setup"
+  end
+  
+  def badges 
+    if @course.has_public_badges?
+      @title = @course.name
+      @badges = @course.badges
+    else
+      redirect_to root_path, alert: "Whoops, nothing to see here! That data is not available."
+    end
   end
 
   def copy
