@@ -1,4 +1,4 @@
-- if presenter.current_element && presenter.next_element.present?
+- if presenter.next_element.present?
   .progress.bar_magic.transparent.center
     .meter
       %i.fa.fa-lock
@@ -28,7 +28,7 @@
     %span.your-rank Your rank: Not on the board yet!
 
 
-- if presenter.current_element && presenter.previous_element.present?
+- if presenter.previous_element.present?
   .progress.bar_magic.success.center
     .meter
       %i.fa.fa-star
