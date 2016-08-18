@@ -101,6 +101,11 @@ describe API::PredictedEarnedChallengesController do
         expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, predicted_points: 0 })
       end
     end
+
+    it "sets predictor to not update" do
+      get :index, format: :json
+      expect(assigns(:update_challenges)).to be_falsey
+    end
   end
 
   # helper methods:

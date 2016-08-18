@@ -33,8 +33,6 @@ module PredictorData
 
   def predictor_challenges(student)
     return [] unless challenge_conditions_met? student
-    team = student.team_for_course(current_course)
-    grades = team.challenge_grades
 
     current_course.challenges.select(
       :id,
@@ -56,21 +54,7 @@ module PredictorData
         }
       end
 
-      grade = grades.where(challenge_id: challenge.id).first
-      if grade.present? && ChallengeGradeProctor.new(grade).viewable?
-        challenge.grade = {
-          score: grade.score,
-          # The Predictor js calculates points off of Assignment final_points,
-          # We can use the same templates for Challenges if we treat
-          # the score as the Challenge final_points
-          final_points: grade.score
-        }
-      else
-        challenge.grade = {
-          score: nil,
-          final_points: nil
-        }
-      end
+      challenge.grade = predicted_grade_for_challenge(student, challenge)
       challenge
     end
   end
@@ -95,5 +79,25 @@ module PredictorData
     current_course.challenges.present? &&
     student.team_for_course(current_course).present? &&
     current_course.add_team_score_to_student
+  end
+
+  def predicted_grade_for_challenge(student, challenge)
+    team = student.team_for_course(current_course)
+    grade = team.challenge_grades.where(challenge_id: challenge.id).first
+    if grade.present? && ChallengeGradeProctor.new(grade).viewable?
+      challenge_grade = {
+        score: grade.score,
+        # The Predictor js calculates points off of Assignment final_points,
+        # We can use the same templates for Challenges if we treat
+        # the score as the Challenge final_points
+        final_points: grade.score
+      }
+    else
+      challenge_grade = {
+        score: nil,
+        final_points: nil
+      }
+    end
+    challenge_grade
   end
 end

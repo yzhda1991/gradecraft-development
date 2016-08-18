@@ -75,6 +75,11 @@ describe API::PredictedEarnedBadgesController do
         get :index, format: :json
         expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, predicted_times_earned: 0 })
       end
+
+      it "sets predictor to not update" do
+        get :index, format: :json
+        expect(assigns(:update_badges)).to be_falsey
+      end
     end
   end
 

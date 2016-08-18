@@ -5,9 +5,12 @@ class API::PredictedEarnedChallengesController < ApplicationController
 
   # GET api/predicted_earned_challenges
   def index
-    if current_user_is_student?
+    if current_user_is_student?  && !current_user_in_preview_mode?
       @student = current_student
       @update_challenges = true
+    elsif current_user_in_preview_mode?
+      @student = current_student
+      @update_challenges = false
     else
       @student = NullStudent.new
       @update_challenges = false
