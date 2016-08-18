@@ -9,12 +9,16 @@
           %h4.event-name= link_to event.name, event
         %p.event-date= glyph(:calendar) + presenter.dates_for(event)
         .slide-body
-          .event-image
-            %img{:src => event.media }
-          .event-description
-            %p
-              = truncate(sanitize(event.description, :tags => %w(br a)), :length => 200, :omission => "...")
-              = link_to "See the Details", event
+          .event-information
+            .event-image
+              %img{:src => event.media }
+            .event-description
+              %p
+                = truncate(sanitize(event.description, :tags => %w(br a)), :length => 200, :omission => "...")
+                = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
-              %li #{link_to assignment.name, assignment} due today!
+              %li #{link_to assignment.name, assignment} due!
+    .event-slide.last-slide
+      .slide-body
+        .dashboard-message This class is over!

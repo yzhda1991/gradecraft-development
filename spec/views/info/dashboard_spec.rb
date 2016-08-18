@@ -44,6 +44,7 @@ describe "info/dashboard" do
 
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student_1)
     allow(view).to receive(:presenter).and_return presenter
   end
 
@@ -61,7 +62,6 @@ describe "info/dashboard" do
 
     it "shows the dashboard" do
       allow(view).to receive(:current_user).and_return(@student_1)
-      allow(view).to receive(:current_student).and_return(@student_1)
       render
       assert_select "#student-dashboard", count: 1
     end
