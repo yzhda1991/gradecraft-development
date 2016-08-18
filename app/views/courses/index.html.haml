@@ -36,6 +36,9 @@
           %th
           %th
           %th
+          %th
+          %th
+          %th
           %th{scope: "col" }
             %span.sr-only Actions
     %tbody
@@ -53,9 +56,12 @@
             %td= link_to_unless_current "Research Grades", research_gradebook_path(id: course.id, format: "csv"), :class=>"data-clearing"
             %td= link_to_unless_current "Final Grades", final_grades_path(id: course.id, format: "csv"), :class=>"data-clearing"
             %td= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(id: course.id, format: "csv")
+            %td= link_to "#{term_for :assignment} Submissions", submissions_path(id: course.id, format: "csv")
             %td= link_to "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: course.id, format: "csv")
-            %td= link_to  "Full Gradebook", gradebook_path(id: course.id, format: "csv")
-            %td= link_to  "Multiplied Gradebook", multiplied_gradebook_path(id: course.id, format: "csv") if course.student_weighted?
+            %td= link_to "Full Gradebook", gradebook_path(id: course.id, format: "csv")
+            %td= link_to "Multiplied Gradebook", multiplied_gradebook_path(id: course.id, format: "csv") if course.student_weighted?
+            %td= link_to "#{term_for :badges}", export_structure_badges_path(id: course.id, format: "csv")
+            %td= link_to "Grading Scheme", export_structure_grade_scheme_elements_path(id: course.id, format: "csv")
             %td
               .right
                 %ul.button-bar
