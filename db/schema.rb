@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20160907000216) do
   create_table "criterion_grades", force: :cascade do |t|
     t.integer  "points"
     t.integer  "criterion_id",  null: false
-    t.integer  "level_id",      null: false
+    t.integer  "level_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "assignment_id", null: false
@@ -348,7 +348,7 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.string   "name",          null: false
     t.text     "description"
     t.datetime "open_at"
-    t.datetime "due_at",        null: false
+    t.datetime "due_at"
     t.text     "media"
     t.text     "thumbnail"
     t.text     "media_credit"
@@ -625,12 +625,10 @@ ActiveRecord::Schema.define(version: 20160907000216) do
   add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "assignment_id"
+    t.integer  "assignment_id", null: false
     t.integer  "student_id"
-    t.string   "feedback"
-    t.string   "comment"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "link"
     t.text     "text_comment"
     t.integer  "creator_id"

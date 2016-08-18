@@ -48,7 +48,6 @@ class Course < ActiveRecord::Base
   end
 
   with_options dependent: :destroy do |c|
-    c.has_many :student_academic_histories
     c.has_many :assignment_types
     c.has_many :assignments
     c.has_many :announcements

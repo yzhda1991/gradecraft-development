@@ -262,7 +262,6 @@ GradeCraft::Application.routes.draw do
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
-    resources :student_academic_histories, except: :index
     member do
       get :grade_index
       get :recalculate

@@ -277,9 +277,9 @@ describe AssignmentType do
   describe "#submissions_this_week_count" do
     it "returns the count of submissions for this assignment type this week" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type)
-      earlier_submission = create(:submission, assignment: assignment, assignment_type: assignment_type, updated_at: 8.days.ago)
-      submission = create(:submission, assignment: assignment, assignment_type: assignment_type)
-      submission_2 = create(:submission, assignment: assignment, assignment_type: assignment_type)
+      earlier_submission = create(:submission, assignment: assignment, updated_at: 8.days.ago)
+      submission = create(:submission, assignment: assignment)
+      submission_2 = create(:submission, assignment: assignment)
       expect(assignment_type.submissions_this_week_count).to eq(2)
     end
   end

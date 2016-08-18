@@ -4,8 +4,8 @@ require_relative "../toolkits/models/shared/files"
 describe GradeFile do
   subject { grade.grade_files.new image_file_attrs }
 
-  let(:course) { build(:course) }
-  let(:assignment) { build(:assignment, course: course) }
+  let(:course) { create(:course) }
+  let(:assignment) { create(:assignment, course: course) }
   let(:grade) { build(:grade, course: course, assignment: assignment) }
   let(:new_grade_file) { grade.grade_files.new image_file_attrs }
 

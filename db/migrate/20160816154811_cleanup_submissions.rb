@@ -1,7 +1,6 @@
 class CleanupSubmissions < ActiveRecord::Migration
   def change
     change_column :submissions, :assignment_id, :integer, null: false
-    change_column :submissions, :student_id, :integer, null: false
     change_column :submissions, :created_at, :datetime, null: false
     change_column :submissions, :updated_at, :datetime, null: false
     change_column :submissions, :course_id, :integer, null: false

@@ -22,7 +22,6 @@ describe Timeline do
 
     context "with events for the course" do
       let!(:event) { create :event, course: course, due_at: Date.today }
-      let!(:event_not_due) { create :event, course: course, due_at: nil }
 
       it "includes the events" do
         expect(subject.events).to eq [event]
