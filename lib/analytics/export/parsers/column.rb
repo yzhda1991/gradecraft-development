@@ -20,10 +20,12 @@ module Analytics
         def initialize(export)
           @export = export
           @records = export.export_records
-          @parsed_columns = default_columns
+          @parsed_columns = build_default_columns
         end
 
-        def default_columns
+        def build_default_columns
+          return nil unless export.column_names
+
           export.column_names.inject({}) do |memo, column_name|
             memo[column_name] = []
             memo

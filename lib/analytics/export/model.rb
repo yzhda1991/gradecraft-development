@@ -1,4 +1,5 @@
 require "active_support/inflector"
+require "formatter/filename"
 
 module Analytics
   module Export
@@ -66,11 +67,14 @@ module Analytics
       # generate a 'header' row for the CSV file by pulling the column names
       # from the schema that we defined with set_schema
       def column_names
-        column_mapping ? column_mapping.keys : []
+        column_mapping.keys if column_mapping
       end
 
       def default_filename
-        "#{self.class.name.underscore}.csv"
+        formatted_filename = Formatter::Filename.new(self.class.name.underscore)
+          .url_safe.filename
+
+        "#{formatted_filename}.csv"
       end
 
       # build a hash of context filters according to the class prefixes we've

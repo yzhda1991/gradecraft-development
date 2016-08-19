@@ -64,4 +64,42 @@ describe Analytics::Export::Model do
       expect(subject.parsed_columns).to eq({ some: ["columns"] })
     end
   end
+
+  describe "#parsed_rows" do
+    it "returns nil if there aren't any columns" do
+      allow(subject).to receive(:parsed_columns) { nil }
+      expect(subject.parsed_columns).to be_nil
+    end
+
+    it "transposes the columns into rows if columns exist" do
+      allow(subject).to receive(:parsed_columns).and_return({
+        column_a: %w[a b c],
+        column_b: [1, 2, 3]
+      })
+
+      expect(subject.parsed_rows).to eq \
+        [["a", 1], ["b", 2], ["c", 3]]
+    end
+  end
+
+  describe "#column_names" do
+    it "returns the keys from the column mapping if there is one" do
+      allow(subject).to receive(:column_mapping).and_return(
+        { some_column: [], another_column: [] }
+      )
+
+      expect(subject.column_names).to eq [:some_column, :another_column]
+    end
+
+    it "returns nil if no column_mapping is present" do
+      allow(subject).to receive(:column_mapping) { nil }
+      expect(subject.column_names).to be_nil
+    end
+  end
+
+  describe "#default_filename" do
+    it "builds a filename from the class name" do
+      expect(subject.default_filename).to eq "analytics_export_model.csv"
+    end
+  end
 end
