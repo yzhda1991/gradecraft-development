@@ -1,7 +1,12 @@
 .conditions
   %h4 Requirement
   .assignment-or-badge
-    = f.input :condition_type, :collection => ["Assignment", "Badge", "Course"], :label => "Type"
+    = f.input :condition_type, :collection => ["Assignment Type", "Assignment", "Badge", "Course"], :label => "Type"  
+  #assignment-types-list{:style => "display: none"}
+    = f.input :condition_id, :collection => current_course.assignment_types.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment} Type"
+    = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => "State Achieved"
+    = f.input :condition_value, :label => "Amount"
+    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => f.try(:condition_date) }, :label => "Done By"
   #assignments-list{:style => "display: none"}
     = f.input :condition_id, :collection => current_course.assignments.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
     = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read", "Passed"], :label => "State Achieved"
