@@ -8,6 +8,10 @@
       %a{:href => new_assignment_path }
         = glyph(:plus)
         New #{(term_for :assignment).titleize}
+    %li
+      %a{:href => assignments_importers_path }
+        = glyph(:upload)
+        Import Assignments
 
 .pageContent
   = render partial: "layouts/alerts"

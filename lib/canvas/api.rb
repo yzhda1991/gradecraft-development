@@ -3,7 +3,7 @@ require "httparty"
 module Canvas
   class API
     include HTTParty
-    base_uri "https://canvas.instructure.com/api/v1"
+    base_uri "#{ENV["CANVAS_BASE_URL"]}/api/v1"
     format :json
 
     attr_reader :access_token

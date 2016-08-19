@@ -1,7 +1,13 @@
 require "active_lms"
 
 class Grades::ImportersController < ApplicationController
+  include OAuthProvider
+
   before_filter :ensure_staff?
+  before_filter except: [:download, :index, :show, :upload] do |controller|
+    controller.unauthorized_path assignment_grades_importers_path(params[:assignment_id])
+  end
+  before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
   def assignments
     @assignment = Assignment.find params[:assignment_id]
@@ -31,6 +37,7 @@ class Grades::ImportersController < ApplicationController
     @courses = syllabus.courses
   end
 
+  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
@@ -45,9 +52,9 @@ class Grades::ImportersController < ApplicationController
   # GET /assignments/:assignment_id/grades/importers/:id
   def show
     @assignment = Assignment.find params[:assignment_id]
-    provider = params[:id]
+    provider = params[:provider_id]
 
-    render "#{provider}"
+    render "#{provider}" if %w(canvas csv).include? provider
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
@@ -77,6 +84,6 @@ class Grades::ImportersController < ApplicationController
   def syllabus
     @syllabus ||= ActiveLMS::Syllabus.new \
       @provider_name,
-      ENV["#{@provider_name.upcase}_ACCESS_TOKEN"]
+      authorization(@provider_name).access_token
   end
 end

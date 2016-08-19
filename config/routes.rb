@@ -283,6 +283,7 @@ GradeCraft::Application.routes.draw do
 
   #15. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
+  get "/auth/:provider/callback", to: "authorizations#create"
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
   get :login, to: "user_sessions#new", as: :login
