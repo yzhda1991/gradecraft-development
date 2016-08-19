@@ -17,6 +17,13 @@ FactoryGirl.define do
       letter { "F" }
       level { "Awful" }
     end
+    
+    factory :grade_scheme_element_highest do 
+      lowest_points 20001
+      highest_points 30000
+      letter { "A+" }
+      level { "Ahhhmazing" }
+    end
 
   end
 end
