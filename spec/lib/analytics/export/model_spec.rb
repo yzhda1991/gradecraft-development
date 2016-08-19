@@ -1,9 +1,10 @@
 require "analytics/export"
 require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
+require "./spec/support/test_classes/lib/analytics/export/test_context_filter"
 
 describe Analytics::Export::Model do
   subject { described_class.new context: context }
-  let(:context) { double(:context).as_null_object }
+  let(:context) { double(:context, class: "TestContext").as_null_object }
 
   describe "#column_mapping" do
     it "sets the column mapping for the class" do
@@ -100,6 +101,35 @@ describe Analytics::Export::Model do
   describe "#default_filename" do
     it "builds a filename from the class name" do
       expect(subject.default_filename).to eq "analytics_export_model.csv"
+    end
+  end
+
+  describe "#context_filters" do
+    it "builds an array of context filter instances" do
+      described_class.context_filters :test
+      TestContextFilter.accepts_context_types :test_context
+
+      expect(subject.context_filters[:test].class)
+        .to eq TestContextFilter
+    end
+  end
+
+  describe "#write_csv" do
+    it "writes the actual CSV file" do
+      tmpdir = Dir.mktmpdir
+      allow(subject).to receive_messages \
+        column_names: [:first, :second],
+        parsed_rows: [%w[a b], %w[c d]],
+        filename: "some_filename.csv"
+
+      csv = subject.write_csv tmpdir
+
+      filepath = File.join tmpdir, "some_filename.csv"
+      rows = CSV.read filepath
+
+      expect(rows.first).to eq %w[first second]
+      expect(rows[1]).to eq %w[a b]
+      expect(rows.last).to eq %w[c d]
     end
   end
 end

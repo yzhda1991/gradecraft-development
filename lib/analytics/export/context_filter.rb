@@ -6,7 +6,7 @@ module Analytics
     class ContextFilter
       attr_reader :context
 
-      def initialize(context:)
+      def initialize(context)
         @context = context
         validate_context_type
         self

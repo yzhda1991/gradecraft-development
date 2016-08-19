@@ -1,5 +1,6 @@
 require "active_support/inflector"
 require "formatter/filename"
+require "csv"
 
 module Analytics
   module Export
@@ -85,6 +86,7 @@ module Analytics
       #
       def context_filters
         filter_names = self.class.instance_variable_get :@context_filters
+        return nil unless filter_names
 
         @context_filters ||= filter_names.inject({}) do |memo, filter_name|
           # re-add the context_filter suffix when we're fetching the class
