@@ -1,103 +1,67 @@
+require "analytics/export"
 require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
 
 describe Analytics::Export::Model do
+  subject { described_class.new context: context }
+  let(:context) { double(:context).as_null_object }
 
-  # test modular behaviors in the context of a test class
-  describe AnalyticsExportModelTest do
-    subject { described_class.new loaded_data }
-    let(:loaded_data) { { some: "data" } }
+  describe "#column_mapping" do
+    it "sets the column mapping for the class" do
+      described_class.column_mapping({ some: :columns })
+      expect(described_class.instance_variable_get :@column_mapping)
+        .to eq({ some: :columns })
+    end
+  end
 
-    it "has been extended with Analytics::Export::ClassMethods" do
-      expect(described_class).to respond_to :set_schema
-      expect(described_class).to respond_to :rows_by
+  describe "#export_focus" do
+    it "sets the name of the context method to use for the export records" do
+      described_class.export_focus :some_focus
+      expect(described_class.instance_variable_get :@export_focus)
+        .to eq :some_focus
+    end
+  end
+
+  describe "#context_filters" do
+    it "sets a list of context filters to build for the export" do
+      described_class.context_filters :some_filter, :another_filter
+      expect(described_class.instance_variable_get :@context_filters)
+        .to eq [:some_filter, :another_filter]
+    end
+  end
+
+  describe "#initialize" do
+    it "sets the context" do
+      expect(subject.context).to eq context
     end
 
-    it "has an accessible data attribute" do
-      subject.loaded_data = "some data"
-      expect(subject.loaded_data).to eq "some data"
+    it "sets an optional filename" do
+      model = described_class.new context: context, filename: "something.csv"
+      expect(model.filename).to eq "something.csv"
     end
 
-    it "sets the loaded data to data on #initialize" do
-      expect(subject.loaded_data).to eq loaded_data
+    it "derives the export_focus from the class" do
+      described_class.export_focus :some_focus
+      expect(subject.export_focus).to eq :some_focus
     end
 
-    describe "#records" do
-      let(:loaded_data) { { fossils: ["travis"] } }
-
-      it "selects the data value using the key set in rows_by" do
-        expect(subject.records).to eq ["travis"]
-      end
-
-      it "caches the records" do
-        subject.records
-        expect(subject.loaded_data).not_to receive(:[]).with :fossils
-        subject.records
-      end
+    it "derives the column_mapping from the class" do
+      described_class.column_mapping({ the: "mapping" })
+      expect(subject.column_mapping).to eq({ the: "mapping" })
     end
 
-    describe "#parsed_schema_records" do
-      let(:record_parser_class) { Analytics::Export::RecordParser }
-      let(:schema_records_hash) { double(:schema_records).as_null_object }
-
-      before do
-        allow(record_parser_class).to receive(:new) { schema_records_hash }
-      end
-
-      context "a records_set is given" do
-        let(:result) { subject.parsed_schema_records ["the-records-set"] }
-
-        it "builds a hash of parsed schema records for records set" do
-          expect(record_parser_class).to receive(:new).with \
-            export: subject, records: ["the-records-set"]
-          result
-        end
-
-        it "caches the parsed schema records" do
-          result
-          expect(record_parser_class).not_to receive(:new)
-          result
-        end
-
-        it "sets the parsed schema records to @schema_records" do
-          result
-          expect(subject.instance_variable_get(:@parsed_schema_records))
-            .to eq schema_records_hash
-        end
-      end
-
-      context "no records_set is given" do
-        let(:result) { subject.parsed_schema_records }
-
-        it "builds a hash of parsed schema records using the export records" do
-          allow(subject).to receive(:records) { ["some-records"] }
-          expect(record_parser_class).to receive(:new).with \
-            export: subject, records: ["some-records"]
-          result
-        end
-      end
+    it "gets the export records from the context using the export_focus" do
+      described_class.export_focus :some_focus
+      allow(context).to receive(:some_focus) { ["the", "records"] }
+      expect(subject.export_records).to eq  ["the", "records"]
     end
+  end
 
-    describe "#generate_csv" do
-      let(:result) { subject.generate_csv "/path/bro", "file.txt", ["set"] }
-      let(:csv_double) { double(:csv_object).as_null_object }
+  describe "#parsed_columns" do
+    it "builds a column parser and uses it" do
+      allow_any_instance_of(Analytics::Export::Parsers::Column).to receive(:parse!)
+        .and_return({ some: ["columns"] })
 
-      before do
-        allow(Analytics::Export::CSV).to receive(:new) { csv_double }
-      end
-
-      it "builds a new export CSV object" do
-        expect(Analytics::Export::CSV).to receive(:new).with \
-          export: subject,
-          path: "/path/bro",
-          filename: "file.txt",
-          schema_record_set: ["set"]
-        result
-      end
-
-      it "generates the new CSV" do
-        expect(csv_double).to receive(:generate!)
-        result
-      end
+      expect(subject.parsed_columns).to eq({ some: ["columns"] })
     end
   end
 end

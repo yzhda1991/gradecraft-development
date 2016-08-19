@@ -17,16 +17,10 @@ module Analytics
       class Column
         attr_reader :export, :records, :parsed_columns
 
-        def initialize(export:, records:)
+        def initialize(export)
           @export = export
-          @records = records
+          @records = export.export_records
           @parsed_columns = default_columns
-        end
-
-        # get the column mapping that's defined on the export class
-        #
-        def column_mapping
-          export.class.column_mapping
         end
 
         def default_columns
@@ -40,7 +34,7 @@ module Analytics
         def parse!
           puts "=> Parsing export data by column..."
 
-          column_mapping.each do |column_name, parsing_strategy|
+          export.column_mapping.each do |column_name, parsing_strategy|
             puts "  => parsing column :#{column_name} as :#{parsing_strategy}"
 
             parsed_columns[column_name] = records.each_with_index.collect do |record, index|

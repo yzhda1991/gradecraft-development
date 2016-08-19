@@ -27,7 +27,7 @@ module Analytics
       end
 
       def self.context_filters(*filter_names)
-        @context_filter_names = filter_names
+        @context_filters = filter_names
       end
 
       # every Analytics::Export class will have both a context and a set of
@@ -42,19 +42,19 @@ module Analytics
       # by the export process for a more specific presentation beyond simply
       # rendering the collection of events in its raw form.
       #
-      attr_accessor :context, :export_records, :filename, :export_focus,
-        :column_mapping
+      attr_reader :context, :export_records, :filename, :export_focus,
+        :column_mapping, :context_filters
 
       def initialize(context:, filename: nil)
         @context = context
         @filename = filename
         @export_focus = self.class.instance_variable_get :@export_focus
         @column_mapping = self.class.instance_variable_get :@column_mapping
-        @export_records = context.send export_focus
+        @export_records = context.send(export_focus) if export_focus
       end
 
       def parsed_columns
-        @parsed_columns ||= Analytics::Export::ColumnParser.new(self).parse!
+        @parsed_columns ||= Analytics::Export::Parsers::Column.new(self).parse!
       end
 
       # reorganize the data by column into rows by transposing the values
@@ -66,7 +66,7 @@ module Analytics
       # generate a 'header' row for the CSV file by pulling the column names
       # from the schema that we defined with set_schema
       def column_names
-        self.class.column_mapping.keys
+        column_mapping ? column_mapping.keys : []
       end
 
       def default_filename
@@ -80,7 +80,7 @@ module Analytics
       # which is intended to feel like a params[] object in a rails controller
       #
       def context_filters
-        filter_names = self.class.instance_variable_get :@context_filter_names
+        filter_names = self.class.instance_variable_get :@context_filters
 
         @context_filters ||= filter_names.inject({}) do |memo, filter_name|
           # re-add the context_filter suffix when we're fetching the class
