@@ -6,7 +6,7 @@
 
     - @grade_scheme_elements.each do |element|
       - if current_student.cached_score_for_course(current_course) < element.lowest_points || (current_student.cached_score_for_course(current_course) >= element.lowest_points && ! element.is_unlocked_for_student?(current_student))
-        .progress.bar_magic.transparent.center
+        .progress.bar_magic.center
           .meter
             %i.fa.fa-lock
             %span= element.name

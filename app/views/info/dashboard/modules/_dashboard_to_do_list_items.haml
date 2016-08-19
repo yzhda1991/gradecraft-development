@@ -9,7 +9,7 @@
             .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
         - if presenter.starred?(assignment)
           %a.starred
-            %i.fa.fa-star.fa-fw.yellow
+            %i.fa.fa-flag.fa-fw.orange
           .display_on_hover.hover-style
             You have included this #{(term_for :assignment).downcase} in your grade prediction
         - if presenter.submitted?(assignment)

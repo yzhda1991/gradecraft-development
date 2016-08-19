@@ -1,5 +1,5 @@
 - if presenter.next_element.present?
-  .progress.bar_magic.transparent.center
+  .progress.bar_magic.center
     .meter
       %i.fa.fa-lock
       %span= presenter.next_element.name
@@ -7,8 +7,7 @@
 
 - if presenter.current_element.present?
   .progress.bar_magic.current.center
-    %span.your-rank Your rank:
-    %span.your-rank= presenter.current_element.name
+    %span.your-rank= link_to "Your rank: #{presenter.current_element.name}", grading_scheme_path
     .striped-bar-container
       .striped{ style: "width: #{ presenter.progress_percent }%;" }
     .left-points
@@ -18,7 +17,7 @@
       %span Points to next level:
       %span.bold= points presenter.points_to_next_level
 - else
-  .progress.bar_magic.transparent.center
+  .progress.bar_magic.center
     .meter
       %i.fa.fa-lock
       %span= presenter.first_element.name

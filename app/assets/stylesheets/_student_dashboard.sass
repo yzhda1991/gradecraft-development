@@ -111,6 +111,9 @@
     &:last-child
       border-bottom: none
 
+    &.starred
+      border-left: 2px solid $color-orange-1
+
     .button, .student-stats
       position: absolute
       top: 50%
@@ -210,9 +213,6 @@
 
       img
         width: 100%
-
-        &:hover
-          opacity: 1 !important
 
 /* Styling the bar chart in your status module */
 #userBarTotal
@@ -323,7 +323,7 @@ ul.assignments-due
 .weekly-stats-module
    font-size: 0.8rem
    text-align: center
-   max-height: 250px
+   max-height: 220px
    overflow-y: auto
 
    .module-section
