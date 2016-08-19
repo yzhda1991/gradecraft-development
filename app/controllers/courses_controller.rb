@@ -21,7 +21,6 @@ class CoursesController < ApplicationController
   end
 
   def course_creation_wizard
-
   end
 
   def show

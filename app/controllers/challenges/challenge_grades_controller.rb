@@ -20,7 +20,7 @@ class Challenges::ChallengeGradesController < ApplicationController
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 
-      redirect_to @challenge,
+      redirect_to challenge_path(@challenge),
         notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
     else
       render action: "new"
