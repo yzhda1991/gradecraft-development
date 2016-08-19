@@ -36,6 +36,41 @@
   .col-60
     width: 60%
 
+  .flex-column
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
+    display: flex
+    -webkit-box-orient: horizontal
+    -webkit-box-direction: normal
+    -webkit-flex-direction: row
+    -ms-flex-direction: row
+    flex-direction: row
+
+  .flex-row
+    margin-right: 1rem
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
+
+  .stacked-column
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
+    display: flex
+    flex-flow: column
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
+
+  .stacked-module
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1 auto
+
   .dashboard-module
     margin-bottom: 1.25rem
     width: 100%
@@ -223,8 +258,10 @@
 
   img
     max-width: 128px
-    float: left
-    padding-right: 1rem
+
+.event-image
+  float: left
+  margin-right: 1rem
 
 .event-name
   font-size: 1rem
@@ -264,6 +301,7 @@
 
 ul.assignments-due
   padding: 0
+  margin-top: 1.5rem
   list-style: none
 
   li
@@ -301,6 +339,11 @@ ul.assignments-due
    img
      vertical-align: middle
      margin-bottom: .25rem
+     max-width: 20px
+
+#instructor-dashboard
+  .weekly-stats-module
+    max-height: 180px
 
 @media (max-width: $media-small-max)
   #student-dashboard, #instructor-dashboard

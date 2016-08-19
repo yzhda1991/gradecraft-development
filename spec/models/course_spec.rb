@@ -678,26 +678,4 @@ describe Course do
       expect(subject.earned_grade_scheme_elements_by_student_count).to eq({:elements => [["#{gse2.name}", 1], ["#{gse.name}", 1]]})
     end
   end
-  
-  describe "#assignment_types_submitted_by_student_count" do 
-    it "returns the number of students who have submitted an assignment in this category each week" do
-      assignment_type = create(:assignment_type, course: subject)
-      assignment_type_2 = create(:assignment_type, course: subject)
-      assignment = create(:assignment, assignment_type: assignment_type, course: subject)
-      assignment_2 = create(:assignment, assignment_type: assignment_type_2, course: subject)
-      submission = create(:submission, assignment: assignment)
-      submission_2 = create(:submission, assignment: assignment_2)
-      expect(subject.assignment_types_submitted_by_student_count).to eq({:assignment_types => [["#{assignment_type.name}", 1], ["#{assignment_type_2.name}", 1]]})
-    end
-  end
-  
-  describe "#badges_earned_by_student_count" do 
-    it "returns the number of students who have earned a badge this week" do
-      badge = create(:badge, course: subject)
-      badge2 = create(:badge, course: subject)
-      earned_badge = create(:earned_badge, badge: badge)
-      earned_badge = create(:earned_badge, badge: badge2)
-      expect(subject.badges_earned_by_student_count).to eq({:badges => [["#{badge.name}", 1], ["#{badge2.name}", 1]]})
-    end
-  end
 end

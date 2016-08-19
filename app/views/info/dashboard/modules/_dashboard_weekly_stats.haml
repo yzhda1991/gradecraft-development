@@ -2,13 +2,13 @@
   %h3 Weekly Stats
 .card-body.weekly-stats-module
   - if presenter.has_weekly_stats?
-    .module-section
-      - if presenter.has_points_this_week?
+    - if presenter.has_points_this_week?
+      .module-section
         %p Total points earned this week:
         %p.week-points= number_with_delimiter(presenter.points_this_week)
 
-    .module-section
-      - if presenter.has_grades_this_week?
+    - if presenter.has_grades_this_week?
+      .module-section
         %p Grades received this week:
         %ul
           - presenter.grades_this_week.each do |grade|
@@ -16,14 +16,25 @@
               #{link_to grade.assignment.name, grade.assignment}:
               %span #{number_with_delimiter(grade.final_points)} points earned
 
-    .module-section
-      - if current_course.has_badges? && presenter.has_badges_this_week?
+    - if current_user_is_staff? && presenter.has_submissions_this_week?
+      .module-section
+        %p #{term_for :assignments} submitted this week:
+        %ul
+          - presenter.submissions_this_week.each do |assignment_type|
+            %li #{assignment_type.name}: #{ assignment_type.submissions_this_week_count }
+
+    - if current_course.has_badges? && presenter.has_badges_this_week?
+      .module-section
         %p #{term_for :badges} earned this week:
         %ul
           - presenter.badges_this_week.each do |badge|
             %li
               %img{:src => badge.icon, :width => 25 }
-              %span #{badge.name} #{(term_for :badge).downcase} earned
+              - if current_student.present?
+                %span #{badge.name} #{ (term_for :badge).downcase } earned
+              - elsif current_user_is_staff?
+                %span #{badge.name}: #{ badge.earned_badges_this_week_count }
+              
   - else
     .module-section.dashboard-message
       %p You have not earned anything in the last week!
