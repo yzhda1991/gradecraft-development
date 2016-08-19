@@ -112,11 +112,16 @@ class Grade < ActiveRecord::Base
   end
 
   def check_unlockables
-    if self.assignment.is_a_condition?
+    if self.assignment.is_a_condition? 
       self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
     end
+    if self.assignment_type.is_a_condition? 
+      self.assignment_type.unlock_keys.map(&:unlockable).each do |unlockable|
+        unlockable.check_unlock_status(student)
+      end
+    end  
   end
 
   def excluded_by

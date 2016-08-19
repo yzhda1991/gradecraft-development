@@ -1,5 +1,6 @@
 class AssignmentType < ActiveRecord::Base
   include Copyable
+  include UnlockableCondition
 
   acts_as_list scope: :course
 

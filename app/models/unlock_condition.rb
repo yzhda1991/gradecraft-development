@@ -32,6 +32,8 @@ class UnlockCondition < ActiveRecord::Base
   def requirements_description_sentence
     if condition_type == "Course"
       "#{ condition_state_do } #{ condition_value } points in this course"
+    elsif condition_type == "AssignmentType"
+      "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
     else
       "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
@@ -70,6 +72,10 @@ class UnlockCondition < ActiveRecord::Base
       "Earn"
     elsif condition_state == "Passed"
       "Pass"
+    elsif condition_state == "Min Points"
+      "Earn #{condition_value} points"
+    elsif condition_state == "Assignments Completed"
+      "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize}"
     end
   end
 
@@ -84,6 +90,10 @@ class UnlockCondition < ActiveRecord::Base
       "Earning"
     elsif condition_state == "Passed"
       "Passing"
+    elsif condition_state == "Min Points"
+      "Earning #{condition_value} points"
+    elsif condition_state == "Assignments Completed"
+      "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize}"
     end
   end
 
@@ -98,7 +108,28 @@ class UnlockCondition < ActiveRecord::Base
       "Earned"
     elsif condition_state == "Passed"
       "Passed"
+    elsif condition_state == "Min Points"
+      "Earned #{condition_value} points"
+    elsif condition_state == "Assignments Completed"
+      "Completed"
     end
+  end
+  
+  def check_assignment_type_condition(student)
+    method = "check_#{ condition_state.parameterize('_') }_condition"
+    self.send method, student
+  end
+  
+  def check_assignments_completed_condition
+    assignment_type = AssignmentType.find(condition_id)
+    assignment_completed_count = assignment_type.count_grades_for(student)
+    assignment_completed_count >= condition_value
+  end
+  
+  def check_min_points_condition
+    assignment_type = AssignmentType.find(condition_id)
+    assignment_type_score = assignment_type.score_for_student(student)
+    assignment_type_score >= condition_value
   end
 
   def check_badge_condition(student)
