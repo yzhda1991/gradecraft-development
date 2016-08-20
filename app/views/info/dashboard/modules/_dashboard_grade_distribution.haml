@@ -9,7 +9,7 @@
     - else
       #grade_distro.instructor-distro{"data-scores"=> current_course.scores.to_json}
       #gradeDistro
-    .italic= "Class Average: #{points current_course.average_course_score} points"
-    .italic= "Low Score: #{points current_course.minimum_course_score} points"
-    .italic= "High Score: #{points current_course.maximum_course_score} points"
+    .italic.small= "Class Average: #{points current_course.average_course_score} points"
+    .italic.small= "Low Score: #{points current_course.minimum_course_score} points"
+    .italic.small= "High Score: #{points current_course.maximum_course_score} points"
     .italic.small= link_to "How do I read this chart?", "http://www.youtube.com/watch?v=7UK2DK7rblw&feature=youtu.be", :target => "_blank"

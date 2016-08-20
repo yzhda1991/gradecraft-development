@@ -112,7 +112,7 @@
       border-bottom: none
 
     &.starred
-      background-color: transparentize($color-blue-4, .8)
+      border-left: 2px solid $color-orange-1
 
     .button, .student-stats
       position: absolute
@@ -214,9 +214,6 @@
       img
         width: 100%
 
-        &:hover
-          opacity: 1 !important
-
 /* Styling the bar chart in your status module */
 #userBarTotal
   clear: both
@@ -258,6 +255,16 @@
 
   img
     max-width: 128px
+
+.event-information
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -ms-flex-align: center
+  -webkit-align-items: center
+  -webkit-box-align: center
+  align-items: center
 
 .event-image
   float: left
@@ -305,7 +312,8 @@ ul.assignments-due
   list-style: none
 
   li
-    border-left: 3px solid $color-orange-1
+    background-color: transparentize($color-blue-3, .9)
+    border-left: 3px solid $color-blue-3
     padding: .25rem 1rem
     margin: .25rem 0
     font-weight: 300
@@ -315,7 +323,7 @@ ul.assignments-due
 .weekly-stats-module
    font-size: 0.8rem
    text-align: center
-   max-height: 250px
+   max-height: 220px
    overflow-y: auto
 
    .module-section

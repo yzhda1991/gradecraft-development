@@ -5,19 +5,12 @@
     %ul.badge-grid
       - cache multi_cache_key :student_dashboard_badges, current_student, current_course do
         - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
-          %li= sidebar_earned_badge badge, current_student
+          %li
+            %a{:href => badge_path(badge) }
+              %img{:src => badge.icon, :alt => badge.name}
 
         - current_student.student_visible_unearned_badges(current_course).each do |badge|
           - cache ["v1", badge] do
             %li
-              %a
+              %a{:href => badge_path(badge) }
                 %img{:src => badge.icon, :alt => badge.name, class: "unearned"}
-              .display_on_hover.hover-style.right
-                - if badge.name_visible_for_student?(current_student)
-                  = "Not yet earned: #{badge.name}"
-                - else
-                  .bold= "Locked #{(term_for :badge).titleize}"
-                  .italic= "You must unlock this #{term_for :badge} to learn more about it"
-
-      - if current_student.earned_badge_score_for_course(current_course) > 0
-        .italic.small= "You've earned #{points current_student.earned_badge_score_for_course(current_course)} points through #{(term_for :badges).titleize}."

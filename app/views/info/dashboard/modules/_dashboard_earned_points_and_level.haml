@@ -7,7 +7,7 @@
     - if presenter.earned_level.present?
       / Display current level if it is present
       %br
-      %span.bold= link_to "#{ presenter.earned_level_sentence }", grading_scheme_path
+      %span.bold= presenter.earned_level_sentence
     - cache multi_cache_key :student_dashboard_total_score, current_student, current_course do
       - scores = total_scores_for_chart current_student, current_course
       #data-predictor{"data-predictor" =>  scores.to_json}
