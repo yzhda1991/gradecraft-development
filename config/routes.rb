@@ -199,6 +199,7 @@ GradeCraft::Application.routes.draw do
   #11. Informational Pages
   controller :info do
     get :dashboard
+    get :predictor
     get :earned_badges
     get :export_earned_badges
     get :final_grades
@@ -255,8 +256,6 @@ GradeCraft::Application.routes.draw do
   end
 
   get :leaderboard, to: "students#leaderboard"
-  get :predictor, to: "students#predictor"
-  get :my_team, to: "students#teams"
 
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
@@ -264,9 +263,7 @@ GradeCraft::Application.routes.draw do
     resources :student_academic_histories, except: :index
     member do
       get :grade_index
-      get :predictor
       get :recalculate
-      get :teams
     end
     collection do
       get :autocomplete_student_name

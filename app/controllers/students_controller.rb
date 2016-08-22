@@ -1,7 +1,7 @@
 class StudentsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?, except: [:predictor, :teams]
+  before_filter :ensure_staff?
   before_filter :save_referer, only: [:recalculate]
 
   # Lists all students in the course,
@@ -48,21 +48,6 @@ class StudentsController < ApplicationController
       { name: [u.first_name, u.last_name].join(" "), id: u.id }
     end
     render json: MultiJson.dump(students)
-  end
-
-  def teams
-    student = params[:id].present? ? User.find(params[:id]) : current_student
-    # make current_student a scope so the student profile tabs partial is displayed
-    params[:student_id] = params[:id]
-    @title = "#{term_for :teams}"
-    @team = student.team_for_course(current_course)
-    @teams = current_course.teams.order_by_rank.includes(:earned_badges)
-  end
-
-  # Display the grade predictor
-  def predictor
-    # id is used for api routes
-    params[:student_id] = params[:id] if current_user_is_staff?
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates
