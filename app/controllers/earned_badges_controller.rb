@@ -4,6 +4,7 @@ class EarnedBadgesController < ApplicationController
   # Earned badges are to badges what grades are to assignments - the record of
   # how what and how a student performed
 
+  skip_before_filter :require_login, only: [:confirm_earned]
   before_filter :ensure_staff?
   before_action :find_badge
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
@@ -15,6 +16,12 @@ class EarnedBadgesController < ApplicationController
   def show
     @student = @earned_badge.student
     @title = "#{@student.name}'s #{@badge.name} #{term_for :badge}"
+  end
+
+  def confirm_earned
+    respond_to do |format|
+      format.all { render nothing: true, status: 200 }
+    end
   end
 
   def new

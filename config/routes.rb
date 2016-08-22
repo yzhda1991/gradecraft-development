@@ -189,6 +189,11 @@ GradeCraft::Application.routes.draw do
     get :student_onboarding_setup, on: :member
     post :student_onboarding_setup, action: :update, on: :member
     get :badges, on: :member
+    resources :badges do 
+      resources :earned_badges do 
+        get :confirm_earned, on: :member
+      end
+    end
   end
   resources :course_memberships, only: [:create, :delete, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
