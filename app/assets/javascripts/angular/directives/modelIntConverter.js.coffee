@@ -14,6 +14,7 @@
 
       ngModelController.$formatters.push((data)->
         #convert data to string for view
+        return "" if isNaN(data)
         return data.toString()
       )
   }

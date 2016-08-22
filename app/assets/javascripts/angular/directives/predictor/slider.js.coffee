@@ -127,23 +127,36 @@
         else
           return points
 
-      scope.snapAndSave = (points)->
+      scope.snap = (points)->
         points = scope.pointsSnappedToRange(points)
         points = scope.pointsSnappedToScoreLevel(points)
         points = scope.pointsSnappedToThreshold(points)
         scope.updateArticle(points)
         scope.updateSlider(points)
-        scope.save()
 
+
+      scope.snapAndSave = (points)->
+        points = if isNaN(points) then 0 else points
+        scope.snap(points)
+        scope.save()
 
       #---------------- DIRECT INPUT FIELD ------------------------------------#
 
+      # snap and persist input value on blur
       scope.registerInput = ()->
         scope.inputMode("TEXT_INPUT")
 
         # Wait for the current $apply in progress to complete
         setTimeout ( ->
           scope.snapAndSave(scope.article.prediction.predicted_points)
+        ), 125
+
+      # register and snap updates while typing in the input field
+      scope.registerInputChanging = ()->
+        scope.inputMode("TEXT_INPUT")
+
+        setTimeout ( ->
+          scope.snap(scope.article.prediction.predicted_points)
         ), 125
 
 
