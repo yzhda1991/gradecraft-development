@@ -31,18 +31,6 @@ class StudentsController < ApplicationController
     render :leaderboard, Students::LeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
-  # Students' primary page: displays all assignments and
-  # team challenges in course
-  def syllabus
-    self.current_student = current_course.students.where(id: params[:id]).first
-    render :syllabus, Students::SyllabusPresenter.build({
-      student: current_student,
-      assignment_types: current_course.assignment_types.ordered.includes(:assignments),
-      course: current_course,
-      view_context: view_context
-    })
-  end
-
   # Displaying student profile to instructors
   def show
     @events = Timeline.new(current_course).events_by_due_date

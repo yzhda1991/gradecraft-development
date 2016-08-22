@@ -1,4 +1,4 @@
 -if current_user_is_staff?
   = render partial: "assignments/instructor_index"
 - else
-  = render partial: "students/syllabus/assignments", locals: { presenter: presenter }
+  = render partial: "assignments/student_index", locals: { presenter: presenter }

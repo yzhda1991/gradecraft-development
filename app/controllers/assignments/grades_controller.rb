@@ -148,10 +148,10 @@ class Assignments::GradesController < ApplicationController
         grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
         grade_updater_job.enqueue
 
-        redirect_to syllabus_path,
+        redirect_to assignments_path,
           notice: "Nice job! Thanks for logging your grade!"
       else
-        redirect_to syllabus_path,
+        redirect_to assignments_path,
           notice: "We're sorry, there was an error saving your grade."
       end
 

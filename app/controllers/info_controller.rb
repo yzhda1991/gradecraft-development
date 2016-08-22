@@ -130,7 +130,7 @@ class InfoController < ApplicationController
     @assignment_types = current_course.assignment_types.ordered
     @teams = current_course.teams
   end
-  
+
   def submissions
     course = current_user.courses.find_by(id: params[:id])
     respond_to do |format|

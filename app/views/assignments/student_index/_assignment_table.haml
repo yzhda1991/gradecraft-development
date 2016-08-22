@@ -16,7 +16,7 @@
           = link_to assignment.name, assignment_path(assignment)
         - else
           %i= "The name for this #{term_for :assignment} has been hidden until you unlock it"
-      %td= render partial: "students/syllabus/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
+      %td= render partial: "assignments/student_index/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
       %td
         - if presenter.points_visible?(assignment)
           - if assignment.pass_fail?
@@ -25,7 +25,7 @@
             // Checking to see if this assignment type is student weightable
             = render partial: "grades/components/score", locals: { grade: presenter.grade_for(assignment), assignment_type: assignment_type, assignment: assignment }
         %td= render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(assignment) } if current_user_is_student?
-      %td= render partial: "students/syllabus/components/due_at", locals: { assignment: assignment }
+      %td= render partial: "assignments/student_index/components/due_at", locals: { assignment: assignment }
       %td
         %span
           - if presenter.open?(assignment)
@@ -34,19 +34,19 @@
         .right
           %ul.button-bar
             / Grade Management /
-            = render partial: "students/syllabus/components/grade_buttons", locals: { presenter: presenter, assignment: assignment }
+            = render partial: "assignments/student_index/components/grade_buttons", locals: { presenter: presenter, assignment: assignment }
 
             / Exclude Grade Feature /
-            = render partial: "students/syllabus/components/exclude_buttons", locals: { presenter: presenter, assignment: assignment }
+            = render partial: "assignments/student_index/components/exclude_buttons", locals: { presenter: presenter, assignment: assignment }
 
             / Groups /
             - if assignment.has_groups?
-              = render partial: "students/syllabus/components/group_buttons", locals: { presenter: presenter, assignment: assignment }
+              = render partial: "assignments/student_index/components/group_buttons", locals: { presenter: presenter, assignment: assignment }
 
             / Submissions /
             - if presenter.submittable?(assignment)
-              = render partial: "students/syllabus/components/submission_buttons", locals: { presenter: presenter, assignment: assignment }
+              = render partial: "assignments/student_index/components/submission_buttons", locals: { presenter: presenter, assignment: assignment }
 
             / Manual Unlock /
             - if current_user_is_staff?
-              = render partial: "students/syllabus/components/manual_unlock", locals: { presenter: presenter, assignment: assignment }
+              = render partial: "assignments/student_index/components/manual_unlock", locals: { presenter: presenter, assignment: assignment }

@@ -10,6 +10,14 @@ class AssignmentsController < ApplicationController
   def index
     @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
+    if current_user_is_student?
+      render :index, Students::SyllabusPresenter.build({
+        student: current_student,
+        assignment_types: current_course.assignment_types.includes(:assignments),
+        course: current_course,
+        view_context: view_context
+      })
+    end
   end
 
   # Gives the instructor the chance to quickly check all assignment settings

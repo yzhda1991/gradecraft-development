@@ -19,8 +19,8 @@
   - else
     %li{class: ("active" if current_page?(dashboard_path)) }
       = link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
-    %li{class: ("active" if current_page?(syllabus_path)) }
-      = link_to_unless_current glyph('file-text') + "#{term_for :assignments}", syllabus_path
+    %li{class: ("active" if current_page?(assignments_path)) }
+      = link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
     - if current_course.grade_scheme_elements.present?
       %li{class: ("active" if current_page?(grading_scheme_path)) }
         = link_to_unless_current glyph("level-up") + "Grading Scheme", grading_scheme_path
