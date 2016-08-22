@@ -1,0 +1,7 @@
+%h3.pagetitle= "#{term_for :assignments}"
+
+.pageContent
+  = render "layouts/alerts"
+
+  = render partial: "students/syllabus/assignments", locals: { presenter: presenter }
+  = render partial: "students/syllabus/challenges"
