@@ -119,7 +119,7 @@ if($("#dashboard-timeline").length) {
 function setInitialEventSlide(eventJson){
   var events = eventJson.timeline.date;
   var todaysDate = new Date();
-  var startIndex = 0;
+  var startIndex = null;
 
   for (var i = 0; i < events.length; i++) {
     var eventEndDate = new Date(events[i].endDate);
@@ -127,6 +127,11 @@ function setInitialEventSlide(eventJson){
       startIndex = i;
       break;
     }
+  }
+
+  if (startIndex === null) {
+    $('.slide-container').append('<div class="event-slide last-slide"><p>This class has no upcoming events!</p></div>');
+    startIndex = events.length;
   }
 
   $('#events-loading-spinner').hide();
@@ -139,6 +144,7 @@ function initSlickSlider(startIndex) {
     prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
     nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
     initialSlide: startIndex,
-    adaptiveHeight: true
+    adaptiveHeight: true, 
+    infinite: false
   });
 }

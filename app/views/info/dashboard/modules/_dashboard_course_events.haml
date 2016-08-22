@@ -18,8 +18,4 @@
                 = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
-              - if assignment.visible_for_student?(current_student)
-                %li #{link_to assignment.name, assignment} due!
-    .event-slide.last-slide
-      .slide-body
-        .dashboard-message This class is over!
+              %li #{link_to assignment.name, assignment} due!
