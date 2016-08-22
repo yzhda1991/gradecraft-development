@@ -2,8 +2,6 @@
 
 %h3.pagetitle= @title
 
-= render "buttons"
-
 .pageContent
   = render partial: "layouts/alerts", locals: { model: @user, term: "profile" }
 
