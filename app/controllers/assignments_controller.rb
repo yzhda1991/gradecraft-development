@@ -11,7 +11,7 @@ class AssignmentsController < ApplicationController
     @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
     if current_user_is_student?
-      render :index, Students::SyllabusPresenter.build({
+      render :index, Assignments::StudentPresenter.build({
         student: current_student,
         assignment_types: current_course.assignment_types.includes(:assignments),
         course: current_course,
