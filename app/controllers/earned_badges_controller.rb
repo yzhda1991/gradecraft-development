@@ -20,7 +20,7 @@ class EarnedBadgesController < ApplicationController
 
   def confirm_earned
     respond_to do |format|
-      format.all { render :nothing => true, :status => 200 }
+      format.all { render nothing: true, status: 200 }
     end
   end
 
