@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "grade_scheme_elements/index" do
+describe "grade_scheme_elements/_instructor_index" do
 
   before(:all) do
     @course = create(:course)

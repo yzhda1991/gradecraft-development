@@ -7,8 +7,6 @@ class TeamsController < ApplicationController
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
     @title = "#{term_for :teams}"
     if current_user_is_student?
-      # make current_student a scope so the student profile tabs partial is displayed
-      params[:student_id] = params[:id]
       @team = current_student.team_for_course(current_course)
     end
   end

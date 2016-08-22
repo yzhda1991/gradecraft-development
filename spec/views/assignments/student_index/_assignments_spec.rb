@@ -1,11 +1,11 @@
 # encoding: utf-8
 require "rails_spec_helper"
 
-describe "students/syllabus/_assignments" do
+describe "assignments/student_index/_assignments" do
 
   let(:user) { double(:user, is_student?: true) }
   let(:view_context) { double(:view_context, current_user: user) }
-  let(:presenter) { Students::SyllabusPresenter.new({ student: @student,
+  let(:presenter) { Assignments::StudentPresenter.new({ student: @student,
     course: @course, assignment_types: @assignment_types,
     view_context: view_context }) }
 

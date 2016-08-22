@@ -77,32 +77,10 @@ describe StudentsController do
       end
     end
 
-    describe "GET syllabus" do
-      it "shows the class syllabus" do
-        get :syllabus, id: 10
-        expect(response).to render_template(:syllabus)
-      end
-    end
-
     describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, id: 10
         (expect(response.status).to eq(200))
-      end
-    end
-
-    describe "GET grading_scheme" do
-      it "shows the course progress" do
-        get :grading_scheme, id: 10
-        expect(assigns(:title)).to eq("Your Course Progress")
-        expect(response).to render_template(:grading_scheme)
-      end
-    end
-
-    describe "GET predictor" do
-      it "shows the grade predictor page" do
-        get :predictor, id: 10
-        expect(response).to render_template(:predictor)
       end
     end
 
@@ -121,46 +99,10 @@ describe StudentsController do
         expect(response).to redirect_to(student_path(@student))
       end
     end
-
-    describe "GET teams" do
-      it "shows the team page shown to students" do
-        get :teams, student_id: @student.id
-        expect(response).to render_template(:teams)
-      end
-    end
   end
 
   context "as a student" do
     before { login_user(@student) }
-
-    describe "GET syllabus" do
-      it "shows the class syllabus" do
-        get :syllabus
-        expect(response).to render_template(:syllabus)
-      end
-    end
-
-    describe "GET grading_scheme" do
-      it "shows the course progress" do
-        get :grading_scheme, id: 10
-        expect(assigns(:title)).to eq("Your Course Progress")
-        expect(response).to render_template(:grading_scheme)
-      end
-    end
-
-    describe "GET predictor" do
-      it "shows the grade predictor page" do
-        get :predictor, id: 10
-        expect(response).to render_template(:predictor)
-      end
-    end
-
-    describe "GET teams" do
-      it "shows the team page shown to students" do
-        get :teams
-        expect(response).to render_template(:teams)
-      end
-    end
 
     describe "protected routes" do
       [
@@ -176,18 +118,9 @@ describe StudentsController do
 
     describe "protected routes requiring id in params" do
       [
+        :show,
         :grade_index,
         :recalculate
-      ].each do |route|
-        it "#{route} redirects to root" do
-          expect(get route, {id: "10"}).to redirect_to(:root)
-        end
-      end
-    end
-
-    describe "protected routes requiring id in params" do
-      [
-        :show
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "10"}).to redirect_to(:root)

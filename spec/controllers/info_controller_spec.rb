@@ -29,6 +29,13 @@ describe InfoController do
       end
     end
 
+    describe "GET predictor" do
+      it "shows the grade predictor page" do
+        get :predictor, id: 10
+        expect(response).to render_template(:predictor)
+      end
+    end
+
     describe "GET timeline_events" do
       it "retrieves the timeline events" do
         get :timeline_events
@@ -203,7 +210,7 @@ describe InfoController do
         expect(assigns(:students)).to eq([@student])
       end
     end
-    
+
     describe "GET submissions export" do
       it "retrieves the submissions export download" do
         get :submissions, id: @course.id, format: :csv
@@ -224,6 +231,13 @@ describe InfoController do
       it "retrieves the dashboard if turned on" do
         get :dashboard
         expect(response).to render_template(:dashboard)
+      end
+    end
+
+    describe "GET predictor" do
+      it "shows the grade predictor page" do
+        get :predictor
+        expect(response).to render_template(:predictor)
       end
     end
 

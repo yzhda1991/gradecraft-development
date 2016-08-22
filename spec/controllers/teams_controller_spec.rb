@@ -86,11 +86,21 @@ describe TeamsController do
       @student = create(:user)
       @student.courses << @course
     end
+
     before(:each) { login_user(@student) }
+
+    describe "GET index" do
+      it "assigns the student's team and renders the index" do
+        @team = create(:team, course: @course)
+        @student.teams << @team
+        get :index
+        expect(assigns(:team)).to eq(@team)
+        expect(response).to render_template(:index)
+      end
+    end
 
     describe "protected routes" do
       [
-        :index,
         :new,
         :create
       ].each do |route|
