@@ -22,8 +22,8 @@
     %li{class: ("active" if current_page?(assignments_path)) }
       = link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
     - if current_course.grade_scheme_elements.present?
-      %li{class: ("active" if current_page?(grading_scheme_path)) }
-        = link_to_unless_current glyph("level-up") + "Grading Scheme", grading_scheme_path
+      %li{class: ("active" if current_page?(grade_scheme_elements_path)) }
+        = link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
     %li{class: ("active" if current_page?(predictor_path)) }
       = link_to_unless_current glyph(:tasks) + "Grade Predictor", predictor_path
     - if current_course.has_badges?

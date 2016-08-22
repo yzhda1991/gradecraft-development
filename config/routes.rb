@@ -256,7 +256,6 @@ GradeCraft::Application.routes.draw do
 
   get :leaderboard, to: "students#leaderboard"
   get :predictor, to: "students#predictor"
-  get :grading_scheme, to: "students#grading_scheme"
   get :my_team, to: "students#teams"
 
   resources :students, only: [:index, :show] do
@@ -266,7 +265,6 @@ GradeCraft::Application.routes.draw do
     member do
       get :grade_index
       get :predictor
-      get :grading_scheme
       get :recalculate
       get :teams
     end

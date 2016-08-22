@@ -1,8 +1,7 @@
 class StudentsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?,
-    except: [:predictor, :grading_scheme, :badges, :teams, :syllabus ]
+  before_filter :ensure_staff?, except: [:predictor, :teams]
   before_filter :save_referer, only: [:recalculate]
 
   # Lists all students in the course,
@@ -49,13 +48,6 @@ class StudentsController < ApplicationController
       { name: [u.first_name, u.last_name].join(" "), id: u.id }
     end
     render json: MultiJson.dump(students)
-  end
-
-  # Displaying the course grading scheme and professor's grading philosophy
-  def grading_scheme
-    self.current_student = current_course.students.where(id: params[:id]).first
-    @grade_scheme_elements = current_course.grade_scheme_elements.order_by_highest_points
-    @title = "Your Course Progress"
   end
 
   def teams

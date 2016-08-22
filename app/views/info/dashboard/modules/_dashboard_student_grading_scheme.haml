@@ -18,7 +18,7 @@ You have earned
 
 - if presenter.current_element.present?
   .progress.bar_magic.current.center
-    %span.your-rank= link_to "Your rank: #{presenter.current_element.name}", grading_scheme_path
+    %span.your-rank= link_to "Your rank: #{presenter.current_element.name}", grade_scheme_elements_path
     .striped-bar-container
       .striped{ style: "width: #{ presenter.progress_percent }%;" }
     .left-points
