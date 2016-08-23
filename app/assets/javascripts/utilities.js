@@ -101,10 +101,10 @@ $(document).find("[data-behavior~=multi-select]").select2({
 });
 
 // Initializing highcharts table data, currently used to display team charts
-$('table.highchart').highchartTable();
+$('table.highchart').highchartTable(
+);
 
 //Hide and show course-info-card in header
 $(".course-info-btn").click(function(){
     $(".course-info-card").toggle();
 });
-

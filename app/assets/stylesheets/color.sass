@@ -1,48 +1,40 @@
 $txt-color-inverse: #FFF
 
-$color-blue-1: #00162F
-$color-blue-2: #002D62
+$color-blue-1: #00274F
+$color-blue-2: #215089
 $color-blue-3: #2E70BE
-$color-blue-4: #8BDEFF
-$color-blue-5: #E7F8FF
-$blues: ( "1": #00162F, 2: #002D62, 3: #2E70BE, 4: #8BDEFF, 5: #E7F8FF )
-
-$color-alt-blue-1: #1E267F
-$color-alt-blue-2: #1460AE
-$color-alt-blue-3: #6FA9DD
-$color-alt-blue-4: #55C3F5
-$alt-blues: (1: #1E267F, 2: #1460AE, 3: #6FA9DD, 4: #55C3F5)
+$color-blue-4: #B9D6F2
+$color-blue-5: #8ED0FF
+$blues: ( "1": #00274F, 2: #215089, 3: #2E70BE, 4: #B9D6F2, 5: #8ED0FF )
 
 $color-purple-1: #490454
 $color-purple-2: #8F27A1
 $purples: (1: #490454, 2: #8F27A1)
 
-$color-green-1: #219800
-$color-green-2: #7CC02F
-$greens: (1: #219800, 2: #7CC02F)
+$color-green-1: #9FE88D
+$color-green-2: #6DD677
+$color-green-3: #25B256
+$greens: (1: #9FE88D, 2: #6DD677, 3: #25B256 )
 
-$color-alt-green-1: #1C7200
-$color-alt-green-2: #68A127
-$alt-greens: (1: #1C7200, 2: #219800)
+$color-red-1: #D1495B
+$reds: (1: #D1495B)
 
-$color-red-1: #CC0000
-$reds: (1: #CC0000)
-
-$color-orange-1: #F7941E
-$oranges: (1: #F7941E)
+$color-orange-1: #FEB130
+$oranges: (1: #FEB130)
 
 $color-yellow-1: #FFCF06
 $yellows: (1: #FFCF06)
 
 $color-grey-1: #000000
-$color-grey-2: #333333
-$color-grey-3: #444444
-$color-grey-4: #666666
-$color-grey-5: #CCCCCC
-$color-grey-6: #EEEEEE
-$color-grey-7: #FFFFFF
-$color-grey-8: #999999
-$greys: (1: #000000, 2: #333333, 3: #444444, 4: #666666, 5: #CCCCCC, 6: #EEEEEE, 7: #FFFFFF, 8: #999999)
+$color-grey-2: #2A2B2B
+$color-grey-3: #3E3F40
+$color-grey-4: #7C7E7F
+$color-grey-5: #9D9FA1
+//
+$color-grey-6: #DEE3E5
+$color-grey-7: #F5F7F7
+$color-grey-8: #FFFFFF
+$greys: (1: #000000, 2: #2A2B2B, 3: #3E3F40, 4: #7C7E7F, 5: #9D9FA1, 6: #DEE3E5, 7: #F5F7F7, 8: #FFFFFF)
 
 // COLOR AID CLASSES:
 
@@ -54,16 +46,8 @@ $greys: (1: #000000, 2: #333333, 3: #444444, 4: #666666, 5: #CCCCCC, 6: #EEEEEE,
   .color-purple-#{$number}
     background-color: $hex-code
 
-@each $number, $hex-code in $alt-blues
-  .color-alt-blue-#{$number}
-    background-color: $hex-code
-
 @each $number, $hex-code in $greens
   .color-green-#{$number}
-    background-color: $hex-code
-
-@each $number, $hex-code in $alt-greens
-  .color-alt-green-#{$number}
     background-color: $hex-code
 
 @each $number, $hex-code in $reds
@@ -85,7 +69,7 @@ $greys: (1: #000000, 2: #333333, 3: #444444, 4: #666666, 5: #CCCCCC, 6: #EEEEEE,
 // ALIASES:
 
 $color-black: $color-grey-1 // alias
-$color-white: $color-grey-7 // alias
+$color-white: $color-grey-8 // alias
 
 // LAYOUT ALAISES
 $txt-color-inverse: $color-white

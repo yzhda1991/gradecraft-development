@@ -6,21 +6,21 @@ $(document).ready(function() {
       type: 'bar',
       backgroundColor: null
     },
+    
     colors: [
-     '#48BDEB',
-     '#8BDEFF',
-     '#E7F8FF',
-     '#1C7200',
-     '#68A127',
-     '#7CC02F',
-     '#EFFFED',
-     '#F1592A',
-     '#F7941E',
-     '#FCB040',
-     '#FFCF06',
-     '#FFFD73',
-     '#1E267F',
-     '#1460AE'
+     '#00274F',
+     '#215089',
+     '#2E70BE',
+     '#B9D6F2',
+     '#8ED0FF',
+     '#490454',
+     '#8F27A1',
+     '#9FE88D',
+     '#6DD677',
+     '#25B256',
+     '#D1495B',
+     '#EDAE49',
+     '#FFCF06'
   ],
 
     credits: {

@@ -11,9 +11,8 @@
       if ($gradeDistro.hasClass('student-distro')) {
         sparkOpts.target = data.user_score[0];
       }
-      sparkOpts.tooltipOffsetY = -130;
+      sparkOpts.disableTooltips = true;
       sparkOpts.height = '35';
-      sparkOpts.tooltipOffsetY = -80;
       sparkOpts.targetColor = "#FF0000";
       sparkOpts.boxFillColor = '#eee';
       sparkOpts.lineColor = '#444';

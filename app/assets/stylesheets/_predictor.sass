@@ -21,7 +21,7 @@ $card-width-1 : 48%
 $card-margin-1 : 3px
 
 .predictor-inner.inner-wrap
-  background-color: rgba(255,255,255,0.8)
+  background-color: rgba(255,255,255,0.9)
 
 #predictor-loading-message
     position: fixed
@@ -31,11 +31,11 @@ $card-margin-1 : 3px
     height: 100px
     width: calc(100% - 15rem)
     background-color: white
-    border-right: 1px solid $color-grey-6
+    border-right: 1px solid $color-grey-7
 
 #predictor-main-content
   padding-bottom: 1rem
-  border-right: 1px solid $color-grey-5
+  border-right: 1px solid $color-grey-6
 
 // SVG
 
@@ -71,14 +71,14 @@ $card-margin-1 : 3px
     text
       font-size: $predictor-font-size-4
   #svg-graph-points-earned
-    fill: $color-green-1
+    fill: $color-green-3
   #svg-graph-points-predicted
     fill: $color-blue-3
   #svg-earned-key
     -webkit-transform: translate(10px,90px) /* Safari */
     transform: translate(10px,90px)
     .key
-      fill: $color-green-1
+      fill: $color-green-3
       width: 20
       height: 20
   #svg-predicted-key
@@ -145,6 +145,7 @@ $card-margin-1 : 3px
 
 .collapse-toggler, .collapse-all-toggler
   position: relative
+  cursor: pointer
 
 .collapse-arrow
   width: 0
@@ -253,11 +254,11 @@ $card-margin-1 : 3px
   .coin:hover .coin-remove-icon
     visibility: visible
   .coin-slot
-    background-color: $color-blue-2
+    background-color: $color-blue-3
     border: 2px solid $color-orange-1
     @include transition(all, .5s, ease-out)
   .coin-add-icon
-    color: $color-blue-2
+    color: $color-blue-3
     margin: 1px 0 0 -1.5px
     visibility: hidden
   .coin-slot:hover
@@ -286,7 +287,7 @@ $card-margin-1 : 3px
 .predictor-article-card
   display: block
   margin-bottom: $predictor-font-size-3
-  background-color: lighten($color-grey-6, 5%)
+  background-color: lighten($color-grey-7, 2%)
   float: left
   height: 140px
   //default width for largest
@@ -304,6 +305,7 @@ $card-margin-1 : 3px
   font-size: $predictor-font-size-5
   position: relative
   height: 1.1rem
+  cursor: pointer
   overflow: hidden
   .info-icon
     position: absolute
@@ -313,7 +315,7 @@ $card-margin-1 : 3px
     cursor: pointer
 
 .predictor-article-title-stripe
-  background-color: $color-blue-4
+  background-color: $color-blue-5
   padding: .2rem
 
 .badge-predicted
@@ -330,17 +332,19 @@ $card-margin-1 : 3px
   height: 50px
 
 .predictor-article-card.status-completed
-  background-color: lighten($color-green-2, 30%)
+  background-color: lighten($color-green-1, 10%)
   .predictor-article-title
-    background-color: $color-green-1
+    background-color: $color-green-3
+    color: $color-white
   .predictor-article-title-stripe
-    background-color: lighten($color-green-2, 10%)
+    background-color: $color-green-2
   &.focus-article
-    outline: 3px solid $color-green-1
+    outline: 3px solid $color-green-3
 
 .predictor-article-card.status-completed.status-no-points
-  background-color: $color-grey-6
+  background-color: $color-grey-5
   .predictor-article-title
+    color: $color-white
     background-color: $color-grey-4
   .predictor-article-title-stripe
     background-color: $color-grey-5
@@ -350,7 +354,6 @@ $card-margin-1 : 3px
 .article-completed, .pass-fail-prediction
   text-align: center
   font-size: $predictor-font-size-3
-  color: $color-blue-2
 
 .article-completed.excluded
   .grade
@@ -363,7 +366,6 @@ $card-margin-1 : 3px
 .article-predicted .grade
   text-align: center
   font-size: $predictor-font-size-3
-  color: $color-blue-2
   .value
     font-size: $predictor-font-size-3
     padding: 15px 10px
@@ -403,7 +405,7 @@ $card-margin-1 : 3px
       position: absolute
       top: -4px
       margin-left: -12px
-      background: $color-blue-3
+      background: $color-blue-1
       border-radius: 1rem
 
   input.predicted-points
@@ -446,7 +448,7 @@ $card-margin-1 : 3px
   position: absolute
   top: -3px
   left: -1px
-  background: $color-blue-3
+  background: $color-blue-1
   border-radius: 1rem
 
 .predictor-binary-switch .switch-socket.on
@@ -546,6 +548,7 @@ $card-margin-1 : 3px
       display: none
   .predictor-section
     height: auto
+    cursor: pointer
 
 @mixin mobile-graph-mixin
   #predictor-graph-svg

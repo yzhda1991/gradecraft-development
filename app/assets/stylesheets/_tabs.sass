@@ -5,7 +5,7 @@
   padding: 1rem
 
   a
-    color: $color-blue-3
+    color: $color-blue-4
 
 .tabs-content
   border: none
@@ -19,7 +19,7 @@
 
 form .tabs-content .content
   min-height: 400px
-  border: 1px solid $color-grey-7
+  border: 1px solid $color-white
   padding: 1rem
 
 .ui-tabs
@@ -30,7 +30,7 @@ form .tabs-content .content
   font-family: 'Open Sans', sans-serif
 
 .ui-widget-content
-  border: 1px solid $color-grey-6
+  border: 1px solid $color-grey-7
   border-radius: $global-radius
 
   .ui-tabs-panel
@@ -53,23 +53,26 @@ form .tabs-content .content
   border-bottom-right-radius: 0 !important
   border-bottom-left-radius: 0 !important
   background: $color-white !important
-  border-bottom: 5px solid darken($color-blue-3, 0%)
+  border-bottom: 5px solid $color-blue-1
   clear: both
 
   li.ui-state-default
-    background: $color-blue-2 !important
+    background: $color-blue-4
     border: 0
     font-weight: 300
     a
-      color: $color-white !important
+      color: $color-black
 
-    &:hover
-      background: $color-blue-3 !important
+      &:hover
+        border-top-right-radius: $global-radius !important
+        border-top-left-radius: $global-radius !important
+        background: $color-blue-3
+        color: $color-white !important
 
     &.ui-state-active
-      background: $color-blue-3 !important
+      background: $color-blue-1
       a
-        color: $color-white !important
+        color: $color-white
 
 #tab4 a
   color: $color-yellow-1
