@@ -11,6 +11,10 @@ class Info::DashboardGradingSchemePresenter < Showtime::Presenter
     properties[:student]
   end
 
+  def current_element_sentence
+    "You have achieved the #{ current_element.name } level" || "You have not yet earned a level"
+  end
+
   def score_for_course
     student.cached_score_for_course(course)
   end

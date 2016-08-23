@@ -8,9 +8,6 @@
     .col-30
       .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
 
-      - if current_course.has_badges?
-        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_badges"
-
       - if current_course.student_weighted?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
@@ -22,10 +19,11 @@
 
 
     .col-30
-      .panel.dashboard-module.earned_points= render partial: "info/dashboard/modules/dashboard_earned_points_and_level", locals: { presenter: Students::DashboardEarnedPointsAndLevelPresenter.new(course: current_course, student: current_student) }
-
       - if current_course.grade_scheme_elements.present?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
       - if ! current_course.hide_analytics?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
+
+      - if current_course.has_badges?
+        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_badges"
