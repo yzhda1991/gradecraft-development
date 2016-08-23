@@ -12,9 +12,9 @@
           .event-information
             .event-image
               %img{:src => event.media }
-            .event-description
-              %p
-                = sanitize(event.description, :tags=>['a', 'strong', 'em', 'ul', 'ol', 'li' 'p', 'br']).truncate(200, :separator => " ").html_safe
+            - if event.description.present?
+              .event-description
+                = sanitize(event.description, :tags=>['a', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']).truncate(200, :separator => " ").html_safe
                 = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
