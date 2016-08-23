@@ -2,7 +2,7 @@ require "analytics/export"
 require "./app/analytics_exports/context_filters/user_aggregate_context_filter"
 
 describe UserAggregateContextFilter do
-  subject { described_class.new context: context }
+  subject { described_class.new context }
   let(:context) { double(:some_context, class: "CourseExportContext") }
 
   before do

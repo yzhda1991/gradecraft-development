@@ -24,7 +24,7 @@ module Analytics
       end
 
       def context_type
-        context.class.to_s.underscore.to_sym
+        self.context.class.to_s.underscore.to_sym
       end
 
       class << self
