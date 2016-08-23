@@ -91,7 +91,7 @@ describe API::PredictedEarnedChallengesController do
       allow(controller).to receive(:current_course).and_return(world.course)
       allow(world.course).to receive(:add_team_score_to_student).and_return(true)
       allow(world.student).to receive(:team_for_course).and_return(world.team)
-      session[:previewing_agent] = professor.id
+      session[:impersonating_agent_id] = professor.id
     end
 
     describe "GET index" do

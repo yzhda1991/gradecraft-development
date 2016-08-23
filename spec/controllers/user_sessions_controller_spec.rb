@@ -22,26 +22,26 @@ describe UserSessionsController do
     end
   end
 
-  describe "enter_student_preview" do
+  describe "impersonate_student" do
     it "stores the professor id in sessions" do
       login_user(professor)
-      get :enter_student_preview, student_id: student.id
-      expect(session[:previewing_agent]).to eq(professor.id)
+      get :impersonate_student, student_id: student.id
+      expect(session[:impersonating_agent_id]).to eq(professor.id)
     end
 
     it "logs in as student" do
       login_user(professor)
-      get :enter_student_preview, student_id: student.id
+      get :impersonate_student, student_id: student.id
       expect(session[:user_id]).to eq(student.id.to_s)
     end
   end
 
-  describe "exit_student_preview" do
+  describe "exit_student_impersonation" do
     it "returns session to faculty" do
       allow(subject).to receive(:login) { student }
-      session[:previewing_agent] = professor.id
-      get :exit_student_preview
-      expect(session[:previewing_agent]).to be_nil
+      session[:impersonating_agent_id] = professor.id
+      get :exit_student_impersonation
+      expect(session[:impersonating_agent_id]).to be_nil
       expect(session[:user_id]).to eq(professor.id.to_s)
     end
   end

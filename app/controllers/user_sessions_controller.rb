@@ -1,6 +1,6 @@
 class UserSessionsController < ApplicationController
 
-  before_filter :ensure_staff?, only: [:enter_student_preview]
+  before_filter :ensure_staff?, only: [:impersonate_student]
   skip_before_filter :require_login, except: [:index]
   skip_before_filter :verify_authenticity_token, only: [:lti_create]
 
@@ -46,17 +46,17 @@ class UserSessionsController < ApplicationController
     respond_with @user, location: dashboard_path
   end
 
-  def enter_student_preview
-    student = User.find(params[:student_id])
-    session[:previewing_agent] = current_user.id
+  def impersonate_student
+    student = current_course.students.find(params[:student_id])
+    impersonating_agent current_user
     auto_login(student)
     redirect_to root_url
   end
 
-  def exit_student_preview
-    faculty = User.find(session[:previewing_agent])
+  def exit_student_impersonation
+    faculty = User.find(impersonating_agent_id)
     auto_login(faculty)
-    session.delete :previewing_agent
+    delete_impersonating_agent
     redirect_to root_url
   end
 

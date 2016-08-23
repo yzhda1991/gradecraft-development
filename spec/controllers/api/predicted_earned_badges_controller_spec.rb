@@ -66,7 +66,7 @@ describe API::PredictedEarnedBadgesController do
     before do
       login_user(world.student)
       allow(controller).to receive(:current_course).and_return(world.course)
-      session[:previewing_agent] = professor.id
+      session[:impersonating_agent_id] = professor.id
     end
 
     describe "GET index" do

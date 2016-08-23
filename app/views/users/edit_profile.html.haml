@@ -45,7 +45,7 @@
               .form_label What's the background of your character in this class? What skills do you have and what are you motivated by?
               = p.input :character_profile, :label => false
 
-      - if current_user_in_preview_mode?
+      - if student_impersonation?
         You cannot update this information in preview mode
       - else
         .submit-buttons
