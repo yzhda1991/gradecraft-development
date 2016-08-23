@@ -7,11 +7,11 @@
   &:hover
     background-color: $color-white
 
-$below-expectations-color: $color-grey-5
+$below-expectations-color: $color-grey-6
 $below-expectations-selected-color: $color-grey-4
 $meets-expectations-color: $color-green-2
 $meets-expectations-selected-color: $color-green-1
-$no-expectation-color: $color-grey-8
+$no-expectation-color: $color-grey-5
 
 #rubric
   textarea
@@ -90,20 +90,20 @@ h4.notice
 #rubric-column-heading
   margin-top: 1rem
   .criterion-heading
-    background: $color-grey-6
+    background: $color-grey-7
     margin: 0 .5rem .5rem
     padding: .5rem
     float: left
     width: 195px
 
   .level-heading
-    background: $color-grey-6
+    background: $color-grey-7
     padding: .5rem
     float: left
     width: calc(100% - 250px)
 
 td.level-td
-  border: 1px solid $color-grey-6
+  border: 1px solid $color-grey-7
 
 #criterion-box
   width: 94%
@@ -125,7 +125,7 @@ td.level-td
     display: inline
 
 .criterion
-  background: $color-grey-5
+  background: $color-grey-6
 
   &.saved
     background: $color-blue-3
@@ -150,7 +150,7 @@ td.level-td
     padding: -4px 2px
 
     &[disabled]
-      color: $color-grey-6
+      color: $color-grey-7
 
     option.default, option.selected.default
       color: $color-grey-5
@@ -196,7 +196,7 @@ button.meets-expectations-status.show
     opacity: 0
 
 button.meets-expectations-toggle.remove
-  background-color: $color-grey-8
+  background-color: $color-grey-5
 
 button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
@@ -231,7 +231,7 @@ button.meets-expectations-status.no-expectation
     padding: 2rem
 
     &[disabled]
-      color: $color-grey-8
+      color: $color-grey-5
 
     option.default, option.selected.default
       color: $color-grey-5
@@ -243,8 +243,8 @@ button.meets-expectations-status.no-expectation
     @include rubric-level-input
 
     &:disabled
-      background: $color-grey-8
-      color: $color-grey-8
+      background: $color-grey-5
+      color: $color-grey-5
 
   input.ng-pristine.ng-invalid
     background: $color-white
@@ -279,10 +279,10 @@ button.meets-expectations-status.no-expectation
 #rubric .rubric-container
   margin: 1rem 0
   clear: both
-  border: 1px dashed $color-grey-6
+  border: 1px dashed $color-grey-7
   padding: 10px
   cursor: move
-  border-left: 2px solid $color-grey-8
+  border-left: 2px solid $color-grey-5
   width: 100%
   overflow-y: scroll
   height: 280px !important
@@ -356,12 +356,12 @@ button.meets-expectations-status.no-expectation
     font-style: italic
 
   td.level-level
-    border: 1px solid $color-grey-7
-    background-color: $color-grey-6
+    border: 1px solid $color-white
+    background-color: $color-grey-7
 
   .level.meets-expectations
     background-color: $meets-expectations-color
-    border: 1px solid $color-grey-7
+    border: 1px solid $color-white
 
   .level.selected
     background-color: $below-expectations-selected-color
@@ -388,7 +388,7 @@ button.meets-expectations-status.no-expectation
     background-color: $color-blue-3
 
   td.comments-box
-    background-color: $color-grey-6
+    background-color: $color-grey-7
     border: none
     padding: .25rem
     font-size: .8rem
