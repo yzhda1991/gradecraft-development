@@ -67,8 +67,19 @@ describe Analytics::Export::ContextFilter do
   end
 
   describe ".accepts_context_types" do
+    it "defines the context types array" do
+      described_class.accepts_context_types :stuff, :other_stuff
+      expect(described_class.valid_context_types).to eq [:stuff, :other_stuff]
+    end
   end
 
   describe ".valid_context_types" do
+    it "returns the valid context types" do
+      described_class.instance_variable_set :@valid_context_types,
+        [:more_stuff, :still_more_stuff]
+
+      expect(described_class.valid_context_types).to eq \
+        [:more_stuff, :still_more_stuff]
+    end
   end
 end
