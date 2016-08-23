@@ -60,6 +60,10 @@ describe Analytics::Export::ContextFilter do
   end
 
   describe "#context_type" do
+    it "converts the context class to an underscored symbol" do
+      # note that we've stubbed the class for the course context double above
+      expect(subject.context_type).to eq :course_export_context
+    end
   end
 
   describe ".accepts_context_types" do
