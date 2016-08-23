@@ -76,7 +76,7 @@ module PredictorData
   end
 
   def predictor_assignment_types
-    current_course.assignment_types
+    current_course.assignment_types.ordered
       .select(
         :course_id,
         :id,
