@@ -1,6 +1,6 @@
 # Manages Loading all assets for the Predictor Page on init
 
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$q', 'PredictorService', ($scope, $q, PredictorService) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$q', 'PredictorService', 'StudentPanelService', ($scope, $q, PredictorService, StudentPanelService) ->
 
   $scope.loading = true
 
@@ -8,6 +8,7 @@
     $scope.student_id = student_id
     $scope.services().then(()->
       $scope.loading = false
+      StudentPanelService.changeFocusArticle(PredictorService.assignments[0])
     )
 
   $scope.services = ()->
