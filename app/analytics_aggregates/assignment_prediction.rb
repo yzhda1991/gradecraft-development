@@ -1,4 +1,3 @@
-# TODO: refactor as AssignmentPredictionScore of type Aggregate::Average
 class AssignmentPrediction
   include Analytics::Aggregate
 

@@ -1,4 +1,3 @@
-# TODO: refactor as CourseEvent of type Aggregate::Count
 class CourseEvent
   include Analytics::Aggregate
 

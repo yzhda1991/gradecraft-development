@@ -1,4 +1,3 @@
-# TODO: refactor as AssignmentEvent type Aggregate::Count
 class AssignmentEvent
   include Analytics::Aggregate
 

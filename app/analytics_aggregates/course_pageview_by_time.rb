@@ -1,4 +1,3 @@
-# TODO: refactor as CoursePageviewByTime of type Aggregate::Count
 class CoursePageviewByTime
   include Analytics::Aggregate
 
