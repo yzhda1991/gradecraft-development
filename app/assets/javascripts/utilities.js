@@ -33,9 +33,8 @@ $( "#tabs" ).tabs({
   heightMin: 200,
   toolbarButtons: [
     'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-    'fontFamily', 'fontSize', 'color', 'sep', 'blockStyle', 'emoticons',
-    'insertTable', 'sep', 'formatBlock', 'align', 'insertOrderedList',
-    'outdent', 'indent', 'insertHorizontalRule', 'insertLink', 'undo', 'redo',
+    'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align', 
+    'outdent', 'indent', 'insertLink', 'undo', 'redo',
     'clearFormatting', 'selectAll', 'html'
   ]
 })
