@@ -11,6 +11,8 @@
   -webkit-flex-direction: row
   -ms-flex-direction: row
   flex-direction: row
+  @media (max-width: $media-small-max)
+    display: block
 
   .col-30, .col-40, .col-60
     display: -webkit-box
@@ -36,6 +38,11 @@
   .col-60
     width: 60%
 
+  .col-30, .col-40, .col-60
+    @media (max-width: $media-small-max)
+      width: 100%
+      margin: 0
+
   .flex-column
     display: -webkit-box
     display: -webkit-flex
@@ -46,6 +53,8 @@
     -webkit-flex-direction: row
     -ms-flex-direction: row
     flex-direction: row
+    @media (max-width: $media-small-max)
+      display: block
 
   .flex-row
     margin-right: 1rem
@@ -255,9 +264,14 @@
 .slick-slide
   height: auto
   padding: 0.25rem 2rem
+  @media (max-width: $media-small-max)
+    padding: 0.2rem 0.5rem
 
   img
     max-width: 128px
+    @media (max-width: $media-small-max)
+      max-width: 100px
+      margin: 0 auto
 
 .event-information
   display: -webkit-box
@@ -268,21 +282,29 @@
   -webkit-align-items: center
   -webkit-box-align: center
   align-items: center
+  @media (max-width: $media-small-max)
+    display: block
 
 .event-image
   float: left
   margin-right: 1rem
+  @media (max-width: $media-small-max)
+    float: none
 
 .event-name
   font-size: 1rem
   text-align: center
   font-weight: 400
+  @media (max-width: $media-small-max)
+    padding: 0 1.25rem
 
 .event-date
   font-size: 0.8rem
   color: $color-grey-3
   margin-top: 0.2rem
   text-align: center
+  @media (max-width: $media-small-max)
+    padding: 0 1.25rem
 
 .last-slide
   text-align: center
@@ -360,23 +382,3 @@ ul.assignments-due
 #instructor-dashboard
   .weekly-stats-module
     max-height: 180px
-
-@media (max-width: $media-small-max)
-  #student-dashboard, #instructor-dashboard
-    flex-direction: column
-
-    .col-30, .col-40, .col-60
-      width: 100%
-      margin: 0
-
-  .slick-slide
-    padding: 0.2rem 0.5rem
-
-    .event-date, .event-name
-      padding: 0 1.25rem
-
-    img
-      max-width: 128px
-      float: none
-      margin: 0 auto
-      padding: 0
