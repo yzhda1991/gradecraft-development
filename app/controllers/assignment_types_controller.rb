@@ -9,7 +9,7 @@ class AssignmentTypesController < ApplicationController
   def index
     @title = "#{term_for :assignment_types}"
     @assignment_types =
-      current_course.assignment_types.includes(assignments: :assignment_type)
+      current_course.assignment_types.ordered.includes(assignments: :assignment_type)
     @students = current_course.students
   end
 

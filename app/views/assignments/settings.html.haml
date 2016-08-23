@@ -72,7 +72,7 @@
             %th{scope: "col", :style => "min-width: 110px"}
               %span.sr-only Actions
         %tbody
-          - assignments = assignment_type.assignments
+          - assignments = assignment_type.assignments.ordered
           - assignments.each do |assignment|
             %tr
               %td= link_to assignment.name, assignment

@@ -67,7 +67,7 @@ class InfoController < ApplicationController
 
   # Displaying per assignment summary outcome statistics
   def per_assign
-    @assignment_types = current_course.assignment_types.includes(:assignments)
+    @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
     @title = "#{term_for :assignment} Analytics"
   end
 
@@ -127,7 +127,7 @@ class InfoController < ApplicationController
   # Chart displaying all of the student weighting choices thus far
   def multiplier_choices
     @title = "#{current_course.weight_term} Choices"
-    @assignment_types = current_course.assignment_types
+    @assignment_types = current_course.assignment_types.ordered
     @teams = current_course.teams
   end
   

@@ -10,14 +10,14 @@ class AssignmentsController < ApplicationController
   def index
     redirect_to syllabus_path and return if current_user_is_student?
     @title = "#{term_for :assignments}"
-    @assignment_types = current_course.assignment_types.includes(:assignments)
+    @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
   end
 
   # Gives the instructor the chance to quickly check all assignment settings
   # for the whole course
   def settings
     @title = "Review #{term_for :assignment} Settings"
-    @assignment_types = current_course.assignment_types.includes(:assignments)
+    @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
   end
 
   def show

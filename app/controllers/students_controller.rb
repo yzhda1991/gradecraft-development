@@ -37,7 +37,7 @@ class StudentsController < ApplicationController
     self.current_student = current_course.students.where(id: params[:id]).first
     render :syllabus, Students::SyllabusPresenter.build({
       student: current_student,
-      assignment_types: current_course.assignment_types.includes(:assignments),
+      assignment_types: current_course.assignment_types.ordered.includes(:assignments),
       course: current_course,
       view_context: view_context
     })

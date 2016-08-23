@@ -24,7 +24,7 @@ class Assignments::ImportersController < ApplicationController
     @provider_name = params[:importer_provider_id]
     @course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
-    @assignment_types = current_course.assignment_types
+    @assignment_types = current_course.assignment_types.ordered
   end
 
   # POST /assignments/importers/:importer_provider_id/courses/:id/assignments
@@ -40,7 +40,7 @@ class Assignments::ImportersController < ApplicationController
     else
       @course = syllabus.course(params[:id])
       @assignments = syllabus.assignments(params[:id])
-      @assignment_types = current_course.assignment_types
+      @assignment_types = current_course.assignment_types.ordered
 
       render :assignments, alert: @result.message
     end
