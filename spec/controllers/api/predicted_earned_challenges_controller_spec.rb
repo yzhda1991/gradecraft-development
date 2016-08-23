@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+include SessionHelper
 
 describe API::PredictedEarnedChallengesController do
   let(:world) { World.create.with(:course, :student, :team, :challenge) }
@@ -87,11 +88,10 @@ describe API::PredictedEarnedChallengesController do
 
   context "as faculty previewing as student" do
     before do
-      login_user(world.student)
+      login_as_impersonating_agent(professor, world.student)
       allow(controller).to receive(:current_course).and_return(world.course)
       allow(world.course).to receive(:add_team_score_to_student).and_return(true)
       allow(world.student).to receive(:team_for_course).and_return(world.team)
-      session[:impersonating_agent_id] = professor.id
     end
 
     describe "GET index" do

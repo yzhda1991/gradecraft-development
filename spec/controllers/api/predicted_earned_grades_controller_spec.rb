@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+include SessionHelper
 
 describe API::PredictedEarnedGradesController do
   let(:world) { World.create.with(:course, :student, :assignment) }
@@ -54,9 +55,8 @@ describe API::PredictedEarnedGradesController do
 
   context "as faculty previewing as student" do
     before do
-      login_user(world.student)
+      login_as_impersonating_agent(professor, world.student)
       allow(controller).to receive(:current_course).and_return(world.course)
-      session[:impersonating_agent_id] = professor.id
     end
 
     describe "GET index" do
