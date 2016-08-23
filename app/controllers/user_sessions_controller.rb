@@ -41,7 +41,7 @@ class UserSessionsController < ApplicationController
     save_lti_context
     session[:course_id] = @course.id
     auto_login @user
-    User.increment_counter(:visit_count, @user.id)
+    record_course_login_event user: @user
     respond_with @user, location: dashboard_path
   end
 

@@ -32,8 +32,6 @@ GradeCraft::Application.routes.draw do
     get :all_events
     get :role_events
     get :assignment_events
-    get :login_frequencies
-    get :role_login_frequencies
     get :login_events
     get :login_role_events
     get :all_pageview_events
