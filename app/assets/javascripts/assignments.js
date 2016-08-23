@@ -53,7 +53,7 @@
     var badgeSelector = parent.find('#badges-list');
     var courseSelector = parent.find('#courses-list');
     var val = $(select).val();
-    if(val === 'Assignment Type') {
+    if(val === 'AssignmentType') {
       assignmentSelector.hide();
       assignmentTypeSelector.show();
       badgeSelector.hide();

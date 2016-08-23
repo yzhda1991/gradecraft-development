@@ -1,7 +1,7 @@
 .conditions
   %h4 Requirement
   .assignment-or-badge
-    = f.input :condition_type, :collection => ["Assignment Type", "Assignment", "Badge", "Course"], :label => "Type"  
+    = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", "Course"], :label => "Type", include_blank: true
   #assignment-types-list{:style => "display: none"}
     = f.input :condition_id, :collection => current_course.assignment_types.ordered.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment} Type"
     = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => "State Achieved"
