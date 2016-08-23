@@ -34,7 +34,7 @@ class BadgesController < ApplicationController
   end
 
   def create
-    @badge = current_course.badges.new(params[:badge])
+    @badge = current_course.badges.new(badge_params)
 
     if @badge.save
       redirect_to @badge,
@@ -45,7 +45,7 @@ class BadgesController < ApplicationController
   end
 
   def update
-    if @badge.update_attributes(params[:badge])
+    if @badge.update_attributes(badge_params)
       redirect_to badges_path,
         notice: "#{@badge.name} #{term_for :badge} successfully updated"
     else
@@ -72,6 +72,17 @@ class BadgesController < ApplicationController
   end
 
   private
+
+  def badge_params
+    params.require(:badge).permit(:name, :description, :icon, :visible, :full_points,
+      :can_earn_multiple_times, :earned_badges, :earned_badges_attributes,
+      :badge_file_ids, :badge_files_attributes, :badge_file, :position,
+      :visible_when_locked, :course_id, :course, :show_name_when_locked,
+      :show_points_when_locked, :show_description_when_locked,
+      unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date],
+      badge_files_attributes: [:id, file: []])
+  end
 
   def find_badge
     @badge = current_course.badges.find(params[:id])

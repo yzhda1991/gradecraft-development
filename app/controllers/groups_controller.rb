@@ -24,7 +24,7 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = current_course.groups.new(params[:group])
+    @group = current_course.groups.new(group_params)
     @group.students << current_student if current_user_is_student?
     if current_user_is_student?
       @group.approved = "Pending"
@@ -50,7 +50,7 @@ class GroupsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @group.update_attributes(params[:group])
+      if @group.update_attributes(group_params)
         format.html { respond_with @group }
         flash[:success]=
           "#{@group.name} #{term_for :group} successfully updated"
@@ -71,6 +71,15 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def group_params
+    params.require(:group).permit :name, :approved,
+      :text_feedback, :proposals_attributes, :proposal, :approved,
+      proposal_attributes: [:approved, :title, :proposal, :id],
+      assignment_groups_attributes: [:assignment_id, :group_id, :id],
+      group_membership_attributes: [:accepted, :group_id, :student_id, :id],
+      assignment_ids: [], student_ids: []
+  end
 
   def potential_team_members
     current_course.students.where.not(id: current_user.id)

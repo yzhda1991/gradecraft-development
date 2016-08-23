@@ -12,7 +12,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   # POST /challenge_grades
   def create
-    @challenge_grade = current_course.challenge_grades.new(params[:challenge_grade])
+    @challenge_grade = current_course.challenge_grades.new(challenge_grade_params)
     @team = @challenge_grade.team
     if @challenge_grade.save
 
@@ -20,7 +20,7 @@ class Challenges::ChallengeGradesController < ApplicationController
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 
-      redirect_to @challenge,
+      redirect_to challenge_path(@challenge),
         notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
     else
       render action: "new"
@@ -37,7 +37,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   # PUT /challenges/:id/challenge_grades/mass_update
   def mass_update
-    if @challenge.update_attributes(params[:challenge])
+    if @challenge.update_attributes(challenge_params)
 
       challenge_grade_ids = []
       @challenge.challenge_grades.each do |challenge_grade|
@@ -69,13 +69,22 @@ class Challenges::ChallengeGradesController < ApplicationController
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
-      challenge_grade.update_attributes!(params[:challenge_grade].reject { |k, v| v.blank? })
+      challenge_grade.update_attributes!(challenge_grade_params.reject { |k, v| v.blank? })
     end
     flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"
     redirect_to challenge_path(@challenge)
   end
 
   private
+
+  def challenge_params
+    params.require(:challenge).permit challenge_grades_attributes: [:score, :status, :team_id, :id]
+  end
+
+  def challenge_grade_params
+    params.require(:challenge_grade).permit :name, :score, :status, :challenge_id, :feedback,
+      :team_id, :final_points
+  end
 
   def find_challenge
     @challenge = current_course.challenges.find(params[:challenge_id])

@@ -5,12 +5,6 @@ class Challenge < ActiveRecord::Base
   include UploadsThumbnails
   include MultipleFileAttributes
 
-  attr_accessible :name, :description, :visible, :full_points,
-    :due_at, :open_at, :accepts_submissions, :release_necessary,
-    :course, :team, :challenge, :challenge_file_ids,
-    :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
-    :challenge_score_levels_attributes, :challenge_score_level
-
   # grade points available to the predictor from the assignment controller
   attr_accessor :prediction, :grade
 
@@ -29,7 +23,7 @@ class Challenge < ActiveRecord::Base
   score_levels :challenge_score_levels
 
   multiple_files :challenge_files
-  has_many :challenge_files, dependent: :destroy
+  has_many :challenge_files, dependent: :destroy, inverse_of: :challenge
   accepts_nested_attributes_for :challenge_files
 
   scope :with_dates, -> { where("challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL") }
@@ -41,7 +35,7 @@ class Challenge < ActiveRecord::Base
   validates_presence_of :course, :name
   validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
   in: [true, false], message: "must be true or false"
-  
+
   validate :positive_points, :open_before_close
 
   def has_levels?

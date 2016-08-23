@@ -1,9 +1,6 @@
 class ChallengeGrade < ActiveRecord::Base
   include GradeStatus
 
-  attr_accessible :name, :score, :challenge_id, :feedback, :team_id,
-    :final_points, :team, :challenge
-
   belongs_to :course
   belongs_to :challenge
   belongs_to :team, autosave: true

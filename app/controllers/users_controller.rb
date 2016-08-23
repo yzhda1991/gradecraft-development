@@ -36,7 +36,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = Services::CreatesOrUpdatesUser.create_or_update params[:user], current_course,
+    result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
       params[:send_welcome] == "1"
     @user = result[:user]
 
@@ -57,7 +57,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.assign_attributes params[:user]
+    @user.assign_attributes user_params
     cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
 
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
 
-    if @user.update_attributes params[:user]
+    if @user.update_attributes user_params
       @user.activate!
       auto_login @user
       redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
@@ -120,12 +120,13 @@ class UsersController < ApplicationController
   def update_profile
     @user = current_user
 
-    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
-      params[:user].delete(:password)
-      params[:user].delete(:password_confirmation)
+    up = user_params
+    if up[:password].blank? && up[:password_confirmation].blank?
+      up.delete(:password)
+      up.delete(:password_confirmation)
     end
 
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(up)
       redirect_to dashboard_path,
         notice: "Your profile was successfully updated!"
     else
@@ -152,5 +153,23 @@ class UsersController < ApplicationController
         .import(current_course)
       render :import_results
     end
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit :username, :email, :password, :time_zone, :password_confirmation,
+      :activation_state, :avatar_file_name, :first_name, :last_name, :user_id,
+      :kerberos_uid, :display_name, :current_course_id, :last_activity_at,
+      :last_login_at, :last_logout_at, :team_ids, :course_ids,
+      :team_role, :team_id, :lti_uid, :course_team_ids, :internal,
+      earned_badges_attributes: [:points, :feedback, :student_id, :badge_id,
+        :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
+        :student_visible, :id, :_destroy],
+      course_memberships_attributes: [:auditing, :character_profile, :course_id,
+        :instructor_of_record, :user_id, :role, :last_login_at, :id, :_destroy],
+      student_academic_history_attributes: [:student_id, :major, :gpa,
+        :current_term_credits, :accumulated_credits, :year_in_school, :state_of_residence,
+        :high_school, :athlete, :act_score, :sat_score, :course_id, :id, :_destroy]
   end
 end

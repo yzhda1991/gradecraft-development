@@ -1,10 +1,4 @@
 class Submission < ActiveRecord::Base
-  attr_accessible :task, :task_id, :assignment, :assignment_id,
-    :assignment_type_id, :group, :group_id, :link, :student, :student_id,
-    :creator, :creator_id, :text_comment, :submission_file, :submitted_at,
-    :submission_files_attributes, :submission_files, :course_id, :updated_at,
-    :submission_file_ids
-
   include Historical
   include MultipleFileAttributes
   include Sanitizable
@@ -22,7 +16,10 @@ class Submission < ActiveRecord::Base
   has_one :assignment_type_weight, through: :assignment_type
 
   accepts_nested_attributes_for :grade
-  has_many :submission_files, dependent: :destroy, autosave: true
+  has_many :submission_files,
+    dependent: :destroy,
+    autosave: true,
+    inverse_of: :submission
   accepts_nested_attributes_for :submission_files
 
   scope :with_grade, -> do

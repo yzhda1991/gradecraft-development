@@ -8,19 +8,6 @@ class Assignment < ActiveRecord::Base
   include UploadsThumbnails
   include UnlockableCondition
 
-  attr_accessible :accepts_attachments, :accepts_links, :accepts_submissions,
-    :accepts_submissions_until, :accepts_text, :assignment_file,
-    :assignment_file_ids, :assignment_files_attributes, :assignment_score_level,
-    :assignment_score_levels_attributes, :assignment_type, :assignment_type_id,
-    :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
-    :include_in_predictor, :include_in_timeline, :include_in_to_do,
-    :mass_grade_type, :name, :open_at, :pass_fail,
-    :full_points, :purpose, :release_necessary,
-    :required, :resubmissions_allowed, :show_description_when_locked,
-    :show_purpose_when_locked, :show_name_when_locked,
-    :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
-    :visible, :visible_when_locked, :min_group_size, :max_group_size
-
   attr_accessor :current_student_grade
 
   belongs_to :course, touch: true
@@ -51,7 +38,7 @@ class Assignment < ActiveRecord::Base
   has_one :imported_assignment, dependent: :destroy
 
   # Instructor uploaded resource files
-  has_many :assignment_files, dependent: :destroy
+  has_many :assignment_files, dependent: :destroy, inverse_of: :assignment
   accepts_nested_attributes_for :assignment_files
 
   # Strip points from pass/fail assignments

@@ -5,11 +5,11 @@ class CriterionGradesController < ApplicationController
   after_action :respond_with_criterion_grade
 
   def new
-    @criterion_grade = CriterionGrade.new params[:criterion_grade]
+    @criterion_grade = CriterionGrade.new criterion_grade_params
   end
 
   def create
-    @criterion_grade = CriterionGrade.create params[:criterion_grade]
+    @criterion_grade = CriterionGrade.create criterion_grade_params
   end
 
   def destroy
@@ -17,11 +17,16 @@ class CriterionGradesController < ApplicationController
   end
 
   def update
-    @criterion_grade.update_attributes params[:criterion_grade]
+    @criterion_grade.update_attributes criterion_grade_params
   end
 
   private
-  
+
+  def criterion_grade_params
+    params.require(:criteron_grade).permit :points, :criterion_id, :level_id,
+      :student_id, :assignment_id
+  end
+
   def find_criterion_grade
     @criterion_grade = CriterionGrade.find params[:id]
   end

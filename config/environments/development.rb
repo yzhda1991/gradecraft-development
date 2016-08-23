@@ -22,7 +22,6 @@ GradeCraft::Application.configure do
   config.eager_load = false
   config.log_level = :debug
   config.session_store :cookie_store, key: "_gradecraft_session"
-  config.active_record.mass_assignment_sanitizer = :strict
   config.after_initialize do
     Bullet.enable = true
     Bullet.bullet_logger = true

@@ -1,8 +1,4 @@
 class EarnedBadge < ActiveRecord::Base
-  attr_accessible :points, :feedback, :student, :badge, :student_id, :badge_id,
-    :submission_id, :course_id, :assignment_id, :level_id, :student_visible,
-    :grade, :_destroy, :course, :grade_id, :feedback
-
   STATUSES= ["Predicted", "Earned"]
 
   before_validation :cache_associations

@@ -3,9 +3,6 @@ class GradeSchemeElement < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
 
-  attr_accessible :letter, :lowest_points, :highest_points, :level, :description,
-                  :course_id, :course, :updated_at
-
   belongs_to :course, touch: true
 
   validates_presence_of :lowest_points, :highest_points, :course
@@ -53,7 +50,7 @@ class GradeSchemeElement < ActiveRecord::Base
   def within_range?(score)
     score >= lowest_points && score <= highest_points
   end
-  
+
   def count_students_earned
     course.course_memberships.where(earned_grade_scheme_element_id: self.id).count
   end

@@ -25,7 +25,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = current_course.events.new(params[:event])
+    @event = current_course.events.new(event_params)
     if @event.save
       flash[:notice] = "Event #{@event.name} was successfully created"
       respond_with(@event)
@@ -37,7 +37,7 @@ class EventsController < ApplicationController
 
   def update
     @event = current_course.events.find(params[:id])
-    flash[:notice] = "Event #{@event.name} was successfully updated" if @event.update(params[:event])
+    flash[:notice] = "Event #{@event.name} was successfully updated" if @event.update(event_params)
     respond_with(@event)
   end
 
@@ -48,4 +48,9 @@ class EventsController < ApplicationController
     redirect_to events_url, notice: "#{@name} successfully deleted"
   end
 
+  private
+
+  def event_params
+    params.require(:event).permit(:course_id, :name, :description, :open_at, :due_at)
+  end
 end

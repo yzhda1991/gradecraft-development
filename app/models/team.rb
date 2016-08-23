@@ -1,7 +1,4 @@
 class Team < ActiveRecord::Base
-  attr_accessible :name, :course, :course_id, :student_ids, :average_score,
-    :students, :leaders,:banner, :rank, :leader_ids, :challenge_grade_score
-
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 

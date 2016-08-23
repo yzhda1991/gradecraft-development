@@ -6,8 +6,6 @@ class Rubric < ActiveRecord::Base
 
   validates :assignment, presence: true
 
-  attr_accessible :assignment_id
-
   def max_level_count
     criteria.inject([]) do |level_counts, criterion|
       level_counts << criterion.levels.count

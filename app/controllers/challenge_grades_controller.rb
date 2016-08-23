@@ -19,13 +19,13 @@ class ChallengeGradesController < ApplicationController
   # POST /challenges_grades/:id
   def update
     @team = @challenge_grade.team
-    if @challenge_grade.update_attributes(params[:challenge_grade])
+    if @challenge_grade.update_attributes(challenge_grade_params)
 
       if ChallengeGradeProctor.new(@challenge_grade).viewable?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 
-      redirect_to @challenge,
+      redirect_to challenge_path(@challenge),
         notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully updated"
     else
       render action: "edit"
@@ -49,6 +49,11 @@ class ChallengeGradesController < ApplicationController
   end
 
   private
+
+  def challenge_grade_params
+    params.require(:challenge_grade).permit :name, :score, :status, :challenge_id, :feedback,
+      :team_id, :final_points
+  end
 
   def find_challenge
     find_challenge_grade

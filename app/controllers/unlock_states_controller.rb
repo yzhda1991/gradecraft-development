@@ -6,13 +6,13 @@ class UnlockStatesController < ApplicationController
   before_filter :save_referer, only: [:manually_unlock]
 
   def create
-    @unlock_state = current_course.unlock_state.new(params[:unlock_condition])
+    @unlock_state = current_course.unlock_state.new(unlock_condition_params)
     @unlock_condition.save
   end
 
   def update
     @unlock_state = current_course.unlock_states.find(params[:id])
-    @unlock_state.update_attributes(params[:unlock_condition])
+    @unlock_state.update_attributes(unlock_condition_params)
     respond_with @unlock_state
   end
 
@@ -34,4 +34,10 @@ class UnlockStatesController < ApplicationController
     @unlock_state.destroy
   end
 
+  private
+
+  def unlock_condition_params
+    params.require(:unlock_condition).permit :unlockable_id, :unlockable_type, :student_id,
+      :instructor_unlocked, :unlocked, :unlockable
+  end
 end

@@ -3,10 +3,7 @@ class SubmissionFile < ActiveRecord::Base
   include S3Manager::Streaming
   include Historical
 
-  attr_accessible :file, :filename, :filepath, :submission_id, :file_missing,
-    :last_confirmed_at
-
-  belongs_to :submission
+  belongs_to :submission, inverse_of: :submission_files
 
   mount_uploader :file, AttachmentUploader
   process_in_background :file

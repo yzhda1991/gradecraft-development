@@ -21,9 +21,8 @@ class AnnouncementsController < ApplicationController
   end
 
   def create
-    announcement_params = params[:announcement]
-      .merge({ course_id: current_course.id, author_id: current_user.id })
-    @announcement = Announcement.new announcement_params
+    @announcement = Announcement.new(announcement_params
+      .merge(course_id: current_course.id, author_id: current_user.id))
     authorize! :create, @announcement
     if @announcement.save
       @announcement.deliver!
@@ -34,5 +33,11 @@ class AnnouncementsController < ApplicationController
 
     @title = "Create a New Announcement"
     render :new
+  end
+
+  private
+
+  def announcement_params
+    params.require(:announcement).permit(:author_id, :body, :course_id, :title)
   end
 end

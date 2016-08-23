@@ -50,6 +50,21 @@ describe Group do
     end
   end
 
+  describe "#assignment_ids=" do
+    let(:assignment1) { create :assignment }
+    let(:assignment2) { create :assignment }
+    let(:student) { create :user }
+
+    subject { build :group, student_ids: [student.id] }
+
+    it "creates assignment groups for each assignment id" do
+      subject.assignment_ids = [assignment1, assignment2].map(&:id)
+      subject.save
+
+      expect(subject.assignment_groups.count).to eq 2
+    end
+  end
+
   describe "#pending?" do
     it "returns true if pending" do
       subject.approved = "Pending"

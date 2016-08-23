@@ -3,8 +3,6 @@ module ScoreLevel
   include Copyable
 
   included do
-    attr_accessible :name, :points
-
     scope :order_by_points, -> { order "points DESC" }
 
     validates :name, presence: true

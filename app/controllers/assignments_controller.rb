@@ -61,9 +61,11 @@ class AssignmentsController < ApplicationController
   end
 
   def create
-    assignment = current_course.assignments.new(params[:assignment])
+    assignment = current_course.assignments.new(assignment_params)
     if assignment.save
-      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" and return
+      redirect_to assignment_path(assignment),
+        notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" \
+        and return
     end
 
     @title = "Create a New #{term_for :assignment}"
@@ -76,7 +78,7 @@ class AssignmentsController < ApplicationController
 
   def update
     assignment = current_course.assignments.find(params[:id])
-    if assignment.update_attributes(params[:assignment])
+    if assignment.update_attributes assignment_params
       respond_to do |format|
         format.html do
           redirect_to assignments_path,
@@ -115,5 +117,26 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       format.csv { send_data AssignmentExporter.new.export(course), filename: "#{ course.name } #{ (term_for :assignment).titleize } Structure - #{ Date.today }.csv" }
     end
+  end
+
+  private
+
+  def assignment_params
+    params.require(:assignment).permit :accepts_attachments, :accepts_links, :accepts_submissions,
+      :accepts_submissions_until, :accepts_text, :assignment_file,
+      :assignment_file_ids, :assignment_score_level,
+      :assignment_type_id, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
+      :include_in_predictor, :include_in_timeline, :include_in_to_do,
+      :mass_grade_type, :name, :open_at, :pass_fail,
+      :full_points, :purpose, :release_necessary,
+      :required, :resubmissions_allowed, :show_description_when_locked,
+      :show_purpose_when_locked, :show_name_when_locked,
+      :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
+      :visible, :visible_when_locked, :min_group_size, :max_group_size,
+      unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date],
+      assignment_files_attributes: [:id, file: []],
+      assignment_score_levels_attributes: [:id, :name, :points],
+      assignment_groups_attributes: [:group_id]
   end
 end

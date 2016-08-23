@@ -15,7 +15,7 @@ class GradeSchemeElementsController < ApplicationController
 
   def update
     @grade_scheme_element = current_course.grade_scheme_elements.find(params[:id])
-    if @grade_scheme_element.update_attributes(params[:grade_scheme_element])
+    if @grade_scheme_element.update_attributes(grade_scheme_element_params)
       redirect_to grade_scheme_elements_path,
         notice: "#{@grade_scheme_element.name} successfully updated"
     else
@@ -40,13 +40,10 @@ class GradeSchemeElementsController < ApplicationController
 
   def mass_update
     @course = current_course
-    gse = params[:grade_scheme_elements_attributes]
     GradeSchemeElement.transaction do
       begin
-        @course.grade_scheme_elements.where(id:
-          params[:deleted_ids]).destroy_all
-        @course.update_attributes(
-          grade_scheme_elements_attributes: gse) unless gse.nil?
+        @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
+        @course.update_attributes(grade_scheme_elements_attributes_params)
       rescue
         raise "HandleThis"
       end
@@ -67,11 +64,23 @@ class GradeSchemeElementsController < ApplicationController
       end
     end
   end
-  
+
   def export_structure
     course = current_user.courses.find_by(id: params[:id])
     respond_to do |format|
       format.csv { send_data GradeSchemeExporter.new.export(course), filename: "#{ course.name } Grading Scheme - #{ Date.today }.csv" }
     end
+  end
+
+  private
+
+  def grade_scheme_element_params
+    params.require(:grade_scheme_element).permit :id, :letter, :lowest_points,
+      :highest_points, :level, :description, :course_id
+  end
+
+  def grade_scheme_elements_attributes_params
+    params.permit grade_scheme_elements_attributes: [:id, :letter, :lowest_points,
+      :highest_points, :level, :description, :course_id]
   end
 end

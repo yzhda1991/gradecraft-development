@@ -3,7 +3,7 @@ require_relative "../../services/creates_earned_badge"
 class API::EarnedBadgesController < ApplicationController
   # POST /api/earned_badges
   def create
-    result = Services::CreatesEarnedBadge.award params[:earned_badge]
+    result = Services::CreatesEarnedBadge.award earned_badge_params
     render json: result.earned_badge
   end
 
@@ -17,5 +17,13 @@ class API::EarnedBadgesController < ApplicationController
       render json: { message: "Earned badge failed to delete", success: false },
         status: 400
     end
+  end
+
+  private
+
+  def earned_badge_params
+    params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
+      :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
+      :student_visible, :_destroy
   end
 end

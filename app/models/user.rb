@@ -52,13 +52,6 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at,
     :score, :team
-  attr_accessible :username, :email, :password, :time_zone, :password_confirmation,
-    :activation_state, :avatar_file_name, :first_name, :last_name, :user_id,
-    :kerberos_uid, :display_name, :current_course_id, :last_activity_at,
-    :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
-    :earned_badges, :earned_badges_attributes, :course_memberships_attributes,
-    :student_academic_history_attributes, :team_role, :team_id, :lti_uid,
-    :course_team_ids, :internal
 
   # all student display pages are ordered by last name except for the
   # leaderboard, and top 10/bottom 10
@@ -74,7 +67,7 @@ class User < ActiveRecord::Base
   mount_uploader :avatar_file_name, ImageUploader
 
   has_many :authorizations, class_name: "UserAuthorization", dependent: :destroy
-  has_many :course_memberships, dependent: :destroy
+  has_many :course_memberships, dependent: :destroy, inverse_of: :user
   has_many :courses, through: :course_memberships
   has_many :course_users, through: :courses, source: "users"
   accepts_nested_attributes_for :courses

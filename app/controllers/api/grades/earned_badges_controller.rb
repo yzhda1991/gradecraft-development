@@ -1,7 +1,7 @@
 class API::Grades::EarnedBadgesController < ApplicationController
   # POST /api/grades/:grade_id/earned_badges
   def create
-    render json: EarnedBadge.create(params[:earned_badges])
+    render json: EarnedBadge.create(earned_badges_params[:earned_badges])
   end
 
   # DELETE /api/grades/:grade_id/earned_badges/delete_all
@@ -15,5 +15,13 @@ class API::Grades::EarnedBadgesController < ApplicationController
         message: "Earned badges failed to delete", success: false
         }, status: 400
     end
+  end
+
+  private
+
+  def earned_badges_params
+    params.permit earned_badges: [:points, :feedback, :student_id,
+      :badge_id, :submission_id, :course_id, :assignment_id, :level_id, :criterion_id,
+      :grade_id, :student_visible, :_destroy]
   end
 end

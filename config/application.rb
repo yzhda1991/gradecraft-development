@@ -37,7 +37,5 @@ module GradeCraft
 
     #http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#error-handling-in-transaction-callbacks
     config.active_record.raise_in_transactional_callbacks = true
-
-    ActiveRecord::SessionStore::Session.attr_accessible :data, :session_id
   end
 end

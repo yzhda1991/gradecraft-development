@@ -1,9 +1,7 @@
 class GradeFile < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  attr_accessible :file, :filename, :filepath, :grade_id
-
-  belongs_to :grade
+  belongs_to :grade, inverse_of: :grade_files
 
   validates :filename, presence: true, length: { maximum: 50 }
 

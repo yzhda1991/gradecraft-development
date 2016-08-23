@@ -2,8 +2,6 @@ module Gradable
   extend ActiveSupport::Concern
 
   included do
-    attr_accessible :grades_attributes
-
     has_many :grades, dependent: :destroy
     has_many :predicted_earned_grades, dependent: :destroy
 

@@ -1,16 +1,12 @@
 class CourseMembership < ActiveRecord::Base
   belongs_to :course, touch: true
-  belongs_to :user, touch: true
+  belongs_to :user, touch: true, inverse_of: :course_memberships
   belongs_to :grade_scheme_element, foreign_key: "earned_grade_scheme_element_id"
 
   # adds logging helpers for rescued-out errors
   include ModelAddons::ImprovedLogging
   include ModelAddons::AdvancedRescue
   include Copyable
-
-  attr_accessible :auditing, :character_profile, :course, :course_id,
-    :instructor_of_record, :user, :user_id, :role, :last_login_at,
-    :earned_grade_scheme_element_id
 
   Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }

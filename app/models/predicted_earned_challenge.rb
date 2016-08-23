@@ -1,7 +1,4 @@
 class PredictedEarnedChallenge < ActiveRecord::Base
-
-  attr_accessible :student_id, :challenge_id, :predicted_points
-
   belongs_to :challenge
   belongs_to :student, class_name: "User"
 
