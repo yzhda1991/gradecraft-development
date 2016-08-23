@@ -247,11 +247,11 @@ class Course < ActiveRecord::Base
   
   def earned_grade_scheme_elements_by_student_count
     elements = []
-    grade_scheme_elements.each do |gse| 
+    grade_scheme_elements.order_by_lowest_points.each do |gse| 
       elements << [gse.name, gse.count_students_earned]
     end
     return { 
-      elements: elements.reverse
+      elements: elements
     }
   end
 
