@@ -1,4 +1,4 @@
-= content_nav_for :analytics_root, "System Analytics"
+= content_nav_for "#{term_for :student} Analytics"
 
 %h3.pagetitle= @title
 
@@ -7,18 +7,9 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %h4.subtitle Interactions
-  / Event counts
-  #role-events-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/role_events.json", :url_data => "role_group=student", :title => "Interactions", :subtitle => "{{granularity}}", :y_axis_label => "Number of events"}}
-  -##events-chart{data: {:chart => "timeseries", :url => "/analytics/assignment_events.json", :title => "Assignment Events", :subtitle => "{{granularity}}", :y_axis_label => "Number of events"}}
-
-  %h4.subtitle Logins
   / Login counts
   #role-logins-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/login_role_events.json", :url_data => "role_group=student", :title => "Logins", :subtitle => "{{granularity}}", :y_axis_label => "Logins {{granularity}}"}}
-  / Average User Login Frequencies
-  #role-logins-frequencies-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/role_login_frequencies.json", :url_data => "role_group=student", :title => "Average User Login Frequencies", :subtitle => "{{granularity}}", :y_axis_label => "User Login Rate (in logins {{granularity}})"}}
-
-  %h4.subtitle Pageviews
+  
   / Pageviews Total
   #all-pageviews-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/all_role_pageview_events.json?role_group=student", :title => "Pageviews", :subtitle => "{{granularity}}"}}
 
