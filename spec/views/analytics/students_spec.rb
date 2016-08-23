@@ -22,7 +22,7 @@ describe "analytics/students" do
     render
     assert_select ".content-nav", count: 1
     assert_select ".breadcrumbs" do
-      assert_select "a", count: 3
+      assert_select "a", count: 2
     end
   end
 end
