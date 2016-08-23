@@ -3,7 +3,7 @@
 
     constructor: (attrs) ->
       @id = attrs.id
-      @value = attrs.value
+      @value = attrs.points
       @formatted_value = null
       @name = attrs.name
       @assignment_id = attrs.assignment_id
