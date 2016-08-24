@@ -122,13 +122,13 @@ class AssignmentsController < ApplicationController
   private
 
   def assignment_params
-    params.require(:assignment).permit :accepts_attachments, :accepts_links, :accepts_submissions,
-      :accepts_submissions_until, :accepts_text, :assignment_file,
-      :assignment_file_ids, :assignment_score_level,
-      :assignment_type_id, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
+    params.require(:assignment).permit :accepts_attachments, :accepts_links, 
+      :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until, 
+      :accepts_text, :assignment_file, :assignment_file_ids, :assignment_score_level, 
+      :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
       :include_in_predictor, :include_in_timeline, :include_in_to_do,
-      :mass_grade_type, :name, :open_at, :pass_fail,
-      :full_points, :purpose, :release_necessary,
+      :mass_grade_type, :name, :open_at, :pass_fail, :max_submissions,
+      :full_points, :purpose, :release_necessary, :hide_analytics,
       :required, :resubmissions_allowed, :show_description_when_locked,
       :show_purpose_when_locked, :show_name_when_locked,
       :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
