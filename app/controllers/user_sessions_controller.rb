@@ -1,5 +1,6 @@
 class UserSessionsController < ApplicationController
 
+  before_filter :ensure_staff?, only: [:impersonate_student]
   skip_before_filter :require_login, except: [:index]
   skip_before_filter :verify_authenticity_token, only: [:lti_create]
 
@@ -43,6 +44,20 @@ class UserSessionsController < ApplicationController
     auto_login @user
     record_course_login_event user: @user
     respond_with @user, location: dashboard_path
+  end
+
+  def impersonate_student
+    student = current_course.students.find(params[:student_id])
+    impersonating_agent current_user
+    auto_login(student)
+    redirect_to root_url
+  end
+
+  def exit_student_impersonation
+    faculty = User.find(impersonating_agent_id)
+    auto_login(faculty)
+    delete_impersonating_agent
+    redirect_to root_url
   end
 
   def destroy

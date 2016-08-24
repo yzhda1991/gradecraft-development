@@ -7,7 +7,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
   def index
     if current_user_is_student?
       @student = current_student
-      @update_badges = true
+      @update_badges = !student_impersonation?
     else
       @student = NullStudent.new
       @update_badges = false

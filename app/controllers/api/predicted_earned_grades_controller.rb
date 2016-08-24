@@ -5,13 +5,20 @@ class API::PredictedEarnedGradesController < ApplicationController
 
   # GET api/predicted_earned_grades
   def index
-    if current_user_is_student?
+    # restrict predictions for professor viewing student in preview mode
+    if student_impersonation?
+      user = User.find(impersonating_agent_id)
       student = current_student
+    elsif current_user_is_student?
+      user = current_user
+      student = current_student
+    # pass a null student for faculty viewing generic predictor
     else
+      user = current_user
       student = NullStudent.new(current_course)
     end
     @assignments = PredictedAssignmentCollectionSerializer.new(
-      current_course.assignments, current_user, student
+      current_course.assignments, user, student
     )
   end
 

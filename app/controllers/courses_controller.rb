@@ -3,6 +3,7 @@ class CoursesController < ApplicationController
 
   skip_before_filter :require_login, only: [:badges]
   before_filter :ensure_staff?, except: [:index, :badges]
+  before_filter :ensure_not_impersonating?, only: [:index]
   before_action :find_course, only: [:show, :edit, :multiplier_settings,
     :custom_terms, :course_details, :player_settings, :student_onboarding_setup,
   :copy, :update, :destroy, :badges]

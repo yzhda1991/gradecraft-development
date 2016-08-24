@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+include SessionHelper
 
 describe API::PredictedEarnedBadgesController do
   let(:world) { World.create.with(:course, :student, :badge) }
@@ -28,7 +29,7 @@ describe API::PredictedEarnedBadgesController do
 
     describe "GET index" do
       it "assigns the student and badges with the call to update" do
-        get :index, format: :json, id: world.student.id
+        get :index, format: :json
         expect(assigns(:student)).to eq(world.student)
         world.badge.reload
         predictor_badge_attributes.each do |attr|
@@ -58,6 +59,26 @@ describe API::PredictedEarnedBadgesController do
         put :update, id: peb.id, predicted_times_earned: predicted_times_earned, format: :json
         expect(PredictedEarnedBadge.where(student: world.student, badge: world.badge).first.predicted_times_earned).to eq(4)
         expect(JSON.parse(response.body)).to eq({"id" => peb.id, "predicted_times_earned" => predicted_times_earned})
+      end
+    end
+  end
+
+  context "as faculty previewing as student" do
+    before do
+      login_as_impersonating_agent(professor, world.student)
+      allow(controller).to receive(:current_course).and_return(world.course)
+    end
+
+    describe "GET index" do
+      it "removes prediction info from models" do
+        prediction = create(:predicted_earned_badge, badge: world.badge, student: world.student)
+        get :index, format: :json
+        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, predicted_times_earned: 0 })
+      end
+
+      it "sets predictor to not update" do
+        get :index, format: :json
+        expect(assigns(:update_badges)).to be_falsey
       end
     end
   end

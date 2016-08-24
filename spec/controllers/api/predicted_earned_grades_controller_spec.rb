@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+include SessionHelper
 
 describe API::PredictedEarnedGradesController do
   let(:world) { World.create.with(:course, :student, :assignment) }
@@ -48,6 +49,20 @@ describe API::PredictedEarnedGradesController do
       it "renders a 404 if prediction not found" do
         put :update, id: 0, predicted_points: 0, format: :json
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  context "as faculty previewing as student" do
+    before do
+      login_as_impersonating_agent(professor, world.student)
+      allow(controller).to receive(:current_course).and_return(world.course)
+    end
+
+    describe "GET index" do
+      it "assigns the professor and not student as user" do
+        get :index, format: :json
+        expect(assigns(:assignments).current_user).to eq(professor)
       end
     end
   end

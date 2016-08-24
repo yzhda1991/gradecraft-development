@@ -91,6 +91,10 @@ class ApplicationController < ActionController::Base
     return not_authenticated unless current_user_is_staff?
   end
 
+  def ensure_not_impersonating?
+    return not_authenticated unless !student_impersonation?
+  end
+
   def ensure_prof?
     return not_authenticated unless current_user_is_professor?
   end

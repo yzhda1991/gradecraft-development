@@ -292,6 +292,9 @@ GradeCraft::Application.routes.draw do
   resources :passwords, path_names: { new: "reset" },
     except: [:destroy, :index, :show]
 
+  get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
+  get "exit_student_impersonation", to: "user_sessions#exit_student_impersonation"
+
   #SAML
   get "saml/init"
   post "saml/consume"

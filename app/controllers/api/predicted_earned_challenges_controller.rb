@@ -7,7 +7,7 @@ class API::PredictedEarnedChallengesController < ApplicationController
   def index
     if current_user_is_student?
       @student = current_student
-      @update_challenges = true
+      @update_challenges = !student_impersonation?
     else
       @student = NullStudent.new
       @update_challenges = false

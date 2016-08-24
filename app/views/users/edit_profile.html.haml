@@ -45,7 +45,10 @@
               .form_label What's the background of your character in this class? What skills do you have and what are you motivated by?
               = p.input :character_profile, :label => false
 
-      .submit-buttons
-        %ul
-          %li= submit_tag "Update Settings", class: "button"
-          %li= link_to glyph("times-circle") + "Cancel", root_path, class: "button"
+      - if student_impersonation?
+        You cannot update this information in preview mode
+      - else
+        .submit-buttons
+          %ul
+            %li= submit_tag "Update Settings", class: "button"
+            %li= link_to glyph("times-circle") + "Cancel", root_path, class: "button"
