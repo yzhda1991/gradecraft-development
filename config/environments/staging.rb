@@ -13,7 +13,7 @@ GradeCraft::Application.configure do
   config.action_mailer.perform_deliveries = true
 
   config.active_support.deprecation = :notify
-  config.assets.compile = false
+  config.assets.compile = ["1", "yes", "true", "on"].include?(ENV["GC_ASSETS_COMPILE"] || "0" )
   config.assets.compress = true
   config.assets.css_compressor = :sass
   config.assets.digest = true
@@ -24,7 +24,7 @@ GradeCraft::Application.configure do
   config.eager_load = true
   config.i18n.fallbacks = true
   config.log_level = :debug
-  config.serve_static_files = false
+  config.serve_static_files = ["1", "yes", "true", "on"].include?(ENV["GC_SERVE_STATIC_FILES"] || "0" )
   config.session_store :active_record_store, :expire_after => 60.minutes
 end
 
