@@ -6,7 +6,7 @@ describe UserAggregateContextFilter do
   let(:context) { double(:some_context, class: "CourseExportContext") }
 
   before do
-    allow(subject).to receive(:@valid_context_type?) { true }
+    allow(subject).to receive(:valid_context_type?) { true }
   end
 
   it "inherits from Analytics::Export::ContextFilter" do
