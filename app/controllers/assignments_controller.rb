@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 require "canvas"
 
 class AssignmentsController < ApplicationController
@@ -6,11 +7,17 @@ class AssignmentsController < ApplicationController
 
   before_filter :ensure_staff?, except: [:show, :index]
 
-  # rubocop:disable AndOr
   def index
-    redirect_to syllabus_path and return if current_user_is_student?
     @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
+    if current_user_is_student?
+      render :index, Assignments::StudentPresenter.build({
+        student: current_student,
+        assignment_types: current_course.assignment_types.includes(:assignments),
+        course: current_course,
+        view_context: view_context
+      })
+    end
   end
 
   # Gives the instructor the chance to quickly check all assignment settings

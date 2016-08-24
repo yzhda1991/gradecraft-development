@@ -1,8 +1,7 @@
 class StudentsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?,
-    except: [:predictor, :grading_scheme, :badges, :teams, :syllabus ]
+  before_filter :ensure_staff?
   before_filter :save_referer, only: [:recalculate]
 
   # Lists all students in the course,
@@ -31,18 +30,6 @@ class StudentsController < ApplicationController
     render :leaderboard, Students::LeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
-  # Students' primary page: displays all assignments and
-  # team challenges in course
-  def syllabus
-    self.current_student = current_course.students.where(id: params[:id]).first
-    render :syllabus, Students::SyllabusPresenter.build({
-      student: current_student,
-      assignment_types: current_course.assignment_types.ordered.includes(:assignments),
-      course: current_course,
-      view_context: view_context
-    })
-  end
-
   # Displaying student profile to instructors
   def show
     @events = Timeline.new(current_course).events_by_due_date
@@ -61,28 +48,6 @@ class StudentsController < ApplicationController
       { name: [u.first_name, u.last_name].join(" "), id: u.id }
     end
     render json: MultiJson.dump(students)
-  end
-
-  # Displaying the course grading scheme and professor's grading philosophy
-  def grading_scheme
-    self.current_student = current_course.students.where(id: params[:id]).first
-    @grade_scheme_elements = current_course.grade_scheme_elements.order_by_highest_points
-    @title = "Your Course Progress"
-  end
-
-  def teams
-    student = params[:id].present? ? User.find(params[:id]) : current_student
-    # make current_student a scope so the student profile tabs partial is displayed
-    params[:student_id] = params[:id]
-    @title = "#{term_for :teams}"
-    @team = student.team_for_course(current_course)
-    @teams = current_course.teams.order_by_rank.includes(:earned_badges)
-  end
-
-  # Display the grade predictor
-  def predictor
-    # id is used for api routes
-    params[:student_id] = params[:id] if current_user_is_staff?
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates

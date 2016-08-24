@@ -1,11 +1,4 @@
-= content_nav_for Team
-
-%h3.pagetitle= @title
-
-= render "buttons"
-
-.pageContent
-  = render "layouts/alerts"
-
-  = render partial: "teams/leaderboard"
-  = render partial: "teams/stats"
+-if current_user_is_staff?
+  = render partial: "teams/instructor_index"
+- else
+  = render partial: "teams/student_index"

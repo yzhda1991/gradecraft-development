@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class Students::SyllabusPresenter < Showtime::Presenter
+class Assignments::StudentPresenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def course

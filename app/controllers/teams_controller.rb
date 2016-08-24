@@ -1,11 +1,14 @@
 class TeamsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, except: [:index]
 
   def index
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
     @title = "#{term_for :teams}"
+    if current_user_is_student?
+      @team = current_student.team_for_course(current_course)
+    end
   end
 
   def show

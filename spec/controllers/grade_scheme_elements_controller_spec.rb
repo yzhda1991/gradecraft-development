@@ -72,7 +72,7 @@ describe GradeSchemeElementsController do
         expect(response.status).to eq(500)
       end
     end
-    
+
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
         get :export_structure, id: @course.id, format: :csv
@@ -90,9 +90,16 @@ describe GradeSchemeElementsController do
       login_user(@student)
     end
 
+    describe "GET index" do
+      it "assigns all grade scheme elements" do
+        @grade_scheme_element = create(:grade_scheme_element, letter: "A", course: @course)
+        get :index
+        expect(assigns(:grade_scheme_elements)).to eq([@grade_scheme_element])
+      end
+    end
+
     describe "protected routes" do
       [
-        :index,
         :mass_edit,
         :mass_update
       ].each do |route|

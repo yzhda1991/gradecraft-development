@@ -171,8 +171,9 @@ describe AssignmentsController do
     before(:each) { login_user(@student) }
 
     describe "GET index" do
-      it "redirects to syllabus path" do
-        expect(get :index).to redirect_to("/syllabus")
+      it "returns assignments for the current course" do
+        get :index
+        expect(response).to render_template(:index)
       end
     end
 

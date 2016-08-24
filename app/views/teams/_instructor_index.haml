@@ -1,0 +1,11 @@
+= content_nav_for Team
+
+%h3.pagetitle= @title
+
+= render "buttons"
+
+.pageContent
+  = render "layouts/alerts"
+
+  = render partial: "teams/leaderboard"
+  = render partial: "teams/stats"

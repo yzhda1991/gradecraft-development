@@ -1,7 +1,7 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
+  before_filter :ensure_staff?, except: [:dashboard, :predictor, :timeline_events]
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
@@ -18,6 +18,12 @@ class InfoController < ApplicationController
       course: current_course,
       view_context: view_context
     })
+  end
+
+  # Display the grade predictor
+  def predictor
+    # id is used for api routes via Angular service
+    params[:student_id] = params[:id] if current_user_is_staff?
   end
 
   def timeline_events
@@ -130,7 +136,7 @@ class InfoController < ApplicationController
     @assignment_types = current_course.assignment_types.ordered
     @teams = current_course.teams
   end
-  
+
   def submissions
     course = current_user.courses.find_by(id: params[:id])
     respond_to do |format|
