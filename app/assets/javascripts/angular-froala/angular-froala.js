@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('froala', []).
-	value('froalaConfig', {}).
+	value('froalaConfig', {
+		key: '6Ud1QBRVCDLPAZMBQ=='
+	}).
 	directive('froala', ['froalaConfig', '$timeout', function(froalaConfig, $timeout) {
 		froalaConfig = froalaConfig || {};
 		var froalaEvents = ['afterPaste','afterRemoveImage','afterSave','afterUploadPastedImage','align','backColor','badLink','beforeDeleteImage','beforeFileUpload','beforeImageUpload','beforePaste','beforeRemoveImage','beforeSave','blur','bold','cellDeleted','cellHorizontalSplit','cellInsertedAfter','cellInsertedBefore','cellVerticalSplit','cellsMerged','columnDeleted','columnInsertedAfter','columnInsertedBefore','contentChanged','fileError','fileUploaded','focus','fontFamily','fontSize','foreColor','formatBlock','htmlHide','htmlShow','imageAltSet','imageDeleteError','imageDeleteSuccess','imageError','imageFloatedLeft','imageFloatedNone','imageFloatedRight','imageInserted','imageLinkInserted','imageLinkRemoved','imageLoaded','imageReplaced','imagesLoadError','imagesLoaded','indent','initialized','italic','linkInserted','linkRemoved','onPaste','orderedListInserted','outdent','redo','rowDeleted','rowInsertedAbove','rowInsertedBelow','saveError','selectAll','strikeThrough','subscript','superscript','tableDeleted','tableInserted','underline','undo','unorderedListInserted','videoError','videoFloatedLeft','videoFloatedNone','videoFloatedRight','videoInserted','videoRemoved'];
