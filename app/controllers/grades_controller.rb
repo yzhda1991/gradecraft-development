@@ -136,9 +136,9 @@ class GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit :_destroy, :adjustment_points, :adjustment_points_feedback,
+    params.require(:grade).permit :_destroy, :score, :adjustment_points, :adjustment_points_feedback,
       :assignment_id, :assignment_type_id, :assignments_attributes, :course_id,
-      :earned_badges_attributes, :excluded_by, :excluded_date, :excluded_from_course_score,
+      :earned_badges_attributes, :excluded_by_id, :excluded_at, :excluded_from_course_score,
       :feedback, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
       :final_points, :grade_file_ids, :grade_files_attributes, :graded_at, :graded_by_id,
       :group_id, :group_type, :instructor_modified, :is_custom_value, :pass_fail_status,

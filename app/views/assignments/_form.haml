@@ -149,12 +149,6 @@
       .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
 
   %section
-    %h4 Timeline
-
-    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: presenter.assignment }
-    = render partial: "layouts/media_image_form_item", locals: { f: f, model: presenter.assignment }
-
-  %section
     %h4 Unlocks
 
     .locked-visibility-options

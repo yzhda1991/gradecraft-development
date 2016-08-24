@@ -29,7 +29,7 @@ class CriteriaController < ApplicationController
   private
 
   def criterion_params
-    params.require(:criterion).permit :description, :full_credit_level_id, :max_points,
+    params.require(:criterion).permit :description, :level_count, :full_credit_level_id, :max_points,
       :meets_expectations_level_id, :meets_expectations_points, :name, :order, :rubric_id
   end
 

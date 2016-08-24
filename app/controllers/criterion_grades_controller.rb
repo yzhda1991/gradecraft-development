@@ -24,7 +24,7 @@ class CriterionGradesController < ApplicationController
 
   def criterion_grade_params
     params.require(:criteron_grade).permit :points, :criterion_id, :level_id,
-      :student_id, :assignment_id
+      :student_id, :assignment_id, :comments
   end
 
   def find_criterion_grade

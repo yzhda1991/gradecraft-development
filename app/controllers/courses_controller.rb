@@ -139,7 +139,7 @@ class CoursesController < ApplicationController
       :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
       :total_weights, :weights_close_at, :has_public_badges,
       :assignment_weight_type, :has_submissions, :teams_visible,
-      :weight_term, :fail_term, :pass_term,
+      :weight_term, :fail_term, :pass_term, :time_zone,
       :max_weights_per_assignment_type, :assignments,
       :accepts_submissions, :tagline, :office, :phone,
       :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,

@@ -57,12 +57,6 @@
     = link_to "Add a Level", "#", class: "add-challenge-score-level button radius"
 
   %section
-    %h4 Timeline
-
-    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: @challenge }
-    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
-
-  %section
     %h4 Attachments
     = f.simple_fields_for :challenge_files, @challenge.challenge_files.new do |cf|
       = cf.file_field :file, :multiple => true
