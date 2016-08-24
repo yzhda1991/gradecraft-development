@@ -116,13 +116,13 @@ class UnlockCondition < ActiveRecord::Base
     self.send method, student
   end
   
-  def check_assignments_completed_condition
+  def check_assignments_completed_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_completed_count = assignment_type.count_grades_for(student)
     assignment_completed_count >= condition_value
   end
   
-  def check_min_points_condition
+  def check_min_points_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_type_score = assignment_type.score_for_student(student)
     assignment_type_score >= condition_value
