@@ -22,7 +22,7 @@ describe CourseUserAggregateExport do
   end
 
   it "uses the users context filter" do
-    filter_names = described_class.instance_variable_get :@context_filter_names
+    filter_names = described_class.instance_variable_get :@context_filters
     expect(filter_names).to eq [:user_aggregate]
   end
 
