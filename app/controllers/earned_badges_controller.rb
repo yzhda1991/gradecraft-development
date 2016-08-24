@@ -5,8 +5,8 @@ class EarnedBadgesController < ApplicationController
   # how what and how a student performed
 
   skip_before_filter :require_login, only: [:confirm_earned]
-  before_filter :ensure_staff?
-  before_action :find_badge
+  before_filter :ensure_staff?, except: [:confirm_earned]
+  before_action :find_badge, except: [:confirm_earned]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
   def index
@@ -19,8 +19,13 @@ class EarnedBadgesController < ApplicationController
   end
 
   def confirm_earned
-    respond_to do |format|
-      format.all { render nothing: true, status: 200 }
+    @course = Course.find(params[:course_id])
+    @badge = @course.badges.find(params[:badge_id])
+    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
+    if @earned_badge.present?
+      render nothing: true, status: 200
+    else 
+      redirect_to root_path
     end
   end
 
