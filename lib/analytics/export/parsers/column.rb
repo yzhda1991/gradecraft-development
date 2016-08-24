@@ -44,7 +44,7 @@ module Analytics
               print "    =>#{message.to_s}" if message.printable?
 
               cell_parser = Parsers::Cell.new \
-                strategy: parsing_strategy,
+                parsing_strategy: parsing_strategy,
                 record: record,
                 export: export
 
