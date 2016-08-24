@@ -1,4 +1,5 @@
 rackup "config.ru"
+environment ENV["RAILS_ENV"] || "development"
 port ENV["PUMA_PORT"] || 5000
 
 pidfile ENV["PUMA_PID_FILE"] if ENV["PUMA_PID_FILE"]
