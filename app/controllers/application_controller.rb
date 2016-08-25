@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_not_impersonating?
-    return not_authenticated unless !student_impersonation?
+    redirect_to root_path unless !student_impersonation?
   end
 
   def ensure_prof?
