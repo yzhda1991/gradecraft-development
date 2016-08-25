@@ -33,6 +33,9 @@
 
     .form-item
       = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
+    
+    .form-item
+      = f.input :lti_uid, label: "LTI ID"
 
   %section
     %h4.uppercase GradeCraft Settings
