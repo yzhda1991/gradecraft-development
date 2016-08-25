@@ -42,4 +42,14 @@ class CoursePredictorExport < Analytics::Export::Model
     assignment_id = event.assignment_id.to_i
     context_filters[:assignments].assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
   end
+
+  def predicted_points(event)
+    return nil unless event.respond_to? :predicted_points
+    event.predicted_points
+  end
+
+  def possible_points(event)
+    return nil unless event.respond_to? :possible_points
+    event.possible_points
+  end
 end

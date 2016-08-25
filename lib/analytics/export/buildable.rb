@@ -6,11 +6,16 @@ module Analytics
       end
 
       def export_builder
-        @export_builder ||= Analytics::Export::Builder.new \
-          export_context: context,
+        @export_builder ||= Analytics::Export::Builder.new builder_attrs
+      end
+
+      def builder_attrs
+        {
+          export_context: export_context,
           export_classes: export_classes,
           filename: filename,
           directory_name: directory_name
+        }
       end
 
       def upload_builder_archive_to_s3

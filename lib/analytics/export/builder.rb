@@ -44,7 +44,7 @@ module Analytics
 
       def exporters
         @exporters ||= export_classes.collect do |export_class|
-          export_class.new context: export_context
+          export_class.new context: export_context, filename: filename
         end
       end
 

@@ -34,7 +34,7 @@ class CourseUserAggregateExport < Analytics::Export::Model
   end
 
   def logins(user)
-    context_filters[:user_aggregate].user_logins[user.id]
+    context_filters[:user_aggregate].parsed_user_logins[user.id]
   end
 
   def predictor_events(user)
