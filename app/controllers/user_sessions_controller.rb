@@ -57,7 +57,7 @@ class UserSessionsController < ApplicationController
     faculty = User.find(impersonating_agent_id)
     auto_login(faculty)
     delete_impersonating_agent
-    redirect_to root_url
+    redirect_to students_path
   end
 
   def destroy
