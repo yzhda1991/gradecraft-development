@@ -17,10 +17,11 @@ module Analytics
         @export_classes = export_classes
         @filename = filename || "exported_files.zip"
         @directory_name = directory_name || "exported_files"
+
+        make_directories
       end
 
       def build_archive!
-        make_directories
         generate_csvs
         build_zip_archive
       end
@@ -44,7 +45,7 @@ module Analytics
 
       def exporters
         @exporters ||= export_classes.collect do |export_class|
-          export_class.new context: export_context, filename: filename
+          export_class.new context: export_context
         end
       end
 

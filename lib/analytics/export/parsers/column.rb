@@ -40,8 +40,6 @@ module Analytics
             puts "  => parsing column :#{column_name} as :#{parsing_strategy}"
 
             parsed_columns[column_name] = records.each_with_index.collect do |record, index|
-              message = progress_message(index)
-              # puts "    =>#{message.to_s}" if message.printable?
 
               cell_parser = Parsers::Cell.new \
                 parsing_strategy: parsing_strategy,
@@ -54,13 +52,6 @@ module Analytics
 
           # and after all of that return the parsed columns
           parsed_columns
-        end
-
-        def progress_message(index)
-          Analytics::Export::ProgressMessage.new \
-            record_index: index,
-            total_records: records.size,
-            print_every: 1000
         end
       end
     end
