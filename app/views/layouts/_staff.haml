@@ -2,10 +2,10 @@
   / Staff-only sidebar navigation
   = render partial: "layouts/navigation/staff_subnav"
 
-.mainContainer{role: "main", :class => current_student.present? ? "viewing-student staff" : "staff"}
+.mainContainer{role: "main", class: "staff"}
 
   - if current_student.present?
-    %h2.profileTitle= current_student.name
+    %h3.pagetitle= current_student.name
 
   / Page content
   .mainContent= render partial: "layouts/content"
