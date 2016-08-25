@@ -21,7 +21,7 @@
 
 %section.student-panel-article-description{'ng-if'=>'article.has_info'}
   %h2 Description
-  .student-panel-text-block{ 'ng-bind-html'=> 'article.description | limitTo:750 | html' }
+  .student-panel-text-block{ 'ng-bind-html'=> 'article.description | limitTo:700 | html' }
     {{article.description}}
   %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
 
