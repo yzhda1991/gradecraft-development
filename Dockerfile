@@ -12,6 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     ruby-dev
 
 EXPOSE 5000
+CMD ./start.sh
 
 RUN gem install -v 1.10.6 bundler
 RUN mkdir /gradecraft
@@ -19,6 +20,5 @@ WORKDIR /gradecraft/
 ADD Gemfile /gradecraft/Gemfile
 ADD Gemfile.lock /gradecraft/Gemfile.lock
 RUN bundle install
-COPY . /gradecraft
 
-CMD ./start.sh
+COPY . /gradecraft
