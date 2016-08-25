@@ -1,14 +1,14 @@
-.col-40
+.flex-col-40
   - if presenter.due_dates?
     .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
 
-.col-60
+.flex-col-60
   - if @events.present?
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
   .flex-column
     - if current_course.grade_scheme_elements.present?
-      .panel.dashboard-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
+      .panel.dashboard-module.grading-scheme-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
 
     .stacked-column
       - if ! current_course.hide_analytics?
