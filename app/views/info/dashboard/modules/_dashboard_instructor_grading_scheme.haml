@@ -4,8 +4,7 @@
 - current_course.grade_scheme_elements.reverse.each do |element|
   .progress.bar_magic
     .meter
-      %span= element.name
-      %span= points element.lowest_points
+      .level-name #{element.name} #{points element.lowest_points}
       %span.student-count= element.count_students_earned
     - if current_course.student_count > 0
       .fill-bar.bar_magic{:style => "width: #{(element.count_students_earned) / (current_course.student_count) * 100}%;"}

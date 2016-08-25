@@ -12,7 +12,7 @@
   -ms-flex-direction: row
   flex-direction: row
   @media (max-width: $media-small-max)
-    display: block
+    flex-wrap: wrap
 
   .flex-col-30
     width: 30%
@@ -80,7 +80,7 @@
     -ms-flex: 1
     flex: 1 auto
 
-  /* Styles the tablet layout for student dashboard */
+/* Styles the tablet layout for student dashboard */
 #student-dashboard
   @media (max-width: $media-medium-max)
     flex-wrap: wrap
@@ -227,6 +227,12 @@
     padding: .25rem .5rem
     font-size: 0.8rem
     position: relative
+    .meter
+      max-height: 20px
+      overflow: hidden
+    .level-name
+      display: inline-block
+      max-width: 90%
     .fill-bar
       position: absolute
       height: 100%
