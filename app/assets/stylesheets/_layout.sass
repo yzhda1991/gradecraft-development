@@ -38,16 +38,6 @@ body
   padding: 1rem
   background-color: $color-white
 
-.mainContainer.viewing-student > .mainContent 
-  padding-top: 5.5rem
-  @media (max-width: $media-small-max)
-    padding-top: 3.5rem
-
-  h3.pagetitle
-    display: none
-  .predictor-graph
-    top: 134px
-
 .student > .mainContent
   padding-top: 2.2rem
   @media (max-width: $media-small-max)
@@ -122,15 +112,24 @@ a:hover + .display_on_hover
   position: absolute
   margin-left: -240px
 
+.preview-bar
+  padding: 1rem 1rem .75rem
+
 .the-nav.preview-mode
   background-color: $color-orange-1
+  .course_semester
+    color: $color-white
 
-.the-nav .release-preview-link
+.the-nav .release-preview-link a
   float: left
   color: white
-  font-size: 1.25rem
-  margin-left: 10%
-  margin: 10px 0 0 10%
+  font-size: .95rem
+  margin: 7px 0 0 12%
+  background-color: $color-blue-3
+  padding: .25rem
+  border-radius: $global-radius
+  &:hover 
+    background-color: $color-blue-2
 
 @media (min-width: $media-medium-max)
   .panel .row
