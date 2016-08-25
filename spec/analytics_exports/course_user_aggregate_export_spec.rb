@@ -63,7 +63,7 @@ describe CourseUserAggregateExport do
   describe "#logins" do
     it "takes the logins from context_filter#user_logins" do
       allow(context_filters[:user_aggregate])
-        .to receive(:user_logins).and_return({ 20 => 400 })
+        .to receive(:parsed_user_logins).and_return({ 20 => 400 })
 
       user = double(:user, id: 20)
       expect(subject.logins user).to eq 400
