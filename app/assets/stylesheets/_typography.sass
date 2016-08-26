@@ -90,9 +90,10 @@ h2.pagetitle
   h2.pagetitle
     background-color: $color-white
     color: $color-blue-2
-    opacity: 1
     display: block
     margin-top: 0.75rem
+    @media (max-width: $media-small-max)
+      font-size: 1.5rem
 
 /** Subtitle **/
 h3.subtitle

@@ -5,54 +5,59 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %ul.in-page-navigation
-    %li
-      %a{ "href" => "#tab1"} Description &amp; Downloads
-    - if presenter.show_rubric_preview? current_student
+  .in-page-nav-wrapper
+    %ul.in-page-navigation
       %li
-        %a{ "href" => "#tab2"} Grading Rubric
-    - if presenter.has_submission_for? current_student
-      %li
-        %a{ :href => "#tab3"} My Submission
-      %li
-        %a{ href: "#history" } My Submission History
-
-    - if presenter.grades_available_for? current_student
-      %li
-        %a{ :href => "#tab4"} My Grade
-      - if !presenter.hide_analytics?
+        %a{:href => "#tab1"} Description &amp; Downloads
+      - if presenter.show_rubric_preview? current_student
         %li
-          %a{ :href => "#tab5"} Class Analytics
+          %a{:href => "#tab2"} Grading Rubric
+      - if presenter.has_submission_for? current_student
+        %li
+          %a{:href => "#tab3"} My Submission
+        %li
+          %a{href: "#history"} My Submission History
+
+      - if presenter.grades_available_for? current_student
+        %li
+          %a{:href => "#tab4"} My Grade
+        - if !presenter.hide_analytics?
+          %li
+            %a{:href => "#tab5"} Class Analytics
 
   .assignment-details-container
     %section#tab1.active
       %h3 Description and Downloads
       = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
-      %hr.dotted
 
     - if presenter.show_rubric_preview? current_student
+      %hr.dotted
       %section#tab2
+        %h3 Grading Rubric
         = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
-        %hr.dotted
 
     - if presenter.has_submission_for?(current_student)
+      %hr.dotted
       %section#tab3
+        %h3 My Submission
         = render partial: "submissions/submission_content",
             locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
               assignment_id: presenter.assignment.id, course: current_course) }
-        %hr.dotted
 
       %section#history
+        %hr.dotted
+        %h3 My Submission History
         = history_timeline presenter.submission_grade_history(current_student)
 
     - if presenter.grades_available_for? current_student
       %section#tab4
+        %hr.dotted
         %h3 My Grade
         = render partial: "grades/grade_content", locals: { grade: presenter.grade_for(current_student) }
-        %hr.dotted
 
       - if !presenter.hide_analytics?
         %section#tab5
+          %hr.dotted
           %h3 Class Analytics
           - if presenter.assignment.has_groups?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
