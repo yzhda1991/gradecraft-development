@@ -10,16 +10,16 @@
         %p.event-date= glyph(:calendar) + presenter.dates_for(event)
         .slide-body
           .event-information
-            .event-image
-              %img{:src => event.media }
+            - if event.media.present?
+              .event-image
+                %img{:src => event.media }
             - if event.description.present?
-              .event-description
-                = sanitize(event.description, :tags=>['a', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']).truncate(200, :separator => " ").html_safe
-                = link_to "See the Details", event
+              .event-details
+                .event-description
+                  = sanitize(event.description, :tags=>['a', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']).truncate(200, :separator => " ").html_safe
+                .see-details-link
+                  = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
               - if assignment.visible_for_student?(current_student)
                 %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.strftime("%H:%M%p") }
-    .event-slide.last-slide
-      .slide-body
-        .dashboard-message This class is over!
