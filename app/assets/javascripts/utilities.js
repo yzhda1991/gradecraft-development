@@ -69,7 +69,7 @@ $(".assignmentType").collapse({
   persist: true
 });
 
-$(".challenge").collapse({
+$(".collapseSection").collapse({
   show: function() {
     // The context of 'this' is applied to
     // the collapsed details in a jQuery wrapper

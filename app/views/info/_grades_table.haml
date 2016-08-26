@@ -1,15 +1,7 @@
-%h4.subtitle{ id: "#{grade_type}TableCaption" }
-  = subtitle
-  %span.label.alert= count
-
 - grades_by_assignment.each do |assignment, grades|
   %div{ class: "assignment-#{grade_type}"}
     %h4.assignment_name
       = link_to assignment.name, assignment
-    - if assignment.is_individual?
-      = link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button quick-grade-button"
-    - else
-      = link_to glyph(:check) + "Grade", assignment, class: "button quick-grade-button"
 
     = form_tag edit_status_assignment_grades_path(assignment), method: :get do
 
@@ -49,7 +41,6 @@
                 %td
                   .right
                     %ul.button-bar
-                      %li= link_to glyph(:eye) + "See Grade", grade_path(grade), class: "button"
                       - if assignment.is_individual?
                         %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
                       - elsif assignment.has_groups?

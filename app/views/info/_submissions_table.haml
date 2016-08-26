@@ -1,11 +1,6 @@
-%h4.subtitle{ id: "#{submission_type}TableCaption" }
-  = subtitle
-  %span.label.alert= count
-
 - submissions_by_assignment.each do |assignment, submissions|
   %h4.assignment_name
     = link_to assignment.name, assignment
-  = link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button quick-grade-button"
   %table.dynatable.no-table-header{"aria-describedby" => "ungradedTableCaption"}
     %thead
       %tr
@@ -38,9 +33,7 @@
             .right
               %ul.button-bar
                 - if assignment.is_individual?
-                  %li= link_to glyph(:eye) + "See Submission", assignment_submission_path(assignment, id: submission.id), class: "button"
                   %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(assignment, student), method: :post, class: "button"
                 - elsif assignment.has_groups?
-                  %li= link_to glyph(:eye) + "See Submission", assignment_submission_path(assignment.id, id: submission.id), class: "button"
                   %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(assignment, group), class: "button"
   %hr.dotted

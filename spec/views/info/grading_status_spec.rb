@@ -22,7 +22,6 @@ describe "info/grading_status" do
       @ungraded_submissions_by_assignment = [ungraded_submission].group_by(&:assignment)
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
-      @no_status_grades_by_assignment = []
       @resubmissions_by_assignment = []
     end
     it "renders successfully" do
@@ -36,7 +35,6 @@ describe "info/grading_status" do
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = @grades.group_by(&:assignment)
       @in_progress_grades_by_assignment = []
-      @no_status_grades_by_assignment = []
       @resubmissions_by_assignment = []
     end
     it "renders successfully" do
@@ -49,7 +47,6 @@ describe "info/grading_status" do
       @grades = [create(:in_progress_grade, course: @course, assignment: @assignment, student: @student)]
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = []
-      @no_status_grades_by_assignment = []
       @in_progress_grades_by_assignment = @grades.group_by(&:assignment)
       @resubmissions_by_assignment = []
     end
@@ -63,7 +60,6 @@ describe "info/grading_status" do
       resubmission = create(:submission, student: @student, assignment: @assignment)
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = []
-      @no_status_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
       @resubmissions_by_assignment = [resubmission].group_by(&:assignment)
     end
