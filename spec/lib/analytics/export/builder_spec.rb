@@ -12,38 +12,6 @@ describe Analytics::Export::Builder do
   end
   let(:export_context) { double(:context).as_null_object }
 
-  describe "readable attributes" do
-    it "has several readable attributes" do
-      subject.instance_variable_set :@export_context, "some data"
-      expect(subject.export_context).to eq "some data"
-    end
-
-    it "has readable export classes" do
-      subject.instance_variable_set :@export_classes, ["some classes"]
-      expect(subject.export_classes).to eq ["some classes"]
-    end
-
-    it "has a readable filename" do
-      subject.instance_variable_set :@filename, "some_filename.txt"
-      expect(subject.filename).to eq "some_filename.txt"
-    end
-
-    it "has a readable directory_name" do
-      subject.instance_variable_set :@directory_name, "some_dirname"
-      expect(subject.directory_name).to eq "some_dirname"
-    end
-
-    it "has a readable tmpdir" do
-      subject.instance_variable_set :@export_tmpdir, "/export/tmp/dir"
-      expect(subject.export_tmpdir).to eq "/export/tmp/dir"
-    end
-
-    it "has a readable final export tmpdir" do
-      subject.instance_variable_set :@final_export_tmpdir, "/final/tmp/dir"
-      expect(subject.final_export_tmpdir).to eq "/final/tmp/dir"
-    end
-  end
-
   describe "#initialize" do
     it "sets the export_context" do
       expect(subject.export_context).to eq export_context
@@ -51,6 +19,11 @@ describe Analytics::Export::Builder do
 
     it "sets the export classes" do
       expect(subject.export_classes).to eq []
+    end
+
+    it "makes the directories" do
+      expect_any_instance_of(described_class).to receive(:make_directories)
+      subject
     end
 
     describe "filename" do
@@ -79,14 +52,8 @@ describe Analytics::Export::Builder do
   describe "#build_archive!" do
     before do
       allow(subject).to receive_messages \
-        make_directories: true,
         generate_csvs: true,
         build_zip_archive: true
-    end
-
-    it "makes the directories" do
-      expect(subject).to receive(:make_directories)
-      subject.build_archive!
     end
 
     it "generates the csvs" do
@@ -105,7 +72,8 @@ describe Analytics::Export::Builder do
 
     before(:each) do
       allow(S3fs).to receive(:mktmpdir) { "/s3fs/dir" }
-      allow(subject).to receive(:export_root_dir) { export_root_dir }
+      allow_any_instance_of(described_class)
+        .to receive(:export_root_dir) { export_root_dir }
     end
 
     it "builds an export_tmpdir" do
@@ -119,7 +87,7 @@ describe Analytics::Export::Builder do
     end
 
     it "makes a directory for the export_root" do
-      expect(FileUtils).to receive(:mkdir_p).with export_root_dir
+      expect(FileUtils).to receive(:mkdir_p).with(export_root_dir).exactly(2).times
       subject.make_directories
     end
   end
