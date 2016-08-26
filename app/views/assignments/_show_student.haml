@@ -25,25 +25,24 @@
         %li
           %a{ :href => "#tab5"} Class Analytics
 
-  #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
-    %h2 
-    #tab1.active
+  .assignment-details-container
+    %section#tab1.active
       = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
     - if presenter.show_rubric_preview? current_student
-      #tab2
+      %section#tab2
         = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
     - if presenter.has_submission_for?(current_student)
-      #tab3
+      %section#tab3
         = render partial: "submissions/submission_content",
             locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
               assignment_id: presenter.assignment.id, course: current_course) }
       #history
         = history_timeline presenter.submission_grade_history(current_student)
     - if presenter.grades_available_for? current_student
-      #tab4
+      %section#tab4
         = render partial: "grades/grade_content", locals: { grade: presenter.grade_for(current_student) }
       - if !presenter.hide_analytics?
-        #tab5
+        %section#tab5
           - if presenter.assignment.has_groups?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else
