@@ -49,20 +49,4 @@ describe Analytics::Export::Parsers::Column do
       expect(subject.parsed_columns[:badger_info]).to eq [90, 300]
     end
   end
-
-  describe "#progress_message" do
-    it "builds a progress message" do
-      expect(Analytics::Export::ProgressMessage).to receive(:new)
-        .with({
-          record_index: 3,
-          total_records: 4,
-          print_every: 5
-        })
-
-      allow(subject).to receive(:records)
-        .and_return double(:records, size: 4)
-
-      subject.progress_message 3
-    end
-  end
 end

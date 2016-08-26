@@ -29,8 +29,8 @@ class UserAggregateContextFilter < Analytics::Export::ContextFilter
   def user_predictor_event_counts
     @user_predictor_event_counts ||= context.predictor_events
       .inject(Hash.new(0)) do |memo, predictor_event|
-        memo[predictor_event.user_id] += 1
-        memo
+      memo[predictor_event.user_id] += 1
+      memo
     end
   end
 
