@@ -19,7 +19,7 @@ describe Analytics::Export::Buildable do
   describe "#export_builder" do
     before do
       allow(subject).to receive_messages({
-        context: "some context",
+        export_context: "some context",
         export_classes: "some classes",
         filename: "the_filename.txt",
         directory_name: "ECO500"
