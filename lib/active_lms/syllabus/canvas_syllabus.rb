@@ -26,8 +26,10 @@ module ActiveLMS
       assignments = []
 
       if assignment_ids.nil?
-        client.get_data("/courses/#{course_id}/assignments", published: true) do |data|
-          assignments += data
+        client.get_data("/courses/#{course_id}/assignments") do |data|
+          data.select { |assignment| assignment["published"] }.each do |assignment|
+            assignments << assignment
+          end
         end
       else
         [assignment_ids].flatten.uniq.compact.each do |assignment_id|
