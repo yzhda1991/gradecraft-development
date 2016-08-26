@@ -6,3 +6,6 @@
   %td= lms_user_match?(user["primary_email"], current_course) ? "Yes" : "No"
   %td= grade["score"]
   %td= Time.new(grade["graded_at"]).strftime("%A, %B %d %Y") unless grade["graded_at"].nil?
+  %td.center
+    - if lms_user_match?(user["primary_email"], current_course)
+      = check_box_tag "grade_ids[]", grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }
