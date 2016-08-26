@@ -1,4 +1,3 @@
-%h3 Description and Downloads
 - if !current_student || presenter.assignment.points_visible_for_student?(current_student)
   - if presenter.assignment.pass_fail?
     %p.italic= "#{term_for :pass}/#{term_for :fail} Assignment"
@@ -28,7 +27,8 @@
   - presenter.assignment.assignment_files.each do |af|
     %li= link_to af.filename, af.url
 - if current_user_is_staff?
-  = link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
+  %h4.uppercase Downloads
+  %p= link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
 
   - if presenter.grade_with_rubric? && presenter.grades.present?
     .clear= link_to glyph(:download) + "Download Rubric Grades", export_earned_levels_assignment_grades_path(presenter.assignment, format: :csv)
@@ -71,19 +71,20 @@
           %li= link_to uc.requirements_description_sentence, uc.condition
 
 - if presenter.assignment.is_a_condition?
-  %h5 #{glyph(:key)} This #{term_for :assignment} is a Key
+  %h4.uppercase Details:
+  %p #{glyph(:key)} This #{term_for :assignment} is a Key
   %ul
     - presenter.assignment.unlock_keys.each do |key|
       %li= link_to key.key_description_sentence, key.unlockable
 
 - if presenter.assignment_has_viewable_description?(current_user)
   %h4.uppercase Guidelines:
-  %p= raw sanitize_external_links presenter.assignment.description
+  = raw sanitize_external_links presenter.assignment.description
 
 - if presenter.assignment_has_viewable_purpose?(current_user)
   %h4.uppercase Purpose:
-  %p= raw presenter.assignment.purpose
+  = raw presenter.assignment.purpose
 
 - if presenter.assignment.assignment_type.description.present?
   %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
-  %p= raw presenter.assignment.assignment_type.description
+  = raw presenter.assignment.assignment_type.description
