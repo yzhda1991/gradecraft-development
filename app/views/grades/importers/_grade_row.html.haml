@@ -5,4 +5,4 @@
   %td= user["primary_email"]
   %td= lms_user_match?(user["primary_email"], current_course) ? "Yes" : "No"
   %td= grade["score"]
-  %td= grade["graded_at"]
+  %td= Time.new(grade["graded_at"]).strftime("%A, %B %d %Y") unless grade["graded_at"].nil?
