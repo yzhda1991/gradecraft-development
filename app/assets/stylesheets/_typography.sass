@@ -75,7 +75,7 @@ hr
   background-color: $color-blue-2
 
 /** Page Title **/
-h3.pagetitle
+h2.pagetitle
   text-transform: uppercase
   width: 100%
   display: inline-block
@@ -87,16 +87,15 @@ h3.pagetitle
   font-weight: 100
 
 .student
-  h3.pagetitle
+  h2.pagetitle
     background-color: $color-white
     color: $color-blue-2
     opacity: 1
-    display: none
-    @media (max-width: $media-small-max)
-      display: block
+    display: block
+    margin-top: 0.75rem
 
 /** Subtitle **/
-h4.subtitle
+h3.subtitle
   font-size: 1.3rem
   line-height: 1.0
   color: $color-blue-2
@@ -108,13 +107,13 @@ h4.subtitle
     margin-bottom: 0 !important
     font-weight: normal
 
-h4.subtitle.fail
+h3.subtitle.fail
   color: $alert-color
 
-h4.subtitle.success
+h3.subtitle.success
   color: $color-green-1
 
-h4.assignment_name
+h3.assignment_name
   margin-bottom: .5rem
   font-size: 1.25rem
   font-weight: normal

@@ -5,7 +5,7 @@
 .mainContainer{role: "main", class: "staff"}
 
   - if current_student.present?
-    %h3.pagetitle= current_student.name
+    %h2.pagetitle= current_student.name
 
   / Page content
   .mainContent= render partial: "layouts/content"

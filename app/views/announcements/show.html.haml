@@ -1,7 +1,7 @@
 - if current_user_is_staff?
   = content_nav_for Announcement, @title
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 - if can? :create, Announcement.new(course_id: current_course.id)
   .context_menu

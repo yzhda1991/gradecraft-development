@@ -3,7 +3,7 @@
 - else
   = content_nav_for Assignment, "My #{term_for :group}"
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 - if current_user_is_staff?
   = render partial: "groups/buttons"

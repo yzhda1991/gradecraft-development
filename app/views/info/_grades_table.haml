@@ -1,3 +1,7 @@
+%h3.subtitle{ id: "#{grade_type}TableCaption" }
+  = subtitle
+  %span.label.alert= count
+
 - grades_by_assignment.each do |assignment, grades|
   %div{ class: "assignment-#{grade_type}"}
     %h4.assignment_name

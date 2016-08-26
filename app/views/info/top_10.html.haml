@@ -1,19 +1,19 @@
 = content_nav_for "Top 10/Bottom 10"
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 .pageContent
   = render "layouts/alerts"
 
-  %h4.subtitle Top 10
+  %h3.subtitle Top 10
 
   = render partial: "students_table", locals: { course: current_course, :students => @top_ten_students }
 
   - if @bottom_ten_students.present?
-    %h4.subtitle Bottom 10
+    %h3.subtitle Bottom 10
 
     = render partial: "students_table", locals: { course: current_course, :students => @bottom_ten_students }
 
   - if current_course.teams.present?
-    %h4.subtitle #{term_for :team} Overview
+    %h3.subtitle #{term_for :team} Overview
     = render partial: "teams_table", locals: { course: current_course, :teams => current_course.teams }

@@ -1,6 +1,6 @@
 = content_nav_for AssignmentType
 
-%h3.pagetitle#tableCaption= @title
+%h2.pagetitle#tableCaption= @title
 
 = render partial: "assignment_types/buttons"
 
@@ -40,7 +40,7 @@
                 = link_to glyph(:trash) + "Delete", assignment_type_path(assignment_type), data: { confirm: "Are you sure? This will delete all associated assignments and their grades.", method: :delete }, class: "button"
 
 
-  %h4.subtitle= "#{term_for :student} Scores"
+  %h3.subtitle= "#{term_for :student} Scores"
 
   .scroll-table
     %table.dynatable.no-table-header.no-button-bar
@@ -63,7 +63,7 @@
                 %td= points at.raw_points_for_student(student)
                 %span.sr-only= at.name
 
-  %h4.subtitle= "#{term_for :student} Grade Counts"
+  %h3.subtitle= "#{term_for :student} Grade Counts"
 
   .scroll-table
     %table.dynatable.no-table-header.no-button-bar

@@ -1,6 +1,6 @@
 = content_nav_for @team
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 = render "buttons"
 
@@ -10,7 +10,7 @@
   - if @team.banner.present?
     %img{:src => @team.banner, :height => 200 }
 
-  %h4.subtitle= "#{term_for :student} Roster"
+  %h3.subtitle= "#{term_for :student} Roster"
 
   %table.dynatable.no-table-header
     %thead
@@ -51,7 +51,7 @@
                 %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
                 %li= link_to glyph(:edit) + "Edit", edit_user_path(student), class: "button"
 
-  %h4.subtitle #{term_for :challenge } Grades
+  %h3.subtitle #{term_for :challenge } Grades
 
   %table.dynatable
     %thead

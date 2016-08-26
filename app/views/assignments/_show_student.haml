@@ -1,6 +1,6 @@
 = content_nav_for presenter.assignment
 
-%h3.pagetitle= presenter.title
+%h2.pagetitle= presenter.title
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -26,6 +26,7 @@
           %a{ :href => "#tab5"} Class Analytics
 
   #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
+    %h2 
     #tab1.active
       = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
     - if presenter.show_rubric_preview? current_student

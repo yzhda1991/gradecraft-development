@@ -1,6 +1,6 @@
 = content_nav_for User, "Import Results"
 
-%h3.pagetitle Import Results
+%h2.pagetitle Import Results
 
 = render "buttons"
 
@@ -8,7 +8,7 @@
   = render "layouts/alerts"
 
   - unless @result.unsuccessful.empty?
-    %h4.subtitle
+    %h3.subtitle
       = "#{@result.unsuccessful.count} #{"Student".pluralize(@result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
@@ -21,7 +21,7 @@
             %td= row[:data]
             %td= row[:errors]
 
-  %h4.subtitle
+  %h3.subtitle
     = "#{@result.successful.count} #{"Student".pluralize(@result.successful.count)} Imported Successfully"
   %table.dynatable
     %thead
