@@ -48,13 +48,20 @@ module ActiveLMS
       assignment
     end
 
-    def grades(course_id, assignment_ids)
+    def grades(course_id, assignment_ids, grade_ids=nil)
       grades = []
       params = { assignment_ids: assignment_ids,
                  student_ids: "all",
                  include: ["assignment", "course", "user"] }
       client.get_data("/courses/#{course_id}/students/submissions", params) do |data|
-        grades += data
+        if grade_ids.nil?
+          grades += data
+        else
+          filtered_ids = [grade_ids].flatten.uniq.compact
+          data.select { |grade| filtered_ids.include?(grade["id"]) }.each do |grade|
+            grades << grade
+          end
+        end
       end
       grades
     end
