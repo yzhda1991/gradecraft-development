@@ -238,6 +238,7 @@ class Course < ActiveRecord::Base
     }
   end
   
+  # creating a list of students who do not have any predictions
   def nonpredictors
     nonpredictors = []
     self.students.each do |student|

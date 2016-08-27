@@ -245,6 +245,7 @@ class User < ActiveRecord::Base
     }
   end
   
+  # Checking to see if a student has any positive predictions for a course
   def predictions_for_course?(course)
     course.assignments.each do |assignment|
       if predicted_earned_grades.where(assignment_id: assignment.id).present? && predicted_earned_grades.where(assignment_id: assignment.id).first.predicted_points > 0
