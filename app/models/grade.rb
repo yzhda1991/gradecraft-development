@@ -87,17 +87,11 @@ class Grade < ActiveRecord::Base
     assignment_type.weight_for_student(student)
   end
 
-  def has_feedback?
-    feedback.present?
-  end
-
-  # @mz TODO: add specs
   def cache_student_and_team_scores
-    { cached_student_score: cache_student_score_and_level,
-      cached_team_score: cache_team_score,
-      student_id: self.student.try(:id),
-      team_id: cached_student_team.try(:id)
-    }.merge(cached_score_failure_information)
+    student.cache_course_score_and_level(course_id)
+    team = student.team_for_course(course_id)
+    team.update_average_score!
+    team.update_ranks!
   end
 
   def check_unlockables
@@ -151,7 +145,6 @@ class Grade < ActiveRecord::Base
     self.assignment_id ||= submission.try(:assignment_id) || task.try(:assignment_id)
     self.assignment_type_id ||= assignment.try(:assignment_type_id)
     self.course_id ||= assignment.try(:course_id)
-    # self.team_id ||= student.team_for_course(course).try(:id)
   end
 
   def zero_points_for_pass_fail
@@ -160,47 +153,5 @@ class Grade < ActiveRecord::Base
       self.final_points = 0
       self.full_points = 0
     end
-  end
-
-  def duplicate_badge_for_grade
-    if self.earned_badges.where(badge_id: earned_badge.badge_id).persisted?
-      errors.add("")
-    end
-  end
-
-  def cached_student_team
-    @team ||= student.team_for_course(course)
-  end
-
-  # @mz TODO: add specs
-  def cache_student_score_and_level
-    student.cache_course_score_and_level(self.course.id)
-  end
-
-  # @mz TODO: add specs, improve the syntax here
-  def cache_team_score
-    if course.has_teams? && student.team_for_course(course).present?
-      @team = cached_student_team
-      @team_update_successful = @team.update_revised_team_score
-      @team_update_successful ? @team.score : false
-    end
-  end
-
-  def cached_score_failure_information
-    failure_attrs = {}
-    if course.has_teams? && student.team_for_course(course).present?
-      unless @team_update_successful
-        failure_attrs.merge! team: @team.attributes
-      end
-
-      unless @student_update_successful
-        failure_attrs.merge! student: @student.attributes
-      end
-
-      unless @team_update_successful && @student_update_successful
-        failure_attrs.merge! grade: self.attributes
-      end
-    end
-    failure_attrs
   end
 end

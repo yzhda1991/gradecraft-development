@@ -3,7 +3,7 @@ require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
 require_relative "../support/uni_mock/rails"
 
-describe Grade do
+describe Grade, focus: true do
   include UniMock::StubRails
 
   before { stub_env "development" }
