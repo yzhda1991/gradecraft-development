@@ -44,7 +44,6 @@ class Grade < ActiveRecord::Base
 
   scope :excluded_from_course_score, -> { where excluded_from_course_score: true }
   scope :included_in_course_score, -> { where excluded_from_course_score: false }
-  scope :no_status, -> { instructor_modified.where(status: ["", nil])}
   scope :instructor_modified, -> { where instructor_modified: true }
   scope :positive, -> { where("score > 0")}
   scope :for_course, ->(course) { where(course_id: course.id) }

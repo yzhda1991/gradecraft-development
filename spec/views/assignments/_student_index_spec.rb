@@ -32,7 +32,7 @@ describe "assignments/_student_index" do
     @team = create(:team, course: @course)
     @team.students << @student
     render
-    assert_select ".challenge", count: 1
+    assert_select ".collapseSection", count: 1
   end
 
   it "does not show the challenge div if they're not added to student scores" do
@@ -42,7 +42,7 @@ describe "assignments/_student_index" do
     @team = create(:team, course: @course)
     @team.students << @student
     render
-    assert_select ".challenge", count: 0
+    assert_select ".collapseSection", count: 0
   end
 
 end

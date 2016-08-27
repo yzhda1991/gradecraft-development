@@ -47,7 +47,6 @@ class InfoController < ApplicationController
     @resubmissions_by_assignment = submissions.resubmitted.group_by(&:assignment)
     @unreleased_grades_by_assignment = grades.not_released.group_by(&:assignment)
     @in_progress_grades_by_assignment = grades.in_progress.group_by(&:assignment)
-    @no_status_grades_by_assignment = grades.no_status.group_by(&:assignment)
   end
 
   # Displaying the top 10 and bottom 10 students for quick overview
