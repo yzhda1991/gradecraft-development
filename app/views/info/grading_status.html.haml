@@ -6,25 +6,25 @@
   = render "layouts/alerts"
         
   %section
-    .card{style: "height: 104px"}
+    .card.quarter{style: "height: 104px"}
       .card-cap
         .center.bold.inverse.large= ungraded_submissions_count_for(current_course)
         %h3.center.inverse Ungraded Submissions
           
   %section
-    .card{style: "height: 104px;"}
+    .card.quarter{style: "height: 104px;"}
       .card-cap
         .center.bold.inverse.large= unreleased_grades_count_for(current_course)
         %h3.center.inverse Unreleased Grades
 
   %section
-    .card{style: "height: 104px;"}
+    .card.quarter{style: "height: 104px;"}
       .card-cap
         .center.bold.inverse.large= in_progress_grades_count_for(current_course)
         %h3.center.inverse In Progress Grades
 
   %section
-    .card{style: "height: 104px;"}
+    .card.quarter{style: "height: 104px;"}
       .card-cap
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h3.center.inverse Resubmissions

@@ -17,6 +17,11 @@ $card-spacer-y: .75rem
   max-width: 280px
   min-width: 15.5rem
   margin: $card-spacer-x $card-spacer-y
+  
+  &.quarter 
+    max-width: 22%
+    min-width: 22%
+    border-color: $card-cap-bg
 
   .card-cap
     background: $card-cap-bg
@@ -40,3 +45,8 @@ $card-spacer-y: .75rem
   .card-title
     background: $card-bg
     margin-bottom: $card-spacer-y
+
+@media (max-width: $media-medium-max)
+  .card.quarter
+    max-width: 42%
+    min-width: 42%
