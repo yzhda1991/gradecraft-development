@@ -237,6 +237,16 @@ class Course < ActiveRecord::Base
       elements: elements
     }
   end
+  
+  def nonpredictors
+    nonpredictors = []
+    self.students.each do |student|
+      if student.predictions_for_course?(self) == false
+        nonpredictors << student
+      end 
+    end
+    return nonpredictors
+  end
 
   private
 

@@ -16,6 +16,19 @@
   / Pageviews per page
   %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=student", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
     %thead
-      %th{:"data-dynatable-column" => "name"} Page
-      %th{:"data-dynatable-column" => "total"} Pageviews
+      %tr 
+        %th{:"data-dynatable-column" => "name"} Page
+        %th{:"data-dynatable-column" => "total"} Pageviews
     %tbody
+  
+  / Students who have not predicted any grades for this course
+  %table.dynatable
+    %thead 
+      %tr 
+        %th #{ term_for :student }
+        %th Last Login
+    %tbody
+      - @nonpredictors.each do |student|
+        %tr
+          %td= student.name
+          %td= student.last_course_login(current_course) || "never logged in"

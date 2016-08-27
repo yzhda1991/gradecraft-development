@@ -244,6 +244,16 @@ class User < ActiveRecord::Base
       user_score: user_score
     }
   end
+  
+  def predictions_for_course?(course)
+    course.assignments.each do |assignment|
+      if predicted_earned_grades.where(assignment_id: assignment.id).present? && predicted_earned_grades.where(assignment_id: assignment.id).first.predicted_points > 0
+        return true
+      else 
+        return false
+      end
+    end
+  end
 
   ### EARNED LEVELS AND GRADE LETTERS
 
@@ -457,6 +467,10 @@ class User < ActiveRecord::Base
 
   def has_group_for_assignment?(assignment)
     assignment.has_groups? && group_for_assignment(assignment).present?
+  end
+  
+  def last_course_login(course)
+    course_memberships.where(course: course).first.last_login_at
   end
 
   private
