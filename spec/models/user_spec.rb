@@ -210,18 +210,6 @@ describe User do
     end
   end
 
-  describe "#public_name" do
-    let(:student) {create :user, first_name: "Daniel", last_name: "Hall", display_name: "Hector's Kid"}
-    it "returns the username's display name if it's present" do
-      expect(student.public_name).to eq("Hector's Kid")
-    end
-
-    it "returns the user's name otherwise" do
-      student.display_name = nil
-      expect(student.public_name).to eq("Daniel Hall")
-    end
-  end
-
   describe "#is_staff?(course)" do
     let(:user) { create :user }
     it "returns true if the user is a professor in the course" do

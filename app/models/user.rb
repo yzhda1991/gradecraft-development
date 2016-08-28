@@ -173,14 +173,6 @@ class User < ActiveRecord::Base
     @name = [first_name,last_name].reject(&:blank?).join(" ").presence || "User #{id}"
   end
 
-  def public_name
-    if display_name?
-      display_name
-    else
-      name
-    end
-  end
-
   def student_directory_name
     "#{last_name.camelize}, #{first_name.camelize}"
   end

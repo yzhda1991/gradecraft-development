@@ -7,7 +7,7 @@ class AnnouncementMailer < ApplicationMailer
     @email_title = "GradeCraft Announcement"
 
     mail to: @student.email,
-       from: "\"#{@announcement.author.public_name}\" <#{@announcement.author.email}>",
+       from: "\"#{@announcement.author.name}\" <#{@announcement.author.email}>",
     subject: @announcement.title
   end
 end
