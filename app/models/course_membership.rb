@@ -63,7 +63,7 @@ class CourseMembership < ActiveRecord::Base
         elements_earned << gse
       end
     end
-    return elements_earned.last
+    return elements_earned.last || course.grade_scheme_elements.order_by_lowest_points.first
   end
 
   def staff?
