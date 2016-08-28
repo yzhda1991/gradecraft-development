@@ -214,7 +214,7 @@ describe InfoController do
     describe "GET submissions export" do
       it "retrieves the submissions export download" do
         get :submissions, id: @course.id, format: :csv
-        expect(response.body).to include("Submission ID,Assignment ID,Assignment Name,Student ID,First Name,Last Name,Comment,Created At,Updated At,Score")
+        expect(response.body).to include("Submission ID,Assignment ID,Assignment Name,Student ID,Group ID,Student Comment,Created At,Updated At,Score,Grader Feedback,Grade Last Updated")
       end
     end
   end

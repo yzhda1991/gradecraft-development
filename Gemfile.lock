@@ -379,7 +379,7 @@ GEM
       origin (~> 2.1)
       tzinfo (>= 0.3.37)
     mono_logger (1.1.0)
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-scp (1.2.1)
@@ -522,7 +522,7 @@ GEM
       rufus-scheduler (~> 3.0)
     resque-throttler (0.1.5)
       resque (~> 1.25)
-    rollbar (2.8.3)
+    rollbar (2.12.0)
       multi_json
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
