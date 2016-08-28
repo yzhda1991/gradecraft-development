@@ -185,17 +185,6 @@ class User < ActiveRecord::Base
     name.downcase == another_user.name.downcase
   end
 
-  def self.graded_students_in_course(course_id)
-    User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-      .where("course_memberships.course_id = ?", course_id)
-      .where("course_memberships.auditing = ?", false)
-      .where("course_memberships.role = ?", "student")
-      .includes(:course_memberships)
-      .group("users.id, course_memberships.score")
-  end
-
   def auditing_course?(course)
     course.membership_for_student(self).auditing?
   end
@@ -350,12 +339,12 @@ class User < ActiveRecord::Base
 
   ### BADGES
 
-  def earned_badge_score_for_course(course)
-    earned_badges.where(course_id: course).student_visible.sum(:points)
+  def earned_badges_for_course(course)
+    earned_badges.where(course: course).student_visible
   end
 
-  def earned_badges_for_course(course)
-    earned_badges.where(course: course)
+  def earned_badge_score_for_course(course)
+    earned_badges_for_course(course).sum(:points)
   end
 
   # returns all badges a student has earned for a particular course this week
@@ -419,14 +408,6 @@ class User < ActiveRecord::Base
       .where(final_earnable_course_badges_sql(grade))
   end
 
-  def earnable_course_badges_sql_conditions(grade)
-    Badge
-      .unscoped
-      .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
-      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
-      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
-  end
-
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has not earned, but is visible & available, or...
@@ -437,28 +418,6 @@ class User < ActiveRecord::Base
       .where(course_id: course[:id])
       .where(visible: true)
       .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
-  end
-
-  # badges that have not been marked 'visible' by the instructor, and for which
-  # the student has earned a badge, but the earned badge has yet to be marked
-  # 'student_visible'
-  def student_invisible_badges(course)
-    Badge
-      .where(visible: false)
-      .where(course_id: course[:id])
-      .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
-  end
-
-  def earn_badge(badge)
-    raise TypeError, "Argument must be a Badge object" unless badge.class == Badge
-    earned_badges.create badge: badge, course: badge.course
-  end
-
-  def earn_badges(badges)
-    raise TypeError, "Argument must be an array of Badge objects" unless badges.class == Array
-    badges.each do |badge|
-      earned_badges.create badge: badge, course: badge.course
-    end
   end
 
   # Returns the student's assigned weight for an assignment type category
@@ -501,6 +460,14 @@ class User < ActiveRecord::Base
   end
 
   private
+
+  def earnable_course_badges_sql_conditions(grade)
+    Badge
+      .unscoped
+      .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
+  end
 
   def final_earnable_course_badges_sql(grade)
     earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
