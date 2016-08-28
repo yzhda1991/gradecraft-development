@@ -70,16 +70,6 @@ describe User do
     end
   end
 
-  describe "formatted name keys" do
-    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
-
-    describe "#full_name" do
-      it "prints the full name" do
-        expect(user.full_name).to eq("Ben Bailey")
-      end
-    end
-  end
-
   describe "#time_zone" do
     subject { user.time_zone }
     let(:user) { create(:user) }

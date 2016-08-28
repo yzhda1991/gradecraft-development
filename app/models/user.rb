@@ -181,12 +181,8 @@ class User < ActiveRecord::Base
     "#{student_directory_name} - #{username.camelize}"
   end
 
-  def full_name
-    "#{first_name} #{last_name}"
-  end
-
   def same_name_as?(another_user)
-    full_name.downcase == another_user.full_name.downcase
+    name.downcase == another_user.name.downcase
   end
 
   def self.graded_students_in_course(course_id)

@@ -101,8 +101,8 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
       it "prints a line for each student with a missing file" do
         subject
-        expect(file_lines).to include(students.first.full_name + ":\n")
-        expect(file_lines).to include(students.last.full_name + ":\n")
+        expect(file_lines).to include(students.first.name + ":\n")
+        expect(file_lines).to include(students.last.name + ":\n")
       end
     end
 
