@@ -176,7 +176,7 @@ describe Grade do
       expect(subject.full_points).to be 0
     end
   end
-
+  
   describe "#feedback_read!" do
     it "marks the grade as read" do
       subject.feedback_read!

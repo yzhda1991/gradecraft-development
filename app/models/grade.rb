@@ -90,8 +90,10 @@ class Grade < ActiveRecord::Base
   def cache_student_and_team_scores
     student.cache_course_score_and_level(course_id)
     team = student.team_for_course(course_id)
-    team.update_average_score!
-    team.update_ranks!
+    if team.present?
+      team.update_average_score!
+      team.update_ranks!
+    end
   end
 
   def check_unlockables
