@@ -513,11 +513,11 @@ describe User do
     end
     
     it "returns the last time the student logged into the course" do 
-      cm = student.course_memberships.where(course: course).first
       login_time = DateTime.now
-      cm.last_login_at = login_time
-      cm.save!
-      expect(student.last_course_login(course)).to eq(login_time)
+      student_2 = create(:user)
+      cm = create(:student_course_membership, user: student_2, course: course, last_login_at:
+      login_time)
+      expect(student_2.last_course_login(course).to_i).to eq (login_time.to_i)
     end
   end
 
