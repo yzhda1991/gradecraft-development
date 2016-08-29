@@ -9,6 +9,8 @@
     %h2 Data Downloads
     %table.dynatable
       %thead
+        %tr
+          %th File Type
       %tbody
         %tr
           %td= link_to glyph("file-excel-o") + "Final Grades", final_grades_path(id: current_course.id, format: "csv")
