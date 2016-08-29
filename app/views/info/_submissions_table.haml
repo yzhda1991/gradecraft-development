@@ -1,7 +1,3 @@
-%h3.subtitle{ id: "#{submission_type}TableCaption" }
-  = subtitle
-  %span.label.alert= count
-
 - submissions_by_assignment.each do |assignment, submissions|
   %h4.assignment_name
     = link_to assignment.name, assignment

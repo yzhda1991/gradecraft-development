@@ -11,7 +11,6 @@
   %p 
     My Goal:
     = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
-    points
 
 %p.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
 %p.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
