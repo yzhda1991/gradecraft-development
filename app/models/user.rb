@@ -244,6 +244,11 @@ class User < ActiveRecord::Base
       user_score: user_score
     }
   end
+  
+  # Checking to see if a student has any positive predictions for a course
+  def predictions_for_course?(course)
+    predicted_earned_grades.for_course(course).predicted_to_be_done.present?
+  end
 
   ### EARNED LEVELS AND GRADE LETTERS
 
@@ -457,6 +462,10 @@ class User < ActiveRecord::Base
 
   def has_group_for_assignment?(assignment)
     assignment.has_groups? && group_for_assignment(assignment).present?
+  end
+  
+  def last_course_login(course)
+    course_memberships.where(course: course).first.last_login_at
   end
 
   private

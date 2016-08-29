@@ -4,6 +4,7 @@ class AnalyticsController < ApplicationController
 
   def students
     @title = "#{term_for :student} Analytics"
+    @nonpredictors = current_course.nonpredictors
   end
 
   def staff

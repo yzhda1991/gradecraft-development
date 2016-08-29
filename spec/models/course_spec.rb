@@ -678,4 +678,17 @@ describe Course do
       expect(subject.earned_grade_scheme_elements_by_student_count).to eq({:elements => [["#{gse2.name}", 1], ["#{gse.name}", 1]]})
     end
   end
+  
+  describe "#nonpredictors" do 
+    it "returns the students who have not yet predicted any assignments" do 
+      student = create(:user)
+      student_2 = create(:user)
+      course = create(:course)
+      student.courses << course
+      student_2.courses << course
+      assignment = create(:assignment, course: course)
+      peg = create(:predicted_earned_grade, student: student, assignment: assignment)
+      expect(course.nonpredictors).to eq([student_2])
+    end
+  end
 end
