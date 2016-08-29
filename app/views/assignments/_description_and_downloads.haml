@@ -16,7 +16,6 @@
 %p.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_submission_for?(current_student)
-  %br
   = render partial: "students/submissions", locals: { assignment: presenter.assignment }
 
 - if presenter.student_logged?(current_user)
@@ -50,6 +49,7 @@
 
   - if presenter.assignment.is_unlockable?
     - if presenter.assignment.is_unlocked_for_student?(current_student)
+      %h4.uppercase Details:
       .italic You have unlocked this #{term_for :assignment}. To achieve this you:
       %ul
         - presenter.assignment.unlock_conditions.each do |condition|
@@ -66,7 +66,8 @@
         You must create a #{term_for :group} to complete this #{term_for :assignment}
 
     - else
-      %h5 #{glyph(:lock)} Unlock Requirements
+      %h4.uppercase Details:
+      %p #{glyph(:lock)} Unlock Requirements
       %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
       %ul
         - presenter.assignment.unlock_conditions.each do |uc|
