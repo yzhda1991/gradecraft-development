@@ -247,13 +247,7 @@ class User < ActiveRecord::Base
   
   # Checking to see if a student has any positive predictions for a course
   def predictions_for_course?(course)
-    course.assignments.each do |assignment|
-      if predicted_earned_grades.where(assignment_id: assignment.id).present? && predicted_earned_grades.where(assignment_id: assignment.id).first.predicted_points > 0
-        return true
-      else 
-        return false
-      end
-    end
+    predicted_earned_grades.for_course(course).predicted_to_be_done.present?
   end
 
   ### EARNED LEVELS AND GRADE LETTERS

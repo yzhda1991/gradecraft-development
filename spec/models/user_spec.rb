@@ -494,6 +494,32 @@ describe User do
       expect(student.grade_for_assignment_id(assignment.id)).to eq([grade])
     end
   end
+  
+  describe "#predictions_for_course?(course)" do
+    #predicted_earned_grades.for_course(course).predicted_to_be_done.present?
+    it "returns true if the student has predicted any assignment" do 
+      prediction = create(:predicted_earned_grade, student: student, assignment: assignment)
+      expect(student.predictions_for_course?(course)).to eq true
+    end
+    
+    it "returns false if the student has not predicted any assignments" do 
+      expect(student.predictions_for_course?(course)).to eq false
+    end
+  end
+  
+  describe "#last_course_login(course)" do
+    it "returns nil  if the student has not logged into the course site" do 
+      expect(student.last_course_login(course)).to be nil
+    end
+    
+    it "returns the last time the student logged into the course" do 
+      cm = student.course_memberships.where(course: course).first
+      login_time = DateTime.now
+      cm.last_login_at = login_time
+      cm.save!
+      expect(student.last_course_login(course)).to eq(login_time)
+    end
+  end
 
   describe "#submission_for_assignment(assignment)" do
     let(:student) { create :user }
