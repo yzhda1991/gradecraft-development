@@ -1,6 +1,6 @@
 require "./app/models/null_grade"
 require "./app/models/null_student"
-require "./lib/grade_proctor"
+require "./app/proctors/grade_proctor"
 
 describe NullGrade do
   subject { NullGrade.new }

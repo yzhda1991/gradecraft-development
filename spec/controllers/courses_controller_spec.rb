@@ -3,11 +3,19 @@ require "rails_spec_helper"
 describe CoursesController do
   let(:course) { create :course }
   let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:admin) { create(:admin_course_membership, course: course).user }
   let(:student) { create(:student_course_membership, course: course).user }
 
   before(:each) do
     session[:course_id] = course.id
     allow(Resque).to receive(:enqueue).and_return(true)
+  end
+
+  context "as admin" do
+    it "destroys the course" do
+      login_user(admin)
+      expect{ get :destroy, id: course }.to change(Course,:count).by(-1)
+    end
   end
 
   context "as professor" do
@@ -227,8 +235,8 @@ describe CoursesController do
     end
 
     describe "GET destroy" do
-      it "destroys the course" do
-        expect{ get :destroy, id: course }.to change(Course,:count).by(-1)
+      it "raises a not authorized error" do
+        expect{ get :destroy, id: course }.to raise_error CanCan::AccessDenied
       end
     end
   end
@@ -252,6 +260,39 @@ describe CoursesController do
           expect(json.length).to eq 1
           expect(json[0].keys).to eq ["id", "name", "course_number", "year", "semester"]
         end
+      end
+    end
+
+    describe "GET change" do
+
+      let(:another_course) { create :course }
+
+      before do
+        student.courses << another_course
+        login_user(student)
+        session[:course_id] = course.id
+        allow(Resque).to receive(:enqueue).and_return(true)
+      end
+
+      it "switches the course context" do
+        get :change, id: another_course.id
+        expect(response).to redirect_to(root_url)
+        expect(session[:course_id]).to eq(another_course.id)
+      end
+
+      it "records the course login event if the course changed" do
+        expect(subject).to receive(:record_course_login_event)
+        get :change, id: another_course.id.to_s
+      end
+
+      it "does not record the course login event if the course does not change" do
+        expect(subject).to_not receive(:record_course_login_event)
+        get :change, id: course.id.to_s
+      end
+
+      it "stores the course to the current course for the user" do
+        get :change, id: another_course.id
+        expect(student.reload.current_course_id).to eq another_course.id
       end
     end
 

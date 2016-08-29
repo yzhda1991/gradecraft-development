@@ -1,4 +1,4 @@
-require "./lib/badge_proctor"
+require "./app/proctors/badge_proctor"
 
 describe BadgeProctor::Viewable do
   let(:course) { double(:course, id: 456) }

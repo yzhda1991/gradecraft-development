@@ -40,7 +40,7 @@
       - @courses.each do |course|
         %tr
           %td= course.course_number
-          %td= link_to course.name, change_current_course_path(course_id: course.id)
+          %td= link_to course.name, change_course_path(id: course.id)
           %td= course.year
           %td= course.semester
           %td= points course.total_points
@@ -61,6 +61,7 @@
               .right
                 %ul.button-bar
                   %li= link_to glyph(:edit) + "Edit", edit_course_path(course), class: "button"
-                  %li= link_to glyph(:trash) + "Delete", course, class: "button", id: "course-id-#{course.id}", data: { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
+                  - if current_user_is_admin?
+                    %li= link_to glyph(:trash) + "Delete", course, class: "button", id: "course-id-#{course.id}", data: { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
                   %li= link_to glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy
                   %li= link_to glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), class: "button", :method => :copy

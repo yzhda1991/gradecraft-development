@@ -10,7 +10,6 @@ class GradeProctor
   module Updatable
     include Base
 
-    # maybe we should have required arguments here
     def updatable?(options={})
       return false if grade.nil?
 

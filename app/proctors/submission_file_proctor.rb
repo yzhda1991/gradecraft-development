@@ -1,4 +1,4 @@
-require_relative "condition_sets/submission_file_condition_set"
+require_relative "submission_file_proctor/submission_file_condition_set"
 
 class SubmissionFileProctor
   attr_reader :submission_file
