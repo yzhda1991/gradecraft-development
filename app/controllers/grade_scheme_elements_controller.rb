@@ -76,7 +76,7 @@ class GradeSchemeElementsController < ApplicationController
 
   def grade_scheme_element_params
     params.require(:grade_scheme_element).permit :id, :letter, :lowest_points,
-      :highest_points, :level, :description, :course_id
+      :highest_points, :level, :description, :course_id, unlock_conditions_attributes: [:unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state, :condition_value, :condition_date]
   end
 
   def grade_scheme_elements_attributes_params
