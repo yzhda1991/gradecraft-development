@@ -7,11 +7,14 @@
   - if presenter.assignment.threshold_points?
     %p.italic= "#{points presenter.assignment.threshold_points} points threshold"
 
+- if current_user_is_student? && presenter.prediction_for(presenter.assignment)
+  %p 
+    My Goal:
+    = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
+    points
+
 %p.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
 %p.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
-
-- if current_user_is_student? && presenter.prediction_for(presenter.assignment)
-  = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
 
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_submission_for?(current_student)
   %br
