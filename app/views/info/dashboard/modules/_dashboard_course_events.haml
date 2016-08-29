@@ -14,11 +14,9 @@
               .event-image
                 %img{:src => event.media }
             - if event.description.present?
-              .event-details
-                .event-description
-                  = sanitize(event.description, :tags=>['a', 'strong', 'em', 'ul', 'ol', 'li', 'p', 'br']).truncate(200, :separator => " ").html_safe
-                .see-details-link
-                  = link_to "See the Details", event
+              .event-description
+                = sanitize(event.description, :tags=>['']).truncate(250, :separator => " ")
+                = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
               - if assignment.visible_for_student?(current_student)
