@@ -2,6 +2,7 @@
 
 cp config/database.sample.yml config/database.yml
 cp config/mongoid.sample.yml config/mongoid.yml
+cp config/puma.sample-env.rb config/puma.rb
 
 if [ "${GC_PROCESS_TYPE}" = "worker" ]; then
   apt-get update
