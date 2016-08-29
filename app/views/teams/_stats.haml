@@ -14,7 +14,7 @@
   %tbody
     - @teams.each_with_index do |team, index|
       %tr
-        %td= index + 1
+        %td= team.rank
         %td= link_to team.name, team
         %td= points team.average_score
         - if current_course.has_team_challenges?

@@ -10,7 +10,7 @@
     - cache multi_cache_key :announcements, current_course do
       - @announcements.each do |announcement|
         %tr{class: current_user.is_student?(current_course) ? announcement.read?(current_user) ? "read" : "unread" : ""}
-          %td= announcement.author.public_name
+          %td= announcement.author.name
           %td= link_to announcement.title, announcement_path(announcement)
           %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
           - if current_user.is_staff?(current_course)

@@ -324,7 +324,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def formatted_student_name(student)
-    Formatter::Filename.titleize student.full_name
+    Formatter::Filename.titleize student.name
   end
 
   def create_submission_binary_files
@@ -363,7 +363,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_missing_binary_files_for_student(file)
     students_with_missing_binaries.each_with_index do |student, index|
-      file.puts "\n#{student.full_name}:"
+      file.puts "\n#{student.name}:"
       add_missing_binary_filenames_to_file(file, student)
     end
   end

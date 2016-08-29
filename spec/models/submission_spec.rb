@@ -368,7 +368,7 @@ describe Submission do
 
   describe "#base_filename" do
     before do
-      allow(subject).to receive_message_chain(:student, :full_name) { "Dan Ho" }
+      allow(subject).to receive_message_chain(:student, :name) { "Dan Ho" }
       allow(subject).to receive_message_chain(:assignment, :name) { "Great" }
     end
 

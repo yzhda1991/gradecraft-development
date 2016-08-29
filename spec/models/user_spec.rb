@@ -70,16 +70,6 @@ describe User do
     end
   end
 
-  describe "formatted name keys" do
-    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
-
-    describe "#full_name" do
-      it "prints the full name" do
-        expect(user.full_name).to eq("Ben Bailey")
-      end
-    end
-  end
-
   describe "#time_zone" do
     subject { user.time_zone }
     let(:user) { create(:user) }
@@ -207,18 +197,6 @@ describe User do
       student.admin = true
       student.save
       expect(student.role(course)).to eq "admin"
-    end
-  end
-
-  describe "#public_name" do
-    let(:student) {create :user, first_name: "Daniel", last_name: "Hall", display_name: "Hector's Kid"}
-    it "returns the username's display name if it's present" do
-      expect(student.public_name).to eq("Hector's Kid")
-    end
-
-    it "returns the user's name otherwise" do
-      student.display_name = nil
-      expect(student.public_name).to eq("Daniel Hall")
     end
   end
 
@@ -603,15 +581,6 @@ describe User do
     end
   end
 
-  describe "#earnable_course_badges_sql_conditions(grade)" do
-    # Badge
-    #   .unscoped
-    #   .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
-    #   .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
-    #   .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
-    skip "implement"
-  end
-
   describe "#weight_for_assignment_type(assignment_type)" do
     let(:student) { create :user }
 
@@ -724,15 +693,6 @@ describe User do
     end
   end
 
-  context "earn_badges" do
-    it "should be able to earn badges" do
-      badges = create_list(:badge, 2, course: course)
-      student.earn_badges(badges)
-      badges_earned = student.earned_badges.collect {|e| e.badge }.sort_by(&:id)
-      expect(badges_earned).to eq(badges.sort_by(&:id))
-    end
-  end
-
   context "student_visible_earned_badges" do
     it "should know which badges a student has earned" do
       earned_badges = create_list(:earned_badge, 3, course: course, student: student, student_visible: true)
@@ -803,40 +763,6 @@ describe User do
     it "should show course badges that the student has yet to earn", broken: true do
       EarnedBadge.destroy_all course_id: course[:id]
       expect(student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
-    end
-  end
-
-  context "user earns just one badge" do
-    let!(:create_badge) { world.create_badge }
-    let(:current_badge) { world.badge }
-
-    it "should create a valid earned badge" do
-      expect(student.earn_badge(current_badge).class).to eq(EarnedBadge)
-      expect(student.earn_badge(current_badge).valid?).to be true
-    end
-
-    it "should not error out when earning one badge" do
-      expect { student.earn_badge(current_badge) }.to_not raise_error
-    end
-
-    it "should choke on an array of badges" do
-      expect { student.earn_badge([current_badge])}.to raise_error(TypeError)
-    end
-  end
-
-  context "student_invisible_badges" do
-    it "should return invisible badges for which the student has earned a badge" do
-      invisible_badges = create_list(:badge, 2, course: course, visible: false)
-      student.earn_badges(invisible_badges)
-      badges_earned_by_id = student.student_invisible_badges(course)
-      expect(badges_earned_by_id).to eq(invisible_badges)
-    end
-
-    it "should not return visible badges for which the student has earned a badge" do
-      visible_badges = create_list(:badge, 2, course: course, visible: true)
-      student.earn_badges(visible_badges)
-      badges_earned_by_id = student.student_invisible_badges(course).sort_by(&:id)
-      expect(badges_earned_by_id).not_to eq(visible_badges.sort_by(&:id))
     end
   end
 end
