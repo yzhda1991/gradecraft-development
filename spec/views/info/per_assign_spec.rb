@@ -19,7 +19,7 @@ describe "info/per_assign" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Assignment Analytics", count: 1
+    assert_select "h2", text: "Assignment Analytics", count: 1
   end
 
   it "renders the breadcrumbs" do

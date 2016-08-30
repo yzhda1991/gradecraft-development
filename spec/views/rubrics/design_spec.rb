@@ -23,7 +23,7 @@ describe "rubrics/design" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Design Rubric for #{@assignment.name}", count: 1
+    assert_select "h2", text: "Design Rubric for #{@assignment.name}", count: 1
   end
 
   it "renders the breadcrumbs" do

@@ -28,7 +28,7 @@
         - else
           = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
       .ui-tabs-panel.assignment-details-container#tabt2{role: "tabpanel", "aria-hidden" => false }
-        = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
+        = render partial: "assignments/description", locals: { presenter: presenter }
       - if presenter.grade_with_rubric?
         .ui-tabs-panel#tabt3{role: "tabpanel", "aria-hidden" => false }
           .tab-container

@@ -24,7 +24,7 @@ describe "info/multiplier_choices" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Multiplier Choices", count: 1
+    assert_select "h2", text: "Multiplier Choices", count: 1
   end
 
   it "renders the breadcrumbs" do

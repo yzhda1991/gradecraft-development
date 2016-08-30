@@ -19,7 +19,7 @@ describe "users/index" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "All Users", count: 1
+    assert_select "h2", text: "All Users", count: 1
   end
 
   it "renders the breadcrumbs" do
