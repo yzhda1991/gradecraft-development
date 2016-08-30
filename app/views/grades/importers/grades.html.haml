@@ -13,7 +13,8 @@
         =link_to "modify your assignment selection", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
         to find grades to import.
   -else
-    = form_tag "#" do
+    = form_tag assignment_grades_importer_grades_import_path(@assignment, :canvas, params[:id]) do
+      = hidden_field_tag :assignment_ids, params[:assignment_ids]
       %table.dynatable.no-table-header
         %thead
           %tr

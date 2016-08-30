@@ -92,6 +92,7 @@ describe Grades::ImportersController do
 
     describe "POST grades_import" do
       let(:access_token) { "BLAH" }
+      let(:assignment_ids) { ["ASSIGNMENT_1"] }
       let(:course_id) { "COURSE_ID" }
       let(:grade_ids) { ["GRADE1", "GRADE2"] }
       let(:result) { double(:result, success?: true, message: "") }
@@ -107,16 +108,19 @@ describe Grades::ImportersController do
       it "imports the selected grades" do
         expect(Services::ImportsLMSGrades).to \
           receive(:import).with("canvas", access_token, course_id,
-                                grade_ids, world.assignment.id.to_s, professor)
+                                assignment_ids, grade_ids, world.assignment.id.to_s,
+                                professor)
             .and_return result
 
         post :grades_import, importer_provider_id: "canvas",
-          assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids
+          assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids,
+          assignment_ids: assignment_ids
       end
 
       it "renders the results" do
         post :grades_import, importer_provider_id: "canvas",
-          assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids
+          assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids,
+          assignment_ids: assignment_ids
 
         expect(response).to render_template :grades_import_results
       end
@@ -128,7 +132,8 @@ describe Grades::ImportersController do
           allow(controller).to receive(:syllabus).and_return syllabus
 
           post :grades_import, importer_provider_id: "canvas",
-            assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids
+            assignment_id: world.assignment.id, id: course_id, grade_ids: grade_ids,
+            assignment_ids: assignment_ids
 
           expect(response).to render_template :grades
         end
