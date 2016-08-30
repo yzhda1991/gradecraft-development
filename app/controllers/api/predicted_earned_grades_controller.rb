@@ -18,7 +18,7 @@ class API::PredictedEarnedGradesController < ApplicationController
       student = NullStudent.new(current_course)
     end
     @assignments = PredictedAssignmentCollectionSerializer.new(
-      current_course.assignments, user, student
+      current_course.assignments.ordered, user, student
     )
   end
 
