@@ -15,7 +15,7 @@ describe "students/leaderboard" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Leaderboard", count: 1
+    assert_select "h2", text: "Leaderboard", count: 1
   end
 
 end

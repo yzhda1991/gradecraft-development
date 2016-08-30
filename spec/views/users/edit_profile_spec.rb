@@ -17,7 +17,7 @@ describe "users/edit_profile" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Edit My Profile", count: 1
+    assert_select "h2", text: "Edit My Profile", count: 1
   end
 
   it "renders the breadcrumbs" do

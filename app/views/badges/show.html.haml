@@ -1,6 +1,6 @@
 = content_nav_for presenter.badge
 
-%h3.pagetitle.badge-page= presenter.title
+%h2.pagetitle.badge-show-page-title= presenter.title
 
 = render partial: "badges/context_menu", locals: { badge: presenter.badge, actions: [:new, :edit, :award, :quick_award] } if current_user_is_staff? && ! presenter.view_student_context?
 

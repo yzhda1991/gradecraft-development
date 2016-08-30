@@ -4,9 +4,6 @@
 .tab-container
   padding: 1rem
 
-  a
-    color: $color-blue-4
-
 .tabs-content
   border: none
   border-top-right-radius: $global-radius
@@ -53,8 +50,11 @@ form .tabs-content .content
   border-bottom-right-radius: 0 !important
   border-bottom-left-radius: 0 !important
   background: $color-white !important
-  border-bottom: 5px solid $color-blue-1
+  border-bottom: 2px solid $color-blue-1
   clear: both
+  font-size: 0.9rem
+  @media (max-width: $media-small-max)
+    font-size: 0.8rem
 
   li.ui-state-default
     background: $color-blue-4

@@ -1,6 +1,6 @@
 = content_nav_for presenter.assignment
 
-%h3.pagetitle= presenter.title
+%h2.pagetitle= presenter.title
 
 // Button bar at the top of the page
 = render partial: "buttons", locals: { presenter: presenter }
@@ -27,8 +27,8 @@
           = render partial: "assignments/group/group_show", locals: { presenter: presenter }
         - else
           = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
-      .ui-tabs-panel#tabt2{role: "tabpanel", "aria-hidden" => false }
-        = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
+      .ui-tabs-panel.assignment-details-container#tabt2{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "assignments/description", locals: { presenter: presenter }
       - if presenter.grade_with_rubric?
         .ui-tabs-panel#tabt3{role: "tabpanel", "aria-hidden" => false }
           .tab-container

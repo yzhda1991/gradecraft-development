@@ -1,12 +1,12 @@
 = content_nav_for Course, ["Import Assignments", assignments_importers_path], @provider_name.capitalize
 
-%h3.pagetitle= "#{@provider_name.capitalize} Assignment Import Results"
+%h2.pagetitle= "#{@provider_name.capitalize} Assignment Import Results"
 
 .pageContent
   = render "layouts/alerts"
 
   - unless @result.import_result.unsuccessful.empty?
-    %h4.subtitle
+    %h3.subtitle
       = "#{@result.import_result.unsuccessful.count} #{"Assignment".pluralize(@result.import_result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
@@ -19,7 +19,7 @@
             %td= row[:data]
             %td= row[:errors]
 
-  %h4.subtitle
+  %h3.subtitle
     = "#{@result.import_result.successful.count} #{"Assignment".pluralize(@result.import_result.successful.count)} Imported Successfully"
   %table.dynatable
     %thead

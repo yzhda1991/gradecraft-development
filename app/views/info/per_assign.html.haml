@@ -1,6 +1,6 @@
 = content_nav_for "#{term_for :assignment} Analytics"
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 .pageContent
   = render "layouts/alerts"
@@ -8,7 +8,7 @@
   - @assignment_types.each do |assignment_type|
     - assignments_for_type = assignment_type.assignments
     - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
-      %h4.subtitle= assignment_type.name
+      %h3.subtitle= assignment_type.name
 
       %table.dynatable
         %caption.sr-only= assignment_type.name

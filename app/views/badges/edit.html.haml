@@ -1,6 +1,6 @@
 = content_nav_for @badge, "Edit #{term_for :badge}"
 
-%h3.pagetitle= @title
+%h2.pagetitle= @title
 
 = render partial: "badges/context_menu", locals: { badge: @badge, actions: [:see, :award, :quick_award]}
 

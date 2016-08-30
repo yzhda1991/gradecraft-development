@@ -6,7 +6,12 @@
 
 /* Student Badge Show Page */
 .student
-  h3.pagetitle.badge-page
+  h2.pagetitle.badge-page-title
+    display: none
+    @media (max-width: $media-small-max)
+      display: block
+
+  h2.pagetitle.badge-show-page-title
     display: none
 
   .badge-show-page

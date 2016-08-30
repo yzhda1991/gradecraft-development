@@ -1,10 +1,9 @@
 -# Requires: grade, assignment, assignment_type
 - if GradeProctor.new(grade).viewable? && grade.final_points
   - if assignment_type.student_weightable?
-    = "#{points grade.final_points} / #{ points assignment.full_points } points (Raw)"
-    .bold= "#{ points grade.score } / #{points grade.full_points} points (Multiplied)"
+    %p= "#{points grade.final_points} / #{ points assignment.full_points } points (Raw)"
+    %p= "#{ points grade.score } / #{points grade.full_points} points (Multiplied)"
   - else
-    .bold
-      = "#{points grade.final_points} / #{points grade.full_points} points earned"
+    %p= "#{points grade.final_points} / #{points grade.full_points} points earned"
 - else
-  .italic= "#{points assignment.full_points} points possible"
+  %p.italic= "#{points assignment.full_points} points possible"

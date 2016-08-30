@@ -61,9 +61,7 @@ describe "assignments/student_index/_assignments" do
         # To verify we have satisfied the released condition:
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
         render
-        assert_select "td" do
-          assert_select "div", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
-        end
+        assert_select "td", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
       end
     end
 

@@ -1,6 +1,6 @@
 = content_nav_for presenter.assignment, "See Submission"
 
-%h3.pagetitle= presenter.title
+%h2.pagetitle= presenter.title
 
 - if current_user_is_staff?
   = render partial: "submissions/buttons", locals: { presenter: presenter }

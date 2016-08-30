@@ -192,7 +192,7 @@ class Course < ActiveRecord::Base
   end
 
   def point_total_for_challenges
-    challenges.pluck("full_points").sum
+    challenges.pluck("full_points").compact.sum
   end
 
   def recalculate_student_scores

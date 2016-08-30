@@ -16,5 +16,3 @@
       = link_to glyph(:edit) + "Edit Our Submission", edit_assignment_submission_path(assignment, id: submission), class: "button"
     - elsif group.approved?
       = link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, group_id: group), class: "button"
-  - else
-    = link_to "Create a Group", new_group_path, class: "button"

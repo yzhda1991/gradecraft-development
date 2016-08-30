@@ -1,0 +1,91 @@
+- if !current_student || presenter.assignment.points_visible_for_student?(current_student)
+  - if presenter.assignment.pass_fail?
+    %p.italic= "#{term_for :pass}/#{term_for :fail} Assignment"
+  - else
+    %p.italic= "#{points presenter.assignment.full_points} points possible"
+
+  - if presenter.assignment.threshold_points?
+    %p.italic= "#{points presenter.assignment.threshold_points} points threshold"
+
+- if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment)
+  %p.italic
+    My Goal:
+    = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
+
+%p.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
+%p.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
+
+- if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_submission_for?(current_student)
+  = render partial: "students/submissions", locals: { assignment: presenter.assignment }
+
+- if presenter.student_logged?(current_user)
+  = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }
+
+
+- if presenter.assignment.assignment_files.present?
+  %h4.uppercase Downloads
+  %ul
+  - presenter.assignment.assignment_files.each do |af|
+    %li= link_to af.filename, af.url
+- if current_user_is_staff?
+  %h4.uppercase Downloads
+  %p= link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
+
+  - if presenter.grade_with_rubric? && presenter.grades.present?
+    .clear= link_to glyph(:download) + "Download Rubric Grades", export_earned_levels_assignment_grades_path(presenter.assignment, format: :csv)
+
+
+- if current_student.present?
+  - @group = current_student.group_for_assignment(presenter.assignment)
+  - if presenter.group_assignment?
+    - if @group.present?
+      = render partial: "groups/status_display", locals: { group: @group }
+      Your #{term_for :group} for this #{term_for :assignment}:
+      %ul
+        - @group.students.each do |student|
+          %li= student.name
+    - else
+      = link_to glyph(:users) + "Create a #{term_for :group}", new_group_path, class: "button"
+
+  - if presenter.assignment.is_unlockable?
+    - if presenter.assignment.is_unlocked_for_student?(current_student)
+      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked:
+      .italic To achieve this you:
+      %ul
+        - presenter.assignment.unlock_conditions.each do |condition|
+          %li
+            = condition.requirements_completed_sentence
+            - if presenter.assignment.has_groups? && @group.present?
+              = "(#{condition.count_unlocked_in_group(@group)}/#{@group.students.count} #{term_for :group} members have completed this requirement)"
+      - if presenter.assignment.has_groups? && @group.present?
+        - if ! presenter.assignment.is_unlocked_for_group?(@group)
+          All #{term_for :group} members must complete the unlock conditions before the #{term_for :group} can proceed
+        - else
+          Congratulations! Your #{term_for :group} has successfully unlocked this #{term_for :assignment}
+      - if presenter.assignment.has_groups? && ! @group.present?
+        You must create a #{term_for :group} to complete this #{term_for :assignment}
+
+    - else
+      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked:
+      %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
+      %ul
+        - presenter.assignment.unlock_conditions.each do |uc|
+          %li= link_to uc.requirements_description_sentence, uc.condition
+
+- if presenter.assignment.is_a_condition?
+  %h4.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
+  %ul
+    - presenter.assignment.unlock_keys.each do |key|
+      %li= link_to key.key_description_sentence, key.unlockable
+
+- if presenter.assignment_has_viewable_description?(current_user)
+  %h4.uppercase Guidelines:
+  = raw sanitize_external_links presenter.assignment.description
+
+- if presenter.assignment_has_viewable_purpose?(current_user)
+  %h4.uppercase Purpose:
+  = raw presenter.assignment.purpose
+
+- if presenter.assignment.assignment_type.description.present?
+  %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
+  = raw presenter.assignment.assignment_type.description

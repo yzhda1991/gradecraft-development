@@ -23,7 +23,7 @@ describe "submissions/edit" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Editing My Submission for #{@assignment.name}", count: 1
+    assert_select "h2", text: "Editing My Submission for #{@assignment.name}", count: 1
   end
 
 end

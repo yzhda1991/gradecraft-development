@@ -1,12 +1,12 @@
 = content_nav_for @assignment, ["Import Grades", assignment_grades_importer_path(@assignment, :csv)], "Import Results"
 
-%h3.pagetitle Import Results
+%h2.pagetitle Import Results
 
 .pageContent
   = render "layouts/alerts"
 
   - unless @result.unsuccessful.empty?
-    %h4.subtitle
+    %h3.subtitle
       = "#{@result.unsuccessful.count} #{"Grade".pluralize(@result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
@@ -19,11 +19,11 @@
             %td= row[:data]
             %td= row[:errors]
 
-  %h4.subtitle
+  %h3.subtitle
     = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
   = render partial: "grades/importers/import_results_table", locals: { grades: @result.successful }
 
   - unless @result.unchanged.empty?
-    %h4.subtitle
+    %h3.subtitle
       = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
     = render partial: "grades/importers/import_results_table", locals: { grades: @result.unchanged }
