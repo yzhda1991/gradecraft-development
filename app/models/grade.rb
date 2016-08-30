@@ -14,6 +14,7 @@ class Grade < ActiveRecord::Base
   belongs_to :group, polymorphic: true, touch: true # Optional
   belongs_to :graded_by, class_name: "User", touch: true
 
+  has_one :imported_grade, dependent: :destroy
   has_many :earned_badges, dependent: :destroy
 
   has_many :badges, through: :earned_badges
@@ -96,16 +97,16 @@ class Grade < ActiveRecord::Base
   end
 
   def check_unlockables
-    if self.assignment.is_a_condition? 
+    if self.assignment.is_a_condition?
       self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
     end
-    if self.assignment_type.is_a_condition? 
+    if self.assignment_type.is_a_condition?
       self.assignment_type.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
-    end  
+    end
   end
 
   def excluded_by
