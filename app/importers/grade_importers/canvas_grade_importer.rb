@@ -15,7 +15,13 @@ class CanvasGradeImporter
         grade = Grade.new assignment_id: assignment_id,
           student_id: user.try(:id),
           raw_points: canvas_grade["score"]
-        grade.save
+        if grade.save
+          link_imported canvas_grade["id"], grade
+          successful << grade
+        else
+          unsuccessful << { data: canvas_grade,
+                            errors: grade.errors.full_messages.join(", ") }
+        end
       end
     end
 
@@ -29,5 +35,12 @@ class CanvasGradeImporter
     if canvas_user
       User.find_by_insensitive_email(canvas_user["primary_email"])
     end
+  end
+
+  def link_imported(provider_resource_id, grade)
+    imported = ImportedGrade.find_or_initialize_by(provider: :canvas,
+      provider_resource_id: provider_resource_id)
+    imported.grade = grade
+    imported.save
   end
 end

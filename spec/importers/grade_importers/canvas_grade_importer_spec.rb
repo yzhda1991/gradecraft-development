@@ -37,6 +37,33 @@ describe CanvasGradeImporter do
         expect(grade.student).to eq user
         expect(grade.raw_points).to eq 98
       end
+
+      it "creates a link to the grade id in canvas" do
+        subject.import(assignment.id, syllabus)
+
+        imported_grade = ImportedGrade.unscoped.last
+        expect(imported_grade.grade).to eq grade
+        expect(imported_grade.provider).to eq "canvas"
+        expect(imported_grade.provider_resource_id).to eq canvas_grade_id
+      end
+
+      it "contains a successful row if the grade is valid" do
+        result = subject.import(assignment.id, syllabus)
+
+        expect(result.successful.count).to eq 1
+        expect(result.successful.last).to eq grade
+      end
+
+      it "contains an unsuccessful row if the grade is not valid" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        allow_any_instance_of(Grade).to receive(:errors)
+          .and_return(double(:errors, full_messages: ["Something is wrong"]))
+
+        result = subject.import(assignment.id, syllabus)
+
+        expect(result.unsuccessful.count).to eq 1
+        expect(result.unsuccessful.first[:errors]).to eq "Something is wrong"
+      end
     end
   end
 end
