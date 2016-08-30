@@ -7,8 +7,8 @@
   - if presenter.assignment.threshold_points?
     %p.italic= "#{points presenter.assignment.threshold_points} points threshold"
 
-- if current_user_is_student? && presenter.prediction_for(presenter.assignment)
-  %p 
+- if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment)
+  %p.italic
     My Goal:
     = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
 
@@ -49,8 +49,8 @@
 
   - if presenter.assignment.is_unlockable?
     - if presenter.assignment.is_unlocked_for_student?(current_student)
-      %h4.uppercase Details:
-      .italic You have unlocked this #{term_for :assignment}. To achieve this you:
+      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked:
+      .italic To achieve this you:
       %ul
         - presenter.assignment.unlock_conditions.each do |condition|
           %li
@@ -66,16 +66,14 @@
         You must create a #{term_for :group} to complete this #{term_for :assignment}
 
     - else
-      %h4.uppercase Details:
-      %p #{glyph(:lock)} Unlock Requirements
+      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked:
       %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
       %ul
         - presenter.assignment.unlock_conditions.each do |uc|
           %li= link_to uc.requirements_description_sentence, uc.condition
 
 - if presenter.assignment.is_a_condition?
-  %h4.uppercase Details:
-  %p #{glyph(:key)} This #{term_for :assignment} is a Key
+  %h4.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
   %ul
     - presenter.assignment.unlock_keys.each do |key|
       %li= link_to key.key_description_sentence, key.unlockable

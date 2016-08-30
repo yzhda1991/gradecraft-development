@@ -32,9 +32,10 @@
 
     %section
       %h3 Description
-      = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
-
+      = render partial: "assignments/description", locals: { presenter: presenter }
+      
     - if presenter.show_rubric_preview? current_student
+      %hr.dotted
       %section
         %h3 Grading Rubric
         = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
