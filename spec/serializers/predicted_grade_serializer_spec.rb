@@ -2,7 +2,7 @@ require "spec_helper"
 require "./app/serializers/predicted_grade_serializer"
 require "./app/models/null_grade"
 require "./app/models/null_student"
-require "./lib/grade_proctor"
+require "./app/proctors/grade_proctor"
 
 describe PredictedGradeSerializer do
   let(:course) { double(:course) }

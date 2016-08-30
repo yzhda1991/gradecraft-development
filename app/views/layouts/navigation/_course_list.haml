@@ -1,7 +1,7 @@
 - cache current_courses_cache_key(current_user), skip_digest: true do
   - current_user.courses.active.alphabetical.each do |c|
     - cache ["v1", c] do
-      %li= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(course_id: c.id)
+      %li= link_to glyph(:home) + "#{c.formatted_short_name}", change_course_path(id: c.id)
 
 - cache archived_courses_cache_key(current_user), skip_digest: true do
   - if current_user.archived_courses.present?
@@ -9,4 +9,4 @@
     %h4.past-label Past Courses
     - current_user.courses.inactive.alphabetical.each do |c|
       - cache ["v1", c] do
-        %li.archived= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(course_id: c.id)
+        %li.archived= link_to glyph(:home) + "#{c.formatted_short_name}", change_course_path(id: c.id)

@@ -1,4 +1,4 @@
-require "./lib/grade_proctor"
+require "./app/proctors/grade_proctor"
 
 describe GradeProctor::Viewable do
   let(:assignment) { double(:assignment, release_necessary?: true) }

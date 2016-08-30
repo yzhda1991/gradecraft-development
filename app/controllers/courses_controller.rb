@@ -1,14 +1,17 @@
+# rubocop:disable AndOr
 class CoursesController < ApplicationController
   include CoursesHelper
 
   skip_before_filter :require_login, only: [:badges]
-  before_filter :ensure_staff?, except: [:index, :badges]
+  before_filter :ensure_staff?, except: [:index, :badges, :change]
   before_filter :ensure_not_impersonating?, only: [:index]
-  before_action :find_course, only: [:show, :edit, :multiplier_settings,
-    :custom_terms, :course_details, :player_settings, :student_onboarding_setup,
-  :copy, :update, :destroy, :badges]
+  before_action :find_course, only: [:show, :edit, :copy, :update,
+    :destroy, :badges]
+  before_action :use_current_course, only: [:course_details, :custom_terms,
+    :multiplier_settings, :player_settings, :student_onboarding_setup ]
+  skip_before_filter :verify_authenticity_token, only: [:change]
+  before_filter :ensure_not_impersonating?, only: [:change]
 
-  # rubocop:disable AndOr
   def index
     @title = "My Courses"
     @courses = current_user.courses
@@ -21,11 +24,9 @@ class CoursesController < ApplicationController
     end
   end
 
-  def course_creation_wizard
-  end
-
   def show
     @title = "Course Settings"
+    authorize! :read, @course
   end
 
   def new
@@ -35,56 +36,11 @@ class CoursesController < ApplicationController
 
   def edit
     @title = "Editing Basic Settings"
-  end
-
-  def multiplier_settings
-    @title = "Multiplier Settings"
-  end
-
-  def custom_terms
-    @title = "Custom Terms"
-  end
-
-  def course_details
-    @title = "Course Details"
-  end
-
-  def player_settings
-    @title = "#{term_for :student} Settings"
-  end
-
-  def student_onboarding_setup
-    @title = "Student Onboarding Setup"
-  end
-
-  def badges
-    if @course.has_public_badges?
-      @title = @course.name
-      @badges = @course.badges
-    else
-      redirect_to root_path, alert: "Whoops, nothing to see here! That data is not available."
-    end
-  end
-
-  def copy
-    duplicated = @course.copy(params[:copy_type], {})
-    if duplicated.save
-      if !current_user_is_admin? && current_user.role(duplicated).nil?
-        duplicated.course_memberships.create(user: current_user, role: current_role)
-      end
-      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
-      session[:course_id] = duplicated.id
-      redirect_to edit_course_path(duplicated.id),
-        notice: "#{@course.name} successfully copied" and return
-    else
-      redirect_to courses_path,
-        alert: "#{@course.name} was not successfully copied" and return
-    end
+    authorize! :update, @course
   end
 
   def create
     @course = Course.new(course_params)
-
     respond_to do |format|
       if @course.save
         if !current_user_is_admin?
@@ -103,7 +59,25 @@ class CoursesController < ApplicationController
     end
   end
 
+  def copy
+    authorize! :read, @course
+    duplicated = @course.copy(params[:copy_type], {})
+    if duplicated.save
+      if !current_user_is_admin? && current_user.role(duplicated).nil?
+        duplicated.course_memberships.create(user: current_user, role: current_role)
+      end
+      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
+      session[:course_id] = duplicated.id
+      redirect_to edit_course_path(duplicated.id),
+        notice: "#{@course.name} successfully copied" and return
+    else
+      redirect_to courses_path,
+        alert: "#{@course.name} was not successfully copied" and return
+    end
+  end
+
   def update
+    authorize! :update, @course
     respond_to do |format|
       if @course.update_attributes(course_params)
         bust_course_list_cache current_user
@@ -118,15 +92,54 @@ class CoursesController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @course
     @name = @course.name
     @course.destroy
+    redirect_to courses_url, notice: "Course #{@name} successfully deleted"
+  end
 
-    respond_to do |format|
-      format.html do
-        redirect_to courses_url,
-        notice: "Course #{@name} successfully deleted"
+  # Switch between enrolled courses
+  def change
+    if course = current_user.courses.where(id: params[:id]).first
+      authorize! :read, course
+      unless session[:course_id] == course.id
+        session[:course_id] = CourseRouter.change!(current_user, course).id
+        record_course_login_event course: course
       end
     end
+    redirect_to root_url
+  end
+
+  def course_creation_wizard
+  end
+
+  def badges
+    if @course.has_public_badges?
+      @title = @course.name
+      @badges = @course.badges
+    else
+      redirect_to root_path, alert: "Whoops, nothing to see here! That data is not available."
+    end
+  end
+
+  def course_details
+    @title = "Course Details"
+  end
+
+  def custom_terms
+    @title = "Custom Terms"
+  end
+
+  def multiplier_settings
+    @title = "Multiplier Settings"
+  end
+
+  def player_settings
+    @title = "#{term_for :student} Settings"
+  end
+
+  def student_onboarding_setup
+    @title = "Student Onboarding Setup"
   end
 
   private
@@ -154,5 +167,10 @@ class CoursesController < ApplicationController
 
   def find_course
     @course = Course.find(params[:id])
+  end
+
+  def use_current_course
+    @course = current_course
+    authorize! :update, @course
   end
 end

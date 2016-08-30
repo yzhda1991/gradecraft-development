@@ -1,5 +1,5 @@
 require "proctor"
-require_relative "../../app/proctors/condition_sets/submission_file_condition_set.rb"
+require_relative "../../app/proctors/submission_file_proctor/submission_file_condition_set.rb"
 require_relative "../../app/proctors/submission_file_proctor.rb"
 
 describe SubmissionFileProctor do

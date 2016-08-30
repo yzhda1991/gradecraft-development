@@ -170,27 +170,27 @@ GradeCraft::Application.routes.draw do
   resources :challenge_grades, except: [:index, :new, :create]
 
   #9. Courses
+
   resources :courses do
     post :copy, on: :collection
-    get :course_details, on: :member
-    post :course_details, action: :update, on: :member
-    get :custom_terms, on: :member
-    post :custom_terms, action: :update, on: :member
-    get :multiplier_settings, on: :member
-    post :multiplier_settings, action: :update, on: :member
-    get :player_settings, on: :member
-    post :player_settings, action: :update, on: :member
-    get :student_onboarding_setup, on: :member
-    post :student_onboarding_setup, action: :update, on: :member
     get :badges, on: :member
-    resources :badges do 
-      resources :earned_badges do 
+    get :change, on: :member
+    resources :badges do
+      resources :earned_badges do
         get :confirm_earned, on: :member
       end
     end
   end
+
+  controller :courses do
+    get :course_details
+    get :custom_terms
+    get :multiplier_settings
+    get :player_settings
+    get :student_onboarding_setup
+  end
+
   resources :course_memberships, only: [:create, :delete, :destroy]
-  get "/current_course/change" => "current_courses#change", as: :change_current_course
   get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups
