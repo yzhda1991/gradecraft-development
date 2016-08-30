@@ -6,6 +6,7 @@ class AssignmentsController < ApplicationController
   include SortsPosition
 
   before_filter :ensure_staff?, except: [:show, :index]
+  before_filter :sanitize_params, only: [:create, :update]
 
   def index
     @title = "#{term_for :assignments}"
@@ -128,10 +129,18 @@ class AssignmentsController < ApplicationController
 
   private
 
+  def sanitize_params
+    [:full_points, :threshold_points].each do |points|
+      if params[:assignment][points].class == String
+        params[:assignment][points].delete!(",").to_i
+      end
+    end
+  end
+
   def assignment_params
-    params.require(:assignment).permit :accepts_attachments, :accepts_links, 
-      :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until, 
-      :accepts_text, :assignment_file, :assignment_file_ids, :assignment_score_level, 
+    params.require(:assignment).permit :accepts_attachments, :accepts_links,
+      :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
+      :accepts_text, :assignment_file, :assignment_file_ids, :assignment_score_level,
       :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
       :include_in_predictor, :include_in_timeline, :include_in_to_do,
       :mass_grade_type, :name, :open_at, :pass_fail, :max_submissions,
