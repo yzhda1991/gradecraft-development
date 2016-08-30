@@ -130,7 +130,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
     context "for specific ids" do
       it "filters out a single id" do
-        grades = subject.grades(123, assignment_ids, 456)
+        grades = subject.grades(123, assignment_ids, "456")
 
         expect(grades.first["id"]).to eq 456
       end

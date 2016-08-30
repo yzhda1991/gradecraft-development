@@ -57,8 +57,8 @@ module ActiveLMS
         if grade_ids.nil?
           grades += data
         else
-          filtered_ids = [grade_ids].flatten.uniq.compact
-          data.select { |grade| filtered_ids.include?(grade["id"]) }.each do |grade|
+          filtered_ids = [grade_ids].flatten.uniq.compact.map(&:to_s)
+          data.select { |grade| filtered_ids.include?(grade["id"].to_s) }.each do |grade|
             grades << grade
           end
         end
