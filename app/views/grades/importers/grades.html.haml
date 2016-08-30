@@ -14,7 +14,8 @@
         to find grades to import.
   -else
     = form_tag assignment_grades_importer_grades_import_path(@assignment, :canvas, params[:id]) do
-      = hidden_field_tag :assignment_ids, params[:assignment_ids]
+      - params[:assignment_ids].each do |assignment_id|
+        = hidden_field_tag "assignment_ids[]", assignment_id
       %table.dynatable.no-table-header
         %thead
           %tr

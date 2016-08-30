@@ -48,15 +48,15 @@ class Grades::ImportersController < ApplicationController
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades_import
   def grades_import
     @provider_name = params[:importer_provider_id]
+    @assignment = Assignment.find params[:assignment_id]
 
     @result = Services::ImportsLMSGrades.import @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
-      params[:grade_ids], params[:assignment_id], current_user
+      params[:grade_ids], @assignment.id, current_user
 
     if @result.success?
       render :grades_import_results
     else
-      @assignment = Assignment.find params[:assignment_id]
       @grades = syllabus.grades(params[:id], params[:assignment_ids])
 
       render :grades, alert: @result.message
