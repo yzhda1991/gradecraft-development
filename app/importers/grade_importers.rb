@@ -1,2 +1,3 @@
 require_relative "grade_importers/canvas_grade_importer"
+require_relative "grade_importers/csv_grade_importer"
 

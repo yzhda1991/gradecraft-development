@@ -51,7 +51,7 @@ class Grades::ImportersController < ApplicationController
 
     @result = Services::ImportsLMSGrades.import @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:grade_ids],
-      params[:assignment_id]
+      params[:assignment_id], current_user
 
     if @result.success?
       render :grades_import_results
@@ -84,7 +84,8 @@ class Grades::ImportersController < ApplicationController
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
         notice: "File is missing"
     else
-      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
+      @result = CSVGradeImporter.new(params[:file].tempfile)
+        .import(current_course, @assignment)
 
       grade_ids = @result.successful.map(&:id)
       enqueue_multiple_grade_update_jobs(grade_ids)
