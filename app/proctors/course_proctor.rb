@@ -9,17 +9,17 @@ class CourseProctor
   end
 
   def viewable?(user)
-    return false if course.nil?
+    return false if course.nil? || user.nil?
     user.courses.include? @course
   end
 
   def updatable?(user)
-    return false if course.nil?
+    return false if course.nil? || user.nil?
     user.is_professor?(course) || user.is_admin?(course)
   end
 
   def destroyable?(user)
-    return false if course.nil?
+    return false if course.nil? || user.nil?
     user.is_admin?(course)
   end
 end

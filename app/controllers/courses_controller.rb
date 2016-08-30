@@ -41,7 +41,6 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params)
-
     respond_to do |format|
       if @course.save
         if !current_user_is_admin?
@@ -61,6 +60,7 @@ class CoursesController < ApplicationController
   end
 
   def copy
+    authorize! :read, @course
     duplicated = @course.copy(params[:copy_type], {})
     if duplicated.save
       if !current_user_is_admin? && current_user.role(duplicated).nil?
@@ -95,17 +95,13 @@ class CoursesController < ApplicationController
     authorize! :destroy, @course
     @name = @course.name
     @course.destroy
-
-    respond_to do |format|
-      format.html do
-        redirect_to courses_url, notice: "Course #{@name} successfully deleted"
-      end
-    end
+    redirect_to courses_url, notice: "Course #{@name} successfully deleted"
   end
 
   # Switch between enrolled courses
   def change
     if course = current_user.courses.where(id: params[:id]).first
+      authorize! :read, course
       unless session[:course_id] == course.id
         session[:course_id] = CourseRouter.change!(current_user, course).id
         record_course_login_event course: course
@@ -175,5 +171,6 @@ class CoursesController < ApplicationController
 
   def use_current_course
     @course = current_course
+    authorize! :update, @course
   end
 end
