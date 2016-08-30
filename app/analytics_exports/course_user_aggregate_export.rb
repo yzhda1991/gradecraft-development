@@ -1,66 +1,47 @@
-class CourseUserAggregateExport
-  include Analytics::Export::Model
+require_relative "./context_filters/user_aggregate_context_filter"
 
-  rows_by :users
+class CourseUserAggregateExport < Analytics::Export::Model
 
-  set_schema username: :username,
-             role: :user_role,
-             user_id: :user_id,
-             total_pageviews: :pageviews,
-             total_logins: :logins,
-             total_predictor_events: :predictor_events,
-             total_predictor_sessions: :predictor_sessions
+  # what is the base set of records we'd like to use from the context to
+  # generate this export. These records will translate to rows on the final
+  # export csv.
+  #
+  export_focus :users
 
-  def schema_records_for_role(role)
-    self.schema_records records.select {|user| @roles[user.id] == role }
+  # map the column name to the attribute or method name on the record that we'd
+  # like to use to populate each row
+  #
+  column_mapping username: :username,
+                 role: :user_role,
+                 user_id: :id,
+                 total_pageviews: :pageviews,
+                 total_logins: :logins,
+                 total_predictor_events: :predictor_events,
+                 total_predictor_sessions: :predictor_sessions
+
+  # filters add an extra layer of parsing on top of the base context queries
+  #
+  context_filters :user_aggregate
+
+  # column parsing methods
+  #
+  def user_role(user)
+    context_filters[:user_aggregate].user_roles[user.id]
   end
 
-  def initialize(loaded_data)
-    @roles = loaded_data[:events].inject(Hash.new("")) do |hash, event|
-      hash[event.user_id] = event.user_role
-      hash
-    end
-    @user_predictor_event_counts = loaded_data[:predictor_events].inject(Hash.new(0)) do |hash, predictor_event|
-      hash[predictor_event.user_id] += 1
-      hash
-    end
-    @user_pageviews = loaded_data[:user_pageviews].inject(Hash.new(0)) do |hash, pageview|
-      # pageview.pages raises an error w/ mongoid > 4.0.0
-      hash[pageview.user_id] = pageview.raw_attributes["pages"]["_all"]["all_time"]
-      hash
-    end
-    @user_logins = loaded_data[:user_logins].inject(Hash.new(0)) do |hash, login|
-      hash[login.user_id] = login["all_time"]["count"]
-      hash
-    end
-    @user_predictor_sessions = loaded_data[:user_predictor_pageviews].inject(Hash.new(0)) do |hash, predictor_pageview|
-      hash[predictor_pageview.user_id] = predictor_pageview["all_time"]
-      hash
-    end
-    super
+  def pageviews(user)
+    context_filters[:user_aggregate].parsed_user_pageviews[user.id]
   end
 
-  def user_role(user, i)
-    @roles[user.id]
+  def logins(user)
+    context_filters[:user_aggregate].parsed_user_logins[user.id]
   end
 
-  def pageviews(user, i)
-    @user_pageviews[user.id]
+  def predictor_events(user)
+    context_filters[:user_aggregate].user_predictor_event_counts[user.id]
   end
 
-  def logins(user, i)
-    @user_logins[user.id]
-  end
-
-  def predictor_events(user, i)
-    @user_predictor_event_counts[user.id]
-  end
-
-  def predictor_sessions(user, i)
-    @user_predictor_sessions[user.id]
-  end
-
-  def user_id(user, i)
-    user.id
+  def predictor_sessions(user)
+    context_filters[:user_aggregate].user_predictor_sessions[user.id]
   end
 end

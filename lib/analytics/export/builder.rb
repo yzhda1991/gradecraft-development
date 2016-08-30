@@ -9,18 +9,19 @@ require "s3fs"
 module Analytics
   module Export
     class Builder
-      attr_reader :export_data, :export_classes, :filename, :directory_name,
+      attr_reader :export_context, :export_classes, :filename, :directory_name,
                   :export_tmpdir, :export_root_dir, :final_export_tmpdir
 
-      def initialize(export_data:, export_classes:, filename: nil, directory_name: nil)
-        @export_data = export_data
+      def initialize(export_context:, export_classes:, filename: nil, directory_name: nil)
+        @export_context = export_context
         @export_classes = export_classes
         @filename = filename || "exported_files.zip"
         @directory_name = directory_name || "exported_files"
+
+        make_directories
       end
 
       def build_archive!
-        make_directories
         generate_csvs
         build_zip_archive
       end
@@ -39,12 +40,12 @@ module Analytics
       # filetype-agnostic approach.
       #
       def generate_csvs
-        exporters.each {|exporter| exporter.generate_csv export_root_dir }
+        exporters.each {|exporter| exporter.write_csv export_root_dir }
       end
 
       def exporters
         @exporters ||= export_classes.collect do |export_class|
-          export_class.new export_data
+          export_class.new context: export_context
         end
       end
 

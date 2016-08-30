@@ -3,8 +3,7 @@ require "analytics/export"
 class AnalyticsExportBuildableTest
   include Analytics::Export::Buildable
 
-  def export_data
-    {}
+  def export_context
   end
 
   def export_classes

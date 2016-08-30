@@ -1,86 +1,112 @@
-require_relative "model/class_methods"
+require "active_support/inflector"
+require "formatter/filename"
+require "csv"
 
 module Analytics
   module Export
+    # let's make this a class instead of a module because it's more straight-
+    # forward to define the class behaviors that we're using here than it is
+    # to include them through the module. Additionally if we need any more
+    # common #initialize behaviors here beyond just setting the context on
+    # create it's cleaner to use the 'super' keyword to include these
+    # behaviors than it is to define them in the #initialize method on
+    # each subclass.
+    #
+    class Model
+      # set the hash that defines how each column will be populated with
+      # either an attribute on the record-row, or a method that provides
+      # additional filtering for the data before populating it
+      #
+      def self.column_mapping(mapping)
+        @column_mapping = mapping
+      end
 
-    # This hasn't been changed at all, it's just been moved from
-    # Analytics::Export to Analtyics::Export::Model so that we can use the
-    # ::Export module to house adjacent helper classes.
-    #
-    # This entire process is the subject of the 2132 branch/issue, and has been
-    # completely refactored into multiple classes on that branch for
-    # significantly better readability and clarity of process.
-    #
-    module Model
-      def self.included(base)
-        base.extend(ClassMethods)
-        base.class_eval do
-          attr_accessor :data
+      # define the method that gives us the array of records we'd like to
+      # pull from the context to define our export rows.
+      #
+      def self.export_focus(method_name)
+        @export_focus = method_name
+      end
+
+      def self.context_filters(*filter_names)
+        @context_filters = filter_names
+      end
+
+      # every Analytics::Export class will have both a context and a set of
+      # export_records. The context is the larger set of records that have
+      # been queried for to perform the overall export so that individual
+      # queries for the same data don't have to be made if multiple exports
+      # are performed.
+      #
+      # export_records are the set of records that will act as the basis for
+      # the data rendered in the CSV by the export itself. Each export_record
+      # will represent a row in the final CSV, but that data will be filtered
+      # by the export process for a more specific presentation beyond simply
+      # rendering the collection of events in its raw form.
+      #
+      attr_reader :context, :export_records, :filename, :export_focus,
+        :column_mapping, :context_filters
+
+      def initialize(context:, filename: nil)
+        @context = context
+        @filename = filename
+        @export_focus = self.class.instance_variable_get :@export_focus
+        @column_mapping = self.class.instance_variable_get :@column_mapping
+        @export_records = context.send(export_focus) if export_focus
+      end
+
+      def parsed_columns
+        @parsed_columns ||= Analytics::Export::Parsers::Column.new(self).parse!
+      end
+
+      # reorganize the data by column into rows by transposing the values
+      def parsed_rows
+        return nil unless parsed_columns
+        @parsed_rows ||= parsed_columns.values.transpose
+      end
+
+      # generate a 'header' row for the CSV file by pulling the column names
+      # from the schema that we defined with set_schema
+      def column_names
+        column_mapping.keys if column_mapping
+      end
+
+      def default_filename
+        formatted_filename = Formatter::Filename.new(self.class.name.underscore)
+          .url_safe.filename
+
+        "#{formatted_filename}.csv"
+      end
+
+      # build a hash of context filters according to the class prefixes we've
+      # defined in ClassName.context_filters.
+      #
+      # Individual filters will be fetchable as context_filters[:filter_name],
+      # which is intended to feel like a params[] object in a rails controller
+      #
+      def context_filters
+        filter_names = self.class.instance_variable_get :@context_filters
+        return nil unless filter_names
+
+        @context_filters ||= filter_names.inject({}) do |memo, filter_name|
+          # re-add the context_filter suffix when we're fetching the class
+          filter_class = "#{filter_name}_context_filter".camelize.constantize
+
+          # build the filter instance using the context
+          memo[filter_name] = filter_class.new(context)
+          memo
         end
       end
 
-      def initialize(loaded_data)
-        self.data = loaded_data
-      end
+      def write_csv(directory_path)
+        csv_filepath = File.join directory_path, (filename || default_filename)
 
-      def filter(rows)
-        rows
-      end
+        ::CSV.open(csv_filepath, "wb") do |csv|
+          # add the header names for each column
+          csv << column_names
 
-      def records
-        @records ||= self.filter data[self.class.rows]
-      end
-
-      # {
-      #   username: ["blah", "blah2", "blah3"],
-      #   role: ["admin", "owner", "owner"], ...
-      # }
-      def schema_records(records_set=nil)
-        puts "  => generating schema records"
-        recs = records_set || self.records
-
-        Hash.new { |hash, key| hash[key] = [] }.tap do |h|
-          total_records = recs.size
-          all_elapsed = Benchmark.realtime do
-            self.class.schema.each do |column, value|
-              elapsed = Benchmark.realtime do
-                puts "    => column #{column.inspect}, value #{value.inspect}"
-                h[column] = recs.each_with_index.map do |record, i|
-                  print "\r       record #{i} of #{total_records} (#{(i*100.0/total_records).round}%)" if i % 5 == 0 || i == (total_records - 1)
-
-                  if value.respond_to? :call
-                    value.call(record)
-                  elsif record.respond_to? value
-                    record.send(value)
-                  else
-                    self.send(value, record, i) if self.respond_to? value
-                  end
-
-                end
-              end
-              puts "\n       Done. Elapsed time: #{elapsed} seconds"
-            end
-          end
-          puts "     Done. Elapsed time: #{all_elapsed} seconds"
-        end
-      end
-
-      def filter_schema_records(&filter)
-        record_set = filter.call(self.records)
-        self.schema_records record_set
-      end
-
-      def generate_csv(path, file_name=nil, schema_record_set=nil)
-        schema_recs = schema_record_set || self.schema_records
-
-        file_name ||= "#{self.class.name.underscore}.csv"
-
-        CSV.open(File.join(path, file_name), "w") do |csv|
-          # Write header row
-          csv << self.class.schema.keys
-
-          # Zip schema_records values from each key
-          schema_recs.values.transpose.each{ |record| csv << record }
+          # add all of the rows
+          parsed_rows.each {|row| csv << row }
         end
       end
     end

@@ -43,9 +43,9 @@ class CourseAnalyticsExport < ActiveRecord::Base
   end
 
   # overwrite the default export_builder_attrs so we can declare
-  def export_builder_attrs
+  def builder_attrs
     {
-      export_data: export_context.export_data,
+      export_context: export_context,
       export_classes: export_classes,
       filename: url_safe_filename,
       directory_name: formatted_course_number # root directory name

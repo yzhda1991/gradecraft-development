@@ -74,16 +74,16 @@ describe CourseAnalyticsExport do
     end
   end
 
-  describe "#export_builder_attrs" do
+  describe "#builder_attrs" do
     it "returns a hash of attributes to use for the builder" do
       allow(subject).to receive_messages \
-        export_context: double(:context, export_data: "some data"),
+        export_context: "the context",
         export_classes: "some classes",
         url_safe_filename: "the_filename.txt",
         formatted_course_number: "ECO500"
 
-      expect(subject.export_builder_attrs).to eq({
-        export_data: "some data",
+      expect(subject.builder_attrs).to eq({
+        export_context: "the context",
         export_classes: "some classes",
         filename: "the_filename.txt",
         directory_name: "ECO500"
