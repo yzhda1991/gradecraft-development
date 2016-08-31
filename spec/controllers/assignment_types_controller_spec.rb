@@ -65,7 +65,7 @@ describe AssignmentTypesController do
         params = { name: "new name" }
         post :update, id: @assignment_type.id, assignment_type: params
         @assignment_type.reload
-        expect(response).to redirect_to(assignment_types_path)
+        expect(response).to redirect_to(assignments_path)
         expect(@assignment_type.name).to eq("new name")
       end
 
