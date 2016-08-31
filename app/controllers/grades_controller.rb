@@ -51,25 +51,14 @@ class GradesController < ApplicationController
   # This is the method used when faculty delete a grade
   # it preserves the predicted grade
   def remove
-    @grade = Grade.find(params[:id])
-    @grade.raw_points = nil
-    @grade.status = nil
-    @grade.feedback = nil
-    @grade.feedback_read = false
-    @grade.feedback_read_at = nil
-    @grade.feedback_reviewed = false
-    @grade.feedback_reviewed_at = nil
-    @grade.instructor_modified = false
-    @grade.graded_at = nil
+    grade = Grade.find(params[:id])
 
-    @grade.update_attributes(grade_params)
-
-    if @grade.save
-      score_recalculator(@grade.student)
-      redirect_to @grade.assignment,
-        notice: "#{ @grade.student.name }'s #{ @grade.assignment.name } grade was successfully deleted."
+    if grade.clear_grade!
+      score_recalculator(grade.student)
+      redirect_to grade.assignment,
+        notice: "#{grade.student.name}'s #{grade.assignment.name} grade was successfully deleted."
     else
-      redirect_to @grade.assignment, notice:  @grade.errors.full_messages, status: 400
+      redirect_to grade.assignment, notice: grade.errors.full_messages, status: 400
     end
   end
 

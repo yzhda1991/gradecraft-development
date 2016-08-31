@@ -153,6 +153,18 @@ describe GradesController do
         post :remove, { id: @grade.id, grade: { full_points: 13 }}
         expect(response.status).to eq(400)
       end
+
+      it "preserves the grade but removes any indication that it was graded" do
+        expect_any_instance_of(Grade).to receive(:clear_grade!).and_call_original
+
+        post :remove, { id: @grade.id }
+      end
+
+      it "recalculates the grade's score" do
+        expect(controller).to receive(:score_recalculator).with(@grade.student)
+
+        post :remove, { id: @grade.id }
+      end
     end
 
     describe "POST exclude" do
