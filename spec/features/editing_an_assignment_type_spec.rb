@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "editing an assignment type", focus: true do
+feature "editing an assignment type" do
   context "as a professor" do
     let(:course) { create :course, assignment_term: "Assignment"}
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
@@ -9,25 +9,15 @@ feature "editing an assignment type", focus: true do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit assignments_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Assignment types"
+      within(".assignments") do
+        click_link "[ Edit ]"
       end
 
-      expect(current_path).to eq assignment_types_path
-
-      within(".pageContent") do
-        click_link "Assignment Type Name"
-      end
-
-      expect(current_path).to eq assignment_type_path(assignment_type.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
+      expect(current_path).to eq edit_assignment_type_path(assignment_type)
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Assignment Type Name"

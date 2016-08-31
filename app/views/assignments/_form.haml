@@ -4,7 +4,7 @@
   %section
     %h4 Basic Info
     .form-item
-      = f.association :assignment_type, collection: current_course.assignment_types.ordered, value_method: :id, include_blank: true, selected: params[:assignment_type_id]
+      = f.association :assignment_type, collection: current_course.assignment_types.ordered, value_method: :id, include_blank: true, selected: params[:assignment_type_id] || presenter.assignment.assignment_type_id
 
     .form-item
       = f.label :name
