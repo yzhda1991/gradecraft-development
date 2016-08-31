@@ -5,10 +5,6 @@
 .context_menu
   %ul
     %li
-      %a{:href => new_assignment_path }
-        = glyph(:plus)
-        New #{(term_for :assignment).titleize}
-    %li
       %a{:href => assignments_importers_path }
         = glyph(:upload)
         Import Assignments
@@ -24,6 +20,8 @@
             %i.fa.fa-angle-double-right.fa-fw
           .assignment-type-name #{assignment_type.name} – #{points assignment_type.total_points} points
         .collapse-hidden
+          = link_to "[ Edit ]", edit_assignment_type_path(assignment_type)
+          = link_to "[ Delete ]", assignment_type_path(assignment_type), data: { confirm: "Are you sure?", method: :delete }
           %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
             %thead
               %tr

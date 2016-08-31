@@ -107,7 +107,7 @@ class AssignmentTypesController < ApplicationController
   def destroy
     @name = "#{@assignment_type.name}"
     @assignment_type.destroy
-    redirect_to assignment_types_path, flash: {
+    redirect_to assignments_path, flash: {
       success: "#{(term_for :assignment_type).titleize} #{@name} successfully deleted"
     }
   end

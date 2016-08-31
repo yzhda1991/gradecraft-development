@@ -71,7 +71,7 @@ class AssignmentsController < ApplicationController
   def create
     assignment = current_course.assignments.new(assignment_params)
     if assignment.save
-      redirect_to assignment_path(assignment),
+      redirect_to assignments_path,
         notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" \
         and return
     end
