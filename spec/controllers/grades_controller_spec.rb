@@ -135,6 +135,15 @@ describe GradesController do
         expect(response).to redirect_to(login_path)
       end
 
+      it "redirects to next submission if requested" do
+        submission_2 = create :submission, assignment: @assignment
+        put :update, { id: @grade.id, grade: { raw_points: 12345}, redirect_to_grade_next: true}
+        expect(response).to redirect_to(edit_grade_path(
+          Grade.where(
+            student: submission_2.student,
+            assignment: submission_2.assignment).first))
+      end
+
       it "redirects on failure" do
         allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
         put :update, { id: @grade.id, grade: { full_points: 100 }}
