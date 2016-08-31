@@ -26,7 +26,6 @@
 %hr
 
 %h5 Coursework
-%li= link_to_unless_current glyph(:book) + "#{term_for :assignment_types}", assignment_types_path
 %li= link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
 - if current_course.has_badges?
   %li= link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
