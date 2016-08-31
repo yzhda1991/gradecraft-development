@@ -9,25 +9,15 @@ feature "editing an assignment type" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit assignments_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Assignment types"
+      within(".assignments") do
+        click_link "[ Edit ]"
       end
 
-      expect(current_path).to eq assignment_types_path
-
-      within(".pageContent") do
-        click_link "Assignment Type Name"
-      end
-
-      expect(current_path).to eq assignment_type_path(assignment_type.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
+      expect(current_path).to eq edit_assignment_type_path(assignment_type)
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Assignment Type Name"

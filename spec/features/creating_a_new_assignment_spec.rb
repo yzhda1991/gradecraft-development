@@ -17,7 +17,7 @@ feature "creating a new assignment" do
         click_link "Assignments"
       end
 
-      within(".context_menu") do
+      within(".assignments") do
         click_link "New Assignment"
       end
 

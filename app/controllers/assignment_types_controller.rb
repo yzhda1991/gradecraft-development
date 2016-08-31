@@ -13,11 +13,6 @@ class AssignmentTypesController < ApplicationController
     @students = current_course.students
   end
 
-  # See assignment type with all of its included assignments
-  def show
-    @title = "#{@assignment_type.name}"
-  end
-
   # Create a new assignment type
   def new
     @title = "Create a New #{term_for :assignment_type}"
@@ -37,7 +32,7 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html do redirect_to assignment_types_path, flash: {
+        format.html do redirect_to assignments_path, flash: {
           success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" }
         end
       else
@@ -53,7 +48,7 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html do redirect_to assignment_types_path, flash: {
+        format.html do redirect_to assignments_path, flash: {
           success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
         end
       else
@@ -112,7 +107,7 @@ class AssignmentTypesController < ApplicationController
   def destroy
     @name = "#{@assignment_type.name}"
     @assignment_type.destroy
-    redirect_to assignment_types_path, flash: {
+    redirect_to assignments_path, flash: {
       success: "#{(term_for :assignment_type).titleize} #{@name} successfully deleted"
     }
   end

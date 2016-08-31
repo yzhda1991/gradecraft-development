@@ -8,16 +8,13 @@ feature "creating a new assignment type" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit assignments_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Assignment types"
-      end
-
-      within(".context_menu") do
-        click_link "New Assignment type"
+      
+      within(".box") do
+        click_link "Add a New Assignment Type"
       end
 
       expect(current_path).to eq new_assignment_type_path

@@ -135,7 +135,7 @@ GradeCraft::Application.routes.draw do
   resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
-  resources :assignment_types do
+  resources :assignment_types, except: [:show] do
     get :all_grades, on: :member
     get :export_scores, on: :member
     get :export_all_scores, on: :collection

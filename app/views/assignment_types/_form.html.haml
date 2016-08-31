@@ -40,4 +40,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
-      %li= link_to glyph("times-circle") + "Cancel", assignment_types_path, class: "button"
+      %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"

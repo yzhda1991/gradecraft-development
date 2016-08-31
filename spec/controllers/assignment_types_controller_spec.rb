@@ -30,15 +30,6 @@ describe AssignmentTypesController do
       end
     end
 
-    describe "GET show" do
-      it "returns the assignment type show page" do
-        get :show, id: @assignment_type.id
-        expect(assigns(:title)).to eq(@assignment_type.name)
-        expect(assigns(:assignment_type)).to eq(@assignment_type)
-        expect(response).to render_template(:show)
-      end
-    end
-
     describe "GET new" do
       it "assigns title and assignment types" do
         get :new
@@ -74,7 +65,7 @@ describe AssignmentTypesController do
         params = { name: "new name" }
         post :update, id: @assignment_type.id, assignment_type: params
         @assignment_type.reload
-        expect(response).to redirect_to(assignment_types_path)
+        expect(response).to redirect_to(assignments_path)
         expect(@assignment_type.name).to eq("new name")
       end
 
@@ -196,7 +187,6 @@ describe AssignmentTypesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :show,
         :update,
         :destroy,
         :export_scores,

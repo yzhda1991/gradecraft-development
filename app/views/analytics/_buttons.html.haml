@@ -1,6 +1,8 @@
 .context_menu
   %ul
     %li= link_to glyph("file-zip-o") + "#{term_for :assignment} Analytics", per_assign_path
+    
+    %li= link_to glyph("file-zip-o") + "#{term_for :assignment} Type Analytics", assignment_types_path
 
     %li= link_to_unless_current glyph(:user) + "#{term_for :student} Analytics", analytics_students_path
 
