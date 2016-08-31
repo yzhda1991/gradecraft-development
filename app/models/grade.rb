@@ -61,6 +61,16 @@ class Grade < ActiveRecord::Base
     Grade.where(student_id: student_ids, assignment_id: assignment_id)
   end
 
+  def clear_grade!
+    self.raw_points, self.status, self.feedback, self.feedback_read_at,
+      self.feedback_reviewed_at, self.graded_at, self.graded_by_id,
+      self.adjustment_points_feedback = nil
+
+    self.adjustment_points = 0
+    self.feedback_read = self.feedback_reviewed = self.instructor_modified = false
+    save
+  end
+
   def feedback_read!
     update_attributes feedback_read: true, feedback_read_at: DateTime.now
   end
@@ -96,16 +106,16 @@ class Grade < ActiveRecord::Base
   end
 
   def check_unlockables
-    if self.assignment.is_a_condition? 
+    if self.assignment.is_a_condition?
       self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
     end
-    if self.assignment_type.is_a_condition? 
+    if self.assignment_type.is_a_condition?
       self.assignment_type.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.check_unlock_status(student)
       end
-    end  
+    end
   end
 
   def excluded_by
