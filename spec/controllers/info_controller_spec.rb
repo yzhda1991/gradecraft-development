@@ -22,11 +22,6 @@ describe InfoController do
         get :dashboard
         expect(response).to render_template(:dashboard)
       end
-
-      it "redirects to the course creation wizard if there are no assignments created" do
-        get :dashboard
-        expect(response).to redirect_to course_creation_wizard_path
-      end
     end
 
     describe "GET predictor" do

@@ -104,6 +104,6 @@ $('table.highchart').highchartTable(
 );
 
 //Hide and show course-info-card in header
-$(".course-info-btn").click(function(){
+$(".course-info-btn").hover(function(){
     $(".course-info-card").toggle();
 });
