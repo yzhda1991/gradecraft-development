@@ -55,8 +55,8 @@
           .submit-buttons
             %ul
               %li= submit_tag "#{grade.persisted? && grade.is_graded? ? 'Update' : 'Submit'} Grade", class: "button"
-              - if grade.assignment.accepts_submissions? && !grade.is_graded?
-                %li= submit_tag "Submit and Grade Next", name: "redirect_to_grade_next", class: "button"
+              - if !grade.is_graded?
+                %li= submit_tag "Submit and Grade Next", name: "redirect_to_next_grade", class: "button"
               %li= link_to glyph("times-circle") + "Cancel", assignment_path(grade.assignment), class: "button"
 
         %section

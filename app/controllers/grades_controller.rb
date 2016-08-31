@@ -37,18 +37,11 @@ class GradesController < ApplicationController
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
 
-      if params[:redirect_to_grade_next].present?
-        next_submission = grade.assignment.submissions.ungraded.first
-        if next_submission.present?
-          grade = Grade.find_or_create next_submission.assignment.id, next_submission.student.id
-          path =  edit_grade_path grade
-        else
-          path = assignment_path(grade.assignment)
-        end
+      if params[:redirect_to_next_grade].present?
+        path = path_for_next_grade grade
       else
-        path = session[:return_to] || assignment_path(grade.assignment)
+        path = assignment_path(grade.assignment)
       end
-
       redirect_to path,
         notice: "#{grade.student.name}'s #{grade.assignment.name} was successfully updated"
     else # failure
@@ -184,5 +177,22 @@ class GradesController < ApplicationController
 
   def rubric_criteria_with_levels
     @rubric_criteria_with_levels ||= @rubric.criteria.ordered.includes(:levels)
+  end
+
+  def path_for_next_grade(grade)
+    if grade.assignment.accepts_submissions?
+      next_submission = grade.assignment.submissions.ungraded.first
+      next_student = next_submission.student if next_submission.present?
+    else
+      next_student = grade.assignment.ungraded_students.first
+    end
+
+    if next_student.present?
+      return edit_grade_path(
+        Grade.find_or_create(grade.assignment.id, next_student.id)
+      )
+    else
+      return assignment_path(grade.assignment)
+    end
   end
 end
