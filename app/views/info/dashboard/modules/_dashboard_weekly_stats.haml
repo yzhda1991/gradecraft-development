@@ -36,5 +36,8 @@
                 %span #{badge.name}: #{ badge.earned_badges_this_week_count }
               
   - else
-    .module-section.dashboard-message
-      %p You have not earned anything in the last week!
+    .dashboard-message
+      - if current_user_is_student?
+        %p You have not earned anything in the last week!
+      - else
+        %p No grades have been awarded yet this week
