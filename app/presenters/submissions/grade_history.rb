@@ -27,12 +27,24 @@ module Submissions::GradeHistory
       end
       .rename("SubmissionFile" => "Attachment")
       .include do |history|
+        viewable = true
+
         if history.changeset["object"] == "Grade" && only_student_visible_grades
-          grade = history.version.reify
-          GradeProctor.new(grade).viewable?
-        else
-          true
+          version = history.version.reify
+          viewable = GradeProctor.new(version).viewable?
+
+          unless viewable
+            # Make the change viewable if the grade was updated first but then
+            # it was released. This displays the changeset where the grade was
+            # updated
+            viewable = (history.changeset.keys.include?("raw_points") ||
+                        history.changeset.keys.include?("feedback")) &&
+                        history.version.event == "update" &&
+                        GradeProctor.new(grade).viewable?
+          end
         end
+
+        viewable
       end
       .changesets
   end
