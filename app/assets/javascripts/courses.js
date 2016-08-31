@@ -27,7 +27,7 @@
               return item.name.match(regex) || item.course_number.match(regex);
             }
           }).on('omniselect:select', function(event, id) {
-            window.location = "/current_course/change?course_id=" + id
+            window.location = "/courses/" + id + "/change"
             return false;
           });
         }
