@@ -822,6 +822,19 @@ describe Assignment do
     end
   end
 
+  describe "ungraded_students" do
+    before { subject.save }
+
+    it "returns all students for course who are not graded for this assignment" do
+      s1 = create(:student_course_membership, course: subject.course).user
+      s2 = create(:student_course_membership, course: subject.course).user
+      s3 = create(:student_course_membership, course: subject.course).user
+      subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
+      expect(subject.ungraded_students.count).to eq(2)
+    end
+  end
+
   describe "#soon?" do
     it "is not soon if there is no due date" do
       subject.due_at = nil

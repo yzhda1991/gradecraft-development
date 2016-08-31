@@ -64,4 +64,8 @@ module Gradable
   def predicted_count
     predicted_earned_grades.predicted_to_be_done.count
   end
+
+  def ungraded_students
+    course.students - User.find(grades.graded.pluck(:student_id))
+  end
 end
