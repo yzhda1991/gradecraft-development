@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
     def unscoped_students_being_graded_for_course(course, team=nil)
       query = User
         .unscoped # override the order("last_name ASC") default scope on the User model
-        .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
+        .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users,avatar_file_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
         .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
         .where("course_memberships.course_id = ?", course.id)
         .where("course_memberships.auditing = ?", false)

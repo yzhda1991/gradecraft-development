@@ -12,6 +12,7 @@
       %tr
         %th
         %th{scope: "col"} Rank
+        %th{scope: "col"} Avatar
         %th{scope: "col"} First Name
         %th{scope: "col"} Last Name
         - if presenter.display_pseudonyms?
@@ -32,6 +33,9 @@
               = div_for student do
                 = link_to flagged_user_icon(presenter.course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
             %td{"data-title" => "Rank"}= index + 1
+            %td{"data-title" => "Avatar"}
+              - if student.avatar_file_name.present? 
+                %img{:src => student.avatar_file_name, :width => 30, :height => 30 }
             %td{"data-title" => "First Name"}= link_to student.first_name, student_path(student)
             %td{"data-title" => "Last Name"}= link_to student.last_name, student_path(student)
             - if presenter.display_pseudonyms?

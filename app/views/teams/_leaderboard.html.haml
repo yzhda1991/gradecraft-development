@@ -1,15 +1,18 @@
 %h3.subtitle= "#{term_for :team} Leaderboard"
-#leaderboardBarChart
-%table.highchart.hidden{data: { "graph-container" => "#leaderboardBarChart", "graph-type" => "column", "graph-legend-disabled" => 1, "graph-xaxis-rotation" => 0, "graph-color-1" => "#303285"} }
-  %thead
-    %tr
-      %th Points
-      %th Team
-  %tbody
-    - @teams.each do |team|
+- if @teams.present?
+  #leaderboardBarChart
+  %table.highchart.hidden{data: { "graph-container" => "#leaderboardBarChart", "graph-type" => "column", "graph-legend-disabled" => 1, "graph-xaxis-rotation" => 0, "graph-color-1" => "#303285"} }
+    %thead
       %tr
-        %td= team.name
-        - if current_course.team_score_average?
-          %td.points= team.average_score
-        - else
-          %td.points= team.challenge_grade_score
+        %th Points
+        %th Team
+    %tbody
+      - @teams.each do |team|
+        %tr
+          %td= team.name
+          - if current_course.team_score_average?
+            %td.points= team.average_score
+          - else
+            %td.points= team.challenge_grade_score
+- else 
+  %p There are no #{term_for :teams} in this course yet!
