@@ -30,7 +30,7 @@ class HistoryFilter
       result = inclusions.inject(true) do |select, inclusion|
         history_item.changeset[inclusion] == options[inclusion]
       end
-      result &= yield(history_item) if block_given?
+      result &= yield(history_item, history) if block_given?
       result
     end
     clear_empty_changesets
