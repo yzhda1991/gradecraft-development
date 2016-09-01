@@ -180,12 +180,7 @@ class GradesController < ApplicationController
   end
 
   def path_for_next_grade(grade)
-    if grade.assignment.accepts_submissions?
-      next_submission = grade.assignment.submissions.ungraded.first
-      next_student = next_submission.student if next_submission.present?
-    else
-      next_student = grade.assignment.next_ungraded_student(grade.student)
-    end
+    next_student = grade.assignment.next_ungraded_student(grade.student)
 
     if next_student.present?
       return edit_grade_path(

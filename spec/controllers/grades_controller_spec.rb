@@ -136,26 +136,29 @@ describe GradesController do
       end
 
       context "when redirect_to_next_grade is included in params" do
-        it "redirects to grade the next ungraded student when not accepting submissions" do
-          next_student = create(
+        before do
+          @next_student = create(
             :student_course_membership, course: @assignment.course,
             user: create(:user,last_name: "Zzz")).user
-          @assignment.update(accepts_submissions: false)
+        end
 
+        it "creates and redirects to grade the next ungraded student when not accepting submissions" do
+          @assignment.update(accepts_submissions: false)
           put :update, { id: @grade.id, grade: { raw_points: 12345, status: "Graded"}, redirect_to_next_grade: true}
           expect(response).to redirect_to(edit_grade_path(
             Grade.where(
-              student: next_student,
+              student: @next_student,
               assignment: @assignment).first)
           )
         end
 
-        it "redirects to grade the next submission when accepting submissions" do
-          submission_2 = create :submission, assignment: @assignment
+        it "creates and redirects to grade the next student with submission" do
+          create :submission, assignment: @assignment, student: @student
+          create :submission, assignment: @assignment, student: @next_student
           put :update, { id: @grade.id, grade: { raw_points: 12345 }, redirect_to_next_grade: true}
           expect(response).to redirect_to(edit_grade_path(
             Grade.where(
-              student: submission_2.student,
+              student: @next_student,
               assignment: @assignment).first)
           )
         end

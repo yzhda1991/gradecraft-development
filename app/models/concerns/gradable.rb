@@ -70,8 +70,16 @@ module Gradable
       (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
   end
 
+  def ungraded_students_with_submissions(ids_to_include=[])
+    ungraded_students(ids_to_include) & User.find(submissions.pluck(:student_id))
+  end
+
   def next_ungraded_student(student)
-    us = ungraded_students([student.id])
+    if accepts_submissions?
+      us = ungraded_students_with_submissions([student.id])
+    else
+      us = ungraded_students([student.id])
+    end
     i = us.map(&:id).index(student.id)
     i && i < us.length - 1 ? us[i + 1] : nil
   end
