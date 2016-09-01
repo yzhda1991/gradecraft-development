@@ -65,7 +65,14 @@ module Gradable
     predicted_earned_grades.predicted_to_be_done.count
   end
 
-  def ungraded_students
-    course.students - User.find(grades.graded.pluck(:student_id))
+  def ungraded_students(ids_to_include=[])
+    course.students.order_by_name -
+      (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
+  end
+
+  def next_ungraded_student(student)
+    us = ungraded_students([student.id])
+    i = us.map(&:id).index(student.id)
+    i && i < us.length - 1 ? us[i + 1] : nil
   end
 end

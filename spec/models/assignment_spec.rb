@@ -823,15 +823,40 @@ describe Assignment do
   end
 
   describe "ungraded_students" do
-    before { subject.save }
-
-    it "returns all students for course who are not graded for this assignment" do
+    before do
+      subject.save
       s1 = create(:student_course_membership, course: subject.course).user
       s2 = create(:student_course_membership, course: subject.course).user
       s3 = create(:student_course_membership, course: subject.course).user
       subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
       subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
-      expect(subject.ungraded_students.count).to eq(2)
+    end
+
+    it "returns all students without a 'Graded' grade for the assignment" do
+     expect(subject.ungraded_students.count).to eq(2)
+    end
+  end
+
+  describe "next_ungraded_student" do
+    before { subject.save }
+
+    %w"Zenith Apex Middleton".each do |username|
+      let!(username.downcase.to_sym) do
+        create(:student_course_membership, course: subject.course,
+          user: create(:user,last_name: username)).user
+      end
+    end
+
+    it "returns the next student by last name" do
+      expect(subject.next_ungraded_student(middleton).last_name).to eq("Zenith")
+    end
+
+    it "returns nil for the last student" do
+      expect(subject.next_ungraded_student(zenith)).to be_nil
+    end
+
+    it "returns nil for student not in the list" do
+      expect(subject.next_ungraded_student(create(:user))).to be_nil
     end
   end
 

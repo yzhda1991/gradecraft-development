@@ -136,8 +136,10 @@ describe GradesController do
       end
 
       context "when redirect_to_next_grade is included in params" do
-        it "redirects to grade the next ungraded student when not accepting submissions"  , focus: true  do
-          next_student = create(:student_course_membership, course: @assignment.course).user
+        it "redirects to grade the next ungraded student when not accepting submissions" do
+          next_student = create(
+            :student_course_membership, course: @assignment.course,
+            user: create(:user,last_name: "Zzz")).user
           @assignment.update(accepts_submissions: false)
 
           put :update, { id: @grade.id, grade: { raw_points: 12345, status: "Graded"}, redirect_to_next_grade: true}

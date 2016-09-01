@@ -184,7 +184,7 @@ class GradesController < ApplicationController
       next_submission = grade.assignment.submissions.ungraded.first
       next_student = next_submission.student if next_submission.present?
     else
-      next_student = grade.assignment.ungraded_students.first
+      next_student = grade.assignment.next_ungraded_student(grade.student)
     end
 
     if next_student.present?
