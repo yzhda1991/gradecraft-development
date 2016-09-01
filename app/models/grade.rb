@@ -14,6 +14,7 @@ class Grade < ActiveRecord::Base
   belongs_to :group, polymorphic: true, touch: true # Optional
   belongs_to :graded_by, class_name: "User", touch: true
 
+  has_one :imported_grade, dependent: :destroy
   has_many :earned_badges, dependent: :destroy
 
   has_many :badges, through: :earned_badges

@@ -1,6 +1,6 @@
 require "csv"
 
-class GradeImporter
+class CSVGradeImporter
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 

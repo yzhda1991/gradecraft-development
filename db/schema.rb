@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160818022703) do
+ActiveRecord::Schema.define(version: 20160830154453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -480,6 +480,16 @@ ActiveRecord::Schema.define(version: 20160818022703) do
 
   add_index "imported_assignments", ["assignment_id"], name: "index_imported_assignments_on_assignment_id", using: :btree
 
+  create_table "imported_grades", force: :cascade do |t|
+    t.integer  "grade_id"
+    t.string   "provider"
+    t.string   "provider_resource_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "imported_grades", ["grade_id"], name: "index_imported_grades_on_grade_id", using: :btree
+
   create_table "level_badges", force: :cascade do |t|
     t.integer  "level_id"
     t.integer  "badge_id"
@@ -825,6 +835,7 @@ ActiveRecord::Schema.define(version: 20160818022703) do
   add_foreign_key "flagged_users", "users", column: "flagged_id"
   add_foreign_key "flagged_users", "users", column: "flagger_id"
   add_foreign_key "imported_assignments", "assignments"
+  add_foreign_key "imported_grades", "grades"
   add_foreign_key "secure_tokens", "courses"
   add_foreign_key "secure_tokens", "users"
   add_foreign_key "user_authorizations", "users"

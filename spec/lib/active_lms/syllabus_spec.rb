@@ -46,7 +46,7 @@ describe ActiveLMS::Syllabus do
     subject { described_class.new :canvas, access_token }
 
     it "delegates to the provider" do
-      expect(subject.provider).to receive(:grades).with(123, [456, 789])
+      expect(subject.provider).to receive(:grades).with(123, [456, 789], nil)
       subject.grades(123, [456, 789])
     end
   end

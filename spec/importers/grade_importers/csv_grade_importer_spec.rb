@@ -1,9 +1,11 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require "./lib/quote_helper"
+require "./app/importers/grade_importers/csv_grade_importer"
 
-describe GradeImporter do
+describe CSVGradeImporter do
   describe "#import" do
     it "returns empty results when there is no file" do
-      result = GradeImporter.new(nil).import
+      result = described_class.new(nil).import
       expect(result.successful).to be_empty
       expect(result.unsuccessful).to be_empty
     end
@@ -12,7 +14,7 @@ describe GradeImporter do
       let(:file) { fixture_file "grades.csv", "text/csv" }
       let(:course) { create :course }
       let(:assignment) { create :assignment, course: course }
-      subject { GradeImporter.new(file.tempfile) }
+      subject { described_class.new(file.tempfile) }
 
       context "with a student not in the file" do
         let(:student) { create :user }

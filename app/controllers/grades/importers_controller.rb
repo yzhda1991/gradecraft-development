@@ -1,4 +1,5 @@
 require "active_lms"
+require_relative "../../services/imports_lms_grades"
 
 class Grades::ImportersController < ApplicationController
   include OAuthProvider
@@ -37,11 +38,29 @@ class Grades::ImportersController < ApplicationController
     @courses = syllabus.courses
   end
 
-  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
+  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
     @grades = syllabus.grades(params[:id], params[:assignment_ids])
+  end
+
+  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades_import
+  def grades_import
+    @provider_name = params[:importer_provider_id]
+    @assignment = Assignment.find params[:assignment_id]
+
+    @result = Services::ImportsLMSGrades.import @provider_name,
+      authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
+      params[:grade_ids], @assignment.id, current_user
+
+    if @result.success?
+      render :grades_import_results
+    else
+      @grades = syllabus.grades(params[:id], params[:assignment_ids])
+
+      render :grades, alert: @result.message
+    end
   end
 
   # GET /assignments/:assignment_id/grades/importers
@@ -65,7 +84,8 @@ class Grades::ImportersController < ApplicationController
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
         notice: "File is missing"
     else
-      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
+      @result = CSVGradeImporter.new(params[:file].tempfile)
+        .import(current_course, @assignment)
 
       grade_ids = @result.successful.map(&:id)
       enqueue_multiple_grade_update_jobs(grade_ids)

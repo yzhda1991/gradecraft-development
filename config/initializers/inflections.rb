@@ -13,6 +13,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "LMS"
   inflect.acronym "LTI"
   inflect.acronym "API"
+  inflect.acronym "CSV"
   inflect.acronym "OAuth"
   inflect.irregular "criterion", "criteria"
   inflect.irregular "TA", "TA"
