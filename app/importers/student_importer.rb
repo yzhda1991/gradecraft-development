@@ -16,6 +16,7 @@ class StudentImporter
   def import(course=nil)
     if file
       CSV.foreach(file, headers: true, skip_blanks: true) do |csv|
+        strip_whitespace csv
         row = UserRow.new csv
 
         team = find_or_create_team row, course
@@ -60,6 +61,10 @@ class StudentImporter
     return if row.team_name.blank?
     team = Team.find_by_course_and_name course.id, row.team_name
     team ||= Team.create course_id: course.id, name: row.team_name
+  end
+
+  def strip_whitespace(row)
+    row.each_with_index { |field, index| row[index].strip! if row[index] }
   end
 
   class UserRow
