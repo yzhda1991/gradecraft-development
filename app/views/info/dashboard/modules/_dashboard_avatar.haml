@@ -4,7 +4,10 @@
       = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
       = "#{current_student.first_name}'s Profile"
   .card-body
-    .module-section
+    - if current_student.predictions_for_course?(current_course) == false
+      .small
+        .alert-box.alert Has not yet used the grade predictor
+    .module-section.center
       - if current_student.avatar_file_name.present?
         %img.img-rounded{:src => current_student.avatar_file_name, width: 200, height: 200 }
     .module-section 
@@ -15,6 +18,7 @@
       .small
         %b Last activity: 
         #{ current_student.try(:last_activity_at) || '(never)' }
+        
     .module-section
       %ul.button-bar
         %li= link_to glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
