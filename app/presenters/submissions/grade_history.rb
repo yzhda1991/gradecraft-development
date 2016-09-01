@@ -33,13 +33,17 @@ module Submissions::GradeHistory
           version = history_item.version.reify
           viewable = GradeProctor.new(version).viewable?
 
-          unless viewable
-            # Make the change viewable if the grade was updated first but then
-            # it was released. This displays the changeset where the grade was
-            # updated
-            viewable = (history_item.changeset.keys.include?("raw_points") ||
-                        history_item.changeset.keys.include?("feedback")) &&
-                        history_item.version.event == "update" &&
+          # Make the change viewable if the grade was updated first but then it was
+          # released. This displays the changeset where the grade was updated
+
+          if !viewable && history_item.version.event == "update"
+            last_raw_points_change = last_change?(history, history_item, "Grade",
+                                                  "raw_points")
+
+            last_feedback_change = last_change?(history, history_item, "Grade",
+                                                  "feedback")
+
+            viewable = (last_raw_points_change || last_feedback_change) &&
                         GradeProctor.new(grade).viewable?
           end
         end
@@ -47,5 +51,18 @@ module Submissions::GradeHistory
         viewable
       end
       .changesets
+  end
+
+  private
+
+  def last_item(history, object_type, changeset_key)
+    history.sort { |h| h.version.id }
+           .select { |h| h.changeset["object"] == object_type &&
+                         h.changeset.keys.include?(changeset_key) }.last
+  end
+
+  def last_change?(history, history_item, object_type, changeset_key)
+    last_history_item = last_item(history, object_type, changeset_key)
+    !last_history_item.nil? && last_history_item.version.id == history_item.version.id
   end
 end
