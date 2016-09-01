@@ -1,5 +1,5 @@
 .raw-score
-  = f.label :raw_points, "Raw Points (#{assignment.full_points} Points Possible)"
+  = f.label :raw_points, "Raw Points (#{points assignment.full_points} Points Possible)"
   = f.text_field :raw_points,
     default: assignment.full_points,
     label: "Score",
