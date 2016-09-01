@@ -1,16 +1,22 @@
--# = div_for current_student, class: "avatar text-center" do
--#   %h3
--#     - if current_user_is_staff?
--#       = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
--#     = current_student.name
--#   %hr
--#   - if current_student.avatar_file_name.present?
--#     %img.img-rounded{:src => current_student.avatar_file_name, :width => 150}
--#     %br
--#   .italic= "#{current_student.team_for_course(current_course).name}" if current_student.team_for_course(current_course).present?
--#   .italic= "Last activity: #{current_student.try(:last_activity_at) || "(never)"} "
--#   %ul
--#     %li= link_to glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
--#     %li= link_to glyph(:envelope) + "Email", "mailto:#{current_student.email}", class: "button"
--#     - if current_user_is_admin?
--#       %li= link_to "Recalculate Score", student_recalculate_path(current_student), class: "button"
+.text-center.avatar
+  .card-header
+    %h3.flagged-state
+      = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
+      = "#{current_student.first_name}'s Profile"
+  .card-body
+    .module-section
+      - if current_student.avatar_file_name.present?
+        %img.img-rounded{:src => current_student.avatar_file_name, width: 200, height: 200 }
+    .module-section 
+      - if current_student.team_for_course(current_course).present?
+        .small
+          %b #{term_for :team}:
+          #{current_student.team_for_course(current_course).name}
+      .small
+        %b Last activity: 
+        #{ current_student.try(:last_activity_at) || '(never)' }
+    .module-section
+      %ul.button-bar
+        %li= link_to glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
+        %li= link_to glyph(:envelope) + "Email", "mailto:#{current_student.email}", class: "button"
+        %li= link_to glyph(:refresh) + "Update Score", recalculate_student_path(current_student), class: "button"

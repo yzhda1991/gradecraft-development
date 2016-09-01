@@ -1,9 +1,5 @@
 You have earned
 %span.bold #{points presenter.score_for_course } points
-- if presenter.current_element.present?
-  / Display current level if it is present
-  %br
-  %span.bold= presenter.current_element_sentence
 - cache multi_cache_key :student_dashboard_total_score, current_student, current_course do
   - scores = total_scores_for_chart current_student, current_course
   #data-predictor{"data-predictor" =>  scores.to_json}
