@@ -101,6 +101,12 @@ describe SubmissionsController do
         post :create, assignment_id: @assignment.id, submission: params
         expect(response).to render_template :new
       end
+
+      it "calls check_and_set_late_status afterwards" do
+        params = attributes_for(:submission)
+        expect(controller).to receive(:check_and_set_late_status)
+        post :create, assignment_id: @assignment.id, submission: params
+      end
     end
 
     describe "POST update" do
@@ -111,6 +117,13 @@ describe SubmissionsController do
         post :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(response).to redirect_to(assignment_submission_path(@assignment, @submission, student_id: @student.id))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
+      end
+
+      it "calls check_and_set_late_status afterwards" do
+        params = attributes_for(:submission)
+        params[:text_comment] = "Gesundheit"
+        expect(controller).to receive(:check_and_set_late_status)
+        post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end
     end
 
@@ -152,6 +165,13 @@ describe SubmissionsController do
         submission = Submission.unscoped.last
         expect(submission.submitted_at).to be > current_time
       end
+
+      it "calls check_and_set_late_status afterwards" do
+        params = attributes_for(:submission, student_id: @student.id)
+          .merge(assignment_id: @assignment_id)
+        expect(controller).to receive(:check_and_set_late_status)
+        post :create, assignment_id: @assignment.id, submission: params
+      end
     end
 
     describe "PUT update" do
@@ -169,6 +189,13 @@ describe SubmissionsController do
         current_time = DateTime.now
         put :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(@submission.reload.submitted_at).to be > current_time
+      end
+
+      it "calls check_and_set_late_status afterwards" do
+        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        params[:text_comment] = "Gesundheit"
+        expect(controller).to receive(:check_and_set_late_status)
+        post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end
     end
 
