@@ -1,6 +1,7 @@
 require "active_support/inflector"
-require "spec_helper"
+require "rails_spec_helper"
 require "./app/presenters/submissions/new_presenter"
+require 'date'
 
 describe Submissions::NewPresenter do
   let(:assignment) { double(:assignment) }
@@ -46,6 +47,33 @@ describe Submissions::NewPresenter do
       allow(subject).to receive(:view_context).and_return view_context
       allow(assignment).to receive_messages name: "Fun Assignment", full_points: 10000
       expect(subject.title).to eq "Submit Fun Assignment (10,000 points)"
+    end
+  end
+
+  describe "#submission_will_be_late?" do
+    let(:now) { DateTime.now }
+
+    context "when the assignment has a due_at value" do
+      context "with the current time being after the due_at time" do
+        it "returns true" do
+          allow(assignment).to receive(:due_at).and_return (now - 1)
+          expect(subject.submission_will_be_late?).to eq(true)
+        end
+      end
+
+      context "with the current time being before the due_at time" do
+        it "returns false" do
+          allow(assignment).to receive(:due_at).and_return (now + 1)
+          expect(subject.submission_will_be_late?).to eq(false)
+        end
+      end
+    end
+
+    context "when the assignment does not have a due_at value" do
+      it "returns false" do
+        allow(assignment).to receive(:due_at).and_return nil
+        expect(subject.submission_will_be_late?).to eq(false)
+      end
     end
   end
 end
