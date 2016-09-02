@@ -138,7 +138,10 @@
 
   # Total points predicted for all assignments, badges, and challenges
   allPointsPredicted = ()->
-    total = assignmentsWeightedPredictedPoints()
+    total = 0
+    _.each(assignmentTypes, (assignmentType)->
+        total += assignmentTypePointTotal(assignmentType,true,true,true)
+      )
     total += badgesPredictedPoints()
     total += challengesPredictedPoints()
     total
