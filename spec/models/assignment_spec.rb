@@ -769,14 +769,16 @@ describe Assignment do
 
   describe "#grade_with_rubric?" do
     it "is true if all required conditions are met" do
-      subject.create_rubric
-      allow(subject.rubric).to receive(:designed?).and_return true
-      expect(subject.grade_with_rubric?).to be_truthy
+      assignment = create(:assignment)
+      assignment.create_rubric
+      allow(assignment.rubric).to receive(:designed?).and_return true
+      expect(assignment.grade_with_rubric?).to be_truthy
     end
 
     it "is false if the rubric is not designed" do
-      subject.create_rubric
-      expect(subject.grade_with_rubric?).to be_falsey
+      assignment = create(:assignment)
+      assignment.create_rubric
+      expect(assignment.grade_with_rubric?).to be_falsey
     end
   end
 

@@ -19,7 +19,8 @@ describe LevelsController do
 
     describe "POST create" do
       it "creates a new level" do
-        params = attributes_for(:level)
+        criterion = create(:criterion)
+        params = attributes_for(:level, criterion_id: criterion.id)
         expect{ post :create, level: params }.to change(Level,:count).by(1)
       end
     end
