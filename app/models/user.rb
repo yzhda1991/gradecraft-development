@@ -232,7 +232,8 @@ class User < ActiveRecord::Base
 
   ### SCORE
   def cached_score_for_course(course)
-    @cached_score ||= course_memberships.where(course_id: course).first.score || 0
+    @cached_score ||= course_memberships.where(course_id: course).first.score || 0 if 
+      course_memberships.where(course_id: course).first.present?
   end
 
   # Powers the grade distribution box plot
