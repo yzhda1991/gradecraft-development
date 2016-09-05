@@ -165,7 +165,7 @@
     allPoints = allPointsPredicted()
     predictedGrade = null
     _.each(gradeSchemeElements,(gse)->
-      if allPoints > gse.lowest_points
+      if allPoints >= gse.lowest_points
         if ! predictedGrade || predictedGrade.lowest_points < gse.lowest_points
           predictedGrade = gse
     )
