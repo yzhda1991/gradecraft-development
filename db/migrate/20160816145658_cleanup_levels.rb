@@ -9,7 +9,5 @@ class CleanupLevels < ActiveRecord::Migration
     change_column :levels, :criterion_id, :integer, null: false
     change_column :levels, :created_at, :datetime, null: false
     change_column :levels, :updated_at, :datetime, null: false
-    change_column :levels, :full_credit, :boolean, null: false, default: false
-    change_column :levels, :no_credit, :boolean, null: false, default: false
   end
 end

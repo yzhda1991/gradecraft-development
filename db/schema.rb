@@ -502,9 +502,9 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.string   "name"
     t.text     "description"
     t.integer  "points"
-    t.integer  "criterion_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "criterion_id",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.boolean  "full_credit",        default: false
     t.boolean  "no_credit",          default: false
     t.integer  "sort_order"
