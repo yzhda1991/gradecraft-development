@@ -2,9 +2,9 @@
   %tr
     %td.criterion
       .criterion-heading
-        .criterion-name= criterion.wrapped_name(28).html_safe
+        .criterion-name= criterion.name
         .criterion-points= "#{points criterion.max_points} Points"
-      .criterion-description= criterion.wrapped_description(40).html_safe
+      .criterion-description= criterion.description
 
     - criterion.levels.ordered.each do |level|
       = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
@@ -14,5 +14,3 @@
     - if include_grade_info
       %td.level.level-comments.comments-box
         = raw criterion.comments_for(student.id)
-
-

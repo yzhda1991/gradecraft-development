@@ -1,5 +1,5 @@
 .level-heading
-  .level-name= level.wrapped_name(25).html_safe
+  .level-name= level.name
   - if level.meets_expectations?
     %span Meets Expectations
   .level-points= "#{points level.points} Points"

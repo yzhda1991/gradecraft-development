@@ -11,8 +11,6 @@ class Level < ActiveRecord::Base
 
   scope :ordered, -> { order("points ASC") }
 
-  include DisplayHelpers
-
   def above_expectations?
     # We treat criterion without a 'meets expectations' level as if none
     # of it's levels are above expectations
