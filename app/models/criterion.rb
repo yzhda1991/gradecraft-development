@@ -27,8 +27,6 @@ class Criterion < ActiveRecord::Base
                                  ->(copy) { copy.add_default_levels = false }]})
   end
 
-  include DisplayHelpers
-
   # Mangages a unique level per criteria that meets expectations, and
   # stores the id and points on the Criteria for queries from other levels
   def update_meets_expectations!(level, state)
