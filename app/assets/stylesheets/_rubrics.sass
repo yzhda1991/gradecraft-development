@@ -327,6 +327,34 @@ button.meets-expectations-status.no-expectation
   padding: 0
   border-radius: $global-radius
 
+#student-rubric-feedback
+  .criterion
+    background-color: $color-white
+    margin-bottom: 2rem
+  .criterion-heading
+    background-color: $color-blue-3
+    color: $color-white
+    padding: 0.5rem
+
+  ul.level-tabs
+    padding-left: 0
+    display: flex
+
+  .level-tab
+    list-style-type: none
+    display: inline-block
+    flex: 1
+    text-align: center
+    padding: 0.5rem 0
+    background-color: $color-grey-6
+    border: 1px solid $color-white
+
+  .level-badge-image img
+    height: 35px
+
+  .tab-panel
+    display: none
+
 #rubric-table
   td
     vertical-align: top
@@ -405,10 +433,10 @@ button.meets-expectations-status.no-expectation
     color: $color-green-2
 
 .points-adjustment-feedback
-  margin-right: 1rem;
+  margin-right: 1rem
 
 .total-points
-  margin-bottom: 1rem;
+  margin-bottom: 1rem
 
 #grade-rubric-table.edit
   .level:hover

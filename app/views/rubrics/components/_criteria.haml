@@ -1,16 +1,14 @@
 - rubric.criteria.ordered.includes(levels: :level_badges).each do |criterion|
-  %tr
-    %td.criterion
-      .criterion-heading
-        .criterion-name= criterion.name
-        .criterion-points= "#{points criterion.max_points} Points"
-      .criterion-description= criterion.description
-
+  .criterion
+    .criterion-heading
+      %p.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
+      %p.criterion-description= criterion.description
+    %ul.level-tabs
+      - criterion.levels.ordered.each do |level|
+        %li.level-tab= level.name
     - criterion.levels.ordered.each do |level|
-      = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-
-    - if criterion.levels.size < rubric.max_level_count
-      %td.filler(colspan="#{rubric.max_level_count - criterion.levels.size}")
-    - if include_grade_info
-      %td.level.level-comments.comments-box
-        = raw criterion.comments_for(student.id)
+      .tab-panel
+        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
+        - if include_grade_info
+          .level.level-comments.comments-box
+            = raw criterion.comments_for(student.id)
