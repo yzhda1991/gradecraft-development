@@ -17,6 +17,11 @@
         - else
           %li.hide-for-small= link_to glyph("file-zip-o") + "Download All Submissions", submissions_exports_path(assignment_id: presenter.assignment.id), method: :post
 
+      - unless presenter.assignment.imported_assignment.nil?
+        %li.hide-for-small
+          = link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
+            = glyph(:refresh)
+            = "Update Assignment from #{presenter.assignment.imported_assignment.provider.capitalize}"
       %li.hide-for-small
         %a{:href => assignment_grades_importers_path(presenter.assignment) }
           = glyph(:upload)
