@@ -1,7 +1,11 @@
+<<<<<<< 2cbc7b4f230cf5040f098163b8ad49b493d0d250
 = content_nav_for @badge, "Edit #{term_for :badge}"
 
 %h2.pagetitle= @title
 
+=======
+= render partial: "badges/context_menu", locals: { badge: @badge, actions: [:see, :award, :quick_award]}
+>>>>>>> Removing titles from views
 
 .pageContent
   = render partial: "badges/form"

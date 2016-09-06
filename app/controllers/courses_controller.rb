@@ -13,7 +13,6 @@ class CoursesController < ApplicationController
   before_filter :ensure_not_impersonating?, only: [:change]
 
   def index
-    @title = "My Courses"
     @courses = current_user.courses
     # Used to return the course list to search
     respond_to do |format|
@@ -25,17 +24,14 @@ class CoursesController < ApplicationController
   end
 
   def show
-    @title = "Course Settings"
     authorize! :read, @course
   end
 
   def new
-    @title = "Create a New Course"
     @course = Course.new
   end
 
   def edit
-    @title = "Editing Basic Settings"
     authorize! :update, @course
   end
 
@@ -123,23 +119,18 @@ class CoursesController < ApplicationController
   end
 
   def course_details
-    @title = "Course Details"
   end
 
   def custom_terms
-    @title = "Custom Terms"
   end
 
   def multiplier_settings
-    @title = "Multiplier Settings"
   end
 
   def player_settings
-    @title = "#{term_for :student} Settings"
   end
 
   def student_onboarding_setup
-    @title = "Student Onboarding Setup"
   end
 
   private

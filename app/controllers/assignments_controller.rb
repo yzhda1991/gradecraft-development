@@ -9,7 +9,6 @@ class AssignmentsController < ApplicationController
   before_filter :sanitize_params, only: [:create, :update]
 
   def index
-    @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
     if current_user_is_student?
       render :index, Assignments::StudentPresenter.build({
@@ -24,7 +23,6 @@ class AssignmentsController < ApplicationController
   # Gives the instructor the chance to quickly check all assignment settings
   # for the whole course
   def settings
-    @title = "Review #{term_for :assignment} Settings"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
   end
 
@@ -52,7 +50,6 @@ class AssignmentsController < ApplicationController
 
   def edit
     assignment = current_course.assignments.find(params[:id])
-    @title = "Editing #{assignment.name}"
     render :edit, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
@@ -75,8 +72,6 @@ class AssignmentsController < ApplicationController
         notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" \
         and return
     end
-
-    @title = "Create a New #{term_for :assignment}"
     render :new, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
@@ -99,7 +94,6 @@ class AssignmentsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @title = "Edit #{term_for :assignment}"
         render :edit, Assignments::Presenter.build({
           assignment: assignment,
           course: current_course,

@@ -1,7 +1,3 @@
-= content_nav_for @grade.assignment, "See Grade"
-
-%h2.pagetitle= @title
-
 .pageContent
   = render partial: "layouts/alerts"
   = render partial: "grade_content", locals: { grade: @grade }

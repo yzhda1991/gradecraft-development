@@ -177,6 +177,8 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     crass (1.0.2)
+    croutons (0.0.2)
+      rails (>= 4.1.0)
     d3-rails (3.5.5)
       railties (>= 3.1)
     daemons (1.2.3)
@@ -700,6 +702,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   coffee-rails
   compass-rails
+  croutons
   d3-rails
   dalli
   database_cleaner (~> 1.5.1)

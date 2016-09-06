@@ -25,12 +25,10 @@ class BadgesController < ApplicationController
   end
 
   def new
-    @title = "Create a New #{term_for :badge}"
     @badge = current_course.badges.new
   end
 
   def edit
-    @title = "Editing #{@badge.name}"
   end
 
   def create

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
 
   include Omniauth::Lti::Context
+  include Croutons::Controller
   include CustomNamedRoutes
   include CurrentScopes
   include CourseTerms

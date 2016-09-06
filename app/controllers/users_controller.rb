@@ -12,7 +12,6 @@ class UsersController < ApplicationController
   skip_before_filter :require_login, only: [:activate, :activated]
 
   def index
-    @title = "All Users"
     @teams = current_course.teams
     @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
     if params[:team_id].present?
@@ -24,14 +23,12 @@ class UsersController < ApplicationController
   end
 
   def new
-    @title = "Create a New User"
     @user = User.new
     CourseMembershipBuilder.new(current_user).build_for(@user)
   end
 
   def edit
     @user = User.find(params[:id])
-    @title = "Editing #{@user.name}"
     CourseMembershipBuilder.new(current_user).build_for(@user)
   end
 
@@ -111,7 +108,6 @@ class UsersController < ApplicationController
 
   # We don't allow students to edit their info directly
   def edit_profile
-    @title = "Edit My Profile"
     @user = current_user
     @course_membership =
       @user.course_memberships.where(course_id: current_course).first
@@ -138,7 +134,6 @@ class UsersController < ApplicationController
   end
 
   def import
-    @title = "Import Users"
   end
 
   # import users for class

@@ -15,7 +15,6 @@ class EarnedBadgesController < ApplicationController
 
   def show
     @student = @earned_badge.student
-    @title = "#{@student.name}'s #{@badge.name} #{term_for :badge}"
   end
 
   def confirm_earned
@@ -30,14 +29,12 @@ class EarnedBadgesController < ApplicationController
   end
 
   def new
-    @title = "Award #{@badge.name}"
     @earned_badge = @badge.earned_badges.new
     @students = current_course.students
   end
 
   def edit
     @students = current_course.students
-    @title = "Editing Awarded #{@badge.name}"
   end
 
   def create
@@ -47,7 +44,6 @@ class EarnedBadgesController < ApplicationController
       redirect_to badge_path(result.earned_badge.badge),
         notice: "The #{result.earned_badge.badge.name} #{term_for :badge} was successfully awarded to #{result.earned_badge.student.name}"
     else
-      @title = "Award #{@badge.name}"
       @earned_badge = result.earned_badge
       @students = current_course.students
       render action: "new"
@@ -70,7 +66,6 @@ class EarnedBadgesController < ApplicationController
 
   # Quickly award a badge to multiple students
   def mass_edit
-    @title = "Quick Award #{@badge.name}"
     @teams = current_course.teams
 
     if params[:team_id].present?

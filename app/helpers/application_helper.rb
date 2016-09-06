@@ -39,12 +39,22 @@ module ApplicationHelper
   end
 
   # Return a title on a per-page basis.
+  # def title
+  #   base_title = ""
+  #   if @title.nil?
+  #     base_title
+  #   else
+  #     "#{@title}"
+  #   end
+  # end
   def title
-    base_title = ""
-    if @title.nil?
-      base_title
+    if content_for?(:title)
+      # allows the title to be set in the view by using t(".title")
+      content_for :title
     else
-      "#{@title}"
+      # look up translation key based on controller path, action name and .title
+      # this works identical to the built-in lazy lookup
+      t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
     end
   end
 

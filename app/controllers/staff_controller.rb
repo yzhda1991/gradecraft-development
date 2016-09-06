@@ -8,7 +8,6 @@ class StaffController < ApplicationController
   before_filter :ensure_staff?
 
   def index
-    @title = "Staff Index"
     @staff = current_course.staff
   end
 

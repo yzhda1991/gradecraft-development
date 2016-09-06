@@ -7,12 +7,10 @@ class ChallengeGradesController < ApplicationController
   # GET /challenge_grades/:id
   def show
     @team = @challenge_grade.team
-    @title = "#{@team.name}'s #{@challenge_grade.name} Grade"
   end
 
   # GET /challenge_grades/:id/edit
   def edit
-    @title = "Editing #{@challenge.name} Grade"
     @team = @challenge_grade.team
   end
 

@@ -28,7 +28,6 @@ class InfoController < ApplicationController
   end
 
   def earned_badges
-    @title = "Awarded #{term_for :badges}"
     @teams = current_course.teams
     @badges = current_course.badges
   end
@@ -36,7 +35,6 @@ class InfoController < ApplicationController
   # Displaying all ungraded, graded but unreleased, and in progress assignment
   # submissions in the system
   def grading_status
-    @title = "Grading Status"
     grades = current_course.grades.instructor_modified
     submissions = current_course.submissions.includes(:assignment, :grade, :student, :group, :submission_files)
     @ungraded_submissions_by_assignment = submissions.ungraded.group_by(&:assignment)
@@ -47,7 +45,6 @@ class InfoController < ApplicationController
 
   # Displaying the top 10 and bottom 10 students for quick overview
   def top_10
-    @title = "Top 10/Bottom 10"
     students = current_course.students_being_graded
     students.each do |s|
       s.score = s.cached_score_for_course(current_course)
@@ -69,7 +66,6 @@ class InfoController < ApplicationController
   # Displaying per assignment summary outcome statistics
   def per_assign
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
-    @title = "#{term_for :assignment} Analytics"
   end
 
   def export_earned_badges
@@ -127,7 +123,6 @@ class InfoController < ApplicationController
 
   # Chart displaying all of the student weighting choices thus far
   def multiplier_choices
-    @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types.ordered
     @teams = current_course.teams
   end

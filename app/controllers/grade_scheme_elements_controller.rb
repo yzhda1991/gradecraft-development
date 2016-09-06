@@ -4,7 +4,6 @@ class GradeSchemeElementsController < ApplicationController
   before_filter :ensure_staff?, except: [:index]
 
   def index
-    @title = "Grade Scheme"
     @grade_scheme_elements = current_course
                              .grade_scheme_elements.order_by_highest_points
   end
@@ -25,7 +24,6 @@ class GradeSchemeElementsController < ApplicationController
 
   # Edit all the grade scheme items for a course
   def mass_edit
-    @title = "Edit Grade Scheme"
     @course = current_course
     @total_points = current_course.total_points
     @grade_scheme_elements =  current_course

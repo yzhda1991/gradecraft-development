@@ -26,6 +26,7 @@ gem 'carrierwave', '~> 0.10.0'
 gem 'carrierwave_backgrounder', '0.4.2'
 gem 'coffee-rails'
 gem 'compass-rails'
+gem 'croutons'
 gem 'd3-rails'
 gem 'dalli'
 
