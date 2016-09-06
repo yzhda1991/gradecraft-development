@@ -822,20 +822,80 @@ describe Assignment do
     end
   end
 
-  describe "#soon?" do
-    it "is not soon if there is no due date" do
-      subject.due_at = nil
-      expect(subject).to_not be_soon
+  describe "ungraded_students" do
+    before do
+      subject.save
+      s1 = create(:student_course_membership, course: subject.course).user
+      s2 = create(:student_course_membership, course: subject.course).user
+      s3 = create(:student_course_membership, course: subject.course).user
+      subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
     end
 
-    it "is not soon if the due date is too far in the future" do
-      subject.due_at = 8.days.from_now
-      expect(subject).to_not be_soon
+    it "returns all students without a 'Graded' grade for the assignment" do
+     expect(subject.ungraded_students.count).to eq(2)
+    end
+  end
+
+  describe "next_ungraded_student" do
+
+    %w"Zenith Apex Middleton".each do |name|
+      let!(name.downcase.to_sym) do
+        create(:student_course_membership, course: subject.course,
+          user: create(:user,last_name: name)).user
+      end
     end
 
-    it "is soon if the due date is within 7 days from now" do
-      subject.due_at = 2.days.from_now
-      expect(subject).to be_soon
+    context "when accepting submissions" do
+      before do
+        create :submission, assignment: subject, student: zenith
+        create :submission, assignment: subject, student: apex
+      end
+
+      it "returns the next student with a submission" , focus: true do
+        expect(subject.next_ungraded_student(apex).last_name).to eq("Zenith")
+      end
+
+      it "returns nil for the last student" do
+        expect(subject.next_ungraded_student(zenith)).to be_nil
+      end
+
+      it "returns nil for student without a submission" do
+        expect(subject.next_ungraded_student(middleton)).to be_nil
+      end
+    end
+
+    context "when not accepting submissions" do
+      before { subject.update accepts_submissions: false }
+
+      it "returns the next student by last name" do
+        expect(subject.next_ungraded_student(middleton).last_name).to eq("Zenith")
+      end
+
+      it "returns nil for the last student" do
+        expect(subject.next_ungraded_student(zenith)).to be_nil
+      end
+
+      it "returns nil for student not in the list" do
+        expect(subject.next_ungraded_student(create(:user))).to be_nil
+      end
+    end
+
+    describe "#soon?" do
+      it "is not soon if there is no due date" do
+        subject.due_at = nil
+        expect(subject).to_not be_soon
+      end
+
+      it "is not soon if the due date is too far in the future" do
+        subject.due_at = 8.days.from_now
+        expect(subject).to_not be_soon
+      end
+
+      it "is soon if the due date is within 7 days from now" do
+        subject.due_at = 2.days.from_now
+        expect(subject).to be_soon
+      end
     end
   end
 

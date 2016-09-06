@@ -129,10 +129,33 @@ describe GradesController do
         expect(@grade.reload.score).to eq(nil)
       end
 
-      it "returns to session if present" do
-        session[:return_to] = login_path
-        put :update, { id: @grade.id, grade: { raw_points: 12345 }}
-        expect(response).to redirect_to(login_path)
+      context "when grading a series of students" do
+        before do
+          @next_student = create(
+            :student_course_membership, course: @assignment.course,
+            user: create(:user, last_name: "Zzz")).user
+        end
+
+        it "creates and redirects to grade the next ungraded student when not accepting submissions" do
+          @assignment.update(accepts_submissions: false)
+          put :update, { id: @grade.id, grade: { raw_points: 12345, status: "Graded"}, redirect_to_next_grade: true}
+          expect(response).to redirect_to(edit_grade_path(
+            Grade.where(
+              student: @next_student,
+              assignment: @assignment).first)
+          )
+        end
+
+        it "creates and redirects to grade the next student with submission" do
+          create :submission, assignment: @assignment, student: @student
+          create :submission, assignment: @assignment, student: @next_student
+          put :update, { id: @grade.id, grade: { raw_points: 12345 }, redirect_to_next_grade: true}
+          expect(response).to redirect_to(edit_grade_path(
+            Grade.where(
+              student: @next_student,
+              assignment: @assignment).first)
+          )
+        end
       end
 
       it "redirects on failure" do
