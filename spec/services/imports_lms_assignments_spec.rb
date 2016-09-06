@@ -43,7 +43,13 @@ describe Services::ImportsLMSAssignments do
       described_class.refresh provider, access_token, assignment
     end
 
-    xit "retrieves the assignment details from the lms provider"
+    it "retrieves the assignment details from the lms provider" do
+      expect(Services::Actions::RetrievesLMSAssignment).to \
+        receive(:execute).and_call_original
+
+      described_class.refresh provider, access_token, assignment
+    end
+
     xit "updates the assignment details in the database"
   end
 end
