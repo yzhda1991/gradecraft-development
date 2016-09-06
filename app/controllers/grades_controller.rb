@@ -181,13 +181,9 @@ class GradesController < ApplicationController
 
   def path_for_next_grade(grade)
     next_student = grade.assignment.next_ungraded_student(grade.student)
-
-    if next_student.present?
-      return edit_grade_path(
-        Grade.find_or_create(grade.assignment.id, next_student.id)
-      )
-    else
-      return assignment_path(grade.assignment)
-    end
+    return assignment_path(grade.assignment) unless next_student.present?
+    return edit_grade_path(
+      Grade.find_or_create(grade.assignment.id, next_student.id)
+    )
   end
 end

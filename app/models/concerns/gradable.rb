@@ -76,11 +76,11 @@ module Gradable
 
   def next_ungraded_student(student)
     if accepts_submissions?
-      us = ungraded_students_with_submissions([student.id])
+      ungraded_students = ungraded_students_with_submissions([student.id])
     else
-      us = ungraded_students([student.id])
+      ungraded_students = ungraded_students([student.id])
     end
-    i = us.map(&:id).index(student.id)
-    i && i < us.length - 1 ? us[i + 1] : nil
+    i = ungraded_students.map(&:id).index(student.id)
+    i && i < ungraded_students.length - 1 ? ungraded_students[i + 1] : nil
   end
 end

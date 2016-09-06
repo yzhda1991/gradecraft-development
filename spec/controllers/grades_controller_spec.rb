@@ -129,17 +129,11 @@ describe GradesController do
         expect(@grade.reload.score).to eq(nil)
       end
 
-      it "returns to assignment show page on simple submit" do
-        session[:return_to] = login_path
-        put :update, { id: @grade.id, grade: { raw_points: 12345 }}
-        expect(response).to redirect_to(assignment_path(@grade.assignment))
-      end
-
-      context "when redirect_to_next_grade is included in params" do
+      context "when grading a series of students" do
         before do
           @next_student = create(
             :student_course_membership, course: @assignment.course,
-            user: create(:user,last_name: "Zzz")).user
+            user: create(:user, last_name: "Zzz")).user
         end
 
         it "creates and redirects to grade the next ungraded student when not accepting submissions" do
