@@ -15,19 +15,27 @@ describe Services::Actions::RefreshAssignment do
       grading_type: "points"
     }.stringify_keys
   end
+  let(:provider) { :canvas }
 
   it "expects the assignment to refresh" do
-    expect { described_class.execute lms_assignment: lms_assignment }.to \
-      raise_error LightService::ExpectedKeysNotInContextError
+    expect { described_class.execute lms_assignment: lms_assignment, provider: provider }
+      .to raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "expects the lms assignment details to refresh with" do
-    expect { described_class.execute assignment: assignment }.to \
+    expect { described_class.execute assignment: assignment, provider: provider }.to \
+      raise_error LightService::ExpectedKeysNotInContextError
+  end
+
+  it "expects the provider to import the row with" do
+    expect { described_class.execute assignment: assignment,
+             lms_assignment: lms_assignment }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "updates the assignment details" do
-    result = described_class.execute assignment: assignment, lms_assignment: lms_assignment
+    result = described_class.execute assignment: assignment,
+      lms_assignment: lms_assignment, provider: provider
 
     expect(result.assignment).to_not be_changed
     expect(result.assignment.name).to eq "This is an assignment from Canvas"
