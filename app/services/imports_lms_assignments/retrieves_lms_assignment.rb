@@ -11,7 +11,7 @@ module Services
       executed do |context|
         provider = context.provider
         access_token = context.access_token
-        course_id = context.imported_assignment.provider_data[:course_id]
+        course_id = context.imported_assignment.provider_data["course_id"]
         assignment_id = context.imported_assignment.provider_resource_id
 
         context.lms_assignment = nil

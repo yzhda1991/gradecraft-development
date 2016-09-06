@@ -29,7 +29,7 @@ describe Services::Actions::RetrievesLMSAssignment do
     expect(ActiveLMS::Syllabus).to \
       receive(:new).with(provider, access_token).and_call_original
     expect_any_instance_of(ActiveLMS::Syllabus).to \
-      receive(:assignment).with(imported_assignment.provider_data[:course_id],
+      receive(:assignment).with(imported_assignment.provider_data["course_id"],
                                 imported_assignment.provider_resource_id)
         .and_return ({ name: "Assignment 1" })
 
@@ -41,7 +41,7 @@ describe Services::Actions::RetrievesLMSAssignment do
 
   it "fails the context if the assignment cannot be found" do
     allow_any_instance_of(ActiveLMS::Syllabus).to \
-      receive(:assignment).with(imported_assignment.provider_data[:course_id],
+      receive(:assignment).with(imported_assignment.provider_data["course_id"],
                                 imported_assignment.provider_resource_id)
       .and_raise("Resource not found")
 
