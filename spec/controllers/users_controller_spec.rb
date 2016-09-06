@@ -148,9 +148,10 @@ describe UsersController do
       it "renders the results from the import" do
         post :upload, file: file
         expect(response).to render_template :import_results
-        expect(response.body).to include "2 Students Imported Successfully"
+        expect(response.body).to include "3 Students Imported Successfully"
         expect(response.body).to include "jimmy@example.com"
         expect(response.body).to include "robert@example.com"
+        expect(response.body).to include "whitespace@example.com"
       end
 
       it "renders any errors that have occured" do

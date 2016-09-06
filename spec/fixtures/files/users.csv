@@ -1,3 +1,4 @@
 First Name,Last Name,Username,Email,Team Name
+  leading,trailing  ,whitespace, whitespace@example.com , ,
 Robert,Plant,robert,robert@example.com,
 Jimmy,Page,jimmy,jimmy@example.com,Zeppelin

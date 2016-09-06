@@ -28,6 +28,14 @@ describe StudentImporter do
           expect(user.course_memberships.first.role).to eq "student"
         end
 
+        it "strips whitespace and creates a valid user" do
+          subject.import course
+          user_2 = User.unscoped.first
+          expect(user_2.first_name).to eq "leading"
+          expect(user_2.last_name).to eq "trailing"
+          expect(user_2.email).to eq "whitespace@example.com"
+        end
+
         it "does not create the student membership if it already exists" do
           user = User.create first_name: "Jimmy", last_name: "Page",
               email: "jimmy@example.com", username: "jimmy", password: "blah"
@@ -39,6 +47,11 @@ describe StudentImporter do
           subject.import course
           expect(team.name).to eq "Zeppelin"
           expect(team.students.first.email).to eq "jimmy@example.com"
+        end
+
+        it "handles empty fields with whitespace" do
+          subject.import course
+          expect(User.unscoped.first.team).to be_nil
         end
 
         it "just adds the student to the team if the student already exists" do
@@ -63,12 +76,12 @@ describe StudentImporter do
 
         it "sends the activation email to each student" do
           expect { subject.import course }.to \
-            change { ActionMailer::Base.deliveries.count }.by 2
+            change { ActionMailer::Base.deliveries.count }.by 3
         end
 
         it "contains a successful user if the user and team are valid" do
           result = subject.import course
-          expect(result.successful.count).to eq 2
+          expect(result.successful.count).to eq 3
           expect(result.successful.last).to eq user
         end
 
@@ -77,7 +90,7 @@ describe StudentImporter do
               email: "jimmy@example.com", username: "jimmy", password: "blah"
           user.update_attribute :username, ""
           result = subject.import course
-          expect(result.successful.count).to eq 1
+          expect(result.successful.count).to eq 2
           expect(result.unsuccessful.count).to eq 1
           expect(result.unsuccessful.first[:errors]).to eq "Username can't be blank"
         end
@@ -86,7 +99,7 @@ describe StudentImporter do
           allow_any_instance_of(Team).to receive(:valid?).and_return false
           allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
           result = subject.import course
-          expect(result.successful.count).to eq 1
+          expect(result.successful.count).to eq 2
           expect(result.unsuccessful.count).to eq 1
           expect(result.unsuccessful.first[:errors]).to eq "The team is not cool"
         end
