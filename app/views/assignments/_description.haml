@@ -1,19 +1,19 @@
 - if !current_student || presenter.assignment.points_visible_for_student?(current_student)
   - if presenter.assignment.pass_fail?
-    %p.italic= "#{term_for :pass}/#{term_for :fail} Assignment"
+    %p.assignment-description.italic= "#{term_for :pass}/#{term_for :fail} Assignment"
   - else
-    %p.italic= "#{points presenter.assignment.full_points} points possible"
+    %p.assignment-description.italic= "#{points presenter.assignment.full_points} points possible"
 
   - if presenter.assignment.threshold_points?
-    %p.italic= "#{points presenter.assignment.threshold_points} points threshold"
+    %p.assignment-description.italic= "#{points presenter.assignment.threshold_points} points threshold"
 
 - if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment)
-  %p.italic
+  %p.assignment-description.italic
     My Goal:
     = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
 
-%p.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
-%p.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
+%p.assignment-description.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
+%p.assignment-description.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_submission_for?(current_student)
   = render partial: "students/submissions", locals: { assignment: presenter.assignment }
