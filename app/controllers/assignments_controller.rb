@@ -152,7 +152,7 @@ class AssignmentsController < ApplicationController
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
         :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
       assignment_files_attributes: [:id, file: []],
-      assignment_score_levels_attributes: [:id, :name, :points],
+      assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
       assignment_groups_attributes: [:group_id]
   end
 end
