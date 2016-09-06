@@ -22,6 +22,10 @@ module ActiveLMS
       provider.courses
     end
 
+    def assignment(course_id, assignment_id)
+      provider.assignment(course_id, assignment_id)
+    end
+
     def assignments(course_id, assignment_ids=nil)
       provider.assignments(course_id, assignment_ids)
     end

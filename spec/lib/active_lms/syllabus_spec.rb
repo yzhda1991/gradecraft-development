@@ -15,6 +15,15 @@ describe ActiveLMS::Syllabus do
     end
   end
 
+  describe "#assignment" do
+    subject { described_class.new :canvas, access_token }
+
+    it "delegates to the provider" do
+      expect(subject.provider).to receive(:assignment).with(123, 456)
+      subject.assignment(123, 456)
+    end
+  end
+
   describe "#assignments" do
     subject { described_class.new :canvas, access_token }
 
