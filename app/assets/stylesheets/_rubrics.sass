@@ -331,15 +331,19 @@ button.meets-expectations-status.no-expectation
   .criterion
     background-color: $color-white
     margin-bottom: 2rem
+    border: 1px solid $color-grey-6
   .criterion-heading
     background-color: $color-blue-3
     color: $color-white
-    padding: 0.5rem
+    padding: 0.25rem 0.5rem
   .criterion-name
     font-weight: 400
   .criterion-description
     font-size: 0.75rem
     font-style: italic
+
+  .level
+    background-color: $color-white
 
   ul.level-tabs
     padding-left: 0
@@ -354,6 +358,16 @@ button.meets-expectations-status.no-expectation
     background-color: $color-grey-6
     border: 1px solid $color-white
     font-size: 0.8rem
+    &:first-child
+      border-left: none
+    &:last-child
+      border-right: none
+
+  .earned-level
+    background-color: $color-green-1
+
+  .earned-level-panel, .tab-panel
+    padding: 0.5rem
 
   .level-badge-image img
     height: 35px

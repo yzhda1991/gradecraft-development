@@ -5,9 +5,9 @@
       %p.criterion-description= criterion.description
     %ul.level-tabs
       - criterion.levels.ordered.each do |level|
-        %li.level-tab= level.name
+        %li{:class => level.earned_for?(student.id) ? "earned-level level-tab" : "level-tab"}= link_to "#{level.name}", "#"
     - criterion.levels.ordered.each do |level|
-      .tab-panel
+      %div{:class => level.earned_for?(student.id) ? "earned-level-panel" : "tab-panel"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
         - if include_grade_info
           .level.level-comments.comments-box
