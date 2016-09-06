@@ -19,7 +19,9 @@ class CanvasAssignmentImporter
         assignment.pass_fail = true if canvas_assignment["grading_type"] == "pass_fail"
 
         if assignment.save
-          link_imported canvas_assignment["id"], assignment
+          link_imported canvas_assignment["id"],
+            { course_id: canvas_assignment["course_id"] },
+            assignment
           successful << assignment
         else
           unsuccessful << { data: canvas_assignment,
@@ -33,10 +35,11 @@ class CanvasAssignmentImporter
 
   private
 
-  def link_imported(provider_resource_id, assignment)
+  def link_imported(provider_resource_id, provider_data, assignment)
     imported = ImportedAssignment.find_or_initialize_by(provider: :canvas,
       provider_resource_id: provider_resource_id)
     imported.assignment = assignment
+    imported.provider_data = provider_data
     imported.save
   end
 end

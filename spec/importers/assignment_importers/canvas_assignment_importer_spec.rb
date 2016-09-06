@@ -16,6 +16,7 @@ describe CanvasAssignmentImporter do
       let(:canvas_assignment) do
         {
           id: canvas_assignment_id,
+          course_id: 123,
           name: "This is an assignment from Canvas",
           description: "This is the description",
           due_at: "2012-07-01T23:59:00-06:00",
@@ -66,6 +67,7 @@ describe CanvasAssignmentImporter do
         expect(imported_assignment.provider).to eq "canvas"
         expect(imported_assignment.provider_resource_id).to \
           eq canvas_assignment_id
+        expect(imported_assignment.provider_data).to eq({ "course_id" => "123" })
       end
 
       it "contains a successful row if the assignment is valid" do
