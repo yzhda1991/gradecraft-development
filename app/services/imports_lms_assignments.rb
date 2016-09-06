@@ -1,5 +1,6 @@
 require "light-service"
 require_relative "imports_lms_assignments/imports_lms_assignments"
+require_relative "imports_lms_assignments/retrieves_imported_assignment"
 require_relative "imports_lms_assignments/retrieves_lms_assignments"
 
 module Services
@@ -13,6 +14,12 @@ module Services
            assignment_type_id: assignment_type_id).reduce(
              Actions::RetrievesLMSAssignments,
              Actions::ImportsLMSAssignments
+      )
+    end
+
+    def self.refresh(provider, access_token, assignment)
+      with(provider: provider, access_token: access_token, assignment: assignment).reduce(
+        Actions::RetrievesImportedAssignment
       )
     end
   end
