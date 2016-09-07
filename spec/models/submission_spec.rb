@@ -3,7 +3,6 @@ require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
 require "support/uni_mock/rails"
 require "formatter"
-require "byebug"
 
 describe Submission do
   include UniMock::StubRails
