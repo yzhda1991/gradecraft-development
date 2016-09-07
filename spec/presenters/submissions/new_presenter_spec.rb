@@ -1,4 +1,3 @@
-require "active_support/inflector"
 require "rails_spec_helper"
 require "./app/presenters/submissions/new_presenter"
 require 'date'
