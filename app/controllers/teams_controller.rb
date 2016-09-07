@@ -20,28 +20,19 @@ class TeamsController < ApplicationController
 
   def new
     @team =  current_course.teams.new
-    @team_memberships = @team.team_memberships.new
     @title = "Create a New #{term_for :team}"
-    @course = current_course
-    @users = current_course.users
-    @team.team_memberships.build
-    @students = current_course.students
     @submit_message = "Create #{term_for :team}"
-    respond_with @team
   end
 
   def create
     @team =  current_course.teams.new(team_params)
     @team.save
-    @team.team_memberships.build
     respond_with @team, notice: "Team #{@team.name} successfully created"
   end
 
   def edit
     @team =  current_course.teams.find(params[:id])
     @title = "Editing #{@team.name}"
-    @users = current_course.users
-    @students = current_course.students
     @submit_message = "Update #{term_for :team}"
   end
 
@@ -65,10 +56,10 @@ class TeamsController < ApplicationController
 
   private
 
-  def team_params    
-    params.require(:team).permit :name, :course, :course_id, :student_ids, :average_score,
-      :banner, :rank, :leader_ids, :challenge_grade_score,
-      team_memberships_attributes: [:student_id, :team_id],
-      team_leaderships_attributes: [:leader_id, :team_id]
+  def team_params
+    params.require(:team).permit :name, :course, :course_id, :average_score,
+      :banner, :rank, :challenge_grade_score, student_ids: [], leader_ids: [],
+      team_memberships_attributes: [:id, :student_id, :team_id, :_destroy],
+      team_leaderships_attributes: [:id, :leader_id, :team_id, :_destroy]
   end
 end
