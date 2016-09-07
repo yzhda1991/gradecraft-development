@@ -69,5 +69,29 @@ describe Services::ImportsLMSAssignments do
       described_class.refresh provider, access_token, assignment
     end
   end
+
+  describe ".update" do
+    let(:assignment) { create :assignment }
+
+    before do
+      # do not call the API
+      allow_any_instance_of(ActiveLMS::Syllabus).to \
+        receive(:update_assignment).and_return {}
+    end
+
+    it "retrieves the imported assignment from the database" do
+      expect(Services::Actions::RetrievesImportedAssignment).to \
+        receive(:execute).and_call_original
+
+      described_class.update provider, access_token, assignment
+    end
+
+    it "updates the assignment details on the provider" do
+      expect(Services::Actions::UpdatesLMSAssignment).to \
+        receive(:execute).and_call_original
+
+      described_class.update provider, access_token, assignment
+    end
+  end
 end
 

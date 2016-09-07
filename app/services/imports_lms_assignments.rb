@@ -5,6 +5,7 @@ require_relative "imports_lms_assignments/retrieves_imported_assignment"
 require_relative "imports_lms_assignments/retrieves_lms_assignment"
 require_relative "imports_lms_assignments/retrieves_lms_assignments"
 require_relative "imports_lms_assignments/updates_imported_timestamp"
+require_relative "imports_lms_assignments/updates_lms_assignment"
 
 module Services
   class ImportsLMSAssignments
@@ -30,6 +31,10 @@ module Services
     end
 
     def self.update(provider, access_token, assignment)
+      with(provider: provider, access_token: access_token, assignment: assignment).reduce(
+        Actions::RetrievesImportedAssignment,
+        Actions::UpdatesLMSAssignment
+      )
     end
   end
 end
