@@ -852,7 +852,7 @@ describe Assignment do
         create :submission, assignment: subject, student: apex
       end
 
-      it "returns the next student with a submission" , focus: true do
+      it "returns the next student with a submission" do
         expect(subject.next_ungraded_student(apex).last_name).to eq("Zenith")
       end
 
