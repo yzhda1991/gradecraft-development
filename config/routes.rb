@@ -313,7 +313,11 @@ GradeCraft::Application.routes.draw do
     resources :assignments, only: [] do
       resources :criteria, only: :index
       resources :students, only: [] do
-        resources :criterion_grades, only: :index
+        resources :criterion_grades, only: :index do
+          member do
+            put :update_fields
+          end
+        end
         get "grade", to: 'grades#show'
         put "criterion_grades", to: "criterion_grades#update"
       end

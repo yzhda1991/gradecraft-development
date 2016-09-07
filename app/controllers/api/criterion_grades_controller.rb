@@ -46,6 +46,21 @@ class API::CriterionGradesController < ApplicationController
     end
   end
 
+  # PUT api/assignments/:assignment_id/students/:student_id/criterion_grades/:criterion_grade_id/update_fields
+  def update_fields
+    cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
+    result = cg.update_attributes(criterion_grade_params)
+    if result
+      render json: {
+        message: 'Criterion grade successfully updated', success: true
+      }
+    else
+      render json: {
+        errors: result.errors, success: false
+      }, status: :bad_request
+    end
+  end
+
   # PUT api/assignments/:assignment_id/groups/:group_id/criterion_grade
   def group_update
     result = Services::CreatesGroupGradesUsingRubric.create params
@@ -60,5 +75,11 @@ class API::CriterionGradesController < ApplicationController
         },
         status:  result.error_code || 400
     end
+  end
+
+  private
+
+  def criterion_grade_params
+    params.require(:criterion_grade).permit(:comments)
   end
 end
