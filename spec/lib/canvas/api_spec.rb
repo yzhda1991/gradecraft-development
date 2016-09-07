@@ -83,4 +83,42 @@ describe Canvas::API, type: :disable_external_api do
       expect(result.count).to eq 2
     end
   end
+
+  describe "#set_data" do
+    subject { described_class.new(access_token) }
+
+    it "updates the data from the specified path" do
+      params = { name: "Blah" }
+      stub = stub_request(:put, "https://canvas.instructure.com/api/v1/courses/123")
+        .with(query: { "access_token" => access_token }, body: params.to_json)
+        .to_return(status: 200, body: {}.to_json, headers: {})
+
+      subject.set_data("/courses/123", :put, params)
+
+      expect(stub).to have_been_requested
+    end
+
+    it "raises an exception when a request fails" do
+      body = { errors: [{ message: "Invalid access token." }] }
+      stub = stub_request(:post, "https://canvas.instructure.com/api/v1/courses")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 401, body: body.to_json, headers: {})
+
+      expect { subject.set_data("/courses", :post) }.to \
+        raise_error Canvas::ResponseError, "Invalid access token."
+    end
+
+    it "returns the data in a block" do
+      body = { name: "This is a course" }
+
+      stub = stub_request(:post, "https://canvas.instructure.com/api/v1/courses")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 200, body: body.to_json, headers: {})
+
+      result = nil
+      subject.set_data("/courses") { |course| result = course }
+
+      expect(result["name"]).to eq "This is a course"
+    end
+  end
 end

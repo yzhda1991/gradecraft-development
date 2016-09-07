@@ -23,6 +23,15 @@ module Canvas
       end
     end
 
+    def set_data(path="/", method=:post, params={})
+      url = "#{self.class.base_uri}#{path}"
+      response = self.class.send method, url, body: params.to_json,
+        headers: { "Content-Type" => "application/json" },
+        query: { access_token: access_token }
+      raise ResponseError.new(response) unless response.success?
+      yield response.parsed_response if block_given?
+    end
+
     private
 
     def get_next_url(resp)
