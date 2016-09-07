@@ -102,7 +102,7 @@ describe SubmissionsController do
         expect(response).to render_template :new
       end
 
-      it "calls check_and_set_late_status afterwards" do
+      it "checks if the submission is late" do
         params = attributes_for(:submission)
         expect(controller).to receive(:check_and_set_late_status)
         post :create, assignment_id: @assignment.id, submission: params
@@ -119,9 +119,8 @@ describe SubmissionsController do
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
-      it "calls check_and_set_late_status afterwards" do
+      it "checks if the submission is late" do
         params = attributes_for(:submission)
-        params[:text_comment] = "Gesundheit"
         expect(controller).to receive(:check_and_set_late_status)
         post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end
@@ -166,7 +165,7 @@ describe SubmissionsController do
         expect(submission.submitted_at).to be > current_time
       end
 
-      it "calls check_and_set_late_status afterwards" do
+      it "checks if the submission is late" do
         params = attributes_for(:submission, student_id: @student.id)
           .merge(assignment_id: @assignment_id)
         expect(controller).to receive(:check_and_set_late_status)
@@ -191,9 +190,8 @@ describe SubmissionsController do
         expect(@submission.reload.submitted_at).to be > current_time
       end
 
-      it "calls check_and_set_late_status afterwards" do
+      it "checks if the submission is late" do
         params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
-        params[:text_comment] = "Gesundheit"
         expect(controller).to receive(:check_and_set_late_status)
         post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end

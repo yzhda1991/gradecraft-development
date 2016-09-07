@@ -309,12 +309,12 @@ describe Submission do
     end
   end
 
-  describe "#check_and_set_late_status" do
+  describe "#check_and_set_late_status!" do
     context "when the submission is late" do
       it "sets the late attribute as true" do
         assignment = create(:assignment, due_at: DateTime.now - 1)
         submission = create(:submission, assignment: assignment, submitted_at: DateTime.now)
-        submission.check_and_set_late_status
+        submission.check_and_set_late_status!
         expect(submission.late?).to eq(true)
       end
     end
@@ -323,7 +323,7 @@ describe Submission do
       it "sets the late attribute as false" do
         assignment = create(:assignment, due_at: DateTime.now)
         submission = create(:submission, assignment: assignment, submitted_at: DateTime.now - 1)
-        submission.check_and_set_late_status
+        submission.check_and_set_late_status!
         expect(submission.late?).to eq(false)
       end
     end

@@ -79,7 +79,7 @@ class SubmissionsController < ApplicationController
   private
 
   def check_and_set_late_status(submission)
-    submission.check_and_set_late_status if current_user_is_student?
+    submission.check_and_set_late_status!
   end
 
   def presenter_attrs_with_id
