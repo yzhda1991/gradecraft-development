@@ -28,5 +28,8 @@ module Services
         Actions::UpdatesImportedTimestamp
       )
     end
+
+    def self.update(provider, access_token, assignment)
+    end
   end
 end

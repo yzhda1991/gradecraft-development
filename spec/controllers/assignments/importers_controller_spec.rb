@@ -153,13 +153,43 @@ describe Assignments::ImportersController do
     let(:assignment) { create :assignment, course: course }
 
     context "as a professor" do
+      let(:access_token) { "BLAH" }
+      let(:result) { double(:result, success?: true, message: "") }
+      let!(:user_authorization) do
+        create :user_authorization, :canvas, user: professor, access_token: access_token,
+          expires_at: 2.days.from_now
+      end
+
       before { login_user(professor) }
 
-      xit "updates the canvas assignment from the assignment details"
-      xit "redirects back to the assignment show view and displays a notice"
+      it "updates the canvas assignment from the assignment details" do
+        expect(Services::ImportsLMSAssignments).to \
+          receive(:update).with(provider.to_s, access_token, assignment).and_return result
+
+        post :update_assignment, importer_provider_id: provider, id: assignment.id
+      end
+
+      it "redirects back to the assignment show view and displays a notice" do
+        allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
+
+        post :update_assignment, importer_provider_id: provider, id: assignment.id
+
+        expect(response).to redirect_to(assignment_path(assignment))
+        expect(flash[:notice]).to \
+          eq "You have successfully updated #{assignment.name} on Canvas"
+      end
 
       context "for an assignment that was not imported" do
-        xit "redirects back to the assignment show view and displays an alert"
+        it "redirects back to the assignment show view and displays an alert" do
+          allow(result).to receive_messages(success?: false,
+                                            message: "This was not updated")
+          allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
+
+          post :update_assignment, importer_provider_id: provider, id: assignment.id
+
+          expect(response).to redirect_to(assignment_path(assignment))
+          expect(flash[:alert]).to eq "This was not updated"
+        end
       end
     end
 
