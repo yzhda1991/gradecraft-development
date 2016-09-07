@@ -166,6 +166,24 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
     end
   end
 
+  describe "#update_assignment" do
+    subject { described_class.new access_token }
+
+    it "updates the assignment for the id from the api" do
+      request = { assignment: { name: "This is a published assignment" }}
+      body = { id: "123", name: "This is a published assignment" }
+      stub_request(:put,
+                   "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
+        .with(query: { "access_token" => access_token }, body: request.to_json)
+        .to_return(status: 200, body: body.to_json,
+                   headers: {})
+
+      assignment = subject.update_assignment(123, 456, request)
+
+      expect(assignment["name"]).to eq "This is a published assignment"
+    end
+  end
+
   describe "#user" do
     subject { described_class.new access_token }
 
