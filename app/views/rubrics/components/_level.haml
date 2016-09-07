@@ -1,6 +1,10 @@
-.level{class: ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
+%section.level{class: ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
   = render partial: "rubrics/components/level_heading", locals: { level: level }
-  = render partial: "rubrics/components/level_badges", locals: { level: level }
 
-  - if include_grade_info
-    = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }
+- if !level.level_badges(current_user).empty?
+  %section.badges-earned
+    %h6= "#{term_for :badges} Earned"
+    = render partial: "rubrics/components/level_badges", locals: { level: level }
+
+- if include_grade_info
+  = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }

@@ -1,18 +1,24 @@
 - rubric.criteria.ordered.includes(levels: :level_badges).each do |criterion|
   .criterion
     .criterion-heading
-      %p.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
+      %h5.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
       %p.criterion-description= criterion.description
+
     %ul.level-tabs
       - criterion.levels.ordered.each do |level|
         %li{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level level-tab" : "level-tab"}
+          - if current_user_is_student? && level.earned_for?(student.id)
+            = glyph("check")
           = link_to "#{level.name}", "#"
           - if !level.hide_analytics?
             - unless level.criterion_grades(current_user).empty?
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
+
     - criterion.levels.ordered.each do |level|
       %div{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level-panel" : "tab-panel"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
         - if include_grade_info
-          .level.level-comments.comments-box
-            = raw criterion.comments_for(student.id)
+          %section.grader-feedback
+            %h6 Comments
+            .level.level-comments.comments-box
+              = raw criterion.comments_for(student.id)

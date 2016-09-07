@@ -1,5 +1,4 @@
-.level-heading
-  %p.level-name.uppercase= "#{level.name}: " "#{points level.points} Points"
-  - if level.meets_expectations?
-    %span Meets Expectations
+%h6.level-name= "#{level.name}: " "#{points level.points} Points"
+- if level.meets_expectations?
+  %p.italic Meets Expectations
 .level-description= level.description

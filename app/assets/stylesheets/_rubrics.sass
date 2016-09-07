@@ -214,8 +214,8 @@ button.meets-expectations-status.no-expectation
 
   .badge-messages
     text-align: center
-    font-size: .7rem;
-    font-weight: bold;
+    font-size: .7rem
+    font-weight: bold
 
   .badge-row
     overflow: hidden
@@ -327,7 +327,23 @@ button.meets-expectations-status.no-expectation
   padding: 0
   border-radius: $global-radius
 
+.download-link
+  margin: 0.5rem 0
+
 #student-rubric-feedback
+  h5
+    font-size: 1.1em
+    text-transform: uppercase
+    font-weight: 400
+  h6
+    font-size: 1em
+    text-transform: uppercase
+    font-weight: 400
+    margin: 0
+  section
+    margin-bottom: 1rem
+    &:last-child
+      margin-bottom: 0
   .criterion
     background-color: $color-white
     margin-bottom: 2rem
@@ -336,8 +352,6 @@ button.meets-expectations-status.no-expectation
     background-color: $color-blue-3
     color: $color-white
     padding: 0.25rem 0.5rem
-  .criterion-name
-    font-weight: 400
   .criterion-description
     font-size: 0.75rem
     font-style: italic
@@ -354,23 +368,44 @@ button.meets-expectations-status.no-expectation
     display: inline-block
     flex: 1
     text-align: center
-    padding: 0.5rem 0
+    padding: 0.25rem
     background-color: $color-grey-6
+    color: $color-grey-2
     border: 1px solid $color-white
     font-size: 0.8rem
+    i
+      padding-right: 0
+    a
+      color: $color-grey-2
     &:first-child
       border-left: none
     &:last-child
       border-right: none
 
+  .level-description
+    font-size: 0.85rem
+    font-weight: 300
+
   .earned-level
     background-color: $color-green-1
+
+  .graded-students
+    font-size: 0.65rem
+    font-style: italic
 
   .earned-level-panel, .tab-panel
     padding: 0.5rem
 
-  .level-badge-image img
-    height: 35px
+  ul.badge-row
+    height: auto
+    margin-top: 0
+    padding-left: 0
+
+  .level-badge-image 
+    float: none
+    img
+      height: 35px
+      display: inline-block
 
   .tab-panel
     display: none
