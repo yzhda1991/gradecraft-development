@@ -68,6 +68,8 @@ describe CanvasAssignmentImporter do
         expect(imported_assignment.provider_resource_id).to \
           eq canvas_assignment_id
         expect(imported_assignment.provider_data).to eq({ "course_id" => "123" })
+        expect(imported_assignment.last_imported_at).to \
+          be_within(1.second).of(DateTime.now)
       end
 
       it "contains a successful row if the assignment is valid" do

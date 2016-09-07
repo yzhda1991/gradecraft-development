@@ -45,6 +45,7 @@ class CanvasAssignmentImporter
       provider_resource_id: provider_resource_id)
     imported.assignment = assignment
     imported.provider_data = provider_data
+    imported.last_imported_at = DateTime.now
     imported.save
   end
 end
