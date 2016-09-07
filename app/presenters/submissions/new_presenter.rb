@@ -15,7 +15,7 @@ module Submissions
     end
 
     def submission_will_be_late?
-      assignment.due_at.present? ? DateTime.now > assignment.due_at : false
+      assignment.due_at.present? && assignment.due_at < DateTime.now
     end
   end
 end
