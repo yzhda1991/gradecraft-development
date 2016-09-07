@@ -61,6 +61,13 @@ describe Services::ImportsLMSAssignments do
 
       described_class.refresh provider, access_token, assignment
     end
+
+    it "updates the imported timestamp" do
+      expect(Services::Actions::UpdatesImportedTimestamp).to \
+        receive(:execute).and_call_original
+
+      described_class.refresh provider, access_token, assignment
+    end
   end
 end
 

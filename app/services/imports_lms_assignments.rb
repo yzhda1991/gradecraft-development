@@ -4,6 +4,7 @@ require_relative "imports_lms_assignments/refresh_assignment"
 require_relative "imports_lms_assignments/retrieves_imported_assignment"
 require_relative "imports_lms_assignments/retrieves_lms_assignment"
 require_relative "imports_lms_assignments/retrieves_lms_assignments"
+require_relative "imports_lms_assignments/updates_imported_timestamp"
 
 module Services
   class ImportsLMSAssignments
@@ -23,7 +24,8 @@ module Services
       with(provider: provider, access_token: access_token, assignment: assignment).reduce(
         Actions::RetrievesImportedAssignment,
         Actions::RetrievesLMSAssignment,
-        Actions::RefreshAssignment
+        Actions::RefreshAssignment,
+        Actions::UpdatesImportedTimestamp
       )
     end
   end
