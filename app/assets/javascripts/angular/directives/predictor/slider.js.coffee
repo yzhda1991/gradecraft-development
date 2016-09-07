@@ -127,17 +127,20 @@
         else
           return points
 
-      scope.snap = (points)->
+      # Only snaps that we want to fire while live updates
+      # are coming from the input field
+      scope.liveSnap = (points)->
+        points = scope.pointsSnappedToRange(points)
+        scope.updateArticle(points)
+        scope.updateSlider(points)
+
+      scope.snapAndSave = (points)->
+        points = if isNaN(points) then 0 else points
         points = scope.pointsSnappedToRange(points)
         points = scope.pointsSnappedToScoreLevel(points)
         points = scope.pointsSnappedToThreshold(points)
         scope.updateArticle(points)
         scope.updateSlider(points)
-
-
-      scope.snapAndSave = (points)->
-        points = if isNaN(points) then 0 else points
-        scope.snap(points)
         scope.save()
 
       #---------------- DIRECT INPUT FIELD ------------------------------------#
@@ -156,7 +159,7 @@
         scope.inputMode("TEXT_INPUT")
 
         setTimeout ( ->
-          scope.snap(scope.article.prediction.predicted_points)
+          scope.liveSnap(scope.article.prediction.predicted_points)
         ), 125
 
 
