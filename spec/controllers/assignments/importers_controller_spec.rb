@@ -148,4 +148,27 @@ describe Assignments::ImportersController do
       end
     end
   end
+
+  describe "POST #update_assignment" do
+    let(:assignment) { create :assignment, course: course }
+
+    context "as a professor" do
+      before { login_user(professor) }
+
+      xit "updates the canvas assignment from the assignment details"
+      xit "redirects back to the assignment show view and displays a notice"
+
+      context "for an assignment that was not imported" do
+        xit "redirects back to the assignment show view and displays an alert"
+      end
+    end
+
+    context "as a student" do
+      it "redirects to the root url" do
+        post :update_assignment, importer_provider_id: provider, id: assignment.id
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
 end

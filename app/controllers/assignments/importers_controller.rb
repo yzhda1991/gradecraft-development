@@ -63,6 +63,13 @@ class Assignments::ImportersController < ApplicationController
     redirect_to assignment_path(assignment)
   end
 
+  # POST /assignments/importers/:importer_provider_id/assignments/:id/update
+  def update_assignment
+    assignment = Assignment.find(params[:id])
+
+    redirect_to assignment_path(assignment)
+  end
+
   private
 
   def syllabus
