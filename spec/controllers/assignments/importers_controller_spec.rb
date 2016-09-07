@@ -7,6 +7,8 @@ describe Assignments::ImportersController do
   let(:professor_membership) { create :professor_course_membership, course: course }
   let(:provider) { :canvas }
 
+  before { allow(controller).to receive(:current_course).and_return course }
+
   describe "GET courses" do
     context "as a professor" do
       before { login_user(professor) }
@@ -51,7 +53,6 @@ describe Assignments::ImportersController do
 
       before do
         login_user(professor)
-        allow(controller).to receive(:current_course).and_return course
         allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
       end
 
@@ -89,6 +90,59 @@ describe Assignments::ImportersController do
     context "as a student" do
       it "redirects to the root url" do
         post :assignments_import, importer_provider_id: provider, id: course_id
+
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
+  describe "POST #refresh_assignment" do
+    let(:assignment) { create :assignment, course: course }
+
+    context "as a professor" do
+      let(:access_token) { "BLAH" }
+      let(:result) { double(:result, success?: true, message: "") }
+      let!(:user_authorization) do
+        create :user_authorization, :canvas, user: professor, access_token: access_token,
+          expires_at: 2.days.from_now
+      end
+
+      before { login_user(professor) }
+
+      it "updates the assignment from the provider details" do
+        expect(Services::ImportsLMSAssignments).to \
+          receive(:refresh).with(provider.to_s, access_token, assignment).and_return result
+
+        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+      end
+
+      it "redirects back to the assignment show view and displays a notice" do
+        allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
+
+        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+
+        expect(response).to redirect_to(assignment_path(assignment))
+        expect(flash[:notice]).to \
+          eq "You have successfully updated #{assignment.name} from Canvas"
+      end
+
+      context "for an assignment that was not imported" do
+        it "redirects back to the assignment show view and displays an alert" do
+          allow(result).to receive_messages(success?: false,
+                                            message: "This was not imported")
+          allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
+
+          post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+
+          expect(response).to redirect_to(assignment_path(assignment))
+          expect(flash[:alert]).to eq "This was not imported"
+        end
+      end
+    end
+
+    context "as a student" do
+      it "redirects to the root url" do
+        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
 
         expect(response).to redirect_to root_path
       end

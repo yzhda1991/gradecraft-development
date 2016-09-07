@@ -53,6 +53,7 @@ GradeCraft::Application.routes.draw do
       get "/courses/:id/assignments", to: :assignments, as: :assignments
       post "/courses/:id/assignments/import", to: :assignments_import,
         as: :assignments_import
+      post "/assignments/:id/refresh", to: :refresh_assignment, as: :refresh_assignment
     end
   end
 

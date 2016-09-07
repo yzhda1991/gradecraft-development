@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830154453) do
+ActiveRecord::Schema.define(version: 20160907000216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,6 +476,8 @@ ActiveRecord::Schema.define(version: 20160830154453) do
     t.string   "provider_resource_id", null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.hstore   "provider_data"
+    t.datetime "last_imported_at"
   end
 
   add_index "imported_assignments", ["assignment_id"], name: "index_imported_assignments_on_assignment_id", using: :btree
