@@ -79,7 +79,7 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
-      it "creates the submission with valid attributes"  do
+      it "creates the submission with valid attributes" do
         params = attributes_for(:submission)
         expect{ post :create, assignment_id: @assignment.id, submission: params }.to change(Submission,:count).by(1)
       end
