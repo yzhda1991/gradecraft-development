@@ -55,7 +55,7 @@ class Assignments::ImportersController < ApplicationController
       authorization(provider_name).access_token, assignment
 
     if result.success?
-      flash[:notice] = "You have successfully refreshed #{assignment.name} from #{provider_name.capitalize}"
+      flash[:notice] = "You have successfully updated #{assignment.name} from #{provider_name.capitalize}"
     else
       flash[:alert] = result.message
     end

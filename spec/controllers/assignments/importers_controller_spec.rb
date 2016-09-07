@@ -123,7 +123,7 @@ describe Assignments::ImportersController do
 
         expect(response).to redirect_to(assignment_path(assignment))
         expect(flash[:notice]).to \
-          eq "You have successfully refreshed #{assignment.name} from Canvas"
+          eq "You have successfully updated #{assignment.name} from Canvas"
       end
 
       context "for an assignment that was not imported" do
