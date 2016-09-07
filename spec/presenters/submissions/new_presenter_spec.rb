@@ -1,6 +1,5 @@
 require "rails_spec_helper"
 require "./app/presenters/submissions/new_presenter"
-require 'date'
 
 describe Submissions::NewPresenter do
   let(:assignment) { double(:assignment) }
