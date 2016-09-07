@@ -28,7 +28,12 @@ describe Services::Actions::UpdatesLMSAssignment do
   end
 
   it "updates the lms assignment" do
-    params = { name: assignment.name }
+    params = {
+      name: assignment.name,
+      description: assignment.description,
+      due_at: assignment.due_at,
+      points_possible: assignment.full_points
+    }
     expect(ActiveLMS::Syllabus).to \
       receive(:new).with(provider, access_token).and_call_original
     expect_any_instance_of(ActiveLMS::Syllabus).to \

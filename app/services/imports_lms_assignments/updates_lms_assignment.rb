@@ -14,7 +14,12 @@ module Services
         course_id = context.imported_assignment.provider_data["course_id"]
         assignment_id = context.imported_assignment.provider_resource_id
         assignment = context.imported_assignment.assignment
-        params = { assignment: { name: assignment.name }}
+        params = { assignment: { name: assignment.name,
+                                 description: assignment.description,
+                                 due_at: assignment.due_at.nil? ? nil :
+                                         assignment.due_at.iso8601,
+                                 points_possible: assignment.full_points }}
+        params[:assignment].merge!(grading_type: "pass_fail") if assignment.pass_fail?
 
         context.lms_assignment = nil
 
