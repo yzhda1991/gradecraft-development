@@ -1,21 +1,21 @@
-- rubric.criteria.ordered.includes(levels: :level_badges).each do |criterion|
-  .criterion
+- rubric.criteria.ordered.includes(levels: :level_badges).each_with_index do |criterion, cindex|
+  .criterion{:id => "criterion-#{cindex}"}
     .criterion-heading
       %h5.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
       %p.criterion-description= criterion.description
 
     %ul.level-tabs
-      - criterion.levels.ordered.each do |level|
-        %li{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level level-tab" : "level-tab"}
+      - criterion.levels.ordered.each_with_index do |level, tindex|
+        %li.level-tab{:class => ("earned" if current_user_is_student? && level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}"}
           - if current_user_is_student? && level.earned_for?(student.id)
             = glyph("check")
-          = link_to "#{level.name}", "#"
+          %span= level.name
           - if !level.hide_analytics?
             - unless level.criterion_grades(current_user).empty?
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
 
-    - criterion.levels.ordered.each do |level|
-      %div{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level-panel" : "tab-panel"}
+    - criterion.levels.ordered.each_with_index do |level, lindex|
+      .tab-panel{:class => ("selected" if current_user_is_student? && level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
         - if include_grade_info
           %section.grader-feedback

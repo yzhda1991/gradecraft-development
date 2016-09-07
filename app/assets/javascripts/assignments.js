@@ -165,3 +165,15 @@
 
   $(init);
 }(jQuery);
+
+// for student rubric feedback
+$('ul.level-tabs li').click(function(){
+  var criterionId = $(this).parent().parent().attr('id');
+  var tabId = $(this).attr('data-tab');
+
+    $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
+    $('#' + criterionId + ' .tab-panel').removeClass('selected');
+
+    $(this).addClass('selected');
+    $("#" + tabId).addClass('selected');
+  })

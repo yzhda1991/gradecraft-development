@@ -373,21 +373,24 @@ button.meets-expectations-status.no-expectation
     color: $color-grey-2
     border: 1px solid $color-white
     font-size: 0.8rem
+    cursor: pointer
+    position: relative
+    &:hover, &.selected
+      background-color: lighten($color-grey-6, 5%)
     i
       padding-right: 0
-    a
-      color: $color-grey-2
     &:first-child
       border-left: none
     &:last-child
       border-right: none
+    &.earned
+      background-color: $color-green-1
+      &:hover, &.selected
+        background-color: lighten($color-green-1, 5%)
 
   .level-description
     font-size: 0.85rem
     font-weight: 300
-
-  .earned-level
-    background-color: $color-green-1
 
   .graded-students
     font-size: 0.65rem
@@ -409,6 +412,8 @@ button.meets-expectations-status.no-expectation
 
   .tab-panel
     display: none
+    &.selected
+      display: block
 
 #rubric-table
   td
