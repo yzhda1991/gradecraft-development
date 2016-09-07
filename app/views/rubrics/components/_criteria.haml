@@ -5,9 +5,13 @@
       %p.criterion-description= criterion.description
     %ul.level-tabs
       - criterion.levels.ordered.each do |level|
-        %li{:class => level.earned_for?(student.id) ? "earned-level level-tab" : "level-tab"}= link_to "#{level.name}", "#"
+        %li{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level level-tab" : "level-tab"}
+          = link_to "#{level.name}", "#"
+          - if !level.hide_analytics?
+            - unless level.criterion_grades(current_user).empty?
+              %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
     - criterion.levels.ordered.each do |level|
-      %div{:class => level.earned_for?(student.id) ? "earned-level-panel" : "tab-panel"}
+      %div{:class => current_user_is_student? && level.earned_for?(student.id) ? "earned-level-panel" : "tab-panel"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
         - if include_grade_info
           .level.level-comments.comments-box

@@ -1,6 +1,5 @@
 .level-heading
-  .level-name= level.name
+  %p.level-name.uppercase= "#{level.name}: " "#{points level.points} Points"
   - if level.meets_expectations?
     %span Meets Expectations
-  .level-points= "#{points level.points} Points"
 .level-description= level.description
