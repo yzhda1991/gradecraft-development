@@ -162,7 +162,8 @@ class CoursesController < ApplicationController
       :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
       :assignments_attributes, :start_date, :end_date,
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
-        :condition_type, :condition_state, :condition_value, :condition_date, :_destroy]
+        :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
+      instructors_of_record_ids: [], course_memberships_attributes: [:id, :course_id, :user_id, :instructor_of_record]
   end
 
   def find_course

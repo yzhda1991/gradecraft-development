@@ -3,7 +3,7 @@ class TeamMembership < ActiveRecord::Base
   belongs_to :team
   belongs_to :student, class_name: "User"
 
-  validates_presence_of :team, :student
+  validates_associated :team, :student
 
   scope :for_course, ->(course) do
     joins(:team).where(teams: {course_id: course.id})
