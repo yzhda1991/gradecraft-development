@@ -4,6 +4,7 @@
   $scope.criteria = RubricService.criteria
   $scope.criterionGrades = RubricService.criterionGrades
   $scope.grade = RubricService.grade
+  $scope.updateGrade = RubricService.updateGrade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
 
   # Criterion factory is dependent on CriterionGrades existing in scope

@@ -100,7 +100,7 @@
 
     .summary_feedback
       %h3.text-right Overall Feedback
-      %textarea(ng-model="grade.feedback" froala="froalaSummaryOptions")
+      %textarea(ng-model="grade.feedback" ng-model-options="{debounce: 1000}" ng-change="updateGrade()" froala="froalaSummaryOptions")
     .clear
     %br
 

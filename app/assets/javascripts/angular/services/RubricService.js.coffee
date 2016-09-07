@@ -98,6 +98,18 @@
         console.log(data)
     )
 
+  # Basically a copy of the Grade factory update function
+  # updating grade properties
+  updateGrade = ()->
+    $http.put("/api/grades/#{grade.id}", grade: grade).success(
+      (data,status)->
+        console.log(data)
+        grade.updated_at = new Date()
+    )
+    .error((err)->
+      console.log(err)
+    )
+
   thresholdPoints = ()->
     thresholdPoints
 
@@ -120,6 +132,7 @@
       criteria: criteria,
       criterionGrades: criterionGrades,
       grade: grade,
+      updateGrade: updateGrade,
       gradeStatusOptions: gradeStatusOptions,
       pointsPossible: pointsPossible,
       thresholdPoints: thresholdPoints
