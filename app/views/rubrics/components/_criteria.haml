@@ -15,9 +15,9 @@
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
 
     - criterion.levels.ordered.each_with_index do |level, lindex|
-      .tab-panel{:class => ("selected" if current_user_is_student? && level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}"}
+      .tab-panel{:class => ("earned selected" if current_user_is_student? && level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-        - if include_grade_info
+        - if include_grade_info && level.earned_for?(student.id)
           %section.grader-feedback
             %h6 Comments
             .level.level-comments.comments-box

@@ -177,3 +177,12 @@ $('ul.level-tabs li').click(function(){
     $(this).addClass('selected');
     $("#" + tabId).addClass('selected');
   })
+
+// toggle class analytics on rubric feedback
+$('#class-analytics-toggle').change(function(){
+  if ($(this).prop("checked")) {
+    $('.graded-students').show();
+  } else {
+    $('.graded-students').hide();
+  }
+});
