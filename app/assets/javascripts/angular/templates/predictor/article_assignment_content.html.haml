@@ -12,5 +12,5 @@
     This grade has been excluded
 
 .article-predicted{'ng-if' => '!articleCompleted()'}
-  .component-slider{'ng-if' => 'article.pass_fail != true', 'article'=>'article'}
-  .predictor-binary-switch{'ng-if' => 'article.pass_fail == true', 'article'=>'article','off-value'=>'0','on-value'=>'1'}
+  %component-slider{'ng-if' => 'article.pass_fail != true', 'article'=>'article'}
+  %predictor-binary-switch{'ng-if' => 'article.pass_fail == true', 'article'=>'article','off-value'=>'0','on-value'=>'1'}
