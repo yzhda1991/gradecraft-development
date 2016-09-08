@@ -3,7 +3,6 @@
 @gradecraft.directive 'predictorSectionChallenges', [ 'PredictorService', (PredictorService)->
 
   return {
-    restrict: 'C'
     templateUrl: 'predictor/challenges.html'
     link: (scope, el, attr)->
 
