@@ -1,5 +1,3 @@
-# .predictor-graph
-
 # Renders the graph fixed to the top of the predictor page
 # Must not render until Grade Scheme Elements are loaded,
 # to position high and low point ranges.
@@ -7,7 +5,6 @@
 @gradecraft.directive 'predictorGraph', [ 'PredictorService', (PredictorService)->
 
   return {
-    restrict: 'C'
     templateUrl: 'predictor/graph.html'
 
     link: (scope, el, attr)->
