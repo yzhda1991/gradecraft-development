@@ -6,8 +6,8 @@
 
     %ul.level-tabs
       - criterion.levels.ordered.each_with_index do |level, tindex|
-        %li.level-tab{:class => ("earned" if include_grade_info && level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}"}
-          - if include_grade_info && level.earned_for?(student.id)
+        %li.level-tab{:class => ("earned" if level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}"}
+          - if level.earned_for?(student.id)
             = glyph("check")
           %span= level.name
           - if !level.hide_analytics?
@@ -15,9 +15,9 @@
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
 
     - criterion.levels.ordered.each_with_index do |level, lindex|
-      .tab-panel{:class => ("earned selected" if include_grade_info && level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}"}
+      .tab-panel{:class => ("earned selected" if level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}"}
         = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-        - if include_grade_info && level.earned_for?(student.id)
+        - if level.earned_for?(student.id)
           %section.grader-feedback
             %h6 Comments
             .level.level-comments.comments-box
