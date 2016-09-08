@@ -11,22 +11,4 @@ test:
   min_messages: warning
   pool: 16
 
-
-# This anchor can be used by the staging and production Rails environments to
-# configure with environmental variables.
-default: &default
-  adapter: <%= ENV["GC_DB_ADAPTER"] || "postgresql" %>
-  encoding: <%= ENV["GC_DB_ENCODING"] || "unicode" %>
-  min_messages: <%= ENV["GC_DB_MIN_MESSAGES"] || "warning" %>
-  pool: 16
-
-  database: <%= ENV["GC_DB_DATABASE"] %>
-  host: <%= ENV["GC_DB_HOST"] %>
-  username: <%= ENV["GC_DB_USERNAME"] %>
-  password: <%= ENV["GC_DB_PASSWORD"] %>
-
-staging:
-  <<: *default
-
-production:
-  <<: *default
+# for staging and production use DATABASE_URL, see: http://edgeguides.rubyonrails.org/configuring.html#configuring-a-database
