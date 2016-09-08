@@ -1,10 +1,7 @@
-# .predictor-article-assignment-content
-
 # Fills the Assignment details in the Article "Cards"
 @gradecraft.directive 'predictorArticleAssignmentContent', [ 'PredictorService', (PredictorService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
     }
