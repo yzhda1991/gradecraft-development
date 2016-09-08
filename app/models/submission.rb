@@ -88,9 +88,8 @@ class Submission < ActiveRecord::Base
   # Checking to see if a submission was turned in late
   # Set while skipping validations and callbacks
   def check_and_set_late_status!
-    if self.assignment.due_at.present?
-      self.update_column(:late, submitted_at > self.assignment.due_at)
-    end
+    return false if self.assignment.due_at.nil?
+    self.update_column(:late, submitted_at > self.assignment.due_at)
   end
 
   # build a sensible base filename for all files that are attached to this submission
