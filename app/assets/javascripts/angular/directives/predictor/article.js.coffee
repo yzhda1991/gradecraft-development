@@ -1,12 +1,9 @@
-# .predictor-article
-
 # One "Card" in the predictor that displays an Assignment, Challenge, or Badge
 # Manages linking article to details section in student side panel
 
 @gradecraft.directive 'predictorArticle', ['PredictorService', 'StudentPanelService', (PredictorService, StudentPanelService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
     }

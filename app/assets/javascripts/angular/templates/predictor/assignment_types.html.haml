@@ -24,5 +24,5 @@
               You've predicted {{assignmentTypePointExcess(assignmentType) | number}} more points than you are allowed to earn for this {{termFor("assignmentType")}}!
 
   .collapsable.predictor-articles
-    %article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true', 'article'=>'assignment'}
+    %predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true', 'article'=>'assignment'}
   .clear
