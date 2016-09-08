@@ -1,5 +1,5 @@
 GradeCraft::Application.configure do
-  config.action_controller.default_url_options = { :host => ENV["RAILS_PRODUCTION_DEFUALT_URL_OPTIONS_HOST"] || "www.gradecraft.com" }
+  config.action_controller.default_url_options = { :host => "www.gradecraft.com" }
   config.action_controller.perform_caching = true
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.action_dispatch.default_headers = { "X-Frame-Options" => "ALLOWALL" }
