@@ -17,7 +17,7 @@ class SubmissionsController < ApplicationController
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.new(submission_params.merge(submitted_at: DateTime.now))
     if submission.save
-      check_and_set_late_status submission
+      submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
         NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
@@ -46,7 +46,7 @@ class SubmissionsController < ApplicationController
 
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now))
-        check_and_set_late_status submission
+        submission.check_and_set_late_status!
         path = assignment.has_groups? ? { group_id: submission.group_id } :
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
@@ -77,10 +77,6 @@ class SubmissionsController < ApplicationController
   end
 
   private
-
-  def check_and_set_late_status(submission)
-    submission.check_and_set_late_status!
-  end
 
   def presenter_attrs_with_id
     base_presenter_attrs.merge id: params[:id]
