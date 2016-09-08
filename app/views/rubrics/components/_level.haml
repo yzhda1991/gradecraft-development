@@ -1,10 +1,11 @@
+- if current_user_is_staff? && include_grade_info && level.earned_for?(student.id)
+  %section.student-earned
+    = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }
+
 %section.level{class: ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
   = render partial: "rubrics/components/level_heading", locals: { level: level, student: student }
 
-- if current_user_is_student? && !level.level_badges(current_user).empty? && level.earned_for?(student.id)
+- if current_student.present? && !level.level_badges(current_user).empty? && level.earned_for?(student.id)
   %section.badges-earned
     %h6= "#{term_for :badges} Earned"
     = render partial: "rubrics/components/level_badges", locals: { level: level }
-
-- if include_grade_info
-  = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }

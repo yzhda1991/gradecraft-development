@@ -1,4 +1,4 @@
-- if current_user_is_student? && level.earned_for?(student.id)
+- if current_student.present? && level.earned_for?(student.id)
   %h6.level-name You earned 
 %h6.level-name= "#{level.name}: " "#{points level.points} Points"
 - if level.meets_expectations?
