@@ -20,8 +20,6 @@ class InfoController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    # id is used for api routes via Angular service
-    params[:student_id] = params[:id] if current_user_is_staff?
   end
 
   def timeline_events
