@@ -20,12 +20,6 @@
         PredictorService.getChallenges()]
       return $q.all(promises)
 
-    termFor = (article)->
-      PredictorService.termFor(article)
-
-    unusedWeightsRange = ()->
-      PredictorService.unusedWeightsRange()
-
     {
       bindToController: true,
       controller: PredictorCtrl,
