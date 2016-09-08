@@ -315,7 +315,7 @@ GradeCraft::Application.routes.draw do
       resources :students, only: [] do
         resources :criteria, only: [] do
           member do
-            put :update_fields
+            put :update_fields, to: 'criterion_grades#update_fields'
           end
         end
         resources :criterion_grades, only: :index
