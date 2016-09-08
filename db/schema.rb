@@ -341,7 +341,6 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.integer  "assignment_id"
     t.integer  "level_id"
     t.boolean  "student_visible", default: false, null: false
-    t.boolean  "shared",          default: false, null: false
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
