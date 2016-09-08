@@ -1,5 +1,3 @@
-# .predictor-section-badges
-
 # Iterates over Badges, creating a collapsable section
 
 @gradecraft.directive 'predictorSectionChallenges', [ 'PredictorService', (PredictorService)->
