@@ -32,7 +32,7 @@
     assignment = criterion.$scope.assignment
     requestData = {}
     requestData[field] = criterion[field]
-    $http.put("/api/assignments/#{assignment.id}/students/#{assignment.scope.id}/criterion_grades/#{criterion.id}/update_fields", criterion_grade: requestData).success(
+    $http.put("/api/assignments/#{assignment.id}/students/#{assignment.scope.id}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
       (data, status)->
         console.log(data)
     )
