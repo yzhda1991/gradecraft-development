@@ -14,9 +14,5 @@ module Submissions
         "Editing #{name}'s Submission"
       end
     end
-
-    def submission_will_be_late?
-      assignment.due_at.present? ? DateTime.now > assignment.due_at : false
-    end
   end
 end

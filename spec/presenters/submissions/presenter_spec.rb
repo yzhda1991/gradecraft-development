@@ -71,4 +71,35 @@ describe Submissions::Presenter do
       expect(subject.instance_variable_get(:@group)).to eq group
     end
   end
+
+  describe "#submission_will_be_late?" do
+    let(:now) { DateTime.now }
+
+    before(:each) do
+      allow(assignments).to receive(:find).with(assignment.id) { assignment }
+    end
+
+    context "when the assignment has a due_at value" do
+      context "with the current time being after the due_at time" do
+        it "returns true" do
+          allow(assignment).to receive(:due_at).and_return (now - 1)
+          expect(subject.submission_will_be_late?).to eq true
+        end
+      end
+
+      context "with the current time being before the due_at time" do
+        it "returns false" do
+          allow(assignment).to receive(:due_at).and_return (now + 1)
+          expect(subject.submission_will_be_late?).to eq false
+        end
+      end
+    end
+
+    context "when the assignment does not have a due_at value" do
+      it "returns false" do
+        allow(assignment).to receive(:due_at).and_return nil
+        expect(subject.submission_will_be_late?).to eq false
+      end
+    end
+  end
 end
