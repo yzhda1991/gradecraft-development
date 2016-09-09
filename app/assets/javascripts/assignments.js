@@ -166,7 +166,7 @@
   $(init);
 }(jQuery);
 
-// for student rubric feedback
+// for student rubric feedback tab panels
 $('ul.level-tabs li').click(function(){
   var criterionId = $(this).parent().parent().attr('id');
   var tabId = $(this).attr('data-tab');
@@ -186,3 +186,12 @@ $('#class-analytics-toggle').change(function(){
     $('.graded-students').hide();
   }
 });
+
+// for student rubric feedback on mobile
+function rubricScreenSize() {
+  if ($('.level-tab').css('display') === 'none') {
+    $('.level-tab.earned').trigger('click');
+  }
+}
+rubricScreenSize();
+$(window).resize(rubricScreenSize);
