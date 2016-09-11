@@ -27,13 +27,13 @@ class AssignmentsController < ApplicationController
   end
 
   def show
-    assignment = current_course.assignments.find_by(id: params[:id])
+    @assignment = current_course.assignments.find_by(id: params[:id])
     redirect_to assignments_path,
-      alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
+      alert: "The #{(term_for :assignment)} could not be found." and return unless @assignment.present?
 
-    mark_assignment_reviewed! assignment, current_user
+    mark_assignment_reviewed! @assignment, current_user
     render :show, Assignments::Presenter.build({
-      assignment: assignment,
+      assignment: @assignment,
       course: current_course,
       team_id: params[:team_id],
       view_context: view_context
@@ -49,9 +49,9 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    assignment = current_course.assignments.find(params[:id])
+    @assignment = current_course.assignments.find(params[:id])
     render :edit, Assignments::Presenter.build({
-      assignment: assignment,
+      assignment: @assignment,
       course: current_course,
       view_context: view_context
       })

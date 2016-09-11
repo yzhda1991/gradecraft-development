@@ -1,0 +1,7 @@
+%ul.breadcrumbs
+  - breadcrumbs.each do |breadcrumb|
+    - if breadcrumb.link?
+      %li
+        = link_to "#{breadcrumb.label} >", breadcrumb.url
+    - else 
+      %li= breadcrumb.label
