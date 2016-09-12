@@ -330,14 +330,13 @@ button.meets-expectations-status.no-expectation
 .download-link
   margin: 0.5rem 0
 
-#student-rubric-feedback
+#student-rubric-feedback, #rubric-shell
   h5
     font-size: 1.1em
     text-transform: uppercase
     font-weight: 400
   h6
     font-size: 1em
-    text-transform: uppercase
     font-weight: 400
     margin: 0
   section
@@ -351,7 +350,7 @@ button.meets-expectations-status.no-expectation
     margin-bottom: 2rem
     border: 1px solid $color-grey-6
   .criterion-heading
-    background-color: $color-blue-3
+    background-color: $color-blue-2
     color: $color-white
     padding: 0.25rem 0.5rem
   .criterion-description
@@ -492,6 +491,27 @@ input:checked + .slider:before
 .slider.round:before
   border-radius: 50%
 
+#rubric-shell
+  .tab-panel
+    border-bottom: 1px solid $color-grey-6
+    &:last-child
+      border-bottom: none
+    &.meets-expectations-cutoff
+      border-bottom: 2px dashed $color-green-2
+      position: relative
+
+  .meets-expectations-label, .meets-expectations-tag
+    font-size: 0.8rem
+
+  .meets-expectations-tag
+    position: absolute
+    bottom: 0
+    right: 0
+    background-color: lighten($color-green-2, 20%)
+    padding: 0 0.4rem
+    i
+      width: inherit
+      padding-right: 0
 
 #rubric-table
   td
