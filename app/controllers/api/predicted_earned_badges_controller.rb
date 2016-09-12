@@ -1,19 +1,7 @@
 class API::PredictedEarnedBadgesController < ApplicationController
   include PredictorData
 
-  before_filter :ensure_student?, only: [:update]
-
-  # GET api/predicted_earned_badges
-  def index
-    if current_user_is_student?
-      @student = current_student
-      @update_badges = !student_impersonation?
-    else
-      @student = NullStudent.new
-      @update_badges = false
-    end
-    @badges = predictor_badges(@student)
-  end
+  before_filter :ensure_student?
 
   # POST api/predicted_earned_badges/:id
   def update

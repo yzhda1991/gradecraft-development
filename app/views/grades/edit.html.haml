@@ -16,6 +16,6 @@
             assignment_id: @grade.assignment.id, course: current_course) }
 
   - if @grade.assignment.grade_with_rubric?
-    = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, scope_type: "student", scoped_id: @grade.student_id, return_path: URI(request.referer || "").path }
+    = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, scope_type: "student", student_id: @grade.student_id, return_path: URI(request.referer || "").path }
   - else
     = render partial: "standard_edit", locals: { grade: @grade, badges: @badges, submission: @submission }

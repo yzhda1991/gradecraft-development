@@ -3,16 +3,16 @@ module PredictorData
 
   def predictor_badges(student)
     current_course.badges.select(
-      :id,
-      :name,
+      :can_earn_multiple_times,
+      :course_id,
       :description,
       :full_points,
+      :icon,
+      :id,
+      :name,
+      :position,
       :visible,
       :visible_when_locked,
-      :can_earn_multiple_times,
-      :position,
-      :updated_at,
-      :icon
     ).map do |badge|
       prediction = badge.find_or_create_predicted_earned_badge(student.id)
       if current_user_is_student? && !student_impersonation?

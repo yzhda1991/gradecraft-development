@@ -18,18 +18,19 @@
 
   #------ API Calls -----------------------------------------------------------#
 
-  # GET index list of badges including a student's earned and predictions
+  # GET index list of badges
+  # includes a student's earned badges and predictions
   getBadges = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_badges').success( (response)->
+    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
       GradeCraftAPI.loadMany(badges,response)
       GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
       GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
-      update.badges = response.meta.update_badges
+      update.predictions = response.meta.update_predictions
     )
 
   # PUT a badge prediction
   postPredictedBadge = (badge)->
-    if update.badges
+    if update.predictions
       $http.put(
           '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
         ).success(
