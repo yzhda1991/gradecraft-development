@@ -5,11 +5,11 @@ class Assignments::ImportersController < ApplicationController
 
   oauth_provider_param :importer_provider_id
 
-  before_filter :ensure_staff?
-  before_filter except: :index do |controller|
+  before_action :ensure_staff?
+  before_action except: :index do |controller|
     controller.redirect_path assignments_importers_path
   end
-  before_filter :require_authorization, except: :index
+  before_action :require_authorization, except: :index
 
   # GET /assignments/importers
   def index
