@@ -1,5 +1,3 @@
-# .student-panel-article-icon
-
 # Defines icons listed under the article details.
 # Each icon is turned on by by a boolean on the assignment or badge model with the same name.
 # Icons are defined in the predictor service and looped through in the haml:
@@ -10,7 +8,6 @@
 @gradecraft.directive 'studentPanelArticleIcon', [ 'StudentPanelService', (StudentPanelService)->
 
   return {
-    restrict: 'C'
     scope: {
       iconName: '='
       article: '='
