@@ -1,5 +1,3 @@
-# .predictor-counter-switch
-
 # +/- counter component for Predicted Points Badges.
 #
 # Displays the number of times earned x points, and total earned
@@ -11,7 +9,6 @@
 @gradecraft.directive 'predictorCounterSwitch', [ 'PredictorService', (PredictorService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
     }

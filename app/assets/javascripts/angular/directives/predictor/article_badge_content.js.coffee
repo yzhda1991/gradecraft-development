@@ -1,10 +1,7 @@
-# .predictor-article-badge-content
-
 # Fills the Badge details in the "Cards"
 @gradecraft.directive 'predictorArticleBadgeContent', [ 'PredictorService', (PredictorService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
     }

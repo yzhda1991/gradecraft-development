@@ -1,5 +1,3 @@
-# .component-slider
-
 # Slider component for Predicted Points on Assignments, Challenges and Badges.
 # Zeros out predictions below threshold values, and snaps to Levels.
 #
@@ -15,7 +13,6 @@
 @gradecraft.directive 'componentSlider', [ '$timeout', 'PredictorService', ($timeout, PredictorService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
     }

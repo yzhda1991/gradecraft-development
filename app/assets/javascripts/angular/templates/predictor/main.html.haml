@@ -10,7 +10,7 @@
         Loading Predictor...
 
     #predictor-graph-section{'ng-if'=>'!vm.loading'}
-      .predictor-graph
+      %predictor-graph.predictor-graph
       #predictor-post-graph-spacer
 
     #predictor-main-header.collapse-all-toggler{'ng-class'=>'{"with-weights": vm.predictorService.weightsAvailable()}'}
@@ -24,9 +24,9 @@
               .coin{'ng-repeat' => 'coin in vm.predictorService.unusedWeightsRange()'}
               .coin-stack-count {{vm.predictorService.unusedWeightsRange().length}}
 
-    .predictor-section-assignment-types
+    %predictor-section-assignment-types
 
-    .predictor-section-badges
+    %predictor-section-badges
 
-    .predictor-section-challenges
+    %predictor-section-challenges
 
