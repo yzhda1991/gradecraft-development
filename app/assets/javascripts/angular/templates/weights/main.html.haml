@@ -16,7 +16,7 @@
     .predictor-section-title{'ng-class'=>'{"status-max-points": assignmentTypeAtMaxPoints(assignmentType)}'}
       .predictor-section-title-name
         {{assignmentType.name}}
-      .weighted-total-points{{'article'=>'assignmentType'}}
+      %weighted-total-points.weighted-total-points{{'article'=>'assignmentType'}}
       .predictor-section-title-predicted-points{{'ng-class'=>'{"weightable":assignmentType.student_weightable}'}}
 
         .predictor-section-title-weights
