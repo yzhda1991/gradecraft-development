@@ -11,7 +11,7 @@
 
         .predictor-section-title-weights{{'ng-if'=>'assignmentType.student_weightable'}}
           .predictor-title-right-span x
-          .weights-coin-widget{{'article'=>'assignmentType'}}
+          %weights-coin-widget.weights-coin-widget{{'article'=>'assignmentType'}}
           .predictor-title-right-span.left-padded =
           .predictor-weighted-point-total
             {{assignmentTypePointTotal(assignmentType,true,true,true) | number}}
