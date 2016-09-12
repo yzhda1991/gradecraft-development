@@ -1,10 +1,7 @@
-# .student-panel
-
 # Main directive for the student side panel
 @gradecraft.directive 'studentPanel', [ 'StudentPanelService', (StudentPanelService)->
 
   return {
-    restrict: 'C'
     scope: {
       context: '='
     }
