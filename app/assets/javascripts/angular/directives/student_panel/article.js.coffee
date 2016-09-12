@@ -1,11 +1,8 @@
-# .student-panel-article
-
 # Takes an Assignment, Badge, or Challenge and presents the detailed information
 # in the student side panel.
 @gradecraft.directive 'studentPanelArticle', ['StudentPanelService', "PredictorService", (StudentPanelService, PredictorService)->
 
   return {
-    restrict: 'C'
     scope: {
       article: '='
       icons: '='
