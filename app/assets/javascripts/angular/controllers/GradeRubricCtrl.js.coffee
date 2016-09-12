@@ -3,6 +3,7 @@
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
   $scope.criterionGrades = RubricService.criterionGrades
+  $scope.updateCriterion = RubricService.updateCriterion
   $scope.grade = RubricService.grade
   $scope.updateGrade = RubricService.updateGrade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions

@@ -28,6 +28,18 @@
       criterionGrades[cg.attributes.criterion_id] = criterionGrade
     )
 
+  updateCriterion = (criterion, field)->
+    assignment = criterion.$scope.assignment
+    requestData = {}
+    requestData[field] = criterion[field]
+    $http.put("/api/assignments/#{assignment.id}/students/#{assignment.scope.id}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
+      (data, status)->
+        console.log(data)
+    )
+    .error((err)->
+      console.log(err)
+    )
+
   getCriterionGrades = (assignment)->
     if assignment.scope.type == "student"
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((res)->
@@ -130,6 +142,7 @@
       assignment: assignment,
       badges: badges,
       criteria: criteria,
+      updateCriterion: updateCriterion,
       criterionGrades: criterionGrades,
       grade: grade,
       updateGrade: updateGrade,
