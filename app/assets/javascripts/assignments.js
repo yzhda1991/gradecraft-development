@@ -172,10 +172,14 @@ $('ul.level-tabs li').click(function(){
   var tabId = $(this).attr('data-tab');
 
     $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
+    $('#' + criterionId + ' ul.level-tabs li').attr('aria-selected', 'false');
     $('#' + criterionId + ' .tab-panel').removeClass('selected');
+    $('#' + criterionId + ' .tab-panel').attr('aria-selected', 'false');
 
     $(this).addClass('selected');
+    $(this).attr('aria-selected', 'true');
     $("#" + tabId).addClass('selected');
+    $("#" + tabId).attr('aria-selected', 'true');
   })
 
 // toggle class analytics on rubric feedback
