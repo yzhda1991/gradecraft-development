@@ -98,6 +98,10 @@ en:
       title: "#{name}'s Grade for #{@grade.assignment.name}"
     edit:
       title: "Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}"
+    importers: 
+      title: "Grade Import"
+    csv: 
+      title: "Import Grades for #{@assignment.name}"
   groups: 
     index:
       title: "#{current_course.group_term.pluralize}"
