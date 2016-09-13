@@ -25,5 +25,9 @@ module Submissions
     def group_id
       properties[:group_id]
     end
+
+    def submission_will_be_late?
+      assignment.due_at.present? && assignment.due_at < DateTime.now
+    end
   end
 end

@@ -309,17 +309,33 @@ describe Submission do
     end
   end
 
-  describe "#late?" do
-    it "returns true if the submission was created after the due date" do
-      assignment = create(:assignment, due_at: Date.today - 1)
-      submission = create(:submission, assignment: assignment)
-      expect(submission.late?).to eq(true)
+  describe "#check_and_set_late_status!" do
+    context "when the assignment has a due_at date" do
+      context "with a submission that is late" do
+        it "sets the late attribute as true" do
+          assignment = create(:assignment, due_at: DateTime.now - 1)
+          submission = create(:submission, assignment: assignment, submitted_at: DateTime.now)
+          expect(submission.check_and_set_late_status!).to eq true
+          expect(submission.late?).to eq(true)
+        end
+      end
+
+      context "with a submission that is not late" do
+        it "sets the late attribute as false" do
+          assignment = create(:assignment, due_at: DateTime.now)
+          submission = create(:submission, assignment: assignment, submitted_at: DateTime.now - 1)
+          expect(submission.check_and_set_late_status!).to eq true
+          expect(submission.late?).to eq(false)
+        end
+      end
     end
 
-    it "returns false if the submission was created before the due date" do
-      assignment = create(:assignment, due_at: Date.today + 1)
-      submission = create(:submission, assignment: assignment)
-      expect(submission.late?).to eq(false)
+    context "when the assignment does not have a due_at date" do
+      it "returns false" do
+        assignment = create(:assignment)
+        submission = create(:submission, assignment: assignment)
+        expect(submission.check_and_set_late_status!).to eq false
+      end
     end
   end
 

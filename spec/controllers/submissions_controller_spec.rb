@@ -79,7 +79,7 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
-      it "creates the submission with valid attributes"  do
+      it "creates the submission with valid attributes" do
         params = attributes_for(:submission)
         expect{ post :create, assignment_id: @assignment.id, submission: params }.to change(Submission,:count).by(1)
       end
@@ -101,6 +101,12 @@ describe SubmissionsController do
         post :create, assignment_id: @assignment.id, submission: params
         expect(response).to render_template :new
       end
+
+      it "checks if the submission is late" do
+        params = attributes_for(:submission)
+        expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :create, assignment_id: @assignment.id, submission: params
+      end
     end
 
     describe "POST update" do
@@ -111,6 +117,12 @@ describe SubmissionsController do
         post :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(response).to redirect_to(assignment_submission_path(@assignment, @submission, student_id: @student.id))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
+      end
+
+      it "checks if the submission is late" do
+        params = attributes_for(:submission)
+        expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end
     end
 
@@ -152,6 +164,13 @@ describe SubmissionsController do
         submission = Submission.unscoped.last
         expect(submission.submitted_at).to be > current_time
       end
+
+      it "checks if the submission is late" do
+        params = attributes_for(:submission, student_id: @student.id)
+          .merge(assignment_id: @assignment_id)
+        expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :create, assignment_id: @assignment.id, submission: params
+      end
     end
 
     describe "PUT update" do
@@ -169,6 +188,12 @@ describe SubmissionsController do
         current_time = DateTime.now
         put :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(@submission.reload.submitted_at).to be > current_time
+      end
+
+      it "checks if the submission is late" do
+        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :update, assignment_id: @assignment.id, id: @submission, submission: params
       end
     end
 

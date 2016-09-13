@@ -1,5 +1,4 @@
-require "active_support/inflector"
-require "spec_helper"
+require "rails_spec_helper"
 require "./app/presenters/submissions/new_presenter"
 
 describe Submissions::NewPresenter do

@@ -630,8 +630,8 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.integer  "student_id"
     t.string   "feedback",           limit: 255
     t.string   "comment",            limit: 255
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "link",               limit: 255
     t.text     "text_comment"
     t.integer  "creator_id"
@@ -642,6 +642,7 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.integer  "assignment_type_id"
     t.string   "assignment_type",    limit: 255
     t.datetime "submitted_at"
+    t.boolean  "late",                           default: false, null: false
   end
 
   add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
