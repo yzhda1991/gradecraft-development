@@ -24,15 +24,13 @@ describe Assignments::GradesController do
 
     describe "PUT update_status" do
       it "updates the grade status for grades" do
-        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id],
-                                      grade: { status: "Graded" }}
+        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
         expect(grade.reload.status).to eq("Graded")
       end
 
       it "redirects to session if present"  do
         session[:return_to] = login_path
-        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id],
-                                      grade: { status: "Graded" }}
+        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
         expect(response).to redirect_to(login_path)
       end
 
@@ -49,6 +47,7 @@ describe Assignments::GradesController do
         submission = create(:submission, grade: grade, student: student,
                             assignment: assignment)
         get :export, params: { assignment_id: assignment }, format: :csv
+
         expect(response.body).to \
           include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
       end
@@ -91,8 +90,8 @@ describe Assignments::GradesController do
         student_2 = create(:user, last_name: "zzimmer", first_name: "aaron")
         student_3 = create(:user, last_name: "zzimmer", first_name: "zoron")
         [student_2,student_3].each {|s| s.courses << course }
-        expect{ get :mass_edit, params: { assignment_id: assignment.id }}.to \
-          change{Grade.count}.by(2)
+        expect { get :mass_edit, params: { assignment_id: assignment.id }}.to \
+          change { Grade.count }.by(2)
         expect(assigns(:grades)[1].student).to eq(student_2)
         expect(assigns(:grades)[2].student).to eq(student_3)
       end

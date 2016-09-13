@@ -20,18 +20,18 @@ describe API::PredictedEarnedChallengesController do
     describe "POST create" do
 
       it "creates a new predicted earned challenge" do
-        expect{ post :create, predicted_earned_challenge: params, format: :json }.to change(PredictedEarnedChallenge, :count).by(1)
+        expect{ post :create, params: { predicted_earned_challenge: params }, format: :json }.to change(PredictedEarnedChallenge, :count).by(1)
       end
 
       it "updates the predicted points for challenge and current user" do
-        post :create, predicted_earned_challenge: params, format: :json
+        post :create, params: { predicted_earned_challenge: params }, format: :json
         expect(PredictedEarnedChallenge.where(student: student, challenge: challenge).first.predicted_points).to eq(params[:predicted_points])
         expect(response.status).to eq(201)
       end
 
       it "renders a 400 if a prediction exists for challenge and student" do
         predicted_earned_challenge = create(:predicted_earned_challenge, challenge: challenge, student: student)
-        post :create, predicted_earned_challenge: params, format: :json
+        post :create, params: { predicted_earned_challenge: params }, format: :json
         expect(response.status).to eq(400)
       end
     end
@@ -40,13 +40,13 @@ describe API::PredictedEarnedChallengesController do
       it "updates the predicted points for a challenge" do
         predicted_earned_challenge = create(:predicted_earned_challenge, challenge: challenge, student: student)
         predicted_points = (challenge.full_points * 0.75).to_i
-        put :update, id: predicted_earned_challenge, predicted_earned_challenge: params, format: :json
+        put :update, params: { id: predicted_earned_challenge, predicted_earned_challenge: params }, format: :json
         expect(PredictedEarnedChallenge.where(student: student, challenge: challenge).first.predicted_points).to eq(predicted_points)
         expect(response.status).to eq(200)
       end
 
       it "renders a 404 if prediction not found" do
-        put :update, id: 0, predicted_earned_challenge: params, format: :json
+        put :update, params: { id: 0, predicted_earned_challenge: params }, format: :json
         expect(response.status).to eq(404)
       end
     end

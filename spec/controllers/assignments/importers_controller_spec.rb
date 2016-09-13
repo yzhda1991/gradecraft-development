@@ -33,13 +33,13 @@ describe Assignments::ImportersController do
                                 assignment_ids, course, assignment_type.id.to_s)
                           .and_return result
 
-        post :assignments_import, importer_provider_id: provider, id: course_id,
-          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
       end
 
       it "renders the results" do
-        post :assignments_import, importer_provider_id: provider, id: course_id,
-          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
 
         expect(response).to render_template :assignments_import_results
       end
@@ -50,8 +50,9 @@ describe Assignments::ImportersController do
           syllabus = double(course: {}, assignments: [])
           allow(controller).to receive(:syllabus).and_return syllabus
 
-          post :assignments_import, importer_provider_id: provider, id: course_id,
-            assignment_ids: assignment_ids, assignment_type_id: assignment_type.id
+          post :assignments_import, params: { importer_provider_id: provider,
+            id: course_id, assignment_ids: assignment_ids,
+            assignment_type_id: assignment_type.id }
 
           expect(response).to render_template :assignments
         end
@@ -60,7 +61,7 @@ describe Assignments::ImportersController do
 
     context "as a student" do
       it "redirects to the root url" do
-        post :assignments_import, importer_provider_id: provider, id: course_id
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id }
 
         expect(response).to redirect_to root_path
       end
@@ -84,13 +85,15 @@ describe Assignments::ImportersController do
         expect(Services::ImportsLMSAssignments).to \
           receive(:refresh).with(provider.to_s, access_token, assignment).and_return result
 
-        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+        post :refresh_assignment, params: { importer_provider_id: provider,
+                                            id: assignment.id }
       end
 
       it "redirects back to the assignment show view and displays a notice" do
         allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
 
-        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+        post :refresh_assignment, params: { importer_provider_id: provider,
+                                            id: assignment.id }
 
         expect(response).to redirect_to(assignment_path(assignment))
         expect(flash[:notice]).to \
@@ -103,7 +106,8 @@ describe Assignments::ImportersController do
                                             message: "This was not imported")
           allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
 
-          post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+          post :refresh_assignment, params: { importer_provider_id: provider,
+                                              id: assignment.id }
 
           expect(response).to redirect_to(assignment_path(assignment))
           expect(flash[:alert]).to eq "This was not imported"
@@ -113,7 +117,8 @@ describe Assignments::ImportersController do
 
     context "as a student" do
       it "redirects to the root url" do
-        post :refresh_assignment, importer_provider_id: provider, id: assignment.id
+        post :refresh_assignment, params: { importer_provider_id: provider,
+                                            id: assignment.id }
 
         expect(response).to redirect_to root_path
       end
