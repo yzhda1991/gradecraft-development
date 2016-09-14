@@ -4,10 +4,8 @@
 
 .context_menu
   %ul
-    %li
-      %a{:href => assignments_importers_path }
-        = glyph(:upload)
-        Import Assignments
+    %li= link_to glyph(:plus) + "New #{term_for :assignment}", new_assignment_path
+    %li= link_to glyph(:upload) + "Import #{term_for :assignments}", assignments_importers_path
 
 .pageContent
   = render partial: "layouts/alerts"

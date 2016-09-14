@@ -9,19 +9,26 @@
   ul
     padding: 0
     margin: 0 0 0 1rem
+    @media (max-width: $media-small-max)
+      margin: 0
+      .hide-for-small
+        display: none
     
     li
       list-style-type: none
       margin-right: -4px
       text-transform: capitalize
-      padding: .5rem .4rem
       font-size: .7rem
       display: inline-block
       border-right: 1px solid darken($color-blue-3, 20%)
       color: $color-blue-2
       border-radius: 0 !important
+      @media (max-width: 1200px)
+        font-size: .6rem
       &:first-child
         border-left: 1px solid darken($color-blue-3, 20%)
+        @media (max-width: $media-small-max)
+          border-left: none
 
       &:hover
         background-color: $color-blue-1
@@ -29,19 +36,9 @@
       & a
         color: $color-blue-2
         display: block
+        padding: .5rem .4rem
+        @media (max-width: 1200px)
+          padding: .5rem .35rem
         &:hover
           color: $color-blue-4
           text-decoration: none
-
-@media (max-width: 1200px)
-  .context_menu ul li
-    font-size: .6rem
-    padding: .5rem .35rem
-
-@media (max-width: $media-small-max)
-  .context_menu ul 
-    margin: 0
-    li:first-child
-      border-left: none
-    .hide-for-small
-      display: none
