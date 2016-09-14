@@ -12,10 +12,21 @@
     $scope.pointTotal = parseInt(pointTotal)
     $scope.services()
 
+
   $scope.services = () ->
+    # because getting Criteria requires badges from $scope
+    # we need to wait until the badges are created before
+    # making this call.
+    queCriteriaAfterBadges = ()->
+      if (RubricService.badgesAvailable() == false)
+        window.setTimeout(queCriteriaAfterBadges, 100)
+      else
+        RubricService.getCriteria($scope.assignmentId, $scope)
+
     promises = [
-      RubricService.getBadges()
-      RubricService.getCriteria($scope.assignmentId, $scope)]
+      RubricService.getBadges(),
+      queCriteriaAfterBadges()
+      ]
     $q.all(promises)
 
   # distill key/value pairs for criterion ids and relative order
