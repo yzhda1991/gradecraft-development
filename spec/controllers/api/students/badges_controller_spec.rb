@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe API::Students::PredictedEarnedBadgesController do
+describe API::Students::BadgesController do
   let(:world) { World.create.with(:course, :student, :badge) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
@@ -20,7 +20,7 @@ describe API::Students::PredictedEarnedBadgesController do
           expect(assigns(:badges)[0][attr]).to eq(world.badge[attr])
         end
         expect(assigns(:update_badges)).to be_falsey
-        expect(response).to render_template("api/predicted_earned_badges/index")
+        expect(response).to render_template("api/badges/index")
       end
     end
   end

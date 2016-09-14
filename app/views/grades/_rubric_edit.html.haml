@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{scope_type}', #{student_id})")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{scope_type}', #{grade.student_id})")
     .row
       #rubric-heading.columns
         %h3.text-right
@@ -116,4 +116,4 @@
     .right
       %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
 
-    %award-earned-badges(student-id="#{student_id}")
+    %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")

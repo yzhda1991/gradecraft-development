@@ -86,6 +86,8 @@ class User < ActiveRecord::Base
 
   has_many :grades, foreign_key: :student_id, dependent: :destroy
   has_many :predicted_earned_grades, foreign_key: :student_id, dependent: :destroy
+  has_many :predicted_earned_badges, foreign_key: :student_id, dependent: :destroy
+  has_many :predicted_earned_challenges, foreign_key: :student_id, dependent: :destroy
   has_many :graded_grades, foreign_key: :graded_by_id, class_name: "Grade"
   has_many :criterion_grades, foreign_key: :student_id, dependent: :destroy
 
@@ -229,7 +231,7 @@ class User < ActiveRecord::Base
 
   ### SCORE
   def cached_score_for_course(course)
-    @cached_score ||= course_memberships.where(course_id: course).first.score || 0 if 
+    @cached_score ||= course_memberships.where(course_id: course).first.score || 0 if
       course_memberships.where(course_id: course).first.present?
   end
 
@@ -242,7 +244,7 @@ class User < ActiveRecord::Base
       user_score: user_score
     }
   end
-  
+
   # Checking to see if a student has any positive predictions for a course
   def predictions_for_course?(course)
     predicted_earned_grades.for_course(course).predicted_to_be_done.present?
@@ -461,7 +463,7 @@ class User < ActiveRecord::Base
   def has_group_for_assignment?(assignment)
     assignment.has_groups? && group_for_assignment(assignment).present?
   end
-  
+
   def last_course_login(course)
     course_memberships.where(course: course).first.last_login_at
   end

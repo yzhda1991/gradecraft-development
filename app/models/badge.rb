@@ -3,9 +3,6 @@ class Badge < ActiveRecord::Base
   include UnlockableCondition
   include MultipleFileAttributes
 
-  # grade points available to the predictor from the assignment controller
-  attr_accessor :prediction
-
   acts_as_list scope: :course
 
   mount_uploader :icon, BadgeIconUploader

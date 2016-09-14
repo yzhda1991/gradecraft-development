@@ -27,11 +27,30 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
       'api/'
 
   # transfer models from api results into the model array
-  loadMany = (modelArray, res)->
-    _.each(res.data, (item)->
+  loadMany = (modelArray, results, options={"include":[]})->
+    _.each(results.data, (item)->
+
       # attach JSON API type to attributes ("badges", "assignments", etc.)
       item.attributes.type = item.type
+
+      # attach associated models from included list within
+      _.each(options.include, (included)->
+        return if !results.included || !item.relationships[included]
+        o =  _.find(results.included,
+                    {id: item.relationships[included].data.id,
+                    type: item.relationships[included].data.type}
+            )
+        item.attributes[included] = o.attributes if o
+      )
+
       modelArray.push(item.attributes)
+    )
+
+  # transfer models of a type from the json included section
+  loadFromIncluded = (modelArray, type, results)->
+    _.each(results.included, (item)->
+      if item.type == type
+        modelArray.push(item.attributes)
     )
 
   return {
@@ -39,5 +58,6 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     setTermFor: setTermFor
     uriPrefix: uriPrefix
     loadMany: loadMany
+    loadFromIncluded: loadFromIncluded
   }
 )

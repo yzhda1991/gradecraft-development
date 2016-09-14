@@ -1,36 +1,6 @@
 module PredictorData
   extend ActiveSupport::Concern
 
-  def predictor_badges(student)
-    current_course.badges.select(
-      :can_earn_multiple_times,
-      :course_id,
-      :description,
-      :full_points,
-      :icon,
-      :id,
-      :name,
-      :position,
-      :visible,
-      :visible_when_locked,
-    ).map do |badge|
-      prediction = badge.find_or_create_predicted_earned_badge(student.id)
-      if current_user_is_student? && !student_impersonation?
-        badge.prediction = {
-          id: prediction.id,
-          predicted_times_earned: prediction.times_earned_including_actual
-        }
-        badge
-      else
-        badge.prediction = {
-          id: prediction.id,
-          predicted_times_earned: prediction.actual_times_earned
-        }
-        badge
-      end
-    end
-  end
-
   def predictor_challenges(student)
     return [] unless challenge_conditions_met? student
 
