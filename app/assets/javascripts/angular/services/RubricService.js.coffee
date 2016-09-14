@@ -1,5 +1,10 @@
 @gradecraft.factory 'RubricService', ['CourseBadge', 'Criterion', 'CriterionGrade', '$http', (CourseBadge, Criterion, CriterionGrade, $http) ->
 
+  _badgesAvailable = false
+
+  badgesAvailable = ()->
+    _badgesAvailable
+
   pointsPossible = 0
   thresholdPoints = 0
   assignment = {}
@@ -59,6 +64,7 @@
         courseBadge = new CourseBadge(badge.attributes)
         badges[badge.id] = courseBadge
       )
+      _badgesAvailable = true
     )
 
   getGrade = (assignment)->
@@ -133,6 +139,7 @@
     points
 
   return {
+      badgesAvailable: badgesAvailable,
       getCriteria: getCriteria,
       getCriterionGrades: getCriterionGrades,
       getBadges: getBadges,

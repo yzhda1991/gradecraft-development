@@ -5,7 +5,12 @@
       @id = attrs.id or null
       @criterion = criterion
       @badges = {}
+
+      # This call requires that badges are fully loaded!
+      # There is a timeout in the RubricCtrl to accomodate this,
+      # without it badges are not guaranteed.
       @availableBadges = angular.copy($scope.courseBadges)
+
       @selectedBadge = ""
       @id = if attrs.id then attrs.id else null
 
