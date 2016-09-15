@@ -14,7 +14,7 @@ module AnalyticsHelper
   end
 
   def analytics_switcher_option(path, label, term)
-    content_tag :option, :'data-path' => path, :selected => ('selected' if current_page?(path)) do "#{(term_for term).titleize} Analytics"
+    content_tag :option, 'data-path': path, selected: ('selected' if current_page?(path)) do "#{(term_for term).titleize} Analytics"
     end
   end
 end
