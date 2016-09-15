@@ -1,8 +1,21 @@
-.badge-show-page
-  h4
+@import layout
+
+.show-page-wrapper
+  h3
     font-size: 1.2rem
     font-weight: 400
     margin-top: 1.5rem
+    &:first-of-type
+      margin-top: 0
 
   p
     margin: .5rem 0
+
+  .full-event-description
+    img
+      float: left
+      margin-right: 1rem
+      @media (max-width: $media-small-max)
+        float: none
+        margin: 0.5rem auto
+        display: block

@@ -17,21 +17,14 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .show-page-wrapper.badge-show-page
-    %img{:src => @event.media }
+  .show-page-wrapper
+    - if @event.media.present?
+      %img{:src => @event.media }
+      %p.photo-caption= @event.media_caption
+      %p.photo-credit= "Media credit: #{@event.media_credit}"
 
-    %h4 Event Date
+    %h3 Event Date
     %p= "#{@event.open_at} - #{@event.due_at}"
 
-    %h4 Description
-    %p= raw @event.description
-
-    -if current_user_is_staff?
-      %h4 Thumbnail
-      %img{:src =>  @event.thumbnail }
-
-      %h4 Media credit
-      %p= @event.media_credit
-
-      %h4 Media caption
-      %p= @event.media_caption
+    %h3 Description
+    .full-event-description= raw @event.description
