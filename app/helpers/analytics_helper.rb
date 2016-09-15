@@ -12,4 +12,9 @@ module AnalyticsHelper
       concat link_to "Refresh", "#", data: {refresh_chart: chart_id}, class: "button"
     end
   end
+
+  def analytics_switcher_option(path, label, term)
+    content_tag :option, :'data-path' => path, :selected => ('selected' if current_page?(path)) do "#{(term_for term).titleize} Analytics"
+    end
+  end
 end

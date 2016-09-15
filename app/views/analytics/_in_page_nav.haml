@@ -1,8 +1,5 @@
 %select#analytics-switcher
-  %option{'data-path' => analytics_students_path, :selected => ('selected' if current_page?(analytics_students_path))}= "#{term_for :student} Analytics"
-
-  %option{'data-path' => analytics_staff_path, :selected => ('selected' if current_page?(analytics_staff_path))}= "#{term_for :team_leader} Analytics"
-
-  %option{'data-path' => per_assign_path, :selected => ('selected' if current_page?(per_assign_path))}= "#{term_for :assignment} Analytics" 
-
-  %option{'data-path' => assignment_types_path, :selected => ('selected' if current_page?(assignment_types_path))}= "#{term_for :assignment} Type Analytics"
+  = analytics_switcher_option(analytics_students_path, 'Analytics', 'student')
+  = analytics_switcher_option(analytics_staff_path, 'Analytics', 'team_leader')
+  = analytics_switcher_option(per_assign_path, 'Analytics', 'assignment')
+  = analytics_switcher_option(assignment_types_path, 'Analytics', 'assignment_type')

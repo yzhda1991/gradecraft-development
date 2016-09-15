@@ -2,38 +2,10 @@
 
 %h2.pagetitle#tableCaption= @title
 
-= render partial: "analytics/buttons"
-
 .pageContent
   = render partial: "layouts/alerts"
 
   = render partial: "analytics/in_page_nav"
-
-  %table.dynatable{"aria-describedby" => "tableCaption"}
-    %thead
-      %tr
-        %th{scope: "col"} Name
-        %th{scope: "col", "data-dynatable-sorts": "numericScore"} Max Points
-        %th{scope: "col"}
-          %span.sr-only Actions
-    %tbody
-      - @assignment_types.each do |assignment_type|
-        %tr
-          %td= assignment_type.name
-          %td= points assignment_type.total_points
-          %td
-            %ul.button-bar.right
-
-              %li
-                %a{:href => edit_assignment_type_path(assignment_type), class: "button"}
-                  %i.fa.fa-edit.fa-fw
-                  Edit
-                  %span.sr-only= assignment_type.name
-              %li
-                %a{:href => export_scores_assignment_type_path(assignment_type.id, course_id: current_course.id, format: "csv"), class: "button"}
-                  %i.fa.fa-cloud-download.fa-fw
-                  Download Scores
-
 
   %h3.subtitle= "#{term_for :student} Scores"
 
