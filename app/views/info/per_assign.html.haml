@@ -4,10 +4,10 @@
 
 = render partial: "analytics/buttons"
 
-= render partial: "analytics/in_page_nav"
-
 .pageContent
   = render "layouts/alerts"
+
+  = render partial: "analytics/in_page_nav"
 
   - @assignment_types.each do |assignment_type|
     - assignments_for_type = assignment_type.assignments

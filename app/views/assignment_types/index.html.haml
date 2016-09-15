@@ -4,10 +4,10 @@
 
 = render partial: "analytics/buttons"
 
-= render partial: "analytics/in_page_nav"
-
 .pageContent
   = render partial: "layouts/alerts"
+
+  = render partial: "analytics/in_page_nav"
 
   %table.dynatable{"aria-describedby" => "tableCaption"}
     %thead
