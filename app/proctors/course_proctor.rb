@@ -15,7 +15,7 @@ class CourseProctor
 
   def updatable?(user)
     return false if course.nil? || user.nil?
-    user.is_professor?(course) || user.is_admin?(course)
+    user.is_staff?(course) || user.is_admin?(course)
   end
 
   def destroyable?(user)
