@@ -17,9 +17,9 @@ describe CriteriaController do
 
     describe "POST create" do
       it "creates a new criterion" do
-        @assignment = create(:assignment, course: @course)
-        @rubric = create(:rubric, assignment: @assignment)
-        post :create, criterion: { max_points: 100, name: "Test", order: 1, rubric_id: @rubric.id }
+        assignment = create(:assignment, course: @course)
+        rubric = create(:rubric, assignment: assignment)
+        post :create, criterion: { max_points: 100, name: "Test", order: 1, rubric_id: rubric.id }
         criterion = Criterion.unscoped.last
         expect(criterion.name).to eq "Test"
       end
