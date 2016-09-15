@@ -24,7 +24,7 @@ describe AssignmentTypesController do
     describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
-        expect(assigns(:title)).to eq("Assignment types")
+        expect(assigns(:title)).to eq("Assignment types Analytics")
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:index)
       end
