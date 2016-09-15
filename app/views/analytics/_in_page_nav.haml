@@ -1,0 +1,8 @@
+%select#analytics-switcher
+  %option{'data-path' => per_assign_path}= "#{term_for :assignment} Analytics" 
+
+  %option{'data-path' => assignment_types_path}= "#{term_for :assignment} Type Analytics"
+
+  %option{'data-path' => analytics_students_path}= "#{term_for :student} Analytics"
+
+  %option{'data-path' => analytics_staff_path}= "#{term_for :team_leader} Analytics"

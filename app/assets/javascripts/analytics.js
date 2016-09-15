@@ -387,3 +387,8 @@ $(function () {
   $selects = $('[data-for-chart]');
   loadAnalytics();
 });
+
+// Select menu for analytics pages
+$("#analytics-switcher").change(function() {
+  location = $("#analytics-switcher option:selected").attr('data-path');
+});
