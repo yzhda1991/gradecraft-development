@@ -1,21 +1,43 @@
+@import color
 @import layout
 
 .show-page-wrapper
+  section
+    margin-bottom: 1.5rem
+    font-weight: 300
+
   h3
     font-size: 1.2rem
     font-weight: 400
-    margin-top: 1.5rem
-    &:first-of-type
-      margin-top: 0
 
   p
     margin: .5rem 0
 
-  .full-event-description
-    img
-      float: left
-      margin-right: 1rem
-      @media (max-width: $media-small-max)
-        float: none
-        margin: 0.5rem auto
-        display: block
+.event-description-show
+  img
+    float: left
+    margin-right: 1rem
+    @media (max-width: $media-small-max)
+      float: none
+      margin: 0.5rem auto
+      display: block
+
+.event-image-show-wrapper
+  max-width: 250px
+  @media (max-width: $media-small-max)
+    margin: 0 auto
+    display: block
+  img
+    max-width: 100%
+
+  &.image-with-caption
+    border: 1px solid $color-grey-6
+
+  .photo-details
+    border-top: 1px solid $color-grey-6
+
+  .photo-caption, .photo-credit
+    font-size: 0.7rem
+    font-weight: 300
+    text-align: center
+    margin: 0

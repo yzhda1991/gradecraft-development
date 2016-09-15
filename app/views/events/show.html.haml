@@ -18,13 +18,19 @@
   = render partial: "layouts/alerts"
 
   .show-page-wrapper
-    - if @event.media.present?
-      %img{:src => @event.media }
-      %p.photo-caption= @event.media_caption
-      %p.photo-credit= "Media credit: #{@event.media_credit}"
+    %section
+      %h3 Event Date
+      %p= "#{@event.open_at} - #{@event.due_at}"
 
-    %h3 Event Date
-    %p= "#{@event.open_at} - #{@event.due_at}"
+    %section
+      %h3 Description
+      .event-description-show.clearfix= raw @event.description
 
-    %h3 Description
-    .full-event-description= raw @event.description
+    %section
+      - if @event.media.present?
+        .event-image-show-wrapper{class: ('image-with-caption' if @event.media_caption? || @event.media_credit?)}
+          %img.event-image-show{src: @event.media}
+          - if @event.media_caption.present? || @event.media_credit.present?
+            .photo-details
+              %p.photo-caption= @event.media_caption
+              %p.photo-credit= "Credit: #{@event.media_credit}"
