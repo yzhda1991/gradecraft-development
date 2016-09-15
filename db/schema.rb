@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160907000216) do
+ActiveRecord::Schema.define(version: 20160915161739) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
@@ -625,10 +626,10 @@ ActiveRecord::Schema.define(version: 20160907000216) do
   add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "assignment_id", null: false
+    t.integer  "assignment_id",                      null: false
     t.integer  "student_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.string   "link"
     t.text     "text_comment"
     t.integer  "creator_id"
@@ -639,7 +640,7 @@ ActiveRecord::Schema.define(version: 20160907000216) do
     t.integer  "assignment_type_id"
     t.string   "assignment_type"
     t.datetime "submitted_at"
-    t.boolean  "late",                           default: false, null: false
+    t.boolean  "late",               default: false, null: false
   end
 
   add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
