@@ -18,8 +18,7 @@ module Services
         context[:raw_params]["criterion_grades"].each do |params|
           criterion_id = params["criterion_id"]
           cg = CriterionGrade.find_or_create(assignment.id,criterion_id,student.id)
-          cg.update_attributes({level_id: params["level_id"],
-                                points: params["points"],
+          cg.update_attributes({points: params["points"],
                                 comments: params["comments"]
                               })
           criterion_grades << cg

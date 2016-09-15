@@ -6,7 +6,7 @@ GradeCraft::Application.routes.draw do
 
   #1. Analytics & Charts
   #2. Announcements
-  #3. Assignments, Submissions, Tasks, Grades
+  #3. Assignments, Submissions, Grades
   #4. Assignment Types
   #5. Assignment Type Weights
   #6. Badges
@@ -46,7 +46,7 @@ GradeCraft::Application.routes.draw do
   #2. Announcements
   resources :announcements, except: [:destroy, :edit, :update]
 
-  #3. Assignments, Submissions, Tasks, Grades
+  #3. Assignments, Submissions, Grades
   namespace :assignments do
     resources :importers, param: :provider_id, only: :index do
       get :courses
@@ -262,7 +262,6 @@ GradeCraft::Application.routes.draw do
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
-    resources :student_academic_histories, except: :index
     member do
       get :grade_index
       get :recalculate

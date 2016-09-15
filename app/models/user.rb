@@ -75,9 +75,6 @@ class User < ActiveRecord::Base
 
   belongs_to :current_course, class_name: "Course", touch: true
 
-  has_many :student_academic_histories, foreign_key: :student_id, dependent: :destroy
-  accepts_nested_attributes_for :student_academic_histories
-
   has_many :assignments, through: :grades
 
   has_many :unlock_states, foreign_key: :student_id, dependent: :destroy

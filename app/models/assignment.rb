@@ -28,9 +28,6 @@ class Assignment < ActiveRecord::Base
   has_many :assignment_groups, dependent: :destroy
   has_many :groups, through: :assignment_groups
 
-  # Multipart assignments
-  has_many :tasks, as: :assignment, dependent: :destroy
-
   # Student created submissions to be graded
   has_many :submissions, dependent: :destroy
 

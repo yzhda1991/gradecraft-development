@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 
 describe API::CriterionGradesController do
-  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
+  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :level, :criterion_grade, :badge) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
   context "as professor" do
@@ -39,7 +39,6 @@ describe API::CriterionGradesController do
     end
 
     describe "PUT update" do
-      let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
       let(:params) do
         RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, student_id: world.student.id)
       end
@@ -80,7 +79,7 @@ describe API::CriterionGradesController do
         expect { put :update, params }.to change { EarnedBadge.count }.by(1)
       end
 
-      it "doesn't reaward existing level badges" do
+      it "doesn't re-award existing level badges" do
         expect { put :update, params }.to change { EarnedBadge.count }.by(1)
         expect { put :update, params }.to change { EarnedBadge.count }.by(0)
       end

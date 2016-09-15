@@ -7,7 +7,7 @@ class World
     attr_reader :assignments, :assignment_types, :badges, :challenges,
       :courses, :course_memberships, :criteria, :criterion_grades, :grades,
       :grade_scheme_elements, :groups, :rubrics, :students, :professors,
-      :teams, :users
+      :teams, :users, :levels
 
     def assignment
       assignments.first
@@ -35,6 +35,10 @@ class World
 
     def criterion_grade
       criterion_grades.first
+    end
+    
+    def level
+      levels.first
     end
 
     def grade
@@ -124,14 +128,23 @@ class World
       rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
       criteria << FactoryGirl.create(:criterion, attributes.merge(rubric: rubric))
     end
+    
+    def create_level(attributes={})
+      assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
+      rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
+      criterion = attributes.delete(:criterion) || self.criterion || FactoryGirl.build(:criterion, assignment: assignment)
+      levels << FactoryGirl.create(:level, attributes.merge(criterion: criterion))
+      self
+    end
 
     def create_criterion_grade(attributes={})
       assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
       student = attributes.delete(:student) || self.student || FactoryGirl.build(:user)
       rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
       criterion = attributes.delete(:criterion) || self.criterion || FactoryGirl.build(:criterion, assignment: assignment)
+      level = attributes.delete(:level) || self.level || FactoryGirl.build(:level, criterion: criterion)
       criterion_grades << FactoryGirl.create(:criterion_grade, \
-        attributes.merge(assignment: assignment, student: student, criterion: criterion))
+        attributes.merge(assignment: assignment, student: student, criterion: criterion, level: level))
       self
     end
 
@@ -202,6 +215,7 @@ class World
       @rubrics = []
       @teams = []
       @users = []
+      @levels = []
     end
   end
 end

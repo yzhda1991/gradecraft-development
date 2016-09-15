@@ -6,7 +6,6 @@
       %tr
         %th ID
         %th ID | Assignment
-        %th Task
         %th Submission
         %th Final Score
         %th{ "data-dynatable-sorts" => "numericScore" } Score With Weights
@@ -21,7 +20,6 @@
         %tr
           %td= g.id
           %td= "#{g.assignment_id} • #{g.assignment.try(:name)}"
-          %td= g.task.name if g.task.present?
           %td= g.submission.id if g.submission.present?
           %td= g.final_points
           %td= g.try(:score)

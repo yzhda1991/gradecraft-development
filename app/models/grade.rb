@@ -10,8 +10,7 @@ class Grade < ActiveRecord::Base
   belongs_to :student, class_name: "User", touch: true
   belongs_to :team, touch: true
   belongs_to :submission
-  belongs_to :task, touch: true # Optional
-  belongs_to :group, polymorphic: true, touch: true # Optional
+  belongs_to :group, touch: true # Optional
   belongs_to :graded_by, class_name: "User", touch: true
 
   has_one :imported_grade, dependent: :destroy
@@ -153,8 +152,7 @@ class Grade < ActiveRecord::Base
 
   def cache_associations
     self.student_id ||= submission.try(:student_id)
-    self.task_id ||= submission.try(:task_id)
-    self.assignment_id ||= submission.try(:assignment_id) || task.try(:assignment_id)
+    self.assignment_id ||= submission.try(:assignment_id)
     self.assignment_type_id ||= assignment.try(:assignment_type_id)
     self.course_id ||= assignment.try(:course_id)
   end
