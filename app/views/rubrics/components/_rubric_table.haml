@@ -2,9 +2,9 @@
 
 - if include_grade_info
   %h4.class-analytics-label Show class analytics
-  %label.switch
+  %label.rubric-switch-socket
     %input#class-analytics-toggle{:type => "checkbox", :checked => true}
-    .switch-slider.round
+    .rubric-switch-handle.round
 
   #rubric-graded
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
