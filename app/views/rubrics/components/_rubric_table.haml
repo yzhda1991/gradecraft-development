@@ -7,7 +7,7 @@
     .slider.round
 
   #student-rubric-feedback
-    = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
+    = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
 - else
   #rubric-shell
-    = render partial: "rubrics/components/rubric_shell", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
+    = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }

@@ -305,10 +305,10 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.string   "name"
     t.text     "description"
     t.integer  "max_points"
-    t.integer  "rubric_id"
-    t.integer  "order"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "rubric_id",                               null: false
+    t.integer  "order",                                   null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.integer  "full_credit_level_id"
     t.integer  "level_count",                 default: 0
     t.integer  "meets_expectations_level_id"
@@ -391,12 +391,12 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.integer  "grade_scheme_id"
     t.string   "description"
     t.integer  "highest_points"
-    t.integer  "course_id"
+    t.integer  "course_id",                  null: false
   end
 
   create_table "grades", force: :cascade do |t|
     t.integer  "raw_points"
-    t.integer  "assignment_id"
+    t.integer  "assignment_id",                                          null: false
     t.text     "feedback"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -409,16 +409,13 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.boolean  "substantial"
     t.integer  "final_points"
     t.integer  "submission_id"
-    t.integer  "course_id"
-    t.boolean  "shared"
-    t.integer  "student_id"
-    t.integer  "task_id"
+    t.integer  "course_id",                                              null: false
+    t.integer  "student_id",                                             null: false
     t.integer  "group_id"
     t.string   "group_type"
     t.integer  "score"
     t.integer  "assignment_type_id"
     t.integer  "full_points"
-    t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
     t.integer  "predicted_score",            default: 0,     null: false
@@ -438,13 +435,10 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
   add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
-  add_index "grades", ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
-  add_index "grades", ["task_id"], name: "index_grades_on_task_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "group_id"
