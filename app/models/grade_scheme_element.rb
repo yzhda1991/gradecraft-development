@@ -52,6 +52,6 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   def count_students_earned
-    course.course_memberships.where(earned_grade_scheme_element_id: self.id).count
+    course.course_memberships.being_graded.where(earned_grade_scheme_element_id: self.id).count
   end
 end
