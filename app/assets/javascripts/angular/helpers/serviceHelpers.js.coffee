@@ -35,7 +35,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
       # attach associated models from included list within
       _.each(options.include, (included)->
-        return if !results.included || !item.relationships[included]
+        return if !results.included || !item.relationships || !item.relationships[included]
         o =  _.find(results.included,
                     {id: item.relationships[included].data.id,
                     type: item.relationships[included].data.type}

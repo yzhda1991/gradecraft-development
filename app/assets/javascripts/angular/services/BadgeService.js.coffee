@@ -4,7 +4,7 @@
 @gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   badges = []
-  predictions = []
+  earned_badges = []
   update = {}
 
   termFor = (article)->
@@ -17,19 +17,21 @@
       )
     total
 
+  studentEarnedBadgeForGrade = (studentId,badgeId,gradeId)->
+    _.find(earned_badges,{ badge_id: parseInt(badgeId), grade_id: parseInt(gradeId) })
+
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of badges
   # includes a student's earned badges and predictions
   getBadges = (studentId)->
     $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
-      GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
+      GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction','earned_badges']})
       _.each(badges, (badge)->
         # add null prediction when JSON contains no prediction
         badge.prediction = {predicted_times_earned: 0} if !badge.prediction
       )
-      #example call to include associated model:
-      #GradeCraftAPI.loadFromIncluded(predictions,"predicted_earned_badges", response)
+      GradeCraftAPI.loadFromIncluded(earned_badges,"earned_badges", response)
       GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
       GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
       update.predictions = response.meta.update_predictions
@@ -53,6 +55,8 @@
       getBadges: getBadges
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge
+      studentEarnedBadgeForGrade: studentEarnedBadgeForGrade
       badges: badges
+      earned_badges: earned_badges
   }
 ]

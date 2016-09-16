@@ -3,6 +3,12 @@
     vm = this
     vm.BadgeService = BadgeService
     BadgeService.getBadges(vm.studentId)
+
+    vm.badgeEarnedForGrade = (badge)->
+      BadgeService.studentEarnedBadgeForGrade(vm.studentId,badge.id,vm.gradeId)
+
+    vm.awardBadge = (badge)->
+      console.log("badge awarded!");
   ]
 
   {
