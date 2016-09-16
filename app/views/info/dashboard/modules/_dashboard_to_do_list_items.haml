@@ -1,37 +1,36 @@
 %ul{:class => "todo-list-assignments #{list_class}"}
-  - cache multi_cache_key :student_dashboard_todo_list, current_student, current_course do
-    - assignment_list.each do |assignment|
-      %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
-        - if presenter.submittable?(assignment)
-          - if assignment.is_individual?
-            .right= render "students/submissions", assignment: assignment
-          - else
-            .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
-        - if presenter.starred?(assignment)
-          %a.starred
-            %i.fa.fa-flag.fa-fw.orange
-          .display_on_hover.hover-style
-            You have included this #{(term_for :assignment).downcase} in your grade prediction
-        - if presenter.submitted?(assignment)
-          %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment
-          .small.uppercase= "#{assignment.assignment_type.name}"
+  - assignment_list.each do |assignment|
+    %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
+      - if presenter.submittable?(assignment)
+        - if assignment.is_individual?
+          .right= render "students/submissions", assignment: assignment
         - else
-          - if assignment.name_visible_for_student?(current_student)
-            %span.bold.assignment-name= link_to assignment.name, grade_path(Grade.find_or_create(assignment.id, current_student.id))
-          - else
-            %span.bold.assignment-name= "Locked #{(term_for :assignment ).titleize}"
-            %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
-          .small.uppercase= "#{assignment.assignment_type.name}"
-        - if assignment.due_at?.present?
-          .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
-  - if assignment_list.empty?
-    %li.dashboard-message
-      - if list_class == "course-planner-list"
-        - if presenter.due_dates?
-          You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
+          .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
+      - if presenter.starred?(assignment)
+        %a.starred
+          %i.fa.fa-flag.fa-fw.orange
+        .display_on_hover.hover-style
+          You have included this #{(term_for :assignment).downcase} in your grade prediction
+      - if presenter.submitted?(assignment)
+        %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment
+        .small.uppercase= "#{assignment.assignment_type.name}"
+      - else
+        - if assignment.name_visible_for_student?(current_student)
+          %span.bold.assignment-name= link_to assignment.name, grade_path(Grade.find_or_create(assignment.id, current_student.id))
         - else
-          This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
-      - elsif list_class == "my-planner-list"
-        You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the 
-        = link_to "grade predictor", predictor_path
-        to add #{(term_for :assignment).downcase.pluralize} to this planner.
+          %span.bold.assignment-name= "Locked #{(term_for :assignment ).titleize}"
+          %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
+        .small.uppercase= "#{assignment.assignment_type.name}"
+      - if assignment.due_at?.present?
+        .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
+- if assignment_list.empty?
+  %li.dashboard-message
+    - if list_class == "course-planner-list"
+      - if presenter.due_dates?
+        You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
+      - else
+        This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
+    - elsif list_class == "my-planner-list"
+      You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the 
+      = link_to "grade predictor", predictor_path
+      to add #{(term_for :assignment).downcase.pluralize} to this planner.
