@@ -191,7 +191,7 @@ $('#class-analytics-toggle').change(function(){
   }
 });
 
-// for student rubric feedback on mobile
+// Show only earned level on mobile for rubric grades regardless of previous selection
 function rubricScreenSize() {
   if ($('.level-tab').css('display') === 'none') {
     $('.level-tab.earned').trigger('click');
