@@ -6,8 +6,8 @@
     %input#class-analytics-toggle{:type => "checkbox", :checked => true}
     .switch-slider.round
 
-  #student-rubric-feedback
+  #rubric-graded
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
 - else
-  #rubric-shell
+  #rubric-ungraded
     = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
