@@ -4,7 +4,7 @@
   %h4.class-analytics-label Show class analytics
   %label.switch
     %input#class-analytics-toggle{:type => "checkbox", :checked => true}
-    .slider.round
+    .switch-slider.round
 
   #student-rubric-feedback
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
