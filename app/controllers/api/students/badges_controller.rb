@@ -16,8 +16,17 @@ class API::Students::BadgesController < ApplicationController
       :name,
       :position,
       :visible,
-      :visible_when_locked)
-    #@earned_badges = TODO add here and to jbuilder "relationships"
+      :visible_when_locked).includes(:earned_badges)
+    @earned_badges =
+      current_course.earned_badges.where(student_id: @student.id).select(
+        :id,
+        :badge_id,
+        :grade_id,
+        :feedback,
+        :level_id,
+        :student_id,
+        :student_visible
+      )
     render template: "api/badges/index"
   end
 end
