@@ -40,10 +40,10 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
       end
     end
 
-    it "redirects to the assignment page for the given assignment" do
+    it "redirects to course data exports page" do
       allow(presenter).to receive(:create_and_enqueue_export) { true }
       subject
-      expect(response).to redirect_to(analytics_students_path)
+      expect(response).to redirect_to(downloads_path)
     end
   end
 

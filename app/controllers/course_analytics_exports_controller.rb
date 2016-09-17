@@ -17,7 +17,7 @@ class CourseAnalyticsExportsController < ApplicationController
                       "An administrator has been contacted about the issue."
     end
 
-    redirect_to analytics_students_path
+    redirect_to downloads_path
   end
 
   def destroy

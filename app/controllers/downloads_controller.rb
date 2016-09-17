@@ -4,6 +4,7 @@ class DownloadsController < ApplicationController
   before_filter :ensure_staff?
 
   def index
+    @title = "Downloads"
     render :index, locals: { presenter: presenter }
   end
 

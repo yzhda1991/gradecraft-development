@@ -2,11 +2,11 @@
 
 %h2.pagetitle= @title
 
-= render partial: "analytics/buttons"
-
 .pageContent
   = render partial: "layouts/alerts"
-  
+
+  = render partial: "analytics/in_page_nav"
+
   / Login counts
   #role-logins-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/login_role_events.json", :url_data => "role_group=staff", :title => "Logins", :subtitle => "{{granularity}}", :y_axis_label => "Logins {{granularity}}"}}
   
