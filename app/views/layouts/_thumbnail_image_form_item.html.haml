@@ -1,7 +1,0 @@
-.form-item
-  = f.label :thumbnail
-  = f.file_field :thumbnail
-  - if model.thumbnail.present? && model.errors[:thumbnail].empty?
-    %img{src: model.thumbnail, alt: "Thumbnail Image", style: "height: 25px; width: 25px;" }
-    = f.check_box :remove_thumbnail
-    Remove Thumbnail
