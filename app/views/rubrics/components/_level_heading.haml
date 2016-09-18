@@ -1,6 +1,6 @@
-.level-heading
-  .level-name= level.name
-  - if level.meets_expectations?
-    %span Meets Expectations
-  .level-points= "#{points level.points} Points"
+- if current_student.present? && level.earned_for?(student.id)
+  %h6.level-name You earned 
+%h6.level-name= "#{level.name}: " "#{points level.points} Points"
+- if level.meets_expectations || level.above_expectations?
+  %p.italic.meets-expectations-label Meets Expectations
 .level-description= level.description

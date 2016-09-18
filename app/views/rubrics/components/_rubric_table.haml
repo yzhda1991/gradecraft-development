@@ -1,16 +1,13 @@
-= link_to glyph("file-excel-o") + "Download Rubric", export_assignment_rubric_path(presenter.assignment.id, format: :csv)
-%table#rubric-table
-  %thead
-    %tr
-      %td.criterion.heading
-        Criterion:&nbsp;Max&nbsp;points
+.download-link= link_to glyph("file-excel-o") + "Download Rubric", export_assignment_rubric_path(presenter.assignment.id, format: :csv)
 
-      %td.level.heading(colspan="#{rubric.max_level_count}")
-        Level: Points Awarded
+- if include_grade_info
+  %h4.class-analytics-label Show class analytics
+  %label.rubric-switch-socket
+    %input#class-analytics-toggle{:type => "checkbox", :checked => true}
+    .rubric-switch-handle.round
 
-      - if include_grade_info
-        %td.comments.heading
-          Comments
-
-  %tbody
+  #rubric-graded
+    = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
+- else
+  #rubric-ungraded
     = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }

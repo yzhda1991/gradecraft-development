@@ -1,0 +1,24 @@
+- rubric.criteria.ordered.includes(levels: :level_badges).each_with_index do |criterion, cindex|
+  .criterion{:id => "criterion-#{cindex}"}
+    .criterion-heading
+      %h5.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
+      %p.criterion-description= criterion.description
+
+    %ul.level-tabs{:role => "tablist"}
+      - criterion.levels.ordered.each_with_index do |level, tindex|
+        %li.level-tab{:class => ("earned" if level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "panel#{tindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
+          - if level.earned_for?(student.id)
+            = glyph("check")
+          %span= level.name
+          - if !level.hide_analytics?
+            - unless level.criterion_grades(current_user).empty?
+              %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
+
+    - criterion.levels.ordered.each_with_index do |level, lindex|
+      .tab-panel{:class => ("earned selected" if level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}", :role => "tabpanel", "aria-labelledby" => "tab#{lindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
+        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
+        - if level.earned_for?(student.id)
+          %section.grader-feedback
+            %h6 Comments
+            .level.level-comments.comments-box
+              = raw criterion.comments_for(student.id)

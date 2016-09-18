@@ -165,3 +165,37 @@
 
   $(init);
 }(jQuery);
+
+// for student rubric feedback tab panels
+$('ul.level-tabs li').click(function(){
+  var criterionId = $(this).parent().parent().attr('id');
+  var tabId = $(this).attr('data-tab');
+
+    $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
+    $('#' + criterionId + ' ul.level-tabs li').attr('aria-selected', 'false');
+    $('#' + criterionId + ' .tab-panel').removeClass('selected');
+    $('#' + criterionId + ' .tab-panel').attr('aria-selected', 'false');
+
+    $(this).addClass('selected');
+    $(this).attr('aria-selected', 'true');
+    $("#" + tabId).addClass('selected');
+    $("#" + tabId).attr('aria-selected', 'true');
+  })
+
+// toggle class analytics on rubric feedback
+$('#class-analytics-toggle').change(function(){
+  if ($(this).prop("checked")) {
+    $('.graded-students').show();
+  } else {
+    $('.graded-students').hide();
+  }
+});
+
+// Show only earned level on mobile for rubric grades regardless of previous selection
+function rubricScreenSize() {
+  if ($('.level-tab').css('display') === 'none') {
+    $('.level-tab.earned').trigger('click');
+  }
+}
+rubricScreenSize();
+$(window).resize(rubricScreenSize);

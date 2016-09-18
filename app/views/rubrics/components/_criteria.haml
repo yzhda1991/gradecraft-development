@@ -1,16 +1,11 @@
-- rubric.criteria.ordered.includes(levels: :level_badges).each do |criterion|
-  %tr
-    %td.criterion
-      .criterion-heading
-        .criterion-name= criterion.name
-        .criterion-points= "#{points criterion.max_points} Points"
-      .criterion-description= criterion.description
+- rubric.criteria.ordered.includes(levels: :level_badges).each_with_index do |criterion, cindex|
+  .criterion{:id => "criterion-#{cindex}"}
+    .criterion-heading
+      %h5.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
+      %p.criterion-description= criterion.description
 
-    - criterion.levels.ordered.each do |level|
-      = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-
-    - if criterion.levels.size < rubric.max_level_count
-      %td.filler(colspan="#{rubric.max_level_count - criterion.levels.size}")
-    - if include_grade_info
-      %td.level.level-comments.comments-box
-        = raw criterion.comments_for(student.id)
+    - criterion.levels.ordered.reverse.each_with_index do |level, lindex|
+      .tab-panel.selected{:class => ("meets-expectations-cutoff" if level.meets_expectations)}
+        - if level.meets_expectations
+          %p.meets-expectations-tag Meets expectations #{glyph('long-arrow-up')}
+        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }

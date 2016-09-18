@@ -214,8 +214,8 @@ button.meets-expectations-status.no-expectation
 
   .badge-messages
     text-align: center
-    font-size: .7rem;
-    font-weight: bold;
+    font-size: .7rem
+    font-weight: bold
 
   .badge-row
     overflow: hidden
@@ -327,6 +327,141 @@ button.meets-expectations-status.no-expectation
   padding: 0
   border-radius: $global-radius
 
+.download-link
+  margin: 0.5rem 0
+
+#rubric-graded, #rubric-ungraded
+  *
+    font-weight: 300
+  h5
+    font-size: 1.1em
+    text-transform: uppercase
+    font-weight: 400
+  h6
+    font-size: 1em
+    font-weight: 400
+    margin: 0
+  section
+    margin-bottom: 1rem
+    &:last-child
+      margin-bottom: 0
+  p
+    margin: 0
+  .criterion
+    background-color: $color-white
+    margin-bottom: 2rem
+    border: 1px solid $color-grey-6
+  .criterion-heading
+    background-color: $color-blue-2
+    color: $color-white
+    padding: 0.25rem 0.5rem
+  .criterion-description
+    font-size: 0.75rem
+    font-style: italic
+
+  .level
+    background-color: inherit
+
+  ul.level-tabs
+    padding-left: 0
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
+    display: flex
+    margin: 0
+
+  .level-tab
+    list-style-type: none
+    display: inline-block
+    -webkit-box-flex: 1
+    -webkit-flex: 1
+    -ms-flex: 1
+    flex: 1
+    text-align: center
+    padding: 0.25rem
+    background-color: $color-grey-6
+    color: $color-grey-2
+    border: 1px solid $color-white
+    font-size: 0.8rem
+    cursor: pointer
+    position: relative
+    &:hover
+      background-color: lighten($color-grey-6, 5%)
+    &.selected
+      background-color: $color-white
+    i
+      padding-right: 0
+    &:first-child
+      border-left: none
+    &:last-child
+      border-right: none
+    &.earned
+      background-color: lighten($color-green-1, 20%)
+      border-bottom: none
+      &:hover
+        background-color: lighten($color-green-1, 22%)
+    @media (max-width: $media-small-max)
+      display: none
+
+  .level-name
+    display: inline
+
+  .level-description
+    font-size: 0.85rem
+    font-weight: 300
+
+  .graded-students
+    font-size: 0.65rem
+    font-style: italic
+
+  .earned-level-panel, .tab-panel
+    padding: 0.5rem
+
+  ul.badge-row
+    height: auto
+    margin: 0
+    padding-left: 0
+
+  .level-badge-image 
+    float: none
+    img
+      height: 35px
+      display: inline-block
+
+  .tab-panel
+    display: none
+    &.selected
+      display: block
+    &.earned
+      background-color: lighten($color-green-1, 20%)
+
+// label for class analytics toggle
+.class-analytics-label
+  display: inline
+  vertical-align: top
+
+#rubric-ungraded
+  .tab-panel
+    border-bottom: 1px solid $color-grey-6
+    &:last-child
+      border-bottom: none
+    &.meets-expectations-cutoff
+      border-bottom: 2px dashed $color-green-2
+      position: relative
+
+  .meets-expectations-label, .meets-expectations-tag
+    font-size: 0.8rem
+
+  .meets-expectations-tag
+    position: absolute
+    bottom: 0
+    right: 0
+    background-color: lighten($color-green-2, 20%)
+    padding: 0 0.4rem
+    i
+      width: inherit
+      padding-right: 0
+
 #rubric-table
   td
     vertical-align: top
@@ -405,10 +540,10 @@ button.meets-expectations-status.no-expectation
     color: $color-green-2
 
 .points-adjustment-feedback
-  margin-right: 1rem;
+  margin-right: 1rem
 
 .total-points
-  margin-bottom: 1rem;
+  margin-bottom: 1rem
 
 #grade-rubric-table.edit
   .level:hover
