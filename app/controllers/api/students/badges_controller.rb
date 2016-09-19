@@ -25,7 +25,8 @@ class API::Students::BadgesController < ApplicationController
         :feedback,
         :level_id,
         :student_id,
-        :student_visible
+        :student_visible,
+        :points
       )
     @predicted_earned_badges =
       PredictedEarnedBadge.find_or_create_for_student(

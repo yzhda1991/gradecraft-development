@@ -43,18 +43,40 @@
       $http.put(
           '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
         ).success(
-          (data)->
-            console.log(data);
+          (response)->
+            console.log(response);
         ).error(
-          (data)->
-            console.log(data);
+          (response)->
+            console.log(response);
         )
+
+  # currently creates explictly for a student and a grade
+  createEarnedBadge = (studentId,badgeId,gradeId)->
+    requestParams = {
+      "student_id": studentId,
+      "badge_id": badgeId,
+      "grade_id": gradeId
+    }
+    $http.post(
+        '/api/earned_badges/', requestParams
+      ).success(
+        (response)->
+          GradeCraftAPI.addOne(earned_badges, response)
+      ).error(
+        (response)->
+          console.log(response);
+      )
+
+  deleteEarnedBadge = ()->
+    console.log("destroying earned badge...");
 
   return {
       termFor: termFor
       getBadges: getBadges
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge
+      createEarnedBadge: createEarnedBadge
+      deleteEarnedBadge: deleteEarnedBadge
       studentEarnedBadgeForGrade: studentEarnedBadgeForGrade
       badges: badges
       earned_badges: earned_badges

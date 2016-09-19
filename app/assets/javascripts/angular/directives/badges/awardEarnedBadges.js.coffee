@@ -8,7 +8,10 @@
       BadgeService.studentEarnedBadgeForGrade(vm.studentId,badge.id,vm.gradeId)
 
     vm.awardBadge = (badge)->
-      console.log("badge awarded!");
+      if earnedBadge = vm.badgeEarnedForGrade(badge)
+        BadgeService.deeleteEarnedBadge(earnedBadge)
+      else
+        BadgeService.createEarnedBadge(vm.studentId,badge.id,vm.gradeId)
   ]
 
   {

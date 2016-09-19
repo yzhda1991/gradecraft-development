@@ -6,7 +6,12 @@ class API::EarnedBadgesController < ApplicationController
   # POST /api/earned_badges
   def create
     result = Services::CreatesEarnedBadge.award earned_badge_params
-    render json: result.earned_badge
+    if result.success?
+      @earned_badge = results.earned_badge
+      render status: :created
+    else
+      render json: { message: "Earned badge failed to create", success: false }
+    end
   end
 
   # DELETE /api/earned_badges/:id
