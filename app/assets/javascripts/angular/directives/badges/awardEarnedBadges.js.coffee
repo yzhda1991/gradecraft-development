@@ -9,7 +9,7 @@
 
     vm.awardBadge = (badge)->
       if earnedBadge = vm.badgeEarnedForGrade(badge)
-        BadgeService.deeleteEarnedBadge(earnedBadge)
+        BadgeService.deleteEarnedBadge(earnedBadge)
       else
         BadgeService.createEarnedBadge(vm.studentId,badge.id,vm.gradeId)
   ]

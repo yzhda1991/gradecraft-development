@@ -7,10 +7,10 @@ class API::EarnedBadgesController < ApplicationController
   def create
     result = Services::CreatesEarnedBadge.award earned_badge_params
     if result.success?
-      @earned_badge = results.earned_badge
-      render status: :created
+      @earned_badge = result.earned_badge
+      render status: 201
     else
-      render json: { message: "Earned badge failed to create", success: false }
+      render json: { message: result.message, success: false }, status: 400
     end
   end
 
@@ -29,8 +29,7 @@ class API::EarnedBadgesController < ApplicationController
   private
 
   def earned_badge_params
-    params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
-      :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy
+    params.require(:earned_badge).permit :feedback, :student_id, :badge_id,
+      :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id
   end
 end

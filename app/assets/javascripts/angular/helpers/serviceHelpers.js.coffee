@@ -29,38 +29,56 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   # ----------Methods for handling JSON API response data ---------------------#
   #     See http://jsonapi.org/format/ for details of data structure
 
+  # handles response from .then, (not deprecated .success or .error method)
+  logResponse = (response)->
+    # formatted error response
+    switch response.status
+      when 200
+        console.log(response.data.message)
+      when 201
+        console.log(response.statusText)
+      when 400
+        console.log(response.data.message)
+      else
+        console.log(response)
+
+
   # Format a single model from JSONAPI response.data section
-  # results is needed in options only if pulling other items from "relationships"
-  dataItem = (item, results={}, options={"include":[]})->
+  # response is needed in options only if pulling other items from "relationships"
+  dataItem = (item, response={}, options={"include":[]})->
 
     # attach JSON API type to attributes ("badges", "assignments", etc.)
     item.attributes.type = item.type
 
     # attach associated models from included list within
     _.each(options.include, (included)->
-      return if !results.included || !item.relationships || !item.relationships[included]
-      o =  _.find(results.included,
+      return if !response.included || !item.relationships || !item.relationships[included]
+      o =  _.find(response.included,
                   {id: item.relationships[included].data.id,
                   type: item.relationships[included].data.type}
           )
       item.attributes[included] = o.attributes if o
     )
+    item.attributes
 
 
-  # transfer models from api results data into the model array
-  loadMany = (modelArray, results, options={"include":[]})->
-    _.each(results.data, (item)->
-      modelArray.push(dataItem(item, results, options))
+  # transfer models from api response data into the model array
+  loadMany = (modelArray, response, options={"include":[]})->
+    _.each(response.data, (item)->
+      modelArray.push(dataItem(item, response, options))
     )
 
   # add model from a reponse with a single item
-  addOne = (modelArray, type, results)->
-    if type == results.type
-      modelArray.push(dataItem(results.data))
+  addItem = (modelArray, type, response)->
+    if type == response.data.type
+      modelArray.push(dataItem(response.data))
+
+  deleteItem = (modelArray, item)->
+    _.remove(modelArray, {id: item.id})
 
   # transfer models of a type from the json included section
-  loadFromIncluded = (modelArray, type, results)->
-    _.each(results.included, (item)->
+  loadFromIncluded = (modelArray, type, response)->
+    _.each(response.included, (item)->
       if item.type == type
         modelArray.push(item.attributes)
     )
@@ -69,7 +87,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     termFor: termFor
     setTermFor: setTermFor
     uriPrefix: uriPrefix
+    logResponse: logResponse
     loadMany: loadMany
+    addItem: addItem
+    deleteItem: deleteItem
     loadFromIncluded: loadFromIncluded
   }
 )

@@ -31,12 +31,12 @@
 
   # GET index list of assignments including a student's grades and predictions
   getAssignments = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_grades').success( (res)->
-      GradeCraftAPI.loadMany(assignments,res)
-      GradeCraftAPI.setTermFor("assignment", res.meta.term_for_assignment)
-      GradeCraftAPI.setTermFor("pass", res.meta.term_for_pass)
-      GradeCraftAPI.setTermFor("fail", res.meta.term_for_fail)
-      update.assignments = res.meta.update_assignments
+    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_grades').success( (results)->
+      GradeCraftAPI.loadMany(assignments,results)
+      GradeCraftAPI.setTermFor("assignment", results.meta.term_for_assignment)
+      GradeCraftAPI.setTermFor("pass", results.meta.term_for_pass)
+      GradeCraftAPI.setTermFor("fail", results.meta.term_for_fail)
+      update.assignments = results.meta.update_assignments
     )
 
   # PUT a predicted earned grade for assignment
