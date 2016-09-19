@@ -23,10 +23,10 @@
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of badges
-  # includes a student's earned badges and predictions
+  # includes a student's predictions
   getBadges = (studentId)->
     $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
-      GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction','earned_badge']})
+      GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
         # add null prediction when JSON contains no prediction
         badge.prediction = {predicted_times_earned: 0} if !badge.prediction
@@ -42,59 +42,48 @@
     if update.predictions
       $http.put(
           '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
-        ).success(
-          (response)->
-            console.log(response);
-        ).error(
-          (response)->
-            console.log(response);
-        )
+        ).then((response)-> # success
+                  GradeCraftAPI.logResponse(response)
+                ,(response)-> # error
+                  GradeCraftAPI.logResponse(response)
+              )
 
   # currently creates explictly for a student and a grade
-  createEarnedBadge = (studentId,badgeId,gradeId)->
+  createEarnedBadge = (badgeId,studentId,gradeId)->
     requestParams = {
       "student_id": studentId,
       "badge_id": badgeId,
       "grade_id": gradeId
     }
 
-    # .success and .error are deprecated, only .then returns response
-    # including headers and status code
     $http.post('/api/earned_badges/', requestParams).then(
-      # success
-      (response)->
+      (response)-> # success
         if response.status == 201
           GradeCraftAPI.addItem(earnedBadges, "earned_badges", response.data)
-
           # TODO:(UX) Visually we expect the earned badge count to update, but
           # this doesn't match the logic for this count in ruby
           # (grade has not been released!)
-          _.find(badges,{id: response.data.data.attributes.badge_id}).earned_badge_count++
+          #_.find(badges,{id: response.data.data.attributes.badge_id}).earned_badge_count++
 
         GradeCraftAPI.logResponse(response)
 
-      # error
-      ,(response)->
+      ,(response)-> # error
         GradeCraftAPI.logResponse(response)
     )
 
   deleteEarnedBadge = (earnedBadge)->
     $http.delete("/api/earned_badges/#{earnedBadge.id}").then(
-      # success
-      (response)->
+      (response)-> # success
         if response.status == 200
           # TODO:(UX) see above
-          _.find(badges,{id: earnedBadge.badge_id}).earned_badge_count--
+          #_.find(badges,{id: earnedBadge.badge_id}).earned_badge_count--
           GradeCraftAPI.deleteItem(earnedBadges, earnedBadge)
 
         GradeCraftAPI.logResponse(response)
 
-      # error
-      ,(response)->
+      ,(response)-> # error
         GradeCraftAPI.logResponse(response)
     )
-
-
 
   return {
       termFor: termFor

@@ -34,7 +34,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     # formatted error response
     switch response.status
       when 200
-        console.log(response.data.message)
+        console.log(response.data)
       when 201
         console.log(response.statusText)
       when 400

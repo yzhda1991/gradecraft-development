@@ -11,7 +11,7 @@
       if earnedBadge = vm.badgeEarnedForGrade(badge)
         BadgeService.deleteEarnedBadge(earnedBadge)
       else
-        BadgeService.createEarnedBadge(vm.studentId,badge.id,vm.gradeId)
+        BadgeService.createEarnedBadge(badge.id,vm.studentId,vm.gradeId)
   ]
 
   {
