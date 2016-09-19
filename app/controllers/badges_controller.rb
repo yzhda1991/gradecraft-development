@@ -76,7 +76,7 @@ class BadgesController < ApplicationController
       :can_earn_multiple_times, :earned_badges, :earned_badges_attributes,
       :badge_file_ids, :badge_files_attributes, :badge_file, :position,
       :visible_when_locked, :course_id, :course, :show_name_when_locked,
-      :show_points_when_locked, :show_description_when_locked,
+      :show_points_when_locked, :show_description_when_locked, :student_awardable,
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
         :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
       badge_files_attributes: [:id, file: []])

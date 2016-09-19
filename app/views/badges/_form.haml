@@ -28,6 +28,11 @@
       = f.check_box :can_earn_multiple_times
       .form_label Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
 
+    .form-item
+      = f.label :student_awardable,"Student-awardable"
+      = f.check_box :student_awardable
+      .form_label Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
+
   %section
     %h4 Description
 
