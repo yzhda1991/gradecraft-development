@@ -62,24 +62,4 @@
         %section
 
         - if current_course.badges.present?
-          #awarded(ng-cloak)
-            = render partial: "grades/standard_edit/badges_awarded", locals: { badges: badges }
-            .clear
-
-          #available.empty(ng-cloak)
-            = render partial: "grades/standard_edit/badges_available", locals: { badges: badges }
-            .clear
-
-        .panel(ng-if="debug" ng-cloak)
-          .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
-            .info
-              %h4 {{badge.name}}
-            .info
-              %b Creating:
-              {{badge.creating}}
-            .info
-              %b Deleting:
-              {{badge.deleting}}
-            .info.earned-badge
-              %b EarnedBadge:
-              .pretty-json {{badge.earnedBadge | json}}
+          %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")
