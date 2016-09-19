@@ -18,7 +18,7 @@ module GradesHelper
     # This cache key is busted when a grade is updated
     "#{course.cache_key}/in_progress_grades_count"
   end
-  
+
   def unreleased_grades_count_for(course)
     Rails.cache.fetch(unreleased_grades_count_cache_key(course)) do
       course.grades.not_released.count
@@ -34,10 +34,6 @@ module GradesHelper
     JbuilderTemplate.new(ApplicationController.new.view_context).encode do |json|
       json.grade do
         json.partial! "grades/grade", grade: grade, assignment: grade.assignment
-      end
-
-      json.badges do
-        json.partial! "grades/badges", badges: grade.student.earnable_course_badges_for_grade(grade), student_id: grade.student_id
       end
 
       json.assignment do

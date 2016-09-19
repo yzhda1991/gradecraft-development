@@ -143,40 +143,9 @@ class GradesController < ApplicationController
     @temp_view_context ||= ApplicationController.new.view_context
   end
 
-  def serialized_init_data
-    JbuilderTemplate.new(temp_view_context).encode do |json|
-      json.grade do
-        json.partial! "grades/grade", grade: @grade, assignment: @assignment
-      end
-
-      json.badges do
-        json.partial! "grades/badges", badges: @badges, student_id: @student.id
-      end
-
-      json.assignment do
-        json.partial! "grades/assignment", assignment: @assignment
-      end
-
-      json.assignment_score_levels do
-        json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
-      end
-    end.to_json
-  end
-
-  def serialized_criterion_grades
-    CriterionGrade.where({ student_id: params[:student_id],
-                        assignment_id: params[:assignment_id],
-                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } })
-                        .select(:id, :criterion_id, :level_id, :comments).to_json
-  end
-
   def score_recalculator(student)
     ScoreRecalculatorJob.new(user_id: student.id,
                            course_id: current_course.id).enqueue
-  end
-
-  def rubric_criteria_with_levels
-    @rubric_criteria_with_levels ||= @rubric.criteria.ordered.includes(:levels)
   end
 
   def path_for_next_grade(grade)
