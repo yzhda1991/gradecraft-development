@@ -48,13 +48,6 @@ class SubmissionsExportsController < ApplicationController
   protected
 
   def secure_download_authenticator
-    # it's possible that this could be cleaned up by simply passing params into
-    # the authenticator, but the target_id on the SecureToken doesn't match the
-    # id being passed in conventionally via the member route for
-    # SubmissionsExports#secure_download. This might be worth looking into in
-    # future refactoring but it seems like a fine pattern for now since we're
-    # only passing request parameters into the authenticator.
-
     @secure_download_authenticator ||= SecureTokenAuthenticator.new(
       secure_token_uuid: params[:secure_token_uuid],
       secret_key: params[:secret_key],
