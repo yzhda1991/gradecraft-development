@@ -3,11 +3,11 @@ en:
     index: 
       title: "Announcements"
     show: 
-      title: "% @announcement.title"
+      title: "{ announcement.title }"
     new: 
       title: "Create a New Announcement"
     edit: 
-      title: "Edit Announcement"
+      title: "Edit { announcement.title } Announcement"
   analytics:
     students:
       title: "Student Analytics"

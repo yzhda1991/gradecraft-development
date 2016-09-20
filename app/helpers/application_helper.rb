@@ -47,10 +47,10 @@ module ApplicationHelper
   #     "#{@title}"
   #   end
   # end
-  def title
+  def title(object)
     if content_for?(:title)
       # allows the title to be set in the view by using t(".title")
-      content_for :title
+      content_for :title, object
     else
       # look up translation key based on controller path, action name and .title
       # this works identical to the built-in lazy lookup
