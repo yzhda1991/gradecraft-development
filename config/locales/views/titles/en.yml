@@ -3,17 +3,22 @@ en:
     index: 
       title: "Announcements"
     show: 
-      title: "#{@announcement.title}"
+      title: "% @announcement.title"
     new: 
       title: "Create a New Announcement"
     edit: 
       title: "Edit Announcement"
+  analytics:
+    students:
+      title: "Student Analytics"
+    staff:
+      title: "Staff Analytics"
   assignment_type_weights:
     index:
       title: "Editing My #{term_for :weight} Choices"
   assignment_types:
     index: 
-      title: "#{term_for :assignment_types}"
+      title: "%{term_for :assignment_types}"
     show: 
       title: 
     new:
@@ -45,6 +50,9 @@ en:
       title: "Create a New #{term_for :challenge}"
     edit: 
       title: "Editing #{@challenge.name}"
+    challenge_grades:
+      new:
+        title: "Testing"
   courses: 
     index:
       title: "My Courses"
@@ -67,6 +75,11 @@ en:
       title: "#{@team.name}'s #{@challenge_grade.name} Grade"
     edit: 
       title: "Editing #{@challenge.name} Grade"
+    mass_edit: 
+      title: "Quick Grade #{@challenge.name}"
+  downloads:
+    index:
+      title: "Course Data Exports"
   info:
     dashboard:
       title: "Dashboard"
@@ -112,6 +125,8 @@ en:
     edit:
       title: "Editing #{@group.name}"
   info:
+    dashboard: 
+      title: "Dashboard"
     earned_badges: 
       title: "Awarded #{term_for :badges}"
     grading_status:
@@ -133,6 +148,8 @@ en:
       title: "#{(current_course.student_term).singularize} Roster"
     flagged:
       title: "Flagged #{(current_course.student_term).pluralize}"
+    leaderboard: 
+      title: "Leaderboard"
   rubrics:
     design:
       title: "Design Rubric"

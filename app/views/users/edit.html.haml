@@ -1,12 +1,3 @@
-<<<<<<< 2cbc7b4f230cf5040f098163b8ad49b493d0d250
-= content_nav_for @user, "Edit User"
-
-%h2.pagetitle= @title
-
-=======
-= render "buttons"
->>>>>>> Removing titles from views
-
 .pageContent
   = render partial: "layouts/alerts", locals: { model: @user, term: "user" }
   - if @user.internal?
