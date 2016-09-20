@@ -1,7 +1,7 @@
 .badge-index-section
   .badge-icon-container{'ng-repeat'=>'badge in vm.BadgeService.badges', 'ng-click'=>'vm.awardBadge(badge)'}
-    %img{'ng-class'=>"(vm.badgeEarnedForGrade(badge) ? 'badge-icon' : 'badge-icon  unearned')", 'ng-src'=>'{{badge.icon}}'}
+    %img{'ng-class'=>"(vm.badgeActionable(badge) ? 'badge-icon' : 'badge-icon  unavailable')", 'ng-src'=>'{{badge.icon}}'}
     %p.badge-name {{badge.name}}
-    .gold-stars
-      %i.fa.fa-fw.fa-star
-        .earned-count {{badge.earned_badge_count}}
+    .gold-stars{'ng-show'=>"vm.badgeEarnedForGrade(badge)"}
+      -# %i.fa.fa-fw.fa-star
+      %i.hover-action.fa.fa-fw.fa-plus-circle

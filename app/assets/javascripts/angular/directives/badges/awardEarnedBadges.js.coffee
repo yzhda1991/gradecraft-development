@@ -4,14 +4,19 @@
     vm.BadgeService = BadgeService
     BadgeService.getBadges(vm.studentId)
 
+    vm.badgeActionable = (badge)->
+      vm.badgeEarnedForGrade(badge) ||
+      badge.can_earn_multiple_times ||
+      badge.earned_badge_count < 1
+
     vm.badgeEarnedForGrade = (badge)->
-      BadgeService.studentEarnedBadgeForGrade(vm.studentId,badge.id,vm.gradeId)
+      BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, vm.gradeId)
 
     vm.awardBadge = (badge)->
       if earnedBadge = vm.badgeEarnedForGrade(badge)
         BadgeService.deleteEarnedBadge(earnedBadge)
       else
-        BadgeService.createEarnedBadge(badge.id,vm.studentId,vm.gradeId)
+        BadgeService.createEarnedBadge(badge.id, vm.studentId, vm.gradeId)
   ]
 
   {

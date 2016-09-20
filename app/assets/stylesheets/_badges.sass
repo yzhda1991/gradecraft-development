@@ -116,6 +116,10 @@ button#remove-badges, button#add-badges
     display: block
     margin: 0 auto
     cursor: pointer
+    &.unearned, &.unavailable
+      opacity: .2 !important
+    &.earned
+      opacity: 1
 
   &.focus-article
     background-color: transparentize($color-blue-3, .8)
@@ -126,7 +130,6 @@ button#remove-badges, button#add-badges
     background-color: $color-blue-3
     @include opacity(0.88)
     box-shadow: 0 0 20px #F6C621
-
 
   &.available.earned
     @include opacity(0)
@@ -168,14 +171,17 @@ button#remove-badges, button#add-badges
     right: 0px
     font-size: 2rem
     color: $color-yellow-1
-
+    &.unearned
+      display: none
     i.fa-fw
       z-index: 600 !important
 
-  &.unearned
-    .gold-stars
-      @include opacity(0.6)
-
+  /* for (+) hover state on grade earned badge section */
+  i.hover-action
+    display: none
+  &:hover
+    i.hover-action
+      display: block
 
 /* badge index table on instructor side */
 .badge-index-table

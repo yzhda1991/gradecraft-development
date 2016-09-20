@@ -49,5 +49,4 @@ class EarnedBadge < ActiveRecord::Base
       errors.add :base, " Oops, they've already earned the '#{name}' #{course.badge_term.downcase}."
     end
   end
-
 end

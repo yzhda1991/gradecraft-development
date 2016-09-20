@@ -17,7 +17,7 @@
       )
     total
 
-  studentEarnedBadgeForGrade = (studentId,badgeId,gradeId)->
+  studentEarnedBadgeForGrade = (studentId, badgeId, gradeId)->
     _.find(earnedBadges,{ badge_id: parseInt(badgeId), grade_id: parseInt(gradeId) })
 
   #------ API Calls -----------------------------------------------------------#
@@ -49,7 +49,7 @@
               )
 
   # currently creates explictly for a student and a grade
-  createEarnedBadge = (badgeId,studentId,gradeId)->
+  createEarnedBadge = (badgeId, studentId, gradeId)->
     requestParams = {
       "student_id": studentId,
       "badge_id": badgeId,
@@ -60,11 +60,6 @@
       (response)-> # success
         if response.status == 201
           GradeCraftAPI.addItem(earnedBadges, "earned_badges", response.data)
-          # TODO:(UX) Visually we expect the earned badge count to update, but
-          # this doesn't match the logic for this count in ruby
-          # (grade has not been released!)
-          #_.find(badges,{id: response.data.data.attributes.badge_id}).earned_badge_count++
-
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
@@ -75,10 +70,7 @@
     $http.delete("/api/earned_badges/#{earnedBadge.id}").then(
       (response)-> # success
         if response.status == 200
-          # TODO:(UX) see above
-          #_.find(badges,{id: earnedBadge.badge_id}).earned_badge_count--
           GradeCraftAPI.deleteItem(earnedBadges, earnedBadge)
-
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
