@@ -11,12 +11,6 @@ describe PredictedAssignmentSerializer do
   end
 
   describe "#grade" do
-    it "creates a grade if it does not have one for the assignment" do
-      current_time = DateTime.now
-      grade = subject.grade
-      expect(Grade.find(grade.attributes[:id]).created_at).to be > current_time
-    end
-
     it "returns the grade if one already exists for the user and assignment" do
       existing_grade = Grade.create(assignment: assignment, student: user)
       expect(subject.grade.attributes[:id]).to eq existing_grade.id
