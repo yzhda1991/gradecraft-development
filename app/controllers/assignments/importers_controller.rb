@@ -63,6 +63,23 @@ class Assignments::ImportersController < ApplicationController
     redirect_to assignment_path(assignment)
   end
 
+  # POST /assignments/importers/:importer_provider_id/assignments/:id/update
+  def update_assignment
+    provider_name = params[:importer_provider_id]
+    assignment = Assignment.find(params[:id])
+
+    result = Services::ImportsLMSAssignments.update provider_name,
+      authorization(provider_name).access_token, assignment
+
+    if result.success?
+      flash[:notice] = "You have successfully updated #{assignment.name} on #{provider_name.capitalize}"
+    else
+      flash[:alert] = result.message
+    end
+
+    redirect_to assignment_path(assignment)
+  end
+
   private
 
   def syllabus

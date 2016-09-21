@@ -353,6 +353,15 @@ module ActiveLMS
       grades
     end
 
+    def update_assignment(course_id, assignment_id, params)
+      assignment = nil
+      client.set_data(
+        "/courses/#{course_id}/assignments/#{assignment_id}", :put, params) do |data|
+          assignment = data
+      end
+        assignment
+    end
+
     # Internal: Retrieves single user from the Canvas API.
     #
     # id - A String representing the user id from the Canvas API.
