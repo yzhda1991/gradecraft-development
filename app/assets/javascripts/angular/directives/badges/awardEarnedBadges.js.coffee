@@ -11,7 +11,7 @@
       badge.available_for_student
 
     vm.badgeAwardable = (badge)->
-      vm.badgeAvailable(badge) && !vm.badgeEarnedForGrade(badge)
+      vm.available_for_student && !vm.badgeEarnedForGrade(badge)
 
     vm.awardBadge = (badge)->
       return if !vm.badgeAvailable(badge)
