@@ -188,6 +188,7 @@ GradeCraft::Application.routes.draw do
   controller :courses do
     get :course_details
     get :custom_terms
+    get :integrations
     get :multiplier_settings
     get :player_settings
     get :student_onboarding_setup
