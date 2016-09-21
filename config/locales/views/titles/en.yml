@@ -1,6 +1,6 @@
 en:
   announcements:
-    index: 
+    index:
       title: "Announcements"
     show: 
       title: "{ announcement.title }"
@@ -17,65 +17,65 @@ en:
     index:
       title: "Editing My #{term_for :weight} Choices"
   assignment_types:
-    index: 
+    index:
       title: "%{term_for :assignment_types}"
-    show: 
-      title: 
+    show:
+      title:
     new:
       title: "Create a New #{term_for :assignment_type}"
-    edit: 
+    edit:
       title: "Editing #{@assignment_type.name}"
-    all_grades: 
+    all_grades:
       title: "#{@assignment_type.name} Grade Patterns"
-  assignments: 
-    index: 
+  assignments:
+    index:
       title: "Assignments"
-    settings: 
+    settings:
       title: "Review #{term_for :assignment} Settings"
-    edit: 
+    edit:
       title: "Editing #{assignment.name}"
     new:
       title: "Create a New #{term_for :assignment}"
   badges:
-    new: 
+    new:
       title: "Create a New #{term_for :badge}"
-    edit: 
+    edit:
       title: "Editing #{@badge.name}"
-  challenges: 
-    index: 
+  challenges:
+    index:
       title: "#{term_for :challenges}"
-    show: 
+    show:
       title: "@challenge.name"
-    new: 
+    new:
       title: "Create a New #{term_for :challenge}"
-    edit: 
+    edit:
       title: "Editing #{@challenge.name}"
     challenge_grades:
       new:
         title: "Testing"
-  courses: 
+  courses:
     index:
       title: "My Courses"
-    show: 
+    show:
       title: "Course Settings"
-    new: 
+    new:
       title: "Create a New Course"
-    edit: 
+    edit:
       title: "Editing Basic Settings"
-    course_details:  
+    course_details:
       title: "Course Details"
-    custom_terms: 
+    custom_terms:
       title: "Custom Terms"
-    player_settings: 
+    player_settings:
       title: "#{term_for :student} Settings"
-    student_onboarding_setup: 
+    student_onboarding_setup:
       title: "Student Onboarding Setup"
-  challenge_grades: 
-    show: 
+  challenge_grades:
+    show:
       title: "#{@team.name}'s #{@challenge_grade.name} Grade"
-    edit: 
+    edit:
       title: "Editing #{@challenge.name} Grade"
-    mass_edit: 
+    mass_edit:
       title: "Quick Grade #{@challenge.name}"
   downloads:
     index:
@@ -83,17 +83,17 @@ en:
   info:
     dashboard:
       title: "Dashboard"
-  earned_badges: 
-    show: 
+  earned_badges:
+    show:
       title: "#{@student.name}'s #{@badge.name} #{term_for :badge}"
     new:
       title: "Award #{@badge.name}"
-    edit: 
+    edit:
       title: "Editing Awarded #{@badge.name}"
-    mass_edit: 
+    mass_edit:
       title: "Quick Award #{@badge.name}"
-  events: 
-    index: 
+  events:
+    index:
       title: "Calendar Events"
     show:
       title: "#{@event.name}"
@@ -101,8 +101,8 @@ en:
       title: "Create a New Calendar Event"
     edit:
       title: "Editing #{@event.name}"
-  grade_scheme_elements: 
-    index: 
+  grade_scheme_elements:
+    index:
       title: "Grade Scheme"
     mass_edit:
       title: "Edit Grade Scheme"
@@ -111,11 +111,11 @@ en:
       title: "#{name}'s Grade for #{@grade.assignment.name}"
     edit:
       title: "Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}"
-    importers: 
+    importers:
       title: "Grade Import"
-    csv: 
+    csv:
       title: "Import Grades for #{@assignment.name}"
-  groups: 
+  groups:
     index:
       title: "#{current_course.group_term.pluralize}"
     show:
@@ -125,9 +125,9 @@ en:
     edit:
       title: "Editing #{@group.name}"
   info:
-    dashboard: 
+    dashboard:
       title: "Dashboard"
-    earned_badges: 
+    earned_badges:
       title: "Awarded #{term_for :badges}"
     grading_status:
       title: "Grading Status"
@@ -148,7 +148,7 @@ en:
       title: "#{(current_course.student_term).singularize} Roster"
     flagged:
       title: "Flagged #{(current_course.student_term).pluralize}"
-    leaderboard: 
+    leaderboard:
       title: "Leaderboard"
   rubrics:
     design:

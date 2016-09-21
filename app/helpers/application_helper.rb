@@ -54,7 +54,9 @@ module ApplicationHelper
     else
       # look up translation key based on controller path, action name and .title
       # this works identical to the built-in lazy lookup
-      t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
+      title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
+      # evaluate any variables in the title
+      eval %Q{ "#{ title }" }
     end
   end
 
