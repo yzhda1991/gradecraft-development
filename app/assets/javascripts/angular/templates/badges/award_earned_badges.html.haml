@@ -1,7 +1,16 @@
 .badge-index-section
-  .badge-icon-container{'ng-repeat'=>'badge in vm.BadgeService.badges', 'ng-click'=>'vm.awardBadge(badge)'}
-    %img{'ng-class'=>"(vm.badgeActionable(badge) ? 'badge-icon' : 'badge-icon  unavailable')", 'ng-src'=>'{{badge.icon}}'}
+  .badge-icon-container.badge-award-button{'ng-repeat'=>'badge in vm.BadgeService.badges',
+    'ng-click'=>'vm.awardBadge(badge)',
+    'ng-class'=>'{"unavailable":!vm.badgeAvailable(badge), "awardable":vm.badgeAwardable(badge), "awarded":vm.badgeEarnedForGrade(badge)}',
+    }
+    %img{'ng-src'=>'{{badge.icon}}'}
+
     %p.badge-name {{badge.name}}
-    .gold-stars{'ng-show'=>"vm.badgeEarnedForGrade(badge)"}
-      -# %i.fa.fa-fw.fa-star
-      %i.hover-action.fa.fa-fw.fa-plus-circle
+    .status-icon
+      %i.fa.fa-fw.fa-star{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
+    .status-icon-hover
+      %i.fa.fa-fw.fa-minus-circle{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
+      %i.fa.fa-fw.fa-plus-circle{'ng-show'=>'vm.badgeAwardable(badge)'}
+
+
+

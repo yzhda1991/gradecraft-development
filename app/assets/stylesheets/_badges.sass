@@ -176,13 +176,6 @@ button#remove-badges, button#add-badges
     i.fa-fw
       z-index: 600 !important
 
-  /* for (+) hover state on grade earned badge section */
-  i.hover-action
-    display: none
-  &:hover
-    i.hover-action
-      display: block
-
 /* badge index table on instructor side */
 .badge-index-table
   .sort-column, .lock-icon-column
@@ -219,3 +212,39 @@ button#remove-badges, button#add-badges
     max-width: 100px
     display: block
     margin: 0 auto
+
+// Award Earned Badges on Grading Page
+
+.badge-icon-container.badge-award-button
+  cursor: pointer
+  .status-icon, .status-icon-hover
+    position: absolute
+    top: 0px
+    right: 0px
+    height: 28px
+    width: 28px
+    border-radius: 50%
+    font-size: 2rem
+    color: $color-yellow-1
+    .fa-fw
+      text-align: left
+
+  &.unavailable
+    cursor: default
+    // override legacy code:
+    img
+      cursor: default
+    opacity: .5
+    &:hover
+      .status-icon-hover
+        display: none
+
+  .status-icon-hover
+    display: none
+  &:hover
+    .status-icon
+      display: none
+    .status-icon-hover
+      display: block
+      background-color: white
+
