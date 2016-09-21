@@ -5,10 +5,17 @@ class CoursesController < ApplicationController
   skip_before_filter :require_login, only: [:badges]
   before_filter :ensure_staff?, except: [:index, :badges, :change]
   before_filter :ensure_not_impersonating?, only: [:index]
-  before_action :find_course, only: [:show, :edit, :copy, :update,
-    :destroy, :badges]
-  before_action :use_current_course, only: [:course_details, :custom_terms,
-    :multiplier_settings, :player_settings, :student_onboarding_setup ]
+  before_action :find_course, only: [:show,
+                                     :edit,
+                                     :copy,
+                                     :update,
+                                     :destroy,
+                                     :badges]
+  before_action :use_current_course, only: [:course_details,
+                                            :custom_terms,
+                                            :multiplier_settings,
+                                            :player_settings,
+                                            :student_onboarding_setup]
   skip_before_filter :verify_authenticity_token, only: [:change]
   before_filter :ensure_not_impersonating?, only: [:change]
 

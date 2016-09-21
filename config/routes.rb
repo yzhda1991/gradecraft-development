@@ -11,7 +11,7 @@ GradeCraft::Application.routes.draw do
   #5. Assignment Type Weights
   #6. Badges
   #7. Challenges
-  #8. Importers
+  #8. Integrations
   #9. Courses
   #10. Groups
   #11. Informational Pages
@@ -172,6 +172,10 @@ GradeCraft::Application.routes.draw do
 
   resources :challenge_grades, except: [:index, :new, :create]
 
+  #8. Integrations
+
+  resources :integrations, only: [:index, :create]
+
   #9. Courses
 
   resources :courses do
@@ -188,7 +192,6 @@ GradeCraft::Application.routes.draw do
   controller :courses do
     get :course_details
     get :custom_terms
-    get :integrations
     get :multiplier_settings
     get :player_settings
     get :student_onboarding_setup
