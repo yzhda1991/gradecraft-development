@@ -56,7 +56,8 @@ module ApplicationHelper
       # this works identical to the built-in lazy lookup
       title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
       # evaluate any variables in the title
-      eval %Q{ "#{ title }" }
+      # we may need to put some safety checks on this!
+      eval %{ "#{ title }" }
     end
   end
 
