@@ -8,7 +8,7 @@
       BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, vm.gradeId)
 
     vm.badgeAvailable = (badge)->
-      badge.can_earn_multiple_times || badge.earned_badge_count < 1
+      badge.available_for_student
 
     vm.badgeAwardable = (badge)->
       vm.badgeAvailable(badge) && !vm.badgeEarnedForGrade(badge)

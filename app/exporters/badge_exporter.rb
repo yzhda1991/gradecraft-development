@@ -4,7 +4,7 @@ class BadgeExporter
       csv << baseline_headers
       course.badges.each do |badge|
         csv << [ badge.id, badge.name, badge.full_points,
-          badge.description, badge.awarded_count ]
+          badge.description, badge.earned_count ]
       end
     end
   end

@@ -5,7 +5,7 @@ describe Badges::IndexPresenter do
   let(:badge) do
     double(:badge,
       name: "Badgerino",
-      awarded_count: "course count")
+      earned_count: "course count")
   end
 
   let(:student) do
