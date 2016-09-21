@@ -5,7 +5,7 @@ class EarnedBadgesController < ApplicationController
   # how what and how a student performed
 
   skip_before_filter :require_login, only: [:confirm_earned]
-  before_filter :ensure_staff?, except: [:confirm_earned]
+  before_filter :ensure_staff?, except: [:confirm_earned, :new, :create]
   before_action :find_badge, except: [:confirm_earned]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
@@ -29,6 +29,9 @@ class EarnedBadgesController < ApplicationController
   end
 
   def new
+    if current_user_is_student?
+      return render text: 'forbidden', status: 403 unless @badge.student_awardable
+    end
     @earned_badge = @badge.earned_badges.new
     @students = current_course.students
   end
@@ -38,6 +41,9 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
+    if current_user_is_student?
+      return render text: 'forbidden', status: 403 unless @badge.student_awardable
+    end
     result = Services::CreatesEarnedBadge.award earned_badge_params
 
     if result.success?
