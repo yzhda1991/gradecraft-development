@@ -193,9 +193,18 @@ $('#class-analytics-toggle').change(function(){
 
 // Show only earned level on mobile for rubric grades regardless of previous selection
 function rubricScreenSize() {
-  if ($('.level-tab').css('display') === 'none') {
+  if ($('.level-tabs').css('display') === 'none') {
     $('.level-tab.earned').trigger('click');
+    $('.tab-panel-container').addClass('mobile-rubric-slider');
   }
 }
 rubricScreenSize();
 $(window).resize(rubricScreenSize);
+
+ // Initialize slick slider on mobile for graded rubrics
+$('.mobile-rubric-slider').slick({
+  prevArrow: '<a class="fa fa-caret-left previous rubric-slider-button"></a>',
+  nextArrow: '<a class="fa fa-caret-right next rubric-slider-button"></a>',
+  adaptiveHeight: true, 
+  infinite: false
+});

@@ -13,12 +13,12 @@
           - if !level.hide_analytics?
             - unless level.criterion_grades(current_user).empty?
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
-
-    - criterion.levels.ordered.each_with_index do |level, lindex|
-      .tab-panel{:class => ("earned selected" if level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}", :role => "tabpanel", "aria-labelledby" => "tab#{lindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
-        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-        - if level.earned_for?(student.id)
-          %section.grader-feedback
-            %h6 Comments
-            .level.level-comments.comments-box
-              = raw criterion.comments_for(student.id)
+    .tab-panel-container{"data-start-index" => find_earned_rubric_grade(criterion, student.id)}
+      - criterion.levels.ordered.each_with_index do |level, lindex|
+        .tab-panel{:class => ("earned selected" if level.earned_for?(student.id)), :id => "tab-#{cindex}-#{lindex}", :role => "tabpanel", "aria-labelledby" => "tab#{lindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
+          = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
+          - if level.earned_for?(student.id)
+            %section.grader-feedback
+              %h6 Comments
+              .level.level-comments.comments-box
+                = raw criterion.comments_for(student.id)

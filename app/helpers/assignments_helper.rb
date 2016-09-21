@@ -7,4 +7,8 @@ module AssignmentsHelper
       end
     end
   end
+
+  def find_earned_rubric_grade(criterion, student_id)
+    criterion.levels.ordered.index{|level| level.earned_for?(student_id)}
+  end
 end
