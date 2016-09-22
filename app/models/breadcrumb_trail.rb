@@ -84,7 +84,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Assignment Types", assignment_types_path)
     breadcrumb("Editing " + objects[:assignment_type].name)
   end
-
+  
+  def assignments_groups_grade
+    breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{ term_for :assignments }', assignments_path)
+    
+  end
 
   def badges_index
     breadcrumb("Dashboard", dashboard_path)
@@ -207,7 +212,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def earned_badges_edit
     breadcrumb("Dashboard", dashboard_path)
+<<<<<<< df1c20c6f678ecf04031ea28e3d872a9bbeb5ecb
     breadcrumb("Badges", badges_path)
+=======
+    breadcrumb('#{ term_for :badges }', badges_path)
+>>>>>>> Import users breadcrumbs
     breadcrumb("Editing Awarded " + objects[:earned_badge].name)
   end
 
@@ -321,41 +330,50 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def grades_edit
     breadcrumb("Dashboard", dashboard_path)
-
+    breadcrumb('#{term_for :assignments}', assignments_path)
+    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
+    breadcrumb("Editing Grade")
   end
 
   def grades_importers_index
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_csv
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_assignments
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_courses
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_grades
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_grades_import_results
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
   def grades_importers_import_results
     breadcrumb("Dashboard", dashboard_path)
+    breadcrumb('#{term_for :assignments}', assignments_path)
 
   end
 
@@ -436,6 +454,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb("Users", users_path)
     breadcrumb("Import Users")
+  end
+  
+  def users_import_results
+    breadcrumb("Dashboard", dashboard_path)
+    breadcrumb("Users", users_path)
+    breadcrumb("Imported Users")
   end
 
   def users_index

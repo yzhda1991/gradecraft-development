@@ -36,6 +36,11 @@ en:
       title: "Editing #{assignment.name}"
     new:
       title: "Create a New #{term_for :assignment}"
+    show:
+      title: "#{ @assignment.name }"
+  importers:
+    assignments_import:
+      title: 'Import #{ term_for :assignments }'
   badges:
     new:
       title: "Create a New #{term_for :badge}"
