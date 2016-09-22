@@ -14,6 +14,7 @@
       %p.card-text Import assignments, students, and grades from Canvas and keep them in sync.
 
       %form{ method: :post, action: integrations_path, class: "inline" }
-        %input{ type: :hidden, name: :integration_id, value: :canvas }
+        = hidden_field_tag :authenticity_token, form_authenticity_token
+        = hidden_field_tag :integration_id, :canvas
         %button{ type: :submit, class: "card-link button" } Link a Canvas Course
         = link_to "More Info", "http://canvaslms.com", target: "_blank", class: "card-link"
