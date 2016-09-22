@@ -1,0 +1,16 @@
+.badge-index-section
+  .badge-icon-container.badge-award-button{'ng-repeat'=>'badge in vm.BadgeService.badges',
+    'ng-click'=>'vm.awardBadge(badge)',
+    'ng-class'=>'{"unavailable":!vm.badgeAvailable(badge), "awardable":vm.badgeAwardable(badge), "awarded":vm.badgeEarnedForGrade(badge)}',
+    }
+    %img{'ng-src'=>'{{badge.icon}}'}
+
+    %p.badge-name {{badge.name}}
+    .status-icon
+      %i.fa.fa-fw.fa-star{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
+    .status-icon-hover
+      %i.fa.fa-fw.fa-minus-circle{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
+      %i.fa.fa-fw.fa-plus-circle{'ng-show'=>'vm.badgeAwardable(badge)'}
+
+
+

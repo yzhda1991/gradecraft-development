@@ -19,7 +19,7 @@ class Badges::IndexPresenter < Showtime::Presenter
     if student
       student.visible_earned_badges_for_badge_count(badge)
     else
-      badge.awarded_count
+      badge.earned_count
     end
   end
 

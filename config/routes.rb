@@ -344,14 +344,14 @@ GradeCraft::Application.routes.draw do
     resources :levels, only: :update
 
     # Student Predictor View, Predictor Preview
-    resources :predicted_earned_badges, only: [:index, :update]
+    resources :predicted_earned_badges, only: [:update]
     resources :predicted_earned_challenges, only: [:index, :update]
     resources :predicted_earned_grades, only: [:index, :update]
 
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
+      resources :badges, only: :index
       get "assignment_types", to: "assignment_types#index"
-      get "predicted_earned_badges", to: "predicted_earned_badges#index"
       get "predicted_earned_challenges", to: "predicted_earned_challenges#index"
       get "predicted_earned_grades", to: "predicted_earned_grades#index"
     end

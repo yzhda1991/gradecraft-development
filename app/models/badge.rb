@@ -3,9 +3,6 @@ class Badge < ActiveRecord::Base
   include UnlockableCondition
   include MultipleFileAttributes
 
-  # grade points available to the predictor from the assignment controller
-  attr_accessor :prediction
-
   acts_as_list scope: :course
 
   mount_uploader :icon, BadgeIconUploader
@@ -33,7 +30,7 @@ class Badge < ActiveRecord::Base
   scope :ordered, -> { order("position ASC") }
 
   # indexed badges
-  def awarded_count
+  def earned_count
     earned_badges.student_visible.count
   end
 
@@ -57,6 +54,13 @@ class Badge < ActiveRecord::Base
   # Counting how many times a particular student has earned this badge
   def earned_badge_count_for_student(student)
     earned_badges.where(student_id: student.id, student_visible: true).count
+  end
+
+  # Can this badge be awarded to a student?
+  # Must accound for invisible earned badges
+  def available_for_student?(student)
+    can_earn_multiple_times ||
+    earned_badges.where(student_id: student.id).count < 1
   end
 
   def earned_badge_total_points(student)

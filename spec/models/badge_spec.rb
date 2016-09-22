@@ -68,19 +68,19 @@ describe Badge do
     end
   end
 
-  describe "#awarded_count" do
+  describe "#earned_count" do
     it "returns the count of earned badges that have been awarded" do
       earned_badge = create(:earned_badge, badge: subject, student_visible: true)
       second_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
-      expect(subject.awarded_count).to eq(3)
+      expect(subject.earned_count).to eq(3)
     end
 
     it "does not include earned badges that are not student visible in the count" do
       earned_badge = create(:earned_badge, badge: subject, student_visible: false)
       second_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
-      expect(subject.awarded_count).to eq(2)
+      expect(subject.earned_count).to eq(2)
     end
   end
 
