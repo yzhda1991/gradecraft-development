@@ -3,7 +3,8 @@ class IntegrationsController < ApplicationController
 
   oauth_provider_param :integration_id
 
-  before_filter :ensure_staff?, :require_authorization
+  before_filter :ensure_staff?
+  before_filter :require_authorization, except: :index
 
   def index
     @course = current_course
