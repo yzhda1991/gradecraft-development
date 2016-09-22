@@ -1,6 +1,8 @@
 class IntegrationsController < ApplicationController
   include OAuthProvider
 
+  oauth_provider_param :integration_id
+
   before_filter :ensure_staff?, :require_authorization
 
   def index
@@ -9,6 +11,6 @@ class IntegrationsController < ApplicationController
   end
 
   def create
-    redirect_to integration_courses_path(params[:importer_provider_id])
+    redirect_to integration_courses_path(params[:integration_id])
   end
 end

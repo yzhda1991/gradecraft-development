@@ -3,6 +3,8 @@ require_relative "../../services/imports_lms_assignments"
 class Assignments::ImportersController < ApplicationController
   include OAuthProvider
 
+  oauth_provider_param :importer_provider_id
+
   before_filter :ensure_staff?
   before_filter except: :index do |controller|
     controller.unauthorized_path assignments_importers_path

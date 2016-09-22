@@ -1,6 +1,12 @@
 module OAuthProvider
   extend ActiveSupport::Concern
 
+  class_methods do
+    def oauth_provider_param(param)
+      @@oauth_provider_param = param
+    end
+  end
+
   protected
 
   def unauthorized_path(path)
@@ -8,7 +14,7 @@ module OAuthProvider
   end
 
   def require_authorization
-    provider = params[:importer_provider_id]
+    provider = params.fetch @@oauth_provider_param
     require_authorization_with provider
   end
 

@@ -4,6 +4,8 @@ require_relative "../../services/imports_lms_grades"
 class Grades::ImportersController < ApplicationController
   include OAuthProvider
 
+  oauth_provider_param :importer_provider_id
+
   before_filter :ensure_staff?
   before_filter except: [:download, :index, :show, :upload] do |controller|
     controller.unauthorized_path assignment_grades_importers_path(params[:assignment_id])

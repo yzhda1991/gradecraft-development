@@ -12,7 +12,7 @@ describe IntegrationsController do
     describe "POST create" do
       context "without an existing authentication" do
         it "redirects to authorize the integration" do
-          post :create, { importer_provider_id: provider }
+          post :create, { integration_id: provider }
 
           expect(response).to redirect_to "/auth/canvas"
         end
@@ -27,7 +27,7 @@ describe IntegrationsController do
         it "retrieves a refresh token" do
           expect_any_instance_of(UserAuthorization).to receive(:refresh!)
 
-          post :create, { importer_provider_id: provider }
+          post :create, { integration_id: provider }
         end
       end
 
@@ -38,7 +38,7 @@ describe IntegrationsController do
         end
 
         it "redirects to the redirect url" do
-          post :create, { importer_provider_id: provider }
+          post :create, { integration_id: provider }
 
           expect(response).to redirect_to integration_courses_path(:canvas)
         end
@@ -53,7 +53,7 @@ describe IntegrationsController do
     before { login_user(student) }
 
     it "redirects to the root" do
-      post :create, { importer_provider_id: provider }
+      post :create, { integration_id: provider }
 
       expect(response).to redirect_to root_path
     end
