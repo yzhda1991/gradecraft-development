@@ -8,15 +8,16 @@
       BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, vm.gradeId)
 
     vm.badgeAvailable = (badge)->
-      badge.available_for_student
+      badge.available_for_student || vm.badgeEarnedForGrade(badge)
 
     vm.badgeAwardable = (badge)->
-      vm.available_for_student && !vm.badgeEarnedForGrade(badge)
+      badge.available_for_student && !vm.badgeEarnedForGrade(badge)
 
     vm.awardBadge = (badge)->
       return if !vm.badgeAvailable(badge)
       if earnedBadge = vm.badgeEarnedForGrade(badge)
         BadgeService.deleteEarnedBadge(earnedBadge)
+        badge.available_for_student = true
       else
         BadgeService.createEarnedBadge(badge.id, vm.studentId, vm.gradeId)
   ]
