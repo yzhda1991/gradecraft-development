@@ -1,0 +1,12 @@
+= csrf_meta_tag
+
+= content_nav_for @assignment, "Copy Rubric"
+
+.pageContent
+  = render "layouts/alerts"
+
+  %h1 Choose a rubric from the following:
+
+  - @rubrics.each do |rubric|
+
+    %h2= rubric.assignment.name

@@ -17,6 +17,11 @@ class RubricsController < ApplicationController
     respond_with @rubric
   end
 
+  def copy
+    @assignment = Assignment.find(params[:assignment_id])
+    @rubrics = Rubric.where(assignment_id: current_course.assignments.pluck(:id)).includes(:assignment)
+  end
+
   def destroy
     @rubric.destroy
     respond_with @rubric

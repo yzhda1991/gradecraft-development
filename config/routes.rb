@@ -106,6 +106,7 @@ GradeCraft::Application.routes.draw do
 
     resource :rubric, except: [:edit, :index, :new] do
       get :design, on: :collection
+      get :copy, on: :collection
       get :export, on: :collection
     end
   end
