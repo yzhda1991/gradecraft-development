@@ -10,7 +10,7 @@
     %h6= "#{term_for :badges} Available"
     = render partial: "rubrics/components/level_badges", locals: { level: level }
 
-- elsif !level.level_badges(current_user).empty? && include_grade_info && level.earned_for?(student.id)
+- if !level.level_badges(current_user).empty? && include_grade_info && level.earned_for?(student.id)
   %section.badges-earned
     %h6= "#{term_for :badges} Earned"
     = render partial: "rubrics/components/level_badges", locals: { level: level }

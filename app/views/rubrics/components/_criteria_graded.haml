@@ -23,9 +23,8 @@
             %h5.level-name= "#{level.name}"
           .tab-panel-body
             = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
-            - if level.earned_for?(student.id)
+            - if level.earned_for?(student.id) && criterion.comments_for(student.id).present?
               %section.grader-feedback
-                - if criterion.comments_for(student.id).present?
-                  %h6 Comments
-                  .level.level-comments.comments-box
-                    = raw criterion.comments_for(student.id)
+                %h6 Comments
+                .level.level-comments.comments-box
+                  = raw criterion.comments_for(student.id)
