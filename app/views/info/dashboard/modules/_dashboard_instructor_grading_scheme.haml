@@ -7,4 +7,4 @@
       .level-name #{element.name} #{points element.lowest_points}
       %span.student-count= element.count_students_earned
     - if current_course.student_count > 0
-      .fill-bar.bar_magic{:style => "width: #{(element.count_students_earned) / (current_course.student_count) * 100}%;"}
+      .fill-bar.bar_magic{:style => "width: #{(element.count_students_earned) / (current_course.graded_student_count).to_f * 100}%;"}
