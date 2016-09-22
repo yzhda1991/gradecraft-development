@@ -24,7 +24,6 @@ describe AssignmentTypesController do
     describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
-        expect(assigns(:title)).to eq("Assignment type Analytics")
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:index)
       end
@@ -33,7 +32,6 @@ describe AssignmentTypesController do
     describe "GET new" do
       it "assigns title and assignment types" do
         get :new
-        expect(assigns(:title)).to eq("Create a New Assignment type")
         expect(assigns(:assignment_type)).to be_a_new(AssignmentType)
         expect(response).to render_template(:new)
       end
@@ -42,7 +40,6 @@ describe AssignmentTypesController do
     describe "GET edit" do
       it "assigns title and assignment types" do
         get :edit, id: @assignment_type.id
-        expect(assigns(:title)).to eq("Editing #{@assignment_type.name}")
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:edit)
       end
@@ -119,7 +116,6 @@ describe AssignmentTypesController do
     describe "GET all_grades" do
       it "displays all grades for an assignment type" do
         get :all_grades, id: @assignment_type.id
-        expect(assigns(:title)).to eq("#{@assignment_type.name} Grade Patterns")
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:all_grades)
       end

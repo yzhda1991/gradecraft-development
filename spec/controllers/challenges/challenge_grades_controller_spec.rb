@@ -45,7 +45,6 @@ describe Challenges::ChallengeGradesController do
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, challenge_id: challenge.id
-        expect(assigns(:title)).to eq("Quick Grade #{challenge.name}")
         expect(response).to render_template(:mass_edit)
       end
     end
@@ -77,7 +76,6 @@ describe Challenges::ChallengeGradesController do
     describe "GET edit_status" do
       it "displays the edit_status page" do
         get :edit_status, { challenge_id: challenge.id, challenge_grade_ids: [ @challenge_grade.id ] }
-        expect(assigns(:title)).to eq("#{challenge.name} Grade Statuses")
         expect(response).to render_template(:edit_status)
       end
     end

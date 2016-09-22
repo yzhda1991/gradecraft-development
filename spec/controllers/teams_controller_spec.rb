@@ -20,7 +20,6 @@ describe TeamsController do
     describe "GET index" do
       it "returns all teams for the current course" do
         get :index
-        expect(assigns(:title)).to eq("Teams")
         expect(assigns(:teams)).to eq(@course.reload.teams)
         expect(response).to render_template(:index)
       end
@@ -29,7 +28,6 @@ describe TeamsController do
     describe "GET show" do
       it "returns the team show page" do
         get :show, id: @team.id
-        expect(assigns(:title)).to eq(@team.name)
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:show)
       end
@@ -38,7 +36,6 @@ describe TeamsController do
     describe "GET new" do
       it "assigns a name" do
         get :new
-        expect(assigns(:title)).to eq("Create a New Team")
         expect(assigns(:team)).to be_a_new(Team)
         expect(response).to render_template(:new)
       end
@@ -47,7 +44,6 @@ describe TeamsController do
     describe "GET edit" do
       it "assigns name " do
         get :edit, id: @team.id
-        expect(assigns(:title)).to eq("Editing #{@team.name}")
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:edit)
       end

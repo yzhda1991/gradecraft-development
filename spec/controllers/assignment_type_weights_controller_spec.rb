@@ -13,7 +13,6 @@ describe AssignmentTypeWeightsController do
     describe "GET index" do
       it "returns index page for weights" do
         get :index
-        expect(assigns(:title)).to eq("Editing My Multiplier Choices")
         expect(response).to render_template("index")
       end
     end

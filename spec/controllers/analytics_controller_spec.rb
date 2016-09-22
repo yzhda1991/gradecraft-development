@@ -18,7 +18,6 @@ describe AnalyticsController do
     describe "GET students" do
       it "returns the student analytics page for the current course" do
         get :students
-        expect(assigns(:title)).to eq("Student Analytics")
         expect(response).to render_template(:students)
       end
     end
@@ -26,7 +25,6 @@ describe AnalyticsController do
     describe "GET staff" do
       it "returns the staff analytics page for the current course" do
         get :staff
-        expect(assigns(:title)).to eq("TA Analytics")
         expect(response).to render_template(:staff)
       end
     end

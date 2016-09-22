@@ -26,8 +26,6 @@ describe Assignments::GroupsController do
         @assignment.groups << group
         group.students << @student
         get :grade, { assignment_id: @assignment.id, id: group.id }
-        expect(assigns(:title)).to \
-          eq("Grading #{group.name}'s #{@assignment.name}")
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:assignment_score_levels)).to \
           eq(@assignment.assignment_score_levels)
