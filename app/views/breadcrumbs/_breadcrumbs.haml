@@ -2,6 +2,7 @@
   - breadcrumbs.each do |breadcrumb|
     - if breadcrumb.link?
       %li
-        = link_to "#{breadcrumb.label}", breadcrumb.url
-    - else 
-      %li= breadcrumb.label
+        -# evaluate expressions from breadcrumbs_trail.rb
+        = link_to eval(%{ "#{ breadcrumb.label }" }), breadcrumb.url
+    - else
+      %li= eval %{ "#{ breadcrumb.label }" }
