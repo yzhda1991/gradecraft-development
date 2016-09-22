@@ -6,7 +6,7 @@ describe RubricsController do
   let(:professor) { create(:professor_course_membership, course: course).user }
   let(:student) { create(:student_course_membership, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
-  let!(:rubric) { create(:rubric, assignment: assignment) }
+  let!(:rubric) { create(:rubric_with_criteria, assignment: assignment) }
 
   context "as a professor" do
     before do
@@ -30,13 +30,24 @@ describe RubricsController do
       end
     end
 
-    describe "GET copy" do
+    describe "GET index_for_copy" do
       let(:new_assignment) { create(:assignment, course: course) }
 
       it "retrieves the list of rubric for course to add" do
-        get :copy, assignment_id: new_assignment.id
+        get :index_for_copy, assignment_id: new_assignment.id
         expect(assigns(:assignment)).to eq(new_assignment)
         expect(assigns(:rubrics)).to eq([rubric])
+      end
+    end
+
+    describe "GET copy" do
+      let(:new_assignment) { create(:assignment, course: course) }
+      let(:full_rubric) { create(:rubric_with_criteria) }
+
+      it "copies the full rubric and adds it to the assignment" do
+        post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id
+        expect(new_assignment.rubric.criteria.pluck(:max_points)).to \
+          eq(full_rubric.criteria.pluck(:max_points))
       end
     end
   end
@@ -48,6 +59,7 @@ describe RubricsController do
       [
         :design,
         :create,
+        :index_for_copy,
         :copy,
         :destroy,
         :update

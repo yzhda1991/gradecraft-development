@@ -17,9 +17,16 @@ class RubricsController < ApplicationController
     respond_with @rubric
   end
 
-  def copy
+  def index_for_copy
     @assignment = Assignment.find(params[:assignment_id])
-    @rubrics = Rubric.where(assignment_id: current_course.assignments.pluck(:id)).includes(:assignment)
+    @rubrics = Rubric.where(assignment_id: current_course.assignments.pluck(:id))
+  end
+
+  def copy
+    assignment = Assignment.find(params[:assignment_id])
+    Rubric.find(params[:rubric_id]).copy(assignment_id: assignment.id)
+    redirect_to assignment_path(assignment),
+      notice: "added rubric to #{(term_for :assignment).titleize} #{assignment.name}"
   end
 
   def destroy
