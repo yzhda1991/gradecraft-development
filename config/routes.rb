@@ -174,7 +174,9 @@ GradeCraft::Application.routes.draw do
 
   #8. Integrations
 
-  resources :integrations, only: [:index, :create]
+  resources :integrations, only: [:index, :create] do
+    resources :courses, only: :index
+  end
 
   #9. Courses
 
