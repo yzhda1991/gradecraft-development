@@ -14,7 +14,6 @@ describe "assignments/_instructor_index" do
   end
 
   before(:each) do
-    assign(:title, "Assignments")
     assign(:assignment_types, [@assignment_type_1,@assignment_type_2])
     allow(view).to receive(:current_course).and_return(@course)
   end
