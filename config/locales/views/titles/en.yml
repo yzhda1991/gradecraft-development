@@ -153,6 +153,9 @@ en:
   rubrics:
     design:
       title: "Design Rubric"
+  submissions:
+    show:
+      title: "#{@submission.student.name}'s Submission"
   teams:
     index:
       title: "#{term_for :teams}"

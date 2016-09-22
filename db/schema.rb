@@ -631,6 +631,25 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.string   "last_completed_step"
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.string   "name",                limit: 255
+    t.text     "description"
+    t.datetime "due_at"
+    t.boolean  "accepts_submissions"
+    t.boolean  "group"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "course_id"
+    t.string   "assignment_type",     limit: 255
+    t.string   "type",                limit: 255
+    t.string   "taskable_type",       limit: 255
+  end
+
+  add_index "tasks", ["assignment_id", "assignment_type"], name: "index_tasks_on_assignment_id_and_assignment_type", using: :btree
+  add_index "tasks", ["course_id"], name: "index_tasks_on_course_id", using: :btree
+  add_index "tasks", ["id", "type"], name: "index_tasks_on_id_and_type", using: :btree
+
   create_table "team_leaderships", force: :cascade do |t|
     t.integer  "team_id"
     t.integer  "leader_id"
@@ -656,6 +675,13 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
+  end
+
+  create_table "themes", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "filename",   limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "unlock_conditions", force: :cascade do |t|

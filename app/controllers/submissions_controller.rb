@@ -3,6 +3,7 @@ class SubmissionsController < ApplicationController
   before_filter :save_referer, only: [:new, :edit]
 
   def show
+    @submission = Submission.find(params[:id])
     presenter = Submissions::ShowPresenter.new(presenter_attrs_with_id)
     authorize! :read, presenter.submission
     render :show, locals: { presenter: presenter }

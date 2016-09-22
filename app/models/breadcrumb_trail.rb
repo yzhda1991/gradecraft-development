@@ -398,6 +398,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Students", students_path)
   end
   
+  def submissions_show
+    breadcrumb("Dashboard", dashboard_path)
+    breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
+  end
+  
   def teams_index
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb("Teams", teams_path)
