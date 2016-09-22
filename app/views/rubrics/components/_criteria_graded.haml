@@ -19,6 +19,7 @@
           = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
           - if level.earned_for?(student.id)
             %section.grader-feedback
-              %h6 Comments
-              .level.level-comments.comments-box
-                = raw criterion.comments_for(student.id)
+              - if criterion.comments_for(student.id).present?
+                %h6 Comments
+                .level.level-comments.comments-box
+                  = raw criterion.comments_for(student.id)
