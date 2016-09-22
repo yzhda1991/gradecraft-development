@@ -22,10 +22,8 @@ describe "users/edit" do
 
   it "renders the breadcrumbs" do
     render
-    assert_select ".content-nav", count: 1
     assert_select ".breadcrumbs" do
       assert_select "a", count: 4
     end
   end
 end
-
