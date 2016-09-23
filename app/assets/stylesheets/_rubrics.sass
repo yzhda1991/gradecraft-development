@@ -473,10 +473,10 @@ button.meets-expectations-status.no-expectation
     font-size: 1.2rem
     &:hover
       text-decoration: none
-
+    &.slick-disabled
+      display: none !important
     &.next
       right: 16px
-
     &.previous
       left: 16px
 
@@ -492,6 +492,7 @@ button.meets-expectations-status.no-expectation
 #rubric-ungraded
   .tab-panel
     border-bottom: 1px solid $color-grey-6
+    padding: 0.5rem
     &:last-child
       border-bottom: none
     &.meets-expectations-cutoff
