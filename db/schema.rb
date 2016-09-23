@@ -604,10 +604,7 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.text     "text_comment"
     t.integer  "creator_id"
     t.integer  "group_id"
-    t.datetime "released_at"
     t.integer  "course_id"
-    t.integer  "assignment_type_id"
-    t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",               default: false, null: false
   end

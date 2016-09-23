@@ -80,7 +80,6 @@ class RemoveCharacterLimits < ActiveRecord::Migration
     change_column :submission_files, :file, :string, limit: nil
     
     change_column :submissions, :link, :string, limit: nil
-    change_column :submissions, :assignment_type, :string, limit: nil
     
     change_column :teams, :name, :string, limit: nil
     change_column :teams, :banner, :string, limit: nil
