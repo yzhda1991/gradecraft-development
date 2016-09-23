@@ -16,7 +16,6 @@ class SamlController < ApplicationController
       @user = User.find_by_email(email)
       if !@user.blank?
         auto_login @user
-        User.increment_counter(:visit_count, @user.id)
         session[:course_id] = CourseRouter.current_course_for @user
         redirect_back_or_to dashboard_path
       else
