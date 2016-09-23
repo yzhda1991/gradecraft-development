@@ -442,7 +442,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   end
 
   add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
-  add_index "group_memberships", ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
   add_index "group_memberships", ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
