@@ -396,30 +396,20 @@ ActiveRecord::Schema.define(version: 20160915164717) do
 
   create_table "grades", force: :cascade do |t|
     t.integer  "raw_points"
-    t.integer  "assignment_id"
+    t.integer  "assignment_id", null: false
     t.text     "feedback"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "complete"
-    t.boolean  "semis"
-    t.boolean  "finals"
-    t.string   "type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at" , null: false
     t.string   "status"
-    t.boolean  "attempted"
-    t.boolean  "substantial"
     t.integer  "final_points"
     t.integer  "submission_id"
-    t.integer  "course_id"
-    t.boolean  "shared"
-    t.integer  "student_id"
+    t.integer  "course_id", null: false
+    t.integer  "student_id", null: false
     t.integer  "group_id"
-    t.string   "group_type"
     t.integer  "score"
     t.integer  "assignment_type_id"
     t.integer  "full_points"
-    t.text     "admin_notes"
     t.integer  "graded_by_id"
-    t.integer  "team_id"
     t.integer  "predicted_score",            default: 0,     null: false
     t.boolean  "instructor_modified",        default: false
     t.string   "pass_fail_status"
