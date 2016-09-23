@@ -23,7 +23,7 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.where(id: params[:id]).first
     if @earned_badge.present?
       render nothing: true, status: 200
-    else 
+    else
       redirect_to root_path
     end
   end
