@@ -581,21 +581,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "student_academic_histories", force: :cascade do |t|
-    t.integer "student_id"
-    t.string  "major"
-    t.decimal "gpa"
-    t.integer "current_term_credits"
-    t.integer "accumulated_credits"
-    t.string  "year_in_school"
-    t.string  "state_of_residence"
-    t.string  "high_school"
-    t.boolean "athlete"
-    t.integer "act_score"
-    t.integer "sat_score"
-    t.integer "course_id"
-  end
-
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",                          null: false
     t.integer  "submission_id",                     null: false
@@ -736,14 +721,8 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.datetime "avatar_updated_at"
     t.string   "first_name"
     t.string   "last_name"
-    t.integer  "rank"
     t.string   "display_name"
-    t.boolean  "private_display",                 default: false
     t.integer  "current_course_id"
-    t.string   "final_grade"
-    t.integer  "visit_count"
-    t.integer  "predictor_views"
-    t.integer  "page_views"
     t.string   "team_role"
     t.datetime "last_login_at"
     t.datetime "last_logout_at"

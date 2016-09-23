@@ -75,11 +75,6 @@ class RemoveCharacterLimits < ActiveRecord::Migration
     
     change_column :sessions, :session_id, :string, limit: nil
     
-    change_column :student_academic_histories, :major, :string, limit: nil
-    change_column :student_academic_histories, :year_in_school, :string, limit: nil
-    change_column :student_academic_histories, :state_of_residence, :string, limit: nil
-    change_column :student_academic_histories, :high_school, :string, limit: nil
-    
     change_column :submission_files, :filename, :string, limit: nil
     change_column :submission_files, :filepath, :string, limit: nil
     change_column :submission_files, :file, :string, limit: nil
