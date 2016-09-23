@@ -430,7 +430,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
   add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
-  add_index "grades", ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
