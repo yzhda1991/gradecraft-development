@@ -338,12 +338,13 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def grades_importers_index
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
+    breadcrumb("Grade Import")
   end
 
   def grades_importers_csv
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
+    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
 
   end
 
