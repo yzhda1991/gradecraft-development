@@ -95,7 +95,6 @@ class RemoveCharacterLimits < ActiveRecord::Migration
     change_column :users, :first_name, :string, limit: nil
     change_column :users, :last_name, :string, limit: nil
     change_column :users, :display_name, :string, limit: nil
-    change_column :users, :final_grade, :string, limit: nil
     change_column :users, :team_role, :string, limit: nil
     change_column :users, :lti_uid, :string, limit: nil
     change_column :users, :last_login_from_ip_address, :string, limit: nil
