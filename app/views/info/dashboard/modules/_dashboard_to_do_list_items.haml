@@ -23,14 +23,14 @@
         .small.uppercase= "#{assignment.assignment_type.name}"
       - if assignment.due_at?.present?
         .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
-- if assignment_list.empty?
-  %li.dashboard-message
-    - if list_class == "course-planner-list"
-      - if presenter.due_dates?
-        You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
-      - else
-        This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
-    - elsif list_class == "my-planner-list"
-      You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the 
-      = link_to "grade predictor", predictor_path
-      to add #{(term_for :assignment).downcase.pluralize} to this planner.
+  - if assignment_list.empty?
+    %li.dashboard-message
+      - if list_class == "course-planner-list"
+        - if presenter.due_dates?
+          You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
+        - else
+          This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
+      - elsif list_class == "my-planner-list"
+        You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the 
+        = link_to "grade predictor", predictor_path
+        to add #{(term_for :assignment).downcase.pluralize} to this planner.
