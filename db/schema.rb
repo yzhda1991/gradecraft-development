@@ -440,7 +440,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "course_id"
-    t.string   "group_type"
   end
 
   add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree

@@ -59,7 +59,6 @@ class RemoveCharacterLimits < ActiveRecord::Migration
     change_column :grade_scheme_elements, :description, :string, limit: nil
     
     change_column :group_memberships, :accepted, :string, limit: nil
-    change_column :group_memberships, :group_type, :string, limit: nil
     
     change_column :groups, :name, :string, limit: nil
     change_column :groups, :approved, :string, limit: nil
