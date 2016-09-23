@@ -18,7 +18,7 @@
         %td= points student.grade_for_course(current_course).try(:name)
 
         - if course.has_badges?
-          %td= student.earned_badges.count
+          %td= student.earned_badges_for_course(current_course).count
 
         - if course.has_teams?
           %td
