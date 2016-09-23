@@ -160,7 +160,7 @@ en:
       title: "Design Rubric"
   submissions:
     show:
-      title: "#{@submission.student.name}'s Submission"
+      title: "test"
   teams:
     index:
       title: "#{term_for :teams}"

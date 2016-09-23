@@ -212,11 +212,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def earned_badges_edit
     breadcrumb("Dashboard", dashboard_path)
-<<<<<<< df1c20c6f678ecf04031ea28e3d872a9bbeb5ecb
-    breadcrumb("Badges", badges_path)
-=======
     breadcrumb('#{ term_for :badges }', badges_path)
->>>>>>> Import users breadcrumbs
     breadcrumb("Editing Awarded " + objects[:earned_badge].name)
   end
 
@@ -419,7 +415,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   
   def submissions_show
     breadcrumb("Dashboard", dashboard_path)
-    breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
+    #breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
   end
   
   def teams_index
