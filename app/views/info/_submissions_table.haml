@@ -23,9 +23,9 @@
           - if assignment.is_individual?
             %td= link_to student.first_name, student_path(student)
             %td= link_to student.last_name, student_path(student)
-            %td
-              - if course.has_teams? && student.present? && team.present?
-                = link_to team.name, team
+            - if course.has_teams?
+              %td
+                = link_to team.name, team if student.present? && team.present?
           - elsif assignment.has_groups?
             %td= link_to group.try(:name), group_path(group)
           %td= submission.submitted_at
