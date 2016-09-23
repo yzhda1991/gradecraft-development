@@ -342,6 +342,7 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "assignment_id"
     t.integer  "level_id"
     t.boolean  "student_visible", default: false, null: false
+    t.integer  "awarded_by_id"
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
@@ -829,6 +830,7 @@ ActiveRecord::Schema.define(version: 20161003210720) do
   add_foreign_key "announcement_states", "users"
   add_foreign_key "announcements", "courses"
   add_foreign_key "announcements", "users", column: "author_id"
+  add_foreign_key "earned_badges", "users", column: "awarded_by_id"
   add_foreign_key "flagged_users", "courses"
   add_foreign_key "flagged_users", "users", column: "flagged_id"
   add_foreign_key "flagged_users", "users", column: "flagger_id"

@@ -23,3 +23,7 @@
     = @earned_badge.created_at
 
   %p= raw @earned_badge.feedback
+
+  %p
+    %b= "Awarded by:"
+    = @earned_badge.awarded_by.name

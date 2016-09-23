@@ -9,6 +9,7 @@ class EarnedBadge < ActiveRecord::Base
   belongs_to :submission # Optional
   belongs_to :grade # Optional
   belongs_to :group, polymorphic: true # Optional
+  belongs_to :awarded_by, class_name: 'User'
   has_many :badge_files, through: :badge
 
   validates_presence_of :badge, :course, :student
