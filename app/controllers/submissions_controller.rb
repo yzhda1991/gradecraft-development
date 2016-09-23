@@ -92,7 +92,7 @@ class SubmissionsController < ApplicationController
   end
 
   def submission_params
-    params.require(:submission).permit :task_id, :assignment_id, :assignment_type_id,
+    params.require(:submission).permit :assignment_id, :assignment_type_id,
       :group_id, :link, :student_id, :creator_id, :text_comment, :submitted_at,
       :course_id, :released_at, :submission_file_ids, submission_files_attributes: [:id, file: []]
   end

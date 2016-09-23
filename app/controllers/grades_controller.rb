@@ -135,7 +135,7 @@ class GradesController < ApplicationController
       :feedback, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
       :final_points, :grade_file_ids, :grade_files_attributes, :graded_at, :graded_by_id,
       :group_id, :group_type, :instructor_modified, :is_custom_value, :pass_fail_status,
-      :full_points, :raw_points, :student_id, :submission_id, :task_id, :team_id, :status,
+      :full_points, :raw_points, :student_id, :submission_id, :team_id, :status,
       grade_files_attributes: [:id, file: []]
   end
 

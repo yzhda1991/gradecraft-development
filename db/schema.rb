@@ -412,7 +412,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.integer  "course_id"
     t.boolean  "shared"
     t.integer  "student_id"
-    t.integer  "task_id"
     t.integer  "group_id"
     t.string   "group_type"
     t.integer  "score"
@@ -438,13 +437,11 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
   add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
   add_index "grades", ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
   add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
-  add_index "grades", ["task_id"], name: "index_grades_on_task_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "group_id", null: false
@@ -635,7 +632,6 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.integer  "creator_id"
     t.integer  "group_id"
     t.datetime "released_at"
-    t.integer  "task_id"
     t.integer  "course_id"
     t.integer  "assignment_type_id"
     t.string   "assignment_type"
