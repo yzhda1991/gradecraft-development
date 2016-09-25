@@ -15,7 +15,6 @@ describe "assignment_types/all_grades" do
 
   before(:each) do
     assign(:assignment_type, @assignment_type)
-    assign(:title, "#{@assignment_type.name} Grade Patterns")
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:term_for).and_return("Assignment")
   end
@@ -25,16 +24,6 @@ describe "assignment_types/all_grades" do
     it "renders successfully" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       render
-      assert_select "h2", count: 1
     end
-
-    it "renders the breadcrumbs" do
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      render
-      assert_select ".breadcrumbs" do
-        assert_select "a", count: 4
-      end
-    end
-
   end
 end

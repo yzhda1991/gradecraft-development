@@ -33,7 +33,7 @@ en:
     settings:
       title: "Review #{term_for :assignment} Settings"
     edit:
-      title: "Editing #{assignment.name}"
+      title: "Editing #{ @assignment.name }"
     new:
       title: "Create a New #{term_for :assignment}"
     show:
