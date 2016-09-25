@@ -50,11 +50,11 @@ GradeCraft::Application.routes.draw do
   namespace :assignments do
     resources :importers, param: :provider_id, only: :index do
       get :courses
-      get "/courses/:id/assignments", to: :assignments, as: :assignments
-      post "/courses/:id/assignments/import", to: :assignments_import,
+      get "/courses/:id/assignments", action: :assignments, as: :assignments
+      post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import
-      post "/assignments/:id/refresh", to: :refresh_assignment, as: :refresh_assignment
-      post "/assignments/:id/update", to: :update_assignment, as: :update_assignment
+      post "/assignments/:id/refresh", action: :refresh_assignment, as: :refresh_assignment
+      post "/assignments/:id/update", action: :update_assignment, as: :update_assignment
     end
   end
 
@@ -87,9 +87,9 @@ GradeCraft::Application.routes.draw do
         get :download
         post :upload
         get :courses
-        get "/courses/:id/assignments", to: :assignments, as: :assignments
-        post "/courses/:id/grades", to: :grades, as: :grades
-        post "/courses/:id/grades/import", to: :grades_import, as: :grades_import
+        get "/courses/:id/assignments", action: :assignments, as: :assignments
+        post "/courses/:id/grades", action: :grades, as: :grades
+        post "/courses/:id/grades/import", action: :grades_import, as: :grades_import
       end
     end
 
