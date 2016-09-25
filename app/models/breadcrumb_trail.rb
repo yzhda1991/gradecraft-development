@@ -341,37 +341,31 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
     breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
-
   end
 
   def grades_importers_assignments
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
   end
 
   def grades_importers_courses
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
   end
 
   def grades_importers_grades
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
   end
 
   def grades_importers_grades_import_results
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
   end
 
   def grades_importers_import_results
     breadcrumb("Dashboard", dashboard_path)
     breadcrumb('#{term_for :assignments}', assignments_path)
-
   end
 
   def rubrics_design
@@ -415,7 +409,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   
   def submissions_show
     breadcrumb("Dashboard", dashboard_path)
-    #breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
+    breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
   end
   
   def teams_index
