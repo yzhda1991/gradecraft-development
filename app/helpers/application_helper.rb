@@ -38,18 +38,13 @@ module ApplicationHelper
     classes.join " "
   end
 
-  def title(object)
-    if content_for?(:title)
-      # allows the title to be set in the view by using t(".title")
-      content_for :title, object
-    else
-      # look up translation key based on controller path, action name and .title
-      # this works identical to the built-in lazy lookup
-      title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
-      # evaluate any variables in the title
-      # we may need to put some safety checks on this!
-      eval %{ "#{ title }" }
-    end
+  def title
+    # look up translation key based on controller path, action name and .title
+    # this works identical to the built-in lazy lookup
+    title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "#{current_course.name}")
+    # evaluate any variables in the title
+    # we may need to put some safety checks on this!
+    eval %{ "#{ title }" }
   end
 
   # Add class="active" to navigation item of current page
