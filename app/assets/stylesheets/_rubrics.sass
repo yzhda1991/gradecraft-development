@@ -333,14 +333,22 @@ button.meets-expectations-status.no-expectation
 #rubric-graded, #rubric-ungraded
   *
     font-weight: 300
-  h5
+  h4
     font-size: 1.1em
     text-transform: uppercase
-    font-weight: 400
-  h6
-    font-size: 1em
-    font-weight: 400
     margin: 0
+
+  h5
+    font-size: 1em
+    margin: 0
+
+  h6
+    font-size: 0.9em
+    margin: 0
+
+  h4, h5, h6
+    font-weight: 400
+
   section
     margin-bottom: 1rem
     &:last-child
@@ -369,6 +377,8 @@ button.meets-expectations-status.no-expectation
     display: -ms-flexbox
     display: flex
     margin: 0
+    @media (max-width: $media-small-max)
+      display: none
 
   .level-tab
     list-style-type: none
@@ -400,8 +410,6 @@ button.meets-expectations-status.no-expectation
       border-bottom: none
       &:hover
         background-color: lighten($color-green-1, 22%)
-    @media (max-width: $media-small-max)
-      display: none
 
   .level-name
     display: inline
@@ -414,8 +422,20 @@ button.meets-expectations-status.no-expectation
     font-size: 0.65rem
     font-style: italic
 
-  .earned-level-panel, .tab-panel
+  .meets-expectations-label
+    font-size: 0.8rem
+
+  .tab-panel-body
     padding: 0.5rem
+
+  .tab-panel-header
+    padding: 0.5rem 2rem
+    background-color: $color-grey-6
+    display: none
+    text-align: center
+    font-weight: 400
+    @media (max-width: $media-small-max)
+      display: block
 
   ul.badge-row
     height: auto
@@ -434,6 +454,35 @@ button.meets-expectations-status.no-expectation
       display: block
     &.earned
       background-color: lighten($color-green-1, 20%)
+      .tab-panel-header
+        background-color: lighten($color-green-1, 20%)
+      @media (max-width: $media-small-max)
+        background-color: inherit
+
+  .slick-slide
+    padding: 0
+    display: block
+
+  .rubric-slider-button
+    position: absolute
+    top: 10px
+    display: block
+    cursor: pointer
+    z-index: 1
+    color: $color-blue-3
+    font-size: 1.2rem
+    &:hover
+      text-decoration: none
+    &.slick-disabled
+      display: none !important
+    &.next
+      right: 16px
+    &.previous
+      left: 16px
+
+.class-analytics-toggle, .download-link
+  @media (max-width: $media-small-max)
+    display: none
 
 // label for class analytics toggle
 .class-analytics-label
@@ -443,13 +492,14 @@ button.meets-expectations-status.no-expectation
 #rubric-ungraded
   .tab-panel
     border-bottom: 1px solid $color-grey-6
+    padding: 0.5rem
     &:last-child
       border-bottom: none
     &.meets-expectations-cutoff
       border-bottom: 2px dashed $color-green-2
       position: relative
 
-  .meets-expectations-label, .meets-expectations-tag
+  .meets-expectations-tag
     font-size: 0.8rem
 
   .meets-expectations-tag

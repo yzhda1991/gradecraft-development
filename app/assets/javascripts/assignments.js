@@ -191,10 +191,29 @@ $('#class-analytics-toggle').change(function(){
   }
 });
 
-// Show only earned level on mobile for rubric grades regardless of previous selection
+// If screen is at mobile size, initialize slider for rubric feedback and destroy it when screen size is larger than mobile
 function rubricScreenSize() {
-  if ($('.level-tab').css('display') === 'none') {
-    $('.level-tab.earned').trigger('click');
+  var $tabPanelContainer = $('.tab-panel-container');
+  // rather than testing window size which varies in browser, using MQ to hide level tabs on mobile
+  if ($('.level-tabs').css('display') === 'none') {
+    // Initialize slick slider on mobile for graded rubrics if not already initialized
+    if (!$tabPanelContainer.hasClass('slick-initialized')) {
+      $tabPanelContainer.each(function() {
+        var $thisSlider = $(this);
+
+        $thisSlider.slick({
+          prevArrow: '<a class="fa fa-caret-left previous rubric-slider-button"></a>',
+          nextArrow: '<a class="fa fa-caret-right next rubric-slider-button"></a>',
+          initialSlide: $thisSlider.data("start-index"),
+          adaptiveHeight: true, 
+          infinite: false
+        });
+      });
+    }
+  } else {
+    if ($tabPanelContainer.hasClass('slick-initialized')) {
+      $tabPanelContainer.slick("unslick");
+    }
   }
 }
 rubricScreenSize();
