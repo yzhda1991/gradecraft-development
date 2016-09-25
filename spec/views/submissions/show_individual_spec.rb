@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "submissions/show", focus: true do
+describe "submissions/show" do
 
   let(:presenter) { Submissions::ShowPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id, view_context: view_context }) }
   let(:view_context) { double(:view_context, points: "12,000") }

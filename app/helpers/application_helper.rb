@@ -38,15 +38,6 @@ module ApplicationHelper
     classes.join " "
   end
 
-  # Return a title on a per-page basis.
-  # def title
-  #   base_title = ""
-  #   if @title.nil?
-  #     base_title
-  #   else
-  #     "#{@title}"
-  #   end
-  # end
   def title(object)
     if content_for?(:title)
       # allows the title to be set in the view by using t(".title")
