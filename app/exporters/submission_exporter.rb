@@ -3,9 +3,8 @@ class SubmissionExporter
     CSV.generate do |csv|
       csv << baseline_headers
       course.submissions.each do |submission|
-        grade = submission.student.grade_for_assignment(submission.assignment)
         csv << [ submission.id, submission.assignment_id, submission.assignment.name,
-          submission.student_id, submission.group_id, submission.text_comment, submission.created_at, submission.updated_at, grade.score || "", grade.feedback || "", grade.updated_at ]
+          submission.student_id, submission.group_id, submission.text_comment, submission.created_at, submission.updated_at, submission.grade.try(:score), submission.grade.try(:feedback), submission.grade.try(:updated_at) ]
       end
     end
   end
