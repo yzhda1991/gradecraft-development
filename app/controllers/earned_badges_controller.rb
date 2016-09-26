@@ -30,7 +30,7 @@ class EarnedBadgesController < ApplicationController
 
   def new
     if current_user_is_student?
-      return render text: 'forbidden', status: 403 unless @badge.student_awardable
+      return redirect_to root_url unless @badge.student_awardable
     end
     @earned_badge = @badge.earned_badges.new
     @students = current_course.students
@@ -42,7 +42,7 @@ class EarnedBadgesController < ApplicationController
 
   def create
     if current_user_is_student?
-      return render text: 'forbidden', status: 403 unless @badge.student_awardable
+      return redirect_to root_url unless @badge.student_awardable
     end
 
     result = Services::CreatesEarnedBadge.award earned_badge_params
