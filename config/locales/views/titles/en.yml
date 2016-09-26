@@ -1,7 +1,5 @@
 en:
   announcements:
-    index:
-      title: "Announcements"
     show: 
       title: "#{ @announcement.title }"
     new: 
