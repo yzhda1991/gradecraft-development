@@ -105,6 +105,8 @@ GEM
     arel (6.0.2)
     autonumeric-rails (1.9.37)
       jquery-rails (>= 2.0.2)
+    autoprefixer-rails (6.4.1.1)
+      execjs
     aws-sdk (2.2.6)
       aws-sdk-resources (= 2.2.6)
     aws-sdk-core (2.2.6)
@@ -688,6 +690,7 @@ DEPENDENCIES
   angularjs-rails (~> 1.4.2)
   archive-zip (~> 0.7.0)
   autonumeric-rails
+  autoprefixer-rails
   aws-sdk (~> 2)
   better_errors
   bullet
@@ -786,5 +789,8 @@ DEPENDENCIES
   wysiwyg-rails
   zeus
 
+RUBY VERSION
+   ruby 2.2.2p95
+
 BUNDLED WITH
-   1.11.2
+   1.12.5
