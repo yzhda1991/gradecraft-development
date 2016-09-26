@@ -232,6 +232,7 @@ describe EarnedBadgesController do
     before(:each) do
       login_user(@student)
       @badge = create(:badge, course: @course)
+      @badge_student_awardable = create(:badge, course: @course, student_awardable: true)
     end
 
     describe "protected routes" do
@@ -244,6 +245,20 @@ describe EarnedBadgesController do
             expect(get route, {badge_id: @badge.id}).to redirect_to(:root)
           end
         end
+    end
+
+    describe "GET new" do
+      it "display the create form when the badge is student-awardable" do
+        get :new, badge_id: @badge_student_awardable.id
+        expect(assigns(:title)).to eq("Award #{@badge_student_awardable.name}")
+        expect(assigns(:earned_badge)).to be_a_new(EarnedBadge)
+        expect(response).to render_template(:new)
+      end
+
+      it "redirects to root when the badge is not student-awardable" do
+        get :new, badge_id: @badge.id
+        expect(response).to redirect_to(:root)
+      end
     end
 
     describe "protected routes requiring id in params" do
