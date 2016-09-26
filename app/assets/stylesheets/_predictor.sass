@@ -72,7 +72,6 @@ $card-margin-1 : 3px
   #svg-graph-points-predicted
     fill: $color-blue-3
   #svg-earned-key
-    -webkit-transform: translate(10px,90px) /* Safari */
     transform: translate(10px,90px)
     .key
       fill: $color-green-3
@@ -80,7 +79,6 @@ $card-margin-1 : 3px
       height: 20
   #svg-predicted-key
     transform: translate(230px,90px)
-    -webkit-transform: translate(230px,90px)
     .key
       fill: $color-blue-3
       width: 20
@@ -88,7 +86,6 @@ $card-margin-1 : 3px
   #svg-predicted-grade
     font-size: $predictor-font-size-3
     font-weight: bold
-    -webkit-transform: translate(10px,130px) /* Safari */
 
 
 // ICONS AND TOOLTIPS
@@ -153,14 +150,13 @@ $card-margin-1 : 3px
   border-left: 5px solid transparent
   border-right: 5px solid transparent
   border-top: 8px solid $color-blue-4
-  -webkit-backface-visibility: hidden
+  backface-visibility: hidden
   &:hover
     cursor: pointer
 
 .collapsed
   .collapse-arrow
     transform: rotate(-90deg)
-    -webkit-transform: rotate(-90deg)
 
 .predictor-section-title
   font-size: $predictor-font-size-3
@@ -184,10 +180,7 @@ $card-margin-1 : 3px
   text-align: right
   position: relative
   // don't interfere with collapsable section heads onClick()
-  -moz-user-select: none
-  -khtml-user-select: none
-  -webkit-user-select: none
-  -o-user-select: none
+  user-select: none
 
 .predictor-unweighted-point-total, .predictor-weighted-point-total, .predictor-title-right-span, .weighted-earned-points
   float: left
