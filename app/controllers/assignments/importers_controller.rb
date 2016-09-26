@@ -7,7 +7,8 @@ class Assignments::ImportersController < ApplicationController
 
   before_filter :ensure_staff?
   before_filter except: :index do |controller|
-    controller.unauthorized_path assignments_importers_path
+    controller.redirect_path assignments_importer_courses_path \
+      params[:importer_provider_id]
   end
   before_filter :require_authorization, except: :index
 

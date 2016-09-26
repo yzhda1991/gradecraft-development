@@ -9,7 +9,7 @@ module OAuthProvider
 
   protected
 
-  def unauthorized_path(path)
+  def redirect_path(path)
     session[:return_to] = path
   end
 
@@ -22,8 +22,7 @@ module OAuthProvider
     auth = authorization(provider)
 
     if auth.nil?
-      redirect_to "/auth/#{provider}",
-        notice: "You could not be authorized with #{provider.capitalize}."
+      redirect_to "/auth/#{provider}"
     elsif auth.expired?
       config = ActiveLMS.configuration.providers[provider.to_sym]
       auth.refresh_with_config! config
