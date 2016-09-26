@@ -40,7 +40,7 @@ describe IntegrationsController do
         it "redirects to the redirect url" do
           post :create, { integration_id: provider }
 
-          expect(response).to redirect_to courses_integration_path(:canvas)
+          expect(response).to redirect_to integration_courses_path(:canvas)
         end
       end
     end
