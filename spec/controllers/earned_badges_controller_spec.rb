@@ -229,7 +229,10 @@ describe EarnedBadgesController do
   end
 
   context "as student" do
-    before { login_user(@student) }
+    before(:each) do
+      login_user(@student)
+      @badge = create(:badge, course: @course)
+    end
 
     describe "protected routes" do
       [
@@ -238,7 +241,7 @@ describe EarnedBadgesController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            expect(get route, {badge_id: 1}).to redirect_to(:root)
+            expect(get route, {badge_id: @badge.id}).to redirect_to(:root)
           end
         end
     end
@@ -251,7 +254,7 @@ describe EarnedBadgesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {badge_id: 1, id: "1"}).to redirect_to(:root)
+          expect(get route, {badge_id: @badge.id, id: "1"}).to redirect_to(:root)
         end
       end
     end
