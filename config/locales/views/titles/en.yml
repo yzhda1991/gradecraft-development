@@ -3,61 +3,61 @@ en:
     index:
       title: "Announcements"
     show: 
-      title: "{ announcement.title }"
+      title: "#{ @announcement.title }"
     new: 
       title: "Create a New Announcement"
     edit: 
-      title: "Edit { announcement.title } Announcement"
+      title: "Edit { @announcement.title } Announcement"
   analytics:
     students:
-      title: "Student Analytics"
+      title: "#{ term_for :student } Analytics"
     staff:
       title: "Staff Analytics"
   assignment_type_weights:
     index:
-      title: "Editing My #{term_for :weight} Choices"
+      title: "Editing My #{ term_for :weight } Choices"
   assignment_types:
     index:
-      title: "%{term_for :assignment_types}"
+      title: "%{ term_for :assignment_types }"
     show:
       title:
     new:
-      title: "Create a New #{term_for :assignment_type}"
+      title: "Create a New #{ term_for :assignment_type }"
     edit:
-      title: "Editing #{@assignment_type.name}"
+      title: "Editing #{ @assignment_type.name }"
     all_grades:
-      title: "#{@assignment_type.name} Grade Patterns"
+      title: "#{ @assignment_type.name } Grade Patterns"
   assignments:
     index:
-      title: "Assignments"
+      title: "#{ term_for :assignments }"
     settings:
-      title: "Review #{term_for :assignment} Settings"
+      title: "Review #{ term_for :assignment } Settings"
     edit:
       title: "Editing #{ @assignment.name }"
     new:
-      title: "Create a New #{term_for :assignment}"
+      title: "Create a New #{ term_for :assignment }"
     show:
       title: "#{ @assignment.name }"
   importers:
     assignments_import:
-      title: 'Import #{ term_for :assignments }'
+      title: "Import #{ term_for :assignments }"
   badges:
     new:
-      title: "Create a New #{term_for :badge}"
+      title: "Create a New #{ term_for :badge }"
     edit:
-      title: "Editing #{@badge.name}"
+      title: "Editing #{ @badge.name }"
   challenges:
     index:
-      title: "#{term_for :challenges}"
+      title: "#{ term_for :challenges }"
     show:
-      title: "@challenge.name"
+      title: "#{ @challenge.name }"
     new:
-      title: "Create a New #{term_for :challenge}"
+      title: "Create a New #{ term_for :challenge }"
     edit:
-      title: "Editing #{@challenge.name}"
+      title: "Editing #{ @challenge.name }"
     challenge_grades:
       new:
-        title: "Testing"
+        title: "Grade #{ @team.name }'s #{ @challenge.name }"
   courses:
     index:
       title: "My Courses"
@@ -72,16 +72,16 @@ en:
     custom_terms:
       title: "Custom Terms"
     player_settings:
-      title: "#{term_for :student} Settings"
+      title: "#{ term_for :student } Settings"
     student_onboarding_setup:
-      title: "Student Onboarding Setup"
+      title: "#{ term_for :student } Onboarding Setup"
   challenge_grades:
     show:
-      title: "#{@team.name}'s #{@challenge_grade.name} Grade"
+      title: "#{ @team.name }'s #{@challenge_grade.name} Grade"
     edit:
-      title: "Editing #{@challenge.name} Grade"
+      title: "Editing #{ @challenge.name } Grade"
     mass_edit:
-      title: "Quick Grade #{@challenge.name}"
+      title: "Quick Grade #{ @challenge.name }"
   downloads:
     index:
       title: "Course Data Exports"
@@ -90,22 +90,22 @@ en:
       title: "Dashboard"
   earned_badges:
     show:
-      title: "#{@student.name}'s #{@badge.name} #{term_for :badge}"
+      title: "#{ @student.name }'s #{ @badge.name } #{ term_for :badge }"
     new:
-      title: "Award #{@badge.name}"
+      title: "Award #{ @badge.name }"
     edit:
-      title: "Editing Awarded #{@badge.name}"
+      title: "Editing Awarded #{ @badge.name }"
     mass_edit:
-      title: "Quick Award #{@badge.name}"
+      title: "Quick Award #{ @badge.name }"
   events:
     index:
       title: "Calendar Events"
     show:
-      title: "#{@event.name}"
+      title: "#{ @event.name }"
     new:
       title: "Create a New Calendar Event"
     edit:
-      title: "Editing #{@event.name}"
+      title: "Editing #{ @event.name }"
   grade_scheme_elements:
     index:
       title: "Grade Scheme"
@@ -113,46 +113,46 @@ en:
       title: "Edit Grade Scheme"
   grades:
     show:
-      title: "#{name}'s Grade for #{@grade.assignment.name}"
+      title: "#{ name }'s Grade for #{ @grade.assignment.name }"
     edit:
-      title: "Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}"
+      title: "Editing #{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
     importers:
       title: "Grade Import"
     csv:
-      title: "Import Grades for #{@assignment.name}"
+      title: "Import Grades for #{ @assignment.name }"
   groups:
     index:
-      title: "#{current_course.group_term.pluralize}"
+      title: "#{ current_course.group_term.pluralize }"
     show:
-      title: "#{@group.name}"
+      title: "#{ @group.name }"
     new:
-      title: "Start a #{term_for :group}"
+      title: "Start a #{ term_for :group }"
     edit:
-      title: "Editing #{@group.name}"
+      title: "Editing #{ @group.name }"
   info:
     dashboard:
       title: "Dashboard"
     earned_badges:
-      title: "Awarded #{term_for :badges}"
+      title: "Awarded #{ term_for :badges }"
     grading_status:
       title: "Grading Status"
     top_10:
       title: "Top 10/Bottom 10"
     per_assign:
-      title: "#{term_for :assignment} Analytics"
+      title: "#{ term_for :assignment } Analytics"
     multiplier_choices:
-      title: "#{current_course.weight_term} Choices"
+      title: "#{ term_for :weight } Choices"
   rubric:
     design:
-      title: "Design Rubric for #{@assignment.name}"
+      title: "Design Rubric for #{ @assignment.name }"
   staff:
     index:
       title: "Staff Index"
   students:
     index:
-      title: "#{(current_course.student_term).singularize} Roster"
+      title: "#{ term_for :student } Roster"
     flagged:
-      title: "Flagged #{(current_course.student_term).pluralize}"
+      title: "Flagged #{ term_for :students }"
     leaderboard:
       title: "Leaderboard"
   rubrics:
@@ -160,23 +160,23 @@ en:
       title: "Design Rubric"
   submissions:
     show:
-      title: "test"
+      title: "#{ @submission.student.name }'s Submission for #{ @submission.assignment.name }"
   teams:
     index:
-      title: "#{term_for :teams}"
+      title: "#{ term_for :teams }"
     show:
-      title: "#{@team.name}"
+      title: "#{ @team.name }"
     new:
-      title: "Create a New #{term_for :team}"
+      title: "Create a New #{ term_for :team }"
     edit:
-      title: "Editing #{@team.name}"
+      title: "Editing #{ @team.name }"
   users:
     index:
       title: "All Users"
     new:
       title: "Create a New User"
     edit:
-      title: "Editing #{@user.name}"
+      title: "Editing #{ @user.name }"
     edit_profile:
       title: "Edit My Profile"
     import:
