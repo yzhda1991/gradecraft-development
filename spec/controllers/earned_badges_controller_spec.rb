@@ -260,6 +260,30 @@ describe EarnedBadgesController do
       end
     end
 
+    describe "POST create" do
+      it "creates the earned badge when the badge is student-awardable" do
+        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+              badge_id: @badge_student_awardable.id,
+              student_id: @student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to change(EarnedBadge.student_visible, :count).by(1)
+        expect(response).to redirect_to badge_path(@badge_student_awardable)
+      end
+
+      it "doesn't create earned badge when the badge is not student-awardable" do
+        expect{ post :create, badge_id: @badge.id, earned_badge: {
+              badge_id: @badge.id,
+              student_id: @student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to_not change(EarnedBadge,:count)
+        expect(response).to redirect_to :root
+      end
+    end
+
     describe "protected routes requiring id in params" do
       [
         :edit,
@@ -269,6 +293,9 @@ describe EarnedBadgesController do
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {badge_id: @badge.id, id: "1"}).to redirect_to(:root)
+        end
+        it "#{route} redirects to root for student-awardable badges" do
+          expect(get route, {badge_id: @badge_student_awardable.id, id: "1"}).to redirect_to(:root)
         end
       end
     end
