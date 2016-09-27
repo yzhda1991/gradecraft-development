@@ -42,8 +42,8 @@ module ApplicationHelper
     # look up translation key based on controller path, action name and .title
     # this works identical to the built-in lazy lookup
     title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "")
-    # evaluate any variables in the title
-    # we may need to put some safety checks on this!
+    # evaluate any variables in the title. These should remain
+    # restricted to preset titles in /config/locales/views/titles/en.yml
     eval %{ "#{ title }" }
   end
 
