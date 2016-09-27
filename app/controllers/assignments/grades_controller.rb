@@ -80,9 +80,9 @@ class Assignments::GradesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team)
     else
-      @students = current_course.students
+      @students = current_course.students_being_graded
     end
 
     @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
