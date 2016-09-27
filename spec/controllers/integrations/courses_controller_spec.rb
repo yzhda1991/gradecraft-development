@@ -1,25 +1,52 @@
 require "rails_spec_helper"
 
 describe Integrations::CoursesController do
+  let(:course_id) { "COURSE_ID" }
   let(:provider) { :canvas }
 
   context "as a professor" do
+    let(:course) { create :course }
     let(:professor) { professor_membership.user }
-    let(:professor_membership) { create :professor_course_membership }
+    let(:professor_membership) { create :professor_course_membership, course: course }
 
     before { login_user(professor) }
 
-    describe "POST #link" do
+    describe "POST #create" do
       context "without an existing authentication" do
         it "redirects to authorize the integration" do
-          post :create, { integration_id: provider }
+          post :create, { integration_id: provider, id: course_id }
 
           expect(response).to redirect_to "/auth/canvas"
         end
       end
 
-      xit "creates the link between the course and the provider course"
-      xit "redirects back to the integrations page"
+      context "with an existing authentication" do
+        let(:linked_course) { LinkedCourse.last }
+        let!(:user_authorization) do
+          create :user_authorization, :canvas, user: professor,
+            access_token: "BLAH", expires_at: 2.days.from_now
+        end
+
+        it "creates the link between the course and the provider course" do
+          post :create, { integration_id: provider, id: course_id }
+
+          expect(linked_course).to_not be_nil
+          expect(linked_course.provider).to eq provider.to_s
+          expect(linked_course.course_id).to eq course.id
+          expect(linked_course.provider_resource_id).to eq course_id
+          expect(linked_course.last_linked_at).to be_within(1.second).of(DateTime.now)
+        end
+
+        it "redirects back to the integrations page" do
+          post :create, { integration_id: provider, id: course_id }
+
+          expect(response).to redirect_to integrations_path(provider)
+        end
+
+        context "with an existing linked course" do
+          xit "replaces the current linked course"
+        end
+      end
     end
   end
 
@@ -29,7 +56,10 @@ describe Integrations::CoursesController do
 
     before { login_user(student) }
 
-    xit "redirects to the root" do
+    it "redirects to the root" do
+      post :create, { integration_id: provider, id: course_id }
+
+      expect(response).to redirect_to root_path
     end
   end
 end
