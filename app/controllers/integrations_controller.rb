@@ -17,20 +17,4 @@ class IntegrationsController < ApplicationController
   def create
     redirect_to integration_courses_path(params[:integration_id])
   end
-
-  def courses
-    @course = current_course
-    authorize! :read, @course
-
-    @provider_name = params[:integration_id]
-    @courses = syllabus(@provider_name).courses
-  end
-
-  private
-
-  def syllabus(provider)
-    @syllabus ||= ActiveLMS::Syllabus.new \
-      provider,
-      authorization(provider).access_token
-  end
 end
