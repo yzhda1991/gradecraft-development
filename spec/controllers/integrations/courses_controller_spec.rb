@@ -44,7 +44,17 @@ describe Integrations::CoursesController do
         end
 
         context "with an existing linked course" do
-          xit "replaces the current linked course"
+          before do
+            LinkedCourse.create! provider: provider, course_id: course.id,
+              provider_resource_id: "BLAH"
+          end
+
+          it "replaces the current linked course" do
+            post :create, { integration_id: provider, id: course_id }
+
+            expect(LinkedCourse.count).to eq 1
+            expect(linked_course.course_id).to eq course.id
+          end
         end
       end
     end
