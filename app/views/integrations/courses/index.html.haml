@@ -19,4 +19,7 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph("link") + "Link Course", "#", class: "button"
+                %li
+                  = form_tag integrations_path, method: :post do
+                    = hidden_field_tag :id, course["id"]
+                    = button_tag glyph("link") + "Link Course", class: "button"
