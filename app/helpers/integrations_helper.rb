@@ -1,4 +1,6 @@
 module IntegrationsHelper
+  include ExternalAuthorization
+
   def integration_card_for(provider, course)
     if course.linked?(provider)
       linked_integration_card_for(course.linked_for(provider))
@@ -20,7 +22,7 @@ module IntegrationsHelper
   private
 
   def syllabus_course(linked_course)
-    authorization = UserAuthorization.for(current_user, linked_course.provider)
+    authorization = validate_authorization(linked_course.provider)
     syllabus = ActiveLMS::Syllabus.new linked_course.provider, authorization.access_token
     syllabus.course(linked_course.provider_resource_id)
   end

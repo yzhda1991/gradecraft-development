@@ -1,5 +1,5 @@
 %h4.card-title Canvas Course Linked
 %p.card-text= linked_course["name"]
 %p.card-text= (linked_course["syllabus_body"] || "").html_safe
-%form{ method: :post, action: integrations_path(provider), class: "inline" }
+= form_tag(integration_course_path(provider, linked_course["id"]), method: :delete, class: "inline") do
   %button{ type: :submit, class: "card-link button" } Unlink Canvas Course

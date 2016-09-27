@@ -28,7 +28,7 @@ class Integrations::CoursesController < ApplicationController
     linked_course.last_linked_at = DateTime.now
     linked_course.save
 
-    redirect_to integrations_path(provider_name)
+    redirect_to integrations_path(provider_name), notice: "The #{provider_name.capitalize} course has been linked to #{course.name}"
   end
 
   def destroy
@@ -41,7 +41,7 @@ class Integrations::CoursesController < ApplicationController
                        course_id: course.id,
                        provider_resource_id: params[:id]).destroy_all
 
-    redirect_to integrations_path(provider_name)
+    redirect_to integrations_path(provider_name), notice: "The #{provider_name.capitalize} course has been unlinked from #{course.name}"
   end
 
   private
