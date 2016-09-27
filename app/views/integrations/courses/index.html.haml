@@ -20,6 +20,6 @@
             .right
               %ul.button-bar
                 %li
-                  = form_tag integrations_path, method: :post do
+                  = form_tag integration_courses_path(@provider_name), method: :post do
                     = hidden_field_tag :id, course["id"]
                     = button_tag glyph("link") + "Link Course", class: "button"
