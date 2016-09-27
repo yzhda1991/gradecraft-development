@@ -115,22 +115,22 @@ td.level-td
     margin-right: 10px
     height: 240px
     position: relative
-    float: left
     width: 190px
+    display: inline-block
+    white-space: initial
+    vertical-align: middle
 
 .level-container
   height: 280px !important
-  width: 10000px
-
-  .level
-    float: left
-    display: inline
 
 .criterion
   background: $color-grey-6
 
   &.saved
     background: $color-blue-3
+
+  input
+    margin-right: 0.2rem
 
   input.points
     z-index: 500
@@ -274,9 +274,7 @@ button.meets-expectations-status.no-expectation
   border: none
 
 .add-level
-  position: absolute
-  margin-top: -20px
-  right: 70px
+  vertical-align: bottom
 
 #rubric .rubric-container
   margin: 1rem 0
@@ -284,8 +282,9 @@ button.meets-expectations-status.no-expectation
   border: 1px solid $color-grey-6
   padding: 10px
   cursor: move
-  overflow-y: auto
+  overflow-x: auto
   height: 400px !important
+  white-space: nowrap
 
   .order-label
     display: inline-block
