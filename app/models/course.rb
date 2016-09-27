@@ -117,6 +117,10 @@ class Course < ActiveRecord::Base
     self.linked_courses.where(provider: provider).exists?
   end
 
+  def linked_for(provider)
+    self.linked_courses.where(provider: provider).first
+  end
+
   def valuable_badges?
     badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
   end

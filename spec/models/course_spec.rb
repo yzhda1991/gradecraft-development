@@ -144,6 +144,16 @@ describe Course do
     end
   end
 
+  describe "#linked_for" do
+    let!(:linked_course) { LinkedCourse.create provider: provider, course_id: subject.id }
+    let(:provider) { :canvas }
+    subject { create :course }
+
+    it "returns the linked course for the specified provider" do
+      expect(subject.linked_for(provider)).to eq linked_course
+    end
+  end
+
   describe "#staff" do
     it "returns an alphabetical list of the staff in the course" do
       course = create(:course)
