@@ -2,7 +2,8 @@ require "active_record_spec_helper"
 
 describe Course do
   subject { build(:course) }
-  let(:staff_membership) { create :staff_course_membership, course: subject, instructor_of_record: true }
+  let(:staff_membership) { create :staff_course_membership, course: subject,
+                                  instructor_of_record: true }
 
   describe "validations" do
     it "requires a name" do
@@ -83,9 +84,12 @@ describe Course do
   end
 
   describe "#grade_scheme_elements" do
-    let!(:high) { create(:grade_scheme_element, lowest_points: 2001, highest_points: 3000, course: subject) }
-    let!(:low) { create(:grade_scheme_element, lowest_points: 100, highest_points: 1000, course: subject) }
-    let!(:middle) { create(:grade_scheme_element, lowest_points: 1001, highest_points: 2000, course: subject) }
+    let!(:high) { create(:grade_scheme_element, lowest_points: 2001,
+                         highest_points: 3000, course: subject) }
+    let!(:low) { create(:grade_scheme_element, lowest_points: 100,
+                        highest_points: 1000, course: subject) }
+    let!(:middle) { create(:grade_scheme_element, lowest_points: 1001,
+                           highest_points: 2000, course: subject) }
 
     describe "#for_score" do
       it "returns the grade scheme element that falls within that points range" do
@@ -122,6 +126,21 @@ describe Course do
 
         expect(result.id).to be_nil
       end
+    end
+  end
+
+  describe "#linked?" do
+    let(:provider) { :canvas }
+    subject { create :course }
+
+    it "is linked if it has a linked course to the specified provider" do
+      LinkedCourse.create provider: provider, course_id: subject.id
+
+      expect(subject).to be_linked provider
+    end
+
+    it "is not linked if it does not have a linked course for the specified provider" do
+      expect(subject).to_not be_linked provider
     end
   end
 
@@ -668,8 +687,8 @@ describe Course do
       expect(subject.scores).to eq({:scores => [100, 200, 300]})
     end
   end
-  
-  describe "#earned_grade_scheme_elements_by_student_count" do 
+
+  describe "#earned_grade_scheme_elements_by_student_count" do
     it "returns the number of students who have earned each grade scheme element" do
       gse = create(:grade_scheme_element_high, course: subject)
       gse2 = create(:grade_scheme_element_low, course: subject)
@@ -678,9 +697,9 @@ describe Course do
       expect(subject.earned_grade_scheme_elements_by_student_count).to eq({:elements => [["#{gse2.name}", 1], ["#{gse.name}", 1]]})
     end
   end
-  
-  describe "#nonpredictors" do 
-    it "returns the students who have not yet predicted any assignments" do 
+
+  describe "#nonpredictors" do
+    it "returns the students who have not yet predicted any assignments" do
       student = create(:user)
       student_2 = create(:user)
       course = create(:course)

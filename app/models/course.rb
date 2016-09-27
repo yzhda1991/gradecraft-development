@@ -112,6 +112,10 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def linked?(provider)
+    LinkedCourse.where(provider: provider, course_id: self.id).exists?
+  end
+
   def valuable_badges?
     badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
   end
@@ -237,14 +241,14 @@ class Course < ActiveRecord::Base
       elements: elements
     }
   end
-  
+
   # creating a list of students who do not have any predictions
   def nonpredictors
     nonpredictors = []
     self.students.each do |student|
       if student.predictions_for_course?(self) == false
         nonpredictors << student
-      end 
+      end
     end
     return nonpredictors
   end
