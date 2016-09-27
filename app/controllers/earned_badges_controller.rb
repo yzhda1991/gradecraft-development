@@ -123,7 +123,7 @@ class EarnedBadgesController < ApplicationController
   def earned_badge_params
     params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
       :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy, :awarded_by_id
+      :student_visible, :_destroy
   end
 
   def find_badge
