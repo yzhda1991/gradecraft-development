@@ -60,6 +60,7 @@ class Course < ActiveRecord::Base
     c.has_many :grades
     c.has_many :groups
     c.has_many :group_memberships
+    c.has_many :linked_courses, dependent: :destroy
     c.has_many :submissions
     c.has_many :teams
     c.has_many :course_memberships
@@ -113,7 +114,7 @@ class Course < ActiveRecord::Base
   end
 
   def linked?(provider)
-    LinkedCourse.where(provider: provider, course_id: self.id).exists?
+    self.linked_courses.where(provider: provider).exists?
   end
 
   def valuable_badges?
