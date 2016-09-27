@@ -19,7 +19,6 @@ describe UsersController do
     describe "GET index" do
       it "returns the users for the current course" do
         get :index
-        expect(assigns(:title)).to eq("All Users")
         expect(assigns(:users)).to eq(@course.users)
         expect(response).to render_template(:index)
       end
@@ -28,7 +27,6 @@ describe UsersController do
     describe "GET new" do
       it "assigns the name" do
         get :new
-        expect(assigns(:title)).to eq("Create a New User")
         expect(assigns(:user)).to be_a_new(User)
         expect(response).to render_template(:new)
       end
@@ -37,7 +35,6 @@ describe UsersController do
     describe "GET edit" do
       it "renders the edit user form" do
         get :edit, id: @student.id
-        expect(assigns(:title)).to eq("Editing #{@student.name}")
         expect(assigns(:user)).to eq(@student)
         expect(response).to render_template(:edit)
       end
@@ -115,7 +112,6 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        expect(assigns(:title)).to eq("Edit My Profile")
         expect(assigns(:user)).to eq(@professor)
         expect(response).to render_template(:edit_profile)
       end
@@ -278,7 +274,6 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        expect(assigns(:title)).to eq("Edit My Profile")
         expect(assigns(:user)).to eq(@student)
         expect(response).to render_template(:edit_profile)
       end

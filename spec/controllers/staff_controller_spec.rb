@@ -17,7 +17,6 @@ describe StaffController do
     describe "GET index" do
       it "returns all staff for the current course" do
         get :index
-        expect(assigns(:title)).to eq("Staff Index")
         expect(assigns(:staff)).to eq([@professor])
         expect(response).to render_template(:index)
       end

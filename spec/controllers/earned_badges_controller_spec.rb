@@ -41,7 +41,6 @@ describe EarnedBadgesController do
     describe "GET new" do
       it "display the create form" do
         get :new, badge_id: @badge.id
-        expect(assigns(:title)).to eq("Award #{@badge.name}")
         expect(assigns(:earned_badge)).to be_a_new(EarnedBadge)
         expect(response).to render_template(:new)
       end
@@ -165,7 +164,6 @@ describe EarnedBadgesController do
       it "assigns params" do
         get :mass_edit, badge_id: @badge.id
         expect(assigns(:badge)).to eq(@badge)
-        expect(assigns(:title)).to eq("Quick Award #{@badge.name}")
         expect(assigns(:students)).to eq([@student])
         expect(response).to render_template(:mass_edit)
       end

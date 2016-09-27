@@ -24,7 +24,6 @@ describe CoursesController do
     describe "GET index" do
       it "returns all courses the professor has an association with" do
         get :index
-        expect(assigns(:title)).to eq("My Courses")
         expect(assigns(:courses)).to eq([course])
         expect(response).to render_template(:index)
       end
@@ -44,7 +43,6 @@ describe CoursesController do
     describe "GET show" do
       it "returns the course show page" do
         get :show, id: course.id
-        expect(assigns(:title)).to eq("Course Settings")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:show)
       end
@@ -53,7 +51,6 @@ describe CoursesController do
     describe "GET new" do
       it "assigns title" do
         get :new
-        expect(assigns(:title)).to eq("Create a New Course")
         expect(assigns(:course)).to be_a_new(Course)
         expect(response).to render_template(:new)
       end
@@ -62,7 +59,6 @@ describe CoursesController do
     describe "GET edit" do
       it "edit title" do
         get :edit, id: course.id
-        expect(assigns(:title)).to eq("Editing Basic Settings")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:edit)
       end
@@ -83,7 +79,6 @@ describe CoursesController do
     describe "GET multiplier_settings" do
       it "gets the form to edit the multiplier settings" do
         get :multiplier_settings, id: course.id
-        expect(assigns(:title)).to eq("Multiplier Settings")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:multiplier_settings)
       end
@@ -92,7 +87,6 @@ describe CoursesController do
     describe "GET custom_terms" do
       it "gets the form to edit custom terms" do
         get :custom_terms, id: course.id
-        expect(assigns(:title)).to eq("Custom Terms")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:custom_terms)
       end
@@ -101,7 +95,6 @@ describe CoursesController do
     describe "GET course_details" do
       it "gets the form to edit course details" do
         get :course_details, id: course.id
-        expect(assigns(:title)).to eq("Course Details")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:course_details)
       end
@@ -110,7 +103,6 @@ describe CoursesController do
     describe "GET player_settings" do
       it "gets the form to edit player settings" do
         get :player_settings, id: course.id
-        expect(assigns(:title)).to eq("#{course.student_term} Settings")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:player_settings)
       end
@@ -119,7 +111,6 @@ describe CoursesController do
     describe "GET student_onboarding_setup" do
       it "gets the form to edit the student onboarding process" do
         get :student_onboarding_setup, id: course.id
-        expect(assigns(:title)).to eq("Student Onboarding Setup")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:student_onboarding_setup)
       end
@@ -247,7 +238,6 @@ describe CoursesController do
     describe "GET index" do
       it "returns all courses the student has an association with" do
         get :index
-        expect(assigns(:title)).to eq("My Courses")
         expect(assigns(:courses)).to eq([course])
         expect(response).to render_template(:index)
       end
@@ -331,7 +321,6 @@ describe CoursesController do
     describe "GET badges" do
       it "returns the public badges show page" do
         get :badges, id: course.id
-        expect(assigns(:title)).to eq("#{course.name}")
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:badges)
       end

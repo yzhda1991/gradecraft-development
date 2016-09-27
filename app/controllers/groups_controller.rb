@@ -10,16 +10,13 @@ class GroupsController < ApplicationController
     @approved_groups = groups.approved
     @rejected_groups = groups.rejected
     @assignments = current_course.assignments.group_assignments
-    @title = current_course.group_term.pluralize
   end
 
   def show
-    @title = "#{@group.name}"
   end
 
   def new
     @group = current_course.groups.new
-    @title = "Start a #{term_for :group}"
     @other_students = potential_team_members
   end
 
@@ -45,7 +42,6 @@ class GroupsController < ApplicationController
 
   def edit
     @other_students = potential_team_members
-    @title = "Editing #{@group.name}"
   end
 
   def update

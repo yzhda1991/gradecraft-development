@@ -7,28 +7,23 @@ class AssignmentTypesController < ApplicationController
 
   # Display list of assignment types
   def index
-    @title = "#{term_for :assignment_type} Analytics"
-    @assignment_types =
-      current_course.assignment_types.ordered.includes(assignments: :assignment_type)
+    @assignment_types = current_course.assignment_types.ordered.includes(assignments: :assignment_type)
     @students = current_course.students
   end
 
   # Create a new assignment type
   def new
-    @title = "Create a New #{term_for :assignment_type}"
     @assignment_type = current_course.assignment_types.new
   end
 
   # Edit assignment type
   def edit
-    @title = "Editing #{@assignment_type.name}"
   end
 
   # Create a new assignment type
   def create
     @assignment_type =
       current_course.assignment_types.new(assignment_type_params)
-    @title = "Create a New #{term_for :assignment_type}"
 
     respond_to do |format|
       if @assignment_type.save
@@ -43,7 +38,6 @@ class AssignmentTypesController < ApplicationController
 
   # Update assignment type
   def update
-    @title = "Editing #{@assignment_type.name}"
     @assignment_type.update_attributes(assignment_type_params)
 
     respond_to do |format|
@@ -90,8 +84,6 @@ class AssignmentTypesController < ApplicationController
 
   # display all grades for all assignments in an assignment type
   def all_grades
-    @title = "#{@assignment_type.name} Grade Patterns"
-
     @teams = current_course.teams
 
     if params[:team_id].present?

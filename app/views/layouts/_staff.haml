@@ -4,8 +4,11 @@
 
 .mainContainer{role: "main", class: "staff"}
 
-  - if current_student.present?
-    %h2.pagetitle= current_student.name
-
   / Page content
-  .mainContent= render partial: "layouts/content"
+  .mainContent
+    = breadcrumbs
+    - if current_student.present?
+      %h2.pagetitle= current_student.name
+    - else
+      %h2.pagetitle= title
+    = render partial: "layouts/content"

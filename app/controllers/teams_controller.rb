@@ -5,7 +5,6 @@ class TeamsController < ApplicationController
 
   def index
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
-    @title = "#{term_for :teams}"
     if current_user_is_student?
       @team = current_student.team_for_course(current_course)
     end
@@ -15,12 +14,10 @@ class TeamsController < ApplicationController
     @team = current_course.teams.find(params[:id])
     @students = @team.students
     @challenges = current_course.challenges.chronological.alphabetical
-    @title = @team.name
   end
 
   def new
     @team =  current_course.teams.new
-    @title = "Create a New #{term_for :team}"
     @submit_message = "Create #{term_for :team}"
   end
 
@@ -32,7 +29,6 @@ class TeamsController < ApplicationController
 
   def edit
     @team =  current_course.teams.find(params[:id])
-    @title = "Editing #{@team.name}"
     @submit_message = "Update #{term_for :team}"
   end
 

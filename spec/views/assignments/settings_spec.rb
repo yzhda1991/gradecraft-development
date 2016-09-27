@@ -9,7 +9,6 @@ describe "assignments/settings" do
   end
 
   before(:each) do
-    assign(:title, "Assignment Settings")
     assign(:assignment_types, [@assignment_types])
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:term_for).and_return("Assignment")
@@ -17,6 +16,5 @@ describe "assignments/settings" do
 
   it "renders successfully" do
     render
-    assert_select "h2", text: "Assignment Settings", count: 1
   end
 end

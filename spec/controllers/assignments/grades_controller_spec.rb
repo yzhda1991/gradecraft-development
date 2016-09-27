@@ -23,7 +23,6 @@ describe Assignments::GradesController do
     describe "GET edit_status" do
       it "assigns params" do
         get :edit_status, { assignment_id: @assignment.id, grade_ids: [@grade.id] }
-        expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:grades)).to eq([@grade])
         expect(response).to render_template(:edit_status)
@@ -78,7 +77,6 @@ describe Assignments::GradesController do
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, assignment_id: @assignment.id
-        expect(assigns(:title)).to eq("Quick Grade #{@assignment.name}")
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
         expect(assigns(:assignment_score_levels)).to eq(@assignment.assignment_score_levels)

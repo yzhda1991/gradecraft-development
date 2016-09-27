@@ -6,22 +6,18 @@ class EventsController < ApplicationController
 
   def index
     @events = current_course.events.order("due_at ASC")
-    @title = "Calendar Events"
   end
 
   def show
     @event = current_course.events.find(params[:id])
-    @title = @event.name
   end
 
   def new
     @event = current_course.events.new
-    @title = "Create a New Calendar Event"
   end
 
   def edit
     @event = current_course.events.find(params[:id])
-    @title = "Editing #{@event.name}"
   end
 
   def create
@@ -30,7 +26,6 @@ class EventsController < ApplicationController
       flash[:notice] = "Event #{@event.name} was successfully created"
       respond_with(@event)
     else
-      @title = "Create a New Calendar Event"
       render :new
     end
   end

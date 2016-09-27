@@ -24,7 +24,6 @@ describe "submissions/show" do
 
   it "renders successfully for an individual submission" do
     render
-    assert_select "h2", text: "#{@student.first_name}'s #{@assignment.name} Submission (12,000 points)", count: 1
   end
 
   it "renders the submitted at date" do

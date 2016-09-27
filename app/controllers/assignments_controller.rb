@@ -9,7 +9,6 @@ class AssignmentsController < ApplicationController
   before_filter :sanitize_params, only: [:create, :update]
 
   def index
-    @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
     if current_user_is_student?
       render :index, Assignments::StudentPresenter.build({
@@ -24,18 +23,17 @@ class AssignmentsController < ApplicationController
   # Gives the instructor the chance to quickly check all assignment settings
   # for the whole course
   def settings
-    @title = "Review #{term_for :assignment} Settings"
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
   end
 
   def show
-    assignment = current_course.assignments.find_by(id: params[:id])
+    @assignment = current_course.assignments.find_by(id: params[:id])
     redirect_to assignments_path,
-      alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
+      alert: "The #{(term_for :assignment)} could not be found." and return unless @assignment.present?
 
-    mark_assignment_reviewed! assignment, current_user
+    mark_assignment_reviewed! @assignment, current_user
     render :show, Assignments::Presenter.build({
-      assignment: assignment,
+      assignment: @assignment,
       course: current_course,
       team_id: params[:team_id],
       view_context: view_context
@@ -51,10 +49,9 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    assignment = current_course.assignments.find(params[:id])
-    @title = "Editing #{assignment.name}"
+    @assignment = current_course.assignments.find(params[:id])
     render :edit, Assignments::Presenter.build({
-      assignment: assignment,
+      assignment: @assignment,
       course: current_course,
       view_context: view_context
       })
@@ -75,8 +72,6 @@ class AssignmentsController < ApplicationController
         notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" \
         and return
     end
-
-    @title = "Create a New #{term_for :assignment}"
     render :new, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
@@ -99,7 +94,6 @@ class AssignmentsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @title = "Edit #{term_for :assignment}"
         render :edit, Assignments::Presenter.build({
           assignment: assignment,
           course: current_course,

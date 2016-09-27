@@ -1,0 +1,8 @@
+%ul.breadcrumbs
+  - breadcrumbs.each do |breadcrumb|
+    - if breadcrumb.link?
+      %li
+        -# evaluate expressions from breadcrumbs_trail.rb
+        = link_to eval(%{ "#{ breadcrumb.label }" }), breadcrumb.url
+    - else
+      %li= eval %{ "#{ breadcrumb.label }" }

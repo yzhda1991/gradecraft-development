@@ -14,14 +14,11 @@ class GradesController < ApplicationController
     redirect_to @grade.assignment and return if current_user_is_student?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
-    @title = "#{name}'s Grade for #{@grade.assignment.name}"
   end
 
   # GET /grades/:id/edit
   def edit
     @grade = Grade.find params[:id]
-    @title = "Editing #{@grade.student.name}'s Grade "\
-      "for #{@grade.assignment.name}"
     @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
   end

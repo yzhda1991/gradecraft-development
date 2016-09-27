@@ -41,24 +41,10 @@ describe GradesController do
           group.assignments << assignment
           group.students << @student
         end
-
-        it "includes the group's name in the title" do
-          get :show, id: grade.id
-          expect(assigns(:title)).to \
-            eq("#{group.name}'s Grade for #{assignment.name}")
-        end
-
+        
         it "renders the template" do
           get :show, id: grade.id
           expect(response).to render_template(:show)
-        end
-      end
-
-      context "for an individual grade" do
-        it "includes the student's name in the title" do
-          get :show, id: @grade.id
-          expect(assigns(:title)).to \
-            eq("#{@student.name}'s Grade for #{@assignment.name}")
         end
       end
     end
@@ -67,8 +53,6 @@ describe GradesController do
       it "assigns grade parameters and renders edit" do
         get :edit, { id: @grade.id }
         expect(assigns(:grade)).to eq(@grade)
-        expect(assigns(:title)).to \
-          eq("Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}")
         expect(response).to render_template(:edit)
       end
 

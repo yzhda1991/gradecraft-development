@@ -2,7 +2,6 @@ class AnnouncementsController < ApplicationController
   include AnnouncementsHelper
 
   def index
-    @title = "Announcements"
     @announcements = Announcement.where(course_id: current_course.id)
   end
 
@@ -11,11 +10,9 @@ class AnnouncementsController < ApplicationController
     authorize! :show, @announcement
     @announcement.mark_as_read! current_user
     Rails.cache.delete unread_cache_key(current_user, @announcement.course)
-    @title = @announcement.title
   end
 
   def new
-    @title = "Create a New Announcement"
     @announcement = Announcement.new course_id: current_course.id
     authorize! :create, @announcement
   end
@@ -30,8 +27,6 @@ class AnnouncementsController < ApplicationController
         # rubocop:disable AndOr
         notice: "Announcement created and sent." and return
     end
-
-    @title = "Create a New Announcement"
     render :new
   end
 

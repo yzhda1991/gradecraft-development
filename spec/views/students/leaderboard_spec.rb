@@ -8,14 +8,7 @@ describe "students/leaderboard" do
 
   before(:each) do
     @students = course.students
-    assign(:title, "Leaderboard")
     allow(view).to receive(:current_course).and_return(course)
     allow(view).to receive(:presenter).and_return presenter
   end
-
-  it "renders successfully" do
-    render
-    assert_select "h2", text: "Leaderboard", count: 1
-  end
-
 end

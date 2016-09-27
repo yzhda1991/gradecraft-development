@@ -32,7 +32,6 @@ describe "submissions/show" do
 
   it "renders successfully for a group submission" do
     render
-    assert_select "h2", text: "#{group.name}'s #{assignment.name} Submission (12,000 points)", count: 1
   end
 
   it "renders the submitted at date" do

@@ -6,22 +6,18 @@ class ChallengesController < ApplicationController
   before_action :find_challenge, only: [:show, :edit, :update, :destroy]
 
   def index
-    @title = "#{term_for :challenges}"
     @challenges = current_course.challenges
   end
 
   def show
-    @title = @challenge.name
     @teams = current_course.teams
   end
 
   def new
     @challenge = current_course.challenges.new
-    @title = "Create a New #{term_for :challenge}"
   end
 
   def edit
-    @title = "Editing #{@challenge.name}"
   end
 
   def create

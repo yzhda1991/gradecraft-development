@@ -38,14 +38,13 @@ module ApplicationHelper
     classes.join " "
   end
 
-  # Return a title on a per-page basis.
   def title
-    base_title = ""
-    if @title.nil?
-      base_title
-    else
-      "#{@title}"
-    end
+    # look up translation key based on controller path, action name and .title
+    # this works identical to the built-in lazy lookup
+    title = t("#{ controller_path.tr('/', '.') }.#{ action_name }.title", default: "")
+    # evaluate any variables in the title. These should remain
+    # restricted to preset titles in /config/locales/views/titles/en.yml
+    eval %{ "#{ title }" }
   end
 
   # Add class="active" to navigation item of current page

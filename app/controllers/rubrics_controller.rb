@@ -9,7 +9,6 @@ class RubricsController < ApplicationController
     @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = @assignment.fetch_or_create_rubric
     @course_badge_count = @assignment.course.badges.visible.count
-    @title = "Design Rubric for #{@assignment.name}"
     respond_with @rubric
   end
 
