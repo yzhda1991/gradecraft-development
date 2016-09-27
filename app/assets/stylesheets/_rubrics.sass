@@ -21,6 +21,10 @@ $no-expectation-color: $color-grey-5
     height: 65px
     resize: none
     color: $color-black
+    &.criterion-description
+      width: 50em
+      height: 2rem
+      vertical-align: middle
 
   input
     height: 2rem
@@ -88,13 +92,6 @@ h4.notice
     color: $color-green-2
 
 #rubric-column-heading
-  margin-top: 1rem
-  .criterion-heading
-    background: $color-grey-7
-    margin: 0 .5rem .5rem
-    padding: .5rem
-    float: left
-    width: 195px
 
   .level-heading
     background: $color-grey-7
@@ -106,9 +103,14 @@ td.level-td
   border: 1px solid $color-grey-7
 
 #criterion-box
-  width: 94%
+  .criterion
+    position: relative
+    padding: 0.5rem 0.5rem 0 0.5rem
+    margin-bottom: 0.5rem
+    display: inline-block
+    width: 95%
 
-  .criterion, .level
+  .level
     padding: 2rem .5rem .5rem
     margin-right: 10px
     height: 240px
@@ -279,23 +281,19 @@ button.meets-expectations-status.no-expectation
 #rubric .rubric-container
   margin: 1rem 0
   clear: both
-  border: 1px dashed $color-grey-7
+  border: 1px solid $color-grey-6
   padding: 10px
   cursor: move
-  border-left: 2px solid $color-grey-5
-  width: 100%
-  overflow-y: scroll
-  height: 280px !important
+  overflow-y: auto
+  height: 400px !important
 
   .order-label
-    display: block
-    float: left
-    right: 0
+    display: inline-block
     background: $color-blue-2
-    padding: .5rem
+    padding: 0.77rem 
     color: $color-white
-    margin-top: 0
-    margin-right: 0px
+    margin-right: -4px
+    vertical-align: middle
 
 .badge-row.clickable
   cursor: hand
