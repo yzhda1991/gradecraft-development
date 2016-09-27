@@ -1,5 +1,6 @@
 module OAuthProvider
   extend ActiveSupport::Concern
+  include ExternalAuthorization
 
   class_methods do
     def oauth_provider_param(param)
@@ -19,17 +20,6 @@ module OAuthProvider
   end
 
   def require_authorization_with(provider)
-    auth = authorization(provider)
-
-    if auth.nil?
-      redirect_to "/auth/#{provider}"
-    elsif auth.expired?
-      config = ActiveLMS.configuration.providers[provider.to_sym]
-      auth.refresh_with_config! config
-    end
-  end
-
-  def authorization(provider)
-    UserAuthorization.for(current_user, provider)
+    validate_authorization(provider)
   end
 end
