@@ -250,7 +250,6 @@ describe EarnedBadgesController do
     describe "GET new" do
       it "display the create form when the badge is student-awardable" do
         get :new, badge_id: @badge_student_awardable.id
-        expect(assigns(:title)).to eq("Award #{@badge_student_awardable.name}")
         expect(assigns(:earned_badge)).to be_a_new(EarnedBadge)
         expect(response).to render_template(:new)
       end
