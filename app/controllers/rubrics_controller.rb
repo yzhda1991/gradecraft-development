@@ -24,9 +24,14 @@ class RubricsController < ApplicationController
 
   def copy
     assignment = Assignment.find(params[:assignment_id])
+
+    # this is necessary until we
+    # remove all calls to: fetch_or_create_rubric
+    assignment.rubric.destroy if assignment.rubric.present?
+
     Rubric.find(params[:rubric_id]).copy(assignment_id: assignment.id)
     redirect_to assignment_path(assignment),
-      notice: "added rubric to #{(term_for :assignment).titleize} #{assignment.name}"
+      notice: "Added rubric to #{(term_for :assignment).titleize} #{assignment.name}"
   end
 
   def destroy
