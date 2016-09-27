@@ -58,6 +58,31 @@ describe Integrations::CoursesController do
         end
       end
     end
+
+    describe "DELETE #destroy" do
+      context "with an existing authentication" do
+        let(:course_id) { "COURSE_1" }
+        let!(:linked_course) { LinkedCourse.create provider: provider,
+                               course_id: course.id,
+                               provider_resource_id: course_id }
+        let!(:user_authorization) do
+          create :user_authorization, :canvas, user: professor,
+            access_token: "BLAH", expires_at: 2.days.from_now
+        end
+
+        it "deletes the linked course" do
+          delete :destroy, { integration_id: provider, id: course_id }
+
+          expect(LinkedCourse.exists?(linked_course.id)).to be_falsey
+        end
+
+        it "redirects back to the integrations page" do
+          delete :destroy, { integration_id: provider, id: course_id }
+
+          expect(response).to redirect_to integrations_path(provider)
+        end
+      end
+    end
   end
 
   context "as a student" do

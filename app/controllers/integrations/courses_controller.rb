@@ -19,7 +19,7 @@ class Integrations::CoursesController < ApplicationController
 
   def create
     course = current_course
-    authorize! :read, course
+    authorize! :update, course
 
     provider_name = params[:integration_id]
     linked_course = LinkedCourse.find_or_initialize_by course_id: course.id,
@@ -27,6 +27,19 @@ class Integrations::CoursesController < ApplicationController
     linked_course.provider_resource_id = params[:id]
     linked_course.last_linked_at = DateTime.now
     linked_course.save
+
+    redirect_to integrations_path(provider_name)
+  end
+
+  def destroy
+    course = current_course
+    authorize! :update, course
+
+    provider_name = params[:integration_id]
+
+    LinkedCourse.where(provider: provider_name,
+                       course_id: course.id,
+                       provider_resource_id: params[:id]).destroy_all
 
     redirect_to integrations_path(provider_name)
   end
