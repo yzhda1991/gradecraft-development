@@ -1,10 +1,10 @@
 en:
   announcements:
-    show: 
+    show:
       title: "#{ @announcement.title }"
-    new: 
+    new:
       title: "Create a New Announcement"
-    edit: 
+    edit:
       title: "Edit { @announcement.title } Announcement"
   analytics:
     students:
@@ -86,6 +86,9 @@ en:
   info:
     dashboard:
       title: "Dashboard"
+  integrations:
+    index:
+      title: "Use your favorite tools with GradeCraft"
   earned_badges:
     show:
       title: "#{ @student.name }'s #{ @badge.name } #{ term_for :badge }"
