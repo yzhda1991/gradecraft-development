@@ -2,7 +2,6 @@
   %table.dynatable.no-table-header
     %thead
       %tr
-        %th{scope: "col"} Course
         %th{scope: "col"} Name
         %th{scope: "col"} Description
         %th{scope: "col"} Due
@@ -13,7 +12,6 @@
     %tbody
       - @assignments.each do |assignment|
         %tr
-          %td= @course["name"]
           %td= assignment["name"]
           %td= assignment["description"].html_safe
           %td= assignment["due_at"]
