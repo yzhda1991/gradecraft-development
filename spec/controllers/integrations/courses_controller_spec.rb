@@ -40,7 +40,7 @@ describe Integrations::CoursesController do
         it "redirects back to the integrations page" do
           post :create, { integration_id: provider, id: course_id }
 
-          expect(response).to redirect_to integrations_path(provider)
+          expect(response).to redirect_to integrations_path
         end
 
         context "with an existing linked course" do
@@ -79,7 +79,7 @@ describe Integrations::CoursesController do
         it "redirects back to the integrations page" do
           delete :destroy, { integration_id: provider, id: course_id }
 
-          expect(response).to redirect_to integrations_path(provider)
+          expect(response).to redirect_to integrations_path
         end
       end
     end
