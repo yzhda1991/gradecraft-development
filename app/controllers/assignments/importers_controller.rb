@@ -7,19 +7,12 @@ class Assignments::ImportersController < ApplicationController
 
   before_filter :ensure_staff?
   before_filter except: :index do |controller|
-    controller.redirect_path assignments_importer_courses_path \
-      params[:importer_provider_id]
+    controller.redirect_path assignments_importers_path
   end
   before_filter :require_authorization, except: :index
 
   # GET /assignments/importers
   def index
-  end
-
-  # GET /assignments/importers/:importer_provider_id/courses
-  def courses
-    @provider_name = params[:importer_provider_id]
-    @courses = syllabus.courses
   end
 
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
