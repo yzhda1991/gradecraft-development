@@ -1,30 +1,31 @@
 module OAuthProvider
   extend ActiveSupport::Concern
+  include ExternalAuthorization
+
+  included do
+    self.provider_param = nil
+  end
+
+  class_methods do
+    attr_accessor :provider_param
+
+    def oauth_provider_param(param)
+      @provider_param = param
+    end
+  end
 
   protected
 
-  def unauthorized_path(path)
+  def redirect_path(path)
     session[:return_to] = path
   end
 
   def require_authorization
-    provider = params[:importer_provider_id]
+    provider = params.fetch self.class.provider_param
     require_authorization_with provider
   end
 
   def require_authorization_with(provider)
-    auth = authorization(provider)
-
-    if auth.nil?
-      redirect_to "/auth/#{provider}",
-        notice: "You could not be authorized with #{provider.capitalize}."
-    elsif auth.expired?
-      config = ActiveLMS.configuration.providers[provider.to_sym]
-      auth.refresh_with_config! config
-    end
-  end
-
-  def authorization(provider)
-    UserAuthorization.for(current_user, provider)
+    validate_authorization(provider)
   end
 end

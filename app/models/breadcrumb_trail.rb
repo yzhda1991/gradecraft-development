@@ -291,6 +291,19 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Top 10/Bottom 10', top_10_path)
   end
 
+  def integrations_index
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb(objects[:course].name, course_path(objects[:course]))
+    breadcrumb('Integrations')
+  end
+
+  def integrations_courses_index
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb(objects[:course].name, course_path(objects[:course]))
+    breadcrumb('Integrations', integrations_path)
+    breadcrumb("#{objects[:provider_name].capitalize} Integration")
+  end
+
   def downloads_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Course Data Exports', downloads_path)

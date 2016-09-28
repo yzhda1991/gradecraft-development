@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915164717) do
+ActiveRecord::Schema.define(version: 20160922173457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -496,6 +496,17 @@ ActiveRecord::Schema.define(version: 20160915164717) do
     t.boolean  "meets_expectations", default: false
   end
 
+  create_table "linked_courses", force: :cascade do |t|
+    t.integer  "course_id"
+    t.string   "provider"
+    t.string   "provider_resource_id"
+    t.datetime "last_linked_at"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "linked_courses", ["course_id"], name: "index_linked_courses_on_course_id", using: :btree
+
   create_table "lti_providers", force: :cascade do |t|
     t.string   "name"
     t.string   "uid"
@@ -768,6 +779,7 @@ ActiveRecord::Schema.define(version: 20160915164717) do
   add_foreign_key "flagged_users", "users", column: "flagger_id"
   add_foreign_key "imported_assignments", "assignments"
   add_foreign_key "imported_grades", "grades"
+  add_foreign_key "linked_courses", "courses"
   add_foreign_key "secure_tokens", "courses"
   add_foreign_key "secure_tokens", "users"
   add_foreign_key "user_authorizations", "users"

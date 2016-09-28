@@ -60,6 +60,7 @@ class Course < ActiveRecord::Base
     c.has_many :grades
     c.has_many :groups
     c.has_many :group_memberships
+    c.has_many :linked_courses, dependent: :destroy
     c.has_many :submissions
     c.has_many :teams
     c.has_many :course_memberships
@@ -110,6 +111,14 @@ class Course < ActiveRecord::Base
         Course.set_callback(:create, :after, :create_admin_memberships)
       end
     end
+  end
+
+  def linked?(provider)
+    self.linked_courses.where(provider: provider).exists?
+  end
+
+  def linked_for(provider)
+    self.linked_courses.where(provider: provider).first
   end
 
   def valuable_badges?
@@ -237,14 +246,14 @@ class Course < ActiveRecord::Base
       elements: elements
     }
   end
-  
+
   # creating a list of students who do not have any predictions
   def nonpredictors
     nonpredictors = []
     self.students.each do |student|
       if student.predictions_for_course?(self) == false
         nonpredictors << student
-      end 
+      end
     end
     return nonpredictors
   end

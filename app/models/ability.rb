@@ -1,11 +1,11 @@
 require "cancan"
-require_relative "abilities/course_ability"
-require_relative "abilities/announcement_ability"
-require_relative "abilities/assignment_type_weight_ability"
-require_relative "abilities/challenge_grade_ability"
-require_relative "abilities/grade_ability"
-require_relative "abilities/submission_ability"
-require_relative "abilities/submission_file_ability"
+require_dependency "abilities/announcement_ability"
+require_dependency "abilities/assignment_type_weight_ability"
+require_dependency "abilities/challenge_grade_ability"
+require_dependency "abilities/course_ability"
+require_dependency "abilities/grade_ability"
+require_dependency "abilities/submission_ability"
+require_dependency "abilities/submission_file_ability"
 
 class Ability
   include CanCan::Ability

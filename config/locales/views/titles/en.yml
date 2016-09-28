@@ -86,6 +86,12 @@ en:
   info:
     dashboard:
       title: "Dashboard"
+  integrations:
+    courses:
+      index:
+        title: "Link #{@provider_name.capitalize} Course with #{@course.name}"
+    index:
+      title: "Use your favorite tools with GradeCraft"
   earned_badges:
     show:
       title: "#{ @student.name }'s #{ @badge.name } #{ term_for :badge }"
