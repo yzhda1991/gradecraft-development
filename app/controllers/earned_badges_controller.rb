@@ -53,9 +53,6 @@ class EarnedBadgesController < ApplicationController
     result = Services::CreatesEarnedBadge.award earned_badge_params
 
     if result.success?
-      result.earned_badge.awarded_by = current_user
-      result.earned_badge.save
-
       redirect_to badge_path(result.earned_badge.badge),
         notice: "The #{result.earned_badge.badge.name} #{term_for :badge} was successfully awarded to #{result.earned_badge.student.name}"
     else
@@ -126,9 +123,9 @@ class EarnedBadgesController < ApplicationController
   private
 
   def earned_badge_params
-    params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
+    params.require(:earned_badge).permit(:points, :feedback, :student_id, :badge_id,
       :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy
+      :student_visible, :_destroy).merge(awarded_by: current_user)
   end
 
   def find_badge
