@@ -9,8 +9,7 @@ class Grades::ImportersController < ApplicationController
   before_filter :ensure_staff?
   before_filter except: [:download, :index, :show, :upload] do |controller|
     controller.redirect_path \
-      assignment_grades_importer_courses_path(params[:assignment_id],
-                                              params[:importer_provider_id])
+      assignment_grades_importers_path(params[:assignment_id])
   end
   before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
@@ -33,13 +32,6 @@ class Grades::ImportersController < ApplicationController
           filename: "#{ assignment.name } Import Grades - #{ Date.today}.csv"
       end
     end
-  end
-
-  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses
-  def courses
-    @assignment = Assignment.find params[:assignment_id]
-    @provider_name = params[:importer_provider_id]
-    @courses = syllabus.courses
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
