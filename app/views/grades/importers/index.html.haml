@@ -2,7 +2,7 @@
   = render partial: "layouts/alerts"
 
   %section
-    .card{style: "height: 300px;"}
+    .card{style: "height: 400px;"}
       .card-cap
         %img{src: "/images/csv-logo.png", height: "46px"}
       .card-block
@@ -13,7 +13,7 @@
 
         = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
 
-    .card{style: "height: 300px;"}
+    .card{style: "height: 400px;"}
       .card-cap
         %img{src: "/images/canvas-logo.png"}
       .card-block
@@ -22,5 +22,10 @@
         %p.card-text
           An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
 
-        = link_to "Import Canvas Grades", assignment_grades_importer_courses_path(@assignment, :canvas), class: "card-link button"
-        = link_to "More Info", "http://canvaslms.com", target: "_blank", class: "card-link"
+        - if !@assignment.course.linked?(:canvas)
+          %p.card-text
+            You must add the Canvas integration and link the course first in order to import any Canvas assignments.
+
+          = link_to "Link a Canvas Course", integrations_path, class: "card-link button"
+        -else
+          = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas, @assignment.course.linked_for(:canvas).provider_resource_id), class: "card-link button"
