@@ -84,11 +84,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :assignment } Types', assignment_types_path)
     breadcrumb('Editing ' + objects[:assignment_type].name)
   end
-  
+
   def assignments_groups_grade
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    
+
   end
 
   def badges_index
@@ -265,7 +265,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Awarded #{ term_for :badges }')
   end
-  
+
   def info_multiplier_choices
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :weight } Choices')
@@ -373,6 +373,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :assignments }', assignments_path)
   end
 
+  def rubrics_index_for_copy
+    breadcrumb('Dashboard', dashboard_path)
+  end
+
   def rubrics_design
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
@@ -411,12 +415,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :students }', students_path)
   end
-  
+
   def submissions_show
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
   end
-  
+
   def teams_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :teams }', teams_path)
@@ -451,7 +455,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Users', users_path)
     breadcrumb('Import Users')
   end
-  
+
   def users_import_results
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Users', users_path)

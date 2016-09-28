@@ -16,6 +16,12 @@
       –
       %span Rubric is saved automatically.
 
+      - if ! @assignment.grade_with_rubric?
+        .clear
+        %a.button{href: index_for_copy_assignment_rubrics_path(@assignment) }
+          = glyph(:sliders)
+          = "Copy Rubric from Another #{ term_for :assignment }"
+
     .splash(ng-cloak) Loading rubric...
 
     #rubric-column-heading

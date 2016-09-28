@@ -30,10 +30,12 @@
         %a{:href => assignment_grades_importers_path(presenter.assignment) }
           = glyph(:upload)
           Import Grades
-      %li.hide-for-small
-        %a{:href => design_assignment_rubric_path(presenter.assignment) }
-          = glyph(:sliders)
-          - if presenter.grade_with_rubric?
-            Edit Rubric
-          - else
-            Create Rubric
+
+        %li.hide-for-small
+          %a{:href => design_assignment_rubrics_path(presenter.assignment) }
+            = glyph(:sliders)
+            - if presenter.grade_with_rubric?
+              Edit Rubric
+            - else
+              Create Rubric
+

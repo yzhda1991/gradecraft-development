@@ -1,0 +1,40 @@
+.pageContent
+  = render "layouts/alerts"
+
+  %h1= "Copying a rubric to #{ @assignment.name }"
+
+  %h2= "Choose a rubric from the following #{term_for :assignment}:"
+
+  = form_tag copy_assignment_rubrics_path @assignment do
+
+    %table.assignments-with-rubrics.second-row-header
+      %thead
+        %tr
+          %th Select
+          %th{scope: "col", :width => "20%"} Name
+          %th
+          %th Due
+          %th{:style => "display: none"} Due Date
+          %th{scope: "col", :width => "10%"}  Max Points
+      %tbody
+        - @rubrics.each do |rubric|
+          - assignment = rubric.assignment
+          %tr{id: "assignment-#{assignment.id}"}
+            %td
+              = radio_button_tag "rubric_id", rubric.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-rubric-command']" }
+            %td= link_to assignment.name, assignment
+            %td= render partial: "assignments/index_icons", locals: { assignment: assignment }
+            %td= assignment.try(:due_at) || "Ongoing"
+            %td{:style => "display: none"}
+              - if assignment.due_at.present?
+                = assignment.try(:due_at).to_formatted_s(:db)
+            - if assignment.pass_fail?
+              %td= "#{term_for :pass}/#{term_for :fail}"
+            - else
+              %td= points assignment.full_points
+
+    .submit-buttons
+      .right
+        %ul
+          %li= submit_tag "Copy Rubric To Assignment", class: "button disabled", disabled: true, data: { behavior: "selected-rubric-command" }
+          %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), class: "button"
