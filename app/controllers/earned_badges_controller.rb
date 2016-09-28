@@ -45,6 +45,11 @@ class EarnedBadgesController < ApplicationController
       return redirect_to root_url unless @badge.student_awardable
     end
 
+    if params[:earned_badge][:student_id].to_i == current_user.id
+      return redirect_to badge_path(Badge.find(params[:badge_id])),
+        alert: "You cannot award a #{term_for :badge} to yourself."
+    end
+
     result = Services::CreatesEarnedBadge.award earned_badge_params
 
     if result.success?

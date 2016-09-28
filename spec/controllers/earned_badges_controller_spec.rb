@@ -233,6 +233,7 @@ describe EarnedBadgesController do
       login_user(@student)
       @badge = create(:badge, course: @course)
       @badge_student_awardable = create(:badge, course: @course, student_awardable: true)
+      @other_student = create(:user)
     end
 
     describe "protected routes" do
@@ -264,11 +265,22 @@ describe EarnedBadgesController do
       it "creates the earned badge when the badge is student-awardable" do
         expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
               badge_id: @badge_student_awardable.id,
-              student_id: @student.id,
+              student_id: @other_student.id,
               student_visible: true,
               feedback: "You did great!"
             }
           }.to change(EarnedBadge.student_visible, :count).by(1)
+        expect(response).to redirect_to badge_path(@badge_student_awardable)
+      end
+
+      it "doesn't create the student-awardable earned badge when the awardee and current user are the same" do
+        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+              badge_id: @badge_student_awardable.id,
+              student_id: @student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to_not change(EarnedBadge,:count)
         expect(response).to redirect_to badge_path(@badge_student_awardable)
       end
 
