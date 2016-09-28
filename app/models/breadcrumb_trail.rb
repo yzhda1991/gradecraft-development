@@ -329,6 +329,13 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Editing Grading Scheme')
   end
 
+  def grades_show
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
+    breadcrumb('Showing Grade')
+  end
+
   def grades_edit
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
