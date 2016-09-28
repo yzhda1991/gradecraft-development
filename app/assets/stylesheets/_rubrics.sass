@@ -502,20 +502,6 @@ button.meets-expectations-status.no-expectation
       padding-right: 0
 
 #rubric-table
-  td
-    vertical-align: top
-    text-align: left
-
-  td.criterion.heading
-    background-color: $color-blue-3
-    color: $color-white
-
-  td.level.heading
-    background-color: $color-blue-3
-
-  .criterion
-    background-color: $color-blue-3
-
   .criterion-name, .level-name
     font-weight: bold
 
@@ -526,12 +512,25 @@ button.meets-expectations-status.no-expectation
     font-size: 80%
     text-transform: uppercase
 
-  .criterion-description, .level-description
-    font-style: italic
+  .level-tab
+    padding: 0
 
-  td.level-level
-    border: 1px solid $color-white
-    background-color: $color-grey-7
+  .level-heading
+    border-bottom: 1px solid $color-white
+    padding: 0.2rem 0
+
+  .level-details
+    display: inline-block
+    vertical-align: top
+
+  .badge-row
+    display: inline-block
+    vertical-align: bottom
+
+  .level-description
+    text-align: left
+    padding: 0.2rem 0.5rem
+    font-size: 0.7rem
 
   .level.meets-expectations
     background-color: $meets-expectations-color
@@ -543,8 +542,10 @@ button.meets-expectations-status.no-expectation
   .level.selected.meets-expectations
     background-color: $meets-expectations-selected-color
 
-  .level-badge-image img
-    height: 35px
+  .level-badge-image
+    list-style: none
+    img
+      height: 25px
 
   .badge-row:hover
     background-color: transparent
@@ -561,7 +562,7 @@ button.meets-expectations-status.no-expectation
   .graded-students
     background-color: $color-blue-3
 
-  td.comments-box
+  .comments-box
     background-color: $color-grey-7
     border: none
     padding: .25rem

@@ -35,15 +35,17 @@
         %ul.level-tabs
           %li.level-tab(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.pointsMeetExpectations()}")
             .level-heading
-              .level-name {{level.name.replace(" ","&nbsp;")}}
-              .level-meets-expectations(ng-show="level.meetsExpectations") Meets Expectations
-              .level-points
-                {{level.points | number:0}}&nbsp;Points
+              .level-details
+                .level-name {{level.name.replace(" ","&nbsp;")}}
+                .level-points
+                  {{level.points | number:0}}&nbsp;Points
+              %ul.badge-row.design-view
+                %li.level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
+                  %img(ng-src="{{levelBadge.badge.icon}}")
+
             .level-description
+              .level-meets-expectations(ng-show="level.meetsExpectations") Meets Expectations
               {{level.description}}
-            %ul.badge-row.design-view
-              %li.level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
-                %img(ng-src="{{levelBadge.badge.icon}}" height="50px")
 
         .comments-box
           %textarea(ng-model="criterion.comments" ng-model-options="{debounce: 1000}" ng-change="updateCriterion(criterion, 'comments')" froala="froalaOptions")
