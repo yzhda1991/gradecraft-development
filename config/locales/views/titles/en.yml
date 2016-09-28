@@ -1,10 +1,10 @@
 en:
   announcements:
-    show: 
+    show:
       title: "#{ @announcement.title }"
-    new: 
+    new:
       title: "Create a New Announcement"
-    edit: 
+    edit:
       title: "Edit { @announcement.title } Announcement"
   analytics:
     students:
@@ -111,7 +111,7 @@ en:
       title: "Edit Grade Scheme"
   grades:
     show:
-      title: "#{ name }'s Grade for #{ @grade.assignment.name }"
+      title: "#{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
     edit:
       title: "Editing #{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
     importers:
