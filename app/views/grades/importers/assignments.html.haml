@@ -1,5 +1,25 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  = partial_with "importers/assignments_table", locals: { path: assignment_grades_importer_grades_path(@assignment, @provider_name, @course["id"]) } do
-    %p= submit_tag "Select grades from assignments to import", class: "button disabled", disabled: true, data: { behavior: "selected-assignments-command" }
+  %table.dynatable.no-table-header
+    %thead
+      %tr
+        %th{scope: "col"} Name
+        %th{scope: "col"} Description
+        %th{scope: "col"} Due
+        %th{scope: "col"} Points
+        %th.button-column{"data-dynatable-no-sort" => "true"}
+    %tbody
+      - @assignments.each do |assignment|
+        %tr
+          %td= assignment["name"]
+          %td= assignment["description"].html_safe
+          %td= assignment["due_at"]
+          %td= assignment["points_possible"]
+          %td
+            .right
+              %ul.button-bar
+                %li
+                  = form_tag assignment_grades_importer_grades_path(@assignment, @provider_name, @course["id"]), method: :post do
+                    = hidden_field_tag :id, assignment["id"]
+                    = button_tag glyph(:download) + "Import Grades for this assignment", class: "button"
