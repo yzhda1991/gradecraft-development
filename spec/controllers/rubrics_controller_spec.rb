@@ -18,7 +18,6 @@ describe RubricsController do
     describe "GET design" do
       it "shows the design form" do
         get :design, { assignment_id: assignment.id, rubric: rubric}
-        expect(assigns(:title)).to eq("Design Rubric for #{assignment.name}")
         expect(response).to render_template(:design)
       end
     end
