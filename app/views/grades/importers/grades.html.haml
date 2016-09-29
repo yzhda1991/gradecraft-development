@@ -22,16 +22,21 @@
         %thead
           %tr
             %th{scope: "col"} Student Name
-            %th{scope: "col"} Student Email
-            %th{scope: "col"} Gradecraft Match?
             %th{scope: "col"} #{@provider_name.capitalize} Score
+            %th{scope: "col"} #{@provider_name.capitalize} Feedback
+            %th{scope: "col"} GradeCraft Score
+            %th{scope: "col"} GradeCraft Feedback
+            %th{scope: "col"} User Found?
             %th{"data-dynatable-no-sort" => "true"}
               %button.button.select-all= "Check"
               %button.button.select-none= "Uncheck"
         %tbody
           - @grades.each do |grade|
-            = render partial: "grade_row", locals: { grade: grade,
-                                                     user: lms_user(@syllabus, grade["user_id"])}
+            - lms_user = lms_user(@syllabus, grade["user_id"])
+            = render partial: "grade_row", locals: { lms_grade: grade,
+              lms_user: lms_user,
+              grade: Grade.for_student_email_and_assignment_id(lms_user["primary_email"],
+                                                               @assignment.id) || NullGrade.new }
       .submit-buttons
         .right
           %p= submit_tag "Import Selected Grades for #{@assignment.name}", class: "button disabled", disabled: true, data: { behavior: "selected-grades-command" }
