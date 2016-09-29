@@ -43,7 +43,7 @@
                   %img(ng-src="{{levelBadge.badge.icon}}")
 
             .level-description
-              .level-meets-expectations(ng-show="level.meetsExpectations") Meets Expectations
+              .level-meets-expectations(ng-show="level.pointsMeetExpectations()") Meets Expectations
               {{level.description}}
 
         .comments-box
