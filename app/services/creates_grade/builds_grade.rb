@@ -6,6 +6,7 @@ module Services
       expects :attributes
       expects :student
       expects :assignment
+      expects :grading_agent
 
       promises :grade
 
@@ -18,6 +19,7 @@ module Services
         grade.adjustment_points = context[:attributes]["grade"]["adjustment_points"]
         grade.adjustment_points_feedback = context[:attributes]["grade"]["adjustment_points_feedback"]
         grade.group_id = context[:attributes]["group_id"] if context[:attributes]["group_id"]
+        grade.graded_by_id = context[:grading_agent].id
         context[:grade] = grade
       end
     end
