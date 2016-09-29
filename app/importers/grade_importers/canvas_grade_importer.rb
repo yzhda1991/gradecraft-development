@@ -8,6 +8,7 @@ class CanvasGradeImporter
     @unsuccessful = []
   end
 
+  #TODO: Import submission_comments
   def import(assignment_id, syllabus)
     unless grades.nil?
       grades.each do |canvas_grade|

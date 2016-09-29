@@ -1,9 +1,9 @@
 %tr
-  %td= lms_grade["user"]["name"]
+  %td= lms_user["primary_email"]
   %td= points lms_grade["score"]
   %td= lms_grade["submission_comments"]
   %td= points grade.raw_points
-  %td= grade.feedback
+  %td= grade.feedback.html_safe if grade.feedback.present?
   %td= lms_user_match?(lms_user["primary_email"], current_course) ? "Yes" : "No"
   %td.center
     - if lms_user_match?(lms_user["primary_email"], current_course)
