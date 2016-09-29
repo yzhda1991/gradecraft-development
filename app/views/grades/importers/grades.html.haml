@@ -18,7 +18,7 @@
     = form_tag assignment_grades_importer_grades_import_path(@assignment, :canvas, params[:id]) do
       - [params[:assignment_ids]].flatten.each do |assignment_id|
         = hidden_field_tag "assignment_ids[]", assignment_id
-      %table.dynatable.no-table-header
+      %table.no-table-header
         %thead
           %tr
             %th{scope: "col"} Student Name
@@ -27,9 +27,8 @@
             %th{scope: "col"} GradeCraft Score
             %th{scope: "col"} GradeCraft Feedback
             %th{scope: "col"} User Found?
-            %th{"data-dynatable-no-sort" => "true"}
-              %button.button.select-all= "Check"
-              %button.button.select-none= "Uncheck"
+            %th{scope: "col"}
+              Import Grade from #{@provider_name.capitalize}?
         %tbody
           - @grades.each do |grade|
             - lms_user = lms_user(@syllabus, grade["user_id"])

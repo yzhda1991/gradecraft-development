@@ -6,5 +6,4 @@
   %td= grade.feedback.html_safe if grade.feedback.present?
   %td= lms_user_match?(lms_user["primary_email"], current_course) ? "Yes" : "No"
   %td.center
-    - if lms_user_match?(lms_user["primary_email"], current_course)
-      = check_box_tag "grade_ids[]", lms_grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }
+    = check_box_tag "grade_ids[]", lms_grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }
