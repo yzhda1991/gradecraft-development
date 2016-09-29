@@ -75,9 +75,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :assignments }', assignments_path)
     breadcrumb('New #{ term_for :assignment }')
   end
-  
+
   def assignments_grades_mass_edit
-    
+
   end
 
   def assignment_type_weights_index
@@ -377,18 +377,24 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def grades_importers_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Grade Import')
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Import Grades')
   end
 
   def grades_importers_csv
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Import Grades from a CSV')
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Import Grades', assignment_grades_importers_path(objects[:assignment]))
+    breadcrumb('CSV')
   end
 
   def grades_importers_assignments
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Import Grades', assignment_grades_importers_path(objects[:assignment]))
+    breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
   end
 
   def grades_importers_courses
@@ -487,7 +493,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Users', users_path)
     breadcrumb('Editing ' + objects[:user].name)
   end
-  
+
   def users_edit_profile
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Edit My Profile')
