@@ -21,5 +21,5 @@
               %ul.button-bar
                 %li
                   = form_tag assignment_grades_importer_grades_path(@assignment, @provider_name, @course["id"]), method: :post do
-                    = hidden_field_tag :id, assignment["id"]
+                    = hidden_field_tag "assignment_ids[]", [assignment["id"]]
                     = button_tag glyph(:download) + "Import Grades for this assignment", class: "button"
