@@ -16,18 +16,15 @@
         %em Wrong #{term_for :assignment}?
         = link_to "Switch #{@provider_name.capitalize} assignment", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
     = form_tag assignment_grades_importer_grades_import_path(@assignment, :canvas, params[:id]) do
-      - params[:assignment_ids].each do |assignment_id|
+      - [params[:assignment_ids]].flatten.each do |assignment_id|
         = hidden_field_tag "assignment_ids[]", assignment_id
       %table.dynatable.no-table-header
         %thead
           %tr
-            %th{scope: "col"} Course
-            %th{scope: "col"} #{term_for(:assignment).capitalize}
             %th{scope: "col"} Student Name
             %th{scope: "col"} Student Email
             %th{scope: "col"} Gradecraft Match?
-            %th{scope: "col"} Score
-            %th{scope: "col"} Graded At
+            %th{scope: "col"} #{@provider_name.capitalize} Score
             %th{"data-dynatable-no-sort" => "true"}
               %button.button.select-all= "Check"
               %button.button.select-none= "Uncheck"

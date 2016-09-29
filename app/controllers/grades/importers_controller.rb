@@ -38,8 +38,8 @@ class Grades::ImportersController < ApplicationController
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids].first)
-    @grades = syllabus.grades(params[:id], params[:assignment_ids])
+    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids])
+    @grades = syllabus.grades(params[:id], [params[:assignment_ids]].flatten)
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades_import

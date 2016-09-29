@@ -86,7 +86,7 @@ GradeCraft::Application.routes.draw do
         get :download
         post :upload
         get "/courses/:id/assignments", action: :assignments, as: :assignments
-        post "/courses/:id/grades", action: :grades, as: :grades
+        get "/courses/:id/grades", action: :grades, as: :grades
         post "/courses/:id/grades/import", action: :grades_import, as: :grades_import
       end
     end
