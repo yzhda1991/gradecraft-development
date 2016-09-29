@@ -16,8 +16,8 @@ module Services
 
     aliases raw_params: :attributes
 
-    def self.create(raw_params)
-      with(raw_params: raw_params)
+    def self.create(raw_params, grading_agent)
+      with(raw_params: raw_params, grading_agent: grading_agent)
         .reduce(
           Actions::VerifiesAssignmentStudent,
           Actions::BuildsCriterionGrades,

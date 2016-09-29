@@ -6,6 +6,7 @@ module Services
       extend LightService::Action
 
       expects :raw_params
+      expects :grading_agent
 
       executed do |context|
         begin
@@ -19,7 +20,7 @@ module Services
           params = context[:raw_params].deep_dup
           params["student_id"] = student.id
           params["group_id"] = group.id
-          context.add_to_context Services::CreatesGradeUsingRubric.create(params)
+          context.add_to_context Services::CreatesGradeUsingRubric.create(params, context[:grading_agent])
         end
       end
     end
