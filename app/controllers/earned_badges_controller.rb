@@ -29,9 +29,8 @@ class EarnedBadgesController < ApplicationController
   end
 
   def new
-    if current_user_is_student?
-      return redirect_to root_url unless @badge.student_awardable
-    end
+    authorize! :create, EarnedBadge.new(badge: @badge, course: current_course)
+
     @earned_badge = @badge.earned_badges.new
     @students = current_course.students
   end
@@ -41,14 +40,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    if current_user_is_student?
-      return redirect_to root_url unless @badge.student_awardable
-    end
-
-    if params[:earned_badge][:student_id].to_i == current_user.id
-      return redirect_to badge_path(Badge.find(params[:badge_id])),
-        alert: "You cannot award a #{term_for :badge} to yourself."
-    end
+    authorize! :create, EarnedBadge.new(earned_badge_params)
 
     result = Services::CreatesEarnedBadge.award earned_badge_params
 
@@ -125,7 +117,7 @@ class EarnedBadgesController < ApplicationController
   def earned_badge_params
     params.require(:earned_badge).permit(:points, :feedback, :student_id, :badge_id,
       :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy).merge(awarded_by: current_user)
+      :student_visible, :_destroy).merge(awarded_by: current_user, course: current_course)
   end
 
   def find_badge
