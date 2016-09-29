@@ -38,6 +38,7 @@ class Grades::ImportersController < ApplicationController
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
+    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids].first)
     @grades = syllabus.grades(params[:id], params[:assignment_ids])
   end
 
