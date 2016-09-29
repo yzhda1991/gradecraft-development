@@ -30,20 +30,20 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def assignments_importers_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Import #{ term_for :assignments }', assignments_importers_path)
+    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
   end
 
   def assignments_importers_assignments
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Import #{ term_for :assignments }', assignments_importers_path)
+    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
     breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
   end
 
   def assignments_importers_assignments_import_results
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Import #{ term_for :assignments }', assignments_importers_path)
+    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
     breadcrumb(objects[:provider_name].capitalize + ' #{ term_for :assignments }', assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
   end
 

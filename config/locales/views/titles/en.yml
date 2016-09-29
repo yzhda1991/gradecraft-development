@@ -40,8 +40,13 @@ en:
       mass_edit:
         title: "Quick Grade #{ @assignment.name }"
   importers:
-    assignments_import:
-      title: "Import #{ term_for :assignments }"
+    importers:
+      index:
+        title: "Assignment Import"
+      assignments:
+        title: "Import #{ term_for :assignments } from #{ @provider_name.capitalize }"
+      assignments_import:
+        title: "Import #{ term_for :assignments } from #{ @provider_name.capitalize }"
   badges:
     index:
       title: "#{ term_for :badges }"
