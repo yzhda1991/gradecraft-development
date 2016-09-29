@@ -98,4 +98,5 @@
       %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
 
     - if scope_type == "student" && current_course.badges.present?
+      %h3= "Award #{ @grade.student.name } #{term_for :badges} for #{ @grade.assignment.name }:"
       %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")
