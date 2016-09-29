@@ -9,7 +9,7 @@
     .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
       %img(ng-src="{{levelBadge.badge.icon}}" width="35px" height="35px")
 
-.modal-window(ng-show="level.editingBadges")
+.badge-modal-window(ng-show="level.editingBadges")
   %select(ng-disabled="! level.isSaved()" ng-change="level.selectBadge()" ng-model="level.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in level.availableBadges")
     %option.default(value="" selected disabled ng-show="level.availableBadges.length > 0") select a badge to add...
     %option.default(value="" selected disabled ng-show="level.availableBadges.length == 0") all available badges selected

@@ -2,8 +2,7 @@
   #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{scope_type}', #{scoped_id})")
     .row
       #rubric-heading.columns
-        %h3.text-right
-          Grade Assignment by Rubric
+        %h3.text-right Grade Assignment by Rubric
         %h4.text-right (click to select the level earned for each criterion)
         %br
 
@@ -17,7 +16,6 @@
         %h4.notice(ng-show="isBelowThreshold()") {{ pointsBelowThreshold() | number:0 }} points below the threshold
         %h4.notice.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}" ng-show="pointsAdjusted()") You have adjusted the total by {{adjustmentPoints()}} points
 
-      .clear
 
     #grade-status(ng-cloak)
 
@@ -26,7 +24,7 @@
       %br
       %br
 
-    #rubric-table.edit(ng-cloak)
+    #rubric-grade-edit.edit(ng-cloak)
       .criterion(ng-repeat="criterion in criteria")
         .criterion-heading
           %h4.criterion-name {{criterion.name.replace(" ","&nbsp;")}} {{(criterion.max_points || 0) | number:0}}&nbsp;Points
@@ -36,6 +34,7 @@
           %li.level-tab(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.pointsMeetExpectations()}")
             .level-heading
               .level-details
+                %span.check-mark= glyph("check")
                 .level-name {{level.name.replace(" ","&nbsp;")}}
                 .level-points
                   {{level.points | number:0}}&nbsp;Points

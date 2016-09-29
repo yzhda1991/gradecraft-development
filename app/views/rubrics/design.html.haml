@@ -1,7 +1,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
+  #rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
 
     #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
       %h4#points-legend
@@ -27,8 +27,8 @@
     #criterion-box(ng-cloak)
 
       .rubric-container.divider(ng-repeat="criterion in criteria")
-        .order-label {{$index + 1}}
         .criterion(name="criterionForm" ng-form ng-submit="criterion.create()" ng-class="{saved: criterion.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
+          .order-label {{$index + 1}}
           = render partial: "rubrics/new_criterion"
         .level-container
           .level-wrapper
