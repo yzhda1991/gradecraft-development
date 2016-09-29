@@ -378,14 +378,14 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Import Grades')
+    breadcrumb('Grade Import')
   end
 
   def grades_importers_csv
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Import Grades', assignment_grades_importers_path(objects[:assignment]))
+    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
     breadcrumb('CSV')
   end
 
@@ -393,18 +393,16 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Import Grades', assignment_grades_importers_path(objects[:assignment]))
+    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
     breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
-  end
-
-  def grades_importers_courses
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
   end
 
   def grades_importers_grades
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
+    breadcrumb('#{@provider_name.capitalize} Grades')
   end
 
   def grades_importers_grades_import_results
