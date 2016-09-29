@@ -32,7 +32,11 @@ class EarnedBadgesController < ApplicationController
     authorize! :create, EarnedBadge.new(badge: @badge, course: current_course)
 
     @earned_badge = @badge.earned_badges.new
-    @students = current_course.students
+    if current_user_is_student?
+      @students = current_course.students - [current_user]
+    else
+      @students = current_course.students
+    end
   end
 
   def edit
