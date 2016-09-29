@@ -75,7 +75,8 @@
         %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
-    %grade-files-uploader
+    - if scope_type == "student"
+      %grade-files-uploader
 
     %br
 
