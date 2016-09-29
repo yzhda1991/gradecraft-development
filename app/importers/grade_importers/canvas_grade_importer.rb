@@ -1,3 +1,5 @@
+require "quote_helper"
+
 class CanvasGradeImporter
   attr_reader :successful, :unsuccessful
   attr_accessor :grades

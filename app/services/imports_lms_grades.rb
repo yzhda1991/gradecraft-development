@@ -1,6 +1,8 @@
 require "light-service"
 require_relative "imports_lms_grades/imports_lms_grades"
+require_relative "imports_lms_grades/imports_lms_users"
 require_relative "imports_lms_grades/retrieves_lms_grades"
+require_relative "imports_lms_grades/retrieves_lms_users"
 
 module Services
   class ImportsLMSGrades
@@ -12,6 +14,8 @@ module Services
            assignment_ids: assignment_ids, grade_ids: grade_ids,
            assignment_id: assignment_id, user: user).reduce(
              Actions::RetrievesLMSGrades,
+             Actions::RetrievesLMSUsers,
+             Actions::ImportsLMSUsers,
              Actions::ImportsLMSGrades)
     end
   end
