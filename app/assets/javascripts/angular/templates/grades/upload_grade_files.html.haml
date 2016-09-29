@@ -1,0 +1,11 @@
+.feedback-upload
+  %input(type="file" multiple="true" grade-files-upload="feedbackFiles")
+.clear
+
+.feedback-files{'ng-if'=>'vm.gradeFiles.length > 0'}
+  %ul
+    %li{'ng-repeat' => 'file in vm.gradeFiles'}
+      {{ file.filename }}
+
+
+

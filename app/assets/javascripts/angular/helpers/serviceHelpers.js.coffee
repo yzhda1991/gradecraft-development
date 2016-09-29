@@ -73,6 +73,13 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     if type == response.data.type
       modelArray.push(dataItem(response.data))
 
+  # add to collection from a reponse with an array of items
+  addItems = (modelArray, type, response)->
+    _.each(response.data, (item)->
+      if type == item.type
+        modelArray.push(dataItem(item))
+    )
+
   deleteItem = (modelArray, item)->
     _.remove(modelArray, {id: item.id})
 
@@ -90,6 +97,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     logResponse: logResponse
     loadMany: loadMany
     addItem: addItem
+    addItems: addItems
     deleteItem: deleteItem
     loadFromIncluded: loadFromIncluded
   }

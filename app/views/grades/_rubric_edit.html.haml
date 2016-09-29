@@ -75,9 +75,8 @@
         %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
-    .feedback-upload
-      %input(type="file" multiple="true" grade-file-upload="feedbackFiles")
-    .clear
+    %grade-files-uploader
+
     %br
 
     .summary_feedback
