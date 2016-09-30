@@ -97,8 +97,6 @@
         console.log(data)
     )
 
-
-
   postGradeFiles = (files)->
     fd = new FormData();
     angular.forEach(files, (file, index)->
@@ -117,6 +115,19 @@
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  deleteGradeFile = (file)->
+    file.deleting = true
+    $http.delete("/api/grades/#{file.grade_id}/grade_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(gradeFiles, file)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        file.deleting = false
         GradeCraftAPI.logResponse(response)
     )
 
@@ -150,6 +161,7 @@
       getGrade: getGrade,
       putRubricGradeSubmission: putRubricGradeSubmission,
       postGradeFiles: postGradeFiles,
+      deleteGradeFile: deleteGradeFile,
       assignment: assignment,
       badges: badges,
       criteria: criteria,

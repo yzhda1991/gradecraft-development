@@ -2,6 +2,10 @@
   UploadGradeFilesCtrl = [()->
     vm = this
     vm.gradeFiles = RubricService.gradeFiles
+
+    vm.deleteFile = (file)->
+      console.log("deleting!");
+      RubricService.deleteGradeFile(file)
   ]
 
   {

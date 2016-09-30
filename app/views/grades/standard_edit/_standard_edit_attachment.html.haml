@@ -8,7 +8,7 @@
       - grade.grade_files.each do |gf|
         - next if gf.new_record?
         %li
-          - if ! gf.file_processing
+          - if gf.file_processing
             = "#{gf.filename}"
             %a
               %i.fa.fa-spinner.fa-fw= "(upload in progress)"
