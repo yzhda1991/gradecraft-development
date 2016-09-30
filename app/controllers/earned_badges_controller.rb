@@ -29,7 +29,8 @@ class EarnedBadgesController < ApplicationController
   end
 
   def new
-    @earned_badge = @badge.earned_badges.new
+    @earned_badge = @badge.earned_badges.new course: current_course
+    authorize! :create, @earned_badge
     @students = earned_badge_students
   end
 

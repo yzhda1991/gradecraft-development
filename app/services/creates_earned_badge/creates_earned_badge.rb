@@ -1,3 +1,5 @@
+require_relative "../../proctors/earned_badge_proctor"
+
 module Services
   module Actions
     class CreatesEarnedBadge
@@ -9,10 +11,7 @@ module Services
       executed do |context|
         context.earned_badge = EarnedBadge.new context.attributes
 
-        unless context.earned_badge.awarded_by.is_staff?(context.earned_badge.course) || (
-          context.earned_badge.badge.student_awardable? &&
-          context.earned_badge.student != context.earned_badge.awarded_by
-        )
+        unless EarnedBadgeProctor.new(context.earned_badge).creatable? context.earned_badge.awarded_by
           message = "Permission denied"
           context.fail_with_rollback! message
         end

@@ -237,15 +237,9 @@ describe EarnedBadgesController do
     end
 
     describe "protected routes" do
-      [
-        :index,
-        :new,
-        :create
-      ].each do |route|
-          it "#{route} redirects to root" do
-            expect(get route, {badge_id: @badge.id}).to redirect_to(:root)
-          end
-        end
+      it "index redirects to root" do
+        expect(get :index, {badge_id: @badge.id}).to redirect_to(:root)
+      end
     end
 
     describe "GET new" do
@@ -255,9 +249,8 @@ describe EarnedBadgesController do
         expect(response).to render_template(:new)
       end
 
-      it "redirects to root when the badge is not student-awardable" do
-        get :new, badge_id: @badge.id
-        expect(response).to redirect_to(:root)
+      it "is forbidden when the badge is not student-awardable" do
+        expect{get :new, {badge_id: @badge.id}}.to raise_error CanCan::AccessDenied
       end
     end
 
@@ -281,7 +274,7 @@ describe EarnedBadgesController do
               feedback: "You did great!"
             }
           }.to_not change(EarnedBadge,:count)
-        expect(response).to redirect_to badge_path(@badge_student_awardable)
+          expect(flash[:alert]).to eq 'Permission denied'
       end
 
       it "doesn't create earned badge when the badge is not student-awardable" do
@@ -292,7 +285,7 @@ describe EarnedBadgesController do
               feedback: "You did great!"
             }
           }.to_not change(EarnedBadge,:count)
-        expect(response).to redirect_to :root
+          expect(flash[:alert]).to eq 'Permission denied'
       end
     end
 
