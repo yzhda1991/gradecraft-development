@@ -8,12 +8,13 @@
     background-color: $color-white
 
 $below-expectations-color: $color-grey-6
-$below-expectations-selected-color: $color-grey-4
-$meets-expectations-color: $color-green-2
-$meets-expectations-selected-color: $color-green-1
+$below-expectations-selected-color: lighten($color-grey-6, 10%)
+$meets-expectations-color: $color-green-1
+$meets-expectations-selected-color: lighten($color-green-1, 10%)
 $no-expectation-color: $color-grey-5
 
-#rubric
+// styles for rubric design view
+#rubric-design
   textarea
     @include rubric-level-input
     width: 11.75rem
@@ -21,6 +22,11 @@ $no-expectation-color: $color-grey-5
     height: 65px
     resize: none
     color: $color-black
+    padding: .5rem
+    &.criterion-description
+      width: 50em
+      height: 2rem
+      vertical-align: middle
 
   input
     height: 2rem
@@ -29,131 +35,95 @@ $no-expectation-color: $color-grey-5
     border: 0
     padding: .5rem
 
-  textarea
-    padding: .5rem
+  .rubric-container
+    margin: 1.5rem 0
+    border: 1px solid $color-grey-6
+    padding: 10px
+    cursor: move
+    overflow-x: auto
+    white-space: nowrap
 
-.splash, #rubric-grader-splash
-  display: none
+  .badge-row.clickable
+    cursor: hand
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
-  display: none !important
+  .badge-modal-window
+    /* A centered div above the overlay with a box shadow. */
+    z-index: 1000
+    position: absolute
+    width: 200px
+    padding: 1rem !important
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
+    background-color: $color-blue-4
+    box-shadow: 4px 4px 80px #000
+    .level-badge
+      margin: 0.5rem
+      padding: 0.2rem
+      background: $color-blue-3
+      img
+        vertical-align: middle
+    select
+      width: 200px
 
-  &.splash
-    display: block !important
-    font-size: 26px
-
-  &#rubric-grader-splash
-    display: block !important
-    font-size: 26px
-
-/* Points tally in the upper right hand corner*/
-#points-overview-floating
-  float: right
-  text-align: right
-  border-top: none
-  position: fixed
-  top: 2.8rem
-  right: 28px
-  z-index: 800
-  padding: .5rem 1rem .5rem
-  border-bottom-left-radius: $global-radius
-  border-bottom-right-radius: $global-radius
-  background: $color-blue-2
-
-  h4#points-legend, h4.points-legend
-    font-size: 24px
-    font-style: italic
-    color: $color-blue-4
-
-    .points-assigned
-      margin-right: -4px
-      font-weight: bold
-      color: $color-yellow-1
-    .points-missing
-      color: $color-yellow-1
-    .points-satisfied
-      color: $color-green-2
-    .points-overage
-      color: $color-red-1
-
-h4.notice
-  font-size: 14px
-  font-style: italic
-  font-weight: normal
-  color: $color-yellow-1
-  text-transform: none
-  &.adjustment
-    color: $color-orange-1
-  &.adjustment.positive-adjustment
-    color: $color-green-2
-
-#rubric-column-heading
-  margin-top: 1rem
-  .criterion-heading
-    background: $color-grey-7
-    margin: 0 .5rem .5rem
-    padding: .5rem
-    float: left
-    width: 195px
-
-  .level-heading
-    background: $color-grey-7
-    padding: .5rem
-    float: left
-    width: calc(100% - 250px)
-
-td.level-td
-  border: 1px solid $color-grey-7
+  .update-badges
+    width: 100%
+    margin: .75rem auto 0
+    text-align: center
+    padding: 0
+    border-radius: $global-radius
 
 #criterion-box
-  width: 94%
+  .criterion
+    position: relative
+    padding: 0.5rem 0.5rem 0 0.5rem
+    margin-bottom: 0.5rem
+    display: inline-block
+    width: 95%
+    background-color: $color-grey-6
+    &.saved
+      background-color: $color-blue-2
+    input
+      margin-right: 0.2rem
+      &.points
+        z-index: 500
 
-  .criterion, .level
+    input.ng-invalid, input.ng-pristine.ng-invalid
+      border: 1px solid $color-red-1
+      background: $color-red-1
+
+    input.ng-valid-required
+      background: $color-blue-4
+
+    select
+      color: $color-grey-4
+      font-size: 13px
+      padding: -4px 2px
+
+      &[disabled]
+        color: $color-grey-7
+
+      option.default, option.selected.default
+        color: $color-grey-5
+
+  .order-label
+    display: inline-block
+    padding: 0 0.5rem 0 0.25rem
+    color: $color-white
+    vertical-align: middle
+
+  .level
     padding: 2rem .5rem .5rem
     margin-right: 10px
     height: 240px
     position: relative
-    float: left
     width: 190px
+    display: inline-block
+    white-space: initial
+    vertical-align: middle
 
 .level-container
   height: 280px !important
-  width: 10000px
-
-  .level
-    float: left
-    display: inline
-
-.criterion
-  background: $color-grey-6
-
-  &.saved
-    background: $color-blue-3
-
-  input.points
-    z-index: 500
-
-  input.ng-pristine.ng-invalid
-    border: 1px solid $color-red-1
-    background: $color-red-1
-
-  input.ng-valid-required
-    background: $color-blue-4
-
-  input.ng-invalid
-    border: 1px solid $color-red-1
-    background: $color-red-1
-
-  select
-    color: $color-grey-4
-    font-size: 13px
-    padding: -4px 2px
-
-    &[disabled]
-      color: $color-grey-7
-
-    option.default, option.selected.default
-      color: $color-grey-5
 
 .messages
   position: absolute
@@ -260,75 +230,72 @@ button.meets-expectations-status.no-expectation
   margin-bottom: 2px
   position: relative
 
-.modal-window
-  .level-badge
-    margin: .5rem
-    background: $color-blue-3
-    clear: both
-
 .level-badge-image
   float: left
   background: none
   border: none
 
 .add-level
-  position: absolute
-  margin-top: -20px
-  right: 70px
+  vertical-align: bottom
 
-#rubric .rubric-container
-  margin: 1rem 0
-  clear: both
-  border: 1px dashed $color-grey-7
-  padding: 10px
-  cursor: move
-  border-left: 2px solid $color-grey-5
-  width: 100%
-  overflow-y: scroll
-  height: 280px !important
+// loading screens for rubric grading view and rubric design view
+.splash, #rubric-grader-splash
+  display: none
 
-  .order-label
-    display: block
-    float: left
-    right: 0
-    background: $color-blue-2
-    padding: .5rem
-    color: $color-white
-    margin-top: 0
-    margin-right: 0px
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+  display: none !important
 
-.badge-row.clickable
-  cursor: hand
+  &.splash
+    display: block !important
+    font-size: 26px
 
-.modal-window
-  /* A centered div above the overlay with a box shadow. */
-  z-index: 1000
-  position: absolute
-  width: 200px
-  padding: 1rem !important
+  &#rubric-grader-splash
+    display: block !important
+    font-size: 26px
 
-  /* Center the dialog */
-  top: 50%
-  left: 50%
-  transform: translate(-50%, -50%)
+// Points tally in the upper right hand corner of rubric grader
+#points-overview-floating
+  text-align: right
+  position: fixed
+  top: 2.8rem
+  right: 28px
+  z-index: 800
+  padding: .5rem 1rem .5rem
+  border-bottom-left-radius: $global-radius
+  border-bottom-right-radius: $global-radius
+  background: $color-blue-2
 
-  background-color: $color-blue-4
-  box-shadow: 4px 4px 80px #000
+  h4#points-legend, h4.points-legend
+    font-size: 24px
+    font-style: italic
+    color: $color-blue-4
 
-  select
-    width: 200px
+    .points-assigned
+      margin-right: -4px
+      font-weight: bold
+      color: $color-yellow-1
+    .points-missing
+      color: $color-yellow-1
+    .points-satisfied
+      color: $color-green-2
+    .points-overage
+      color: $color-red-1
 
-.update-badges
-  width: 100%
-  margin: .75rem auto 0
-  text-align: center
-  padding: 0
-  border-radius: $global-radius
+//notices used on rubric design and rubric grading views
+h4.notice
+  font-size: 14px
+  font-style: italic
+  font-weight: normal
+  color: $color-yellow-1
+  text-transform: none
+  &.adjustment
+    color: $color-orange-1
+  &.adjustment.positive-adjustment
+    color: $color-green-2
 
-.download-link
-  margin: 0.5rem 0
 
-#rubric-graded, #rubric-ungraded
+// base styles for graded rubric, ungraded rubric and rubric edit views
+#rubric-graded, #rubric-ungraded, #rubric-grade-edit
   *
     font-weight: 300
   h4
@@ -451,6 +418,7 @@ button.meets-expectations-status.no-expectation
       @media (max-width: $media-small-max)
         background-color: inherit
 
+  // styles for slider on mobile graded rubric view
   .slick-slide
     padding: 0
     display: block
@@ -481,6 +449,7 @@ button.meets-expectations-status.no-expectation
   display: inline
   vertical-align: top
 
+// styles for ungraded rubric view
 #rubric-ungraded
   .tab-panel
     border-bottom: 1px solid $color-grey-6
@@ -493,8 +462,6 @@ button.meets-expectations-status.no-expectation
 
   .meets-expectations-tag
     font-size: 0.8rem
-
-  .meets-expectations-tag
     position: absolute
     bottom: 0
     right: 0
@@ -504,21 +471,8 @@ button.meets-expectations-status.no-expectation
       width: inherit
       padding-right: 0
 
-#rubric-table
-  td
-    vertical-align: top
-    text-align: left
-
-  td.criterion.heading
-    background-color: $color-blue-3
-    color: $color-white
-
-  td.level.heading
-    background-color: $color-blue-3
-
-  .criterion
-    background-color: $color-blue-3
-
+// Edit rubric grade view
+#rubric-grade-edit
   .criterion-name, .level-name
     font-weight: bold
 
@@ -529,54 +483,55 @@ button.meets-expectations-status.no-expectation
     font-size: 80%
     text-transform: uppercase
 
-  .criterion-description, .level-description
-    font-style: italic
+  .level-tab
+    padding: 0
+    &.selected
+      .check-mark
+        display: inline-block
 
-  td.level-level
-    border: 1px solid $color-white
-    background-color: $color-grey-7
+  .check-mark
+    display: none
 
-  .level.meets-expectations
-    background-color: $meets-expectations-color
-    border: 1px solid $color-white
+  .level-heading
+    border-bottom: 1px solid $color-white
+    padding: 0.2rem 0
 
-  .level.selected
-    background-color: $below-expectations-selected-color
+  .level-details
+    display: inline-block
+    vertical-align: top
 
-  .level.selected.meets-expectations
+  .badge-row
+    display: inline-block
+    vertical-align: bottom
+
+  .level-description
+    text-align: left
+    padding: 0.2rem 0.5rem
+    font-size: 0.7rem
+
+  .level-meets-expectations
+    background-color: $color-green-1
+    padding: 0.2rem
+
+
+  .level-tab.selected
     background-color: $meets-expectations-selected-color
 
-  .level-badge-image img
-    height: 35px
+
+  .level-badge-image
+    list-style: none
+    img
+      height: 25px
 
   .badge-row:hover
     background-color: transparent
 
-  .badges, .earned_level, .graded-students
-    display: block
-    padding: .25rem
-
-  .earned_level
-    background-color: $color-green-2
-    color: $color-white
-    font-style: italic
-
-  .graded-students
-    background-color: $color-blue-3
-
-  td.comments-box
+  .comments-box
     background-color: $color-grey-7
     border: none
     padding: .25rem
     font-size: .8rem
     min-width: 300px
-
-    textarea
-      margin: 0
-      width: 100%
-      height: 105%
-      resize: none
-      background: $color-white
 
   h4.notice
     color: $color-green-2
@@ -587,6 +542,5 @@ button.meets-expectations-status.no-expectation
 .total-points
   margin-bottom: 1rem
 
-#grade-rubric-table.edit
-  .level:hover
-    background-color: $color-green-2
+.download-link
+  margin: 0.5rem 0

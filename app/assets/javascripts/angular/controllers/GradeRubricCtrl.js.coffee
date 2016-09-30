@@ -20,10 +20,19 @@
     $scope.services()
 
   $scope.services = () ->
+    # because getting Criteria requires badges from $scope
+    # we need to wait until the badges are created before
+    # making this call.
+    queCriteriaAfterBadges = ()->
+      if (RubricService.badgesAvailable() == false)
+        window.setTimeout(queCriteriaAfterBadges, 100)
+      else
+        RubricService.getCriteria($scope.assignment.id, $scope)
+
     promises = [
-      RubricService.getCriterionGrades($scope.assignment),
-      RubricService.getCriteria($scope.assignment.id, $scope),
       RubricService.getBadges(),
+      RubricService.getCriterionGrades($scope.assignment),
+      queCriteriaAfterBadges(),
       RubricService.getGrade($scope.assignment)]
     $q.all(promises)
 

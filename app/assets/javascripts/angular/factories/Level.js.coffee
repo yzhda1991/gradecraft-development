@@ -112,7 +112,7 @@
     removeFromCriterion: (index)->
       @criterion.levels.splice(index,1)
 
-    ##rubric ctrl
+    ##rubric-design ctrl
     loadLevelBadge: (levelBadge)->
       courseBadge = @availableBadges[levelBadge.badge_id]
       loadedBadge = new LevelBadge(@, angular.copy(courseBadge))
@@ -126,7 +126,7 @@
         if (@availableBadges[levelBadge.badge_id])
           @loadLevelBadge(levelBadge)
       )
-    #rubric ctrl
+    #rubric-design ctrl
     # Badges
     addBadge: (attrs={})->
       newBadge = new LevelBadge(@, attrs)

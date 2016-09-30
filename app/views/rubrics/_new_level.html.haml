@@ -9,7 +9,7 @@
     .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
       %img(ng-src="{{levelBadge.badge.icon}}" width="35px" height="35px")
 
-.modal-window(ng-show="level.editingBadges")
+.badge-modal-window(ng-show="level.editingBadges")
   %select(ng-disabled="! level.isSaved()" ng-change="level.selectBadge()" ng-model="level.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in level.availableBadges")
     %option.default(value="" selected disabled ng-show="level.availableBadges.length > 0") select a badge to add...
     %option.default(value="" selected disabled ng-show="level.availableBadges.length == 0") all available badges selected
@@ -26,4 +26,3 @@
 %button.meets-expectations-status(type="button" ng-class="{'no-expectation': !level.meetExpectationSet(),'show': level.meetsExpectations || level.showExpectationStatus()}") {{level.label()[0]}}
 %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectations}" ng-click="level.toggleMeetsExpectations()") {{level.label()[1]}}
 %button.delete(type="button" ng-click="level.delete($index)" ng-hide="level.required") X
-
