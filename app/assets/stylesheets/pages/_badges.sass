@@ -2,6 +2,61 @@
 @import "../utilities/layout"
 @import "../utilities/animation"
 
+// base badge styles
+.badge-name
+  font-size: .7rem
+  margin: 0px
+  width: 110px
+  text-align: center
+  line-height: .9rem
+
+.earned-count
+  font-size: .7rem
+  font-family: Open Sans
+  font-weight: normal
+  width: 1rem
+  margin-top: -1.35rem
+  margin-left: .8rem
+  text-align: center
+  color: $color-black
+
+.gold-stars
+  position: absolute
+  top: 10px
+  right: 0px
+  font-size: 2rem
+  color: $color-yellow-1
+  i.fa-fw
+    z-index: 600 !important
+  &.unearned
+    display: none
+
+// used on the badge index for students, and grade standard edit form
+.badge-icon-container
+  display: inline-block
+  margin: 1rem
+  position: relative
+  vertical-align: top
+
+  .badge-icon
+    width: 80px
+    max-height: 80px
+    display: block
+    margin: 0 auto
+    cursor: pointer
+    &.unearned, &.unavailable
+      opacity: .2 !important
+    &.earned
+      opacity: 1
+
+  &.focus-article
+    background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
+
+// show page base styles
+.badge-show-page
+  font-weight: 300
 
 /* Student Badge Show Page */
 .student
@@ -14,8 +69,6 @@
     display: none
 
   .badge-show-page
-    font-weight: 300
-
     .badge-container
       text-align: center
 
@@ -25,13 +78,13 @@
 
     .badge-icon
       width: 150px
+      max-height: 150px
       display: block
       margin: 0 auto
 
 /* staff badge show page */
 .staff
   .badge-show-page
-    font-weight: 300
 
     .badge-icon
       width: 100%
@@ -74,106 +127,6 @@
     position: absolute
     z-index: 2
 
-/* used on the badge show page for both instructors and students, and grade
-/* standard edit form */
-
-.badge-name
-  font-size: .7rem
-  margin: 0px
-  width: 110px
-  text-align: center
-  line-height: .9rem
-
-.earned-count
-  font-size: .7rem
-  font-family: Open Sans
-  font-weight: normal
-  width: 1rem
-  margin-top: -1.35rem
-  margin-left: .8rem
-  text-align: center
-  color: $color-black
-
-button#remove-badges, button#add-badges
-  position: relative
-  margin-left: .5rem
-  top: -.2rem
-  @include transition-property("background, opacity")
-  @include transition-duration(0.3s)
-  @include transition-timing-function(ease)
-
-.grade-badge,
-.badge-index-section .badge-icon-container
-  display: inline-block
-  margin: 1rem
-  position: relative
-  vertical-align: top
-
-  img
-    width: 80px
-    max-height: 80px
-    display: block
-    margin: 0 auto
-    cursor: pointer
-    &.unearned, &.unavailable
-      opacity: .2 !important
-    &.earned
-      opacity: 1
-
-  &.focus-article
-    background-color: transparentize($color-blue-3, .8)
-    @media (max-width: $media-medium-max)
-      background-color: initial
-
-  &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
-    background-color: $color-blue-3
-    @include opacity(0.88)
-    box-shadow: 0 0 20px #F6C621
-
-  &.available.earned
-    @include opacity(0)
-
-  &.awarded.unearned
-    @include opacity(0)
-
-  &.available, &.awarded
-    &.hide-after-fade, &.temp-hide
-      display: none !important
-
-  &.available.unearned-active
-    transition:1s linear all
-    opacity:0.92
-
-  &.awarded.earned-active
-    transition:1.5s linear all
-    box-shadow: 0 0 150px #FFD017
-    opacity:0.95
-
-  &.fade-in-available
-    @include opacity(0.8)
-    @include transition-property("opacity")
-    @include transition-duration(2s)
-    @include transition-timing-function(ease)
-
-  &.fade-in-awarded
-    @include opacity(1)
-    @include transition-property("opacity")
-    @include transition-duration(2s)
-    @include transition-timing-function(ease)
-
-  .available
-    opacity: .5
-
-  .gold-stars
-    position: absolute
-    top: 10px
-    right: 0px
-    font-size: 2rem
-    color: $color-yellow-1
-    i.fa-fw
-      z-index: 600 !important
-    &.unearned
-      display: none
 
 /* badge index table on instructor side */
 .badge-index-table
@@ -213,7 +166,6 @@ button#remove-badges, button#add-badges
     margin: 0 auto
 
 // Award Earned Badges on Grading Page
-
 .badge-icon-container.badge-award-button
   cursor: pointer
   .status-icon, .status-icon-hover
@@ -245,4 +197,4 @@ button#remove-badges, button#add-badges
       display: none
     .status-icon-hover
       display: block
-      background-color: white
+      background-color: $color-white

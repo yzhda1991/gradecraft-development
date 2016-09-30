@@ -14,6 +14,6 @@
         %a.mobile-click{:href => "badges/{{badge.id}}"}
         %img{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'badge-icon unearned' : 'badge-icon')", 'ng-src'=>'{{badge.icon}}', 'ng-click'=>'changeFocusArticle(badge)'}
         %p.badge-name {{badge.name}}
-        .gold-stars{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'badge-icon unearned' : 'badge-icon')"}
+        .gold-stars{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'unearned' : 'earned')"}
           %i.fa.fa-fw.fa-star
             .earned-count {{badge.earned_badge_count}}
