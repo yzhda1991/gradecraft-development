@@ -32,11 +32,7 @@ class EarnedBadgesController < ApplicationController
     authorize! :create, EarnedBadge.new(badge: @badge, course: current_course)
 
     @earned_badge = @badge.earned_badges.new
-    if current_user_is_student?
-      @students = current_course.students - [current_user]
-    else
-      @students = current_course.students
-    end
+    @students = earned_badge_students
   end
 
   def edit
@@ -122,6 +118,11 @@ class EarnedBadgesController < ApplicationController
     params.require(:earned_badge).permit(:points, :feedback, :student_id, :badge_id,
       :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
       :student_visible, :_destroy).merge(awarded_by: current_user, course: current_course)
+  end
+
+  def earned_badge_students
+    current_course.students if current_user_is_staff?
+    current_course.students - [current_user]
   end
 
   def find_badge
