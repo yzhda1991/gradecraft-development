@@ -79,13 +79,13 @@ class EarnedBadgesController < ApplicationController
     # build a new badge automatically if they can be earned at will
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |student|
-        @badge.earned_badges.new(student: student, badge: @badge)
+        @badge.earned_badges.new(student: student, badge: @badge, awarded_by: current_user)
       end
     # otherwise build a new one only if it hasn't been earned
     else
       @earned_badges = @students.map do |student|
         @badge.earned_badges.where(student_id: student).first ||
-          @badge.earned_badges.new(student: student, badge: @badge)
+          @badge.earned_badges.new(student: student, badge: @badge, awarded_by: current_user)
       end
     end
   end
@@ -132,7 +132,7 @@ class EarnedBadgesController < ApplicationController
 
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
-      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
+      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge, awarded_by: current_user)
       if earned_badge.valid?
         valid_earned_badges << earned_badge
       else
