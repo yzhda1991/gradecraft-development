@@ -1,0 +1,81 @@
+@import "../utilities/color"
+@import "../utilities/layout"
+
+$card-bg: $color-white
+$card-cap-bg: $color-blue-2
+$card-border-width: 1px
+$card-border-color: $color-blue-1
+$card-spacer-x: 1.25rem
+$card-spacer-y: .75rem
+
+.card
+  float: left
+  display: inline-block
+  border: $card-border-width solid $card-border-color
+  border-radius: $global-radius
+  min-height: 8%
+  max-width: 280px
+  min-width: 15.5rem
+  margin: $card-spacer-x $card-spacer-y
+
+  &.quarter
+    max-width: 22%
+    min-width: 22%
+    border-color: $card-cap-bg
+
+  .card-cap
+    background: $card-cap-bg
+    padding: $card-spacer-x 0
+    width: 100%
+
+    img
+      display: block
+      margin: 0 auto
+
+  .card-block
+    padding: $card-spacer-x
+
+  .card-link
+    + .card-link
+      margin-left: $card-spacer-x
+
+  .card-text
+    background: $card-bg
+
+  .card-title
+    background: $card-bg
+    margin-bottom: $card-spacer-y
+
+@mixin hover-card
+  position: absolute
+  font-weight: 300
+  background-color: $color-white
+  box-shadow: 0 2px 5px 0 rgba($color-black, 0.16), 0 2px 10px 0 rgba($color-black,0.12)
+  padding: 1em
+  z-index: 100
+
+  &:after, &:before
+    bottom: 100%
+    left: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+
+  &:after
+    border-color: rgba(255, 255, 255, 0)
+    border-bottom-color: $color-white
+    border-width: 8px
+    margin-left: -8px
+
+  &:before
+    border-color: rgba(238, 238, 238, 0)
+    border-width: 16px
+    margin-left: -16px
+
+@media (max-width: $media-medium-max)
+  .card.quarter
+    max-width: 42%
+    min-width: 42%

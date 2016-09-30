@@ -1,0 +1,27 @@
+@import "../utilities/color"
+@import "../utilities/layout"
+
+.analytics-loading
+  background: $color-grey-3
+  cursor: default
+  &:hover
+    background: $color-grey-6
+
+.content#boxplot .chartcontainer
+  padding-top: 1rem
+
+/* Styles the hover state on the box plot on class analytics tab */
+.jqstooltip
+  box-sizing: content-box
+  height: auto !important
+  width: auto !important
+
+
+/* Styles the select menu on the analytics view for instructors */
+#analytics-switcher
+  float: right
+  margin-bottom: 1rem
+  @media (max-width: $media-small-max)
+    float: none
+    margin: 0.5rem auto
+    display: block

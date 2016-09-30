@@ -1,0 +1,82 @@
+@import "../utilities/color"
+@import "../utilities/layout"
+
+#custom-value-label
+  img
+    float: right
+    margin-left: .25rem
+
+select#grade_raw_points[disabled], input[type=text]#grade_raw_points[disabled]
+  background: $color-grey-7 !important
+  color: $color-grey-4
+  border: none
+  cursor: pointer
+  cursor: hand
+
+#updated-at, #updated-at-current
+  margin-top: .5rem
+  font-style: italic
+  float: left
+  padding: .25rem .5rem
+  border: 1px solid $color-grey-7
+  border-radius: $global-radius
+
+#updated-at-current
+  &.ng-animate
+    background: $color-white
+    border-color: $color-grey-7
+
+#available, #awarded
+  padding: 1rem
+  min-height: 150px
+
+#awarded
+  background-color: $color-green-2
+
+#available
+  background-color: $color-grey-7
+
+/* This is the box that holds the select list */
+#gradebox, .gradebox
+  padding: 1rem
+  border-radius: $global-radius
+  width: 45%
+  height: 4rem
+  font-size: 1rem
+  margin-bottom: 1rem
+  float: left
+  background-color: $color-blue-4
+  display: inline
+
+  &.inactive
+    color: $color-grey-5
+    padding: .5rem
+    font-size: .8rem
+    cursor: pointer
+    cursor: hand
+
+#gradebox
+  margin-right: .5rem
+
+/* This is the box that holds the custom entry field */
+.gradebox
+  input
+    border: none
+
+.grade-adjustment-points
+ border: 1pt $color-blue-4 solid
+
+.grade-info-card-wrapper
+  display: none
+  position: relative
+
+.grade-info-card
+  @include hover-card
+  top: 0.7em
+  right: -3.5em
+  width: 200px
+
+ul.grade-files-list
+ list-style: none
+ .fa-times
+   color: $color-red-1

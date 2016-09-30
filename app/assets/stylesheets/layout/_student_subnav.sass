@@ -1,0 +1,62 @@
+@import "../utilities/color"
+@import "../utilities/layout"
+
+/* Tabs on the student dashboard */
+
+dl
+  margin: 0
+
+.staff .sub-nav
+  margin-top: 3.375rem
+  max-width: 1248px
+
+.sub-nav
+  padding: 0.5rem 0rem
+  margin: 0
+  position: fixed
+  display: block
+  overflow: hidden
+  width: 100%
+  max-width: 1500px
+  background-color: $color-blue-2
+  z-index: 20
+
+  li
+    display: inline
+    font-size: .8rem
+    background-color: $color-blue-2
+    margin: 0 0.05rem 0 0
+    padding: 0.8rem 0
+    text-transform: uppercase
+    a
+      padding: 0.8rem 0.5rem
+      color: $color-white
+      text-decoration: none
+  h5, hr
+    display: none
+  li.active
+    padding: .8rem .5rem !important
+
+  /* Setting the active tab and hover color */
+  li.active, li:hover
+    background-color: $color-blue-3
+    color: $color-white
+
+  li.announcement-nav
+    position: relative
+    a
+      padding-right: 1.8rem
+
+  li .announcement-notification-badge
+    position: absolute
+    top: 12px
+    margin: 0
+    right: 2px
+
+@media (max-width: $media-small-max)
+  .sub-nav
+    display: none
+
+@media (min-width: $media-small-max)
+  i
+    display: inline
