@@ -29,8 +29,6 @@ class EarnedBadgesController < ApplicationController
   end
 
   def new
-    authorize! :create, EarnedBadge.new(badge: @badge, course: current_course)
-
     @earned_badge = @badge.earned_badges.new
     @students = earned_badge_students
   end
@@ -40,8 +38,6 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    authorize! :create, EarnedBadge.new(earned_badge_params)
-
     result = Services::CreatesEarnedBadge.award earned_badge_params
 
     if result.success?
@@ -49,7 +45,8 @@ class EarnedBadgesController < ApplicationController
         notice: "The #{result.earned_badge.badge.name} #{term_for :badge} was successfully awarded to #{result.earned_badge.student.name}"
     else
       @earned_badge = result.earned_badge
-      @students = current_course.students
+      @students = earned_badge_students
+      flash[:alert] = result.message
       render action: "new"
     end
   end
