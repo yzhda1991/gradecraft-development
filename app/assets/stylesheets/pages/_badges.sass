@@ -1,6 +1,27 @@
 @import "../utilities/color"
 @import "../utilities/layout"
-@import "../utilities/animation"
+
+// used on the badge index for students, and grade standard edit form
+.badge-icon-container
+  display: inline-block
+  margin: 1rem
+  position: relative
+  vertical-align: top
+
+  .badge-icon
+    width: 80px
+    display: block
+    margin: 0 auto
+    cursor: pointer
+    &.unearned, &.unavailable
+      opacity: .2 !important
+    &.earned
+      opacity: 1
+
+  &.focus-article
+    background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
 
 // base badge styles
 .badge-name
@@ -31,34 +52,12 @@
   &.unearned
     display: none
 
-// used on the badge index for students, and grade standard edit form
-.badge-icon-container
-  display: inline-block
-  margin: 1rem
-  position: relative
-  vertical-align: top
-
-  .badge-icon
-    width: 80px
-    max-height: 80px
-    display: block
-    margin: 0 auto
-    cursor: pointer
-    &.unearned, &.unavailable
-      opacity: .2 !important
-    &.earned
-      opacity: 1
-
-  &.focus-article
-    background-color: transparentize($color-blue-3, .8)
-    @media (max-width: $media-medium-max)
-      background-color: initial
 
 // show page base styles
 .badge-show-page
   font-weight: 300
 
-/* Student Badge Show Page */
+// Student Badge Show Page
 .student
   h2.pagetitle.badge-page-title
     display: none
@@ -78,41 +77,33 @@
 
     .badge-icon
       width: 150px
-      max-height: 150px
       display: block
       margin: 0 auto
 
-/* staff badge show page */
+// staff badge show page
 .staff
   .badge-show-page
+
+    .badge-container
+      display: flex
+      align-items: center
+      @media (max-width: $media-small-max)
+        flex-direction: column
 
     .badge-icon
       width: 100%
       max-width: 120px
-      @media (max-width: $media-small-max)
-        margin: 0 auto
-        display: block
 
     .badge-description
-      width: 65%
-      margin: 0 0 1rem 1rem
+      max-width: 75%
       @media (max-width: $media-small-max)
-        margin: 0
-
-    .badge-icon-container, .badge-description
-      float: left
-      @media (max-width: $media-small-max)
-        width: 100%
-        float: none
-
-    .badge-title, .count
-      display: none
+        max-width: 100%
 
     .team-filter
       width: 100%
       text-align: right
 
-/* Student Badge Index Page */
+// Student Badge Index Page
 .badge-container
   .badge-description
     .badge-title
@@ -128,7 +119,7 @@
     z-index: 2
 
 
-/* badge index table on instructor side */
+// badge index table on instructor side
 .badge-index-table
   .sort-column, .lock-icon-column
     width: 20px

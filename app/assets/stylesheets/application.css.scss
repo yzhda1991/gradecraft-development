@@ -24,7 +24,7 @@
   *= require plugins/video.min.css
 
   *= require ./pages/_color_palette
-  *= require ./utilities/_accessibility
+  *= require ./components/_accessibility
   *= require ./components/_alerts
   *= require ./pages/_analytics
   *= require ./pages/_assignments
@@ -41,7 +41,7 @@
   *= require ./pages/_grading_scheme
   *= require ./components/_history_timeline
   *= require ./layout/_footer
-  *= require ./components/_forms
+  *= require ./layout/_forms
   *= require ./vendor/_froala
   *= require ./components/_newsletter
   *= require ./pages/_predictor
