@@ -1,5 +1,7 @@
 en:
   announcements:
+    index: 
+      title: "Announcements"
     show:
       title: "#{ @announcement.title }"
     new:
@@ -16,9 +18,7 @@ en:
       title: "Editing My #{ term_for :weight } Choices"
   assignment_types:
     index:
-      title: "%{ term_for :assignment_types }"
-    show:
-      title:
+      title: "#{ term_for :assignment_types }"
     new:
       title: "Create a New #{ term_for :assignment_type }"
     edit:
@@ -36,14 +36,21 @@ en:
       title: "Create a New #{ term_for :assignment }"
     show:
       title: "#{ @assignment.name }"
+    grades:
+      mass_edit:
+        title: "Quick Grade #{ @assignment.name }"
   importers:
     assignments_import:
       title: "Import #{ term_for :assignments }"
   badges:
+    index: 
+      title: "#{ term_for :badges }"
     new:
       title: "Create a New #{ term_for :badge }"
     edit:
       title: "Editing #{ @badge.name }"
+    show: 
+      title: "#{ @badge.name }"
   challenges:
     index:
       title: "#{ term_for :challenges }"
@@ -77,7 +84,7 @@ en:
     show:
       title: "#{ @team.name }'s #{@challenge_grade.name} Grade"
     edit:
-      title: "Editing #{ @challenge.name } Grade"
+      title: "Editing #{ @team.name }'s #{ @challenge.name } Grade"
     mass_edit:
       title: "Quick Grade #{ @challenge.name }"
   downloads:
@@ -86,6 +93,16 @@ en:
   info:
     dashboard:
       title: "Dashboard"
+    earned_badges:
+      title: "Awarded #{ term_for :badges }"
+    grading_status:
+      title: "Grading Status"
+    top_10:
+      title: "Top 10/Bottom 10"
+    per_assign:
+      title: "#{ term_for :assignment } Analytics"
+    multiplier_choices:
+      title: "#{ term_for :weight } Choices"
   integrations:
     courses:
       index:
@@ -122,8 +139,10 @@ en:
       title: "Editing #{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
     importers:
       title: "Grade Import"
-    csv:
-      title: "Import Grades for #{ @assignment.name }"
+      index:  
+        title: "Import Grades for #{ @assignment.name }"
+      csv: 
+        title: "Import Grades from a CSV"
   groups:
     index:
       title: "#{ current_course.group_term.pluralize }"
@@ -133,19 +152,6 @@ en:
       title: "Start a #{ term_for :group }"
     edit:
       title: "Editing #{ @group.name }"
-  info:
-    dashboard:
-      title: "Dashboard"
-    earned_badges:
-      title: "Awarded #{ term_for :badges }"
-    grading_status:
-      title: "Grading Status"
-    top_10:
-      title: "Top 10/Bottom 10"
-    per_assign:
-      title: "#{ term_for :assignment } Analytics"
-    multiplier_choices:
-      title: "#{ term_for :weight } Choices"
   rubric:
     design:
       title: "Design Rubric for #{ @assignment.name }"

@@ -61,6 +61,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :assignments }', assignments_path)
     breadcrumb('New #{ term_for :assignment }')
   end
+  
+  def assignments_grades_mass_edit
+    
+  end
 
   def assignment_type_weights_index
     breadcrumb('Dashboard', dashboard_path)
@@ -365,7 +369,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def grades_importers_csv
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
+    breadcrumb('Import Grades from a CSV')
   end
 
   def grades_importers_assignments
