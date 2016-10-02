@@ -52,10 +52,6 @@ class Students::LeaderboardPresenter < Showtime::Presenter
     course.teams
   end
 
-  def title
-    "Leaderboard"
-  end
-
   def team_memberships
     @team_memberships ||= TeamMembership.for_course(course)
       .where(student_id: student_ids)

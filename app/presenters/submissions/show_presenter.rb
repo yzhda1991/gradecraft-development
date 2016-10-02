@@ -58,11 +58,5 @@ module Submissions
       assignment.open? &&
         (!grade.present? || assignment.resubmissions_allowed?)
     end
-
-    def title
-      "#{owner_name}'s #{assignment.name} Submission " \
-        "(#{view_context.points assignment.full_points} " \
-        "#{"point".pluralize(assignment.full_points)})"
-    end
   end
 end

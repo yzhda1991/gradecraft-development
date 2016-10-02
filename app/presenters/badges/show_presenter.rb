@@ -15,10 +15,6 @@ class Badges::ShowPresenter < Showtime::Presenter
     properties[:student]
   end
 
-  def title
-    badge.name
-  end
-
   def teams
     properties[:teams]
   end

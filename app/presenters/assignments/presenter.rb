@@ -193,10 +193,6 @@ class Assignments::Presenter < Showtime::Presenter
     submission_grade_filtered_history(submission, grade)
   end
 
-  def title
-    title = assignment.name
-  end
-
   def team
     @team ||= teams.find_by(id: properties[:team_id])
   end
