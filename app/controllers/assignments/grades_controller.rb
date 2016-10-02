@@ -8,7 +8,6 @@ class Assignments::GradesController < ApplicationController
   # ("In Progress" => "Graded", or "Graded" => "Released")
   def edit_status
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "#{@assignment.name} Grade Statuses"
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
@@ -74,7 +73,6 @@ class Assignments::GradesController < ApplicationController
   # Quickly grading a single assignment for all students
   def mass_edit
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Quick Grade #{@assignment.name}"
     @assignment_type = @assignment.assignment_type
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 

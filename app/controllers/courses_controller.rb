@@ -118,7 +118,6 @@ class CoursesController < ApplicationController
 
   def badges
     if @course.has_public_badges?
-      @title = @course.name
       @badges = @course.badges
     else
       redirect_to root_path, alert: "Whoops, nothing to see here! That data is not available."
