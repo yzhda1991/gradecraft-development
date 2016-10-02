@@ -46,7 +46,7 @@ class StudentImporter
   end
 
   def find_or_create_user(row, course)
-    user = User.find_by_insensitive_email row.email if row.email
+    user = User.find_by_insensitive_email row.email.downcase if row.email
     user ||= User.find_by_insensitive_username row.username if row.username
     user ||= Services::CreatesNewUser
       .create(row.to_h.merge(internal: internal_students), send_welcome)[:user]

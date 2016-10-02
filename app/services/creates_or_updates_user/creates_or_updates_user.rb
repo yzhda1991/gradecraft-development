@@ -10,7 +10,8 @@ module Services
 
       executed do |context|
         attributes = context[:attributes]
-        email = attributes[:email]
+        entered_email = attributes[:email]
+        email = entered_email.downcase
 
         if email.blank?
           context.fail! "Email can't be blank", 422

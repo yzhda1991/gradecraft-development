@@ -9,6 +9,8 @@ module Services
       executed do |context|
         attributes = context[:attributes]
         context[:user] = User.new attributes
+        user = context[:user]
+        user.email = user.email.downcase
       end
     end
   end
