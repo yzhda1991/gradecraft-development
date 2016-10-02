@@ -117,7 +117,6 @@ GradeCraft::Application.routes.draw do
       post :exclude
       post :feedback_read
       post :include
-      post :remove
     end
   end
 

@@ -77,61 +77,6 @@ describe Grade do
     end
   end
 
-  describe "#clear_grade!" do
-    subject  { create :released_grade, feedback: "You rock", feedback_read: true,
-               feedback_read_at: DateTime.now, feedback_reviewed: true,
-               feedback_reviewed_at: DateTime.now, instructor_modified: true,
-               graded_at: DateTime.now, graded_by_id: 123 }
-
-    it "clears the raw points" do
-      subject.clear_grade!
-
-      expect(subject.raw_points).to be_nil
-    end
-
-    it "clears the adjustment" do
-      subject.clear_grade!
-
-      expect(subject.adjustment_points).to eq 0
-      expect(subject.adjustment_points_feedback).to be_nil
-    end
-
-    it "clears the status" do
-      subject.clear_grade!
-
-      expect(subject.status).to be_nil
-    end
-
-    it "clears the feedback" do
-      subject.clear_grade!
-
-      expect(subject.feedback).to be_empty
-      expect(subject.feedback_read_at).to be_nil
-      expect(subject.feedback_reviewed_at).to be_nil
-      expect(subject.feedback_read).to eq false
-      expect(subject.feedback_reviewed).to eq false
-    end
-
-    it "clears the instructor modified" do
-      subject.clear_grade!
-
-      expect(subject.instructor_modified).to eq false
-    end
-
-    it "removes any indication that it's been graded" do
-      subject.clear_grade!
-
-      expect(subject.graded_at).to be_nil
-      expect(subject.graded_by_id).to be_nil
-    end
-
-    it "persists the grade changes" do
-      subject.clear_grade!
-
-      expect(subject).to_not be_changed
-    end
-  end
-
   describe "#raw_points" do
     it "converts raw_points from human readable strings" do
       subject.update(raw_points: "1,234")

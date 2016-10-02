@@ -149,31 +149,6 @@ describe GradesController do
       end
     end
 
-    describe "POST remove" do
-      before do
-        allow_any_instance_of(ScoreRecalculatorJob).to \
-          receive(:enqueue).and_return true
-      end
-
-      it "returns an error message on failure" do
-        allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :remove, { id: @grade.id, grade: { full_points: 13 }}
-        expect(response.status).to eq(400)
-      end
-
-      it "preserves the grade but removes any indication that it was graded" do
-        expect_any_instance_of(Grade).to receive(:clear_grade!).and_call_original
-
-        post :remove, { id: @grade.id }
-      end
-
-      it "recalculates the grade's score" do
-        expect(controller).to receive(:score_recalculator).with(@grade.student)
-
-        post :remove, { id: @grade.id }
-      end
-    end
-
     describe "POST exclude" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \
@@ -302,7 +277,6 @@ describe GradesController do
       it "all redirect to root" do
         [ Proc.new { get :edit, {id: @grade.id }},
           Proc.new { get :update, { id: @grade.id }},
-          Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, { id: @grade.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
