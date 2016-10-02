@@ -3,12 +3,10 @@ class AnalyticsController < ApplicationController
   before_filter :set_granularity_and_range
 
   def students
-    @title = "#{term_for :student} Analytics"
     @nonpredictors = current_course.nonpredictors
   end
 
   def staff
-    @title = "#{term_for :team_leader} Analytics"
   end
 
   def all_events

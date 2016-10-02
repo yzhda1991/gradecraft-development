@@ -7,7 +7,6 @@ class Challenges::ChallengeGradesController < ApplicationController
   def new
     @team = current_course.teams.find(params[:team_id])
     @challenge_grade = ChallengeGrade.new
-    @title = "Grading #{@team.name}'s #{@challenge.name}"
   end
 
   # POST /challenge_grades
@@ -30,7 +29,6 @@ class Challenges::ChallengeGradesController < ApplicationController
   # Grade many teams on a particular challenge at once
   # GET /challenges/:challenge_id/challenge_grades/mass_edit
   def mass_edit
-    @title = "Quick Grade #{@challenge.name}"
     @teams = current_course.teams
     @challenge_grades = @teams.map { |t| @challenge.challenge_grades.find_or_initialize_for_team(t) }
   end
@@ -59,7 +57,6 @@ class Challenges::ChallengeGradesController < ApplicationController
   # grades, before they are "Released" to students
   # GET /challenges/:challenge_id/challenge_grades/edit_status
   def edit_status
-    @title = "#{@challenge.name} Grade Statuses"
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
   end

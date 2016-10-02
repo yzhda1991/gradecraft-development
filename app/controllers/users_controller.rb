@@ -126,7 +126,6 @@ class UsersController < ApplicationController
       redirect_to dashboard_path,
         notice: "Your profile was successfully updated!"
     else
-      @title = "Edit My Profile"
       @course_membership =
         @user.course_memberships.where(course_id: current_course).first
       render :edit_profile
