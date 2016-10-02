@@ -38,13 +38,4 @@ describe Submissions::NewPresenter do
       expect(subject.student).to eq student
     end
   end
-
-  describe "#title" do
-    it "contains the assignment name and point total" do
-      view_context = double(:view_context, points: "10,000")
-      allow(subject).to receive(:view_context).and_return view_context
-      allow(assignment).to receive_messages name: "Fun Assignment", full_points: 10000
-      expect(subject.title).to eq "Submit Fun Assignment (10,000 points)"
-    end
-  end
 end

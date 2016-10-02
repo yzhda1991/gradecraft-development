@@ -29,8 +29,4 @@ class Assignments::GroupPresenter < Showtime::Presenter
   def students
     group.students
   end
-
-  def title
-    "#{group.name} Grades"
-  end
 end

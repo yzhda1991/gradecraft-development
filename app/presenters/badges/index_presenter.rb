@@ -11,10 +11,6 @@ class Badges::IndexPresenter < Showtime::Presenter
     properties[:student]
   end
 
-  def title
-    properties[:title]
-  end
-
   def earned_badges_count(badge)
     if student
       student.visible_earned_badges_for_badge_count(badge)

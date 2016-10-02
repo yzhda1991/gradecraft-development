@@ -51,12 +51,6 @@ describe Badges::ShowPresenter do
     end
   end
 
-  describe "#title" do
-    it "is the badge name" do
-      expect(subject.title).to eq badge.name
-    end
-  end
-
   describe "#teams" do
     it "is the teams that is passed in as a property" do
       expect(subject.teams).to eq teams

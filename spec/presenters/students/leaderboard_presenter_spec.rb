@@ -108,10 +108,4 @@ describe Students::LeaderboardPresenter do
       expect(subject.team_memberships).to eq [membership]
     end
   end
-
-  describe "#title" do
-    it "always returns 'Leaderboard'" do
-      expect(subject.title).to eq "Leaderboard"
-    end
-  end
 end

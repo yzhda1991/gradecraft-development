@@ -45,10 +45,4 @@ describe Assignments::GroupPresenter do
       expect(subject.students).to eq ([student])
     end
   end
-
-  describe "#title" do
-    it "has the group name" do
-      expect(subject.title).to eq "My Group Grades"
-    end
-  end
 end

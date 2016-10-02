@@ -24,13 +24,7 @@ describe Badges::IndexPresenter do
       }
     )
   end
-
-  describe "#title" do
-    it "is the title that is passed in as a property" do
-      expect(subject.title).to eq "Badgerinos"
-    end
-  end
-
+  
   describe "#badges" do
     it "is the badges that are passed in as a property" do
       expect(subject.badges).to eq [badge]
