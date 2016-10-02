@@ -294,20 +294,4 @@ describe Submissions::ShowPresenter do
       end
     end
   end
-
-  describe "#title" do
-    let(:assignment) { double(:assignment, name: "Greatness", full_points: 40) }
-    let(:view_context) { double(:view_context).as_null_object }
-
-    before do
-      allow(subject).to receive(:owner_name) { "Gary" }
-      allow(subject).to receive(:view_context) { view_context }
-      allow(subject.view_context).to receive(:points).with(40) { 800 }
-    end
-
-    it "builds a title for the show submission page" do
-      expect(subject.title)
-        .to eq "Gary's Greatness Submission (800 points)"
-    end
-  end
 end

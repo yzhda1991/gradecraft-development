@@ -159,10 +159,4 @@ describe Assignments::Presenter do
       expect(subject.team).to eq team
     end
   end
-
-  describe "#title" do
-    it "is the assignment name" do
-      expect(subject.title).to eq "Crazy Wizardry"
-    end
-  end
 end
