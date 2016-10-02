@@ -48,21 +48,6 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /grades/:id/remove
-  # This is the method used when faculty delete a grade
-  # it preserves the predicted grade
-  def remove
-    grade = Grade.find(params[:id])
-
-    if grade.clear_grade!
-      score_recalculator(grade.student)
-      redirect_to grade.assignment,
-        notice: "#{grade.student.name}'s #{grade.assignment.name} grade was successfully deleted."
-    else
-      redirect_to grade.assignment, notice: grade.errors.full_messages, status: 400
-    end
-  end
-
   # POST /grades/:id/exclude
   def exclude
     grade = Grade.find(params[:id])

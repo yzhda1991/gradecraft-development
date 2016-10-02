@@ -66,7 +66,7 @@
               %li= link_to glyph(:edit) + "Re-grade", edit_grade_path(grade), class: "button danger"
             - else
               %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
-            %li= link_to glyph(:trash) + "Delete Grade", remove_grade_path(grade), class: "button", data: { confirm: "Are you sure?" }, :method => :post
+            %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
           - else
             - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
               %li= link_to glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"

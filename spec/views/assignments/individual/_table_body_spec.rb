@@ -26,7 +26,6 @@ describe "assignments/individual/_table_body" do
   describe "with a graded grade" do
     before(:each) do
       @grade.update(status: "Graded", instructor_modified: true)
-      allow(view).to receive(:remove_grades_assignment_path).and_return("#")
     end
 
     describe "with a score" do
