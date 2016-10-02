@@ -3,14 +3,12 @@
     %h3= term_for :badges
   .card-body
     %ul.badge-grid
-      - cache multi_cache_key :student_dashboard_badges, current_student, current_course do
-        - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
-          %li
-            %a{href: badge_path(badge) }
-              %img{src: badge.icon, alt: badge.name}
+      - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
+        %li
+          %a{href: badge_path(badge) }
+            %img{src: badge.icon, alt: badge.name}
 
-        - current_student.student_visible_unearned_badges(current_course).each do |badge|
-          - cache ["v1", badge] do
-            %li
-              %a{href: badge_path(badge) }
-                %img{src: badge.icon, alt: badge.name, class: "unearned"}
+      - current_student.student_visible_unearned_badges(current_course).each do |badge|
+        %li
+          %a{href: badge_path(badge) }
+            %img{src: badge.icon, alt: badge.name, class: "unearned"}
