@@ -1,11 +1,11 @@
 require "rails_spec_helper"
 
-describe StudentImporter do
+describe CSVStudentImporter do
   before(:all) { User.destroy_all }
 
   describe "#import" do
     it "returns empty results when there is no file" do
-      result = StudentImporter.new(nil).import
+      result = described_class.new(nil).import
       expect(result.successful).to be_empty
       expect(result.unsuccessful).to be_empty
     end
@@ -18,7 +18,7 @@ describe StudentImporter do
 
       context "with GradeCraft students" do
         let(:file) { fixture_file "users.csv", "text/csv" }
-        subject { StudentImporter.new(file.tempfile) }
+        subject { described_class.new(file.tempfile) }
 
         it "creates the student accounts" do
           subject.import course
@@ -107,7 +107,7 @@ describe StudentImporter do
 
       context "with UM students" do
         let(:file) { fixture_file "internal_users.csv", "text/csv" }
-        subject { StudentImporter.new(file.tempfile, true) }
+        subject { described_class.new(file.tempfile, true) }
 
         it "creates the student accounts with emails specified" do
           subject.import course
@@ -144,7 +144,7 @@ describe StudentImporter do
         end
 
         it "can send a welcome email to each student" do
-          subject = StudentImporter.new(file.tempfile, true, true)
+          subject = described_class.new(file.tempfile, true, true)
           expect { subject.import course }.to \
             change { ActionMailer::Base.deliveries.count }.by 2
         end
