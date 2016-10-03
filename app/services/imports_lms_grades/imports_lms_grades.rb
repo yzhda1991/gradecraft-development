@@ -8,7 +8,7 @@ module Services
       extend ActiveSupport::Inflector
 
       expects :assignment, :grades, :provider, :user
-      promises :import_result
+      promises :grades_import_result
 
       executed do |context|
         assignment = context.assignment
@@ -17,12 +17,12 @@ module Services
         user = context.user
         authorization = UserAuthorization.for(user, provider)
 
-        context.import_result = nil
+        context.grades_import_result = nil
         unless authorization.nil?
           klass = constantize("#{camelize(provider)}GradeImporter")
           syllabus = ActiveLMS::Syllabus.new provider,
             authorization.access_token
-          context.import_result = klass.new(grades).import assignment.id, syllabus
+          context.grades_import_result = klass.new(grades).import assignment.id, syllabus
         end
       end
     end

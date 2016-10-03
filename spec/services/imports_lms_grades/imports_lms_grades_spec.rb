@@ -41,7 +41,7 @@ describe Services::Actions::ImportsLMSGrades do
       result = described_class.execute assignment: assignment,
         grades: grades, provider: provider, user: user
 
-      expect(result.import_result.successful.count).to eq 1
+      expect(result.grades_import_result.successful.count).to eq 1
     end
   end
 
@@ -50,7 +50,7 @@ describe Services::Actions::ImportsLMSGrades do
       result = described_class.execute assignment: assignment,
           grades: grades, provider: provider, user: user
 
-      expect(result.import_result).to be_nil
+      expect(result.grades_import_result).to be_nil
     end
   end
 end
