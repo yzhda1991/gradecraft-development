@@ -83,7 +83,7 @@ describe Grades::ImportersController do
       it "imports the selected grades" do
         expect(Services::ImportsLMSGrades).to \
           receive(:import).with("canvas", access_token, course_id,
-                                assignment_ids, grade_ids, world.assignment.id,
+                                assignment_ids, grade_ids, world.assignment,
                                 professor)
             .and_return result
 

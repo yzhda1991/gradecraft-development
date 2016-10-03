@@ -9,10 +9,10 @@ module Services
     extend LightService::Organizer
 
     def self.import(provider, access_token, course_id, assignment_ids, grade_ids,
-                    assignment_id, user)
+                    assignment, user)
       with(provider: provider, access_token: access_token, course_id: course_id,
            assignment_ids: assignment_ids, grade_ids: grade_ids,
-           assignment_id: assignment_id, user: user).reduce(
+           assignment: assignment, course: assignment.course, user: user).reduce(
              Actions::RetrievesLMSGrades,
              Actions::RetrievesLMSUsers,
              Actions::ImportsLMSUsers,

@@ -49,7 +49,7 @@ class Grades::ImportersController < ApplicationController
 
     @result = Services::ImportsLMSGrades.import @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
-      params[:grade_ids], @assignment.id, current_user
+      params[:grade_ids], @assignment, current_user
 
     if @result.success?
       render :grades_import_results

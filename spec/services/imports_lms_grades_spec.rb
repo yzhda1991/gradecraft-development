@@ -21,7 +21,7 @@ describe Services::ImportsLMSGrades do
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
-        grade_ids, assignment.id, user
+        grade_ids, assignment, user
     end
 
     it "retrieves the user details from the lms provider" do
@@ -29,7 +29,7 @@ describe Services::ImportsLMSGrades do
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
-        grade_ids, assignment.id, user
+        grade_ids, assignment, user
     end
 
     it "imports the users" do
@@ -37,7 +37,7 @@ describe Services::ImportsLMSGrades do
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
-        grade_ids, assignment.id, user
+        grade_ids, assignment, user
     end
 
     it "imports the grades" do
@@ -45,7 +45,7 @@ describe Services::ImportsLMSGrades do
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
-        grade_ids, assignment.id, user
+        grade_ids, assignment, user
     end
   end
 end

@@ -7,11 +7,11 @@ module Services
       extend LightService::Action
       extend ActiveSupport::Inflector
 
-      expects :assignment_id, :grades, :provider, :user
+      expects :assignment, :grades, :provider, :user
       promises :import_result
 
       executed do |context|
-        assignment_id = context.assignment_id
+        assignment = context.assignment
         grades = context.grades
         provider = context.provider
         user = context.user
@@ -22,7 +22,7 @@ module Services
           klass = constantize("#{camelize(provider)}GradeImporter")
           syllabus = ActiveLMS::Syllabus.new provider,
             authorization.access_token
-          context.import_result = klass.new(grades).import assignment_id, syllabus
+          context.import_result = klass.new(grades).import assignment.id, syllabus
         end
       end
     end
