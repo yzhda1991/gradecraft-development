@@ -1,5 +1,4 @@
-require "active_record_spec_helper"
-require_relative "../../../lib/s3_manager"
+require "rails_spec_helper"
 
 RSpec.describe S3Manager::Carrierwave do
   subject { submission_file }
@@ -72,8 +71,9 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "cached_file_path is present" do
       before do
+        submission_file.update_attributes store_dir: "great_dir"
+
         allow(submission_file).to receive_messages(
-          store_dir: "great_dir",
           mounted_filename: "stuff.txt",
           cached_file_path: "/some/great/path.png"
         )
@@ -169,11 +169,11 @@ RSpec.describe S3Manager::Carrierwave do
 
   describe "#cached_file_path" do
     subject { submission_file.cached_file_path }
-    before do
-      allow(submission_file).to receive_messages(
-        store_dir: "great_dir",
-        mounted_filename: "stuff.txt"
-      )
+
+    before(:each) do
+      submission_file[:store_dir] = "great_dir"
+
+      allow(submission_file).to receive(:mounted_filename) { "stuff.txt" }
     end
 
     context "both store_dir and filename exist" do
