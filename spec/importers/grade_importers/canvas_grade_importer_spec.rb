@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 require "./app/importers/grade_importers/canvas_grade_importer"
 
 describe CanvasGradeImporter do
@@ -16,7 +16,8 @@ describe CanvasGradeImporter do
         {
           id: canvas_grade_id,
           score: 98.0,
-          user_id: "USER_1"
+          user_id: "USER_1",
+          submission_comments: "This is great!"
         }.stringify_keys
       end
       let(:canvas_user) do
@@ -36,6 +37,7 @@ describe CanvasGradeImporter do
         expect(grade.assignment).to eq assignment
         expect(grade.student).to eq user
         expect(grade.raw_points).to eq 98
+        expect(grade.feedback).to eq "This is great!"
       end
 
       it "creates a link to the grade id in canvas" do

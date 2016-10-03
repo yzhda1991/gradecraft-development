@@ -10,14 +10,14 @@ class CanvasGradeImporter
     @unsuccessful = []
   end
 
-  #TODO: Import submission_comments
   def import(assignment_id, syllabus)
     unless grades.nil?
       grades.each do |canvas_grade|
         user = find_user canvas_grade["user_id"], syllabus
         grade = Grade.new assignment_id: assignment_id,
           student_id: user.try(:id),
-          raw_points: canvas_grade["score"]
+          raw_points: canvas_grade["score"],
+          feedback: canvas_grade["submission_comments"]
         if grade.save
           link_imported canvas_grade["id"], grade
           successful << grade
