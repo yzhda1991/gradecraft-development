@@ -473,6 +473,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Users', users_path)
     breadcrumb('Editing ' + objects[:user].name)
   end
+  
+  def users_edit_profile
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('Edit My Profile')
+  end
 
   def users_import
     breadcrumb('Dashboard', dashboard_path)
