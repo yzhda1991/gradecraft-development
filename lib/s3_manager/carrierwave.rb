@@ -40,7 +40,7 @@ module S3Manager
     end
 
     def s3_object_file_key
-      if self.store_dir && mounted_filename
+      if read_attribute(:store_dir) && mounted_filename
         cached_file_path # build a full file path from cached #store_dir and #filename attributes on the FooFile record
       elsif filepath_includes_filename?
         CGI::unescape(filepath)
@@ -59,7 +59,7 @@ module S3Manager
 
     def cached_file_path
       @cached_file_path ||=
-        [self.store_dir, mounted_filename].join("/")
+        [read_attribute(:store_dir), mounted_filename].join("/")
     end
 
     def mounted_filename
