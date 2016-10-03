@@ -91,6 +91,8 @@ class User < ActiveRecord::Base
   has_many :graded_grades, foreign_key: :graded_by_id, class_name: "Grade"
   has_many :criterion_grades, foreign_key: :student_id, dependent: :destroy
 
+  has_many :imported_users, dependent: :destroy
+
   has_many :earned_badges, foreign_key: :student_id, dependent: :destroy
   accepts_nested_attributes_for :earned_badges, reject_if: proc { |attributes| attributes["earned"] != "1" }
   has_many :badges, through: :earned_badges
