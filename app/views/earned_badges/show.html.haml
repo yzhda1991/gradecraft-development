@@ -26,4 +26,7 @@
 
   %p
     %b= "Awarded by:"
-    = @earned_badge.awarded_by.name
+    - if @earned_badge.awarded_by.nil?
+      = "-"
+    - else
+      = @earned_badge.awarded_by.name
