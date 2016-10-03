@@ -28,7 +28,7 @@ describe Services::Actions::ImportsLMSUsers do
     result = described_class.execute course: course,
       provider: provider, users: users
 
-    expect(result.import_result.successful.count).to eq 1
-    expect(result.import_result.successful.first).to eq student
+    expect(result.users_import_result.successful.count).to eq 1
+    expect(result.users_import_result.successful.first).to eq student
   end
 end
