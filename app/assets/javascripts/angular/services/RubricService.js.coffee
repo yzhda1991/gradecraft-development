@@ -1,4 +1,4 @@
-@gradecraft.factory 'RubricService', ['CourseBadge', 'Criterion', 'CriterionGrade', '$http', (CourseBadge, Criterion, CriterionGrade, $http) ->
+@gradecraft.factory 'RubricService', ['CourseBadge', 'Criterion', 'CriterionGrade', '$http', 'GradeCraftAPI', (CourseBadge, Criterion, CriterionGrade, $http, GradeCraftAPI) ->
 
   _badgesAvailable = false
 
@@ -9,6 +9,7 @@
   thresholdPoints = 0
   assignment = {}
   grade = {}
+  gradeFiles = []
 
   gradeStatusOptions = []
   criteria = []
@@ -20,8 +21,8 @@
   # TODO: $scope should not be passed around if we want to avoid tight coupling
   getCriteria = (assignmentId, $scope)->
     _scope = $scope
-    $http.get('/api/assignments/' + assignmentId + '/criteria').success((res)->
-      angular.forEach(res.data, (criterion, index)->
+    $http.get('/api/assignments/' + assignmentId + '/criteria').success((response)->
+      angular.forEach(response.data, (criterion, index)->
         criterionObject = new Criterion(criterion.attributes, _scope)
         criteria.push criterionObject
       )
@@ -47,20 +48,20 @@
 
   getCriterionGrades = (assignment)->
     if assignment.scope.type == "student"
-      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((res)->
-        addCriterionGrades(res.data)
+      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((response)->
+        addCriterionGrades(response.data)
       )
     else if assignment.scope.type == "group"
-      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((res)->
+      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((response)->
 
         # The API sends all student information so we can add the ability to custom grade group members
         # For now we filter to the first student's grade since all students grades are identical
-        addCriterionGrades(_.filter(res.data, { attributes: { 'student_id': res.meta.student_ids[0] }}))
+        addCriterionGrades(_.filter(response.data, { attributes: { 'student_id': response.meta.student_ids[0] }}))
       )
 
   getBadges = ()->
-    $http.get('/api/badges').success((res)->
-      angular.forEach(res.data, (badge, index)->
+    $http.get('/api/badges').success((response)->
+      angular.forEach(response.data, (badge, index)->
         courseBadge = new CourseBadge(badge.attributes)
         badges[badge.id] = courseBadge
       )
@@ -69,19 +70,20 @@
 
   getGrade = (assignment)->
     if assignment.scope.type == "student"
-      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/grade/').success((res)->
-        angular.copy(res.data.attributes, grade)
-        angular.copy(res.meta.grade_status_options, gradeStatusOptions)
-        thresholdPoints = res.meta.threshold_points
+      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/grade/').success((response)->
+        angular.copy(response.data.attributes, grade)
+        GradeCraftAPI.loadFromIncluded(gradeFiles,"grade_files", response)
+        angular.copy(response.meta.grade_status_options, gradeStatusOptions)
+        thresholdPoints = response.meta.threshold_points
       )
     else if assignment.scope.type == "group"
-      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((res)->
+      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((response)->
 
         # The API sends all student information so we can add the ability to custom grade group members
         # For now we filter to the first student's grade since all students grades are identical
-        angular.copy(_.find(res.data, { attributes: {'student_id' : res.meta.student_ids[0] }}).attributes, grade)
-        angular.copy(res.meta.grade_status_options, gradeStatusOptions)
-        thresholdPoints = res.meta.threshold_points
+        angular.copy(_.find(response.data, { attributes: {'student_id' : response.meta.student_ids[0] }}).attributes, grade)
+        angular.copy(response.meta.grade_status_options, gradeStatusOptions)
+        thresholdPoints = response.meta.threshold_points
       )
 
   putRubricGradeSubmission = (assignment, params, returnURL)->
@@ -95,8 +97,6 @@
         console.log(data)
     )
 
-
-
   postGradeFiles = (files)->
     fd = new FormData();
     angular.forEach(files, (file, index)->
@@ -108,12 +108,27 @@
       fd,
       transformRequest: angular.identity,
       headers: { 'Content-Type': undefined }
-    ).success(
-      (data)->
-        console.log(data)
-    ).error(
-      (data)->
-        console.log(data)
+    ).then(
+      (response)-> # success
+        if response.status == 201
+          GradeCraftAPI.addItems(gradeFiles, "grade_files", response.data)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  deleteGradeFile = (file)->
+    file.deleting = true
+    $http.delete("/api/grades/#{file.grade_id}/grade_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(gradeFiles, file)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        file.deleting = false
+        GradeCraftAPI.logResponse(response)
     )
 
   # Basically a copy of the Grade factory update function
@@ -146,12 +161,14 @@
       getGrade: getGrade,
       putRubricGradeSubmission: putRubricGradeSubmission,
       postGradeFiles: postGradeFiles,
+      deleteGradeFile: deleteGradeFile,
       assignment: assignment,
       badges: badges,
       criteria: criteria,
       updateCriterion: updateCriterion,
       criterionGrades: criterionGrades,
       grade: grade,
+      gradeFiles: gradeFiles,
       updateGrade: updateGrade,
       gradeStatusOptions: gradeStatusOptions,
       pointsPossible: pointsPossible,

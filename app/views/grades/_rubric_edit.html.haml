@@ -75,9 +75,9 @@
         %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
-    .feedback-upload
-      %input(type="file" multiple="true" grade-file-upload="feedbackFiles")
-    .clear
+    - if scope_type == "student"
+      %grade-files-uploader
+
     %br
 
     .summary_feedback
@@ -99,4 +99,5 @@
       %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
 
     - if scope_type == "student" && current_course.badges.present?
+      %h3= "Award #{ @grade.student.name } #{term_for :badges} for #{ @grade.assignment.name }:"
       %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")

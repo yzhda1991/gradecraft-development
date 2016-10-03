@@ -40,7 +40,7 @@ json.data @badges do |badge|
       }
     end
 
-    if @earned_badges && @earned_badges.where(badge_id: badge.id).present?
+    if @earned_badges.present? && @earned_badges.where(badge_id: badge.id).present?
       json.earned_badge data: {
         type: "earned_badges",
         id: @earned_badges.where(badge_id: badge.id).first.id
@@ -63,7 +63,7 @@ json.included do
     end
   end
 
-  if @earned_badges
+  if @earned_badges.present?
     json.array! @earned_badges do |earned_badge|
       json.type "earned_badges"
       json.id earned_badge.id

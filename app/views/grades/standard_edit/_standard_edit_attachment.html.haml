@@ -8,14 +8,6 @@
       - grade.grade_files.each do |gf|
         - next if gf.new_record?
         %li
-          - if ! gf.file_processing
-            = "#{gf.filename}"
-            %a
-              %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-            .display-on-hover.hover-style
-              Refresh page to confirm upload has completed
-          - else
-            = link_to gf.filename, gf.url, :target => "_blank"
-            = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", grade_id: grade.id, :upload_id => gf.id } )
-  %br
+          = link_to gf.filename, gf.url, :target => "_blank"
+          = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", grade_id: grade.id, :upload_id => gf.id } )
   %br
