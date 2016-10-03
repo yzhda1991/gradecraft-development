@@ -59,7 +59,7 @@ module S3Manager
 
     def cached_file_path
       @cached_file_path ||=
-        [read_attribute(:store_dir), mounted_filename].join("/")
+        [read_attribute(:store_dir), mounted_filename].join "/"
     end
 
     def mounted_filename

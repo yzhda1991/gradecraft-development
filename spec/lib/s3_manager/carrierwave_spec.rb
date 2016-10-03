@@ -171,7 +171,8 @@ RSpec.describe S3Manager::Carrierwave do
     subject { submission_file.cached_file_path }
 
     before(:each) do
-      submission_file.update_attributes store_dir: "great_dir"
+      submission_file[:store_dir] = "great_dir"
+
       allow(submission_file).to receive(:mounted_filename) { "stuff.txt" }
     end
 
