@@ -149,6 +149,8 @@ en:
         title: "Import Grades from #{ @provider_name.capitalize } for #{ @assignment.name }"
       grades:
         title: "Import Grades from #{ @provider_name.capitalize } for #{ @assignment.name }"
+      grades_import:
+        title: "Import Grade Results from #{ @provider_name.capitalize } for #{ @assignment.name }"
       show:
         title: "Import Grades for #{ @assignment.name }"
   groups:
