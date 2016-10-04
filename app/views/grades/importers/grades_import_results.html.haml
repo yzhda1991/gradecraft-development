@@ -41,12 +41,13 @@
       %table.dynatable
         %thead
           %tr
-            %th Data
+            %th User
             %th Error(s)
         %tbody
           - @result.grades_import_result.unsuccessful.each do |row|
             %tr
-              %td= row[:data]
+              %td
+                = row[:data]["user"]["name"]
               %td= row[:errors]
 
   .table-header-information
