@@ -18,15 +18,20 @@ describe Services::Actions::CreatesEarnedBadge do
     }
   end
 
+  let(:result) { described_class.execute attributes: attributes }
+
   it "expects attributes to create the earned badge" do
     expect { described_class.execute }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "promises the created earned badge" do
-    result = described_class.execute attributes: attributes
     expect(result).to have_key :earned_badge
     expect(result.earned_badge).to be_persisted
+  end
+
+  it "creates the earned badge with the correct awarded_by" do
+    expect(result.earned_badge.awarded_by).to eq(world.professor)
   end
 
   it "halts if the earned badge is invalid" do
