@@ -101,18 +101,3 @@ $(document).find("[data-behavior~=multi-select]").select2({
 
 // Initializing highcharts table data, currently used to display team charts
 $('table.highchart').highchartTable();
-
-//Hide and show course-info-card in header
-$(".course-info-btn").hover(function(){
-  $(".course-info-card-wrapper").toggle();
-});
-
-$(document).on("mouseenter", "[data-behavior~=toggle-card]", function(e) {
-  var targetSelector = $(e.target).data("target-selector");
-  $(targetSelector).show();
-});
-
-$(document).on("mouseleave", "[data-behavior~=toggle-card]", function(e) {
-  var targetSelector = $(e.target).data("target-selector");
-  $(targetSelector).hide();
-});
