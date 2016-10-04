@@ -2,7 +2,7 @@ require "light-service"
 require "active_record_spec_helper"
 require "./app/services/creates_earned_badge/creates_earned_badge"
 
-describe Services::Actions::CreatesEarnedBadge, focus: true do
+describe Services::Actions::CreatesEarnedBadge do
   let(:world) { World.create.with(:course, :assignment, :professor, :student, :badge, :grade) }
 
   let(:attributes) do
