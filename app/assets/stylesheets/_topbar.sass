@@ -1,5 +1,6 @@
 @import color
 @import layout
+@import cards
 
 img.profile-pic
   position: relative
@@ -297,16 +298,14 @@ ul.subnav.logged-out
   &:hover
     text-decoration: none
 
-.course-info-card
+.course-info-card-wrapper
   display: none
-  position: absolute
-  top: 3.1em
+  position: relative
+
+.course-info-card
+  @include hover-card
   right: -11.5em
-  font-weight: 300
-  background-color: $color-white
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
   width: 400px
-  padding: 1em
 
   & > li
     list-style: none
@@ -315,25 +314,3 @@ ul.subnav.logged-out
     .logged-in .the-nav > .nav & > a
       padding: 0em
       color: $color-blue-3
-
-.course-info-card:after,
-.course-info-card:before
-  bottom: 100%
-  left: 50%
-  border: solid transparent
-  content: " "
-  height: 0
-  width: 0
-  position: absolute
-  pointer-events: none
-
-.course-info-card:after
-  border-color: rgba(255, 255, 255, 0)
-  border-bottom-color: $color-white
-  border-width: 8px
-  margin-left: -8px
-
-.course-info-card:before
-  border-color: rgba(238, 238, 238, 0)
-  border-width: 16px
-  margin-left: -16px

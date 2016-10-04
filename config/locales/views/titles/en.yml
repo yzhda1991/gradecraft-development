@@ -1,6 +1,6 @@
 en:
   announcements:
-    index: 
+    index:
       title: "Announcements"
     show:
       title: "#{ @announcement.title }"
@@ -40,16 +40,21 @@ en:
       mass_edit:
         title: "Quick Grade #{ @assignment.name }"
   importers:
-    assignments_import:
-      title: "Import #{ term_for :assignments }"
+    importers:
+      index:
+        title: "Assignment Import"
+      assignments:
+        title: "Import #{ term_for :assignments } from #{ @provider_name.capitalize }"
+      assignments_import:
+        title: "Import #{ term_for :assignments } from #{ @provider_name.capitalize }"
   badges:
-    index: 
+    index:
       title: "#{ term_for :badges }"
     new:
       title: "Create a New #{ term_for :badge }"
     edit:
       title: "Editing #{ @badge.name }"
-    show: 
+    show:
       title: "#{ @badge.name }"
   challenges:
     index:
@@ -138,11 +143,16 @@ en:
     edit:
       title: "Editing #{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
     importers:
-      title: "Grade Import"
-      index:  
+      index:
+        title: "Grade Import"
+      assignments:
+        title: "Import Grades from #{ @provider_name.capitalize } for #{ @assignment.name }"
+      grades:
+        title: "Import Grades from #{ @provider_name.capitalize } for #{ @assignment.name }"
+      grades_import:
+        title: "Import Grade Results from #{ @provider_name.capitalize } for #{ @assignment.name }"
+      show:
         title: "Import Grades for #{ @assignment.name }"
-      csv: 
-        title: "Import Grades from a CSV"
   groups:
     index:
       title: "#{ current_course.group_term.pluralize }"

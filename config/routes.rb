@@ -49,7 +49,6 @@ GradeCraft::Application.routes.draw do
   #3. Assignments, Submissions, Grades
   namespace :assignments do
     resources :importers, param: :provider_id, only: :index do
-      get :courses
       get "/courses/:id/assignments", action: :assignments, as: :assignments
       post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import
@@ -86,9 +85,8 @@ GradeCraft::Application.routes.draw do
       resources :importers, param: :provider_id, only: [:index, :show] do
         get :download
         post :upload
-        get :courses
         get "/courses/:id/assignments", action: :assignments, as: :assignments
-        post "/courses/:id/grades", action: :grades, as: :grades
+        get "/courses/:id/grades", action: :grades, as: :grades
         post "/courses/:id/grades/import", action: :grades_import, as: :grades_import
       end
     end

@@ -1,11 +1,17 @@
 %tr
-  %td= grade["course"]["name"]
-  %td= grade["assignment"]["name"]
-  %td= grade["user"]["name"]
-  %td= user["primary_email"]
-  %td= lms_user_match?(user["primary_email"], current_course) ? "Yes" : "No"
-  %td= grade["score"]
-  %td= Time.new(grade["graded_at"]).strftime("%A, %B %d %Y") unless grade["graded_at"].nil?
+  %td= lms_user["primary_email"]
+  %td= points lms_grade["score"]
+  %td= lms_grade["submission_comments"]
+  %td= points grade.raw_points
+  %td= h grade.feedback if grade.feedback.present?
+  %td
+    - if lms_user_match?(lms_user["primary_email"], current_course)
+      Yes
+    -else
+      No
+      = link_to glyph("info-circle"), "#", title: "Import grade to create GradeCraft account for this user.", data: { behavior: "toggle-card", "target-selector" => "#grade-#{lms_grade["id"]}-info" }
+      .grade-info-card-wrapper{ id: "grade-#{lms_grade["id"]}-info" }
+        .grade-info-card
+          Import grade to create GradeCraft account for this user
   %td.center
-    - if lms_user_match?(user["primary_email"], current_course)
-      = check_box_tag "grade_ids[]", grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }
+    = check_box_tag "grade_ids[]", lms_grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }

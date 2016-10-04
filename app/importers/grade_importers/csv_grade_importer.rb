@@ -1,4 +1,5 @@
 require "csv"
+require "quote_helper"
 
 class CSVGradeImporter
   attr_reader :successful, :unsuccessful, :unchanged

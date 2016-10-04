@@ -46,7 +46,17 @@ describe Services::Actions::RetrievesLMSGrades do
       receive(:grades).with(course_id, assignment_ids, grade_ids)
         .and_return [{ grade: "A+" }, { grade: "D-" }]
 
+    described_class.execute provider: provider, access_token: access_token,
+      course_id: course_id, assignment_ids: assignment_ids, grade_ids: grade_ids
+  end
+
+  it "promises the user ids from the grades" do
+    allow_any_instance_of(ActiveLMS::Syllabus).to \
+      receive(:grades).and_return([{ "user_id" => "123" }])
+
     result = described_class.execute provider: provider, access_token: access_token,
       course_id: course_id, assignment_ids: assignment_ids, grade_ids: grade_ids
+
+    expect(result).to have_key :user_ids
   end
 end

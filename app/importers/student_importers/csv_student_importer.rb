@@ -1,7 +1,7 @@
 require "csv"
-require_relative "../services/creates_new_user"
+require_relative "../../services/creates_new_user"
 
-class StudentImporter
+class CSVStudentImporter
   attr_reader :successful, :unsuccessful
   attr_accessor :file, :internal_students, :send_welcome
 

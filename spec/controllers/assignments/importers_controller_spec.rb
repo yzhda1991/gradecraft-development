@@ -9,35 +9,6 @@ describe Assignments::ImportersController do
 
   before { allow(controller).to receive(:current_course).and_return course }
 
-  describe "GET courses" do
-    context "as a professor" do
-      before { login_user(professor) }
-
-      context "without an existing authentication" do
-        it "redirects to authorize with canvas" do
-          get :courses, importer_provider_id: provider
-
-          expect(response).to redirect_to "/auth/canvas"
-        end
-      end
-
-      context "with an expired authentication" do
-        let(:access_token) { "BLAH" }
-        let!(:user_authorization) do
-          create :user_authorization, :canvas, user: professor, access_token: access_token,
-            expires_at: 2.days.ago
-        end
-
-        it "retrieves a refresh token" do
-          allow_any_instance_of(ActiveLMS::Syllabus).to receive(:courses).and_return []
-          expect_any_instance_of(UserAuthorization).to receive(:refresh!)
-
-          get :courses, importer_provider_id: provider
-        end
-      end
-    end
-  end
-
   describe "POST assignments_import" do
     let(:course_id) { "COURSE_ID" }
 

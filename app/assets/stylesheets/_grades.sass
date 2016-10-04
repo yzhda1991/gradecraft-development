@@ -1,5 +1,6 @@
 @import color
 @import layout
+@import cards
 
 #custom-value-label
   img
@@ -66,6 +67,15 @@ select#grade_raw_points[disabled], input[type=text]#grade_raw_points[disabled]
 .grade-adjustment-points
  border: 1pt $color-blue-4 solid
 
+.grade-info-card-wrapper
+  display: none
+  position: relative
+
+.grade-info-card
+  @include hover-card
+  top: 0.7em
+  right: -3.5em
+  width: 200px
 
 ul.grade-files-list
  list-style: none

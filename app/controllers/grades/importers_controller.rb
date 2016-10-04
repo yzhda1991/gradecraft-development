@@ -9,8 +9,7 @@ class Grades::ImportersController < ApplicationController
   before_filter :ensure_staff?
   before_filter except: [:download, :index, :show, :upload] do |controller|
     controller.redirect_path \
-      assignment_grades_importer_courses_path(params[:assignment_id],
-                                              params[:importer_provider_id])
+      assignment_grades_importers_path(params[:assignment_id])
   end
   before_filter :require_authorization, except: [:download, :index, :show, :upload]
 
@@ -35,18 +34,12 @@ class Grades::ImportersController < ApplicationController
     end
   end
 
-  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses
-  def courses
-    @assignment = Assignment.find params[:assignment_id]
-    @provider_name = params[:importer_provider_id]
-    @courses = syllabus.courses
-  end
-
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @grades = syllabus.grades(params[:id], params[:assignment_ids])
+    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids])
+    @grades = syllabus.grades(params[:id], [params[:assignment_ids]].flatten)
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades_import
@@ -56,7 +49,7 @@ class Grades::ImportersController < ApplicationController
 
     @result = Services::ImportsLMSGrades.import @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
-      params[:grade_ids], @assignment.id, current_user
+      params[:grade_ids], @assignment, current_user
 
     if @result.success?
       render :grades_import_results

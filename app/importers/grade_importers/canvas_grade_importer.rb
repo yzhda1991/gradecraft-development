@@ -1,3 +1,5 @@
+require "quote_helper"
+
 class CanvasGradeImporter
   attr_reader :successful, :unsuccessful
   attr_accessor :grades
@@ -14,7 +16,8 @@ class CanvasGradeImporter
         user = find_user canvas_grade["user_id"], syllabus
         grade = Grade.new assignment_id: assignment_id,
           student_id: user.try(:id),
-          raw_points: canvas_grade["score"]
+          raw_points: canvas_grade["score"],
+          feedback: canvas_grade["submission_comments"]
         if grade.save
           link_imported canvas_grade["id"], grade
           successful << grade

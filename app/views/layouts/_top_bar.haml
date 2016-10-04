@@ -19,9 +19,10 @@
           %ul.nav.nav-pill.right
             - if presenter.has_info?
               %li.course-info-btn
-                = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
-                %ul.course-info-card
-                  = render partial: "layouts/navigation/class_info", locals: { presenter: presenter }
+                = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title", data: { behavior: "toggle-card", "target-selector" => ".course-info-card-wrapper" }
+                %ul.course-info-card-wrapper
+                  .course-info-card
+                    = render partial: "layouts/navigation/class_info", locals: { presenter: presenter }
             = render partial: "layouts/navigation/authenticated_nav"
         %a.btn-navbar-left.hide-for-large
           %i.fa.fa-bars.fa-fw

@@ -215,6 +215,25 @@ describe Grade do
     end
   end
 
+  describe ".for_student_email_and_assignment_id" do
+    let(:assignment) { create :assignment }
+    let(:email_address) { "jimmy@example.com" }
+    let!(:grade) { create :grade, assignment: assignment, student: student }
+    let(:student) { create :user, email: email_address }
+
+    it "returns the grade for the specified student email and assignment id" do
+      expect(
+        described_class.for_student_email_and_assignment_id(email_address.upcase,
+                                                            assignment.id)).to eq grade
+    end
+
+    it "returns nil if the specified student email does not exist" do
+      expect(
+        described_class.for_student_email_and_assignment_id("blah", assignment.id)
+      ).to be_nil
+    end
+  end
+
   describe ".find_or_create" do
     it "finds and existing grade for assignment and student" do
       world = World.create.with(:course, :student, :assignment, :grade)

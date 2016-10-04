@@ -10,23 +10,23 @@ describe Services::Actions::ImportsLMSGrades do
   let(:user) { create :user }
 
   it "expects grades to import" do
-    expect { described_class.execute assignment_id: assignment.id,
+    expect { described_class.execute assignment: assignment,
              provider: provider, user: user }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
-  it "expects an assignment id to create the grades for" do
+  it "expects an assignment to create the grades for" do
     expect { described_class.execute grades: grades, provider: provider, user: user }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "expects a provider to create the correct importer object" do
-    expect { described_class.execute assignment_id: assignment.id, grades: grades,
+    expect { described_class.execute assignment: assignment, grades: grades,
              user: user }.to raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "expects a user to find the grade information for" do
-    expect { described_class.execute assignment_id: assignment.id, grades: grades,
+    expect { described_class.execute assignment: assignment, grades: grades,
              provider: provider }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
@@ -38,19 +38,19 @@ describe Services::Actions::ImportsLMSGrades do
     it "creates the grades" do
       allow_any_instance_of(ActiveLMS::Syllabus).to \
         receive(:user).and_return({ "primary_email" => user.email })
-      result = described_class.execute assignment_id: assignment.id,
+      result = described_class.execute assignment: assignment,
         grades: grades, provider: provider, user: user
 
-      expect(result.import_result.successful.count).to eq 1
+      expect(result.grades_import_result.successful.count).to eq 1
     end
   end
 
   context "without a user authorization" do
     it "does not create the grade" do
-      result = described_class.execute assignment_id: assignment.id,
+      result = described_class.execute assignment: assignment,
           grades: grades, provider: provider, user: user
 
-      expect(result.import_result).to be_nil
+      expect(result.grades_import_result).to be_nil
     end
   end
 end

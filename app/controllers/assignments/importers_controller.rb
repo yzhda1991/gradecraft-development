@@ -7,19 +7,12 @@ class Assignments::ImportersController < ApplicationController
 
   before_filter :ensure_staff?
   before_filter except: :index do |controller|
-    controller.redirect_path assignments_importer_courses_path \
-      params[:importer_provider_id]
+    controller.redirect_path assignments_importers_path
   end
   before_filter :require_authorization, except: :index
 
   # GET /assignments/importers
   def index
-  end
-
-  # GET /assignments/importers/:importer_provider_id/courses
-  def courses
-    @provider_name = params[:importer_provider_id]
-    @courses = syllabus.courses
   end
 
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
@@ -33,16 +26,17 @@ class Assignments::ImportersController < ApplicationController
   # POST /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments_import
     @provider_name = params[:importer_provider_id]
+    @course_id = params[:id]
 
     @result = Services::ImportsLMSAssignments.import @provider_name,
-      authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
+      authorization(@provider_name).access_token, @course_id, params[:assignment_ids],
       current_course, params[:assignment_type_id]
 
     if @result.success?
       render :assignments_import_results
     else
-      @course = syllabus.course(params[:id])
-      @assignments = syllabus.assignments(params[:id])
+      @course = syllabus.course(@course_id)
+      @assignments = syllabus.assignments(@course_id)
       @assignment_types = current_course.assignment_types.ordered
 
       render :assignments, alert: @result.message

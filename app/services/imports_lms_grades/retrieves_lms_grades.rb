@@ -6,7 +6,7 @@ module Services
       extend LightService::Action
 
       expects :access_token, :assignment_ids, :course_id, :grade_ids, :provider
-      promises :grades
+      promises :grades, :user_ids
 
       executed do |context|
         provider = context.provider
@@ -17,6 +17,7 @@ module Services
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
         context.grades = syllabus.grades course_id, assignment_ids, grade_ids
+        context.user_ids = context.grades.map { |h| h["user_id"] }.compact.uniq
       end
     end
   end

@@ -65,31 +65,6 @@ describe Grades::ImportersController do
       end
     end
 
-    describe "GET courses" do
-      context "without an existing authentication" do
-        it "redirects to authorize with canvas" do
-          get :courses, assignment_id: world.assignment.id, importer_provider_id: :canvas
-
-          expect(response).to redirect_to "/auth/canvas"
-        end
-      end
-
-      context "with an expired authentication" do
-        let(:access_token) { "BLAH" }
-        let!(:user_authorization) do
-          create :user_authorization, :canvas, user: professor, access_token: access_token,
-            expires_at: 2.days.ago
-        end
-
-        it "retrieves a refresh token" do
-          allow_any_instance_of(ActiveLMS::Syllabus).to receive(:courses).and_return []
-          expect_any_instance_of(UserAuthorization).to receive(:refresh!)
-
-          get :courses, assignment_id: world.assignment.id, importer_provider_id: :canvas
-        end
-      end
-    end
-
     describe "POST grades_import" do
       let(:access_token) { "BLAH" }
       let(:assignment_ids) { ["ASSIGNMENT_1"] }
@@ -108,7 +83,7 @@ describe Grades::ImportersController do
       it "imports the selected grades" do
         expect(Services::ImportsLMSGrades).to \
           receive(:import).with("canvas", access_token, course_id,
-                                assignment_ids, grade_ids, world.assignment.id,
+                                assignment_ids, grade_ids, world.assignment,
                                 professor)
             .and_return result
 

@@ -141,15 +141,15 @@ class UsersController < ApplicationController
       flash[:notice] = "File missing"
       redirect_to users_path
     else
-      @result = StudentImporter.new(params[:file].tempfile,
-                                    params[:internal_students] == "1",
-                                    params[:send_welcome] == "1")
+      @result = CSVStudentImporter.new(params[:file].tempfile,
+                                       params[:internal_students] == "1",
+                                       params[:send_welcome] == "1")
         .import(current_course)
       render :import_results
     end
   end
 
-  private 
+  private
 
   def user_params
     params.require(:user).permit :username, :email, :admin, :password, :time_zone, :password_confirmation, :activation_token_expires_at, :activation_token,
