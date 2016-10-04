@@ -27,8 +27,9 @@
             %th{scope: "col"} GradeCraft Score
             %th{scope: "col"} GradeCraft Feedback
             %th{scope: "col"} User Found?
-            %th{scope: "col"}
-              Import Grade from #{@provider_name.capitalize}?
+            %th
+              %button.button.select-all= "Check"
+              %button.button.select-none= "Uncheck"
         %tbody
           - @grades.each do |grade|
             - lms_user = lms_user(@syllabus, grade["user_id"])
