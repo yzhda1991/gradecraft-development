@@ -33,7 +33,7 @@ $( "#tabs" ).tabs({
   heightMin: 200,
   toolbarButtons: [
     'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-    'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align', 
+    'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
     'outdent', 'indent', 'insertLink', 'undo', 'redo',
     'clearFormatting', 'selectAll', 'html'
   ]
@@ -105,5 +105,5 @@ $('table.highchart').highchartTable(
 
 //Hide and show course-info-card in header
 $(".course-info-btn").hover(function(){
-    $(".course-info-card").toggle();
+  $(".course-info-card-wrapper").toggle();
 });
