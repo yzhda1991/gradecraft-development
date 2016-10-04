@@ -48,6 +48,13 @@ describe RubricsController do
         expect(new_assignment.rubric.criteria.pluck(:max_points)).to \
           eq(full_rubric.criteria.pluck(:max_points))
       end
+
+      it "copies earned badges on rubric, but doesn't duplicate badges" do
+        create :level_badge, level: full_rubric.criteria.first.levels.first
+        post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id
+        expect(LevelBadge.count).to eq(2)
+        expect(Badge.count).to eq(1)
+      end
     end
   end
 
