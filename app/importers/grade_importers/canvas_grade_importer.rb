@@ -10,14 +10,21 @@ class CanvasGradeImporter
     @unsuccessful = []
   end
 
-  def import(assignment_id, syllabus)
+  def import(assignment_id, syllabus, override=false)
     unless grades.nil?
       grades.each do |canvas_grade|
         user = find_user canvas_grade["user_id"], syllabus
-        grade = Grade.new assignment_id: assignment_id,
-          student_id: user.try(:id),
-          raw_points: canvas_grade["score"],
-          feedback: canvas_grade["submission_comments"]
+
+        if override
+          grade = Grade.find_or_initialize_by student_id: user.try(:id),
+            assignment_id: assignment_id
+        else
+          grade = Grade.new student_id: user.try(:id), assignment_id: assignment_id
+        end
+
+        grade.raw_points = canvas_grade["score"]
+        grade.feedback = canvas_grade["submission_comments"]
+
         if grade.save
           link_imported canvas_grade["id"], grade
           successful << grade
