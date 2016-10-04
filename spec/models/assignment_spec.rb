@@ -865,6 +865,15 @@ describe Assignment do
       it "returns nil for student without a submission" do
         expect(subject.next_ungraded_student(middleton)).to be_nil
       end
+
+      it "filters to team members if team present" do
+        create :submission, assignment: subject, student: middleton
+        team = create :team, course: subject.course
+        create :team_membership, team: team, student: apex
+        create :team_membership, team: team, student: zenith
+
+        expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
+      end
     end
 
     context "when not accepting submissions" do
@@ -880,6 +889,14 @@ describe Assignment do
 
       it "returns nil for student not in the list" do
         expect(subject.next_ungraded_student(create(:user))).to be_nil
+      end
+
+      it "filters to team members if team present" do
+        team = create :team, course: subject.course
+        create :team_membership, team: team, student: apex
+        create :team_membership, team: team, student: zenith
+
+        expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
       end
     end
 

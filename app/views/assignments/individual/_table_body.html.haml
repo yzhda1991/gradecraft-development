@@ -71,7 +71,8 @@
             - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
               %li= link_to glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
             - has_submission = presenter.assignment.accepts_submissions? && !submissions_for_assignment.empty?
-            %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student), method: :post, class: "button #{has_submission ? "danger" : ""}"
+            - team_param = presenter.for_team? ? {team_id: presenter.team.id} : nil
+            %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{has_submission ? "danger" : ""}"
 
     - if presenter.assignment.release_necessary?
       %td

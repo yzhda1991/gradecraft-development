@@ -21,6 +21,7 @@ class GradesController < ApplicationController
     @grade = Grade.find params[:id]
     @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
+    @team = Team.find(params[:team_id]) if params[:team_id]
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will
@@ -33,9 +34,11 @@ class GradesController < ApplicationController
       if GradeProctor.new(grade).viewable?
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
-
       if params[:redirect_to_next_grade].present?
         path = path_for_next_grade grade
+      elsif params[:redirect_to_next_team_grade].present?
+        team = grade.student.team_for_course current_course
+        path = path_for_next_grade grade, team
       else
         path = assignment_path(grade.assignment)
       end
@@ -130,11 +133,12 @@ class GradesController < ApplicationController
                            course_id: current_course.id).enqueue
   end
 
-  def path_for_next_grade(grade)
-    next_student = grade.assignment.next_ungraded_student(grade.student)
-    return assignment_path(grade.assignment) unless next_student.present?
+  def path_for_next_grade(grade, team=nil)
+    next_student = grade.assignment.next_ungraded_student(grade.student, team)
+    team_params = team ? {team_id: team.id} : nil
+    return assignment_path(grade.assignment, team_params) unless next_student.present?
     return edit_grade_path(
-      Grade.find_or_create(grade.assignment.id, next_student.id)
+      Grade.find_or_create(grade.assignment.id, next_student.id), team_params
     )
   end
 end

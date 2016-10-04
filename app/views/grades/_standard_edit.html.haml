@@ -56,7 +56,8 @@
             %ul
               %li= submit_tag "#{grade.persisted? && grade.is_graded? ? 'Update' : 'Submit'} Grade", class: "button"
               - unless grade.is_graded?
-                %li= submit_tag "Submit and Grade Next", name: "redirect_to_next_grade", class: "button"
+                - redirect_name = @team.present? ? "redirect_to_next_team_grade" : "redirect_to_next_grade"
+                %li= submit_tag "Submit and Grade Next", name: redirect_name, class: "button"
               %li= link_to glyph("times-circle") + "Cancel", assignment_path(grade.assignment), class: "button"
 
         %section
