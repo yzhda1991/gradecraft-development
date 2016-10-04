@@ -26,6 +26,6 @@
           %p.card-text
             You must add the Canvas integration and link the course first in order to import any Canvas assignments.
 
-          = link_to "Link a Canvas Course", integrations_path, class: "card-link button"
+          = link_to "Add a Canvas Integration", integrations_path, class: "card-link button"
         -else
           = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas, @assignment.course.linked_for(:canvas).provider_resource_id), class: "card-link button"
