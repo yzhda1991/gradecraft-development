@@ -22,7 +22,8 @@ module Services
           klass = constantize("#{camelize(provider)}GradeImporter")
           syllabus = ActiveLMS::Syllabus.new provider,
             authorization.access_token
-          context.grades_import_result = klass.new(grades).import assignment.id, syllabus
+          context.grades_import_result = klass.new(grades).import \
+            assignment.id, syllabus, true
         end
       end
     end

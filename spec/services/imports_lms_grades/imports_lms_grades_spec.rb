@@ -35,7 +35,7 @@ describe Services::Actions::ImportsLMSGrades do
     let!(:user_authorization) { create :user_authorization, user: user,
                                 provider: provider, access_token: "BLAH" }
 
-    it "creates the grades" do
+    it "imports the grades" do
       allow_any_instance_of(ActiveLMS::Syllabus).to \
         receive(:user).and_return({ "primary_email" => user.email })
       result = described_class.execute assignment: assignment,
