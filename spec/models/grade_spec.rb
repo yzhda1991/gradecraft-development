@@ -57,7 +57,7 @@ describe Grade do
       subject.save!
       another_grade = build(:grade, course: subject.course, assignment: subject.assignment, student: subject.student)
       expect(another_grade).to_not be_valid
-      expect(another_grade.errors[:assignment_id]).to include "has already been taken"
+      expect(another_grade.errors[:student_id]).to include "has already been graded on this assignment"
     end
   end
 
