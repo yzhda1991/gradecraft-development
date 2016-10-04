@@ -10,7 +10,7 @@ module Services
         attributes = context[:attributes]
         context[:user] = User.new attributes
         user = context[:user]
-        user.email = user.email.downcase
+        user.email = user.email.to_s.downcase
       end
     end
   end
