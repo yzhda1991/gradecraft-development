@@ -42,5 +42,3 @@ class Level < ActiveRecord::Base
     end
   end
 end
-
-
