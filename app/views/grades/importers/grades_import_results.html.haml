@@ -37,7 +37,7 @@
   - unless @result.grades_import_result.unsuccessful.empty?
     .table-header-information
       %h4.subtitle
-        = "#{@result.grades_import_result.unsuccessful.count} #{"Grade".pluralize(@result.grades_import_result.unsuccessful.count)} Not Imported"
+        = "#{@result.grades_import_result.unsuccessful.count} #{"Grade".pluralize(@result.grades_import_result.unsuccessful.count)} Not Imported into #{@assignment.name}"
       %table.dynatable
         %thead
           %tr
@@ -51,16 +51,18 @@
 
   .table-header-information
     %h4.subtitle
-      = "#{@result.grades_import_result.successful.count} #{"Grade".pluralize(@result.grades_import_result.successful.count)} Imported Successfully"
+      = "#{@result.grades_import_result.successful.count} #{"Grade".pluralize(@result.grades_import_result.successful.count)} Imported Successfully into #{@assignment.name}"
     %table.dynatable
       %thead
         %tr
-          %th Assignment
+          %th First Name
+          %th Last Name
           %th Raw Points
           %th Score
       %tbody
         - @result.grades_import_result.successful.each do |grade|
           %tr
-            %td= link_to grade.assignment.name, assignment_path(grade.assignment)
+            %td= grade.student.first_name
+            %td= grade.student.last_name
             %td= points grade.raw_points
             %td= grade.score
