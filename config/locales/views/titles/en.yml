@@ -18,7 +18,7 @@ en:
       title: "Editing My #{ term_for :weight } Choices"
   assignment_types:
     index:
-      title: "#{ term_for :assignment_types }"
+      title: "#{ term_for :assignment_type } Analytics"
     new:
       title: "Create a New #{ term_for :assignment_type }"
     edit:
@@ -76,6 +76,8 @@ en:
       title: "Course Details"
     custom_terms:
       title: "Custom Terms"
+    multiplier_settings:
+      title: "Multiplier Settings"
     player_settings:
       title: "#{ term_for :student } Settings"
     student_onboarding_setup:
