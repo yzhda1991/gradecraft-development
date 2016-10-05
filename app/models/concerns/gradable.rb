@@ -67,12 +67,11 @@ module Gradable
 
   def ungraded_students(ids_to_include=[], team=nil)
     if team
-      course.students_by_team(team).order_by_name -
-        (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
+      students = course.students_by_team(team).order_by_name
     else
-      course.students.order_by_name -
-        (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
+      students = course.students.order_by_name
     end
+    students - (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
   end
 
   def ungraded_students_with_submissions(ids_to_include=[], team=nil)

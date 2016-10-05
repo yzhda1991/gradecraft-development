@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "grade_proctor"
 
-describe GradesController , focus: true do
+describe GradesController do
   include PredictorEventJobsToolkit
 
   let(:course) { create :course }
@@ -18,10 +18,6 @@ describe GradesController , focus: true do
 
     before do
       login_user(professor)
-    end
-
-    after(:each) do
-      grade.delete
     end
 
     describe "GET show" do
@@ -254,8 +250,6 @@ describe GradesController , focus: true do
       login_user(student)
       allow(controller).to receive(:current_student).and_return(student)
     end
-
-    after(:each) { grade.delete }
 
     describe "GET show" do
       it "redirects to the assignment show page" do
