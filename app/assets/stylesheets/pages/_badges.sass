@@ -58,14 +58,6 @@
 
 // Student Badge Show Page
 .student
-  h2.pagetitle.badge-page-title
-    display: none
-    @media (max-width: $media-small-max)
-      display: block
-
-  h2.pagetitle.badge-show-page-title
-    display: none
-
   .badge-show-page
     .badge-container
       text-align: center
@@ -82,7 +74,6 @@
 // staff badge show page
 .staff
   .badge-show-page
-
     .badge-container
       display: flex
       align-items: center
@@ -172,7 +163,6 @@
 
   &.unavailable
     cursor: default
-    // override legacy code:
     img
       cursor: default
     opacity: .5
@@ -188,3 +178,12 @@
     .status-icon-hover
       display: block
       background-color: $color-white
+
+ul.earned-badge-list
+  list-style-type: none
+  padding-left: 0
+  img
+    max-width: 30px
+    vertical-align: middle
+  li
+    padding: 0.1rem 0
