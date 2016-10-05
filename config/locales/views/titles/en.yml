@@ -180,7 +180,7 @@ en:
       title: "Design Rubric"
   submissions:
     show:
-      title: "#{ @submission.student.name }'s Submission for #{ @submission.assignment.name }"
+      title: "#{ @submission.assignment.name } Submission"
     new:
       title: "New Submission"
   teams:
