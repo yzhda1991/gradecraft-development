@@ -42,10 +42,10 @@ describe Services::Actions::CreatesEarnedBadge do
     end
   end
 
-  context "as a student", focus: true do
+  context "as a student" do
 
     describe "awarding a student-awardable badge to another student" do
-      let(:result) do
+      let(:attributes) do
         badge = world.badge
         badge.student_awardable = true
         badge.save
@@ -53,7 +53,7 @@ describe Services::Actions::CreatesEarnedBadge do
         other_student = create(:user)
         other_student.courses << world.course
 
-        described_class.execute attributes: {
+        {
           student_id: other_student.id,
           badge_id: badge.id,
           assignment_id: world.assignment.id,
@@ -72,6 +72,29 @@ describe Services::Actions::CreatesEarnedBadge do
 
       it "creates the earned badge with the correct awarded_by" do
         expect(result.earned_badge.awarded_by).to eq(world.student)
+      end
+    end
+
+    describe "awarding a non-student-awardable badge to another student" do
+      let(:attributes) do
+        other_student = create(:user)
+        other_student.courses << world.course
+
+        {
+          student_id: other_student.id,
+          badge_id: world.badge.id,
+          assignment_id: world.assignment.id,
+          grade_id: world.grade.id,
+          course_id: world.course.id,
+          awarded_by_id: world.student.id,
+          student_visible: true,
+          feedback: "You are so awesome!"
+        }
+      end
+
+      it "does not create the earned badge", focus: true do
+        expect { described_class.execute attributes: attributes }.to \
+          raise_error LightService::FailWithRollbackError
       end
     end
   end
