@@ -65,7 +65,7 @@ describe Services::Actions::CreatesEarnedBadge do
         }
       end
 
-      it "promises the created earned badge", focus: true do
+      it "promises the created earned badge" do
         expect(result).to have_key :earned_badge
         expect(result.earned_badge).to be_persisted
       end
@@ -92,7 +92,7 @@ describe Services::Actions::CreatesEarnedBadge do
         }
       end
 
-      it "does not create the earned badge", focus: true do
+      it "does not create the earned badge" do
         expect { described_class.execute attributes: attributes }.to \
           raise_error LightService::FailWithRollbackError
       end
