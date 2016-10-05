@@ -15,3 +15,7 @@
           Import grade to create GradeCraft account for this user
   %td.center
     = check_box_tag "grade_ids[]", lms_grade["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-grades-command']" }
+    = link_to glyph("info-circle"), "#", title: "Override existing GradeCraft grade?", data: { behavior: "toggle-card", "target-selector" => "#grade-override-#{lms_grade["id"]}-info" }, style: "visibility: #{grade.raw_points.nil? ? "hidden" : "visible"}"
+    .grade-info-card-wrapper{ id: "grade-override-#{lms_grade["id"]}-info" }
+      .grade-info-card
+        Importing this grade would override the existing grade in GradeCraft with the grade from #{@provider_name.capitalize}

@@ -66,6 +66,34 @@ describe CanvasGradeImporter do
         expect(result.unsuccessful.count).to eq 1
         expect(result.unsuccessful.first[:errors]).to eq "Something is wrong"
       end
+
+      context "with an existing grade for the assignment and student" do
+        let!(:existing_grade) { create :grade,
+                                assignment_id: assignment.id, student_id: user.id,
+                                raw_points: 76, feedback: "You rock!" }
+
+        context "with override" do
+          it "replaces the grade score and comments" do
+            result = subject.import(assignment.id, syllabus, true)
+
+            expect(result.successful.count).to eq 1
+            expect(result.unsuccessful.count).to eq 0
+            expect(grade.assignment).to eq assignment
+            expect(grade.student).to eq user
+            expect(grade.raw_points).to eq 98
+            expect(grade.feedback).to eq "This is great!"
+          end
+        end
+
+        context "without an override" do
+          it "contains an unsuccessful row" do
+            result = subject.import(assignment.id, syllabus)
+
+            expect(result.successful.count).to eq 0
+            expect(result.unsuccessful.count).to eq 1
+          end
+        end
+      end
     end
   end
 end
