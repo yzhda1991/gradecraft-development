@@ -181,6 +181,8 @@ en:
   submissions:
     show:
       title: "#{ @submission.student.name }'s Submission for #{ @submission.assignment.name }"
+    new:
+      title: "New Submission"
   teams:
     index:
       title: "#{ term_for :teams }"
