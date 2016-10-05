@@ -1,0 +1,138 @@
+@mixin hover-card
+  position: absolute
+  font-weight: 300
+  background-color: $color-white
+  box-shadow: 0 2px 5px 0 rgba($color-black, 0.16), 0 2px 10px 0 rgba($color-black,0.12)
+  padding: 1em
+  z-index: 100
+
+  &:after, &:before
+    bottom: 100%
+    left: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+
+  &:after
+    border-color: rgba(255, 255, 255, 0)
+    border-bottom-color: $color-white
+    border-width: 8px
+    margin-left: -8px
+
+  &:before
+    border-color: rgba(238, 238, 238, 0)
+    border-width: 16px
+    margin-left: -16px
+
+
+// styles for background scene
+@mixin cloud-bubble-mixin($size,$left,$top)
+  $main-size: $size * 1px
+  $radius-size: $main-size / 2
+  left:  $left * 1px
+  top: $top * 1px
+  width: $main-size
+  height: $main-size
+  @include rounded-corners($radius-size)
+
+@mixin mountain-size-mixin($size)
+  $main-size: $size * $default-mountain-size
+  $peak-size: $size * 35px
+  $spacer-size: $main-size - $peak-size
+  margin-top: $default-mountain-size - $main-size - $hill-lift-spacer
+  .mountain-left-side
+    border-left-width: $main-size
+    border-bottom-width: $main-size
+  .mountain-right-side
+    border-right-width: $main-size
+    border-bottom-width: $main-size
+  .mountain-peak-left-spacer
+    width: $spacer-size
+    height: $spacer-size
+  .mountain-peak-right-spacer
+    width: $main-size
+    height: $main-size
+  .mountain-peak-left-side
+    border-right-width: $peak-size
+    border-bottom-width: $peak-size
+    border-top-width: $peak-size
+  .mountain-peak-right-side
+    border-left-width: $peak-size
+    border-bottom-width: $peak-size
+    border-top-width: $peak-size
+  .mountain-root
+    width: $main-size
+    height: $main-size
+    top: $main-size
+  .mountain-root.right
+    left: $main-size
+
+
+// grade predictor mobile headers
+@mixin mobile-headers-mixin
+  .predictor-section-title-predicted-points.weightable
+    background-color: $color-blue-2
+    display: block
+    margin-left: -10px
+  .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
+    text-align: left
+    float: none
+    .icon
+      margin: 0
+      font-size: $predictor-font-size-1
+
+  #predictor-main-header
+    margin: 8px 0 1px 0
+    height: 30px
+  .predictor-section-title
+    overflow: hidden
+    font-size: 0.8rem
+    padding: 0.3rem 0.5rem
+  .predictor-section-title-name
+    .desktop-only
+      display: none
+  .predictor-section
+    height: auto
+    cursor: pointer
+
+@mixin mobile-graph-mixin
+  #predictor-graph-svg
+    height: 175px
+    .grade-point-axis text
+      font-size: $predictor-font-size-6
+    #svg-keys
+      font-size: $predictor-font-size-4
+    #svg-predicted-key
+      transform: translate(10px,120px)
+    #svg-predicted-grade
+      transform: translate(10px, 160px)
+  #predictor-post-graph-spacer
+    height: 175px
+
+// mixin for all rubric level form fields
+@mixin rubric-level-input
+  background-color: $color-white
+  &:hover
+    background-color: $color-white
+
+
+// layout
+@mixin rounded-corners($radius)
+  border-radius: $radius
+
+
+// animation
+@mixin transition-property($properties)
+  transition-property: $properties
+
+@mixin transition-duration($properties)
+  transition-duration: $properties
+
+@mixin transition-timing-function($timing_function)
+  transition-timing-function: $timing_function
+
+@mixin transition($property, $duration, $easing)
+  transition: $property $duration $easing

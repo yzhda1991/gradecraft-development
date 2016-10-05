@@ -1,5 +1,5 @@
-@import "../utilities/color"
-@import "../utilities/layout"
+@import "../utilities/variables"
+@import "../utilities/mixins"
 
 $background-height: 100px
 
@@ -107,14 +107,6 @@ $layer-back-color: -1000
   background-color: white
   opacity: .3
 
-@mixin cloud-bubble-mixin($size,$left,$top)
-  $main-size: $size * 1px
-  $radius-size: $main-size / 2
-  left:  $left * 1px
-  top: $top * 1px
-  width: $main-size
-  height: $main-size
-  @include rounded-corners($radius-size)
 
 // small bubbles in the corners
 .cloud-bubble-1
@@ -263,37 +255,6 @@ $layer-back-color: -1000
   background-color: $color-blue-1
   left: $default-mountain-size
 
-@mixin mountain-size-mixin($size)
-  $main-size: $size * $default-mountain-size
-  $peak-size: $size * 35px
-  $spacer-size: $main-size - $peak-size
-  margin-top: $default-mountain-size - $main-size - $hill-lift-spacer
-  .mountain-left-side
-    border-left-width: $main-size
-    border-bottom-width: $main-size
-  .mountain-right-side
-    border-right-width: $main-size
-    border-bottom-width: $main-size
-  .mountain-peak-left-spacer
-    width: $spacer-size
-    height: $spacer-size
-  .mountain-peak-right-spacer
-    width: $main-size
-    height: $main-size
-  .mountain-peak-left-side
-    border-right-width: $peak-size
-    border-bottom-width: $peak-size
-    border-top-width: $peak-size
-  .mountain-peak-right-side
-    border-left-width: $peak-size
-    border-bottom-width: $peak-size
-    border-top-width: $peak-size
-  .mountain-root
-    width: $main-size
-    height: $main-size
-    top: $main-size
-  .mountain-root.right
-    left: $main-size
 
 .mountain-size-1
   @include mountain-size-mixin(1.2)

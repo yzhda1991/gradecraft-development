@@ -1,6 +1,5 @@
-@import "../utilities/color"
-@import "../utilities/layout"
-@import "../utilities/animation"
+@import "../utilities/variables"
+@import "../utilities/mixins"
 
 $predictor-font-size-1 : 1.5rem
 $predictor-font-size-2 : 1.25rem
@@ -518,45 +517,6 @@ $card-margin-1 : 3px
       width: 32%
       margin: 8px 3px
 
-@mixin mobile-headers-mixin
-  .predictor-section-title-predicted-points.weightable
-    background-color: $color-blue-2
-    display: block
-    margin-left: -10px
-  .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
-    text-align: left
-    float: none
-    .icon
-      margin: 0
-      font-size: $predictor-font-size-1
-
-  #predictor-main-header
-    margin: 8px 0 1px 0
-    height: 30px
-  .predictor-section-title
-    overflow: hidden
-    font-size: 0.8rem
-    padding: 0.3rem 0.5rem
-  .predictor-section-title-name
-    .desktop-only
-      display: none
-  .predictor-section
-    height: auto
-    cursor: pointer
-
-@mixin mobile-graph-mixin
-  #predictor-graph-svg
-    height: 175px
-    .grade-point-axis text
-      font-size: $predictor-font-size-6
-    #svg-keys
-      font-size: $predictor-font-size-4
-    #svg-predicted-key
-      transform: translate(10px,120px)
-    #svg-predicted-grade
-      transform: translate(10px, 160px)
-  #predictor-post-graph-spacer
-    height: 175px
 
 // small
 @media (max-width: $media-small-max)
