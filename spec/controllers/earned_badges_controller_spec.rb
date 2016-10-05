@@ -234,6 +234,7 @@ describe EarnedBadgesController do
       @badge = create(:badge, course: @course)
       @badge_student_awardable = create(:badge, course: @course, student_awardable: true)
       @other_student = create(:user)
+      @other_student.courses << @course
     end
 
     describe "protected routes" do
