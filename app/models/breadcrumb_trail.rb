@@ -466,6 +466,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
   end
 
+  def submissions_edit
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb("Edit Submission")
+  end
+
   def teams_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :teams }', teams_path)
