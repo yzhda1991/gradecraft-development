@@ -1,4 +1,4 @@
 .mainContainer.student{role: "main"}
   / Display errors and notifications
-  = render partial: "layouts/navigation/student_profile_tabs"
+  = render partial: "layouts/navigation/student_profile_tabs", locals: {nav_class: 'sub-nav'}
   .mainContent= render partial: "layouts/content"
