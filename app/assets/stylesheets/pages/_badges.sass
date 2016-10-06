@@ -1,0 +1,189 @@
+@import "../utilities/variables"
+
+// used on the badge index for students, and grade standard edit form
+.badge-icon-container
+  display: inline-block
+  margin: 1rem
+  position: relative
+  vertical-align: top
+
+  .badge-icon
+    width: 80px
+    display: block
+    margin: 0 auto
+    cursor: pointer
+    &.unearned, &.unavailable
+      opacity: .2 !important
+    &.earned
+      opacity: 1
+
+  &.focus-article
+    background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
+
+// base badge styles
+.badge-name
+  font-size: .7rem
+  margin: 0px
+  width: 110px
+  text-align: center
+  line-height: .9rem
+
+.earned-count
+  font-size: .7rem
+  font-family: Open Sans
+  font-weight: normal
+  width: 1rem
+  margin-top: -1.35rem
+  margin-left: .8rem
+  text-align: center
+  color: $color-black
+
+.gold-stars
+  position: absolute
+  top: 10px
+  right: 0px
+  font-size: 2rem
+  color: $color-yellow-1
+  i.fa-fw
+    z-index: 600 !important
+  &.unearned
+    display: none
+
+
+// show page base styles
+.badge-show-page
+  font-weight: 300
+
+// Student Badge Show Page
+.student
+  .badge-show-page
+    .badge-container
+      text-align: center
+
+    section
+      max-width: 720px
+      margin: 1rem auto
+
+    .badge-icon
+      width: 150px
+      display: block
+      margin: 0 auto
+
+// staff badge show page
+.staff
+  .badge-show-page
+    .badge-container
+      display: flex
+      align-items: center
+      @media (max-width: $media-small-max)
+        flex-direction: column
+
+    .badge-icon
+      width: 100%
+      max-width: 120px
+
+    .badge-description
+      max-width: 75%
+      @media (max-width: $media-small-max)
+        max-width: 100%
+
+    .team-filter
+      width: 100%
+      text-align: right
+
+// Student Badge Index Page
+.badge-container
+  .badge-description
+    .badge-title
+      font-size: 1.25rem
+
+.mobile-click
+  display: none
+  @media (max-width: $media-medium-max)
+    display: block
+    width: 110px
+    height: 94px
+    position: absolute
+    z-index: 2
+
+
+// badge index table on instructor side
+.badge-index-table
+  .sort-column, .lock-icon-column
+    width: 20px
+
+  .icon-column
+    width: 10%
+    text-align: center
+
+  .earned-column
+    width: 100px
+
+  .description-column
+  &.student-index
+    .button-column
+      min-width: 0px
+      width: 10px
+
+  .button-bar li a.button
+    display: block
+    margin: .25em
+    border-radius: 0.1875rem
+    @media (max-width: 800px)
+      display: inline-block
+
+  .button-bar li:not(:last-of-type) a.button
+    @media (max-width: $media-medium-max)
+      margin-right: 0
+    @media (max-width: 800px)
+      margin-right: .5rem
+
+  .badge-icon
+    width: 80%
+    max-width: 100px
+    display: block
+    margin: 0 auto
+
+// Award Earned Badges on Grading Page
+.badge-icon-container.badge-award-button
+  cursor: pointer
+  .status-icon, .status-icon-hover
+    position: absolute
+    top: 0px
+    right: 0px
+    height: 28px
+    width: 28px
+    border-radius: 50%
+    font-size: 2rem
+    color: $color-yellow-1
+    .fa-fw
+      text-align: left
+
+  &.unavailable
+    cursor: default
+    img
+      cursor: default
+    opacity: .5
+    &:hover
+      .status-icon-hover
+        display: none
+
+  .status-icon-hover
+    display: none
+  &:hover
+    .status-icon
+      display: none
+    .status-icon-hover
+      display: block
+      background-color: $color-white
+
+ul.earned-badge-list
+  list-style-type: none
+  padding-left: 0
+  img
+    max-width: 30px
+    vertical-align: middle
+  li
+    padding: 0.1rem 0

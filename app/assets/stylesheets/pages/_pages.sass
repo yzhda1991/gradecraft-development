@@ -1,0 +1,116 @@
+@import "../utilities/variables"
+
+.public
+  display: flex
+  flex-direction: column
+  flex: 1 0 auto
+
+.public-with-background
+  background-color: rgba($color-blue-3, .5)
+
+.page
+  .hero-section
+    margin: 0
+    background:rgba(46,112,190,.5)
+    background-position: top center
+    background-repeat: no-repeat
+    position: relative
+
+    h1
+      color: $color-white
+      text-align: center
+      font-size: 2.5rem
+      padding: 1.5em 0 2em 0
+
+    .public-subnav 
+      position: absolute
+      bottom: 9
+
+      li
+        display: inline
+        text-transform: uppercase
+
+        span
+          background-color: rgba(255,255,255,.4)
+          color: $color-white
+          padding: 0.75em 1em
+
+        a
+          color: $color-white
+          padding: 0.75em 1em
+          text-decoration: none
+          &:hover
+            background-color: rgba(255,255,255,.4)
+
+    ul
+      list-style: none
+      padding-left: 0
+      text-align: center
+      margin: 0 auto
+      width: 100%
+
+
+  .main-section
+    background-color: $color-white
+    padding: 1rem
+
+    h2
+      margin: 1em 0 0 0
+
+    ul
+      padding-left: 0
+
+    ul li
+      list-style-type: none
+
+    li
+      margin-bottom: 1rem
+
+    .date
+      text-transform: uppercase
+      font-size: .8rem
+
+    .main-section-content
+      width: 75%
+      margin: 0 auto
+
+.article
+  margin-bottom: 1.5rem
+
+  .title
+    font-size: 1rem
+
+.role-title
+  text-transform: uppercase
+  margin: 1em 0
+
+.team-photo
+  display: block
+  margin: 1rem auto
+  width: 75%
+
+.logged-out .page .hero-section, .logged-out .features .hero-section
+  margin: 2.5rem 0 0
+
+@media (max-width: $media-small-max)
+  .page 
+    .hero-section 
+      h1
+        padding: 1em 0
+        font-size: 1.75rem
+
+      .public-subnav
+        display: none
+
+    .main-section
+      padding: 1.25rem
+
+      .main-section-content
+        width: 100%
+
+        h2
+          font-size: 1.25rem
+          margin-bottom: .5rem
+
+  .team-photo
+    width: 100%

@@ -1,0 +1,202 @@
+@import "../utilities/variables"
+
+table
+  clear: both
+  border-spacing: 0
+  font-size: .9rem
+  font-weight: 300
+  text-align: left
+  width: 100%
+  background-color: $color-white
+  border-collapse: collapse
+
+  tr:nth-child(even)
+    background-color: $color-grey-7 !important
+
+  tr
+    border-bottom: 1px solid $color-grey-6
+
+  td
+    padding: .5rem
+
+  td .center
+    text-align: center !important
+
+  thead
+    background-color: $color-blue-2
+    color: $color-white
+
+    th
+      padding: .5rem
+      font-weight: 300
+      text-transform: uppercase
+      font-size: .8rem
+
+      a, a.active, a.sorted
+        color: $color-white !important
+
+.scroll-table
+  overflow-x: scroll
+  display: block
+
+  &.stacktable.large-only
+    display: block
+
+.table-header-information
+  font-weight: 300
+  padding-bottom: 20px;
+
+/* Styling pattern tables for assignment outcome overview */
+td.complete, tr.achieved
+  background-color: $color-green-1
+
+i.complete
+  color: red
+
+td.absent
+  background-color: $color-black
+
+i.absent
+  color: $color-black
+
+td.partial
+  background-color: $color-blue-4
+
+i.partial
+  color: $color-green-2
+
+i.missing_grade
+  color: $color-grey-6
+
+.collapse-hidden
+  padding: .5rem
+
+.assignment-type-container
+  padding: 0 1.5rem 1rem
+
+.announcements
+  .read
+    background-color: $color-blue-4
+  .unread
+    font-weight: bold
+  td
+    vertical-align: center
+
+/** Leaderboard Styles **/
+.columns.team
+  border: 3px solid $color-white
+
+#leaderboard .rank
+  font-weight: bold
+  text-align: center
+  background-color: $color-grey-2
+  font-weight: bold
+  color: $color-white !important
+  padding: .5rem
+
+#leaderboard .name, #leaderboard .score
+  padding: 0.5rem
+  background-color: $color-blue-4
+
+#leaderboard .score
+  font-weight: bold
+
+@media (max-width: 867px)
+  table
+    th.draggable, td.draggable
+      display: none
+
+@media (max-width: 2400px)
+  table.default_assignments_dynatable
+    tbody ul.button-bar li a.button
+      display: block
+      border-radius: $global-radius
+      margin-bottom: .2rem !important
+      margin-right: 0
+
+@media (max-width: 1200px)
+  table
+    th, td
+      padding: .25rem
+      font-size: .7rem
+
+  tbody ul.button-bar li a.button
+    border-radius: $global-radius
+    display: block
+    margin-bottom: .2rem !important
+
+@media (max-width: $media-medium-max)
+  tbody ul.button-bar li a.button
+    font-size: .6rem
+    display: inline-block
+
+  tbody ul.button-bar li:not(:last-of-type) a.button
+    margin-right: .2rem
+
+@media (max-width: 800px)
+  tbody ul.button-bar li
+    margin-left: 0px
+
+  .dynatable-sort-header
+    pointer-events: none
+
+  th a:hover
+    color: $color-blue-3
+
+  table.stacktable
+    border: 1px solid $color-grey-5
+    margin-bottom: 1em
+
+    .table-header-row
+      background-color: $color-blue-2 !important
+      color: $color-white
+      text-align: center
+      a
+        color: $color-white
+
+    .st-key
+      text-transform: capitalize
+
+    tr:last-child, tr:first-child
+      .st-key
+        display: none
+
+    tr:first-child
+      .st-val
+        padding: .5em
+        font-size: .85rem
+
+  .badge-index-table
+    .st-key
+      width: 25%
+    .st-val
+      width: 75%
+    .button-bar
+      text-align: right
+    .badge-icon
+      margin: 0
+      max-width: 40px
+
+  table.second-row-header
+    tr:first-child
+      display: none
+    tr:nth-child(2)
+      .st-key
+        display: none
+      .st-val
+        padding: .5em
+        font-size: .85rem
+
+  table.no-button-bar
+    tr:last-child
+      .st-key
+        display: table-cell
+
+  table.no-table-header
+    tr:first-child
+      text-align: left
+      .st-key
+        display: table-cell
+        padding: .25rem
+      .st-key, .st-val
+        font-size: .7rem

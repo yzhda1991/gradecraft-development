@@ -1,0 +1,91 @@
+@import "../utilities/variables"
+
+/** Staff Sidebar **/
+.sidebar-container
+  width: 220px
+  float: left
+  padding: .75rem 1rem
+  background-color: $color-blue-2
+  font-weight: 300
+
+  /* Subheadings */
+  h5
+    font-size: .9rem
+    font-weight: 400
+    color: $color-blue-4
+    margin: 0 0 0 0.25rem
+
+  ul
+    margin: 0
+    padding: 0
+
+  /* Spacing out the list items*/
+  li
+    text-transform: capitalize
+    margin: 0
+    list-style-type: none
+    white-space: nowrap
+    font-weight: 300
+
+    &:not(a)
+      color: $color-yellow-1
+
+    a
+      display: block !important
+      color: $color-white
+      padding: 0.15rem
+      font-weight: 300
+      text-decoration: none
+
+    a:hover, a:focus
+      background-color: $color-blue-3 !important
+      color: $color-white
+
+    span.sidebar-nav
+      display: block
+      padding: 2.4px
+
+/* Styling of search fields in staff-sidenav and mobile nav */
+.sidebar-container, .sidebar, ul.nav.nav-pill
+  p.has-form
+    display: inline-block
+    margin: 0 0 .75rem 0
+
+  input[type=text]
+    height: 1.7rem
+    border: 0
+    padding: 5px
+    width: 188px
+    border-top-left-radius: $global-radius
+    border-bottom-left-radius: $global-radius
+
+  a.button
+    width: 20px
+    padding: 8px 6px 7px !important
+    float: right
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+    &:hover
+      background-color: darken($color-blue-3, 10%) !important
+
+/* Positioning and styling of notification badges in staff-sidenav */
+.staff-sidenav li
+  position: relative
+
+.staff-sidenav
+  .staff-notification-badge
+    background-color: $color-red-1
+    border-radius: 50%
+    color: $color-white
+    width: 1.4rem
+    line-height: 1.4rem
+    position: absolute
+    right: 0
+    top: 3px
+
+  /* Spacing the list divider */
+  hr
+    margin: .75rem auto
+    border: 0
+    border-bottom: 1px dashed $color-white
+    width: 78%

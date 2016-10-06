@@ -1,0 +1,77 @@
+@import "../utilities/variables"
+
+.tab-container
+  padding: 1rem
+
+.tabs-content
+  border: none
+  border-top-right-radius: $global-radius
+
+  table
+    border-top-right-radius: none !important
+
+    th:first-child th:first-child, th:first-child th:last-child
+      border-top-right-radius: 0
+
+form .tabs-content .content
+  min-height: 400px
+  border: 1px solid $color-white
+  padding: 1rem
+
+.ui-tabs
+  padding: 0 !important
+  font-weight: 300
+
+.ui-widget
+  font-family: 'Open Sans', sans-serif
+
+.ui-widget-content
+  border: 1px solid $color-grey-7
+  border-radius: $global-radius
+
+  .ui-tabs-panel
+    padding: .5rem
+
+    .button-group a
+      color: $color-white
+
+  .team-filter
+    margin-top: .2rem
+
+#tabs .ui-widget-content a.button.secondary
+  color: $color-white
+
+
+.ui-widget-header
+  border: 0
+
+.ui-tabs .ui-tabs-nav
+  border-bottom-right-radius: 0 !important
+  border-bottom-left-radius: 0 !important
+  background: $color-white !important
+  border-bottom: 2px solid $color-blue-1
+  clear: both
+  font-size: 0.9rem
+  @media (max-width: $media-small-max)
+    font-size: 0.8rem
+
+  li.ui-state-default
+    background: $color-blue-4
+    border: 0
+    font-weight: 300
+    a
+      color: $color-black
+
+      &:hover
+        border-top-right-radius: $global-radius !important
+        border-top-left-radius: $global-radius !important
+        background: $color-blue-3
+        color: $color-white !important
+
+    &.ui-state-active
+      background: $color-blue-1
+      a
+        color: $color-white
+
+#tab4 a
+  color: $color-yellow-1

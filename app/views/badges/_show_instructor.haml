@@ -1,0 +1,31 @@
+= render partial: "badges/context_menu", locals: { badge: presenter.badge, actions: [:new, :edit, :award, :quick_award] }
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  .badge-show-page
+    .badge-container
+      .badge-icon-container
+        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+
+      .badge-description
+        = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+
+    - if presenter.badge.badge_files.present?
+      %p
+        %b Attachments:
+        %ul
+          - presenter.badge.badge_files.each do |bf|
+            %li
+              = link_to bf.filename, bf.url
+              - if current_user_is_staff?
+                = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
+
+    - if current_course.has_teams?
+      .team-filter
+        = form_tag badge_path(presenter.badge), name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+          %label.sr-only{:for => "team_id"}
+            Select #{term_for :team}
+          = select_tag :team_id, options_for_select(presenter.teams.map { |t| [t.name, t.id] }, presenter.team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+
+    = render partial: "badges/all_students_earned_badges_table", locals: { presenter: presenter }

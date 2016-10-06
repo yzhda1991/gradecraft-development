@@ -1,0 +1,30 @@
+.pageContent
+  = render partial: "layouts/alerts"
+
+  .badge-show-page
+    %section.badge-container
+      %h1.badge-title
+        = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
+      .badge-icon-container
+        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+      .count
+        Times Earned:
+        %span
+          = render partial: "badges/components/count", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+        = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
+    %section.badge-description
+      %h2 Description
+      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+
+    - if presenter.badge.badge_files.present?
+      %p
+        %b Attachments:
+        %ul
+          - presenter.badge.badge_files.each do |bf|
+            %li
+              = link_to bf.filename, bf.url
+              - if current_user_is_staff?
+                = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
+
+    %section.badges-earned
+      = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
