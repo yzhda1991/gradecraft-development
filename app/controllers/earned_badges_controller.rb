@@ -30,7 +30,7 @@ class EarnedBadgesController < ApplicationController
 
   def new
     @earned_badge = @badge.earned_badges.new course: current_course
-    authorize! :new, @earned_badge
+    authorize! :build, @earned_badge
     @students = earned_badge_students
   end
 
