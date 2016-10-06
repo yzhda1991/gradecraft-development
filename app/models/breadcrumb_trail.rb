@@ -282,7 +282,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def info_dashboard
-    breadcrumb('Dashboard', dashboard_path)
   end
 
   def info_earned_badges
