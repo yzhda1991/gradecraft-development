@@ -9,7 +9,6 @@
         = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
 
       .badge-description
-        %h2 Description
         = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
     - if presenter.badge.badge_files.present?
