@@ -2,9 +2,8 @@
 @import "../utilities/mixins"
 
 $below-expectations-color: $color-grey-6
-$below-expectations-selected-color: lighten($color-grey-6, 10%)
 $meets-expectations-color: $color-green-1
-$meets-expectations-selected-color: lighten($color-green-1, 10%)
+$level-selected-color: lighten($color-green-1, 10%)
 $no-expectation-color: $color-grey-5
 
 // styles for rubric design view
@@ -73,10 +72,10 @@ $no-expectation-color: $color-grey-5
     padding: 0.5rem 0.5rem 0 0.5rem
     margin-bottom: 0.5rem
     display: inline-block
-    width: 95%
-    background-color: $color-grey-6
-    &.saved
-      background-color: $color-blue-2
+    width: 100%
+    background-color: $color-blue-2
+    box-sizing: border-box
+
     input
       margin-right: 0.2rem
       &.points
@@ -166,15 +165,12 @@ button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
 
 .level
-  background: $color-grey-5
+  background-color: $below-expectations-color
+  &.level-meets-expectations
+    background-color: $meets-expectations-color
 
   &.nocredit
     width: 180px
-
-  &.saved
-    background-color: $below-expectations-color
-    &.level-meets-expectations
-      background-color: $meets-expectations-color
 
   .badge-messages
     text-align: center
@@ -289,7 +285,7 @@ h4.notice
 
 
 // base styles for graded rubric, ungraded rubric and rubric edit views
-#rubric-graded, #rubric-ungraded, #rubric-grade-edit
+.rubric
   *
     font-weight: 300
   h4
@@ -509,7 +505,7 @@ h4.notice
 
 
   .level-tab.selected
-    background-color: $meets-expectations-selected-color
+    background-color: $level-selected-color
 
 
   .level-badge-image

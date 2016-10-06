@@ -24,7 +24,7 @@
       %br
       %br
 
-    #rubric-grade-edit.edit(ng-cloak)
+    #rubric-grade-edit.rubric.edit(ng-cloak)
       .criterion(ng-repeat="criterion in criteria")
         .criterion-heading
           %h4.criterion-name {{criterion.name.replace(" ","&nbsp;")}} {{(criterion.max_points || 0) | number:0}}&nbsp;Points
