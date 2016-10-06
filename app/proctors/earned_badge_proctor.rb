@@ -8,13 +8,18 @@ class EarnedBadgeProctor
     @earned_badge = earned_badge
   end
 
-  def creatable?(user)
-    return false unless earned_badge.course.users.include? user
-    return false unless earned_badge.student.nil? || earned_badge.course.students.include?(earned_badge.student)
-
-    user.is_staff?(earned_badge.course) || (
-      earned_badge.badge.student_awardable? &&
-      earned_badge.student != user
+  def newable?(user)
+    earned_badge.course.users.include?(user) && (
+      user.is_staff?(earned_badge.course) || (
+        earned_badge.badge.student_awardable? &&
+        user.is_student?(earned_badge.course)
+      )
     )
+  end
+
+  def creatable?(user)
+    newable?(user) &&
+    earned_badge.course.students.include?(earned_badge.student) &&
+    earned_badge.student != user
   end
 end
