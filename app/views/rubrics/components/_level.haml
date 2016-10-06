@@ -3,7 +3,7 @@
     = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }
 
 %section.level{class: ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
-  = render partial: "rubrics/components/level_heading", locals: { level: level, student: student }
+  = render partial: "rubrics/components/level_heading", locals: { level: level, student: student, include_grade_info: include_grade_info }
 
 - if !level.level_badges(current_user).empty? && !include_grade_info
   %section.badges-earned

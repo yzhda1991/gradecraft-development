@@ -1,4 +1,4 @@
-- if current_student.present? && level.earned_for?(student.id)
+- if current_student.present? && include_grade_info && level.earned_for?(student.id)
   %h5.level-name You earned 
 %h5.level-name= "#{level.name}: #{points level.points} Points"
 - if level.meets_expectations || level.above_expectations?

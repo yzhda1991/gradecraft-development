@@ -8,4 +8,4 @@
       .tab-panel.selected{:class => ("meets-expectations-cutoff" if level.meets_expectations)}
         - if level.meets_expectations
           %p.meets-expectations-tag Meets expectations #{glyph('long-arrow-up')}
-        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: include_grade_info }
+        = render partial: "rubrics/components/level", locals: { level: level, student: student, include_grade_info: false }
