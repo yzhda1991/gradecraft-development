@@ -97,15 +97,4 @@ describe Badges::ShowPresenter do
       expect(subject.earned_badges).to eq("all earned badges")
     end
   end
-
-  describe "#view_student_context?" do
-    it "is true when the student is in the context" do
-      expect(subject.view_student_context?).to be_truthy
-    end
-
-    it "is false when there is no student in context" do
-      subject = Badges::ShowPresenter.new()
-      expect(subject.view_student_context?).to be_falsey
-    end
-  end
 end

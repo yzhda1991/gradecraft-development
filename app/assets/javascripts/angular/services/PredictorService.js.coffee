@@ -25,8 +25,8 @@
   assignmentTypes = AssignmentTypeService.assignmentTypes
   weights = AssignmentTypeService.weights
 
-  getAssignmentTypes= (studentId)->
-    AssignmentTypeService.getAssignmentTypes(studentId)
+  getAssignmentTypes= ()->
+    AssignmentTypeService.getAssignmentTypes()
 
   unusedWeightsRange = ()->
     AssignmentTypeService.unusedWeightsRange()
@@ -90,8 +90,8 @@
 
   assignments = AssignmentService.assignments
 
-  getAssignments= (studentId)->
-    AssignmentService.getAssignments(studentId)
+  getAssignments= ()->
+    AssignmentService.getAssignments()
 
   #------ BADGES --------------------------------------------------------------#
 
@@ -107,8 +107,8 @@
 
   challenges = ChallengeService.challenges
 
-  getChallenges= (studentId)->
-    ChallengeService.getChallenges(studentId)
+  getChallenges= ()->
+    ChallengeService.getChallenges()
 
   challengesFullPoints = ()->
     ChallengeService.challengesFullPoints()

@@ -55,8 +55,8 @@
 
   #----------------- API Calls ------------------------------------------------#
 
-  getAssignmentTypes = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + "assignment_types").success((res)->
+  getAssignmentTypes = ()->
+    $http.get("/api/assignment_types").success((res)->
       _.each(res.data, (assignment_type)->
         assignmentTypes.push(assignment_type.attributes)
       )

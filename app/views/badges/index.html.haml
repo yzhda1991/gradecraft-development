@@ -1,4 +1,4 @@
-= render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
+= render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff?
 
 - if current_user_is_student?
   = render partial: "badges/student_badge_index", locals: { presenter: presenter }
@@ -7,7 +7,7 @@
   .pageContent
     = render "layouts/alerts"
 
-    %table.badge-index-table.second-row-header{:class => ("student-index" if presenter.view_student_context?)}
+    %table.badge-index-table.second-row-header
       %thead
         %tr
           %th.sort-column
@@ -19,24 +19,18 @@
           %th.description-column Description
           %th.button-column
 
-      %tbody{:class => ("sort-badges" if !presenter.view_student_context?)}
+      %tbody.sort-badges
         - presenter.badges.each do |badge|
           - if BadgeProctor.new(badge).viewable?(current_student || current_user)
             %tr{id: "badge-#{badge.id}"}
-              - if !presenter.view_student_context?
-                %td.center.draggable
-                  %i.fa.fa-arrows-v
-              - else
-                %td
+              %td.center.draggable
+                %i.fa.fa-arrows-v
+
 
               // Badge Name
               %td
-                - if current_user_is_staff? && presenter.view_student_context?
-                  = render partial: "badges/components/name",
-                    locals: { badge: badge, title: link_to(badge.name, student_badge_path(presenter.student, badge)) }
-                - else
-                  = render partial: "badges/components/name",
-                    locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
+                = render partial: "badges/components/name",
+                  locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
               // Badge Icon
               %td
@@ -57,14 +51,9 @@
 
               // Description
               %td
-                - if current_user_is_staff? && presenter.view_student_context?
-                  = render partial: "badges/components/description",
-                    locals: { badge: badge, title: link_to(badge.name, student_badge_path(presenter.student, badge)) }
-                - else
-                  = render partial: "badges/components/description",
-                    locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
+                = render partial: "badges/components/description",
+                  locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
               // Buttons
               %td
-                - if !presenter.view_student_context?
-                  = render partial: "badges/buttons", locals: { badge: badge }
+                = render partial: "badges/buttons", locals: { badge: badge }
