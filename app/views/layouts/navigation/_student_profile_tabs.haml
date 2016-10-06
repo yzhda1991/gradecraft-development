@@ -1,20 +1,20 @@
-%ul.sub-nav
+%ul{class: ("#{nav_class}" if local_assigns[:nav_class])}
   %h5 Navigation
   %li{class: ("active" if current_page?(dashboard_path)) }
-    = link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
+    = link_to_unless_current "Dashboard", dashboard_path
   %li{class: ("active" if current_page?(assignments_path)) }
-    = link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
+    = link_to_unless_current "#{term_for :assignments}", assignments_path
   - if current_course.grade_scheme_elements.present?
     %li{class: ("active" if current_page?(grade_scheme_elements_path)) }
-      = link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
+      = link_to_unless_current "Grading Scheme", grade_scheme_elements_path
   %li{class: ("active" if current_page?(predictor_path)) }
-    = link_to_unless_current glyph(:tasks) + "Grade Predictor", predictor_path
+    = link_to_unless_current "Grade Predictor", predictor_path
   - if current_course.has_badges?
     %li{class: ("active" if current_page?(badges_path)) }
-      = link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
+      = link_to_unless_current "#{term_for :badges}", badges_path
   - if current_course.teams_visible? || current_course.has_in_team_leaderboards?
     %li{class: ("active" if current_page?(teams_path)) }
-      = link_to_unless_current glyph(:users) + "#{term_for :teams}", teams_path
+      = link_to_unless_current "#{term_for :teams}", teams_path
   - if current_course.announcements.present?
     %li{class: (current_page?(announcements_path)? "active" : "announcement-nav") }
       - unread_count = unread_count_for current_student, current_course
