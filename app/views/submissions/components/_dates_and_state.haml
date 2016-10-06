@@ -4,7 +4,9 @@
 
   // Late alert if submitted after due date
   - if presenter.submission.late?
-    %span.label.alert Late!
+    .icon.is_late
+      %i.fa.fa-fw.fa-clock-o
+      %span.icon-text LATE
 
   - if presenter.submission.resubmitted?
     %span.label.alert Resubmitted!

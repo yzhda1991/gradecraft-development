@@ -92,7 +92,8 @@ class Submission < ActiveRecord::Base
 
   # build a sensible base filename for all files that are attached to this submission
   def base_filename
-    [student.name, assignment.name].collect do |part|
+    owner = student || group
+    [owner.name, assignment.name].collect do |part|
       Formatter::Filename.titleize part
     end.compact.join " - "
   end
