@@ -118,14 +118,6 @@ describe Assignments::GradesController do
           allow(controller).to receive(:current_course).and_return(course)
         end
 
-        it "assigns grades_by_groups" do
-          get :mass_edit, assignment_id: assignment_with_groups
-          expect(assigns(:grades_by_group)).to_not be_nil
-          expect(assigns(:grades_by_group).length).to eq(2)
-          expect(assigns(:grades_by_group).select { |gbg| gbg[:group] == group }).to_not be_nil
-          expect(assigns(:grades_by_group).select { |gbg| gbg[:group] == group_2 }).to_not be_nil
-        end
-
         it "renders the mass_edit template" do
           get :mass_edit, assignment_id: assignment_with_groups
           expect(response).to render_template(:mass_edit)
