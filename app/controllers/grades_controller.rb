@@ -22,6 +22,9 @@ class GradesController < ApplicationController
     @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
+    if @grade.assignment.grade_with_rubric?
+      @grade_next_path = path_for_next_grade @grade, @team
+    end
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will
