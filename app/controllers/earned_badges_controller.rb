@@ -5,7 +5,7 @@ class EarnedBadgesController < ApplicationController
   # how what and how a student performed
 
   skip_before_filter :require_login, only: [:confirm_earned]
-  before_filter :ensure_staff?, except: [:confirm_earned]
+  before_filter :ensure_staff?, except: [:confirm_earned, :new, :create]
   before_action :find_badge, except: [:confirm_earned]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
@@ -23,14 +23,15 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.where(id: params[:id]).first
     if @earned_badge.present?
       render nothing: true, status: 200
-    else 
+    else
       redirect_to root_path
     end
   end
 
   def new
-    @earned_badge = @badge.earned_badges.new
-    @students = current_course.students
+    @earned_badge = @badge.earned_badges.new course: current_course
+    authorize! :build, @earned_badge
+    @students = earned_badge_students
   end
 
   def edit
@@ -45,7 +46,8 @@ class EarnedBadgesController < ApplicationController
         notice: "The #{result.earned_badge.badge.name} #{term_for :badge} was successfully awarded to #{result.earned_badge.student.name}"
     else
       @earned_badge = result.earned_badge
-      @students = current_course.students
+      @students = earned_badge_students
+      flash[:alert] = result.message
       render action: "new"
     end
   end
@@ -78,13 +80,13 @@ class EarnedBadgesController < ApplicationController
     # build a new badge automatically if they can be earned at will
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |student|
-        @badge.earned_badges.new(student: student, badge: @badge)
+        @badge.earned_badges.new(student: student, badge: @badge, awarded_by: current_user)
       end
     # otherwise build a new one only if it hasn't been earned
     else
       @earned_badges = @students.map do |student|
         @badge.earned_badges.where(student_id: student).first ||
-          @badge.earned_badges.new(student: student, badge: @badge)
+          @badge.earned_badges.new(student: student, badge: @badge, awarded_by: current_user)
       end
     end
   end
@@ -111,9 +113,14 @@ class EarnedBadgesController < ApplicationController
   private
 
   def earned_badge_params
-    params.require(:earned_badge).permit :points, :feedback, :student_id, :badge_id,
+    params.require(:earned_badge).permit(:points, :feedback, :student_id, :badge_id,
       :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy
+      :student_visible, :_destroy).merge(awarded_by: current_user, course: current_course)
+  end
+
+  def earned_badge_students
+    current_course.students if current_user_is_staff?
+    current_course.students - [current_user]
   end
 
   def find_badge
@@ -126,7 +133,7 @@ class EarnedBadgesController < ApplicationController
 
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
-      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
+      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge, awarded_by: current_user)
       if earned_badge.valid?
         valid_earned_badges << earned_badge
       else

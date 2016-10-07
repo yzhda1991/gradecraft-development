@@ -94,6 +94,8 @@ class User < ActiveRecord::Base
   has_many :imported_users, dependent: :destroy
 
   has_many :earned_badges, foreign_key: :student_id, dependent: :destroy
+  has_many :awarded_badges, foreign_key: :awarded_by_id, class_name: 'EarnedBadge'
+
   accepts_nested_attributes_for :earned_badges, reject_if: proc { |attributes| attributes["earned"] != "1" }
   has_many :badges, through: :earned_badges
 

@@ -3,7 +3,7 @@ require "./app/services/creates_earned_badge"
 
 describe Services::CreatesEarnedBadge do
   describe ".award" do
-    let(:world) { World.create.with(:course, :assignment, :student, :badge, :grade) }
+    let(:world) { World.create.with(:course, :assignment, :professor, :student, :badge, :grade) }
 
     let(:attributes) do
       {
@@ -11,6 +11,8 @@ describe Services::CreatesEarnedBadge do
         badge_id: world.badge.id,
         assignment_id: world.assignment.id,
         grade_id: world.grade.id,
+        course_id: world.course.id,
+        awarded_by_id: world.professor.id,
         student_visible: true,
         feedback: "You are so awesome!"
       }

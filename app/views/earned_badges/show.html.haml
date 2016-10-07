@@ -23,3 +23,10 @@
     = @earned_badge.created_at
 
   %p= raw @earned_badge.feedback
+
+  %p
+    %b= "Awarded by:"
+    - if @earned_badge.awarded_by.nil?
+      = "-"
+    - else
+      = @earned_badge.awarded_by.name

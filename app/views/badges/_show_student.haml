@@ -16,6 +16,11 @@
       %h2 Description
       = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
+    - if presenter.badge.student_awardable?
+      %section.student-awardable
+        = link_to glyph(:star) + "Award", new_badge_earned_badge_path(presenter.badge), class: "button"
+        You can award this #{(term_for :badge).downcase} to another #{(term_for :student).downcase}.
+
     - if presenter.badge.badge_files.present?
       %p
         %b Attachments:

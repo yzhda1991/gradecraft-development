@@ -229,18 +229,65 @@ describe EarnedBadgesController do
   end
 
   context "as student" do
-    before { login_user(@student) }
+    before(:each) do
+      login_user(@student)
+      @badge = create(:badge, course: @course)
+      @badge_student_awardable = create(:badge, course: @course, student_awardable: true)
+      @other_student = create(:user)
+      @other_student.courses << @course
+    end
 
     describe "protected routes" do
-      [
-        :index,
-        :new,
-        :create
-      ].each do |route|
-          it "#{route} redirects to root" do
-            expect(get route, {badge_id: 1}).to redirect_to(:root)
-          end
-        end
+      it "index redirects to root" do
+        expect(get :index, {badge_id: @badge.id}).to redirect_to(:root)
+      end
+    end
+
+    describe "GET new" do
+      it "display the create form when the badge is student-awardable" do
+        get :new, badge_id: @badge_student_awardable.id
+        expect(assigns(:earned_badge)).to be_a_new(EarnedBadge)
+        expect(response).to render_template(:new)
+      end
+
+      it "is forbidden when the badge is not student-awardable" do
+        expect{get :new, {badge_id: @badge.id}}.to raise_error CanCan::AccessDenied
+      end
+    end
+
+    describe "POST create" do
+      it "creates the earned badge when the badge is student-awardable" do
+        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+              badge_id: @badge_student_awardable.id,
+              student_id: @other_student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to change(EarnedBadge.student_visible, :count).by(1)
+        expect(response).to redirect_to badge_path(@badge_student_awardable)
+      end
+
+      it "doesn't create the student-awardable earned badge when the awardee and current user are the same" do
+        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+              badge_id: @badge_student_awardable.id,
+              student_id: @student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to_not change(EarnedBadge,:count)
+          expect(flash[:alert]).to eq 'Permission denied'
+      end
+
+      it "doesn't create earned badge when the badge is not student-awardable" do
+        expect{ post :create, badge_id: @badge.id, earned_badge: {
+              badge_id: @badge.id,
+              student_id: @student.id,
+              student_visible: true,
+              feedback: "You did great!"
+            }
+          }.to_not change(EarnedBadge,:count)
+          expect(flash[:alert]).to eq 'Permission denied'
+      end
     end
 
     describe "protected routes requiring id in params" do
@@ -251,7 +298,10 @@ describe EarnedBadgesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {badge_id: 1, id: "1"}).to redirect_to(:root)
+          expect(get route, {badge_id: @badge.id, id: "1"}).to redirect_to(:root)
+        end
+        it "#{route} redirects to root for student-awardable badges" do
+          expect(get route, {badge_id: @badge_student_awardable.id, id: "1"}).to redirect_to(:root)
         end
       end
     end
