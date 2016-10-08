@@ -30,7 +30,8 @@
         .criterion(name="criterionForm" ng-form ng-submit="criterion.create()" ng-class="{saved: criterion.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
           .order-label {{$index + 1}}
           = render partial: "rubrics/new_criterion"
-        .level-container
+        .new-criterion-notice(ng-show="criterion.isNew()") "Criterion Name" and "Max Points" are required fields
+        .level-container(ng-show="!criterion.isNew()")
           .level-wrapper
             .level(name="levelForm" ng-repeat="level in criterion.levels" ng-form ng-submit="level.create()" ng-class="{saved: level.isSaved(), nocredit: level.noCredit, 'level-meets-expectations': level.pointsMeetExpectations()}")
               = render partial: "rubrics/new_level"
