@@ -2,38 +2,17 @@
 %table.dynatable
   %thead
     %tr
-      %th Name
-      %th Description
-      %th Due date
-      - if @team.present?
-        %th Score
-      - else
-        %th Point total
+      %th= term_for :challenge
+      %th Points
+      %th Due
 
   %tbody
     - current_course.challenges.visible.chronological.alphabetical.includes(:challenge_files, :challenge_grades).each do |challenge|
       %tr
+        %td= link_to challenge.name, challenge
         %td
-          - if challenge.graded?
-            = link_to challenge.name, challenge
+          - if @team.present? && challenge.challenge_grade_for_team(@team).present?
+            = "#{ points challenge.challenge_grade_for_team(@team).try(:score) } / #{ points challenge.full_points }"
           - else
-            = challenge.name
-        %td
-          = link_to "See Description", challenge
-
-          - if challenge.challenge_files.present?
-            %b Attachments:
-            %ul
-              - challenge.challenge_files.each do |cf|
-                %li
-                  = link_to cf.filename, cf.url
-
+            %span.italic= " #{ points challenge.full_points } points possible"
         %td= challenge.due_at
-        - if @team.present?
-          %td
-            %span= points challenge.challenge_grade_for_team(@team).try(:score) if challenge.graded?
-            %span= "/" if challenge.graded?
-            %span= points challenge.full_points
-
-        - else
-          %td= points challenge.full_points

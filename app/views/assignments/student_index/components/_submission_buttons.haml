@@ -1,8 +1,7 @@
 - if assignment.is_individual?
   - if presenter.submission_for(assignment).present?
     %li
-      = link_to glyph(:paperclip) + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button" if current_user_is_student?
-      = link_to glyph(:paperclip) + "See Submission", assignment_submission_path(assignment, presenter.submission_for(assignment).id), class: "button" if current_user_is_staff?
+      = link_to glyph(:paperclip) + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button"
   - elsif assignment.open?
     %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, student_id: presenter.student.id), class: "button"
 - elsif assignment.has_groups? && presenter.group_for(assignment)
