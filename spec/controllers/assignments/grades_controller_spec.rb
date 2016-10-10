@@ -136,43 +136,43 @@ describe Assignments::GradesController do
           }
         end
 
-      it "updates the grades for the specific assignment" do
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(grade.reload.raw_points).to eq 1000
-      end
-
-      it "timestamps the grades" do
-        current_time = DateTime.now
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(grade.reload.graded_at).to be > current_time
-      end
-
-      it "only sends notifications to the students if the grade changed" do
-        grade.update_attributes({ raw_points: 1000 })
-        run_background_jobs_immediately do
-          expect { put :mass_update, assignment_id: assignment.id,
-                   assignment: { grades_attributes: grades_attributes } }.to_not \
-            change { ActionMailer::Base.deliveries.count }
-          end
+        it "updates the grades for the specific assignment" do
+          put :mass_update, assignment_id: assignment.id,
+            assignment: { grades_attributes: grades_attributes }
+          expect(grade.reload.raw_points).to eq 1000
         end
 
-      it "redirects to assignment path with a team" do
-        team = create(:team, course: course)
-        put :mass_update, assignment_id: assignment.id, team_id: team.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(response).to \
-          redirect_to(assignment_path(assignment, team_id: team.id))
-      end
+        it "timestamps the grades" do
+          current_time = DateTime.now
+          put :mass_update, assignment_id: assignment.id,
+            assignment: { grades_attributes: grades_attributes }
+          expect(grade.reload.graded_at).to be > current_time
+        end
 
-      it "redirects on failure" do
-        allow_any_instance_of(Assignment).to \
-          receive(:update_attributes).and_return false
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(response).to \
-          redirect_to(mass_edit_assignment_grades_path(assignment))
+        it "only sends notifications to the students if the grade changed" do
+          grade.update_attributes({ raw_points: 1000 })
+          run_background_jobs_immediately do
+            expect { put :mass_update, assignment_id: assignment.id,
+                     assignment: { grades_attributes: grades_attributes } }.to_not \
+              change { ActionMailer::Base.deliveries.count }
+            end
+          end
+
+        it "redirects to assignment path with a team" do
+          team = create(:team, course: course)
+          put :mass_update, assignment_id: assignment.id, team_id: team.id,
+            assignment: { grades_attributes: grades_attributes }
+          expect(response).to \
+            redirect_to(assignment_path(assignment, team_id: team.id))
+        end
+
+        it "redirects on failure" do
+          allow(Services::CreatesManyGrades).to \
+            receive(:create).and_return double(:result, success?: false, message: "")
+          put :mass_update, assignment_id: assignment.id,
+            assignment: { grades_attributes: grades_attributes }
+          expect(response).to \
+            redirect_to(mass_edit_assignment_grades_path(assignment))
         end
       end
 
@@ -198,23 +198,30 @@ describe Assignments::GradesController do
           allow(controller).to receive(:current_course).and_return(course)
         end
 
-        describe "#mass_update_groups" do
-          it "should create grades for the students" do
-            expect(assignment_with_groups.grades.length).to be_zero
-            put :mass_update, assignment_id: assignment_with_groups.id,
-              assignment: { grades_by_group: params }
-            expect(assignment_with_groups.reload.grades.length).to eq(group.students.length + group_2.students.length)
-          end
+        it "should create grades for the students" do
+          expect(assignment_with_groups.grades.length).to be_zero
+          put :mass_update, assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }
+          expect(assignment_with_groups.reload.grades.length).to eq(group.students.length + group_2.students.length)
+        end
 
-          it "updates the grade attributes" do
-            put :mass_update, assignment_id: assignment_with_groups.id,
-              assignment: { grades_by_group: params }
-            grade = Grade.unscoped.last
-            expect(grade.graded_by_id).to eq(professor.id)
-            expect(grade.instructor_modified).to be true
-            expect(grade.raw_points).to eq(500)
-            expect(grade.status).to eq("Graded")
-          end
+        it "updates the grade attributes" do
+          put :mass_update, assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }
+          grade = Grade.unscoped.last
+          expect(grade.graded_by_id).to eq(professor.id)
+          expect(grade.instructor_modified).to be true
+          expect(grade.raw_points).to eq(500)
+          expect(grade.status).to eq("Graded")
+        end
+
+        it "redirects on failure" do
+          allow(Services::CreatesManyGroupGrades).to \
+            receive(:create).and_return double(:result, success?: false, message: "")
+          put :mass_update, assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }
+          expect(response).to \
+            redirect_to(mass_edit_assignment_grades_path(assignment_with_groups))
         end
       end
     end
