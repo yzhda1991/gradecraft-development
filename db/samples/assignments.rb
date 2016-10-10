@@ -1390,6 +1390,41 @@ test that teaches you a lesson. – Tom Bodett",
   }
 }
 
+@assignments[:passed_unlock_submission_condition] = {
+  quotes: {
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Past-Submission-Key",
+    description:
+      "It's too late, but I was the thing you need to submit to unlock 'Unlocked-By-Past-Submission'",
+    due_at: 4.weeks.ago,
+    full_points: 180000,
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
+  }
+}
+
+@assignments[:past_submission_is_an_unlock] = {
+  quotes: {
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Unlocked-By-Past-Submission",
+    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor",
+    full_points: 180000,
+  },
+  unlock_condition: true,
+  unlock_attributes: {
+    condition: :passed_unlock_submission_condition,
+    condition_type: "Assignment",
+    condition_state: "Submitted"
+  }
+}
+
+
 #------------------------------------------------------------------------------#
 
 #                        Sorting Assignment Type
