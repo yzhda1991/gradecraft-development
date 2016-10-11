@@ -237,46 +237,46 @@ describe EarnedBadgesController do
 
     describe "GET new" do
       it "display the create form when the badge is student-awardable" do
-        get :new, badge_id: @badge_student_awardable.id
+        get :new, params: { badge_id: @badge_student_awardable.id }
         expect(assigns(:earned_badge)).to be_a_new(EarnedBadge)
         expect(response).to render_template(:new)
       end
 
       it "is forbidden when the badge is not student-awardable" do
-        expect{get :new, {badge_id: @badge.id}}.to raise_error CanCan::AccessDenied
+        expect{get :new, params: {badge_id: @badge.id}}.to raise_error CanCan::AccessDenied
       end
     end
 
     describe "POST create" do
       it "creates the earned badge when the badge is student-awardable" do
-        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+        expect{ post :create, params: { badge_id: @badge_student_awardable.id, earned_badge: {
               badge_id: @badge_student_awardable.id,
               student_id: @other_student.id,
               student_visible: true,
               feedback: "You did great!"
-            }
+            }}
           }.to change(EarnedBadge.student_visible, :count).by(1)
         expect(response).to redirect_to badge_path(@badge_student_awardable)
       end
 
       it "doesn't create the student-awardable earned badge when the awardee and current user are the same" do
-        expect{ post :create, badge_id: @badge_student_awardable.id, earned_badge: {
+        expect{ post :create, params: { badge_id: @badge_student_awardable.id, earned_badge: {
               badge_id: @badge_student_awardable.id,
               student_id: @student.id,
               student_visible: true,
               feedback: "You did great!"
-            }
+            }}
           }.to_not change(EarnedBadge,:count)
           expect(flash[:alert]).to eq 'Permission denied'
       end
 
       it "doesn't create earned badge when the badge is not student-awardable" do
-        expect{ post :create, badge_id: @badge.id, earned_badge: {
+        expect{ post :create, params: { badge_id: @badge.id, earned_badge: {
               badge_id: @badge.id,
               student_id: @student.id,
               student_visible: true,
               feedback: "You did great!"
-            }
+            }}
           }.to_not change(EarnedBadge,:count)
           expect(flash[:alert]).to eq 'Permission denied'
       end
