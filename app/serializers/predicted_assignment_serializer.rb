@@ -47,10 +47,6 @@ class PredictedAssignmentSerializer < SimpleDelegator
     select_attributes.merge boolean_flags
   end
 
-  def predictor_display_type
-    assignment.predictor_display_type
-  end
-
   def score_levels
     assignment.assignment_score_levels.map do |asl|
       {name: asl.name, points: asl.points}
@@ -106,8 +102,8 @@ class PredictedAssignmentSerializer < SimpleDelegator
   # boolean states for icons in predictor
   def boolean_flags
     {
-      accepting_submissions: accepting_submissions?,
-      closed_without_submission: closed_without_sumbission?,
+      is_accepting_submissions: accepting_submissions?,
+      is_closed_without_submission: closed_without_sumbission?,
       has_been_unlocked: has_been_unlocked?,
       has_info: has_info?,
       is_rubric_graded: is_rubric_graded?,

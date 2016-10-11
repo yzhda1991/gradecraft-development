@@ -7,8 +7,6 @@ json.data @assignments do |assignment|
   json.attributes do
     json.merge! assignment.attributes
 
-    json.predictor_display_type assignment.predictor_display_type
-
     json.score_levels assignment.score_levels unless assignment.score_levels.empty?
     json.unlock_conditions assignment.unlock_conditions unless assignment.unlock_conditions.empty?
     json.unlocked_conditions assignment.unlocked_conditions unless assignment.unlocked_conditions.empty?

@@ -60,12 +60,6 @@ describe PredictedAssignmentSerializer do
     end
   end
 
-  describe "#predictor_display_type" do
-    it "returns the same type as the assignment" do
-      expect(subject.predictor_display_type).to eq(assignment.predictor_display_type)
-    end
-  end
-
   describe "#score_levels" do
     it "returns a hash of score levels" do
       subject.assignment_score_levels.build name: "First level", points: 456
