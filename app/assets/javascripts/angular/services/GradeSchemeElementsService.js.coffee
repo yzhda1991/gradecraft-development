@@ -72,6 +72,7 @@
           window.location.href = '/grade_scheme_elements/'
       ).error(
         (error) ->
+          alert('An error occurred that prevented saving.')
           console.log(error)
       )
 
