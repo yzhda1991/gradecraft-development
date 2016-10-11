@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -23,10 +22,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "read",            default: true
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.index ["announcement_id"], name: "index_announcement_states_on_announcement_id", using: :btree
+    t.index ["user_id"], name: "index_announcement_states_on_user_id", using: :btree
   end
-
-  add_index "announcement_states", ["announcement_id"], name: "index_announcement_states_on_announcement_id", using: :btree
-  add_index "announcement_states", ["user_id"], name: "index_announcement_states_on_user_id", using: :btree
 
   create_table "announcements", force: :cascade do |t|
     t.string   "title",      null: false
@@ -35,10 +33,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "course_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_announcements_on_author_id", using: :btree
+    t.index ["course_id"], name: "index_announcements_on_course_id", using: :btree
   end
-
-  add_index "announcements", ["author_id"], name: "index_announcements_on_author_id", using: :btree
-  add_index "announcements", ["course_id"], name: "index_announcements_on_course_id", using: :btree
 
   create_table "assignment_files", force: :cascade do |t|
     t.string   "filename"
@@ -71,10 +68,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "assignment_type_id", null: false
     t.integer  "weight",             null: false
     t.integer  "course_id"
+    t.index ["course_id"], name: "index_assignment_type_weights_on_course_id", using: :btree
+    t.index ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
   end
-
-  add_index "assignment_type_weights", ["course_id"], name: "index_assignment_type_weights_on_course_id", using: :btree
-  add_index "assignment_type_weights", ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
 
   create_table "assignment_types", force: :cascade do |t|
     t.string   "name",                               null: false
@@ -133,9 +129,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "show_purpose_when_locked",     default: true,         null: false
     t.integer  "min_group_size",               default: 1,            null: false
     t.integer  "max_group_size",               default: 5,            null: false
+    t.index ["course_id"], name: "index_assignments_on_course_id", using: :btree
   end
-
-  add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
 
   create_table "badge_files", force: :cascade do |t|
     t.string   "filename"
@@ -149,20 +144,20 @@ ActiveRecord::Schema.define(version: 20161003210720) do
   end
 
   create_table "badges", force: :cascade do |t|
-    t.string   "name",                                        null: false
+    t.string   "name",                                         null: false
     t.text     "description"
     t.integer  "full_points"
-    t.integer  "course_id",                                   null: false
+    t.integer  "course_id",                                    null: false
     t.string   "icon"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
-    t.boolean  "visible",                      default: true, null: false
-    t.boolean  "can_earn_multiple_times",      default: true, null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
+    t.boolean  "visible",                      default: true,  null: false
+    t.boolean  "can_earn_multiple_times",      default: true,  null: false
     t.integer  "position"
-    t.boolean  "visible_when_locked",          default: true, null: false
-    t.boolean  "show_name_when_locked",        default: true, null: false
+    t.boolean  "visible_when_locked",          default: true,  null: false
+    t.boolean  "show_name_when_locked",        default: true,  null: false
     t.boolean  "show_points_when_locked",      default: true
-    t.boolean  "show_description_when_locked", default: true, null: false
+    t.boolean  "show_description_when_locked", default: true,  null: false
     t.boolean  "student_awardable",            default: false, null: false
   end
 
@@ -239,11 +234,10 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.string   "role",                           default: "student", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
+    t.index ["course_id", "user_id"], name: "index_course_memberships_on_course_id_and_user_id", unique: true, using: :btree
+    t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
+    t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
-
-  add_index "course_memberships", ["course_id", "user_id"], name: "index_course_memberships_on_course_id_and_user_id", unique: true, using: :btree
-  add_index "course_memberships", ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
-  add_index "course_memberships", ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.string   "name",                                                                                           null: false
@@ -265,7 +259,7 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
     t.boolean  "teams_visible",                                           default: true,                         null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
-    t.decimal  "default_weight",                  precision: 4, scale: 1, default: 1.0
+    t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
     t.string   "office"
     t.string   "phone"
@@ -298,9 +292,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "hide_analytics",                                          default: false,                        null: false
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
+    t.index ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
   end
-
-  add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
 
   create_table "criteria", force: :cascade do |t|
     t.string   "name"
@@ -325,9 +318,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "assignment_id", null: false
     t.integer  "student_id",    null: false
     t.text     "comments"
+    t.index ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
   end
-
-  add_index "criterion_grades", ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
 
   create_table "earned_badges", force: :cascade do |t|
     t.integer  "badge_id",                        null: false
@@ -343,9 +335,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "level_id"
     t.boolean  "student_visible", default: false, null: false
     t.integer  "awarded_by_id"
+    t.index ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
   end
-
-  add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
 
   create_table "events", force: :cascade do |t|
     t.string   "name",          null: false
@@ -367,11 +358,10 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "flagged_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_flagged_users_on_course_id", using: :btree
+    t.index ["flagged_id"], name: "index_flagged_users_on_flagged_id", using: :btree
+    t.index ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
   end
-
-  add_index "flagged_users", ["course_id"], name: "index_flagged_users_on_course_id", using: :btree
-  add_index "flagged_users", ["flagged_id"], name: "index_flagged_users_on_flagged_id", using: :btree
-  add_index "flagged_users", ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
 
   create_table "grade_files", force: :cascade do |t|
     t.integer  "grade_id"
@@ -437,16 +427,15 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "excluded_from_course_score", default: false
     t.datetime "excluded_at"
     t.integer  "excluded_by_id"
+    t.index ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
+    t.index ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
+    t.index ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
+    t.index ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
+    t.index ["course_id"], name: "index_grades_on_course_id", using: :btree
+    t.index ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
+    t.index ["score"], name: "index_grades_on_score", using: :btree
+    t.index ["task_id"], name: "index_grades_on_task_id", using: :btree
   end
-
-  add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
-  add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
-  add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
-  add_index "grades", ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
-  add_index "grades", ["score"], name: "index_grades_on_score", using: :btree
-  add_index "grades", ["task_id"], name: "index_grades_on_task_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "group_id"
@@ -456,11 +445,10 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "updated_at", null: false
     t.integer  "course_id"
     t.string   "group_type"
+    t.index ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
+    t.index ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
+    t.index ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
   end
-
-  add_index "group_memberships", ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
-  add_index "group_memberships", ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
-  add_index "group_memberships", ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -480,9 +468,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "updated_at",           null: false
     t.hstore   "provider_data"
     t.datetime "last_imported_at"
+    t.index ["assignment_id"], name: "index_imported_assignments_on_assignment_id", using: :btree
   end
-
-  add_index "imported_assignments", ["assignment_id"], name: "index_imported_assignments_on_assignment_id", using: :btree
 
   create_table "imported_grades", force: :cascade do |t|
     t.integer  "grade_id"
@@ -490,9 +477,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.string   "provider_resource_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.index ["grade_id"], name: "index_imported_grades_on_grade_id", using: :btree
   end
-
-  add_index "imported_grades", ["grade_id"], name: "index_imported_grades_on_grade_id", using: :btree
 
   create_table "imported_users", force: :cascade do |t|
     t.integer  "user_id"
@@ -501,9 +487,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "last_imported_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.index ["user_id"], name: "index_imported_users_on_user_id", using: :btree
   end
-
-  add_index "imported_users", ["user_id"], name: "index_imported_users_on_user_id", using: :btree
 
   create_table "level_badges", force: :cascade do |t|
     t.integer  "level_id"
@@ -532,9 +517,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "last_linked_at"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.index ["course_id"], name: "index_linked_courses_on_course_id", using: :btree
   end
-
-  add_index "linked_courses", ["course_id"], name: "index_linked_courses_on_course_id", using: :btree
 
   create_table "lti_providers", force: :cascade do |t|
     t.string   "name"
@@ -552,9 +536,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "predicted_times_earned", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["badge_id", "student_id"], name: "index_predidcted_badge_on_student_badge", unique: true, using: :btree
   end
-
-  add_index "predicted_earned_badges", ["badge_id", "student_id"], name: "index_predidcted_badge_on_student_badge", unique: true, using: :btree
 
   create_table "predicted_earned_challenges", force: :cascade do |t|
     t.integer  "challenge_id"
@@ -562,9 +545,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "predicted_points", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["challenge_id", "student_id"], name: "index_predidcted_challenge_on_student_challenge", unique: true, using: :btree
   end
-
-  add_index "predicted_earned_challenges", ["challenge_id", "student_id"], name: "index_predidcted_challenge_on_student_challenge", unique: true, using: :btree
 
   create_table "predicted_earned_grades", force: :cascade do |t|
     t.integer  "assignment_id"
@@ -572,9 +554,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.integer  "predicted_points", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["assignment_id", "student_id"], name: "index_predidcted_grade_on_student_assignment", unique: true, using: :btree
   end
-
-  add_index "predicted_earned_grades", ["assignment_id", "student_id"], name: "index_predidcted_grade_on_student_assignment", unique: true, using: :btree
 
   create_table "proposals", force: :cascade do |t|
     t.string   "title"
@@ -603,21 +584,19 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "expires_at"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["course_id"], name: "index_secure_tokens_on_course_id", using: :btree
+    t.index ["target_type", "target_id"], name: "index_secure_tokens_on_target_type_and_target_id", using: :btree
+    t.index ["user_id"], name: "index_secure_tokens_on_user_id", using: :btree
   end
-
-  add_index "secure_tokens", ["course_id"], name: "index_secure_tokens_on_course_id", using: :btree
-  add_index "secure_tokens", ["target_type", "target_id"], name: "index_secure_tokens_on_target_type_and_target_id", using: :btree
-  add_index "secure_tokens", ["user_id"], name: "index_secure_tokens_on_user_id", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
+    t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
   end
-
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
@@ -645,9 +624,8 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "last_confirmed_at"
     t.boolean  "file_missing",      default: false
     t.string   "store_dir"
+    t.index ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
   end
-
-  add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "assignment_id",                      null: false
@@ -665,14 +643,13 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",               default: false, null: false
+    t.index ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
+    t.index ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
+    t.index ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
+    t.index ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
+    t.index ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
+    t.index ["course_id"], name: "index_submissions_on_course_id", using: :btree
   end
-
-  add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
-  add_index "submissions", ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
-  add_index "submissions", ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
-  add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
-  add_index "submissions", ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
-  add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
 
   create_table "submissions_exports", force: :cascade do |t|
     t.integer  "assignment_id"
@@ -739,10 +716,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.boolean  "instructor_unlocked"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["student_id"], name: "index_unlock_states_on_student_id", using: :btree
+    t.index ["unlockable_id", "unlockable_type"], name: "index_unlock_states_on_unlockable_id_and_unlockable_type", using: :btree
   end
-
-  add_index "unlock_states", ["student_id"], name: "index_unlock_states_on_student_id", using: :btree
-  add_index "unlock_states", ["unlockable_id", "unlockable_type"], name: "index_unlock_states_on_unlockable_id_and_unlockable_type", using: :btree
 
   create_table "user_authorizations", force: :cascade do |t|
     t.integer  "user_id"
@@ -752,10 +728,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "updated_at",    null: false
     t.string   "refresh_token"
     t.datetime "expires_at"
+    t.index ["user_id", "provider"], name: "index_user_authorizations_on_user_id_and_provider", unique: true, using: :btree
+    t.index ["user_id"], name: "index_user_authorizations_on_user_id", using: :btree
   end
-
-  add_index "user_authorizations", ["user_id", "provider"], name: "index_user_authorizations_on_user_id_and_provider", unique: true, using: :btree
-  add_index "user_authorizations", ["user_id"], name: "index_user_authorizations_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",                                                               null: false
@@ -795,22 +770,20 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "activation_token_expires_at"
     t.boolean  "admin",                           default: false
     t.string   "time_zone",                       default: "Eastern Time (US & Canada)"
+    t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
+    t.index ["kerberos_uid"], name: "index_users_on_kerberos_uid", using: :btree
+    t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at", using: :btree
+    t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
   end
-
-  add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree
-  add_index "users", ["kerberos_uid"], name: "index_users_on_kerberos_uid", using: :btree
-  add_index "users", ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at", using: :btree
-  add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
 
   create_table "version_associations", force: :cascade do |t|
     t.integer "version_id"
     t.string  "foreign_key_name", null: false
     t.integer "foreign_key_id"
+    t.index ["foreign_key_name", "foreign_key_id"], name: "index_version_associations_on_foreign_key", using: :btree
+    t.index ["version_id"], name: "index_version_associations_on_version_id", using: :btree
   end
-
-  add_index "version_associations", ["foreign_key_name", "foreign_key_id"], name: "index_version_associations_on_foreign_key", using: :btree
-  add_index "version_associations", ["version_id"], name: "index_version_associations_on_version_id", using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
@@ -821,10 +794,9 @@ ActiveRecord::Schema.define(version: 20161003210720) do
     t.datetime "created_at"
     t.integer  "transaction_id"
     t.text     "object_changes"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+    t.index ["transaction_id"], name: "index_versions_on_transaction_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
-  add_index "versions", ["transaction_id"], name: "index_versions_on_transaction_id", using: :btree
 
   add_foreign_key "announcement_states", "announcements"
   add_foreign_key "announcement_states", "users"
