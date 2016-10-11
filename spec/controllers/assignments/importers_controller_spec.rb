@@ -142,13 +142,13 @@ describe Assignments::ImportersController do
         expect(Services::ImportsLMSAssignments).to \
           receive(:update).with(provider.to_s, access_token, assignment).and_return result
 
-        post :update_assignment, importer_provider_id: provider, id: assignment.id
+        post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
       end
 
       it "redirects back to the assignment show view and displays a notice" do
         allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
 
-        post :update_assignment, importer_provider_id: provider, id: assignment.id
+        post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
         expect(response).to redirect_to(assignment_path(assignment))
         expect(flash[:notice]).to \
@@ -161,7 +161,7 @@ describe Assignments::ImportersController do
                                             message: "This was not updated")
           allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
 
-          post :update_assignment, importer_provider_id: provider, id: assignment.id
+          post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
           expect(response).to redirect_to(assignment_path(assignment))
           expect(flash[:alert]).to eq "This was not updated"
@@ -171,7 +171,7 @@ describe Assignments::ImportersController do
 
     context "as a student" do
       it "redirects to the root url" do
-        post :update_assignment, importer_provider_id: provider, id: assignment.id
+        post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
         expect(response).to redirect_to root_path
       end

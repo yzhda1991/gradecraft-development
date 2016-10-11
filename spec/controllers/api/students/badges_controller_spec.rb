@@ -27,7 +27,7 @@ describe API::Students::BadgesController do
         earned_badge = create(
           :earned_badge, badge: world.badge,
           student: world.student, course: world.course, student_visible: true)
-        get :index, format: :json, student_id: world.student.id
+        get :index, format: :json, params: { student_id: world.student.id }
         expect(assigns(:earned_badges)).to eq([earned_badge])
       end
     end

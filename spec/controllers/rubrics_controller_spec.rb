@@ -33,7 +33,7 @@ describe RubricsController do
       let(:new_assignment) { create(:assignment, course: course) }
 
       it "retrieves the list of rubric for course to add" do
-        get :index_for_copy, assignment_id: new_assignment.id
+        get :index_for_copy, params: { assignment_id: new_assignment.id }
         expect(assigns(:assignment)).to eq(new_assignment)
         expect(assigns(:rubrics)).to eq([rubric])
       end
@@ -44,19 +44,20 @@ describe RubricsController do
       let(:full_rubric) { create(:rubric_with_criteria) }
 
       it "copies the full rubric and adds it to the assignment" do
-        post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id
+        post :copy, params: { assignment_id: new_assignment.id, rubric_id: full_rubric.id }
         expect(new_assignment.rubric.criteria.pluck(:max_points)).to \
           match_array(full_rubric.criteria.pluck(:max_points))
       end
 
       it "copies earned badges on rubric" do
         create :level_badge, level: full_rubric.criteria.first.levels.first
-        expect{ post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id }.to change(LevelBadge, :count).by(1)
+        expect{ post :copy, params: { assignment_id: new_assignment.id, rubric_id: full_rubric.id }}
+          .to change(LevelBadge, :count).by(1)
       end
 
       it "doesn't duplicate badges" do
         create :level_badge, level: full_rubric.criteria.first.levels.first
-        expect{ post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id }.to_not change(Badge, :count)
+        expect{ post :copy, params: { assignment_id: new_assignment.id, rubric_id: full_rubric.id }}.to_not change(Badge, :count)
       end
     end
   end

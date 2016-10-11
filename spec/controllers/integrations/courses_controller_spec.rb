@@ -14,7 +14,7 @@ describe Integrations::CoursesController do
     describe "POST #create" do
       context "without an existing authentication" do
         it "redirects to authorize the integration" do
-          post :create, { integration_id: provider, id: course_id }
+          post :create, params: { integration_id: provider, id: course_id }
 
           expect(response).to redirect_to "/auth/canvas"
         end
@@ -28,7 +28,7 @@ describe Integrations::CoursesController do
         end
 
         it "creates the link between the course and the provider course" do
-          post :create, { integration_id: provider, id: course_id }
+          post :create, params: { integration_id: provider, id: course_id }
 
           expect(linked_course).to_not be_nil
           expect(linked_course.provider).to eq provider.to_s
@@ -38,7 +38,7 @@ describe Integrations::CoursesController do
         end
 
         it "redirects back to the integrations page" do
-          post :create, { integration_id: provider, id: course_id }
+          post :create, params: { integration_id: provider, id: course_id }
 
           expect(response).to redirect_to integrations_path
         end
@@ -50,7 +50,7 @@ describe Integrations::CoursesController do
           end
 
           it "replaces the current linked course" do
-            post :create, { integration_id: provider, id: course_id }
+            post :create, params: { integration_id: provider, id: course_id }
 
             expect(LinkedCourse.count).to eq 1
             expect(linked_course.course_id).to eq course.id
@@ -71,13 +71,13 @@ describe Integrations::CoursesController do
         end
 
         it "deletes the linked course" do
-          delete :destroy, { integration_id: provider, id: course_id }
+          delete :destroy, params: { integration_id: provider, id: course_id }
 
           expect(LinkedCourse.exists?(linked_course.id)).to be_falsey
         end
 
         it "redirects back to the integrations page" do
-          delete :destroy, { integration_id: provider, id: course_id }
+          delete :destroy, params: { integration_id: provider, id: course_id }
 
           expect(response).to redirect_to integrations_path
         end
@@ -92,7 +92,7 @@ describe Integrations::CoursesController do
     before { login_user(student) }
 
     it "redirects to the root" do
-      post :create, { integration_id: provider, id: course_id }
+      post :create, params: { integration_id: provider, id: course_id }
 
       expect(response).to redirect_to root_path
     end

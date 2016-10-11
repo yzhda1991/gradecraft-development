@@ -141,7 +141,8 @@ describe GradesController do
           team = create :team, course: course
           create :team_membership, team: team, student: student
           create :team_membership, team: team, student: next_student
-          put :update, { id: grade.id, grade: { raw_points: 12345, status: "Graded"}, redirect_to_next_team_grade: true}
+          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "Graded"},
+                                 redirect_to_next_team_grade: true}
           expect(response).to redirect_to(
             edit_grade_path(
               Grade.where(student: next_student, assignment: assignment).first, team_id: team.id )

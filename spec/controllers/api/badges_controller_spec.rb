@@ -1,6 +1,8 @@
 require "rails_spec_helper"
 
 describe API::BadgesController do
+  include SessionHelper
+
   let(:world) { World.create.with(:course, :student, :badge) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
@@ -41,7 +43,7 @@ describe API::BadgesController do
 
       it "adds the student's predicted earned badges" do
         prediction = create(:predicted_earned_badge, badge: world.badge, student: world.student)
-        get :index, format: :json, id: world.student.id
+        get :index, params: { id: world.student.id }, format: :json
         expect(assigns(:predicted_earned_badges)[0]).to eq(prediction)
       end
     end
