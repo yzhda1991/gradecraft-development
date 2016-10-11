@@ -4,6 +4,7 @@
   float: right
   margin-top: 0.5rem
   display: inline-block
+  position: relative
   ul
     padding: 0
     margin: 0 0 0 1rem
@@ -14,3 +15,21 @@
   li
     list-style-type: none
     display: inline-block
+
+.options-menu
+  background-color: white
+  font-size: 0.7rem
+  display: none
+  position: absolute
+  box-shadow: 0 2px 5px 0 rgba($color-black, 0.16), 0 2px 10px 0 rgba($color-black,0.12)
+  z-index: 100
+  right: 0
+  li
+    display: block
+    a
+      padding: 0.5rem
+      display: block
+      &:hover
+        background-color: $color-blue-3
+        color: $color-white
+        text-decoration: none
