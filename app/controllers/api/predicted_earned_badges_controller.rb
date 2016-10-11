@@ -1,7 +1,7 @@
 class API::PredictedEarnedBadgesController < ApplicationController
 
-  before_filter :ensure_student?
-  before_filter :ensure_not_impersonating?
+  before_action :ensure_student?
+  before_action :ensure_not_impersonating?
 
   # POST api/predicted_earned_badges
   def create

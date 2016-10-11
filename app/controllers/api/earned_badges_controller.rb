@@ -1,7 +1,7 @@
 require_relative "../../services/creates_earned_badge"
 
 class API::EarnedBadgesController < ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
 
   # POST /api/earned_badges
   def create
