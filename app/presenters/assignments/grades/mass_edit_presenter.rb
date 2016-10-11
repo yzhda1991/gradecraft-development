@@ -1,10 +1,6 @@
 require "showtime"
 
 class Assignments::Grades::MassEditPresenter < Showtime::Presenter
-  def title
-    "Quick Grade #{assignment.name}"
-  end
-
   def assignment
     properties[:assignment]
   end
