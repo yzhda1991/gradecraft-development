@@ -71,13 +71,13 @@ describe Level do
     it "is not hidden if the course is not set to hide analytics" do
       rubric.assignment.hide_analytics = true
       rubric.assignment.course.hide_analytics = false
-      expect(subject.hide_analytics?).to eq false
+      expect(subject.hide_analytics?).to eq true
     end
 
     it "is not hidden if the assignment is not set to hide analytics" do
       rubric.assignment.hide_analytics = false
       rubric.assignment.course.hide_analytics = true
-      expect(subject.hide_analytics?).to eq false
+      expect(subject.hide_analytics?).to eq true
     end
   end
 end
