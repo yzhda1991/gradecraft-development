@@ -1,12 +1,12 @@
 .download-link= link_to glyph("file-excel-o") + "Download Rubric", export_assignment_rubrics_path(presenter.assignment.id, format: :csv)
 
 - if include_grade_info
-  .class-analytics-toggle
-    %h4.class-analytics-label Show class analytics
-    %label.rubric-switch-socket
-      %input#class-analytics-toggle{:type => "checkbox", :checked => true}
-      .rubric-switch-handle.round
-
+  - if !presenter.assignment.hide_analytics? 
+    .class-analytics-toggle
+      %h4.class-analytics-label Show class analytics
+      %label.rubric-switch-socket
+        %input#class-analytics-toggle{:type => "checkbox", :checked => true}
+        .rubric-switch-handle.round
   #rubric-graded.rubric
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
 - else

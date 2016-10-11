@@ -11,7 +11,6 @@
       .panel.dashboard-module.grading-scheme-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
 
     .stacked-column
-      - if ! current_course.hide_analytics?
-        .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
+      .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
 
       .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
