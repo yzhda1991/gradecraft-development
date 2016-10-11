@@ -1,7 +1,7 @@
 require "./app/presenters/assignments/grades/mass_edit_presenter"
 require "active_record_spec_helper"
 
-describe Assignments::Grades::MassEditPresenter, focus: true do
+describe Assignments::Grades::MassEditPresenter do
   let(:assignment) { double(:assignment) }
   subject { described_class.new }
 
