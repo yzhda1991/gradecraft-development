@@ -9,7 +9,7 @@
     )
 
   $scope.services = ()->
-    promises = [AssignmentTypeService.getAssignmentTypes($scope.student_id)]
+    promises = [AssignmentTypeService.getAssignmentTypes()]
     return $q.all(promises)
 
 

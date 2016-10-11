@@ -24,7 +24,7 @@ describe Badges::IndexPresenter do
       }
     )
   end
-  
+
   describe "#badges" do
     it "is the badges that are passed in as a property" do
       expect(subject.badges).to eq [badge]
@@ -45,17 +45,6 @@ describe Badges::IndexPresenter do
     it "returns all earned badges for badge count when student is absent" do
       subject = Badges::IndexPresenter.new(badge: badge)
       expect(subject.earned_badges_count(badge)).to eq("course count")
-    end
-  end
-
-  describe "#view_student_context?" do
-    it "is true when the student is in the context" do
-      expect(subject.view_student_context?).to be_truthy
-    end
-
-    it "is false when there is no student in context" do
-      subject = Badges::IndexPresenter.new()
-      expect(subject.view_student_context?).to be_falsey
     end
   end
 end

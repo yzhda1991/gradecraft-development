@@ -42,15 +42,4 @@ class Badges::ShowPresenter < Showtime::Presenter
       badge.earned_badges
     end
   end
-
-  # Method used to determine when the view context is
-  # True:
-  #  - a student viewing `/badges/:id`
-  #  - a faculty viewing `/students/:student_id/badges/:id`
-  # False:
-  #  - a faculty viewing `/badges/:id`
-  #
-  def view_student_context?
-    student.present?
-  end
 end

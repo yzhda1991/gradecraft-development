@@ -30,8 +30,8 @@
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of assignments including a student's grades and predictions
-  getAssignments = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_grades').success( (results)->
+  getAssignments = ()->
+    $http.get('/api/predicted_earned_grades').success( (results)->
       GradeCraftAPI.loadMany(assignments,results)
       GradeCraftAPI.setTermFor("assignment", results.meta.term_for_assignment)
       GradeCraftAPI.setTermFor("pass", results.meta.term_for_pass)

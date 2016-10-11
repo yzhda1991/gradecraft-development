@@ -32,8 +32,8 @@
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of challenges including a student's grades and predictions
-  getChallenges = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'predicted_earned_challenges').success( (res)->
+  getChallenges = ()->
+    $http.get('/api/predicted_earned_challenges').success( (res)->
       GradeCraftAPI.loadMany(challenges,res)
       GradeCraftAPI.setTermFor("challenges", res.meta.term_for_challenges)
       update.challenges = res.meta.update_challenges
