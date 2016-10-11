@@ -336,7 +336,7 @@ h4.notice
     @media (max-width: $media-small-max)
       display: none
 
-  .level-tab
+  .level-tab, .criterion-tab, .comments-tab
     list-style-type: none
     display: inline-block
     flex: 1
@@ -366,6 +366,10 @@ h4.notice
 
   .level-name
     display: inline
+
+  .earned
+    background-color: lighten($color-green-1, 20%)
+
 
   .level-description
     font-size: 0.85rem
@@ -446,6 +450,10 @@ h4.notice
   display: inline
   vertical-align: top
 
+// styles for the rubric grade review page
+#rubric-results-table
+
+
 // styles for ungraded rubric view
 #rubric-ungraded
   .tab-panel
@@ -469,7 +477,7 @@ h4.notice
       padding-right: 0
 
 // Edit rubric grade view
-#rubric-grade-edit
+#rubric-grade-edit, #rubric-results-table
   .criterion-name, .level-name
     font-weight: bold
 
@@ -480,7 +488,7 @@ h4.notice
     font-size: 80%
     text-transform: uppercase
 
-  .level-tab
+  .level-tab, .criterion-tab, .comments-tab
     padding: 0
     &.selected
       .check-mark
@@ -531,6 +539,10 @@ h4.notice
 
   h4.notice
     color: $color-green-2
+
+#rubric-results-table
+  .criterion
+    margin-bottom: 0
 
 .points-adjustment-feedback
   margin-right: 1rem

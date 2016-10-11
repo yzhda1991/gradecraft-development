@@ -1,34 +1,29 @@
-.rubric-container
-  %table#rubric-results-table
-    %thead
-      %tr
-        %td.criterion.heading
-          Criteria
-
-        %td.heading(colspan="#{presenter.rubric.max_level_count}")
-          Levels
-        %td.comments.heading
-          Comments
-
-
-    %tbody
-      - @criteria.each do |criterion|
-        - criterion_grade = @criterion_grades.where(student_id: student.id, criterion_id: criterion.id).first
-        %tr
-          %td.criterion
+#rubric-results-table
+  - @criteria.each do |criterion|
+    - criterion_grade = @criterion_grades.where(student_id: student.id, criterion_id: criterion.id).first
+    .criterion
+      %ul.level-tabs
+        %li.criterion-tab
+          .criterion-heading
             %h4.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
-          - criterion.levels.order("points ASC").each do |level|
-            %td.level{class: ("level-earned" if criterion_grade.level_id == level.id)}
-              - if criterion_grade.level_id == level.id
-                %span.earned_level= glyph(:check) 
-              %span.level-heading= level.name
-              .badges
+
+        - criterion.levels.order("points ASC").each do |level|
+          %li.level-tab{class: ("earned selected" if criterion_grade.level_id == level.id)}
+            .level-heading
+              .level-details
+                - if criterion_grade.level_id == level.id
+                  %span.check-mark= glyph("check")
+                .level-name= level.name
+                .level-points
+                  = "#{ points level.points } Points"
+              %ul.badge-row.design-view
                 - level.level_badges.each_with_index do |level_badge, index|
-                  - if BadgeProctor.new(level_badge.badge).viewable?(current_user, level: level) && index < 2
-                    .level-badge-image
-                      %img{:src => level_badge.badge.try(:icon), class: "level_badge", width: 20 }
+                  %li.level-badge-image
+                    %img{:src => level_badge.badge.try(:icon), class: "level_badge" }
 
-              
+            .level-description
+              .level-meets-expectations Meets Expectations
 
-          %td.level-comments.comments-box
+        %li.comments-tab
+          .level-comments.comments-box
             = raw criterion_grade.comments
