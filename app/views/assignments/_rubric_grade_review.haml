@@ -5,7 +5,7 @@
         %td.criterion.heading
           Criteria
 
-        %td.level.heading(colspan="#{presenter.rubric.max_level_count}")
+        %td.heading(colspan="#{presenter.rubric.max_level_count}")
           Levels
         %td.comments.heading
           Comments
@@ -30,5 +30,5 @@
 
               
 
-          %td.level.level-comments.comments-box
+          %td.level-comments.comments-box
             = raw criterion_grade.comments
