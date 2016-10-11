@@ -1,9 +1,6 @@
 .context_menu
   %ul
-    %li
-      %a{:href => mass_edit_grade_scheme_elements_path }
-        = glyph(:edit)
-        Edit
+    %li= link_to glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

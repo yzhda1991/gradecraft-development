@@ -1,10 +1,7 @@
 - if current_user_is_staff?
   .context_menu
     %ul
-      %li
-        %a{:href => new_challenge_path }
-          = glyph(:plus)
-          New #{(term_for :challenge).titleize}
+      %li= link_to glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

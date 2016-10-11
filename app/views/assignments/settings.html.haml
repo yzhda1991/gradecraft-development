@@ -3,7 +3,7 @@
     %li
       %a{:href => new_assignment_path }
         = glyph(:plus)
-        New #{(term_for :assignment).titleize}
+        New #{(term_for :assignment).titleize}, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

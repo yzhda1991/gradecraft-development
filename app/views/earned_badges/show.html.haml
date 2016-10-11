@@ -1,9 +1,6 @@
 .context_menu
   %ul
-    %li
-      %a{:href => edit_badge_earned_badge_path(id: @earned_badge.id) }
-        %i.fa.fa-edit
-        Edit
+    %li= link_to glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

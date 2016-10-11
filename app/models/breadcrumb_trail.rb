@@ -196,7 +196,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def courses_new
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Courses', courses_path)
-    breadcrumb('New Course', course_new_path)
+    breadcrumb('New Course', new_course_path)
   end
 
   def courses_edit

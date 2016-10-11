@@ -1,18 +1,11 @@
 - if current_user_is_staff?
   .context_menu
     %ul
-      %li
-        %a{:href => new_challenge_path }
-          = glyph(:plus)
-          New #{(term_for :challenge).titleize}
-      %li
-        %a{:href => edit_challenge_path(@challenge) }
-          = glyph(:edit)
-          Edit
-      %li
-        %a{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
-          = glyph(:check)
-          Quick Grade
+      %li= link_to glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path, class: "button button-edit"
+
+      %li= link_to glyph(:edit) + "Edit", edit_challenge_path(@challenge), class: "button button-edit"
+
+      %li= link_to glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(@challenge), class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
