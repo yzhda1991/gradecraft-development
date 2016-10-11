@@ -6,11 +6,13 @@
 
   / Page content
   .mainContent
-    = breadcrumbs
     - if current_student.present?
-      %h2.pagetitle= current_student.name
+      .page-header
+        = breadcrumbs
+        %h2.pagetitle= current_student.name
     - else
       .page-header
+        = breadcrumbs
         %h2.pagetitle= title
         = yield(:context_menu)
     = render partial: "layouts/content"

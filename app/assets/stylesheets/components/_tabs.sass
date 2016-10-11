@@ -19,8 +19,10 @@
 
 .ui-tabs .ui-tabs-nav
   background: $color-white
-  padding: 0
-  
+  padding: 0 1rem
+  border-bottom: 1px solid $color-grey-6
+  margin: 0 -19px
+
   .ui-state-focus a 
     outline: none
   li 
@@ -40,3 +42,12 @@
         border-bottom: 1px solid $color-green-3
   li.ui-state-active a
     border-bottom: 1px solid $color-green-3
+
+.active-tab-indicator
+  height: 2px
+  position: absolute
+  bottom: 0
+  left: 12
+  background-color: $color-blue-2
+  will-change: left, right
+  transition: all 0.5s
