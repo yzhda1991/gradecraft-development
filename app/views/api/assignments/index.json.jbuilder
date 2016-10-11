@@ -63,19 +63,25 @@ json.data @assignments do |assignment|
       end
     end
 
+    # conditions and keys
+
     if assignment.unlock_conditions.present?
-      json.unlock_conditions assignment.unlock_conditions do |condition|
+      unlock_conditions = assignment.unlock_conditions.map do |condition|
         condition.requirements_description_sentence
       end
-      json.unlocked_conditions assignment.unlock_conditions do |condition|
+      json.unlock_conditions unlock_conditions
+
+      unlocked_conditions = assignment.unlock_conditions.map do |condition|
         condition.requirements_completed_sentence
       end
+      json.unlocked_conditions unlocked_conditions
     end
 
     if assignment.unlock_keys.present?
-     json.unlock_keys  assignment.unlock_keys.map do |key|
-       key.key_description_sentence
-     end
+      unlock_keys = assignment.unlock_keys.map do |key|
+        key.key_description_sentence
+      end
+      json.unlock_keys unlock_keys
     end
   end
 end
