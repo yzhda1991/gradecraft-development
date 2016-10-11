@@ -1,22 +1,24 @@
 - if presenter.assignment.is_individual?
-  .context_menu
-    %ul
-      %li
-        %a.button.button-edit{:href => "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?student_id=#{presenter.student.id}" }
-          = glyph(:edit)
-          Edit Submission
-          %span.sr-only #{presenter.student.try(:first_name)}'s Submission
-      %li= link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), data: { confirm: "Are you sure?",  method: :delete }
+  - content_for :context_menu do
+    .context_menu
+      %ul
+        %li
+          %a.button.button-edit{:href => "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?student_id=#{presenter.student.id}" }
+            = glyph(:edit)
+            Edit Submission
+            %span.sr-only #{presenter.student.try(:first_name)}'s Submission
+        %li= link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), data: { confirm: "Are you sure?",  method: :delete }
 
-      %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, presenter.student), method: :post
+        %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, presenter.student), method: :post
 - elsif presenter.assignment.has_groups?
-  .context_menu
-    %ul
-      %li
-        %a.button.button-edit{:href => "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?group_id=#{presenter.group.id}" }
-          = glyph(:edit)
-          Edit Submission
-          %span.sr-only #{presenter.group.name}'s Submission
-      %li
-        = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), data: { confirm: "Are you sure?",  method: :delete }, class: "button button-edit"
-      %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(presenter.assignment,  presenter.group), class: "button button-edit"
+  - content_for :context_menu do
+    .context_menu
+      %ul
+        %li
+          %a.button.button-edit{:href => "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?group_id=#{presenter.group.id}" }
+            = glyph(:edit)
+            Edit Submission
+            %span.sr-only #{presenter.group.name}'s Submission
+        %li
+          = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), data: { confirm: "Are you sure?",  method: :delete }, class: "button button-edit"
+        %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(presenter.assignment,  presenter.group), class: "button button-edit"

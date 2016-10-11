@@ -10,5 +10,7 @@
     - if current_student.present?
       %h2.pagetitle= current_student.name
     - else
-      %h2.pagetitle= title
+      .page-header
+        %h2.pagetitle= title
+        = yield(:context_menu)
     = render partial: "layouts/content"
