@@ -3,10 +3,10 @@
     %thead
       %tr
         %td.criterion.heading
-          Criterion:&nbsp;Max&nbsp;points
+          Criteria
 
         %td.level.heading(colspan="#{presenter.rubric.max_level_count}")
-          Level: Points Awarded
+          Levels
         %td.comments.heading
           Comments
 
@@ -16,16 +16,19 @@
         - criterion_grade = @criterion_grades.where(student_id: student.id, criterion_id: criterion.id).first
         %tr
           %td.criterion
-            .criterion-heading
-              .criterion-name= criterion.name
-
+            %h4.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
           - criterion.levels.order("points ASC").each do |level|
             %td.level{class: ("level-earned" if criterion_grade.level_id == level.id)}
-              .level-heading
-                .level-name= level.name
-
               - if criterion_grade.level_id == level.id
-                .earned_level #{student.first_name} earned this level
+                %span.earned_level= glyph(:check) 
+              %span.level-heading= level.name
+              .badges
+                - level.level_badges.each_with_index do |level_badge, index|
+                  - if BadgeProctor.new(level_badge.badge).viewable?(current_user, level: level) && index < 2
+                    .level-badge-image
+                      %img{:src => level_badge.badge.try(:icon), class: "level_badge", width: 20 }
+
+              
 
           %td.level.level-comments.comments-box
             = raw criterion_grade.comments
