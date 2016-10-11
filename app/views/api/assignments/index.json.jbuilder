@@ -6,51 +6,76 @@ json.data @assignments do |assignment|
   json.id assignment.id.to_s
   json.attributes do
 
-    json.id                         assignment.id
-    json.name                       assignment.name
-    json.description                assignment.description
-    json.purpose                    assignment.purpose
     json.accepts_submissions_until  assignment.accepts_submissions_until
     json.assignment_type_id         assignment.assignment_type_id
+    json.description                assignment.description
     json.due_at                     assignment.due_at
-    json.pass_fail                  assignment.pass_fail
     json.full_points                assignment.full_points
+    json.id                         assignment.id
+    json.name                       assignment.name
+    json.pass_fail                  assignment.pass_fail
     json.position                   assignment.position
+    json.purpose                    assignment.purpose
     json.threshold_points           assignment.threshold_points
 
     # boolean flags
 
-    json.has_been_unlocked assignment.is_unlockable? && assignment.is_unlocked_for_student?(@student)
-    json.has_info
-    json.has_levels
-    json.has_submission
-    json.has_threshold
-    json.is_a_condition
-    json.is_accepting_submissions
-    json.is_closed_without_submission
-    json.is_due_in_future
-    json.is_earned_by_group
-    json.is_late
-    json.is_locked
-    json.is_required
-    json.is_rubric_graded
+    json.has_been_unlocked    assignment.is_unlockable? && \
+      assignment.is_unlocked_for_student?(@student)
 
+    json.has_info             assignment.description.blank?
 
+    json.has_levels           assignment.assignment_score_levels.present?
 
-    json.score_levels assignment.assignment_score_levels.map do |asl|
-      {name: asl.name, points: asl.points}
+    json.has_submission       assignment.accepts_submissions? && \
+      @student.submission_for_assignment(assignment).present?
+
+    json.has_threshold        assignment.threshold_points && \
+      assignment.threshold_points > 0
+
+    json.is_a_condition       assignment.is_a_condition?
+
+    json.is_accepting_submissions    assignment.accepts_submissions? && \
+      !assignment.submissions_have_closed? && \
+      !@student.submission_for_assignment(assignment).present?
+
+    json.is_closed_without_submission    assignment.submissions_have_closed? && \
+      !@student.submission_for_assignment(assignment).present?
+
+    json.is_due_in_future     assignment.due_at.present? && assignment.due_at >= Time.now
+
+    json.is_earned_by_group   assignment.grade_scope == "Group"
+
+    json.is_late              assignment.overdue? && \
+      assignment.accepts_submissions && \
+      !@student.submission_for_assignment(assignment).present?
+
+    json.is_locked            !assignment.is_unlocked_for_student?(@student)
+
+    json.is_required          assignment.required
+
+    json.is_rubric_graded     assignment.grade_with_rubric?
+
+    if assignment.assignment_score_levels.present?
+      json.score_levels assignment.assignment_score_levels do |asl|
+        json.name asl.name
+        json.points asl.points
+      end
     end
 
-    json.unlock_conditions assignment.unlock_conditions.map do |condition|
-      condition.requirements_description_sentence
+    if assignment.unlock_conditions.present?
+      json.unlock_conditions assignment.unlock_conditions do |condition|
+        condition.requirements_description_sentence
+      end
+      json.unlocked_conditions assignment.unlock_conditions do |condition|
+        condition.requirements_completed_sentence
+      end
     end
 
-    json.unlocked_conditions assignment.unlock_conditions.map do |condition|
-      condition.requirements_completed_sentence
-    end
-
-    json.unlock_keys  assignment.unlock_keys.map do |key|
-      key.key_description_sentence
+    if assignment.unlock_keys.present?
+     json.unlock_keys  assignment.unlock_keys.map do |key|
+       key.key_description_sentence
+     end
     end
   end
 end
