@@ -373,12 +373,12 @@ GEM
     mime-types-data (3.2016.0521)
     mini_magick (4.5.1)
     mini_portile2 (2.1.0)
-    minitest (5.9.0)
+    minitest (5.9.1)
     mongo (2.3.0)
       bson (~> 4.1)
-    mongoid (6.0.0.rc0)
+    mongoid (6.0.0)
       activemodel (~> 5.0)
-      mongo (~> 2.2)
+      mongo (~> 2.3)
     mono_logger (1.1.0)
     multi_json (1.12.1)
     multi_xml (0.5.5)
@@ -773,6 +773,9 @@ DEPENDENCIES
   whenever
   wysiwyg-rails
   zeus
+
+RUBY VERSION
+   ruby 2.2.2p95
 
 BUNDLED WITH
    1.12.5
