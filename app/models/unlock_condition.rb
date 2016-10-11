@@ -151,7 +151,7 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_assignment_condition(student)
-    method = "check_#{ condition_state.parameterize('_') }_condition"
+    method = "check_#{ condition_state.parameterize(separator: "_") }_condition"
     self.send method, student
   end
 
