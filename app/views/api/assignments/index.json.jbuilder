@@ -83,8 +83,53 @@ json.data @assignments do |assignment|
       end
       json.unlock_keys unlock_keys
     end
+
+    json.relationships do
+      if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
+        json.prediction data: {
+          type: "predicted_earned_grades",
+          id: @predicted_earned_grades.where(assignment_id: assignment.id).first.id
+        }
+      end
+
+      if @grades.present? && @grades.where(assignment_id: assignment.id).present?
+        json.grade data: {
+          type: "grades",
+          id: @grades.where(assignment_id: assignment.id).first.id
+        }
+      end
+    end
   end
 end
+
+json.included do
+  if @predicted_earned_grades.present?
+    json.array! @predicted_earned_grades do |predicted_earned_grade|
+      json.type "predicted_earned_grades"
+      json.id predicted_earned_grade.id.to_s
+      json.attributes do
+        json.id predicted_earned_grade.id
+        json.student_id predicted_earned_grade.student_id
+        json.predicted_points predicted_earned_grade.predicted_points
+      end
+    end
+  end
+
+  if @grades.present?
+    json.array! @grades do |grade|
+      next unless GradeProctor.new(grade).viewable?(@student)
+      json.type "grades"
+      json.id grade.id.to_s
+      json.attributes do
+        json.id             grade.id
+        json.score          grade.score
+        json.final_points   grade.final_points
+        json.is_excluded    grade.excluded_from_course_score?
+      end
+    end
+  end
+end
+
 
 json.meta do
   json.term_for_assignment term_for :assignment

@@ -53,7 +53,7 @@ json.included do
   if @predicted_earned_badges.present?
     json.array! @predicted_earned_badges do |predicted_earned_badge|
       json.type "predicted_earned_badges"
-      json.id predicted_earned_badge.id
+      json.id predicted_earned_badge.id.to_s
       json.attributes do
         json.id predicted_earned_badge.id
         json.student_id predicted_earned_badge.student_id
@@ -66,7 +66,7 @@ json.included do
   if @earned_badges.present?
     json.array! @earned_badges do |earned_badge|
       json.type "earned_badges"
-      json.id earned_badge.id
+      json.id earned_badge.id.to_s
       json.attributes do
         json.merge! earned_badge.attributes
       end
