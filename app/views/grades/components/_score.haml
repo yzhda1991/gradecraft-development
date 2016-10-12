@@ -1,5 +1,5 @@
 -# Requires: grade, assignment, assignment_type
-- if GradeProctor.new(grade).viewable? && grade.final_points
+- if GradeProctor.new(grade).viewable? && grade.final_points || current_user_is_staff?
   - if assignment_type.student_weightable?
     %p= "#{points grade.final_points} / #{ points assignment.full_points } points (Raw)"
     %p= "#{ points grade.score } / #{points grade.full_points} points (Multiplied)"

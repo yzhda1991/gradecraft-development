@@ -5,7 +5,8 @@
       %ul.level-tabs
         %li.criterion-tab
           .criterion-heading
-            %h4.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
+            %h4.criterion-name= "#{criterion.name}"
+            .level-points= "#{points criterion.max_points} Points"
 
         - criterion.levels.order("points ASC").each do |level|
           %li.level-tab{class: ("earned selected" if criterion_grade.level_id == level.id)}
@@ -21,9 +22,10 @@
                   %li.level-badge-image
                     %img{:src => level_badge.badge.try(:icon), class: "level_badge" }
 
-            .level-description
-              .level-meets-expectations Meets Expectations
+              - if level.meets_expectations? || level.above_expectations?
+                .level-description
+                  .level-meets-expectations Meets Expectations
 
         %li.comments-tab
-          .level-comments.comments-box
-            = raw criterion_grade.comments
+          .comments-heading Feedback
+          .comments-text= raw criterion_grade.comments

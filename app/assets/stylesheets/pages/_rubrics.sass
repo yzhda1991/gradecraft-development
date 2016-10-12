@@ -317,7 +317,7 @@ h4.notice
   .criterion
     background-color: $color-white
     margin-bottom: 2rem
-    border: 1px solid $color-grey-6
+    border-bottom: 1px solid $color-grey-6
   .criterion-heading
     background-color: $color-blue-2
     color: $color-white
@@ -344,7 +344,8 @@ h4.notice
     padding: 0.25rem
     background-color: $color-grey-6
     color: $color-grey-2
-    border: 1px solid $color-white
+    border-left: 1px solid $color-white
+    border-right: 1px solid $color-white
     font-size: 0.8rem
     cursor: pointer
     position: relative
@@ -518,7 +519,6 @@ h4.notice
     background-color: $color-green-1
     padding: 0.2rem
 
-
   .level-tab.selected
     background-color: $level-selected-color
 
@@ -541,8 +541,40 @@ h4.notice
     color: $color-green-2
 
 #rubric-results-table
+  padding: 1px
+  border: 1px solid $color-grey-6
   .criterion
     margin-bottom: 0
+    border-bottom: 1px solid $color-white
+  .criterion-tab
+    background-color: $color-blue-2
+    &:hover 
+      background-color: $color-blue-2
+  .comments-tab 
+    background-color: $color-white
+    .comments-heading
+      padding: 0.25rem
+      background-color: $color-grey-4
+      color: $color-white
+    .comments-text, .comments-text:hover
+      background-color: $color-white
+      padding: 0.25rem
+  .level-heading
+    border-bottom: 0
+    .earned
+      background-color: $meets-expectations-selected-color
+  .feedback-name
+    background-color: $color-grey-6
+    padding: .25rem
+  .level-comments
+    padding: .25rem
+  .level-tab, .criterion-tab, .comments-tab
+    &:hover, &.selected
+      background-color: $color-grey-6
+    &.earned
+      background-color: $meets-expectations-selected-color
+      &:hover
+        background-color: $meets-expectations-selected-color
 
 .points-adjustment-feedback
   margin-right: 1rem

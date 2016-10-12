@@ -1,30 +1,23 @@
-%h3.pagetitle= "#{presenter.assignment.name} Review Rubric Grades (#{ points presenter.assignment.full_points } points)"
-
 .pageContent
   = render "layouts/alerts"
 
-  - if presenter.has_teams? && presenter.assignment.is_individual?
-    .team-filter
-      = form_tag grades_review_assignment_path(presenter.assignment), name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label.sr-only{:for => "team_id"}
-          Select #{term_for :team}
-        = select_tag :team_id, options_for_select(presenter.teams.map { |t| [t.name, t.id] }, presenter.team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+  = team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
 
   - presenter.students_being_graded.each do |student|
     - grade = student.grade_for_assignment(presenter.assignment)
     - if grade.present? && grade.instructor_modified?
       %h4.uppercase= student.name
-      .left
-        %h5.bold= "#{points grade.score} / #{points presenter.assignment.full_points} points "
-      .right= link_to "Edit #{student.first_name}'s Grade", edit_grade_path(grade), class: "button"
-      %br
-      %br
+      .left= render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
+      .right= render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
 
     - if presenter.grade_with_rubric?
+      .clear
       = render partial: "assignments/rubric_grade_review", locals: { presenter: presenter, student: student, grade: grade }
 
     - if grade.graded_by.present? && grade.feedback.present?
-      %b= "Feedback from #{ grade.graded_by.name }:"
-      %p.summary-comments= raw grade.feedback
+      = render partial: "grades/components/feedback", locals: { student: student, grade: grade }
+    - if grade.grade_files.present?
+      = render partial: "grades/components/attachments", locals: { student: student, grade: grade }
 
-    %hr
+    .clear
+    %hr.dotted
