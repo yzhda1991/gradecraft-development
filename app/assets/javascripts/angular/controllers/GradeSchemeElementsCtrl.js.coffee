@@ -13,6 +13,17 @@
     # directives, but this works for now and probably isn't worth the additional
     # time to implement the directives properly.
     #
+    $scope.validateElements = (index)->
+      for element, i in $scope.grade_scheme_elements
+        $scope.gradeSchemeForm["lowest_points_#{i}"].$setValidity('conflict', true)
+        for otherElement, j in $scope.grade_scheme_elements
+          continue if i == j
+
+          pointRange = [(element.lowest_points - 1)..(element.lowest_points + 1)]
+          if otherElement.lowest_points in pointRange
+            $scope.gradeSchemeForm["lowest_points_#{i}"].$setValidity('conflict', false)
+            $scope.gradeSchemeForm["lowest_points_#{j}"].$setValidity('conflict', false)
+
     $scope.updatePreviousElement = (index)->
       currentElement = $scope.grade_scheme_elements[index]
       previousElement = $scope.grade_scheme_elements[index - 1]

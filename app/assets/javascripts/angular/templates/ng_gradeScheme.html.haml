@@ -10,8 +10,9 @@
   %input.low-range(type='number'
                    ng-model='element.lowest_points'
                    ng-model-options='{allowInvalid: true}'
+                   ng-change='validateElements($index)'
                    required
-                   name='lowest_points')
+                   name='lowest_points_{{$index}}')
 
   .right
     %span
