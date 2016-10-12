@@ -107,8 +107,10 @@ class Assignments::GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:assignment_id])
 
     if @assignment.has_groups?
+      filter_params_with_raw_points :grades_by_group
       @result = Services::CreatesManyGroupGrades.create @assignment.id, current_user.id, assignment_group_grades_params
     else
+      filter_params_with_raw_points :grades_attributes
       @result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
     end
 
@@ -185,6 +187,12 @@ class Assignments::GradesController < ApplicationController
     params.require(:assignment).permit grades_by_group: [:graded_by_id, :graded_at,
                                                            :instructor_modified, :raw_points,
                                                            :status, :pass_fail_status, :group_id]
+  end
+
+  def filter_params_with_raw_points(attribute_name)
+    params[:assignment][attribute_name] = params[:assignment][attribute_name].delete_if do |key, value|
+      value[:raw_points].nil? || value[:raw_points].empty?
+    end
   end
 
   # Schedule the `GradeUpdater` for all grades provided
