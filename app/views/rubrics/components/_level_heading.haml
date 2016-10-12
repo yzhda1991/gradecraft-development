@@ -2,5 +2,8 @@
   %h5.level-name You earned 
 %h5.level-name= "#{level.name}: #{points level.points} Points"
 - if level.meets_expectations || level.above_expectations?
-  %p.italic.meets-expectations-label Meets Expectations
+  .meets-expectations-label
+    %a.italic Meets Expectations
+    .display_on_hover.hover-style
+      %p Earning this level means that you met or surpassed the minimum expectations for this criterion, and will earn the associated points. 
 .level-description= level.description
