@@ -32,7 +32,7 @@
           # Maximum possible points for the course
           totalPoints: totalPoints
           #scale for placing elements along the x axis
-          scale: d3.scale.linear().domain([0,totalPoints]).range([0,width])
+          scale: d3.scaleLinear().domain([0,totalPoints]).range([0,width])
         }
 
       # Don't let the hover boxes with grades info fall off the right side
@@ -54,7 +54,6 @@
         stats = scope.GraphsStats()
         padding = stats.padding
         scale = stats.scale
-        axis = d3.svg.axis().scale(scale).orient("bottom")
         g = svg.selectAll('g').data(PredictorService.gradeSchemeElements).enter().append('g')
                 .attr("transform", (gse)->
                   "translate(" + (scale(gse.lowest_points) + padding) + "," + 25 + " )")
@@ -93,10 +92,13 @@
           .attr("fill","#68A127")
         txt.attr("transform", (gse)->
           "translate(" + scope.gradeLevelPosition(scale,gse.lowest_points,stats.width,padding) + "," + 0 + ")")
-        d3.select("svg").append("g")
-          .attr("class": "grade-point-axis")
-          .attr("transform": "translate(" + padding + "," + (65) + ")")
-          .call(axis)
+        graph = d3.select("svg").append("g")
+          .classed("grade-point-axis", true)
+          .attr("transform", ()->
+            "translate(" + padding + "," + (65) + ")"
+          ).call(d3.axisBottom(scale))
+
+
 
       # Calculetes width for Earned Points (green) bar
       scope.svgEarnedBarWidth = ()->
