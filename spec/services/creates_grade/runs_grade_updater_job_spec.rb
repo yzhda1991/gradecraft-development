@@ -5,15 +5,21 @@ require "./app/services/creates_grade/runs_grade_updater_job"
 describe Services::Actions::RunsGradeUpdaterJob do
   let(:grade) { build :grade }
   let(:update_grade) { true }
-  let(:context) { { grade: grade, update_grade: update_grade } }
+  let(:student_visible_status) { true }
+  let(:context) { { grade: grade, update_grade: update_grade, student_visible_status: student_visible_status } }
 
   it "expects grade passed to service" do
-    expect { described_class.execute({ update_grade: update_grade })}.to \
+    expect { described_class.execute({ update_grade: update_grade, student_visible_status: student_visible_status })}.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
   it "expects update grade" do
-    expect { described_class.execute({ grade: grade })}.to \
+    expect { described_class.execute({ grade: grade, student_visible_status: student_visible_status })}.to \
+      raise_error LightService::ExpectedKeysNotInContextError
+  end
+
+  it "expects student visible status passed to service" do
+    expect { described_class.execute({ grade: grade, update_grade: update_grade })}.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
@@ -40,7 +46,7 @@ describe Services::Actions::RunsGradeUpdaterJob do
   end
 
   context "when the grade is not viewable" do
-    before(:each) { allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false }
+    let(:student_visible_status) { false }
 
     context "with update grade equal to false" do
       let(:update_grade) { false }

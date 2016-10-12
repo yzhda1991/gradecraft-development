@@ -22,6 +22,11 @@ describe Services::Actions::SavesGrade do
     expect(result).to have_key :update_grade
   end
 
+  it "promises student visible status" do
+    result = described_class.execute grade: grade
+    expect(result).to have_key :student_visible_status
+  end
+
   it "halts if a record is invalid" do
     grade.student_id = nil
     expect { described_class.execute grade: grade }.to \
