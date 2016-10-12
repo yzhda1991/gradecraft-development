@@ -1,5 +1,6 @@
-.context_menu
-  %ul
-    %li= link_to_unless_current glyph(:plus) + "New User", new_user_path
-    - if @staff_member.present?
-      %li= link_to_unless_current glyph(:edit) + "Edit Staff Member", edit_user_path(@staff_member)
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to_unless_current glyph(:plus) + "New User", new_user_path, class: "button button-edit"
+      - if @staff_member.present?
+        %li= link_to_unless_current glyph(:edit) + "Edit Staff Member", edit_user_path(@staff_member), class: "button button-edit"

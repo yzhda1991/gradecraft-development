@@ -1,27 +1,17 @@
-.context_menu
-  %ul
-    - if actions.include? :new
-      %li
-        %a{:href => new_badge_path }
-          = glyph(:plus)
-          New #{(term_for :badge).titleize}
-    - if actions.include? :see
-      %li
-        %a{:href => badge_path(badge) }
-          = glyph(:eye)
-          See
-    - if actions.include? :edit
-      %li
-        %a{:href => edit_badge_path(badge) }
-          = glyph(:edit)
-          Edit
-    - if actions.include? :award
-      %li
-        %a{:href => new_badge_earned_badge_path(badge_id: badge) }
-          = glyph(:star)
-          Award
-    - if actions.include? :quick_award
-      %li
-        %a{:href => mass_edit_badge_earned_badges_path(badge) }
-          = glyph(:check)
-          Quick Award
+- content_for :context_menu do
+  .context_menu
+    %ul
+      - if actions.include? :new
+        %li= link_to glyph(:plus) + "New #{(term_for :badge).titleize}", new_badge_path, class: "button button-edit"
+
+      - if actions.include? :see
+        %li= link_to glyph(:eye) + "See", badge_path(badge), class: "button button-edit"
+
+      - if actions.include? :edit
+        %li= link_to glyph(:edit) + "Edit", edit_badge_path(badge), class: "button button-edit"
+
+      - if actions.include? :award
+        %li= link_to glyph(:star) + "Award", new_badge_earned_badge_path(badge_id: badge), class: "button button-edit"
+
+      - if actions.include? :quick_award
+        %li= link_to glyph(:check) + "Quick Award", mass_edit_badge_earned_badges_path(badge), class: "button button-edit"

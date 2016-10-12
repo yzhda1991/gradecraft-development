@@ -150,36 +150,5 @@ describe "assignments/student_index/_assignments" do
       render
       assert_select "a", text: "Create a Group", count: 1
     end
-
-  end
-
-  describe "as faculty" do
-    it "renders the instructor grade managment menu" do
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      allow(view).to receive(:term_for).and_return("custom_term")
-      assign(:students, [@student])
-      assign(:grades, {@student.id => nil})
-      render
-      assert_select "li", text: "Grade", count: 1
-    end
-
-    it "shows a button to edit a grade for an assignment if one is present" do
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      allow(view).to receive(:term_for).and_return("custom_term")
-      assign(:students, [@student])
-      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_points: 2000, status: "Released")
-      render
-      assert_select "a", text: "Edit Grade", count: 1
-    end
-
-    it "shows a button to see their submission if one is present" do
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      allow(view).to receive(:term_for).and_return("custom_term")
-      assign(:students, [@student])
-      @assignment.update(accepts_submissions: true)
-      @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
-      render
-      assert_select "a", text: "See Submission", count: 1
-    end
   end
 end

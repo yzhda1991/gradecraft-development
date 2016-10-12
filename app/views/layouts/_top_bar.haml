@@ -15,7 +15,7 @@
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
 
           - if student_impersonation?
-            .release-preview-link= link_to glyph('eye-slash') + "Exit Student Preview", exit_student_impersonation_path
+            .release-preview-link= link_to glyph('eye-slash') + "Exit #{term_for :student} Preview", exit_student_impersonation_path
           %ul.nav.nav-pill.right
             - if presenter.has_info?
               %li.course-info-btn

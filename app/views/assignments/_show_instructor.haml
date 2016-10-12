@@ -9,13 +9,13 @@
       %li
         %a{ "href" => "#tab"} Grades
       %li
-        %a{ "href" => "#tabt2"} Description &amp; Downloads
+        %a{ "href" => "#tab2"} Description &amp; Downloads
       - if presenter.grade_with_rubric?
         %li
-          %a{ "href" => "#tabt3"} Grading Rubric
+          %a{ "href" => "#tab3"} Grading Rubric
       - if presenter.has_persisted_grades?
         %li
-          %a{ "href" => "#tabt4"} Class Analytics
+          %a{ "href" => "#tab4"} Class Analytics
 
     #tabt1.ui-tabs-panel
       .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
@@ -23,14 +23,14 @@
           = render partial: "assignments/group/group_show", locals: { presenter: presenter }
         - else
           = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
-      .ui-tabs-panel.assignment-details-container#tabt2{role: "tabpanel", "aria-hidden" => false }
+      .ui-tabs-panel.assignment-details-container#tab2{role: "tabpanel", "aria-hidden" => false }
         = render partial: "assignments/description", locals: { presenter: presenter }
       - if presenter.grade_with_rubric?
-        .ui-tabs-panel#tabt3{role: "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
           .tab-container
             = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
       - if presenter.has_persisted_grades?
-        .ui-tabs-panel#tabt4{role: "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else

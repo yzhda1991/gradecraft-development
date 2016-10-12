@@ -1,7 +1,8 @@
-.context_menu
-  %ul
-    %li= link_to glyph(:plus) + "New #{term_for :assignment}", new_assignment_path
-    %li= link_to glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
+      %li= link_to glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

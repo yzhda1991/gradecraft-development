@@ -1,10 +1,11 @@
-.context_menu
-  %ul
-    %li= link_to_unless_current glyph(:plus) + "New User", new_user_path
-    %li= link_to_unless_current glyph(:download) + "Import Users", import_users_path
-    - if @user.present? && @user.persisted?
-      %li= link_to_unless_current glyph(:edit) + "Edit User", edit_user_path(@user)
-      - if @user.is_staff?(current_course)
-        %li= link_to_unless_current glyph(:list) + "Show Staff Member", staff_path(@user)
-      - else
-        %li= link_to_unless_current glyph(:list) + "Show Student", student_path(@user)
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to glyph(:plus) + "New User", new_user_path, class: "button button-edit"
+      %li= link_to glyph(:download) + "Import Users", import_users_path, class: "button button-edit"
+      - if @user.present? && @user.persisted?
+        %li= link_to glyph(:edit) + "Edit User", edit_user_path(@user), class: "button button-edit"
+        - if @user.is_staff?(current_course)
+          %li= link_to glyph(:list) + "Show Staff Member", staff_path(@user), class: "button button-edit"
+        - else
+          %li= link_to glyph(:list) + "Show Student", student_path(@user), class: "button button-edit"

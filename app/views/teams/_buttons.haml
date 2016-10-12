@@ -1,5 +1,7 @@
-.context_menu
-  %ul
-    %li= link_to_unless_current glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path
-    - if @team.present? && @team.persisted?
-      %li= link_to_unless_current glyph(:edit) + "Edit #{(term_for :team).titleize}", edit_team_path(@team)
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to_unless_current glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path, class: "button button-edit"
+
+      - if @team.present? && @team.persisted?
+        %li= link_to glyph(:edit) + "Edit #{(term_for :team).titleize}", edit_team_path(@team), class: "button button-edit"

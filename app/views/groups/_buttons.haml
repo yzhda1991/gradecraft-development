@@ -1,3 +1,4 @@
-.context_menu
-  %ul
-    %li= link_to glyph(:plus) + "New #{term_for :group}", new_group_path
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to glyph(:plus) + "New #{term_for :group}", new_group_path, class: "button button-edit"

@@ -9,7 +9,7 @@ body
   height: 100vh
 
 .inner-wrap
-  margin: 2.75rem auto 0 auto
+  margin: 2.75rem auto 0
   max-width: 1500px
   width: 100%
   flex: 1 0 auto
@@ -24,7 +24,7 @@ body
     float: right
 
 .pageContent
-  padding: 0.75rem 1rem
+  padding: 0rem 1rem 1rem
   background-color: $color-white
 
 .student > .mainContent
@@ -101,9 +101,9 @@ a:hover + .display_on_hover
   padding: 1rem 1rem .75rem
 
 .the-nav.preview-mode
-  background-color: $color-orange-1
-  .course_semester
-    color: $color-white
+  background-color: $color-blue-4
+  a, .course_semester
+    color: $color-black
 
 .the-nav .release-preview-link a
   float: left
@@ -115,6 +115,9 @@ a:hover + .display_on_hover
   border-radius: $global-radius
   &:hover 
     background-color: $color-blue-2
+
+.page-header
+  padding: 0.5rem 1rem
 
 @media (min-width: $media-medium-max)
   .panel .row

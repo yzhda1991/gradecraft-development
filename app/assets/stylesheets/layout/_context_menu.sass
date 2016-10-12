@@ -1,43 +1,38 @@
 @import "../utilities/variables"
 
 .context_menu
-  background-color: $color-blue-4
-  margin: 0
-  width: 100%
-
+  float: right
+  margin-top: 0.5rem
+  display: inline-block
+  position: relative
+  @media (max-width: $media-small-max)
+    float: none
+    margin-top: 0
   ul
     padding: 0
-    margin: 0 0 0 1rem
+    margin: 0
     @media (max-width: $media-small-max)
       margin: 0
       .hide-for-small
         display: none
-    
-    li
-      list-style-type: none
-      margin-right: -4px
-      text-transform: capitalize
-      font-size: .7rem
-      display: inline-block
-      border-right: 1px solid darken($color-blue-3, 20%)
-      color: $color-blue-2
-      border-radius: 0 !important
-      @media (max-width: 1200px)
-        font-size: .6rem
-      &:first-child
-        border-left: 1px solid darken($color-blue-3, 20%)
-        @media (max-width: $media-small-max)
-          border-left: none
+  li
+    list-style-type: none
+    display: inline-block
 
+.options-menu
+  background-color: white
+  font-size: 0.7rem
+  display: none
+  position: absolute
+  box-shadow: 0 2px 5px 0 rgba($color-black, 0.16), 0 2px 10px 0 rgba($color-black,0.12)
+  z-index: 100
+  right: 0
+  li
+    display: block
+    a
+      padding: 0.5rem
+      display: block
       &:hover
-        background-color: $color-blue-1
-
-      & a
-        color: $color-blue-2
-        display: block
-        padding: .5rem .4rem
-        @media (max-width: 1200px)
-          padding: .5rem .35rem
-        &:hover
-          color: $color-blue-4
-          text-decoration: none
+        background-color: $color-blue-3
+        color: $color-white
+        text-decoration: none
