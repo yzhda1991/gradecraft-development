@@ -2,5 +2,6 @@
   / Display errors and notifications
   = render partial: "layouts/navigation/student_profile_tabs", locals: {nav_class: 'sub-nav'}
   .mainContent
-    %h2.pagetitle= title
+    .page-header
+      %h2.pagetitle= title
     = render partial: "layouts/content"

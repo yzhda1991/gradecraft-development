@@ -34,20 +34,25 @@
     background: $color-white
     border: 0
     font-weight: 300
+    padding-bottom: 0.5rem
     a
       color: $color-black
 
-      &:hover
-        color: $color-black
-        border-bottom: 1px solid $color-green-3
-  li.ui-state-active a
-    border-bottom: 1px solid $color-green-3
+      &:hover::after
+        width: 100%
+        background: $color-blue-2
 
-.active-tab-indicator
-  height: 2px
-  position: absolute
-  bottom: 0
-  left: 12
-  background-color: $color-blue-2
-  will-change: left, right
-  transition: all 0.5s
+  li.ui-state-default a:after,
+  li.ui-state-active a:after
+    content: ''
+    position: absolute
+    bottom: 0
+    display: block
+    height: 3px
+    width: 0
+    background: transparent
+    transition: width .3s ease, background-color .3s ease
+
+  li.ui-state-active a:after
+    width: 100%
+    background: $color-blue-2
