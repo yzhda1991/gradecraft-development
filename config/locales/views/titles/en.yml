@@ -139,6 +139,8 @@ en:
       title: "Grade Scheme"
     mass_edit:
       title: "Edit Grade Scheme"
+    edit:
+      title: "Editing #{ @grade_scheme_element.name } Level"
   grades:
     show:
       title: "#{ @grade.student.name }'s Grade for #{ @grade.assignment.name }"
