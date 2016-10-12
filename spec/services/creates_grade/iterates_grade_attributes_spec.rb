@@ -27,6 +27,16 @@ describe Services::Actions::IteratesGradeAttributes do
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
+  it "promises the successful grade creates" do
+    result = described_class.execute({ graded_by_id: professor.id, assignment_id: assignment.id, grade_attributes: grade_attributes })
+    expect(result).to have_key :successful
+  end
+
+  it "promises the unsuccessful grade creates" do
+    result = described_class.execute({ graded_by_id: professor.id, assignment_id: assignment.id, grade_attributes: grade_attributes })
+    expect(result).to have_key :unsuccessful
+  end
+
   it "should create grades" do
     expect(Services::CreatesGrade).to receive(:create).exactly(grade_attributes.length).times.and_call_original
     described_class.execute({ graded_by_id: professor.id, assignment_id: assignment.id, grade_attributes: grade_attributes })

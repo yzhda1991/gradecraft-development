@@ -149,15 +149,6 @@ describe Assignments::GradesController do
           expect(grade.reload.graded_at).to be > current_time
         end
 
-        it "only sends notifications to the students if the grade changed" do
-          grade.update_attributes({ raw_points: 1000 })
-          run_background_jobs_immediately do
-            expect { put :mass_update, assignment_id: assignment.id,
-                     assignment: { grades_attributes: grades_attributes } }.to_not \
-              change { ActionMailer::Base.deliveries.count }
-            end
-          end
-
         it "redirects to assignment path with a team" do
           team = create(:team, course: course)
           put :mass_update, assignment_id: assignment.id, team_id: team.id,
