@@ -114,7 +114,7 @@ class Assignments::GradesController < ApplicationController
       @result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
     end
 
-    if @result.success?
+    if @result.success? && @result.unsuccessful.length == 0
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, team_id: params[:team_id])
       else
