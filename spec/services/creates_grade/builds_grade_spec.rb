@@ -36,7 +36,6 @@ describe Services::Actions::BuildsGrade do
   end
 
   it "adds attributes to the grade" do
-    initial_time = DateTime.now
     result = described_class.execute context
     expect(result[:grade].assignment_id).to eq world.assignment.id
     expect(result[:grade].student_id).to eq world.student.id
@@ -47,7 +46,7 @@ describe Services::Actions::BuildsGrade do
     expect(result[:grade].adjustment_points).to eq -10
     expect(result[:grade].adjustment_points_feedback).to eq "reduced by 10 points"
     expect(result[:grade].graded_by_id).to eq(world.professor.id)
-    expect(result[:grade].graded_at).to be > initial_time
+    expect(result[:grade].graded_at).to be_within(1.second).of(DateTime.now)
   end
 
   it "adds the group id if supplied" do
