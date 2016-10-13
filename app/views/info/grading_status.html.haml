@@ -27,7 +27,7 @@
 
   - if @ungraded_submissions_by_assignment.present?
     .collapseSection{id: "ungraded" }
-      %h3.collapse
+      .collapse
         %a
           %i.fa.fa-angle-double-right.fa-fw
         Ungraded Submissions
@@ -36,7 +36,7 @@
 
   - if @unreleased_grades_by_assignment.present?
     .collapseSection{id: "unreleased" }
-      %h3.collapse
+      .collapse
         %a
           %i.fa.fa-angle-double-right.fa-fw
         Unreleased Grades
@@ -45,7 +45,7 @@
 
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress" }
-      %h3.collapse
+      .collapse
         %a
           %i.fa.fa-angle-double-right.fa-fw
         In Progress Grades
@@ -54,7 +54,7 @@
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions" }
-      %h3.collapse
+      .collapse
         %a
           %i.fa.fa-angle-double-right.fa-fw
         Resubmissions

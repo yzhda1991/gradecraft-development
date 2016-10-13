@@ -10,7 +10,7 @@
   .assignments
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-#{assignment_type.id}" }
-        %h3.collapse
+        .collapse
           %a
             %i.fa.fa-angle-double-right.fa-fw
           .assignment-type-name #{assignment_type.name} – #{points assignment_type.total_points} points
