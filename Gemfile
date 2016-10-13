@@ -55,7 +55,7 @@ gem 'logglier', '~> 0.3.0'
 
 gem 'multi_json'
 gem 'mini_magick'
-gem 'mongoid', '~> 6.0.0.rc0'
+gem 'mongoid', '~> 6.0.0'
 gem 'ng-rails-csrf'
 gem 'nokogiri'
 gem 'oauth', git: 'https://github.com/venturit/oauth-ruby.git', branch: 'master'

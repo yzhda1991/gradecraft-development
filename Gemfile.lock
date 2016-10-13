@@ -710,7 +710,7 @@ DEPENDENCIES
   light-service
   logglier (~> 0.3.0)
   mini_magick
-  mongoid (~> 6.0.0.rc0)
+  mongoid (~> 6.0.0)
   multi_json
   newrelic_rpm
   ng-rails-csrf
