@@ -47,11 +47,16 @@
 .assignment-type-message
   background-color: $color-grey-7
   padding: 0.5rem
-  margin: 0.5rem 0
+  margin-bottom: 1rem
+  font-weight: 300
   @media (max-width: $media-small-max)
     display: none
+  h4
+    font-weight: 400
+  p 
+    margin: 0.25rem 0
 
-.assignment_type
+.assignment_type.student
   .collapse
     margin: 0 0 -1px 0
     border: 1px solid $color-grey-6
@@ -81,7 +86,7 @@
     float: right
 
 .assignment-type-container
-  padding: 0 1.5rem 1rem
+  padding: 1rem
   border: 1px solid $color-grey-6
   margin-bottom: 0.5rem
   @media (max-width: $media-medium-max)
