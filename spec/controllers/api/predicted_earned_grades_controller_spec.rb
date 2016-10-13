@@ -7,36 +7,10 @@ describe API::PredictedEarnedGradesController do
   let(:professor) { create(:professor_course_membership, course: course).user }
   let(:assignment) { create(:assignment) }
 
-  context "as professor" do
-    before(:each) { login_user(professor) }
-
-    describe "GET index" do
-      before do
-        allow(controller).to receive(:current_course).and_return(course)
-        allow(controller).to receive(:current_user).and_return(professor)
-      end
-
-      context "with no student" do
-        it "assigns student as null student and no call to update" do
-          get :index, format: :json
-          expect(assigns(:assignments).student.class).to eq(NullStudent)
-        end
-      end
-    end
-  end
-
   context "as student" do
     before do
       login_user(student)
       allow(controller).to receive(:current_course).and_return(course)
-    end
-
-    describe "GET index" do
-      it "assigns the attributes with call to update" do
-        get :index, format: :json, id: student.id
-        expect(assigns(:assignments).class).to eq(PredictedAssignmentCollectionSerializer)
-        expect(response).to render_template(:index)
-      end
     end
 
     describe "POST create" do
@@ -51,7 +25,7 @@ describe API::PredictedEarnedGradesController do
         expect(PredictedEarnedGrade.where(student: student, assignment: assignment).first.predicted_points).to eq(params[:predicted_points])
       end
 
-      it "renders a 404 if a prediction exists for assignment and student" do
+      it "renders a 400 if a prediction exists for assignment and student" do
         predicted_earned_grade = create(:predicted_earned_grade, assignment: assignment, student: student)
         post :create, predicted_earned_grade: params, format: :json
         expect(response.status).to eq(400)
@@ -72,30 +46,5 @@ describe API::PredictedEarnedGradesController do
         expect(response.status).to eq(404)
       end
     end
-  end
-
-  context "as faculty previewing as student" do
-    before do
-      login_as_impersonating_agent(professor, student)
-      allow(controller).to receive(:current_course).and_return(course)
-    end
-
-    describe "GET index" do
-      it "assigns the professor and not student as user" do
-        get :index, format: :json
-        expect(assigns(:assignments).current_user).to eq(professor)
-      end
-    end
-  end
-
-  # helper methods:
-  def predictor_challenge_attributes
-    [
-      :id,
-      :name,
-      :description,
-      :full_points,
-      :visible
-    ]
   end
 end
