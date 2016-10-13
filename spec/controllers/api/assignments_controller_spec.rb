@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 include SessionHelper
 
-describe API::AssignmentsController , focus: true do
+describe API::AssignmentsController do
   let(:course) { create :course}
   let(:student)  { create(:student_course_membership, course: course).user }
   let(:professor) { create(:professor_course_membership, course: course).user }
@@ -37,12 +37,13 @@ describe API::AssignmentsController , focus: true do
     end
 
     describe "GET index" do
-      it "assigns the attributes with call to update" do
+      it "assigns the assignments with predictions and grades and a call to update" do
         get :index, format: :json
         expect(assigns(:assignments).first.id).to eq(assignment.id)
         expect(assigns :student).to eq(student)
         expect(assigns :predicted_earned_grades).to eq([predicted_earned_grade])
         expect(assigns :grades).to eq([grade])
+        expect(assigns(:update_predictions)).to be_truthy
         expect(response).to render_template(:index)
       end
     end

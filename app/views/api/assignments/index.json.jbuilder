@@ -23,7 +23,7 @@ json.data @assignments do |assignment|
     json.has_been_unlocked    assignment.is_unlockable? && \
       assignment.is_unlocked_for_student?(@student)
 
-    json.has_info             assignment.description.blank?
+    json.has_info             !assignment.description.blank?
 
     json.has_levels           assignment.assignment_score_levels.present?
 
@@ -125,6 +125,7 @@ json.included do
         json.score          grade.score
         json.final_points   grade.final_points
         json.is_excluded    grade.excluded_from_course_score?
+        json.pass_fail_status grade.pass_fail_status
       end
     end
   end

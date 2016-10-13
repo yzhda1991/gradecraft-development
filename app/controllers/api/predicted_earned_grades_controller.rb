@@ -71,7 +71,7 @@ class API::PredictedEarnedGradesController < ApplicationController
 
   def predicted_earned_grade_params
     params.require(:predicted_earned_grade).permit(
-      :student_id, :assignment_id, :predicted_points
+      :assignment_id, :predicted_points
     ).merge(student_id: current_user.id)
   end
 
