@@ -2,14 +2,13 @@ class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?, except: :self_log
   before_filter :ensure_student?, only: :self_log
   before_filter :save_referer, only: :edit_status
-  before_action :find_assignment, only: [:mass_edit, :delete_all]
+  before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
   before_action :find_grades_for_assignment, only: [:mass_edit, :delete_all]
 
   # GET /assignments/:assignment_id/grades/edit_status
   # For changing the status of a group of grades passed in grade_ids
   # ("In Progress" => "Graded", or "Graded" => "Released")
   def edit_status
-    @assignment = current_course.assignments.find(params[:assignment_id])
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
@@ -85,7 +84,6 @@ class Assignments::GradesController < ApplicationController
     params[:assignment][:grades_attributes].each do |index, grade_params|
       grade_params.merge!(graded_at: DateTime.now)
     end if params[:assignment][:grades_attributes].present?
-    @assignment = current_course.assignments.find(params[:assignment_id])
     if @assignment.update_attributes(assignment_params)
       # @mz TODO: add specs
       enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
@@ -119,7 +117,6 @@ class Assignments::GradesController < ApplicationController
   # either sets raw points to params[:grade][:raw_points]
   # or defaults to point total for assignment
   def self_log
-    @assignment = current_course.assignments.find(params[:assignment_id])
     if @assignment.open? && @assignment.student_logged?
       @grade = Grade.find_or_create(@assignment.id, current_student.id)
 
