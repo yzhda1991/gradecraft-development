@@ -164,9 +164,24 @@ describe Assignments::GradesController do
     end
 
     describe "DELETE delete_all" do
-      it "deletes all the grades for the assignment" do
-        delete :delete_all, assignment_id: @assignment.id
-        expect(@assignment.reload.grades).to be_empty
+      context "when there is no team id" do
+        it "deletes all the grades for the assignment" do
+          delete :delete_all, assignment_id: @assignment.id
+          expect(@assignment.reload.grades).to be_empty
+        end
+      end
+
+      context "when there is a team id" do
+        let(:team) { create(:team, course: @course) }
+        let(:student) { create(:user) }
+        let!(:team_membership) { create(:team_membership, team: team, student: student) }
+        let!(:course_membership) { create(:student_course_membership, user: student, course: @course) }
+        let!(:grade) { create(:grade, student: student, assignment: @assignment, course: @course) }
+
+        it "deletes only the grades for the team on the assignment" do
+          expect{ delete :delete_all, assignment_id: @assignment.id, team_id: team.id }.to \
+            change { @assignment.reload.grades.count }.by(-1)
+        end
       end
 
       it "redirects to assignments page on success" do
