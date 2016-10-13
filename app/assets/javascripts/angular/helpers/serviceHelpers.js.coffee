@@ -37,6 +37,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         console.log(response.data)
       when 201
         console.log(response.statusText)
+        console.log(response.data.data.attributes)
       when 400
         console.log(response.data.message)
       else
@@ -52,9 +53,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
     # attach associated models from included list within
     _.each(options.include, (included)->
+      #debugger if item.type == "assignments"
       return if !response.included || !item.relationships || !item.relationships[included]
       child =  _.find(response.included,
-        {id: item.relationships[included].data.id,
+        {id: item.relationships[included].data.id.toString(),
         type: item.relationships[included].data.type}
       )
       item.attributes[included] = child.attributes if child

@@ -31,26 +31,53 @@
 
   # GET index list of assignments including a student's grades and predictions
   getAssignments = ()->
-    $http.get('/api/predicted_earned_grades').success( (results)->
-      GradeCraftAPI.loadMany(assignments,results)
-      GradeCraftAPI.setTermFor("assignment", results.meta.term_for_assignment)
-      GradeCraftAPI.setTermFor("pass", results.meta.term_for_pass)
-      GradeCraftAPI.setTermFor("fail", results.meta.term_for_fail)
-      update.assignments = results.meta.update_assignments
+    $http.get('/api/assignments').success( (response)->
+      GradeCraftAPI.loadMany(assignments, response, {"include" : ['prediction','grade']})
+      _.each(assignments, (assignment)->
+        # add null prediction and grades when JSON contains none
+        assignment.prediction = { predicted_points: 0 } if !assignment.prediction
+        assignment.grade = { score: null, final_points: null, is_excluded: false } if !assignment.grade
+      )
+
+      GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
+      GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
+      GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
+      update.predicted_earned_grades = response.meta.update_predictions
     )
 
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
-    if update.assignments
-      $http.put(
-        '/api/predicted_earned_grades/' + assignment.prediction.id, predicted_points: assignment.prediction.predicted_points
-        ).success(
-          (data)->
-            console.log(data);
-        ).error(
-          (data)->
-            console.log(data);
-        )
+    if update.predicted_earned_grades
+      if assignment.prediction.id
+        updatePrediction(assignment)
+      else
+        createPrediction(assignment)
+
+  createPrediction = (assignment)->
+    requestParams = {
+      "predicted_earned_grade": {
+        "assignment_id": assignment.id,
+        "predicted_points": assignment.prediction.predicted_points
+      }
+    }
+
+    $http.post('/api/predicted_earned_grades/', requestParams).then(
+      (response)-> # success
+        if response.status == 201
+          assignment.prediction = response.data.data.attributes
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  updatePrediction = (assignment)->
+    $http.put(
+      '/api/predicted_earned_grades/' + assignment.prediction.id, predicted_points: assignment.prediction.predicted_points
+    ).then((response)-> # success
+              GradeCraftAPI.logResponse(response)
+          ,(response)-> # error
+              GradeCraftAPI.logResponse(response)
+          )
 
   return {
       termFor: termFor

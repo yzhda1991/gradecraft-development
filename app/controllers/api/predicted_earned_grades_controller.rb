@@ -1,7 +1,8 @@
 class API::PredictedEarnedGradesController < ApplicationController
   include PredictorData
 
-  before_filter :ensure_student?, only: [:update]
+  before_filter :ensure_student?, only: [:create, :update]
+  before_filter :ensure_not_impersonating?, only: [:create, :update]
 
   # GET api/predicted_earned_grades
   def index
@@ -22,7 +23,19 @@ class API::PredictedEarnedGradesController < ApplicationController
     )
   end
 
-  # POST api/predicted_earned_grades/:id
+  # POST api/predicted_earned_grades
+  def create
+    @prediction = PredictedEarnedGrade.create predicted_earned_grade_params
+    if @prediction.save
+      PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+      render status: 201
+    else
+      render json: { message: @prediction.errors.full_messages, success: false },
+        status: 400
+    end
+  end
+
+  # PUT api/predicted_earned_grades/:id
   def update
     prediction = PredictedEarnedGrade.where(
       student: current_student,
@@ -33,13 +46,7 @@ class API::PredictedEarnedGradesController < ApplicationController
       prediction.predicted_points = params[:predicted_points]
       prediction.save
 
-      # This should be extracted with the rest of the event_loggers
-      # TODO: this should be implemented with a PredictorEventLogger instead of a
-      # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
-      # request params data, but for now this is better than what we had
-      PredictorEventJob.new(
-        data: predictor_event_attrs(prediction)
-      ).enqueue
+      PredictorEventJob.new(data: predictor_event_attrs(prediction)).enqueue
 
       if prediction.valid?
         render json: {
@@ -61,6 +68,12 @@ class API::PredictedEarnedGradesController < ApplicationController
   end
 
   private
+
+  def predicted_earned_grade_params
+    params.require(:predicted_earned_grade).permit(
+      :student_id, :assignment_id, :predicted_points
+    ).merge(student_id: current_user.id)
+  end
 
   def predictor_event_attrs(prediction)
     {

@@ -83,21 +83,21 @@ json.data @assignments do |assignment|
       end
       json.unlock_keys unlock_keys
     end
+  end
 
-    json.relationships do
-      if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
-        json.prediction data: {
-          type: "predicted_earned_grades",
-          id: @predicted_earned_grades.where(assignment_id: assignment.id).first.id
-        }
-      end
+  json.relationships do
+    if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
+      json.prediction data: {
+        type: "predicted_earned_grades",
+        id: @predicted_earned_grades.where(assignment_id: assignment.id).first.id
+      }
+    end
 
-      if @grades.present? && @grades.where(assignment_id: assignment.id).present?
-        json.grade data: {
-          type: "grades",
-          id: @grades.where(assignment_id: assignment.id).first.id
-        }
-      end
+    if @grades.present? && @grades.where(assignment_id: assignment.id).present?
+      json.grade data: {
+        type: "grades",
+        id: @grades.where(assignment_id: assignment.id).first.id
+      }
     end
   end
 end
@@ -135,5 +135,5 @@ json.meta do
   json.term_for_assignment term_for :assignment
   json.term_for_pass current_course.pass_term
   json.term_for_fail current_course.fail_term
-  json.update_assignments false
+  json.update_predictions @update_predictions
 end
