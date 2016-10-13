@@ -3,9 +3,7 @@ module Services
     class BuildsCriterionGrades
       extend LightService::Action
 
-      expects :raw_params
-      expects :student
-      expects :assignment
+      expects :raw_params, :student, :assignment
       promises :criterion_grades
 
       executed do |context|

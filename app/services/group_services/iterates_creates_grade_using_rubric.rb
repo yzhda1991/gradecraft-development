@@ -4,10 +4,8 @@ module Services
   module Actions
     class IteratesCreatesGradeUsingRubric
       extend LightService::Action
-
-      expects :raw_params
-      expects :graded_by_id
-      expects :group
+      
+      expects :raw_params, :graded_by_id, :group
 
       executed do |context|
         graded_by_id = context.graded_by_id

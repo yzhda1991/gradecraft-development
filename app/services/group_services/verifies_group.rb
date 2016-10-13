@@ -2,7 +2,7 @@ module Services
   module Actions
     class VerifiesGroup
       extend LightService::Action
-
+      
       expects :attributes
       promises :group
 

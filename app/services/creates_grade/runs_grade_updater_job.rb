@@ -2,10 +2,8 @@ module Services
   module Actions
     class RunsGradeUpdaterJob
       extend LightService::Action
-
-      expects :grade
-      expects :update_grade
-      expects :student_visible_status
+      
+      expects :grade, :update_grade, :student_visible_status
 
       executed do |context|
         grade = context[:grade]

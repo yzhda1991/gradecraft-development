@@ -2,10 +2,8 @@ module Services
   module Actions
     class AssociatesSubmissionWithGrade
       extend LightService::Action
-
-      expects :student
-      expects :assignment
-      expects :grade
+      
+      expects :student, :assignment, :grade
 
       executed do |context|
         if context[:group]

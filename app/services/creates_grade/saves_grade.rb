@@ -2,10 +2,9 @@ module Services
   module Actions
     class SavesGrade
       extend LightService::Action
-
+      
       expects :grade
-      promises :update_grade
-      promises :student_visible_status
+      promises :update_grade, :student_visible_status
 
       executed do |context|
         grade = context[:grade]

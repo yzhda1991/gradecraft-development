@@ -2,10 +2,9 @@ module Services
   module Actions
     class VerifiesAssignmentStudent
       extend LightService::Action
-
+      
       expects :raw_params
-      promises :student
-      promises :assignment
+      promises :student, :assignment
 
       executed do |context|
         begin

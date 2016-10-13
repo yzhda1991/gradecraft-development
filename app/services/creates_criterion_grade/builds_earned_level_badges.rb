@@ -8,11 +8,7 @@ module Services
     class BuildsEarnedLevelBadges
       extend LightService::Action
 
-      expects :raw_params
-      expects :student
-      expects :assignment
-      expects :student_visible_status
-
+      expects :raw_params, :student, :assignment, :student_visible_status
       promises :earned_level_badges
 
       # Returns an empty array if no level_badges in raw_params

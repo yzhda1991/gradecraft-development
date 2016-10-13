@@ -1,16 +1,12 @@
-require_relative "../creates_grade_using_rubric"
+require_relative "../creates_group_grades"
 
 module Services
   module Actions
     class IteratesAssignmentGroupsToCreateGrades
       extend LightService::Action
 
-      expects :assignment_id
-      expects :grades_by_group_params
-      expects :graded_by_id
-
-      promises :unsuccessful
-      promises :successful
+      expects :assignment_id, :grades_by_group_params, :graded_by_id
+      promises :unsuccessful, :successful
 
       executed do |context|
         context.successful = []

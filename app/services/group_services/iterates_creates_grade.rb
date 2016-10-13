@@ -4,10 +4,8 @@ module Services
   module Actions
     class IteratesCreatesGrade
       extend LightService::Action
-
-      expects :attributes
-      expects :group
-      expects :graded_by_id
+      
+      expects :attributes, :group, :graded_by_id
 
       executed do |context|
         group = context.group

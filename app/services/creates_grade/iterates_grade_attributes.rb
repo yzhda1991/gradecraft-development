@@ -4,13 +4,9 @@ module Services
   module Actions
     class IteratesGradeAttributes
       extend LightService::Action
-
-      expects :assignment_id
-      expects :graded_by_id
-      expects :grade_attributes
-
-      promises :successful
-      promises :unsuccessful
+      
+      expects :assignment_id, :graded_by_id, :grade_attributes
+      promises :successful, :unsuccessful
 
       executed do |context|
         context.successful = []
