@@ -1,6 +1,9 @@
 - presenter.assignments_for(assignment_type).each do |assignment|
   - if presenter.assignment_visible?(assignment)
     .assignment-container
+      .assignment-info.assignment-indicator-icon
+        - if presenter.grade_for(assignment)
+          = glyph(:check)
       - if presenter.name_visible?(assignment)
         .assignment-name
           = link_to assignment.name, assignment_path(assignment)

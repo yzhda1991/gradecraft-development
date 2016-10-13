@@ -57,14 +57,14 @@
     h3
       display: inline
       font-size: 1.2rem
-    span
-      display: inline
-      float: right
     a
       padding: 1rem
       display: block
     &.open
       border-bottom: 3px solid $color-blue-2
+  .points-summary
+    display: inline
+    float: right
 
 .assignment-type-container
   padding: 0 1.5rem 1rem
@@ -91,3 +91,14 @@
 
 .assignment-due-date
   width: 20%
+
+.assignment-type-points-graph
+  width: 200px
+  height: 10px
+  background-color: $color-grey-6
+  position: relative
+
+.points-graph-fill-bar
+  height: 10px
+  background-color: $color-green-1
+  position: absolute
