@@ -11,7 +11,7 @@
         .points-summary
           .assignment-type-points-graph
             .points-graph-fill-bar{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
-          %span #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
+          %span.assignment-type-points #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
 
       .assignment-type-container
         .assignment-type-message
