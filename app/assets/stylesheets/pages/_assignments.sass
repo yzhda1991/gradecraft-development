@@ -40,10 +40,14 @@
     padding: 0.25rem 0
 
 // assignment index page for students and instructors
-
 .assignment-index-container
   max-width: 1200px
   margin: 0 auto
+
+.assignment-type-message
+  background-color: $color-grey-7
+  padding: 0.5rem
+  margin: 0.5rem 0
 
 .assignment_type
   .collapse
@@ -52,9 +56,38 @@
     border-collapse: collapse
     h3
       display: inline
+      font-size: 1.2rem
     span
       display: inline
       float: right
     a
       padding: 1rem
       display: block
+    &.open
+      border-bottom: 3px solid $color-blue-2
+
+.assignment-type-container
+  padding: 0 1.5rem 1rem
+  border: 1px solid $color-grey-6
+  margin-bottom: 0.5rem
+
+.assignment-container
+  border: 1px solid $color-grey-6
+  padding: 0.5rem
+  margin-bottom: 2px
+
+.assignment-name
+  display: inline-block
+  width: 50%
+
+.assignment-info
+  display: inline-block
+  font-size: 0.8rem
+  p
+    margin: 0
+
+.assignment-points
+  width: 20%
+
+.assignment-due-date
+  width: 20%

@@ -11,13 +11,15 @@
         %span #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
 
       .assignment-type-container
-        - if assignment_type.is_capped?
-          .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
-        - if assignment_type.count_only_top_grades?
-          .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
-        - if assignment_type.description?
-          %p.description= raw assignment_type.description
+        .assignment-type-message
+          - if assignment_type.is_capped?
+            .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
+          - if assignment_type.count_only_top_grades?
+            .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
+          - if assignment_type.description?
+            %h4 #{(term_for :assignment_type)} Guidelines
+            %p.description= raw assignment_type.description
 
         // Display the assignments for each assignment type in a responsive table, below header.
-        %table.default_assignments_dynatable.dynatable
+        %default_assignments_dynatable
           = render partial: "assignments/student_index/assignment_table", locals: { presenter: presenter, assignment_type: assignment_type }
