@@ -1,5 +1,5 @@
 require "light-service"
-require "creates_grade/iterates_grade_attributes"
+require "shared/iterates_grade_attributes"
 
 module Services
   class CreatesManyGrades

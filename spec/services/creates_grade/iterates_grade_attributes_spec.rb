@@ -1,6 +1,6 @@
 require "light-service"
 require "active_record_spec_helper"
-require "./app/services/creates_grade/iterates_grade_attributes"
+require "./app/services/shared/iterates_grade_attributes"
 
 describe Services::Actions::IteratesGradeAttributes do
   let(:assignment) { create(:assignment, course: course) }
