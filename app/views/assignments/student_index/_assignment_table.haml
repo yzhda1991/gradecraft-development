@@ -1,9 +1,11 @@
 - presenter.assignments_for(assignment_type).each do |assignment|
   - if presenter.assignment_visible?(assignment)
-    .assignment-container
+    .assignment-container{class: ("predicted" if assignment.is_predicted_by_student?(current_student) && !GradeProctor.new(presenter.grade_for(assignment)).viewable? ) }
       .assignment-info.assignment-indicator-icon
-        - if presenter.grade_for(assignment)
-          = glyph(:check)
+        - if GradeProctor.new(presenter.grade_for(assignment)).viewable?
+          %span.checkmark= glyph(:check)
+        - elsif assignment.is_predicted_by_student?(current_student)
+          %span.flag= glyph(:flag)
       - if presenter.name_visible?(assignment)
         .assignment-name
           = link_to assignment.name, assignment_path(assignment)
