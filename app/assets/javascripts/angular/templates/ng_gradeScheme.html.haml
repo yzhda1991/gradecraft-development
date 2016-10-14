@@ -12,7 +12,16 @@
                    ng-model-options='{allowInvalid: true}'
                    ng-change='validateElements($index)'
                    required
+                   min=0
                    name='lowest_points_{{$index}}')
+
+  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict'
+                         title='Has the same point threshold as another level.')
+    %i.fa.fa-exclamation-triangle
+
+  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict'
+                         title='Is within one point of another level.')
+    %i.fa.fa-exclamation-triangle
 
   .right
     %span
