@@ -24,7 +24,7 @@
 
       %hr.dotted
       - if @user.is_student?(current_course)
-        - if current_course.teams_visible? && (current_course.has_in_team_leaderboards? || (current_student.team_for_course(current_course).present? && current_student.team_for_course(current_course).has_in_team_leaderboards?)) || current_course.has_character_names?
+        - if current_course.teams_visible? && (current_course.has_in_team_leaderboards? || current_course.has_character_names?)
           .form-item
             = f.label :display_name, "Pseudonym"
             = f.text_field :display_name
