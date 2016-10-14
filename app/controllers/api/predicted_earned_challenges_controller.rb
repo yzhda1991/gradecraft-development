@@ -1,18 +1,17 @@
 class API::PredictedEarnedChallengesController < ApplicationController
-  include PredictorData
 
-  before_filter :ensure_student?, only: [:update]
+  before_filter :ensure_student?
+  before_filter :ensure_not_impersonating?
 
-  # GET api/predicted_earned_challenges
-  def index
-    if current_user_is_student?
-      @student = current_student
-      @update_challenges = !student_impersonation?
+  # POST api/predicted_earned_challenges
+  def create
+    @prediction = PredictedEarnedChallenge.new predicted_earned_challenge_params
+    if @prediction.save
+      PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+      render "api/predicted_earned_articles/prediction", status: 201
     else
-      @student = NullStudent.new
-      @update_challenges = false
+      render "api/predicted_earned_articles/errors", status: 400
     end
-    @challenges = predictor_challenges(@student)
   end
 
   # POST api/predicted_earned_challenges/:id
@@ -38,6 +37,12 @@ class API::PredictedEarnedChallengesController < ApplicationController
   end
 
   private
+
+  def predicted_earned_challenge_params
+    params.require(:predicted_earned_challenge).permit(
+      :challenge_id, :predicted_points
+    ).merge(student_id: current_user.id)
+  end
 
   # This should be extracted with the rest of the event_loggers
   def predictor_event_attrs(prediction)

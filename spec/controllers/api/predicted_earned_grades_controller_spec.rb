@@ -4,7 +4,6 @@ include SessionHelper
 describe API::PredictedEarnedGradesController do
   let(:course) { create :course}
   let(:student)  { create(:student_course_membership, course: course).user }
-  let(:professor) { create(:professor_course_membership, course: course).user }
   let(:assignment) { create(:assignment) }
 
   context "as student" do

@@ -1,5 +1,4 @@
 class API::PredictedEarnedGradesController < ApplicationController
-  include PredictorData
 
   before_filter :ensure_student?
   before_filter :ensure_not_impersonating?

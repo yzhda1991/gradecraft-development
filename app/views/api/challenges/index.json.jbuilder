@@ -53,12 +53,13 @@ json.included do
   if @grades.present?
     json.array! @grades do |grade|
       next unless ChallengeGradeProctor.new(grade).viewable?(@student)
-      json.type "grades"
+      json.type "challenge_grades"
       json.id grade.id.to_s
       json.attributes do
         json.id             grade.id
         json.score          grade.score
-        json.final_points   grade.final_points
+        #TODO: manage final_points on ChallengeGrades
+        json.final_points   grade.score
       end
     end
   end

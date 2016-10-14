@@ -356,8 +356,8 @@ GradeCraft::Application.routes.draw do
     resources :levels, only: :update
 
     # Student Predictor View, Predictor Preview
-    resources :predicted_earned_badges, only: [:update]
-    resources :predicted_earned_challenges, only: [:index, :update]
+    resources :predicted_earned_badges, only: [:create, :update]
+    resources :predicted_earned_challenges, only: [:create, :update]
     resources :predicted_earned_grades, only: [:create, :update]
 
     # Instructor View of Student's Predictor

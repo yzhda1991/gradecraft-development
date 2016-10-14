@@ -1,7 +1,7 @@
 class API::PredictedEarnedBadgesController < ApplicationController
-  include PredictorData
 
   before_filter :ensure_student?
+  before_filter :ensure_not_impersonating?
 
   # POST api/predicted_earned_badges/:id
   def update

@@ -1,5 +1,4 @@
 class API::AssignmentTypesController < ApplicationController
-  include PredictorData
 
   # GET api/assignment_types
   def index
@@ -10,6 +9,16 @@ class API::AssignmentTypesController < ApplicationController
       @student = NullStudent.new
       @update_weights = false
     end
-    @assignment_types = predictor_assignment_types
+    @assignment_types =
+      current_course.assignment_types.ordered.select(
+        :course_id,
+        :id,
+        :name,
+        :max_points,
+        :description,
+        :student_weightable,
+        :position,
+        :updated_at
+      )
   end
 end
