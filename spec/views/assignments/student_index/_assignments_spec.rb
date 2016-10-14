@@ -51,7 +51,7 @@ describe "assignments/student_index/_assignments" do
 
       it "renders the points possible when grade is not released" do
         render
-        assert_select "span", text: "#{points @assignment.full_points} points possible", count: 1
+        assert_select "p", text: "#{points @assignment.full_points} points possible", count: 1
       end
 
       it "renders the points out of points possible when the grade is released for assignment" do
@@ -61,7 +61,7 @@ describe "assignments/student_index/_assignments" do
         # To verify we have satisfied the released condition:
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
         render
-        assert_select "span", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
+        assert_select "p", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
       end
     end
 
@@ -84,7 +84,7 @@ describe "assignments/student_index/_assignments" do
 
         render
         assert_select "div" do
-          assert_select "div", text: "Pass", count: 1
+          assert_select "p", text: "Pass", count: 1
         end
       end
     end
