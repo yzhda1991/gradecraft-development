@@ -73,7 +73,7 @@ describe "assignments/student_index/_assignments" do
 
       it "renders Pass/Fail in the points possible field when grade is not released" do
         render
-        assert_select "span", text: "Pass/Fail", count: 1
+        assert_select "div", text: "Pass/Fail", count: 1
       end
 
       it "renders Pass or Fail in the points possible field when a grade is released for assignment" do
@@ -83,7 +83,7 @@ describe "assignments/student_index/_assignments" do
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
 
         render
-        assert_select "span" do
+        assert_select "div" do
           assert_select "div", text: "Pass", count: 1
         end
       end
