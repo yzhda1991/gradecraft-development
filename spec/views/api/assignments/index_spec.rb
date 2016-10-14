@@ -21,27 +21,6 @@ describe "api/assignments/index" do
     expect(json["data"].length).to eq(1)
   end
 
-  it "includes the current student grade with the assignment" do
-    create :student_course_membership, user: @student, course: @assignment.course
-    grade = create :grade, assignment: @assignment, student: @student,
-      course: @assignment.course, pass_fail_status: nil,
-      raw_points: 1000, score: 1000, status: "Released"
-    @grades = Grade.where(assignment_id: @assignment.id)
-    render
-    json = JSON.parse(response.body)
-    expect(json["data"][0]["relationships"]["grade"]).to eq(
-      {"data"=>{"type"=>"grades", "id"=>grade.id}}
-    )
-    expect(json["included"][0]["attributes"]).to eq(
-      { "id" => grade.id,
-        "final_points" => 1000,
-        "score" => 1000,
-        "is_excluded" => false,
-        "pass_fail_status" => nil
-      }
-    )
-  end
-
   it "includes the pass fail status with the grade when the assignment is pass fail" do
     create :student_course_membership, user: @student, course: @assignment.course
     grade = create :grade, assignment: @assignment, student: @student,
@@ -75,7 +54,7 @@ describe "api/assignments/index" do
     expect(json["data"].length).to eq(0)
   end
 
-  it "not include assignments in predictor if include_in_predictor is false" do
+  it "not include assignments if include_in_predictor is false" do
     @assignment.update(include_in_predictor: false)
     render
     json = JSON.parse(response.body)
@@ -159,6 +138,46 @@ describe "api/assignments/index" do
     render
     json = JSON.parse(response.body)
     expect(json["data"][0]["attributes"]["score_levels"]).to eq([{"name" => asl.name, "points" => asl.points}])
+  end
+
+  describe "included" do
+    it "contains the grade" do
+      create :student_course_membership, user: @student, course: @assignment.course
+      grade = create :grade, assignment: @assignment, student: @student,
+        course: @assignment.course, pass_fail_status: nil,
+        raw_points: 1000, score: 1000, status: "Released"
+      @grades = Grade.where(assignment_id: @assignment.id)
+      render
+      json = JSON.parse(response.body)
+      expect(json["data"][0]["relationships"]["grade"]).to eq(
+        {"data"=>{"type"=>"grades", "id"=>grade.id}}
+      )
+      expect(json["included"][0]["attributes"]).to eq(
+        { "id" => grade.id,
+          "final_points" => 1000,
+          "score" => 1000,
+          "is_excluded" => false,
+          "pass_fail_status" => nil
+        }
+      )
+    end
+
+    it "contains the prediction" do
+      create :student_course_membership, user: @student, course: @assignment.course
+      prediction = create :predicted_earned_grade, assignment: @assignment, student: @student
+      @predicted_earned_grades =
+        PredictedEarnedGrade.where(assignment_id: @assignment.id, student_id: @student.id)
+      render
+      json = JSON.parse(response.body)
+      expect(json["data"][0]["relationships"]["prediction"]).to eq(
+        {"data"=>{"type"=>"predicted_earned_grades", "id"=>prediction.id}}
+      )
+      expect(json["included"][0]["attributes"]).to eq(
+        { "id" => prediction.id,
+          "predicted_points" => prediction.predicted_points,
+        }
+      )
+    end
   end
 
   it "renders term for assignments, pass, and fail" do

@@ -1,0 +1,70 @@
+json.data @challenges do |challenge|
+  next unless !@student.present? || challenge.visible_for_student?(@student)
+  json.type "challenges"
+  json.id challenge.id.to_s
+  json.attributes do
+
+    json.description    challenge.description
+    json.due_at         challenge.due_at
+    json.full_points    challenge.full_points
+    json.id             challenge.id
+    json.name           challenge.name
+    json.visible        challenge.visible
+
+    # boolean states for icons
+    json.has_info !challenge.description.blank?
+    json.has_levels challenge.challenge_score_levels.present?
+    json.is_due_in_future challenge.due_at.present? && challenge.due_at >= Time.now
+
+    json.score_levels challenge.challenge_score_levels.map {
+      |csl| {name: csl.name, points: csl.points}
+    }
+  end
+
+  json.relationships do
+    if @predicted_earned_challenges.present? && @predicted_earned_challenges.where(challenge_id: challenge.id).present?
+      json.prediction data: {
+        type: "predicted_earned_challenges",
+        id: @predicted_earned_challenges.where(challenge_id: challenge.id).first.id
+      }
+    end
+
+    if @grades.present? && @grades.where(challenge_id: challenge.id).present?
+      grade =  @grades.where(challenge_id: challenge.id).first
+      if ChallengeGradeProctor.new(grade).viewable?(@student)
+        json.grade data: { type: "challenge_grades", id: grade.id }
+      end
+    end
+  end
+end
+
+json.included do
+  if @predicted_earned_challenges.present?
+    json.array! @predicted_earned_challenges do |predicted_earned_challenge|
+      json.type "predicted_earned_challenges"
+      json.id predicted_earned_challenge.id.to_s
+      json.attributes do
+        json.id predicted_earned_challenge.id
+        json.predicted_points predicted_earned_challenge.predicted_points
+      end
+    end
+  end
+
+  if @grades.present?
+    json.array! @grades do |grade|
+      next unless ChallengeGradeProctor.new(grade).viewable?(@student)
+      json.type "grades"
+      json.id grade.id.to_s
+      json.attributes do
+        json.id             grade.id
+        json.score          grade.score
+        json.final_points   grade.final_points
+      end
+    end
+  end
+end
+
+json.meta do
+  json.term_for_challenges term_for :challenges
+  json.update_predictions @update_predictions
+end

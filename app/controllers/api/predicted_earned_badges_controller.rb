@@ -5,53 +5,47 @@ class API::PredictedEarnedBadgesController < ApplicationController
 
   # POST api/predicted_earned_badges/:id
   def update
-    prediction = PredictedEarnedBadge.where(
+    @prediction = PredictedEarnedBadge.where(
       student: current_student,
       id: params[:id]
     ).first
 
-    prediction.predicted_times_earned = params[:predicted_times_earned]
-    prediction.save
+    if @prediction.present?
+      @prediction.predicted_times_earned = params[:predicted_times_earned]
 
-    # This should be extracted with the rest of the event_loggers
-    PredictorEventJob.new(
-      data: badge_predictor_event_attrs(prediction.badge, prediction.valid?)
-    ).enqueue
-
-    if prediction.valid?
-      render json: {
-        id: prediction.id,
-        predicted_times_earned: prediction.predicted_times_earned
-      }
+      if @prediction.save
+        PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+        render "api/predicted_earned_articles/prediction", status: 200
+      else
+        render :errors, status: 400
+      end
     else
-      render json: {
-        errors:  prediction.errors.full_messages
-        },
-        status: 400
+      render json: { errors: [{ detail: "unable to find prediction" }], success: false },
+        status: 404
     end
   end
 
   private
 
   # This should be extracted with the rest of the event_loggers
-  def badge_predictor_event_attrs(badge, prediction_saved)
+  def predictor_event_attrs(prediction)
     {
       prediction_type: "badge",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
-      badge_id: badge.id,
+      badge_id: prediction.badge.id,
       predicted_earns: params[:predicted_times_earned],
-      multiple_earns_possible: badge.can_earn_multiple_times,
-      predicted_points: badge_predicted_points,
-      point_value_per_badge: badge.full_points,
+      multiple_earns_possible: prediction.badge.can_earn_multiple_times,
+      predicted_points: badge_predicted_points(prediction),
+      point_value_per_badge: prediction.badge.full_points,
       created_at: Time.now,
-      prediction_saved_successfully: prediction_saved
+      prediction_saved_successfully: prediction.badge.valid?
     }
   end
 
-  def badge_predicted_points
-    @badge.full_points * params[:predicted_times_earned] rescue nil
+  def badge_predicted_points(prediction)
+    prediction.badge.full_points * params[:predicted_times_earned] rescue nil
   end
 end

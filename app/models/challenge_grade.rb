@@ -5,6 +5,9 @@ class ChallengeGrade < ActiveRecord::Base
   belongs_to :challenge
   belongs_to :team, autosave: true
 
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_team, ->(team) { where(team_id: team.id) }
+
   validates_presence_of :team, :challenge
 
   delegate :name, :description, :due_at, :full_points, to: :challenge

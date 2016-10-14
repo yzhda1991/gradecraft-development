@@ -6,44 +6,33 @@ class API::PredictedEarnedGradesController < ApplicationController
 
   # POST api/predicted_earned_grades
   def create
-    @prediction = PredictedEarnedGrade.create predicted_earned_grade_params
+    @prediction = PredictedEarnedGrade.new predicted_earned_grade_params
     if @prediction.save
       PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
-      render status: 201
+      render "api/predicted_earned_articles/prediction", status: 201
     else
-      render json: { message: @prediction.errors.full_messages, success: false },
-        status: 400
+      render :errors, status: 400
     end
   end
 
   # PUT api/predicted_earned_grades/:id
   def update
-    prediction = PredictedEarnedGrade.where(
+    @prediction = PredictedEarnedGrade.where(
       student: current_student,
       id: params[:id]
     ).first
 
-    if prediction.present?
-      prediction.predicted_points = params[:predicted_points]
-      prediction.save
+    if @prediction.present?
+      @prediction.predicted_points = params[:predicted_points]
 
-      PredictorEventJob.new(data: predictor_event_attrs(prediction)).enqueue
-
-      if prediction.valid?
-        render json: {
-          id: prediction.id,
-          predicted_points: prediction.predicted_points
-        }
+      if @prediction.save
+        PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+        render "api/predicted_earned_articles/prediction", status: 200
       else
-        render json: {
-          errors:  prediction.errors.full_messages
-          },
-          status: 400
+        render :errors, status: 400
       end
     else
-      render json: {
-        errors: [{ detail: "unable to find prediction" }], success: false
-        },
+      render json: { errors: [{ detail: "unable to find prediction" }], success: false },
         status: 404
     end
   end
@@ -56,6 +45,7 @@ class API::PredictedEarnedGradesController < ApplicationController
     ).merge(student_id: current_user.id)
   end
 
+  # This should be extracted with the rest of the event_loggers
   def predictor_event_attrs(prediction)
     {
       prediction_type: "grade",

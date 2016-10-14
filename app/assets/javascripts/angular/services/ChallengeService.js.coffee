@@ -36,7 +36,7 @@
     $http.get('/api/predicted_earned_challenges').success( (res)->
       GradeCraftAPI.loadMany(challenges,res)
       GradeCraftAPI.setTermFor("challenges", res.meta.term_for_challenges)
-      update.challenges = res.meta.update_challenges
+      update.challenges = res.meta.update_predictions
     )
 
   # PUT a challenge prediction

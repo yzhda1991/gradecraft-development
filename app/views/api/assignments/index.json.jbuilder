@@ -1,7 +1,8 @@
 json.data @assignments do |assignment|
   next unless assignment.full_points > 0 || assignment.pass_fail?
-  next unless assignment.visible_for_student?(@student)
+  next unless !@student.present? || assignment.visible_for_student?(@student)
   next unless assignment.include_in_predictor?
+
   json.type "assignments"
   json.id assignment.id.to_s
   json.attributes do
@@ -20,41 +21,51 @@ json.data @assignments do |assignment|
 
     # boolean flags
 
-    json.has_been_unlocked    assignment.is_unlockable? && \
-      assignment.is_unlocked_for_student?(@student)
-
     json.has_info             !assignment.description.blank?
-
     json.has_levels           assignment.assignment_score_levels.present?
-
-    json.has_submission       assignment.accepts_submissions? && \
-      @student.submission_for_assignment(assignment).present?
-
-    json.has_threshold        assignment.threshold_points && \
-      assignment.threshold_points > 0
-
+    json.has_threshold        assignment.threshold_points && assignment.threshold_points > 0
     json.is_a_condition       assignment.is_a_condition?
-
-    json.is_accepting_submissions    assignment.accepts_submissions? && \
-      !assignment.submissions_have_closed? && \
-      !@student.submission_for_assignment(assignment).present?
-
-    json.is_closed_without_submission    assignment.submissions_have_closed? && \
-      !@student.submission_for_assignment(assignment).present?
-
     json.is_due_in_future     assignment.due_at.present? && assignment.due_at >= Time.now
-
     json.is_earned_by_group   assignment.grade_scope == "Group"
-
-    json.is_late              assignment.overdue? && \
-      assignment.accepts_submissions && \
-      !@student.submission_for_assignment(assignment).present?
-
-    json.is_locked            !assignment.is_unlocked_for_student?(@student)
-
     json.is_required          assignment.required
-
     json.is_rubric_graded     assignment.grade_with_rubric?
+
+    if @student.present?
+      json.has_been_unlocked \
+        assignment.is_unlockable? && assignment.is_unlocked_for_student?(@student)
+
+      json.has_submission \
+        assignment.accepts_submissions? &&
+        @student.submission_for_assignment(assignment).present?
+
+      json.is_accepting_submissions \
+        assignment.accepts_submissions? &&
+        !assignment.submissions_have_closed? &&
+        !@student.submission_for_assignment(assignment).present?
+
+      json.is_late \
+        assignment.overdue? && assignment.accepts_submissions &&
+        !@student.submission_for_assignment(assignment).present?
+
+      json.is_closed_without_submission \
+        assignment.submissions_have_closed? &&
+        !@student.submission_for_assignment(assignment).present?
+
+      json.is_locked !assignment.is_unlocked_for_student?(@student)
+
+    # booleans for generic predictor
+    else
+      json.is_locked false
+      json.has_been_unlocked false
+      json.has_submission false
+      json.is_accepting_submissions
+        assignment.accepts_submissions? && !assignment.submissions_have_closed?
+      json.is_late
+        assignment.overdue? && assignment.accepts_submissions
+      json.is_closed_without_submission false
+    end
+
+    # Assignment Score Levels
 
     if assignment.assignment_score_levels.present?
       json.score_levels assignment.assignment_score_levels do |asl|
@@ -94,10 +105,10 @@ json.data @assignments do |assignment|
     end
 
     if @grades.present? && @grades.where(assignment_id: assignment.id).present?
-      json.grade data: {
-        type: "grades",
-        id: @grades.where(assignment_id: assignment.id).first.id
-      }
+      grade =  @grades.where(assignment_id: assignment.id).first
+      if GradeProctor.new(grade).viewable?(@student)
+        json.grade data: { type: "grades", id: grade.id }
+      end
     end
   end
 end
@@ -109,7 +120,6 @@ json.included do
       json.id predicted_earned_grade.id.to_s
       json.attributes do
         json.id predicted_earned_grade.id
-        json.student_id predicted_earned_grade.student_id
         json.predicted_points predicted_earned_grade.predicted_points
       end
     end

@@ -340,6 +340,7 @@ GradeCraft::Application.routes.draw do
     end
 
     resources :assignments, only: :index
+    resources :challenges, only: :index
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create
     end

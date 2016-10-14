@@ -31,15 +31,15 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # console logs response from $http.post(...).then((response)->...)
   logResponse = (response)->
-    # formatted error response
+    console.log(response.statusText) if response.statusText
+
     switch response.status
       when 200
-        console.log(response.data)
+        console.log(response.data.data.attributes)
       when 201
-        console.log(response.statusText)
         console.log(response.data.data.attributes)
       when 400
-        console.log(response.data.message)
+        console.log(response.data.errors)
       else
         console.log(response)
 
