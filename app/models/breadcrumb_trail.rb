@@ -364,6 +364,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Editing Grading Scheme')
   end
+  
+  def grade_scheme_elements_edit
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('Grading Scheme', grade_scheme_elements_path)
+  end
 
   def grades_show
     breadcrumb('Dashboard', dashboard_path)
