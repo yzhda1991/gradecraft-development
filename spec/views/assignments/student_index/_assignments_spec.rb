@@ -51,7 +51,7 @@ describe "assignments/student_index/_assignments" do
 
       it "renders the points possible when grade is not released" do
         render
-        assert_select "td", text: "#{points @assignment.full_points} points possible", count: 1
+        assert_select "span", text: "#{points @assignment.full_points} points possible", count: 1
       end
 
       it "renders the points out of points possible when the grade is released for assignment" do
@@ -61,7 +61,7 @@ describe "assignments/student_index/_assignments" do
         # To verify we have satisfied the released condition:
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
         render
-        assert_select "td", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
+        assert_select "span", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
       end
     end
 
@@ -73,7 +73,7 @@ describe "assignments/student_index/_assignments" do
 
       it "renders Pass/Fail in the points possible field when grade is not released" do
         render
-        assert_select "td", text: "Pass/Fail", count: 1
+        assert_select "span", text: "Pass/Fail", count: 1
       end
 
       it "renders Pass or Fail in the points possible field when a grade is released for assignment" do
@@ -83,7 +83,7 @@ describe "assignments/student_index/_assignments" do
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
 
         render
-        assert_select "td" do
+        assert_select "span" do
           assert_select "div", text: "Pass", count: 1
         end
       end
@@ -103,52 +103,10 @@ describe "assignments/student_index/_assignments" do
       assert_select "i.fa-exclamation-circle", count: 1
     end
 
-    it "shows the assignment submission if present" do
-      @assignment.update(accepts_submissions: true)
-      @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
-      allow(view).to receive(:current_user_is_student?).and_return(true)
-      render
-      assert_select "a", text: "See Submission", count: 1
-    end
-
     it "shows the due date if it's in the future" do
       @assignment.update(due_at: 2.days.from_now)
       render
       assert_select "span", text: "#{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
-    end
-
-    it "shows a button to see more results if the grade is released" do
-      create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: 2000, status: "Released")
-      render
-      assert_select "a", text: "See Grade", count: 1
-    end
-
-    it "shows a button to see the group if a group exists" do
-      @assignment.update(grade_scope: "Group")
-      @group = create(:group, course: @course)
-      @assignment.groups << @group
-      @group.students << @student
-      allow(view).to receive(:term_for).and_return("Group")
-      render
-      assert_select "a", text: "See Group", count: 1
-    end
-
-    it "shows a button to see the group submission if one is present" do
-      @assignment.update(accepts_submissions: true)
-      @assignment.update(grade_scope: "Group")
-      @group = create(:group, course: @course)
-      @assignment.groups << @group
-      @group.students << @student
-      @submission = create(:submission, course: @course, assignment: @assignment, group: @group)
-      render
-      assert_select "a", text: "See Submission", count: 1
-    end
-
-    it "shows a button to create a group if no group is present" do
-      @assignment.update(grade_scope: "Group")
-      allow(view).to receive(:term_for).and_return("Group")
-      render
-      assert_select "a", text: "Create a Group", count: 1
     end
   end
 end
