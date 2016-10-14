@@ -51,24 +51,13 @@
       if challenge.prediction.id
         updatePrediction(challenge)
       else
-        createPrediction(challenge)
-
-  createPrediction = (challenge)->
-    requestParams = {
-      "predicted_earned_challenge": {
-        "challenge_id": challenge.id,
-        "predicted_points": challenge.prediction.predicted_points
-      }
-    }
-
-    $http.post('/api/predicted_earned_challenges/', requestParams).then(
-      (response)-> # success
-        if response.status == 201
-          challenge.prediction = response.data.data.attributes
-        GradeCraftAPI.logResponse(response)
-      ,(response)-> # error
-        GradeCraftAPI.logResponse(response)
-    )
+        requestParams = {
+          "predicted_earned_challenge": {
+            "challenge_id": challenge.id,
+            "predicted_points": challenge.prediction.predicted_points
+          }
+        }
+        GradeCraftAPI.createPrediction(challenge, '/api/predicted_earned_challenges/', requestParams)
 
   updatePrediction = (challenge)->
     $http.put(

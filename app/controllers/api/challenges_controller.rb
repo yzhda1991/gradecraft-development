@@ -12,6 +12,7 @@ class API::ChallengesController < ApplicationController
       @update_predictions = !student_impersonation?
 
       if !student_impersonation?
+        @challenges.includes(:predicted_earned_challenges)
         @predicted_earned_challenges =
           PredictedEarnedChallenge.for_course(current_course).for_student(current_student)
         @grades =

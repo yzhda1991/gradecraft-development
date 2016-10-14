@@ -33,7 +33,7 @@ json.data @badges do |badge|
   end
 
   json.relationships do
-    if @predicted_earned_badges.present?
+    if @predicted_earned_badges.present? &&  @predicted_earned_badges.where(badge_id: badge.id).present?
       json.prediction data: {
         type: "predicted_earned_badges",
         id: @predicted_earned_badges.where(badge_id: badge.id).first.id

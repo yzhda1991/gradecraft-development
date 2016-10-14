@@ -11,6 +11,7 @@ class API::AssignmentsController < ApplicationController
       @update_predictions = !student_impersonation?
 
       if !student_impersonation?
+        @assignments.includes(:predicted_earned_grades)
         @predicted_earned_grades =
           PredictedEarnedGrade.for_course(current_course).for_student(current_student)
         @grades =

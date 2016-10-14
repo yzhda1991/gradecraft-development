@@ -1,5 +1,5 @@
 # Common Methods and Objects for Services using the GradeCraft api routes
-angular.module('helpers').factory('GradeCraftAPI', ()->
+angular.module('helpers').factory('GradeCraftAPI', ['$http', ($http)->
 
   # stores custom terms, default to GC defaults
   _termFor = {
@@ -91,6 +91,19 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         modelArray.push(item.attributes)
     )
 
+
+  # shared methods for predictions
+
+  createPrediction = (article,url,requestParams)->
+    $http.post(url, requestParams).then(
+      (response)-> # success
+        if response.status == 201
+          article.prediction = response.data.data.attributes
+        logResponse(response)
+      ,(response)-> # error
+        logResponse(response)
+    )
+
   return {
     termFor: termFor
     setTermFor: setTermFor
@@ -101,5 +114,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     addItems: addItems
     deleteItem: deleteItem
     loadFromIncluded: loadFromIncluded
+    createPrediction: createPrediction
   }
-)
+])
+

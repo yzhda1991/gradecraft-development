@@ -40,13 +40,25 @@
   # PUT a badge prediction
   postPredictedBadge = (badge)->
     if update.predictions
-      $http.put(
-          '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
-        ).then((response)-> # success
-                  GradeCraftAPI.logResponse(response)
-                ,(response)-> # error
-                  GradeCraftAPI.logResponse(response)
-              )
+      if badge.prediction.id
+        updatePrediction(badge)
+      else
+        requestParams = {
+          "predicted_earned_badge": {
+            "badge_id": badge.id,
+            "predicted_times_earned": badge.prediction.predicted_times_earned
+          }
+        }
+        GradeCraftAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
+
+  updatePrediction = (badge)->
+    $http.put(
+      '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
+    ).then((response)-> # success
+              GradeCraftAPI.logResponse(response)
+          ,(response)-> # error
+              GradeCraftAPI.logResponse(response)
+          )
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->
