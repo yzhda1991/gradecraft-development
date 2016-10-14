@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 include SessionHelper
 
-describe API::PredictedEarnedChallengesController do
+describe API::PredictedEarnedChallengesController , focus: true do
   let(:world) { World.create.with(:course, :student, :team, :challenge) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
@@ -76,7 +76,7 @@ describe API::PredictedEarnedChallengesController do
         predicted_points = (world.challenge.full_points * 0.75).to_i
         put :update, id: predicted_earned_challenge, predicted_points: predicted_points, format: :json
         expect(PredictedEarnedChallenge.where(student: world.student, challenge: world.challenge).first.predicted_points).to eq(predicted_points)
-        expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_challenge.id, "predicted_points" => predicted_points})
+        expect(response.status).to eq(200)
       end
 
       it "renders a 404 if prediction not found" do

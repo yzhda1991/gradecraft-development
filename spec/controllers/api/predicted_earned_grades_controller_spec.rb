@@ -23,6 +23,7 @@ describe API::PredictedEarnedGradesController do
       it "updates the predicted points for assignment and current user" do
         post :create, predicted_earned_grade: params, format: :json
         expect(PredictedEarnedGrade.where(student: student, assignment: assignment).first.predicted_points).to eq(params[:predicted_points])
+        expect(response.status).to eq(201)
       end
 
       it "renders a 400 if a prediction exists for assignment and student" do
@@ -38,7 +39,7 @@ describe API::PredictedEarnedGradesController do
         predicted_points = (assignment.full_points * 0.75).to_i
         put :update, id: predicted_earned_grade.id, predicted_points: predicted_points, format: :json
         expect(PredictedEarnedGrade.where(student: student, assignment: assignment).first.predicted_points).to eq(predicted_points)
-        expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_grade.id, "predicted_points" => predicted_points})
+        expect(response.status).to eq(200)
       end
 
       it "renders a 404 if prediction not found" do

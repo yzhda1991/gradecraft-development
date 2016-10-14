@@ -11,7 +11,7 @@ class API::PredictedEarnedGradesController < ApplicationController
       PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
       render "api/predicted_earned_articles/prediction", status: 201
     else
-      render :errors, status: 400
+      render "api/predicted_earned_articles/errors", status: 400
     end
   end
 
@@ -29,7 +29,7 @@ class API::PredictedEarnedGradesController < ApplicationController
         PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
         render "api/predicted_earned_articles/prediction", status: 200
       else
-        render :errors, status: 400
+        render "api/predicted_earned_articles/errors", status: 400
       end
     else
       render json: { errors: [{ detail: "unable to find prediction" }], success: false },

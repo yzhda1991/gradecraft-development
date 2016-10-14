@@ -13,7 +13,7 @@ describe API::PredictedEarnedBadgesController do
         predicted_times_earned = 4
         put :update, id: peb.id, predicted_times_earned: predicted_times_earned, format: :json
         expect(PredictedEarnedBadge.where(student: world.student, badge: world.badge).first.predicted_times_earned).to eq(4)
-        expect(JSON.parse(response.body)).to eq({"id" => peb.id, "predicted_times_earned" => predicted_times_earned})
+        expect(response.status).to eq(200)
       end
     end
   end
