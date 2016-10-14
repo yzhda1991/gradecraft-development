@@ -315,7 +315,7 @@ class User < ActiveRecord::Base
 
   # Returning the total number of points for all grades released this week
   def points_earned_for_course_this_week(course)
-    grades_released_for_course_this_week(course).sum(&:final_points)
+    grades_released_for_course_this_week(course).map(&:final_points).compact.sum
   end
 
   # Grabbing the grade for an assignment
