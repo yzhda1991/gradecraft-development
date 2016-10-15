@@ -1,4 +1,4 @@
 - if GradeProctor.new(presenter.grade_for(assignment)).viewable?
   %p= presenter.grade_for(assignment).pass_fail_status
 - else
-  %p= "#{term_for :pass}/#{term_for :fail}"
+  %p.italic= "#{term_for :pass}/#{term_for :fail}"
