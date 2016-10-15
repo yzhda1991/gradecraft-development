@@ -25,6 +25,8 @@
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h3.center.inverse Resubmissions
 
+  .clear
+  
   - if @ungraded_submissions_by_assignment.present?
     .collapseSection{id: "ungraded" }
       .collapse

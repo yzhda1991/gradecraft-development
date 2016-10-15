@@ -3,9 +3,7 @@
 .pass-fail-grade-toggle
   .switch.pass-fail-contingent{data: {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
     = f.check_box :pass_fail_status,
-      { :checked=> grade.pass_fail_status == "Pass" },
-      checked_value = "Pass",
-      unchecked_value = "Fail"
+      { :checked=> grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
 
-    - label_text = grade.pass_fail_status ? (term_for grade.pass_fail_status) : (term_for :fail)
+    - label_text = grade.pass_fail_status ? (term_for :pass) : (term_for :fail)
     = f.label :pass_fail_status, label_text
