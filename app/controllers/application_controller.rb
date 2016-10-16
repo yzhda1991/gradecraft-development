@@ -67,6 +67,7 @@ class ApplicationController < ActionController::Base
     return unless request.format.html? || request.format.xml?
     event_attrs = event_session.merge event_options
     return unless [:course, :user].all? { |attr| event_attrs[attr].present? }
+    current_user.course_memberships.where(course: current_course).first.last_login_at = Time.now
     LoginEventLogger.new(event_attrs).enqueue_with_fallback
   end
 
