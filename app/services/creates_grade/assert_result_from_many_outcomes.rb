@@ -1,0 +1,16 @@
+# Defines if the true result of a chained set of service calls
+# is successful or not; expects an array of unsuccessful results
+module Services
+  module Actions
+    class AssertResultFromManyOutcomes
+      extend LightService::Action
+
+      expects :unsuccessful
+
+      executed do |context|
+        unsuccessful = context[:unsuccessful]
+        context.fail!("There were #{"grade".pluralize(unsuccessful.length)} that were not updated") unless unsuccessful.empty?
+      end
+    end
+  end
+end

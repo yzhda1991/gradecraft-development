@@ -147,15 +147,6 @@ describe Assignments::GradesController do
           expect(response).to \
             redirect_to(mass_edit_assignment_grades_path(assignment))
         end
-
-        it "redirects if there are unsuccessful grade saves" do
-          allow(Services::CreatesManyGrades).to \
-            receive(:create).and_return double(:result, success?: true, unsuccessful: [0, 1])
-          put :mass_update, assignment_id: assignment.id,
-            assignment: { grades_attributes: grades_attributes }
-          expect(response).to \
-            redirect_to(mass_edit_assignment_grades_path(assignment))
-        end
       end
 
       context "with raw points not set to a value" do

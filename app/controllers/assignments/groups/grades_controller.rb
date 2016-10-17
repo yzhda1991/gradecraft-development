@@ -17,7 +17,7 @@ class Assignments::Groups::GradesController < ApplicationController
     filter_params_with_raw_points! :grades_by_group
     result = Services::CreatesManyGroupGrades.create @assignment.id, current_user.id, assignment_group_grades_params
 
-    if result.success? && result.unsuccessful.length == 0
+    if result.success?
       respond_with @assignment
     else
       redirect_to mass_edit_assignment_groups_grades_path(@assignment),

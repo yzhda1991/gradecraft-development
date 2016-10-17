@@ -87,7 +87,7 @@ describe Assignments::Groups::GradesController do
     end
   end
 
-  context "as a student", focus: true do
+  context "as a student" do
     let(:student) { create(:user) }
 
     before(:each) { login_user(student) }
