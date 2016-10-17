@@ -13,6 +13,77 @@ describe Assignments::Grades::MassEditPresenter do
     end
   end
 
+  describe "#grade_select?" do
+    context "when assignment grade type is not a select list" do
+      it "returns false" do
+        allow(assignment).to receive(:grade_select?).and_return false
+        expect(subject.grade_select?).to eq false
+      end
+    end
+
+    context "when assignment grade type is a select list" do
+      it "returns true" do
+        allow(assignment).to receive(:grade_select?).and_return true
+        expect(subject.grade_select?).to eq true
+      end
+    end
+  end
+
+  describe "#grade_radio?" do
+    context "when assignment grading type is not radio buttons" do
+      it "returns false" do
+        allow(assignment).to receive(:grade_radio?).and_return false
+        expect(subject.grade_radio?).to eq false
+      end
+    end
+
+    context "when assignment grade type is radio buttons" do
+      it "returns true" do
+        allow(assignment).to receive(:grade_radio?).and_return true
+        expect(subject.grade_radio?).to eq true
+      end
+    end
+  end
+
+  describe "#grade_checkboxes?" do
+    context "when assignment grading type is not checkboxes" do
+      it "returns false" do
+        allow(assignment).to receive(:grade_checkboxes?).and_return false
+        expect(subject.grade_checkboxes?).to eq false
+      end
+    end
+
+    context "when assignment grade type is checkboxes" do
+      it "returns true" do
+        allow(assignment).to receive(:grade_checkboxes?).and_return true
+        expect(subject.grade_checkboxes?).to eq true
+      end
+    end
+  end
+
+  describe "#pass_fail?" do
+    context "when assignment grading type is not pass/fail" do
+      it "returns false" do
+        allow(assignment).to receive(:pass_fail?).and_return false
+        expect(subject.pass_fail?).to eq false
+      end
+    end
+
+    context "when assignment grade type is pass/fail" do
+      it "returns true" do
+        allow(assignment).to receive(:pass_fail?).and_return true
+        expect(subject.pass_fail?).to eq true
+      end
+    end
+  end
+
+  describe "#full_points" do
+    it "returns the assignment points" do
+      allow(assignment).to receive(:full_points).and_return 9000
+      expect(subject.full_points).to eq 9000
+    end
+  end
+
   describe "#groups" do
     it "returns the assignment groups" do
       groups = double(:groups, name: "Mock Group")

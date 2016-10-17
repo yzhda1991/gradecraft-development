@@ -4,24 +4,24 @@
     %td.center
       = f.simple_fields_for "grades_by_group[]", i do |gf|
         - if !gbg[:grade].status
-          = gf.hidden_field :status, value: "Graded"
+          = gf.hidden_field :status, value: :Graded
         = gf.hidden_field :instructor_modified, value: true
         = gf.hidden_field :group_id, value: gbg[:group].id
         = label_tag do
           // Checking to see if the grade is actually graded before setting the default value to 0
-          - if presenter.assignment.grade_select? && presenter.has_levels?
+          - if presenter.grade_select?
             = gf.select :raw_points, options_from_collection_for_select(presenter.assignment_score_levels, :points, :formatted_name, gbg[:grade]), include_blank: true
-          - elsif presenter.assignment.grade_radio? && presenter.assignment.has_levels?
+          - elsif presenter.grade_radio?
             - presenter.assignment_score_levels.each do |assignment_score_level|
               = gf.label :raw_points, "#{assignment_score_level.formatted_name}", value: assignment_score_level.points
               = gf.radio_button :raw_points, assignment_score_level.points, class: "radio_inline"
-          - elsif presenter.assignment.grade_checkboxes?
-            = gf.check_box :raw_points, {}, presenter.assignment.full_points, nil
-          - elsif presenter.assignment.pass_fail?
+          - elsif presenter.grade_checkboxes?
+            = gf.check_box :raw_points, {}, presenter.full_points, nil
+          - elsif presenter.pass_fail?
             = gf.select :pass_fail_status, [[], ["#{term_for :pass}", "Pass"], ["#{term_for :fail}", "Fail"]]
           - else
             - if gbg[:grade].persisted? && GradeProctor.new(gbg[:grade]).updatable?(user: current_user, course: current_course)
               = gf.text_field :raw_points, value: gbg[:grade].raw_points, data: {autonumeric: true, "m-dec" => "0"}
             - else
               = gf.text_field :raw_points, value: nil , data: {autonumeric: true, "m-dec" => "0"}
-    %td{:style => "text-align: left"}= "/ #{points presenter.assignment.full_points}" if !presenter.assignment.pass_fail?
+    %td{:style => "text-align: left"}= "/ #{points presenter.full_points}" if !presenter.pass_fail?

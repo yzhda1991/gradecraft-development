@@ -5,6 +5,26 @@ class Assignments::Grades::MassEditPresenter < Showtime::Presenter
     properties[:assignment]
   end
 
+  def grade_select?
+    assignment.grade_select?
+  end
+
+  def grade_radio?
+    assignment.grade_radio?
+  end
+
+  def grade_checkboxes?
+    assignment.grade_checkboxes?
+  end
+
+  def pass_fail?
+    assignment.pass_fail?
+  end
+
+  def full_points
+    assignment.full_points
+  end
+
   def groups
     assignment.groups
   end
