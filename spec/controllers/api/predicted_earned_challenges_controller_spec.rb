@@ -6,6 +6,7 @@ describe API::PredictedEarnedChallengesController do
   let(:student)  { create(:student_course_membership, course: course).user }
   let(:team) { create :team }
   let(:challenge) { create(:challenge) }
+  let(:params) {{ challenge_id: challenge.id, predicted_points: (challenge.full_points * 0.75).to_i }}
 
   context "as student" do
     before do
@@ -17,7 +18,6 @@ describe API::PredictedEarnedChallengesController do
     end
 
     describe "POST create" do
-      let(:params) {{ challenge_id: challenge.id, predicted_points: (challenge.full_points * 0.75).to_i }}
 
       it "creates a new predicted earned challenge" do
         expect{ post :create, predicted_earned_challenge: params, format: :json }.to change(PredictedEarnedChallenge, :count).by(1)
@@ -40,13 +40,13 @@ describe API::PredictedEarnedChallengesController do
       it "updates the predicted points for a challenge" do
         predicted_earned_challenge = create(:predicted_earned_challenge, challenge: challenge, student: student)
         predicted_points = (challenge.full_points * 0.75).to_i
-        put :update, id: predicted_earned_challenge, predicted_points: predicted_points, format: :json
+        put :update, id: predicted_earned_challenge, predicted_earned_challenge: params, format: :json
         expect(PredictedEarnedChallenge.where(student: student, challenge: challenge).first.predicted_points).to eq(predicted_points)
         expect(response.status).to eq(200)
       end
 
       it "renders a 404 if prediction not found" do
-        put :update, id: 0, predicted_points: 0, format: :json
+        put :update, id: 0, predicted_earned_challenge: params, format: :json
         expect(response.status).to eq(404)
       end
     end

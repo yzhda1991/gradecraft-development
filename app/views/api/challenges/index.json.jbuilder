@@ -68,4 +68,9 @@ end
 json.meta do
   json.term_for_challenges term_for :challenges
   json.update_predictions @update_predictions
+  json.include_in_predictor @include_in_predictor
+  json.current_user_is_student   current_user_is_student?
+  json.challenges_present  current_course.challenges.present?
+  json.team_present?  current_student.team_for_course(current_course).present?
+  json.add_team_score_to_student  current_course.add_team_score_to_student
 end

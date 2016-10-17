@@ -5,12 +5,12 @@ describe API::PredictedEarnedBadgesController do
   let(:course) { create :course}
   let(:student)  { create(:student_course_membership, course: course).user }
   let(:badge) { create :badge }
+  let(:params) {{ badge_id: badge.id, predicted_times_earned: 2 }}
 
   context "as student" do
     before(:each) { login_user(student) }
 
     describe "POST create" do
-      let(:params) {{ badge_id: badge.id, predicted_times_earned: 2 }}
 
       it "creates a new predicted earned badge" do
         expect{ post :create, predicted_earned_badge: params, format: :json }.to change(PredictedEarnedBadge, :count).by(1)
@@ -33,9 +33,8 @@ describe API::PredictedEarnedBadgesController do
     describe "PUT update" do
       it "updates the predicted times earned for a badge" do
         peb = create(:predicted_earned_badge, badge: badge, student: student)
-        predicted_times_earned = 4
-        put :update, id: peb.id, predicted_times_earned: predicted_times_earned, format: :json
-        expect(PredictedEarnedBadge.where(student: student, badge: badge).first.predicted_times_earned).to eq(4)
+        put :update, id: peb.id, predicted_earned_badge: params, format: :json
+        expect(PredictedEarnedBadge.where(student: student, badge: badge).first.predicted_times_earned).to eq(2)
         expect(response.status).to eq(200)
       end
     end

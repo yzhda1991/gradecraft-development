@@ -94,10 +94,20 @@ angular.module('helpers').factory('GradeCraftAPI', ['$http', ($http)->
 
   # shared methods for predictions
 
-  createPrediction = (article,url,requestParams)->
+  createPrediction = (article, url, requestParams)->
     $http.post(url, requestParams).then(
       (response)-> # success
         if response.status == 201
+          article.prediction = response.data.data.attributes
+        logResponse(response)
+      ,(response)-> # error
+        logResponse(response)
+    )
+
+  updatePrediction = (article, url, requestParams)->
+    $http.put(url, requestParams).then(
+      (response)-> # success
+        if response.status == 200
           article.prediction = response.data.data.attributes
         logResponse(response)
       ,(response)-> # error
@@ -115,6 +125,7 @@ angular.module('helpers').factory('GradeCraftAPI', ['$http', ($http)->
     deleteItem: deleteItem
     loadFromIncluded: loadFromIncluded
     createPrediction: createPrediction
+    updatePrediction: updatePrediction
   }
 ])
 

@@ -22,7 +22,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
     ).first
 
     if @prediction.present?
-      @prediction.predicted_times_earned = params[:predicted_times_earned]
+      @prediction.update predicted_earned_badge_params
 
       if @prediction.save
         PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue

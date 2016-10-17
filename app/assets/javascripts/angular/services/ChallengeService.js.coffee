@@ -34,6 +34,7 @@
   # GET index list of challenges including a student's grades and predictions
   getChallenges = ()->
     $http.get('/api/challenges').success( (response)->
+      return unless response.meta.include_in_predictor
       GradeCraftAPI.loadMany(challenges,response, {"include" : ['prediction','grade']})
       _.each(challenges, (challenge)->
         # add null prediction and grades when JSON contains none
@@ -48,25 +49,15 @@
   # PUT a challenge prediction
   postPredictedChallenge = (challenge)->
     if update.challenges
+      requestParams = {
+        "predicted_earned_challenge": {
+          "challenge_id": challenge.id,
+          "predicted_points": challenge.prediction.predicted_points
+        }}
       if challenge.prediction.id
-        updatePrediction(challenge)
+        GradeCraftAPI.updatePrediction(challenge, '/api/predicted_earned_challenges/' + challenge.prediction.id, requestParams)
       else
-        requestParams = {
-          "predicted_earned_challenge": {
-            "challenge_id": challenge.id,
-            "predicted_points": challenge.prediction.predicted_points
-          }
-        }
         GradeCraftAPI.createPrediction(challenge, '/api/predicted_earned_challenges/', requestParams)
-
-  updatePrediction = (challenge)->
-    $http.put(
-      '/api/predicted_earned_challenges/' + challenge.prediction.id, predicted_points: challenge.prediction.predicted_points
-    ).then((response)-> # success
-              GradeCraftAPI.logResponse(response)
-          ,(response)-> # error
-              GradeCraftAPI.logResponse(response)
-          )
 
   return {
       termFor: termFor

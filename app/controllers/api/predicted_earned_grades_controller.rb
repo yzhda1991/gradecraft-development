@@ -22,7 +22,7 @@ class API::PredictedEarnedGradesController < ApplicationController
     ).first
 
     if @prediction.present?
-      @prediction.predicted_points = params[:predicted_points]
+      @prediction.update predicted_earned_grade_params
 
       if @prediction.save
         PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue

@@ -48,25 +48,15 @@
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
     if update.predicted_earned_grades
+      requestParams = {
+        "predicted_earned_grade": {
+          "assignment_id": assignment.id,
+          "predicted_points": assignment.prediction.predicted_points
+        }}
       if assignment.prediction.id
-        updatePrediction(assignment)
+        GradeCraftAPI.updatePrediction(assignment, '/api/predicted_earned_grades/' + assignment.prediction.id, requestParams)
       else
-        requestParams = {
-          "predicted_earned_grade": {
-            "assignment_id": assignment.id,
-            "predicted_points": assignment.prediction.predicted_points
-          }
-        }
         GradeCraftAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
-
-  updatePrediction = (assignment)->
-    $http.put(
-      '/api/predicted_earned_grades/' + assignment.prediction.id, predicted_points: assignment.prediction.predicted_points
-    ).then((response)-> # success
-              GradeCraftAPI.logResponse(response)
-          ,(response)-> # error
-              GradeCraftAPI.logResponse(response)
-          )
 
   return {
       termFor: termFor
