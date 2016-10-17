@@ -11,11 +11,11 @@ describe API::AssignmentTypesController do
     end
 
     describe "GET index" do
-      it "returns assignment types with null student" do
+      it "returns assignment types without weights update" do
         get :index, format: :json
-        expect(assigns(:student).class).to eq(NullStudent)
         expect(assigns(:assignment_types)).to eq([assignment_type])
         expect(assigns(:update_weights)).to be_falsey
+        expect(assigns(:student)).to be_nil
         expect(response).to render_template(:index)
       end
     end

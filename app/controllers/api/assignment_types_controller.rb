@@ -6,7 +6,6 @@ class API::AssignmentTypesController < ApplicationController
       @student = current_student
       @update_weights = true
     else
-      @student = NullStudent.new
       @update_weights = false
     end
     @assignment_types =

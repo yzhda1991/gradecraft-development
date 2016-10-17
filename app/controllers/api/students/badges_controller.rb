@@ -28,10 +28,6 @@ class API::Students::BadgesController < ApplicationController
         :student_visible,
         :points
       )
-    @predicted_earned_badges =
-      PredictedEarnedBadge.find_or_create_for_student(
-        current_course.id, @student.id
-      )
     render template: "api/badges/index"
   end
 end
