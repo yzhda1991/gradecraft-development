@@ -1,5 +1,5 @@
 json.data @challenges do |challenge|
-  next unless !@student.present? || challenge.visible?(@student)
+  next unless !@student.present? || challenge.visible?
   json.type "challenges"
   json.id challenge.id.to_s
   json.attributes do
@@ -58,7 +58,7 @@ json.included do
       json.attributes do
         json.id             grade.id
         json.score          grade.score
-        #TODO: manage final_points on ChallengeGrades
+        # final_points should be managed on ChallengeGrades model
         json.final_points   grade.score
       end
     end

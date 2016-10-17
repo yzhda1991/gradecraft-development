@@ -58,9 +58,9 @@ json.data @assignments do |assignment|
       json.is_locked false
       json.has_been_unlocked false
       json.has_submission false
-      json.is_accepting_submissions
+      json.is_accepting_submissions \
         assignment.accepts_submissions? && !assignment.submissions_have_closed?
-      json.is_late
+      json.is_late \
         assignment.overdue? && assignment.accepts_submissions
       json.is_closed_without_submission false
     end
@@ -140,7 +140,6 @@ json.included do
     end
   end
 end
-
 
 json.meta do
   json.term_for_assignment term_for :assignment
