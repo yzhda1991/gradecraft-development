@@ -13,6 +13,7 @@
         %th Role
       %th{scope: "col"} Score
       %th Grade
+      %th Last Active
       %th{ :style => "min-width: 200px" }
   %tbody
     - students.each do |student|
@@ -40,6 +41,7 @@
         %td
           - if student.grade_for_course(current_course).present?
             = student.grade_for_course(current_course).name
+        %td= student.last_course_login(current_course)
         %td
           .right
             %ul.button-bar

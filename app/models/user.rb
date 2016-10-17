@@ -485,8 +485,4 @@ class User < ActiveRecord::Base
   def final_earnable_course_badges_sql(grade)
     earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
   end
-
-  def cache_last_login
-    self.cached_last_login_at = self.last_login_at
-  end
 end
