@@ -61,7 +61,7 @@ describe API::ChallengesController  do
     describe "GET index" do
       it "assigns false for updating predictions" do
         get :index, format: :json
-        expect(assigns(:update_predictions)).to be_falsy
+        expect(assigns(:update_predictions)).to be_falsey
       end
     end
   end
