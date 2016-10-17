@@ -30,4 +30,4 @@
                 - student.team.leaders.each do |leader|
                   - cache ["v1", leader] do
                     %li= link_to leader.first_name, staff_path(leader)
-        %td= student.try(:last_activity_at) || "(never)"
+        %td= student.last_course_login(course) || "(never)"
