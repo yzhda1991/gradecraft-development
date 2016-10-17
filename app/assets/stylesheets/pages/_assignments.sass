@@ -39,13 +39,7 @@
   li
     padding: 0.25rem 0
 
-// assignment index page for students and instructors
-.assignment-index-container
-  max-width: 1200px
-  margin: 0 auto
-
 .assignment-type-message
-  background-color: $color-grey-7
   padding: 0.5rem
   margin-bottom: 1rem
   font-weight: 300
@@ -61,6 +55,8 @@
     margin: 0 0 -1px 0
     border: 1px solid $color-grey-6
     border-collapse: collapse
+    &:hover
+        background-color: $color-grey-7
     h3
       display: inline
       font-size: 1.1rem
@@ -71,6 +67,9 @@
       display: block
       @media (max-width: $media-medium-max)
         padding: 0.75rem 0.5rem
+      &:hover
+        text-decoration: none
+        color: $color-blue-2
     &.open
       border-bottom: 3px solid $color-blue-2
   .points-summary
@@ -88,12 +87,14 @@
 .assignment-type-container
   padding: 1rem
   border: 1px solid $color-grey-6
-  margin-bottom: 0.5rem
+  margin-bottom: -1px
+  background-color: $color-grey-7
   @media (max-width: $media-medium-max)
     padding: 0.5rem
 
 .assignment-container
   border: 1px solid $color-grey-6
+  background-color: $color-white
   padding: 0.5rem
   margin-bottom: -1px
   &.predicted
@@ -139,7 +140,7 @@
     width: 100%
 
 .assignment-type-points-graph
-  width: 200px
+  width: 400px
   height: 10px
   background-color: $color-grey-6
   position: relative
