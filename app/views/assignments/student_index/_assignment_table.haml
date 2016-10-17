@@ -6,6 +6,10 @@
           %span.checkmark= glyph(:check)
         - elsif assignment.is_predicted_by_student?(current_student)
           %span.flag= glyph(:flag)
+        - if assignment.required? && !assignment.is_predicted_by_student?(current_student)
+          %a.asterisk= glyph(:asterisk)
+          .display_on_hover.hover-style
+            This #{term_for :assignment} is required!
 
       .assignment-name
         - if presenter.name_visible?(assignment)
