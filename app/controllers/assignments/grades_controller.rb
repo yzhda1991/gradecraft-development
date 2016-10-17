@@ -100,9 +100,9 @@ class Assignments::GradesController < ApplicationController
   def mass_update
     filter_params_with_raw_points! :grades_attributes
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
+    result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
-    if @result.success? && @result.unsuccessful.length == 0
+    if result.success?
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, team_id: params[:team_id])
       else
