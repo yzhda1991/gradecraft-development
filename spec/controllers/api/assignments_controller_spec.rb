@@ -6,6 +6,8 @@ describe API::AssignmentsController do
   let(:student)  { create(:student_course_membership, course: course).user }
   let(:professor) { create(:professor_course_membership, course: course).user }
   let!(:assignment) { create(:assignment, course: course) }
+  let!(:predicted_earned_grade) { create :predicted_earned_grade, student: student, assignment: assignment }
+  let!(:grade) { create :grade, student: student, assignment: assignment }
 
   context "as professor" do
     before do
@@ -27,9 +29,6 @@ describe API::AssignmentsController do
   end
 
   context "as student" do
-    let!(:predicted_earned_grade) { create :predicted_earned_grade, student: student, assignment: assignment }
-    let!(:grade) { create :grade, student: student, assignment: assignment }
-
     before do
       login_user(student)
       allow(controller).to receive(:current_course).and_return(course)
@@ -57,9 +56,14 @@ describe API::AssignmentsController do
     end
 
     describe "GET index" do
-      it "assigns false for updating predictions" do
+      it "assigns the assignments with grades, no predictions and no call to update" do
         get :index, format: :json
+        expect(assigns(:assignments).first.id).to eq(assignment.id)
+        expect(assigns :student).to eq(student)
+        expect(assigns :predicted_earned_grades).to be_nil
+        expect(assigns :grades).to eq([grade])
         expect(assigns(:update_predictions)).to be_falsy
+        expect(response).to render_template(:index)
       end
     end
   end
