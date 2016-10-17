@@ -42,7 +42,7 @@ $card-margin-1 : 3px
   height: 140px
 
 .predictor-graph
-  width: calc(100% - 401px)
+  width: 100%
   max-width: 1099px
   position: fixed
   top: 80px
@@ -229,7 +229,7 @@ $card-margin-1 : 3px
     height: 18px
     border-radius: 50%
   .coin
-      margin: 2px 0 0 -16px
+    margin: 2px 0 0 -16px
   .coin-non-interactive, .coin-slot
     margin: 2px 0 0 2px
   .coin, .coin-non-interactive
@@ -518,22 +518,16 @@ $card-margin-1 : 3px
       margin: 8px 3px
 
 
-// small
-@media (max-width: $media-small-max)
-  @include mobile-headers-mixin
-  @include mobile-graph-mixin
+// large
+@media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
   .predictor-article-card
-    width: $card-width-1
-    margin: $card-margin-1
-    .info-icon
-      display: none
-  .collapse-arrow.doubled
-    margin: 35px 0 0 0
-
-  .student .predictor-graph
-    margin-top: 0rem
-    top: 45px
-
+    width: $card-width-3
+    margin: $card-margin-3
+  #predictor-main-header, .predictor-section
+  .mainContainer.staff
+    .predictor-article-card
+      width: $card-width-1
+      margin: $card-margin-1
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max + 5rem)
@@ -549,14 +543,18 @@ $card-margin-1 : 3px
     .student-panel
       display: none
 
-
-// large
-@media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
+// small
+@media (max-width: $media-small-max)
+  @include mobile-headers-mixin
+  @include mobile-graph-mixin
   .predictor-article-card
-    width: $card-width-3
-    margin: $card-margin-3
-  #predictor-main-header, .predictor-section
-  .mainContainer.staff
-    .predictor-article-card
-      width: $card-width-1
-      margin: $card-margin-1
+    width: $card-width-1
+    margin: $card-margin-1
+    .info-icon
+      display: none
+  .collapse-arrow.doubled
+    margin: 35px 0 0 0
+
+  .student .predictor-graph
+    margin-top: 0rem
+    top: 45px
