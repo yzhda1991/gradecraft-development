@@ -11,14 +11,8 @@
       %table
         %thead
           %tr
-            - if @assignment.has_groups?
-              = render partial: "assignments/grades/components/group_table_head", locals: { presenter: presenter }
-            - else
-              = render partial: "assignments/grades/components/individual_table_head", locals: { model: @assignment }
-        - if @assignment.has_groups?
-          = render partial: "assignments/grades/components/group_table_body", locals: { presenter: presenter, f: f }
-        - else
-          = render partial: "assignments/grades/components/individual_table_body", locals: { model: @assignment, f: f }
+            = render partial: "assignments/grades/components/individual_table_head", locals: { model: @assignment }
+            = render partial: "assignments/grades/components/individual_table_body", locals: { model: @assignment, f: f }
 
       .submit-buttons
         %ul

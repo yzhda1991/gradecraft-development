@@ -1,6 +1,4 @@
 require_relative "../../services/creates_many_grades"
-require_relative "../../services/creates_group_grades"
-require_relative "../../services/creates_many_group_grades"
 
 class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?, except: :self_log
@@ -79,40 +77,30 @@ class Assignments::GradesController < ApplicationController
   # Quickly grading a single assignment for all students
   def mass_edit
     @assignment = current_course.assignments.find(params[:assignment_id])
-
     if @assignment.has_groups?
-      presenter = Assignments::Grades::MassEditPresenter.build({
-        assignment: @assignment
-      })
-      render :mass_edit, presenter
-    else
-      @assignment_type = @assignment.assignment_type
-      @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
-
-      if params[:team_id].present?
-        @team = current_course.teams.find_by(id: params[:team_id])
-        @students = current_course.students_being_graded_by_team(@team)
-      else
-        @students = current_course.students_being_graded
-      end
-
-      @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
-      @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
+      redirect_to mass_edit_assignment_groups_grades_path and return
     end
+
+    @assignment_type = @assignment.assignment_type
+    @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
+
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students_being_graded
+    end
+
+    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
+    @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
   # PUT /assignments/:assignment_id/grades/mass_update
   # Updates all the grades for the students or groups in a course for an assignment
   def mass_update
+    filter_params_with_raw_points! :grades_attributes
     @assignment = current_course.assignments.find(params[:assignment_id])
-
-    if @assignment.has_groups?
-      filter_params_with_raw_points :grades_by_group
-      @result = Services::CreatesManyGroupGrades.create @assignment.id, current_user.id, assignment_group_grades_params
-    else
-      filter_params_with_raw_points :grades_attributes
-      @result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
-    end
+    @result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
     if @result.success? && @result.unsuccessful.length == 0
       if !params[:team_id].blank?
@@ -183,13 +171,7 @@ class Assignments::GradesController < ApplicationController
                                                            :id]
   end
 
-  def assignment_group_grades_params
-    params.require(:assignment).permit grades_by_group: [:graded_by_id, :graded_at,
-                                                           :instructor_modified, :raw_points,
-                                                           :status, :pass_fail_status, :group_id]
-  end
-
-  def filter_params_with_raw_points(attribute_name)
+  def filter_params_with_raw_points!(attribute_name)
     params[:assignment][attribute_name] = params[:assignment][attribute_name].delete_if do |key, value|
       value[:raw_points].nil? || value[:raw_points].empty?
     end
