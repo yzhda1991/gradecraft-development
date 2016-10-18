@@ -25,14 +25,14 @@ json.data @challenges do |challenge|
     if @predicted_earned_challenges.present? && @predicted_earned_challenges.where(challenge_id: challenge.id).present?
       json.prediction data: {
         type: "predicted_earned_challenges",
-        id: @predicted_earned_challenges.where(challenge_id: challenge.id).first.id
+        id: @predicted_earned_challenges.where(challenge_id: challenge.id).first.id.to_s
       }
     end
 
     if @grades.present? && @grades.where(challenge_id: challenge.id).present?
       grade =  @grades.where(challenge_id: challenge.id).first
       if ChallengeGradeProctor.new(grade).viewable?(@student)
-        json.grade data: { type: "challenge_grades", id: grade.id }
+        json.grade data: { type: "challenge_grades", id: grade.id.to_s }
       end
     end
   end

@@ -150,7 +150,7 @@ describe "api/assignments/index" do
       render
       json = JSON.parse(response.body)
       expect(json["data"][0]["relationships"]["grade"]).to eq(
-        {"data"=>{"type"=>"grades", "id"=>grade.id}}
+        {"data"=>{"type"=>"grades", "id"=>grade.id.to_s}}
       )
       expect(json["included"][0]["attributes"]).to eq(
         { "id" => grade.id,
@@ -170,7 +170,7 @@ describe "api/assignments/index" do
       render
       json = JSON.parse(response.body)
       expect(json["data"][0]["relationships"]["prediction"]).to eq(
-        {"data"=>{"type"=>"predicted_earned_grades", "id"=>prediction.id}}
+        {"data"=>{"type"=>"predicted_earned_grades", "id"=>prediction.id.to_s}}
       )
       expect(json["included"][0]["attributes"]).to eq(
         { "id" => prediction.id,

@@ -55,7 +55,7 @@ angular.module('helpers').factory('GradeCraftAPI', ['$http', ($http)->
     _.each(options.include, (included)->
       return if !response.included || !item.relationships || !item.relationships[included]
       child =  _.find(response.included,
-        {id: item.relationships[included].data.id.toString(),
+        {id: item.relationships[included].data.id,
         type: item.relationships[included].data.type}
       )
       item.attributes[included] = child.attributes if child

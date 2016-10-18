@@ -36,14 +36,14 @@ json.data @badges do |badge|
     if @predicted_earned_badges.present? &&  @predicted_earned_badges.where(badge_id: badge.id).present?
       json.prediction data: {
         type: "predicted_earned_badges",
-        id: @predicted_earned_badges.where(badge_id: badge.id).first.id
+        id: @predicted_earned_badges.where(badge_id: badge.id).first.id.to_s
       }
     end
 
     if @earned_badges.present? && @earned_badges.where(badge_id: badge.id).present?
       json.earned_badge data: {
         type: "earned_badges",
-        id: @earned_badges.where(badge_id: badge.id).first.id
+        id: @earned_badges.where(badge_id: badge.id).first.id.to_s
       }
     end
   end

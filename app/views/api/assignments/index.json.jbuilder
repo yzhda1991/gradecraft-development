@@ -100,14 +100,14 @@ json.data @assignments do |assignment|
     if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
       json.prediction data: {
         type: "predicted_earned_grades",
-        id: @predicted_earned_grades.where(assignment_id: assignment.id).first.id
+        id: @predicted_earned_grades.where(assignment_id: assignment.id).first.id.to_s
       }
     end
 
     if @grades.present? && @grades.where(assignment_id: assignment.id).present?
       grade =  @grades.where(assignment_id: assignment.id).first
       if GradeProctor.new(grade).viewable?(@student)
-        json.grade data: { type: "grades", id: grade.id }
+        json.grade data: { type: "grades", id: grade.id.to_s }
       end
     end
   end
