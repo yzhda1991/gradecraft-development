@@ -100,7 +100,7 @@ describe "assignments/student_index/_assignments" do
       @assignment.required = true
       @assignment.save
       render
-      assert_select "i.fa-exclamation-circle", count: 1
+      assert_select "i.fa-asterisk", count: 1
     end
 
     it "shows the due date if it's in the future" do
