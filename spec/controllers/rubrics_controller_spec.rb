@@ -46,7 +46,7 @@ describe RubricsController do
       it "copies the full rubric and adds it to the assignment" do
         post :copy, assignment_id: new_assignment.id, rubric_id: full_rubric.id
         expect(new_assignment.rubric.criteria.pluck(:max_points)).to \
-          eq(full_rubric.criteria.pluck(:max_points))
+          match_array(full_rubric.criteria.pluck(:max_points))
       end
 
       it "copies earned badges on rubric" do
