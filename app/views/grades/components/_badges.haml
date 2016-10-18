@@ -1,4 +1,4 @@
-.bold= "Earned #{ term_for :badges }:"
+%h4.uppercase= "Earned #{ term_for :badges }:"
 %ul.earned-badge-list
   - grade.earned_badges.each do |earned_badge|
     %li

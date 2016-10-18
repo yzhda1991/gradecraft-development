@@ -36,6 +36,8 @@ en:
       title: "Create a New #{ term_for :assignment }"
     show:
       title: "#{ @assignment.name }"
+    grades_review:
+      title: "Review Grades for #{ @assignment.name }"
     grades:
       mass_edit:
         title: "Quick Grade #{ @assignment.name }"

@@ -121,6 +121,20 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def grades_review
+    @assignment = current_course.assignments.find(params[:id])
+    if @assignment.grade_with_rubric?
+      @criteria = @assignment.rubric.criteria.includes(levels: :level_badges)
+      @criterion_grades = @assignment.criterion_grades
+    end
+    render :grades_review, Assignments::Presenter.build({
+      assignment: @assignment,
+      course: current_course,
+      team_id: params[:team_id],
+      view_context: view_context
+      })
+  end
+
   private
 
   def sanitize_params

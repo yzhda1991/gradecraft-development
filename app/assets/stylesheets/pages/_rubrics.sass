@@ -317,7 +317,7 @@ h4.notice
   .criterion
     background-color: $color-white
     margin-bottom: 2rem
-    border: 1px solid $color-grey-6
+    border-bottom: 1px solid $color-grey-6
   .criterion-heading
     background-color: $color-blue-2
     color: $color-white
@@ -336,7 +336,7 @@ h4.notice
     @media (max-width: $media-small-max)
       display: none
 
-  .level-tab
+  .level-tab, .criterion-tab, .comments-tab
     list-style-type: none
     display: inline-block
     flex: 1
@@ -344,7 +344,8 @@ h4.notice
     padding: 0.25rem
     background-color: $color-grey-6
     color: $color-grey-2
-    border: 1px solid $color-white
+    border-left: 1px solid $color-white
+    border-right: 1px solid $color-white
     font-size: 0.8rem
     cursor: pointer
     position: relative
@@ -366,6 +367,10 @@ h4.notice
 
   .level-name
     display: inline
+
+  .earned
+    background-color: lighten($color-green-1, 20%)
+
 
   .level-description
     font-size: 0.85rem
@@ -446,6 +451,10 @@ h4.notice
   display: inline
   vertical-align: top
 
+// styles for the rubric grade review page
+#rubric-results-table
+
+
 // styles for ungraded rubric view
 #rubric-ungraded
   .tab-panel
@@ -469,7 +478,7 @@ h4.notice
       padding-right: 0
 
 // Edit rubric grade view
-#rubric-grade-edit
+#rubric-grade-edit, #rubric-results-table
   .criterion-name, .level-name
     font-weight: bold
 
@@ -480,7 +489,7 @@ h4.notice
     font-size: 80%
     text-transform: uppercase
 
-  .level-tab
+  .level-tab, .criterion-tab, .comments-tab
     padding: 0
     &.selected
       .check-mark
@@ -510,10 +519,8 @@ h4.notice
     background-color: $color-green-1
     padding: 0.2rem
 
-
   .level-tab.selected
     background-color: $level-selected-color
-
 
   .level-badge-image
     list-style: none
@@ -533,6 +540,42 @@ h4.notice
   h4.notice
     color: $color-green-2
 
+#rubric-results-table
+  padding: 1px
+  border: 1px solid $color-grey-6
+  .criterion
+    margin-bottom: 0
+    border-bottom: 1px solid $color-white
+  .criterion-tab
+    background-color: $color-blue-2
+    &:hover
+      background-color: $color-blue-2
+  .comments-tab
+    background-color: $color-white
+    .comments-heading
+      padding: 0.25rem
+      background-color: $color-grey-4
+      color: $color-white
+    .comments-text, .comments-text:hover
+      background-color: $color-white
+      padding: 0.25rem
+  .level-heading
+    border-bottom: 0
+    .earned
+      background-color: $meets-expectations-color
+  .feedback-name
+    background-color: $color-grey-6
+    padding: .25rem
+  .level-comments
+    padding: .25rem
+  .level-tab, .criterion-tab, .comments-tab
+    &:hover, &.selected
+      background-color: $color-grey-6
+    &.earned
+      background-color: $meets-expectations-color
+      &:hover
+        background-color: $meets-expectations-color
+
 .points-adjustment-feedback
   margin-right: 1rem
 
@@ -541,3 +584,6 @@ h4.notice
 
 .download-link
   margin: 0.5rem 0
+
+.level-earned
+  background-color: lighten($color-green-1, 20%)

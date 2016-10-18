@@ -1,0 +1,23 @@
+.pageContent
+  = render "layouts/alerts"
+
+  = team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
+
+  - presenter.students_being_graded.each do |student|
+    - grade = student.grade_for_assignment(presenter.assignment)
+    - if grade.present? && grade.instructor_modified?
+      %h4.uppercase= student.name
+      .left= render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
+      .right= render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
+
+    - if presenter.grade_with_rubric?
+      .clear
+      = render partial: "assignments/rubric_grade_review", locals: { presenter: presenter, student: student, grade: grade }
+
+    - if grade.graded_by.present? && grade.feedback.present?
+      = render partial: "grades/components/feedback", locals: { student: student, grade: grade }
+    - if grade.grade_files.present?
+      = render partial: "grades/components/attachments", locals: { student: student, grade: grade }
+
+    .clear
+    %hr.dotted

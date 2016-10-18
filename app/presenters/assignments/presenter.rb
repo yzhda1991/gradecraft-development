@@ -35,7 +35,7 @@ class Assignments::Presenter < Showtime::Presenter
   def prediction_for(assignment)
     grade_for(assignment).predicted_points
   end
-  
+
   def positive_prediction_for?(assignment)
     grade_for(assignment).predicted_points > 0
   end
