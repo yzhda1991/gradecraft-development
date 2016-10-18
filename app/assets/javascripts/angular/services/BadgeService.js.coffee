@@ -1,7 +1,7 @@
 # Manages state of Badges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   badges = []
   earnedBadges = []
@@ -46,9 +46,9 @@
           "predicted_times_earned": badge.prediction.predicted_times_earned
         }}
       if badge.prediction.id
-        GradeCraftAPI.updatePrediction(badge, '/api/predicted_earned_badges/' + badge.prediction.id, requestParams)
+        GradeCraftPredictionAPI.updatePrediction(badge, '/api/predicted_earned_badges/' + badge.prediction.id, requestParams)
       else
-        GradeCraftAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
+        GradeCraftPredictionAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->

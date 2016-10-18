@@ -2,7 +2,7 @@
 # points of control for AssignmentTypes, Assignments, Badges, and Challenges
 # Includes calculations for summing points that involve cross-model interaction
 
-@gradecraft.factory 'PredictorService', ['$http', 'GradeCraftAPI', 'GradeSchemeElementsService', 'AssignmentTypeService', 'AssignmentService', 'BadgeService', 'ChallengeService', ($http, GradeCraftAPI, GradeSchemeElementsService, AssignmentTypeService, AssignmentService, BadgeService, ChallengeService) ->
+@gradecraft.factory 'PredictorService', ['GradeCraftAPI', 'GradeSchemeElementsService', 'AssignmentTypeService', 'AssignmentService', 'BadgeService', 'ChallengeService', (GradeCraftAPI, GradeSchemeElementsService, AssignmentTypeService, AssignmentService, BadgeService, ChallengeService) ->
 
   update = {}
 

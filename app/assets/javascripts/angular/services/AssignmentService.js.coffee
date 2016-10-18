@@ -1,7 +1,7 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   assignments = []
   update = {}
@@ -54,9 +54,9 @@
           "predicted_points": assignment.prediction.predicted_points
         }}
       if assignment.prediction.id
-        GradeCraftAPI.updatePrediction(assignment, '/api/predicted_earned_grades/' + assignment.prediction.id, requestParams)
+        GradeCraftPredictionAPI.updatePrediction(assignment, '/api/predicted_earned_grades/' + assignment.prediction.id, requestParams)
       else
-        GradeCraftAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
+        GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
   return {
       termFor: termFor

@@ -1,7 +1,7 @@
 # Manages state of Challenges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'ChallengeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'ChallengeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   challenges = []
   update = {}
@@ -55,9 +55,9 @@
           "predicted_points": challenge.prediction.predicted_points
         }}
       if challenge.prediction.id
-        GradeCraftAPI.updatePrediction(challenge, '/api/predicted_earned_challenges/' + challenge.prediction.id, requestParams)
+        GradeCraftPredictionAPI.updatePrediction(challenge, '/api/predicted_earned_challenges/' + challenge.prediction.id, requestParams)
       else
-        GradeCraftAPI.createPrediction(challenge, '/api/predicted_earned_challenges/', requestParams)
+        GradeCraftPredictionAPI.createPrediction(challenge, '/api/predicted_earned_challenges/', requestParams)
 
   return {
       termFor: termFor
