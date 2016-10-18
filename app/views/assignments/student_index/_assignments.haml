@@ -1,23 +1,29 @@
 
 // Display top headers for expandable list of assignments.
-- presenter.assignment_types.each do |assignment_type|
-  .assignment_type{id: "assignment-type-#{assignment_type.id}" }
+.assignment-index-container
+  - presenter.assignment_types.each do |assignment_type|
+    .assignment_type.student{id: "assignment-type-#{assignment_type.id}" }
 
-    // Display the student's points out of assignment total, if there is an assignment max value. Else
-    // display the student's points out of the the current point total for assignment.
-    %h3.collapse
-      %a
-        %i.fa.fa-angle-double-right.fa-fw
-      #{assignment_type.try(:name)} • #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
+      // Display the student's points out of assignment total, if there is an assignment max value. Else
+      // display the student's points out of the the current point total for assignment.
+      .collapse
+        %h3= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
+        .points-summary
+          .assignment-type-points-graph
+            .points-graph-fill-bar{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
+          %span.assignment-type-points #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
 
-    .assignment-type-container
-      - if assignment_type.is_capped?
-        .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
-      - if assignment_type.count_only_top_grades?
-        .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
-      - if assignment_type.description?
-        %p.description= raw assignment_type.description
+      .assignment-type-container
+        - if presenter.assignment_type_message?(assignment_type)
+          .assignment-type-message
+            - if assignment_type.description?
+              %h4 #{assignment_type.name} Guidelines
+              %p.description= raw assignment_type.description
+            - if assignment_type.is_capped?
+              .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
+            - if assignment_type.count_only_top_grades?
+              .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
 
-      // Display the assignments for each assignment type in a responsive table, below header.
-      %table.default_assignments_dynatable.dynatable
-        = render partial: "assignments/student_index/assignment_table", locals: { presenter: presenter, assignment_type: assignment_type }
+        // Display the assignments for each assignment type in a responsive table, below header.
+        %student-assignment-list
+          = render partial: "assignments/student_index/assignment_table", locals: { presenter: presenter, assignment_type: assignment_type }

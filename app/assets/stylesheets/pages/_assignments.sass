@@ -38,3 +38,120 @@
 
   li
     padding: 0.25rem 0
+
+.assignment-type-message
+  padding: 0.5rem
+  margin-bottom: 1rem
+  font-weight: 300
+  @media (max-width: $media-small-max)
+    display: none
+  h4
+    font-weight: 400
+  p 
+    margin: 0.25rem 0
+
+.assignment_type.student
+  .collapse
+    margin: 0 0 -1px 0
+    border: 1px solid $color-grey-6
+    border-collapse: collapse
+    &:hover
+        background-color: $color-grey-7
+    h3
+      display: inline
+      font-size: 1.1rem
+      @media (max-width: $media-medium-max)
+        font-size: 1rem
+    a
+      padding: 0.75rem
+      display: block
+      @media (max-width: $media-medium-max)
+        padding: 0.75rem 0.5rem
+      &:hover
+        text-decoration: none
+        color: $color-blue-2
+    &.open
+      border-bottom: 3px solid $color-blue-2
+  .points-summary
+    display: inline
+    float: right
+    @media (max-width: $media-medium-max)
+      font-size: 0.8rem
+      display: block
+      float: none
+
+.assignment-type-points
+  @media (max-width: $media-medium-max)
+    float: right
+
+.assignment-type-container
+  padding: 1rem
+  border: 1px solid $color-grey-6
+  margin-bottom: -1px
+  background-color: $color-grey-7
+  @media (max-width: $media-medium-max)
+    padding: 0.5rem
+
+.assignment-container
+  border: 1px solid $color-grey-6
+  background-color: $color-white
+  padding: 0.5rem
+  margin-bottom: -1px
+  &.predicted
+    border-left: 2px solid $color-orange-1
+
+.assignment-indicator-icon
+  width: 16px
+  @media (max-width: $media-medium-max)
+    width: auto
+  .checkmark
+    color: $color-green-1
+  .flag
+    color: $color-orange-1
+  .asterisk
+    color: $color-purple-2
+
+.assignment-name
+  display: inline-block
+  width: 50%
+  @media (max-width: $media-medium-max)
+    width: 90%
+    font-size: 0.9rem
+    height: 1.3rem
+    overflow: hidden
+    text-overflow: ellipsis
+    word-wrap: break-word
+    white-space: nowrap
+
+.assignment-info
+  display: inline-block
+  font-size: 0.8rem
+  @media (max-width: $media-medium-max)
+    font-size: 0.8rem
+  p
+    margin: 0
+
+.assignment-points
+  width: 25%
+  @media (max-width: $media-medium-max)
+    width: 100%
+
+.assignment-due-date
+  width: 20%
+  @media (max-width: $media-medium-max)
+    width: 100%
+
+.assignment-type-points-graph
+  width: 400px
+  height: 10px
+  background-color: $color-grey-6
+  position: relative
+  @media (max-width: $media-medium-max)
+    display: inline-block
+    margin-top: 0.3rem
+    width: 50%
+
+.points-graph-fill-bar
+  height: 10px
+  background-color: $color-green-1
+  position: absolute

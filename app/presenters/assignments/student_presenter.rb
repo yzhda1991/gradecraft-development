@@ -58,4 +58,8 @@ class Assignments::StudentPresenter < Showtime::Presenter
     assignment.accepts_submissions? &&
         assignment.is_unlocked_for_student?(student)
   end
+
+  def assignment_type_message?(assignment_type)
+    assignment_type.description? || assignment_type.is_capped?  || assignment_type.count_only_top_grades?
+  end
 end
