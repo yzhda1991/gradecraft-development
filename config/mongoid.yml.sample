@@ -69,7 +69,8 @@ test:
       hosts:
         - localhost:27017
       options:
-        read: :primary_preferred
+        read:
+          mode: :primary_preferred
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
