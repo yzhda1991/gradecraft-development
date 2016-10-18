@@ -49,13 +49,7 @@
 %hr
 
 %h5 Course Setup
-%li= link_to_unless_current glyph(:cog) + "Basic Settings", edit_course_path(current_course)
-%li= link_to_unless_current glyph("map-signs") + "Course Details", course_details_path
-%li= link_to_unless_current glyph(:mixcloud) + "Course Integrations", integrations_path
-%li= link_to_unless_current glyph(:language) + "Custom Terms", custom_terms_path
-%li= link_to_unless_current glyph(:database) + "Multiplier Settings", multiplier_settings_path
-%li= link_to_unless_current glyph(:child) + "Player Settings", player_settings_path
-%li= link_to_unless_current glyph(:sitemap) + "Onboarding Setup", student_onboarding_setup_path
+%li= link_to_unless_current glyph(:cog) + "Course Settings", edit_course_path(current_course)
 %li= link_to_unless_current glyph(:tasks) + "Predictor Preview", predictor_path
 %li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 

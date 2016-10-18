@@ -214,37 +214,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def courses_edit
     breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Basic Settings')
+    breadcrumb('Course Settings')
   end
 
   def courses_show
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb(objects[:course].name, course_path(objects[:course]))
-  end
-
-  def courses_player_settings
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :student } Settings', player_settings_path)
-  end
-
-  def courses_multiplier_settings
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :weight } Settings', multiplier_settings_path)
-  end
-
-  def courses_student_onboarding_setup
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :student } Onboarding Setup', student_onboarding_setup_path)
-  end
-
-  def courses_course_details
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Course Details', course_details_path)
-  end
-
-  def courses_custom_terms
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Custom Terms', custom_terms_path)
   end
 
   def earned_badges_edit
