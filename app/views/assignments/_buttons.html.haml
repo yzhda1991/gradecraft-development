@@ -6,6 +6,8 @@
         %li
           %a.button.button-edit.button-options= glyph(:cog) + "Options" + glyph("caret-down")
         %ul.options-menu
+          - if presenter.assignment.grades.present?
+            %li= link_to glyph(:"check-square") + "Review Grades", grades_review_assignment_path(id: presenter.assignment)
           %li= link_to glyph(:copy) + "Copy", copy_assignments_path(id: presenter.assignment), method: :copy
           - if presenter.assignment.has_groups?
             %li= link_to glyph(:users) + "Create #{term_for :group}", new_group_path
