@@ -42,6 +42,11 @@ describe Services::CreatesGradeUsingRubric do
       described_class.create params, agent
     end
 
+    it "updates the badges for grade" do
+      expect(Services::Actions::UpdatesEarnedBadgesForGrade).to receive(:execute).and_call_original
+      described_class.create params, agent
+    end
+
     it "creates level badges" do
       expect(Services::Actions::BuildsEarnedLevelBadges).to receive(:execute).and_call_original
       described_class.create params, agent
