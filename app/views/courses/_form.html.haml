@@ -44,58 +44,69 @@
       = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
       .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?
 
-    .form-item
-      = f.label :has_teams, "Sections"
-      = f.check_box :has_teams, {"aria-describedby" => "txtSections"}
-      .form_label{id: "txtSections"}  Will you have semester-long sections in your course?
-
-    .form-item
-      = f.label :has_team_challenges, "Section Assignments"
-      = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections"}
-      .form_label{id: "txtSections"}  Will you have section assignments in your course?
-
-    .form-item
-      = f.label :has_badges, "Badges"
-      = f.check_box :has_badges
-      .form_label Do you want to use badges in your course?
-      
-    - if current_user_is_admin?
-      .form-item
-        = f.label :has_public_badges, "Public Badges"
-        = f.check_box :has_public_badges
-        .form_label Can students export the badges earned in your course?
-
-    .form-item
-      = f.label :teams_visible, "Section Leaderboard"
-      = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard"}
-      .form_label{id: "txtSectionLeaderboard"} Can students see a leaderboard of the section rankings and their points?
-
-    .form-item
-      = f.label :has_in_team_leaderboards, "In-Section Leaderboard"
-      = f.check_box :has_in_team_leaderboards, {"aria-describedby" => "txtInSectionLeaderboard"}
-      .form_label{id: "txtInSectionLeaderboard"} Can students see in-section rankings and points (students must opt in to this by adding a screenname to protect their privacy)?
-
-    .form-item
-      = f.label :team_score_average, "Section Score = Average User Score"
-      = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
-      .form_label{id: "txtScoreAverage"}  Will sections' scores be the average of their students' scores?
-
-    .form-item
-      = f.label :add_team_score_to_student, "Student Score = Grades + Team Assignments"
-      = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
-      .form_label{id: "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
-
-    .form-item
-      = f.label :hide_analytics, "Hide Analytics?"
-      = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-      .form_label{id: "hideAnalytics"}  Do you want to hide assignment and course analytics from students?
-
-
     - if current_user_is_admin?
       .form-item
         = f.label :status, "Active?"
         = f.check_box :status
         .form_label Is this an active course?
+
+  %section
+    %h4.uppercase Enable Features
+    .form-card-grid
+      .form-card
+        .top-level-form
+          = f.label :has_badges, "Badges"
+          = f.check_box :has_badges
+          .feature-description Do you want to use badges in your course?
+        .advanced-form
+          %a.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card.closed
+          - if current_user_is_admin?
+            = f.label :has_public_badges, "Can students export the badges earned in your course?"
+            = f.check_box :has_public_badges
+
+      .form-card
+        .top-level-form
+          = f.label :hide_analytics, "Hide Analytics?"
+          = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+          .feature-description{id: "hideAnalytics"}  Do you want to hide assignment and course analytics from students?
+
+      .form-card
+        .top-level-form
+          = f.label :has_teams, "Sections"
+          = f.check_box :has_teams, {"aria-describedby" => "txtSections"}
+          .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
+
+      .form-card
+        .top-level-form
+          = f.label :has_team_challenges, "Section Assignments"
+          = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections"}
+          .feature-description{id: "txtSections"}  Will you have section assignments in your course?
+
+      .form-card
+        .top-level-form
+          = f.label :teams_visible, "Section Leaderboard"
+          = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard"}
+          .feature-description{id: "txtSectionLeaderboard"} Can students see a leaderboard of the section rankings and their points?
+
+      .form-card
+        .top-level-form
+          = f.label :has_in_team_leaderboards, "In-Section Leaderboard"
+          = f.check_box :has_in_team_leaderboards, {"aria-describedby" => "txtInSectionLeaderboard"}
+          .feature-description{id: "txtInSectionLeaderboard"} Can students see in-section rankings and points (students must opt in to this by adding a screenname to protect their privacy)?
+
+      .form-card
+        .top-level-form
+          = f.label :team_score_average, "Section Score = Average User Score"
+          = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
+          .feature-description{id: "txtScoreAverage"}  Will sections' scores be the average of their students' scores?
+
+      .form-card
+        .top-level-form
+          = f.label :add_team_score_to_student, "Student Score = Grades + Team Assignments"
+          = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
+          .feature-description{id: "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
+
 
   .submit-buttons
     %ul

@@ -1,0 +1,54 @@
+@import "../utilities/variables"
+
+.form-card-grid
+  display: flex
+  flex-wrap: wrap
+
+.form-card
+  border: 1px solid $color-grey-6
+  width: 300px
+  margin: 0.5rem
+  flex: 1 auto
+  position: relative
+
+.top-level-form
+  padding: 1rem
+
+  .feature-description
+    font-size: 0.8rem
+    font-weight: 300
+
+.advanced-form
+  background-color: $color-grey-7
+  padding: 0.25rem 1rem
+
+.advanced-settings-card
+  background-color: $color-blue-5
+  overflow-y: hidden
+  max-height: 500px
+  transition-property: all
+  transition-duration: .5s
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1)
+  position: relative
+  &.closed
+    max-height: 0
+  label
+    text-transform: inherit
+    font-size: 0.8rem
+    font-weight: 300
+
+.button-advanced-settings
+  font-size: 0.8rem
+  text-align: right
+  display: block
+
+.simple_form section
+  .form-card
+    label
+      text-align: left
+      display: block
+      width: auto
+    input
+      position: absolute
+      top: 5px
+      right: 5px

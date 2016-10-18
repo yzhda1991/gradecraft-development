@@ -106,3 +106,8 @@ $('table.highchart').highchartTable();
 $(".button-options").click(function(){
     $(".options-menu").toggle();
 });
+
+//Toggle options menu
+$(".button-advanced-settings").click(function(){
+    $(".advanced-settings-card").toggleClass('closed');
+});

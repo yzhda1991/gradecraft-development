@@ -222,6 +222,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:course].name, course_path(objects[:course]))
   end
 
+  def courses_multiplier_settings
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('#{ term_for :weight } Settings', multiplier_settings_path)
+  end
+
   def earned_badges_edit
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :badges }', badges_path)

@@ -13,6 +13,9 @@
     = f.label :has_character_profiles, "Character Profiles"
     = f.check_box :has_character_profiles, {"aria-describedby" => "has_character_profiles"}
     .form_label{id: "has_character_profiles"} Do students create a profile for their character in the class?
+
+  %hr.dotted
+
   .submit-buttons
     %ul
       %li= f.button :submit, "Update #{term_for :student} Settings", class: "button"

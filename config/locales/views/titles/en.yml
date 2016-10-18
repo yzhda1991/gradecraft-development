@@ -79,12 +79,8 @@ en:
       title: "Create a New Course"
     edit:
       title: "Course Settings"
-    custom_terms:
-      title: "Custom Terms"
     multiplier_settings:
       title: "Multiplier Settings"
-    player_settings:
-      title: "#{ term_for :student } Settings"
   challenge_grades:
     show:
       title: "#{ @team.name }'s #{@challenge_grade.name} Grade"

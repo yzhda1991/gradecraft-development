@@ -132,20 +132,20 @@ class CoursesController < ApplicationController
     end
   end
 
-  def course_details
-  end
-
-  def custom_terms
-  end
-
-  def multiplier_settings
-  end
-
-  def player_settings
-  end
-
-  def student_onboarding_setup
-  end
+  # def course_details
+  # end
+  # 
+  # def custom_terms
+  # end
+  # 
+  # def multiplier_settings
+  # end
+  # 
+  # def player_settings
+  # end
+  # 
+  # def student_onboarding_setup
+  # end
 
   private
 
