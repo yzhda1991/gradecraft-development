@@ -34,7 +34,7 @@ describe BadgesHelper do
 
     it "renders the badge name in a hover state" do
       html = helper.sidebar_earned_badge(badge, student)
-      expect(html).to have_tag "div", with: { class: "display_on_hover" } do
+      expect(html).to have_tag "div", with: { class: "display-on-hover" } do
         with_text "badgy"
       end
     end
@@ -42,7 +42,7 @@ describe BadgesHelper do
     it "renders the points earned if it has points" do
       allow(badge).to receive(:full_points).and_return 10_000
       html = helper.sidebar_earned_badge(badge, student)
-      expect(html).to have_tag "div", with: { class: "display_on_hover" } do
+      expect(html).to have_tag "div", with: { class: "display-on-hover" } do
         with_text "badgy, 10,000 points"
       end
     end

@@ -63,18 +63,20 @@ p.predictor-description
 /* for the grade scheme elements mass edit form */
 .grade-scheme-elements
   .low-range, .high-range
-    &.ng-invalid-max, &.ng-invalid-min
-      background: red
-      border: 1px solid red
+    &.ng-invalid
+      background: #ffcfcf
 
   input.low-range, .high-range
     width: 150px !important
 
+  .validation-error
+    color: #dd5555
+
   .add-element
-    display: none
+    visibility: hidden
 
   .grade-scheme-row:hover .add-element
-    display: block
+    visibility: visible
 
   .required-notice
     display: none
@@ -84,6 +86,9 @@ p.predictor-description
   button[type=submit][disabled]
     color: $color-grey-6
     opacity: 0.7
+    
+  .hover-style.gse-bar
+    margin-left: 575px
 
 .ng-invalid
   .required-notice

@@ -6,28 +6,32 @@
   %span.form_label Level name
   %input.level(name='level' ng-model='element.level')
 
-  %span.form_label Low Point Threshold
+  %span.form_label Point Threshold
   %input.low-range(type='number'
                    ng-model='element.lowest_points'
                    ng-model-options='{allowInvalid: true}'
-                   ng-change='updateNextElement($index)'
+                   ng-change='validateElements($index)'
                    required
-                   name='lowest_points'
-                   max='{{lowPointsMax($index)}}')
+                   min=0
+                   name='lowest_points_{{$index}}')
 
-  %span.form_label High Point Threshold
-  %input.high-range(type='number'
-                    ng-model='element.highest_points'
-                    ng-model-options='{allowInvalid: true}'
-                    ng-change='updatePreviousElement($index)'
-                    required
-                    name='highest_points'
-                    min='{{highPointsMin($index)}}')
+  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict')
+    %a
+      %i.fa.fa-exclamation-triangle
+    .display-on-hover.hover-style.gse-bar
+      This level has the same point threshold as another level.
+
+  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict')
+    %a
+      %i.fa.fa-exclamation-triangle
+    .display-on-hover.hover-style.gse-bar
+      This level is within one point of another level.
 
   .right
-    %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
-      Remove
-      %i.fa.fa-times
-
-  %button.add-element.button(type='button' ng-click='gradeService.addNew($index)')
-    %i.fa.fa-plus Add A Level
+    %span
+      %button.add-element.button(type='button' ng-click='gradeService.addNew($index)')
+        %i.fa.fa-plus 
+        Add a level below
+      %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
+        Remove
+        %i.fa.fa-times

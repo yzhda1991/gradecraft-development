@@ -11,7 +11,8 @@
 
     .grade-scheme-elements
       .grade-scheme-element(ng-repeat='element in grade_scheme_elements'
-                            ng-include="'ng_gradeScheme.html'")
+                            ng-include="'ng_gradeScheme.html'"
+                            name="element_{{$index}}")
 
       %button.button.right(ng-click='gradeService.addFirst()'
                            ng-hide='gradeService.elements.length > 0') Add Your Highest Grade

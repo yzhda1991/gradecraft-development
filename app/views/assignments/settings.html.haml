@@ -20,46 +20,46 @@
               %span
                 %a
                   %i.fa.fa-eye.fa-fw
-                .display_on_hover.hover-style
+                .display-on-hover.hover-style
                   Visible to Students
             %th{scope: "col"}
               %a
                 !
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Required
             %th{scope: "col"}
               %a
                 %i.fa.fa-paperclip.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Accepts Submissions
             %th{scope: "col"}
               %a
                 %i.fa.fa-calendar.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Shown in Timeline
 
             %th{scope: "col"}
               %a
                 %i.fa.fa-sliders.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Shown in Predictor
 
             %th{scope: "col"}
               %a
                 %i.fa.fa-list.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Shown in Due This Week
 
             %th{scope: "col"}
               %a
                 %i.fa.fa-pencil.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Logged By Students
 
             %th{scope: "col"}
               %a
                 %i.fa.fa-unlock-alt.fa-fw
-              .display_on_hover.hover-style
+              .display-on-hover.hover-style
                 Release Required
 
             %th{scope: "col"} Grade Form Preview
@@ -77,55 +77,55 @@
                 - if assignment.visible?
                   %a
                     %i.fa.fa-eye
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Visible to Students
 
               %td
                 - if assignment.required?
                   %a
                     Required
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     !
               %td
                 - if assignment.accepts_submissions?
                   %a
                     %i.fa.fa-paperclip
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Accepts Submissions
 
               %td
                 - if assignment.include_in_timeline?
                   %a
                     %i.fa.fa-calendar
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Shown in Timeline
 
               %td
                 - if assignment.include_in_predictor?
                   %a
                     %i.fa.fa-sliders
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Shown in Predictor
 
               %td
                 - if assignment.include_in_to_do?
                   %a
                     %i.fa.fa-list.fa-fw
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Shown in Due This Week
 
               %td
                 - if assignment.student_logged?
                   %a
                     %i.fa.fa-pencil.fa-fw
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Logged By Students
 
               %td
                 - if assignment.release_necessary?
                   %a
                     %i.fa.fa-unlock-alt.fa-fw
-                  .display_on_hover.hover-style
+                  .display-on-hover.hover-style
                     Release Required
 
               %td

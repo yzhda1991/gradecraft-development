@@ -37,8 +37,7 @@
       {
         letter: ''
         level: ''
-        highest_points: highestPoints(index)
-        lowest_points: lowestPoints(index)
+        lowest_points: null
       }
 
     highestPoints = (index) ->
@@ -67,14 +66,20 @@
         deleted_ids: deletedIds
       }
 
-      $http.put('/grade_scheme_elements/mass_update', data).success(
-        (data) ->
-          angular.copy(data.grade_scheme_elements, elements)
-          window.location.href = '/grade_scheme_elements/'
-      ).error(
-        (error) ->
-          console.log(error)
-      )
+      # Make sure we have a zero-level
+      thresholds = (element.lowest_points for element in elements)
+      if 0 in thresholds
+        $http.put('/grade_scheme_elements/mass_update', data).success(
+          (data) ->
+            angular.copy(data.grade_scheme_elements, elements)
+            window.location.href = '/grade_scheme_elements/'
+        ).error(
+          (error) ->
+            alert('An error occurred that prevented saving.')
+            console.log(error)
+        )
+      else
+        alert('A level with a Point Threshold of 0 (zero) is required.')
 
     return {
         getGradeSchemeElements: getGradeSchemeElements
