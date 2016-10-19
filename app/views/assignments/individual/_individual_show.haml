@@ -3,6 +3,7 @@
 - if presenter.assignment.grades.any?
   .clear.right
     = simple_form_for presenter.assignment, :url => delete_all_assignment_grades_path(assignment_id: presenter.assignment.id), method: :delete do |f|
+      = hidden_field_tag :team_id, presenter.team.id unless presenter.team.nil?
       .submit-buttons
         %button{ :type => "submit", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" } }
           %i.fa.fa-trash
