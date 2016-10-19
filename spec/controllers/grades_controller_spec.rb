@@ -103,6 +103,12 @@ describe GradesController do
         expect(grade.reload.score).to eq(nil)
       end
 
+      it "updates badges earned on the grade" do
+        earned_badge = create :earned_badge, grade: grade, student_visible: false
+        put :update, { id: grade.id, grade: { status: "Graded" }}
+        expect(earned_badge.reload.student_visible).to be_truthy
+      end
+
       context "when grading a series of students" do
         let!(:next_student) do
           create(:student_course_membership, course: course,
