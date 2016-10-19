@@ -2,8 +2,20 @@
   %section
     %h4.uppercase Class Details
     .form-item
+      = f.label :location, "Location"
+      = f.text_field :location
+
+    .form-item
+      = f.label :meeting_times, "Class Meeting Times"
+      = f.text_field :meeting_times
+
+    .form-item
       = f.label :office, "Professor's Office"
       = f.text_field :office
+
+    .form-item
+      = f.label :office_hours, "Office Hours"
+      = f.text_field :office_hours
 
     .form-item
       = f.label :phone, "Contact Phone #"
@@ -24,18 +36,6 @@
       .form_label Don't include the hash sign
 
     .form-item
-      = f.label :location, "Location"
-      = f.text_field :location
-
-    .form-item
-      = f.label :office_hours, "Office Hours"
-      = f.text_field :office_hours
-
-    .form-item
-      = f.label :meeting_times, "Class Meeting Times"
-      = f.text_field :meeting_times
-
-    .form-item
       = f.label :syllabus
       = f.file_field :syllabus
       - if current_course.syllabus.present?
@@ -53,3 +53,6 @@
     %ul
       %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
       %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"
+
+  %section
+    %h4.uppercase Class Schedule

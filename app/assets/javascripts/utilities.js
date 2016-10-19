@@ -107,7 +107,7 @@ $(".button-options").click(function(){
     $(".options-menu").toggle();
 });
 
-//Toggle options menu
+//Reveal advanced settings on form card
 $(".button-advanced-settings").click(function(){
-    $(".advanced-settings-card").toggleClass('closed');
+    $(this).parent().next().toggleClass('closed');
 });
