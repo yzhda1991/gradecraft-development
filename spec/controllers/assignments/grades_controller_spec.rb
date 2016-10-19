@@ -4,8 +4,7 @@ describe Assignments::GradesController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }
-  let(:student) { create(:user) }
-  let!(:student_course_membership) { create(:student_course_membership, course: course, user: student) }
+  let!(:student) { create(:student_course_membership, course: course).user }
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
 
   context "as professor" do

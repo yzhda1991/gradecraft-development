@@ -76,7 +76,6 @@ class Assignments::GradesController < ApplicationController
   # GET /assignments/:assignment_id/grades/export/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
-    @assignment = current_course.assignments.find(params[:assignment_id])
     if @assignment.has_groups?
       redirect_to mass_edit_assignment_groups_grades_path and return
     end
@@ -99,7 +98,6 @@ class Assignments::GradesController < ApplicationController
   # Updates all the grades for the students or groups in a course for an assignment
   def mass_update
     filter_params_with_no_grades! :grades_attributes
-    @assignment = current_course.assignments.find(params[:assignment_id])
     result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
     if result.success?
@@ -182,17 +180,6 @@ class Assignments::GradesController < ApplicationController
     grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
   end
 
-  # Retrieve all grades for an assignment if it has a score
-  def mass_update_grade_ids
-    @assignment.grades.inject([]) do |memo, grade|
-      scored_changed = grade.previous_changes[:raw_points].present?
-      if scored_changed && grade.graded_or_released?
-        memo << grade.id
-      end
-      memo
-    end
-  end
-
   def find_assignment
     @assignment = current_course.assignments.find(params[:assignment_id])
   end
@@ -205,24 +192,5 @@ class Assignments::GradesController < ApplicationController
       @students = current_course.students_being_graded
     end
     @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
-  end
-
-  def assign_graded_at_date(params)
-    params.each do |index, value|
-      value.merge!(graded_at: DateTime.now)
-    end
-  end
-
-  def redirect_on_mass_update_success
-    if !params[:team_id].blank?
-      redirect_to assignment_path(@assignment, team_id: params[:team_id])
-    else
-      respond_with @assignment
-    end
-  end
-
-  def redirect_on_mass_update_failure
-    redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]),
-      notice: "Oops! There was an error while saving the grades!"
   end
 end
