@@ -7,9 +7,9 @@
             = glyph(:edit)
             Edit Submission
             %span.sr-only #{presenter.student.try(:first_name)}'s Submission
-        %li= link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), data: { confirm: "Are you sure?",  method: :delete }
+        %li= link_to glyph(:trash) + "Delete Submission", assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), class: "button button-edit", data: { confirm: "Are you sure?",  method: :delete }
 
-        %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, presenter.student), method: :post
+        %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, presenter.student), class: "button button-edit", method: :post
 - elsif presenter.assignment.has_groups?
   - content_for :context_menu do
     .context_menu
