@@ -185,6 +185,7 @@ GradeCraft::Application.routes.draw do
 
   resources :courses do
     post :copy, on: :collection
+    post :recalculate_student_scores, on: :member
     get :badges, on: :member
     get :change, on: :member
     resources :badges do

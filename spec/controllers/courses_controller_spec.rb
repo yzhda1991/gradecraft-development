@@ -12,9 +12,25 @@ describe CoursesController do
   end
 
   context "as admin" do
+    before(:each) { login_user(admin) }
+
     it "destroys the course" do
-      login_user(admin)
       expect{ get :destroy, id: course }.to change(Course,:count).by(-1)
+    end
+
+    describe "POST recalculate_student_scores" do
+      let!(:course_membership) { create(:student_course_membership, course: course) }
+
+      it "recalculates student scores" do
+        expect_any_instance_of(Course).to receive(:recalculate_student_scores)
+        post :recalculate_student_scores, id: course.id.to_s
+      end
+
+      it "redirects to root on success with a notice" do
+        post :recalculate_student_scores, id: course.id.to_s
+        expect(response).to redirect_to root_path
+        expect(flash[:notice]).to_not be_nil
+      end
     end
   end
 
@@ -230,6 +246,13 @@ describe CoursesController do
         expect{ get :destroy, id: course }.to raise_error CanCan::AccessDenied
       end
     end
+
+    describe "POST recalculate_student_scores" do
+      it "is a protected route" do
+        expect(post :recalculate_student_scores, id: course.id.to_s).to \
+          redirect_to(:root)
+      end
+    end
   end
 
   context "as student" do
@@ -283,6 +306,13 @@ describe CoursesController do
       it "stores the course to the current course for the user" do
         get :change, id: another_course.id
         expect(student.reload.current_course_id).to eq another_course.id
+      end
+    end
+
+    describe "POST recalculate_student_scores" do
+      it "is a protected route" do
+        expect(post :recalculate_student_scores, id: course.id.to_s).to \
+          redirect_to(:root)
       end
     end
 

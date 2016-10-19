@@ -5,12 +5,14 @@ class CoursesController < ApplicationController
   skip_before_filter :require_login, only: [:badges]
   before_filter :ensure_staff?, except: [:index, :badges, :change]
   before_filter :ensure_not_impersonating?, only: [:index]
+  before_action :ensure_admin?, only: [:recalculate_student_scores]
   before_action :find_course, only: [:show,
                                      :edit,
                                      :copy,
                                      :update,
                                      :destroy,
-                                     :badges]
+                                     :badges,
+                                     :recalculate_student_scores]
   before_action :use_current_course, only: [:course_details,
                                             :custom_terms,
                                             :multiplier_settings,
@@ -111,6 +113,11 @@ class CoursesController < ApplicationController
       end
     end
     redirect_to root_url
+  end
+
+  def recalculate_student_scores
+    @course.recalculate_student_scores
+    redirect_to root_path, notice: "Recalculated student scores for #{@course.name}"
   end
 
   def course_creation_wizard

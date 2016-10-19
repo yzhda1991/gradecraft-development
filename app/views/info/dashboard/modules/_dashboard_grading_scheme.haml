@@ -1,6 +1,11 @@
 .card-header
   %h3 Course Progress
 .card-body
+  .center
+    = form_tag recalculate_student_scores_course_path current_course, method: :post do
+      %button.center{ type: :submit, class: "button button-slim" }
+        = glyph(:refresh)
+        Recalculate All Grades
 
   - if current_student.present?
     = render partial: "info/dashboard/modules/dashboard_student_grading_scheme", locals: { presenter: presenter }
