@@ -33,6 +33,12 @@ describe Assignments::GradesController do
         put :update_status, { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
         expect(response).to redirect_to(login_path)
       end
+
+      it "updates badges earned on the grade" do
+        earned_badge = create :earned_badge, grade: grade, student_visible: false
+        put :update_status, { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
+        expect(earned_badge.reload.student_visible).to be_truthy
+      end
     end
 
     describe "GET export" do

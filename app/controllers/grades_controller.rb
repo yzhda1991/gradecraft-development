@@ -35,6 +35,7 @@ class GradesController < ApplicationController
 
     if grade.update_attributes grade_params.merge(graded_at: DateTime.now, instructor_modified: true)
       if GradeProctor.new(grade).viewable?
+        EarnedBadge.where(grade_id: grade.id).each(&:save)
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
       if params[:redirect_to_next_grade].present?
