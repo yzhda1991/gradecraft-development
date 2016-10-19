@@ -165,6 +165,8 @@ describe Assignments::GradesController do
       end
 
       context "when there is a team id" do
+        let!(:other_student) { create(:student_course_membership, course: course).user }
+        let!(:other_grade) { create(:grade, assignment: assignment, course: course, student: other_student) }
         let(:team) { create(:team, course: course) }
         let!(:team_membership) { create(:team_membership, team: team, student: student) }
 
