@@ -9,7 +9,7 @@
       - if presenter.starred?(assignment)
         %a.starred
           %i.fa.fa-flag.fa-fw.orange
-        .display_on_hover.hover-style
+        .display-on-hover.hover-style
           You have included this #{(term_for :assignment).downcase} in your grade prediction
       - if presenter.submitted?(assignment)
         %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment

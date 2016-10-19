@@ -2,13 +2,13 @@
   - if assignment.has_groups?
     %a
       %i.fa.fa-group.fa-fw
-    .display_on_hover.hover-style
+    .display-on-hover.hover-style
       This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
   - if assignment.is_unlockable?
     - if ! assignment.is_unlocked_for_student?(presenter.student)
       %a
         %i.fa.fa-lock
-      .display_on_hover.hover-style
+      .display-on-hover.hover-style
         %h3 This #{term_for :assignment} is Locked
         .small.italic In order to unlock it you must:
         %ol
@@ -17,7 +17,7 @@
     - else
       %a
         %i.fa.fa-unlock
-      .display_on_hover.hover-style
+      .display-on-hover.hover-style
         %h3 You have unlocked this #{term_for :assignment}
         .small.italic To achieve this you:
         %ol
@@ -26,7 +26,7 @@
   - if assignment.is_a_condition?
     %a
       %i.fa.fa-key
-    .display_on_hover.hover-style
+    .display-on-hover.hover-style
       %h3 This #{term_for :assignment} is a Key
       %ol
         - assignment.unlock_keys.each do |key|
