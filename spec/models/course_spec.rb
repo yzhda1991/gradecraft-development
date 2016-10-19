@@ -647,6 +647,13 @@ describe Course do
     end
   end
 
+  describe "#recalculate_student_scores" do
+    it "recalculates scores for each student id" do
+      allow(subject).to receive(:ordered_student_ids).and_return [1, 2]
+      expect{ subject.recalculate_student_scores }.to change { queue(ScoreRecalculatorJob).size }.by(2)
+    end
+  end
+
   describe "#ordered_student_ids" do
     it "returns an ordered array of student ids" do
       student_2 = create(:user)
