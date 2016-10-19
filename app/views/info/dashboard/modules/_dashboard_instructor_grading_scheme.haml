@@ -8,3 +8,11 @@
       %span.student-count= element.count_students_earned
     - if current_course.student_count > 0
       .fill-bar.bar_magic{:style => "width: #{(element.count_students_earned) / (current_course.graded_student_count).to_f * 100}%;"}
+
+
+- if current_user_is_admin?
+  %p
+    = form_tag recalculate_student_scores_course_path current_course, method: :post do
+      %button.center{ type: :submit, class: "button button-slim" }
+        = glyph(:refresh)
+        Recalculate All Grades
