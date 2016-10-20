@@ -24,6 +24,7 @@ class CanvasGradeImporter
 
         grade.raw_points = canvas_grade["score"]
         grade.feedback = canvas_grade["submission_comments"]
+        grade.instructor_modified = true
 
         if grade.save
           link_imported canvas_grade["id"], grade

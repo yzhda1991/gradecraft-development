@@ -64,11 +64,20 @@ describe CanvasStudentImporter do
         expect(imported_user.last_imported_at).to be_within(1.second).of(DateTime.now)
       end
 
-      it "contains a successful row if the user is valid" do
+      it "contains a successful row if the user is valid and changed" do
         result = subject.import course
 
         expect(result.successful.count).to eq 1
         expect(result.successful.last).to eq student
+      end
+
+      it "does not contain a successful row if the user was not changed" do
+        existing_student = create :user, email: "jimmy@example.com", first_name: "Jimmy",
+          last_name: "Page"
+
+        result = subject.import course
+
+        expect(result.successful).to be_empty
       end
 
       it "contains an unsuccessful row if the user is not valid" do
