@@ -77,5 +77,5 @@ end
 json.meta do
   json.term_for_badges term_for :badges
   json.term_for_badge term_for :badge
-  json.update_predictions @update_predictions
+  json.allow_updates @allow_updates
 end

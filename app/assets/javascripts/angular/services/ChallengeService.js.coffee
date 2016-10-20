@@ -43,7 +43,7 @@
       )
 
       GradeCraftAPI.setTermFor("challenges", response.meta.term_for_challenges)
-      update.challenges = response.meta.update_predictions
+      update.challenges = response.meta.allow_updates
     )
 
   # PUT a challenge prediction

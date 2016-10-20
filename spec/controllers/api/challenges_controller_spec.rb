@@ -45,7 +45,7 @@ describe API::ChallengesController  do
         expect(assigns :student).to eq(student)
         expect(assigns :predicted_earned_challenges).to eq([predicted_earned_challenge])
         expect(assigns :grades).to eq([grade])
-        expect(assigns(:update_predictions)).to be_truthy
+        expect(assigns(:allow_updates)).to be_truthy
         expect(response).to render_template(:index)
       end
     end
@@ -61,7 +61,7 @@ describe API::ChallengesController  do
     describe "GET index" do
       it "assigns false for updating predictions" do
         get :index, format: :json
-        expect(assigns(:update_predictions)).to be_falsey
+        expect(assigns(:allow_updates)).to be_falsey
       end
     end
   end

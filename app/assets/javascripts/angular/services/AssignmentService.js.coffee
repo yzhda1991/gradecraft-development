@@ -42,7 +42,7 @@
       GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
       GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
       GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
-      update.predicted_earned_grades = response.meta.update_predictions
+      update.predicted_earned_grades = response.meta.allow_updates
     )
 
   # PUT a predicted earned grade for assignment

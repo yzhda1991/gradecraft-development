@@ -8,7 +8,7 @@ class API::ChallengesController < ApplicationController
     return unless include_student_data?
     @team = current_student.team_for_course(current_course)
     @student = current_student
-    @update_predictions = !student_impersonation?
+    @allow_updates = !student_impersonation?
     @include_in_predictor = true
 
     return unless !student_impersonation?

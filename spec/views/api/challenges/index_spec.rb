@@ -47,11 +47,11 @@ describe "api/challenges/index" do
     expect(@json["meta"]["term_for_challenges"]).to eq("Team tsallenzes")
   end
 
-  it "includes update_predictions" do
-    @update_predictions = true
+  it "includes allow_updates" do
+    @allow_updates = true
     render
     @json = JSON.parse(response.body)
-    expect(@json["meta"]["update_predictions"]).to be_truthy
+    expect(@json["meta"]["allow_updates"]).to be_truthy
   end
 
   describe "included" do

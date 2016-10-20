@@ -5,7 +5,7 @@ class API::Students::BadgesController < ApplicationController
   # GET api/students/:student_id/badges
   def index
     @student = User.find(params[:student_id])
-    @update_predictions = false
+    @allow_updates = false
     @badges = current_course.badges.select(
       :can_earn_multiple_times,
       :course_id,

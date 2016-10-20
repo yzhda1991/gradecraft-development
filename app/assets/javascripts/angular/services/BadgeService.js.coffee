@@ -34,7 +34,7 @@
       GradeCraftAPI.loadFromIncluded(earnedBadges,"earned_badges", response)
       GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
       GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
-      update.predictions = response.meta.update_predictions
+      update.predictions = response.meta.allow_updates
     )
 
   # PUT a badge prediction

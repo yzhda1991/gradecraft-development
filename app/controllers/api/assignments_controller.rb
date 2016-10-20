@@ -7,7 +7,7 @@ class API::AssignmentsController < ApplicationController
 
     return unless current_user_is_student?
     @student = current_student
-    @update_predictions = !student_impersonation?
+    @allow_updates = !student_impersonation?
     @grades = Grade.for_course(current_course).for_student(current_student)
 
     return unless !student_impersonation?

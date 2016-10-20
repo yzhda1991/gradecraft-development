@@ -42,7 +42,7 @@ describe API::AssignmentsController do
         expect(assigns :student).to eq(student)
         expect(assigns :predicted_earned_grades).to eq([predicted_earned_grade])
         expect(assigns :grades).to eq([grade])
-        expect(assigns(:update_predictions)).to be_truthy
+        expect(assigns(:allow_updates)).to be_truthy
         expect(response).to render_template(:index)
       end
     end
@@ -62,7 +62,7 @@ describe API::AssignmentsController do
         expect(assigns :student).to eq(student)
         expect(assigns :predicted_earned_grades).to be_nil
         expect(assigns :grades).to eq([grade])
-        expect(assigns(:update_predictions)).to be_falsey
+        expect(assigns(:allow_updates)).to be_falsey
         expect(response).to render_template(:index)
       end
     end
