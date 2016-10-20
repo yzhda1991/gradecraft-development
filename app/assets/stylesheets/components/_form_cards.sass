@@ -6,54 +6,65 @@
 
 .form-card
   border: 1px solid $color-grey-6
+  border-radius: 2px
   width: 300px
-  margin: 0.5rem
   position: relative
+  overflow: hidden
+  margin: 0.5rem
+  display: flex
+  flex-direction: column
+  flex: 1 auto
 
-.top-level-form
-  padding: 1rem
+  .form-card-header
+    border-bottom: 1px solid $color-grey-6
+    padding: 0.25rem 1rem
+
+  .form-card-body
+    padding: 1rem
+    flex-grow: 1
 
   .feature-description
     font-size: 0.8rem
     font-weight: 300
 
-.advanced-form
-  background-color: $color-grey-7
-  padding: 0.25rem 1rem
-
 .advanced-settings-card
   background-color: $color-grey-7
-  overflow-y: hidden
-  max-height: 500px
-  transition-property: all
-  transition-duration: .5s
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1)
-  position: relative
-  padding: 0.25rem 1rem
-  &.closed
-    max-height: 0
+  padding: 0 1rem
+  position: absolute
+  width: 100%
+  overflow-y: auto
+  /*top: 0;*/
+  left:0
+  bottom:0
+  height: 100%
+  z-index: 1
+  display: none
+
+.form-card-advanced-settings
+  background-color: $color-grey-7
+  padding: 0.5rem 1rem
 
 .button-advanced-settings
   font-size: 0.8rem
-  text-align: right
   display: block
+  cursor: pointer
+
 
 .simple_form section
   .form-card
     label
       text-align: left
-      display: block
+      display: inline-block
       width: auto
+      margin-bottom: 0
     input
-      position: absolute
-      top: 5px
-      right: 5px
+      float: right
     .advanced-settings-card
       label
         text-transform: inherit
         font-size: 0.75rem
         font-weight: 300
+        width: 85%
       input
-        // position: inherit
-        // top: auto
-        // right: auto
+        float: none
+        vertical-align: top

@@ -109,5 +109,9 @@ $(".button-options").click(function(){
 
 //Reveal advanced settings on form card
 $(".button-advanced-settings").click(function(){
-    $(this).parent().next().toggleClass('closed');
+    $(this).parent().next().slideToggle('slow');
+});
+
+$('.button-close').on('click',function(){
+    $(this).parent().slideToggle('slow');
 });
