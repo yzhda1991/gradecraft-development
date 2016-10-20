@@ -8,7 +8,7 @@
 
 .multi-part-icon{'ng-if' => 'article.has_been_unlocked'}
   .icon.is_unlocked
-    %i.fa.fa-fw.fa-unlock-alt
+    %i.fa.fa-fw.fa-unlock
   %span this {{articleTerm()}} has been unlocked
   %ul.icon-list
     %li{'ng-repeat' => 'condition in article.unlocked_conditions'}
