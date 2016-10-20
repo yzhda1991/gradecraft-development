@@ -299,29 +299,6 @@ describe Badge do
     end
   end
 
-  describe "#find_or_create_predicted_earned_badge" do
-    it "creates a predicted earned badge for a student" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      expect { badge.find_or_create_predicted_earned_badge(student.id) }.to \
-        change(PredictedEarnedBadge,:count).by 1
-    end
-
-    it "finds an existing predicted earned badge for a student" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      peb = create(:predicted_earned_badge, student: student, badge: badge)
-      expect(badge.find_or_create_predicted_earned_badge(student.id)).to \
-        eq(peb)
-    end
-
-    it "returns a null object for a student id of 0" do
-      badge = create(:badge, full_points: 1000)
-      expect(badge.find_or_create_predicted_earned_badge(0).class).to \
-        eq(NullPredictedEarnedBadge)
-    end
-  end
-
   describe "#earned_badge_count_for_student(student)" do
     it "sums up the number of times a student has earned a specific badge" do
       student = create(:user)

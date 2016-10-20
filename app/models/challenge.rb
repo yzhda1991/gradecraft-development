@@ -55,10 +55,6 @@ class Challenge < ActiveRecord::Base
     challenge_grades.present?
   end
 
-  def visible_for_student?(student)
-    return true if visible?
-  end
-
   def find_or_create_predicted_earned_challenge(student_id)
     if student_id == 0
       NullPredictedEarnedChallenge.new

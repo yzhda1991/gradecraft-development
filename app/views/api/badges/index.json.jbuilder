@@ -33,17 +33,17 @@ json.data @badges do |badge|
   end
 
   json.relationships do
-    if @predicted_earned_badges.present?
+    if @predicted_earned_badges.present? &&  @predicted_earned_badges.where(badge_id: badge.id).present?
       json.prediction data: {
         type: "predicted_earned_badges",
-        id: @predicted_earned_badges.where(badge_id: badge.id).first.id
+        id: @predicted_earned_badges.where(badge_id: badge.id).first.id.to_s
       }
     end
 
     if @earned_badges.present? && @earned_badges.where(badge_id: badge.id).present?
       json.earned_badge data: {
         type: "earned_badges",
-        id: @earned_badges.where(badge_id: badge.id).first.id
+        id: @earned_badges.where(badge_id: badge.id).first.id.to_s
       }
     end
   end
@@ -53,7 +53,7 @@ json.included do
   if @predicted_earned_badges.present?
     json.array! @predicted_earned_badges do |predicted_earned_badge|
       json.type "predicted_earned_badges"
-      json.id predicted_earned_badge.id
+      json.id predicted_earned_badge.id.to_s
       json.attributes do
         json.id predicted_earned_badge.id
         json.student_id predicted_earned_badge.student_id
@@ -66,7 +66,7 @@ json.included do
   if @earned_badges.present?
     json.array! @earned_badges do |earned_badge|
       json.type "earned_badges"
-      json.id earned_badge.id
+      json.id earned_badge.id.to_s
       json.attributes do
         json.merge! earned_badge.attributes
       end
@@ -77,5 +77,5 @@ end
 json.meta do
   json.term_for_badges term_for :badges
   json.term_for_badge term_for :badge
-  json.update_predictions @update_predictions
+  json.allow_updates @allow_updates
 end

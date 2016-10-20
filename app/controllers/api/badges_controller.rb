@@ -14,16 +14,14 @@ class API::BadgesController < ApplicationController
       :visible,
       :visible_when_locked)
 
-    if current_user_is_student?
+    if  current_user_is_student?
       @student = current_student
-      @update_predictions = !student_impersonation?
+      @allow_updates = !student_impersonation?
 
       if !student_impersonation?
         @badges.includes(:predicted_earned_badges)
         @predicted_earned_badges =
-          PredictedEarnedBadge.find_or_create_for_student(
-            current_course.id, @student.id
-          )
+          PredictedEarnedBadge.for_course(current_course).for_student(current_student)
       end
     end
   end

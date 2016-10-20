@@ -109,9 +109,9 @@ describe "api/badges/index" do
   end
 
   it "includes call to update" do
-    @update_predictions = true
+    @allow_updates = true
     render
     json = JSON.parse(response.body)
-    expect(json["meta"]["update_predictions"]).to be_truthy
+    expect(json["meta"]["allow_updates"]).to be_truthy
   end
 end

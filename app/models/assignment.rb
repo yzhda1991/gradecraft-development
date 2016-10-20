@@ -228,15 +228,6 @@ class Assignment < ActiveRecord::Base
     mass_grade_type == "Checkbox"
   end
 
-  # Current types: "Fixed", "Slider"
-  def predictor_display_type
-    if pass_fail
-      "checkbox"
-    else
-      "slider"
-    end
-  end
-
   def grade_select?
     mass_grade_type == "Select List" && has_levels?
   end

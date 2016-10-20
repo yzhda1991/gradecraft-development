@@ -40,7 +40,7 @@
           tooltip: 'This ' + scope.articleTerm() + ' is late!'
           icon: "fa-clock-o"
         }
-        closed_without_submission: {
+        is_closed_without_submission: {
           tooltip: 'This ' + scope.articleTerm() + ' is no longer open for submissions'
           icon: "fa-ban"
         }
@@ -52,7 +52,7 @@
           tooltip: 'This ' + scope.articleTerm() + ' is rubric graded'
           icon: "fa-th"
         }
-        accepting_submissions: {
+        is_accepting_submissions: {
           tooltip: 'This ' + scope.articleTerm() + ' accepts submissions'
           icon: "fa-paperclip"
         }

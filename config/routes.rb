@@ -339,6 +339,8 @@ GradeCraft::Application.routes.draw do
       end
     end
 
+    resources :assignments, only: :index
+    resources :challenges, only: :index
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create
     end
@@ -354,9 +356,9 @@ GradeCraft::Application.routes.draw do
     resources :levels, only: :update
 
     # Student Predictor View, Predictor Preview
-    resources :predicted_earned_badges, only: [:update]
-    resources :predicted_earned_challenges, only: [:index, :update]
-    resources :predicted_earned_grades, only: [:index, :update]
+    resources :predicted_earned_badges, only: [:create, :update]
+    resources :predicted_earned_challenges, only: [:create, :update]
+    resources :predicted_earned_grades, only: [:create, :update]
 
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do

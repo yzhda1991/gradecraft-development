@@ -4,7 +4,7 @@ class GradeExporter
     CSV.generate(options) do |csv|
       csv << headers
       students.each do |student|
-        grade = student.grade_for_assignment(assignment) || NullGrade.new
+        grade = student.grade_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
                 student.email,
                 grade.score || "",
@@ -18,7 +18,7 @@ class GradeExporter
       csv << headers + detail_headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
-        grade = NullGrade.new if grade.nil? || !(grade.instructor_modified? || grade.graded_or_released?)
+        grade = Grade.new if !(grade.instructor_modified? || grade.graded_or_released?)
         submission = student.submission_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
                 student.email,

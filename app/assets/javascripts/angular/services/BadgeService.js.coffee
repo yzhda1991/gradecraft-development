@@ -1,7 +1,7 @@
 # Manages state of Badges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   badges = []
   earnedBadges = []
@@ -29,24 +29,26 @@
       GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
         # add null prediction when JSON contains no prediction
-        badge.prediction = {predicted_times_earned: 0} if !badge.prediction
+        badge.prediction = {predicted_times_earned: badge.earned_badge_count} if !badge.prediction
       )
       GradeCraftAPI.loadFromIncluded(earnedBadges,"earned_badges", response)
       GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
       GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
-      update.predictions = response.meta.update_predictions
+      update.predictions = response.meta.allow_updates
     )
 
   # PUT a badge prediction
   postPredictedBadge = (badge)->
     if update.predictions
-      $http.put(
-          '/api/predicted_earned_badges/' + badge.prediction.id, predicted_times_earned: badge.prediction.predicted_times_earned
-        ).then((response)-> # success
-                  GradeCraftAPI.logResponse(response)
-                ,(response)-> # error
-                  GradeCraftAPI.logResponse(response)
-              )
+      requestParams = {
+        "predicted_earned_badge": {
+          "badge_id": badge.id,
+          "predicted_times_earned": badge.prediction.predicted_times_earned
+        }}
+      if badge.prediction.id
+        GradeCraftPredictionAPI.updatePrediction(badge, '/api/predicted_earned_badges/' + badge.prediction.id, requestParams)
+      else
+        GradeCraftPredictionAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->

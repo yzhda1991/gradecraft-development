@@ -42,7 +42,7 @@ describe GradeExporter do
     it "includes students that do not have grades for the assignment" do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return nil
+          .and_return Grade.new
       csv = CSV.new(subject.export_grades(assignment, students)).read
       expect(csv[1][3]).to eq ""
     end
@@ -96,7 +96,7 @@ describe GradeExporter do
     it "includes students that do not have grades for the assignment" do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return nil
+          .and_return Grade.new
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
       expect(csv[1][3]).to eq ""
     end

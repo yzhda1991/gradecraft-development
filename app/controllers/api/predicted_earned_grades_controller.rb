@@ -1,67 +1,50 @@
 class API::PredictedEarnedGradesController < ApplicationController
-  include PredictorData
 
-  before_filter :ensure_student?, only: [:update]
+  before_filter :ensure_student?
+  before_filter :ensure_not_impersonating?
 
-  # GET api/predicted_earned_grades
-  def index
-    # restrict predictions for professor viewing student in preview mode
-    if student_impersonation?
-      user = User.find(impersonating_agent_id)
-      student = current_student
-    elsif current_user_is_student?
-      user = current_user
-      student = current_student
-    # pass a null student for faculty viewing generic predictor
+  # POST api/predicted_earned_grades
+  def create
+    @prediction = PredictedEarnedGrade.new predicted_earned_grade_params
+    if @prediction.save
+      PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+      render "api/predicted_earned_articles/prediction", status: 201
     else
-      user = current_user
-      student = NullStudent.new(current_course)
+      render "api/predicted_earned_articles/errors", status: 400
     end
-    @assignments = PredictedAssignmentCollectionSerializer.new(
-      current_course.assignments.ordered, user, student
-    )
   end
 
-  # POST api/predicted_earned_grades/:id
+  # PUT api/predicted_earned_grades/:id
   def update
-    prediction = PredictedEarnedGrade.where(
+    @prediction = PredictedEarnedGrade.where(
       student: current_student,
       id: params[:id]
     ).first
 
-    if prediction.present?
-      prediction.predicted_points = params[:predicted_points]
-      prediction.save
+    if @prediction.present?
+      @prediction.update predicted_earned_grade_params
 
-      # This should be extracted with the rest of the event_loggers
-      # TODO: this should be implemented with a PredictorEventLogger instead of a
-      # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
-      # request params data, but for now this is better than what we had
-      PredictorEventJob.new(
-        data: predictor_event_attrs(prediction)
-      ).enqueue
-
-      if prediction.valid?
-        render json: {
-          id: prediction.id,
-          predicted_points: prediction.predicted_points
-        }
+      if @prediction.save
+        PredictorEventJob.new(data: predictor_event_attrs(@prediction)).enqueue
+        render "api/predicted_earned_articles/prediction", status: 200
       else
-        render json: {
-          errors:  prediction.errors.full_messages
-          },
-          status: 400
+        render "api/predicted_earned_articles/errors", status: 400
       end
     else
-      render json: {
-        errors: [{ detail: "unable to find prediction" }], success: false
-        },
+      render json: { errors: [{ detail: "unable to find prediction" }], success: false },
         status: 404
     end
   end
 
   private
 
+  def predicted_earned_grade_params
+    params.require(:predicted_earned_grade).permit(
+      :assignment_id, :predicted_points
+    ).merge(student_id: current_user.id)
+  end
+
+  # This should be extracted with the rest of the event_loggers
   def predictor_event_attrs(prediction)
     {
       prediction_type: "grade",

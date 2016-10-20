@@ -19,7 +19,7 @@ describe API::BadgesController do
           expect(assigns(:badges)[0][attr]).to eq(world.badge[attr])
         end
         expect(assigns(:student)).to be_nil
-        expect(assigns(:update_predictions)).to be_falsey
+        expect(assigns(:allow_updates)).to be_falsey
       end
     end
   end
@@ -35,7 +35,7 @@ describe API::BadgesController do
         predictor_badge_attributes.each do |attr|
           expect(assigns(:badges)[0][attr]).to eq(world.badge[attr])
         end
-        expect(assigns(:update_predictions)).to be_truthy
+        expect(assigns(:allow_updates)).to be_truthy
         expect(response).to render_template(:index)
       end
 

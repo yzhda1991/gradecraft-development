@@ -1,7 +1,7 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   assignments = []
   update = {}
@@ -31,26 +31,32 @@
 
   # GET index list of assignments including a student's grades and predictions
   getAssignments = ()->
-    $http.get('/api/predicted_earned_grades').success( (results)->
-      GradeCraftAPI.loadMany(assignments,results)
-      GradeCraftAPI.setTermFor("assignment", results.meta.term_for_assignment)
-      GradeCraftAPI.setTermFor("pass", results.meta.term_for_pass)
-      GradeCraftAPI.setTermFor("fail", results.meta.term_for_fail)
-      update.assignments = results.meta.update_assignments
+    $http.get('/api/assignments').success( (response)->
+      GradeCraftAPI.loadMany(assignments, response, {"include" : ['prediction','grade']})
+      _.each(assignments, (assignment)->
+        # add null prediction and grades when JSON contains none
+        assignment.prediction = { predicted_points: 0 } if !assignment.prediction
+        assignment.grade = { score: null, final_points: null, is_excluded: false } if !assignment.grade
+      )
+
+      GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
+      GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
+      GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
+      update.predicted_earned_grades = response.meta.allow_updates
     )
 
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
-    if update.assignments
-      $http.put(
-        '/api/predicted_earned_grades/' + assignment.prediction.id, predicted_points: assignment.prediction.predicted_points
-        ).success(
-          (data)->
-            console.log(data);
-        ).error(
-          (data)->
-            console.log(data);
-        )
+    if update.predicted_earned_grades
+      requestParams = {
+        "predicted_earned_grade": {
+          "assignment_id": assignment.id,
+          "predicted_points": assignment.prediction.predicted_points
+        }}
+      if assignment.prediction.id
+        GradeCraftPredictionAPI.updatePrediction(assignment, '/api/predicted_earned_grades/' + assignment.prediction.id, requestParams)
+      else
+        GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
   return {
       termFor: termFor

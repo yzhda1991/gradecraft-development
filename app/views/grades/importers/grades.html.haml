@@ -36,7 +36,7 @@
             = render partial: "grade_row", locals: { lms_grade: grade,
               lms_user: lms_user,
               grade: Grade.for_student_email_and_assignment_id(lms_user["primary_email"],
-                                                               @assignment.id) || NullGrade.new }
+                                                               @assignment.id) || Grade.new }
       .submit-buttons
         .right
           %p= submit_tag "Import Selected Grades for #{@assignment.name}", class: "button disabled", disabled: true, data: { behavior: "selected-grades-command" }
