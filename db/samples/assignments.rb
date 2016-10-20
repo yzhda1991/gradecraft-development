@@ -1397,7 +1397,7 @@ test that teaches you a lesson. – Tom Bodett",
   attributes: {
     name: "Past-Submission-Key",
     description:
-      "It's too late, but I was the thing you need to submit to unlock 'Unlocked-By-Past-Submission'",
+      "It's too late, but I was the thing you needed to submit to unlock 'Unlocked-By-Past-Submission'",
     due_at: 4.weeks.ago,
     full_points: 180000,
     accepts_submissions: true,

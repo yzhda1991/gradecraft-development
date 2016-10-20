@@ -122,6 +122,8 @@
   articleCompleted = (article)->
     if article.type == "badges"
       return ! article.can_earn_multiple_times && article.earned_badge_count > 0
+    if article.is_closed_without_submission == true
+      return true
     if article.grade.score == null
       return false
     else
