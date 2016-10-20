@@ -42,7 +42,7 @@ class GradeSchemeElementsController < ApplicationController
       begin
         @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
         @course.update_attributes(grade_scheme_elements_attributes_params)
-      rescue
+      rescue Exception => e
         raise "HandleThis"
       end
     end
@@ -89,10 +89,10 @@ class GradeSchemeElementsController < ApplicationController
   def fix_grade_scheme_elements_attributes_params
     gse_attributes = params["grade_scheme_elements_attributes"]
 
-    gse_attributes.sort_by! { |e| e["lowest_points"] }
+    gse_attributes.sort_by! { |e| e["lowest_points"].to_i }
 
     # Make sure first element's lowest_points is zero
-    if gse_attributes.first["lowest_points"] != 0
+    if gse_attributes.first["lowest_points"].to_i != 0
       gse_attributes.unshift({
         "level"=>"-", "lowest_points"=>0, "letter"=>"", "highest_points"=>0
       })
@@ -102,7 +102,7 @@ class GradeSchemeElementsController < ApplicationController
       next_gse = gse_attributes[i+1]
       if next_gse.nil?
         # Make sure last element's highest_points is course's max points
-        if gse["lowest_points"] < @course.total_points.to_i
+        if gse["lowest_points"].to_i < @course.total_points.to_i
           gse["highest_points"] = @course.total_points.to_i
         else
           gse["highest_points"] = gse["highest_points"].to_i + 1

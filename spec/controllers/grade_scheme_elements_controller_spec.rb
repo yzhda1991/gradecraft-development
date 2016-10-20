@@ -55,7 +55,7 @@ describe GradeSchemeElementsController do
           highest_points: 100000, course_id: @course.id }, { id: GradeSchemeElement.new.id,
           letter: "B", level: "Snail", lowest_points: 100001, highest_points: 200000,
           course_id: @course.id }], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
-        put :mass_update, params: params.merge(format: :json)
+        put :mass_update, params: params, format: :json
         expect(@course.reload.grade_scheme_elements.count).to eq(2)
         expect(@grade_scheme_element.reload.level).to eq("Sea Slug")
       end
