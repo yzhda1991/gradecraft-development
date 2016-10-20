@@ -18,7 +18,7 @@ class CanvasStudentImporter
 
         if user.valid?
           link_imported canvas_student["id"], user
-          successful << user
+          successful << user unless user.previous_changes.empty?
         else
           unsuccessful << { data: canvas_student,
                             errors: user.errors.full_messages.join(", ") }
