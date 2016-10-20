@@ -32,11 +32,11 @@ describe Assignments::Groups::GradesController do
       let!(:assignment_group) { create(:assignment_group, group: group, assignment: assignment_with_groups) }
       let!(:assignment_group_2) { create(:assignment_group, group: group_2, assignment: assignment_with_groups) }
 
-      context "with raw points not set to a value" do
+      context "with raw points being blank" do
         let(:params) do
           {
-            "0" => { graded_by_id: professor.id, instructor_modified: true,
-              "group_id" => group_2.id, raw_points: "", status: "Graded",
+            "0" => { graded_by_id: professor.id,
+              "group_id" => group_2.id, raw_points: "",
               assignment: assignment_with_groups.id
             }
           }
@@ -49,11 +49,11 @@ describe Assignments::Groups::GradesController do
         end
       end
 
-      context "with raw points set to 1000" do
+      context "with raw points not being blank" do
         let(:params) do
           {
-            "0" => { graded_by_id: professor.id, instructor_modified: true,
-              "group_id" => group.id, raw_points: 1000, status: "Graded",
+            "0" => { graded_by_id: professor.id,
+              "group_id" => group.id, raw_points: 1000,
               assignment: assignment_with_groups.id
             }
           }

@@ -97,7 +97,10 @@ class Assignments::GradesController < ApplicationController
   # PUT /assignments/:assignment_id/grades/mass_update
   # Updates all the grades for the students or groups in a course for an assignment
   def mass_update
-    filter_params_with_no_grades! :grades_attributes
+    filter_params_with_no_grades!
+    params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].each do |key, value|
+      value.merge!(instructor_modified: true, status: "Graded")
+    end
     result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
     if result.success?
@@ -164,13 +167,11 @@ class Assignments::GradesController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit grades_attributes: [:graded_by_id, :graded_at,
-                                                           :instructor_modified, :student_id,
-                                                           :raw_points, :status, :pass_fail_status,
-                                                           :id]
+      :instructor_modified, :student_id, :raw_points, :status, :pass_fail_status, :id]
   end
 
-  def filter_params_with_no_grades!(attribute_name)
-    params[:assignment][attribute_name] = params[:assignment][attribute_name].delete_if do |key, value|
+  def filter_params_with_no_grades!
+    params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].delete_if do |key, value|
       value[:raw_points].blank? && value[:pass_fail_status].blank?
     end
   end

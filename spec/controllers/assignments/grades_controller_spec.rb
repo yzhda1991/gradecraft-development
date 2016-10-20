@@ -37,7 +37,7 @@ describe Assignments::GradesController do
       it "updates badges earned on the grade" do
         earned_badge = create :earned_badge, grade: grade, student_visible: false
         put :update_status, { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
-        expect(earned_badge.reload.student_visible).to be_truthy
+        expect(earned_badge.reload.student_visible).to be true
       end
     end
 
@@ -66,7 +66,7 @@ describe Assignments::GradesController do
     end
 
     describe "GET index" do
-      it "redirects to the assignments show view if the assigment is not a rubric" do
+      it "redirects to the assignments show view if the assignment is not a rubric" do
         allow(assignment).to receive(:grade_with_rubric?).and_return false
         get :index, assignment_id: assignment.id
         expect(response).to redirect_to assignment_path(assignment)
@@ -110,9 +110,8 @@ describe Assignments::GradesController do
         context "with raw points not being blank" do
           let(:grades_attributes) do
             { "#{assignment.reload.grades.index(grade)}" =>
-              { graded_by_id: professor.id, instructor_modified: true,
-                student_id: grade.student_id, raw_points: 1000, status: "Graded",
-                id: grade.id
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, raw_points: 1000
               }
             }
           end
@@ -121,6 +120,8 @@ describe Assignments::GradesController do
             put :mass_update, assignment_id: assignment.id,
               assignment: { grades_attributes: grades_attributes }
             expect(grade.reload.raw_points).to eq 1000
+            expect(grade.reload.instructor_modified).to be true
+            expect(grade.reload.status).to eq "Graded"
           end
 
           it "timestamps the grades" do
@@ -152,9 +153,8 @@ describe Assignments::GradesController do
         context "with raw points being blank" do
           let(:grades_attributes) do
             { "#{assignment.reload.grades.index(grade)}" =>
-              { graded_by_id: professor.id, instructor_modified: true,
-                student_id: grade.student_id, raw_points: "", status: "Graded",
-                id: grade.id
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, raw_points: ""
               }
             }
           end
@@ -172,9 +172,8 @@ describe Assignments::GradesController do
         context "with pass fail status being blank" do
           let(:grades_attributes) do
             { "#{assignment.reload.grades.index(grade)}" =>
-              { graded_by_id: professor.id, instructor_modified: true,
-                student_id: grade.student_id, pass_fail_status: "", status: :Graded,
-                id: grade.id
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, pass_fail_status: ""
               }
             }
           end
@@ -187,12 +186,11 @@ describe Assignments::GradesController do
           end
         end
 
-        context "with pass fail status being blank" do
+        context "with pass fail status set to pass" do
           let(:grades_attributes) do
             { "#{assignment.reload.grades.index(grade)}" =>
-              { graded_by_id: professor.id, instructor_modified: true,
-                student_id: grade.student_id, pass_fail_status: "Pass", status: "Graded",
-                id: grade.id
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, pass_fail_status: "Pass"
               }
             }
           end
@@ -200,6 +198,7 @@ describe Assignments::GradesController do
           it "updates the grade for the specific assignment" do
             put :mass_update, assignment_id: assignment.id,
               assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.instructor_modified).to be true
             expect(grade.reload.status).to eq "Graded"
             expect(grade.reload.pass_fail_status).to eq "Pass"
           end
