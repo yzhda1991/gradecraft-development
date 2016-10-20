@@ -37,8 +37,18 @@
         # add null prediction and grades when JSON contains none
         assignment.prediction = { predicted_points: 0 } if !assignment.prediction
         assignment.grade = { score: null, final_points: null, is_excluded: false } if !assignment.grade
-      )
 
+        # Iterate through all Assignments that are conditions,
+        # If they are closed_without_submission,
+        # flag this assignment to be closed as well
+        if assignment.conditional_assignment_ids
+          assignment.is_closed_by_condition = false
+          _.each(assignment.conditional_assignment_ids, (id)->
+            a = _.find(assignments, {id: id})
+            if a.is_closed_without_submission == true
+              assignment.is_closed_by_condition = true
+          )
+      )
       GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
       GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
       GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
