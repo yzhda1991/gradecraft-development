@@ -50,7 +50,7 @@ class UnlockCondition < ActiveRecord::Base
     unlocked_count = 0
     return 0 unless group.present?
     group.students.each do |student|
-      unlocked_count += group.students.count { |student| self.is_complete?(student) }
+      unlocked_count += 1 if self.is_complete?(student)
     end
     return unlocked_count
   end
@@ -110,18 +110,18 @@ class UnlockCondition < ActiveRecord::Base
       "Completed"
     end
   end
-  
+
   def check_assignment_type_condition(student)
     method = "check_#{ condition_state.parameterize('_') }_condition"
     self.send method, student
   end
-  
+
   def check_assignments_completed_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_completed_count = assignment_type.count_grades_for(student)
     assignment_completed_count >= condition_value
   end
-  
+
   def check_min_points_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_type_score = assignment_type.score_for_student(student)
