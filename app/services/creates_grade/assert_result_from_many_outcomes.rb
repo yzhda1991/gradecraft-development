@@ -9,7 +9,8 @@ module Services
 
       executed do |context|
         unsuccessful = context[:unsuccessful]
-        context.fail!("There were #{"grade".pluralize(unsuccessful.length)} that were not updated") unless unsuccessful.empty?
+        context.fail!("Failed to update #{unsuccessful.length} #{"grade".pluralize(unsuccessful.length)}") \
+          unless unsuccessful.empty?
       end
     end
   end
