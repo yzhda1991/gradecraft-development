@@ -24,6 +24,7 @@ class Grade < ActiveRecord::Base
   before_save :calculate_points
   before_save :zero_points_for_pass_fail
   after_save :check_unlockables
+  after_save :update_earned_badges
 
   clean_html :feedback
   multiple_files :grade_files
@@ -164,6 +165,10 @@ class Grade < ActiveRecord::Base
     self.assignment_id ||= submission.try(:assignment_id)
     self.assignment_type_id ||= assignment.try(:assignment_type_id)
     self.course_id ||= assignment.try(:course_id)
+  end
+
+  def update_earned_badges
+    EarnedBadge.where(grade_id: self.id).each(&:save)
   end
 
   def zero_points_for_pass_fail

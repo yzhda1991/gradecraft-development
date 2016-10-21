@@ -1,5 +1,4 @@
 class EarnedBadge < ActiveRecord::Base
-  STATUSES= ["Predicted", "Earned"]
 
   before_validation :cache_associations
 
@@ -8,12 +7,12 @@ class EarnedBadge < ActiveRecord::Base
   belongs_to :student, class_name: "User", touch: true
   belongs_to :submission # Optional
   belongs_to :grade # Optional
-  belongs_to :group, polymorphic: true # Optional
   belongs_to :awarded_by, class_name: 'User'
   has_many :badge_files, through: :badge
 
   validates_presence_of :badge, :course, :student
 
+  before_save :update_visibility
   after_save :check_unlockables
 
   # validates :badge_id, uniqueness: {scope: :grade_id}
@@ -38,10 +37,14 @@ class EarnedBadge < ActiveRecord::Base
 
   private
 
+  def update_visibility
+    self.student_visible = GradeProctor.new(grade).viewable? if grade.present?
+    true
+  end
+
   def cache_associations
     self.course_id ||= badge.try(:course_id)
     self.points ||= badge.try(:full_points) || 0
-    self.student_visible = GradeProctor.new(grade).viewable? if grade.present?
     true
   end
 
