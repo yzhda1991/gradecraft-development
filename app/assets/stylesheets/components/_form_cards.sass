@@ -3,6 +3,9 @@
 .form-card-grid
   display: flex
   flex-wrap: wrap
+  *
+    box-sizing: border-box
+
 
 .form-card
   border: 1px solid $color-grey-6
@@ -29,26 +32,35 @@
 
 .advanced-settings-card
   background-color: $color-grey-7
-  padding: 0 1rem
+  padding: 1rem
   position: absolute
   width: 100%
   overflow-y: auto
   /*top: 0;*/
-  left:0
-  bottom:0
+  left: 0
+  bottom: 0
   height: 100%
   z-index: 1
   display: none
 
 .form-card-advanced-settings
   background-color: $color-grey-7
-  padding: 0.5rem 1rem
+  padding: 0.25rem 1rem
 
-.button-advanced-settings
+a.button-advanced-settings
   font-size: 0.8rem
   display: block
   cursor: pointer
+  color: $color-grey-3
+  &:hover
+    text-decoration: none
 
+.button-close
+  display: block
+  text-align: right
+  color: $color-grey-3
+  &:hover
+    color: $color-grey-3
 
 .simple_form section
   .form-card

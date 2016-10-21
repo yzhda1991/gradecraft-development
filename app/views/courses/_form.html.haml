@@ -58,14 +58,14 @@
           = f.label :has_badges, "Badges"
           = f.check_box :has_badges
         .form-card-body
-          .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course. 
-        .form-card-advanced-settings
-          %a.button-advanced-settings= glyph(:cog) + "Additional Options"
-        .advanced-settings-card
-          - if current_user_is_admin?
+          .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course.
+        - if current_user_is_admin?
+          .form-card-advanced-settings
+            %a.button-advanced-settings= glyph(:cog) + "Additional Options"
+          .advanced-settings-card
+            %a.button-close= glyph(:times)
             = f.check_box :has_public_badges
             = f.label :has_public_badges, "Allow students to export badges earned in your course"
-            %a.button-close= glyph(:times)
 
 
       .form-card
@@ -91,8 +91,10 @@
         .form-card-advanced-settings
           %a.button-advanced-settings= glyph(:cog) + "Additional Options"
         .advanced-settings-card
+          %a.button-close= glyph(:times)
           = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
           = f.label :team_score_average, "Will sections' scores be the average of their students' scores?"
+
 
       .form-card
         .form-card-header
@@ -103,6 +105,7 @@
         .form-card-advanced-settings
           %a.button-advanced-settings= glyph(:cog) + "Additional Options"
         .advanced-settings-card
+          %a.button-close= glyph(:times)
           = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
           = f.label :add_team_score_to_student, "Do you want team assignment scores to be added directly into student scores?"
 
@@ -115,6 +118,7 @@
         .form-card-advanced-settings
           %a.button-advanced-settings= glyph(:cog) + "Additional Options"
         .advanced-settings-card
+          %a.button-close= glyph(:times)
           = f.check_box :has_in_team_leaderboards, {"aria-describedby" => "txtInSectionLeaderboard"}
           = f.label :has_in_team_leaderboards, "Allow students to opt in to see in-section rankings and points (using screennames to protect their privacy)"
 
