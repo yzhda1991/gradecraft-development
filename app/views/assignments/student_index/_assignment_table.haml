@@ -6,15 +6,15 @@
           %span.checkmark= glyph(:check)
         - elsif assignment.is_predicted_by_student?(current_student)
           %span.flag= glyph(:flag)
-        - if assignment.required? && !assignment.is_predicted_by_student?(current_student)
+        - if assignment.required? && !assignment.is_predicted_by_student?(current_student) && !GradeProctor.new(presenter.grade_for(assignment)).viewable?
           %a.asterisk= glyph(:asterisk)
-          .display_on_hover.hover-style
-            This #{term_for :assignment} is required!
+          .display-on-hover.hover-style
+            %p This #{term_for :assignment} is required!
 
       .assignment-name
         - if presenter.name_visible?(assignment)
           = link_to assignment.name, assignment_path(assignment)
-          %span= render partial: "assignments/student_index/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
+          = render partial: "assignments/student_index/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
         - else
           %i= "The name for this #{term_for :assignment} has been hidden until you unlock it"
       .assignment-info.assignment-due-date
