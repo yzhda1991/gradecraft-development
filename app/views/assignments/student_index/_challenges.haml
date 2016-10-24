@@ -1,11 +1,11 @@
 - if current_course.has_team_challenges? && current_course.add_team_score_to_student? && current_student.team_for_course(current_course).present?
-  .assignment_type.student
+  .assignment_type.team-challenge.student
 
     .collapse
       %h3= glyph('angle-double-right') + "#{term_for :challenges}" 
       .points-summary
         .assignment-type-points-graph
-          .points-graph-fill-bar{:style => "width: #{ (current_student.team_for_course(current_course).challenge_grade_score).to_f }/#{ ((current_course.point_total_for_challenges).to_f ).to_f* 100}%;" }
+          .points-graph-fill-bar{:style => "width: #{(current_student.team_for_course(current_course).challenge_grade_score).to_f / (current_course.point_total_for_challenges).to_f * 100}%;"}
         %span.assignment-type-points #{ points current_student.team_for_course(current_course).challenge_grade_score }/#{ points current_course.point_total_for_challenges}
 
     .assignment-type-container
