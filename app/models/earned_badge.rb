@@ -1,6 +1,6 @@
 class EarnedBadge < ActiveRecord::Base
 
-  before_validation :cache_associations
+  before_validation :add_associations
 
   belongs_to :course, touch: true
   belongs_to :badge
@@ -40,9 +40,12 @@ class EarnedBadge < ActiveRecord::Base
     true
   end
 
-  def cache_associations
-    self.course_id ||= badge.try(:course_id)
-    self.points ||= badge.try(:full_points) || 0
+  def add_associations
+    self.course_id ||= badge.course_id
+    self.points = self.badge.full_points || 0
+    if self.grade.present?
+      self.assignment_id ||= self.grade.assignment_id
+    end
     true
   end
 

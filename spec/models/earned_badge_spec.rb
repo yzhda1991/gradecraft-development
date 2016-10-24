@@ -63,12 +63,19 @@ describe EarnedBadge do
     end
   end
 
-  describe "#cache_associations" do
+  describe "#add_associations" do
     it "caches 0 for a badge with nil points" do
       badge = create(:badge, full_points: nil)
       student = create(:user)
       earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       expect(earned_badge.points).to eq(0)
+    end
+
+    it "caches badge full points for points" do
+      badge = create(:badge, full_points: 123)
+      student = create(:user)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      expect(earned_badge.points).to eq(123)
     end
   end
 
