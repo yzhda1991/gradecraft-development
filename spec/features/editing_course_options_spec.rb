@@ -13,7 +13,7 @@ feature "editing a course's basic settings" do
 
     scenario "successfully" do
       within(".sidebar-container .staff-sidenav") do
-        click_link "Basic Settings"
+        click_link "Course Settings"
       end
 
       within(".pageContent") do

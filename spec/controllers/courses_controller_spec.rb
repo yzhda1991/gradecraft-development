@@ -93,46 +93,6 @@ describe CoursesController do
       end
     end
 
-    describe "GET multiplier_settings" do
-      it "gets the form to edit the multiplier settings" do
-        get :multiplier_settings, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:multiplier_settings)
-      end
-    end
-
-    describe "GET custom_terms" do
-      it "gets the form to edit custom terms" do
-        get :custom_terms, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:custom_terms)
-      end
-    end
-
-    describe "GET course_details" do
-      it "gets the form to edit course details" do
-        get :course_details, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:course_details)
-      end
-    end
-
-    describe "GET player_settings" do
-      it "gets the form to edit player settings" do
-        get :player_settings, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:player_settings)
-      end
-    end
-
-    describe "GET student_onboarding_setup" do
-      it "gets the form to edit the student onboarding process" do
-        get :student_onboarding_setup, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:student_onboarding_setup)
-      end
-    end
-
     describe "POST copy" do
       it "creates a duplicate course" do
         expect{ post :copy, params: { id: course.id }}.to change(Course, :count).by(1)
