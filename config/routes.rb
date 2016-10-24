@@ -204,14 +204,6 @@ Rails.application.routes.draw do
     end
   end
 
-  controller :courses do
-    get :course_details
-    get :custom_terms
-    get :multiplier_settings
-    get :player_settings
-    get :student_onboarding_setup
-  end
-
   resources :course_memberships, only: [:create, :delete, :destroy]
   get :course_creation_wizard, to: "courses#course_creation_wizard"
 

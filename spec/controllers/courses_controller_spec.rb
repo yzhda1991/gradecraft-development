@@ -297,11 +297,6 @@ describe CoursesController do
         :show,
         :update,
         :destroy,
-        :multiplier_settings,
-        :student_onboarding_setup,
-        :course_details,
-        :custom_terms,
-        :player_settings,
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)

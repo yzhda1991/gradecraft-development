@@ -82,7 +82,7 @@ class CoursesController < ApplicationController
       if @course.update_attributes(course_params)
         bust_course_list_cache current_user
         format.html do
-          redirect_to @course,
+          redirect_to edit_course_path(@course),
           notice: "Course #{@course.name} successfully updated"
         end
       else
@@ -108,11 +108,6 @@ class CoursesController < ApplicationController
       end
     end
     redirect_to root_url
-  end
-
-  def recalculate_student_scores
-    @course.recalculate_student_scores
-    redirect_to root_path, notice: "Recalculated student scores for #{@course.name}"
   end
 
   def course_creation_wizard
