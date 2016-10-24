@@ -603,7 +603,7 @@ on hover",
   assignment_type: :predictor,
   attributes: {
     name: "Past Assignment no Grade but Prediction",
-    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons.",
+    description: "Has prediction but closed at 0 points in the Predictor. displays 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions: true,
     accepts_submissions_until: 1.week.ago,
@@ -688,7 +688,7 @@ accepts predictions.",
   assignment_type: :predictor,
   attributes: {
     name: "Not Submitted, Closed",
-    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons.",
+    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons. Closed in Predictor",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     full_points: 15000,
@@ -697,12 +697,6 @@ accepts predictions.",
     accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
-  },
-  grades: true,
-  grade_attributes: {
-    instructor_modified: false,
-    raw_points: -> { nil },
-    status: nil,
   },
   prediction: true,
   prediction_attributes: {
@@ -1389,6 +1383,39 @@ test that teaches you a lesson. – Tom Bodett",
     condition_state: "Submitted"
   }
 }
+
+@assignments[:passed_unlock_submission_condition] = {
+  quotes: {
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Past-Submission-Key",
+    description:
+      "It's too late, but I was the thing you needed to submit to unlock 'Unlocked-By-Past-Submission' Should be closed in Predictor",
+    due_at: 4.weeks.ago,
+    full_points: 180000,
+    accepts_submissions: true,
+    accepts_submissions_until: 1.week.ago,
+  }
+}
+
+@assignments[:past_submission_is_an_unlock] = {
+  quotes: {
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Unlocked-By-Past-Submission",
+    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor",
+    full_points: 180000,
+  },
+  unlock_condition: true,
+  unlock_attributes: {
+    condition: :passed_unlock_submission_condition,
+    condition_type: "Assignment",
+    condition_state: "Submitted"
+  }
+}
+
 
 #------------------------------------------------------------------------------#
 

@@ -122,6 +122,10 @@
   articleCompleted = (article)->
     if article.type == "badges"
       return ! article.can_earn_multiple_times && article.earned_badge_count > 0
+    if article.is_closed_without_submission == true
+      return true
+    if article.is_closed_by_condition == true
+      return true
     if article.grade.score == null
       return false
     else
@@ -132,7 +136,9 @@
     # Always treats badges as if they "count"
     return false if article.type == "badges"
     return true if article.grade.pass_fail_status == "Fail"
-    return true if article.grade.score == 0
+    return true if article.grade.score == 0 ||
+      article.is_closed_without_submission == true ||
+      article.is_closed_by_condition == true
     return true if article.grade.is_excluded
     return false
 

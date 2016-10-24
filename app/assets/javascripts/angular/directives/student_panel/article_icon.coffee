@@ -4,7 +4,10 @@
 # "is_required", "is_late", "has_info", "is_locked", "has_been_unlocked", "is_a_condition", "group"
 # example:
 #   .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'assignment', 'article_type'=>'assignment'}
-# Does not handle locked/unlocked icons, which include lists of lock conditions
+#
+# This Does not handle locked/unlocked icons, which include lists conditions
+# and is managed by /templates/student_panel/panel_article/condition_icons.html.haml
+
 @gradecraft.directive 'studentPanelArticleIcon', [ 'StudentPanelService', (StudentPanelService)->
 
   return {
