@@ -136,7 +136,9 @@
     # Always treats badges as if they "count"
     return false if article.type == "badges"
     return true if article.grade.pass_fail_status == "Fail"
-    return true if article.grade.score == 0
+    return true if article.grade.score == 0 ||
+      article.is_closed_without_submission == true ||
+      article.is_closed_by_condition == true
     return true if article.grade.is_excluded
     return false
 
