@@ -4,6 +4,8 @@ require "./app/services/creates_grade/saves_grade"
 
 describe Services::Actions::SavesGrade do
   let(:grade) { build :grade }
+  let(:previous_changes_with_raw_points) { { raw_points: 100 } }
+  let(:previous_changes_without_raw_points) { { raw_points: nil } }
 
   it "expects grade passed to service" do
     expect { described_class.execute }.to \
@@ -15,7 +17,12 @@ describe Services::Actions::SavesGrade do
     expect(result[:grade]).to_not be_new_record
   end
 
-  it "promises the student visible status" do
+  it "promises update grade" do
+    result = described_class.execute grade: grade
+    expect(result).to have_key :update_grade
+  end
+
+  it "promises student visible status" do
     result = described_class.execute grade: grade
     expect(result).to have_key :student_visible_status
   end
@@ -26,15 +33,43 @@ describe Services::Actions::SavesGrade do
       raise_error LightService::FailWithRollbackError
   end
 
-  it "sets the student visible status to nil when grade not visible" do
-    result = described_class.execute grade: grade
-    expect(result[:student_visible_status]).to be_falsey
+  context "when the grade has not been graded or released" do
+    before(:each) { allow_any_instance_of(GradeStatus).to receive(:graded_or_released?).and_return false }
+
+    context "with previous changes to raw points" do
+      it "sets update grade to false" do
+        allow_any_instance_of(Grade).to receive(:previous_changes).and_return previous_changes_with_raw_points
+        result = described_class.execute grade: grade
+        expect(result.update_grade).to be_falsey
+      end
+    end
+
+    context "with no previous changes to raw points" do
+      it "sets update grade to false" do
+        allow_any_instance_of(Grade).to receive(:previous_changes).and_return previous_changes_without_raw_points
+        result = described_class.execute grade: grade
+        expect(result.update_grade).to be_falsey
+      end
+    end
   end
 
-  it "sets the student visible status to true when grade is visible" do
-    allow_any_instance_of(GradeProctor).to \
-              receive(:viewable?).and_return true
-    result = described_class.execute grade: grade
-    expect(result[:student_visible_status]).to be_truthy
+  context "when the grade has been graded or released" do
+    before(:each) { allow_any_instance_of(GradeStatus).to receive(:graded_or_released?).and_return true }
+
+    context "with previous changes to raw points" do
+      it "sets update grade to true" do
+        allow_any_instance_of(Grade).to receive(:previous_changes).and_return previous_changes_with_raw_points
+        result = described_class.execute grade: grade
+        expect(result.update_grade).to be_truthy
+      end
+    end
+
+    context "with no previous changes to raw points" do
+      it "sets update grade to false" do
+        allow_any_instance_of(Grade).to receive(:previous_changes).and_return previous_changes_without_raw_points
+        result = described_class.execute grade: grade
+        expect(result.update_grade).to be_falsey
+      end
+    end
   end
 end

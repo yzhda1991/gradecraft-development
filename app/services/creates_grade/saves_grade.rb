@@ -2,16 +2,17 @@ module Services
   module Actions
     class SavesGrade
       extend LightService::Action
-
+      
       expects :grade
-      promises :student_visible_status
+      promises :update_grade, :student_visible_status
 
       executed do |context|
         grade = context[:grade]
         context.fail_with_rollback!("The grade is invalid and cannot be saved", error_code: 422) \
           unless grade.save
-        # warning: LightService doesn't set context keys to false, will be nil !
+        context[:update_grade] = grade.previous_changes[:raw_points].present? && grade.graded_or_released?
         context[:student_visible_status] = GradeProctor.new(grade).viewable?
+        # warning: LightService doesn't set context keys to false, will be nil !
       end
     end
   end

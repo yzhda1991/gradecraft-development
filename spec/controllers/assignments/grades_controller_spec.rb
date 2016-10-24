@@ -3,8 +3,8 @@ require "rails_spec_helper"
 describe Assignments::GradesController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
-  let(:student) { create(:user) }
-  let!(:student_course_membership) { create(:student_course_membership, course: course, user: student) }
+  let(:assignment_with_groups) { create(:group_assignment, course: course) }
+  let!(:student) { create(:student_course_membership, course: course).user }
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
 
   context "as professor" do
@@ -37,7 +37,7 @@ describe Assignments::GradesController do
       it "updates badges earned on the grade" do
         earned_badge = create :earned_badge, grade: grade, student_visible: false
         put :update_status, { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
-        expect(earned_badge.reload.student_visible).to be_truthy
+        expect(earned_badge.reload.student_visible).to be true
       end
     end
 
@@ -66,7 +66,7 @@ describe Assignments::GradesController do
     end
 
     describe "GET index" do
-      it "redirects to the assignments show view if the assigment is not a rubric" do
+      it "redirects to the assignments show view if the assignment is not a rubric" do
         allow(assignment).to receive(:grade_with_rubric?).and_return false
         get :index, assignment_id: assignment.id
         expect(response).to redirect_to assignment_path(assignment)
@@ -88,8 +88,8 @@ describe Assignments::GradesController do
         student_2 = create(:user, last_name: "zzimmer", first_name: "aaron")
         student_3 = create(:user, last_name: "zzimmer", first_name: "zoron")
         [student_2,student_3].each {|s| s.courses << course }
-        expect { get :mass_edit, assignment_id: assignment.id }.to \
-          change { Grade.count }.by(2)
+        expect{ get :mass_edit, assignment_id: assignment.id }.to \
+          change{Grade.count}.by(2)
         expect(assigns(:grades)[1].student).to eq(student_2)
         expect(assigns(:grades)[2].student).to eq(student_3)
       end
@@ -106,52 +106,103 @@ describe Assignments::GradesController do
     end
 
     describe "PUT mass_update" do
-      let(:grades_attributes) do
-        { "#{assignment.reload.grades.index(grade)}" =>
-          { graded_by_id: professor.id, instructor_modified: true,
-            student_id: grade.student_id, raw_points: 1000, status: "Graded",
-            id: grade.id
-          }
-        }
-      end
+      context "when the assignment is not pass fail type" do
+        context "with raw points not being blank" do
+          let(:grades_attributes) do
+            { "#{assignment.reload.grades.index(grade)}" =>
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, raw_points: 1000
+              }
+            }
+          end
 
-      it "updates the grades for the specific assignment" do
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(grade.reload.raw_points).to eq 1000
-      end
+          it "updates the grade for the specific assignment" do
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.raw_points).to eq 1000
+            expect(grade.reload.instructor_modified).to be true
+            expect(grade.reload.status).to eq "Graded"
+          end
 
-      it "timestamps the grades" do
-        current_time = DateTime.now
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(grade.reload.graded_at).to be > current_time
-      end
+          it "timestamps the grades" do
+            current_time = DateTime.now
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.graded_at).to_not be_nil
+            expect(grade.reload.graded_at).to be > current_time
+          end
 
-      it "only sends notifications to the students if the grade changed" do
-        grade.update_attributes({ raw_points: 1000 })
-        run_background_jobs_immediately do
-          expect { put :mass_update, assignment_id: assignment.id,
-                   assignment: { grades_attributes: grades_attributes } }.to_not \
-            change { ActionMailer::Base.deliveries.count }
+          it "redirects to assignment path with a team" do
+            team = create(:team, course: course)
+            put :mass_update, assignment_id: assignment.id, team_id: team.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(response).to \
+              redirect_to(assignment_path(assignment, team_id: team.id))
+          end
+
+          it "redirects on failure" do
+            allow(Services::CreatesManyGrades).to \
+              receive(:create).and_return double(:result, success?: false, message: "")
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(response).to \
+              redirect_to(mass_edit_assignment_grades_path(assignment))
+          end
+        end
+
+        context "with raw points being blank" do
+          let(:grades_attributes) do
+            { "#{assignment.reload.grades.index(grade)}" =>
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, raw_points: ""
+              }
+            }
+          end
+
+          it "does not update the grade for the specific assignment" do
+            raw_points_prior = grade.raw_points
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.raw_points).to eq raw_points_prior
+          end
         end
       end
 
-      it "redirects to assignment path with a team" do
-        team = create(:team, course: course)
-        put :mass_update, assignment_id: assignment.id, team_id: team.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(response).to \
-          redirect_to(assignment_path(assignment, team_id: team.id))
-      end
+      context "when the assignment is of pass/fail type" do
+        context "with pass fail status being blank" do
+          let(:grades_attributes) do
+            { "#{assignment.reload.grades.index(grade)}" =>
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, pass_fail_status: ""
+              }
+            }
+          end
 
-      it "redirects on failure" do
-        allow_any_instance_of(Assignment).to \
-          receive(:update_attributes).and_return false
-        put :mass_update, assignment_id: assignment.id,
-          assignment: { grades_attributes: grades_attributes }
-        expect(response).to \
-          redirect_to(mass_edit_assignment_grades_path(assignment))
+          it "does not update the grade for the specific assignment" do
+            raw_points_prior = grade.raw_points
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.raw_points).to eq raw_points_prior
+          end
+        end
+
+        context "with pass fail status set to pass" do
+          let(:grades_attributes) do
+            { "#{assignment.reload.grades.index(grade)}" =>
+              { graded_by_id: professor.id, id: grade.id,
+                student_id: grade.student_id, pass_fail_status: "Pass"
+              }
+            }
+          end
+
+          it "updates the grade for the specific assignment" do
+            put :mass_update, assignment_id: assignment.id,
+              assignment: { grades_attributes: grades_attributes }
+            expect(grade.reload.instructor_modified).to be true
+            expect(grade.reload.status).to eq "Graded"
+            expect(grade.reload.pass_fail_status).to eq "Pass"
+          end
+        end
       end
     end
 

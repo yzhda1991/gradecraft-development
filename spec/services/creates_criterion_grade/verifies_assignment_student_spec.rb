@@ -1,6 +1,6 @@
 require "light-service"
 require "active_record_spec_helper"
-require "./app/services/creates_criterion_grade/verifies_assignment_student"
+require "./app/services/creates_grade/verifies_assignment_student"
 
 describe Services::Actions::VerifiesAssignmentStudent do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }

@@ -85,6 +85,15 @@ GradeCraft::Application.routes.draw do
       end
     end
 
+    resource :groups, only: [], module: :assignments do
+      resources :grades, only: [], module: :groups do
+        collection do
+          get :mass_edit
+          put :mass_update
+        end
+      end
+    end
+
     namespace :grades do
       resources :importers, param: :provider_id, only: [:index, :show] do
         get :download

@@ -4,23 +4,18 @@ module Services
   module Actions
     class IteratesCreatesGradeUsingRubric
       extend LightService::Action
-
-      expects :raw_params
-      expects :grading_agent
+      
+      expects :raw_params, :graded_by_id, :group
 
       executed do |context|
-        begin
-          group = Group.find(context[:raw_params]["group_id"])
-        rescue ActiveRecord::RecordNotFound
-          context.fail!("Unable to find group", error_code: 404)
-          next context
-        end
+        graded_by_id = context.graded_by_id
+        group = context.group
 
         group.students.each do |student|
           params = context[:raw_params].deep_dup
           params["student_id"] = student.id
           params["group_id"] = group.id
-          context.add_to_context Services::CreatesGradeUsingRubric.create(params, context[:grading_agent])
+          context.add_to_context Services::CreatesGradeUsingRubric.create(params, graded_by_id)
         end
       end
     end

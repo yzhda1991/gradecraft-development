@@ -1,24 +1,16 @@
-require "active_record_spec_helper"
+require "./app/services/creates_grade"
 
-require "./app/services/creates_grade_using_rubric"
-
-describe Services::CreatesGradeUsingRubric do
+describe Services::CreatesGrade do
   let(:professor) { create(:user) }
-  let(:params) { RubricGradePUT.new.params }
+  let(:group) { create(:group) }
+  let!(:assignment_group) { create(:assignment_group, group: group, assignment: assignment_with_group) }
+  let(:assignment_with_group) { create(:group_assignment) }
+  let(:grade) { create(:grade, assignment: assignment_with_group) }
+  let(:params) { { "group_id" => group.id, grade: grade, assignment: assignment_with_group } }
 
   describe ".create" do
     it "confirms the student and assignment" do
       expect(Services::Actions::VerifiesAssignmentStudent).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
-    it "initializes new criterion grades" do
-      expect(Services::Actions::BuildsCriterionGrades).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
-    it "saves criterion grades" do
-      expect(Services::Actions::SavesCriterionGrades).to receive(:execute).and_call_original
       described_class.create params, professor.id
     end
 
@@ -39,21 +31,6 @@ describe Services::CreatesGradeUsingRubric do
 
     it "saves the grade" do
       expect(Services::Actions::SavesGrade).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
-    it "updates the badges for grade" do
-      expect(Services::Actions::UpdatesEarnedBadgesForGrade).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
-    it "creates level badges" do
-      expect(Services::Actions::BuildsEarnedLevelBadges).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
-    it "saves level badges" do
-      expect(Services::Actions::SavesEarnedLevelBadges).to receive(:execute).and_call_original
       described_class.create params, professor.id
     end
 

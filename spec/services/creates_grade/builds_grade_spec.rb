@@ -3,14 +3,13 @@ require "active_record_spec_helper"
 require "./app/services/creates_grade/builds_grade"
 
 describe Services::Actions::BuildsGrade do
-
   let(:world) { World.create.with(:course, :professor, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
   let(:attributes) { RubricGradePUT.new(world).params }
   let(:context) {{
       attributes: attributes,
       student: world.student,
       assignment: world.assignment,
-      grading_agent: world.professor
+      graded_by_id: world.professor.id
     }}
 
   it "expects attributes to assign to grade" do
@@ -47,6 +46,7 @@ describe Services::Actions::BuildsGrade do
     expect(result[:grade].adjustment_points).to eq -10
     expect(result[:grade].adjustment_points_feedback).to eq "reduced by 10 points"
     expect(result[:grade].graded_by_id).to eq(world.professor.id)
+    expect(result[:grade].graded_at).to be_within(1.second).of(DateTime.now)
   end
 
   it "adds the group id if supplied" do

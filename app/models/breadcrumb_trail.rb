@@ -47,6 +47,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:provider_name].capitalize + ' #{ term_for :assignments }', assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
   end
 
+  def assignments_groups_grades_mass_edit
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb("Update Grades")
+  end
+
   def assignments_grades_edit_status
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
@@ -371,7 +377,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Editing Grading Scheme')
   end
-  
+
   def grade_scheme_elements_edit
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('Grading Scheme', grade_scheme_elements_path)

@@ -1,3 +1,5 @@
+require_relative "../../services/creates_many_grades"
+
 class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?, except: :self_log
   before_filter :ensure_student?, only: :self_log
@@ -74,21 +76,34 @@ class Assignments::GradesController < ApplicationController
   # GET /assignments/:assignment_id/grades/export/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
+    if @assignment.has_groups?
+      redirect_to mass_edit_assignment_groups_grades_path and return
+    end
+
     @assignment_type = @assignment.assignment_type
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
+
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students_being_graded
+    end
+
+    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
   # PUT /assignments/:assignment_id/grades/mass_update
-  # Updates all the grades for the students in a course for an assignment
+  # Updates all the grades for the students or groups in a course for an assignment
   def mass_update
-    params[:assignment][:grades_attributes].each do |index, grade_params|
-      grade_params.merge!(graded_at: DateTime.now)
-    end if params[:assignment][:grades_attributes].present?
-    if @assignment.update_attributes(assignment_params)
-      # @mz TODO: add specs
-      enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
+    filter_params_with_no_grades!
+    params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].each do |key, value|
+      value.merge!(instructor_modified: true, status: "Graded")
+    end
+    result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
+    if result.success?
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, team_id: params[:team_id])
       else
@@ -152,25 +167,18 @@ class Assignments::GradesController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit grades_attributes: [:graded_by_id, :graded_at,
-                                                           :instructor_modified, :student_id,
-                                                           :raw_points, :status, :pass_fail_status,
-                                                           :id]
+      :instructor_modified, :student_id, :raw_points, :status, :pass_fail_status, :id]
+  end
+
+  def filter_params_with_no_grades!
+    params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].delete_if do |key, value|
+      value[:raw_points].blank? && value[:pass_fail_status].blank?
+    end
   end
 
   # Schedule the `GradeUpdater` for all grades provided
   def enqueue_multiple_grade_update_jobs(grade_ids)
     grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
-  end
-
-  # Retrieve all grades for an assignment if it has a score
-  def mass_update_grade_ids
-    @assignment.grades.inject([]) do |memo, grade|
-      scored_changed = grade.previous_changes[:raw_points].present?
-      if scored_changed && grade.graded_or_released?
-        memo << grade.id
-      end
-      memo
-    end
   end
 
   def find_assignment

@@ -2,7 +2,7 @@ module Services
   module Actions
     class MarksAsGraded
       extend LightService::Action
-
+      
       expects :grade
 
       executed do |context|

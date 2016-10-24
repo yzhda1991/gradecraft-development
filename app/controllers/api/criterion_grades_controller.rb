@@ -33,7 +33,7 @@ class API::CriterionGradesController < ApplicationController
 
   # PUT api/assignments/:assignment_id/students/:student_id/criterion_grades
   def update
-    result = Services::CreatesGradeUsingRubric.create params, current_user
+    result = Services::CreatesGradeUsingRubric.create params, current_user.id
     if result.success?
       render json: {
         message: "Grade successfully saved", success: true },
@@ -63,7 +63,7 @@ class API::CriterionGradesController < ApplicationController
 
   # PUT api/assignments/:assignment_id/groups/:group_id/criterion_grades
   def group_update
-    result = Services::CreatesGroupGradesUsingRubric.create params, current_user
+    result = Services::CreatesGroupGradesUsingRubric.create params, current_user.id
     if result.success?
       render json: {
         message: "Grade successfully saved", success: true
