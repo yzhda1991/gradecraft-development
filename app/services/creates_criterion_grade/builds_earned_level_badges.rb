@@ -21,16 +21,13 @@ module Services
         level_ids.each do |id|
           level = Level.find(id)
           level.level_badges.each do |level_badge|
-            context[:earned_level_badges] << EarnedBadge.find_or_create_by(
+            elb = EarnedBadge.find_or_create_by(
               student_id: context[:student].id,
               badge_id: level_badge.badge.id,
               level_id: level.id
-            ).update(
-              assignment_id: context[:assignment].id,
-              course_id: context[:assignment].course.id,
-              points: level_badge.badge.full_points,
-              grade_id: context[:grade].id
             )
+            elb.update(grade_id: context[:grade].id)
+            context[:earned_level_badges] << elb
           end
         end
       end

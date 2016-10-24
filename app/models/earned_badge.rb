@@ -41,8 +41,8 @@ class EarnedBadge < ActiveRecord::Base
   end
 
   def add_associations
-    self.course_id ||= badge.course_id
     self.points = self.badge.full_points || 0
+    self.course_id ||= badge.course_id
     if self.grade.present?
       self.assignment_id ||= self.grade.assignment_id
     end

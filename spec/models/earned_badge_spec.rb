@@ -64,18 +64,31 @@ describe EarnedBadge do
   end
 
   describe "#add_associations" do
+    let(:student) { create :user }
+
     it "caches 0 for a badge with nil points" do
       badge = create(:badge, full_points: nil)
-      student = create(:user)
-      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)
       expect(earned_badge.points).to eq(0)
     end
 
     it "caches badge full points for points" do
       badge = create(:badge, full_points: 123)
-      student = create(:user)
-      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)
       expect(earned_badge.points).to eq(123)
+    end
+
+    it "pulls the course id off of badge" do
+      badge = create(:badge, full_points: 123)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)
+      expect(earned_badge.course_id).to eq(badge.course_id)
+    end
+
+    it "pulls the assignment off of grade if grade present" do
+      badge = create(:badge, full_points: 123)
+      grade = create(:released_grade, student: student)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, grade_id: grade.id )
+      expect(earned_badge.assignment_id).to eq(grade.assignment_id)
     end
   end
 
