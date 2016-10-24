@@ -667,6 +667,7 @@ ActiveRecord::Schema.define(version: 20161108202754) do
     t.datetime "last_export_completed_at"
     t.string   "last_completed_step"
     t.integer  "group_ids",                default: [], null: false, array: true
+    t.boolean  "use_groups",               default: false
   end
 
   create_table "team_leaderships", force: :cascade do |t|
