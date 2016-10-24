@@ -1,5 +1,5 @@
 require "light-service"
-require_relative "group_services/iterates_assignment_groups_to_create_grades"
+require_relative "shared/iterates_assignment_groups_to_create_grades"
 require "creates_grade/assert_result_from_many_outcomes"
 
 module Services
