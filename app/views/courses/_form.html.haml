@@ -61,7 +61,7 @@
           .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course.
         - if current_user_is_admin?
           .form-card-advanced-settings
-            %a.button-advanced-settings= glyph(:cog) + "Additional Options"
+            %a.button-advanced-settings= glyph(:cog) + "Settings"
           .advanced-settings-card
             %a.button-close= glyph(:times)
             = f.check_box :has_public_badges
@@ -81,6 +81,11 @@
           = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
         .form-card-body
           .feature-description{id: "hideAnalytics"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
+        .form-card-advanced-settings
+          %a.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = render partial: "courses/multiplier_settings"
 
       .form-card
         .form-card-header
@@ -89,7 +94,7 @@
         .form-card-body
           .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
         .form-card-advanced-settings
-          %a.button-advanced-settings= glyph(:cog) + "Additional Options"
+          %a.button-advanced-settings= glyph(:cog) + "Settings"
         .advanced-settings-card
           %a.button-close= glyph(:times)
           = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
@@ -103,7 +108,7 @@
         .form-card-body
           .feature-description{id: "txtSections"}  These are larger assignments to be completed by discussion section groups. 
         .form-card-advanced-settings
-          %a.button-advanced-settings= glyph(:cog) + "Additional Options"
+          %a.button-advanced-settings= glyph(:cog) + "Settings"
         .advanced-settings-card
           %a.button-close= glyph(:times)
           = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
@@ -116,7 +121,7 @@
         .form-card-body
           .feature-description{id: "txtSectionLeaderboard"} Students can choose to participate in anonymous, section-based leaderboards if they enjoy competition, and opt-out if they don't.
         .form-card-advanced-settings
-          %a.button-advanced-settings= glyph(:cog) + "Additional Options"
+          %a.button-advanced-settings= glyph(:cog) + "Settings"
         .advanced-settings-card
           %a.button-close= glyph(:times)
           = f.check_box :has_in_team_leaderboards, {"aria-describedby" => "txtInSectionLeaderboard"}

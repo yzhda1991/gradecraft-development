@@ -12,15 +12,9 @@ class CoursesController < ApplicationController
                                      :copy,
                                      :update,
                                      :destroy,
-                                     :badges,
-                                     :recalculate_student_scores]
-  before_action :use_current_course, only: [:course_details,
-                                            :custom_terms,
-                                            :multiplier_settings,
-                                            :player_settings,
-                                            :student_onboarding_setup]
-  skip_before_action :verify_authenticity_token, only: [:change]
-  before_action :ensure_not_impersonating?, only: [:change]
+                                     :badges]
+  skip_before_filter :verify_authenticity_token, only: [:change]
+  before_filter :ensure_not_impersonating?, only: [:change]
 
   def index
     @courses = current_user.courses
@@ -132,20 +126,6 @@ class CoursesController < ApplicationController
     end
   end
 
-  # def course_details
-  # end
-  # 
-  # def custom_terms
-  # end
-  # 
-  # def multiplier_settings
-  # end
-  # 
-  # def player_settings
-  # end
-  # 
-  # def student_onboarding_setup
-  # end
 
   private
 

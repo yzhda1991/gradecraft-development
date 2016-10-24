@@ -9,11 +9,9 @@
       %li
         %a{ "href" => "#tab3"} Integrations
       %li
-        %a{ "href" => "#tab4"} Grading Scheme
+        %a{ "href" => "#tab4"} Student Onboarding
       %li
-        %a{ "href" => "#tab5"} Student Onboarding
-      %li
-        %a{ "href" => "#tab6"} Advanced Settings
+        %a{ "href" => "#tab5"} Advanced Settings
 
     #tabt1.ui-tabs-panel
       .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
@@ -23,8 +21,6 @@
       .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
         = render partial: "integrations/index"
       .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
-
-      .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
         = render partial: "courses/student_onboarding_setup"
-      .ui-tabs-panel#tab6{role: "tabpanel", "aria-hidden" => false }
+      .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
         = render partial: "courses/advanced_settings"

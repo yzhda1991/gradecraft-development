@@ -1,0 +1,14 @@
+= simple_form_for(@course, :validate => false)  do |f|
+  = f.label :total_weights, "How many multipliers do #{term_for :students} have to allocate?"
+  = f.number_field :total_weights, {"aria-describedby" => "txtMultiplierCount"}
+
+  = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
+
+  = f.label :max_weights_per_assignment_type, "Maximum Per #{term_for :assignment_type}"
+  = f.number_field :max_weights_per_assignment_type, {"aria-describedby" => "txtMaxPerAssignment"}
+
+  = f.label :max_assignment_types_weighted, "Is there a maximum number of assignment types they can weight?"
+  = f.number_field :max_assignment_types_weighted, {"aria-describedby" => "txtMaxWeighted"}
+
+  = f.label :weight_term, "What do you want to call these weights/multipliers?"
+  = f.text_field :weight_term, {"aria-describedby" => "txtWeightTerm"}
