@@ -290,15 +290,6 @@ describe Badge do
     end
   end
 
-  describe "#earned_badge_for_student(student)" do
-    it "returns the first earned badge for a student for a particular badge" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      expect(badge.earned_badge_for_student(student)).to eq(earned_badge)
-    end
-  end
-
   describe "#earned_badge_count_for_student(student)" do
     it "sums up the number of times a student has earned a specific badge" do
       student = create(:user)

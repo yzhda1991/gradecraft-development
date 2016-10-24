@@ -30,7 +30,7 @@ describe EarnedBadge do
     end
   end
 
-  describe "#multiple_allowed" do
+  describe "#ernable" do
     it "allows a student to earn a badge if they haven't earned it yet" do
       badge = create(:badge)
       student = create(:user)
@@ -53,6 +53,13 @@ describe EarnedBadge do
       EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       expect(badge.earned_badge_count_for_student(student)).to eq(1)
+    end
+
+    it "allows a single earned badge to be resaved" do
+      badge = create(:badge, can_earn_multiple_times: false)
+      student = create(:user)
+      eb = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      expect(eb.save).to be_truthy
     end
   end
 

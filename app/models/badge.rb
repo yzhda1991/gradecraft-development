@@ -34,15 +34,6 @@ class Badge < ActiveRecord::Base
     earned_badges.student_visible.count
   end
 
-  # badges per role
-  def earned_badges_by_student_id
-    @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
-  end
-
-  def earned_badge_for_student(student)
-    earned_badges_by_student_id[[student.id]].try(:first)
-  end
-
   # Counting how many times a particular student has earned this badge
   def earned_badge_count_for_student(student)
     earned_badges.where(student_id: student.id, student_visible: true).count
