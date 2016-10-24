@@ -100,6 +100,18 @@
   &.predicted
     border-left: 2px solid $color-orange-1
 
+  .assignment-name
+    display: inline-block
+    width: 50%
+    @media (max-width: $media-medium-max)
+      width: 90%
+      font-size: 0.9rem
+      height: 1.3rem
+      overflow: hidden
+      text-overflow: ellipsis
+      word-wrap: break-word
+      white-space: nowrap
+
 .assignment-indicator-icon
   width: 16px
   @media (max-width: $media-medium-max)
@@ -111,17 +123,10 @@
   .asterisk
     color: $color-purple-2
 
-.assignment-name
-  display: inline-block
-  width: 50%
-  @media (max-width: $media-medium-max)
-    width: 90%
-    font-size: 0.9rem
-    height: 1.3rem
-    overflow: hidden
-    text-overflow: ellipsis
-    word-wrap: break-word
-    white-space: nowrap
+.assignment-details-icon
+  position: relative
+  .hover-style
+    left: 0
 
 .assignment-info
   display: inline-block
