@@ -7,6 +7,21 @@ describe HistoryFilter do
     expect(described_class.new(history).history).to eq history
   end
 
+  describe "#clear_initial_value" do
+    it "sets the from value for those attributes to empty" do
+      history = [OpenStruct.new(changeset: { "change1" => ["before1", "after1"] }),
+                 OpenStruct.new(changeset: { "change2" => ["before2", "after2"] }),
+                 OpenStruct.new(changeset: { "change3" => ["before3", "after3"] }),
+                 OpenStruct.new(changeset: {})]
+
+      result = described_class.new(history).clear_initial_value("change1", "change2").changesets
+
+      expect(result).to eq [{ "change1" => ["", "after1"] },
+                            { "change2" => ["", "after2"] },
+                            { "change3" => ["before3", "after3"] }]
+    end
+  end
+
   describe "#empty_changeset?" do
     it "is not empty if none of the values are arrays which represent changes" do
       history = [double(:history_item, changeset: [{ "change" => ["before", "after"] }])]

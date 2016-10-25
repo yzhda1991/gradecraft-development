@@ -9,6 +9,23 @@ class HistoryFilter
     @history = history
   end
 
+  def clear_initial_value(*attributes)
+    attrs = Array(attributes).flatten
+
+    attrs.each do |attribute|
+      @history = history.select do |history_item|
+        unless history_item.changeset[attribute].nil? ||
+               history_item.changeset[attribute][0].nil?
+          history_item.changeset[attribute][0] = ""
+        end
+        history_item
+      end
+    end
+
+    clear_empty_changesets
+    self
+  end
+
   def exclude(options={})
     exclusions = options.keys
 
