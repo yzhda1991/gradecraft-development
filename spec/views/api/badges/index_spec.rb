@@ -45,7 +45,7 @@ describe "api/badges/index" do
   it "adds the total earned points to the badges" do
     render
     json = JSON.parse(response.body)
-    expect(json["data"][0]["attributes"]["total_earned_points"]).to eq(@badge.earned_badge_total_points(@student))
+    expect(json["data"][0]["attributes"]["total_earned_points"]).to eq(@badge.earned_badge_total_points_for_student(@student))
   end
 
   it "adds the earned badge count to the badges" do

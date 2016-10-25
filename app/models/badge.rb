@@ -46,11 +46,8 @@ class Badge < ActiveRecord::Base
     earned_badges.where(student_id: student.id).count < 1
   end
 
-  def earned_badge_total_points(student)
-    earned_badges.where(
-      student_id: student,
-      student_visible: true
-    ).pluck("points").map(&:to_i).sum
+  def earned_badge_total_points_for_student(student)
+    earned_badge_count_for_student(student) * self.full_points
   end
 
   def earned_badges_this_week_count

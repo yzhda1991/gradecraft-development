@@ -17,17 +17,6 @@ class EarnedBadgesController < ApplicationController
     @student = @earned_badge.student
   end
 
-  def confirm_earned
-    @course = Course.find(params[:course_id])
-    @badge = @course.badges.find(params[:badge_id])
-    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
-    if @earned_badge.present?
-      render nothing: true, status: 200
-    else
-      redirect_to root_path
-    end
-  end
-
   def new
     @earned_badge = @badge.earned_badges.new course: current_course
     authorize! :build, @earned_badge
@@ -108,6 +97,19 @@ class EarnedBadgesController < ApplicationController
     expire_fragment "earned_badges"
     redirect_to @badge,
       notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
+  end
+
+  # Used for Badges Backpack integration
+  # GET /courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned
+  def confirm_earned
+    @course = Course.find(params[:course_id])
+    @badge = @course.badges.find(params[:badge_id])
+    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
+    if @earned_badge.present?
+      render nothing: true, status: 200
+    else
+      redirect_to root_path
+    end
   end
 
   private

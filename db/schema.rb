@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
   create_table "badges", force: :cascade do |t|
     t.string   "name",                                         null: false
     t.text     "description"
-    t.integer  "full_points"
+    t.integer  "full_points",                  default: 0
     t.integer  "course_id",                                    null: false
     t.string   "icon"
     t.datetime "created_at",                                   null: false
@@ -322,15 +322,12 @@ ActiveRecord::Schema.define(version: 20161031184138) do
 
   create_table "earned_badges", force: :cascade do |t|
     t.integer  "badge_id",                        null: false
-    t.integer  "submission_id"
     t.integer  "course_id",                       null: false
     t.integer  "student_id",                      null: false
     t.integer  "grade_id"
-    t.integer  "points",          default: 0,     null: false
     t.text     "feedback"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
-    t.integer  "assignment_id"
     t.integer  "level_id"
     t.boolean  "student_visible", default: false, null: false
     t.integer  "awarded_by_id"

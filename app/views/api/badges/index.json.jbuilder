@@ -17,7 +17,7 @@ json.data @badges do |badge|
     json.has_info !badge.description.blank?
 
     if @student.present?
-      json.total_earned_points badge.earned_badge_total_points(@student)
+      json.total_earned_points badge.earned_badge_total_points_for_student(@student)
       json.earned_badge_count badge.earned_badge_count_for_student(@student)
       json.available_for_student badge.available_for_student?(@student)
 

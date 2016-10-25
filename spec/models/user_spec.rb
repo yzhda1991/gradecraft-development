@@ -531,18 +531,21 @@ describe User do
     end
   end
 
-  describe "#earned_badge_score_for_course(course)" , focus: true do
+  describe "#earned_badge_score_for_course(course)" do
     let(:student) { create(:student_course_membership, course: course).user }
-    let!(:points_1) { create(:earned_badge, student: student, course: course, student_visible: true).points}
-    let!(:points_2) { create(:earned_badge, student: student, course: course, student_visible: true).points}
+
+    before do
+      create(:earned_badge, student: student, course: course, student_visible: true, badge: create(:badge, full_points: 100))
+      create(:earned_badge, student: student, course: course, student_visible: true, badge: create(:badge, full_points: 400))
+    end
 
     it "returns the sum of the badge score for a student" do
-      expect(student.earned_badge_score_for_course(course)).to eq(points_1 + points_2)
+      expect(student.earned_badge_score_for_course(course)).to eq(500)
     end
 
     it "does not include earned badges that have not yet been made student visible" do
-      create(:earned_badge, points: 155, student: student, course: course, student_visible: false)
-      expect(student.earned_badge_score_for_course(course)).to eq(points_1 + points_2)
+      create(:earned_badge, student: student, course: course, student_visible: false)
+      expect(student.earned_badge_score_for_course(course)).to eq(500)
     end
   end
 
@@ -554,8 +557,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
-      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, student: student, course: course, student_visible: true)
+      earned_badge_2 = create(:earned_badge, student: student, course: course, student_visible: true)
       expect(student.earned_badges_for_course(course)).to eq([earned_badge_1, earned_badge_2])
     end
   end
@@ -568,8 +571,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true, created_at: Date.today - 10)
-      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, student: student, course: course, student_visible: true, created_at: Date.today - 10)
+      earned_badge_2 = create(:earned_badge, student: student, course: course, student_visible: true)
       expect(student.earned_badges_for_course_this_week(course)).to eq([earned_badge_2])
     end
   end

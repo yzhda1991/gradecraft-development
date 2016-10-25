@@ -291,7 +291,7 @@ describe Badge do
     end
   end
 
-  describe "#earned_badge_total_points(student)" do
+  describe "#earned_badge_total_points_for_student(student)" do
     it "sums up the total points earned for a specific badge" do
       student = create(:user)
       badge = create(:badge, full_points: 1000)
@@ -299,7 +299,7 @@ describe Badge do
       earned_badge = create(:earned_badge, badge: badge, points: 1000, student: student, student_visible: true)
       second_earned_badge = create(:earned_badge, badge: second_badge, points: 200, student: student, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
-      expect(badge.earned_badge_total_points(student)).to eq(1000)
+      expect(badge.earned_badge_total_points_for_student(student)).to eq(1000)
     end
   end
 
