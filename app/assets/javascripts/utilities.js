@@ -104,5 +104,5 @@ $('table.highchart').highchartTable();
 
 //Toggle options menu
 $(".button-options").click(function(){
-    $(".options-menu").toggle();
+    $(this).next('.options-menu').toggle();
 });

@@ -44,7 +44,8 @@
         %td= student.last_course_login(current_course)
         %td
           .right
-            %ul.button-bar
-              %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student), class: "button"
-              %li= link_to glyph(:edit) + "Edit", edit_user_path(student), class: "button"
-              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: current_course.id).first, class: "button", data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
+            %a.button.button-edit.button-options= glyph(:cog) + glyph("caret-down")
+            %ul.options-menu
+              %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student)
+              %li= link_to glyph(:edit) + "Edit", edit_user_path(student)
+              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: current_course.id).first, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
