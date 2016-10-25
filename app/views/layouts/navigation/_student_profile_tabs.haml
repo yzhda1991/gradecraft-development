@@ -16,7 +16,7 @@
     %li{class: ("active" if current_page?(teams_path)) }
       = link_to_unless_current "#{term_for :teams}", teams_path
   - if current_course.announcements.present?
-    %li{class: (current_page?(announcements_path)? "active" : "announcement-nav") }
+    %li{class: "announcement-nav #{"active" if current_page?(announcements_path)}"}
       - unread_count = unread_count_for current_student, current_course
       = link_to_unless_current "Announcements", announcements_path
       - if unread_count > 0
