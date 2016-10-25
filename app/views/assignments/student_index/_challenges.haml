@@ -1,40 +1,26 @@
 - if current_course.has_team_challenges? && current_course.add_team_score_to_student? && current_student.team_for_course(current_course).present?
-  .collapseSection
+  .assignment_type.team-challenge.student
 
     .collapse
-      %a
-        %i.fa.fa-angle-double-right.fa-fw
-      #{term_for :challenges} • #{ points current_student.team_for_course(current_course).challenge_grade_score }/#{points current_course.point_total_for_challenges}
+      %h3= glyph('angle-double-right') + "#{term_for :challenges}" 
+      .points-summary
+        .assignment-type-points-graph
+          .points-graph-fill-bar{:style => "width: #{(current_student.team_for_course(current_course).challenge_grade_score).to_f / (current_course.point_total_for_challenges).to_f * 100}%;"}
+        %span.assignment-type-points #{ points current_student.team_for_course(current_course).challenge_grade_score }/#{ points current_course.point_total_for_challenges}
 
-    .collapse-hidden
-      %table
-        %thead
-          %tr
-            %th Name
-            %th Points Earned
-            %th Due
-            - if current_user_is_staff?
-              %th
-        - current_course.challenges.visible.each do |challenge|
-          %tr
-            %td{:width => "25%"}= link_to challenge.name, challenge
-            %td{:width => "25%"}
-              - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
-                .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.full_points} points earned"
-              - else
-                %span.italic= "#{points challenge.full_points} points possible"
-            %td{:width => "25%"}
-              - if challenge.future?
-                = "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
-              - else
-                %span
-            - if current_user_is_staff?
-              %td
-                .right
-                  %ul.button-bar
-                    - if challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
-                      %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(current_student.team_for_course(current_course)), team: current_student.team_for_course(current_course)), class: "button"
-                    - else
-                      %li
-                        %a{:href => new_challenge_challenge_grade_path(challenge, team_id: current_student.team_for_course(current_course).id), class: "button"}
-                          Grade
+    .assignment-type-container
+      - current_course.challenges.visible.each do |challenge|
+        .assignment-container
+          .assignment-info.assignment-indicator-icon
+            - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
+              %span.checkmark= glyph(:check)
+          .assignment-name
+            = link_to challenge.name, challenge
+          .assignment-info.assignment-due-date
+            - if challenge.future?
+              = "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
+          .assignment-info.assignment-pass-fail
+            - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
+              .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.full_points} points earned"
+            - else
+              %span.italic= "#{points challenge.full_points} points possible"
