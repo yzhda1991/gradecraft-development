@@ -137,7 +137,7 @@
       = f.check_box :include_in_to_do
       .form_label Can #{term_for :students} see this #{term_for :assignment} in the "Course Events" panel?
 
-    - if ! current_course.hide_analytics?
+    - if current_course.show_analytics?
       .form-item
         = f.label :hide_analytics, "Hide Analytics?"
         = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}

@@ -128,7 +128,7 @@ class CoursesController < ApplicationController
       :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
       :user_id, :course_id, :course_rules, :syllabus,
-      :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
+      :has_character_names, :has_team_roles, :has_character_profiles, :show_analytics,
       :total_weights, :weights_close_at, :has_public_badges,
       :assignment_weight_type, :has_submissions, :teams_visible,
       :weight_term, :fail_term, :pass_term, :time_zone,

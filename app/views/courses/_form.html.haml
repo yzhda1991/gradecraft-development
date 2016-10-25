@@ -70,17 +70,17 @@
 
       .form-card
         .form-card-header
-          = f.label :hide_analytics, "Hide Analytics?"
-          = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+          = f.label :show_analytics, "Analytics"
+          = f.check_box :show_analytics, {"aria-describedby" => "showAnalytics"}
         .form-card-body
-          .feature-description{id: "hideAnalytics"}  Disable course and assignment learning analytics displays that help students stay informed about their own work
+          .feature-description{id: "showAnalytics"}  Show course and assignment learning analytics displays that help students stay informed about their own work
 
       .form-card
         .form-card-header
-          = f.label :hide_analytics, "Multipliers"
-          = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+          = f.label :show_analytics, "Multipliers"
+          = f.check_box :show_analytics, {"aria-describedby" => "hideMultipliers"}
         .form-card-body
-          .feature-description{id: "hideAnalytics"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
+          .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
         .form-card-advanced-settings
           %a.button-advanced-settings= glyph(:cog) + "Settings"
         .advanced-settings-card

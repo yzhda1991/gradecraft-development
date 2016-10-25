@@ -111,7 +111,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def hide_analytics?
-    course.hide_analytics? || assignment.hide_analytics?
+    !course.show_analytics? || assignment.hide_analytics?
   end
 
   def individual_assignment?

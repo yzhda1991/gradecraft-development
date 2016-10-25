@@ -20,7 +20,7 @@
       - if current_course.grade_scheme_elements.present?
         .panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
-      - if ! current_course.hide_analytics?
+      - if current_course.show_analytics?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
 
       - if current_course.has_badges?

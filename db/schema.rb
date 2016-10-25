@@ -288,7 +288,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
     t.string   "fail_term",                                               default: "Fail",                       null: false
     t.string   "syllabus"
     t.boolean  "has_public_badges",                                       default: true,                         null: false
-    t.boolean  "hide_analytics",                                          default: false,                        null: false
+    t.boolean  "show_analytics",                                          default: true,                         null: false
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
     t.index ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
