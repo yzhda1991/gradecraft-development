@@ -49,7 +49,3 @@
         = f.input :instructors_of_record_ids, collection: f.object.staff,
           label: false, wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
         .form_label Enter a professor's name to add them to this course
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

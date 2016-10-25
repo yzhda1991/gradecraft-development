@@ -46,8 +46,3 @@
       = f.label :fail_term, "Fail Term"
       = f.text_field :fail_term, {"aria-describedby" => "txtFailTerm"}
       .form_label{id: "txtFailTerm"} What would you like to call failure for a pass/fail assignment?
-
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

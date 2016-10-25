@@ -24,3 +24,9 @@
         = render partial: "courses/student_onboarding_setup"
       .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
         = render partial: "courses/advanced_settings"
+
+  = simple_form_for(@course, :validate => false)  do |f|
+    .submit-buttons
+      %ul
+        %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
+        %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

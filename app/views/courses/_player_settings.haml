@@ -15,8 +15,3 @@
     .form_label{id: "has_character_profiles"} Do students create a profile for their character in the class?
 
   %hr.dotted
-
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "Update #{term_for :student} Settings", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

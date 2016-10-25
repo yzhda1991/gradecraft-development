@@ -99,7 +99,7 @@
       .form-card
         .form-card-header
           = f.label :has_teams, "Sections"
-          = f.check_box :has_teams, {"aria-describedby" => "txtSections"}
+          = f.check_box :has_teams, {"aria-describedby" => "txtSections", class: "sections-enabled"}
         .form-card-body
           .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
         .form-card-advanced-settings
@@ -113,7 +113,7 @@
       .form-card
         .form-card-header
           = f.label :has_team_challenges, "Section Assignments"
-          = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections"}
+          = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections", class: "dependent-on-section", disabled: "disabled"}
         .form-card-body
           .feature-description{id: "txtSections"}  These are larger assignments to be completed by discussion section groups. 
         .form-card-advanced-settings
@@ -126,7 +126,7 @@
       .form-card
         .form-card-header
           = f.label :teams_visible, "Section Leaderboard"
-          = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard"}
+          = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard", class: "dependent-on-section", disabled: "disabled"}
         .form-card-body
           .feature-description{id: "txtSectionLeaderboard"} Students can choose to participate in anonymous, section-based leaderboards if they enjoy competition, and opt-out if they don't.
         .form-card-advanced-settings
@@ -135,8 +135,3 @@
           %a.button-close= glyph(:times)
           = f.check_box :has_in_team_leaderboards, {"aria-describedby" => "txtInSectionLeaderboard"}
           = f.label :has_in_team_leaderboards, "Allow students to opt in to see in-section rankings and points (using screennames to protect their privacy)"
-
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

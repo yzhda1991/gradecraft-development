@@ -12,8 +12,3 @@
       .textarea
         .form_label What would you like to tell students about how they should expected to be graded?
         = f.text_area :course_rules, class: "froala"
-
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

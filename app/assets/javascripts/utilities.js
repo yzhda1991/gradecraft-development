@@ -115,3 +115,17 @@ $(".button-advanced-settings").click(function(){
 $('.button-close').on('click',function(){
     $(this).parent().slideToggle('slow');
 });
+
+// Section leaderboards and challenges are dependent on Sections feature being enabled 
+$('input[id="course_has_teams"]').change(function(){
+  var $dependentOnSection = $('.dependent-on-section');
+  var $card = $dependentOnSection.parent().parent();
+
+  if($(this).is(":checked")) {
+    $dependentOnSection.prop("disabled", false);
+    $card.removeClass("disabled");
+  } else {
+    $dependentOnSection.prop("disabled", true);
+    $card.addClass("disabled");
+  }
+});
