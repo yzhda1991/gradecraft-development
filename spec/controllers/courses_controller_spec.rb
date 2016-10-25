@@ -23,11 +23,11 @@ describe CoursesController do
 
       it "recalculates student scores" do
         expect_any_instance_of(Course).to receive(:recalculate_student_scores)
-        post :recalculate_student_scores, id: course.id.to_s
+        post :recalculate_student_scores, params: { id: course.id.to_s }
       end
 
       it "redirects to root on success with a notice" do
-        post :recalculate_student_scores, id: course.id.to_s
+        post :recalculate_student_scores, params: { id: course.id.to_s }
         expect(response).to redirect_to root_path
         expect(flash[:notice]).to_not be_nil
       end
@@ -252,7 +252,7 @@ describe CoursesController do
 
     describe "POST recalculate_student_scores" do
       it "is a protected route" do
-        expect(post :recalculate_student_scores, id: course.id.to_s).to \
+        expect(post :recalculate_student_scores, params: { id: course.id.to_s }).to \
           redirect_to(:root)
       end
     end
@@ -314,7 +314,7 @@ describe CoursesController do
 
     describe "POST recalculate_student_scores" do
       it "is a protected route" do
-        expect(post :recalculate_student_scores, id: course.id.to_s).to \
+        expect(post :recalculate_student_scores, params: { id: course.id.to_s }).to \
           redirect_to(:root)
       end
     end

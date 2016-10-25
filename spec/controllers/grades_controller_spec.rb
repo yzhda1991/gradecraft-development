@@ -105,7 +105,7 @@ describe GradesController do
 
       it "updates badges earned on the grade" do
         earned_badge = create :earned_badge, grade: grade, student_visible: false
-        put :update, { id: grade.id, grade: { status: "Graded" }}
+        put :update, params: { id: grade.id, grade: { status: "Graded" }}
         expect(earned_badge.reload.student_visible).to be_truthy
       end
 
