@@ -1,7 +1,7 @@
 # Earned Level Badges are EarnedBadges that are earned on a specific level of a
 # a rubric criteria. They are treated uniquely here to allow for
-# future services that build EarnedBadges for other associations
-# (submission, assignment, etc.)
+# other services that build EarnedBadges for other associations
+# (earned on a Grade, or awarded on the course level, for instance).
 
 module Services
   module Actions
@@ -9,7 +9,6 @@ module Services
       extend LightService::Action
 
       expects :student
-      expects :assignment
       expects :criterion_grades
       expects :grade
 

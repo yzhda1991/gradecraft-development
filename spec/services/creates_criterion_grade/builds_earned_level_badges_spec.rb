@@ -20,12 +20,6 @@ describe Services::Actions::BuildsEarnedLevelBadges do
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
-  it "expects attributes to assign to assignment" do
-    context.delete(:assignment)
-    expect { described_class.execute context }.to \
-      raise_error LightService::ExpectedKeysNotInContextError
-  end
-
   it "expects attributes to assign to criterion grades" do
     context.delete(:criterion_grades)
     expect { described_class.execute context }.to \
