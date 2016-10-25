@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031184138) do
+ActiveRecord::Schema.define(version: 20161025152738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -291,7 +291,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
     t.boolean  "show_analytics",                                          default: true,                         null: false
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
-    t.index ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
+    t.boolean  "has_multipliers",                                         default: false,                        null: false
   end
 
   create_table "criteria", force: :cascade do |t|

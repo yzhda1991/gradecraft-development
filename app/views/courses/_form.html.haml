@@ -77,8 +77,8 @@
 
       .form-card
         .form-card-header
-          = f.label :show_analytics, "Multipliers"
-          = f.check_box :show_analytics, {"aria-describedby" => "hideMultipliers"}
+          = f.label :has_multipliers, "Multipliers"
+          = f.check_box :has_multipliers, {"aria-describedby" => "hideMultipliers"}
         .form-card-body
           .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
         .form-card-advanced-settings
