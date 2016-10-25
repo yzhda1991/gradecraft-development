@@ -201,7 +201,8 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
         "You can now view the grade for your #{grade.course.assignment_term.downcase} "\
         "#{grade.assignment.name} in #{grade.course.name}."
       expect(announcement.body).to include \
-        "Visit http://localhost:5000/assignments/#{(grade.assignment.id)} to view your results."
+        "Visit <a href=http://localhost:5000/assignments/#{(grade.assignment.id)}>"\
+        "#{grade.assignment.name}</a> to view your results."
     end
   end
 

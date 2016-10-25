@@ -51,6 +51,6 @@ class GradeUpdatePerformer < ResqueJob::Performer
   def announcement_body
     "<p>You can now view the grade for your #{@grade.course.assignment_term.downcase} " \
       "#{@grade.assignment.name} in #{@grade.course.name}.</p>" \
-      "<p>Visit #{Rails.application.routes.url_helpers.assignment_url(@grade.assignment, Rails.application.config.action_mailer.default_url_options)} to view your results.</p>"
+      "<p>Visit <a href=#{Rails.application.routes.url_helpers.assignment_url(@grade.assignment, Rails.application.config.action_mailer.default_url_options)}>#{@grade.assignment.name}</a> to view your results.</p>"
   end
 end
