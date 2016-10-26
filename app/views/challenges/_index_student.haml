@@ -8,11 +8,11 @@
 
   %tbody
     - current_course.challenges.chronological.alphabetical.includes(:challenge_files, :challenge_grades).each do |challenge|
-      - if challenge.visible_for_student?(current_student) || ChallengeGradeProctor.new(challenge.challenge_grade_for_team(@team)).viewable?
+      - if challenge.visible? || (ChallengeGradeProctor.new(challenge.challenge_grade_for_team(@team)).viewable? user: current_student)
         %tr
           %td= link_to challenge.name, challenge
           %td
-            - if @team.present? && challenge.challenge_grade_for_team(@team).present?
+            - if @team.present? && (ChallengeGradeProctor.new(challenge.challenge_grade_for_team(@team)).viewable? user: current_student)
               = "#{ points challenge.challenge_grade_for_team(@team).try(:score) } / #{ points challenge.full_points }"
             - else
               %span.italic= " #{ points challenge.full_points } points possible"

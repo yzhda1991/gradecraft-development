@@ -16,8 +16,8 @@ class ChallengeGradeProctor
       user = options[:user]
       course = options[:course] || challenge_grade.team.course
 
-      challenge_grade_for_course?(course) &&
-        challenge_grade_visible_by_students?
+      challenge_grade_for_course?(course) && 
+        (user.is_staff?(course) || challenge_grade_visible_by_students?)
     end
 
     private
