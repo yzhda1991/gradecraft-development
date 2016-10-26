@@ -1,51 +1,50 @@
-= simple_form_for(@course, :validate => false)  do |f|
+%section
+  %h4.uppercase Class Details
+  .form-item
+    = f.label :location, "Location"
+    = f.text_field :location
+
+  .form-item
+    = f.label :meeting_times, "Class Meeting Times"
+    = f.text_field :meeting_times
+
+  .form-item
+    = f.label :office, "Professor's Office"
+    = f.text_field :office
+
+  .form-item
+    = f.label :office_hours, "Office Hours"
+    = f.text_field :office_hours
+
+  .form-item
+    = f.label :phone, "Contact Phone #"
+    = f.text_field :phone
+
+  .form-item
+    = f.label :class_email, "Class Email"
+    = f.text_field :class_email
+
+  .form-item
+    = f.label :twitter_handle, "Twitter Handle"
+    = f.text_field :twitter_handle
+    .form_label Don't include the @ sign
+
+  .form-item
+    = f.label :twitter_hashtag, "Hashtag"
+    = f.text_field :twitter_hashtag
+    .form_label Don't include the hash sign
+
+  .form-item
+    = f.label :syllabus
+    = f.file_field :syllabus
+    - if current_course.syllabus.present?
+      .italic= link_to "Current Syllabus", current_course.syllabus_url
+
+- unless @course.new_record?
   %section
-    %h4.uppercase Class Details
+    %h4.uppercase Professors
     .form-item
-      = f.label :location, "Location"
-      = f.text_field :location
-
-    .form-item
-      = f.label :meeting_times, "Class Meeting Times"
-      = f.text_field :meeting_times
-
-    .form-item
-      = f.label :office, "Professor's Office"
-      = f.text_field :office
-
-    .form-item
-      = f.label :office_hours, "Office Hours"
-      = f.text_field :office_hours
-
-    .form-item
-      = f.label :phone, "Contact Phone #"
-      = f.text_field :phone
-
-    .form-item
-      = f.label :class_email, "Class Email"
-      = f.text_field :class_email
-
-    .form-item
-      = f.label :twitter_handle, "Twitter Handle"
-      = f.text_field :twitter_handle
-      .form_label Don't include the @ sign
-
-    .form-item
-      = f.label :twitter_hashtag, "Hashtag"
-      = f.text_field :twitter_hashtag
-      .form_label Don't include the hash sign
-
-    .form-item
-      = f.label :syllabus
-      = f.file_field :syllabus
-      - if current_course.syllabus.present?
-        .italic= link_to "Current Syllabus", current_course.syllabus_url
-
-  - unless @course.new_record?
-    %section
-      %h4.uppercase Professors
-      .form-item
-        = f.label :professors
-        = f.input :instructors_of_record_ids, collection: f.object.staff,
-          label: false, wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
-        .form_label Enter a professor's name to add them to this course
+      = f.label :professors
+      = f.input :instructors_of_record_ids, collection: f.object.staff,
+        label: false, wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
+      .form_label Enter a professor's name to add them to this course

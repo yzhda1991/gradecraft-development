@@ -1,48 +1,47 @@
-= simple_form_for(@course, :validate => false)  do |f|
-  %section
-    %p GradeCraft allows you to customize the language used throughout the application. Update the defaults below to customize the language for your class.
+%section
+  %p GradeCraft allows you to customize the language used throughout the application. Update the defaults below to customize the language for your class.
 
-    .form-item
-      = f.label :student_term, "User Term"
-      = f.text_field :student_term, {"aria-describedby" => "txtUserTerm"}
-      .form_label{id: "txtUserTerm"} What will you call your user? Student, Learner, Player..."
+  .form-item
+    = f.label :student_term, "User Term"
+    = f.text_field :student_term, {"aria-describedby" => "txtUserTerm"}
+    .form_label{id: "txtUserTerm"} What will you call your user? Student, Learner, Player..."
 
-    .form-item
-      = f.label :assignment_term, "Assignment Term"
-      = f.text_field :assignment_term, {"aria-describedby" => "txtAssignmentTerm"}
-      .form_label{id: "txtAssignmentTerm"} Would you like to call assignments something else?
+  .form-item
+    = f.label :assignment_term, "Assignment Term"
+    = f.text_field :assignment_term, {"aria-describedby" => "txtAssignmentTerm"}
+    .form_label{id: "txtAssignmentTerm"} Would you like to call assignments something else?
 
-    .form-item
-      = f.label :group_term
-      = f.text_field :group_term, {"aria-describedby" => "txtGroupTerm"}
-      .form_label{id: "txtGroupTerm"} What will these groups be called?
+  .form-item
+    = f.label :group_term
+    = f.text_field :group_term, {"aria-describedby" => "txtGroupTerm"}
+    .form_label{id: "txtGroupTerm"} What will these groups be called?
 
-    .form-item
-      = f.label :team_leader_term, "Section Leader Term"
-      = f.text_field :team_leader_term, {"aria-describedby" => "txtTeamLeader"}
-      .form_label{id: "txtTeamLeader"} TA, GSI, Team Leader...
+  .form-item
+    = f.label :team_leader_term, "Section Leader Term"
+    = f.text_field :team_leader_term, {"aria-describedby" => "txtTeamLeader"}
+    .form_label{id: "txtTeamLeader"} TA, GSI, Team Leader...
 
-    .form-item
-      = f.label :challenge_term, "Section Assignment Term"
-      = f.text_field :challenge_term, {"aria-describedby" => "txtChallenge"}
-      .form_label{id: "txtChallenge"} What would you like to call these section assignments? Quests, Boss Battles, Challenges...
+  .form-item
+    = f.label :challenge_term, "Section Assignment Term"
+    = f.text_field :challenge_term, {"aria-describedby" => "txtChallenge"}
+    .form_label{id: "txtChallenge"} What would you like to call these section assignments? Quests, Boss Battles, Challenges...
 
-    .form-item
-      = f.label :team_term, "Section Term"
-      = f.text_field :team_term, {"aria-describedby" => "txtSectionTerm"}
-      .form_label{id: "txtSectionTerm"}  What will you call these? Team, House, Section...
+  .form-item
+    = f.label :team_term, "Section Term"
+    = f.text_field :team_term, {"aria-describedby" => "txtSectionTerm"}
+    .form_label{id: "txtSectionTerm"}  What will you call these? Team, House, Section...
 
-    .form-item
-      = f.label :badge_term, "Badge Term"
-      = f.text_field :badge_term, {"aria-describedby" => "txtBadgeTerm"}
-      .form_label{id: "txtBadgeTerm"} Would you like to call badges something else?
+  .form-item
+    = f.label :badge_term, "Badge Term"
+    = f.text_field :badge_term, {"aria-describedby" => "txtBadgeTerm"}
+    .form_label{id: "txtBadgeTerm"} Would you like to call badges something else?
 
-    .form-item
-      = f.label :pass_term, "Pass Term"
-      = f.text_field :pass_term, {"aria-describedby" => "txtPassTerm"}
-      .form_label{id: "txtPassTerm"} What would you like to call success for a pass/fail assignment?
+  .form-item
+    = f.label :pass_term, "Pass Term"
+    = f.text_field :pass_term, {"aria-describedby" => "txtPassTerm"}
+    .form_label{id: "txtPassTerm"} What would you like to call success for a pass/fail assignment?
 
-    .form-item
-      = f.label :fail_term, "Fail Term"
-      = f.text_field :fail_term, {"aria-describedby" => "txtFailTerm"}
-      .form_label{id: "txtFailTerm"} What would you like to call failure for a pass/fail assignment?
+  .form-item
+    = f.label :fail_term, "Fail Term"
+    = f.text_field :fail_term, {"aria-describedby" => "txtFailTerm"}
+    .form_label{id: "txtFailTerm"} What would you like to call failure for a pass/fail assignment?

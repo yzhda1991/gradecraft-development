@@ -1,5 +1,5 @@
 %h4 Custom Terms
-= render partial: "courses/custom_terms"
+= render partial: "courses/custom_terms", locals: { f: f }
 
 %h4 #{term_for :Student} Settings
-= render partial: "courses/player_settings"
+= render partial: "courses/player_settings", locals: { f: f }
