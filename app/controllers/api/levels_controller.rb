@@ -1,6 +1,6 @@
 
 class API::LevelsController < ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
 
   # PUT api/level/:id
   def update
@@ -8,7 +8,8 @@ class API::LevelsController < ApplicationController
 
     if params[:level].key? :meets_expectations
       level.criterion.update_meets_expectations!(
-        level, params[:level][:meets_expectations]
+        level,
+        ActiveRecord::Type::Boolean.new.deserialize(params[:level][:meets_expectations])
       )
     end
 

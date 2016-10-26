@@ -2,10 +2,11 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  skip_before_filter :require_login, only: [:badges]
-  before_filter :ensure_staff?, except: [:index, :badges, :change]
-  before_filter :ensure_not_impersonating?, only: [:index]
+  skip_before_action :require_login, only: [:badges]
+  before_action :ensure_staff?, except: [:index, :badges, :change]
+  before_action :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:recalculate_student_scores]
+
   before_action :find_course, only: [:show,
                                      :edit,
                                      :copy,
@@ -18,8 +19,8 @@ class CoursesController < ApplicationController
                                             :multiplier_settings,
                                             :player_settings,
                                             :student_onboarding_setup]
-  skip_before_filter :verify_authenticity_token, only: [:change]
-  before_filter :ensure_not_impersonating?, only: [:change]
+  skip_before_action :verify_authenticity_token, only: [:change]
+  before_action :ensure_not_impersonating?, only: [:change]
 
   def index
     @courses = current_user.courses

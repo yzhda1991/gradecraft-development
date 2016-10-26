@@ -14,7 +14,7 @@ describe API::Students::BadgesController do
       end
 
       it "assigns the badges with no call to update" do
-        get :index, format: :json, student_id: world.student.id
+        get :index, params: { student_id: world.student.id }, format: :json
         expect(assigns(:student)).to eq(world.student)
         predictor_badge_attributes do |attr|
           expect(assigns(:badges)[0][attr]).to eq(world.badge[attr])
@@ -27,7 +27,7 @@ describe API::Students::BadgesController do
         earned_badge = create(
           :earned_badge, badge: world.badge,
           student: world.student, course: world.course, student_visible: true)
-        get :index, format: :json, student_id: world.student.id
+        get :index, format: :json, params: { student_id: world.student.id }
         expect(assigns(:earned_badges)).to eq([earned_badge])
       end
     end

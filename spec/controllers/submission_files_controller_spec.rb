@@ -58,7 +58,7 @@ describe SubmissionFilesController do
     end
 
     describe "GET download" do
-      let(:result) { get :download, params.merge(format: "html") }
+      let(:result) { get :download, params: params, format: "html" }
       let(:presenter) { presenter_class.new params }
 
       before do
@@ -72,6 +72,8 @@ describe SubmissionFilesController do
           submission: submission,
           submission_file: submission_file
         )
+
+        request.env["HTTP_REFERER"] = "http://some-referrer.com"
       end
 
       context "user is authorized to download the submission" do
@@ -81,10 +83,10 @@ describe SubmissionFilesController do
         context "the submission file is streamable" do
           it "streams the submission file with the filename" do
             allow(presenter).to receive(:send_data_options) { send_data_options }
-            expect(controller).to receive(:send_data).with(*send_data_options) do
+            expect(controller).to receive(:send_data).with(*send_data_options) do |c|
               # expressly render nothing so that the controller doesn't attempt
               # to render the template
-              controller.render nothing: true
+              controller.render head: :ok, body: nil
             end
             result
           end
@@ -93,7 +95,6 @@ describe SubmissionFilesController do
         context "the submission file is not streamable" do
           before do
             allow(presenter).to receive(:submission_file_streamable?) { false }
-            allow(request).to receive(:referrer) { "http://some-referrer.com" }
           end
 
           it "marks the submission_file_missing" do

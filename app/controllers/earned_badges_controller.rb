@@ -4,8 +4,8 @@ class EarnedBadgesController < ApplicationController
   # Earned badges are to badges what grades are to assignments - the record of
   # how what and how a student performed
 
-  skip_before_filter :require_login, only: [:confirm_earned]
-  before_filter :ensure_staff?, except: [:confirm_earned, :new, :create]
+  skip_before_action :require_login, only: [:confirm_earned]
+  before_action :ensure_staff?, except: [:confirm_earned, :new, :create]
   before_action :find_badge, except: [:confirm_earned]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 

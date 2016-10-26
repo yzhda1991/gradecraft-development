@@ -1,5 +1,5 @@
 class LevelsController < ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
 
   before_action :find_level, except: [:create]
 
@@ -12,7 +12,7 @@ class LevelsController < ApplicationController
 
   def destroy
     @level.destroy
-    render nothing: true
+    render head: :ok, body: nil
   end
 
   def update

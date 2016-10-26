@@ -21,7 +21,7 @@ describe Assignments::Groups::GradesController do
       end
 
       it "renders the mass_edit template" do
-        get :mass_edit, assignment_id: assignment_with_groups
+        get :mass_edit, params: { assignment_id: assignment_with_groups }
         expect(response).to render_template(:mass_edit)
       end
     end
@@ -43,8 +43,8 @@ describe Assignments::Groups::GradesController do
         end
 
         it "should not create grades for the students" do
-          put :mass_update, assignment_id: assignment_with_groups.id,
-            assignment: { grades_by_group: params }
+          put :mass_update, params: { assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }}
           expect(assignment_with_groups.reload.grades.count).to be_zero
         end
       end
@@ -60,14 +60,14 @@ describe Assignments::Groups::GradesController do
         end
 
         it "should create grades for the students" do
-          put :mass_update, assignment_id: assignment_with_groups.id,
-            assignment: { grades_by_group: params }
+          put :mass_update, params: { assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }}
           expect(assignment_with_groups.reload.grades.count).to eq(group.students.count)
         end
 
         it "updates the grade attributes" do
-          put :mass_update, assignment_id: assignment_with_groups.id,
-            assignment: { grades_by_group: params }
+          put :mass_update, params: { assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }}
           grade = Grade.unscoped.last
           expect(grade.graded_by_id).to eq(professor.id)
           expect(grade.instructor_modified).to be true
@@ -78,8 +78,8 @@ describe Assignments::Groups::GradesController do
         it "redirects on failure" do
           allow(Services::CreatesManyGroupGrades).to \
             receive(:create).and_return double(:result, success?: false, message: "")
-          put :mass_update, assignment_id: assignment_with_groups.id,
-            assignment: { grades_by_group: params }
+          put :mass_update, params: { assignment_id: assignment_with_groups.id,
+            assignment: { grades_by_group: params }}
           expect(response).to \
             redirect_to(mass_edit_assignment_groups_grades_path(assignment_with_groups))
         end
@@ -94,14 +94,14 @@ describe Assignments::Groups::GradesController do
 
     describe "GET mass_edit" do
       it "redirects back to the root" do
-        expect(get :mass_edit, { assignment_id: assignment_with_groups.id }).to \
+        expect(get :mass_edit, params: { assignment_id: assignment_with_groups.id }).to \
           redirect_to(:root)
       end
     end
 
     describe "PUT mass_update" do
       it "redirects back to the root" do
-        expect(get :mass_update, { assignment_id: assignment_with_groups.id }).to \
+        expect(get :mass_update, params: { assignment_id: assignment_with_groups.id }).to \
           redirect_to(:root)
       end
     end

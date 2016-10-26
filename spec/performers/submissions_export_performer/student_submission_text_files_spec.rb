@@ -15,7 +15,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     let(:submission1) { create(:submission, text_comment: "This was tough.", link: "http://greatjob.com", student: student1) }
     let(:mkdir) { FileUtils.mkdir_p("/tmp/great_files") unless Dir.exist?("/tmp/great_files") }
     let(:text_file) { File.readlines(text_file_path) }
-    let(:text_file_output) { puts "BEGIN TEXT FILE OUTPUT"; File.readlines(text_file_path).each {|line| puts line }}
     let(:delete_text_file) { File.delete(text_file_path) if File.exist?(text_file_path) }
 
     before { mkdir }

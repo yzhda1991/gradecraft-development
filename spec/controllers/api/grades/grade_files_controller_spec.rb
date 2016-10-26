@@ -10,7 +10,8 @@ describe API::Grades::GradeFilesController do
     describe "POST create" do
       it "adds upload file to grade" do
         grade_file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
-        post :create, grade_id: world.grade.id, grade_files: [grade_file], format: :json
+        post :create, params: { grade_id: world.grade.id, grade_files: [grade_file] },
+          format: :json
         expect(world.grade.grade_files.count).to eq(1)
       end
     end
@@ -20,7 +21,7 @@ describe API::Grades::GradeFilesController do
       let(:stub_grade_file) { allow(GradeFile).to receive(:where) { [grade_file] }}
 
       it "destroys the grade file" do
-        delete :destroy, grade_id: world.grade.id, id: grade_file.id, format: :json
+        delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json
         world.grade.reload
         expect(world.grade.grade_files.count).to eq(0)
       end
@@ -28,7 +29,7 @@ describe API::Grades::GradeFilesController do
       it "removes the corresponding file on s3" do
         stub_grade_file
         expect(grade_file).to receive(:delete_from_s3)
-        delete :destroy, grade_id: world.grade.id, id: grade_file.id, format: :json
+        delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json
       end
     end
   end
@@ -38,14 +39,15 @@ describe API::Grades::GradeFilesController do
 
     describe "POST create" do
       it "is a protected route" do
-        expect(post :create, grade_id: world.grade.id, format: :json).to redirect_to(:root)
+        expect(post :create, params: { grade_id: world.grade.id }, format: :json).to \
+          redirect_to(:root)
       end
     end
 
     describe "DELETE destroy" do
       it "is a protected route" do
         grade_file = create(:grade_file, grade: world.grade)
-        expect(delete :destroy, grade_id: world.grade.id, id: grade_file.id, format: :json).to redirect_to(:root)
+        expect(delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json).to redirect_to(:root)
       end
     end
   end

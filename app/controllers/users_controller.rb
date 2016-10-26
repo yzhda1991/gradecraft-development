@@ -6,10 +6,10 @@ class UsersController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?,
+  before_action :ensure_staff?,
     except: [:activate, :activated, :edit_profile, :update_profile]
-  before_filter :ensure_admin?, only: [:all]
-  skip_before_filter :require_login, only: [:activate, :activated]
+  before_action :ensure_admin?, only: [:all]
+  skip_before_action :require_login, only: [:activate, :activated]
 
   def index
     @teams = current_course.teams

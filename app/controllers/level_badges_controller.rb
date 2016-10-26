@@ -1,5 +1,5 @@
 class LevelBadgesController< ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
 
   def create
     level_badge = LevelBadge.create level_badge_params
@@ -8,7 +8,7 @@ class LevelBadgesController< ApplicationController
 
   def destroy
     LevelBadge.find(params[:id]).destroy
-    render nothing: true
+    render head: :ok, body: nil
   end
 
   private

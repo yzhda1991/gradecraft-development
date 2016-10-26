@@ -1,5 +1,5 @@
 class UploadsController < ApplicationController
-  before_filter :fetch_upload_with_model, only: :remove
+  before_action :fetch_upload_with_model, only: :remove
 
   def remove
     @upload.delete_from_s3
@@ -10,7 +10,7 @@ class UploadsController < ApplicationController
       destroy_upload_with_flash
     end
 
-    redirect_to :back
+    redirect_back(fallback_location: root_path)
   end
 
   protected

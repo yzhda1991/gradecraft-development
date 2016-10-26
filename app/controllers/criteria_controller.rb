@@ -1,5 +1,5 @@
 class CriteriaController < ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
 
   before_action :find_criterion, only: [:update, :destroy]
 
@@ -13,7 +13,7 @@ class CriteriaController < ApplicationController
   def destroy
     @rubric = @criterion.rubric
     @criterion.destroy
-    render nothing: true
+    render head: :ok, body: :nothing
   end
 
   def update
@@ -23,7 +23,7 @@ class CriteriaController < ApplicationController
 
   def update_order
     Criterion.update params[:criterion_order].keys, params[:criterion_order].values
-    render nothing: true
+    render head: :ok, body: :nothing
   end
 
   private

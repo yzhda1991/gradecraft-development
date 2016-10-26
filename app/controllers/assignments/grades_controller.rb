@@ -1,9 +1,9 @@
 require_relative "../../services/creates_many_grades"
 
 class Assignments::GradesController < ApplicationController
-  before_filter :ensure_staff?, except: :self_log
-  before_filter :ensure_student?, only: :self_log
-  before_filter :save_referer, only: :edit_status
+  before_action :ensure_staff?, except: :self_log
+  before_action :ensure_student?, only: :self_log
+  before_action :save_referer, only: :edit_status
   before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
   before_action :find_grades_for_assignment, only: [:mass_edit, :delete_all]
 

@@ -1,11 +1,11 @@
 class AnalyticsEventsController < ApplicationController
-  skip_before_filter :increment_page_views
+  skip_before_action :increment_page_views
 
   def predictor_event
     # limited to 5 predictor jobs/second in Resque initializer
     PredictorEventLogger.new(event_session_with_params).enqueue_with_fallback
 
-    render nothing: true, status: :ok
+    render head: :ok, body: nil
   end
 
   def tab_select_event
@@ -15,7 +15,7 @@ class AnalyticsEventsController < ApplicationController
     event_logger.build_page_from_params
     event_logger.enqueue_in_with_fallback(Lull.time_until_next_lull)
 
-    render nothing: true, status: :ok
+    render head: :ok, body: nil
   end
 
   protected
