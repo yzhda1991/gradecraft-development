@@ -1,4 +1,6 @@
-%table.dynatable.no-table-header
+= render partial: "students/table_filter"
+
+%table.student-index-table.dynatable.no-table-header
   %thead
     %tr
       %th Flag
@@ -22,7 +24,7 @@
         %td
           = div_for student do
             = link_to flagged_user_icon(current_course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
-        %td
+        %td= student.rank
         %td= link_to student.first_name, student_path(student)
         %td= link_to student.last_name, student_path(student)
         %td

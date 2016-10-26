@@ -1,0 +1,8 @@
+.table-filter-wrapper
+  .filter-container
+    %p Filter:
+    .filter-buttons
+      %button.button-table-action.selected#btn-all-students= glyph(:users) + "All #{term_for :students}"
+      %button.button-table-action#btn-flagged-students= glyph(:flag) + "Flagged #{term_for :students}"
+      %button.button-table-action#btn-top10= glyph('star') + "Top 10"
+      %button.button-table-action#btn-bottom10= glyph('star-half-empty') + "Bottom 10"

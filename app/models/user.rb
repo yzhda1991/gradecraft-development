@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at,
-    :score, :team
+    :score, :team, :rank
 
   # all student display pages are ordered by last name except for the
   # leaderboard, and top 10/bottom 10

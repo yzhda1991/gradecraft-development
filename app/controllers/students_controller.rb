@@ -13,7 +13,9 @@ class StudentsController < ApplicationController
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
     else
-      @students = current_course.students
+      @students = current_course.students.order_by_high_score.each_with_index do |student, index|
+        student.rank = index + 1
+      end
     end
   end
 
