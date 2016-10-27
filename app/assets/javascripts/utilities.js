@@ -116,16 +116,18 @@ $('.button-close').on('click',function(){
     $(this).parent().slideToggle('slow');
 });
 
-// Section leaderboards and challenges are dependent on Sections feature being enabled 
-$('input[id="course_has_teams"]').change(function(){
+// Section leaderboards and challenges are dependent on Sections feature being enabled
+function formDependencies() {
   var $dependentOnSection = $('.dependent-on-section');
   var $card = $dependentOnSection.parent().parent();
+  var $sectionsCheckbox = $('input[id="course_has_teams"]');
 
-  if($(this).is(":checked")) {
+  if($sectionsCheckbox.is(":checked")) {
     $dependentOnSection.prop("disabled", false);
     $card.removeClass("disabled");
   } else {
     $dependentOnSection.prop("disabled", true);
     $card.addClass("disabled");
   }
-});
+  $sectionsCheckbox.change(formDependencies);
+} formDependencies();
