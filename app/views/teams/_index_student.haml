@@ -11,4 +11,4 @@
   - if @team.present? && current_course.has_in_team_leaderboards?
     = render partial: "teams/in_team_rankings", locals: { team: @team }
 
-  = render partial: "challenges/student_index" if current_course.challenges.present?
+  = render partial: "challenges/index_student" if current_course.challenges.present?
