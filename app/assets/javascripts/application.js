@@ -93,6 +93,7 @@
 //= require assignment-results-vis
 //= require uploads
 //= require course_switch
+//= require course_settings
 //= require background
 //= require d3
 //= require_tree ./behaviors

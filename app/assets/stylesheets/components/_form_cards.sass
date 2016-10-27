@@ -50,13 +50,24 @@
   background-color: $color-grey-7
   padding: 0.25rem 1rem
 
-a.button-advanced-settings
+button.button-advanced-settings
   font-size: 0.8rem
   display: block
   cursor: pointer
   color: $color-grey-3
+  background-color: transparent
+  width: 100%
+  text-align: left
+  padding: 0
+  line-height: normal
+  &:focus
+    outline: none
   &:hover
     text-decoration: none
+    background-color: transparent
+  &:disabled
+    opacity: 0.3
+    cursor: default
 
 .button-close
   display: block

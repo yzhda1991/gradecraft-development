@@ -106,28 +106,3 @@ $('table.highchart').highchartTable();
 $(".button-options").click(function(){
     $(".options-menu").toggle();
 });
-
-//Reveal advanced settings on form card
-$(".button-advanced-settings").click(function(){
-    $(this).parent().next().slideToggle('slow');
-});
-
-$('.button-close').on('click',function(){
-    $(this).parent().slideToggle('slow');
-});
-
-// Section leaderboards and challenges are dependent on Sections feature being enabled
-function formDependencies() {
-  var $dependentOnSection = $('.dependent-on-section');
-  var $card = $dependentOnSection.parent().parent();
-  var $sectionsCheckbox = $('input[id="course_has_teams"]');
-
-  if($sectionsCheckbox.is(":checked")) {
-    $dependentOnSection.prop("disabled", false);
-    $card.removeClass("disabled");
-  } else {
-    $dependentOnSection.prop("disabled", true);
-    $card.addClass("disabled");
-  }
-  $sectionsCheckbox.change(formDependencies);
-} formDependencies();
