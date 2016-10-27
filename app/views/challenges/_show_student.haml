@@ -21,7 +21,7 @@
         - challenge_grade = @challenge.challenge_grades.find_by team: team
         %tr
           %td= team.name
-          %td= points challenge_grade.score if challenge_grade && ChallengeGradeProctor.new(challenge_grade).viewable?
+          %td= points challenge_grade.score if (challenge_grade && ChallengeGradeProctor.new(challenge_grade).viewable?(user: current_user))
           - if @challenge.has_levels?
             %td
               = @challenge.grade_level(grade) if challenge_grade
