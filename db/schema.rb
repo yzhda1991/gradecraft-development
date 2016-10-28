@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 20161025152738) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: true,                         null: false
+    t.boolean  "teams_visible",                                           default: false,                         null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
