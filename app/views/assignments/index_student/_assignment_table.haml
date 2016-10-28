@@ -14,11 +14,11 @@
       .assignment-name
         - if presenter.name_visible?(assignment)
           = link_to assignment.name, assignment_path(assignment)
-          = render partial: "assignments/student_index/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
+          = render partial: "assignments/index_student/components/assignment_icons", locals: { presenter: presenter, assignment: assignment }
         - else
           %span.italic= "The name for this #{term_for :assignment} has been hidden until you unlock it"
       .assignment-info.assignment-due-date
-        = render partial: "assignments/student_index/components/due_at", locals: { assignment: assignment }
+        = render partial: "assignments/index_student/components/due_at", locals: { assignment: assignment }
 
       - if presenter.points_visible?(assignment)
         - if assignment.pass_fail?

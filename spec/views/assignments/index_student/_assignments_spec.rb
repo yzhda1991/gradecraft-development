@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "rails_spec_helper"
 
-describe "assignments/student_index/_assignments" do
+describe "assignments/index_student/_assignments" do
 
   let(:user) { double(:user, is_student?: true) }
   let(:view_context) { double(:view_context, current_user: user) }

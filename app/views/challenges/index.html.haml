@@ -8,6 +8,6 @@
   = render partial: "layouts/alerts"
 
   - if current_user_is_staff?
-    = render partial: "challenges/staff_index"
+    = render partial: "challenges/index_staff"
   - else
-    = render partial: "challenges/student_index"
+    = render partial: "challenges/index_student"

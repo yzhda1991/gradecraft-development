@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "assignments/_instructor_index" do
+describe "assignments/_index_staff" do
 
   before(:all) do
     @course = create(:course)

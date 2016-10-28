@@ -21,6 +21,6 @@
           = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", :upload_id => cf.id })
 
   - if current_user_is_staff?
-    = render partial: "challenges/show_instructor"
+    = render partial: "challenges/show_staff"
   - else
     = render partial: "challenges/show_student"
