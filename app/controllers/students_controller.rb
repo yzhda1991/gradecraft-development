@@ -9,8 +9,9 @@ class StudentsController < ApplicationController
   def index
     @teams = current_course.teams
 
+    @team = current_course.teams.find_by(id: params[:team_id])
     @students = User
-        .unscoped_students_being_graded_for_course(current_course, params[:team_id])
+        .unscoped_students_being_graded_for_course(current_course, @team)
         .order_by_high_score
   end
 

@@ -225,7 +225,6 @@ Rails.application.routes.draw do
     get :per_assign
     get :research_gradebook
     get :timeline_events
-    get :top_10
   end
 
   controller :pages do
@@ -269,8 +268,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get :leaderboard, to: "students#leaderboard"
-
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
@@ -280,7 +277,6 @@ Rails.application.routes.draw do
     end
     collection do
       get :autocomplete_student_name
-      get :flagged
     end
   end
 

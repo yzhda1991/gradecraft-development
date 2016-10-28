@@ -46,36 +46,6 @@ describe StudentsController do
       end
     end
 
-    describe "GET leaderboard" do
-      it "shows the class leaderboard" do
-        get :leaderboard
-        expect(response).to render_template(:leaderboard)
-      end
-    end
-
-    describe "GET flagged" do
-      before(:each) do
-        @student = create(:user)
-        @student.courses << @course
-        @student_2 = create(:user)
-        @student_2.courses << @course
-        @flagged_student = create \
-          :flagged_user, flagger: @professor, course: @course, flagged: @student
-      end
-
-      it "shows the students the current user has flagged" do
-        get :flagged
-        expect(response).to render_template(:flagged)
-        expect(assigns(:students)).to eq([@student])
-      end
-
-      it "does not show unflagged students" do
-        get :flagged
-        expect(response).to render_template(:flagged)
-        expect(assigns(:students)).to_not include(@student_2)
-      end
-    end
-
     describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, params: { id: 10 }
@@ -106,7 +76,6 @@ describe StudentsController do
     describe "protected routes" do
       [
         :index,
-        :leaderboard,
         :autocomplete_student_name,
       ].each do |route|
           it "#{route} redirects to root" do

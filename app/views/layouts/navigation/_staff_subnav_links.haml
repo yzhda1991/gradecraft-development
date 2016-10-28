@@ -1,8 +1,7 @@
 %h5 Overview
 %li= link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
 
-%li
-  = link_to_unless_current glyph("list-ol") + "Leaderboard", leaderboard_path
+%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
 %li
   - grading_status_count = grading_status_count_for(current_course)
   = link_to_unless_current glyph("flag-checkered") + "Grading Status", grading_status_path do |name|
@@ -18,7 +17,6 @@
 
 %li
   = link_to_unless_current glyph("file-archive-o") + "Course Data Exports", downloads_path
-%li= link_to_unless_current glyph("star-half-empty") + "Top 10/Bottom 10", top_10_path
 %li= link_to_unless_current glyph("bar-chart") + "Analytics", analytics_students_path
 %li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path
 %li= link_to_unless_current glyph(:calendar) + "Calendar Events", events_path
@@ -35,8 +33,6 @@
 %hr
 
 %h5 Users
-%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
-%li= link_to_unless_current glyph(:flag) + "Flagged #{term_for :students}", flagged_students_path
 - if current_course.has_teams?
   %li= link_to_unless_current glyph(:users) + "#{term_for :teams}", teams_path
 %li
