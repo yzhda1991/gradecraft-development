@@ -168,7 +168,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def students
-    for_team? ? course.students_by_team(team) : course.students
+    for_team? ? course.students_by_team(team).order_by_name : course.students.order_by_name
   end
 
   def students_being_graded

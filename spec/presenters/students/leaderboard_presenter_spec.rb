@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
-require "./app/presenters/students/leaderboard_presenter"
+require "./app/presenters/students/index_presenter"
 
-describe Students::LeaderboardPresenter do
+describe Students::IndexPresenter do
   let(:course) { create(:course) }
   subject { described_class.new course: course }
 

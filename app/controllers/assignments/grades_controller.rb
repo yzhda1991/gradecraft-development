@@ -85,9 +85,9 @@ class Assignments::GradesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team).order_by_name
     else
-      @students = current_course.students_being_graded
+      @students = current_course.students_being_graded.order_by_name
     end
 
     @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
@@ -188,9 +188,9 @@ class Assignments::GradesController < ApplicationController
   def find_grades_for_assignment
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team).order_by_name
     else
-      @students = current_course.students_being_graded
+      @students = current_course.students_being_graded.order_by_name
     end
     @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
   end

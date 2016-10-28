@@ -29,9 +29,9 @@ class Badges::ShowPresenter < Showtime::Presenter
 
   def students
     if team
-      course.students_being_graded_by_team(team)
+      course.students_being_graded_by_team(team).order_by_name
     else
-      course.students_being_graded
+      course.students_being_graded.order_by_name
     end
   end
 

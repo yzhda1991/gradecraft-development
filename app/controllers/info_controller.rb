@@ -122,9 +122,9 @@ class InfoController < ApplicationController
 
   def find_students
     if @team
-      @students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team).order_by_name
     else
-      @students = current_course.students_being_graded
+      @students = current_course.students_being_graded.order_by_name
     end
   end
 end
