@@ -7,11 +7,11 @@
 %p
 %h4{:align => "center"}
   Click
-  =link_to "here", assignment_path(@assignment)
+  =link_to "here", assignment_url(@assignment)
   to view your results.
 %hr/
 %p{:align => "center"}
   Don't forget to update your plan for the semester by checking your
   = succeed "." do
-    %a{:href => "https://www.gradecraft.com/predictor"} grade predictor
+    = link_to "grade predictor", predictor_url
 %hr/

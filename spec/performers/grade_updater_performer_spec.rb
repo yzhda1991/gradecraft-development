@@ -2,7 +2,8 @@ require "rails_spec_helper"
 
 RSpec.describe GradeUpdatePerformer, type: :background_job do
   let(:assignment) { create(:assignment) }
-  let(:grade) { create(:grade, assignment_id: assignment.id) }
+  let(:instructor) { create :user }
+  let(:grade) { create(:grade, assignment_id: assignment.id, graded_by_id: instructor.id) }
   let(:attrs) {{ grade_id: grade[:id] }}
   let(:performer) { GradeUpdatePerformer.new(attrs) }
   subject { performer }
@@ -171,18 +172,37 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
   end
 
   describe "notify_grade_released" do
-    subject { performer.instance_eval { notify_grade_released } }
     let(:mailer_double) { double(:mailer).as_null_object }
+    let(:notify) { performer.instance_eval { notify_grade_released } }
+
     before(:each) { allow(NotificationMailer).to receive(:grade_released).and_return(mailer_double) }
-    after(:each) { subject }
 
     it "should create a new grade released notifier with the grade id" do
       expect(NotificationMailer).to receive(:grade_released).with(grade.id)
+      notify
     end
 
     it "should deliver the mailer" do
       allow(performer).to receive_messages(grade_released:  mailer_double)
       expect(mailer_double).to receive(:deliver_now)
+      notify
+    end
+
+    it "creates a new announcement for the student" do
+      expect { notify }.to change { Announcement.count }.by(1)
+
+      announcement = Announcement.last
+
+      expect(announcement.course).to eq grade.course
+      expect(announcement.author).to eq grade.graded_by
+      expect(announcement.title).to eq \
+        "#{grade.course.course_number} - #{grade.assignment.name} Graded"
+      expect(announcement.body).to include \
+        "You can now view the grade for your #{grade.course.assignment_term.downcase} "\
+        "#{grade.assignment.name} in #{grade.course.name}."
+      expect(announcement.body).to include \
+        "Visit <a href=http://localhost:5000/assignments/#{(grade.assignment.id)}>"\
+        "#{grade.assignment.name}</a> to view your results."
     end
   end
 
