@@ -331,7 +331,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
     t.integer  "level_id"
     t.boolean  "student_visible", default: false, null: false
     t.integer  "awarded_by_id"
-    t.index ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
+    t.index ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", using: :btree
   end
 
   create_table "events", force: :cascade do |t|

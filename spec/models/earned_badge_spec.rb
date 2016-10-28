@@ -33,12 +33,6 @@ describe EarnedBadge do
   describe "#points" do
     let(:student) { create :user }
 
-    it "returns 0 for a badge with nil points" do
-      badge = create(:badge, full_points: nil)
-      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)
-      expect(earned_badge.points).to eq(0)
-    end
-
     it "returns badge full points for points" do
       badge = create(:badge, full_points: 123)
       earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)

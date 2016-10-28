@@ -189,26 +189,6 @@
       level_id:          criterion.selectedLevel.id
     }
 
-  $scope.levelBadgesParams = ()->
-    params = []
-    angular.forEach($scope.gradedCriteria(), (criterion, index)->
-      # grab the selected level for the active criterion
-      level = criterion.selectedLevel
-      angular.forEach(level.badges, (badge, index)->
-        params.push {
-          name:         badge.name,
-          level_id:     level.id,
-          criterion_id: level.criterion_id,
-          badge_id:     badge.badge.id,
-          description:  badge.description,
-          full_points:  badge.full_points,
-          icon:         badge.icon,
-          multiple:     badge.multiple
-        }
-      )
-    )
-    return params
-
   $scope.gradeParams = ()->
     {
       raw_points: $scope.pointsAllocated(),
@@ -224,7 +204,6 @@
     {
       points_possible:  $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
-      level_badges:     $scope.levelBadgesParams(),
       level_ids:        $scope.selectedLevelIds(),
       criterion_ids:    $scope.allCriterionIds(),
       grade:            $scope.gradeParams(),

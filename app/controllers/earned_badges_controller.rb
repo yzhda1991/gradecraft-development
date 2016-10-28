@@ -116,7 +116,7 @@ class EarnedBadgesController < ApplicationController
 
   def earned_badge_params
     params.require(:earned_badge).permit(:feedback, :student_id, :badge_id
-      ).merge(awarded_by: current_user, course: current_course)
+      ).merge(awarded_by: current_user)
   end
 
   def earned_badge_students

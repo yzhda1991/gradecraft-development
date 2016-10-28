@@ -296,6 +296,7 @@ end
               of studying and 14-hour days earning your dues. I spent three
               years isolated in an academic environment to be the best actor
               I could."'
+              eb.awarded_by_id = course_config[:staff_ids].sample
             end
           end
         end

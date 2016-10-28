@@ -30,6 +30,6 @@ class API::EarnedBadgesController < ApplicationController
 
   def earned_badge_params
     params.require(:earned_badge).permit(:feedback, :student_id, :badge_id,
-      :grade_id).merge(awarded_by: current_user, course: current_course)
+      :grade_id).merge(awarded_by: current_user)
   end
 end

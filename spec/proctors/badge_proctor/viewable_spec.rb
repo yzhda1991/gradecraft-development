@@ -30,20 +30,24 @@ describe BadgeProctor::Viewable do
 
       it "can view the badge if earned and the EarnedBadge is visible" do
         world = World.create.create_badge
+        grade = create :released_grade
         eb = create(:earned_badge,
           course: world.course,
           badge: world.badge,
-          student_visible: true)
+          grade: grade,
+          student: grade.student)
         subject = BadgeProctor.new(world.badge)
         expect(subject).to be_viewable eb.student, course: eb.course
       end
 
       it "cannnot view the badge if earned but the EarnedBadge is invisible" do
         world = World.create.create_badge(visible: false)
+        grade = create :unreleased_grade
         eb = create(:earned_badge,
           course: world.course,
           badge: world.badge,
-          student_visible: false)
+          grade: grade,
+          student: grade.student)
         subject = BadgeProctor.new(world.badge)
         expect(subject).to_not be_viewable eb.student, course: eb.course
       end
