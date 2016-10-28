@@ -18,7 +18,7 @@ class EarnedBadge < ActiveRecord::Base
 
   validate :earnable?, :on => :create
 
-  delegate :name, :description, :icon, :points, to: :badge
+  delegate :name, :description, :icon, to: :badge
 
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
@@ -34,7 +34,7 @@ class EarnedBadge < ActiveRecord::Base
   end
 
   def points
-    self.badge.full_points || 0
+    self.badge.full_points
   end
 
   private

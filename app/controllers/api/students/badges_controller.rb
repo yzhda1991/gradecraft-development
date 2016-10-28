@@ -17,17 +17,7 @@ class API::Students::BadgesController < ApplicationController
       :position,
       :visible,
       :visible_when_locked).includes(:earned_badges)
-    @earned_badges =
-      current_course.earned_badges.where(student_id: @student.id).select(
-        :id,
-        :badge_id,
-        :grade_id,
-        :feedback,
-        :level_id,
-        :student_id,
-        :student_visible,
-        :points
-      )
+    @earned_badges = current_course.earned_badges.where(student_id: @student.id)
     render template: "api/badges/index"
   end
 end

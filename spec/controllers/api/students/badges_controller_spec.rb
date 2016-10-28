@@ -1,23 +1,25 @@
 require "rails_spec_helper"
 
 describe API::Students::BadgesController do
-  let(:world) { World.create.with(:course, :student, :badge) }
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:course) { create :course }
+  let(:badge) { create :badge }
+  let(:student) { create(:student_course_membership, course: course).user}
+  let(:professor) { create(:professor_course_membership, course: course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "GET index" do
       before do
-        allow(controller).to receive(:current_course).and_return(world.course)
+        allow(controller).to receive(:current_course).and_return(course)
         allow(controller).to receive(:current_user).and_return(professor)
       end
 
       it "assigns the badges with no call to update" do
-        get :index, params: { student_id: world.student.id }, format: :json
-        expect(assigns(:student)).to eq(world.student)
+        get :index, params: { student_id: student.id }, format: :json
+        expect(assigns(:student)).to eq(student)
         predictor_badge_attributes do |attr|
-          expect(assigns(:badges)[0][attr]).to eq(world.badge[attr])
+          expect(assigns(:badges)[0][attr]).to eq(badge[attr])
         end
         expect(assigns(:update_badges)).to be_falsey
         expect(response).to render_template("api/badges/index")
@@ -25,9 +27,9 @@ describe API::Students::BadgesController do
 
       it "assigns the student's earned badges" do
         earned_badge = create(
-          :earned_badge, badge: world.badge,
-          student: world.student, course: world.course, student_visible: true)
-        get :index, format: :json, params: { student_id: world.student.id }
+          :earned_badge, badge: badge,
+          student: student, course: course, student_visible: true)
+        get :index, format: :json, params: { student_id: student.id }
         expect(assigns(:earned_badges)).to eq([earned_badge])
       end
     end
