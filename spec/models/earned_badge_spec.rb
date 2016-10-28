@@ -100,8 +100,8 @@ describe EarnedBadge do
       expect(subject).to be_student_visible
     end
 
-    it "can be overriden by passing in a value" do
-      subject = create(:earned_badge, student_visible: true)
+    it "is always set to visible if no grade associated" do
+      subject = create(:earned_badge, student_visible: false)
       expect(subject).to be_student_visible
     end
   end

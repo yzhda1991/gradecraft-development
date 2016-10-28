@@ -40,7 +40,11 @@ class EarnedBadge < ActiveRecord::Base
   private
 
   def update_visibility
-    self.student_visible = GradeProctor.new(grade).viewable? if grade.present?
+    if grade.present?
+      self.student_visible = GradeProctor.new(grade).viewable?
+    else
+      self.student_visible = true
+    end
     true
   end
 
