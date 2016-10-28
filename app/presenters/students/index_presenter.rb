@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class Students::LeaderboardPresenter < Showtime::Presenter
+class Students::IndexPresenter < Showtime::Presenter
   def course
     properties[:course]
   end
@@ -58,7 +58,7 @@ class Students::LeaderboardPresenter < Showtime::Presenter
       .includes(:team)
   end
 
-  class LeaderboardStudentCollection
+  class IndexStudentCollection
     include Enumerable
 
     attr_reader :presenter
@@ -73,7 +73,7 @@ class Students::LeaderboardPresenter < Showtime::Presenter
     end
   end
 
-  class LeaderboardStudentDecorator < SimpleDelegator
+  class IndexStudentDecorator < SimpleDelegator
     attr_reader :presenter
 
     def earned_badges

@@ -9,24 +9,9 @@ class StudentsController < ApplicationController
   def index
     @teams = current_course.teams
 
-    if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
-    else
-      @students = current_course.students.order_by_high_score.each_with_index do |student, index|
-        student.rank = index + 1
-      end
-    end
-  end
-
-  # Displays all students flagged by the current user
-  def flagged
-    @students = FlaggedUser.flagged current_course, current_user
-  end
-
-  # Course wide leaderboard - excludes auditors from view
-  def leaderboard
-    render :leaderboard, Students::LeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
+    @students = User
+        .unscoped_students_being_graded_for_course(current_course, params[:team_id])
+        .order_by_high_score
   end
 
   # Displaying student profile to instructors

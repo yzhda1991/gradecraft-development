@@ -5,9 +5,9 @@
     %tr
       %th Flag
       %th Rank
+      %th Avatar
       %th First Name
       %th Last Name
-      %th Avatar
       - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
         %th Screenname
       - if current_course.has_teams?
@@ -16,20 +16,23 @@
         %th Role
       %th{scope: "col"} Score
       %th Level
+      - if current_course.has_badges?
+        %th #{ term_for :badges }
+        %th{:style => "display: none"} Badge Count
       %th Last Login
       %th Options
   %tbody
-    - students.each do |student|
+    - students.each_with_index do |student, index|
       %tr
         %td
           = div_for student do
             = link_to flagged_user_icon(current_course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
-        %td= student.rank
-        %td= link_to student.first_name, student_path(student)
-        %td= link_to student.last_name, student_path(student)
+        %td= index + 1
         %td
           - if student.avatar_file_name.present?
             %img.img-rounded{:src => student.avatar_file_name, :width => 30}
+        %td= link_to student.first_name, student_path(student)
+        %td= link_to student.last_name, student_path(student)
         - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
           %td
             = student.display_name
@@ -45,6 +48,11 @@
         %td
           - if student.grade_for_course(current_course).present?
             = student.grade_for_course(current_course).name
+        - if current_course.has_badges?
+          %td#earned_badges{"data-title" => "Badges"}
+            - student.earned_badges.each do |badge|
+              %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
+          %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
         %td= student.last_course_login(current_course)
         %td
           .right
