@@ -4,11 +4,7 @@ Rails.application.configure do
   config.asset_host = ENV["GC_ASSET_HOST"] || "http://localhost:5000"
 
   config.action_mailer.default_url_options = { :host => "localhost:5000" }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "localhost",
-    :port => 1025,
-  }
+  config.action_mailer.delivery_method = :sendmail
   config.action_mailer.perform_deliveries = true
 
 
