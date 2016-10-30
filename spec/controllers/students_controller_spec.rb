@@ -22,20 +22,7 @@ describe StudentsController do
     describe "GET index" do
       it "returns the students for the current course" do
         get :index
-        expect(assigns(:students)).to eq([@student])
         expect(response).to render_template(:index)
-      end
-
-      it "returns just the students on a team" do
-        @team = create(:team, course: @course)
-        @student = create(:user)
-        @student.courses << @course
-        @student.teams << @team
-        @student_2 = create(:user)
-        @student_2.courses << @course
-        get :index, params: { team_id: @team.id }
-        expect(response).to render_template(:index)
-        expect(assigns(:students)).to eq([@student])
       end
     end
 

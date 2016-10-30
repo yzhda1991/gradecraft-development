@@ -9,6 +9,18 @@ class Students::IndexPresenter < Showtime::Presenter
     course.has_in_team_leaderboards? || course.has_character_names?
   end
 
+  def has_badges?
+    course.has_badges?
+  end
+
+  def has_teams?
+    course.has_teams?
+  end
+  
+  def has_team_roles?
+    course.has_team_roles?
+  end
+  
   def earned_badges
     @earned_badges ||=
       EarnedBadge.for_course(course)
@@ -17,25 +29,12 @@ class Students::IndexPresenter < Showtime::Presenter
         .includes(:badge)
   end
 
-  def grade_scheme_elements
-    @grade_scheme_elements ||=
-      GradeSchemeElement.unscoped.for_course(course).order_by_lowest_points
-  end
-
-  def has_badges?
-    course.has_badges?
-  end
-
-  def has_teams?
-    course.has_teams?
-  end
-
   def student_ids
     students.map(&:id)
   end
 
   def students
-    @students ||= LeaderboardStudentCollection.new(User
+    @students ||= IndexStudentCollection.new(User
       .unscoped_students_being_graded_for_course(course, team)
       .order_by_high_score, self)
   end
@@ -69,25 +68,31 @@ class Students::IndexPresenter < Showtime::Presenter
     end
 
     def each
-      @students.each { |student| yield LeaderboardStudentDecorator.new(student, presenter) }
+      @students.each { |student| yield IndexStudentDecorator.new(student, presenter) }
     end
   end
 
   class IndexStudentDecorator < SimpleDelegator
     attr_reader :presenter
-
+    
     def earned_badges
       presenter.earned_badges.select { |eb| eb.student_id == self.id }
     end
 
     def grade_scheme
       scheme = presenter.course.grade_scheme_elements.for_score(score)
-      puts scheme.inspect
-      scheme
     end
 
     def score
       self.cached_score_sql_alias
+    end
+    
+    def display_name 
+      presenter.display_name
+    end
+    
+    def last_login 
+      self.last_course_login(presenter.course)
     end
 
     def team

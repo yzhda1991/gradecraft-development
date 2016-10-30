@@ -23,12 +23,12 @@ describe User do
     end
   end
 
-  describe "ordering" do
+  describe "order_by_name" do
     it "should return users alphabetical by last name" do
       User.destroy_all
       student = create(:user, last_name: "Zed")
       student2 = create(:user, last_name: "Alpha")
-      expect(User.all).to eq([student2,student])
+      expect(User.all.order_by_name).to eq([student2,student])
     end
   end
 

@@ -30,15 +30,6 @@ describe Students::IndexPresenter do
     end
   end
 
-  describe "#grade_scheme_elements" do
-    let!(:high_grade_scheme_element) { create :grade_scheme_element_high, course: course }
-    let!(:low_grade_scheme_element) { create :grade_scheme_element_low, course: course }
-
-    it "returns all the grade scheme elements for the course" do
-      expect(subject.grade_scheme_elements).to eq [low_grade_scheme_element, high_grade_scheme_element]
-    end
-  end
-
   describe "has_badges?" do
     it "returns true if the course has badges" do
       allow(course).to receive(:has_badges?).and_return true

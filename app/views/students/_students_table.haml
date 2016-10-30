@@ -8,52 +8,42 @@
       %th Avatar
       %th First Name
       %th Last Name
-      - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
-        %th Screenname
-      - if current_course.has_teams?
-        %th #{current_course.team_term}
-      - if current_course.has_team_roles?
-        %th Role
+      %th= "Screenname" if presenter.display_pseudonyms?
+      - if presenter.has_teams?
+        %th= "#{presenter.course.team_term}" 
+        %th= "Role" if presenter.has_team_roles?
       %th{scope: "col"} Score
       %th Level
-      - if current_course.has_badges?
+      - if presenter.has_badges?
         %th #{ term_for :badges }
         %th{:style => "display: none"} Badge Count
       %th Last Login
       %th Options
   %tbody
-    - students.each_with_index do |student, index|
+    - presenter.students.each_with_index do |student, index|
       %tr
         %td
           = div_for student do
-            = link_to flagged_user_icon(current_course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
+            = link_to flagged_user_icon(presenter.course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
         %td= index + 1
         %td
           - if student.avatar_file_name.present?
-            %img.img-rounded{:src => student.avatar_file_name, :width => 30}
+            %img.img-rounded{ :src => student.avatar_file_name, :width => 30 }
         %td= link_to student.first_name, student_path(student)
         %td= link_to student.last_name, student_path(student)
-        - if current_course.has_in_team_leaderboards? || current_course.has_character_names?
+        %td= student.display_name if presenter.display_pseudonyms?
+        - if presenter.has_teams? 
           %td
-            = student.display_name
-        - if current_course.has_teams?
-          %td
-            - if student.team_for_course(current_course)
-              = link_to student.team_for_course(current_course).name, team_path(id: student.team_for_course(current_course).id)
-        - if current_course.has_team_roles?
-          %td= student.try(:team_role)
-        %td
-          - if student.respond_to?(:grades)
-            = points student.cached_score_for_course(current_course)
-        %td
-          - if student.grade_for_course(current_course).present?
-            = student.grade_for_course(current_course).name
-        - if current_course.has_badges?
+            = link_to student.team.name, team_path(id: student.team.id) if student.team
+          %td= student.try(:team_role) if presenter.has_team_roles?
+        %td= points student.score
+        %td= student.grade_scheme.try(:name)
+        - if presenter.has_badges?
           %td#earned_badges{"data-title" => "Badges"}
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
-          %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
-        %td= student.last_course_login(current_course)
+          %td{ :style => "display: none" }= student.earned_badges_for_course(presenter.course).count
+        %td= student.last_login
         %td
           .right
             %a.button.button-edit.button-options= glyph(:cog) + glyph("caret-down")
@@ -61,4 +51,4 @@
               %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
               %li= link_to glyph(:edit) + "Edit", edit_user_path(student)
-              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: current_course.id).first, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
+              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: presenter.course.id).first, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete

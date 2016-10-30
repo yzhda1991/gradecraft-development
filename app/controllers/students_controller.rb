@@ -7,12 +7,7 @@ class StudentsController < ApplicationController
   # Lists all students in the course,
   # broken out by those being graded and auditors
   def index
-    @teams = current_course.teams
-
-    @team = current_course.teams.find_by(id: params[:team_id])
-    @students = User
-        .unscoped_students_being_graded_for_course(current_course, @team)
-        .order_by_high_score
+    render "index", Students::IndexPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
   # Displaying student profile to instructors

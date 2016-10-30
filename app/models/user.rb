@@ -50,8 +50,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  attr_accessor :password, :password_confirmation, :cached_last_login_at,
-    :score, :team
+  attr_accessor :password, :password_confirmation, :score, :team
 
   scope :order_by_high_score, -> { includes(:course_memberships).order "course_memberships.score DESC" }
   scope :order_by_low_score, -> { includes(:course_memberships).order "course_memberships.score ASC" }

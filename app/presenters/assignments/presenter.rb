@@ -172,7 +172,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def students_being_graded
-    for_team? ? course.students_being_graded_by_team(team) : course.students_being_graded
+    for_team? ? course.students_being_graded_by_team(team).order_by_name : course.students_being_graded.order_by_name
   end
 
   def submission_for_assignment(student)
