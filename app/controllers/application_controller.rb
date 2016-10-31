@@ -1,4 +1,5 @@
-require 'application_responder'
+require "application_responder"
+require "lull"
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
