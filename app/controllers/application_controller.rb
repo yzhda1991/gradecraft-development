@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
   before_action :require_login, except: [:not_authenticated]
   before_action :increment_page_views
   before_action :course_scores
+  before_action :set_paper_trail_whodunnit
 
   include ApplicationHelper
 
