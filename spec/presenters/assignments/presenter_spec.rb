@@ -2,7 +2,7 @@ require "spec_helper"
 require "./app/presenters/assignments/presenter"
 require "./app/presenters/assignments/group_presenter"
 
-describe Assignments::Presenter do
+describe Assignments::Presenter, focus: true do
   let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
@@ -142,14 +142,6 @@ describe Assignments::Presenter do
     let(:student) { double(:user) }
 
     it "returns the students that are attached to the course" do
-      allow(course).to receive(:students).and_return [student]
-      expect(subject.students).to eq [student]
-    end
-
-    it "returns the students that are attached to the course for the team if a team is specified" do
-      subject.properties[:team_id] = 123
-      allow(course).to receive(:teams).and_return double(:relation, find_by: team)
-      allow(course).to receive(:students_by_team).and_return [student]
       expect(subject.students).to eq [student]
     end
   end
