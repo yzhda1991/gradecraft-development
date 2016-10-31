@@ -1,3 +1,5 @@
+require "lull"
+
 class AnalyticsEventsController < ApplicationController
   skip_before_action :increment_page_views
 
