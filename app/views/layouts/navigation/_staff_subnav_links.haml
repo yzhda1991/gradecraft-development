@@ -53,10 +53,11 @@
 %li= link_to_unless_current glyph(:tasks) + "Predictor Preview", predictor_path
 %li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 
-- if current_user_is_admin?
-  .hide-for-small
+.hide-for-small
   %hr
 
   %h5{ class: "make-lizards" } Admin
-  %li= link_to_unless_current glyph(:university) + "My Courses", courses_path
-  %li= link_to_unless_current glyph("user-times") + "All Users", users_path
+  %li= link_to_unless_current glyph(:plus) + "New Course", new_course_path
+  - if current_user_is_admin?
+    %li= link_to_unless_current glyph(:university) + "My Courses", courses_path
+    %li= link_to_unless_current glyph("user-times") + "All Users", users_path
