@@ -29,5 +29,5 @@
   
       .submit-buttons
         %ul
-          %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
+          %li= f.button :submit, "Save Settings", class: "button"
           %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"
