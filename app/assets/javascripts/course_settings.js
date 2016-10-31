@@ -50,3 +50,13 @@ function formDependencies() {
 
 $('input[id="course_has_teams"]').change(formDependencies);
 formDependencies();
+
+// Remember the last active tab in order to redirect to same tab after save
+$(function() {
+   $( ".course-settings-tabs" ).tabs({
+     activate:function(event,ui){
+       localStorage.setItem("lastTab",ui.newTab.index() );
+     },
+     active: localStorage.getItem("lastTab") || 0
+   });
+});

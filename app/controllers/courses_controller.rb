@@ -2,13 +2,10 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  skip_before_action :require_login, only: [:badges]
-  before_action :ensure_staff?, except: [:index, :badges, :change]
-  before_action :ensure_not_impersonating?, only: [:index]
-  before_action :ensure_admin?, only: [:recalculate_student_scores]
-
-  before_action :find_course, only: [:show,
-                                     :edit,
+  skip_before_filter :require_login, only: [:badges]
+  before_filter :ensure_staff?, except: [:index, :badges, :change]
+  before_filter :ensure_not_impersonating?, only: [:index]
+  before_action :find_course, only: [:edit,
                                      :copy,
                                      :update,
                                      :destroy,
@@ -25,10 +22,6 @@ class CoursesController < ApplicationController
         render json: @courses.to_json(only: [:id, :name, :course_number, :year, :semester])
       end
     end
-  end
-
-  def show
-    authorize! :read, @course
   end
 
   def new
