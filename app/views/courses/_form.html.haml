@@ -28,18 +28,17 @@
   .form-item
     = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
 
-%section
-  %h4.uppercase GradeCraft Settings
-  .form-item
-    = f.label :accepts_submissions, "Submissions"
-    = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
-    .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?
-
-  - if current_user_is_admin?
+- if current_user_is_admin?
+  %section
+    %h4.uppercase GradeCraft Settings
     .form-item
       = f.label :status, "Active?"
       = f.check_box :status
       .form_label Is this an active course?
+  -# .form-item
+  -#   = f.label :accepts_submissions, "Submissions"
+  -#   = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
+  -#   .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?  
 
 %section
   %h4.uppercase Enable Features
