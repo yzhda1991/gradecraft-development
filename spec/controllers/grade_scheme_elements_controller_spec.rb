@@ -3,17 +3,17 @@ require "rails_spec_helper"
 describe GradeSchemeElementsController do
   let(:course) { create(:course) }
 
-  before(:each) do
-    session[:course_id] = course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
-
   context "as professor" do
+    let!(:course_membership) { create(:student_course_membership, course: course, score: 100000,
+      earned_grade_scheme_element_id: grade_scheme_element.id) }
+    let!(:another_course_membership) { create(:student_course_membership, course: course, score: 80000,
+      earned_grade_scheme_element_id: grade_scheme_element.id) }
     let(:professor) { create(:professor_course_membership, course: course).user }
     let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course) }
 
     before(:each) do
       login_user(professor)
+      allow(controller).to receive(:current_course).and_return course
     end
 
     describe "GET index" do
@@ -65,10 +65,19 @@ describe GradeSchemeElementsController do
           highest_points: 100010, course_id: course.id }, { id: GradeSchemeElement.new.id,
           letter: "B", level: "Snail", lowest_points: 100011, highest_points: nil,
           course_id: course.id}], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
-        put :mass_update, params.merge(format: :json)
+        put :mass_update, params: params, format: :json
         expect(grade_scheme_element.reload.highest_points).to eq(100000)
         expect(response.status).to eq(500)
       end
+    end
+
+    it "recalculates scores for all students in the course" do
+      params = { "grade_scheme_elements_attributes" => [{
+        id: grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0,
+        highest_points: 100000, course_id: course.id }, { id: GradeSchemeElement.new.id,
+        letter: "B", level: "Snail", lowest_points: 100001, highest_points: 200000,
+        course_id: course.id }], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
+      expect{ put :mass_update, params: params, format: :json }.to change { queue(ScoreRecalculatorJob).size }.by(course.students.count)
     end
 
     describe "GET export_structure" do
