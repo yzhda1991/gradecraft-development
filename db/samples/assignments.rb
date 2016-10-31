@@ -1432,9 +1432,9 @@ me and I never know what to say.' ― Seymour Papert",
   },
   assignment_type: :sorting,
   attributes: {
-    name: "Class 1",
+    name: "Class 1 Position 1",
     description: "Tests that Assignments are Sorted Correctly by Alphanumeric
-      Name"
+      Name as well as by Position (most views use should use Position)"
   }
 }
 
@@ -1450,9 +1450,9 @@ capacities. - Seymour Papert",
   },
   assignment_type: :sorting,
   attributes: {
-    name: "Class 2",
+    name: "Class 2 Position 2",
     description: "Tests that Assignments are Sorted Correctly by Alphanumeric
-      Name"
+      Name as well as by Position (most views use should use Position)"
   }
 }
 
@@ -1463,9 +1463,9 @@ believe that you need the society as it is. ― Ivan Illich",
   },
   assignment_type: :sorting,
   attributes: {
-    name: "Class 12",
+    name: "Class 12 Position 3",
     description: "Tests that Assignments are Sorted Correctly by Alphanumeric
-      Name"
+      Name as well as by Position (most views use should use Position)"
   }
 }
 
@@ -1479,9 +1479,9 @@ Illich",
   },
   assignment_type: :sorting,
   attributes: {
-    name: "Class 10",
+    name: "Class 10 Position 4",
     description: "Tests that Assignments are Sorted Correctly by Alphanumeric
-      Name"
+      Name as well as by Position (most views use should use Position)"
   }
 }
 
@@ -1494,9 +1494,9 @@ the speed, and the route.― Jay Cross",
   },
   assignment_type: :sorting,
   attributes: {
-    name: "Class 20",
+    name: "Class 20 Position 5",
     description: "Tests that Assignments are Sorted Correctly by Alphanumeric
-      Name"
+      Name as well as by Position (most views use should use Position)"
   }
 }
 

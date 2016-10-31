@@ -227,7 +227,6 @@ describe Assignment do
       expect(a2.position).to be(1)
       a3 = create :assignment, assignment_type: a2.assignment_type
       expect(a3.position).to be(2)
-      badge
     end
   end
 
