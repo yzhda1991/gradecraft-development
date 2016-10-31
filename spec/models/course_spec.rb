@@ -701,7 +701,7 @@ describe Course do
       course_membership = create(:student_course_membership, course: subject, score: 100)
       course_membership_2 = create(:student_course_membership, course: subject, score: 200)
       course_membership_3 = create(:student_course_membership, course: subject, score: 300)
-      expect(subject.scores).to eq({:scores => [100, 200, 300]})
+      expect(subject.scores).to match_array({:scores => [100, 200, 300]})
     end
   end
 
