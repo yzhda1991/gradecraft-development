@@ -48,6 +48,7 @@ class GradeSchemeElementsController < ApplicationController
     end
     respond_to do |format|
       if @course.save
+        @course.students.pluck(:id).each { |id| ScoreRecalculatorJob.new(user_id: id, course_id: @course.id).enqueue }
         format.json do
           render json: current_course.grade_scheme_elements.select(
             :id,
