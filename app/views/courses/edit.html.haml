@@ -1,5 +1,6 @@
 .pageContent
-  
+  = render partial: "layouts/alerts", locals: { model: @course }
+
   = simple_form_for(@course, :validate => false)  do |f|
 
     #tabs.ui-tabs.ui-widget.course-settings-tabs
