@@ -44,7 +44,7 @@
     .form-card
       .form-card-header
         = f.label :has_badges, "Badges"
-        = f.check_box :has_badges, {class: "has-settings-menu"}
+        = f.check_box :has_badges, {class: "feature-checkbox has-settings-menu"}
       .form-card-body
         .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course.
       .form-card-advanced-settings
@@ -58,14 +58,14 @@
     .form-card
       .form-card-header
         = f.label :show_analytics, "Analytics"
-        = f.check_box :show_analytics, {"aria-describedby" => "showAnalytics"}
+        = f.check_box :show_analytics, {"aria-describedby" => "showAnalytics", class: "feature-checkbox"}
       .form-card-body
         .feature-description{id: "showAnalytics"}  Show course and assignment learning analytics displays that help students stay informed about their own work.
 
     .form-card
       .form-card-header
         = f.label :has_multipliers, "Multipliers"
-        = f.check_box :has_multipliers, {"aria-describedby" => "hideMultipliers", class: "has-settings-menu"}
+        = f.check_box :has_multipliers, {"aria-describedby" => "hideMultipliers", class: "feature-checkbox has-settings-menu"}
       .form-card-body
         .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
       .form-card-advanced-settings
@@ -86,21 +86,21 @@
     .form-card
       .form-card-header
         = f.label :has_teams, "Sections"
-        = f.check_box :has_teams, {"aria-describedby" => "txtSections", class: "sections-enabled has-settings-menu"}
+        = f.check_box :has_teams, {"aria-describedby" => "txtSections", class: "feature-checkbox sections-enabled has-settings-menu"}
       .form-card-body
         .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
       .form-card-advanced-settings
         %button.button-advanced-settings= glyph(:cog) + "Settings"
       .advanced-settings-card
         %a.button-close= glyph(:times)
-        = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
+        = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage", class: "feature-checkbox"}
         = f.label :team_score_average, "Will sections' scores be the average of their students' scores?"
 
 
     .form-card
       .form-card-header
         = f.label :has_team_challenges, "Section Assignments"
-        = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections", class: "dependent-on-section has-settings-menu"}
+        = f.check_box :has_team_challenges, {"aria-describedby" => "txtSections", class: "feature-checkbox dependent-on-section has-settings-menu"}
       .form-card-body
         .feature-description{id: "txtSections"}  These are larger assignments to be completed by discussion section groups. 
       .form-card-advanced-settings
@@ -113,7 +113,7 @@
     .form-card
       .form-card-header
         = f.label :teams_visible, "Section Leaderboard"
-        = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard", class: "dependent-on-section has-settings-menu"}
+        = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard", class: "feature-checkbox dependent-on-section has-settings-menu"}
       .form-card-body
         .feature-description{id: "txtSectionLeaderboard"} Students can choose to participate in anonymous, section-based leaderboards if they enjoy competition, and opt-out if they don't.
       .form-card-advanced-settings

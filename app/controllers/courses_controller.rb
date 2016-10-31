@@ -43,7 +43,7 @@ class CoursesController < ApplicationController
         session[:course_id] = @course.id
         bust_course_list_cache current_user
         format.html do
-          redirect_to course_path(@course),
+          redirect_to edit_course_path(@course),
           notice: "Course #{@course.name} successfully created"
         end
       else

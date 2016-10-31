@@ -51,6 +51,25 @@ function formDependencies() {
 $('input[id="course_has_teams"]').change(formDependencies);
 formDependencies();
 
+// Give form-card enabled class if checkbox is checked
+function formCardStyles($thisInput) {
+  var $cardHeader = $thisInput.parent();
+
+  if ($thisInput.is(":checked")) {
+    $cardHeader.addClass("enabled");
+  } else {
+    $cardHeader.removeClass("enabled");
+  }
+}
+$('input.feature-checkbox').change(function() {
+  formCardStyles($(this));
+});
+
+$('input.feature-checkbox').each(function() {
+  formCardStyles($(this));
+});
+
+
 // Remember the last active tab in order to redirect to same tab after save
 $(function() {
    $( ".course-settings-tabs" ).tabs({
