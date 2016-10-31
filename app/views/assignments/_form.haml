@@ -89,28 +89,27 @@
       = f.check_box :required
       .form_label Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
 
-    - if current_course.accepts_submissions?
-      .form-item
-        .assignment_options
-          = f.label :accepts_submissions #{term_for :assignment} Submissions
-          = f.check_box :accepts_submissions
-          .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
+    .form-item
+      .assignment_options
+        = f.label :accepts_submissions #{term_for :assignment} Submissions
+        = f.check_box :accepts_submissions
+        .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
 
-        %br
+      %br
 
-        %ul.submit.accepts_submission_types
-          %li.submit
-            .checkbox
-              = f.label :accepts_links, :label => "Accept Links"
-              = f.check_box :accepts_links
-          %li.submit
-            .checkbox
-              = f.label :accepts_attachments, :label => "Accept Uploads/Attachments"
-              = f.check_box :accepts_attachments
-          %li.submit
-            .checkbox
-              = f.label :accepts_text, :label => "Accept raw text"
-              = f.check_box :accepts_text
+      %ul.submit.accepts_submission_types
+        %li.submit
+          .checkbox
+            = f.label :accepts_links, :label => "Accept Links"
+            = f.check_box :accepts_links
+        %li.submit
+          .checkbox
+            = f.label :accepts_attachments, :label => "Accept Uploads/Attachments"
+            = f.check_box :accepts_attachments
+        %li.submit
+          .checkbox
+            = f.label :accepts_text, :label => "Accept raw text"
+            = f.check_box :accepts_text
 
       .form-item
         = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions

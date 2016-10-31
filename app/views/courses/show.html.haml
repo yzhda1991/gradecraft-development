@@ -22,11 +22,7 @@
 
     %p= "Year: #{@course.year}"
 
-    %p= "GradeCraft will accept assignment submissions for this course: #{@course.accepts_submissions? ? "Yes" : "No"}"
-
     %p= "Course Status: #{@course.status? ? "Active" : "Archived"}"
-
-    %p= "Maximum Number of Points: #{points @course.total_points}"
 
     %h4 Class Info
     %p= "Meeting Location: #{@course.location}"
