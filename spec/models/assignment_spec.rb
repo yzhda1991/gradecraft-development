@@ -217,6 +217,20 @@ describe Assignment do
     end
   end
 
+  describe "position" do
+
+    it "sets the position by assignment type on save (using acts_as_list gem)" do
+      expect(subject.position).to be_nil
+      subject.save
+      expect(subject.position).to be(1)
+      a2 = create :assignment
+      expect(a2.position).to be(1)
+      a3 = create :assignment, assignment_type: a2.assignment_type
+      expect(a3.position).to be(2)
+      badge
+    end
+  end
+
   describe "#min_group_size" do
     it "sets the default min group size at 2" do
       expect(subject.min_group_size).to eq(1)
