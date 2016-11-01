@@ -3,7 +3,7 @@ class API::AssignmentsController < ApplicationController
 
   # GET api/assignments
   def index
-    @assignments = current_course.assignments
+    @assignments = current_course.assignments.ordered
 
     if  current_user_is_student?
       @student = current_student
