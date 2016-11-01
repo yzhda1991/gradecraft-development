@@ -521,6 +521,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :teams }', teams_path)
     breadcrumb('New #{ term_for :team }')
   end
+  
+  def user_sessions_new
+  end
 
   def users_edit
     breadcrumb('Dashboard', dashboard_path)
