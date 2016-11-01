@@ -1,9 +1,8 @@
 .pageContent
-  = render partial: "layouts/alerts", locals: { model: @course }
 
   = simple_form_for(@course, :validate => false)  do |f|
 
-    #tabs.ui-tabs.ui-widget.course-settings-tabs
+    .ui-tabs.ui-widget.course-settings-tabs
       %ul.ui-tabs-nav{role: "tablist"}
         %li
           %a{ "href" => "#tab"} Basic Settings
@@ -16,17 +15,16 @@
         %li
           %a{ "href" => "#tab5"} Advanced Settings
 
-      #tabt1.ui-tabs-panel
-        .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
-          = render partial: "courses/form", locals: { f: f }
-        .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
-          = render partial: "courses/course_details", locals: { f: f }
-        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
-          = render partial: "integrations/index", locals: { f: f }
-        .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
-          = render partial: "courses/student_onboarding_setup", locals: { f: f }
-        .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
-          = render partial: "courses/advanced_settings", locals: { f: f }
+      .ui-tabs-panel#tab{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "courses/form", locals: { f: f }
+      .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "courses/course_details", locals: { f: f }
+      .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "integrations/index", locals: { f: f }
+      .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "courses/student_onboarding_setup", locals: { f: f }
+      .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
+        = render partial: "courses/advanced_settings", locals: { f: f }
   
       .submit-buttons
         %ul

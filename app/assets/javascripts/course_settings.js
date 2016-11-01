@@ -76,6 +76,9 @@ $(function() {
      activate:function(event,ui){
        localStorage.setItem("lastTab",ui.newTab.index() );
      },
-     active: localStorage.getItem("lastTab") || 0
+     active: localStorage.getItem("lastTab") || 0,
+     create: function(event, ui) {
+       ui.panel.addClass('last-active-tab');
+     }
    });
 });
