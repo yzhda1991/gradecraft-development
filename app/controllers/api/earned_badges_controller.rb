@@ -5,7 +5,7 @@ class API::EarnedBadgesController < ApplicationController
 
   # POST /api/earned_badges
   def create
-    result = Services::CreatesEarnedBadge.award earned_badge_params
+    result = Services::CreatesEarnedBadge.award earned_badge_params.merge(awarded_by: current_user)
     if result.success?
       @earned_badge = result.earned_badge
       render status: 201
@@ -30,6 +30,6 @@ class API::EarnedBadgesController < ApplicationController
 
   def earned_badge_params
     params.require(:earned_badge).permit(:feedback, :student_id, :badge_id,
-      :grade_id).merge(awarded_by: current_user)
+      :grade_id)
   end
 end
