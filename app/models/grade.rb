@@ -169,6 +169,7 @@ class Grade < ActiveRecord::Base
 
   def update_earned_badges
     self.earned_badges.reload.each(&:save)
+    true
   end
 
   def zero_points_for_pass_fail
