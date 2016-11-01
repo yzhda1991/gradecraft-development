@@ -101,6 +101,8 @@ describe EarnedBadgesController do
     end
 
     describe "send_earned_badge_notifications" do
+      let(:user) { create :user }
+
       before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
@@ -108,7 +110,7 @@ describe EarnedBadgesController do
 
       before(:each) do
         @earned_badges = @students.collect do |student|
-          create(:earned_badge, student_id: student.id, badge: @badge)
+          create(:earned_badge, student_id: student.id, badge: @badge, awarded_by: user)
         end
         @controller = EarnedBadgesController.new
       end
@@ -127,12 +129,24 @@ describe EarnedBadgesController do
           end
           controller.instance_eval { send_earned_badge_notifications }
         end
+
+        it "should create an announcement" do
+          expect { controller.instance_eval { send_earned_badge_notifications }}.to \
+            change { Announcement.count }.by 2
+        end
       end
 
       context "no earned badges" do
+        before { @controller.instance_variable_set(:@valid_earned_badges, []) }
+
         it "should not send any notifications" do
-          @controller.instance_variable_set(:@valid_earned_badges, [])
           expect(NotificationMailer).not_to receive(:earned_badge_awarded)
+          controller.instance_eval { send_earned_badge_notifications }
+        end
+
+        it "should not create any announcements" do
+          expect { controller.instance_eval { send_earned_badge_notifications }}.to_not \
+            change { Announcement.count }
         end
       end
     end
