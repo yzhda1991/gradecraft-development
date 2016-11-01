@@ -56,14 +56,6 @@ describe CoursesController do
       end
     end
 
-    describe "GET show" do
-      it "returns the course show page" do
-        get :show, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:show)
-      end
-    end
-
     describe "GET new" do
       it "assigns title" do
         get :new

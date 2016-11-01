@@ -387,8 +387,8 @@ describe Course do
   end
 
   describe "#teams_visible?" do
-    it "has team visible by default" do
-      expect(subject.teams_visible?).to eq(true)
+    it "does not have team visible by default" do
+      expect(subject.teams_visible?).to eq(false)
     end
 
     it "has team visible if it's turned on" do

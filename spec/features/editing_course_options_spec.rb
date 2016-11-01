@@ -18,7 +18,7 @@ feature "editing a course's basic settings" do
 
       within(".pageContent") do
         fill_in "Course Title", with: "New Course Name"
-        click_button "Update Course"
+        click_button "Save Settings"
       end
 
       expect(current_path).to eq course_path(course.id)
