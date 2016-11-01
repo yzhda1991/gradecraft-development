@@ -185,7 +185,7 @@ describe CoursesController do
       it "updates the course" do
         params = { name: "new name" }
         post :update, params: { id: course.id, course: params }
-        expect(response).to redirect_to(course_path(course))
+        expect(response).to redirect_to(edit_course_path(@course))
         expect(course.reload.name).to eq("new name")
       end
 

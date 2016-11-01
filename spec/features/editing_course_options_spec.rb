@@ -21,7 +21,7 @@ feature "editing a course's basic settings" do
         click_button "Save Settings"
       end
 
-      expect(current_path).to eq course_path(course.id)
+      expect(current_path).to eq edit_course_path(course.id)
       expect(page).to have_notification_message("notice", "Course New Course Name successfully updated")
     end
   end
