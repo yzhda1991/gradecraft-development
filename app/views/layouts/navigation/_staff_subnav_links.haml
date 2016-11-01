@@ -1,7 +1,5 @@
 %h5 Overview
 %li= link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
-
-%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
 %li
   - grading_status_count = grading_status_count_for(current_course)
   = link_to_unless_current glyph("flag-checkered") + "Grading Status", grading_status_path do |name|
@@ -33,6 +31,7 @@
 %hr
 
 %h5 Users
+%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
 - if current_course.has_teams?
   %li= link_to_unless_current glyph(:users) + "#{term_for :teams}", teams_path
 %li
