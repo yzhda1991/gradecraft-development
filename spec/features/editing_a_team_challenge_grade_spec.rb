@@ -3,8 +3,10 @@ require "rails_spec_helper"
 feature "editing a team challenge grade" do
   context "as a professor" do
     let(:course) { create :course, has_team_challenges: true }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
+    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let(:student) { create :user }
+    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
     let!(:challenge) { create :challenge, name: "Team Challenge Name", course: course }
     let!(:team) { create :team, name: "Team Name", course: course }
     let!(:challenge_grade) { create :challenge_grade, team: team, challenge: challenge, score: 100 }
@@ -37,6 +39,8 @@ feature "editing a team challenge grade" do
         fill_in("challenge_grade_score", with: 101)
         click_button "Update Grade"
       end
+      
+      expect(current_path).to eq challenge_path(challenge.id)
       expect(page).to have_notification_message("notice", "Team Name's Grade for Team Challenge Name Team Challenge successfully updated")
     end
   end
