@@ -47,5 +47,13 @@ describe Services::ImportsLMSGrades do
       described_class.import provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
+
+    it "enqueues the grade updater jobs" do
+      expect(Services::Actions::EnqueuesGradeUpdaterJobs).to \
+        receive(:execute).and_call_original
+
+      described_class.import provider, access_token, course_id, assignment_ids,
+        grade_ids, assignment, user
+    end
   end
 end
