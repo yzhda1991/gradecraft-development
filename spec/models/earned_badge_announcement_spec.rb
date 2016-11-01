@@ -7,7 +7,7 @@ describe EarnedBadgeAnnouncement do
   let(:user) { create :user }
 
   describe ".create" do
-    it "creates an announcement in the database" do
+    it "creates an announcement for the earned badge" do
       expect { described_class.create earned_badge }.to change { Announcement.count }.by 1
       expect(announcement.course).to eq earned_badge.course
       expect(announcement.author).to eq user
