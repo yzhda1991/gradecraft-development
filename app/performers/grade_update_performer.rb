@@ -42,18 +42,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def notify_grade_released
-    Announcement.create course_id: @grade.course_id, author_id: @grade.graded_by_id,
-      body: announcement_body,
-      title: "#{@grade.course.course_number} - #{@grade.assignment.name} Graded"
+    GradeAnnouncement.create @grade
     NotificationMailer.grade_released(@grade.id).deliver_now
-  end
-
-  def announcement_body
-    url = Rails.application.routes.url_helpers.assignment_url(
-      @grade.assignment,
-      Rails.application.config.action_mailer.default_url_options)
-    "<p>You can now view the grade for your #{@grade.course.assignment_term.downcase} " \
-      "#{@grade.assignment.name} in #{@grade.course.name}.</p>" \
-      "<p>Visit <a href=#{url}>#{@grade.assignment.name}</a> to view your results.</p>"
   end
 end
