@@ -1,4 +1,4 @@
-# common methods for CRUD operations on a `Grade`
+# common methods for CRUD operations on a `ChallengeGrade`
 class ChallengeGradeProctor
   module Base
 

@@ -31,7 +31,7 @@ json.data @challenges do |challenge|
 
     if @grades.present? && @grades.where(challenge_id: challenge.id).present?
       grade =  @grades.where(challenge_id: challenge.id).first
-      if ChallengeGradeProctor.new(grade).viewable?(@student)
+      if ChallengeGradeProctor.new(grade).viewable?
         json.grade data: { type: "challenge_grades", id: grade.id.to_s }
       end
     end
@@ -52,7 +52,7 @@ json.included do
 
   if @grades.present?
     json.array! @grades do |grade|
-      next unless ChallengeGradeProctor.new(grade).viewable?(@student)
+      next unless ChallengeGradeProctor.new(grade).viewable?
       json.type "challenge_grades"
       json.id grade.id.to_s
       json.attributes do

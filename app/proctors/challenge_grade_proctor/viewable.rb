@@ -1,10 +1,8 @@
-# Determines if a `ChallengeGrade` resource can be viewed by a user. If no user
-# is supplied in the options, it will default to the Grade's student.
+# Determines if a `ChallengeGrade` resource can be viewed by a user.
 #
 # Options include:
 #   course:  Will verify the challenge grade is for the course
-#   user:    Determines permissions for supplied user rather than the
-#            challenge grade's student
+#   user:    Determines permissions for supplied user
 #
 class ChallengeGradeProctor
   module Viewable
@@ -16,8 +14,8 @@ class ChallengeGradeProctor
       user = options[:user]
       course = options[:course] || challenge_grade.team.course
 
-      challenge_grade_for_course?(course) &&
-        challenge_grade_visible_by_students?
+      challenge_grade_for_course?(course) && 
+        ((user.present? && user.is_staff?(course)) || challenge_grade_visible_by_students?)
     end
 
     private
