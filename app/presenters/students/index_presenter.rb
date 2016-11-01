@@ -87,11 +87,7 @@ class Students::IndexPresenter < Showtime::Presenter
       self.cached_score_sql_alias
     end
     
-    def display_name 
-      presenter.display_name
-    end
-    
-    def last_login 
+    def last_login
       self.last_course_login(presenter.course)
     end
 
