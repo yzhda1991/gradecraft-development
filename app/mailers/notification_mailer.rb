@@ -41,8 +41,8 @@ class NotificationMailer < ApplicationMailer
     send_student_email "#{@course.course_number} - #{@assignment.name} Graded"
   end
 
-  def earned_badge_awarded(earned_badge_id)
-    @earned_badge = EarnedBadge.find earned_badge_id
+  def earned_badge_awarded(earned_badge)
+    @earned_badge = earned_badge
     @student = @earned_badge.student
     @course = @earned_badge.course
     send_student_email "#{@course.course_number} - You've earned a new #{@course.badge_term}!"

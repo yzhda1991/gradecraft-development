@@ -123,7 +123,7 @@ describe EarnedBadgesController do
           allow(mail_responder).to receive(:deliver_now)
           allow(NotificationMailer).to receive(:earned_badge_awarded) { mail_responder }
           @earned_badges.each do |earned_badge|
-            expect(NotificationMailer).to receive(:earned_badge_awarded).with(earned_badge[:id])
+            expect(NotificationMailer).to receive(:earned_badge_awarded).with(earned_badge)
           end
           controller.instance_eval { send_earned_badge_notifications }
         end

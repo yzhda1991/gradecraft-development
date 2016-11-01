@@ -17,7 +17,7 @@ describe Services::Actions::NotifiesOfEarnedBadge , focus: true do
     it "sends a notification to the student of the newly awarded badge" do
       expect(delivery).to receive(:deliver_now)
       expect(NotificationMailer).to \
-        receive(:earned_badge_awarded).with(earned_badge.id).and_return delivery
+        receive(:earned_badge_awarded).with(earned_badge).and_return delivery
       described_class.execute earned_badge: earned_badge
     end
 
