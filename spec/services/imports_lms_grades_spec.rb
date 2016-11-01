@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 require "./app/services/imports_lms_grades"
 
 describe Services::ImportsLMSGrades do
