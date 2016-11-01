@@ -97,7 +97,7 @@
       .advanced-settings-card
         %a.button-close= glyph(:times)
         = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage", class: "feature-checkbox"}
-        = f.label :team_score_average, "Will sections' scores be the average of their students' scores?"
+        = f.label :team_score_average, "Allow sections' scores to be the average of their students' scores"
 
 
     .form-card
@@ -111,7 +111,7 @@
       .advanced-settings-card
         %a.button-close= glyph(:times)
         = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
-        = f.label :add_team_score_to_student, "Do you want team assignment scores to be added directly into student scores?"
+        = f.label :add_team_score_to_student, "Allow team assignment scores to be added directly into student scores"
 
     .form-card
       .form-card-header
