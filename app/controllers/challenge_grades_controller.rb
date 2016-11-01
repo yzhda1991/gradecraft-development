@@ -20,7 +20,7 @@ class ChallengeGradesController < ApplicationController
     if @challenge_grade.update_attributes(challenge_grade_params)
 
       # if challenge grades are released, they're visible to _all_ students
-      if ChallengeGradeProctor.new(@challenge_grade).viewable? user: current_course.students.first
+      if ChallengeGradeProctor.new(@challenge_grade).viewable?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 

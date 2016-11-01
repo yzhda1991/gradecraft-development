@@ -15,7 +15,7 @@ class Challenges::ChallengeGradesController < ApplicationController
     @team = @challenge_grade.team
     if @challenge_grade.save
 
-      if ChallengeGradeProctor.new(@challenge_grade).viewable? user: current_user
+      if ChallengeGradeProctor.new(@challenge_grade).viewable?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 

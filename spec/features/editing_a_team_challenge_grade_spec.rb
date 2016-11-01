@@ -5,8 +5,6 @@ feature "editing a team challenge grade" do
     let(:course) { create :course, has_team_challenges: true }
     let(:professor) { create :user }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
-    let(:student) { create :user }
-    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
     let!(:challenge) { create :challenge, name: "Team Challenge Name", course: course }
     let!(:team) { create :team, name: "Team Name", course: course }
     let!(:challenge_grade) { create :challenge_grade, team: team, challenge: challenge, score: 100 }
