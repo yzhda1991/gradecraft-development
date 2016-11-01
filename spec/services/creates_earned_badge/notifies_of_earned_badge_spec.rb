@@ -26,21 +26,6 @@ describe Services::Actions::NotifiesOfEarnedBadge , focus: true do
 
       expect { described_class.execute earned_badge: earned_badge }.to \
         change { Announcement.count }.by 1
-
-      announcement = Announcement.unscoped.last
-
-      expect(announcement.course).to eq earned_badge.course
-      expect(announcement.author).to eq user
-      expect(announcement.title).to \
-        eq "#{course.course_number} - You've earned a new #{course.badge_term}!"
-      expect(announcement.body).to include \
-        "<p>Congratulations #{earned_badge.student.first_name}!</p>"
-      expect(announcement.body).to include \
-        "<p>You've earned the #{earned_badge.badge.name} #{course.badge_term}.</p>"
-      expect(announcement.body).to include \
-        "<p>Check out your new "\
-        "<a href='http://localhost:5000/courses/#{course.id}/badges/#{earned_badge.badge.id}/"\
-        "earned_badges/#{earned_badge.id}'>badge</a>.</p>"
     end
   end
 
