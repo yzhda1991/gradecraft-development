@@ -239,7 +239,6 @@ describe Grade do
     let(:student) { create(:student_course_membership, course: course).user }
     let(:assignment) { create :assignment, course: course }
 
-
     it "finds and existing grade for assignment and student" do
       grade = create :grade, assignment: assignment, student: student
       results = Grade.find_or_create(assignment.id,student.id)
@@ -269,11 +268,10 @@ describe Grade do
     end
   end
 
-  describe "after_save actions" do
+  describe "when it is saved" do
     let(:course) { create :course }
     let(:assignment) { create :assignment, course: course }
     let(:grade) { create :grade, assignment: assignment }
-
 
     it "updates earned badge visibility" do
       earned_badge = create(:earned_badge, student: grade.student, grade: grade, student_visible: false)

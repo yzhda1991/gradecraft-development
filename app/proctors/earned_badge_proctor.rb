@@ -11,8 +11,9 @@ class EarnedBadgeProctor
   def buildable?(user)
     course.users.include?(user) && (
       user.is_staff?(course) || (
-        earned_badge.badge.student_awardable? &&
-        user.is_student?(course)
+        user.is_student?(course) &&
+        earned_badge.badge.student_awardable?
+
       )
     )
   end

@@ -40,7 +40,7 @@ describe EarnedBadge do
     end
   end
 
-  describe "#ernable" do
+  describe "#earnable" do
     it "allows a student to earn a badge if they haven't earned it yet" do
       badge = create(:badge)
       student = create(:user)

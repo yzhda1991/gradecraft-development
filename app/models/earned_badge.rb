@@ -15,8 +15,7 @@ class EarnedBadge < ActiveRecord::Base
   before_save :update_visibility
   after_save :check_unlockables
 
-
-  validate :earnable?, :on => :create
+  validate :earnable?, on: :create
 
   delegate :name, :description, :icon, to: :badge
 
