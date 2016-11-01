@@ -342,7 +342,7 @@ describe User do
     end
 
     it "returns the scores of all students being graded in the course plus the user's own score" do
-      expect(student.scores_for_course(course_2)).to eq({:scores => [100, 200, 300, 500], :user_score => [500]})
+      expect(student.scores_for_course(course_2)).to match_array({:scores => [100, 200, 300, 500], :user_score => [500]})
     end
   end
 
