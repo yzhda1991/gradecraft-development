@@ -16,10 +16,7 @@ class EarnedBadgeAnnouncement
   end
 
   def body
-    url = Rails.application.routes.url_helpers.course_badge_earned_badge_url(
-      earned_badge.course,
-      earned_badge.badge,
-      earned_badge,
+    url = Rails.application.routes.url_helpers.badges_url(
       Rails.application.config.action_mailer.default_url_options)
 
     "<p>Congratulations #{earned_badge.student.first_name}!</p>" \

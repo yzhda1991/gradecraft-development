@@ -19,8 +19,7 @@ describe EarnedBadgeAnnouncement do
         "<p>You've earned the #{earned_badge.badge.name} #{course.badge_term}.</p>"
       expect(announcement.body).to include \
         "<p>Check out your new "\
-        "<a href='http://localhost:5000/courses/#{course.id}/badges/#{earned_badge.badge.id}/"\
-        "earned_badges/#{earned_badge.id}'>badge</a>.</p>"
+        "<a href='http://localhost:5000/badges'>badge</a>.</p>"
     end
   end
 end
