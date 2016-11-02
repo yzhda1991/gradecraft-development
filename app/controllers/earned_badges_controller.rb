@@ -117,8 +117,7 @@ class EarnedBadgesController < ApplicationController
   private
 
   def earned_badge_params
-    params.require(:earned_badge).permit(:feedback, :student_id, :badge_id
-      )
+    params.require(:earned_badge).permit(:feedback, :student_id, :badge_id)
   end
 
   def earned_badge_students
