@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "imports_lms_grades/enqueues_grade_updater_jobs"
 require_relative "imports_lms_grades/imports_lms_grades"
 require_relative "imports_lms_grades/imports_lms_users"
 require_relative "imports_lms_grades/retrieves_lms_grades"
@@ -16,7 +17,8 @@ module Services
              Actions::RetrievesLMSGrades,
              Actions::RetrievesLMSUsers,
              Actions::ImportsLMSUsers,
-             Actions::ImportsLMSGrades)
+             Actions::ImportsLMSGrades,
+             Actions::EnqueuesGradeUpdaterJobs)
     end
   end
 end
