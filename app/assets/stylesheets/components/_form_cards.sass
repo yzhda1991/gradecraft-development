@@ -1,0 +1,99 @@
+@import "../utilities/variables"
+
+.form-card-grid
+  display: flex
+  flex-wrap: wrap
+  *
+    box-sizing: border-box
+
+
+.form-card
+  border: 1px solid $color-grey-6
+  border-radius: 2px
+  width: 300px
+  position: relative
+  overflow: hidden
+  margin: 0.5rem
+  display: flex
+  flex-direction: column
+  flex: 1 auto
+  &.disabled
+    opacity: 0.6
+    color: inherit
+
+  .form-card-header
+    border-bottom: 1px solid $color-grey-6
+    padding: 0.25rem 1rem
+    &.enabled
+      background-color: transparentize($color-green-1, 0.7)
+
+  .form-card-body
+    padding: 1rem
+    flex-grow: 1
+
+  .feature-description
+    font-size: 0.8rem
+    font-weight: 300
+
+.advanced-settings-card
+  background-color: $color-grey-7
+  padding: 1rem
+  position: absolute
+  width: 100%
+  overflow-y: auto
+  /*top: 0;*/
+  left: 0
+  bottom: 0
+  height: 100%
+  z-index: 1
+  display: none
+
+.form-card-advanced-settings
+  background-color: $color-grey-7
+  padding: 0.25rem 1rem
+
+button.button-advanced-settings
+  font-size: 0.8rem
+  display: block
+  cursor: pointer
+  color: $color-grey-3
+  background-color: transparent
+  width: 100%
+  text-align: left
+  padding: 0
+  line-height: normal
+  &:focus
+    outline: none
+  &:hover
+    text-decoration: none
+    background-color: transparent
+  &:disabled
+    opacity: 0.3
+    cursor: default
+
+.button-close
+  display: block
+  text-align: right
+  color: $color-grey-3
+  cursor: pointer
+  &:hover
+    color: $color-grey-3
+
+.simple_form section
+  .form-card
+    label
+      text-align: left
+      display: inline-block
+      width: auto
+      margin-bottom: 0
+    input
+      float: right
+    .advanced-settings-card
+      label
+        text-transform: inherit
+        font-size: 0.75rem
+        font-weight: 300
+        width: 85%
+      input
+        float: none
+        vertical-align: top

@@ -32,7 +32,7 @@ class Level < ActiveRecord::Base
 
   def hide_analytics?
     assignment = self.criterion.rubric.assignment
-    assignment.hide_analytics? || assignment.course.hide_analytics?
+    assignment.hide_analytics? || !assignment.course.show_analytics?
   end
 
   def points=(points)

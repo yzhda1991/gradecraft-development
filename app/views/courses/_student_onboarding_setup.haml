@@ -1,0 +1,15 @@
+= render partial: "layouts/alerts", locals: { model: @course }
+
+%section
+  %h4 Gameful Philosophy
+  .form-item
+    .textarea
+      .form_label What would you like to tell students about how they should expect to be graded?
+      = f.text_area :gameful_philosophy, class: "froala"
+
+%section
+  %h4 Course Rules
+  .form-item
+    .textarea
+      .form_label Are there specific rules for this course that students should know?
+      = f.text_area :course_rules, class: "froala"

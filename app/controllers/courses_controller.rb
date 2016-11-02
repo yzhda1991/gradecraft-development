@@ -2,25 +2,19 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  skip_before_action :require_login, only: [:badges]
-  before_action :ensure_staff?, except: [:index, :badges, :change]
-  before_action :ensure_not_impersonating?, only: [:index]
+  skip_before_filter :require_login, only: [:badges]
+  before_filter :ensure_staff?, except: [:index, :badges, :change]
+  before_filter :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:recalculate_student_scores]
 
-  before_action :find_course, only: [:show,
-                                     :edit,
+  before_action :find_course, only: [:edit,
                                      :copy,
                                      :update,
                                      :destroy,
                                      :badges,
                                      :recalculate_student_scores]
-  before_action :use_current_course, only: [:course_details,
-                                            :custom_terms,
-                                            :multiplier_settings,
-                                            :player_settings,
-                                            :student_onboarding_setup]
-  skip_before_action :verify_authenticity_token, only: [:change]
-  before_action :ensure_not_impersonating?, only: [:change]
+  skip_before_filter :verify_authenticity_token, only: [:change]
+  before_filter :ensure_not_impersonating?, only: [:change]
 
   def index
     @courses = current_user.courses
@@ -31,10 +25,6 @@ class CoursesController < ApplicationController
         render json: @courses.to_json(only: [:id, :name, :course_number, :year, :semester])
       end
     end
-  end
-
-  def show
-    authorize! :read, @course
   end
 
   def new
@@ -56,7 +46,7 @@ class CoursesController < ApplicationController
         session[:course_id] = @course.id
         bust_course_list_cache current_user
         format.html do
-          redirect_to course_path(@course),
+          redirect_to edit_course_path(@course),
           notice: "Course #{@course.name} successfully created"
         end
       else
@@ -88,7 +78,7 @@ class CoursesController < ApplicationController
       if @course.update_attributes(course_params)
         bust_course_list_cache current_user
         format.html do
-          redirect_to @course,
+          redirect_to edit_course_path(@course),
           notice: "Course #{@course.name} successfully updated"
         end
       else
@@ -132,21 +122,6 @@ class CoursesController < ApplicationController
     end
   end
 
-  def course_details
-  end
-
-  def custom_terms
-  end
-
-  def multiplier_settings
-  end
-
-  def player_settings
-  end
-
-  def student_onboarding_setup
-  end
-
   private
 
   def course_params
@@ -154,7 +129,7 @@ class CoursesController < ApplicationController
       :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
       :user_id, :course_id, :course_rules, :syllabus,
-      :has_character_names, :has_team_roles, :has_character_profiles, :hide_analytics,
+      :has_character_names, :has_team_roles, :has_character_profiles, :show_analytics,
       :total_weights, :weights_close_at, :has_public_badges,
       :assignment_weight_type, :has_submissions, :teams_visible,
       :weight_term, :fail_term, :pass_term, :time_zone,

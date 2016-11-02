@@ -141,10 +141,9 @@ class Course < ActiveRecord::Base
     end
   end
 
-  # total number of points 'available' in the course - sometimes set by an
-  # instructor as a cap, sometimes just the sum of all assignments
+  # total number of points 'available' in the course - the sum of all assignments
   def total_points
-    full_points || assignments.sum("full_points")
+    assignments.sum("full_points")
   end
 
   def active?

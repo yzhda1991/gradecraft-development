@@ -78,17 +78,9 @@ en:
     new:
       title: "Create a New Course"
     edit:
-      title: "Editing Basic Settings"
-    course_details:
-      title: "Course Details"
-    custom_terms:
-      title: "Custom Terms"
+      title: "Course Settings"
     multiplier_settings:
       title: "Multiplier Settings"
-    player_settings:
-      title: "#{ term_for :student } Settings"
-    student_onboarding_setup:
-      title: "#{ term_for :student } Onboarding Setup"
   challenge_grades:
     show:
       title: "#{ @team.name }'s #{@challenge_grade.name} Grade"

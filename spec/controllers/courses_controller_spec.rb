@@ -56,14 +56,6 @@ describe CoursesController do
       end
     end
 
-    describe "GET show" do
-      it "returns the course show page" do
-        get :show, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:show)
-      end
-    end
-
     describe "GET new" do
       it "assigns title" do
         get :new
@@ -90,46 +82,6 @@ describe CoursesController do
       it "redirects to new from with invalid attributes" do
         expect{ post :create, params: { course: attributes_for(:course, name: nil) }}
           .to_not change(Course,:count)
-      end
-    end
-
-    describe "GET multiplier_settings" do
-      it "gets the form to edit the multiplier settings" do
-        get :multiplier_settings, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:multiplier_settings)
-      end
-    end
-
-    describe "GET custom_terms" do
-      it "gets the form to edit custom terms" do
-        get :custom_terms, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:custom_terms)
-      end
-    end
-
-    describe "GET course_details" do
-      it "gets the form to edit course details" do
-        get :course_details, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:course_details)
-      end
-    end
-
-    describe "GET player_settings" do
-      it "gets the form to edit player settings" do
-        get :player_settings, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:player_settings)
-      end
-    end
-
-    describe "GET student_onboarding_setup" do
-      it "gets the form to edit the student onboarding process" do
-        get :student_onboarding_setup, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:student_onboarding_setup)
       end
     end
 
@@ -233,7 +185,7 @@ describe CoursesController do
       it "updates the course" do
         params = { name: "new name" }
         post :update, params: { id: course.id, course: params }
-        expect(response).to redirect_to(course_path(course))
+        expect(response).to redirect_to(edit_course_path(id: course.id))
         expect(course.reload.name).to eq("new name")
       end
 
@@ -334,14 +286,8 @@ describe CoursesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :show,
         :update,
         :destroy,
-        :multiplier_settings,
-        :student_onboarding_setup,
-        :course_details,
-        :custom_terms,
-        :player_settings,
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)

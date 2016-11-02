@@ -77,21 +77,21 @@ describe Assignments::Presenter do
     end
   end
 
-  describe "#hide_analytics?" do
+  describe "#show_analytics?" do
     it "is hidden if the course does not hide analytics but the assignment does" do
-      allow(course).to receive(:hide_analytics?).and_return false
+      allow(course).to receive(:show_analytics?).and_return true
       allow(assignment).to receive(:hide_analytics?).and_return true
       expect(subject.hide_analytics?).to eq true
     end
 
-    it "is hidden if the assignment does not hide analytics" do
-      allow(course).to receive(:hide_analytics?).and_return true
+    it "is hidden if the assignment does not hide analytics but the course does" do
+      allow(course).to receive(:show_analytics?).and_return false
       allow(assignment).to receive(:hide_analytics?).and_return false
       expect(subject.hide_analytics?).to eq true
     end
 
     it "is hidden if both the assignment and course hide analytics" do
-      allow(course).to receive(:hide_analytics?).and_return true
+      allow(course).to receive(:show_analytics?).and_return false
       allow(assignment).to receive(:hide_analytics?).and_return true
       expect(subject.hide_analytics?).to eq true
     end

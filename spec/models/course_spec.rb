@@ -387,8 +387,8 @@ describe Course do
   end
 
   describe "#teams_visible?" do
-    it "has team visible by default" do
-      expect(subject.teams_visible?).to eq(true)
+    it "does not have team visible by default" do
+      expect(subject.teams_visible?).to eq(false)
     end
 
     it "has team visible if it's turned on" do
@@ -477,11 +477,6 @@ describe Course do
   end
 
   describe "#total_points" do
-    it "returns the total points available if they're set by the instructor" do
-      subject.full_points = 100000
-      expect(subject.total_points).to eq(subject.full_points)
-    end
-
     it "sums up the available points in the assignments if there's no point total set" do
       course = create(:course)
       course.full_points = nil
