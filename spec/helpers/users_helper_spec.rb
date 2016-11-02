@@ -1,7 +1,7 @@
 require "spec_helper"
 require "./app/helpers/users_helper"
 
-describe UsersHelper , focus: true do
+describe UsersHelper do
   class Helper
     include UsersHelper
   end
