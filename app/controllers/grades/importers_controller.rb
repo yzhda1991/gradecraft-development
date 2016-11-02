@@ -54,7 +54,10 @@ class Grades::ImportersController < ApplicationController
     if @result.success?
       render :grades_import_results
     else
-      @grades = syllabus.grades(params[:id], params[:assignment_ids])[:data]
+      @grades = syllabus.grades(params[:id], params[:assignment_ids])[:data] do
+        redirect_to assignment_grades_importers_path(@assignment),
+          alert: "There was an issue trying to retrieve the grades from #{@provider_name.capitalize}." and return
+      end
 
       render :grades, alert: @result.message
     end
