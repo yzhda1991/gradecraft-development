@@ -38,8 +38,8 @@ module ActiveLMS
       provider.update_assignment(course_id, assignment_id, params, &exception_handler)
     end
 
-    def user(id)
-      provider.user(id)
+    def user(id, &exception_handler)
+      provider.user(id, &exception_handler)
     end
 
     def users(course_id, fetch_next=true, options={})
