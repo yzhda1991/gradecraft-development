@@ -24,7 +24,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def edit
-    @students = current_course.students
+    @students = current_course.students.order_by_name
   end
 
   def create
@@ -63,9 +63,9 @@ class EarnedBadgesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find params[:team_id]
-      @students = current_course.students_by_team(@team)
+      @students = current_course.students_by_team(@team).order_by_name
     else
-      @students = current_course.students
+      @students = current_course.students.order_by_name
     end
 
     # build a new badge automatically if they can be earned at will

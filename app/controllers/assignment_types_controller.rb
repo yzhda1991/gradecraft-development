@@ -8,7 +8,7 @@ class AssignmentTypesController < ApplicationController
   # Display list of assignment types
   def index
     @assignment_types = current_course.assignment_types.ordered.includes(assignments: :assignment_type)
-    @students = current_course.students
+    @students = current_course.students.order_by_name
   end
 
   # Create a new assignment type

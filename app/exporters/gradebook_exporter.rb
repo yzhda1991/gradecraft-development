@@ -4,7 +4,7 @@ class GradebookExporter
   def gradebook(course)
     CSV.generate do |csv|
       csv << gradebook_columns(course)
-      course.students.each do |student|
+      course.students.order_by_name.each do |student|
         csv << student_data_for(student, course)
       end
     end

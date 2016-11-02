@@ -43,26 +43,6 @@ class InfoController < ApplicationController
     @in_progress_grades_by_assignment = grades.in_progress.group_by(&:assignment)
   end
 
-  # Displaying the top 10 and bottom 10 students for quick overview
-  def top_10
-    students = current_course.students_being_graded
-    students.each do |s|
-      s.score = s.cached_score_for_course(current_course)
-      s.team_for_course(current_course)
-    end
-    @students = students.to_a.sort_by {|student| student.score}.reverse
-    if @students.length <= 10
-      @top_ten_students = @students
-    elsif @students.length <= 20
-      @top_ten_students = @students[0..9]
-      @count = @students.length
-      @bottom_ten_students = @students[10..@count]
-    else
-      @top_ten_students = @students[0..9]
-      @bottom_ten_students = @students[-10..-1]
-    end
-  end
-
   # Displaying per assignment summary outcome statistics
   def per_assign
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
@@ -142,9 +122,9 @@ class InfoController < ApplicationController
 
   def find_students
     if @team
-      @students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team).order_by_name
     else
-      @students = current_course.students_being_graded
+      @students = current_course.students_being_graded.order_by_name
     end
   end
 end

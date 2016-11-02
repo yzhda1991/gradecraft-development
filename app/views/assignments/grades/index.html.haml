@@ -6,7 +6,7 @@
   = team_filter(presenter.teams) if presenter.has_teams? && presenter.assignment.is_individual?
 
   - if presenter.grade_with_rubric?
-    - presenter.students_being_graded.each do |student|
+    - presenter.students.each do |student|
       - grade_for_assignment = student.grade_for_assignment(presenter.assignment)
       - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
         %h4.uppercase= student.name

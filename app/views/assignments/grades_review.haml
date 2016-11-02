@@ -3,7 +3,7 @@
 
   = team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
 
-  - presenter.students_being_graded.each do |student|
+  - presenter.students.each do |student|
     - grade = student.grade_for_assignment(presenter.assignment)
     - if grade.present? && grade.instructor_modified?
       %h4.uppercase= student.name

@@ -98,8 +98,6 @@ en:
       title: "Awarded #{ term_for :badges }"
     grading_status:
       title: "Grading Status"
-    top_10:
-      title: "Top 10/Bottom 10"
     per_assign:
       title: "#{ term_for :assignment } Analytics"
     multiplier_choices:
@@ -169,10 +167,6 @@ en:
   students:
     index:
       title: "#{ term_for :student } Roster"
-    flagged:
-      title: "Flagged #{ term_for :students }"
-    leaderboard:
-      title: "Leaderboard"
   rubrics:
     design:
       title: "Design Rubric"

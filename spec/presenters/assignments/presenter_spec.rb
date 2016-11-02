@@ -142,15 +142,9 @@ describe Assignments::Presenter do
     let(:student) { double(:user) }
 
     it "returns the students that are attached to the course" do
-      allow(course).to receive(:students).and_return [student]
-      expect(subject.students).to eq [student]
-    end
-
-    it "returns the students that are attached to the course for the team if a team is specified" do
-      subject.properties[:team_id] = 123
       allow(course).to receive(:teams).and_return double(:relation, find_by: team)
-      allow(course).to receive(:students_by_team).and_return [student]
-      expect(subject.students).to eq [student]
+      allow(User).to receive(:unscoped_students_being_graded_for_course).and_return double(:collection, order_by_name: [student])
+      expect(subject.students.class).to eq Assignments::Presenter::AssignmentStudentCollection
     end
   end
 

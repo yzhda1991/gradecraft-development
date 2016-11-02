@@ -19,7 +19,7 @@ describe UsersController do
     describe "GET index" do
       it "returns the users for the current course" do
         get :index
-        expect(assigns(:users)).to eq(@course.users)
+        expect(assigns(:users)).to eq(@course.users.order_by_name)
         expect(response).to render_template(:index)
       end
     end

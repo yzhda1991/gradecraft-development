@@ -50,12 +50,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  attr_accessor :password, :password_confirmation, :cached_last_login_at,
-    :score, :team
-
-  # all student display pages are ordered by last name except for the
-  # leaderboard, and top 10/bottom 10
-  default_scope { order("last_name ASC, first_name ASC") }
+  attr_accessor :password, :password_confirmation, :score, :team
 
   scope :order_by_high_score, -> { includes(:course_memberships).order "course_memberships.score DESC" }
   scope :order_by_low_score, -> { includes(:course_memberships).order "course_memberships.score ASC" }

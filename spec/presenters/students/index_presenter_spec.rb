@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
-require "./app/presenters/students/leaderboard_presenter"
+require "./app/presenters/students/index_presenter"
 
-describe Students::LeaderboardPresenter do
+describe Students::IndexPresenter do
   let(:course) { create(:course) }
   subject { described_class.new course: course }
 
@@ -27,15 +27,6 @@ describe Students::LeaderboardPresenter do
 
     it "returns the earned badges for all the students" do
       expect(subject.earned_badges).to eq [earned_badge1, earned_badge2]
-    end
-  end
-
-  describe "#grade_scheme_elements" do
-    let!(:high_grade_scheme_element) { create :grade_scheme_element_high, course: course }
-    let!(:low_grade_scheme_element) { create :grade_scheme_element_low, course: course }
-
-    it "returns all the grade scheme elements for the course" do
-      expect(subject.grade_scheme_elements).to eq [low_grade_scheme_element, high_grade_scheme_element]
     end
   end
 

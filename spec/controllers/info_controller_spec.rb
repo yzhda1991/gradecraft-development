@@ -52,54 +52,6 @@ describe InfoController do
       end
     end
 
-    describe "GET top_10" do
-      before(:all) do
-        student = create(:user)
-        student_2 = create(:user)
-        student_3 = create(:user)
-        student_4 = create(:user)
-        student_5 = create(:user)
-        student_6 = create(:user)
-        student_7 = create(:user)
-        student_8 = create(:user)
-        student_9 = create(:user)
-        student.courses << @course
-        student_2.courses << @course
-        student_3.courses << @course
-        student_4.courses << @course
-        student_5.courses << @course
-        student_6.courses << @course
-        student_7.courses << @course
-        student_8.courses << @course
-        student_9.courses << @course
-      end
-
-      it "returns the Top 10/Bottom 10 page for the current course" do
-        session[:course_id] = @course.id
-        get :top_10
-        expect(response).to render_template(:top_10)
-      end
-
-      it "shows the top 10 if there are less than ten students" do
-        get :top_10
-        expect(response).to render_template(:top_10)
-        expect(assigns(:top_ten_students).present?).to be true
-        expect(assigns(:bottom_ten_students)).to be nil
-      end
-
-      it "shows the top and bottom students if less than 20 students" do
-        student_10 = create(:user)
-        student_11 = create(:user)
-        student_12 = create(:user)
-        student_10.courses << @course
-        student_11.courses << @course
-        student_12.courses << @course
-        get :top_10
-        expect(assigns(:top_ten_students).present?).to be true
-        expect(assigns(:bottom_ten_students).present?).to be true
-      end
-    end
-
     describe "GET per_assign" do
       it "returns the Assignment Analytics page for the current course" do
         get :per_assign
@@ -244,7 +196,6 @@ describe InfoController do
       [
         :earned_badges,
         :grading_status,
-        :top_10,
         :per_assign,
         :gradebook,
         :multiplied_gradebook,

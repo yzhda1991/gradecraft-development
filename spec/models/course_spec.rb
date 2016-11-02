@@ -157,50 +157,50 @@ describe Course do
   describe "#staff" do
     it "returns an alphabetical list of the staff in the course" do
       course = create(:course)
-      staff_1 = create(:user, last_name: "Zeto")
-      staff_2 = create(:user, last_name: "Able")
-      staff_3 = create(:user, last_name: "Able")
+      staff_1 = create(:user)
+      staff_2 = create(:user)
+      staff_3 = create(:user)
       course_membership = create(:course_membership, user: staff_1, role: "gsi", course: course)
       course_membership = create(:course_membership, user: staff_2, role: "gsi", course: course)
-      expect(course.staff).to eq([staff_2,staff_1])
+      expect(course.staff).to match_array([staff_2,staff_1])
     end
   end
 
   describe "#students_being_graded" do
     it "returns an alphabetical list of students being graded" do
-      student = create(:user, last_name: "Zed")
+      student = create(:user)
       student.courses << subject
-      student2 = create(:user, last_name: "Alpha")
+      student2 = create(:user)
       student2.courses << subject
-      expect(subject.students_being_graded).to eq([student2,student])
+      expect(subject.students_being_graded).to match_array([student2,student])
     end
   end
 
   describe "#students_being_graded_by_team(team)" do
-    it "returns an alphabetical list of students being graded for a specific team" do
-      student = create(:user, last_name: "Zed")
+    it "returns a list of students being graded for a specific team" do
+      student = create(:user)
       student.courses << subject
-      student2 = create(:user, last_name: "Alpha")
+      student2 = create(:user)
       student2.courses << subject
-      student3 = create(:user, last_name: "Mr. Green")
+      student3 = create(:user)
       student3.courses << subject
       team = create(:team, course: subject)
       team.students << [ student, student2]
-      expect(subject.students_being_graded_by_team(team)).to eq([student2,student])
+      expect(subject.students_being_graded_by_team(team)).to match_array([student2,student])
     end
   end
 
   describe "#students_by_team(team)" do
-    it "returns an alphabetical list of all students in a team" do
-      student = create(:user, last_name: "Zed")
+    it "return a list of all students in a team" do
+      student = create(:user)
       course_membership = create(:auditing_membership, user: student, course: subject)
-      student2 = create(:user, last_name: "Alpha")
+      student2 = create(:user)
       student2.courses << subject
-      student3 = create(:user, last_name: "Mr. Green")
+      student3 = create(:user)
       course_membership_2 = create(:auditing_membership, user: student3, course: subject)
       team = create(:team, course: subject)
       team.students << [ student, student2]
-      expect(subject.students_by_team(team)).to eq([student2, student])
+      expect(subject.students_by_team(team)).to  match_array([student2, student])
     end
   end
 

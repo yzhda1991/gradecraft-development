@@ -297,11 +297,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :assignment } Analytics', per_assign_path)
   end
 
-  def info_top_10
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Top 10/Bottom 10', top_10_path)
-  end
-
   def integrations_index
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb(objects[:course].name, course_path(objects[:course]))
@@ -447,11 +442,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :students }', students_path)
     breadcrumb('Flagged #{ term_for :students }', flagged_students_path)
-  end
-
-  def students_leaderboard
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Leaderboard', leaderboard_path)
   end
 
   def students_show
