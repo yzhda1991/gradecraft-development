@@ -80,7 +80,7 @@ class Students::IndexPresenter < Showtime::Presenter
     end
 
     def grade_scheme
-      scheme = presenter.course.grade_scheme_elements.for_score(score)
+      self.grade_for_course(presenter.course)
     end
 
     def score
