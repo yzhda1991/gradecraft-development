@@ -310,7 +310,9 @@ module ActiveLMS
     # automatically
     # options - A hash representing any additional parameters that should be included
     # in the query
-    #
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     # Examples
     #
     # GET: http://instructure.com/api/v1/courses/:id/students/submission
