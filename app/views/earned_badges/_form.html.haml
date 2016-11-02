@@ -4,7 +4,6 @@
   .italic= "You are awarding the #{@badge.name} #{term_for :badge} to..."
 
   = f.hidden_field :badge_id, value: @badge.id
-  = f.hidden_field :student_visible, value: true
 
   %section
     = f.select :student_id, options_from_collection_for_select(@students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"

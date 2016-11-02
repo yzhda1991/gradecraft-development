@@ -9,17 +9,24 @@ class EarnedBadgeProctor
   end
 
   def buildable?(user)
-    earned_badge.course.users.include?(user) && (
-      user.is_staff?(earned_badge.course) || (
-        earned_badge.badge.student_awardable? &&
-        user.is_student?(earned_badge.course)
+    course.users.include?(user) && (
+      user.is_staff?(course) || (
+        user.is_student?(course) &&
+        earned_badge.badge.student_awardable?
+
       )
     )
   end
 
   def creatable?(user)
     buildable?(user) &&
-    earned_badge.course.students.include?(earned_badge.student) &&
+    course.students.include?(earned_badge.student) &&
     earned_badge.student != user
+  end
+
+  private
+
+  def course
+    earned_badge.course || earned_badge.badge.course
   end
 end

@@ -17,17 +17,6 @@ class EarnedBadgesController < ApplicationController
     @student = @earned_badge.student
   end
 
-  def confirm_earned
-    @course = Course.find(params[:course_id])
-    @badge = @course.badges.find(params[:badge_id])
-    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
-    if @earned_badge.present?
-      render nothing: true, status: 200
-    else
-      redirect_to root_path
-    end
-  end
-
   def new
     @earned_badge = @badge.earned_badges.new course: current_course
     authorize! :build, @earned_badge
@@ -39,7 +28,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    result = Services::CreatesEarnedBadge.award earned_badge_params
+    result = Services::CreatesEarnedBadge.award earned_badge_params.merge(awarded_by: current_user)
 
     if result.success?
       redirect_to badge_path(result.earned_badge.badge),
@@ -53,7 +42,9 @@ class EarnedBadgesController < ApplicationController
   end
 
   def update
-    if @earned_badge.update_attributes(earned_badge_params)
+    if @earned_badge.update_attributes(
+      earned_badge_params.merge(awarded_by: current_user)
+    )
       if @badge.full_points?
         ScoreRecalculatorJob.new(user_id: @earned_badge.student_id,
                                  course_id: current_course.id).enqueue
@@ -110,12 +101,23 @@ class EarnedBadgesController < ApplicationController
       notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
   end
 
+  # Used for Badges Backpack integration
+  # GET /courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned
+  def confirm_earned
+    @course = Course.find(params[:course_id])
+    @badge = @course.badges.find(params[:badge_id])
+    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
+    if @earned_badge.present?
+      render nothing: true, status: 200
+    else
+      redirect_to root_path
+    end
+  end
+
   private
 
   def earned_badge_params
-    params.require(:earned_badge).permit(:points, :feedback, :student_id, :badge_id,
-      :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
-      :student_visible, :_destroy).merge(awarded_by: current_user, course: current_course)
+    params.require(:earned_badge).permit(:feedback, :student_id, :badge_id)
   end
 
   def earned_badge_students

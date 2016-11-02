@@ -22,7 +22,6 @@ class Assignments::GradesController < ApplicationController
 
     grade_ids = grades.collect do |grade|
       grade.update(status: status)
-      EarnedBadge.where(grade_id: grade.id).each(&:save)
       grade.id
     end
 

@@ -3,19 +3,22 @@ require "active_record_spec_helper"
 require "./app/services/creates_earned_badge/creates_earned_badge"
 
 describe Services::Actions::CreatesEarnedBadge do
-  let(:world) { World.create.with(:course, :assignment, :professor, :student, :badge, :grade) }
+  let(:course) { create :course }
+  let(:badge) { create :badge }
+  let(:student) { create(:student_course_membership, course: course).user}
+  let(:grade) { create :grade, course: course, student: student }
+  let(:professor) { create(:professor_course_membership, course: course).user}
   let(:result) { described_class.execute attributes: attributes }
 
   context "as a professor" do
 
     let(:attributes) do
       {
-        student_id: world.student.id,
-        badge_id: world.badge.id,
-        assignment_id: world.assignment.id,
-        grade_id: world.grade.id,
-        course_id: world.course.id,
-        awarded_by_id: world.professor.id,
+        student_id: student.id,
+        badge_id: badge.id,
+        grade_id: grade.id,
+        course_id: course.id,
+        awarded_by_id: professor.id,
         student_visible: true,
         feedback: "You are so awesome!"
       }
@@ -32,7 +35,7 @@ describe Services::Actions::CreatesEarnedBadge do
     end
 
     it "creates the earned badge with the correct awarded_by" do
-      expect(result.earned_badge.awarded_by).to eq(world.professor)
+      expect(result.earned_badge.awarded_by).to eq(professor)
     end
 
     it "halts if the earned badge is invalid" do
@@ -46,20 +49,17 @@ describe Services::Actions::CreatesEarnedBadge do
 
     describe "awarding a student-awardable badge to another student" do
       let(:attributes) do
-        badge = world.badge
         badge.student_awardable = true
         badge.save
 
         other_student = create(:user)
-        other_student.courses << world.course
+        other_student.courses << course
 
         {
           student_id: other_student.id,
           badge_id: badge.id,
-          assignment_id: world.assignment.id,
-          grade_id: world.grade.id,
-          course_id: world.course.id,
-          awarded_by_id: world.student.id,
+          course_id: course.id,
+          awarded_by_id: student.id,
           student_visible: true,
           feedback: "You are so awesome!"
         }
@@ -71,22 +71,20 @@ describe Services::Actions::CreatesEarnedBadge do
       end
 
       it "creates the earned badge with the correct awarded_by" do
-        expect(result.earned_badge.awarded_by).to eq(world.student)
+        expect(result.earned_badge.awarded_by).to eq(student)
       end
     end
 
     describe "awarding a non-student-awardable badge to another student" do
       let(:attributes) do
         other_student = create(:user)
-        other_student.courses << world.course
+        other_student.courses << course
 
         {
           student_id: other_student.id,
-          badge_id: world.badge.id,
-          assignment_id: world.assignment.id,
-          grade_id: world.grade.id,
-          course_id: world.course.id,
-          awarded_by_id: world.student.id,
+          badge_id: badge.id,
+          course_id: course.id,
+          awarded_by_id: student.id,
           student_visible: true,
           feedback: "You are so awesome!"
         }

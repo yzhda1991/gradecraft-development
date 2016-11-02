@@ -30,7 +30,17 @@ describe EarnedBadge do
     end
   end
 
-  describe "#multiple_allowed" do
+  describe "#points" do
+    let(:student) { create :user }
+
+    it "returns badge full points for points" do
+      badge = create(:badge, full_points: 123)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id)
+      expect(earned_badge.points).to eq(123)
+    end
+  end
+
+  describe "#earnable" do
     it "allows a student to earn a badge if they haven't earned it yet" do
       badge = create(:badge)
       student = create(:user)
@@ -54,14 +64,20 @@ describe EarnedBadge do
       EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       expect(badge.earned_badge_count_for_student(student)).to eq(1)
     end
+
+    it "allows a single earned badge to be resaved" do
+      badge = create(:badge, can_earn_multiple_times: false)
+      student = create(:user)
+      eb = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      expect(eb.save).to be_truthy
+    end
   end
 
-  describe "#cache_associations" do
-    it "caches 0 for a badge with nil points" do
-      badge = create(:badge, full_points: nil)
-      student = create(:user)
-      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
-      expect(earned_badge.points).to eq(0)
+  describe "#add_associations" do
+    it "pulls the course id off of badge" do
+      badge = create(:badge, full_points: 123)
+      earned_badge = EarnedBadge.create(badge_id: badge.id)
+      expect(earned_badge.course_id).to eq(badge.course_id)
     end
   end
 
@@ -78,8 +94,8 @@ describe EarnedBadge do
       expect(subject).to be_student_visible
     end
 
-    it "can be overriden by passing in a value" do
-      subject = create(:earned_badge, student_visible: true)
+    it "is always set to visible if no grade associated" do
+      subject = create(:earned_badge, student_visible: false)
       expect(subject).to be_student_visible
     end
   end

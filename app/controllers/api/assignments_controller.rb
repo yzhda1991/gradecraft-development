@@ -1,5 +1,5 @@
 class API::AssignmentsController < ApplicationController
-  before_filter :ensure_student?, only: [:update]
+  before_action :ensure_student?, only: [:update]
 
   # GET api/assignments
   def index

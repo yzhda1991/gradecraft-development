@@ -3,7 +3,6 @@ require_relative "creates_criterion_grade/builds_criterion_grades"
 require_relative "creates_criterion_grade/builds_earned_level_badges"
 require_relative "creates_criterion_grade/saves_criterion_grades"
 require_relative "creates_criterion_grade/saves_earned_level_badges"
-require_relative "creates_earned_badge/updates_earned_badges_for_grade"
 require_relative "creates_grade/verifies_assignment_student"
 require_relative "creates_grade/associates_submission_with_grade"
 require_relative "creates_grade/builds_grade"
@@ -27,7 +26,6 @@ module Services
           Actions::AssociatesSubmissionWithGrade,
           Actions::MarksAsGraded,
           Actions::SavesGrade,
-          Actions::UpdatesEarnedBadgesForGrade,
           Actions::BuildsEarnedLevelBadges,
           Actions::SavesEarnedLevelBadges,
           Actions::RunsGradeUpdaterJob

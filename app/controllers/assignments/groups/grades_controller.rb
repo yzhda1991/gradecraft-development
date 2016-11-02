@@ -1,7 +1,7 @@
 require_relative "../../../services/creates_many_group_grades"
 
 class Assignments::Groups::GradesController < ApplicationController
-  before_filter :ensure_staff?
+  before_action :ensure_staff?
   before_action :find_assignment
 
   # GET /assignments/:assignment_id/groups/grades/mass_edit

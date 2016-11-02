@@ -1,6 +1,6 @@
 %header.student-panel-article-header{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints()}'}
   .article-title {{article.name}}
-  .full-points full points: {{article.full_points | number}}
+  .full-points{'ng-if' => 'article.full_points > 0'} full points: {{article.full_points | number}}
   .due-date{'ng-if' => 'article.due_at'} due: {{article.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
   .times-earned{'ng-if'=>'article.type === "badges"'} times earned: {{article.earned_badge_count}}
 

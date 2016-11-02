@@ -70,16 +70,16 @@ describe Badge do
 
   describe "#earned_count" do
     it "returns the count of earned badges that have been awarded" do
-      earned_badge = create(:earned_badge, badge: subject, student_visible: true)
-      second_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
-      third_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
+      earned_badge = create(:earned_badge, badge: subject)
+      second_earned_badge = create(:earned_badge, badge: subject)
+      third_earned_badge = create(:earned_badge, badge: subject)
       expect(subject.earned_count).to eq(3)
     end
 
     it "does not include earned badges that are not student visible in the count" do
-      earned_badge = create(:earned_badge, badge: subject, student_visible: false)
-      second_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
-      third_earned_badge = create(:earned_badge, badge: subject, student_visible: true)
+      earned_badge_not_visible = create(:earned_badge, badge: subject, grade: create(:unreleased_grade))
+      second_earned_badge = create(:earned_badge, badge: subject)
+      third_earned_badge = create(:earned_badge, badge: subject)
       expect(subject.earned_count).to eq(2)
     end
   end
@@ -279,47 +279,26 @@ describe Badge do
     end
   end
 
-  describe "#earned_badges_by_student_id" do
-    it "should return all of the earned badges for a badge, grouped by their unique student ids" do
-      student = create(:user)
-      student_2 = create(:user)
-      badge = create(:badge)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
-      earned_badge_1 = create(:earned_badge, badge: badge, student: student_2)
-      expect(badge.earned_badges_by_student_id).to eq({ [student.id] => [earned_badge], [student_2.id] => [earned_badge_1] })
-    end
-  end
-
-  describe "#earned_badge_for_student(student)" do
-    it "returns the first earned badge for a student for a particular badge" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      expect(badge.earned_badge_for_student(student)).to eq(earned_badge)
-    end
-  end
-
   describe "#earned_badge_count_for_student(student)" do
     it "sums up the number of times a student has earned a specific badge" do
       student = create(:user)
       badge = create(:badge, full_points: 1000)
       second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      second_earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
+      earned_badge = create(:earned_badge, badge: badge, student: student)
+      second_earned_badge = create(:earned_badge, badge: badge, student: student)
+      third_earned_badge = create(:earned_badge, badge: second_badge, student: student)
       expect(badge.earned_badge_count_for_student(student)).to eq(2)
     end
   end
 
-  describe "#earned_badge_total_points(student)" do
+  describe "#earned_badge_total_points_for_student(student)" do
     it "sums up the total points earned for a specific badge" do
       student = create(:user)
       badge = create(:badge, full_points: 1000)
       second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: badge, points: 1000, student: student, student_visible: true)
-      second_earned_badge = create(:earned_badge, badge: second_badge, points: 200, student: student, student_visible: true)
-      third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
-      expect(badge.earned_badge_total_points(student)).to eq(1000)
+      earned_badge = create(:earned_badge, badge: badge, student: student)
+      second_earned_badge = create(:earned_badge, badge: second_badge, student: student)
+      expect(badge.earned_badge_total_points_for_student(student)).to eq(1000)
     end
   end
 

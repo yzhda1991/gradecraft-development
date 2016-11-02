@@ -235,31 +235,49 @@ describe Grade do
   end
 
   describe ".find_or_create" do
+    let(:course) { create :course }
+    let(:student) { create(:student_course_membership, course: course).user }
+    let(:assignment) { create :assignment, course: course }
+
     it "finds and existing grade for assignment and student" do
-      world = World.create.with(:course, :student, :assignment, :grade)
-      results = Grade.find_or_create(world.assignment.id,world.student.id)
-      expect(results).to eq world.grade
+      grade = create :grade, assignment: assignment, student: student
+      results = Grade.find_or_create(assignment.id,student.id)
+      expect(results).to eq grade
     end
 
     it "creates a grade for assignment and student if none exists" do
-      world = World.create.with(:course, :student, :assignment)
-      expect{Grade.find_or_create(world.assignment.id,world.student.id)}.to \
+      expect{Grade.find_or_create(assignment.id,student.id)}.to \
         change{ Grade.count }.by(1)
     end
   end
 
   describe ".find_or_create_grades" do
-    let(:world) { World.create.with(:course, :assignment, :group) }
-    let(:ids) { world.group.students.pluck(:id) }
+    let(:course) { create :course }
+    let(:group) { create(:group, course: course) }
+    let(:assignment) { create :assignment, course: course }
+    let(:ids) { group.students.pluck(:id) }
 
     it "finds and existing grade for assignment and student" do
-      results = Grade.find_or_create_grades(world.assignment.id, ids)
+      results = Grade.find_or_create_grades(assignment.id, ids)
       expect(results.count).to eq ids.length
     end
 
     it "creates a grade for assignment and student if none exists" do
-      expect { Grade.find_or_create_grades(world.assignment.id, ids) }.to \
+      expect { Grade.find_or_create_grades(assignment.id, ids) }.to \
         change{ Grade.count }.by(ids.length)
+    end
+  end
+
+  describe "when it is saved" do
+    let(:course) { create :course }
+    let(:assignment) { create :assignment, course: course }
+    let(:grade) { create :grade, assignment: assignment }
+
+    it "updates earned badge visibility" do
+      earned_badge = create(:earned_badge, student: grade.student, grade: grade, student_visible: false)
+      grade.status = "Graded"
+      grade.save
+      expect(earned_badge.reload.student_visible).to be_truthy
     end
   end
 end

@@ -494,25 +494,25 @@ describe User do
       expect(student.grade_for_assignment_id(assignment.id)).to eq([grade])
     end
   end
-  
+
   describe "#predictions_for_course?(course)" do
     #predicted_earned_grades.for_course(course).predicted_to_be_done.present?
-    it "returns true if the student has predicted any assignment" do 
+    it "returns true if the student has predicted any assignment" do
       prediction = create(:predicted_earned_grade, student: student, assignment: assignment)
       expect(student.predictions_for_course?(course)).to eq true
     end
-    
-    it "returns false if the student has not predicted any assignments" do 
+
+    it "returns false if the student has not predicted any assignments" do
       expect(student.predictions_for_course?(course)).to eq false
     end
   end
-  
+
   describe "#last_course_login(course)" do
-    it "returns nil  if the student has not logged into the course site" do 
+    it "returns nil  if the student has not logged into the course site" do
       expect(student.last_course_login(course)).to be nil
     end
-    
-    it "returns the last time the student logged into the course" do 
+
+    it "returns the last time the student logged into the course" do
       login_time = DateTime.now
       student_2 = create(:user)
       cm = create(:student_course_membership, user: student_2, course: course, last_login_at:
@@ -532,21 +532,20 @@ describe User do
   end
 
   describe "#earned_badge_score_for_course(course)" do
-    let(:student) { create :user }
+    let(:student) { create(:student_course_membership, course: course).user }
 
     before do
-      create(:course_membership, user: student, course: course)
-      create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
-      create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      create(:earned_badge, student: student, course: course, badge: create(:badge, full_points: 100))
+      create(:earned_badge, student: student, course: course, badge: create(:badge, full_points: 400))
     end
 
     it "returns the sum of the badge score for a student" do
-      expect(student.earned_badge_score_for_course(course)).to eq(400)
+      expect(student.earned_badge_score_for_course(course)).to eq(500)
     end
 
     it "does not include earned badges that have not yet been made student visible" do
-      create(:earned_badge, points: 155, student: student, course: course, student_visible: false)
-      expect(student.earned_badge_score_for_course(course)).to eq(400)
+      create(:earned_badge, student: student, course: course, grade: (create :unreleased_grade))
+      expect(student.earned_badge_score_for_course(course)).to eq(500)
     end
   end
 
@@ -558,8 +557,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
-      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, student: student, course: course)
+      earned_badge_2 = create(:earned_badge, student: student, course: course)
       expect(student.earned_badges_for_course(course)).to eq([earned_badge_1, earned_badge_2])
     end
   end
@@ -572,8 +571,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true, created_at: Date.today - 10)
-      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, student: student, course: course, created_at: Date.today - 10)
+      earned_badge_2 = create(:earned_badge, student: student, course: course)
       expect(student.earned_badges_for_course_this_week(course)).to eq([earned_badge_2])
     end
   end
@@ -587,7 +586,7 @@ describe User do
     end
 
     it "returns the students' earned_badges for a particular badge" do
-      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: course)
       expect(student.earned_badge_for_badge(badge)).to eq([earned_badge_1])
     end
   end
@@ -601,8 +600,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: course, student_visible: true)
-      earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: course)
+      earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: course)
       expect(student.earned_badges_for_badge_count(badge)).to eq(2)
     end
   end
@@ -721,12 +720,12 @@ describe User do
 
   context "student_visible_earned_badges" do
     it "should know which badges a student has earned" do
-      earned_badges = create_list(:earned_badge, 3, course: course, student: student, student_visible: true)
+      earned_badges = create_list(:earned_badge, 3, course: course, student: student)
       expect(student.student_visible_earned_badges(course)).to eq(earned_badges)
     end
 
     it "should not select non-visible student badges" do
-      earned_badges = create_list(:earned_badge, 3, course: course, student: student, student_visible: false)
+      earned_badges = create_list(:earned_badge, 3, course: course, student: student, grade: (create :unreleased_grade))
       expect(student.student_visible_earned_badges(course)).to be_empty
     end
 
@@ -740,7 +739,7 @@ describe User do
 
   context "unique_student_earned_badges" do
     before(:each) do
-      create_list(:earned_badge, 3, course: course, student: student, student_visible: true)
+      create_list(:earned_badge, 3, course: course, student: student)
     end
 
     # Intermittent failure?

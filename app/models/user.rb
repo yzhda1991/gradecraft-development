@@ -353,7 +353,7 @@ class User < ActiveRecord::Base
   end
 
   def earned_badge_score_for_course(course)
-    earned_badges_for_course(course).sum(:points)
+    earned_badges_for_course(course).sum(&:points)
   end
 
   # returns all badges a student has earned for a particular course this week
