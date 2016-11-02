@@ -342,28 +342,24 @@ module ActiveLMS
     #   "excused": true
     # }]
     def grades(course_id, assignment_ids, grade_ids=nil, fetch_next=false, options={}, &exception_handler)
-      grades = []
-      params = { assignment_ids: assignment_ids,
-                 student_ids: "all",
-                 include: ["assignment", "course", "user", "submission_comments"],
-                 per_page: options.delete(:per_page) || 25 }.merge(options)
-      result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
-        data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
-        if grade_ids.nil?
-          grades += data
-        else
-          filtered_ids = [grade_ids].flatten.uniq.compact.map(&:to_s)
-          data.select { |grade| filtered_ids.include?(grade["id"].to_s) }.each do |grade|
-            grades << grade
+      handle_exceptions(exception_handler) do
+        grades = []
+        params = { assignment_ids: assignment_ids,
+                   student_ids: "all",
+                   include: ["assignment", "course", "user", "submission_comments"],
+                   per_page: options.delete(:per_page) || 25 }.merge(options)
+        result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
+          data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
+          if grade_ids.nil?
+            grades += data
+          else
+            filtered_ids = [grade_ids].flatten.uniq.compact.map(&:to_s)
+            data.select { |grade| filtered_ids.include?(grade["id"].to_s) }.each do |grade|
+              grades << grade
+            end
           end
         end
-      end
-      { data: grades, has_next_page: result[:has_next_page] }
-    rescue Canvas::ResponseError, HTTParty::Error, JSON::ParserError => e
-      if block_given?
-        exception_handler.call(e)
-      else
-        raise e
+        { data: grades, has_next_page: result[:has_next_page] }
       end
     end
 
@@ -460,5 +456,15 @@ module ActiveLMS
     private
 
     attr_reader :client
+
+    def handle_exceptions(exception_handler, &blk)
+      blk.call
+    rescue Canvas::ResponseError, HTTParty::Error, JSON::ParserError => e
+      if !exception_handler.nil?
+        exception_handler.call(e)
+      else
+        raise e
+      end
+    end
   end
 end
