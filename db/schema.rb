@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031184138) do
+ActiveRecord::Schema.define(version: 20161102180020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -256,7 +256,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: false,                         null: false
+    t.boolean  "teams_visible",                                           default: false,                        null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
@@ -317,6 +317,7 @@ ActiveRecord::Schema.define(version: 20161031184138) do
     t.integer  "assignment_id", null: false
     t.integer  "student_id",    null: false
     t.text     "comments"
+    t.integer  "grade_id"
     t.index ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
   end
 

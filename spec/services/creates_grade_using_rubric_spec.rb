@@ -17,11 +17,6 @@ describe Services::CreatesGradeUsingRubric do
       described_class.create params, professor.id
     end
 
-    it "saves criterion grades" do
-      expect(Services::Actions::SavesCriterionGrades).to receive(:execute).and_call_original
-      described_class.create params, professor.id
-    end
-
     it "initializes new grade from params" do
       expect(Services::Actions::BuildsGrade).to receive(:execute).and_call_original
       described_class.create params, professor.id
@@ -39,6 +34,16 @@ describe Services::CreatesGradeUsingRubric do
 
     it "saves the grade" do
       expect(Services::Actions::SavesGrade).to receive(:execute).and_call_original
+      described_class.create params, professor.id
+    end
+
+    it "associates the grade and criterion grades" do
+      expect(Services::Actions::AddsGradeIdToCriterionGrades).to receive(:execute).and_call_original
+      described_class.create params, professor.id
+    end
+
+    it "saves criterion grades" do
+      expect(Services::Actions::SavesCriterionGrades).to receive(:execute).and_call_original
       described_class.create params, professor.id
     end
 

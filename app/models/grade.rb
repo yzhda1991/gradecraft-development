@@ -15,6 +15,7 @@ class Grade < ActiveRecord::Base
 
   has_one :imported_grade, dependent: :destroy
   has_many :earned_badges, dependent: :destroy
+  has_many :criterion_grades, dependent: :destroy
 
   has_many :badges, through: :earned_badges
   accepts_nested_attributes_for :earned_badges,

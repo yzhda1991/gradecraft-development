@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "creates_criterion_grade/adds_grade_id_to_criterion_grades"
 require_relative "creates_criterion_grade/builds_criterion_grades"
 require_relative "creates_criterion_grade/builds_earned_level_badges"
 require_relative "creates_criterion_grade/saves_criterion_grades"
@@ -21,11 +22,12 @@ module Services
         .reduce(
           Actions::VerifiesAssignmentStudent,
           Actions::BuildsCriterionGrades,
-          Actions::SavesCriterionGrades,
           Actions::BuildsGrade,
           Actions::AssociatesSubmissionWithGrade,
           Actions::MarksAsGraded,
           Actions::SavesGrade,
+          Actions::AddsGradeIdToCriterionGrades,
+          Actions::SavesCriterionGrades,
           Actions::BuildsEarnedLevelBadges,
           Actions::SavesEarnedLevelBadges,
           Actions::RunsGradeUpdaterJob
