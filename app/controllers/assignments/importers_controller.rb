@@ -36,7 +36,10 @@ class Assignments::ImportersController < ApplicationController
     if @result.success?
       render :assignments_import_results
     else
-      @assignments = syllabus.assignments(@course_id)
+      @assignments = syllabus.assignments(@course_id) do
+        redirect_to assignment_importers_path,
+          alert: "There was an issue trying to retrieve the assignments from #{@provider_name.capitalize}." and return
+      end
       @assignment_types = @course.assignment_types.ordered
 
       render :assignments, alert: @result.message
