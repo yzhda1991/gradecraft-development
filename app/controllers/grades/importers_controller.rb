@@ -34,7 +34,7 @@ class Grades::ImportersController < ApplicationController
     end
   end
 
-  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
+  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
