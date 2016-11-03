@@ -25,18 +25,21 @@ module Submissions::GradeHistory
           history_item.changeset["event"] = "upload"
         end
       end
+      .clear_initial_value("raw_score", "feedback")
       .rename("SubmissionFile" => "Attachment")
       .include do |history_item, history|
         viewable = true
 
-        if history_item.changeset["object"] == "Grade" && only_student_visible_grades
+        if history_item.changeset["object"] == "Grade" &&
+            history_item.version.event == "update" &&
+            only_student_visible_grades
+
           version = history_item.version.reify
           viewable = GradeProctor.new(version).viewable?
 
-          # Make the change viewable if the grade was updated first but then it was
-          # released. This displays the changeset where the grade was updated
-
-          if !viewable && history_item.version.event == "update"
+          # Make the change viewable if the grade was updated first but then it
+          # was released. This displays the changeset where the grade was updated
+          if !viewable
             last_raw_points_change = last_change?(history, history_item, "Grade",
                                                   "raw_points")
 
