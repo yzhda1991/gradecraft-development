@@ -1,4 +1,4 @@
-@gradecraft.factory 'Grade', ['$http', 'EventHelper', ($http, EventHelper)->
+@gradecraft.factory 'Grade', ['$http', 'EventHelper', (EventHelper)->
   class Grade
     constructor: (attrs={}, http)->
       @id = attrs.id
@@ -14,13 +14,11 @@
       @updated_at = null
 
     enableCustomValue: ()->
-      console.log this.is_custom_value
       if this.is_custom_value == false
         this.is_custom_value = true
         this.update()
 
     disableCustomValue: ()->
-      console.log this.is_custom_value
       if this.is_custom_value == true
         this.is_custom_value = false
         this.update()
@@ -37,15 +35,6 @@
     timeSinceUpdate: ()->
       self = this
       Math.abs(new Date() - self.updated_at)
-
-    modelOptions: ()->
-      {
-        updateOn: 'default blur',
-        debounce: {
-          default: 1800,
-          blur: 0
-        }
-      }
 
     # updating grade properties
     update: ()->

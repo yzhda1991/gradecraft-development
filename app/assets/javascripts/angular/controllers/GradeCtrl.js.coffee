@@ -1,4 +1,4 @@
-@gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'Grade', 'AssignmentScoreLevel', '$window', '$http','EventHelper', ($timeout, $rootScope, $scope, Grade, AssignmentScoreLevel, $window, $http, EventHelper) ->
+@gradecraft.controller 'GradeCtrl', ['$scope', 'Grade', 'AssignmentScoreLevel', '$http', ($scope, Grade, AssignmentScoreLevel, $http) ->
 
   # setup the controller scope on initialize
   $scope.init = (initData)->
@@ -6,9 +6,10 @@
     $scope.debug = false
 
     # grade stuff
-    $scope.grade = new Grade(initData.grade, $http)
+    $scope.grade = new Grade(initData.grade)
     $scope.gradeId = initData.grade.id
 
+    debugger
     # assignment stuff
     $scope.releaseNecessary = initData.assignment.release_necessary
 
@@ -31,6 +32,14 @@
       scoreLevelPrototype = new AssignmentScoreLevel(scoreLevel, $scope)
       $scope.assignmentScoreLevels.push scoreLevelPrototype
     )
+
+  $scope.modelOptions = {
+    updateOn: 'default blur',
+    debounce: {
+      default: 1800,
+      blur: 0
+    }
+  }
 
   $scope.froalaOptions = {
     inlineMode: false,
