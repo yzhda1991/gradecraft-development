@@ -36,7 +36,7 @@ describe NotificationMailer do
   let(:earned_badge) { create(:earned_badge, earned_badge_attrs.merge(feedback: "You did a really great job.")) }
   let(:earned_badge_attrs) {{ student: student, course: course, badge: badge }}
 
-  let(:deliver_email) { NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now }
+  let(:deliver_email) { NotificationMailer.earned_badge_awarded(earned_badge).deliver_now }
 
   describe "#earned_badge_awarded" do
     before(:each) { deliver_email }

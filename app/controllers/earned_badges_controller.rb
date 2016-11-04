@@ -162,7 +162,8 @@ class EarnedBadgesController < ApplicationController
 
   def send_earned_badge_notifications
     @valid_earned_badges.each do |earned_badge|
-      NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now
+      EarnedBadgeAnnouncement.create earned_badge
+      NotificationMailer.earned_badge_awarded(earned_badge).deliver_now
       logger.info "Sent an earned badge notification for EarnedBadge ##{earned_badge[:id]}"
     end
   end

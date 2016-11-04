@@ -6,9 +6,10 @@ module Services
       expects :earned_badge
 
       executed do |context|
-        if context.earned_badge.student_visible?
-          NotificationMailer.earned_badge_awarded(context.earned_badge.id)
-            .deliver_now
+        earned_badge = context.earned_badge
+        if earned_badge.student_visible?
+          EarnedBadgeAnnouncement.create earned_badge
+          NotificationMailer.earned_badge_awarded(earned_badge).deliver_now
         end
       end
     end
