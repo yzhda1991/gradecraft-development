@@ -3,7 +3,7 @@ class API::Assignments::SubmissionsController < ApplicationController
 
   def create
     assignment = Assignment.find(params[:assignment_id])
-    submission = assignment.submissions.new submission_params.merge(student_id: current_user.id)
+    submission = assignment.submissions.new submission_params.merge(student_id: current_user.id, draft: true)
 
     if submission.save
       render json: { submission: submission, message: "Successsfully created a submission draft" }, status: 201

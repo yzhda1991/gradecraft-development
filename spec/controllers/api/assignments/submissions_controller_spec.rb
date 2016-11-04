@@ -20,12 +20,13 @@ describe API::Assignments::SubmissionsController do
       it "sets the submission attributes" do
         post :create, params: params, format: :json
         submission = Submission.unscoped.last
-        expect(submission.text_comment).to eq params[:submission][:text_comment]
-        expect(submission.student_id).to eq student.id
-        expect(submission.assignment_id).to eq submission.assignment_id
+        expect(submission.text_comment).to eq(params[:submission][:text_comment])
+        expect(submission.student_id).to eq(student.id)
+        expect(submission.assignment_id).to eq(submission.assignment_id)
+        expect(submission.draft).to be true
       end
 
-      it "returns a success status " do
+      it "returns a success status" do
         post :create, params: params, format: :json
         expect(response.status).to eq(201)
       end
@@ -42,7 +43,7 @@ describe API::Assignments::SubmissionsController do
   end
 
   describe "#update" do
-    let(:submission) { create(:submission, student_id: student.id, text_comment: "I love school", assignment: assignment) }
+    let(:submission) { create(:submission, student_id: student.id, text_comment: "I love school", draft: true, assignment: assignment) }
 
     context "when the submission doesn't exist" do
       let(:params) {{ submission: submission.as_json, assignment_id: assignment.id, id: "2" }}
@@ -54,7 +55,8 @@ describe API::Assignments::SubmissionsController do
     end
 
     context "when the submission exists" do
-      let(:submission_attributes) {{ id: submission.id, assignment_id: submission.assignment_id, student_id: submission.student_id, text_comment: "No really, I love school" }}
+      let(:submission_attributes) {{ id: submission.id, assignment_id: submission.assignment_id,
+        student_id: submission.student_id, text_comment: "No really, I love school", draft: true }}
       let(:params) {{ submission: submission_attributes, assignment_id: assignment.id, id: submission.id }}
 
       context "when successful" do
