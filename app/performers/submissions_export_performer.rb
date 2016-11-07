@@ -546,6 +546,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def message_suffix
-    "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+    "for assignment #{@assignment.id} for students: #{@submitters.collect(&:id)}"
   end
 end
