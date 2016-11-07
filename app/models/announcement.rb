@@ -19,12 +19,13 @@ class Announcement < ActiveRecord::Base
   def self.read_count_for(user, course)
     AnnouncementState
       .joins(:announcement)
-      .where(announcements: { course_id: course.id })
+      .where(announcements: { course_id: course.id, recipient_id: [nil, user.id] })
       .where(user_id: user.id).count
   end
 
   def self.unread_count_for(user, course)
-    Announcement.where(course_id: course.id).count - read_count_for(user, course)
+    Announcement.where(course_id: course.id, recipient_id: [nil, user.id]).count -
+      read_count_for(user, course)
   end
 
   def abstract(words=25)
