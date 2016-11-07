@@ -7,10 +7,10 @@
       .features-section-toggle
         %button.button-tab.button-features-toggle.selected#instructor-feat-btn Instructors
         %button.button-tab.button-features-toggle#student-feat-btn Students
-
-  .instructor-features
-    = render partial: "pages/instructor_features"
-  .student-features
-    = render partial: "pages/student_features"
+  .features-body-section
+    .instructor-features
+      = render partial: "pages/instructor_features"
+    .student-features
+      = render partial: "pages/student_features"
 
 = render partial: "pages/newsletter_signup"
