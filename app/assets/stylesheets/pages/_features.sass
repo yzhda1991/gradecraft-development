@@ -1,32 +1,6 @@
 @import "../utilities/variables"
 
 .features
-  .ui-widget-content
-    background: transparent !important
-    border: 0px
-
-  .ui-widget-content#tabs
-    margin: 0 0 2rem
-    padding: 0
-
-    .ui-tabs-panel
-      padding: 0
-      float: left
-      width: 100%
-
-    ul
-      width: 210px
-      height: 50px
-      margin: .5rem auto 0
-      border: 0
-      background: transparent !important
-
-      li
-        border-radius: 0 !important
-        margin: 0
-        border: 0
-        padding: 0
-
   .hero-section
     background:rgba(46,112,190,0.3)
     padding: 1rem 0 1rem
@@ -47,6 +21,11 @@
 
     .promo-text
       color: $color-white
+      margin-bottom: 0.5rem
+      font-size: 1rem
+
+  .student-features
+    display: none
 
   .feature-section
     padding: 2rem
@@ -69,7 +48,7 @@
       background-color: $color-white
 
     &.alternate-white
-      background-color: lighten($color-blue-4, 12%)
+      background-color: lighten($color-blue-5, 12%)
 
     .text
       line-height: 1.75rem
