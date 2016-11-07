@@ -87,13 +87,6 @@ class CoursesController < ApplicationController
     end
   end
 
-  def destroy
-    authorize! :destroy, @course
-    @name = @course.name
-    @course.destroy
-    redirect_to courses_url, notice: "Course #{@name} successfully deleted"
-  end
-
   # Switch between enrolled courses
   def change
     if course = current_user.courses.where(id: params[:id]).first
