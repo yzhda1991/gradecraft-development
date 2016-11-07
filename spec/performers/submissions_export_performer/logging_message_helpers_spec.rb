@@ -9,7 +9,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   subject { performer }
 
   describe "logging message helpers" do
-    before { performer.instance_variable_set(:@students, students) }
+    before { performer.instance_variable_set(:@submitters, students) }
 
     describe "generate_csv_messages" do
       subject { performer.instance_eval{ generate_export_csv_messages } }

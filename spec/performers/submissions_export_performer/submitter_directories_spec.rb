@@ -90,7 +90,7 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
     subject { performer.instance_eval { create_submitter_directories }}
     before(:each) { stub_students }
 
-    it "calls Dir.mkdir once for each student in @students" do
+    it "calls Dir.mkdir once for each student in @submitters" do
       expect(Dir).to receive(:mkdir).with(student_dir_path1).once
       expect(Dir).to receive(:mkdir).with(student_dir_path2).once
       expect(Dir).to receive(:mkdir).with(student_dir_path3).once
