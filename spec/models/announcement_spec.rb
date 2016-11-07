@@ -60,6 +60,7 @@ describe Announcement do
 
   describe "#deliver!" do
     let(:course) { create :course }
+    let(:delivery) { double(:email, deliver_now: nil) }
     let(:student) { create :user }
     subject { create :announcement, course: course }
 
@@ -69,9 +70,21 @@ describe Announcement do
     end
 
     it "sends an email to all the users in the course" do
-      delivery = double(:email)
       expect(delivery).to receive(:deliver_now)
-      expect(AnnouncementMailer).to receive(:announcement_email).with(subject, student).and_return delivery
+      expect(AnnouncementMailer).to \
+        receive(:announcement_email).with(subject, student).and_return delivery
+      subject.deliver!
+    end
+
+    it "sends an email only to the recipient if it is set" do
+      another_student = create :user
+      subject.update_attributes recipient: another_student
+
+      expect(AnnouncementMailer).to \
+        receive(:announcement_email).with(subject, another_student).and_return delivery
+      expect(AnnouncementMailer).to_not \
+        receive(:announcement_email).with(subject, student)
+
       subject.deliver!
     end
   end
