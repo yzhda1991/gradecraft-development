@@ -1,5 +1,5 @@
 class AnnouncementMailer < ApplicationMailer
-  layout "mailers/announcement_layout"
+  layout "mailers/notification_layout"
 
   def announcement_email(announcement, student)
     @announcement = announcement

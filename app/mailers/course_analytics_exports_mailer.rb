@@ -1,5 +1,5 @@
 class CourseAnalyticsExportsMailer < ApplicationMailer
-  layout "mailers/exports_layout"
+  layout "mailers/notification_layout"
 
   attr_reader :owner, :course, :export, :status
 
