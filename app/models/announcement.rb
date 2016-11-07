@@ -9,11 +9,6 @@ class Announcement < ActiveRecord::Base
   validates :course, presence: true
   validates :title, presence: true
 
-  scope :for_course_or_recipient, ->(course_id, recipient_id) do
-    query = where(course_id: course_id)
-    query = query.where(recipient_id: recipient_id) unless recipient_id.nil?
-    query
-  end
   default_scope { order "created_at DESC" }
 
   def self.read_count_for(user, course)

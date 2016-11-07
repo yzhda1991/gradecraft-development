@@ -89,23 +89,6 @@ describe Announcement do
     end
   end
 
-  describe ".for_course_or_recipient" do
-    let!(:announcement1) { create :announcement, course: course }
-    let!(:announcement2) { create :announcement, course: course, recipient: recipient }
-    let(:course) { create :course }
-    let(:recipient) { create :user }
-
-    it "returns the announcement for the course only if the recipient is nil" do
-      expect(described_class.for_course_or_recipient(course.id, nil)).to \
-        include announcement1, announcement2
-    end
-
-    it "returns the announcement only for the recipient if that is set" do
-      expect(described_class.for_course_or_recipient(course.id, recipient.id)).to \
-        eq [announcement2]
-    end
-  end
-
   describe "#read_count" do
     it "is the number of users for the course who have not read the announcement" do
       announcement = create :announcement
