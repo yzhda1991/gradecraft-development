@@ -10,6 +10,7 @@ describe GradeAnnouncement do
       expect { described_class.create grade }.to change { Announcement.count }.by 1
       expect(announcement.course).to eq grade.course
       expect(announcement.author).to eq grade.graded_by
+      expect(announcement.recipient).to eq grade.student
       expect(announcement.title).to eq \
         "#{grade.course.course_number} - #{grade.assignment.name} Graded"
       expect(announcement.body).to include \
