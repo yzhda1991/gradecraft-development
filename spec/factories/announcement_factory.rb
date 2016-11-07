@@ -4,5 +4,9 @@ FactoryGirl.define do
     body { Faker::Lorem.paragraph(2) }
     association :course
     association :author, factory: :user
+
+    trait :for_recipient do
+      association :recipient, factory: :user
+    end
   end
 end
