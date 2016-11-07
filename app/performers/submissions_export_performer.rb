@@ -489,7 +489,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  def student_directories_created_successfully_messages
+  def submitter_directories_created_successfully_messages
     expand_messages ({
       success: "Successfully confirmed creation of all student directories",
       failure: "Some student directories did not create properly"
