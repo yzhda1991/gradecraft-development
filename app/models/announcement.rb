@@ -1,6 +1,7 @@
 class Announcement < ActiveRecord::Base
   belongs_to :author, class_name: "User"
   belongs_to :course
+  belongs_to :recipient, class_name: "User"
   has_many :states, class_name: "AnnouncementState", dependent: :destroy
 
   validates :author, presence: true

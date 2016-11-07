@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102180020) do
+ActiveRecord::Schema.define(version: 20161107123814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,14 +27,16 @@ ActiveRecord::Schema.define(version: 20161102180020) do
   end
 
   create_table "announcements", force: :cascade do |t|
-    t.string   "title",      null: false
-    t.text     "body",       null: false
-    t.integer  "author_id",  null: false
-    t.integer  "course_id",  null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",        null: false
+    t.text     "body",         null: false
+    t.integer  "author_id",    null: false
+    t.integer  "course_id",    null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "recipient_id"
     t.index ["author_id"], name: "index_announcements_on_author_id", using: :btree
     t.index ["course_id"], name: "index_announcements_on_course_id", using: :btree
+    t.index ["recipient_id"], name: "index_announcements_on_recipient_id", using: :btree
   end
 
   create_table "assignment_files", force: :cascade do |t|
@@ -234,6 +236,7 @@ ActiveRecord::Schema.define(version: 20161102180020) do
     t.string   "role",                           default: "student", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
+    t.index ["course_id", "user_id"], name: "index_course_memberships_on_course_id_and_user_id", unique: true, using: :btree
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
@@ -256,7 +259,7 @@ ActiveRecord::Schema.define(version: 20161102180020) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: false,                        null: false
+    t.boolean  "teams_visible",                                           default: true,                         null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
@@ -292,6 +295,7 @@ ActiveRecord::Schema.define(version: 20161102180020) do
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
     t.boolean  "has_multipliers",                                         default: false,                        null: false
+    t.index ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|
@@ -799,6 +803,7 @@ ActiveRecord::Schema.define(version: 20161102180020) do
   add_foreign_key "announcement_states", "users"
   add_foreign_key "announcements", "courses"
   add_foreign_key "announcements", "users", column: "author_id"
+  add_foreign_key "announcements", "users", column: "recipient_id"
   add_foreign_key "earned_badges", "users", column: "awarded_by_id"
   add_foreign_key "flagged_users", "courses"
   add_foreign_key "flagged_users", "users", column: "flagged_id"
