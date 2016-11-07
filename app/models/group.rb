@@ -64,6 +64,11 @@ class Group < ActiveRecord::Base
     "#{submitter_directory_name} - #{id}"
   end
 
+  # Grabbing the grade for an assignment
+  def grade_for_assignment(assignment)
+    grades.where(assignment_id: assignment.id).first || grades.new(assignment: assignment)
+  end
+
   private
 
   # Checking to make sure any constraints the instructor has set up around

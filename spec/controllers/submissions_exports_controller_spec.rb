@@ -282,13 +282,13 @@ RSpec.describe SubmissionsExportsController, type: :controller do
         course_id: course.id,
         professor_id: professor.id,
         team_id: team.id,
-        group_id: group.id
+        use_groups: true
       }
     end
 
     before do
       allow(controller).to receive(:params) do
-        {assignment_id: assignment.id, team_id: team.id, group_id: group.id }
+        { assignment_id: assignment.id, team_id: team.id, use_groups: true }
       end
 
       allow(controller).to receive_messages(current_course: course, current_user: professor)

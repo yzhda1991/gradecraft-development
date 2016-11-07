@@ -13,9 +13,9 @@
     - if export.team
       = link_to export.team.name, team_path(export.team)
 
-  -# number of students
+  -# number of submitters
   %td
-    = export.student_ids.count
+    = export.submitter_ids.count
 
   -# filename
   %td
