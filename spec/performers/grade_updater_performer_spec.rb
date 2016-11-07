@@ -188,7 +188,7 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       notify
     end
 
-    xit "creates a new announcement for the student" do
+    it "creates a new announcement for the student" do
       expect { notify }.to change { Announcement.count }.by(1)
     end
   end
