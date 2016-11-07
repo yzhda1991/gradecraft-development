@@ -3,7 +3,7 @@
   %head
     %meta{:content => "width=device-width", name: "viewport"}/
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title= @page_title rescue "GradeCraft Notification"
+    %title= @email_title rescue "GradeCraft Notification"
     = render partial: "layouts/mailers/stylesheet"
 
   %body{:bgcolor => "#f6f6f6"}
