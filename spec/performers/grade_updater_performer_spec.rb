@@ -188,9 +188,8 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       notify
     end
 
-    it "creates a new announcement for the student" do
-      skip "pending fix to individual emails"
-      # expect { notify }.to change { Announcement.count }.by(1)
+    xit "creates a new announcement for the student" do
+      expect { notify }.to change { Announcement.count }.by(1)
     end
   end
 

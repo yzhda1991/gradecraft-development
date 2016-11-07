@@ -21,12 +21,11 @@ describe Services::Actions::NotifiesOfEarnedBadge do
       described_class.execute earned_badge: earned_badge
     end
 
-    it "creates an announcement for the student" do
-      skip "pending bugfix to handle individuals"
-      # allow(NotificationMailer).to receive(:earned_badge_awarded).and_return delivery
-      # 
-      # expect { described_class.execute earned_badge: earned_badge }.to \
-      #   change { Announcement.count }.by 1
+    xit "creates an announcement for the student" do
+      allow(NotificationMailer).to receive(:earned_badge_awarded).and_return delivery
+
+      expect { described_class.execute earned_badge: earned_badge }.to \
+        change { Announcement.count }.by 1
     end
   end
 
