@@ -25,10 +25,11 @@ class EarnedBadgeAnnouncement
   end
 
   def params
-    { course_id: earned_badge.course_id,
-      author_id: earned_badge.awarded_by_id,
-      body:      body,
-      title:     title
+    { course_id:    earned_badge.course_id,
+      author_id:    earned_badge.awarded_by_id,
+      recipient_id: earned_badge.student_id,
+      body:         body,
+      title:        title
     }
   end
 

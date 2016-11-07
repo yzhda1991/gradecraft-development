@@ -11,6 +11,7 @@ describe EarnedBadgeAnnouncement do
       expect { described_class.create earned_badge }.to change { Announcement.count }.by 1
       expect(announcement.course).to eq earned_badge.course
       expect(announcement.author).to eq user
+      expect(announcement.recipient).to eq earned_badge.student
       expect(announcement.title).to \
         eq "#{course.course_number} - You've earned a new #{course.badge_term}!"
       expect(announcement.body).to include \
