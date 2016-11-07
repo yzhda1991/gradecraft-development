@@ -117,7 +117,7 @@ tbody
   display: inline-block
   margin-bottom: 1rem
 
-.filter-button
+.button-filter
   background-color: $color-white
   color: $color-grey-3
   display: block
@@ -143,6 +143,23 @@ tbody
   padding: .5rem .4rem
   &:hover
     background-color: darken($color-blue-2, 5%)
+
+.button-tab
+  border-radius: 0
+  margin-right: -4px
+  padding: .5rem
+  font-size: 0.8rem
+  background-color: transparent
+  border: 1px solid $color-blue-3
+  color: $color-blue-3
+  transition: all 0.3s
+  &.selected, &:hover
+    background-color: $color-blue-3
+    color: $color-white
+  &:active
+    background-color: inherit
+  &:focus
+    outline: none
 
 .button-options
   position: relative

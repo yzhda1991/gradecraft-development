@@ -78,6 +78,7 @@
 //= require assignments
 //= require pass_fail
 //= require student_dashboard
+//= require public_pages
 //= require levels_per_assign
 //= require earned_badges
 //= require file_upload
