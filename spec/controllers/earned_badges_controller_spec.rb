@@ -130,7 +130,7 @@ describe EarnedBadgesController do
           controller.instance_eval { send_earned_badge_notifications }
         end
 
-        xit "should create an announcement" do
+        it "should create an announcement" do
           expect { controller.instance_eval { send_earned_badge_notifications }}.to \
             change { Announcement.count }.by 2
         end

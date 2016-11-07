@@ -21,7 +21,7 @@ describe Services::Actions::NotifiesOfEarnedBadge do
       described_class.execute earned_badge: earned_badge
     end
 
-    xit "creates an announcement for the student" do
+    it "creates an announcement for the student" do
       allow(NotificationMailer).to receive(:earned_badge_awarded).and_return delivery
 
       expect { described_class.execute earned_badge: earned_badge }.to \
