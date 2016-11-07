@@ -55,6 +55,14 @@ describe AnnouncementsController do
         get :index
         expect(assigns(:announcements)).to eq [announcement]
       end
+
+      it "does not list announcements that are for another recipient" do
+        create :announcement, :for_recipient, course_id: @course.id
+
+        get :index
+
+        expect(assigns(:announcements)).to eq [announcement]
+      end
     end
 
     describe "POST #create" do

@@ -60,6 +60,7 @@ describe Announcement do
 
   describe "#deliver!" do
     let(:course) { create :course }
+    let(:delivery) { double(:email, deliver_now: nil) }
     let(:student) { create :user }
     subject { create :announcement, course: course }
 
@@ -69,9 +70,21 @@ describe Announcement do
     end
 
     it "sends an email to all the users in the course" do
-      delivery = double(:email)
       expect(delivery).to receive(:deliver_now)
-      expect(AnnouncementMailer).to receive(:announcement_email).with(subject, student).and_return delivery
+      expect(AnnouncementMailer).to \
+        receive(:announcement_email).with(subject, student).and_return delivery
+      subject.deliver!
+    end
+
+    it "sends an email only to the recipient if it is set" do
+      another_student = create :user
+      subject.update_attributes recipient: another_student
+
+      expect(AnnouncementMailer).to \
+        receive(:announcement_email).with(subject, another_student).and_return delivery
+      expect(AnnouncementMailer).to_not \
+        receive(:announcement_email).with(subject, student)
+
       subject.deliver!
     end
   end
@@ -96,6 +109,20 @@ describe Announcement do
       announcement = build :announcement, course: nil
       expect(announcement.unread_count).to be_zero
     end
+
+    context "with an announcement for a specific recipient" do
+      subject { create :announcement, :for_recipient }
+
+      it "returns 1 if the recipient has not yet read the announcement" do
+        expect(subject.unread_count).to eq 1
+      end
+
+      it "returns 0 if the recipient has read it" do
+        AnnouncementState.create announcement: subject, user: subject.recipient, read: true
+
+        expect(subject.unread_count).to be_zero
+      end
+    end
   end
 
   describe ".read_count_for" do
@@ -107,6 +134,19 @@ describe Announcement do
       create :announcement_state, announcement: subject, user: subject.author
       expect(Announcement.read_count_for(subject.author, subject.course)).to eq 1
     end
+
+    context "with announcements for a specific recipient" do
+      let!(:recipient_announcement) { create :announcement, :for_recipient,
+                                      course: subject.course }
+      let(:recipient) { recipient_announcement.recipient }
+
+      it "returns the number of read announcements for a specific student and course" do
+        create :announcement_state, announcement: subject, user: recipient
+        create :announcement_state, announcement: recipient_announcement, user: recipient
+
+        expect(Announcement.read_count_for(recipient, subject.course)).to eq 2
+      end
+    end
   end
 
   describe ".unread_count_for" do
@@ -116,6 +156,15 @@ describe Announcement do
       CourseMembership.create  course_id: subject.course.id,
         user_id: subject.author.id, role: "student"
       expect(Announcement.unread_count_for(subject.author, subject.course)).to eq 1
+    end
+
+    context "with announcements for a specific recipient" do
+      let!(:recipient_announcement) { create :announcement, course: subject.course,
+                                      recipient: subject.author }
+
+      it "returns the number of unread announcements for a specific student and course" do
+        expect(Announcement.unread_count_for(subject.author, subject.course)).to eq 2
+      end
     end
   end
 

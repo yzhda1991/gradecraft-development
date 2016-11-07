@@ -131,9 +131,8 @@ describe EarnedBadgesController do
         end
 
         it "should create an announcement" do
-          skip "pending bugfix to handle individuals"
-          # expect { controller.instance_eval { send_earned_badge_notifications }}.to \
-          #   change { Announcement.count }.by 2
+          expect { controller.instance_eval { send_earned_badge_notifications }}.to \
+            change { Announcement.count }.by 2
         end
       end
 

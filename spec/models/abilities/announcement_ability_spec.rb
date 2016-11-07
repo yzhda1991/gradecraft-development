@@ -15,6 +15,20 @@ describe Ability do
       expect(subject).to be_able_to(:read, announcement)
     end
 
+    context "with a single recipient announcement" do
+      it "is viewable only by the recipient" do
+        announcement = build :announcement, course: course, recipient: student
+
+        expect(subject).to be_able_to(:read, announcement)
+      end
+
+      it "is not viewable by someone else" do
+        announcement = build :announcement, :for_recipient, course: course
+
+        expect(subject).to_not be_able_to(:read, announcement)
+      end
+    end
+
     it "is creatable by any staff for the course" do
       professor_course_membership = create :professor_course_membership,
         course: course

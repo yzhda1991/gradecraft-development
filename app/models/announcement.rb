@@ -1,6 +1,7 @@
 class Announcement < ActiveRecord::Base
   belongs_to :author, class_name: "User"
   belongs_to :course
+  belongs_to :recipient, class_name: "User"
   has_many :states, class_name: "AnnouncementState", dependent: :destroy
 
   validates :author, presence: true
@@ -13,12 +14,13 @@ class Announcement < ActiveRecord::Base
   def self.read_count_for(user, course)
     AnnouncementState
       .joins(:announcement)
-      .where(announcements: { course_id: course.id })
+      .where(announcements: { course_id: course.id, recipient_id: [nil, user.id] })
       .where(user_id: user.id).count
   end
 
   def self.unread_count_for(user, course)
-    Announcement.where(course_id: course.id).count - read_count_for(user, course)
+    Announcement.where(course_id: course.id, recipient_id: [nil, user.id]).count -
+      read_count_for(user, course)
   end
 
   def abstract(words=25)
@@ -26,7 +28,9 @@ class Announcement < ActiveRecord::Base
   end
 
   def deliver!
-    if course
+    if !recipient.nil?
+      AnnouncementMailer.announcement_email(self, recipient).deliver_now
+    elsif !course.nil?
       course.users.each do |user|
         AnnouncementMailer.announcement_email(self, user).deliver_now
       end
@@ -58,6 +62,7 @@ class Announcement < ActiveRecord::Base
 
   def unread_count
     return 0 if course.nil?
+    return 1 - read_count if recipient.present?
     course.users.count - read_count
   end
 end

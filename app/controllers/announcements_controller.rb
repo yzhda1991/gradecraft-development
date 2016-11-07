@@ -2,7 +2,8 @@ class AnnouncementsController < ApplicationController
   include AnnouncementsHelper
 
   def index
-    @announcements = Announcement.where(course_id: current_course.id)
+    @announcements = Announcement.where(course_id: current_course.id,
+                                        recipient_id: [nil, current_user.id])
   end
 
   def show

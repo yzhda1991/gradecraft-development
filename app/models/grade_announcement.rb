@@ -26,10 +26,11 @@ class GradeAnnouncement
   end
 
   def params
-    { course_id: grade.course_id,
-      author_id: grade.graded_by_id,
-      body:      body,
-      title:     title
+    { course_id:    grade.course_id,
+      author_id:    grade.graded_by_id,
+      recipient_id: grade.student_id,
+      body:         body,
+      title:        title
     }
   end
 
