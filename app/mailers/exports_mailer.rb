@@ -1,5 +1,5 @@
 class ExportsMailer < ApplicationMailer
-  layout "mailers/exports_layout"
+  layout "mailers/notification_layout"
 
   # the SecureTokenHelper brings in the #secure_downloads_url method which we
   # need for building the secure download method on success emails

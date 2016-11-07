@@ -32,7 +32,7 @@ describe AnnouncementMailer do
     end
 
     it "has the email html title" do
-      expect(email.body).to include "GradeCraft Announcement"
+      expect(email.body).to include "Announcement"
     end
   end
 end

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  mount RailsEmailPreview::Engine, at: "emails" if Rails.env.development?
-
   require "admin_constraint"
 
   #1. Analytics & Charts
