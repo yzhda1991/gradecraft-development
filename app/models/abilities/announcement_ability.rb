@@ -2,7 +2,9 @@ module AnnouncementAbility
   def define_announcement_abilities(user, course)
     can :read, Announcement do |announcement|
       announcement.course.nil? || (announcement.course == course &&
-        announcement.course.users.include?(user))
+        (announcement.recipient.present? ?
+          announcement.recipient == user :
+          announcement.course.users.include?(user)))
     end
 
     can :create, Announcement do |announcement|
