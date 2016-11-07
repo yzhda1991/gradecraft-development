@@ -9,9 +9,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "#submissions_snapshot" do
     subject { performer.instance_eval { submissions_snapshot }}
 
-    let(:submission) { double(Submission, id: 872, student_id: 3800, updated_at: updated_timestamp) }
+    let(:submission) { double(Submission, id: 872, submitter_id: 3800, updated_at: updated_timestamp) }
     let(:updated_timestamp) { Time.parse("Oct 20 1942") }
-    let(:snapshot_expectation) {{ 872 => { student_id: 3800, updated_at: updated_timestamp.to_s }}}
+    let(:snapshot_expectation) {{ 872 => { submitter_id: 3800, updated_at: updated_timestamp.to_s }}}
 
     before(:each) do
       performer.instance_variable_set(:@submissions_snapshot, nil)
