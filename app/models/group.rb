@@ -51,6 +51,10 @@ class Group < ActiveRecord::Base
     approved == "Pending"
   end
 
+  def same_name_as?(another_group)
+    name.downcase == another_group.name.downcase
+  end
+
   # Group submissions
   def submission_for_assignment(assignment)
     submissions_by_assignment_id[assignment.id].try(:first)
