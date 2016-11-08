@@ -2,7 +2,7 @@ class GradeExporter
 
   def export_grades(assignment, students, options={})
     CSV.generate(options) do |csv|
-      csv << header
+      csv << headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
