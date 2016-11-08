@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(version: 20161107123814) do
     t.boolean  "has_badges",                                              default: false,                        null: false
     t.boolean  "has_teams",                                               default: false,                        null: false
     t.string   "student_term",                                            default: "Student",                    null: false
-    t.string   "team_term",                                               default: "Team",                       null: false
+    t.string   "team_term",                                               default: "Section",                       null: false
     t.text     "course_rules"
     t.boolean  "status",                                                  default: true,                         null: false
     t.datetime "weights_close_at"
