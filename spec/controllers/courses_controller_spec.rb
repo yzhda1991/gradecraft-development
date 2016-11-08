@@ -14,10 +14,6 @@ describe CoursesController do
   context "as admin" do
     before(:each) { login_user(admin) }
 
-    it "destroys the course" do
-      expect{ get :destroy, params: { id: course }}.to change(Course,:count).by(-1)
-    end
-
     describe "POST recalculate_student_scores" do
       let!(:course_membership) { create(:student_course_membership, course: course) }
 
@@ -196,12 +192,6 @@ describe CoursesController do
       end
     end
 
-    describe "GET destroy" do
-      it "raises a not authorized error" do
-        expect{ get :destroy, params: { id: course }}.to raise_error CanCan::AccessDenied
-      end
-    end
-
     describe "POST recalculate_student_scores" do
       it "is a protected route" do
         expect(post :recalculate_student_scores, params: { id: course.id.to_s }).to \
@@ -286,8 +276,7 @@ describe CoursesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :update,
-        :destroy,
+        :update
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)
