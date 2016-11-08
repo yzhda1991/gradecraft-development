@@ -13,6 +13,18 @@ class GradeExporter
     end
   end
 
+  def export_group_grades(assignment, groups, options={})
+    CSV.generate(options) do |csv|
+      csv << headers
+      groups.each do |group|
+        grade = group.grade_for_assignment(assignment)
+        csv << [group.name,
+                grade.score || "",
+                grade.feedback || ""]
+      end
+    end
+  end
+
   def export_grades_with_detail(assignment, students, options={})
     CSV.generate(options) do |csv|
       csv << headers + detail_headers
