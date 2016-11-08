@@ -2,7 +2,7 @@ class GradeExporter
 
   def export_grades(assignment, students, options={})
     CSV.generate(options) do |csv|
-      csv << headers
+      csv << header
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
@@ -15,7 +15,7 @@ class GradeExporter
 
   def export_group_grades(assignment, groups, options={})
     CSV.generate(options) do |csv|
-      csv << headers
+      csv << group_headers
       groups.each do |group|
         grade = group.grade_for_assignment(assignment)
         csv << [group.name,
@@ -44,6 +44,10 @@ class GradeExporter
   end
 
   private
+
+  def group_headers
+    ["Group Name", "Score", "Feedback"].freeze
+  end
 
   def headers
     ["First Name", "Last Name", "Email", "Score", "Feedback"].freeze
