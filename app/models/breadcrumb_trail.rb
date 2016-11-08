@@ -438,12 +438,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :students }')
   end
 
-  def students_flagged
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :students }', students_path)
-    breadcrumb('Flagged #{ term_for :students }', flagged_students_path)
-  end
-
   def students_show
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :students }', students_path)
