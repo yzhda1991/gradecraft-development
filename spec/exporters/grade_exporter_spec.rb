@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 require "./app/exporters/grade_exporter"
 
 describe GradeExporter do
@@ -53,12 +53,12 @@ describe GradeExporter do
 
     it "generates an empty CSV if there is no assignment specified" do
       csv = subject.export_group_grades(nil, [])
-      expect(csv).to eq "Name,Score,Feedback\n"
+      expect(csv).to eq "Group Name,Score,Feedback\n"
     end
 
     it "generates an empty CSV if there are no groups specified" do
       csv = subject.export_group_grades(assignment, [])
-      expect(csv).to eq "Name,Score,Feedback\n"
+      expect(csv).to eq "Group Name,Score,Feedback\n"
     end
 
     it "generates a CSV with student scores" do
@@ -68,23 +68,24 @@ describe GradeExporter do
       allow(groups.first).to receive(:grade_for_assignment).with(assignment)
           .and_return grade1
 
-      allow(groups.first).to receive(:grade_for_assignment).with(assignment)
+      allow(groups.last).to receive(:grade_for_assignment).with(assignment)
           .and_return grade2
 
       csv = CSV.new(subject.export_group_grades(assignment, groups)).read
 
       expect(csv.length).to eq 3
 
-      expect(csv[1]).to eq [groups.first.name, 123, ""]
-      expect(csv[2]).to eq [groups.last.name, 456, "Grrrrreat!"]
+      expect(csv[1]).to eq [groups.first.name, "123", ""]
+      expect(csv[2]).to eq [groups.last.name, "456", "Grrrrreat!"]
     end
 
     it "includes groups that do not have grades for the assignment" do
       allow(groups.first).to \
         receive(:grade_for_assignment).with(assignment)
           .and_return Grade.new
+
       csv = CSV.new(subject.export_group_grades(assignment, groups)).read
-      expect(csv[1][3]).to eq ""
+      expect(csv.last.last).to eq ""
     end
   end
 
