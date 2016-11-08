@@ -5,8 +5,8 @@ feature "grading a team challenge" do
     let(:course) { create :course, has_team_challenges: true }
     let(:professor) { create :user }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
-    let!(:challenge) { create :challenge, name: "Team Challenge Name", course: course }
-    let!(:team) { create :team, name: "Team Name", course: course }
+    let!(:challenge) { create :challenge, name: "Section Challenge Name", course: course }
+    let!(:team) { create :team, name: "Section Name", course: course }
 
     before(:each) do
       login_as professor
@@ -15,13 +15,13 @@ feature "grading a team challenge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "Team Challenges"
+        click_link "Section Challenges"
       end
 
       expect(current_path).to eq challenges_path
 
       within(".pageContent") do
-        click_link "Team Challenge Name"
+        click_link "Section Challenge Name"
       end
 
       expect(current_path).to eq challenge_path(challenge.id)
@@ -36,7 +36,7 @@ feature "grading a team challenge" do
         fill_in("challenge_grade_score", with: 100)
         click_button "Submit Grade"
       end
-      expect(page).to have_notification_message("notice", "Team Name's Grade for Team Challenge Name Team Challenge successfully graded")
+      expect(page).to have_notification_message("notice", "Section Name's Grade for Section Challenge Name Section Challenge successfully graded")
     end
   end
 end

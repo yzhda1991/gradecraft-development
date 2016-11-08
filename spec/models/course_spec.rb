@@ -326,8 +326,8 @@ describe Course do
       expect(subject.team_term).to eq("Horde")
     end
 
-    it "returns Team if no team_term is present" do
-      expect(subject.team_term).to eq("Team")
+    it "returns Section if no team_term is present" do
+      expect(subject.team_term).to eq("Section")
     end
   end
 

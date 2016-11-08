@@ -5,7 +5,7 @@ feature "editing a team" do
     let(:course) { create :course, has_teams: true }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
-    let!(:team) { create :team, name: "Team Name", course: course }
+    let!(:team) { create :team, name: "Section Name", course: course }
 
     before(:each) do
       login_as professor
@@ -14,13 +14,13 @@ feature "editing a team" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "Teams"
+        click_link "Sections"
       end
 
       expect(current_path).to eq teams_path
 
       within(".pageContent") do
-        click_link "Team Name"
+        click_link "Section Name"
       end
 
       expect(current_path).to eq team_path(team.id)
@@ -30,11 +30,13 @@ feature "editing a team" do
       end
 
       within(".pageContent") do
-        fill_in "Name", with: "Edited Team Name"
-        click_button "Update Team"
+        fill_in "Name", with: "Edited Section Name"
+        click_button "Update Section"
       end
-
-      expect(page).to have_notification_message("notice", "Team Edited Team Name successfully updated")
+      
+      expect(current_path).to eq team_path(team)
+      
+      expect(page).to have_content("Edited Section Name")
     end
   end
 end

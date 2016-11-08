@@ -5,7 +5,7 @@ feature "deleting a team" do
     let(:course) { create :course, has_teams: true }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
-    let!(:team) { create :team, name: "Team Name", course: course }
+    let!(:team) { create :team, name: "Section Name", course: course }
 
     before(:each) do
       login_as professor
@@ -14,7 +14,7 @@ feature "deleting a team" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "Teams"
+        click_link "Section"
       end
 
       expect(current_path).to eq teams_path
@@ -23,7 +23,7 @@ feature "deleting a team" do
         click_link "Delete"
       end
 
-      expect(page).to have_notification_message("notice", "Team Team Name successfully deleted")
+      expect(page).to have_notification_message("notice", "Section Section Name successfully deleted")
     end
   end
 end

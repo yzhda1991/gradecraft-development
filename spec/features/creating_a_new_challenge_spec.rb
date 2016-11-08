@@ -13,21 +13,21 @@ feature "creating a new challenge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "Team Challenges"
+        click_link "Section Challenges"
       end
 
       within(".context_menu") do
-        click_link "New Team Challenge"
+        click_link "New Section Challenge"
       end
 
       expect(current_path).to eq new_challenge_path
 
       within(".pageContent") do
-        fill_in "Name", with: "New Team Challenge Name"
-        click_button "Create Team Challenge"
+        fill_in "Name", with: "New Section Challenge Name"
+        click_button "Create Section Challenge"
       end
 
-      expect(page).to have_notification_message("notice", "Challenge New Team Challenge Name successfully created")
+      expect(page).to have_notification_message("notice", "Challenge New Section Challenge Name successfully created")
     end
   end
 end

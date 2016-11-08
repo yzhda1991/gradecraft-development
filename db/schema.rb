@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161107123814) do
+ActiveRecord::Schema.define(version: 20161108202754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(version: 20161107123814) do
     t.boolean  "has_badges",                                              default: false,                        null: false
     t.boolean  "has_teams",                                               default: false,                        null: false
     t.string   "student_term",                                            default: "Student",                    null: false
-    t.string   "team_term",                                               default: "Section",                       null: false
+    t.string   "team_term",                                               default: "Section",                    null: false
     t.text     "course_rules"
     t.boolean  "status",                                                  default: true,                         null: false
     t.datetime "weights_close_at"
@@ -258,7 +258,7 @@ ActiveRecord::Schema.define(version: 20161107123814) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: false,                         null: false
+    t.boolean  "teams_visible",                                           default: false,                        null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
@@ -294,7 +294,6 @@ ActiveRecord::Schema.define(version: 20161107123814) do
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
     t.boolean  "has_multipliers",                                         default: false,                        null: false
-    t.index ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|

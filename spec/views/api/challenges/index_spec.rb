@@ -44,7 +44,7 @@ describe "api/challenges/index" do
   it "renders term for challenges" do
     render
     @json = JSON.parse(response.body)
-    expect(@json["meta"]["term_for_challenges"]).to eq("Team tsallenzes")
+    expect(@json["meta"]["term_for_challenges"]).to eq("Section tsallenzes")
   end
 
   it "includes allow_updates" do
