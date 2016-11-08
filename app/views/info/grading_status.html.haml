@@ -1,32 +1,27 @@
 .pageContent
   = render "layouts/alerts"
-        
-  %section
-    .card.quarter{style: "height: 104px"}
-      .card-cap
+
+  .grading-status-card-wrapper
+    .card.quarter
+      .card-text
         .center.bold.inverse.large= ungraded_submissions_count_for(current_course)
         %h3.center.inverse Ungraded Submissions
-          
-  %section
-    .card.quarter{style: "height: 104px;"}
-      .card-cap
+
+    .card.quarter
+      .card-text
         .center.bold.inverse.large= unreleased_grades_count_for(current_course)
         %h3.center.inverse Unreleased Grades
 
-  %section
-    .card.quarter{style: "height: 104px;"}
-      .card-cap
+    .card.quarter
+      .card-text
         .center.bold.inverse.large= in_progress_grades_count_for(current_course)
         %h3.center.inverse In Progress Grades
 
-  %section
-    .card.quarter{style: "height: 104px;"}
-      .card-cap
+    .card.quarter
+      .card-text
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h3.center.inverse Resubmissions
 
-  .clear
-  
   - if @ungraded_submissions_by_assignment.present?
     .collapseSection{id: "ungraded" }
       .collapse
