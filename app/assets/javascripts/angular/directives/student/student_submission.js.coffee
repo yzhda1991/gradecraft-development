@@ -1,8 +1,26 @@
 @gradecraft.directive 'studentSubmission', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  return {
+  StudentSubmissionCtrl = [() ->
+    vm = this
+    vm.loading = true
+    vm.saveSubmission = () ->
+      StudentSubmissionService.saveDraftSubmission(vm.assignmentId, vm.submission).then((result) ->
+        vm.submission = result
+      )
+
+    StudentSubmissionService.getDraftSubmission(vm.assignmentId).then((submission) ->
+      vm.submission = submission
+      vm.loading = false
+    )
+  ]
+
+  {
+    bindToController: true,
+    controller: StudentSubmissionCtrl,
+    controllerAs: 'vm',
+    restrict: 'EA',
     scope: {
-      submission: '='
+      assignmentId: '@'
     },
     templateUrl: 'student/submission/main.html'
     link: (scope, el, attr) ->
@@ -16,8 +34,5 @@
           'clearFormatting', 'selectAll', 'html'
         ]
       }
-      scope.saveSubmission = () ->
-        submission = scope.submission
-        StudentSubmissionService.saveSubmission(submission) #TODO: submission param should go into some sort of constructor
   }
 ]

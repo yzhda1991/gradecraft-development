@@ -1,30 +1,40 @@
 @gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
 
-  autosaved_submission = null
+  saveDraftSubmission = (assignmentId, submission) ->
+    if submission.id? then updateDraftSubmission(assignmentId, submission) else createDraftSubmission(assignmentId, submission)
 
-  saveSubmission = (submission) ->
-    autosaved_submission ?= submission
-    promise = if autosaved_submission? && autosaved_submission.id? then updateDraftSubmission() else createDraftSubmission();
-    promise.success(
+  getDraftSubmission = (assignmentId) ->
+    $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
-        autosaved_submission = response.submission
-        GradeCraftAPI.logResponse(response)
-    ).error(
-      (response) ->
-        GradeCraftAPI.logResponse(response)
+        GradeCraftAPI.logResponse(response.data)
+        response.data.submission
+      ,(response) ->
+        GradeCraftAPI.logResponse(response.data)
+        response.data.submission
     )
 
-  createDraftSubmission = () ->
-    return $http.post("/api/assignments/#{autosaved_submission.assignment_id}/submissions",
-      { submission: autosaved_submission }
+  createDraftSubmission = (assignmentId, submission) ->
+    $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response.data)
+        response.data.submission
+      ,(response) ->
+        GradeCraftAPI.logResponse(response.data)
+        null
     )
 
-  updateDraftSubmission = () ->
-    return $http.put("/api/assignments/#{autosaved_submission.assignment_id}/submissions/#{autosaved_submission.id}",
-      { submission: autosaved_submission }
+  updateDraftSubmission = (assignmentId, submission) ->
+    $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response.data)
+        response.data.submission
+      ,(response) ->
+        GradeCraftAPI.logResponse(response.data)
+        submission
     )
 
   return {
-    saveSubmission: saveSubmission
+    getDraftSubmission: getDraftSubmission
+    saveDraftSubmission: saveDraftSubmission
   }
 ]
