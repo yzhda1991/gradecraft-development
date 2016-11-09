@@ -1,8 +1,33 @@
 @import "../utilities/variables"
 
 .student-onboarding-slides
+  display: none
+
   .slick-slide
     height: auto
+
+  .slider-direction-button
+    top: 45%
+    background-color: $color-blue-5
+    color: $color-white
+    font-size: 2rem
+    width: 2.5rem
+    line-height: 2.5rem
+    border: none
+    &:hover
+      background-color: darken($color-blue-5, 5%)
+    &.next
+      right: -80px
+    &.previous
+      left: -80px
+
+  .fa-chevron-left::before
+    margin-right: 8px
+  .fa-chevron-right::before
+    margin-left: 8px
+
+.slick-slider
+  display: block
 
 .modal-wrapper
   max-width: 600px
