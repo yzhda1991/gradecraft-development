@@ -367,12 +367,16 @@ PaperTrail.whodunnit = nil
         Rubric.create! do |rubric|
           rubric.assignment = assignment
           rubric.save
+
+          full_points = 0
           1.upto(5).each do |n|
             rubric.criteria.create! do |criterion|
               criterion.name = "Criteria ##{n}"
               criterion.description = "Thestral dirigible plums, Viktor Krum hexed memory charm Animagus Invisibility Cloak three-headed Dog. Half-Blood Prince Invisibility Cloak cauldron cakes, hiya Harry!"
               criterion.max_points =
                 10.times.collect {|i| (i + 1) * 10000}.sample
+
+              full_points += criterion.max_points
               criterion.order = n
               criterion.save
               LevelBadge.create!(
@@ -396,6 +400,7 @@ PaperTrail.whodunnit = nil
               end
             end
           end
+          assignment.update_attributes(full_points: full_points)
         end
         print "." if !course_name == @courses.keys[-1]
         puts_success :assignment, assignment_name,
@@ -429,31 +434,10 @@ PaperTrail.whodunnit = nil
           :submissions_created if course_name == @courses.keys[-1]
       end
 
-      if config[:rubric] && config[:grades]
-        @students.each do |student|
-          assignment.rubric.criteria.each do |criterion|
-            criterion.criterion_grades.create! do |cg|
-              cg.assignment_id = assignment.id
-              cg.comments = "good work #{student.display_name}!"
-              cg.criterion_id = criterion.id
-              cg.level_id = criterion.levels.first.id
-              cg.points = criterion.levels.first.points
-              cg.student_id = student.id
-            end
-          end
-          print "."
-        end
-        print "\n"
-        puts_success :assignment, assignment_name,
-          :grades_created if course_name == @courses.keys[-1]
-      end
-
       if config[:grades]
-
-        grade_attributes = config[:grade_attributes] || {}
-
         @students.each do |student|
-          student.grades.create! do |g|
+          grade_attributes = config[:grade_attributes] || {}
+          grade = student.grades.create! do |g|
             @assignment_default_config[:grade_attributes].keys.each do |attr|
 
               # You can set a custom raw score in :grade_attributes like this:
@@ -474,8 +458,26 @@ PaperTrail.whodunnit = nil
             end
             g.assignment = assignment
           end
+
+          if config[:rubric]
+            raw_points = 0
+            assignment.rubric.criteria.each do |criterion|
+              raw_points += criterion.levels.first.points
+              criterion.criterion_grades.create! do |cg|
+                cg.assignment_id = assignment.id
+                cg.comments = "good work #{student.display_name}!"
+                cg.criterion_id = criterion.id
+                cg.level_id = criterion.levels.first.id
+                cg.points = criterion.levels.first.points
+                cg.student_id = student.id
+                cg.grade_id = grade.id
+              end
+            end
+            grade.update_attributes(raw_points: raw_points)
+          end
           print "."
         end
+
         print "\n"
         puts_success :assignment, assignment_name,
           :grades_created if course_name == @courses.keys[-1]
