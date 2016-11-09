@@ -367,12 +367,16 @@ PaperTrail.whodunnit = nil
         Rubric.create! do |rubric|
           rubric.assignment = assignment
           rubric.save
+
+          full_points = 0
           1.upto(5).each do |n|
             rubric.criteria.create! do |criterion|
               criterion.name = "Criteria ##{n}"
               criterion.description = "Thestral dirigible plums, Viktor Krum hexed memory charm Animagus Invisibility Cloak three-headed Dog. Half-Blood Prince Invisibility Cloak cauldron cakes, hiya Harry!"
               criterion.max_points =
                 10.times.collect {|i| (i + 1) * 10000}.sample
+
+              full_points += criterion.max_points
               criterion.order = n
               criterion.save
               LevelBadge.create!(
@@ -396,6 +400,7 @@ PaperTrail.whodunnit = nil
               end
             end
           end
+          assignment.update_attributes(full_points: full_points)
         end
         print "." if !course_name == @courses.keys[-1]
         puts_success :assignment, assignment_name,
