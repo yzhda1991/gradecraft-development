@@ -15,7 +15,7 @@
                 %img{:src => event.media }
             - if event.description.present?
               .event-description
-                = sanitize(event.description, :tags=>['']).truncate(250, :separator => " ")
+                = sanitize(event.description, tags: %w(p), attributes: %w()).truncate(250, :separator => " ").gsub(/<\/?p>/, " ")
                 = link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).each do |assignment|
