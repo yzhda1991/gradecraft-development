@@ -82,7 +82,7 @@ describe Group do
     end
   end
 
-  describe "#grade_for_assignment", focus: true do
+  describe "#grade_for_assignment" do
     context "group grade exists" do
       it "returns the grade" do
         assignment = create :assignment
