@@ -199,7 +199,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def generate_export_csv
     open(csv_file_path, "w") do |f|
       if submissions_export.use_groups
-        export_data = GradeExporter.new.export_group_grades(@assignment, @submitters)
+        export_data = GradeExporter.new
+          .export_group_grades(@assignment, @submitters_for_csv)
         f.puts export_data
       else
         f.puts @assignment.grade_import(@submitters_for_csv)

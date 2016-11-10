@@ -27,25 +27,39 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "generate_export_csv" do
+  describe "generate_export_csv", focus: true do
     subject { performer.instance_eval { generate_export_csv }}
-    let(:students_for_csv) { create_list(:user, 2) }
+
+    let(:dogs_csv) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
     let(:csv_path) { performer.instance_eval { csv_file_path }}
 
     before(:each) do
-      performer.instance_variable_set(:@submitters_for_csv, students_for_csv)
+      performer.instance_variable_set(:@submitters_for_csv, submitters)
       performer.instance_variable_set(:@assignment, assignment)
-      allow(assignment).to receive(:grade_import) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
     end
 
-    it "saves the result of assignment#grade_import" do
-      subject
-      expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+    context "export uses groups" do
+      let(:submitters) { create_list :group, 2 }
+
+      it "saves the result of assignment#grade_import" do
+        allow(performer.submissions_export).to receive(:use_groups) { true }
+        allow_any_instance_of(GradeExporter).to \
+          receive(:export_group_grades).with(assignment, submitters) { dogs_csv }
+
+        subject
+        expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+      end
     end
 
-    it "sends an array of students to assignment#grade_import" do
-      expect(assignment).to receive(:grade_import).with(students_for_csv)
-      subject
+    context "export uses students" do
+      let(:submitters) { create_list(:user, 2) }
+
+      it "saves the result of assignment#grade_import" do
+        allow(assignment).to receive(:grade_import).with(submitters) { dogs_csv }
+
+        subject
+        expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+      end
     end
   end
 
