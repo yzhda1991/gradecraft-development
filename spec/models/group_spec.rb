@@ -119,4 +119,22 @@ describe Group do
     end
   end
 
+  describe "#same_name_as?" do
+    let(:hound_dogz1) { create(:group, name: "Hound Dogz") }
+    let(:hound_dogz2) { create(:group, name: "Hound Dogz") }
+    let(:roger_daltry) { create(:group, name: "Roger Daltry") }
+
+    context "has the same name as the group given" do
+      it "returns true" do
+        expect(hound_dogz1.same_name_as?(hound_dogz2)).to eq true
+      end
+    end
+
+    context "has a different name than the group given" do
+      it "returns false" do
+        expect(hound_dogz1.same_name_as?(roger_daltry)).to eq false
+      end
+    end
+  end
+
 end
