@@ -96,6 +96,22 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#group_suffix" do
+    context "export uses groups" do
+      it "returns the suffix" do
+        allow(subject).to receive(:use_groups) { true }
+        expect(subject.group_suffix).to eq "Group Submissions"
+      end
+    end
+
+    context "export does not use groups" do
+      it "returns nil" do
+        allow(subject).to receive(:use_groups) { false }
+        expect(subject.group_suffix).to be_nil
+      end
+    end
+  end
+
   describe "#formatted_team_name" do
     let(:result) { subject.formatted_team_name }
 
