@@ -157,15 +157,6 @@ class Assignment < ActiveRecord::Base
       .to_a # eager-load
   end
 
-  def group_submissions_with_files
-    Submission
-      .includes(:submission_files)
-      .includes(:group)
-      .where(assignment_id: self[:id])
-      .where(submissions_with_files_query)
-      .to_a # eager-load
-  end
-
   def student_with_submissions_query
     "select distinct(student_id) from submissions where assignment_id = ?"
   end

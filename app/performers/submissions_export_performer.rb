@@ -176,7 +176,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def fetch_submissions
     if submissions_export.use_groups
-      @assignment.group_submissions_with_files
+      @assignment.submissions.with_groups
     elsif submissions_export.team
       @assignment.student_submissions_with_files_for_team(@team)
     else

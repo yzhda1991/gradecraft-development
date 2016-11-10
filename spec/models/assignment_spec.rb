@@ -1074,18 +1074,4 @@ describe Assignment do
       expect(json).to eq({ id: subject.id }.to_json)
     end
   end
-
-  describe "#group_submissions_with_files", focus: true do
-    it "includes group submissions that have submission files" do
-      assignment = create :assignment
-      group = create :group, course_id: assignment.course.id
-      submission = create :submission, group: group, assignment: assignment
-      submission_file = create :submission_file, submission: submission
-
-      expect(assignment.group_submissions_with_files).to include(submission)
-    end
-
-    it "does not include group submissions that have no files" do
-    end
-  end
 end
