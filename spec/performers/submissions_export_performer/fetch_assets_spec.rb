@@ -149,7 +149,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         allow(performer.submissions_export).to receive(:use_groups) { true }
 
         allow(performer.assignment)
-          .to receive(:group_submissions_with_files)
+          .to receive_message_chain(:submissions, :with_group)
           .and_return ["group-submissions"]
 
         expect(fetch_submissions).to eq ["group-submissions"]
