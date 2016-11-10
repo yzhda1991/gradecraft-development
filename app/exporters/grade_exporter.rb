@@ -43,11 +43,12 @@ class GradeExporter
     end
   end
 
-  private
 
   def group_headers
     ["Group Name", "Score", "Feedback"].freeze
   end
+
+  private
 
   def headers
     ["First Name", "Last Name", "Email", "Score", "Feedback"].freeze

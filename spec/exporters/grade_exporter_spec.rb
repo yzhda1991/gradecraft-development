@@ -151,4 +151,14 @@ describe GradeExporter do
       expect(csv[1][3]).to eq ""
     end
   end
+
+  describe "#group_headers" do
+    it "has an array of headers for group grades" do
+      expect(subject.group_headers).to eq ["Group Name", "Score", "Feedback"]
+    end
+
+    it "is frozen" do
+      expect(subject.group_headers.frozen?).to eq true
+    end
+  end
 end
