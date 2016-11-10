@@ -27,7 +27,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "generate_export_csv", focus: true do
+  describe "generate_export_csv" do
     subject { performer.instance_eval { generate_export_csv }}
 
     let(:dogs_csv) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
