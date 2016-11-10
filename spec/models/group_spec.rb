@@ -82,6 +82,31 @@ describe Group do
     end
   end
 
+  describe "#grade_for_assignment", focus: true do
+    context "group grade exists" do
+      it "returns the grade" do
+        assignment = create :assignment
+        group = create :group
+        grade = create :grade, group: group, assignment: assignment
+
+        expect(group.grade_for_assignment(assignment)).to eq grade
+      end
+    end
+
+    context "no group grade exists" do
+      it "builds a new grade" do
+        assignment = create :assignment
+        group = create :group
+
+        grade = group.grade_for_assignment(assignment)
+
+        expect(grade.new_record?).to eq true
+        expect(grade.group).to eq group
+        expect(grade.assignment).to eq assignment
+      end
+    end
+  end
+
   describe "#pending?" do
     it "returns true if pending" do
       subject.approved = "Pending"
