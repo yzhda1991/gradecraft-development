@@ -35,7 +35,7 @@ class Students::IndexPresenter < Showtime::Presenter
 
   def students
     @students ||= IndexStudentCollection.new(User
-      .unscoped_students_being_graded_for_course(course, team)
+      .students_for_course(course, team)
       .order_by_high_score, self)
   end
 
@@ -84,7 +84,7 @@ class Students::IndexPresenter < Showtime::Presenter
     end
 
     def score
-      self.cached_score_sql_alias
+      self.score_for_course(presenter.course)
     end
     
     def last_login
@@ -93,6 +93,10 @@ class Students::IndexPresenter < Showtime::Presenter
 
     def team
       presenter.team_memberships.find { |tm| tm.student_id == self.id }.try(:team)
+    end
+    
+    def auditing?
+      self.auditing_course?(presenter.course)
     end
 
     def initialize(student, presenter)

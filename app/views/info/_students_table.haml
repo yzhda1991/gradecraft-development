@@ -14,7 +14,7 @@
     - students.each do |student|
       %tr
         %td= link_to student.name, student_path(student)
-        %td= points student.cached_score_for_course(current_course)
+        %td= points student.score_for_course(current_course)
         %td= points student.grade_for_course(current_course).try(:name)
 
         - if course.has_badges?

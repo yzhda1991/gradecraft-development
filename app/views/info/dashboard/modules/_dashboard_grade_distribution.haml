@@ -3,7 +3,7 @@
     %h3 Points Distribution
   .card-body
     - if current_user_is_student?
-      %h4.not_bold.italic= "You've earned #{points current_student.cached_score_for_course(current_course)} points"
+      %h4.not_bold.italic= "You've earned #{points current_student.score_for_course(current_course)} points"
       #grade_distro.student-distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
       #gradeDistro
     - else

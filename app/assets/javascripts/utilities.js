@@ -127,6 +127,12 @@ $('.button-table-action').click(function() {
     } else if (btnId === 'btn-flagged-students') {
       var flagged = $(this).find('td:eq(0) i').hasClass('flagged');
       return !flagged;
+    } else if (btnId === 'btn-auditors') {
+      var auditor = $(this).find('td:eq(0) span').hasClass('auditor');
+      return !auditor;
+    } else if (btnId === 'btn-leaderboard') {
+      var graded = $(this).find('td:eq(0) span').hasClass('graded');
+      return !graded;
     }
   }).hide();
 });

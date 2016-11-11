@@ -48,7 +48,7 @@ class Team < ActiveRecord::Base
   def total_earned_points
     total_score = 0
     students.each do |student|
-      total_score += (student.cached_score_for_course(course) || 0 )
+      total_score += (student.score_for_course(course) || 0 )
     end
     return total_score
   end

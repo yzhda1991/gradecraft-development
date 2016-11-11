@@ -29,6 +29,6 @@
                   %td
             - if current_course.valuable_badges?
               %td= student.earned_badge_score_for_course(current_course)
-            %td= student.cached_score_for_course(current_course)
+            %td= student.score_for_course(current_course)
             %td= student.grade_level_for_course(current_course)
             %td= link_to student.name, user_path(student)

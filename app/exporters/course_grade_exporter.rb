@@ -22,7 +22,7 @@ class CourseGradeExporter
       student.last_name,
       student.email,
       student.username,
-      student.cached_score_for_course(course),
+      student.score_for_course(course),
       student.grade_letter_for_course(course),
       student.grade_level_for_course(course),
       student.earned_badges.count,
