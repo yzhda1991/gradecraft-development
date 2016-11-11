@@ -1,27 +1,31 @@
-#gradebox(ng-click="grade.disableCustomValue()" ng-class="{'inactive': grade.is_custom_value}" tooltips tooltip-size="medium" tooltip-title="Click to use score levels" tooltip-side="bottom" tooltip-delay="800")
+#gradebox
 
-  -# dynamic label for select box
-  %label(for="grade_raw_points" ng-click="grade.disableCustomValue()" ng-class="{'inactive': grade.is_custom_value}")
-    Raw Score (#{assignment.full_points} Points Possible)
+  .raw-points-wrapper(ng-class="{'custom-input': grade.is_custom_value}")
 
-  %select#grade_raw_points(name="grade[raw_points]" ng-model="grade.raw_points" ng-disabled="grade.is_custom_value" ng-click="grade.enableScoreLevels($event)" ng-change="grade.update()" ng-class="{'disabled': grade.is_custom_value}")
-    %option(value="{{scoreLevel.value}}" ng-repeat="scoreLevel in assignmentScoreLevels" ng-selected="grade.raw_points == scoreLevel.value") {{scoreLevel.name}} ({{scoreLevel.formatted_value}} points)
+    %label.raw-points-label(for="grade_raw_points" ng-click="grade.enableScoreLevels()" ng-class="{'disabled': grade.is_custom_value}")
+      Raw Score (#{assignment.full_points} Points Possible)
+    %select#grade_raw_points(name="grade[raw_points]" ng-model="grade.raw_points" ng-disabled="grade.is_custom_value" ng-change="grade.update()" ng-class="{'disabled': grade.is_custom_value}")
+      %option(value="{{scoreLevel.value}}" ng-repeat="scoreLevel in assignmentScoreLevels" ng-selected="grade.raw_points == scoreLevel.value") {{scoreLevel.name}} ({{scoreLevel.formatted_value}} points)
 
-.gradebox(ng-click="grade.enableCustomValue()" ng-class="{'inactive': ! grade.is_custom_value}" tooltips tooltip-title="Click to enable custom grading" tooltip-size="medium" tooltip-side="bottom" tooltip-delay="800")
-  -# dynamic label for custom value field
-  %label#custom-value-label(for="grade_raw_points" ng-click="grade.enableCustomValue()" ng-class="{'disabled': ! grade.is_custom_value}")
-    Custom Value
-  = f.text_field :raw_points,
-    default: assignment.full_points,
-    label: "Score",
-    hint: "Total Assignment Points: #{ points assignment.full_points }",
-    "ng-model" => "grade.raw_points",
-    "ng-change" => "grade.update()",
-    "ng-click" => "grade.enableCustomValue()",
-    "ng-model-options" => "modelOptions",
-    "ng-disabled" => "! grade.is_custom_value",
-    "placeholder" => "Enter raw score for grade",
-    "smart-number" => "",
-    "smart-number-options" => "{ maxDigits: 9, preventInvalidInput: true }"
+    %label.raw-points-label(for="grade_raw_points" ng-class="{'disabled': ! grade.is_custom_value}")
+      Custom Value
+    = f.text_field :raw_points,
+      default: assignment.full_points,
+      label: "Score",
+      hint: "Total Assignment Points: #{ points assignment.full_points }",
+      "ng-model" => "grade.raw_points",
+      "ng-click" => "grade.enableCustomValue()",
+      "ng-model-options" => "modelOptions",
+      "ng-change" => "grade.update()",
+      "ng-disabled" => "! grade.is_custom_value",
+      "placeholder" => "Enter raw score for grade",
+      "smart-number" => "",
+      "smart-number-options" => "{ maxDigits: 9, preventInvalidInput: true }"
+
+  .class-analytics-toggle
+    %h4.class-analytics-label Enter as custom value
+    %label.rubric-switch-socket
+      %input#class-analytics-toggle(type="checkbox" ng-click="grade.toggleCustomValue()" ng-checked="grade.is_custom_value")
+      .rubric-switch-handle.round
 
 %input(type="hidden" name="grade[is_custom_value]" ng-value="grade.is_custom_value")

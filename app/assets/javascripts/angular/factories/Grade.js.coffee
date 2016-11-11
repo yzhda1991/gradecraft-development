@@ -13,6 +13,9 @@
       @http = http
       @updated_at = null
 
+    toggleCustomValue: ()->
+      this.is_custom_value = !this.is_custom_value
+
     enableCustomValue: ()->
       if this.is_custom_value == false
         this.is_custom_value = true
@@ -39,7 +42,7 @@
     # updating grade properties
     update: ()->
       self = this
-      @http.put("/api/grades/#{self.id}", grade: self).success(
+      $http.put("/api/grades/#{self.id}", grade: self).success(
         (data,status)->
           console.log(data);
           self.updated_at = new Date()
