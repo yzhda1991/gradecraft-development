@@ -1,4 +1,4 @@
-%textarea(ng-model="vm.submission.text_comment" ng-change="vm.saveSubmission()" ng-model-options="{debounce: 2500}" froala="froalaOptions" ng-if="!vm.loading")
+%textarea(ng-model="vm.submission.text_comment" ng-change="vm.saveSubmission()" ng-model-options="{debounce: 2500}" froala="froalaOptions" ng-if="!vm.loading" name="submission[text_comment]")
 #loading-submission-draft-message{'ng-if'=>'vm.loading'}
   %i.fa.fa-spinner.fa-spin.fa-fw
   Loading submission...
