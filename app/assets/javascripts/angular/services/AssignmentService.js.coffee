@@ -3,6 +3,7 @@
 
 @gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
+  # handle either a single assignment, or an array of assignments
   assignments = []
   update = {}
 
@@ -28,6 +29,12 @@
     assignmentsSubsetPredictedPoints(assignments)
 
   #------ API Calls -----------------------------------------------------------#
+
+  # GET single assignment, will be the only item in the assignments array
+  getAssignment = (assignmentId)->
+    $http.get('/api/assignments/' + assignmentId).success( (response)->
+      GradeCraftAPI.addItem(assignments, "assignments", response)
+    )
 
   # GET index list of assignments including a student's grades and predictions
   getAssignments = ()->
@@ -73,6 +80,7 @@
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       assignmentsPredictedPoints: assignmentsPredictedPoints
       getAssignments: getAssignments
+      getAssignment: getAssignment
       postPredictedAssignment: postPredictedAssignment
       assignments: assignments
   }

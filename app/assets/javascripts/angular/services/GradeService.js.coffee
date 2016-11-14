@@ -4,16 +4,16 @@
   gradeFiles = []
   gradeStatusOptions = []
 
-  getGrade = (assignment)->
-    if assignment.scope.type == "student"
-      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/grade/').success((response)->
+  getGrade = (assignment, reciptientType, reciptientId)->
+    if reciptientType == "student"
+      $http.get('/api/assignments/' + assignment.id + '/students/' + reciptientId + '/grade/').success((response)->
         angular.copy(response.data.attributes, grade)
         GradeCraftAPI.loadFromIncluded(gradeFiles,"grade_files", response)
         angular.copy(response.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = response.meta.threshold_points
       )
-    else if assignment.scope.type == "group"
-      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((response)->
+    else if reciptientType == "group"
+      $http.get('/api/assignments/' + assignment.id + '/groups/' + reciptientId + '/grades/').success((response)->
 
         # The API sends all student information so we can add the ability to custom grade group members
         # For now we filter to the first student's grade since all students grades are identical
@@ -21,6 +21,21 @@
         angular.copy(response.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = response.meta.threshold_points
       )
+
+  toggleCustomValue = ()->
+    grade.is_custom_value = !grade.is_custom_value
+
+  enableCustomValue = ()->
+    this.toggleCustomValue() if grade.is_custom_value == false
+
+  enableScoreLevels = (event)->
+    this.toggleCustomValue() if grade.is_custom_value == true
+
+  justUpdated = ()->
+    this.timeSinceUpdate() < 1000
+
+  timeSinceUpdate = ()->
+    Math.abs(new Date() - grade.updated_at)
 
   updateGrade = ()->
     $http.put("/api/grades/#{grade.id}", grade: grade).success(
@@ -70,6 +85,12 @@
       grade: grade,
       gradeFiles: gradeFiles,
       gradeStatusOptions: gradeStatusOptions,
+
+      toggleCustomValue: toggleCustomValue,
+      enableCustomValue: enableCustomValue,
+      enableScoreLevels: enableScoreLevels,
+      justUpdated: justUpdated,
+      timeSinceUpdate: timeSinceUpdate,
 
       getGrade: getGrade,
       updateGrade: updateGrade,

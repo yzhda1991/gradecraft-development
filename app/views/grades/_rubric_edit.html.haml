@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{scope_type}', #{scoped_id})")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{recipient_type}', #{recipient_id})")
     .row
       #rubric-heading.columns
         %h3.text-right Grade Assignment by Rubric
@@ -75,7 +75,7 @@
         %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
-    - if scope_type == "student"
+    - if recipient_type == "student"
       %grade-files-uploader(grade-id="#{grade.id}")
 
     %br
@@ -97,9 +97,9 @@
 
     .right
       %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
-      - if scope_type == "student"
+      - if recipient_type == "student"
         %button#submit-grade(ng-click="submitGrade('#{grade_next_path}')" ng-class='{"disabled" : !grade.status}') Submit and Grade Next
 
-    - if scope_type == "student" && current_course.badges.present?
+    - if recipient_type == "student" && current_course.badges.present?
       %h3= "Award #{ @grade.student.name } #{term_for :badges} for #{ @grade.assignment.name }:"
       %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")

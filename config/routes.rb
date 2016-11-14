@@ -315,7 +315,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
 
-    resources :assignments, only: [] do
+    resources :assignments, only: [:index, :show] do
       resources :criteria, only: :index
       resources :students, only: [] do
         resources :criteria, only: [] do
@@ -334,7 +334,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assignments, only: :index
     resources :challenges, only: :index
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create

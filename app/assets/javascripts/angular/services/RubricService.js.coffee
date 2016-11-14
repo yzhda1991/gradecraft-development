@@ -13,8 +13,9 @@
   grade = GradeService.grade
   gradeFiles = GradeService.gradeFiles
   gradeStatusOptions =  GradeService.gradeStatusOptions
-  getGrade = (assignment)->
-    GradeService.getGrade(assignment)
+
+  getGrade = (assignment, reciptientType, reciptientId)->
+    GradeService.getGrade(assignment, reciptientType, reciptientId)
   updateGrade = ()->
     GradeService.updateGrade()
   postGradeFiles = (files)->

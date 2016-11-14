@@ -13,32 +13,6 @@
       @http = http
       @updated_at = null
 
-    toggleCustomValue: ()->
-      this.is_custom_value = !this.is_custom_value
-
-    enableCustomValue: ()->
-      if this.is_custom_value == false
-        this.is_custom_value = true
-        this.update()
-
-    disableCustomValue: ()->
-      if this.is_custom_value == true
-        this.is_custom_value = false
-        this.update()
-
-    enableScoreLevels: (event)->
-      EventHelper.killEvent(event)
-      if this.is_custom_value == true
-        this.is_custom_value = false
-        this.update()
-
-    justUpdated: ()->
-      this.timeSinceUpdate() < 1000
-
-    timeSinceUpdate: ()->
-      self = this
-      Math.abs(new Date() - self.updated_at)
-
     # updating grade properties
     update: ()->
       self = this

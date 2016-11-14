@@ -1,23 +1,36 @@
-@gradecraft.controller 'GradeCtrl', ['$scope', 'Grade', 'AssignmentScoreLevel', '$http', ($scope, Grade, AssignmentScoreLevel, $http) ->
+@gradecraft.controller 'GradeCtrl', ['$scope', '$q', 'AssignmentScoreLevel', 'AssignmentService', 'GradeService', ($scope, $q, AssignmentScoreLevel, AssignmentService, GradeService) ->
 
-  # setup the controller scope on initialize
-  $scope.init = (initData)->
-    # is interactive ui debugging on?
-    $scope.debug = false
+  $scope.grade = GradeService.grade
 
-    # grade stuff
-    $scope.grade = new Grade(initData.grade)
-    $scope.gradeId = initData.grade.id
+  $scope.init = (initData, assignmentId, reciptientType, reciptientId)->
+    $scope.services(assignmentId).then(()->
+      GradeService.getGrade(AssignmentService.assignments[0], reciptientType, reciptientId)
+    )
 
     debugger
     # assignment stuff
     $scope.releaseNecessary = initData.assignment.release_necessary
-
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
-
     # establish and populate all necessary collections for UI
     $scope.populateCollections(initData.assignment_score_levels)
+
+  $scope.services = (assignmentId)->
+    promises = [AssignmentService.getAssignment(assignmentId)]
+    return $q.all(promises)
+
+  $scope.toggleCustomValue = ()->
+    GradeService.toggleCustomValue()
+  $scope.enableCustomValue = ()->
+    GradeService.enableCustomValue()
+  $scope.enableScoreLevels = ()->
+    GradeService.enableScoreLevels()
+  $scope.justUpdated = ()->
+    GradeService.justUpdated()
+  $scope.timeSinceUpdate = ()->
+    GradeService.timeSinceUpdate()
+  $scope.updateGrade = ()->
+    GradeService.updateGrade()
 
   # add initial score levels
   $scope.populateCollections = (assignmentScoreLevels)->
