@@ -1,42 +1,45 @@
-.modal-wrapper
-  .student-onboarding-slides
-    .modal-slide
-      .modal-slide-top
-        %img.modal-slide-image.centered{src: "/images/onboarding-slide-1.png"}
-      .modal-slide-bottom
-        .modal-slide-text
-          %h2= "Hey, #{current_user.name}!"
-          %p Welcome to GradeCraft!
-          %p This quick tour will show you how GradeCraft works.
+.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-labelledby': 'Student Onboarding'}
+  .modal-wrapper.modal-content#modal-holder{role: "document"}
+    .student-onboarding-slides
+      .modal-slide
+        .modal-slide-top
+          %img.modal-slide-image.centered{src: "/images/onboarding-slide-1.png"}
+        .modal-slide-bottom
+          .modal-slide-text
+            %h2= "Hey, #{current_user.name}!"
+            %p Welcome to GradeCraft!
+            %p This quick tour will show you how GradeCraft works.
 
-    .modal-slide
-      .modal-slide-top
-        %img.modal-slide-image.centered{src: "/images/onboarding-slide-2.png"}
-      .modal-slide-bottom
-        .modal-slide-text
-          %h2 Start from zero
-          %p Everyone starts at zero, and earns points by completing assignments. Your final grade is completely independent from your peers’ performances.
+      .modal-slide
+        .modal-slide-top
+          %img.modal-slide-image.centered{src: "/images/onboarding-slide-2.png"}
+        .modal-slide-bottom
+          .modal-slide-text
+            %h2 Start from zero
+            %p Everyone starts at zero, and earns points by completing assignments. Your final grade is completely independent from your peers’ performances.
 
-    .modal-slide
-      .modal-slide-top
-        %img.modal-slide-image.centered{src: "/images/onboarding-slide-3.png"}
-      .modal-slide-bottom
-        .modal-slide-text
-          %h2 High autonomy
-          %p You have the freedom to decide what kind of work you want to do and when. Find out what best aligns with your interests and take control of the outcome.
+      .modal-slide
+        .modal-slide-top
+          %img.modal-slide-image.centered{src: "/images/onboarding-slide-3.png"}
+        .modal-slide-bottom
+          .modal-slide-text
+            %h2 High autonomy
+            %p You have the freedom to decide what kind of work you want to do and when. Find out what best aligns with your interests and take control of the outcome.
 
-    .modal-slide
-      .modal-slide-top
-        %img.modal-slide-image.centered{src: "/images/onboarding-slide-4.png"}
-      .modal-slide-bottom
-        .modal-slide-text
-          %h2 Tangible feedback
-          %p Experience the learning process in real time. Easily keep track of progress through comprehensive grade analytics.
+      .modal-slide
+        .modal-slide-top
+          %img.modal-slide-image.centered{src: "/images/onboarding-slide-4.png"}
+        .modal-slide-bottom
+          .modal-slide-text
+            %h2 Tangible feedback
+            %p Experience the learning process in real time. Easily keep track of progress through comprehensive grade analytics.
 
-    .modal-slide
-      .modal-slide-top
-        %img.modal-slide-image.centered{src: "/images/onboarding-slide-5.png"}
-      .modal-slide-bottom
-        .modal-slide-text
-          %h2 Plan your grade
-          %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
+      .modal-slide
+        .modal-slide-top
+          %img.modal-slide-image.centered{src: "/images/onboarding-slide-5.png"}
+        .modal-slide-bottom
+          .modal-slide-text
+            %h2 Plan your grade
+            %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
+
+    %button.btn-close#modal-close{type: 'button', 'aria-label': 'close'}= glyph(:times)
