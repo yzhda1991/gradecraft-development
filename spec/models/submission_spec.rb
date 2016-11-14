@@ -109,6 +109,17 @@ describe Submission do
     end
   end
 
+  describe ".for" do
+    let(:assignment) { create(:assignment) }
+    let(:student)  { create(:student_course_membership, course: assignment.course).user }
+    let!(:submission) { create(:submission, assignment: assignment, student: student) }
+
+    it "returns the submission for the student and assignment" do
+      result = Submission.for(assignment.id, student.id)
+      expect(result).to eq submission
+    end
+  end
+
   describe "#submission_files_attributes=" do
     it "supports multiple file uploads" do
       file_attribute_1 = fixture_file "test_file.txt", "txt"
@@ -253,12 +264,14 @@ describe Submission do
   end
 
   describe ".order_by_submitted" do
-    it "returns the submissions in the order they were submitted" do
+    before do
       Submission.delete_all
+    end
+
+    it "returns the submissions in the order they were submitted" do
       submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
       never_submitted = create(:submission)
       just_submitted = create(:submission, submitted_at: DateTime.now)
-
       expect(Submission.order_by_submitted).to eq [submitted_yesterday, just_submitted, never_submitted]
     end
   end

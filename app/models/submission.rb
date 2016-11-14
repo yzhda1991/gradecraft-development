@@ -30,16 +30,18 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-      .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
   end
 
-  scope :resubmitted, -> { includes(:grade)
+  scope :resubmitted, -> {
+    includes(:grade)
     .where(grades: { status: ["Graded", "Released"] })
     .where("grades.graded_at < submitted_at")
   }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
+  scope :for, ->(assignment_id, student_id) { find_by(assignment_id: assignment_id, student_id: student_id) }
 
   scope :with_group, -> { where "group_id is not null" }
 
