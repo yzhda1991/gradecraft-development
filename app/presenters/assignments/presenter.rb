@@ -195,7 +195,7 @@ class Assignments::Presenter < Showtime::Presenter
   
   def students
     @students ||= AssignmentStudentCollection.new(User
-      .unscoped_students_being_graded_for_course(course, team)
+      .students_being_graded_for_course(course, team)
       .order_by_name, self)
   end
   

@@ -120,6 +120,7 @@ $('.button-table-action').click(function() {
 
     if (btnId === 'btn-top10') {
       rank = $(this).find('td:eq(1)').text();
+      console.log(rank);
       return parseInt(rank) > 10;
     } else if (btnId === 'btn-bottom10') {
       rank = $(this).find('td:eq(1)').text();

@@ -442,17 +442,6 @@ describe Course do
     end
   end
 
-  describe "#formatted_tagline" do
-    it "returns an empty string if no tagline is present" do
-      expect(subject.formatted_tagline).to eq(" ")
-    end
-
-    it "returns a tagline if present" do
-      subject.tagline = "Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning."
-      expect(subject.formatted_tagline).to eq("Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning.")
-    end
-  end
-
   describe "#formatted_short_name" do
     it "uses the course number if that's all that's present" do
       expect(subject.formatted_short_name).to eq(subject.course_number)
@@ -488,12 +477,12 @@ describe Course do
 
   describe "#student_weighted?" do
     it "returns false if no weights are set" do
-      subject.total_weights = nil
+      subject.has_multipliers = nil
       expect(subject.student_weighted?).to eq(false)
     end
 
     it "returns true if weights have been set by the instructor" do
-      subject.total_weights = 5
+      subject.has_multipliers = true
       expect(subject.student_weighted?).to eq(true)
     end
   end
@@ -661,27 +650,6 @@ describe Course do
     end
   end
 
-  describe "#course_badge_count" do
-    it "tallies the number of badges in a course" do
-      badge = create(:badge, course: subject)
-      badge1 = create(:badge, course: subject)
-      badge2 = create(:badge, course: subject)
-      badge3 = create(:badge, course: subject)
-      expect(subject.course_badge_count).to eq(4)
-    end
-  end
-
-  describe "#awarded_course_badge_count" do
-    it "tallies the number of earned badges in a course" do
-      badge = create(:badge, course: subject)
-      student = create(:user)
-      earned_badge = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
-      earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
-      earned_badge_3 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
-      expect(subject.awarded_course_badge_count).to eq(3)
-    end
-  end
-
   describe "#create_admin_memberships" do
     it "creates admin memberships for all courses automatically on creation of new courses" do
       admin = create(:user, admin: true)
@@ -699,17 +667,7 @@ describe Course do
       expect(subject.scores).to match_array({:scores => [100, 200, 300]})
     end
   end
-
-  describe "#earned_grade_scheme_elements_by_student_count" do
-    it "returns the number of students who have earned each grade scheme element" do
-      gse = create(:grade_scheme_element_high, course: subject)
-      gse2 = create(:grade_scheme_element_low, course: subject)
-      course_membership = create(:student_course_membership, course: subject, earned_grade_scheme_element_id: gse.id)
-      course_membership = create(:student_course_membership, course: subject, earned_grade_scheme_element_id: gse2.id)
-      expect(subject.earned_grade_scheme_elements_by_student_count).to eq({:elements => [["#{gse2.name}", 1], ["#{gse.name}", 1]]})
-    end
-  end
-
+  
   describe "#nonpredictors" do
     it "returns the students who have not yet predicted any assignments" do
       student = create(:user)

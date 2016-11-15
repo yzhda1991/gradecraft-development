@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe User, focus: true do
+describe User do
   let!(:world) do
     World.create.with(:course, :student, :assignment, :grade)
   end
@@ -97,15 +97,15 @@ describe User, focus: true do
     end
   end
 
-  describe ".students_for_coursed" do
+  describe ".students_for_course" do
     let(:student_not_being_graded) { create(:user) }
     before do
       create(:course_membership, course: course, user: student_not_being_graded, auditing: true)
     end
 
-    it "returns all the students that are being graded" do
-      result = User.students_being_graded(course)
-      expect(result.pluck(:id)).to eq [student.id]
+    it "returns all the students for a course" do
+      result = User.students_for_course(course)
+      expect(result.pluck(:id)).to include(student.id, student_not_being_graded.id)
     end
 
     context "with a team" do
@@ -116,14 +116,14 @@ describe User, focus: true do
         team.students << student_in_team
       end
 
-      it "returns only students in the team that are being graded" do
-        result = User.students_being_graded_for_course(course, team)
+      it "returns only students in the team" do
+        result = User.students_for_course(course, team)
         expect(result.pluck(:id)).to eq [student_in_team.id]
       end
     end
   end
 
-  describe ".students_being_graded" do
+  describe ".students_being_graded_for_course" do
     let(:student_not_being_graded) { create(:user) }
     before do
       create(:course_membership, course: course, user: student_not_being_graded, auditing: true)

@@ -18,22 +18,17 @@ class User < ActiveRecord::Base
     end
 
     def students_for_course(course, team=nil)
-      query = User
-        .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.avatar_file_name, users.updated_at")
-        .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-        .where("course_memberships.course_id = ?", course.id)
-        .where("course_memberships.role = ?", "student")
-        .includes(:course_memberships)
-        .group("users.id, course_memberships.score")
-        .includes(:team_memberships)
-      query = query.joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
-          .where("team_memberships.team_id = ?", team.id) if team
+      user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
+      query = User.where(id: user_ids)
+      query = query.students_in_team(team.id, user_ids) if team
       query
     end
     
     def students_being_graded_for_course(course, team=nil)
-      students_for_course(course, team=nil)
-        .where("course_memberships.auditing = ?", false)
+      user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
+      query = User.where(id: user_ids)
+      query = query.students_in_team(team.id, user_ids) if team
+      query
     end
 
     def internal_email_regex
@@ -315,17 +310,13 @@ class User < ActiveRecord::Base
 
   # Powers the worker to recalculate student scores
   def cache_course_score_and_level(course_id)
-    course_membership = fetch_course_membership(course_id)
-    unless course_membership.nil?
-      course_membership.recalculate_and_update_student_score
-      course_membership.check_and_update_student_earned_level
+    membership = course_memberships.where(course_id: course_id).first
+    unless membership.nil?
+      membership.recalculate_and_update_student_score
+      membership.check_and_update_student_earned_level
     end
   end
-
-  def fetch_course_membership(course_id)
-    course_memberships.where(course_id: course_id).first
-  end
-
+  
   ### SUBMISSIONS
 
   def submission_for_assignment(assignment)

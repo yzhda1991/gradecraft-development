@@ -143,7 +143,7 @@ describe Assignments::Presenter do
 
     it "returns the students that are attached to the course" do
       allow(course).to receive(:teams).and_return double(:relation, find_by: team)
-      allow(User).to receive(:unscoped_students_being_graded_for_course).and_return double(:collection, order_by_name: [student])
+      allow(User).to receive(:students_being_graded_for_course).and_return double(:collection, order_by_name: [student])
       expect(subject.students.class).to eq Assignments::Presenter::AssignmentStudentCollection
     end
   end
