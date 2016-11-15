@@ -4,7 +4,15 @@ $('.student-onboarding-slides').slick({
   nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
   adaptiveHeight: true,
   dots: true,
-  infinite: false
+  infinite: false,
+  responsive: [
+    {
+      breakpoint: 640,
+      settings: {
+        arrows: false
+      }
+    }
+  ]
 });
 
 //modal for student onboarding from Scott O'Hara (https://www.smashingmagazine.com/2014/09/making-modal-windows-better-for-everyone/)

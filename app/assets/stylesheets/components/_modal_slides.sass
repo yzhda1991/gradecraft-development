@@ -1,66 +1,5 @@
 @import "../utilities/variables"
 
-.student-onboarding-slides
-  display: none
-
-  .slick-slide
-    height: auto
-
-  .slider-direction-button
-    top: 45%
-    background-color: $color-blue-5
-    color: $color-grey-3
-    font-size: 2rem
-    width: 2.5rem
-    line-height: 2.5rem
-    border: none
-    &:hover
-      background-color: darken($color-blue-5, 5%)
-      color: $color-grey-3
-    &.next
-      right: -80px
-    &.previous
-      left: -80px
-
-  .slick-dots li button::before, .slick-dots li.slick-active button::before
-    color: $color-white
-
-  .fa-chevron-left::before
-    margin-right: 8px
-  .fa-chevron-right::before
-    margin-left: 8px
-
-.slick-slider
-  display: block
-
-.modal-wrapper
-  max-width: 600px
-  margin: auto
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
-
-.modal-slide-top
-  background-color: $color-grey-7
-  padding: 0 3rem
-  height: 350px
-
-.modal-slide-image
-  max-width: 300px
-
-.modal-slide-bottom
-  padding: 0 3rem
-  height: 200px
-  background-color: $color-white
-
-.modal-slide-text
-  position: relative
-  top: 50%
-  transform: translateY(-50%)
-  h2
-    font-weight: 400
-    margin-bottom: 0.75rem
-  p
-    margin: 0
-
 // Modal Overlay
 .modal-overlay
   background: rgba(0,0,0,.8)
@@ -74,6 +13,9 @@
   transition: opacity .2s
   width: 100%
   z-index: -1
+  box-sizing: border-box
+  @media (max-width: $media-small-max)
+    padding: 0
 
 
 .modal-overlay[aria-hidden="true"]
@@ -119,3 +61,78 @@
   &:hover
     color: darken($color-grey-3, 5%)
     background-color: inherit
+
+.student-onboarding-slides
+  display: none
+
+  .slick-slide
+    height: auto
+    @media (max-width: $media-small-max)
+      height: 100%
+
+  .slider-direction-button
+    top: 45%
+    background-color: $color-blue-5
+    color: $color-grey-3
+    font-size: 2rem
+    width: 2.5rem
+    line-height: 2.5rem
+    border: none
+    &:hover
+      background-color: darken($color-blue-5, 5%)
+      color: $color-grey-3
+    &.next
+      right: -80px
+    &.previous
+      left: -80px
+
+  .slick-dots
+    @media (max-width: $media-small-max)
+      bottom: 20px
+
+  .slick-dots li button::before, .slick-dots li.slick-active button::before
+    color: $color-white
+    @media (max-width: $media-small-max)
+      color: $color-grey-1
+
+  .fa-chevron-left::before
+    margin-right: 8px
+  .fa-chevron-right::before
+    margin-left: 8px
+
+.slick-slider
+  display: block
+
+.modal-wrapper
+  max-width: 600px
+  margin: auto
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+
+.modal-slide-top
+  background-color: $color-grey-7
+  padding: 0 3rem
+  height: 350px
+  @media (max-width: $media-small-max)
+    height: 60%
+    padding: 0 1rem
+
+.modal-slide-image
+  max-width: 300px
+
+.modal-slide-bottom
+  padding: 0 3rem
+  height: 200px
+  background-color: $color-white
+  @media (max-width: $media-small-max)
+    height: 40%
+    padding: 0 2rem
+
+.modal-slide-text
+  position: relative
+  top: 50%
+  transform: translateY(-50%)
+  h2
+    font-weight: 400
+    margin-bottom: 0.75rem
+  p
+    margin: 0
