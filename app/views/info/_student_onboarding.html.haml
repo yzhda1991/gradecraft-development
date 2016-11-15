@@ -42,41 +42,44 @@
             %h2 Plan your grade
             %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
 
-      .modal-slide
-        .modal-slide-top#course-specific
-          .course-specific-features.centered
-            .course-feature-row
+      - if presenter.has_course_specific_features?
+        .modal-slide
+          .modal-slide-top#course-specific
+            .course-specific-features.centered
+              .course-feature-row
+                - if current_course.has_badges?
+                  .course-feature-block
+                    .course-feature-image-wrapper
+                      %img.course-feature-image{src: "/images/onboarding-slide-6-badges.png"}
+                    %h3 Badges
+                - if current_course.teams_visible?
+                  .course-feature-block
+                    .course-feature-image-wrapper
+                      %img.course-feature-image{src: "/images/onboarding-slide-6-leaderboard.png"}
+                    %h3 Leaderboards
+              .course-feature-row
+                - if presenter.has_course_terminology?
+                  .course-feature-block
+                    .course-feature-image-wrapper
+                      %img.course-feature-image{src: "/images/onboarding-slide-6-custom-terms.png"}
+                    %h3 Custom Terms
+                - if current_course.has_multipliers?
+                  .course-feature-block
+                    .course-feature-image-wrapper
+                      %img.course-feature-image{src: "/images/onboarding-slide-6-multipliers.png"}
+                    %h3 Multipliers
+          .modal-slide-bottom
+            .modal-slide-text
+              %h2= "#{current_course.course_number} Features"
+              %p="#{current_course.name} has: "
               - if current_course.has_badges?
-                .course-feature-block
-                  .course-feature-image-wrapper
-                    %img.course-feature-image{src: "/images/onboarding-slide-6-badges.png"}
-                  %h3 Badges
+                %p Badges: to identify, acknowledge, and celebrate core skills and distinguished performances
               - if current_course.teams_visible?
-                .course-feature-block
-                  .course-feature-image-wrapper
-                    %img.course-feature-image{src: "/images/onboarding-slide-6-leaderboard.png"}
-                  %h3 Leaderboards
-            .course-feature-row
-              .course-feature-block
-                .course-feature-image-wrapper
-                  %img.course-feature-image{src: "/images/onboarding-slide-6-custom-terms.png"}
-                %h3 Custom Terms
+                %p Section leaderboards: sections are ranked by points to showcase and motivate collective progress
               - if current_course.has_multipliers?
-                .course-feature-block
-                  .course-feature-image-wrapper
-                    %img.course-feature-image{src: "/images/onboarding-slide-6-multipliers.png"}
-                  %h3 Multipliers
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2= "#{current_course.course_number} Features"
-            %p="#{current_course.name} has: "
-            - if current_course.has_badges?
-              %p Badges: to identify, acknowledge, and celebrate core skills and distinguished performances
-            - if current_course.teams_visible?
-              %p Section leaderboards: sections are ranked by points to showcase and motivate collective progress
-            - if current_course.has_multipliers?
-              %p Multipliers: specific assignment types are allowed to be boosted through strategically chosen weights
-            %p Generic terms are renamed specifically by the instructor based on the course theme.
+                %p Multipliers: specific assignment types are allowed to be boosted through strategically chosen weights
+              - if presenter.has_course_terminology?
+                %p Generic terms are renamed specifically by the instructor based on the course theme.
 
 
     %button.btn-close#modal-close{type: 'button', 'aria-label': 'close'}= glyph(:times)
