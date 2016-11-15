@@ -17,17 +17,14 @@
   @media (max-width: $media-small-max)
     padding: 0
 
-
 .modal-overlay[aria-hidden="true"]
   opacity: 0
   visibility: hidden
-
 
 .modal-overlay[aria-hidden="false"]
   opacity: 1
   visibility: visible
   z-index: 100
-
 
 // Modal Content Area
 .modal-content 
@@ -42,7 +39,6 @@
 .input:focus,
 .modal-content:focus
   outline: none
-
 
 // Close Modal Button
 .btn-close
@@ -64,6 +60,7 @@
 
 .student-onboarding-slides
   display: none
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 
   .slick-slide
     height: auto
@@ -106,7 +103,6 @@
 .modal-wrapper
   max-width: 600px
   margin: auto
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 
 .modal-slide-top
   background-color: $color-grey-7
@@ -136,3 +132,24 @@
     margin-bottom: 0.75rem
   p
     margin: 0
+    font-weight: 300
+
+.course-feature-row
+  flex: 1
+  display: flex
+  justify-content: space-around
+
+.course-feature-block
+  display: flex
+  flex-direction: column
+  flex: 1
+  margin: 0.25rem
+  padding: 0.75rem
+  text-align: center
+
+.course-feature-image-wrapper
+  flex: 1
+
+.course-feature-image
+  max-width: 120px
+  margin: 0 auto
