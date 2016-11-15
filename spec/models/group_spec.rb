@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
 require "toolkits/sanitization_toolkit"
 
 describe Group do

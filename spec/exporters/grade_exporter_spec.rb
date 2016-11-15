@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
 require "./app/exporters/grade_exporter"
 
 describe GradeExporter do

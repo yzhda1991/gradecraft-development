@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
 require "support/uni_mock/rails"
