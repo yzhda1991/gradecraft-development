@@ -26,6 +26,12 @@ describe Submission do
       expect(subject).to_not be_valid
       expect(subject.errors[:base]).to include "Submission cannot be empty"
     end
+
+    it "permits only one submission per user, per assignment" do
+      course_submission = create(:submission)
+      expect{create(:submission, assignment: course_submission.assignment,
+        student: course_submission.student)}.to raise_error ActiveRecord::RecordInvalid
+    end
   end
 
   it_behaves_like "a historical model", :submission, link: "http://example.org"
