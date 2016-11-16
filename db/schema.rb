@@ -646,6 +646,7 @@ ActiveRecord::Schema.define(version: 20161209225205) do
     t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",               default: false, null: false
+    t.text     "text_comment_draft"
     t.index ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
     t.index ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
