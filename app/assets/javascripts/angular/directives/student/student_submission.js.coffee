@@ -5,7 +5,7 @@
     vm.loading = true
     vm.saveSubmission = () ->
       StudentSubmissionService.saveDraftSubmission(vm.assignmentId, vm.submission).then((result) ->
-        vm.submission = result
+        vm.submission = result if result?
       )
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then((submission) ->

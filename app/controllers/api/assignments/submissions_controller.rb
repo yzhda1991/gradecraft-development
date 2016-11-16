@@ -41,6 +41,6 @@ class API::Assignments::SubmissionsController < ApplicationController
   private
 
   def submission_params
-    params.require(:submission).permit(:assignment_id, :text_comment)
+    params.require(:submission).permit(:assignment_id, :text_comment_draft)
   end
 end

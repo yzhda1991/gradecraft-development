@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe API::Assignments::SubmissionsController, focus: true do
+describe API::Assignments::SubmissionsController do
   let(:assignment) { create(:assignment) }
   let(:student)  { create(:student_course_membership, course: assignment.course).user }
 
@@ -30,7 +30,7 @@ describe API::Assignments::SubmissionsController, focus: true do
   end
 
   describe "#create" do
-    let(:submission_attributes) { attributes_for(:submission).merge(assignment_id: assignment.id, text_comment: "I love school") }
+    let(:submission_attributes) { attributes_for(:submission).merge(assignment_id: assignment.id, text_comment_draft: "I love school") }
     let(:params) {{ submission: submission_attributes, assignment_id: assignment.id }}
 
     context "when successful" do
@@ -41,7 +41,7 @@ describe API::Assignments::SubmissionsController, focus: true do
       it "sets the submission attributes" do
         post :create, params: params, format: :json
         submission = Submission.unscoped.last
-        expect(submission.text_comment).to eq(params[:submission][:text_comment])
+        expect(submission.text_comment_draft).to eq(params[:submission][:text_comment_draft])
         expect(submission.student_id).to eq(student.id)
         expect(submission.assignment_id).to eq(submission.assignment_id)
       end
@@ -63,7 +63,7 @@ describe API::Assignments::SubmissionsController, focus: true do
   end
 
   describe "#update" do
-    let(:submission) { create(:submission, student: student, text_comment: "I love school", assignment: assignment) }
+    let(:submission) { create(:submission, student: student, text_comment_draft: "I love school", assignment: assignment) }
 
     context "when the draft submission doesn't exist" do
       let(:params) {{ submission: submission.as_json, assignment_id: assignment.id, id: "2" }}
@@ -76,7 +76,7 @@ describe API::Assignments::SubmissionsController, focus: true do
 
     context "when the draft submission exists" do
       let(:submission_attributes) {{ id: submission.id, assignment_id: submission.assignment_id,
-        student_id: submission.student_id, text_comment: "No really, I love school" }}
+        student_id: submission.student_id, text_comment_draft: "No really, I love school" }}
       let(:params) {{ submission: submission_attributes, assignment_id: assignment.id, id: submission.id }}
 
       context "when successful" do
@@ -87,7 +87,7 @@ describe API::Assignments::SubmissionsController, focus: true do
 
         it "updates the submission text" do
           put :update, params: params, format: :json
-          expect(submission.reload.text_comment).to eq(submission_attributes[:text_comment])
+          expect(submission.reload.text_comment_draft).to eq(submission_attributes[:text_comment_draft])
         end
       end
 
