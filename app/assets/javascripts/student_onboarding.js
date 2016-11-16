@@ -37,6 +37,7 @@ if (m && p) {
     var mOverlay = getId('modal-window'),
         mOpen = getId('modal-open'),
         mClose = getId('modal-close'),
+        mAction = getId('modal-action'),
         modal = getId('modal-holder'),
         allNodes = document.querySelectorAll("*"),
         modalOpen = false,
@@ -91,6 +92,9 @@ if (m && p) {
 
     // close modal by btn click/hit
     mClose.addEventListener('click', modalClose);
+
+    // close modal by modal action btn click/hit
+    mAction.addEventListener('click', modalClose);
 
     // close modal by keydown, but only if modal is open
     document.addEventListener('keydown', modalClose);

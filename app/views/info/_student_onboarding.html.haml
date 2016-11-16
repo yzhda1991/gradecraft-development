@@ -28,7 +28,7 @@
 
       .modal-slide
         .modal-slide-top
-          %img.modal-slide-image.centered{src: "/images/onboarding-slide-4.png"}
+          %img.modal-slide-image.large-image.centered{src: "/images/onboarding-slide-4.png"}
         .modal-slide-bottom
           .modal-slide-text
             %h2 Tangible feedback
@@ -36,11 +36,14 @@
 
       .modal-slide
         .modal-slide-top
-          %img.modal-slide-image.centered{src: "/images/onboarding-slide-5.png"}
+          %img.modal-slide-image.large-image.centered{src: "/images/onboarding-slide-5.png"}
         .modal-slide-bottom
           .modal-slide-text
             %h2 Plan your grade
             %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
+            - if !presenter.has_course_specific_features?
+              .modal-action-wrapper
+                %button#modal-action{type: 'button', 'aria-label': 'close'} Let's Go!
 
       - if presenter.has_course_specific_features?
         .modal-slide
@@ -108,6 +111,8 @@
 
                   - if presenter.term_for_groups?
                     %li= "Groups: #{term_for :groups}"
+              .modal-action-wrapper
+                %button#modal-action{type: 'button', 'aria-label': 'close'} Let's Go!
 
 
     %button.btn-close#modal-close{type: 'button', 'aria-label': 'close'}= glyph(:times)

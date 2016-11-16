@@ -73,6 +73,13 @@
 
 .modal-slide-image
   max-width: 300px
+  @media (max-width: $media-small-max)
+    max-width: 280px
+  &.large-image
+    max-width: 400px
+    @media (max-width: $media-small-max)
+      max-width: 280px
+
 
 .modal-slide-bottom
   padding: 0 3rem
@@ -134,3 +141,13 @@
 
 .slick-slider
   display: block
+
+.modal-action-wrapper
+  text-align: right
+  margin-top: 0.75rem
+  @media (max-width: $media-small-max)
+    text-align: center
+
+button#modal-action
+  font-size: 0.9rem
+  padding: 0.5rem 0.75rem
