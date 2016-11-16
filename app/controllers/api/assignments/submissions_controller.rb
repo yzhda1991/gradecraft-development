@@ -2,13 +2,13 @@ class API::Assignments::SubmissionsController < ApplicationController
   before_action :ensure_student?
 
   def show
-    assignment = Assignment.find(params[:assignment_id])
-    submission = assignment.submissions.find_by(student_id: current_user.id)
+    submission = Submission.for(params[:assignment_id], current_user.id)
 
     if submission.present?
       render json: { submission: submission, message: "Found an existing submission draft" }, status: 200
     else
-      render json: { submission: assignment.submissions.new, message: "No existing submission draft was found" }, status: 404
+      render json: { submission: Submission.new(assignment_id: params[:assignment_id]),
+        message: "No existing submission draft was found" }, status: 404
     end
   end
 
