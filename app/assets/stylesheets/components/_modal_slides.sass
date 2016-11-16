@@ -13,9 +13,10 @@
   transition: opacity .2s
   width: 100%
   z-index: -1
-  box-sizing: border-box
   @media (max-width: $media-small-max)
     padding: 0
+  *
+    box-sizing: border-box
 
 .modal-overlay[aria-hidden="true"]
   opacity: 0
@@ -69,7 +70,7 @@
   height: 350px
   @media (max-width: $media-small-max)
     height: 60%
-    padding: 0 1rem
+    padding: 1rem
 
 .modal-slide-image
   max-width: 300px
@@ -87,7 +88,7 @@
   background-color: $color-white
   @media (max-width: $media-small-max)
     height: 40%
-    padding: 0 2rem
+    padding: 1.5rem
 
 .modal-slide-text
   position: relative
@@ -127,7 +128,7 @@
 
   .slick-dots
     @media (max-width: $media-small-max)
-      bottom: 20px
+      bottom: 10px
 
   .slick-dots li button::before, .slick-dots li.slick-active button::before
     color: $color-white
