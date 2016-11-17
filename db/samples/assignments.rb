@@ -162,14 +162,14 @@ to bed. ― J.K. Rowling"
   }
 }
 
-@assignments[:standard_edit_quick_grade_select_assignment] = {
+@assignments[:assignment_score_levels] = {
   quotes: {
     assignment_created: "What a school thinks about its library is a measure \
 of what it feels about education.― Harold Howe",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Standard Edit with Select/Quick Grade with Select [No Grades]",
+    name: "Assignment with Score Levels [No Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
     mass_grade_type: "Select List",
@@ -178,14 +178,14 @@ of what it feels about education.― Harold Howe",
   assignment_score_levels: true,
 }
 
-@assignments[:standard_edit_quick_grade_select_assignment_graded] = {
+@assignments[:assignment_score_levels_graded] = {
   quotes: {
     assignment_created: "Education consists mainly of what we have unlearned. \
 ― Mark Twain, Notebook",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Standard Edit with Select/Quick Grade with Select [Grades]",
+    name: "Assignment with Score Levels [Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
     mass_grade_type: "Select List",
@@ -263,7 +263,7 @@ One Day",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Multi-level Self-Logged Assignment",
+    name: "Self-Logged with Score Levels Assignment",
     open_at: DateTime.now,
     due_at: DateTime.now + 0.05,
     full_points: 200000,
@@ -855,7 +855,7 @@ Ralph Waldo Emerson",
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Level Slider no Prediction",
+    name: "Score Level Slider no Prediction",
     description: "Should have a slider with levels with zero prediction",
     due_at: 1.week.from_now,
     full_points: 25000,
@@ -871,7 +871,7 @@ to proceed with growing up. ― John Taylor Gatto",
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Level Slider with Prediction",
+    name: "Score Level Slider with Prediction",
     description: "Should have a slider with levels with random prediction",
     due_at: 1.week.from_now,
     full_points: 25000,
@@ -895,7 +895,7 @@ to proceed with growing up. ― John Taylor Gatto",
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Level Slider and Threshold",
+    name: "Score Level Slider and Threshold",
     description:
       "Should have a slider with both Level and a Threshold Behavior",
     due_at: 1.week.from_now,
@@ -911,7 +911,7 @@ to proceed with growing up. ― John Taylor Gatto",
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment With Icons and Levels",
+    name: "Assignment With Icons and Score Levels",
     description:
       "Should have a required, late, and locked icon in main widget, and score levels",
     due_at: 2.weeks.ago + 0.05,

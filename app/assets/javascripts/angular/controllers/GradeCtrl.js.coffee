@@ -1,21 +1,17 @@
-@gradecraft.controller 'GradeCtrl', ['$scope', '$q', 'AssignmentScoreLevel', 'AssignmentService', 'GradeService', ($scope, $q, AssignmentScoreLevel, AssignmentService, GradeService) ->
+@gradecraft.controller 'GradeCtrl', ['$scope', 'AssignmentScoreLevel', 'AssignmentService', 'GradeService', ($scope, AssignmentScoreLevel, AssignmentService, GradeService) ->
 
   $scope.grade = GradeService.grade
+  $scope.assignment = AssignmentService.assignments[0]
 
   $scope.init = (initData, assignmentId, reciptientType, reciptientId)->
-    $scope.services(assignmentId).then(()->
-      GradeService.getGrade(AssignmentService.assignments[0], reciptientType, reciptientId)
-    )
+    AssignmentService.getAssignment(assignmentId)
+    GradeService.getGrade($scope.assignment, reciptientType, reciptientId)
 
-    # assignment stuff
-    $scope.releaseNecessary = initData.assignment.release_necessary
-    $scope.rawScoreUpdating = false
-    $scope.hasChanges = false
     # establish and populate all necessary collections for UI
     $scope.populateCollections(initData.assignment_score_levels)
 
   $scope.services = (assignmentId)->
-    promises = [AssignmentService.getAssignment(assignmentId)]
+    promises = []
     return $q.all(promises)
 
   $scope.toggleCustomValue = ()->

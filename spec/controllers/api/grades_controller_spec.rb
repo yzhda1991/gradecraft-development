@@ -4,7 +4,7 @@ describe API::GradesController do
   let(:world) { World.create.with(:course, :student, :assignment, :grade) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
-  context "as professor" , focus: true do
+  context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "GET show" do
