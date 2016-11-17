@@ -7,7 +7,6 @@
       GradeService.getGrade(AssignmentService.assignments[0], reciptientType, reciptientId)
     )
 
-    debugger
     # assignment stuff
     $scope.releaseNecessary = initData.assignment.release_necessary
     $scope.rawScoreUpdating = false
