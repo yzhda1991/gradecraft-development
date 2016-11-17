@@ -338,7 +338,11 @@ class User < ActiveRecord::Base
   ### SUBMISSIONS
 
   def submission_for_assignment(assignment)
-    submissions.where(assignment_id: assignment.id).try(:first)
+    if self.has_group_for_assignment?(assignment)
+      self.group_for_assignment(assignment).submission_for_assignment(assignment)
+    else
+      submissions.where(assignment_id: assignment.id).try(:first)
+    end
   end
 
   ### BADGES
