@@ -49,7 +49,7 @@
     assignment = criterion.$scope.assignment
     requestData = {}
     requestData[field] = criterion[field]
-    $http.put("/api/assignments/#{assignment.id}/students/#{assignment.scope.id}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
+    $http.put("/api/assignments/#{assignmentId}/students/#{reciptientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
       (data, status)->
         console.log(data)
     )
@@ -57,13 +57,13 @@
       console.log(err)
     )
 
-  getCriterionGrades = (assignment)->
-    if assignment.scope.type == "student"
-      $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((response)->
+  getCriterionGrades = (assignmentId, reciptientType, reciptientId)->
+    if reciptientType == "student"
+      $http.get('/api/assignments/' + assignmentId + '/students/' + reciptientId + '/criterion_grades/').success((response)->
         addCriterionGrades(response.data)
       )
-    else if assignment.scope.type == "group"
-      $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((response)->
+    else if reciptientType == "group"
+      $http.get('/api/assignments/' + assignmentId + '/groups/' + reciptientId + '/criterion_grades/').success((response)->
 
         # The API sends all student information so we can add the ability to custom grade group members
         # For now we filter to the first student's grade since all students grades are identical
@@ -79,9 +79,9 @@
       _badgesAvailable = true
     )
 
-  putRubricGradeSubmission = (assignment, params, returnURL)->
-    scopeRoute = if assignment.scope.type == "student" then "students" else "groups"
-    $http.put("/api/assignments/#{assignment.id}/#{scopeRoute}/#{assignment.scope.id}/criterion_grades", params).success(
+  putRubricGradeSubmission = (assignmentId, reciptientType, reciptientId, params, returnURL)->
+    scopeRoute = if reciptientType == "student" then "students" else "groups"
+    $http.put("/api/assignments/#{assignmentId}/#{scopeRoute}/#{reciptientId}/criterion_grades", params).success(
       (data)->
         console.log(data)
         window.location = returnURL

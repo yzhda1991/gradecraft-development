@@ -9,17 +9,14 @@
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
 
   $scope.init = (assignmentId, reciptientType, reciptientId)->
-    # Criterion factory is dependent on CriterionGrades existing in scope
-    $scope.assignment = {
-      id: assignmentId,
-      scope: {
-        type: scope_type,
-        id: scoped_id
-      }
-    }
-    $scope.services(reciptientType, reciptientId)
+    $scope.assignmentId = assignmentId
+    $scope.reciptientType = reciptientType
+    $scope.reciptientId = reciptientId
 
-  $scope.services = (reciptientType, reciptientId) ->
+    # Criterion factory is dependent on CriterionGrades already existing in scope
+    $scope.services()
+
+  $scope.services = () ->
     # because getting Criteria requires badges from $scope
     # we need to wait until the badges are created before
     # making this call.
@@ -27,13 +24,13 @@
       if (RubricService.badgesAvailable() == false)
         window.setTimeout(queCriteriaAfterBadges, 100)
       else
-        RubricService.getCriteria($scope.assignment.id, $scope)
+        RubricService.getCriteria($scope.assignmentId, $scope)
 
     promises = [
       RubricService.getBadges(),
-      RubricService.getCriterionGrades($scope.assignment),
+      RubricService.getCriterionGrades($scope.assignmentId, $scope.reciptientType, $scope.reciptientId),
       queCriteriaAfterBadges(),
-      RubricService.getGrade($scope.assignment, reciptientType, reciptientId)]
+      RubricService.getGrade($scope.assignmentId, $scope.reciptientType, $scope.reciptientId)]
     $q.all(promises)
 
   $scope.pointsPossible = ()->

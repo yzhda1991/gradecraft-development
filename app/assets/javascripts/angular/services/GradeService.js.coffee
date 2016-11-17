@@ -4,16 +4,16 @@
   gradeFiles = []
   gradeStatusOptions = []
 
-  getGrade = (assignment, reciptientType, reciptientId)->
+  getGrade = (assignmentId, reciptientType, reciptientId)->
     if reciptientType == "student"
-      $http.get('/api/assignments/' + assignment.id + '/students/' + reciptientId + '/grade/').success((response)->
+      $http.get('/api/assignments/' + assignmentId + '/students/' + reciptientId + '/grade/').success((response)->
         angular.copy(response.data.attributes, grade)
         GradeCraftAPI.loadFromIncluded(gradeFiles,"grade_files", response)
         angular.copy(response.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = response.meta.threshold_points
       )
     else if reciptientType == "group"
-      $http.get('/api/assignments/' + assignment.id + '/groups/' + reciptientId + '/grades/').success((response)->
+      $http.get('/api/assignments/' + assignmentId + '/groups/' + reciptientId + '/grades/').success((response)->
 
         # The API sends all student information so we can add the ability to custom grade group members
         # For now we filter to the first student's grade since all students grades are identical
