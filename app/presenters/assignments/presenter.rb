@@ -77,7 +77,8 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def has_submission_for?(user)
-    assignment.accepts_submissions? && !user.submission_for_assignment(assignment).nil?
+    submission = Submission.for(assignment.id, user.id).first
+    assignment.accepts_submissions? && submission.present? && SubmissionProctor.new(submission).viewable?
   end
 
   def has_teams?
@@ -166,7 +167,7 @@ class Assignments::Presenter < Showtime::Presenter
   def student_logged?(user)
     assignment.student_logged? && assignment.open? && user.is_student?(course)
   end
-  
+
   def submission_for_assignment(student)
     student.submission_for_assignment(assignment)
   end
@@ -192,13 +193,13 @@ class Assignments::Presenter < Showtime::Presenter
   def team
     @team ||= teams.find_by(id: properties[:team_id])
   end
-  
+
   def students
     @students ||= AssignmentStudentCollection.new(User
       .students_being_graded_for_course(course, team)
       .order_by_name, self)
   end
-  
+
   class AssignmentStudentCollection
     include Enumerable
 
@@ -213,7 +214,7 @@ class Assignments::Presenter < Showtime::Presenter
       @students.each { |student| yield AssignmentStudentDecorator.new(student, presenter) }
     end
   end
-  
+
   class AssignmentStudentDecorator < SimpleDelegator
     attr_reader :presenter
 

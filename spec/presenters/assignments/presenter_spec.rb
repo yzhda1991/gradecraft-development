@@ -3,7 +3,7 @@ require "./app/presenters/assignments/presenter"
 require "./app/presenters/assignments/group_presenter"
 
 describe Assignments::Presenter do
-  let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
+  let(:assignment) { double(:assignment, id: 1, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
@@ -152,6 +152,37 @@ describe Assignments::Presenter do
     it "returns the team for the team id from the course" do
       allow(course).to receive(:teams).and_return double(:relation, find_by: team)
       expect(subject.team).to eq team
+    end
+  end
+
+  describe "#has_submission_for" do
+    let(:user) { double(:user, id: 1) }
+    let(:submission) { double(:submission) }
+
+    it "is false if the assignment doesn't accept submissions" do
+      allow(Submission).to receive(:for).and_return [submission]
+      allow(assignment).to receive(:accepts_submissions?).and_return false
+      expect(subject.has_submission_for?(user)).to eq false
+    end
+
+    it "is false if the submission doesn't exist" do
+      allow(Submission).to receive(:for).and_return []
+      allow(assignment).to receive(:accepts_submissions?).and_return true
+      expect(subject.has_submission_for?(user)).to eq false
+    end
+
+    it "is false if the submission is not viewable" do
+      allow(Submission).to receive(:for).and_return [submission]
+      allow(assignment).to receive(:accepts_submissions?).and_return(true)
+      allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
+      expect(subject.has_submission_for?(user)).to eq false
+    end
+
+    it "is true when all criteria are met" do
+      allow(Submission).to receive(:for).and_return [submission]
+      allow(assignment).to receive(:accepts_submissions?).and_return(true)
+      allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+      expect(subject.has_submission_for?(user)).to eq true
     end
   end
 end
