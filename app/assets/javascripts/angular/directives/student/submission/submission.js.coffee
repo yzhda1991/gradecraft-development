@@ -1,15 +1,15 @@
 @gradecraft.directive 'studentSubmission', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  StudentSubmissionCtrl = [() ->
+  StudentSubmissionCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
-    vm.saveSubmission = () ->
-      StudentSubmissionService.saveDraftSubmission(vm.assignmentId, vm.submission).then((result) ->
-        vm.submission = result if result?
-      )
+    $scope.submission = StudentSubmissionService.submission
 
-    StudentSubmissionService.getDraftSubmission(vm.assignmentId).then((submission) ->
-      vm.submission = submission
+    vm.saveSubmission = () ->
+      StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
+
+    StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
+      $scope.submission = StudentSubmissionService.getSubmission()
       vm.loading = false
     )
   ]
@@ -21,7 +21,7 @@
     restrict: 'EA',
     scope: {
       assignmentId: '@'
-    },
+    }
     templateUrl: 'student/submission/main.html'
     link: (scope, el, attr) ->
       scope.froalaOptions = {

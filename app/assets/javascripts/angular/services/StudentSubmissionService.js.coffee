@@ -1,39 +1,47 @@
 @gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
 
-  saveDraftSubmission = (assignmentId, submission) ->
-    if submission.id? then updateDraftSubmission(assignmentId, submission) else createDraftSubmission(assignmentId, submission)
+  submission = null
+
+  setSubmission = (newSubmission) ->
+    submission = newSubmission
+
+  getSubmission = () ->
+    submission
+
+  saveDraftSubmission = (assignmentId) ->
+    debugger
+    if submission.id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
 
   getDraftSubmission = (assignmentId) ->
     $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
         GradeCraftAPI.logResponse(response.data)
-        response.data.submission
+        setSubmission(response.data.submission)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
-        response.data.submission
     )
 
-  createDraftSubmission = (assignmentId, submission) ->
+  createDraftSubmission = (assignmentId) ->
     $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
       (response) ->
         GradeCraftAPI.logResponse(response.data)
-        response.data.submission
+        setSubmission(response.data.submission)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
-        null
     )
 
-  updateDraftSubmission = (assignmentId, submission) ->
+  updateDraftSubmission = (assignmentId) ->
     $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
       (response) ->
         GradeCraftAPI.logResponse(response.data)
-        response.data.submission
+        setSubmission(response.data.submission)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
-        submission
     )
 
   return {
+    getSubmission: getSubmission
+    setSubmission: setSubmission
     getDraftSubmission: getDraftSubmission
     saveDraftSubmission: saveDraftSubmission
   }
