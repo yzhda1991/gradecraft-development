@@ -11,9 +11,7 @@
     bindToController: true,
     controller: UploadGradeFilesCtrl,
     controllerAs: 'vm',
-    scope: {
-      grade_id: '@'
-    },
+    scope: {},
     templateUrl: 'grades/upload_grade_files.html'
   }
 ]

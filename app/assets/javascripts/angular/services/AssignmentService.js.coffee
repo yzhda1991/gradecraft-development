@@ -3,7 +3,6 @@
 
 @gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
-  # handle either a single assignment, or an array of assignments
   assignments = []
   update = {}
 
