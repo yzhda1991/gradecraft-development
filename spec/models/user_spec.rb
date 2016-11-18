@@ -523,11 +523,24 @@ describe User do
 
   describe "#submission_for_assignment(assignment)" do
     let(:student) { create :user }
-    let(:assignment) { create :assignment}
 
     it "returns the submission for an assignment if it exists" do
+      assignment = create(:assignment)
       submission = create(:submission, assignment: assignment, student: student)
       expect(student.submission_for_assignment(assignment)).to eq(submission)
+    end
+
+    describe "when it is a group assignment" do
+      let!(:create_group) { world.create_group }
+      let(:group) { world.group }
+
+      it "returns the group submission if it exists"  do
+        assignment = create(:assignment, grade_scope: "Group")
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        submission = create(:submission, assignment: assignment, student: nil, group: group)
+        expect(student.submission_for_assignment(assignment)).to eq(submission)
+      end
     end
   end
 
