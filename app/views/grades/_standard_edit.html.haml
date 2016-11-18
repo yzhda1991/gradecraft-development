@@ -18,11 +18,8 @@
             - else
               = render partial: "grades/standard_edit/raw_points_grading_fields", locals: { f: f, assignment: grade.assignment }
 
-          // %grade-files-uploader
-
-          .attachments(ng-cloak)
-            .clear
-            = render partial: "grades/standard_edit/standard_edit_attachment", locals: { f: f, grade: grade }
+          .clear
+          %grade-files-uploader
 
           .text-feedback
             = f.hidden_field :graded_by_id, :value => current_user.id
