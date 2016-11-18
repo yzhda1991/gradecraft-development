@@ -6,7 +6,7 @@
     = simple_form_for grade do |f|
       = f.hidden_field :submission_id, value: submission.try(:id)
 
-      #grade(ng-controller="GradeCtrl" ng-init="init(#{initial_grade_json(grade)}, #{grade.assignment.id}, '#{recipient_type}', #{recipient_id})")
+      #grade(ng-controller="GradeCtrl" ng-init="init(#{grade.assignment.id}, '#{recipient_type}', #{recipient_id})")
         .panel.splash(ng-cloak) Loading grade for #{grade.student.name}...
 
         .panel(ng-cloak)

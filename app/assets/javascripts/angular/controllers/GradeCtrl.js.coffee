@@ -1,14 +1,13 @@
-@gradecraft.controller 'GradeCtrl', ['$scope', 'AssignmentScoreLevel', 'AssignmentService', 'GradeService', ($scope, AssignmentScoreLevel, AssignmentService, GradeService) ->
+@gradecraft.controller 'GradeCtrl', ['$scope', 'AssignmentService', 'GradeService', ($scope, AssignmentService, GradeService) ->
 
   $scope.grade = GradeService.grade
-  $scope.assignment = AssignmentService.assignments[0]
 
-  $scope.init = (initData, assignmentId, reciptientType, reciptientId)->
+  $scope.assignment = ()->
+    AssignmentService.assignments[0]
+
+  $scope.init = (assignmentId, reciptientType, reciptientId)->
     AssignmentService.getAssignment(assignmentId)
-    GradeService.getGrade($scope.assignment, reciptientType, reciptientId)
-
-    # establish and populate all necessary collections for UI
-    $scope.populateCollections(initData.assignment_score_levels)
+    GradeService.getGrade(assignmentId, reciptientType, reciptientId)
 
   $scope.services = (assignmentId)->
     promises = []
@@ -26,20 +25,6 @@
     GradeService.timeSinceUpdate()
   $scope.updateGrade = ()->
     GradeService.updateGrade()
-
-  # add initial score levels
-  $scope.populateCollections = (assignmentScoreLevels)->
-    $scope.assignmentScoreLevels = []
-
-    unless assignmentScoreLevels.length == 0
-      $scope.addAssignmentScoreLevels(assignmentScoreLevels)
-
-  # add assignment score level objects if they exist
-  $scope.addAssignmentScoreLevels = (assignmentScoreLevels)->
-    angular.forEach(assignmentScoreLevels, (scoreLevel, index)->
-      scoreLevelPrototype = new AssignmentScoreLevel(scoreLevel, $scope)
-      $scope.assignmentScoreLevels.push scoreLevelPrototype
-    )
 
   $scope.modelOptions = {
     updateOn: 'default blur',

@@ -5,7 +5,7 @@
     %label.raw-points-label(for="grade_raw_points" ng-click="enableScoreLevels()" ng-class="{'disabled': grade.is_custom_value}")
       Raw Score (#{assignment.full_points} Points Possible)
     %select#grade_raw_points(name="grade[raw_points]" ng-model="grade.raw_points" ng-disabled="grade.is_custom_value" ng-change="updateGrade()" ng-class="{'disabled': grade.is_custom_value}")
-      %option(value="{{scoreLevel.value}}" ng-repeat="scoreLevel in assignmentScoreLevels" ng-selected="grade.raw_points == scoreLevel.value") {{scoreLevel.name}} ({{scoreLevel.formatted_value}} points)
+      %option(value="{{scoreLevel.points}}" ng-repeat="scoreLevel in assignment().score_levels" ng-selected="grade.raw_points == scoreLevel.points") {{scoreLevel.name}} {{scoreLevel.points | number}}
 
     %label.raw-points-label(for="grade_raw_points" ng-class="{'disabled': ! grade.is_custom_value}")
       Custom Value

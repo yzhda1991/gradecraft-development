@@ -29,20 +29,4 @@ module GradesHelper
     # This cache key is busted when a grade is updated
     "#{course.cache_key}/unreleased_grades_count"
   end
-
-  def initial_grade_json(grade)
-    JbuilderTemplate.new(ApplicationController.new.view_context).encode do |json|
-      json.grade do
-        json.partial! "grades/grade", grade: grade, assignment: grade.assignment
-      end
-
-      json.assignment do
-        json.partial! "grades/assignment", assignment: grade.assignment
-      end
-
-      json.assignment_score_levels do
-        json.partial! "grades/assignment_score_levels", assignment_score_levels: grade.assignment.assignment_score_levels.order_by_points
-      end
-    end.to_json
-  end
 end
