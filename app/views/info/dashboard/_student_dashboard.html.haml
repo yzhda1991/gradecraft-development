@@ -1,5 +1,5 @@
-%button.btn-modal#modal-open{type: "button"} Open the Modal
-= render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course) }
+- if !current_user.course_memberships.where(course: current_course).first.has_seen_course_onboarding?
+  = render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course) }
 
 .pageContent
 

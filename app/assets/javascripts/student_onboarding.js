@@ -35,12 +35,12 @@ if (m && p) {
 
     // list out the vars
     var mOverlay = getId('modal-window'),
-        mOpen = getId('modal-open'),
         mClose = getId('modal-close'),
         mAction = getId('modal-action'),
         modal = getId('modal-holder'),
         allNodes = document.querySelectorAll("*"),
         modalOpen = false,
+        firstLoad = true,
         lastFocus,
         i;
 
@@ -87,9 +87,6 @@ if (m && p) {
        }
     }, false);
 
-    // open modal by btn click/hit
-    mOpen.addEventListener('click', modalShow);
-
     // close modal by btn click/hit
     mClose.addEventListener('click', modalClose);
 
@@ -103,6 +100,11 @@ if (m && p) {
     for (i = 0; i < allNodes.length; i++) {
       allNodes.item(i).addEventListener('focus', focusRestrict);
     }
+    
+    if ( firstLoad == true ) {
+     $(document).ready( modalShow );
+   };
 
   })();
+  
 }
