@@ -366,6 +366,11 @@ ActiveRecord::Schema.define(version: 20161209225205) do
     t.index ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
   end
 
+  create_table "grade_file_associations", force: :cascade do |t|
+    t.integer "grade_id",      null: false
+    t.integer "grade_file_id", null: false
+  end
+
   create_table "grade_files", force: :cascade do |t|
     t.integer  "grade_id"
     t.string   "filename"

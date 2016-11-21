@@ -8,7 +8,9 @@ class API::Grades::GradeFilesController < ApplicationController
 
     @grade_files = []
     params[:grade_files].each do |f|
-      @grade_files << GradeFile.create(file: f, filename: f.original_filename[0..49], grade_id: grade.id)
+      grade_file = GradeFile.create(file: f, filename: f.original_filename[0..49], grade_id: grade.id)
+      GradeFileAssociation.create(grade_file_id: grade_file.id, grade_id: grade.id)
+      @grade_files << grade_file
     end
 
     render status: 201
@@ -20,6 +22,8 @@ class API::Grades::GradeFilesController < ApplicationController
     if grade_file.present?
       grade_file.delete_from_s3
       grade_file.destroy
+
+      GradeFileAssociation.where(grade_file_id: grade_file.id).destroy_all
 
       if !grade_file.exists_on_s3? && grade_file.destroyed?
         render json: { message: "Grade file successfully deleted", success: true },
