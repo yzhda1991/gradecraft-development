@@ -75,9 +75,23 @@ input[type=text]#grade_raw_points[disabled]
   width: 200px
 
 ul.grade-files-list
- list-style: none
- .fa-times
-   color: $color-red-1
+  list-style: none
+  .grade-file-list-item
+    .grade-file-delete-button
+      .hover-state, .no-hover-state
+        display: inline
+      .hover-state
+        display: none
+    &:hover
+      .grade-file-delete-button
+        .no-hover-state
+          display: none
+        .hover-state
+          display: inline
+    .fa-check
+      color: $color-green-2
+    .fa-times, .fa-spinner
+      color: $color-red-1
 
 /* Grading Status Page */
 .grading-status-card-wrapper
