@@ -48,6 +48,48 @@ describe GradeExporter do
     end
   end
 
+  describe "#export_group_grades" do
+    let(:groups) { create_list :group, 2 }
+
+    it "generates an empty CSV if there is no assignment specified" do
+      csv = subject.export_group_grades(nil, [])
+      expect(csv).to eq "Group Name,Score,Feedback\n"
+    end
+
+    it "generates an empty CSV if there are no groups specified" do
+      csv = subject.export_group_grades(assignment, [])
+      expect(csv).to eq "Group Name,Score,Feedback\n"
+    end
+
+    it "generates a CSV with student scores" do
+      grade1 = double(:grade, score: 123, feedback: nil)
+      grade2 = double(:grade, score: 456, feedback: "Grrrrreat!")
+
+      allow(groups.first).to receive(:grade_for_assignment).with(assignment)
+          .and_return grade1
+
+      allow(groups.last).to receive(:grade_for_assignment).with(assignment)
+          .and_return grade2
+
+      csv = CSV.new(subject.export_group_grades(assignment, groups)).read
+
+      expect(csv.length).to eq 3
+
+      expect(csv[1]).to eq [groups.first.name, "123", ""]
+      expect(csv[2]).to eq [groups.last.name, "456", "Grrrrreat!"]
+    end
+
+    it "includes groups that do not have grades for the assignment" do
+      allow(groups.first).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return Grade.new
+
+      csv = CSV.new(subject.export_group_grades(assignment, groups)).read
+      expect(csv.last.last).to eq ""
+    end
+  end
+
+
   describe "#export_grades_with_detail" do
     it "generates an empty CSV if there is no assignment specified" do
       csv = subject.export_grades_with_detail(nil, [])
@@ -107,6 +149,16 @@ describe GradeExporter do
           .and_return double(:grade, instructor_modified?: false, graded_or_released?: false)
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
       expect(csv[1][3]).to eq ""
+    end
+  end
+
+  describe "#group_headers" do
+    it "has an array of headers for group grades" do
+      expect(subject.group_headers).to eq ["Group Name", "Score", "Feedback"]
+    end
+
+    it "is frozen" do
+      expect(subject.group_headers.frozen?).to eq true
     end
   end
 end

@@ -49,7 +49,9 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def archive_basename
-    [formatted_assignment_name, formatted_team_name].compact.join(" - ").strip
+    [formatted_assignment_name,
+     formatted_team_name,
+     group_suffix].compact.join(" - ").strip
   end
 
   def formatted_assignment_name
@@ -57,10 +59,10 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def formatted_team_name
-    @team_name ||= Formatter::Filename.titleize(team.name) if has_team?
+    @team_name ||= Formatter::Filename.titleize(team.name) if team
   end
 
-  def has_team?
-    team_id.present?
+  def group_suffix
+    "Group Submissions" if use_groups
   end
 end

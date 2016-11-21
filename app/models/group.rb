@@ -20,6 +20,7 @@ class Group < ActiveRecord::Base
   accepts_nested_attributes_for :proposals, allow_destroy: true, reject_if: proc { |a| a["proposal"].blank? }
 
   has_many :submissions
+  has_many :submissions_exports
 
   has_many :earned_badges, as: :group
 
@@ -33,6 +34,7 @@ class Group < ActiveRecord::Base
   scope :approved, -> { where approved: "Approved" }
   scope :rejected, -> { where approved: "Rejected" }
   scope :pending, -> { where approved: "Pending" }
+  scope :order_by_name, -> { order "name ASC" }
 
   clean_html :text_proposal
 
@@ -49,9 +51,26 @@ class Group < ActiveRecord::Base
     approved == "Pending"
   end
 
+  def same_name_as?(another_group)
+    name.downcase == another_group.name.downcase
+  end
+
   # Group submissions
   def submission_for_assignment(assignment)
     submissions_by_assignment_id[assignment.id].try(:first)
+  end
+
+  def submitter_directory_name
+    Formatter::Filename.new(name).directory_name.filename
+  end
+
+  def submitter_directory_name_with_suffix
+    "#{submitter_directory_name} - #{id}"
+  end
+
+  # Grabbing the grade for an assignment
+  def grade_for_assignment(assignment)
+    grades.where(assignment_id: assignment.id).first || grades.new(assignment: assignment)
   end
 
   private

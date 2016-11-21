@@ -41,6 +41,8 @@ class Submission < ActiveRecord::Base
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
+  scope :with_group, -> { where "group_id is not null" }
+
   before_validation :cache_associations
 
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
@@ -81,6 +83,14 @@ class Submission < ActiveRecord::Base
   # Getting the name of the student who submitted the work
   def name
     student.name
+  end
+
+  def submitter
+    assignment.has_groups? ? group : student
+  end
+
+  def submitter_id
+    assignment.has_groups? ? group_id : student_id
   end
 
   # Checking to see if a submission was turned in late

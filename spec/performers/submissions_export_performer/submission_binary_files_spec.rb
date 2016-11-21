@@ -10,14 +10,14 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "creating submission binary files" do
     let(:submissions) { [ submission_with_files, submission_without_files ] }
-    let(:submission_with_files) { build(:submission, submission_files: submission_files, student: student) }
+    let(:submission_with_files) { build(:submission, submission_files: submission_files, student: submitter) }
     let(:submission_without_files) { build(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
     let(:submission_file1) { build(:submission_file, filename: "gary_ate_ants.ralph", file_missing: false) }
     let(:submission_file2) { build(:submission_file, file_missing: false) }
 
-    let(:student) { build(:user, first_name: "Edwina", last_name: "Georgebot") }
+    let(:submitter) { build(:user, first_name: "Edwina", last_name: "Georgebot") }
 
     let(:tmp_dir) { Dir.mktmpdir }
 
@@ -75,13 +75,13 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     describe "submission binary file name stuff" do
       describe "#submission_binary_file_path" do
         let(:result) do
-          subject.submission_binary_file_path(student, submission_file1, 5)
+          subject.submission_binary_file_path(submitter, submission_file1, 5)
         end
 
         before do
           allow(submission_file1).to receive(:instructor_filename)  { "ick.txt" }
-          allow(subject).to receive(:student_directory_file_path)
-            .with(student, "ick.txt").and_return "the/path"
+          allow(subject).to receive(:submitter_directory_file_path)
+            .with(submitter, "ick.txt").and_return "the/path"
         end
 
         it "builds the instructor filename for the submission file" do
@@ -89,19 +89,19 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           result
         end
 
-        it "returns the student directory path for the student and filename" do
+        it "returns the submitter directory path for the submitter and filename" do
           expect(result).to eq "the/path"
         end
       end
 
       describe "#write_submission_binary_file" do
         let(:result) do
-          subject.write_submission_binary_file(student, submission_file1, 5)
+          subject.write_submission_binary_file(submitter, submission_file1, 5)
         end
 
         it "gets the binary submission file path" do
           expect(performer).to receive(:submission_binary_file_path)
-            .with(student, submission_file1, 5)
+            .with(submitter, submission_file1, 5)
           result
         end
 

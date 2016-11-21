@@ -9,6 +9,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   let(:submissions_export) { create(:submissions_export, course: course, assignment: assignment, s3_object_key: "some thing") }
   let(:assignment) { create(:assignment) }
   let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:group) { double :group, id: 30 }
 
   before do
     login_user(professor)
@@ -274,15 +275,22 @@ RSpec.describe SubmissionsExportsController, type: :controller do
 
   describe "#create_submissions_export" do
     subject { controller.instance_eval { create_submissions_export } }
-    let(:submissions_export_attrs) {{
-      assignment_id: assignment.id,
-      course_id: course.id,
-      professor_id: professor.id,
-      team_id: team.id
-    }}
+
+    let(:submissions_export_attrs) do
+      {
+        assignment_id: assignment.id,
+        course_id: course.id,
+        professor_id: professor.id,
+        team_id: team.id,
+        use_groups: true
+      }
+    end
 
     before do
-      allow(controller).to receive(:params) {{ assignment_id: assignment.id, team_id: team.id }}
+      allow(controller).to receive(:params) do
+        { assignment_id: assignment.id, team_id: team.id, use_groups: true }
+      end
+
       allow(controller).to receive_messages(current_course: course, current_user: professor)
     end
 

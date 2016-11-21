@@ -6,7 +6,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   attr_reader :submissions_export, :professor, :course, :errors, :assignment, :team, :submissions
 
   def setup
-    ensure_s3fs_tmp_dir if use_s3fs?
+    S3fs.ensure_tmpdir # make sure the s3fs tmpdir exists
     @submissions_export = SubmissionsExport.find @attrs[:submissions_export_id]
     fetch_assets
     @submissions_export.update_attributes submissions_export_attributes
@@ -22,7 +22,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       submissions_export.update_export_completed_time
     else
       if logger
-        log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
+        log_error_with_attributes "@assignment.present? and/or" \
+          "@submitters.present? failed and both should have been present, " \
+          "could not do_the_work"
       end
     end
   end
@@ -31,12 +33,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [
       :generate_export_csv, # generate the csv overview for the assignment or team
       :confirm_export_csv_integrity, # check whether the csv export was successful
-      :create_student_directories, # generate student directories
-      :student_directories_created_successfully, # check whether the student directories were all created successfully
-      :create_submission_text_files, # create text files in each student directory if there is submission data that requires it
-      :create_submission_binary_files, # create binary files in each student directory
+      :create_submitter_directories, # generate submitter directories
+      :submitter_directories_created_successfully, # check whether the submitter directories were all created successfully
+      :create_submission_text_files, # create text files in each submitter directory if there is submission data that requires it
+      :create_submission_binary_files, # create binary files in each submitter directory
       :write_note_for_missing_binary_files,
-      :remove_empty_student_directories,
+      :remove_empty_submitter_directories,
       :generate_error_log, # write error log for errors that may have occurred during file generation
       :archive_exported_files,
       :upload_archive_to_s3,
@@ -65,7 +67,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def base_export_attributes
     {
-      student_ids: @students.collect(&:id),
+      submitter_ids: @submitters.collect(&:id),
       submissions_snapshot: submissions_snapshot,
       last_export_started_at: Time.now
     }
@@ -75,27 +77,27 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     base_export_attributes
   end
 
-  def submission_binary_file_path(student, submission_file, index)
+  def submission_binary_file_path(submitter, submission_file, index)
     # get the filename from the submission file with an index
     filename = submission_file.instructor_filename index
-    student_directory_file_path student, filename
+    submitter_directory_file_path submitter, filename
   end
 
-  def write_submission_binary_file(student, submission_file, index)
-    file_path = submission_binary_file_path(student, submission_file, index)
+  def write_submission_binary_file(submitter, submission_file, index)
+    file_path = submission_binary_file_path(submitter, submission_file, index)
     stream_s3_file_to_disk(submission_file, file_path)
   end
 
   def create_binary_files_for_submission(submission)
     submission.submission_files.present.each_with_index do |submission_file, index|
-      write_submission_binary_file(submission.student, submission_file, index)
+      write_submission_binary_file(submission.submitter, submission_file, index)
     end
   end
 
   protected
 
   def work_resources_present?
-    @assignment.present? && @students.present?
+    @assignment.present? && @submitters.present?
   end
 
   def fetch_assets
@@ -103,8 +105,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @course = @submissions_export.course
     @professor = @submissions_export.professor
     @team = @submissions_export.team
-    @students = fetch_students
-    @students_for_csv = fetch_students_for_csv
+    @submitters = fetch_submitters
+    @submitters_for_csv = fetch_submitters_for_csv
     @submissions = fetch_submissions
   end
 
@@ -113,11 +115,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def tmp_dir
-    if use_s3fs?
-      @tmp_dir ||= Dir.mktmpdir(nil, s3fs_tmp_dir_path)
-    else
-      @tmp_dir ||= Dir.mktmpdir
-    end
+    @tmp_dir ||= S3fs.mktmpdir
   end
 
   def archive_root_dir
@@ -132,20 +130,20 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", archive_root_dir)
   end
 
-  def sorted_student_directory_keys
-    submissions_grouped_by_student.keys.sort
+  def sorted_submitter_directory_keys
+    submissions_grouped_by_submitter.keys.sort
   end
 
-  def submissions_grouped_by_student
-    @submissions_grouped_by_student ||= @submissions.group_by do |submission|
-      student_directory_names[submission.student.id]
+  def submissions_grouped_by_submitter
+    @submissions_grouped_by_submitter ||= @submissions.group_by do |submission|
+      submitter_directory_names[submission.submitter_id]
     end
   end
 
   def submissions_snapshot
     @submissions_snapshot ||= @submissions.inject({}) do |memo, submission|
       memo[submission.id] = {
-        student_id: submission.student_id,
+        submitter_id: submission.submitter_id,
         updated_at: submission.updated_at.to_s
       }
       memo
@@ -156,27 +154,33 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @course = @assignment.course
   end
 
-  def fetch_students_for_csv
-    if submissions_export.has_team?
-      @students_for_csv = User.students_by_team(@course, @team)
+  def fetch_submitters_for_csv
+    if submissions_export.use_groups
+      Group.where course: @course
+    elsif @submissions_export.team
+      User.students_by_team(@course, @team)
     else
-      @students_for_csv = User.with_role_in_course("student", @course)
+      User.with_role_in_course("student", @course)
     end
   end
 
-  def fetch_students
-    if submissions_export.has_team?
-      @students = @assignment.students_with_text_or_binary_files_on_team(@team)
+  def fetch_submitters
+    if submissions_export.use_groups
+      @assignment.groups_with_files
+    elsif @submissions_export.team
+      @assignment.students_with_text_or_binary_files_on_team(@team)
     else
-      @students = @assignment.students_with_text_or_binary_files
+      @assignment.students_with_text_or_binary_files
     end
   end
 
   def fetch_submissions
-    if submissions_export.has_team?
-      @submissions = @assignment.student_submissions_with_files_for_team(@team)
+    if submissions_export.use_groups
+      @assignment.submissions.with_group
+    elsif submissions_export.team
+      @assignment.student_submissions_with_files_for_team(@team)
     else
-      @submissions = @assignment.student_submissions_with_files
+      @assignment.student_submissions_with_files
     end
   end
 
@@ -194,7 +198,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def generate_export_csv
     open(csv_file_path, "w") do |f|
-      f.puts @assignment.grade_import(@students_for_csv)
+      if submissions_export.use_groups
+        export_data = GradeExporter.new
+          .export_group_grades(@assignment, @submitters_for_csv)
+        f.puts export_data
+      else
+        f.puts @assignment.grade_import(@submitters_for_csv)
+      end
     end
   end
 
@@ -204,87 +214,66 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   # final archive concerns
 
-  # create a separate tmp dir for storing the final generated archive
-  def ensure_s3fs_tmp_dir
-    FileUtils.mkdir_p(s3fs_tmp_dir_path) unless Dir.exist?(s3fs_tmp_dir_path)
-  end
-
   def archive_tmp_dir
-    if use_s3fs?
-      @archive_tmp_dir ||= Dir.mktmpdir(nil, s3fs_tmp_dir_path)
-    else
-      @archive_tmp_dir ||= Dir.mktmpdir
-    end
-  end
-
-  def tmp_dir_parent_path
-    use_s3fs? ? s3fs_tmp_dir_path : nil
-  end
-
-  def s3fs_tmp_dir_path
-    "/s3mnt/tmp/#{Rails.env}"
-  end
-
-  def use_s3fs?
-    @use_s3fs ||= Rails.env.staging? || Rails.env.production?
+    @archive_tmp_dir ||= S3fs.mktmpdir
   end
 
   def expanded_archive_base_path
     @expanded_archive_base_path ||= File.expand_path(submissions_export.export_file_basename, archive_tmp_dir)
   end
 
-  ## creating student directories
+  ## creating submitter directories
 
-  def student_directories_created_successfully
-    missing_student_directories.empty?
+  def submitter_directories_created_successfully
+    missing_submitter_directories.empty?
   end
 
-  def missing_student_directories
-    @students.inject([]) do |memo, student|
-      memo << student_directory_names[student.id] unless Dir.exist?(student_directory_path(student))
+  def missing_submitter_directories
+    @submitters.inject([]) do |memo, submitter|
+      memo << submitter_directory_names[submitter.id] unless Dir.exist?(submitter_directory_path(submitter))
       memo
     end
   end
 
   # in the format of { student_id => "lastname_firstname(--username-if-naming-conflict)" }
-  def student_directory_names
-    @student_directory_names ||= @students.inject({}) do |memo, student|
+  def submitter_directory_names
+    @submitter_directory_names ||= @submitters.inject({}) do |memo, submitter|
       # check to see whether there are any duplicate student names
-      total_students_with_name = @students.to_a.count do |compared_student|
-        student.same_name_as?(compared_student)
+      total_submitters_with_name = @submitters.to_a.count do |compared_submitter|
+        submitter.same_name_as?(compared_submitter)
       end
 
-      if total_students_with_name > 1
-        memo[student.id] = student.student_directory_name_with_username
+      if total_submitters_with_name > 1
+        memo[submitter.id] = submitter.submitter_directory_name_with_suffix
       else
-        memo[student.id] = student.student_directory_name
+        memo[submitter.id] = submitter.submitter_directory_name
       end
       memo
     end
   end
 
-  def create_student_directories
-    @students.each do |student|
-      dir_path = student_directory_path(student)
+  def create_submitter_directories
+    @submitters.each do |submitter|
+      dir_path = submitter_directory_path(submitter)
       FileUtils.mkdir_p(dir_path) # unless Dir.exist?(dir_path) # create directory with parents
     end
   end
 
-  # removing student directories
-  def remove_empty_student_directories
-    @students.each do |student|
-      if student_directory_empty?(student)
-        Dir.delete student_directory_path(student)
+  # removing submitter directories
+  def remove_empty_submitter_directories
+    @submitters.each do |submitter|
+      if submitter_directory_empty?(submitter)
+        Dir.delete submitter_directory_path(submitter)
       end
     end
   end
 
-  def student_directory_empty?(student)
-    (Dir.entries(student_directory_path(student)) - %w{ . .. }).empty?
+  def submitter_directory_empty?(submitter)
+    (Dir.entries(submitter_directory_path(submitter)) - %w{ . .. }).empty?
   end
 
-  def student_directory_path(student)
-    File.expand_path(student_directory_names[student.id], archive_root_dir)
+  def submitter_directory_path(submitter)
+    File.expand_path(submitter_directory_names[submitter.id], archive_root_dir)
   end
 
   def create_submission_text_files
@@ -297,8 +286,14 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def create_submission_text_file(submission)
-    open(submission_text_file_path(submission.student), "w") do |f|
-      f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}"
+    if submissions_export.use_groups
+      submitter_name = submission.group.name
+    else
+      submitter_name = "#{submission.student.last_name}, #{submission.student.first_name}"
+    end
+
+    open(submission_text_file_path(submission.submitter), "w") do |f|
+      f.puts "Submission items from #{submitter_name}"
 
       if submission.text_comment.present?
         f.puts "\ntext comment: #{submission.text_comment}"
@@ -310,21 +305,21 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def submission_text_file_path(student)
-    File.expand_path submission_text_filename(student),
-      student_directory_path(student)
+  def submission_text_file_path(submitter)
+    File.expand_path submission_text_filename(submitter),
+      submitter_directory_path(submitter)
   end
 
-  def submission_text_filename(student)
+  def submission_text_filename(submitter)
     [
-      formatted_student_name(student),
+      formatted_submitter_name(submitter),
       submissions_export.formatted_assignment_name,
       "Submission Text.txt"
     ].join(" - ")
   end
 
-  def formatted_student_name(student)
-    Formatter::Filename.titleize student.name
+  def formatted_submitter_name(submitter)
+    Formatter::Filename.titleize submitter.name
   end
 
   def create_submission_binary_files
@@ -344,12 +339,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @submission_files_with_missing_binaries ||= @assignment.submission_files_with_missing_binaries
   end
 
-  def students_with_missing_binaries
-    @students_with_missing_binaries ||= @assignment.students_with_missing_binaries
+  def submitters_with_missing_binaries
+    @submitters_with_missing_binaries ||= @assignment.submitters_with_missing_binaries
   end
 
   def write_note_for_missing_binary_files
-    unless students_with_missing_binaries.empty?
+    unless submitters_with_missing_binaries.empty?
       open(missing_binaries_file_path, "wt") do |file|
         write_missing_binary_text(file)
       end
@@ -358,13 +353,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_missing_binary_text(file)
     file.puts "The following files were uploaded, but no longer appear to be available on the server:"
-    write_missing_binary_files_for_student(file)
+    write_missing_binary_files_for_submitter(file)
   end
 
-  def write_missing_binary_files_for_student(file)
-    students_with_missing_binaries.each_with_index do |student, index|
-      file.puts "\n#{student.name}:"
-      add_missing_binary_filenames_to_file(file, student)
+  def write_missing_binary_files_for_submitter(file)
+    submitters_with_missing_binaries.each_with_index do |submitter, index|
+      file.puts "\n#{submitter.name}:"
+      add_missing_binary_filenames_to_file(file, submitter)
     end
   end
 
@@ -374,8 +369,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def student_directory_file_path(student, filename)
-    File.expand_path filename, student_directory_path(student)
+  def submitter_directory_file_path(student, filename)
+    File.expand_path filename, submitter_directory_path(student)
   end
 
   def stream_s3_file_to_disk(submission_file, target_file_path)
@@ -486,10 +481,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  def create_student_directories_messages
+  def create_submitter_directories_messages
     expand_messages ({
-      success: "Successfully created the student directories",
-      failure: "Failed to create the student directories"
+      success: "Successfully created the submitter directories",
+      failure: "Failed to create the submitter directories"
     })
   end
 
@@ -500,7 +495,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  def student_directories_created_successfully_messages
+  def submitter_directories_created_successfully_messages
     expand_messages ({
       success: "Successfully confirmed creation of all student directories",
       failure: "Some student directories did not create properly"
@@ -542,10 +537,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  def remove_empty_student_directories_messages
+  def remove_empty_submitter_directories_messages
     expand_messages ({
-      success: "Successfully removed empty student directories from archive",
-      failure: "Failed to remove empty student directories"
+      success: "Successfully removed empty submitter directories from archive",
+      failure: "Failed to remove empty submitter directories"
     })
   end
 
@@ -557,6 +552,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def message_suffix
-    "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+    "for assignment #{@assignment.id} for students: #{@submitters.collect(&:id)}"
   end
 end

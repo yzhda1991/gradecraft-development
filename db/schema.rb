@@ -236,6 +236,7 @@ ActiveRecord::Schema.define(version: 20161108202754) do
     t.string   "role",                           default: "student", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
+    t.index ["course_id", "user_id"], name: "index_course_memberships_on_course_id_and_user_id", unique: true, using: :btree
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
@@ -654,18 +655,19 @@ ActiveRecord::Schema.define(version: 20161108202754) do
     t.integer  "assignment_id"
     t.integer  "course_id"
     t.integer  "professor_id"
-    t.integer  "student_ids",              default: [], null: false, array: true
+    t.integer  "submitter_ids",            default: [],    null: false, array: true
     t.integer  "team_id"
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_bucket_name"
-    t.text     "performer_error_log",      default: [], null: false, array: true
-    t.hstore   "submissions_snapshot",     default: {}, null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.text     "performer_error_log",      default: [],    null: false, array: true
+    t.hstore   "submissions_snapshot",     default: {},    null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.datetime "last_export_started_at"
     t.datetime "last_export_completed_at"
     t.string   "last_completed_step"
+    t.boolean  "use_groups",               default: false
   end
 
   create_table "team_leaderships", force: :cascade do |t|

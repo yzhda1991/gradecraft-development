@@ -47,30 +47,30 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
     end
   end
 
-  describe "#students_with_missing_binaries" do
-    subject { performer.instance_eval { students_with_missing_binaries }}
+  describe "#submitters_with_missing_binaries" do
+    subject { performer.instance_eval { submitters_with_missing_binaries }}
     let(:assignment) { create(:assignment) }
     let(:submission_files) { create_list(:submission_file, 2) }
     before(:each) do
       performer.instance_variable_set(:@assignment, assignment)
-      allow(assignment).to receive(:students_with_missing_binaries) { submission_files }
+      allow(assignment).to receive(:submitters_with_missing_binaries) { submission_files }
     end
 
     it "gets the submission files with missing binaries from the assignment" do
-      expect(assignment).to receive(:students_with_missing_binaries)
+      expect(assignment).to receive(:submitters_with_missing_binaries)
       subject
     end
 
     describe "caching" do
       it "caches the result" do
         subject
-        expect(assignment).not_to receive(:students_with_missing_binaries)
+        expect(assignment).not_to receive(:submitters_with_missing_binaries)
         subject
       end
 
       it "sets an instance variable" do
         subject
-        expect(performer.instance_variable_get(:@students_with_missing_binaries)).to eq(submission_files)
+        expect(performer.instance_variable_get(:@submitters_with_missing_binaries)).to eq(submission_files)
       end
     end
   end
@@ -87,7 +87,7 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
     describe "intro line" do
       let(:students) { create_list(:user, 1) }
-      before { allow(performer).to receive(:students_with_missing_binaries) { students }}
+      before { allow(performer).to receive(:submitters_with_missing_binaries) { students }}
 
       it "adds a message to the missing files text file" do
         subject
@@ -97,7 +97,7 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
     describe "printing students with missing files" do
       let(:students) { create_list(:user, 2) }
-      before { allow(performer).to receive(:students_with_missing_binaries) { students }}
+      before { allow(performer).to receive(:submitters_with_missing_binaries) { students }}
 
       it "prints a line for each student with a missing file" do
         subject
@@ -114,7 +114,7 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
       let(:submission_files) { [ submission_file_with_student, submission_file_without_student ] }
 
       before do
-        allow(performer).to receive(:students_with_missing_binaries) { students }
+        allow(performer).to receive(:submitters_with_missing_binaries) { students }
         allow(performer).to receive(:submission_files_with_missing_binaries) { submission_files }
       end
 

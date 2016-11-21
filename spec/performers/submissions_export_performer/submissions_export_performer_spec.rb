@@ -15,38 +15,51 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   # private and protected methods
 
-  describe "sorted_student_directory_keys" do
-    let(:contrived_student_submissions_hash) {{ "dave_hoggworthy"=>"", "carla_makeshift"=>"", "bordwell_hamhock"=>"" }}
-    let(:expected_keys_result) { %w[ bordwell_hamhock carla_makeshift dave_hoggworthy ] }
-
-    before do
-      allow(performer).to receive(:submissions_grouped_by_student) { contrived_student_submissions_hash }
-    end
-
+  describe "sorted_submitter_directory_keys" do
     it "sorts the keys alphabetically" do
-      expect(performer.instance_eval { sorted_student_directory_keys }).to eq(expected_keys_result)
+      submitters = { "dave_hoggworthy"=>"", "carla_makeshift"=>"", "bordwell_hamhock"=>"" }
+
+      allow(subject).to receive(:submissions_grouped_by_submitter)
+        .and_return submitters
+
+      expect(performer.instance_eval { sorted_submitter_directory_keys })
+        .to eq %w[bordwell_hamhock carla_makeshift dave_hoggworthy]
     end
   end
 
   describe "generate_export_csv" do
     subject { performer.instance_eval { generate_export_csv }}
-    let(:students_for_csv) { create_list(:user, 2) }
+
+    let(:dogs_csv) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
     let(:csv_path) { performer.instance_eval { csv_file_path }}
 
     before(:each) do
-      performer.instance_variable_set(:@students_for_csv, students_for_csv)
+      performer.instance_variable_set(:@submitters_for_csv, submitters)
       performer.instance_variable_set(:@assignment, assignment)
-      allow(assignment).to receive(:grade_import) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
     end
 
-    it "saves the result of assignment#grade_import" do
-      subject
-      expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+    context "export uses groups" do
+      let(:submitters) { create_list :group, 2 }
+
+      it "saves the result of assignment#grade_import" do
+        allow(performer.submissions_export).to receive(:use_groups) { true }
+        allow_any_instance_of(GradeExporter).to \
+          receive(:export_group_grades).with(assignment, submitters) { dogs_csv }
+
+        subject
+        expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+      end
     end
 
-    it "sends an array of students to assignment#grade_import" do
-      expect(assignment).to receive(:grade_import).with(students_for_csv)
-      subject
+    context "export uses students" do
+      let(:submitters) { create_list(:user, 2) }
+
+      it "saves the result of assignment#grade_import" do
+        allow(assignment).to receive(:grade_import).with(submitters) { dogs_csv }
+
+        subject
+        expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+      end
     end
   end
 
@@ -123,43 +136,43 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "work_resources_present?" do
     let(:assignment_present) { performer.instance_variable_set(:@assignment, true) }
     let(:assignment_not_present) { performer.instance_variable_set(:@assignment, false) }
-    let(:students_present) { performer.instance_variable_set(:@students, true) }
-    let(:students_not_present) { performer.instance_variable_set(:@students, false) }
+    let(:submitters_present) { performer.instance_variable_set(:@submitters, true) }
+    let(:submitters_not_present) { performer.instance_variable_set(:@submitters, false) }
 
     subject { performer.instance_eval { work_resources_present? }}
 
-    context "both @assignment and @students are present" do
-      before { assignment_present; students_present }
+    context "both @assignment and @submitters are present" do
+      before { assignment_present; submitters_present }
       it { should be_truthy }
     end
 
-    context "@assignment is present but @students are not" do
-      before { assignment_present; students_not_present }
+    context "@assignment is present but @submitters are not" do
+      before { assignment_present; submitters_not_present }
       it { should be_falsey }
     end
 
-    context "@students is present but @assignment is not" do
-      before { students_present; assignment_not_present }
+    context "@submitters is present but @assignment is not" do
+      before { submitters_present; assignment_not_present }
       it { should be_falsey }
     end
 
-    context "neither @students nor @assignment are present" do
-      before { students_not_present; assignment_not_present }
+    context "neither @submitters nor @assignment are present" do
+      before { submitters_not_present; assignment_not_present }
       it { should be_falsey }
     end
   end
 
-  describe "submissions_by_student" do
+  describe "submissions_by_submitter" do
     let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey", username: "benfriend") }
     let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey") }
     let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty") }
     let(:student4) { create(:user, first_name: "Ben", last_name: "Bailey", username: "benweirdo") }
 
-    let(:submission1) { double(:submission, id: 1, student: student1) }
-    let(:submission2) { double(:submission, id: 2, student: student2) }
-    let(:submission3) { double(:submission, id: 3, student: student3) }
-    let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
-    let(:submission5) { double(:submission, id: 5, student: student4) }
+    let(:submission1) { double(:submission, id: 1, submitter_id: student1.id) }
+    let(:submission2) { double(:submission, id: 2, submitter_id: student2.id) }
+    let(:submission3) { double(:submission, id: 3, submitter_id: student3.id) }
+    let(:submission4) { double(:submission, id: 4, submitter_id: student2.id) } # note that this uses student 2
+    let(:submission5) { double(:submission, id: 5, submitter_id: student4.id) }
 
     let(:grouped_submission_expectation) {{
       "Bailey, Ben - Benfriend" => [submission1],
@@ -172,11 +185,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     before(:each) do
       performer.instance_variable_set(:@submissions, submissions_by_id)
-      performer.instance_variable_set(:@students, [ student1, student2, student3, student4 ])
+      performer.instance_variable_set(:@submitters, [ student1, student2, student3, student4 ])
     end
 
     subject do
-      performer.instance_eval { submissions_grouped_by_student }
+      performer.instance_eval { submissions_grouped_by_submitter }
     end
 
     it "should reorder the @submissions array by student" do
