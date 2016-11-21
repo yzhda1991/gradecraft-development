@@ -2,6 +2,7 @@
 
   SaveDraftCtrl = [() ->
     vm = this
+
     vm.saveSubmission = () ->
       StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
   ]
@@ -14,8 +15,6 @@
     scope: {
       assignmentId: '@'
     }
-    templateUrl: 'student/submission/save_draft.html',
-    link: (scope, el, attr, controller) ->
-      scope.saveSubmission = controller.saveSubmission
+    templateUrl: 'student/submission/save_draft.html'
   }
 ]

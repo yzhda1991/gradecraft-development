@@ -1,40 +1,39 @@
 @gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
 
-  submission = null
-
-  setSubmission = (newSubmission) ->
-    submission = newSubmission
+  submission = {}
 
   getSubmission = () ->
     submission
 
+  setSubmission = (newSubmission) ->
+    angular.copy(newSubmission, submission)
+
   saveDraftSubmission = (assignmentId) ->
-    debugger
-    if submission.id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
+    if getSubmission().id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
 
   getDraftSubmission = (assignmentId) ->
     $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
-        GradeCraftAPI.logResponse(response.data)
         setSubmission(response.data.submission)
+        GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
     )
 
   createDraftSubmission = (assignmentId) ->
-    $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
+    $http.post("/api/assignments/#{assignmentId}/submissions", getSubmission()).then(
       (response) ->
-        GradeCraftAPI.logResponse(response.data)
         setSubmission(response.data.submission)
+        GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
     )
 
   updateDraftSubmission = (assignmentId) ->
-    $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
+    $http.put("/api/assignments/#{assignmentId}/submissions/#{getSubmission().id}", getSubmission()).then(
       (response) ->
-        GradeCraftAPI.logResponse(response.data)
         setSubmission(response.data.submission)
+        GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
     )
