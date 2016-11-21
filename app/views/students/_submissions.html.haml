@@ -8,7 +8,7 @@
   - elsif assignment.open?
     - if student_submission.present? && student_submission.text_comment_draft.present?
       -# new submission with preexisting autosaved draft
-      = link_to glyph(:upload) + "Edit Draft", edit_assignment_submission_path(assignment, id: student_submission.id), class: "button"
+      = link_to glyph(:pencil) + "Edit Draft", edit_assignment_submission_path(assignment, id: student_submission.id), class: "button"
     - else
       -# new submission with no prior autosaved draft
       = link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, student_id: current_student), class: "button"

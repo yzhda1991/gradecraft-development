@@ -3,11 +3,10 @@
   StudentSubmissionCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
-    vm.timer =
 
     $scope.submission = StudentSubmissionService.getSubmission()
 
-    # Need alternative to using debounce on ng-model-options because delaying
+    # TODO: Need alternative to using debounce on ng-model-options because delaying
     # model updates causes problems on dependent consumers of that value
     vm.saveSubmission = () ->
       StudentSubmissionService.saveDraftSubmission(vm.assignmentId)

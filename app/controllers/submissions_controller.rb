@@ -55,7 +55,7 @@ class SubmissionsController < ApplicationController
           NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
           redirect_to = assignment_path(assignment, anchor: "tab3")
         end
-        format.html { redirect_to redirect_to, notice: "Your submission for #{assignment.name} was successfully updated." }
+        format.html { redirect_to redirect_to, notice: "Your changes for #{assignment.name} were successfully submitted." }
         format.json { render json: assignment, status: :created, location: assignment }
       else
         format.html do

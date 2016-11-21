@@ -1,5 +1,5 @@
 %textarea(ng-model="submission.text_comment_draft" froala="froalaOptions" ng-if="!vm.loading" name="submission[text_comment]")
-%last-saved-message(ng-if="submission && !vm.loading")
+%last-saved-message(ng-if="submission.text_comment_draft && submission.updated_at && !vm.loading")
   Last saved: {{submission.updated_at | date:"MM/dd/yyyy 'at' h:mma"}}
 #loading-submission-draft-message{'ng-if'=>'vm.loading'}
   %i.fa.fa-spinner.fa-spin.fa-fw
