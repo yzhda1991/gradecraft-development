@@ -82,19 +82,19 @@
     )
 
   return {
-      grade: grade,
-      gradeFiles: gradeFiles,
-      gradeStatusOptions: gradeStatusOptions,
+    grade: grade,
+    gradeFiles: gradeFiles,
+    gradeStatusOptions: gradeStatusOptions,
 
-      toggleCustomValue: toggleCustomValue,
-      enableCustomValue: enableCustomValue,
-      enableScoreLevels: enableScoreLevels,
-      justUpdated: justUpdated,
-      timeSinceUpdate: timeSinceUpdate,
+    toggleCustomValue: toggleCustomValue,
+    enableCustomValue: enableCustomValue,
+    enableScoreLevels: enableScoreLevels,
+    justUpdated: justUpdated,
+    timeSinceUpdate: timeSinceUpdate,
 
-      getGrade: getGrade,
-      updateGrade: updateGrade,
-      postGradeFiles: postGradeFiles,
-      deleteGradeFile: deleteGradeFile
+    getGrade: getGrade,
+    updateGrade: updateGrade,
+    postGradeFiles: postGradeFiles,
+    deleteGradeFile: deleteGradeFile
   }
 ]
