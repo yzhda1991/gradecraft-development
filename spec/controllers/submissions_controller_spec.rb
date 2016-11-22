@@ -1,37 +1,27 @@
 require "rails_spec_helper"
 
 describe SubmissionsController do
-  subject { described_class.new }
-
-  before(:all) do
-    @course = create(:course)
-    @student = create(:user)
-    @student.courses << @course
-    @assignment = create(:assignment, course: @course)
-  end
+  let(:course) { create(:course) }
+  let(:assignment) { create(:assignment, course: course) }
+  let!(:student) { create(:student_course_membership, course: course).user }
 
   before(:each) do
-    session[:course_id] = @course.id
+    session[:course_id] = course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-  let(:ability) { Object.new.extend(CanCan::Ability) }
-  let(:submission) { create(:submission) }
-  let(:presenter) { double(presenter_class, submission: submission).as_null_object }
-
   context "as a professor" do
-    before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
-    end
+    let(:professor) { create(:professor_course_membership, course: course).user }
+    let(:submission) { create(:submission, assignment: assignment, student: student) }
 
     before(:each) do
-      @submission = create(:submission, assignment_id: @assignment.id, student_id: @student.id, course_id: @course.id)
-      login_user(@professor)
+      login_user(professor)
     end
 
     describe "GET show" do
+      let(:ability) { Object.new.extend(CanCan::Ability) }
       let(:make_request) { get :show, params: { id: submission.id, assignment_id: submission.assignment_id }}
+      let(:presenter) { double(presenter_class, submission: submission).as_null_object }
       let(:presenter_class) { Submissions::ShowPresenter }
 
       before do
@@ -73,21 +63,21 @@ describe SubmissionsController do
 
     describe "GET edit" do
       it "display the edit form" do
-        get :edit, params: { id: @submission.id, assignment_id: @assignment.id }
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
       end
     end
 
     describe "POST create" do
-      it "creates the submission with valid attributes"  do
-        params = attributes_for(:submission).merge(student_id: @student.id)
-        expect{ post :create, params: { assignment_id: @assignment.id, submission: params }}.to change(Submission,:count).by(1)
+      it "creates the submission with valid attributes" do
+        params = attributes_for(:submission).merge(student_id: student.id)
+        expect{ post :create, params: { assignment_id: assignment.id, submission: params }}.to change(Submission,:count).by(1)
       end
 
       it "manages submission file uploads" do
-        params = attributes_for(:submission).merge(student_id: @student.id)
+        params = attributes_for(:submission).merge(student_id: student.id)
         params.merge! submission_files_attributes: {"0" => {file: [fixture_file("test_file.txt", "txt")]}}
-        post :create, params: { assignment_id: @assignment.id, submission: params }
+        post :create, params: { assignment_id: assignment.id, submission: params }
         submission = Submission.unscoped.last
         expect(submission.submission_files.count).to eq 1
         expect(submission.submission_files[0].filename).to eq "test_file.txt"
@@ -98,101 +88,103 @@ describe SubmissionsController do
         file = fixture_file("test_file.txt", "txt")
         allow_any_instance_of(AttachmentUploader).to receive(:size).and_return 50_000_000
         params.merge! submission_files_attributes: {"0" => {file: [file]}}
-        post :create, params: { assignment_id: @assignment.id, submission: params }
+        post :create, params: { assignment_id: assignment.id, submission: params }
         expect(response).to render_template :new
       end
 
       it "checks if the submission is late" do
         params = attributes_for(:submission)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
-        post :create, params: { assignment_id: @assignment.id, submission: params }
+        post :create, params: { assignment_id: assignment.id, submission: params }
       end
     end
 
     describe "POST update" do
       it "updates the submission successfully"  do
         params = attributes_for(:submission)
-        params[:assignment_id] = @assignment.id
+        params[:assignment_id] = assignment.id
         params[:text_comment] = "Ausgezeichnet"
-        post :update, params: { assignment_id: @assignment.id, id: @submission, submission: params }
-        expect(response).to redirect_to(assignment_submission_path(@assignment, @submission, student_id: @student.id))
-        expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        expect(response).to redirect_to(assignment_submission_path(assignment, submission, student_id: student.id))
+        expect(submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
       it "checks if the submission is late" do
         params = attributes_for(:submission)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
-        post :update, params: { assignment_id: @assignment.id, id: @submission, submission: params }
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
     end
 
     describe "GET destroy" do
+      let!(:submission) { create(:submission, assignment: assignment, student: student, course: course) }
+
       it "destroys the submission" do
-        expect{ get :destroy, params: { id: @submission, assignment_id: @assignment.id } }.to change(Submission,:count).by(-1)
+        expect{ get :destroy, params: { id: submission.id, assignment_id: assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
   end
 
   context "as a student" do
+    let(:submission) { create(:submission, assignment: assignment, student: student) }
+
     before do
-      @submission = create(:submission, assignment_id: @assignment.id,
-                           student_id: @student.id, course_id: @course.id)
-      login_user(@student)
+      login_user(student)
     end
 
     describe "GET edit" do
       it "shows the edit submission form" do
-        get :edit, params: { id: @submission.id, assignment_id: @assignment.id }
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
       end
     end
 
     describe "POST create" do
       it "creates the submission with valid attributes" do
-        params = attributes_for(:submission, student_id: @student.id)
-          .merge(assignment_id: @assignment_id)
-        expect { post :create, params: { assignment_id: @assignment.id, submission: params }}.to \
+        params = attributes_for(:submission, student_id: student.id)
+          .merge(assignment_id: assignment.id)
+        expect { post :create, params: { assignment_id: assignment.id, submission: params }}.to \
           change(Submission,:count).by(1)
       end
 
       it "timestamps the submission" do
-        params = attributes_for(:submission, student_id: @student.id)
-          .merge(assignment_id: @assignment_id)
+        params = attributes_for(:submission, student_id: student.id)
+          .merge(assignment_id: assignment.id)
         current_time = DateTime.now
-        post :create, params: { assignment_id: @assignment.id, submission: params }
+        post :create, params: { assignment_id: assignment.id, submission: params }
         submission = Submission.unscoped.last
         expect(submission.submitted_at).to be > current_time
       end
 
       it "checks if the submission is late" do
-        params = attributes_for(:submission, student_id: @student.id)
-          .merge(assignment_id: @assignment_id)
+        params = attributes_for(:submission, student_id: student.id)
+          .merge(assignment_id: assignment.id)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
-        post :create, params: { assignment_id: @assignment.id, submission: params }
+        post :create, params: { assignment_id: assignment.id, submission: params }
       end
     end
 
     describe "PUT update" do
       it "updates the submission successfully"  do
-        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         params[:text_comment] = "Ausgezeichnet"
-        put :update, params: { assignment_id: @assignment.id, id: @submission, submission: params }
-        expect(response).to redirect_to(assignment_path(@assignment, anchor: "tab3"))
-        expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
+        put :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
       it "timestamps the submission" do
-        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         params[:text_comment] = "Ausgezeichnet"
         current_time = DateTime.now
-        put :update, params: { assignment_id: @assignment.id, id: @submission, submission: params }
-        expect(@submission.reload.submitted_at).to be > current_time
+        put :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        expect(submission.reload.submitted_at).to be > current_time
       end
 
       it "checks if the submission is late" do
-        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
-        post :update, params: { assignment_id: @assignment.id, id: @submission, submission: params }
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
     end
 
