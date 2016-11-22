@@ -109,6 +109,12 @@ describe SubmissionsController do
         expect(submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
+      it "deletes the text comment draft content" do
+        params = attributes_for(:submission)
+        expect(Services::DeletesSubmissionDraftContent).to receive(:for).and_call_original
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }, format: :json
+      end
+
       it "checks if the submission is late" do
         params = attributes_for(:submission)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)

@@ -1,3 +1,5 @@
+require_relative "../services/deletes_submission_draft_content"
+
 class SubmissionsController < ApplicationController
   before_action :ensure_staff?, only: [:show, :destroy]
   before_action :save_referer, only: [:new, :edit]
@@ -17,6 +19,7 @@ class SubmissionsController < ApplicationController
   def create
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.new(submission_params.merge(submitted_at: DateTime.now))
+
     if submission.save
       submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
@@ -46,7 +49,8 @@ class SubmissionsController < ApplicationController
     submission = assignment.submissions.find(params[:id])
 
     respond_to do |format|
-      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now))
+      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&
+        Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status!
         path = assignment.has_groups? ? { group_id: submission.group_id } :
           { student_id: submission.student_id }
