@@ -5,9 +5,9 @@
   $scope.assignment = ()->
     AssignmentService.assignments[0]
 
-  $scope.init = (assignmentId, reciptientType, reciptientId)->
+  $scope.init = (assignmentId, recipientType, recipientId)->
     AssignmentService.getAssignment(assignmentId)
-    GradeService.getGrade(assignmentId, reciptientType, reciptientId)
+    GradeService.getGrade(assignmentId, recipientType, recipientId)
 
   $scope.services = (assignmentId)->
     promises = []

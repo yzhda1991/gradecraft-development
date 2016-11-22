@@ -8,10 +8,10 @@
   $scope.updateGrade = RubricService.updateGrade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
 
-  $scope.init = (assignmentId, reciptientType, reciptientId)->
+  $scope.init = (assignmentId, recipientType, recipientId)->
     $scope.assignmentId = assignmentId
-    $scope.reciptientType = reciptientType
-    $scope.reciptientId = reciptientId
+    $scope.recipientType = recipientType
+    $scope.recipientId = recipientId
 
     # Criterion factory is dependent on CriterionGrades already existing in scope
     $scope.services()
@@ -28,9 +28,9 @@
 
     promises = [
       RubricService.getBadges(),
-      RubricService.getCriterionGrades($scope.assignmentId, $scope.reciptientType, $scope.reciptientId),
+      RubricService.getCriterionGrades($scope.assignmentId, $scope.recipientType, $scope.recipientId),
       queCriteriaAfterBadges(),
-      RubricService.getGrade($scope.assignmentId, $scope.reciptientType, $scope.reciptientId)]
+      RubricService.getGrade($scope.assignmentId, $scope.recipientType, $scope.recipientId)]
     $q.all(promises)
 
   $scope.pointsPossible = ()->
