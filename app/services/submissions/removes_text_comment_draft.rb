@@ -6,8 +6,7 @@ module Services
       expects :submission
 
       executed do |context|
-        context.submission.text_comment_draft = nil
-        context.submission.save
+        context.submission.update(text_comment_draft: nil)
       end
     end
   end
