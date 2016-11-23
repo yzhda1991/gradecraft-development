@@ -1,12 +1,26 @@
-@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
+@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', '$timeout', (GradeCraftAPI, $http, $timeout) ->
 
+  self = this
   submission = {}
+  saveTimeout = null
 
   getSubmission = () ->
     submission
 
   setSubmission = (newSubmission) ->
     angular.copy(newSubmission, submission)
+
+  # Custom debounce method for autosaving submissions
+  # Pass true for immediate to manually trigger save
+  queueDraftSubmissionSave = (assignmentId, immediate = false) ->
+    if immediate is true
+      $timeout.cancel(self.saveTimeout)
+      saveDraftSubmission(assignmentId)
+    else
+      $timeout.cancel(self.saveTimeout) if self.saveTimeout?
+      self.saveTimeout = $timeout(() ->
+        saveDraftSubmission(assignmentId)
+      , 3500)
 
   saveDraftSubmission = (assignmentId) ->
     if getSubmission().id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
@@ -42,6 +56,6 @@
     getSubmission: getSubmission
     setSubmission: setSubmission
     getDraftSubmission: getDraftSubmission
-    saveDraftSubmission: saveDraftSubmission
+    queueDraftSubmissionSave: queueDraftSubmissionSave
   }
 ]

@@ -3,8 +3,8 @@
   SaveDraftCtrl = [() ->
     vm = this
 
-    vm.saveSubmission = () ->
-      StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
+    vm.queueDraftSubmissionSave = () ->
+      StudentSubmissionService.queueDraftSubmissionSave(vm.assignmentId, true)
   ]
 
   {

@@ -1,22 +1,15 @@
 @gradecraft.directive 'studentSubmission', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  StudentSubmissionCtrl = ['$scope', '$timeout', ($scope, $timeout) ->
+  StudentSubmissionCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
-    vm.saveTimeout = null
+    vm.queueDraftSubmissionSave = () ->
+      StudentSubmissionService.queueDraftSubmissionSave(vm.assignmentId)
+
+    $scope.submission = StudentSubmissionService.getSubmission()
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
       vm.loading = false
-    )
-
-    $scope.submission = StudentSubmissionService.getSubmission()
-    $scope.$watch('submission.text_comment_draft', (val) ->
-      if val?
-        $timeout.cancel(vm.saveTimeout) if vm.saveTimeout?
-
-        vm.saveTimeout = $timeout(() ->
-          StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
-        , 3500)
     )
   ]
 
