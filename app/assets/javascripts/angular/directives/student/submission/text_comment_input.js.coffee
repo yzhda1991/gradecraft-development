@@ -1,6 +1,6 @@
-@gradecraft.directive 'studentSubmission', ['StudentSubmissionService', (StudentSubmissionService) ->
+@gradecraft.directive 'textCommentInput', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  StudentSubmissionCtrl = ['$scope', ($scope) ->
+  TextCommentInputCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
     vm.queueDraftSubmissionSave = () ->
@@ -15,13 +15,13 @@
 
   {
     bindToController: true,
-    controller: StudentSubmissionCtrl,
+    controller: TextCommentInputCtrl,
     controllerAs: 'vm',
     restrict: 'EA',
     scope: {
       assignmentId: '@'
     }
-    templateUrl: 'student/submission/main.html'
+    templateUrl: 'student/submission/text_comment_input.html'
     link: (scope, el, attr) ->
       scope.froalaOptions = {
         inlineMode: false,

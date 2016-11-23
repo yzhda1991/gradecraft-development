@@ -1,6 +1,6 @@
-@gradecraft.directive 'saveDraft', ['StudentSubmissionService', (StudentSubmissionService) ->
+@gradecraft.directive 'saveDraftButton', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  SaveDraftCtrl = [() ->
+  SaveDraftButtonCtrl = [() ->
     vm = this
 
     vm.queueDraftSubmissionSave = () ->
@@ -9,12 +9,12 @@
 
   {
     bindToController: true,
-    controller: SaveDraftCtrl,
+    controller: SaveDraftButtonCtrl,
     controllerAs: 'vm',
     restrict: 'C',
     scope: {
       assignmentId: '@'
     }
-    templateUrl: 'student/submission/save_draft.html'
+    templateUrl: 'student/submission/save_draft_button.html'
   }
 ]

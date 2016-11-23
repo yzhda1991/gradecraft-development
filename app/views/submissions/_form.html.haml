@@ -34,11 +34,11 @@
 
       - if presenter.assignment.accepts_text
         %h4.uppercase Content/Statement
-        %student-submission{"assignment_id"=>"#{presenter.assignment.id}"}
+        %text-comment-input{"assignment_id"=>"#{presenter.assignment.id}"}
 
     .submit-buttons
       %ul
-        %li.save-draft.button{"assignment_id"=>"#{presenter.assignment.id}"}
+        %li.save-draft-button.button{"assignment_id"=>"#{presenter.assignment.id}"}
         %li= f.button :submit,
           "#{presenter.submission.persisted? ? (presenter.submission.will_be_resubmitted? ? "Resubmit" : "Update Submission") : "Submit #{term_for :assignment}"}",
           data: { confirm: ("This submission will be late. Continue?" if presenter.submission_will_be_late?) }
