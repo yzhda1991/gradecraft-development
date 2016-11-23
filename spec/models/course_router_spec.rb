@@ -29,18 +29,18 @@ describe CourseRouter do
 
     context "with a current course id" do
       it "returns the course that the user has access to" do
-        allow(courses).to receive(:find_by).and_return course
+        allow(courses).to receive(:where).and_return [course]
         expect(described_class.current_course_for(user, course.id)).to eq course
       end
 
       it "returns the default course if one is not specified" do
-        allow(courses).to receive(:find_by).and_return nil
+        allow(courses).to receive(:where).and_return [nil]
         allow(user).to receive(:current_course).and_return course
         expect(described_class.current_course_for(user, course.id)).to eq course
       end
 
       it "returns the first course if there is not one set as the default" do
-        allow(courses).to receive(:find_by).and_return nil
+        allow(courses).to receive(:where).and_return [nil]
         allow(user).to receive(:current_course).and_return nil
         allow(courses).to receive(:first).and_return course
         expect(described_class.current_course_for(user, course.id)).to eq course
