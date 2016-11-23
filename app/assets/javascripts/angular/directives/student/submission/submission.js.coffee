@@ -1,18 +1,22 @@
 @gradecraft.directive 'studentSubmission', ['StudentSubmissionService', (StudentSubmissionService) ->
 
-  StudentSubmissionCtrl = ['$scope', ($scope) ->
+  StudentSubmissionCtrl = ['$scope', '$timeout', ($scope, $timeout) ->
     vm = this
     vm.loading = true
-
-    $scope.submission = StudentSubmissionService.getSubmission()
-
-    # TODO: Need alternative to using debounce on ng-model-options because delaying
-    # model updates causes problems on dependent consumers of that value
-    vm.saveSubmission = () ->
-      StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
+    vm.saveTimeout = null
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
       vm.loading = false
+    )
+
+    $scope.submission = StudentSubmissionService.getSubmission()
+    $scope.$watch('submission.text_comment_draft', (val) ->
+      if val?
+        $timeout.cancel(vm.saveTimeout) if vm.saveTimeout?
+
+        vm.saveTimeout = $timeout(() ->
+          StudentSubmissionService.saveDraftSubmission(vm.assignmentId)
+        , 3500)
     )
   ]
 
