@@ -31,9 +31,10 @@
                 - if assignment.is_individual?
                   %td= link_to student.first_name, student_path(student)
                   %td= link_to student.last_name, student_path(student)
-                  %td
-                    - if course.has_teams? && student.present? && team.present?
-                      = link_to team.name, team
+                  - if course.has_teams?
+                    %td
+                      - if student.present? && team.present?
+                        = link_to team.name, team
                 - elsif assignment.has_groups?
                   %td= link_to group.try(:name), group_path(group)
                 %td= points grade.score
@@ -45,7 +46,7 @@
                         %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
                       - elsif assignment.has_groups?
                         %li= link_to glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
-                %td.center= check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-grades-command']" }
+                %td.right= check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-grades-command']" }
 
       .submit-buttons
         .right
