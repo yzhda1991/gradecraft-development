@@ -35,8 +35,8 @@ if (m && p) {
 
     // list out the vars
     var mOverlay = getId('modal-window'),
-        mClose = getId('modal-close'),
-        mAction = getId('modal-action'),
+        // mClose = getId('modal-close'),
+        // mAction = getId('modal-action'),
         modal = getId('modal-holder'),
         allNodes = document.querySelectorAll("*"),
         modalOpen = false,
@@ -81,20 +81,20 @@ if (m && p) {
     }
 
     // Close modal window by clicking on the overlay
-    mOverlay.addEventListener('click', function( e ) {
-      if (e.target == modal.parentNode) {
-         modalClose( e );
-       }
-    }, false);
+    // mOverlay.addEventListener('click', function( e ) {
+    //   if (e.target == modal.parentNode) {
+    //      modalClose( e );
+    //    }
+    // }, false);
 
     // close modal by btn click/hit
-    mClose.addEventListener('click', modalClose);
+    // mClose.addEventListener('click', modalClose);
 
     // close modal by modal action btn click/hit
-    mAction.addEventListener('click', modalClose);
+    // mAction.addEventListener('click', modalClose);
 
     // close modal by keydown, but only if modal is open
-    document.addEventListener('keydown', modalClose);
+    // document.addEventListener('keydown', modalClose);
 
     // restrict tab focus on elements only inside modal window
     for (i = 0; i < allNodes.length; i++) {
