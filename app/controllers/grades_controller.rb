@@ -51,7 +51,7 @@ class GradesController < ApplicationController
     else # failure
       redirect_to edit_grade_path(grade),
         alert: "#{grade.student.name}'s #{grade.assignment.name} was not successfully "\
-          "submitted! Please try again."
+          "submitted! #{grade.errors.full_messages.first}"
     end
   end
 
