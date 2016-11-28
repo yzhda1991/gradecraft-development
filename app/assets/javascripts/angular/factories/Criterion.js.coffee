@@ -121,10 +121,9 @@
     create: ()->
       Restangular.all('criteria').post(@params())
         .then (response)=>
-          criterion = response.existing_criterion
-          @id = criterion.id
+          @id = response.id
           @$scope.countSavedCriterion()
-          @addLevels(criterion.levels)
+          @addLevels(response.levels)
 
     modify: (form)->
       if form.$valid
