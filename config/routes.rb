@@ -202,7 +202,9 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :course_memberships, only: [:create, :delete, :destroy]
+  resources :course_memberships, only: [:create, :delete, :destroy] do 
+    post :confirm_onboarding, on: :member
+  end
   get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups

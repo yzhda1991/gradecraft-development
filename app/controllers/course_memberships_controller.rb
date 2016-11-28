@@ -1,7 +1,7 @@
 require_relative "../services/cancels_course_membership"
 
 class CourseMembershipsController < ApplicationController
-  before_action :ensure_staff?
+  before_action :ensure_staff?, except: [:confirm_onboarding]
 
   def create
     @course_membership =
@@ -18,6 +18,13 @@ class CourseMembershipsController < ApplicationController
 
     redirect_to students_path,
       notice: "#{course_membership.user.name} was successfully removed from course."
+  end
+  
+  def confirm_onboarding
+    course_membership = current_course.course_memberships.find(params[:id])
+    course_membership.has_seen_course_onboarding = true
+    course_membership.save
+    redirect_to assignments_path
   end
 
   private

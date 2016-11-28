@@ -112,7 +112,9 @@
                   - if presenter.term_for_groups?
                     %li= "Groups: #{term_for :groups}"
               .modal-action-wrapper
-                %button#modal-action{type: 'button', 'aria-label': 'close'} Let's Go!
+                = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
+                  %button#modal-action{type: 'button', 'aria-label': 'close'} Let's Go!
 
 
-    %button.btn-close#modal-close{type: 'button', 'aria-label': 'close'}= glyph(:times)
+    = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
+      %button.btn-close#modal-close{type: 'button', 'aria-label': 'close'}= glyph(:times)
