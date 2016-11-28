@@ -15,7 +15,7 @@
     = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
     - if current_user
       %a.nav-flyout-contentmask
-      .inner-wrap.clearfix
+      .inner-wrap
         - if current_user_is_staff?
           = render partial: "layouts/staff"
         - else
