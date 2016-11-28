@@ -1,121 +1,14 @@
 .modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-labelledby': 'Student Onboarding' }
   .modal-wrapper.modal-content#modal-holder{role: "document"}
     .modal-slider.student-onboarding-slides
-      .modal-slide
-        .modal-slide-top
-          %img.modal-slide-image.centered{src: "/images/onboarding-slide-1.png"}
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2= "Hey, #{current_user.name}!"
-            %p Welcome to GradeCraft!
-            %p This quick tour will show you how GradeCraft works.
-
-      .modal-slide
-        .modal-slide-top
-          %img.modal-slide-image.centered{src: "/images/onboarding-slide-2.png"}
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2 Start from zero
-            %p Everyone starts at zero, and earns points by completing assignments. Your final grade is completely independent from your peers’ performances.
-
-      .modal-slide
-        .modal-slide-top
-          %img.modal-slide-image.centered{src: "/images/onboarding-slide-3.png"}
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2 High autonomy
-            %p You have the freedom to decide what kind of work you want to do and when. Find out what best aligns with your interests and take control of the outcome.
-
-      .modal-slide
-        .modal-slide-top
-          %img.modal-slide-image.large-image.centered{src: "/images/onboarding-slide-4.png"}
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2 Tangible feedback
-            %p Experience the learning process in real time. Easily keep track of progress through comprehensive grade analytics.
-
-      .modal-slide
-        .modal-slide-top
-          %img.modal-slide-image.large-image.centered{src: "/images/onboarding-slide-5.png"}
-        .modal-slide-bottom
-          .modal-slide-text
-            %h2 Plan your grade
-            %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
-            - if !presenter.has_course_specific_features?
-              .modal-action-wrapper
-                = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
-                  %button{type: 'submit', 'aria-label': 'close'} Let's Go!
+      = render partial: "info/student_onboarding/student_onboarding_slide1"
+      = render partial: "info/student_onboarding/student_onboarding_slide2"
+      = render partial: "info/student_onboarding/student_onboarding_slide3"
+      = render partial: "info/student_onboarding/student_onboarding_slide4"
+      = render partial: "info/student_onboarding/student_onboarding_slide5"
 
       - if presenter.has_course_specific_features?
-        .modal-slide
-          .modal-slide-top#course-specific
-            .course-specific-features.centered
-              .course-feature-row
-                - if current_course.has_badges?
-                  .course-feature-block
-                    .course-feature-image-wrapper
-                      %img.course-feature-image{src: "/images/onboarding-slide-6-badges.png"}
-                    %h3 Badges
-                - if current_course.teams_visible?
-                  .course-feature-block
-                    .course-feature-image-wrapper
-                      %img.course-feature-image{src: "/images/onboarding-slide-6-leaderboard.png"}
-                    %h3 Leaderboards
-              .course-feature-row
-                - if presenter.has_course_terminology?
-                  .course-feature-block
-                    .course-feature-image-wrapper
-                      %img.course-feature-image{src: "/images/onboarding-slide-6-custom-terms.png"}
-                    %h3 Custom Terms
-                - if current_course.has_multipliers?
-                  .course-feature-block
-                    .course-feature-image-wrapper
-                      %img.course-feature-image{src: "/images/onboarding-slide-6-multipliers.png"}
-                    %h3 Multipliers
-          .modal-slide-bottom
-            .modal-slide-text
-              %h2= "#{current_course.course_number} Features"
-              - if current_course.has_badges?
-                %p.custom-feature-text
-                  %span Badges:
-                  to acknowledge core skills and distinguished performances
-              - if current_course.teams_visible?
-                %p.custom-feature-text 
-                  %span Leaderboards: 
-                  sections are ranked by points to motivate collective progress
-              - if current_course.has_multipliers?
-                %p.custom-feature-text 
-                  %span Multipliers:
-                  students are able to choose weights to boost specific assignment types
-              - if presenter.has_course_terminology?
-                %p.custom-feature-text
-                  %span Custom terms:
-                  this class uses different terminology to describe things
-                %ul.course-terminology
-                  - if presenter.term_for_assignments?
-                    %li= "Assignments: #{term_for :assignments}"
-
-                  - if presenter.term_for_weights?
-                    %li= "Assignment Weights: #{term_for :weights}"
-
-                  - if presenter.term_for_badges?
-                    %li= "Badges: #{term_for :badges}"
-
-                  - if presenter.term_for_challenges?
-                    %li= "Section Challenges: #{term_for :challenges}"
-
-                  - if presenter.term_for_teams?
-                    %li= "Teams: #{term_for :teams}"
-
-                  - if presenter.term_for_team_leaders?
-                    %li= "Team Leaders: #{term_for :team_leaders}"
-
-                  - if presenter.term_for_groups?
-                    %li= "Groups: #{term_for :groups}"
-              .modal-action-wrapper
-                = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
-                  %button{type: 'submit', 'aria-label': 'close'} Let's Go!
-
+        = render partial: "info/student_onboarding/student_onboarding_slide6"
 
     = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
       %button.btn-close{type: 'submit', 'aria-label': 'close'}= glyph(:times)
