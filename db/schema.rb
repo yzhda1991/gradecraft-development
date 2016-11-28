@@ -236,7 +236,6 @@ ActiveRecord::Schema.define(version: 20161108202754) do
     t.string   "role",                           default: "student", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
-    t.index ["course_id", "user_id"], name: "index_course_memberships_on_course_id_and_user_id", unique: true, using: :btree
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
