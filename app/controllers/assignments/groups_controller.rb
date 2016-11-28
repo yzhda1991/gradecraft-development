@@ -28,7 +28,13 @@ class Assignments::GroupsController < ApplicationController
     # @mz TODO: add specs
     enqueue_multiple_grade_update_jobs(grade_ids)
 
-    respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
+    if params[:redirect_to_next_grade].present?
+      path = path_for_next_group_grade @assignment, @group
+    else
+      path = assignment_path(@assignment)
+    end
+    redirect_to path,
+      notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
 
   private
@@ -41,5 +47,11 @@ class Assignments::GroupsController < ApplicationController
   # Schedule the `GradeUpdater` for all grades provided
   def enqueue_multiple_grade_update_jobs(grade_ids)
     grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
+  end
+
+  def path_for_next_group_grade(assignment, group)
+    next_group = assignment.next_ungraded_group(group)
+    return assignment_path(assignment) unless next_group.present?
+    return grade_assignment_group_path(assignment_id: assignment.id, id: next_group.id)
   end
 end

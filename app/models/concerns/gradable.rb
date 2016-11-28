@@ -87,4 +87,18 @@ module Gradable
     i = ungraded.map(&:id).index(student.id)
     i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
   end
+
+  def ungraded_groups()
+    # groups - groups with grades
+  end
+
+  def next_ungraded_group(group)
+    if has_groups?
+      if accepts_submissions?
+        # groups with submissions, no grades
+      else
+        # groups with no grades
+      end
+    end
+  end
 end
