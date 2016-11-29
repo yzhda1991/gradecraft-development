@@ -1,5 +1,5 @@
 class API::AssignmentsController < ApplicationController
-  before_action :ensure_student?, only: [:update]
+  before_filter :ensure_staff?, only: [:show]
 
   # GET api/assignments
   def index
@@ -16,6 +16,10 @@ class API::AssignmentsController < ApplicationController
           PredictedEarnedGrade.for_course(current_course).for_student(current_student)
       end
     end
+  end
+
+  def show
+    @assignment = Assignment.find(params[:id])
   end
 end
 

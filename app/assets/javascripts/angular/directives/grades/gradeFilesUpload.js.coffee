@@ -1,11 +1,10 @@
-@gradecraft.directive 'gradeFilesUploader', ['$parse', 'RubricService', ($parse, RubricService) ->
+@gradecraft.directive 'gradeFilesUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
   UploadGradeFilesCtrl = [()->
     vm = this
-    vm.gradeFiles = RubricService.gradeFiles
+    vm.gradeFiles = GradeService.gradeFiles
 
     vm.deleteFile = (file)->
-      console.log("deleting!");
-      RubricService.deleteGradeFile(file)
+      GradeService.deleteGradeFile(file)
   ]
 
   {
@@ -18,7 +17,7 @@
 ]
 
 # adapted from https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-@gradecraft.directive('gradeFilesUpload', ['$parse', 'RubricService', ($parse, RubricService)->
+@gradecraft.directive('gradeFilesUpload', ['$parse', 'GradeService', ($parse, GradeService)->
   return {
     restrict: 'A',
     link: (scope, element, attrs)->
@@ -27,7 +26,7 @@
       element.bind('change', ()->
         scope.$apply(()->
           model.assign(scope, element[0].files)
-          RubricService.postGradeFiles(element[0].files)
+          GradeService.postGradeFiles(element[0].files)
         );
       );
     };

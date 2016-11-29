@@ -26,6 +26,14 @@ describe API::AssignmentsController do
         expect(response).to render_template(:index)
       end
     end
+
+    describe "GET show" do
+      it "assigns the assignment" do
+        get :show, params: { id: assignment.id }, format: :json
+        expect(assigns(:assignment).id).to eq(assignment.id)
+        expect(response).to render_template(:show)
+      end
+    end
   end
 
   context "as student" do

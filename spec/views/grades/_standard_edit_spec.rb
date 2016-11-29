@@ -19,6 +19,8 @@ describe "grades/_standard_edit" do
     allow(view).to receive(:submission).and_return(nil)
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:recipient_type).and_return("Student")
+    allow(view).to receive(:recipient_id).and_return(@student.id)
   end
 
   describe "when an assignment has point values" do

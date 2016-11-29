@@ -1,17 +1,16 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
-#custom-value-label
-  img
-    float: right
-    margin-left: .25rem
+.raw-points-wrapper
+  padding: 2px 0 6px 0
 
-select#grade_raw_points[disabled], input[type=text]#grade_raw_points[disabled]
-  background: $color-grey-7 !important
-  color: $color-grey-4
-  border: none
-  cursor: pointer
-  cursor: hand
+.raw-points-wrapper.custom-input
+  padding: 0 0 5px 0
+
+.raw-points-label.disabled,
+select#grade_raw_points[disabled],
+input[type=text]#grade_raw_points[disabled]
+  display: none
 
 #updated-at, #updated-at-current
   margin-top: .5rem
@@ -40,7 +39,6 @@ select#grade_raw_points[disabled], input[type=text]#grade_raw_points[disabled]
 #gradebox, .gradebox
   padding: 1rem
   border-radius: $global-radius
-  width: 45%
   height: 4rem
   font-size: 1rem
   margin-bottom: 1rem
@@ -77,9 +75,23 @@ select#grade_raw_points[disabled], input[type=text]#grade_raw_points[disabled]
   width: 200px
 
 ul.grade-files-list
- list-style: none
- .fa-times
-   color: $color-red-1
+  list-style: none
+  .grade-file-list-item
+    .grade-file-delete-button
+      .hover-state, .no-hover-state
+        display: inline
+      .hover-state
+        display: none
+    &:hover
+      .grade-file-delete-button
+        .no-hover-state
+          display: none
+        .hover-state
+          display: inline
+    .fa-check
+      color: $color-green-2
+    .fa-times, .fa-spinner
+      color: $color-red-1
 
 /* Grading Status Page */
 .grading-status-card-wrapper

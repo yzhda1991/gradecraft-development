@@ -3,20 +3,16 @@
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
   $scope.criterionGrades = RubricService.criterionGrades
-  $scope.updateCriterion = RubricService.updateCriterion
   $scope.grade = RubricService.grade
   $scope.updateGrade = RubricService.updateGrade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
 
-  # Criterion factory is dependent on CriterionGrades existing in scope
-  $scope.init = (assignment_id, scope_type, scoped_id)->
-    $scope.assignment = {
-      id: assignment_id,
-      scope: {
-        type: scope_type,
-        id: scoped_id
-      }
-    }
+  $scope.init = (assignmentId, recipientType, recipientId)->
+    $scope.assignmentId = assignmentId
+    $scope.recipientType = recipientType
+    $scope.recipientId = recipientId
+
+    # Criterion factory is dependent on CriterionGrades already existing in scope
     $scope.services()
 
   $scope.services = () ->
@@ -27,21 +23,23 @@
       if (RubricService.badgesAvailable() == false)
         window.setTimeout(queCriteriaAfterBadges, 100)
       else
-        RubricService.getCriteria($scope.assignment.id, $scope)
+        RubricService.getCriteria($scope.assignmentId, $scope)
 
     promises = [
       RubricService.getBadges(),
-      RubricService.getCriterionGrades($scope.assignment),
+      RubricService.getCriterionGrades($scope.assignmentId, $scope.recipientType, $scope.recipientId),
       queCriteriaAfterBadges(),
-      RubricService.getGrade($scope.assignment)]
+      RubricService.getGrade($scope.assignmentId, $scope.recipientType, $scope.recipientId)]
     $q.all(promises)
+
+  $scope.updateCriterion = (criterion, field)->
+    RubricService.updateCriterion($scope.assignmentId, $scope.recipientType, $scope.recipientId, criterion, field)
 
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
 
   $scope.thresholdPoints = ()->
     RubricService.thresholdPoints()
-
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
@@ -220,7 +218,7 @@
     if !$scope.grade.status
       return alert "You must select a grade status before you can submit this grade"
     if confirm confirmMessage()
-      RubricService.putRubricGradeSubmission($scope.assignment, $scope.gradedRubricParams(), returnURL)
+      RubricService.putRubricGradeSubmission($scope.assignmentId, $scope.recipientType, $scope.recipientId, $scope.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
     inlineMode: false,

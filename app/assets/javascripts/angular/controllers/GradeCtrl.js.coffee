@@ -1,36 +1,38 @@
-@gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'Grade', 'AssignmentScoreLevel', '$window', '$http','EventHelper', ($timeout, $rootScope, $scope, Grade, AssignmentScoreLevel, $window, $http, EventHelper) ->
+@gradecraft.controller 'GradeCtrl', ['$scope', 'AssignmentService', 'GradeService', ($scope, AssignmentService, GradeService) ->
 
-  # setup the controller scope on initialize
-  $scope.init = (initData)->
-    # is interactive ui debugging on?
-    $scope.debug = false
+  $scope.grade = GradeService.grade
 
-    # grade stuff
-    $scope.grade = new Grade(initData.grade, $http)
-    $scope.gradeId = initData.grade.id
+  $scope.assignment = ()->
+    AssignmentService.assignments[0]
 
-    # assignment stuff
-    $scope.releaseNecessary = initData.assignment.release_necessary
+  $scope.init = (assignmentId, recipientType, recipientId)->
+    AssignmentService.getAssignment(assignmentId)
+    GradeService.getGrade(assignmentId, recipientType, recipientId)
 
-    $scope.rawScoreUpdating = false
-    $scope.hasChanges = false
+  $scope.services = (assignmentId)->
+    promises = []
+    return $q.all(promises)
 
-    # establish and populate all necessary collections for UI
-    $scope.populateCollections(initData.assignment_score_levels)
+  $scope.toggleCustomValue = ()->
+    GradeService.toggleCustomValue()
+  $scope.enableCustomValue = ()->
+    GradeService.enableCustomValue()
+  $scope.enableScoreLevels = ()->
+    GradeService.enableScoreLevels()
+  $scope.justUpdated = ()->
+    GradeService.justUpdated()
+  $scope.timeSinceUpdate = ()->
+    GradeService.timeSinceUpdate()
+  $scope.updateGrade = ()->
+    GradeService.updateGrade()
 
-  # add initial score levels
-  $scope.populateCollections = (assignmentScoreLevels)->
-    $scope.assignmentScoreLevels = []
-
-    unless assignmentScoreLevels.length == 0
-      $scope.addAssignmentScoreLevels(assignmentScoreLevels)
-
-  # add assignment score level objects if they exist
-  $scope.addAssignmentScoreLevels = (assignmentScoreLevels)->
-    angular.forEach(assignmentScoreLevels, (scoreLevel, index)->
-      scoreLevelPrototype = new AssignmentScoreLevel(scoreLevel, $scope)
-      $scope.assignmentScoreLevels.push scoreLevelPrototype
-    )
+  $scope.modelOptions = {
+    updateOn: 'default blur',
+    debounce: {
+      default: 1800,
+      blur: 0
+    }
+  }
 
   $scope.froalaOptions = {
     inlineMode: false,

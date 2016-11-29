@@ -58,6 +58,6 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(:raw_points, :feedback, :status)
+    params.require(:grade).permit(:raw_points, :feedback, :status, :is_custom_value)
   end
 end
