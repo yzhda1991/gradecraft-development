@@ -1,4 +1,4 @@
-.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-labelledby': 'Student Onboarding' }
+.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-labelledby': 'Student Onboarding', 'data-first-load': current_user.course_memberships.where(course: current_course).first.has_seen_course_onboarding? ? 'false' : 'true' }
   .modal-wrapper.modal-content#modal-holder{role: "document"}
     .modal-slider.student-onboarding-slides
       = render partial: "info/student_onboarding/student_onboarding_slide1"

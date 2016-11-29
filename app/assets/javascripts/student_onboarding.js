@@ -21,7 +21,7 @@ $('.student-onboarding-slides').slick({
 var m = document.getElementById('modal-window');
 var p = document.querySelector('.student .offscreen-sidebar');
 
-function swap () {
+function swap() {
   p.parentNode.insertBefore(m, p);
 }
 
@@ -30,38 +30,43 @@ if (m && p) {
 
   // modal window
   (function() {
-
     'use strict';
 
     // list out the vars
     var mOverlay = getId('modal-window'),
+        mOpen = document.querySelectorAll('.modal-open')[1],
         mClose = getId('modal-close'),
         mAction = getId('modal-action'),
         modal = getId('modal-holder'),
         allNodes = document.querySelectorAll("*"),
         modalOpen = false,
-        firstLoad = true,
+        firstLoad = $('#modal-window').data('first-load'),
         lastFocus,
         i;
 
     // Let's cut down on what we need to type to get an ID
-    function getId ( id ) {
+    function getId(id) {
       return document.getElementById(id);
     }
 
     // Let's open the modal
-    function modalShow () {
+    function modalShow() {
       lastFocus = document.activeElement;
       mOverlay.setAttribute('aria-hidden', 'false');
       modalOpen = true;
       modal.setAttribute('tabindex', '0');
       modal.focus();
     }
+    
+    function modalReopen(event) {
+      event.preventDefault();
+      modalShow();
+    }
 
     // binds to both the button click and the escape key to close the modal window
     // but only if modalOpen is set to true
-    function modalClose ( event ) {
-      if (modalOpen && ( !event.keyCode || event.keyCode === 27 ) ) {
+    function modalClose(event) {
+      if (modalOpen && (!event.keyCode || event.keyCode === 27)) {
         // mOverlay.setAttribute('aria-hidden', 'true');
         // modal.setAttribute('tabindex', '-1');
         // modalOpen = false;
@@ -74,19 +79,22 @@ if (m && p) {
     // Tabbing will just loop through the whole modal.
     // Shift + Tab will allow backup to the top of the modal,
     // and then stop.
-    function focusRestrict ( event ) {
-      if ( modalOpen && !modal.contains( event.target ) ) {
+    function focusRestrict(event) {
+      if (modalOpen && !modal.contains(event.target)) {
         event.stopPropagation();
         modal.focus();
       }
     }
 
     // Close modal window by clicking on the overlay
-    mOverlay.addEventListener('click', function( e ) {
-      if (e.target == modal.parentNode) {
-         modalClose( e );
+    mOverlay.addEventListener('click', function(event) {
+      if (event.target == modal.parentNode) {
+         modalClose(event);
        }
     }, false);
+
+    // open modal by link click/hit in account menu
+    mOpen.addEventListener('click', modalReopen);
 
     // close modal by btn click/hit
     mClose.addEventListener('click', modalClose);
@@ -101,11 +109,9 @@ if (m && p) {
     for (i = 0; i < allNodes.length; i++) {
       allNodes.item(i).addEventListener('focus', focusRestrict);
     }
-    
-    if ( firstLoad == true ) {
-     $(document).ready( modalShow );
-   }
 
+    if (firstLoad === true) {
+      $(document).ready(modalShow);
+    }
   })();
-  
 }
