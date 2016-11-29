@@ -3,7 +3,6 @@
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
   $scope.criterionGrades = RubricService.criterionGrades
-  $scope.updateCriterion = RubricService.updateCriterion
   $scope.grade = RubricService.grade
   $scope.updateGrade = RubricService.updateGrade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
@@ -33,12 +32,14 @@
       RubricService.getGrade($scope.assignmentId, $scope.recipientType, $scope.recipientId)]
     $q.all(promises)
 
+  $scope.updateCriterion = (criterion, field)->
+    RubricService.updateCriterion($scope.assignmentId, $scope.recipientType, $scope.recipientId, criterion, field)
+
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
 
   $scope.thresholdPoints = ()->
     RubricService.thresholdPoints()
-
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
@@ -217,7 +218,7 @@
     if !$scope.grade.status
       return alert "You must select a grade status before you can submit this grade"
     if confirm confirmMessage()
-      RubricService.putRubricGradeSubmission($scope.assignment, $scope.gradedRubricParams(), returnURL)
+      RubricService.putRubricGradeSubmission($scope.assignmentId, $scope.recipientType, $scope.recipientId, $scope.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
     inlineMode: false,

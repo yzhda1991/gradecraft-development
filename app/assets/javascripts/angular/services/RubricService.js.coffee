@@ -45,17 +45,19 @@
       criterionGrades[cg.attributes.criterion_id] = criterionGrade
     )
 
-  updateCriterion = (criterion, field)->
-    assignment = criterion.$scope.assignment
+  updateCriterion = (assignmentId, recipientType, recipientId, criterion, field)->
     requestData = {}
     requestData[field] = criterion[field]
-    $http.put("/api/assignments/#{assignmentId}/students/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
-      (data, status)->
-        console.log(data)
-    )
-    .error((err)->
-      console.log(err)
-    )
+    # This doesn't handle group criterion grades, we need to add functionality
+    # to update on all group criterion grades.
+    if recipientType == "student"
+      $http.put("/api/assignments/#{assignmentId}/students/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
+        (data, status)->
+          console.log(data)
+      )
+      .error((err)->
+        console.log(err)
+      )
 
   getCriterionGrades = (assignmentId, recipientType, recipientId)->
     if recipientType == "student"
