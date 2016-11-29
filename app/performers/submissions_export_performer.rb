@@ -158,7 +158,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     if submissions_export.use_groups
       Group.where course: @course
     elsif @submissions_export.team
-      User.students_by_team(@course, @team)
+      @course.students_by_team(@team)
     else
       User.with_role_in_course("student", @course)
     end
