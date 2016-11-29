@@ -65,4 +65,4 @@
             %li= "Groups: #{term_for :groups}"
       .modal-action-wrapper
         = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
-          %button{type: 'submit', 'aria-label': 'close'} Let's Go!
+          %button#modal-action{type: 'submit', 'aria-label': 'close'} Let's Go!
