@@ -14,14 +14,15 @@ body
   width: 100%
   flex: 1 0 auto
   background-color: $color-white
+  display: flex
 
 .outer-wrap
   padding: 0.1rem 0
 
 .mainContainer
   &.staff
-    width: calc(100% - 252px)
-    float: right
+    flex: 1
+    overflow: hidden
 
 .pageContent
   padding: 0rem 1rem 1rem
@@ -116,8 +117,6 @@ a:hover + .display-on-hover
     margin-bottom: 1rem
 
 @media (max-width: $media-medium-max)
-  .mainContainer.staff
-    width: 100%
   .box
     border-bottom: 1px solid $color-grey-3
     padding: 1rem
@@ -127,7 +126,5 @@ a:hover + .display-on-hover
     width: 23%
 
 @media (max-width: $media-small-max)
-  .mainContainer.staff
-    width: 100%
   .badge-icon
     width: 25px
