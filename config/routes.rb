@@ -202,9 +202,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :course_memberships, only: [:create, :delete, :destroy] do 
-    post :confirm_onboarding, on: :member
-  end
+  resources :course_memberships, only: [:create, :delete, :destroy]
   get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups
@@ -342,6 +340,7 @@ Rails.application.routes.draw do
       resources :assignment_type_weights, only: :create
     end
     resources :badges, only: :index
+    put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
     resources :earned_badges, only: [:create, :destroy]
     resources :grades, only: :update do
       resources :earned_badges, only: :create, module: :grades do

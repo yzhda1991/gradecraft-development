@@ -7,5 +7,4 @@
       %p Plan out variable assignment pathways with Grade Predictor and use it to maximize your freedom of choice. Achieve the goals you want on your terms.
       - if !presenter.has_course_specific_features?
         .modal-action-wrapper
-          = form_tag confirm_onboarding_course_membership_path(id: current_student.course_memberships.where(course_id: current_course.id).first.id), method: :post do
-            %button#modal-action{type: 'submit', 'aria-label': 'close'} Let's Go!
+          %button#modal-action{type: 'submit', 'aria-label': 'close'} Let's Go!

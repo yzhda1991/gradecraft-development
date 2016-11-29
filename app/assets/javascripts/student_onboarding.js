@@ -57,7 +57,7 @@ if (m && p) {
       modal.setAttribute('tabindex', '0');
       modal.focus();
     }
-    
+
     function modalReopen(event) {
       event.preventDefault();
       modalShow();
@@ -67,11 +67,18 @@ if (m && p) {
     // but only if modalOpen is set to true
     function modalClose(event) {
       if (modalOpen && (!event.keyCode || event.keyCode === 27)) {
-        // mOverlay.setAttribute('aria-hidden', 'true');
-        // modal.setAttribute('tabindex', '-1');
-        // modalOpen = false;
-        // lastFocus.focus();
-        $('#modal-holder form').submit();
+        $.ajax({
+          url: '/api/course_memberships/confirm_onboarding',
+          dataType: "json",
+          type: 'put',
+          success: function(response) {
+            console.log(response);
+            mOverlay.setAttribute('aria-hidden', 'true');
+            modal.setAttribute('tabindex', '-1');
+            modalOpen = false;
+            lastFocus.focus();
+          }
+        });
       }
     }
 
