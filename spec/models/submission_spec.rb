@@ -109,13 +109,27 @@ describe Submission do
     end
   end
 
-  describe ".for" do
+  describe ".for_assignment_and_student" do
     let(:assignment) { create(:assignment) }
     let(:student)  { create(:student_course_membership, course: assignment.course).user }
     let!(:submission) { create(:submission, assignment: assignment, student: student) }
 
     it "returns the submission for the student and assignment" do
       result = Submission.for_assignment_and_student(assignment.id, student.id).first
+      expect(result).to eq submission
+    end
+  end
+
+  describe ".for_assignment_and_group" do
+    let(:assignment) { create(:group_assignment) }
+    let(:student) { create(:user) }
+    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
+    let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
+    let!(:submission) { create(:submission, assignment: assignment, group: assignment_group.group) }
+
+    it "returns the submission for the group and assignment" do
+      result = Submission.for_assignment_and_group(assignment.id, assignment_group.group_id).first
       expect(result).to eq submission
     end
   end

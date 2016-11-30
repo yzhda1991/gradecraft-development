@@ -2,7 +2,14 @@ class API::Assignments::SubmissionsController < ApplicationController
   before_action :ensure_student?
 
   def show
-    submission = Submission.for_assignment_and_student(params[:assignment_id], current_user.id).first
+    assignment = Assignment.find(params[:assignment_id])
+    submission = nil
+
+    if assignment.is_individual?
+      submission = Submission.for_assignment_and_student(assignment.id, current_user.id).first
+    else
+      submission = Submission.for_assignment_and_group(assignment.id, current_student.group_for_assignment(assignment).id).first
+    end
 
     if submission.present?
       render json: { submission: submission, message: "Found an existing submission draft" }, status: 200
@@ -14,7 +21,7 @@ class API::Assignments::SubmissionsController < ApplicationController
 
   def create
     assignment = Assignment.find(params[:assignment_id])
-    submission = assignment.submissions.new submission_params.merge(student_id: current_user.id)
+    submission = assignment.submissions.new merged_submission_params(assignment)
 
     if submission.save
       render json: { submission: submission, message: "Successfully created a submission draft" }, status: 201
@@ -39,6 +46,14 @@ class API::Assignments::SubmissionsController < ApplicationController
   end
 
   private
+
+  def merged_submission_params(assignment)
+    if assignment.is_individual?
+      submission_params.merge(student_id: current_student.id)
+    else
+      submission_params.merge(group_id: current_student.group_for_assignment(assignment).id)
+    end
+  end
 
   def submission_params
     params.require(:submission).permit(:assignment_id, :text_comment_draft)
