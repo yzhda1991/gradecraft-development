@@ -52,7 +52,8 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   end
 
   def file_klass
-    model.class.to_s.underscore.pluralize
+    return model.klass_name if model.class.method_defined? :klass_name
+    klass_name = model.class.to_s.underscore.pluralize
   end
 
   def owner_name

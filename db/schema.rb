@@ -355,7 +355,7 @@ ActiveRecord::Schema.define(version: 20161209225205) do
     t.integer  "course_id",     null: false
   end
 
-  create_table "files", force: :cascade do |t|
+  create_table "file_attachments", force: :cascade do |t|
     t.integer  "grade_id"
     t.string   "filename"
     t.string   "filepath"
