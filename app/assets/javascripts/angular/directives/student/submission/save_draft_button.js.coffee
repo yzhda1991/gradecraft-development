@@ -8,10 +8,10 @@
   ]
 
   {
-    bindToController: true,
-    controller: SaveDraftButtonCtrl,
-    controllerAs: 'vm',
-    restrict: 'C',
+    bindToController: true
+    controller: SaveDraftButtonCtrl
+    controllerAs: 'vm'
+    restrict: 'C'
     scope: {
       assignmentId: '@'
     }

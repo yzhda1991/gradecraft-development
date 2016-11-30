@@ -14,10 +14,10 @@
   ]
 
   {
-    bindToController: true,
-    controller: TextCommentInputCtrl,
-    controllerAs: 'vm',
-    restrict: 'EA',
+    bindToController: true
+    controller: TextCommentInputCtrl
+    controllerAs: 'vm'
+    restrict: 'EA'
     scope: {
       assignmentId: '@'
     }
