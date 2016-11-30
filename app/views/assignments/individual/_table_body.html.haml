@@ -1,5 +1,5 @@
 - presenter.students.each do |student|
-  - student_submission = Submission.for(presenter.assignment.id, student.id).first
+  - student_submission = Submission.for_assignment_and_student(presenter.assignment.id, student.id).first
   - grade = presenter.grade_for(student)
   %tr
     - if presenter.assignment.is_unlockable?

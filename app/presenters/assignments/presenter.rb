@@ -81,7 +81,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def has_viewable_submission_for?(user)
-    submission = Submission.for(assignment.id, user.id).first
+    submission = Submission.for_assignment_and_student(assignment.id, user.id).first
     has_viewable_submission(submission)
   end
 

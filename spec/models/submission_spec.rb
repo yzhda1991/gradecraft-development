@@ -115,7 +115,7 @@ describe Submission do
     let!(:submission) { create(:submission, assignment: assignment, student: student) }
 
     it "returns the submission for the student and assignment" do
-      result = Submission.for(assignment.id, student.id).first
+      result = Submission.for_assignment_and_student(assignment.id, student.id).first
       expect(result).to eq submission
     end
   end

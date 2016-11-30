@@ -43,7 +43,7 @@ class Submission < ActiveRecord::Base
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
-  scope :for, ->(assignment_id, student_id) { where(assignment_id: assignment_id, student_id: student_id) }
+  scope :for_assignment_and_student, ->(assignment_id, student_id) { where(assignment_id: assignment_id, student_id: student_id) }
 
   scope :with_group, -> { where "group_id is not null" }
 
