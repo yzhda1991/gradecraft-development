@@ -4,12 +4,19 @@ class API::GradesController < ApplicationController
 
   # GET api/assignments/:assignment_id/students/:student_id/grade
   def show
-    @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
-    @file_attachments = FileAttachment.where(grade_id: @grade.id)
-    if @grade.assignment.release_necessary?
-      @grade_status_options = Grade::STATUSES
+    if Assignment.exists?(params[:assignment_id]) && User.exists?(params[:student_id])
+      @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
+      @file_attachments = FileAttachment.where(grade_id: @grade.id)
+      if @grade.assignment.release_necessary?
+        @grade_status_options = Grade::STATUSES
+      else
+        @grade_status_options = Grade::UNRELEASED_STATUSES
+      end
     else
-      @grade_status_options = Grade::UNRELEASED_STATUSES
+      render json: {
+        message: "not a valid student or assignment", success: false
+        },
+        status: 400
     end
   end
 
