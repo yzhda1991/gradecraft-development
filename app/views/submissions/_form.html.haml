@@ -2,8 +2,9 @@
 
 %hr
 
-%student-submission-form{"ng-app"=>"gradecraft"}
-  = simple_form_for([presenter.assignment, presenter.submission]) do |f|
+%student-submission{"ng-app"=>"gradecraft", class: "ng-cloak"}
+  = simple_form_for [presenter.assignment, presenter.submission], :html => { class: "student-submission-form", "assignment_id"=>"#{presenter.assignment.id}" } do |f|
+    %hidden-form-method
     - if presenter.assignment.has_groups? && current_user_is_student?
       = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(presenter.assignment).id }, as: :hidden
     - elsif presenter.assignment.has_groups? && current_user_is_staff?
@@ -41,5 +42,5 @@
         %li.save-draft-button.button{"assignment_id"=>"#{presenter.assignment.id}"}
         %li= f.button :submit,
           "#{presenter.submission.persisted? ? (presenter.submission.will_be_resubmitted? ? "Resubmit" : "Update Submission") : "Submit #{term_for :assignment}"}",
-          data: { confirm: ("This submission will be late. Continue?" if presenter.submission_will_be_late?) }, class: "form-submit ng-cloak", "ng-disabled"=>"loaded"
-        %li= link_to glyph("times-circle") + "Cancel", assignment_path(presenter.assignment), class: "button form-submit ng-cloak", "ng-disabled"=>"loaded"
+          data: { confirm: ("This submission will be late. Continue?" if presenter.submission_will_be_late?) }, class: "ng-cloak"
+        %li= link_to glyph("times-circle") + "Cancel", assignment_path(presenter.assignment), class: "button ng-cloak"
