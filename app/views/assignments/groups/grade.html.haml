@@ -21,7 +21,7 @@
       %h4.uppercase= "#{@group.name}'s Submission"
       = render partial: "submissions/submission_content",
         locals: { presenter: Submissions::ShowPresenter.new(id: @submission_id,
-            assignment_id: @assignment.id, course: current_course) }
+            assignment_id: @assignment.id, course: current_course, group_id: @group.id) }
 
   - if @rubric
     %hr.dotted
