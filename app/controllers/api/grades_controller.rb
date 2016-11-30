@@ -4,7 +4,7 @@ class API::GradesController < ApplicationController
 
   # GET api/assignments/:assignment_id/students/:student_id/grade
   def show
-    if Assignment.exists?(params[:assignment_id]) && User.exists?(params[:student_id])
+    if Assignment.exists?(params[:assignment_id].to_i) && User.exists?(params[:student_id].to_i)
       @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
       @file_attachments = FileAttachment.where(grade_id: @grade.id)
       if @grade.assignment.release_necessary?
