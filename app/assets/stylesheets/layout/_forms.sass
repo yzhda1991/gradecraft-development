@@ -27,7 +27,6 @@ fieldset
 
 select, .ui-tabs-panel select
   background-color: $color-white
-  padding: .5rem !important
   width: 16rem
   height: 1.5rem
   font-size: 12px
@@ -168,6 +167,8 @@ error
     padding-right: .5rem
     text-align: right
     font-size: 0.9rem
+    @media (max-width: $media-small-max)
+      text-align: left
 
   input[type=text], input[type=password], input[type=number]
     padding: .5rem
@@ -184,16 +185,24 @@ error
     font-style: italic
     font-weight: normal
     text-transform: none
+    @media (max-width: $media-small-max)
+      margin-left: 0
 
   .form-item
-    margin-bottom: .5rem
+    margin-bottom: .75rem
 
   .checkbox
     position: relative
     display: block
-    margin-left: 10.5rem
-    margin-top: -1.8rem
-    margin-bottom: 1.7rem
+    @media (max-width: $media-small-max)
+      margin-left: 0
+      margin-top: 0
+      margin-bottom: 0
+
+.conditional-options
+  margin-left: 7.5rem
+  @media (max-width: $media-small-max)
+    margin-left: 0
 
 .ui-datepicker
   margin-top: -2.7rem !important
