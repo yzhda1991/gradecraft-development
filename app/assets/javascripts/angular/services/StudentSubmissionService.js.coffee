@@ -13,6 +13,10 @@
   # Custom debounce method for autosaving submissions
   # Pass true for immediate to manually trigger save
   queueDraftSubmissionSave = (assignmentId, immediate = false) ->
+    unless getSubmission().text_comment_draft
+      $timeout.cancel(self.saveTimeout)
+      return
+
     if immediate is true
       $timeout.cancel(self.saveTimeout)
       saveDraftSubmission(assignmentId)
