@@ -1,13 +1,13 @@
 require "active_record_spec_helper"
 require_relative "../toolkits/models/shared/files"
 
-describe GradeFile do
-  subject { grade.grade_files.new image_file_attrs }
+describe FileAttachment do
+  subject { grade.file_attachments.new image_file_attrs }
 
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { build(:grade, course: course, assignment: assignment) }
-  let(:new_grade_file) { grade.grade_files.new image_file_attrs }
+  let(:new_grade_file) { grade.file_attachments.new image_file_attrs }
 
   extend Toolkits::Models::Shared::Files
   define_context # pull in attrs for image and text files
@@ -31,15 +31,15 @@ describe GradeFile do
 
     it "is deleted when the parent submission is destroyed" do
       subject.grade.save!
-      expect {grade.destroy}.to change(GradeFile, :count).by(-1)
+      expect {grade.destroy}.to change(FileAttachment, :count).by(-1)
     end
   end
 
   describe "uploading multiple files" do
     it "accepts multiple files" do
-      grade.grade_files.new text_file_attrs
+      grade.file_attachments.new text_file_attrs
       subject.grade.save!
-      expect(grade.grade_files.count).to equal 2
+      expect(grade.file_attachments.count).to equal 2
     end
   end
 
@@ -87,14 +87,14 @@ describe GradeFile do
   end
 
   describe "S3Manager::Carrierwave inclusion" do
-    let(:grade_file) { build(:grade_file) }
+    let(:file_attachment) { build(:file_attachment) }
 
     it "can be deleted from s3" do
-      expect(grade_file.respond_to?(:delete_from_s3)).to be_truthy
+      expect(file_attachment.respond_to?(:delete_from_s3)).to be_truthy
     end
 
     it "can check whether it exists on s3" do
-      expect(grade_file.respond_to?(:exists_on_s3?)).to be_truthy
+      expect(file_attachment.respond_to?(:exists_on_s3?)).to be_truthy
     end
   end
 end

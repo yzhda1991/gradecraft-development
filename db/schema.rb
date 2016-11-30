@@ -378,8 +378,8 @@ ActiveRecord::Schema.define(version: 20161209225205) do
   end
 
   create_table "grade_files", force: :cascade do |t|
-    t.integer "grade_id",      null: false
-    t.integer "grade_file_id", null: false
+    t.integer "grade_id",           null: false
+    t.integer "file_attachment_id", null: false
   end
 
   create_table "grade_scheme_elements", force: :cascade do |t|

@@ -21,7 +21,7 @@
 - if grade.adjustment_points != 0
   = render partial: "grades/components/points_adjustment", locals: { grade: grade }
 
-- if grade.grade_files.present?
+- if grade.file_attachments.present?
   = render partial: "grades/components/attachments", locals: { grade: grade }
 
 - if grade.feedback.present?

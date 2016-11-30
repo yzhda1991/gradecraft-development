@@ -138,16 +138,16 @@ RSpec.describe UploadsController do
   describe "all possible upload file classes" do
     before(:each) { subject }
 
-    context ":model param is GradeFile" do
-      let(:grade_file) { create(:grade_file) }
-      subject { get :remove, params: { model: "GradeFile", upload_id: grade_file.id }}
+    context ":model param is FileAttachment" do
+      let(:file_attachment) { create(:file_attachment) }
+      subject { get :remove, params: { model: "FileAttachment", upload_id: file_attachment.id }}
 
-      it "returns a GradeFile object" do
-        expect(assigns(:upload).class).to eq(GradeFile)
+      it "returns a FileAttachment object" do
+        expect(assigns(:upload).class).to eq(FileAttachment)
       end
 
-      it "returns the correct GradeFile" do
-        expect(assigns(:upload).id).to eq(grade_file.id)
+      it "returns the correct FileAttachment" do
+        expect(assigns(:upload).id).to eq(file_attachment.id)
       end
     end
 

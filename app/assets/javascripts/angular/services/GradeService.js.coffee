@@ -1,14 +1,14 @@
 @gradecraft.factory 'GradeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   grade = {}
-  gradeFiles = []
+  fileAttachments = []
   gradeStatusOptions = []
 
   getGrade = (assignmentId, recipientType, recipientId)->
     if recipientType == "student"
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').success((response)->
         angular.copy(response.data.attributes, grade)
-        GradeCraftAPI.loadFromIncluded(gradeFiles,"grade_files", response)
+        GradeCraftAPI.loadFromIncluded(fileAttachments,"file_attachments", response)
         angular.copy(response.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = response.meta.threshold_points
       )
@@ -50,7 +50,7 @@
   postGradeFiles = (files)->
     fd = new FormData();
     angular.forEach(files, (file, index)->
-      fd.append("grade_files[]", file)
+      fd.append("file_attachments[]", file)
     )
 
     $http.post(
@@ -61,7 +61,7 @@
     ).then(
       (response)-> # success
         if response.status == 201
-          GradeCraftAPI.addItems(gradeFiles, "grade_files", response.data)
+          GradeCraftAPI.addItems(fileAttachments, "file_attachments", response.data)
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
@@ -73,7 +73,7 @@
     $http.delete("/api/grades/#{file.grade_id}/grade_files/#{file.id}").then(
       (response)-> # success
         if response.status == 200
-          GradeCraftAPI.deleteItem(gradeFiles, file)
+          GradeCraftAPI.deleteItem(fileAttachments, file)
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
@@ -83,7 +83,7 @@
 
   return {
     grade: grade,
-    gradeFiles: gradeFiles,
+    fileAttachments: fileAttachments,
     gradeStatusOptions: gradeStatusOptions,
 
     toggleCustomValue: toggleCustomValue,

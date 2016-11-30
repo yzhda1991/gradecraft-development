@@ -5,7 +5,7 @@ class API::GradesController < ApplicationController
   # GET api/assignments/:assignment_id/students/:student_id/grade
   def show
     @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
-    @grade_files = GradeFile.where(grade_id: @grade.id)
+    @file_attachments = FileAttachment.where(grade_id: @grade.id)
     if @grade.assignment.release_necessary?
       @grade_status_options = Grade::STATUSES
     else

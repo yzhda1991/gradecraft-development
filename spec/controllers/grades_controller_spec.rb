@@ -79,15 +79,6 @@ describe GradesController do
         expect(grade.submission).to eq submission
       end
 
-      it "handles a grade file upload" do
-        grade_params = { raw_points: 12345, "grade_files_attributes" => {"0" => {
-          "file" => [fixture_file("test_file.txt", "txt")] }}}
-
-        put :update, params: { id: grade.id, grade: grade_params}
-        expect expect(GradeFile.count).to eq(1)
-        expect expect(GradeFile.last.filename).to eq("test_file.txt")
-      end
-
       it "handles commas in raw score params" do
         put :update, params: { id: grade.id, grade: { raw_points: "12,345" }}
         expect(grade.reload.score).to eq(12345)

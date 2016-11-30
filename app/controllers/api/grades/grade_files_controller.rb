@@ -6,11 +6,11 @@ class API::Grades::GradeFilesController < ApplicationController
   def create
     grade = Grade.find(params[:grade_id])
 
-    @grade_files = []
-    params[:grade_files].each do |f|
-      grade_file = GradeFile.create(file: f, filename: f.original_filename[0..49], grade_id: grade.id)
-      GradeFileAssociation.create(grade_file_id: grade_file.id, grade_id: grade.id)
-      @grade_files << grade_file
+    @file_attachments = []
+    params[:file_attachments].each do |f|
+      file = FileAttachment.create(file: f, filename: f.original_filename[0..49], grade_id: grade.id)
+      GradeFile.create(file_attachment_id: file.id, grade_id: grade.id)
+      @file_attachments << file
     end
 
     render status: 201
@@ -18,17 +18,17 @@ class API::Grades::GradeFilesController < ApplicationController
 
   # DELETE /api/grades/:grade_id/grade_files/:id
   def destroy
-    grade_file = GradeFile.where(id: params[:id], grade_id: params[:grade_id]).first
-    if grade_file.present?
-      grade_file.delete_from_s3
-      grade_file.destroy
+    file = FileAttachment.where(id: params[:id], grade_id: params[:grade_id]).first
+    if file.present?
+      file.delete_from_s3
+      file.destroy
 
-      GradeFileAssociation.where(grade_file_id: grade_file.id).destroy_all
+      GradeFile.where(file_attachment_id: file.id).destroy_all
 
-      if !grade_file.exists_on_s3? && grade_file.destroyed?
+      if !file.exists_on_s3? && file.destroyed?
         render json: { message: "Grade file successfully deleted", success: true },
         status: 200
-      elsif grade_file.destroyed?
+      elsif file.destroyed?
         render json: {message: "Grade file deleted, error removing remote file", success: true},
         status: 200
       else

@@ -1,7 +1,7 @@
-@gradecraft.directive 'gradeFilesUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
-  UploadGradeFilesCtrl = [()->
+@gradecraft.directive 'fileAttachmentsUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
+  UploadCtrl = [()->
     vm = this
-    vm.gradeFiles = GradeService.gradeFiles
+    vm.fileAttachments = GradeService.fileAttachments
 
     vm.deleteFile = (file)->
       GradeService.deleteGradeFile(file)
@@ -9,19 +9,19 @@
 
   {
     bindToController: true,
-    controller: UploadGradeFilesCtrl,
+    controller: UploadCtrl,
     controllerAs: 'vm',
     scope: {},
-    templateUrl: 'grades/upload_grade_files.html'
+    templateUrl: 'grades/upload_file_attachments.html'
   }
 ]
 
 # adapted from https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-@gradecraft.directive('gradeFilesUpload', ['$parse', 'GradeService', ($parse, GradeService)->
+@gradecraft.directive('fileAttachmentsUpload', ['$parse', 'GradeService', ($parse, GradeService)->
   return {
     restrict: 'A',
     link: (scope, element, attrs)->
-      model = $parse(attrs.gradeFilesUpload)
+      model = $parse(attrs.fileAttachmentsUpload)
 
       element.bind('change', ()->
         scope.$apply(()->

@@ -9,27 +9,27 @@ describe API::Grades::GradeFilesController do
 
     describe "POST create" do
       it "adds upload file to grade" do
-        grade_file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
-        post :create, params: { grade_id: world.grade.id, grade_files: [grade_file] },
+        file_attachment = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
+        post :create, params: { grade_id: world.grade.id, grade_files: [file_attachment] },
           format: :json
-        expect(world.grade.grade_files.count).to eq(1)
+        expect(world.grade.file_attachments.count).to eq(1)
       end
     end
 
     describe "DELETE destroy" do
-      let!(:grade_file) { create :grade_file, grade: world.grade }
-      let(:stub_grade_file) { allow(GradeFile).to receive(:where) { [grade_file] }}
+      let!(:file_attachment) { create :file_attachment, grade: world.grade }
+      let(:stub_file_attachment) { allow(FileAttachment).to receive(:where) { [file_attachment] }}
 
       it "destroys the grade file" do
-        delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json
+        delete :destroy, params: { grade_id: world.grade.id, id: file_attachment.id }, format: :json
         world.grade.reload
-        expect(world.grade.grade_files.count).to eq(0)
+        expect(world.grade.file_attachments.count).to eq(0)
       end
 
       it "removes the corresponding file on s3" do
-        stub_grade_file
-        expect(grade_file).to receive(:delete_from_s3)
-        delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json
+        stub_file_attachment
+        expect(file_attachment).to receive(:delete_from_s3)
+        delete :destroy, params: { grade_id: world.grade.id, id: file_attachment.id }, format: :json
       end
     end
   end
@@ -46,8 +46,8 @@ describe API::Grades::GradeFilesController do
 
     describe "DELETE destroy" do
       it "is a protected route" do
-        grade_file = create(:grade_file, grade: world.grade)
-        expect(delete :destroy, params: { grade_id: world.grade.id, id: grade_file.id }, format: :json).to redirect_to(:root)
+        file_attachment = create(:file_attachment, grade: world.grade)
+        expect(delete :destroy, params: { grade_id: world.grade.id, id: file_attachment.id }, format: :json).to redirect_to(:root)
       end
     end
   end

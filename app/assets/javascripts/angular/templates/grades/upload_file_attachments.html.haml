@@ -1,0 +1,20 @@
+.feedback-upload
+  %input(type="file" multiple="true" file-attachments-upload="feedbackFiles")
+.clear
+
+
+%ul.file-attachments-list(ng-if='vm.fileAttachments.length > 0')
+  %li(ng-repeat='file in vm.fileAttachments')
+    .file-attachment-list-item
+      .file-attachment-delete-button(ng-if='!file.deleting')
+        .no-hover-state
+          %i.fa.fa-check.fa-fw
+        .hover-state
+          %i.fa.fa-times.fa-fw(ng-click="vm.deleteFile(file)")
+        {{ file.filename }}
+      .file-attachment-delete-button(ng-if='file.deleting')
+        %i.fa.fa-spinner.fa-fw
+        {{ file.filename }}
+
+
+

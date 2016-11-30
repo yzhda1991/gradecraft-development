@@ -11,7 +11,7 @@
 
   # delegations to the GradeService:
   grade = GradeService.grade
-  gradeFiles = GradeService.gradeFiles
+  fileAttachments = GradeService.fileAttachments
   gradeStatusOptions =  GradeService.gradeStatusOptions
 
   getGrade = (assignment, recipientType, recipientId)->
@@ -106,7 +106,7 @@
       getGrade: getGrade,
       updateGrade: updateGrade,
       grade: grade,
-      gradeFiles: gradeFiles,
+      fileAttachments: fileAttachments,
       postGradeFiles: postGradeFiles,
       deleteGradeFile: deleteGradeFile,
       gradeStatusOptions: gradeStatusOptions,
