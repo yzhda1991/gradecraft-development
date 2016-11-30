@@ -135,36 +135,27 @@
     }
   }
 
-  if($('.locked-visibility-options > input').is(':checked')) {
-    $('ul > .locked-display').show();
-  } else {
-    $('ul > .locked-display').hide();
-  }
-
-  $('.locked-visibility-options').change(function(){
-    if($(this).is(":checked")) {
-      $('ul > .locked-display').toggle();
-    } else {
-      $('ul > .locked-display').toggle();
-    }
-  });
-
-  if($('.assignment_options > input').is(':checked')) {
-    $('ul > .submit').show();
-  } else {
-    $('ul > .submit').hide();
-  }
-
-  $('.assignment_options').change(function(){
-    if($(this).is(":checked")) {
-      $('ul > .submit').toggle();
-    } else {
-      $('ul > .submit').toggle();
-    }
-  });
-
   $(init);
 }(jQuery);
+
+//Show and hide conditional form items (used on assignment and badge edit)
+function showConditionalOptions($thisInput) {
+  var $thisConditionalOptionsList = $thisInput.closest('.form-item-with-options').next('.conditional-options');
+  
+  if ($thisInput.is(':checked')) {
+    $thisConditionalOptionsList.show();
+  } else {
+    $thisConditionalOptionsList.hide();
+  }
+}
+
+$('input.has-conditional-options').change(function() {
+  showConditionalOptions($(this));
+});
+
+$('input.has-conditional-options').each(function() {
+  showConditionalOptions($(this));
+});
 
 // for student rubric feedback tab panels
 $('ul.level-tabs li').click(function(){
