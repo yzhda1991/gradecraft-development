@@ -155,34 +155,34 @@ describe Assignments::Presenter do
     end
   end
 
-  describe "#has_submission_for" do
+  describe "#has_viewable_submission_for" do
     let(:user) { double(:user, id: 1) }
     let(:submission) { double(:submission) }
 
     it "is false if the assignment doesn't accept submissions" do
       allow(Submission).to receive(:for).and_return [submission]
       allow(assignment).to receive(:accepts_submissions?).and_return false
-      expect(subject.has_submission_for?(user)).to eq false
+      expect(subject.has_viewable_submission_for?(user)).to eq false
     end
 
     it "is false if the submission doesn't exist" do
       allow(Submission).to receive(:for).and_return []
       allow(assignment).to receive(:accepts_submissions?).and_return true
-      expect(subject.has_submission_for?(user)).to eq false
+      expect(subject.has_viewable_submission_for?(user)).to eq false
     end
 
     it "is false if the submission is not viewable" do
       allow(Submission).to receive(:for).and_return [submission]
       allow(assignment).to receive(:accepts_submissions?).and_return(true)
       allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
-      expect(subject.has_submission_for?(user)).to eq false
+      expect(subject.has_viewable_submission_for?(user)).to eq false
     end
 
     it "is true when all criteria are met" do
       allow(Submission).to receive(:for).and_return [submission]
       allow(assignment).to receive(:accepts_submissions?).and_return(true)
       allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
-      expect(subject.has_submission_for?(user)).to eq true
+      expect(subject.has_viewable_submission_for?(user)).to eq true
     end
   end
 end

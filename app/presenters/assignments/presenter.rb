@@ -76,9 +76,13 @@ class Assignments::Presenter < Showtime::Presenter
     grades.instructor_modified.present?
   end
 
-  def has_submission_for?(user)
-    submission = Submission.for(assignment.id, user.id).first
+  def has_viewable_submission(submission)
     assignment.accepts_submissions? && submission.present? && SubmissionProctor.new(submission).viewable?
+  end
+
+  def has_viewable_submission_for?(user)
+    submission = Submission.for(assignment.id, user.id).first
+    has_viewable_submission(submission)
   end
 
   def has_teams?
@@ -119,13 +123,11 @@ class Assignments::Presenter < Showtime::Presenter
     assignment.is_individual?
   end
 
-  def submission_submitted_date_for(submissions)
-    submission = submissions.first
+  def submission_submitted_date_for(submission)
     submission.submitted_at if submission
   end
 
-  def submission_resubmitted?(submissions)
-    submission = submissions.first
+  def submission_resubmitted?(submission)
     submission.nil? ? false : submission.resubmitted?
   end
 

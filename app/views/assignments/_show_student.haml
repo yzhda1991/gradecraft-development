@@ -17,7 +17,7 @@
             = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
           %hr.dotted
 
-    - if presenter.has_submission_for?(current_student)
+    - if presenter.has_viewable_submission_for?(current_student)
       %section
         %h3 My Submission
         = render partial: "submissions/submission_content",
