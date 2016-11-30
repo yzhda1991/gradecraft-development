@@ -355,6 +355,17 @@ ActiveRecord::Schema.define(version: 20161209225205) do
     t.integer  "course_id",     null: false
   end
 
+  create_table "files", force: :cascade do |t|
+    t.integer  "grade_id"
+    t.string   "filename"
+    t.string   "filepath"
+    t.string   "file"
+    t.boolean  "file_processing", default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "store_dir"
+  end
+
   create_table "flagged_users", force: :cascade do |t|
     t.integer  "course_id",  null: false
     t.integer  "flagger_id", null: false
@@ -366,20 +377,9 @@ ActiveRecord::Schema.define(version: 20161209225205) do
     t.index ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
   end
 
-  create_table "grade_file_associations", force: :cascade do |t|
+  create_table "grade_files", force: :cascade do |t|
     t.integer "grade_id",      null: false
     t.integer "grade_file_id", null: false
-  end
-
-  create_table "grade_files", force: :cascade do |t|
-    t.integer  "grade_id"
-    t.string   "filename"
-    t.string   "filepath"
-    t.string   "file"
-    t.boolean  "file_processing", default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "store_dir"
   end
 
   create_table "grade_scheme_elements", force: :cascade do |t|
