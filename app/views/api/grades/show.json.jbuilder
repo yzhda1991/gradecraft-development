@@ -16,7 +16,7 @@ json.data do
   end
 
   json.relationships do
-    if @file_attachments.present?
+    if @grade.file_attachments.present?
       json.file_attachments do
         json.data @files_attachments do |file_attachment|
           json.type "file_attachments"
@@ -28,8 +28,8 @@ json.data do
 end
 
 json.included do
-  if @file_attachments.present?
-    json.array! @file_attachments do |file_attachment|
+  if @grade.file_attachments.present?
+    json.array! @grade.file_attachments do |file_attachment|
       json.type "file_attachments"
       json.id file_attachment.id.to_s
       json.attributes do
