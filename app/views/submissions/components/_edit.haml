@@ -1,2 +1,1 @@
-- button_text = presenter.submission.text_comment_draft.present? ? "Edit Draft" : "Edit Submission"
-= link_to glyph(:pencil) + "#{button_text}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"
+= link_to glyph(:pencil) + "#{presenter.term_for_edit(current_user)}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"

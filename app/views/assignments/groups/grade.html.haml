@@ -13,14 +13,14 @@
       - @group.proposals.last do |prop|
         = prop.title
 
-  - if @assignment.accepts_submissions? && @submission_id.present?
+  - if @assignment.accepts_submissions? && @submission.id.present? && SubmissionProctor.new(@submission).viewable?
     %hr.dotted
 
     %section
 
       %h4.uppercase= "#{@group.name}'s Submission"
       = render partial: "submissions/submission_content",
-        locals: { presenter: Submissions::ShowPresenter.new(id: @submission_id,
+        locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
             assignment_id: @assignment.id, course: current_course, group_id: @group.id) }
 
   - if @rubric
