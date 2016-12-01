@@ -16,7 +16,7 @@ describe "submissions/show" do
 
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)
-    allow(view).to receive(:current_student).and_return(@student)
+    allow(view).to receive(:current_user).and_return(@student)
     # stub path called in partial app/views/submissions/_buttons.haml
     allow(view).to receive(:assignment_submission_path).and_return("#")
     allow(view).to receive(:presenter).and_return presenter

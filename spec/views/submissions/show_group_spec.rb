@@ -18,10 +18,12 @@ describe "submissions/show" do
   let(:assignment) { build(:group_assignment, course: course) }
   let(:group) { create(:group, course: course) }
   let(:submission) { create(:submission, course: course, assignment: assignment, group: group) }
+  let(:student) { create(:student_course_membership, course: course).user }
 
   before do
     allow(view).to receive_messages(
       current_course: course,
+      current_user: student,
       # stub path called in partial app/views/submissions/_buttons.haml
       assignment_submission_path: "#",
       presenter: presenter
