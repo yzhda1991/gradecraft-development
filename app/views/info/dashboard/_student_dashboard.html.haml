@@ -1,3 +1,5 @@
+= render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course) }
+
 .pageContent
 
   = render "layouts/alerts"
@@ -6,7 +8,7 @@
     .flex-col-30.tablet-col-2
       .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
 
-      - if current_course.student_weighted?
+      - if current_course.has_multipliers?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
     .flex-col-40.tablet-col-1

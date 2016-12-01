@@ -1,6 +1,7 @@
 require_relative "../services/cancels_course_membership"
 
 class CourseMembershipsController < ApplicationController
+
   before_action :ensure_staff?
 
   def create
@@ -25,6 +26,6 @@ class CourseMembershipsController < ApplicationController
   def course_membership_params
     params.require(:course_membership).permit :auditing, :character_profile,
       :course_id, :instructor_of_record, :user_id, :role, :last_login_at,
-      :earned_grade_scheme_element_id
+      :earned_grade_scheme_element_id, :has_seen_course_onboarding
   end
 end
