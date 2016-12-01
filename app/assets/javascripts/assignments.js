@@ -24,15 +24,6 @@ function checkDropdown(select) {
   $($thisSelectedList).find('select, input').attr('disabled', false);
 }
 
-if($('.locked-visibility-options > input').is(':checked')) {
-  $('ul > .locked-display').show();
-} else {
-  $('ul > .locked-display').hide();
-}
-
-  $(init);
-}(jQuery);
-
 //Show and hide conditional form items (used on assignment and badge edit)
 function showConditionalOptions($thisInput) {
   var $thisConditionalOptionsList = $thisInput.closest('.form-item-with-options').next('.conditional-options');
