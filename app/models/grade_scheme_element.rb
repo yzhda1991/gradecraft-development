@@ -5,9 +5,8 @@ class GradeSchemeElement < ActiveRecord::Base
 
   belongs_to :course, touch: true
 
-  validates_presence_of :lowest_points, :highest_points, :course
-  validates_numericality_of :highest_points,
-                            greater_than: proc { |e| e.lowest_points.to_i }
+  validates_presence_of :lowest_points, :course
+  #validates_numericality_of :highest_points, greater_than: proc { |e| e.lowest_points.to_i }
 
   scope :for_course, -> (course_id) { where(course_id: course_id) }
   scope :order_by_lowest_points, -> { order "lowest_points ASC" }
