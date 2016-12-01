@@ -7,7 +7,7 @@ describe Services::DeletesSubmissionDraftContent do
   describe ".for" do
     it "removes the text comment draft" do
       expect(Services::Actions::RemovesTextCommentDraft).to receive(:execute).and_call_original
-      described_class.delete submission
+      described_class.for submission
     end
   end
 end

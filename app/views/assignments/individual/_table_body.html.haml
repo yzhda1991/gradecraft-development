@@ -55,7 +55,7 @@
       .right
         %ul.button-bar
           - if presenter.assignment.accepts_submissions?
-            - if presenter.has_viewable_submission(student_submission)
+            - if presenter.has_viewable_submission?(student_submission)
               /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
               %li= link_to glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, student_submission.id), class: "button"
 
@@ -70,7 +70,7 @@
             - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
               %li= link_to glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
             - team_param = presenter.for_team? ? {team_id: presenter.team.id} : nil
-            %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{presenter.has_viewable_submission(student_submission) ? "danger" : ""}"
+            %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{presenter.has_viewable_submission?(student_submission) ? "danger" : ""}"
 
     - if presenter.assignment.release_necessary?
       %td
