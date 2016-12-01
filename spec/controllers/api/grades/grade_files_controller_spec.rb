@@ -10,7 +10,7 @@ describe API::Grades::GradeFilesController do
     describe "POST create" do
       it "adds upload file to grade" do
         file_attachment = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
-        post :create, params: { grade_id: world.grade.id, grade_files: [file_attachment] },
+        post :create, params: { grade_id: world.grade.id, file_attachments: [file_attachment] },
           format: :json
         expect(world.grade.file_attachments.count).to eq(1)
       end
