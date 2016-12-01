@@ -2,22 +2,22 @@
   %h4 Requirement
   .assignment-or-badge
     = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", "Course"], :label => "Type", include_blank: true
-  #assignment-types-list{:style => "display: none"}
+  #assignment-types-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => current_course.assignment_types.ordered.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment} Type"
     = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => "State Achieved"
     = f.input :condition_value, :label => "Amount"
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
-  #assignments-list{:style => "display: none"}
+  #assignments-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => current_course.assignments.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
     = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read", "Passed"], :label => "State Achieved"
     = f.input :condition_value, :label => "Min Points"
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
-  #badges-list{:style => "display: none"}
+  #badges-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => current_course.badges.map { |l| [l.name, l.id] }, :include_blank => true, :label => "#{term_for :badge}"
     = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
     = f.input :condition_value, :label => "Number of Times Earned"
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
-  #courses-list{:style => "display: none"}
+  #courses-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => [["#{current_course.name}", current_course.id]], label: "Course", include_blank: false
     = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
     = f.input :condition_value, :label => "Min Points"
