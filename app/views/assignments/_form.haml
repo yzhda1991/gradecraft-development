@@ -90,14 +90,12 @@
       .form_label Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
 
     .form-item
-      .assignment_options
+      .assignment_options.form-item-with-options
         = f.label :accepts_submissions #{term_for :assignment} Submissions
-        = f.check_box :accepts_submissions
+        = f.check_box :accepts_submissions, {class: "has-conditional-options"}
         .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
 
-      %br
-
-      %ul.submit.accepts_submission_types
+      %ul.submit.accepts_submission_types.conditional-options
         %li.submit
           .checkbox
             = f.label :accepts_links, :label => "Accept Links"
@@ -111,10 +109,10 @@
             = f.label :accepts_text, :label => "Accept raw text"
             = f.check_box :accepts_text
 
-      .form-item
-        = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
-        = f.check_box :resubmissions_allowed
-        .form_label Can #{term_for :students} resubmit this #{term_for :assignment}?
+    .form-item
+      = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
+      = f.check_box :resubmissions_allowed
+      .form_label Can #{term_for :students} resubmit this #{term_for :assignment}?
 
     .form-item
       = f.label :release_necessary
@@ -150,11 +148,11 @@
   %section
     %h4 Unlocks
 
-    .locked-visibility-options
+    .locked-visibility-options.form-item-with-options
       = f.label :visible_when_locked, :label => "Visible when Locked"
-      = f.check_box :visible_when_locked
+      = f.check_box :visible_when_locked, {class: "has-conditional-options"}
 
-    %ul.locked-display.visible_elements
+    %ul.locked-display.visible_elements.conditional-options
       %li.locked-display
         .checkbox
           = f.label :show_name_when_locked, :label => "Show Name when Locked"

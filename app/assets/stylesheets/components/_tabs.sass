@@ -25,10 +25,13 @@
   padding: 0 1rem
   border-bottom: 1px solid $color-grey-6
   margin: 0 -19px
+  span
+    @media (max-width: $media-small-max)
+      display: none
 
   .ui-state-focus a 
     outline: none
-  li 
+  li
     a
       padding: 0
 
@@ -38,6 +41,8 @@
     border: 0
     font-weight: 300
     padding-bottom: 0.5rem
+    @media (max-width: $media-small-max)
+      margin: 0 0.75rem 0 0
     a
       color: $color-black
 

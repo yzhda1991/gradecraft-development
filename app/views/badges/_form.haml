@@ -43,11 +43,11 @@
   %section
     %h4 Unlocks
     .form-item
-      .locked-visibility-options
+      .locked-visibility-options.form-item-with-options
         = f.label :visible_when_locked, :label => "Visible when Locked"
-        = f.check_box :visible_when_locked
+        = f.check_box :visible_when_locked, {class: "has-conditional-options"}
 
-      %ul.locked-display.visible_elements
+      %ul.locked-display.visible_elements.conditional-options
         %li.locked-display
           .checkbox
             = f.label :show_name_when_locked, :label => "Show Name when Locked"
