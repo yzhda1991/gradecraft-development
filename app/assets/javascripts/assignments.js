@@ -1,139 +1,34 @@
-!function($) {
-  var $document = $(document), $link, selector;
+// run checkDropdown when any unlock conditions select changes
+$(document).on('change', '.conditions .assignment-or-badge select', function () {
+  checkDropdown(this);
+});
 
-  var init = function() {
-    $document = $(document);
-    $document.on('click', '.add-assignment-rubric a', addAssignmentRubric);
-    $document.on('click', '.remove-assignment-rubric', removeAssignmentRubric);
-    findExistingConditions();
-  };
+// run checkDropdown on page load to make previously selected conditions are correct
+$('.conditions .assignment-or-badge select').each(function (index, element) {
+  checkDropdown(element);
+});
 
-  var addAssignmentRubric = function(e) {
-    $link = $(this), selector = $link.attr('href');
-    $(selector).removeClass('hidden').find('input.destroy').val(false);
-    $link.closest('li').addClass('disabled');
-    e.preventDefault();
-  };
+function checkDropdown(select) {
+  var $conditions = $(select).closest('.conditions');
+  var $unlockConditionsLists = $conditions.find('.unlock-conditions-list');
+  var selectedList = $(select).find('option:selected').text();
+  var selectedListId = '#' + selectedList.toLowerCase().replace(/\s/g, '-') + 's-list';
+  var $thisSelectedList = $conditions.find(selectedListId);
 
-  var removeAssignmentRubric = function() {
-    $link = $(this), selector = $link.attr('href');
-    $(selector).addClass('hidden');
-    $link.prev('input.destroy').val(true);
-    $('.add-assignment-rubric a[href="' + selector + '"]').closest('li').removeClass('disabled');
-    return false;
-  };
+  //hide and disable all inputs in all conditions lists
+  $unlockConditionsLists.hide();
+  $unlockConditionsLists.find('select, input').attr('disabled', true);
 
-  $('.add-unlock-condition').click(function(){
-    setTimeout(function() {
-      $('.assignment-or-badge:last').change(function(){
-          checkDropdown($(this).find('select'));
-      });
-    }, 500);
-  });
+  //show the selected list and remove disabled attribute from inputs
+  $($thisSelectedList).show();
+  $($thisSelectedList).find('select, input').attr('disabled', false);
+}
 
-  function findExistingConditions() {
-    var selects = $('.conditions').find('.assignment-or-badge');
-    $.each(selects, function(i, element){
-      var select = $(element).find('select');
-      checkDropdown(select);
-      existingSelectsListener(select);
-    });
-  }
-
-  function existingSelectsListener(select) {
-    $(select).closest('.assignment-or-badge').change(function(){
-      checkDropdown($(this).find('select'));
-    });
-  }
-
-  function checkDropdown(select) {
-    var parent = $(select).closest('.conditions');
-    var assignmentSelector = parent.find('#assignments-list');
-    var assignmentTypeSelector = parent.find('#assignment-types-list');
-    var badgeSelector = parent.find('#badges-list');
-    var courseSelector = parent.find('#courses-list');
-    var val = $(select).val();
-    if(val === 'AssignmentType') {
-      assignmentSelector.hide();
-      assignmentTypeSelector.show();
-      badgeSelector.hide();
-      courseSelector.hide();
-      assignmentTypeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
-      });
-      badgeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      assignmentSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      courseSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-    } else if(val === 'Assignment') {
-      assignmentSelector.show();
-      assignmentTypeSelector.hide();
-      badgeSelector.hide();
-      courseSelector.hide();
-      assignmentSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
-      });
-      assignmentTypeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      badgeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      courseSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-    } else if(val === 'Badge') {
-      assignmentSelector.hide();
-      assignmentTypeSelector.hide();
-      badgeSelector.show();
-      courseSelector.hide();
-      badgeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
-      });
-      assignmentSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      assignmentTypeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      courseSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-    } else if(val === 'Course') {
-      assignmentSelector.hide();
-      assignmentTypeSelector.hide();
-      badgeSelector.hide();
-      badgeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      assignmentSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      assignmentTypeSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', true);
-      });
-      courseSelector.show();
-      courseSelector.find('select, input').each(function(i, input){
-        $(input).attr('disabled', false);
-      });
-    } else {
-      var allFields = [assignmentSelector, assignmentTypeSelector, badgeSelector, courseSelector];
-      assignmentSelector.hide();
-      assignmentTypeSelector.hide();
-      badgeSelector.hide();
-      courseSelector.show();
-      $.each(allFields, function(i, group){
-        group.find('select, input').each(function(i, input){
-          $(input).prop('disabled', true);
-        });
-      });
-    }
-  }
+if($('.locked-visibility-options > input').is(':checked')) {
+  $('ul > .locked-display').show();
+} else {
+  $('ul > .locked-display').hide();
+}
 
   $(init);
 }(jQuery);
