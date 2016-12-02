@@ -375,6 +375,7 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
 Robin Williams",
   },
   assignment_type: :grading,
+  assign_groups: true,
   attributes: {
     name: "Group Assignment + Standard Edit",
     open_at: 3.weeks.ago,
@@ -391,6 +392,7 @@ think they're not - because the thing they were good at at school wasn't \
 valued, or was actually stigmatized. - Sir Ken Robinson",
   },
   assignment_type: :grading,
+  assign_groups: true,
   attributes: {
     name: "Group Assignment + Submissions",
     due_at: 2.weeks.ago + 0.05,
@@ -412,6 +414,7 @@ people, To assist the nature of all things, Without daring to meddle. - Lao \
 Tzu"
   },
   assignment_type: :grading,
+  assign_groups: true,
   attributes: {
     name: "Group Assignment + Rubric Edit",
     due_at: 1.weeks.ago,
@@ -420,6 +423,22 @@ Tzu"
   },
   rubric: true
 }
+
+@assignments[:group_grade_assignment_no_groups_assigned] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :grading,
+  assign_groups: false,
+  attributes: {
+    name: "No Groups Assigned, Group Assignment",
+    open_at: 3.weeks.ago,
+    due_at: 3.weeks.ago + 0.05,
+    full_points: 10000,
+    grade_scope: "Group"
+  }
+}
+
 
 #------------------------------------------------------------------------------#
 
@@ -1010,6 +1029,7 @@ gathers knowledge faster than society gathers wisdom. ― Isaac Asimov",
 these, 'It might have been.' ― John Greenleaf Whittier",
   },
   assignment_type: :analytics,
+  assign_groups: true,
   attributes: {
     name: "Group Assignment + Analytics",
     due_at: 4.weeks.from_now,
@@ -1040,6 +1060,7 @@ a vinaigrette of confusion and conflict. ― Lemony Snicket",
 be lived forwards. ― Soren Kierkegaard",
   },
   assignment_type: :analytics,
+  assign_groups: true,
   attributes: {
     name: "Group Assignment + Hidden Analytics",
     due_at: 4.weeks.from_now,
@@ -1331,6 +1352,7 @@ Sir Ken Robinson",
     accepts_links: true,
     accepts_text: true,
   },
+  assign_groups: true,
   unlock_condition: true,
   unlock_attributes: {
     condition: :group_unlock_submission_condition,
@@ -1346,6 +1368,7 @@ you're taught a lesson and then given a test. In life, you're given a test \
 that teaches you a lesson. – Tom Bodett",
   },
   assignment_type: :unlocks,
+  assign_groups: true,
   attributes: {
     name: "Group-Assignment-Submission-Unlocks ",
     description: "All members of a Group Submitting 'Submission-Key' unlocks
