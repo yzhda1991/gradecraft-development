@@ -71,7 +71,7 @@ module Gradable
     else
       students = course.students.order_by_name
     end
-    students - (User.find(grades.graded.pluck(:student_id)) - User.find(ids_to_include))
+    students - (User.find(grades.graded_or_released.pluck(:student_id)) - User.find(ids_to_include))
   end
 
   def ungraded_students_with_submissions(ids_to_include=[], team=nil)
@@ -88,8 +88,8 @@ module Gradable
     i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
   end
 
-  def ungraded_groups()
-    # groups - groups with grades
+  def ungraded_groups
+    ungraded_students.map { |student| student.group_for_assignment(self) }.uniq
   end
 
   def next_ungraded_group(group)

@@ -6,7 +6,6 @@ describe Assignment do
   include Toolkits::Models::AssignmentsToolkit
 
   subject { build(:assignment) }
-  let(:assignment) { build :assignment }
 
   it_behaves_like "a model that needs sanitization", :description
 
@@ -795,16 +794,6 @@ describe Assignment do
     end
   end
 
-  describe "#high_score" do
-    before { subject.save }
-
-    it "returns the maximum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
-      expect(subject.high_score).to eq 8
-    end
-  end
-
   describe "#is_predicted_by_student?" do
     let(:student) { create :user }
     before { subject.save }
@@ -819,115 +808,144 @@ describe Assignment do
     end
   end
 
-  describe "#low_score" do
-    before { subject.save }
+  describe "Gradable Concern" do
+    describe "#high_score" do
+      before { subject.save }
 
-    it "returns the minimum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
-      expect(subject.low_score).to eq 5
-    end
-  end
-
-  describe "#predicted_count" do
-    it "returns the number of grades that are predicted to have a score greater than zero" do
-      predicted_earned_grades = double(:predicted_earned_grades, predicted_to_be_done: 43.times.to_a)
-      allow(subject).to receive(:predicted_earned_grades).and_return predicted_earned_grades
-      expect(subject.predicted_count).to eq 43
-    end
-  end
-
-  describe "ungraded_students" do
-    before do
-      subject.save
-      s1 = create(:student_course_membership, course: subject.course).user
-      s2 = create(:student_course_membership, course: subject.course).user
-      s3 = create(:student_course_membership, course: subject.course).user
-      subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
-    end
-
-    it "returns all students without a 'Graded' grade for the assignment" do
-     expect(subject.ungraded_students.count).to eq(2)
-    end
-  end
-
-  describe "next_ungraded_student" do
-
-    %w"Zenith Apex Middleton".each do |name|
-      let!(name.downcase.to_sym) do
-        create(:student_course_membership, course: subject.course,
-          user: create(:user,last_name: name)).user
+      it "returns the maximum raw score for a graded grade" do
+        subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
+        subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
+        expect(subject.high_score).to eq 8
       end
     end
 
-    context "when accepting submissions" do
+    describe "#low_score" do
+      before { subject.save }
+
+      it "returns the minimum raw score for a graded grade" do
+        subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
+        subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
+        expect(subject.low_score).to eq 5
+      end
+    end
+
+    describe "#predicted_count" do
+      it "returns the number of grades that are predicted to have a score greater than zero" do
+        predicted_earned_grades = double(:predicted_earned_grades, predicted_to_be_done: 43.times.to_a)
+        allow(subject).to receive(:predicted_earned_grades).and_return predicted_earned_grades
+        expect(subject.predicted_count).to eq 43
+      end
+    end
+
+    describe "ungraded_students" do
       before do
-        create :submission, assignment: subject, student: zenith
-        create :submission, assignment: subject, student: apex
+        subject.save
+        s1 = create(:student_course_membership, course: subject.course).user
+        s2 = create(:student_course_membership, course: subject.course).user
+        s3 = create(:student_course_membership, course: subject.course).user
+        subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
+        subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
       end
 
-      it "returns the next student with a submission" do
-        expect(subject.next_ungraded_student(apex).last_name).to eq("Zenith")
-      end
-
-      it "returns nil for the last student" do
-        expect(subject.next_ungraded_student(zenith)).to be_nil
-      end
-
-      it "returns nil for student without a submission" do
-        expect(subject.next_ungraded_student(middleton)).to be_nil
-      end
-
-      it "filters to team members if team present" do
-        create :submission, assignment: subject, student: middleton
-        team = create :team, course: subject.course
-        create :team_membership, team: team, student: apex
-        create :team_membership, team: team, student: zenith
-
-        expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
+      it "returns all students without a 'Graded' grade for the assignment" do
+       expect(subject.ungraded_students.count).to eq(2)
       end
     end
 
-    context "when not accepting submissions" do
-      before { subject.update accepts_submissions: false }
+    describe "next_ungraded_student" do
 
-      it "returns the next student by last name" do
-        expect(subject.next_ungraded_student(middleton).last_name).to eq("Zenith")
+      %w"Zenith Apex Middleton".each do |name|
+        let!(name.downcase.to_sym) do
+          create(:student_course_membership, course: subject.course,
+            user: create(:user,last_name: name)).user
+        end
       end
 
-      it "returns nil for the last student" do
-        expect(subject.next_ungraded_student(zenith)).to be_nil
+      context "when accepting submissions" do
+        before do
+          create :submission, assignment: subject, student: zenith
+          create :submission, assignment: subject, student: apex
+        end
+
+        it "returns the next student with a submission" do
+          expect(subject.next_ungraded_student(apex).last_name).to eq("Zenith")
+        end
+
+        it "returns nil for the last student" do
+          expect(subject.next_ungraded_student(zenith)).to be_nil
+        end
+
+        it "returns nil for student without a submission" do
+          expect(subject.next_ungraded_student(middleton)).to be_nil
+        end
+
+        it "filters to team members if team present" do
+          create :submission, assignment: subject, student: middleton
+          team = create :team, course: subject.course
+          create :team_membership, team: team, student: apex
+          create :team_membership, team: team, student: zenith
+
+          expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
+        end
       end
 
-      it "returns nil for student not in the list" do
-        expect(subject.next_ungraded_student(create(:user))).to be_nil
-      end
+      context "when not accepting submissions" do
+        before { subject.update accepts_submissions: false }
 
-      it "filters to team members if team present" do
-        team = create :team, course: subject.course
-        create :team_membership, team: team, student: apex
-        create :team_membership, team: team, student: zenith
+        it "returns the next student by last name" do
+          expect(subject.next_ungraded_student(middleton).last_name).to eq("Zenith")
+        end
 
-        expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
+        it "returns nil for the last student" do
+          expect(subject.next_ungraded_student(zenith)).to be_nil
+        end
+
+        it "returns nil for student not in the list" do
+          expect(subject.next_ungraded_student(create(:user))).to be_nil
+        end
+
+        it "filters to team members if team present" do
+          team = create :team, course: subject.course
+          create :team_membership, team: team, student: apex
+          create :team_membership, team: team, student: zenith
+
+          expect(subject.next_ungraded_student(apex, team).last_name).to eq("Zenith")
+        end
       end
     end
 
-    describe "#soon?" do
-      it "is not soon if there is no due date" do
-        subject.due_at = nil
-        expect(subject).to_not be_soon
+    describe "ungraded_groups" do
+      it "returns all ungraded groups" do
+        subject.update(grade_scope: "Group")
+        g1 = create :approved_group, course: subject.course
+        g2 = create :approved_group, course: subject.course
+        subject.groups << [g1,g2]
+        g1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
+        expect(subject.ungraded_groups).to eq([g2])
       end
+    end
 
-      it "is not soon if the due date is too far in the future" do
-        subject.due_at = 8.days.from_now
-        expect(subject).to_not be_soon
-      end
+    describe "next_ungraded_group" do
+      it "returns the next ungraded group" do
 
-      it "is soon if the due date is within 7 days from now" do
-        subject.due_at = 2.days.from_now
-        expect(subject).to be_soon
       end
+    end
+  end
+
+  describe "#soon?" do
+    it "is not soon if there is no due date" do
+      subject.due_at = nil
+      expect(subject).to_not be_soon
+    end
+
+    it "is not soon if the due date is too far in the future" do
+      subject.due_at = 8.days.from_now
+      expect(subject).to_not be_soon
+    end
+
+    it "is soon if the due date is within 7 days from now" do
+      subject.due_at = 2.days.from_now
+      expect(subject).to be_soon
     end
   end
 

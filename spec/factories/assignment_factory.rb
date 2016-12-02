@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :assignment do
     name { Faker::Lorem.word }
     association :course
-    association :assignment_type
+    assignment_type { association :assignment_type, course: course }
     description { Faker::Lorem.sentence }
     full_points { Faker::Number.number(5) }
     required false
