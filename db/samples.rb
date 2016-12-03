@@ -34,6 +34,29 @@ def add_unlock_conditions(model, config, course_config)
   end
 end
 
+def create_groups(course_name, assignment)
+  group_names = ["The Clique", "The Cabal", "The Household", "The Community",
+    "The Posse", "The Squad"].shuffle
+
+  group_members = group_names.each_with_object({}) do |name, memo|
+    memo[name] = []
+  end
+  @students.each_with_index do |student, i|
+    group_members[group_names[i%group_names.length]] << student
+  end
+
+  groups = group_names.map do |group_name|
+    assignment.course.groups.create! do |g|
+      g.name = group_name
+      g.approved = "Approved"
+      g.assignments << assignment
+      g.students << group_members[group_name]
+    end
+  end
+  @courses[course_name][:groups] = groups
+end
+
+
 # ---------------------------- Users and Courses -----------------------------#
 
 user_names = ["Ron Weasley","Fred Weasley","Harry Potter","Hermione Granger",
@@ -45,6 +68,7 @@ user_names = ["Ron Weasley","Fred Weasley","Harry Potter","Hermione Granger",
 majors = ["Engineering","American Culture","Anthropology","Asian Studies",
   "Astronomy","Cognitive Science","Creative Writing and Literature",
   "English","German","Informatics","Linguistics","Physics"]
+
 pseuydonyms = ["Bigby Wolf", "Snow White", "Beauty", "the Beast", "Trusty John",
   "Grimble", "Bufkin", "Prince Charming", "Cinderella", "Old King Cole",
   "Hobbes", "Pinocchio", "Briar Rose", "Doctor Swineheart", "Rapunzel", "Kay",
@@ -416,6 +440,14 @@ PaperTrail.whodunnit = nil
         end
         puts_success :assignment, assignment_name,
           :score_levels_created if course_name == @courses.keys[-1]
+      end
+
+      if assignment.grade_scope == "Group" && config[:assign_groups]
+        if course_config[:groups]
+          assignment.groups << course_config[:groups]
+        else
+          create_groups(course_name, assignment)
+        end
       end
 
       if config[:student_submissions]
