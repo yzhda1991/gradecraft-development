@@ -21,11 +21,6 @@ describe GradeSchemeElement do
       expect(subject).to be_invalid
     end
 
-    it "is invalid without a high range" do
-      subject.highest_points = nil
-      expect(subject).to be_invalid
-    end
-
     it "is invalid without a course" do
       subject.course = nil
       expect(subject).to be_invalid

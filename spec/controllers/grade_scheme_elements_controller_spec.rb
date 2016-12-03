@@ -63,7 +63,7 @@ describe GradeSchemeElementsController do
         params = { "grade_scheme_elements_attributes" => [{
           id: grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", lowest_points: 0,
           highest_points: 100010, course_id: course.id }, { id: GradeSchemeElement.new.id,
-          letter: "B", level: "Snail", lowest_points: 100011, highest_points: nil,
+          letter: "B", level: "Snail", lowest_points: nil, highest_points: 200000,
           course_id: course.id}], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params: params, format: :json
         expect(grade_scheme_element.reload.highest_points).to eq(100000)
