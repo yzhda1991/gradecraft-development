@@ -311,10 +311,9 @@ class User < ActiveRecord::Base
   # Powers the worker to recalculate student scores
   def cache_course_score_and_level(course_id)
     membership = course_memberships.where(course_id: course_id).first
-    unless membership.nil?
-      membership.recalculate_and_update_student_score
-      membership.check_and_update_student_earned_level
-    end
+    return unless membership.present?
+    membership.recalculate_and_update_student_score
+    membership.check_and_update_student_earned_level
   end
   
   ### SUBMISSIONS

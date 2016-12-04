@@ -74,10 +74,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           use_groups: false,
           team: true
 
-        allow(User).to receive(:students_by_team).with(course, team)
-          .and_return ["team-students"]
+        allow(User).to receive(:students_being_graded_for_course).with(course, team)
+          .and_return [student1, student2]
 
-        expect(fetch_submitters_for_csv).to eq ["team-students"]
+        expect(fetch_submitters_for_csv.pluck(:id)).to eq [student1.id, student2.id]
       end
     end
 
@@ -87,10 +87,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           use_groups: false,
           team: false
 
-        allow(User).to receive(:with_role_in_course).with("student", course)
-          .and_return ["some-students"]
+        allow(User).to receive(:students_being_graded_for_course).with(course)
+          .and_return [student1.id, student2.id]
 
-        expect(fetch_submitters_for_csv).to eq ["some-students"]
+        expect(fetch_submitters_for_csv.pluck(:id)).to eq [student1.id, student2.id]
       end
     end
   end
