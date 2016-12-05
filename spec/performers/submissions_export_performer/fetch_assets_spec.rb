@@ -77,7 +77,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         allow(User).to receive(:students_being_graded_for_course).with(course, team)
           .and_return [student1, student2]
 
-        expect(fetch_submitters_for_csv.pluck(:id)).to eq [student1.id, student2.id]
+        expect(fetch_submitters_for_csv).to eq [student1, student2]
       end
     end
 
@@ -88,9 +88,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           team: false
 
         allow(User).to receive(:students_being_graded_for_course).with(course)
-          .and_return [student1.id, student2.id]
+          .and_return [student1, student2]
 
-        expect(fetch_submitters_for_csv.pluck(:id)).to eq [student1.id, student2.id]
+        expect(fetch_submitters_for_csv).to eq [student1, student2]
       end
     end
   end
@@ -174,9 +174,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
         allow(performer.assignment)
           .to receive(:student_submissions_with_files)
-          .and_return ["other-submissions"]
+          .and_return submissions
 
-        expect(fetch_submissions).to eq ["other-submissions"]
+        expect(fetch_submissions).to eq submissions
       end
     end
   end
