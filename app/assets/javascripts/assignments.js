@@ -43,6 +43,41 @@ $('input.has-conditional-options').each(function() {
   showConditionalOptions($(this));
 });
 
+
+// add and delete buttons for unlock conditions
+var $form = $('form');
+$form.on('click', '.remove-unlock-condition', function(event) {
+  event.preventDefault();
+  removeUnlockCondition($(this));
+  showVisibilityOptions();
+});
+
+$form.on('click', '.add-unlock-condition', function(event) {
+  event.preventDefault();
+  addUnlockCondition();
+  showVisibilityOptions();
+});
+
+function removeUnlockCondition($link) {
+  $link.prev('input.destroy').val(true);
+  $link.closest('fieldset.unlock-condition').hide();
+}
+
+function addUnlockCondition() {
+  var $wrapper = $('.unlock-conditions');
+  var template = $('#unlock-condition-template').html().replace(/child_index/g, $wrapper.children('.unlock-condition').length);
+  $wrapper.append(template);
+}
+// show visibility form items only if there are unlock requirements
+function showVisibilityOptions() {
+  if ($('fieldset.unlock-condition:visible').length) {
+    $('.unlock-visibility-settings').show();
+  } else {
+    $('.unlock-visibility-settings').hide();
+  }
+}
+showVisibilityOptions();
+
 // for student rubric feedback tab panels
 $('ul.level-tabs li').click(function(){
   var criterionId = $(this).parent().parent().attr('id');

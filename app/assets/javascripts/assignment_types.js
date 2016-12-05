@@ -44,20 +44,6 @@
       return false;
     });
 
-    $form.on('click', '.add-unlock-condition', function(e) {
-      var $wrapper = $('.unlock-conditions');
-      var template = $('#unlock-condition-template').html().replace(/child_index/g, $wrapper.children('.unlock-condition').length);
-      $wrapper.append(template);
-      return false;
-    });
-
-    $form.on('click', '.remove-unlock-condition', function(e) {
-      var $link = $(this);
-      $link.prev('input.destroy').val(true);
-      $link.closest('fieldset.unlock-condition').hide();
-      return false;
-    });
-
     $form.on('click', '.add-proposal', function(e) {
       var $wrapper = $('.proposals');
       var template = $('#proposal-template').html().replace(/child_index/g, $wrapper.children('.proposal').length);
