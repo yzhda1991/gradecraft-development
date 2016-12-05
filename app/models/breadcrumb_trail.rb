@@ -497,14 +497,14 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_import
     breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Users', users_path)
-    breadcrumb('Import Users')
+    breadcrumb('#{ term_for :students }', students_path)
+    breadcrumb('Import #{ term_for :students }')
   end
 
   def users_import_results
     breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Users', users_path)
-    breadcrumb('Imported Users')
+    breadcrumb('#{ term_for :students }', students_path)
+    breadcrumb('Imported #{ term_for :students }')
   end
 
   def users_index
