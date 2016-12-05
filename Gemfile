@@ -36,7 +36,7 @@ gem 'dotenv-rails'
 
 gem 'fast_blank'
 gem 'fog'
-gem 'font-awesome-rails'
+gem 'font-awesome-rails', '~> 4.7'
 gem 'haml'
 gem 'httparty'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
