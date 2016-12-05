@@ -13,7 +13,7 @@
           %td= link_to challenge.name, challenge
           %td
             - if @team.present? && (ChallengeGradeProctor.new(challenge.challenge_grade_for_team(@team)).viewable? user: current_student)
-              = "#{ points challenge.challenge_grade_for_team(@team).try(:score) } / #{ points challenge.full_points }"
+              = "#{ points challenge.challenge_grade_for_team(@team).try(:final_points) } / #{ points challenge.full_points }"
             - else
               %span.italic= " #{ points challenge.full_points } points possible"
           %td= challenge.due_at

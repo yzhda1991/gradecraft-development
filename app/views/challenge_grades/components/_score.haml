@@ -1,0 +1,7 @@
+-# Requires: grade, assignment, assignment_type
+- if ChallengeGradeProctor.new(challenge_grade).viewable? && challenge_grade.final_points || current_user_is_staff?
+  %p
+    %b Score: 
+    = "#{ points challenge_grade.final_points } / #{ points challenge.full_points } points earned"
+- else
+  %p.italic= "#{points challenge.full_points} points possible"

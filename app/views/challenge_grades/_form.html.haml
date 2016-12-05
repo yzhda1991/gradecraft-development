@@ -22,7 +22,16 @@
     %h4 Feedback
     .textarea
       = f.text_area :feedback, class: "froala"
-
+      
+  %section
+    .right
+      %h4.text-right Points Adjustment
+      = f.input :adjustment_points
+      %br
+      = f.label :adjustment_points_feedback, "Feedback"
+      .right= f.text_area :adjustment_points_feedback
+      
+    .clear
   .submit-buttons
     %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
