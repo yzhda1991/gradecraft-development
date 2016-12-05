@@ -46,6 +46,18 @@ describe ChallengeGrade do
       expect(described_class.student_visible).to eq [graded_grade, released_grade]
     end
   end
+  
+  describe "calculation of final_points" do
+    it "is nil when score is nil" do
+      subject.update(score: nil)
+      expect(subject.final_points).to eq(nil)
+    end
+
+    it "is the sum of score and adjustment_points" do
+      subject.update(score: "1234", adjustment_points: -234)
+      expect(subject.final_points).to eq(1000)
+    end
+  end
 
   describe "#cache_team_score" do
     it "saves the team scores" do
