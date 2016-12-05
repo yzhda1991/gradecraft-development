@@ -24,7 +24,7 @@ class SubmissionsController < ApplicationController
       submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
-        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
+        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual? && SubmissionProctor.new(submission).viewable?
         redirect_to = assignment_path(assignment, anchor: "tab3")
       end
       # rubocop:disable AndOr
@@ -47,6 +47,7 @@ class SubmissionsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.find(params[:id])
+    submission_was_draft = !SubmissionProctor.new(submission).viewable?
 
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&
@@ -56,7 +57,11 @@ class SubmissionsController < ApplicationController
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
         if current_user_is_student?
-          NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
+          if submission_was_draft
+            NotificationMailer.successful_submission(submission.id).deliver_now
+          else
+            NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
+          end
           redirect_to = assignment_path(assignment, anchor: "tab3")
         end
         format.html { redirect_to redirect_to, notice: "Your changes for #{assignment.name} were successfully submitted." }

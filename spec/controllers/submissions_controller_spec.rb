@@ -132,6 +132,7 @@ describe SubmissionsController do
   end
 
   context "as a student" do
+    let(:delivery) { double(:email, deliver_now: nil) }
     let(:submission) { create(:submission, assignment: assignment, student: student) }
 
     before do
@@ -168,9 +169,20 @@ describe SubmissionsController do
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
         post :create, params: { assignment_id: assignment.id, submission: params }
       end
+
+      it "sends an email if the submission is viewable" do
+        params = attributes_for(:submission).merge(student_id: student.id)
+        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+        expect(delivery).to receive(:deliver_now)
+        expect(NotificationMailer).to \
+          receive(:successful_submission).and_return delivery
+        post :create, params: { assignment_id: assignment.id, submission: params }
+      end
     end
 
     describe "PUT update" do
+      let(:delivery) { double(:email, deliver_now: nil) }
+
       it "updates the submission successfully"  do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         params[:text_comment] = "Ausgezeichnet"
@@ -190,6 +202,25 @@ describe SubmissionsController do
       it "checks if the submission is late" do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+      end
+
+      it "sends an email if the submission was a draft" do
+        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
+        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
+        expect(delivery).to receive(:deliver_now)
+        expect(NotificationMailer).to \
+          receive(:successful_submission).and_return delivery
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+      end
+
+      it "sends an email if the assignment is individual" do
+        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
+        allow(assignment).to receive(:is_individual?).and_return true
+        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+        expect(delivery).to receive(:deliver_now)
+        expect(NotificationMailer).to \
+          receive(:updated_submission).and_return delivery
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
     end
