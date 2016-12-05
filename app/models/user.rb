@@ -17,31 +17,17 @@ class User < ActiveRecord::Base
       end
     end
 
-    def students_being_graded(course, team=nil)
-      user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
+    def students_for_course(course, team=nil)
+      user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
       query = User.where(id: user_ids)
       query = query.students_in_team(team.id, user_ids) if team
       query
     end
-
-    def students_by_team(course, team)
-      user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
-      User.where(id: user_ids).students_in_team(team.id, user_ids)
-    end
-
-    def unscoped_students_being_graded_for_course(course, team=nil)
-      query = User
-        .unscoped # override the order("last_name ASC") default scope on the User model
-        .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users,avatar_file_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-        .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-        .where("course_memberships.course_id = ?", course.id)
-        .where("course_memberships.auditing = ?", false)
-        .where("course_memberships.role = ?", "student")
-        .includes(:course_memberships)
-        .group("users.id, course_memberships.score")
-        .includes(:team_memberships)
-      query = query.joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
-          .where("team_memberships.team_id = ?", team.id) if team
+    
+    def students_being_graded_for_course(course, team=nil)
+      user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
+      query = User.where(id: user_ids)
+      query = query.students_in_team(team.id, user_ids) if team
       query
     end
 
@@ -229,8 +215,8 @@ class User < ActiveRecord::Base
   end
 
   ### SCORE
-  def cached_score_for_course(course)
-    @cached_score ||= course_memberships.where(course_id: course).first.score || 0 if
+  def score_for_course(course)
+    @score ||= course_memberships.where(course_id: course).first.score || 0 if
       course_memberships.where(course_id: course).first.present?
   end
 
@@ -283,7 +269,7 @@ class User < ActiveRecord::Base
   end
 
   def points_to_next_level(course)
-    get_element_level(course, :next).lowest_points - cached_score_for_course(course)
+    get_element_level(course, :next).lowest_points - score_for_course(course)
   end
 
   ### GRADES
@@ -324,17 +310,12 @@ class User < ActiveRecord::Base
 
   # Powers the worker to recalculate student scores
   def cache_course_score_and_level(course_id)
-    course_membership = fetch_course_membership(course_id)
-    unless course_membership.nil?
-      course_membership.recalculate_and_update_student_score
-      course_membership.check_and_update_student_earned_level
-    end
+    membership = course_memberships.where(course_id: course_id).first
+    return unless membership.present?
+    membership.recalculate_and_update_student_score
+    membership.check_and_update_student_earned_level
   end
-
-  def fetch_course_membership(course_id)
-    course_memberships.where(course_id: course_id).first
-  end
-
+  
   ### SUBMISSIONS
 
   def submission_for_assignment(assignment)
@@ -450,8 +431,7 @@ class User < ActiveRecord::Base
     assignment_type_weights.where(course: course).count > 0
   end
 
-  # Used to allow students to self-log a grade, currently only a boolean
-  # (complete or not)
+  # Used to allow students to self-log a grade
   def self_reported_done?(assignment)
     grade = grade_for_assignment(assignment)
     GradeProctor.new(grade).viewable?

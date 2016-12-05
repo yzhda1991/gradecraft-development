@@ -37,12 +37,12 @@ class GradeSchemeElement < ActiveRecord::Base
   # Figuring out how many points a student has to earn the next level
   def points_to_next_level(student, course)
     # if high points, +1
-    highest_points - student.cached_score_for_course(course) + 1
+    highest_points - student.score_for_course(course) + 1
   end
 
   # Calculating how far a student is through this level
   def progress_percent(student)
-    ((student.cached_score_for_course(course) - lowest_points) / range) * 100
+    ((student.score_for_course(course) - lowest_points) / range) * 100
   end
 
   def within_range?(score)

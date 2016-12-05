@@ -102,31 +102,7 @@ $(document).find("[data-behavior~=multi-select]").select2({
 // Initializing highcharts table data, currently used to display team charts
 $('table.highchart').highchartTable();
 
-//Toggle options menu
+//Toggle options menu on some table rows
 $(".button-options").click(function(){
     $(this).next('.options-menu').toggle();
-});
-
-//Filter content on the student index page table for instructors
-$('.button-table-action').click(function() {
-  var $tableRows = $('.student-index-table tbody tr');
-  var btnId = $(this).attr('id');
-  var lowestRank = $tableRows.last().find('td:eq(1)').text();
-
-  $(this).addClass("selected").siblings().removeClass("selected");
-  $tableRows.show();
-  $tableRows.filter(function() {
-    var rank;
-
-    if (btnId === 'btn-top10') {
-      rank = $(this).find('td:eq(1)').text();
-      return parseInt(rank) > 10;
-    } else if (btnId === 'btn-bottom10') {
-      rank = $(this).find('td:eq(1)').text();
-      return parseInt(rank) <= parseInt(lowestRank) - 10;
-    } else if (btnId === 'btn-flagged-students') {
-      var flagged = $(this).find('td:eq(0) i').hasClass('flagged');
-      return !flagged;
-    }
-  }).hide();
 });

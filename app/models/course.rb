@@ -36,15 +36,15 @@ class Course < ActiveRecord::Base
   end
 
   def students_being_graded
-    User.students_being_graded(self)
+    User.students_being_graded_for_course(self)
   end
 
   def students_being_graded_by_team(team)
-    User.students_being_graded(self,team)
+    User.students_being_graded_for_course(self,team)
   end
 
   def students_by_team(team)
-    User.students_by_team(self, team)
+    User.students_for_course(self, team)
   end
 
   with_options dependent: :destroy do |c|
@@ -125,14 +125,6 @@ class Course < ActiveRecord::Base
     badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
   end
 
-  def formatted_tagline
-    if tagline.present?
-      tagline
-    else
-      " "
-    end
-  end
-
   def formatted_short_name
     if semester.present? && year.present?
       "#{self.course_number} #{(self.semester).capitalize.first[0]}#{self.year}"
@@ -151,7 +143,7 @@ class Course < ActiveRecord::Base
   end
 
   def student_weighted?
-    total_weights.to_i > 0
+    has_multipliers?
   end
 
   def assignment_weight_open?
@@ -172,26 +164,23 @@ class Course < ActiveRecord::Base
 
   # Descriptive stats of the grades
   def minimum_course_score
-    CourseMembership.where(course: self, auditing: false,
-      role: "student").minimum("score")
+    course_memberships.where(role: "student", auditing: false).minimum("score")
   end
 
   def maximum_course_score
-    CourseMembership.where(course: self, auditing: false,
-      role: "student").maximum("score")
+    course_memberships.where(role: "student", auditing: false).maximum("score")
   end
 
   def average_course_score
-    CourseMembership.where(course: self, auditing: false,
-      role: "student").average("score").to_i
+    course_memberships.where(role: "student", auditing: false).average("score").to_i
   end
 
   def student_count
-    students.count
+    course_memberships.where(role: "student").count
   end
 
   def graded_student_count
-    students_being_graded.count
+    course_memberships.where(role: "student", auditing: false).count
   end
 
   def groups_to_review_count
@@ -210,21 +199,11 @@ class Course < ActiveRecord::Base
 
   def ordered_student_ids
     User
-      .unscoped # clear the default scope
       .joins(:course_memberships)
       .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "student")
       .select(:id) # only need the ids, please
       .order("id ASC")
       .collect(&:id)
-  end
-
-  # badges
-  def course_badge_count
-    badges.count
-  end
-
-  def awarded_course_badge_count
-    earned_badges.count
   end
 
   # box plot for instructor dashboard
@@ -233,16 +212,6 @@ class Course < ActiveRecord::Base
       role: "student").pluck("score")
     return {
       scores: scores
-    }
-  end
-
-  def earned_grade_scheme_elements_by_student_count
-    elements = []
-    grade_scheme_elements.order_by_lowest_points.each do |gse|
-      elements << [gse.name, gse.count_students_earned]
-    end
-    return {
-      elements: elements
     }
   end
 

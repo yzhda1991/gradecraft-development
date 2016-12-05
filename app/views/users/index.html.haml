@@ -38,7 +38,7 @@
               %li= link_to team.name, team
           %td
             - if user_is_student
-              = points user.cached_score_for_course(current_course) if user.respond_to?(:grades)
+              = points user.score_for_course(current_course) if user.respond_to?(:grades)
           %td
             .right
               %ul.button-bar

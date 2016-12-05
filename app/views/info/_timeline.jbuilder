@@ -1,9 +1,5 @@
 json.set! :timeline do
 
-  json.set! :headline, current_course.name
-  json.set! :type, "default"
-  json.set! :text, current_course.formatted_tagline
-
   json.set! :date do
     json.array! @events do |event|
       if event.open_at && event.due_at

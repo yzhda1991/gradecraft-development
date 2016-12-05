@@ -16,7 +16,7 @@ class Info::DashboardGradingSchemePresenter < Showtime::Presenter
   end
 
   def score_for_course
-    student.cached_score_for_course(course)
+    student.score_for_course(course)
   end
 
   def course_elements

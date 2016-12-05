@@ -24,4 +24,4 @@
               %td= student.character_profile(current_course)
             - if current_course.has_team_roles?
               %td= student.team_role
-            %td{"data-title" => "Score"}= points student.cached_score_for_course(current_course) if student.respond_to?(:grades)
+            %td{"data-title" => "Score"}= points student.score_for_course(current_course) if student.respond_to?(:grades)

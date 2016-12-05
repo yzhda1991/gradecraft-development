@@ -20,12 +20,14 @@
       %th Last Login
       %th Options
   %tbody
-    - presenter.students.each_with_index do |student, index|
+    - index = 0
+    - presenter.students.each_with_index do |student|
       %tr
         %td
           = div_for student do
             = link_to flagged_user_icon(presenter.course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
-        %td= index + 1
+          %span{ class: student.auditing? ? 'auditor' : 'graded'}
+        %td= index += 1 if !student.auditing?
         %td
           - if student.avatar_file_name.present?
             %img.img-rounded{ :src => student.avatar_file_name, :width => 30 }
