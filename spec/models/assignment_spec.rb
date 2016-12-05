@@ -925,6 +925,20 @@ describe Assignment do
       end
     end
 
+    describe "ungrade_groups_with_submissions" do
+      it "returns all ungraded groups that have submitted" do
+        subject.update(grade_scope: "Group")
+        g1 = create :approved_group, course: subject.course
+        g2 = create :approved_group, course: subject.course
+        g3 = create :approved_group, course: subject.course
+        subject.groups << [g1,g2,g3]
+        create :submission, assignment: subject, student: g1.students.first
+        create :submission, assignment: subject, student: g2.students.first
+        g2.students.each {|s| create(:released_grade, assignment: subject, student: s)}
+        expect(subject.ungraded_groups_with_submissions).to eq([g1])
+      end
+    end
+
     describe "next_ungraded_group" do
       it "returns the next ungraded group" do
 

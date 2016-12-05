@@ -92,6 +92,10 @@ module Gradable
     ungraded_students.map { |student| student.group_for_assignment(self) }.uniq
   end
 
+  def ungraded_groups_with_submissions
+    ungraded_students_with_submissions.map { |student| student.group_for_assignment(self) }.uniq
+  end
+
   def next_ungraded_group(group)
     if has_groups?
       if accepts_submissions?
