@@ -95,7 +95,7 @@
         = f.check_box :accepts_submissions, {class: "has-conditional-options"}
         .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
 
-      %ul.submit.accepts_submission_types.conditional-options
+      %ul.submit.accepts_submission_types.conditional-options.indented
         %li.submit
           .checkbox
             = f.label :accepts_links, :label => "Accept Links"
@@ -166,7 +166,7 @@
         = f.label :visible_when_locked, :label => "Visible when Locked"
         = f.check_box :visible_when_locked, {class: "has-conditional-options"}
 
-      %ul.locked-display.visible_elements.conditional-options
+      %ul.locked-display.visible_elements.conditional-options.indented
         %li.locked-display
           .checkbox
             = f.label :show_name_when_locked, :label => "Show Name when Locked"

@@ -14,13 +14,13 @@
       = f.text_field :name
 
     .form-item
-      / What's the max number of points a student may earn in this category?
-      = f.label :has_max_points, :label => "Maximum Points?"
-      = f.check_box :has_max_points, {"aria-describedby" => "txtMaxPoints"}
-      .form_label{id: "txtMaxPoints"} Is there a cap on how many points students can earn through this category?
-    
-    - if f.object.has_max_points?
-      .form-item
+      .form-item-with-options
+        / What's the max number of points a student may earn in this category?
+        = f.label :has_max_points, :label => "Maximum Points?"
+        = f.check_box :has_max_points, {"aria-describedby" => "txtMaxPoints", class: "has-conditional-options"}
+        .form_label{id: "txtMaxPoints"} Is there a cap on how many points students can earn through this category?
+      
+      .conditional-options
         / What's the max number of points a student may earn in this category?
         = f.label :max_points, :label => "Maximum Points Possible"
         = f.text_field :max_points, data: {autonumeric: true, "m-dec" => "0"}
