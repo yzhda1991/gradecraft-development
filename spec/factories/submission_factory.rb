@@ -57,6 +57,13 @@ FactoryGirl.define do
       link nil
       submission_files { create_list(:missing_submission_file, 2) }
     end
+
+    factory :draft_submission do
+      link nil
+      text_comment nil
+      text_comment_draft "Dear professor, "
+      submission_files {[]}
+      submitted_at nil
+    end
   end
 end
-

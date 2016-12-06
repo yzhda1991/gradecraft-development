@@ -206,12 +206,12 @@ describe SubmissionsController do
       end
 
       it "sends an email if the submission was a draft" do
-        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
-        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
+        empty_submission = create(:draft_submission, assignment: assignment, student: student)
+        submission_params = { course_id: course, assignment_id: assignment.id, student_id: student }
         expect(delivery).to receive(:deliver_now)
         expect(NotificationMailer).to \
           receive(:successful_submission).and_return delivery
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        post :update, params: { assignment_id: assignment.id, id: empty_submission.id, submission: submission_params }
       end
 
       it "sends an email if the assignment is individual" do

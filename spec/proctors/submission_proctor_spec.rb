@@ -5,23 +5,14 @@ describe SubmissionProctor do
   let(:submission) { double(:submission, link: nil, text_comment: nil, submission_files: []) }
 
   describe "#viewable" do
-    it "returns true when a link exists on the submission" do
-      allow(submission).to receive(:link).and_return(true)
-      expect(subject.viewable?).to eq(true)
+    it "returns true if the submission is not a draft" do
+      allow(submission).to receive(:draft?).and_return false
+      expect(subject.viewable?).to be true
     end
 
-    it "returns true when a text_comment exists on the submission" do
-      allow(submission).to receive(:text_comment).and_return(true)
-      expect(subject.viewable?).to eq(true)
-    end
-
-    it "return true when there are submission files on the submission" do
-      allow(submission).to receive(:submission_files).and_return(["file1", "file2"])
-      expect(subject.viewable?).to eq(true)
-    end
-
-    it "returns false when there are neither links, nor text comments, nor submission files" do
-      expect(subject.viewable?).to eq(false)
+    it "returns false if the submission is a draft" do
+      allow(submission).to receive(:draft?).and_return true
+      expect(subject.viewable?).to be false
     end
   end
 

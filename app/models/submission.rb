@@ -154,6 +154,10 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def draft?
+    link.blank? && text_comment.blank? && submission_files.empty? && submitted_at.nil?
+  end
+
   private
 
   def cache_associations

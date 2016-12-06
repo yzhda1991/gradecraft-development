@@ -472,4 +472,35 @@ describe Submission do
       expect(subject.base_filename).to eq "Dan Ho - Great"
     end
   end
+
+  describe "#draft?" do
+    it "returns false if it has a link" do
+      subject.link = "http://www.gradecraft.com"
+      subject.text_comment = nil
+      subject.submission_files.clear
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns false if it has a text comment" do
+      subject.link = nil
+      subject.text_comment = "Hello"
+      subject.submission_files.clear
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns false if it has a submission file" do
+      subject.save
+      subject.link = "http://www.gradecraft.com"
+      subject.text_comment = nil
+      subject.submission_files.create attributes_for(:submission_file)
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns true if there is no link, text comment, or submission files" do
+      subject.link = nil
+      subject.text_comment = nil
+      subject.submission_files.clear
+      expect(subject.draft?).to eq true
+    end
+  end
 end
