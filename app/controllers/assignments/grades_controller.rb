@@ -79,7 +79,6 @@ class Assignments::GradesController < ApplicationController
       redirect_to mass_edit_assignment_groups_grades_path and return
     end
 
-    @assignment_type = @assignment.assignment_type
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 
     if params[:team_id].present?
