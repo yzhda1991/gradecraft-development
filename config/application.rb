@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module GradeCraft
   class Application < Rails::Application
     config.time_zone = "America/Detroit"
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += %W(#{config.root}/lib #{config.root}/app/models/abilities)
 
     config.assets.precompile += %w(.svg .eot .otf .woff .ttf)
     config.filter_parameters += [:password]
