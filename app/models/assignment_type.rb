@@ -131,7 +131,7 @@ class AssignmentType < ActiveRecord::Base
   private
 
   def positive_max_points
-    if max_points < 0
+    if max_points.present? && max_points < 0
       errors.add :base, "Maximum points must be a positive number."
     end
   end
