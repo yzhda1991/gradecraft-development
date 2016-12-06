@@ -1,8 +1,6 @@
 @import "../utilities/variables"
 
 .footer
-  position: relative
-  clear: both
   padding: 3rem 2rem
   background-color: $color-grey-2
   box-sizing: border-box
@@ -10,6 +8,13 @@
   font-size: 1rem
   width: 100%
   flex-shrink: 0
+  display: flex
+  justify-content: space-between
+  @media (max-width: $media-small-max)
+    flex-direction: column-reverse
+    padding: 1rem 1rem
+    font-size: .8rem
+    text-align: center
 
   ul
     margin: 0
@@ -19,17 +24,18 @@
       display: inline
       list-style-type: none
       text-transform: uppercase
+      margin-right: 1rem
+      &:last-of-type
+        margin-right: 0
       a
         color: $color-grey-6
-
         &:hover
           color: $color-blue-4
 
     &.social
       font-size: 1.25rem
-
-    li:not(:last-of-type)
-      margin-right: 1rem
+      @media (max-width: $media-small-max)
+        margin-bottom: 0.5rem
 
   .footer-logo
     display: none
@@ -43,33 +49,13 @@
   max-width: 1500px
   margin: 0 auto
   z-index: 50
+  @media (max-width: $media-small-max)
+    padding: 1rem 1rem
 
   .footer-links
     display: none
 
   .footer-logo
     display: block
-
-@media (max-width: $media-small-max)
-  .footer
-    padding: 1rem 1rem
-    font-size: .8rem
-    text-align: center
-    position: relative
-
-    .left
-      width: 100%
-      text-align: center
-      float: none
-
-    .right
-      width: 100%
-      margin-bottom: .5rem
-      text-align: center
-      float: none
-
-  .logged-in .footer
-    padding: 1rem 1rem
-
-    .footer-logo
+    @media (max-width: $media-small-max)
       margin: 0 auto
