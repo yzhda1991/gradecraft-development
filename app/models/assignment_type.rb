@@ -13,7 +13,7 @@ class AssignmentType < ActiveRecord::Base
   # assignments will be worth for them)
   has_many :weights, class_name: "AssignmentTypeWeight", dependent: :destroy
 
-  validates_presence_of :name, :max_points
+  validates_presence_of :name
   validate :positive_max_points
 
   scope :student_weightable, -> { where(student_weightable: true) }
@@ -32,7 +32,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def is_capped?
-    max_points > 0
+    max_points.present? && max_points > 0
   end
 
   # Checking to see if the instructor has set a maximum number of grades that

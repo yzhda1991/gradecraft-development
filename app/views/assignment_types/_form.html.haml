@@ -15,9 +15,16 @@
 
     .form-item
       / What's the max number of points a student may earn in this category?
-      = f.label :max_points, :label => "Maximum Points"
-      = f.text_field :max_points, data: {autonumeric: true, "m-dec" => "0"}
-      .form_label{id: "txtMaxPoints"} Is there a cap on how many points students can earn through this category (Set to 0 if not)? If you fill this in, students will not be able to earn more than this amount.
+      = f.label :has_max_points, :label => "Maximum Points?"
+      = f.check_box :has_max_points, {"aria-describedby" => "txtMaxPoints"}
+      .form_label{id: "txtMaxPoints"} Is there a cap on how many points students can earn through this category?
+    
+    - if f.object.has_max_points?
+      .form-item
+        / What's the max number of points a student may earn in this category?
+        = f.label :max_points, :label => "Maximum Points Possible"
+        = f.text_field :max_points, data: {autonumeric: true, "m-dec" => "0"}
+        .form_label{id: "txtMaxPoints"} If you fill this in, students will not be able to earn more than this amount.
 
     .form-item
       / Do only X number of highest grades count?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206013623) do
+ActiveRecord::Schema.define(version: 20161206025103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20161206013623) do
 
   create_table "assignment_types", force: :cascade do |t|
     t.string   "name",                               null: false
-    t.integer  "max_points",         default: 0,     null: false
+    t.integer  "max_points"
     t.text     "description"
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20161206013623) do
     t.boolean  "student_weightable", default: false, null: false
     t.integer  "position",                           null: false
     t.integer  "top_grades_counted", default: 0,     null: false
-    t.boolean  "has_max_points",      default: false, null: false
+    t.boolean  "has_max_points",     default: false, null: false
   end
 
   create_table "assignments", force: :cascade do |t|
