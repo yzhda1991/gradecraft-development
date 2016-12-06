@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161120173838) do
+ActiveRecord::Schema.define(version: 20161206013623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 20161120173838) do
     t.boolean  "student_weightable", default: false, null: false
     t.integer  "position",                           null: false
     t.integer  "top_grades_counted", default: 0,     null: false
+    t.boolean  "has_max_points",      default: false, null: false
   end
 
   create_table "assignments", force: :cascade do |t|
@@ -99,7 +100,7 @@ ActiveRecord::Schema.define(version: 20161120173838) do
     t.boolean  "required",                     default: false,        null: false
     t.boolean  "accepts_submissions",          default: false,        null: false
     t.boolean  "student_logged",               default: false,        null: false
-    t.boolean  "release_necessary",            default: false,        null: false
+    t.boolean  "release_necessary",            default: true,         null: false
     t.datetime "open_at"
     t.boolean  "visible",                      default: true,         null: false
     t.boolean  "resubmissions_allowed",        default: false,        null: false
@@ -175,14 +176,16 @@ ActiveRecord::Schema.define(version: 20161120173838) do
   end
 
   create_table "challenge_grades", force: :cascade do |t|
-    t.integer  "challenge_id", null: false
+    t.integer  "challenge_id",                           null: false
     t.integer  "score"
     t.string   "status"
-    t.integer  "team_id",      null: false
+    t.integer  "team_id",                                null: false
     t.integer  "final_points"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
     t.text     "feedback"
+    t.integer  "adjustment_points",          default: 0
+    t.text     "adjustment_points_feedback"
   end
 
   create_table "challenge_score_levels", force: :cascade do |t|
