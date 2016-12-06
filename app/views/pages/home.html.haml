@@ -11,22 +11,24 @@
     %h2.center What is Gameful?
     .section-container
       .flex-container
-        .quarter.flex-item
-          = image_tag "rocket.png", :width => "125", alt: "Rocket"
-          %h3 Earn Up
-          %p Flip the frame so that everyone starts at zero and earns their way up to success as they complete course milestones.
-        .quarter.flex-item
-          = image_tag "pointer.png", :width => "125", alt: "Multi-directional sign"
-          %h3 Increased Autonomy
-          %p Students make choices about when and what type of work they want to do to demonstrate their learning.
-        .quarter.flex-item
-          = image_tag "help.png", :width => "125", alt: "Life preserver"
-          %h3 Freedom to Fail
-          %p Design learning opportunities for students to take risks and explore without the fear that their grade will suffer.
-        .quarter.flex-item
-          = image_tag "graph.png", :width => "125", alt: "Upward trending graph"
-          %h3 Tangible Progress
-          %p Students can see their progress at any time. Levels, unlocks, and badges provide feedback and support motivation to keep working.
+        .flex-row
+          .quarter.flex-item
+            = image_tag "rocket.png", :width => "125", alt: "Rocket"
+            %h3 Earn Up
+            %p Flip the frame so that everyone starts at zero and earns their way up to success as they complete course milestones.
+          .quarter.flex-item
+            = image_tag "pointer.png", :width => "125", alt: "Multi-directional sign"
+            %h3 Increased Autonomy
+            %p Students make choices about when and what type of work they want to do to demonstrate their learning.
+        .flex-row
+          .quarter.flex-item
+            = image_tag "help.png", :width => "125", alt: "Life preserver"
+            %h3 Freedom to Fail
+            %p Design learning opportunities for students to take risks and explore without the fear that their grade will suffer.
+          .quarter.flex-item
+            = image_tag "graph.png", :width => "125", alt: "Upward trending graph"
+            %h3 Tangible Progress
+            %p Students can see their progress at any time. Levels, unlocks, and badges provide feedback and support motivation to keep working.
 
 
   .feature-section.alternate-white.feature-overview
@@ -71,44 +73,46 @@
             .feature-information
               %h3 Leaderboards
               %p Students can choose to participate in anonymous, team-based leaderboards if they enjoy competition, and opt-out if they don't. Instructors control if leaderboards appear at all.
-      .center
+      .center.button-container
         = link_to "See More Features", features_path, class: "outline-button"
 
   .feature-section.white.gameful.pedagogy
     %h2.center Learn More About Gameful Pedagogy
     .section-container
       .flex-container
-        .quarter.flex-item
-          .homepage-circle.what-is-gameful
-            = image_tag "book.png", :width => "75"
-          %h3 What is Gameful?
-          %p Learn more about the core elements of gameful learning
-          = link_to "http://gamefulpedagogy.com/what-is-gameful", target: "_blank" do
-            Read more
-            = glyph("long-arrow-right")
-        .quarter.flex-item
-          .homepage-circle.getting-started
-            = image_tag "getting-started.png", :width => "100"
-          %h3 Getting Started
-          %p Learn how to implement gameful design in your course
-          = link_to "http://gamefulpedagogy.com/getting-started", target: "_blank" do
-            Get Started
-            = glyph("long-arrow-right")
-        .quarter.flex-item
-          .homepage-circle.faq
-            = image_tag "faq.png", :width => "100"
-          %h3 FAQs
-          %p Frequently asked questions about gameful pedagogy
-          = link_to "http://gamefulpedagogy.com/faqs", target: "_blank" do
-            Find your question
-            = glyph("long-arrow-right")
-        .quarter.flex-item
-          .homepage-circle.example-syllabi
-            = image_tag "example-syllabi.png", :width => "100"
-          %h3 Example Syllabi
-          %p Example syllabi from courses using gameful pedagogy
-          = link_to "http://gamefulpedagogy.com/example-syllabi", target: "_blank" do
-            View examples
-            = glyph("long-arrow-right")
+        .flex-row
+          .quarter.flex-item
+            .homepage-circle.what-is-gameful
+              = image_tag "book.png", width: "75", alt: "Guide to Gameful book"
+            %h3 What is Gameful?
+            %p Learn more about the core elements of gameful learning
+            = link_to "http://gamefulpedagogy.com/what-is-gameful", target: "_blank" do
+              Read more
+              = glyph("long-arrow-right")
+          .quarter.flex-item
+            .homepage-circle.getting-started
+              = image_tag "getting-started.png", width: "100", alt: "Cogs"
+            %h3 Getting Started
+            %p Learn how to implement gameful design in your course
+            = link_to "http://gamefulpedagogy.com/getting-started", target: "_blank" do
+              Get Started
+              = glyph("long-arrow-right")
+        .flex-row
+          .quarter.flex-item
+            .homepage-circle.faq
+              = image_tag "faq.png", width: "100", alt: "Question bubble"
+            %h3 FAQs
+            %p Frequently asked questions about gameful pedagogy
+            = link_to "http://gamefulpedagogy.com/faqs", target: "_blank" do
+              Find your question
+              = glyph("long-arrow-right")
+          .quarter.flex-item
+            .homepage-circle.example-syllabi
+              = image_tag "example-syllabi.png", width: "100", alt: "Documents"
+            %h3 Example Syllabi
+            %p Example syllabi from courses using gameful pedagogy
+            = link_to "http://gamefulpedagogy.com/example-syllabi", target: "_blank" do
+              View examples
+              = glyph("long-arrow-right")
 
 = render partial: "pages/newsletter_signup"
