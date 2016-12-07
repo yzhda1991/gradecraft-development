@@ -39,21 +39,21 @@ describe Gradebook do
     end
   end
 
-  describe "#grades" do
+  describe "#existing_grades" do
     let(:student1) { create :user }
     let(:student2) { create :user }
     subject { described_class.new(assignment, student1, student2) }
 
-    it "returns all the grades for the assignment and students" do
+    it "returns all the exising grades for the assignment and students" do
       grade = create :grade, assignment: assignment, student: student2
 
-      expect(subject.grades).to eq [grade]
+      expect(subject.existing_grades).to eq [grade]
     end
 
-    it "only includes grades for the specified assignment" do
+    it "only includes existing grades for the specified assignment" do
       grade = create :grade, student: student2
 
-      expect(subject.grades).to be_empty
+      expect(subject.existing_grades).to be_empty
     end
   end
 

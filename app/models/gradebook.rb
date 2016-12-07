@@ -7,10 +7,10 @@ class Gradebook
   end
 
   def grade(student)
-    grades.find { |g| g.assignment_id = assignment.id && g.student_id == student.id }
+    existing_grades.find { |g| g.assignment_id = assignment.id && g.student_id == student.id }
   end
 
-  def grades
-    @grades ||= Grade.where(assignment_id: assignment.id, student_id: students.map(&:id))
+  def existing_grades
+    @existing_grades ||= Grade.where(assignment_id: assignment.id, student_id: students.map(&:id))
   end
 end
