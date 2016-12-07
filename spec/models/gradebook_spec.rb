@@ -57,6 +57,35 @@ describe Gradebook do
     end
   end
 
+  describe "#grades" do
+    let(:student1) { create :user, first_name: "John", last_name: "Doe" }
+    let(:student2) { create :user, first_name: "Jane", last_name: "Doe" }
+    subject { described_class.new(assignment, student1, student2) }
+
+    it "includes the existing grades" do
+      grade1 = create :grade, assignment: assignment, student: student1
+      grade2 = create :grade, assignment: assignment, student: student2
+
+      expect(subject.grades.count).to eq 2
+      expect(subject.grades).to include grade1
+      expect(subject.grades).to include grade2
+    end
+
+    it "adds any missing grades" do
+      grade = create :grade, assignment: assignment, student: student1
+
+      expect(subject.grades.count).to eq 2
+      expect(subject.grades).to include grade
+      expect(subject.grades.select(&:new_record?).count).to eq 1
+    end
+
+    it "sorts the grades by student names" do
+      grade = create :grade, assignment: assignment, student: student1
+
+      expect(subject.grades.map(&:student)).to eq [student2, student1]
+    end
+  end
+
   describe "#grade" do
     let(:student1) { create :user }
     let(:student2) { create :user }
