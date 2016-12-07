@@ -57,11 +57,7 @@ class SubmissionsController < ApplicationController
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
         if current_user_is_student?
-          if submission_was_draft
-            NotificationMailer.successful_submission(submission.id).deliver_now
-          else
-            NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
-          end
+          send_notification(submission.id, submission_was_draft) if assignment.is_individual?
           redirect_to = assignment_path(assignment, anchor: "tab3")
         end
         format.html { redirect_to redirect_to, notice: "Your changes for #{assignment.name} were successfully submitted." }
@@ -87,6 +83,14 @@ class SubmissionsController < ApplicationController
   end
 
   private
+
+  def send_notification(submission_id, submission_was_draft)
+    if submission_was_draft
+      NotificationMailer.successful_submission(submission_id).deliver_now
+    else
+      NotificationMailer.updated_submission(submission_id).deliver_now
+    end
+  end
 
   def presenter_attrs_with_id
     base_presenter_attrs.merge id: params[:id]

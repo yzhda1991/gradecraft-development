@@ -205,23 +205,36 @@ describe SubmissionsController do
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
 
-      it "sends an email if the submission was a draft" do
-        empty_submission = create(:draft_submission, assignment: assignment, student: student)
-        submission_params = { course_id: course, assignment_id: assignment.id, student_id: student }
-        expect(delivery).to receive(:deliver_now)
-        expect(NotificationMailer).to \
-          receive(:successful_submission).and_return delivery
-        post :update, params: { assignment_id: assignment.id, id: empty_submission.id, submission: submission_params }
+      context "with an individual assignment" do
+        it "sends a successful email if the submission was a draft" do
+          empty_submission = create(:draft_submission, assignment: assignment, student: student)
+          submission_params = { course_id: course, assignment_id: assignment.id, student_id: student }
+          expect(delivery).to receive(:deliver_now)
+          expect(NotificationMailer).to \
+            receive(:successful_submission).and_return delivery
+          post :update, params: { assignment_id: assignment.id, id: empty_submission.id, submission: submission_params }
+        end
+
+        it "sends an updated email if submission was not a draft" do
+          params = attributes_for(:submission).merge({ assignment_id: assignment.id })
+          allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+          expect(delivery).to receive(:deliver_now)
+          expect(NotificationMailer).to \
+            receive(:updated_submission).and_return delivery
+          post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        end
       end
 
-      it "sends an email if the assignment is individual" do
-        params = attributes_for(:submission).merge({ assignment_id: assignment.id })
-        allow(assignment).to receive(:is_individual?).and_return true
-        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
-        expect(delivery).to receive(:deliver_now)
-        expect(NotificationMailer).to \
-          receive(:updated_submission).and_return delivery
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+      context "with a group assignment" do
+        let(:group_assignment) { create(:group_assignment, course: course) }
+        let(:group_submission) { create(:submission, assignment: group_assignment) }
+
+        it "does not send any emails" do
+          params = attributes_for(:submission).merge({ assignment_id: group_assignment.id })
+          allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+          expect(NotificationMailer).to_not receive(:updated_submission)
+          post :update, params: { assignment_id: group_assignment.id, id: group_submission, submission: params }
+        end
       end
     end
 
