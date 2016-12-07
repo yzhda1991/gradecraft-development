@@ -145,6 +145,21 @@ describe Submission do
     end
   end
 
+  describe "#submitted_this_week" do
+    let(:assignment_type) { create(:assignment_type) }
+    let(:assignment) { create(:group_assignment, assignment_type: assignment_type) }
+    let(:another_assignment) { create(:group_assignment, assignment_type: assignment_type) }
+    let(:student) { create(:student_course_membership, course: assignment.course).user }
+    let!(:submission) { create(:submission, assignment: assignment, student: student) }
+    let!(:another_submission) { create(:draft_submission, assignment: another_assignment, student: student) }
+
+    it "returns non-draft submissions for the past week" do
+      result = Submission.submitted_this_week(assignment_type)
+      expect(result.count).to eq 1
+      expect(result).to eq [submission]
+    end
+  end
+
   describe "#graded_at" do
     it "returns when the grade was graded if it was graded" do
       subject.save

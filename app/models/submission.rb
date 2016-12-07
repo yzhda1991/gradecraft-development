@@ -59,6 +59,10 @@ class Submission < ActiveRecord::Base
   clean_html :text_comment
   multiple_files :submission_files
 
+  def self.submitted_this_week(assignment_type)
+    assignment_type.submissions.where("submissions.updated_at > ? ", 7.days.ago).reject(&:draft?)
+  end
+
   def graded_at
     grade.graded_at if graded?
   end

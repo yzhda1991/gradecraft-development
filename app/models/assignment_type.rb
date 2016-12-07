@@ -17,7 +17,7 @@ class AssignmentType < ActiveRecord::Base
   validate :positive_max_points
 
   scope :student_weightable, -> { where(student_weightable: true) }
-  scope :submitted_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }
+  scope :with_submissions_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }
 
   scope :ordered, -> { order("position ASC") }
 
@@ -115,11 +115,6 @@ class AssignmentType < ActiveRecord::Base
       return max_points if (max_points > 0) && (score > max_points)
       score
     end
-  end
-
-  # Counting how many submissions have happened this week - used for instructor dashboard
-  def submissions_this_week_count
-    submissions.where("submissions.updated_at > ? ", 7.days.ago).count
   end
 
   def max_points_for_student(student)
