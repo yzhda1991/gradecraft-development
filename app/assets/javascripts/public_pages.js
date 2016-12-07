@@ -9,3 +9,14 @@ $('.button-features-toggle').click(function() {
   clickedSection.show().attr('aria-hidden', 'false');
   clickedSection.siblings().hide().attr('aria-hidden', 'true');
 });
+
+//toggle password forgot form on login page
+$('#forgot-password').click(function() {
+  $('.password-forgot-form').show().attr('aria-hidden', 'false');
+  $('.login-form').hide().attr('aria-hidden', 'true');
+});
+
+$('#show-login-form').click(function() {
+  $('.login-form').show().attr('aria-hidden', 'false');
+  $('.password-forgot-form').hide().attr('aria-hidden', 'true');
+});
