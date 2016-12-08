@@ -3,15 +3,15 @@ class SubmissionProctor
     @submission = submission
   end
 
-  # Viewable if the submission is not an autosaved draft
-  # A submission is considered a draft if it has no link, text_comment,
-  # or submission_files
-  def viewable?
+  # If the user is not considered staff, the submission should be viewable
+  # Otherwise, it should only be visible if it is not a draft
+  def viewable?(user)
+    return true if user.is_student?(@submission.course)
     !@submission.draft?
   end
 
-  def viewable_submission
-    return nil unless viewable?
+  def viewable_submission(user)
+    return nil unless viewable?(user)
     @submission
   end
 end
