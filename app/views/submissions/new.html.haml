@@ -3,6 +3,6 @@
 
   - if presenter.assignment.accepts_submissions?
     - if current_user_is_student?
-      = render partial: "form", locals: { presenter: presenter }
-    - else
       = render partial: "autosave_form", locals: { presenter: presenter }
+    - else
+      = render partial: "form", locals: { presenter: presenter }
