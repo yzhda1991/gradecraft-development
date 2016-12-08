@@ -4,9 +4,6 @@
   submission = {}
   saveTimeout = null
 
-  setSubmission = (newSubmission) ->
-    angular.copy(newSubmission, submission)
-
   # Custom debounce method for autosaving submissions
   # Pass true for immediate to manually trigger save
   queueDraftSubmissionSave = (assignmentId, immediate = false) ->
@@ -29,7 +26,7 @@
   getDraftSubmission = (assignmentId) ->
     $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
-        setSubmission(response.data.submission)
+        angular.copy(response.data.submission, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -38,7 +35,7 @@
   createDraftSubmission = (assignmentId) ->
     $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
       (response) ->
-        setSubmission(response.data.submission)
+        angular.copy(response.data.submission, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -47,7 +44,7 @@
   updateDraftSubmission = (assignmentId) ->
     $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
       (response) ->
-        setSubmission(response.data.submission)
+        angular.copy(response.data.submission, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -55,7 +52,6 @@
 
   return {
     submission: submission
-    setSubmission: setSubmission
     getDraftSubmission: getDraftSubmission
     queueDraftSubmissionSave: queueDraftSubmissionSave
   }
