@@ -13,7 +13,7 @@
       - @group.proposals.last do |prop|
         = prop.title
 
-  - if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?
+  - if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
     %hr.dotted
 
     %section

@@ -1,6 +1,6 @@
 - if assignment.is_individual?
   - student_submission = Submission.for_assignment_and_student(assignment.id, current_student.id).first
-  - if student_submission.present? && SubmissionProctor.new(student_submission).viewable?
+  - if student_submission.present? && SubmissionProctor.new(student_submission).viewable?(current_user)
     - if current_user_is_student?
       = link_to glyph("file-o") + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button"
     - else

@@ -170,9 +170,8 @@ describe SubmissionsController do
         post :create, params: { assignment_id: assignment.id, submission: params }
       end
 
-      it "sends an email if the submission is viewable" do
+      it "sends an email if the assigment is individual" do
         params = attributes_for(:submission).merge(student_id: student.id)
-        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
         expect(delivery).to receive(:deliver_now)
         expect(NotificationMailer).to \
           receive(:successful_submission).and_return delivery

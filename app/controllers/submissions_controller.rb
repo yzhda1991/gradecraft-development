@@ -24,7 +24,7 @@ class SubmissionsController < ApplicationController
       submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
-        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual? && SubmissionProctor.new(submission).viewable?
+        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
         redirect_to = assignment_path(assignment, anchor: "tab3")
       end
       # rubocop:disable AndOr
