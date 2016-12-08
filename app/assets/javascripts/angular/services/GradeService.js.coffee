@@ -1,14 +1,14 @@
 @gradecraft.factory 'GradeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   grade = {}
-  fileAttachments = []
+  fileUploads = []
   gradeStatusOptions = []
 
   getGrade = (assignmentId, recipientType, recipientId)->
     if recipientType == "student"
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').success((response)->
         angular.copy(response.data.attributes, grade)
-        GradeCraftAPI.loadFromIncluded(fileAttachments,"file_attachments", response)
+        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response)
         angular.copy(response.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = response.meta.threshold_points
       )
@@ -47,33 +47,33 @@
       console.log(err)
     )
 
-  postGradeFiles = (files)->
+  postAttachments = (files)->
     fd = new FormData();
     angular.forEach(files, (file, index)->
-      fd.append("file_attachments[]", file)
+      fd.append("file_uploads[]", file)
     )
 
     $http.post(
-      "/api/grades/#{grade.id}/grade_files",
+      "/api/grades/#{grade.id}/attachments",
       fd,
       transformRequest: angular.identity,
       headers: { 'Content-Type': undefined }
     ).then(
       (response)-> # success
         if response.status == 201
-          GradeCraftAPI.addItems(fileAttachments, "file_attachments", response.data)
+          GradeCraftAPI.addItems(fileUploads, "file_uploads", response.data)
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
     )
 
-  deleteGradeFile = (file)->
+  deleteAttachment = (file)->
     file.deleting = true
-    $http.delete("/api/grades/#{file.grade_id}/grade_files/#{file.id}").then(
+    $http.delete("/api/grades/#{file.grade_id}/attachments/#{file.id}").then(
       (response)-> # success
         if response.status == 200
-          GradeCraftAPI.deleteItem(fileAttachments, file)
+          GradeCraftAPI.deleteItem(fileUploads, file)
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
@@ -83,7 +83,7 @@
 
   return {
     grade: grade,
-    fileAttachments: fileAttachments,
+    fileUploads: fileUploads,
     gradeStatusOptions: gradeStatusOptions,
 
     toggleCustomValue: toggleCustomValue,
@@ -94,7 +94,7 @@
 
     getGrade: getGrade,
     updateGrade: updateGrade,
-    postGradeFiles: postGradeFiles,
-    deleteGradeFile: deleteGradeFile
+    postAttachments: postAttachments,
+    deleteAttachment: deleteAttachment
   }
 ]

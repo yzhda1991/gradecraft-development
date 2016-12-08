@@ -1,4 +1,4 @@
-class GradeFile < ActiveRecord::Base
+class Attachment < ActiveRecord::Base
   belongs_to :grade
-  belongs_to :file_attachment
+  belongs_to :file_upload
 end

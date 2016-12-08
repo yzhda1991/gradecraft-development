@@ -1,12 +1,12 @@
 # This class currently handles grade files, it should be expanded to handle
 # submission files and badge files to reduce the number of models needed
-# to handle associated files. It is named FileAttachment since "File" is
+# to handle associated files. It is named FileUpload since "File" is
 # already a ruby class.
 
-class FileAttachment < ActiveRecord::Base
+class FileUpload < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  belongs_to :grade, inverse_of: :file_attachments
+  belongs_to :grade, inverse_of: :file_uploads
 
   validates :filename, presence: true, length: { maximum: 50 }
 
@@ -22,6 +22,6 @@ class FileAttachment < ActiveRecord::Base
   end
 
   def klass_name
-    "grade_files"
+    "attachments"
   end
 end

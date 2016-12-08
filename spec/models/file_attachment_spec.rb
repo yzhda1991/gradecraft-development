@@ -1,13 +1,13 @@
 require "active_record_spec_helper"
 require_relative "../toolkits/models/shared/files"
 
-describe FileAttachment do
-  subject { grade.file_attachments.new image_file_attrs }
+describe FileUpload do
+  subject { grade.file_uploads.new image_file_attrs }
 
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { build(:grade, course: course, assignment: assignment) }
-  let(:new_grade_file) { grade.file_attachments.new image_file_attrs }
+  let(:new_attachment) { grade.file_uploads.new image_file_attrs }
 
   extend Toolkits::Models::Shared::Files
   define_context # pull in attrs for image and text files
@@ -31,24 +31,24 @@ describe FileAttachment do
 
     it "is deleted when the parent submission is destroyed" do
       subject.grade.save!
-      expect {grade.destroy}.to change(FileAttachment, :count).by(-1)
+      expect {grade.destroy}.to change(FileUpload, :count).by(-1)
     end
   end
 
   describe "uploading multiple files" do
     it "accepts multiple files" do
-      grade.file_attachments.new text_file_attrs
+      grade.file_uploads.new text_file_attrs
       subject.grade.save!
-      expect(grade.file_attachments.count).to equal 2
+      expect(grade.file_uploads.count).to equal 2
     end
   end
 
   describe "formatting name of mounted file" do
-    subject { new_grade_file.read_attribute(:file) }
-    let(:save_grade) { new_grade_file.grade.save! }
+    subject { new_attachment.read_attribute(:file) }
+    let(:save_grade) { new_attachment.grade.save! }
 
     it "accepts text files as well as images" do
-      new_grade_file.file = fixture_file("test_file.txt", "txt")
+      new_attachment.file = fixture_file("test_file.txt", "txt")
       save_grade
       expect expect(subject).to match(/\d+_test_file\.txt/)
     end
@@ -59,15 +59,15 @@ describe FileAttachment do
     end
 
     it "shortens and removes non-word characters from file names on save" do
-      new_grade_file.file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
+      new_attachment.file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
       save_grade
       expect(subject).to match(/\d+_too_long__strange_characters__and_spaces_\.jpg/)
     end
   end
 
   describe "url" do
-    subject { new_grade_file.url }
-    before { allow(new_grade_file).to receive_message_chain(:s3_object, :presigned_url) { "http://some.url" }}
+    subject { new_attachment.url }
+    before { allow(new_attachment).to receive_message_chain(:s3_object, :presigned_url) { "http://some.url" }}
 
     it "returns the presigned amazon url" do
       expect(subject).to eq("http://some.url")
@@ -87,14 +87,14 @@ describe FileAttachment do
   end
 
   describe "S3Manager::Carrierwave inclusion" do
-    let(:file_attachment) { build(:file_attachment) }
+    let(:file_upload) { build(:file_upload) }
 
     it "can be deleted from s3" do
-      expect(file_attachment.respond_to?(:delete_from_s3)).to be_truthy
+      expect(file_upload.respond_to?(:delete_from_s3)).to be_truthy
     end
 
     it "can check whether it exists on s3" do
-      expect(file_attachment.respond_to?(:exists_on_s3?)).to be_truthy
+      expect(file_upload.respond_to?(:exists_on_s3?)).to be_truthy
     end
   end
 end

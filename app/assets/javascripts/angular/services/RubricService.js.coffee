@@ -11,17 +11,17 @@
 
   # delegations to the GradeService:
   grade = GradeService.grade
-  fileAttachments = GradeService.fileAttachments
+  fileUploads = GradeService.fileUploads
   gradeStatusOptions =  GradeService.gradeStatusOptions
 
   getGrade = (assignment, recipientType, recipientId)->
     GradeService.getGrade(assignment, recipientType, recipientId)
   updateGrade = ()->
     GradeService.updateGrade()
-  postGradeFiles = (files)->
-    GradeService.postGradeFiles(files)
-  deleteGradeFile = (file)->
-    GradeService.deleteGradeFile(file)
+  postAttachments = (files)->
+    GradeService.postAttachments(files)
+  deleteAttachment = (file)->
+    GradeService.deleteAttachment(file)
 
   criteria = []
 
@@ -106,9 +106,9 @@
       getGrade: getGrade,
       updateGrade: updateGrade,
       grade: grade,
-      fileAttachments: fileAttachments,
-      postGradeFiles: postGradeFiles,
-      deleteGradeFile: deleteGradeFile,
+      fileUploads: fileUploads,
+      postAttachments: postAttachments,
+      deleteAttachment: deleteAttachment,
       gradeStatusOptions: gradeStatusOptions,
 
       badgesAvailable: badgesAvailable,
