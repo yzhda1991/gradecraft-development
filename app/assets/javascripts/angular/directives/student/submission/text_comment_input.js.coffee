@@ -5,8 +5,8 @@
     vm = this
     vm.loading = true
     vm.submission = StudentSubmissionService.submission
-    vm.queueDraftSubmissionSave = () ->
-      StudentSubmissionService.queueDraftSubmissionSave(vm.assignmentId)
+    vm.queueSaveDraftSubmission = () ->
+      StudentSubmissionService.queueSaveDraftSubmission(vm.assignmentId)
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
       vm.loading = false
