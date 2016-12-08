@@ -3,10 +3,9 @@
   TextCommentInputCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
+    vm.submission = StudentSubmissionService.submission
     vm.queueDraftSubmissionSave = () ->
       StudentSubmissionService.queueDraftSubmissionSave(vm.assignmentId)
-
-    $scope.submission = StudentSubmissionService.getSubmission()
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
       vm.loading = false

@@ -2,7 +2,7 @@
 
   StudentSubmissionFormCtrl = [() ->
     vm = this
-    vm.submission = StudentSubmissionService.getSubmission()
+    vm.submission = StudentSubmissionService.submission
   ]
 
   {

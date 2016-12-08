@@ -1,7 +1,7 @@
 @gradecraft.directive 'hiddenFormMethod', ['StudentSubmissionService', (StudentSubmissionService) ->
   HiddenFormMethodCtrl = ['$scope', ($scope) ->
     vm = this
-    vm.submission = StudentSubmissionService.getSubmission()
+    vm.submission = StudentSubmissionService.submission
     vm.formMethod = null
 
     $scope.$watch(() ->
