@@ -5,7 +5,6 @@ class Assignments::GradesController < ApplicationController
   before_action :ensure_student?, only: :self_log
   before_action :save_referer, only: :edit_status
   before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
-  before_action :find_grades_for_assignment, only: [:mass_edit, :delete_all]
 
   # GET /assignments/:assignment_id/grades/edit_status
   # For changing the status of a group of grades passed in grade_ids
@@ -72,25 +71,23 @@ class Assignments::GradesController < ApplicationController
       })
   end
 
-  # GET /assignments/:assignment_id/grades/export/mass_edit
+  # GET /assignments/:assignment_id/grades/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
     if @assignment.has_groups?
       redirect_to mass_edit_assignment_groups_grades_path and return
     end
 
-    @assignment_type = @assignment.assignment_type
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team).order_by_name
+      students = current_course.students_being_graded_by_team(@team).order_by_name
     else
-      @students = current_course.students_being_graded.order_by_name
+      students = current_course.students_being_graded.order_by_name
     end
 
-    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
-    @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
+    @grades = Gradebook.new(@assignment, students).grades
   end
 
   # PUT /assignments/:assignment_id/grades/mass_update
@@ -117,7 +114,14 @@ class Assignments::GradesController < ApplicationController
   # DELETE /assignments/:assignment_id/grades/delete_all
   # Delete grades for a given assignment id
   def delete_all
-    @grades.each do |grade|
+    if params[:team_id].present?
+      team = current_course.teams.find_by(id: params[:team_id])
+      students = current_course.students_being_graded_by_team(team).order_by_name
+    else
+      students = current_course.students_being_graded.order_by_name
+    end
+
+    Gradebook.new(@assignment, students).existing_grades.each do |grade|
       grade.destroy
       ScoreRecalculatorJob.new(user_id: grade.student_id, course_id: current_course.id).enqueue
     end
@@ -182,15 +186,5 @@ class Assignments::GradesController < ApplicationController
 
   def find_assignment
     @assignment = current_course.assignments.find(params[:assignment_id])
-  end
-
-  def find_grades_for_assignment
-    if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team).order_by_name
-    else
-      @students = current_course.students_being_graded.order_by_name
-    end
-    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
   end
 end

@@ -79,19 +79,19 @@ describe Assignments::GradesController do
       it "assigns params" do
         get :mass_edit, params: { assignment_id: assignment.id }
         expect(assigns(:assignment)).to eq(assignment)
-        expect(assigns(:assignment_type)).to eq(assignment.assignment_type)
         expect(assigns(:assignment_score_levels)).to eq(assignment.assignment_score_levels)
         expect(assigns(:grades)).to eq([grade])
-        expect(assigns(:students)).to eq([student])
         expect(response).to render_template(:mass_edit)
       end
 
-      it "creates missing grades and orders grades by student name" do
-        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron")
-        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron")
-        [student_2,student_3].each {|s| s.courses << course }
-        expect { get :mass_edit, params: { assignment_id: assignment.id }}.to \
-          change { Grade.count }.by(2)
+      it "orders grades by student name" do
+        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron", courses: [course])
+        create :grade, assignment: assignment, student: student_2
+        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron", courses: [course])
+        create :grade, assignment: assignment, student: student_3
+
+        get :mass_edit, params: { assignment_id: assignment.id }
+
         expect(assigns(:grades)[1].student).to eq(student_2)
         expect(assigns(:grades)[2].student).to eq(student_3)
       end
@@ -100,8 +100,9 @@ describe Assignments::GradesController do
         it "assigns params" do
           team = create(:team, course: course)
           team.students << student
+
           get :mass_edit, params: { assignment_id: assignment.id, team_id: team.id }
-          expect(assigns(:students)).to eq([student])
+
           expect(assigns(:team)).to eq(team)
         end
       end
