@@ -3,42 +3,41 @@ class API::Assignments::SubmissionsController < ApplicationController
 
   def show
     assignment = Assignment.find(params[:assignment_id])
-    submission = nil
+    @submission = nil
 
     if assignment.is_individual?
-      submission = Submission.for_assignment_and_student(assignment.id, current_user.id).first
+      @submission = Submission.for_assignment_and_student(assignment.id, current_user.id).first
     else
-      submission = Submission.for_assignment_and_group(assignment.id, current_student.group_for_assignment(assignment).id).first
+      @submission = Submission.for_assignment_and_group(assignment.id, current_student.group_for_assignment(assignment).id).first
     end
 
-    if submission.present?
-      render json: { submission: submission, message: "Found an existing submission draft" }, status: 200
+    if @submission.present?
+      render "api/assignments/submissions/submission", status: 200
     else
-      render json: { submission: Submission.new(assignment_id: params[:assignment_id]),
-        message: "No existing submission draft was found" }, status: 404
+      render json: { message: "Submission not found" }, status: 404
     end
   end
 
   def create
     assignment = Assignment.find(params[:assignment_id])
-    submission = assignment.submissions.new merged_submission_params(assignment)
+    @submission = assignment.submissions.new merged_submission_params(assignment)
 
-    if submission.save
-      render json: { submission: submission, message: "Successfully created a submission draft" }, status: 201
+    if @submission.save
+      render "api/assignments/submissions/submission", status: 201
     else
-      render json: { message: "Failed to create submission" }, status: 500
+      render "api/assignments/submissions/errors", status: 500
     end
   end
 
   def update
     assignment = Assignment.find(params[:assignment_id])
-    submission = assignment.submissions.find_by_id(params[:id])
+    @submission = assignment.submissions.find_by_id(params[:id])
 
-    if submission.present?
-      if submission.update_attributes submission_params
-        render json: { submission: submission, message: "Successfully updated a submission draft" }, status: 200
+    if @submission.present?
+      if @submission.update_attributes submission_params
+        render "api/assignments/submissions/submission", status: 200
       else
-        render json: { message: "Failed to update submission" }, status: 500
+        render "api/assignments/submissions/errors", status: 500
       end
     else
       render json: { message: "Submission not found" }, status: 404

@@ -26,7 +26,7 @@
   getDraftSubmission = (assignmentId) ->
     $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
-        angular.copy(response.data.submission, submission)
+        angular.copy(response.data.attributes, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -35,7 +35,7 @@
   createDraftSubmission = (assignmentId) ->
     $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
       (response) ->
-        angular.copy(response.data.submission, submission)
+        angular.copy(response.data.attributes, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -44,7 +44,7 @@
   updateDraftSubmission = (assignmentId) ->
     $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
       (response) ->
-        angular.copy(response.data.submission, submission)
+        angular.copy(response.data.attributes, submission)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)

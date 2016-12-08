@@ -7,25 +7,27 @@ describe API::Assignments::SubmissionsController do
     login_user(student)
   end
 
-  context "when the assignment is for groups" do
+  context "with a group assignment" do
     let(:assignment) { create(:group_assignment) }
     let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
     let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
     let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
+    let(:params) {{ assignment_id: assignment.id }}
 
     describe "#show" do
-      context "when a submission exists" do
+      context "when the submission exists" do
         let!(:submission) { create(:submission, assignment: assignment, text_comment_draft: "I love", group_id: assignment_group.group_id) }
-        let(:params) {{ assignment_id: assignment.id }}
 
-        it "returns a success status" do
+        it "returns a 200 ok" do
           get :show, params: params, format: :json
           expect(response.status).to eq(200)
         end
+      end
 
-        it "returns the submission" do
+      context "when no submission exists" do
+        it "returns a 404 not found" do
           get :show, params: params, format: :json
-          expect(response.body).to include submission.to_json
+          expect(response.status).to eq(404)
         end
       end
     end
@@ -48,23 +50,16 @@ describe API::Assignments::SubmissionsController do
           expect(submission.group_id).to eq(assignment_group.group_id)
         end
 
-        it "returns a success status" do
+        it "returns a 201 created" do
           post :create, params: params, format: :json
           expect(response.status).to eq(201)
-        end
-
-        it "returns the submission" do
-          post :create, params: params, format: :json
-          result = JSON.parse(response.body).deep_symbolize_keys
-          expect(result[:submission]).to_not be_nil
-          expect(result[:submission]).to include submission_attributes
         end
       end
 
       context "when unsuccessful" do
         before(:each) { allow_any_instance_of(Submission).to receive(:save).and_return(false) }
 
-        it "returns an error status" do
+        it "returns a 500 internal server error" do
           post :create, params: params, format: :json
           expect(response.status).to eq(500)
         end
@@ -72,30 +67,25 @@ describe API::Assignments::SubmissionsController do
     end
   end
 
-  context "when the assignment is for individuals" do
+  context "with an individual assignment" do
     let(:assignment) { create(:assignment) }
     let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
 
     describe "#show" do
-      context "when there is a preexisting submission" do
+      context "when the submission exists" do
         let!(:submission) { create(:submission, student: student, assignment: assignment, text_comment_draft: "I love") }
         let(:params) {{ assignment_id: assignment.id }}
 
-        it "returns a success status" do
+        it "returns a 200 ok" do
           get :show, params: params, format: :json
           expect(response.status).to eq(200)
         end
-
-        it "returns the submission" do
-          get :show, params: params, format: :json
-          expect(response.body).to include submission.to_json
-        end
       end
 
-      context "when there is no preexisting submission" do
+      context "when no submission exists" do
         let(:params) {{ assignment_id: assignment.id }}
 
-        it "returns an error status" do
+        it "returns a 404 not found" do
           get :show, params: params, format: :json
           expect(response.status).to eq(404)
         end
@@ -120,23 +110,16 @@ describe API::Assignments::SubmissionsController do
           expect(submission.group_id).to be_nil
         end
 
-        it "returns a success status" do
+        it "returns a 201 created" do
           post :create, params: params, format: :json
           expect(response.status).to eq(201)
-        end
-
-        it "returns the submission" do
-          post :create, params: params, format: :json
-          result = JSON.parse(response.body).deep_symbolize_keys
-          expect(result[:submission]).to_not be_nil
-          expect(result[:submission]).to include submission_attributes
         end
       end
 
       context "when unsuccessful" do
         before(:each) { allow_any_instance_of(Submission).to receive(:save).and_return(false) }
 
-        it "returns an error status" do
+        it "returns a 500 internal server error" do
           post :create, params: params, format: :json
           expect(response.status).to eq(500)
         end
@@ -149,16 +132,16 @@ describe API::Assignments::SubmissionsController do
     let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
     let(:submission) { create(:submission, student: student, text_comment_draft: "I love school", assignment: assignment) }
 
-    context "when there is no preexisting submission" do
+    context "when no submission exists" do
       let(:params) {{ submission: submission.as_json, assignment_id: assignment.id, id: "2" }}
 
-      it "returns an error status" do
+      it "returns a 404 not found" do
         put :update, params: params, format: :json
         expect(response.status).to eq(404)
       end
     end
 
-    context "when there is a preexisting submission" do
+    context "when a submission exists" do
       let(:submission_attributes) {{ id: submission.id, assignment_id: submission.assignment_id,
         student_id: submission.student_id, text_comment_draft: "No really, I love school" }}
       let(:params) {{ submission: submission_attributes, assignment_id: assignment.id, id: submission.id }}
@@ -169,23 +152,16 @@ describe API::Assignments::SubmissionsController do
           expect(submission.reload.text_comment_draft).to eq(submission_attributes[:text_comment_draft])
         end
 
-        it "returns a success status" do
+        it "returns a 200 ok" do
           put :update, params: params, format: :json
           expect(response.status).to eq(200)
-        end
-
-        it "returns the submission" do
-          put :update, params: params, format: :json
-          result = JSON.parse(response.body).deep_symbolize_keys
-          expect(result[:submission]).to_not be_nil
-          expect(result[:submission]).to include submission_attributes
         end
       end
 
       context "when unsuccessful" do
         before(:each) { allow_any_instance_of(Submission).to receive(:save).and_return(false) }
 
-        it "returns an error status" do
+        it "returns a 500 internal server error" do
           post :create, params: params, format: :json
           expect(response.status).to eq(500)
         end
