@@ -27,7 +27,7 @@ describe Challenges::ChallengeGradesController do
       it "creates the challenge grade with valid attributes and redirects to the challenge show page" do
         team2 = create(:team, course: world.course )
         params = attributes_for(:challenge_grade)
-        params[:score] = "101"
+        params[:raw_points] = "101"
         params[:challenge_id] = challenge.id
         params[:team_id] = team2.id
         params[:status] = "Released"
@@ -55,7 +55,7 @@ describe Challenges::ChallengeGradesController do
     describe "POST mass_update" do
       it "updates the challenge grades for the specific challenge" do
         challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(@challenge_grade)}" =>
-          { team_id: team.id, score: 1000, status: "Released",
+          { team_id: team.id, raw_points: 1000, status: "Released",
             id: @challenge_grade.id
           }
         }
@@ -66,7 +66,7 @@ describe Challenges::ChallengeGradesController do
 
       it "redirects to the mass_edit form if attributes are invalid" do
         challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(@challenge_grade)}" =>
-          { team_id: nil, score: 1000, status: "Released",
+          { team_id: nil, raw_points: 1000, status: "Released",
             id: @challenge_grade.id
           }
         }

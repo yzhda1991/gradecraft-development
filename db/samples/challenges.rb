@@ -26,7 +26,7 @@
   },
   grades: false,
   grade_attributes: {
-    score: Proc.new { rand(10000)},
+    raw_points: Proc.new { rand(10000)},
     status: nil,
   }
 }

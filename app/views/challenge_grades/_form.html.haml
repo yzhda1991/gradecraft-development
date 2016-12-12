@@ -6,8 +6,8 @@
     = f.hidden_field :challenge_id, value: @challenge.id
 
     .form-item
-      = f.label :score
-      = f.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
+      = f.label :raw_points
+      = f.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}
       .form_label out of #{points @challenge.full_points} points
 
     .form-item
@@ -22,7 +22,16 @@
     %h4 Feedback
     .textarea
       = f.text_area :feedback, class: "froala"
-
+      
+  %section
+    .right
+      %h4.text-right Points Adjustment
+      = f.input :adjustment_points
+      %br
+      = f.label :adjustment_points_feedback, "Feedback"
+      .right= f.text_area :adjustment_points_feedback
+      
+    .clear
   .submit-buttons
     %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"

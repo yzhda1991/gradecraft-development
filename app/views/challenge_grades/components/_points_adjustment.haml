@@ -1,0 +1,8 @@
+%div.grade-points-adjustment
+  %p
+    %b Points Adjustment:
+    %span= challenge_grade.adjustment_points
+  - if challenge_grade.adjustment_points_feedback.present?
+    %p 
+      %b Points Adjustment Note:
+      %span= raw challenge_grade.adjustment_points_feedback
