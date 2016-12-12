@@ -518,4 +518,26 @@ describe Submission do
       expect(subject.draft?).to eq true
     end
   end
+
+  describe "#belongs_to?" do
+    let(:student) { create(:user) }
+
+    context "when the assignment is individual" do
+      it "returns true if the student_id equals the user id" do
+        subject.student_id = student.id
+        expect(subject.belongs_to?(student)).to eq true
+      end
+    end
+
+    context "when the assignment is for groups" do
+      before(:each) { allow(subject).to receive(:assignment).and_return build_stubbed(:group_assignment) }
+
+      let!(:group_membership) { create(:group_membership, student: student) }
+
+      it "returns true if the student's group memberships include the group id" do
+        subject.group_id = group_membership.group_id
+        expect(subject.belongs_to?(student)).to eq true
+      end
+    end
+  end
 end

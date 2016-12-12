@@ -162,6 +162,14 @@ class Submission < ActiveRecord::Base
     link.blank? && text_comment.blank? && submission_files.empty? && submitted_at.nil?
   end
 
+  def belongs_to?(user)
+    if assignment.is_individual?
+      student_id == user.id
+    else
+      user.group_memberships.pluck(:group_id).include? group_id
+    end
+  end
+
   private
 
   def cache_associations

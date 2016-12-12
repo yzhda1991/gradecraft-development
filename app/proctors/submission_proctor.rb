@@ -6,7 +6,7 @@ class SubmissionProctor
   # If the user is not considered staff, the submission should be viewable
   # Otherwise, it should only be visible if it is not a draft
   def viewable?(user)
-    return true if user.is_student?(@submission.course)
+    return @submission.belongs_to?(user) if user.is_student?(@submission.course)
     !@submission.draft?
   end
 

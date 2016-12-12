@@ -25,6 +25,7 @@ describe SubmissionProctor do
       before(:each) { allow(user).to receive(:is_student?).with(course).and_return true }
 
       it "returns true" do
+        allow(submission).to receive(:belongs_to?).with(user).and_return true
         expect(subject.viewable?(user)).to eq true
       end
     end
