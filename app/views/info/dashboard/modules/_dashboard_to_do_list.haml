@@ -6,8 +6,8 @@
       %h2 #{term_for :assignment} Planner
   .card-body#todo-list
     - if current_student.present?
-      .planner-filter.clearfix
-        = link_to "Course Planner", "#", class: "button-filter button selected", id: "course-planner"
+      .planner-filter.clearfix{role: "toolbar", "aria-label": "Course Assignments or My Assignments"}
+        = link_to "Course Planner", "#", class: "button-filter button selected", id: "course-planner", "aria-pressed": "true"
         = link_to "My Planner", "#", class: "button-filter button", id: "my-planner"
       = render partial: "info/dashboard/modules/dashboard_to_do_list_items", locals: { presenter: presenter, assignment_list: presenter.course_planner_assignments, list_class: "course-planner-list" }
       = render partial: "info/dashboard/modules/dashboard_to_do_list_items", locals: { presenter: presenter, assignment_list: presenter.my_planner_assignments, list_class: "my-planner-list" }

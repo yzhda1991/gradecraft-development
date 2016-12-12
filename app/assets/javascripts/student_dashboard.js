@@ -92,15 +92,17 @@ $(document).ready(function() {
 
 // Filter my planner items in "due this week" module
 $('#my-planner').click(function() {
-  $('#course-planner, #my-planner').toggleClass("selected");
-  $('.my-planner-list').show();
-  $('.course-planner-list').hide();
+  $('#my-planner').attr('aria-pressed', true).addClass("selected");
+  $('#course-planner').attr('aria-pressed', false).removeClass("selected");
+  $('.my-planner-list').show().attr('aria-hidden', 'false');
+  $('.course-planner-list').hide().attr('aria-hidden', 'true');
 });
 
 $('#course-planner').click(function() {
-  $('#course-planner, #my-planner').toggleClass("selected");
-  $('.course-planner-list').show();
-  $('.my-planner-list').hide();
+  $('#course-planner').attr('aria-pressed', true).addClass("selected");
+  $('#my-planner').attr('aria-pressed', false).removeClass("selected");
+  $('.course-planner-list').show().attr('aria-hidden', 'false');
+  $('.my-planner-list').hide().attr('aria-hidden', 'true');
 });
 
 //Find event with closest date
