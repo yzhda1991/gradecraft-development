@@ -1,5 +1,3 @@
 %p.has-form{role: "search"}
-  %label.sr-only{:for => "search-input"}
-    Search Courses
-  %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "Switch Course", label: false }
+  %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "Switch Course", "aria-label": "Search your courses" }
   %a.alert.button{ :href => "#" } Go
