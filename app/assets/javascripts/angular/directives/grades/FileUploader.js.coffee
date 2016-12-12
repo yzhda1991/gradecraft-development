@@ -21,7 +21,7 @@
   return {
     restrict: 'A',
     link: (scope, element, attrs)->
-      model = $parse(attrs.fileUploadsUpload)
+      model = $parse(attrs.fileUpload)
 
       element.bind('change', ()->
         scope.$apply(()->
