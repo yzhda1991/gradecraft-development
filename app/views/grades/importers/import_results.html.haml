@@ -2,7 +2,7 @@
   = render "layouts/alerts"
 
   - unless @result.unsuccessful.empty?
-    %h3.subtitle
+    %h2.subtitle
       = "#{@result.unsuccessful.count} #{"Grade".pluralize(@result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
@@ -15,11 +15,11 @@
             %td= row[:data]
             %td= row[:errors]
 
-  %h3.subtitle
+  %h2.subtitle
     = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
   = render partial: "grades/importers/import_results_table", locals: { grades: @result.successful }
 
   - unless @result.unchanged.empty?
-    %h3.subtitle
+    %h2.subtitle
       = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
     = render partial: "grades/importers/import_results_table", locals: { grades: @result.unchanged }

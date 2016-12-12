@@ -1,4 +1,4 @@
-%h3.subtitle= "#{term_for :team} Leaderboard"
+%h2.subtitle= "#{term_for :team} Leaderboard"
 - if @teams.present?
   #leaderboardBarChart
   %table.highchart.hidden{data: { "graph-container" => "#leaderboardBarChart", "graph-type" => "column", "graph-legend-disabled" => 1, "graph-xaxis-rotation" => 0, "graph-color-1" => "#303285"} }

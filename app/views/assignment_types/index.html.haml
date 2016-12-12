@@ -3,7 +3,7 @@
 
   = render partial: "analytics/in_page_nav"
 
-  %h3.subtitle= "#{term_for :student} Scores"
+  %h2.subtitle= "#{term_for :student} Scores"
 
   .scroll-table
     %table.dynatable.no-table-header.no-button-bar
@@ -26,7 +26,7 @@
                 %td= points at.raw_points_for_student(student)
                 %span.sr-only= at.name
 
-  %h3.subtitle= "#{term_for :student} Grade Counts"
+  %h2.subtitle= "#{term_for :student} Grade Counts"
 
   .scroll-table
     %table.dynatable.no-table-header.no-button-bar
