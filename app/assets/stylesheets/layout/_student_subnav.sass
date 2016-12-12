@@ -19,6 +19,8 @@ dl
   max-width: 1500px
   background-color: $color-blue-2
   z-index: 20
+  @media (max-width: $media-small-max)
+    display: none
 
   li
     display: inline
@@ -52,11 +54,3 @@ dl
     top: 12px
     margin: 0
     right: 2px
-
-@media (max-width: $media-small-max)
-  .sub-nav
-    display: none
-
-@media (min-width: $media-small-max)
-  i
-    display: inline
