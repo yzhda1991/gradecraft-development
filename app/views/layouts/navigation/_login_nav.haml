@@ -1,3 +1,2 @@
 .login-buttons
-  = link_to "Log in with U-M", saml_init_path, class: "um-login button"
-  = link_to "Log in via GradeCraft", new_user_session_path, class: "gc-login button"
+  = link_to "Log in", new_user_session_path, class: "gc-login", "aria-label": "Log in to GradeCraft"

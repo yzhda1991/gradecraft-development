@@ -1,13 +1,26 @@
 - content_for :public_class, 'public-with-background'
 .login
   .alert-bkg= render "layouts/alerts"
-  #login-form
-    %h2 Login
-    %p
-    = render partial: "user_sessions/form"
-  #password-forgot
-    %h2 Forgot Your Password?
-    %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
-    = render partial: "passwords/reset_form"
+  .login-form-container
+    .login-form
+      .login-block
+        %a.um-login.button{"aria-label": "University of Michigan Login", href: "saml_init_path"}
+          = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
+          Log in with U-M
 
-    .small * This will not work if you use a @umich email address to log in. You must reset your password through the UM system.
+      .divider
+        %p.divider-message OR
+
+      .login-block
+        = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
+        %h2 Log in with GradeCraft
+        = render partial: "user_sessions/form"
+        %button.button-link.small#forgot-password Forgot your password?
+
+    .password-forgot-form
+      %h2 Forgot Your Password?
+      %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
+      = render partial: "passwords/reset_form"
+
+      %p.small * This will not work if you use a @umich email address to log in. You must reset your password through the UM system.
+      %button.button-link.small#show-login-form Back to log in
