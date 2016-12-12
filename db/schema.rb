@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206025103) do
+ActiveRecord::Schema.define(version: 20161209225205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,7 +177,7 @@ ActiveRecord::Schema.define(version: 20161206025103) do
 
   create_table "challenge_grades", force: :cascade do |t|
     t.integer  "challenge_id",                           null: false
-    t.integer  "score"
+    t.integer  "raw_points"
     t.string   "status"
     t.integer  "team_id",                                null: false
     t.integer  "final_points"
