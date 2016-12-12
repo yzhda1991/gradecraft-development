@@ -27,12 +27,12 @@ describe ChallengeGrade do
 
   describe "#score" do
     it "returns the challenge grade score if present" do
-      challenge_grade = create(:challenge_grade, score: 100)
+      challenge_grade = create(:challenge_grade, raw_points: 100)
       expect(challenge_grade.score).to eq(100)
     end
 
     it "returns nil if there's no score present" do
-      challenge_grade = create(:challenge_grade, score: nil)
+      challenge_grade = create(:challenge_grade, raw_points: nil)
       expect(challenge_grade.score).to eq(nil)
     end
   end
@@ -49,12 +49,12 @@ describe ChallengeGrade do
   
   describe "calculation of final_points" do
     it "is nil when score is nil" do
-      subject.update(score: nil)
+      subject.update(raw_points: nil)
       expect(subject.final_points).to eq(nil)
     end
 
     it "is the sum of score and adjustment_points" do
-      subject.update(score: "1234", adjustment_points: -234)
+      subject.update(raw_points: "1234", adjustment_points: -234)
       expect(subject.final_points).to eq(1000)
     end
   end
@@ -62,7 +62,7 @@ describe ChallengeGrade do
   describe "#cache_team_score" do
     it "saves the team scores" do
       team = create(:team, challenge_grade_score: 0, average_score: 0)
-      challenge_grade = create(:challenge_grade, team: team, score: 100, status: "Released")
+      challenge_grade = create(:challenge_grade, team: team, raw_points: 100, status: "Released")
       challenge_grade.cache_team_scores
       expect(team.challenge_grade_score).to eq(100)
     end

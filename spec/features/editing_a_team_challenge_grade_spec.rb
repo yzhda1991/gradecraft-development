@@ -7,7 +7,7 @@ feature "editing a team challenge grade" do
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let!(:challenge) { create :challenge, name: "Section Challenge Name", course: course }
     let!(:team) { create :team, name: "Section Name", course: course }
-    let!(:challenge_grade) { create :challenge_grade, team: team, challenge: challenge, score: 100 }
+    let!(:challenge_grade) { create :challenge_grade, team: team, challenge: challenge, raw_points: 100 }
 
     before(:each) do
       login_as professor
@@ -34,7 +34,7 @@ feature "editing a team challenge grade" do
       expect(current_path).to eq edit_challenge_grade_path(challenge_grade)
 
       within(".pageContent") do
-        fill_in("challenge_grade_score", with: 101)
+        fill_in("challenge_grade_raw_points", with: 101)
         click_button "Update Grade"
       end
       

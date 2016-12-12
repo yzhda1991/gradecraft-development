@@ -83,7 +83,7 @@ class Team < ActiveRecord::Base
   # Summing all of the points the team has earned across their challenges
   def challenge_grade_score
     # use student_visible scope from challenge_grades
-    challenge_grades.student_visible.sum("score") || 0
+    challenge_grades.student_visible.sum("final_points") || 0
   end
 
   # Teams rack up points in two ways, which is used is determined by the

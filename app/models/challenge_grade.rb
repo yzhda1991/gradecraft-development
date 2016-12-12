@@ -20,13 +20,17 @@ class ChallengeGrade < ActiveRecord::Base
   validates_presence_of :team_id
 
   def score
+    final_points
+  end
+
+  def raw_points
     super.presence || nil
   end
   
   # totaled points (adds adjustment, without weighting)
   def calculate_final_points
-    return nil unless score.present?
-    self.final_points = score + adjustment_points
+    return nil unless raw_points.present?
+    self.final_points = raw_points + adjustment_points
   end
 
   def cache_team_scores
