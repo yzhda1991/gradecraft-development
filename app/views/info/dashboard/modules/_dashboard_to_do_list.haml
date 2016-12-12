@@ -1,9 +1,9 @@
 .text-center
   .card-header
     - if presenter.due_dates?
-      %h3 #{term_for :assignments} Due This Week
+      %h2 #{term_for :assignments} Due This Week
     - else
-      %h3 #{term_for :assignment} Planner
+      %h2 #{term_for :assignment} Planner
   .card-body#todo-list
     - if current_student.present?
       .planner-filter.clearfix

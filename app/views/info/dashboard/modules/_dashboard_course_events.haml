@@ -1,12 +1,12 @@
 .card-header
-  %h3 Upcoming Events
+  %h2 Upcoming Events
 .card-body
   %i#events-loading-spinner.fa.fa-spinner.fa-spin.fa-fw
   .slide-container
     - @events.each do |event|
       .event-slide
         .slide-header
-          %h4.event-name= link_to event.name, event
+          %h2.event-name= link_to event.name, event
         %p.event-date= glyph(:calendar) + presenter.dates_for(event)
         .slide-body
           .event-information

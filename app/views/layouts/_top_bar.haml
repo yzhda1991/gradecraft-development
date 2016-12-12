@@ -4,7 +4,7 @@
   = render partial: "layouts/navigation/offscreen_sidebar", locals: { presenter: presenter }
 
   .layout-right-content
-    %header
+    %header{role: "banner"}
       .navbar.container
         %nav.the-nav.nav-collapse{class: ("preview-mode" if student_impersonation?), role: "navigation"}
           %ul.nav.nav-pill.left

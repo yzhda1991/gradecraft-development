@@ -7,7 +7,7 @@
       // Display the student's points out of assignment total, if there is an assignment max value. Else
       // display the student's points out of the the current point total for assignment.
       .collapse
-        %h3= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
+        %h2= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
         .points-summary
           .assignment-type-points-graph
             .points-graph-fill-bar{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
@@ -17,7 +17,7 @@
         - if presenter.assignment_type_message?(assignment_type)
           .assignment-type-message
             - if assignment_type.description?
-              %h4 #{assignment_type.name} Guidelines
+              %h3 #{assignment_type.name} Guidelines
               %p.description= raw assignment_type.description
             - if assignment_type.is_capped?
               .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.

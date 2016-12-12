@@ -14,7 +14,7 @@
 - if assignment.description.present?
   %hr.dotted
 
-  %h4.uppercase Guidelines:
+  %h3.uppercase Guidelines:
   - if assignment.assignment_files.present?
     %ul
       Downloads
@@ -25,6 +25,6 @@
 
 - if assignment.assignment_type.description.present?
   %hr.dotted
-  %h4.uppercase #{ assignment.assignment_type.name} Guidelines:
+  %h3.uppercase #{ assignment.assignment_type.name} Guidelines:
 
   %p= raw assignment.assignment_type.description

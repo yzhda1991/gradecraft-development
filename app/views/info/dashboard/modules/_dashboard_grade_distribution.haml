@@ -1,6 +1,6 @@
 .text-center
   .card-header
-    %h3 Points Distribution
+    %h2 Points Distribution
   .card-body
     - if current_user_is_student?
       %h4.not_bold.italic= "You've earned #{points current_student.score_for_course(current_course)} points"
