@@ -1,6 +1,7 @@
 class API::Assignments::SubmissionsController < ApplicationController
   before_action :ensure_student?
 
+  # GET api/assignments/:assignment_id/submissions
   def show
     assignment = Assignment.find(params[:assignment_id])
     @submission = nil
@@ -18,6 +19,7 @@ class API::Assignments::SubmissionsController < ApplicationController
     end
   end
 
+  # POST api/assignments/:assignment_id/submissions
   def create
     assignment = Assignment.find(params[:assignment_id])
     @submission = assignment.submissions.new merged_submission_params(assignment)
@@ -29,6 +31,7 @@ class API::Assignments::SubmissionsController < ApplicationController
     end
   end
 
+  # PUT api/assignments/:assignment_id/submissions/:id
   def update
     assignment = Assignment.find(params[:assignment_id])
     @submission = assignment.submissions.find_by_id(params[:id])
