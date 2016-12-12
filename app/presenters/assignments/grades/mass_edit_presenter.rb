@@ -35,7 +35,8 @@ class Assignments::Grades::MassEditPresenter < Showtime::Presenter
 
   def grades_by_group
     assignment.groups.map do |group|
-      { group: group, grade: Grade.find_or_create(assignment.id, group.students.first.id) }
+      gradebook = Gradebook.new(assignment, group.students.first)
+      { group: group, grade: gradebook.grades.first }
     end
   end
 end
