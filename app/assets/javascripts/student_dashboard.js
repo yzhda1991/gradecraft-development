@@ -143,8 +143,8 @@ function setInitialEventSlide(eventJson){
 // Initialize slick slider for course events
 function initSlickSlider(startIndex) {
   $('.slide-container').slick({
-    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
-    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
+    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous course event"></a>',
+    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
     initialSlide: startIndex,
     adaptiveHeight: true, 
     infinite: false

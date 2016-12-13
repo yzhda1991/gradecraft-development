@@ -1,7 +1,7 @@
 //initiate slick slider for student onboarding slides
 $('.student-onboarding-slides').slick({
-  prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
-  nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
+  prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous slide"></a>',
+  nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
   adaptiveHeight: true,
   dots: true,
   infinite: false,

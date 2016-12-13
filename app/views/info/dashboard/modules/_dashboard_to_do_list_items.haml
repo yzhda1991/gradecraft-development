@@ -1,8 +1,8 @@
 %ul{:class => "todo-list-assignments #{list_class}"}
   - assignment_list.each do |assignment|
-    %li{:class => presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
+    %li{class: presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
       - if presenter.starred?(assignment)
-        %a.starred
+        %a.starred{"aria-label": "Predicted assignment"}
           %i.fa.fa-flag.fa-fw.orange
         .display-on-hover.hover-style
           You have included this #{(term_for :assignment).downcase} in your grade prediction
