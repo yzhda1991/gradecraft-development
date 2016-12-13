@@ -24,5 +24,5 @@
                   .course-info-card
                     = render partial: "layouts/navigation/class_info", locals: { presenter: presenter }
             = render partial: "layouts/navigation/authenticated_nav"
-        %a.btn-navbar-left.hide-for-large
+        %a.btn-navbar-left.hide-for-large{"aria-label": "Mobile navigation"}
           %i.fa.fa-bars.fa-fw
