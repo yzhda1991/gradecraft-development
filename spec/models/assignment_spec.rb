@@ -843,11 +843,13 @@ describe Assignment do
         s1 = create(:student_course_membership, course: subject.course).user
         s2 = create(:student_course_membership, course: subject.course).user
         s3 = create(:student_course_membership, course: subject.course).user
+        s4 = create(:student_course_membership, course: subject.course).user
         subject.grades.create student_id: s1.id, raw_points: 8, status: "Graded"
-        subject.grades.create student_id: s2.id, raw_points: 5, status: "In Progress"
+        subject.grades.create student_id: s2.id, raw_points: 8, status: "Released"
+        subject.grades.create student_id: s3.id, raw_points: 5, status: "In Progress"
       end
 
-      it "returns all students without a 'Graded' grade for the assignment" do
+      it "returns all students without a 'Graded' or 'Released' grade for the assignment" do
        expect(subject.ungraded_students.count).to eq(2)
       end
     end
@@ -923,17 +925,18 @@ describe Assignment do
       before do
         subject.update(grade_scope: "Group")
         subject.groups << [g1,g2,g3]
-        g1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
       end
 
       describe "ungraded_groups" do
         it "returns all ungraded groups" do
+          g1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
           expect(subject.ungraded_groups.count).to eq(2)
         end
       end
 
       describe "ungrade_groups_with_submissions" do
         it "returns all ungraded groups that have submitted" do
+          g1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
           create :submission, assignment: subject, student: g1.students.first
           create :submission, assignment: subject, student: g2.students.first
           expect(subject.ungraded_groups_with_submissions).to eq([g2])
@@ -941,12 +944,31 @@ describe Assignment do
       end
 
       describe "next_ungraded_group" do
-        it "returns the next ungraded group" do
-          expect(subject.next_ungraded_group(g3)).to eq(g2)
+        context "when accepting submissions" do
+          before do
+            create :submission, assignment: subject, student: g1.students.first
+            create :submission, assignment: subject, student: g2.students.first
+          end
+
+          it "returns the next ungraded group with a submission" do
+            expect(subject.next_ungraded_group(g1)).to eq(g2)
+          end
+
+          it "returns nil for the last group with a submission" do
+            expect(subject.next_ungraded_group(g2)).to eq(nil)
+          end
         end
 
-        it "returns nil for the last group" do
-          expect(subject.next_ungraded_group(g2)).to eq(nil)
+        context "when not accepting submissions" do
+          before { subject.update accepts_submissions: false }
+
+          it "returns the next ungraded group" do
+            expect(subject.next_ungraded_group(g3)).to eq(g2)
+          end
+
+          it "returns nil for the last group" do
+            expect(subject.next_ungraded_group(g2)).to eq(nil)
+          end
         end
       end
     end
