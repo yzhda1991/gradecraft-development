@@ -18,7 +18,6 @@ module GradeCraft
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.angular_templates.ignore_prefix  = %w(angular/templates/)
     config.generators do |g|
-      g.integration_tool :mini_test
       g.orm :active_record
       g.stylesheets :false
       g.template_engine :haml

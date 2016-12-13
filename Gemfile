@@ -47,11 +47,6 @@ gem 'light-service'
 
 # interface for connecting to remote logging system Loggly
 gem 'logglier', '~> 0.3.0'
-# connect to papertrail
-# gem 'remote_syslog_logger'
-# connect to Loggly/whatever more easily over UDP/TCP
-# gem 'syslogger', '~> 1.6.0'
-# gem 'lograge','~> 0.3.1'
 
 gem 'multi_json'
 gem 'mini_magick'
@@ -122,7 +117,6 @@ group :development, :test do
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
-  gem 'zeus'
   gem 'better_errors'
 end
 
@@ -139,7 +133,6 @@ group :test do
   # add spec helpers for testing Resque objects and resque scheduler
   gem 'resque_spec', github: 'leshill/resque_spec'
   gem 'rspec-html-matchers'
-  gem 'selenium-webdriver'
   gem 'simplecov'
   gem 'webmock'
 end
