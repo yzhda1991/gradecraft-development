@@ -15,7 +15,7 @@ class API::Assignments::SubmissionsController < ApplicationController
     if @submission.present?
       render "api/assignments/submissions/submission", status: 200
     else
-      render json: { message: "Submission not found" }, status: 404
+      render json: { data: nil, message: "No submission for assignment" }, status: 200
     end
   end
 
@@ -43,7 +43,7 @@ class API::Assignments::SubmissionsController < ApplicationController
         render "api/assignments/submissions/errors", status: 500
       end
     else
-      render json: { message: "Submission not found" }, status: 404
+      render json: { data: nil, errors: [ "Submission not found" ] }, status: 404
     end
   end
 

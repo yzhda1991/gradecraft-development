@@ -25,9 +25,9 @@ describe API::Assignments::SubmissionsController do
       end
 
       context "when no submission exists" do
-        it "returns a 404 not found" do
+        it "returns a 200 ok" do
           get :show, params: params, format: :json
-          expect(response.status).to eq(404)
+          expect(response.status).to eq(200)
         end
       end
     end
@@ -85,9 +85,9 @@ describe API::Assignments::SubmissionsController do
       context "when no submission exists" do
         let(:params) {{ assignment_id: assignment.id }}
 
-        it "returns a 404 not found" do
+        it "returns a 200 ok" do
           get :show, params: params, format: :json
-          expect(response.status).to eq(404)
+          expect(response.status).to eq(200)
         end
       end
     end
