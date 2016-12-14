@@ -7,7 +7,7 @@
   Score:
   = label_tag do
     - if @assignment.has_levels?
-      = f.select :raw_points, @assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :selected => @group.students.first.grade_for_assignment(@assignment).try(:raw_points), :include_blank => true
+      = f.select :raw_points, @assignment_score_levels.map { |l| [l.formatted_name, l.points] }, :selected => @group.students.first.grade_for_assignment(@assignment).try(:raw_points), :include_blank => true
     - else
       = f.text_field :raw_points, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.full_points }", data: {autonumeric: true, "m-dec" => "0"}, :value => @group.students.first.grade_for_assignment(@assignment).try(:raw_points)
 
