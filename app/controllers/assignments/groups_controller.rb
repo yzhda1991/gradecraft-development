@@ -6,7 +6,7 @@ class Assignments::GroupsController < ApplicationController
   def grade
     @assignment = current_course.assignments.find(params[:assignment_id])
     @group = @assignment.groups.find(params[:id])
-    @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
+    @submission = @assignment.submissions.where(group_id: @group.id).first
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
     @rubric = @assignment.rubric if @assignment.grade_with_rubric?
   end
