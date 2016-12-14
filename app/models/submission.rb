@@ -3,7 +3,7 @@ class Submission < ActiveRecord::Base
   include MultipleFileAttributes
   include Sanitizable
 
-  has_paper_trail :ignore => [:text_comment_draft]
+  has_paper_trail ignore: [:text_comment_draft]
 
   belongs_to :assignment, touch: true
   belongs_to :student, class_name: "User", touch: true
