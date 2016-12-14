@@ -36,9 +36,9 @@ module UnlockableCondition
 
   def is_unlocked_for_student?(student)
     return true unless unlock_conditions.present?
+
     unlock_state = unlock_states.where(student_id: student.id).first
-    return true if unlock_state.present? && unlock_state.is_unlocked?
-    return false
+    unlock_state.present? && unlock_state.is_unlocked?
   end
 
   def is_unlocked_for_group?(group)
