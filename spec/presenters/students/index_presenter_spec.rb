@@ -1,9 +1,10 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 require "./app/presenters/students/index_presenter"
 
 describe Students::IndexPresenter do
   let(:course) { create(:course) }
-  subject { described_class.new course: course }
+  let(:current_user) { create(:professor_course_membership, course: course).user }
+  subject { described_class.new course: course, current_user: current_user }
 
   describe "#display_pseudonyms?" do
     it "is displayed if the course is shown in the leaderboard or it has character names" do
@@ -27,6 +28,28 @@ describe Students::IndexPresenter do
 
     it "returns the earned badges for all the students" do
       expect(subject.earned_badges).to eq [earned_badge1, earned_badge2]
+    end
+  end
+
+  describe "#flagged_users" do
+    let(:student1) { create(:student_course_membership, course: course).user }
+    let(:student2) { create(:student_course_membership, course: course).user }
+    let!(:flagged_user1) { create :flagged_user, flagger: current_user, flagged: student1,
+                           course: course }
+    let!(:flagged_user2) { create :flagged_user, flagger: current_user, flagged: student2,
+                           course: course }
+
+    it "returns the flagged users for course that have been flagged by the current user" do
+      expect(subject.flagged_users).to eq [flagged_user1, flagged_user2]
+    end
+  end
+
+  describe "#grade_scheme_elements" do
+    let!(:grade_scheme_element1) { create :grade_scheme_element, course: course }
+    let!(:grade_scheme_element2) { create :grade_scheme_element, course: course }
+
+    it "returns the grade scheme elements for the current course" do
+      expect(subject.grade_scheme_elements).to eq [grade_scheme_element1, grade_scheme_element2]
     end
   end
 

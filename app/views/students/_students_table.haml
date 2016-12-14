@@ -10,13 +10,13 @@
       %th Last Name
       %th= "Screenname" if presenter.display_pseudonyms?
       - if presenter.has_teams?
-        %th= "#{presenter.course.team_term}" 
+        %th= "#{presenter.course.team_term}"
         %th= "Role" if presenter.has_team_roles?
       %th{scope: "col"} Score
       %th Level
       - if presenter.has_badges?
         %th #{ term_for :badges }
-        %th{:style => "display: none"} Badge Count
+        %th{style: "display: none"} Badge Count
       %th Last Activity
       %th Options
   %tbody
@@ -25,8 +25,8 @@
       %tr
         %td
           = div_for student do
-            = link_to flagged_user_icon(presenter.course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
-          %span{ class: student.auditing? ? 'auditor' : 'graded'}
+            = link_to flagged_users_icon(presenter.flagged_users, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
+          %span{ class: student.auditing? ? "auditor" : "graded" }
         %td= index += 1 if !student.auditing?
         %td
           - if student.avatar_file_name.present?
@@ -34,7 +34,7 @@
         %td= link_to student.first_name, student_path(student)
         %td= link_to student.last_name, student_path(student)
         %td= student.display_name if presenter.display_pseudonyms?
-        - if presenter.has_teams? 
+        - if presenter.has_teams?
           %td
             = link_to student.team.name, team_path(id: student.team.id) if student.team
           %td= student.try(:team_role) if presenter.has_team_roles?
@@ -44,8 +44,8 @@
           %td#earned_badges{"data-title" => "Badges"}
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
-          %td{ :style => "display: none" }= student.earned_badges_for_course(presenter.course).count
-        %td= student.try(:last_activity_at) || '(never)'
+          %td{ style: "display: none" }= student.earned_badges.count
+        %td= student.last_activity_at || '(never)'
         %td
           .right
             %a.button.button-edit.button-options= glyph(:cog) + glyph("caret-down")
@@ -53,4 +53,4 @@
               %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
               %li= link_to glyph(:edit) + "Edit", edit_user_path(student)
-              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: presenter.course.id).first, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
+              %li= link_to glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
