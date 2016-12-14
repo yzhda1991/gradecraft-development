@@ -24,6 +24,9 @@ class API::GradesController < ApplicationController
     end
     changes = grade.changes
     if grade.save
+      if GradeProctor.new(grade).viewable?
+        GradeUpdaterJob.new(grade_id: grade.id).enqueue
+      end
       grade.squish_history!
       render json: { message: {changes: changes}, success: true }
     else
