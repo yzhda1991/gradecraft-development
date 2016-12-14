@@ -96,6 +96,18 @@ describe FlaggedUser do
     end
   end
 
+  describe ".for_flagger" do
+    it "returns all the flagged users for a specific flagger user" do
+      student_flagged_user = create(:flagged_user, flagger: professor,
+                                    flagged: student, course: course)
+      another_flagger = create(:professor_course_membership, course: course).user
+      another_flagged_user = create(:flagged_user, flagger: another_flagger,
+                                    flagged: student, course: course)
+      results = FlaggedUser.for_flagger(professor)
+      expect(results).to eq [student_flagged_user]
+    end
+  end
+
   describe ".unflag!" do
     before { FlaggedUser.flag!(course, professor, student.id) }
 
