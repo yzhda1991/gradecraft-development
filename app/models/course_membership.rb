@@ -56,19 +56,24 @@ class CourseMembership < ActiveRecord::Base
     update_attributes earned_grade_scheme_element_id: earned_grade_scheme_element.try(:id)
   end
 
-  def earned_grade_scheme_element
-    elements_earned = []
-    course.grade_scheme_elements.order_by_lowest_points.each do |gse|
+  def earned_grade_scheme_element(grade_scheme_elements=nil)
+    elements = grade_scheme_elements || course.grade_scheme_elements.order_by_lowest_points
+    element_earned = nil
+
+    elements.sort_by{ |element| element.lowest_points }.each_with_index do |gse, index|
       gse.check_unlock_status(user)
-      if !gse.is_unlocked_for_student?(user) 
+      element_earned = gse if index == 0
+
+      if !gse.is_unlocked_for_student?(user)
         break
-      else 
+      else
         if gse.lowest_points <= score
-          elements_earned << gse
+          element_earned = gse
         end
       end
     end
-    return elements_earned.last || course.grade_scheme_elements.order_by_lowest_points.first
+
+    element_earned
   end
 
   def staff?
