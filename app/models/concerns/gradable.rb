@@ -75,7 +75,7 @@ module Gradable
   end
 
   def ungraded_students_with_submissions(ids_to_include=[], team=nil)
-    ungraded_students(ids_to_include, team) & User.find(submissions.pluck(:student_id))
+    ungraded_students(ids_to_include, team) & (User.find(submissions.pluck(:student_id)|ids_to_include))
   end
 
   def next_ungraded_student(student, team=nil)
@@ -88,20 +88,22 @@ module Gradable
     i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
   end
 
-  def ungraded_groups
-    ungraded_students.map { |student| student.group_for_assignment(self) }.uniq
+  def ungraded_groups(group_to_include=nil)
+    included_ids = group_to_include.present? ? group_to_include.students.pluck(:id) : []
+    ungraded_students(included_ids).map { |student| student.group_for_assignment(self) }.uniq
   end
 
-  def ungraded_groups_with_submissions
-    ungraded_students_with_submissions.map { |student| student.group_for_assignment(self) }.uniq
+  def ungraded_groups_with_submissions(group_to_include=nil)
+    included_ids = group_to_include.present? ? group_to_include.students.pluck(:id) : []
+    ungraded_students_with_submissions(included_ids).map { |student| student.group_for_assignment(self) }.uniq
   end
 
   def next_ungraded_group(group)
     if has_groups?
       if accepts_submissions?
-        ungraded = ungraded_groups_with_submissions.sort { |g1,g2| g1.name <=> g2.name }
+        ungraded = ungraded_groups_with_submissions(group).sort { |g1,g2| g1.name <=> g2.name }
       else
-        ungraded = ungraded_groups.sort { |g1,g2| g1.name <=> g2.name }
+        ungraded = ungraded_groups(group).sort { |g1,g2| g1.name <=> g2.name }
       end
       i = ungraded.map(&:id).index(group.id)
       i && i < ungraded.length - 1 ? ungraded[i + 1] : nil

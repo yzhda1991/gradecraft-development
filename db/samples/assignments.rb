@@ -369,12 +369,19 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
   student_submissions: true
 }
 
+#------------------------------------------------------------------------------#
+
+#                        Group Assignment Type
+
+#------------------------------------------------------------------------------#
+
+
 @assignments[:group_grade_assignment] = {
   quotes: {
     assignment_created: "I'm sorry, if you were right, I'd agree with you. - \
 Robin Williams",
   },
-  assignment_type: :grading,
+  assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
     name: "Group Assignment + Standard Edit",
@@ -391,7 +398,7 @@ Robin Williams",
 think they're not - because the thing they were good at at school wasn't \
 valued, or was actually stigmatized. - Sir Ken Robinson",
   },
-  assignment_type: :grading,
+  assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
     name: "Group Assignment + Submissions",
@@ -413,7 +420,7 @@ do not stop.― Confucius",
 people, To assist the nature of all things, Without daring to meddle. - Lao \
 Tzu"
   },
-  assignment_type: :grading,
+  assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
     name: "Group Assignment + Rubric Edit",
@@ -428,7 +435,7 @@ Tzu"
   quotes: {
     assignment_created: nil,
   },
-  assignment_type: :grading,
+  assignment_type: :group_grading,
   assign_groups: false,
   attributes: {
     name: "No Groups Assigned, Group Assignment",
