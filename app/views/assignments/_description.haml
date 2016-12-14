@@ -76,7 +76,10 @@
   %h4.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
   %ul
     - presenter.assignment.unlock_keys.each do |key|
-      %li= link_to key.key_description_sentence, key.unlockable
+      - if !key.unlockable_type == GradeSchemeElement
+        %li= link_to key.key_description_sentence, key.unlockable
+      - else 
+        %li= key.key_description_sentence
 
 - if presenter.assignment_has_viewable_description?(current_user)
   %h4.uppercase Guidelines:
