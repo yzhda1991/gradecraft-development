@@ -808,7 +808,7 @@ describe Assignment do
     end
   end
 
-  describe "Gradable Concern" , focus: true do
+  describe "Gradable Concern" do
     describe "#high_score" do
       before { subject.save }
 
@@ -967,8 +967,8 @@ describe Assignment do
       describe "ungraded_groups_with_submissions" do
         before do
           group_1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
-          create :submission, assignment: subject, student: group_1.students.first
-          create :submission, assignment: subject, student: group_2.students.first
+          create :submission, assignment: subject, student: nil, group: group_1
+          create :submission, assignment: subject, student: nil, group: group_2
         end
 
         it "returns all ungraded groups that have submitted" do
@@ -983,8 +983,8 @@ describe Assignment do
       describe "next_ungraded_group" do
         context "when accepting submissions" do
           before do
-            create :submission, assignment: subject, student: group_1.students.first
-            create :submission, assignment: subject, student: group_2.students.first
+            create :submission, assignment: subject, student: nil, group: group_1
+            create :submission, assignment: subject, student: nil, group: group_2
           end
 
           it "returns the next ungraded group with a submission" do

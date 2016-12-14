@@ -94,19 +94,22 @@ module Gradable
   end
 
   def ungraded_groups_with_submissions(group_to_include=nil)
-    included_ids = group_to_include.present? ? group_to_include.students.pluck(:id) : []
-    ungraded_students_with_submissions(included_ids).map { |student| student.group_for_assignment(self) }.uniq
+    return nil unless accepts_submissions?
+    if group_to_include.present?
+      ungraded_groups(group_to_include) & Group.find(submissions.pluck(:group_id) << group_to_include.id)
+    else
+      ungraded_groups & Group.find(submissions.pluck(:group_id))
+    end
   end
 
   def next_ungraded_group(group)
-    if has_groups?
-      if accepts_submissions?
-        ungraded = ungraded_groups_with_submissions(group).sort { |g1,g2| g1.name <=> g2.name }
-      else
-        ungraded = ungraded_groups(group).sort { |g1,g2| g1.name <=> g2.name }
-      end
-      i = ungraded.map(&:id).index(group.id)
-      i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
+    return nil unless has_groups?
+    if accepts_submissions?
+      ungraded = ungraded_groups_with_submissions(group).sort { |g1,g2| g1.name <=> g2.name }
+    else
+      ungraded = ungraded_groups(group).sort { |g1,g2| g1.name <=> g2.name }
     end
+    i = ungraded.map(&:id).index(group.id)
+    i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
   end
 end
