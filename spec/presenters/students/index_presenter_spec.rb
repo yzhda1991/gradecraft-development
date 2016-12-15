@@ -89,7 +89,7 @@ describe Students::IndexPresenter do
     let!(:student2) { create :student_course_membership, course: course }
 
     it "returns the user ids for the students" do
-      expect(subject.student_ids).to eq [student1, student2].map(&:user_id)
+      expect(subject.student_ids.sort).to eq [student1, student2].map(&:user_id)
     end
   end
 
