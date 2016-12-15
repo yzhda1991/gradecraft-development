@@ -1433,7 +1433,7 @@ test that teaches you a lesson. – Tom Bodett",
   assignment_type: :unlocks,
   attributes: {
     name: "Unlocked-By-Past-Submission",
-    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor",
+    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor, and my prediction should not be added to the Assignment Type total",
     full_points: 180000,
   },
   unlock_condition: true,
@@ -1441,6 +1441,10 @@ test that teaches you a lesson. – Tom Bodett",
     condition: :passed_unlock_submission_condition,
     condition_type: "Assignment",
     condition_state: "Submitted"
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
