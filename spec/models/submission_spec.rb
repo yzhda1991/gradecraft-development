@@ -27,10 +27,25 @@ describe Submission do
       expect(subject.errors[:base]).to include "Submission cannot be empty"
     end
 
-    it "permits only one submission per user, per assignment" do
-      course_submission = create(:submission)
-      expect{create(:submission, assignment: course_submission.assignment,
-        student: course_submission.student)}.to raise_error ActiveRecord::RecordInvalid
+    it "restricts duplicate submissions for a given student on an assignment" do
+      submission = create(:submission)
+      expect{create(:submission, assignment: submission.assignment,
+        student: submission.student)}.to raise_error ActiveRecord::RecordInvalid
+    end
+
+    it "restricts duplicate submissions for a given group on an assignment" do
+      submission = create(:group_submission)
+      expect{create(:group_submission, assignment: submission.assignment,
+        group: submission.group)}.to raise_error ActiveRecord::RecordInvalid
+    end
+
+    it "allows multiple group submissions to be created" do
+      group = create(:group)
+      expect{create_list(:group_submission, 3, group: group)}.not_to raise_error
+    end
+
+    it "allows multiple individual submissions to be created" do
+      expect{create_list(:submission, 3)}.not_to raise_error
     end
   end
 

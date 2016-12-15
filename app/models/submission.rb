@@ -52,8 +52,8 @@ class Submission < ActiveRecord::Base
 
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
   validates_length_of :link, maximum: 255
-  validates :assignment, presence: true, uniqueness: { scope: :student,
-    message: "should only have one submission per student" }
+  validates :assignment, presence: true, uniqueness: { scope: [:student, :group],
+    message: "should only have one submission per student or group" }, allow_nil: true
   validates_with SubmissionValidator
 
   clean_html :text_comment
