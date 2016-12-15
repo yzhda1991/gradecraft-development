@@ -44,6 +44,20 @@ assignments can be graded.",
   }
 }
 
+@assignment_types[:group_grading] = {
+  quotes: {
+    assignment_type_created: "The least we can do is give them a chance to go \
+to school, fulfill that hope, \
+and become who and what they are meant to be.  - Michelle Obama"
+  },
+  attributes: {
+    name: "Group Grading Settings",
+    description: "This category should include all of the different ways \
+assignments can be graded for a group.",
+    position: 1
+  }
+}
+
 @assignment_types[:submissions] = {
   quotes: {
     assignment_type_created: "Creativity is the process of having original \

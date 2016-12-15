@@ -41,10 +41,10 @@ describe Assignments::Presenter do
 
   describe "#groups" do
     it "wraps the assignment groups in an Assignment::GroupPresenter" do
-      groups = [double(:group), double(:group)]
+      groups = double(:groups, order_by_name: [double(:group), double(:group)])
       allow(assignment).to receive(:groups).and_return groups
       expect(subject.groups.map(&:class).uniq).to eq [Assignments::GroupPresenter]
-      expect(subject.groups.first.group).to eq groups.first
+      expect(subject.groups.first.group).to eq groups.order_by_name.first
     end
   end
 

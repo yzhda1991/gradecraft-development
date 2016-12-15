@@ -78,7 +78,7 @@ class GroupsController < ApplicationController
   end
 
   def potential_team_members
-    current_course.students.where.not(id: current_user.id)
+    current_course.students.where.not(id: current_user.id).order_by_name
   end
 
   def find_group
