@@ -38,8 +38,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :score, :team
 
-  scope :order_by_high_score, -> { includes(:course_memberships).order "course_memberships.score DESC" }
-  scope :order_by_low_score, -> { includes(:course_memberships).order "course_memberships.score ASC" }
+  scope :order_by_high_score, -> (course_id) { includes(:course_memberships).where(course_memberships: { course_id: course_id }).order "course_memberships.score DESC" }
+  scope :order_by_low_score, -> (course_id) { includes(:course_memberships).where(course_memberships: { course_id: course_id }).order "course_memberships.score ASC" }
   scope :students_in_team, -> (team_id, student_ids) \
     { includes(:team_memberships).where(team_memberships: { team_id: team_id, student_id: student_ids }) }
 

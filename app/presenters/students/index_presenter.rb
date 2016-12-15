@@ -35,8 +35,7 @@ class Students::IndexPresenter < Showtime::Presenter
 
   def students
     @students ||= IndexStudentCollection.new(User
-      .students_for_course(course, team)
-      .order_by_high_score, self)
+      .students_for_course(course, team).order_by_high_score(course), self)
   end
 
   def team_id
