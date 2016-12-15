@@ -150,3 +150,17 @@ function initSlickSlider(startIndex) {
     infinite: false
   });
 }
+
+// Open class info card and submenu in top nav on click and hide on body click
+$(document).on('click', function(event) {
+  var $this = $(event.target);
+  var $dropdownContent = $('.dropdown-content');
+
+  if ($this.parent().hasClass('dropdown')) {
+    var $thisDropdownContent = $this.siblings('.dropdown-content');
+    $dropdownContent.not($thisDropdownContent).hide();
+    $thisDropdownContent.toggle();
+  } else if (!$this.closest('.dropdown').length) {
+    $dropdownContent.hide();
+  }
+});

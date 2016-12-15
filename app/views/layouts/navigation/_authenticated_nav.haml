@@ -7,5 +7,5 @@
       %img.profile-pic{:src => current_user.avatar_file_name, :height => 20}
     = current_user.name
     %i.fa.fa-caret-down.hidden-2m
-  %ul.subnav#account-info
+  %ul.subnav.dropdown-content#account-info
     = render partial: "layouts/navigation/account_info"
