@@ -21,6 +21,6 @@
               = "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
           .assignment-info.assignment-pass-fail
             - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
-              .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.full_points} points earned"
+              .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).score} / #{points challenge.full_points} points earned"
             - else
               %span.italic= "#{points challenge.full_points} points possible"
