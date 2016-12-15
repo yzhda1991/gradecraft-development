@@ -26,6 +26,12 @@ describe Submission do
       expect(subject).to_not be_valid
       expect(subject.errors[:base]).to include "Submission cannot be empty"
     end
+
+    it "permits only one submission per user, per assignment" do
+      course_submission = create(:submission)
+      expect{create(:submission, assignment: course_submission.assignment,
+        student: course_submission.student)}.to raise_error ActiveRecord::RecordInvalid
+    end
   end
 
   it_behaves_like "a historical model", :submission, link: "http://example.org"
@@ -103,6 +109,31 @@ describe Submission do
     end
   end
 
+  describe ".for_assignment_and_student" do
+    let(:assignment) { create(:assignment) }
+    let(:student)  { create(:student_course_membership, course: assignment.course).user }
+    let!(:submission) { create(:submission, assignment: assignment, student: student) }
+
+    it "returns the submission for the student and assignment" do
+      result = Submission.for_assignment_and_student(assignment.id, student.id).first
+      expect(result).to eq submission
+    end
+  end
+
+  describe ".for_assignment_and_group" do
+    let(:assignment) { create(:group_assignment) }
+    let(:student) { create(:user) }
+    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
+    let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
+    let!(:submission) { create(:submission, assignment: assignment, group: assignment_group.group) }
+
+    it "returns the submission for the group and assignment" do
+      result = Submission.for_assignment_and_group(assignment.id, assignment_group.group_id).first
+      expect(result).to eq submission
+    end
+  end
+
   describe "#submission_files_attributes=" do
     it "supports multiple file uploads" do
       file_attribute_1 = fixture_file "test_file.txt", "txt"
@@ -111,6 +142,21 @@ describe Submission do
       expect(subject.submission_files.length).to eq 2
       expect(subject.submission_files[0].filename).to eq "test_file.txt"
       expect(subject.submission_files[1].filename).to eq "test_image.jpg"
+    end
+  end
+
+  describe "#submitted_this_week" do
+    let(:assignment_type) { create(:assignment_type) }
+    let(:assignment) { create(:group_assignment, assignment_type: assignment_type) }
+    let(:another_assignment) { create(:group_assignment, assignment_type: assignment_type) }
+    let(:student) { create(:student_course_membership, course: assignment.course).user }
+    let!(:submission) { create(:submission, assignment: assignment, student: student) }
+    let!(:another_submission) { create(:draft_submission, assignment: another_assignment, student: student) }
+
+    it "returns non-draft submissions for the past week" do
+      result = Submission.submitted_this_week(assignment_type)
+      expect(result.count).to eq 1
+      expect(result).to eq [submission]
     end
   end
 
@@ -247,12 +293,14 @@ describe Submission do
   end
 
   describe ".order_by_submitted" do
-    it "returns the submissions in the order they were submitted" do
+    before do
       Submission.delete_all
+    end
+
+    it "returns the submissions in the order they were submitted" do
       submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
       never_submitted = create(:submission)
       just_submitted = create(:submission, submitted_at: DateTime.now)
-
       expect(Submission.order_by_submitted).to eq [submitted_yesterday, just_submitted, never_submitted]
     end
   end
@@ -437,6 +485,59 @@ describe Submission do
 
     it "returns the combination of the titleized student and assignment names" do
       expect(subject.base_filename).to eq "Dan Ho - Great"
+    end
+  end
+
+  describe "#draft?" do
+    it "returns false if it has a link" do
+      subject.link = "http://www.gradecraft.com"
+      subject.text_comment = nil
+      subject.submission_files.clear
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns false if it has a text comment" do
+      subject.link = nil
+      subject.text_comment = "Hello"
+      subject.submission_files.clear
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns false if it has a submission file" do
+      subject.save
+      subject.link = "http://www.gradecraft.com"
+      subject.text_comment = nil
+      subject.submission_files.create attributes_for(:submission_file)
+      expect(subject.draft?).to eq false
+    end
+
+    it "returns true if there is no link, text comment, or submission files" do
+      subject.link = nil
+      subject.text_comment = nil
+      subject.submission_files.clear
+      expect(subject.draft?).to eq true
+    end
+  end
+
+  describe "#belongs_to?" do
+    let(:student) { create(:user) }
+
+    context "when the assignment is individual" do
+      it "returns true if the student_id equals the user id" do
+        subject.student_id = student.id
+        expect(subject.belongs_to?(student)).to eq true
+      end
+    end
+
+    context "when the assignment is for groups" do
+      before(:each) { allow(subject).to receive(:assignment).and_return build_stubbed(:group_assignment) }
+
+      let!(:group_membership) { create(:group_membership, student: student) }
+
+      it "returns true if the student's group memberships include the group id" do
+        subject.group_id = group_membership.group_id
+        expect(subject.belongs_to?(student)).to eq true
+      end
     end
   end
 end

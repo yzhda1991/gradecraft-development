@@ -3,6 +3,8 @@ class Submission < ActiveRecord::Base
   include MultipleFileAttributes
   include Sanitizable
 
+  has_paper_trail ignore: [:text_comment_draft]
+
   belongs_to :assignment, touch: true
   belongs_to :student, class_name: "User", touch: true
   belongs_to :creator, class_name: "User", touch: true
@@ -30,16 +32,19 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-      .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
   end
 
-  scope :resubmitted, -> { includes(:grade)
+  scope :resubmitted, -> {
+    includes(:grade)
     .where(grades: { status: ["Graded", "Released"] })
     .where("grades.graded_at < submitted_at")
   }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
+  scope :for_assignment_and_student, ->(assignment_id, student_id) { where(assignment_id: assignment_id, student_id: student_id) }
+  scope :for_assignment_and_group, ->(assignment_id, group_id) { where(assignment_id: assignment_id, group_id: group_id) }
 
   scope :with_group, -> { where "group_id is not null" }
 
@@ -47,11 +52,16 @@ class Submission < ActiveRecord::Base
 
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
   validates_length_of :link, maximum: 255
-  validates :assignment, presence: true
+  validates :assignment, presence: true, uniqueness: { scope: :student,
+    message: "should only have one submission per student" }
   validates_with SubmissionValidator
 
   clean_html :text_comment
   multiple_files :submission_files
+
+  def self.submitted_this_week(assignment_type)
+    assignment_type.submissions.where("submissions.updated_at > ? ", 7.days.ago).reject(&:draft?)
+  end
 
   def graded_at
     grade.graded_at if graded?
@@ -145,6 +155,18 @@ class Submission < ActiveRecord::Base
   def confirm_all_files
     submission_files.each do |submission_file|
       submission_file.check_and_set_confirmed_status
+    end
+  end
+
+  def draft?
+    link.blank? && text_comment.blank? && submission_files.empty? && submitted_at.nil?
+  end
+
+  def belongs_to?(user)
+    if assignment.is_individual?
+      student_id == user.id
+    else
+      user.group_memberships.pluck(:group_id).include? group_id
     end
   end
 

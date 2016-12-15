@@ -33,8 +33,13 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     end
   end
 
-  def submissions_this_week
-    course.assignment_types.submitted_this_week
+  def submitted_assignment_types_this_week
+    assignment_types_this_week = course.assignment_types.with_submissions_this_week
+    assignment_types_this_week.reject { |type| type.submissions.all?(&:draft?) }
+  end
+
+  def submitted_submissions_this_week_count(assignment_type)
+    Submission.submitted_this_week(assignment_type).count
   end
 
   def has_points_this_week?
@@ -55,8 +60,8 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
     end
   end
 
-  def has_submissions_this_week?
-    submissions_this_week.any?
+  def has_submitted_assignment_types_this_week?
+    submitted_assignment_types_this_week.any?
   end
 
   def has_weekly_stats?

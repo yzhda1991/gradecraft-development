@@ -71,12 +71,17 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
       modelArray.push(dataItem(item, response, options))
     )
 
-  # add to collection from a reponse with a single item
+  # copy to a single model from a response
+  setItem = (model, type, response) ->
+    if type == response.data.type
+      angular.copy(dataItem(response.data), model)
+
+  # add to collection from a response with a single item
   addItem = (modelArray, type, response)->
     if type == response.data.type
       modelArray.push(dataItem(response.data))
 
-  # add to collection from a reponse with an array of items
+  # add to collection from a response with an array of items
   addItems = (modelArray, type, response)->
     _.each(response.data, (item)->
       if type == item.type
@@ -99,10 +104,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     uriPrefix: uriPrefix
     logResponse: logResponse
     loadMany: loadMany
+    setItem: setItem
     addItem: addItem
     addItems: addItems
     deleteItem: deleteItem
     loadFromIncluded: loadFromIncluded
   }
 )
-

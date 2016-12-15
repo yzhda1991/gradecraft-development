@@ -1,12 +1,17 @@
-- student_submission = current_student.submission_for_assignment(assignment)
 - if assignment.is_individual?
-  - if student_submission.present?
+  - student_submission = Submission.for_assignment_and_student(assignment.id, current_student.id).first
+  - if student_submission.present? && SubmissionProctor.new(student_submission).viewable?(current_user)
     - if current_user_is_student?
       = link_to glyph("file-o") + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button"
     - else
       = link_to glyph("file-o") + "See Submission", assignment_submission_path(assignment, student_submission.id), class: "button"
   - elsif assignment.open?
-    = link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, student_id: current_student), class: "button"
+    - if student_submission.present? && student_submission.text_comment_draft.present?
+      -# new submission with preexisting autosaved draft
+      = link_to glyph(:pencil) + "Edit Draft", edit_assignment_submission_path(assignment, id: student_submission.id), class: "button"
+    - else
+      -# new submission with no prior autosaved draft
+      = link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, student_id: current_student), class: "button"
 - elsif assignment.has_groups?
   - group = current_student.group_for_assignment(assignment)
   - if group.present?

@@ -3,7 +3,7 @@
 
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @grade.assignment }
 
-  - if @grade.assignment.accepts_submissions? && @submission.present?
+  - if @grade.assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
     %hr.dotted
 
     %section
