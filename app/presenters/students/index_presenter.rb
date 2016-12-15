@@ -55,7 +55,7 @@ class Students::IndexPresenter < Showtime::Presenter
       unless team.nil?
         query = query.includes(:team_memberships).where(team_memberships: { team_id: team_id })
       end
-      query = query.order_by_high_score
+      query = query.order_by_high_score(course.id)
 
       @students = IndexStudentCollection.new(query, self)
     end
