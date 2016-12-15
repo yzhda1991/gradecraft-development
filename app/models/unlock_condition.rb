@@ -37,6 +37,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def requirements_completed_sentence
     "#{ condition_state_past } the #{ condition.name } #{ condition_type }" unless condition_type == "Course"
+    "Earned #{ condition_value } points in this course"
   end
 
   # Human readable sentence to describe what doing work on this thing unlocks
