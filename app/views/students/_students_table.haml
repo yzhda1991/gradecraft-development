@@ -17,7 +17,7 @@
       - if presenter.has_badges?
         %th #{ term_for :badges }
         %th{:style => "display: none"} Badge Count
-      %th Last Login
+      %th Last Activity
       %th Options
   %tbody
     - index = 0
@@ -45,7 +45,7 @@
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
           %td{ :style => "display: none" }= student.earned_badges_for_course(presenter.course).count
-        %td= student.last_login
+        %td= student.try(:last_activity_at) || '(never)'
         %td
           .right
             %a.button.button-edit.button-options= glyph(:cog) + glyph("caret-down")
