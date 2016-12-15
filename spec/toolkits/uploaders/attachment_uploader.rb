@@ -19,6 +19,10 @@ module Toolkits
 
           def owner_name
           end
+
+          def klass_name
+            "custom_files"
+          end
         end
 
         class MountedClass < FullUpFileKlass

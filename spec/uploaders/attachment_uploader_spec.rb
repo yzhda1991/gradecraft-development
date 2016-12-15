@@ -137,7 +137,12 @@ RSpec.describe AttachmentUploader do
     let(:result) { subject.file_klass }
 
     it "formats the name of the file class" do
+      allow(MockClass::FullUpFileKlass).to receive(:method_defined?).and_return(false)
       expect(result.split("/").last).to eq "full_up_file_klasses"
+    end
+
+    it "defaults to model file_klass method" do
+      expect(result).to eq "custom_files"
     end
   end
 

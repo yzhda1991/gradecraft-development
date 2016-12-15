@@ -19,7 +19,7 @@
               = render partial: "grades/standard_edit/raw_points_grading_fields", locals: { f: f, assignment: grade.assignment }
 
           .clear
-          %grade-files-uploader
+          %file-uploader
 
           .text-feedback
             = f.hidden_field :graded_by_id, :value => current_user.id

@@ -122,10 +122,9 @@ class GradesController < ApplicationController
       :assignment_id, :assignment_type_id, :assignments_attributes, :course_id,
       :earned_badges_attributes, :excluded_by_id, :excluded_at, :excluded_from_course_score,
       :feedback, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
-      :final_points, :grade_file_ids, :grade_files_attributes, :graded_at, :graded_by_id,
+      :final_points, :graded_at, :graded_by_id,
       :group_id, :instructor_modified, :is_custom_value, :pass_fail_status,
-      :full_points, :raw_points, :student_id, :submission_id, :team_id, :status,
-      grade_files_attributes: [:id, file: []]
+      :full_points, :raw_points, :student_id, :submission_id, :team_id, :status
   end
 
   def temp_view_context

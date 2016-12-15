@@ -5,7 +5,7 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   # defined on the model in order to use them as subdirectories, otherwise
   # they will be ommited: submission_file: uploads/<course-name_id>/assignments/<assignment-name_id>/submission_files/<student_name>/timestamp_file_name.ext
   # assignment_file:  uploads/<course-name_id>/assignments/<assignment-name_id>/assignment_files/<timestamp_file-name.ext>
-  # grade_file: uploads/<course-name_id>/assignments/<assignment-name_id>/grade_files/<timestamp_file-name.ext>
+  # attachment: uploads/<course-name_id>/assignments/<assignment-name_id>/attachments/<timestamp_file-name.ext>
   # badge_file: uploads/<course-name_id>/badge_files/<timestamp_file-name.ext>
   # challenge_file: uploads/<course-name_id>/challenge_files/<timestamp_file-name.ext>
 
@@ -52,7 +52,8 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   end
 
   def file_klass
-    model.class.to_s.underscore.pluralize
+    return model.klass_name if model.class.method_defined? :klass_name
+    klass_name = model.class.to_s.underscore.pluralize
   end
 
   def owner_name

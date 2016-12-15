@@ -28,11 +28,11 @@ class Grade < ActiveRecord::Base
   after_save :update_earned_badges
 
   clean_html :feedback
-  multiple_files :grade_files
+  multiple_files :file_uploads
   releasable_through :assignment
 
-  has_many :grade_files, dependent: :destroy, inverse_of: :grade
-  accepts_nested_attributes_for :grade_files
+  has_many :file_uploads, dependent: :destroy, inverse_of: :grade
+  accepts_nested_attributes_for :file_uploads
 
   validates_presence_of :assignment, :assignment_type, :course, :student
   validates :student_id, uniqueness: { scope: :assignment_id,
