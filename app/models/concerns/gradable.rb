@@ -105,9 +105,9 @@ module Gradable
   def next_ungraded_group(group)
     return nil unless has_groups?
     if accepts_submissions?
-      ungraded = ungraded_groups_with_submissions(group).sort { |g1,g2| g1.name <=> g2.name }
+      ungraded = ungraded_groups_with_submissions(group).sort_by(&:name)
     else
-      ungraded = ungraded_groups(group).sort { |g1,g2| g1.name <=> g2.name }
+      ungraded = ungraded_groups(group).sort_by(&:name)
     end
     i = ungraded.map(&:id).index(group.id)
     i && i < ungraded.length - 1 ? ungraded[i + 1] : nil
