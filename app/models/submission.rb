@@ -179,8 +179,6 @@ class Submission < ActiveRecord::Base
   end
 
   def student_xor_group
-    unless student.nil? ^ group.nil?
-      errors.add(:base, "must have either a student_id or group_id, but not both")
-    end
+    errors.add(:base, "must have either a student_id or group_id, but not both") unless student.nil? ^ group.nil?
   end
 end
