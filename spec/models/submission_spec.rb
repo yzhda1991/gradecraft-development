@@ -30,13 +30,15 @@ describe Submission do
     it "restricts duplicate submissions for a given student on an assignment" do
       submission = create(:submission)
       expect{create(:submission, assignment: submission.assignment,
-        student: submission.student)}.to raise_error ActiveRecord::RecordInvalid
+        student: submission.student)}.to raise_error ActiveRecord::RecordInvalid,
+        /should only have one submission per student or group/
     end
 
     it "restricts duplicate submissions for a given group on an assignment" do
       submission = create(:group_submission)
       expect{create(:group_submission, assignment: submission.assignment,
-        group: submission.group)}.to raise_error ActiveRecord::RecordInvalid
+        group: submission.group)}.to raise_error ActiveRecord::RecordInvalid,
+        /should only have one submission per student or group/
     end
 
     it "allows multiple group submissions to be created" do
