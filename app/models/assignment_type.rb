@@ -44,7 +44,7 @@ class AssignmentType < ActiveRecord::Base
   # Getting the assignment types max value if it's present, else returning the
   # summed total of assignment points
   def total_points
-    if max_points > 0
+    if max_points.present? && max_points > 0
       max_points
     else
       summed_assignment_points
