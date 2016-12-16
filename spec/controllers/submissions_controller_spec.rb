@@ -93,7 +93,7 @@ describe SubmissionsController do
       end
 
       it "checks if the submission is late" do
-        params = attributes_for(:submission)
+        params = attributes_for(:submission).merge!(student_id: student.id)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
         post :create, params: { assignment_id: assignment.id, submission: params }
       end

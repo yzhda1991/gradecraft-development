@@ -16,7 +16,7 @@ describe API::Assignments::SubmissionsController do
 
     describe "#show" do
       context "when the submission exists" do
-        let!(:submission) { create(:submission, assignment: assignment, text_comment_draft: "I love", group_id: assignment_group.group_id) }
+        let!(:submission) { create(:group_submission, assignment: assignment, text_comment_draft: "I love", group_id: assignment_group.group_id) }
 
         it "returns a 200 ok" do
           get :show, params: params, format: :json

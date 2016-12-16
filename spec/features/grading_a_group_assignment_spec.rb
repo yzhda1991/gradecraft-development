@@ -11,7 +11,7 @@ feature "grading a group assignment" do
     let!(:group) { create :group, course: course, name: "Group Name", approved: "Approved" }
     let!(:assignment_group) { create :assignment_group, group: group, assignment: assignment }
     let!(:group_membership) { create :group_membership, student: student, group: group }
-    let!(:submission) { create :submission, course: course, assignment: assignment, group: group }
+    let!(:submission) { create :group_submission, course: course, assignment: assignment, group: group }
 
     before(:each) do
       login_as professor

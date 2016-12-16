@@ -150,7 +150,7 @@ describe Submission do
     let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
     let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
     let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
-    let!(:submission) { create(:submission, assignment: assignment, group: assignment_group.group) }
+    let!(:submission) { create(:group_submission, assignment: assignment, group: assignment_group.group) }
 
     it "returns the submission for the group and assignment" do
       result = Submission.for_assignment_and_group(assignment.id, assignment_group.group_id).first
@@ -301,6 +301,7 @@ describe Submission do
     end
 
     it "returns one submission for a group resubmissions" do
+      subject = build(:group_submission)
       student1 = create(:user)
       student2 = create(:user)
       group = create(:group, assignments: [subject.assignment])
@@ -404,9 +405,9 @@ describe Submission do
   end
 
   describe "#submitter_id" do
-    let(:submission) { create :submission, group_id: 20, student_id: 30 }
-
     context "submission uses groups" do
+      let(:submission) { build_stubbed :group_submission, group_id: 20 }
+
       it "returns the group id" do
         allow(submission.assignment).to receive(:has_groups?) { true }
         expect(submission.submitter_id).to eq 20
@@ -414,13 +415,14 @@ describe Submission do
     end
 
     context "submissions doesn't use groups" do
+      let(:submission) { build_stubbed :submission, student_id: 30 }
+
       it "returns the student" do
         allow(submission.assignment).to receive(:has_groups?) { false }
         expect(submission.submitter_id).to eq 30
       end
     end
   end
-
 
   describe "#check_and_set_late_status!" do
     context "when the assignment has a due_at date" do

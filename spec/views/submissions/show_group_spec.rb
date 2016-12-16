@@ -17,7 +17,7 @@ describe "submissions/show" do
   let(:course) { create(:course) }
   let(:assignment) { build(:group_assignment, course: course) }
   let(:group) { create(:group, course: course) }
-  let(:submission) { create(:submission, course: course, assignment: assignment, group: group) }
+  let(:submission) { create(:group_submission, course: course, assignment: assignment, group: group) }
   let(:student) { create(:student_course_membership, course: course).user }
 
   before do
