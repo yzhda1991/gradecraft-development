@@ -49,6 +49,13 @@ describe Submission do
     it "allows multiple individual submissions to be created" do
       expect{create_list(:submission, 3)}.not_to raise_error
     end
+
+    it "requires either a group id or student id but not both" do
+      expect(build_stubbed(:submission)).to be_valid
+      expect(build_stubbed(:group_submission)).to be_valid
+      expect(build_stubbed(:submission, student: nil, group: nil)).not_to be_valid
+      expect(build_stubbed(:submission, student: build_stubbed(:user), group: build_stubbed(:group))).not_to be_valid
+    end
   end
 
   it_behaves_like "a historical model", :submission, link: "http://example.org"
