@@ -328,6 +328,11 @@ Rails.application.routes.draw do
         put "criterion_grades", to: "criterion_grades#update"
       end
       resources :groups, only: [] do
+        resources :criteria, only: [] do
+          member do
+            put :update_fields, to: 'criterion_grades#group_update_fields'
+          end
+        end
         get 'grades', to: 'grades#group_index'
         put "criterion_grades", to: "criterion_grades#group_update"
         get 'criterion_grades', to: 'criterion_grades#group_index'

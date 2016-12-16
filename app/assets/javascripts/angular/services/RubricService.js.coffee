@@ -35,6 +35,8 @@
     $http.get('/api/assignments/' + assignmentId + '/criteria').then(
       (response) ->
         angular.forEach(response.data.data, (criterion, index)->
+          # sets off factory construction chain: Criterion -> Level -> LevelBadge
+          # that is dependent on badges being in scope
           criterionObject = new Criterion(criterion.attributes, _scope)
           criteria.push criterionObject
         )
@@ -51,10 +53,16 @@
   updateCriterion = (assignmentId, recipientType, recipientId, criterion, field)->
     requestData = {}
     requestData[field] = criterion[field]
-    # This doesn't handle group criterion grades, we need to add functionality
-    # to update on all group criterion grades.
+
     if recipientType == "student"
       $http.put("/api/assignments/#{assignmentId}/students/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+    else if recipientType == "group"
+      $http.put("/api/assignments/#{assignmentId}/groups/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).then(
         (response) ->
           GradeCraftAPI.logResponse(response)
         ,(response) ->
