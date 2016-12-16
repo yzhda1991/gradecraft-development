@@ -627,7 +627,7 @@ on hover",
   assignment_type: :predictor,
   attributes: {
     name: "Past Assignment no Grade but Prediction",
-    description: "Has prediction but closed at 0 points in the Predictor. displays 'Closed' and 'Late' icons.",
+    description: "Has prediction which should not be added to point calculations. Should be closed at 0 points in the Predictor. displays 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions: true,
     accepts_submissions_until: 1.week.ago,
@@ -712,7 +712,7 @@ accepts predictions.",
   assignment_type: :predictor,
   attributes: {
     name: "Not Submitted, Closed",
-    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons. Closed in Predictor",
+    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons. Has prediction which should not be added to point calculations. Should be closed in predictor",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     full_points: 15000,
@@ -1433,7 +1433,7 @@ test that teaches you a lesson. – Tom Bodett",
   assignment_type: :unlocks,
   attributes: {
     name: "Unlocked-By-Past-Submission",
-    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor",
+    description: "Submitting 'Submission-Key' would have unlocked this assignment, now I am closed in the predictor, and my prediction should not be added to the Assignment Type total",
     full_points: 180000,
   },
   unlock_condition: true,
@@ -1441,6 +1441,10 @@ test that teaches you a lesson. – Tom Bodett",
     condition: :passed_unlock_submission_condition,
     condition_type: "Assignment",
     condition_state: "Submitted"
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
