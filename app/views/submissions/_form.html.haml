@@ -3,11 +3,9 @@
 %hr
 
 = simple_form_for([presenter.assignment, presenter.submission]) do |f|
-  - if presenter.assignment.has_groups? && current_user_is_student?
-    = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(presenter.assignment).id }, as: :hidden
-  - elsif presenter.assignment.has_groups? && current_user_is_staff?
+  - if presenter.assignment.has_groups?
     = f.input :group_id, :input_html => { :value => presenter.group.id }, as: :hidden
-  - elsif presenter.assignment.is_individual?
+  - else # presenter.assignment.is_individual?
     = f.input :student_id, :input_html => { :value => presenter.student.id }, as: :hidden
 
   - if presenter.submission.will_be_resubmitted?

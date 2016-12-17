@@ -11,7 +11,7 @@
       - for challenge_grade in @challenge_grades
         %tr
           %td= challenge_grade.team.name
-          %td= points challenge_grade.score
+          %td= points challenge_grade.final_points
           %td= challenge_grade.status
 
   = simple_form_for :challenge_grade, :url => update_status_challenge_challenge_grades_path(@challenge), :html => { :method => :put} do |f|

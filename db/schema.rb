@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161206025103) do
+ActiveRecord::Schema.define(version: 20161209225205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +135,11 @@ ActiveRecord::Schema.define(version: 20161206025103) do
     t.index ["course_id"], name: "index_assignments_on_course_id", using: :btree
   end
 
+  create_table "attachments", force: :cascade do |t|
+    t.integer "grade_id",       null: false
+    t.integer "file_upload_id", null: false
+  end
+
   create_table "badge_files", force: :cascade do |t|
     t.string   "filename"
     t.integer  "badge_id"
@@ -177,7 +182,7 @@ ActiveRecord::Schema.define(version: 20161206025103) do
 
   create_table "challenge_grades", force: :cascade do |t|
     t.integer  "challenge_id",                           null: false
-    t.integer  "score"
+    t.integer  "raw_points"
     t.string   "status"
     t.integer  "team_id",                                null: false
     t.integer  "final_points"
@@ -355,6 +360,17 @@ ActiveRecord::Schema.define(version: 20161206025103) do
     t.integer  "course_id",     null: false
   end
 
+  create_table "file_uploads", force: :cascade do |t|
+    t.integer  "grade_id"
+    t.string   "filename"
+    t.string   "filepath"
+    t.string   "file"
+    t.boolean  "file_processing", default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "store_dir"
+  end
+
   create_table "flagged_users", force: :cascade do |t|
     t.integer  "course_id",  null: false
     t.integer  "flagger_id", null: false
@@ -364,17 +380,6 @@ ActiveRecord::Schema.define(version: 20161206025103) do
     t.index ["course_id"], name: "index_flagged_users_on_course_id", using: :btree
     t.index ["flagged_id"], name: "index_flagged_users_on_flagged_id", using: :btree
     t.index ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
-  end
-
-  create_table "grade_files", force: :cascade do |t|
-    t.integer  "grade_id"
-    t.string   "filename"
-    t.string   "filepath"
-    t.string   "file"
-    t.boolean  "file_processing", default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "store_dir"
   end
 
   create_table "grade_scheme_elements", force: :cascade do |t|
@@ -646,8 +651,9 @@ ActiveRecord::Schema.define(version: 20161206025103) do
     t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",               default: false, null: false
+    t.text     "text_comment_draft"
     t.index ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
-    t.index ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
+    t.index ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
     t.index ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
     t.index ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree

@@ -58,5 +58,13 @@ module Submissions
       assignment.open? &&
         (!grade.present? || assignment.resubmissions_allowed?)
     end
+
+    def term_for_edit(current_user)
+      if !current_user.is_staff?(assignment.course) && submission.text_comment_draft.present?
+        "Edit Draft"
+      else
+        "Edit Submission"
+      end
+    end
   end
 end

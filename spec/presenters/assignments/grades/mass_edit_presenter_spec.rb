@@ -1,5 +1,5 @@
+require "rails_spec_helper"
 require "./app/presenters/assignments/grades/mass_edit_presenter"
-require "active_record_spec_helper"
 
 describe Assignments::Grades::MassEditPresenter do
   let(:assignment) { double(:assignment) }
@@ -104,12 +104,15 @@ describe Assignments::Grades::MassEditPresenter do
   describe "#grades_by_group" do
     let(:assignment_group_1) { double(:groups, group_id: 1, students: [ double(:student, id: 1) ]) }
     let(:assignment_group_2) { double(:groups, group_id: 2, students: [ double(:student, id: 2) ]) }
+    let(:grade) { double(:grade) }
 
     it "returns grades organized by group" do
       allow(assignment).to receive(:groups).and_return [ assignment_group_1, assignment_group_2 ]
       allow(assignment).to receive(:id).and_return 1
-      allow(Grade).to receive(:find_or_create).and_return double(:grade, { grade_id: 1 })
+      allow_any_instance_of(Gradebook).to receive(:grades).and_return [grade]
+
       result = subject.grades_by_group
+
       expect(result.count).to eq 2
       expect(result).to all include :group, :grade
     end

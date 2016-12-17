@@ -3,7 +3,7 @@ require "./app/presenters/assignments/presenter"
 require "./app/presenters/assignments/group_presenter"
 
 describe Assignments::Presenter do
-  let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
+  let(:assignment) { double(:assignment, id: 1, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
@@ -41,10 +41,10 @@ describe Assignments::Presenter do
 
   describe "#groups" do
     it "wraps the assignment groups in an Assignment::GroupPresenter" do
-      groups = [double(:group), double(:group)]
+      groups = double(:groups, order_by_name: [double(:group), double(:group)])
       allow(assignment).to receive(:groups).and_return groups
       expect(subject.groups.map(&:class).uniq).to eq [Assignments::GroupPresenter]
-      expect(subject.groups.first.group).to eq groups.first
+      expect(subject.groups.first.group).to eq groups.order_by_name.first
     end
   end
 
@@ -152,6 +152,52 @@ describe Assignments::Presenter do
     it "returns the team for the team id from the course" do
       allow(course).to receive(:teams).and_return double(:relation, find_by: team)
       expect(subject.team).to eq team
+    end
+  end
+
+  describe "#has_viewable_submission?" do
+    let(:user) { double(:user, id: 1) }
+    let(:submission) { double(:submission) }
+
+    context "when the submission exists" do
+      before(:each) { allow(Submission).to receive(:for_assignment_and_student).and_return [submission] }
+
+      it "is false if the assignment doesn't accept submissions" do
+        allow(assignment).to receive(:accepts_submissions?).and_return false
+        expect(subject.has_viewable_submission_for?(user)).to eq false
+      end
+
+      it "is false if the submission is not viewable" do
+        allow(assignment).to receive(:accepts_submissions?).and_return(true)
+        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
+        expect(subject.has_viewable_submission_for?(user)).to eq false
+      end
+
+      it "is true when all criteria are met" do
+        allow(assignment).to receive(:accepts_submissions?).and_return(true)
+        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
+        expect(subject.has_viewable_submission_for?(user)).to eq true
+      end
+    end
+
+    context "when the submission does not exist" do
+      before(:each) { allow(Submission).to receive(:for).and_return [] }
+
+      it "is false" do
+        allow(assignment).to receive(:accepts_submissions?).and_return true
+        expect(subject.has_viewable_submission_for?(user)).to eq false
+      end
+    end
+  end
+
+  describe "#has_viewable_submission_for?" do
+    let(:user) { double(:user, id: 1) }
+    let(:submission) { double(:submission) }
+
+    it "checks if there is a viewable submission" do
+      allow(Submission).to receive(:for_assignment_and_student).and_return [submission]
+      expect(subject).to receive(:has_viewable_submission?).with(submission, user)
+      subject.has_viewable_submission_for?(user)
     end
   end
 end

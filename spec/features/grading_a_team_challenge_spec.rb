@@ -33,7 +33,7 @@ feature "grading a team challenge" do
       expect(current_path).to eq new_challenge_challenge_grade_path(challenge.id)
 
       within(".pageContent") do
-        fill_in("challenge_grade_score", with: 100)
+        fill_in("challenge_grade_raw_points", with: 100)
         click_button "Submit Grade"
       end
       expect(page).to have_notification_message("notice", "Section Name's Grade for Section Challenge Name Section Challenge successfully graded")

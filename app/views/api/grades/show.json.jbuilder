@@ -16,11 +16,11 @@ json.data do
   end
 
   json.relationships do
-    if @grade_files.present?
-      json.grade_files do
-        json.data @grade_files do |grade_file|
-          json.type "grade_files"
-          json.id grade_file.id.to_s
+    if @grade.file_uploads.present?
+      json.file_uploads do
+        json.data @files_attachments do |file_upload|
+          json.type "file_uploads"
+          json.id file_upload.id.to_s
         end
       end
     end
@@ -28,16 +28,16 @@ json.data do
 end
 
 json.included do
-  if @grade_files.present?
-    json.array! @grade_files do |grade_file|
-      json.type "grade_files"
-      json.id grade_file.id.to_s
+  if @grade.file_uploads.present?
+    json.array! @grade.file_uploads do |file_upload|
+      json.type "file_uploads"
+      json.id file_upload.id.to_s
       json.attributes do
-        json.id grade_file.id
-        json.grade_id grade_file.grade_id
-        json.filename grade_file.filename
-        json.filepath grade_file.filepath
-        json.file_processing grade_file.file_processing
+        json.id file_upload.id
+        json.grade_id file_upload.grade_id
+        json.filename file_upload.filename
+        json.filepath file_upload.filepath
+        json.file_processing file_upload.file_processing
       end
     end
   end

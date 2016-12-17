@@ -4,12 +4,18 @@ class API::GradesController < ApplicationController
 
   # GET api/assignments/:assignment_id/students/:student_id/grade
   def show
-    @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
-    @grade_files = GradeFile.where(grade_id: @grade.id)
-    if @grade.assignment.release_necessary?
-      @grade_status_options = Grade::STATUSES
+    if Assignment.exists?(params[:assignment_id].to_i) && User.exists?(params[:student_id].to_i)
+      @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
+      if @grade.assignment.release_necessary?
+        @grade_status_options = Grade::STATUSES
+      else
+        @grade_status_options = Grade::UNRELEASED_STATUSES
+      end
     else
-      @grade_status_options = Grade::UNRELEASED_STATUSES
+      render json: {
+        message: "not a valid student or assignment", success: false
+        },
+        status: 400
     end
   end
 
@@ -24,6 +30,9 @@ class API::GradesController < ApplicationController
     end
     changes = grade.changes
     if grade.save
+      if GradeProctor.new(grade).viewable?
+        GradeUpdaterJob.new(grade_id: grade.id).enqueue
+      end
       grade.squish_history!
       render json: { message: {changes: changes}, success: true }
     else

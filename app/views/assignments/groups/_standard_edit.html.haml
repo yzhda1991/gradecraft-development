@@ -2,12 +2,12 @@
   = hidden_field_tag "group_id", @group.id
   = f.hidden_field :graded_by_id, :value => current_user.id
   = f.hidden_field :instructor_modified, :value => true
-  = f.hidden_field :submission_id, value: @submission_id
+  = f.hidden_field :submission_id, value: @submission.id unless @submission.nil?
 
   Score:
   = label_tag do
     - if @assignment.has_levels?
-      = f.select :raw_points, @assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :selected => @group.students.first.grade_for_assignment(@assignment).try(:raw_points), :include_blank => true
+      = f.select :raw_points, @assignment_score_levels.map { |l| [l.formatted_name, l.points] }, :selected => @group.students.first.grade_for_assignment(@assignment).try(:raw_points), :include_blank => true
     - else
       = f.text_field :raw_points, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.full_points }", data: {autonumeric: true, "m-dec" => "0"}, :value => @group.students.first.grade_for_assignment(@assignment).try(:raw_points)
 
@@ -25,4 +25,6 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "Submit Grades", class: "button"
+      - unless @group.students.first.grade_for_assignment(@assignment).try(:is_graded?)
+        %li= f.button :submit, "Submit and Grade Next", name: "redirect_to_next_grade", class: "button"
       %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), class: 'button'

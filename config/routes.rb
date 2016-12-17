@@ -332,6 +332,9 @@ Rails.application.routes.draw do
         put "criterion_grades", to: "criterion_grades#group_update"
         get 'criterion_grades', to: 'criterion_grades#group_index'
       end
+      resources :submissions, only: [:create, :update], module: :assignments do
+        get :show, on: :collection
+      end
     end
 
     resources :challenges, only: :index
@@ -345,7 +348,7 @@ Rails.application.routes.draw do
       resources :earned_badges, only: :create, module: :grades do
         delete :delete_all, on: :collection
       end
-      resources :grade_files, only: [:create, :destroy], module: :grades
+      resources :attachments, only: [:create, :destroy], module: :grades
     end
     resources :grade_scheme_elements, only: :index
     resources :levels, only: :update

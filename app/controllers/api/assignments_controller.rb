@@ -1,5 +1,5 @@
 class API::AssignmentsController < ApplicationController
-  before_filter :ensure_staff?, only: [:show]
+  before_action :ensure_staff?, only: [:show]
 
   # GET api/assignments
   def index
@@ -22,5 +22,3 @@ class API::AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
   end
 end
-
-

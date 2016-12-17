@@ -75,12 +75,12 @@ class Challenges::ChallengeGradesController < ApplicationController
   private
 
   def challenge_params
-    params.require(:challenge).permit challenge_grades_attributes: [:score, :status, :team_id, :id]
+    params.require(:challenge).permit challenge_grades_attributes: [:raw_points, :status, :team_id, :id]
   end
 
   def challenge_grade_params
-    params.require(:challenge_grade).permit :name, :score, :status, :challenge_id, :feedback,
-      :team_id, :final_points
+    params.require(:challenge_grade).permit :name, :raw_points, :status, :challenge_id, :feedback,
+      :team_id, :final_points, :adjustment_points, :adjustment_points_feedback
   end
 
   def find_challenge

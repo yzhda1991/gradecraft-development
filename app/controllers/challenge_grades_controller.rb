@@ -50,8 +50,8 @@ class ChallengeGradesController < ApplicationController
   private
 
   def challenge_grade_params
-    params.require(:challenge_grade).permit :name, :score, :status, :challenge_id, :feedback,
-      :team_id, :final_points
+    params.require(:challenge_grade).permit :name, :raw_points, :status, :challenge_id, :feedback,
+      :team_id, :final_points, :adjustment_points, :adjustment_points_feedback
   end
 
   def find_challenge
