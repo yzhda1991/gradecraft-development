@@ -2,7 +2,7 @@
   = render "layouts/alerts"
 
   - if @team.present?
-    %h3.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
+    %h2.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
     - if @team.banner.present?
       %img.clear{:src => @team.banner, :height => 200 }
 

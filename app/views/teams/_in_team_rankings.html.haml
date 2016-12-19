@@ -1,4 +1,4 @@
-%h3.subtitle= "In-#{ term_for :team } Rankings"
+%h2.subtitle= "In-#{ term_for :team } Rankings"
 - if team.present?
   - if current_user_is_student? && ! current_student.display_name?
     %h6.small.right

@@ -23,12 +23,12 @@
 
 
 - if presenter.assignment.assignment_files.present?
-  %h4.uppercase Downloads
+  %h3.uppercase Downloads
   %ul
   - presenter.assignment.assignment_files.each do |af|
     %li= link_to af.filename, af.url
 - if current_user_is_staff?
-  %h4.uppercase Downloads
+  %h3.uppercase Downloads
   %p= link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
 
   - if presenter.grade_with_rubric? && presenter.grades.present?
@@ -49,7 +49,7 @@
 
   - if presenter.assignment.is_unlockable?
     - if presenter.assignment.is_unlocked_for_student?(current_student)
-      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked:
+      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked:
       .italic To achieve this you:
       %ul
         - presenter.assignment.unlock_conditions.each do |condition|
@@ -66,14 +66,14 @@
         You must create a #{term_for :group} to complete this #{term_for :assignment}
 
     - else
-      %h4.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked:
+      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked:
       %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
       %ul
         - presenter.assignment.unlock_conditions.each do |uc|
           %li= link_to uc.requirements_description_sentence, uc.condition
 
 - if presenter.assignment.is_a_condition?
-  %h4.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
+  %h3.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
   %ul
     - presenter.assignment.unlock_keys.each do |key|
       - if !key.unlockable_type == GradeSchemeElement
@@ -82,13 +82,13 @@
         %li= key.key_description_sentence
 
 - if presenter.assignment_has_viewable_description?(current_user)
-  %h4.uppercase Guidelines:
+  %h3.uppercase Guidelines:
   = raw sanitize_external_links presenter.assignment.description
 
 - if presenter.assignment_has_viewable_purpose?(current_user)
-  %h4.uppercase Purpose:
+  %h3.uppercase Purpose:
   = raw presenter.assignment.purpose
 
 - if presenter.assignment.assignment_type.description.present?
-  %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
+  %h3.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
   = raw presenter.assignment.assignment_type.description

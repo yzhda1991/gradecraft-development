@@ -20,12 +20,17 @@ function animateMobileMenu() {
     $offscreenSidebar
       .removeClass('animating closing opening')
       .toggleClass('menu-visible');
-   
+      if ($offscreenSidebar.hasClass('menu-visible')) {
+        $offscreenSidebar.attr('aria-hidden', 'false');
+      } else {
+        $offscreenSidebar.attr('aria-hidden', 'true');
+      }
+
     $offscreenSidebar.off(transitionEnd);
   });
 
   $contentMask.toggle();
-  $body.toggleClass("noscroll");  
+  $body.toggleClass("noscroll");
 }
 
 //Toggle in-app mobile menu

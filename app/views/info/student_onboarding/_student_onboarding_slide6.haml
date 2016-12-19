@@ -5,23 +5,23 @@
         - if current_course.has_badges?
           .course-feature-block
             .course-feature-image-wrapper
-              %img.course-feature-image{src: "/images/onboarding-slide-6-badges.png"}
+              %img.course-feature-image{src: "/images/onboarding-slide-6-badges.png", alt: "Badge icons"}
             %h3 Badges
         - if current_course.teams_visible?
           .course-feature-block
             .course-feature-image-wrapper
-              %img.course-feature-image{src: "/images/onboarding-slide-6-leaderboard.png"}
+              %img.course-feature-image{src: "/images/onboarding-slide-6-leaderboard.png", alt: "Leaderboard graphic"}
             %h3 Leaderboards
       .course-feature-row
         - if presenter.has_course_terminology?
           .course-feature-block
             .course-feature-image-wrapper
-              %img.course-feature-image{src: "/images/onboarding-slide-6-custom-terms.png"}
+              %img.course-feature-image{src: "/images/onboarding-slide-6-custom-terms.png", alt: "Custom term graphic"}
             %h3 Custom Terms
         - if current_course.has_multipliers?
           .course-feature-block
             .course-feature-image-wrapper
-              %img.course-feature-image{src: "/images/onboarding-slide-6-multipliers.png"}
+              %img.course-feature-image{src: "/images/onboarding-slide-6-multipliers.png", alt: "Multiplier assignment weights"}
             %h3 Multipliers
   .modal-slide-bottom
     .modal-slide-text

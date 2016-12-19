@@ -6,7 +6,7 @@
   - if @team.banner.present?
     %img{:src => @team.banner, :height => 200 }
 
-  %h3.subtitle= "#{term_for :student} Roster"
+  %h2.subtitle= "#{term_for :student} Roster"
 
   %table.dynatable.no-table-header
     %thead
@@ -47,7 +47,7 @@
                 %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
                 %li= link_to glyph(:edit) + "Edit", edit_user_path(student), class: "button"
 
-  %h3.subtitle #{term_for :challenge } Grades
+  %h2.subtitle #{term_for :challenge } Grades
 
   %table.dynatable
     %thead

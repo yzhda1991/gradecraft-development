@@ -6,7 +6,7 @@
   - presenter.students.each do |student|
     - grade = student.grade_for_assignment(presenter.assignment)
     - if grade.present? && grade.instructor_modified?
-      %h4.uppercase= student.name
+      %h3.uppercase= student.name
       .left= render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
       .right= render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
 

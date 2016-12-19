@@ -6,7 +6,7 @@
   - @assignment_types.each do |assignment_type|
     - assignments_for_type = assignment_type.assignments
     - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
-      %h3.subtitle= assignment_type.name
+      %h2.subtitle= assignment_type.name
 
       %table.dynatable
         %caption.sr-only= assignment_type.name

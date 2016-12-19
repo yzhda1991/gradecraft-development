@@ -4,13 +4,13 @@
   .assignment-details-container
     - if presenter.grades_available_for? current_student
       %section
-        %h3 My Grade
+        %h2 My Grade
         = render partial: "grades/grade_content", locals: { grade: presenter.grade_for(current_student) }
         %hr.dotted
 
       - if !presenter.hide_analytics?
         %section
-          %h3 Class Analytics
+          %h2 Class Analytics
           - if presenter.assignment.has_groups?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else
@@ -19,7 +19,7 @@
 
     - if presenter.has_viewable_submission_for?(current_student)
       %section
-        %h3 My Submission
+        %h2 My Submission
         = render partial: "submissions/submission_content",
             locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
               assignment_id: presenter.assignment.id, course: current_course) }
@@ -27,11 +27,11 @@
         %hr.dotted
 
     %section
-      %h3 Description
+      %h2 Description
       = render partial: "assignments/description", locals: { presenter: presenter }
 
     - if presenter.show_rubric_preview? current_student
       %hr.dotted
       %section
-        %h3 Grading Rubric
+        %h2 Grading Rubric
         = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }

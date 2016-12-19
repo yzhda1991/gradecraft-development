@@ -14,11 +14,11 @@
             %button.button.select-all= "Check All"
             %button.button.select-none= "Uncheck"
 
-    %h3.subtitle Description
+    %h2.subtitle Description
     .challenge-description
       = raw @challenge.description
 
-    %h3.subtitle Scores
+    %h2.subtitle Scores
     %tbody
       - @teams.alpha.each do |team|
         - challenge_grade = @challenge.challenge_grades.find_by team: team

@@ -92,15 +92,17 @@ $(document).ready(function() {
 
 // Filter my planner items in "due this week" module
 $('#my-planner').click(function() {
-  $('#course-planner, #my-planner').toggleClass("selected");
-  $('.my-planner-list').show();
-  $('.course-planner-list').hide();
+  $('#my-planner').attr('aria-pressed', true).addClass("selected");
+  $('#course-planner').attr('aria-pressed', false).removeClass("selected");
+  $('.my-planner-list').show().attr('aria-hidden', 'false');
+  $('.course-planner-list').hide().attr('aria-hidden', 'true');
 });
 
 $('#course-planner').click(function() {
-  $('#course-planner, #my-planner').toggleClass("selected");
-  $('.course-planner-list').show();
-  $('.my-planner-list').hide();
+  $('#course-planner').attr('aria-pressed', true).addClass("selected");
+  $('#my-planner').attr('aria-pressed', false).removeClass("selected");
+  $('.course-planner-list').show().attr('aria-hidden', 'false');
+  $('.my-planner-list').hide().attr('aria-hidden', 'true');
 });
 
 //Find event with closest date
@@ -141,10 +143,24 @@ function setInitialEventSlide(eventJson){
 // Initialize slick slider for course events
 function initSlickSlider(startIndex) {
   $('.slide-container').slick({
-    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
-    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
+    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous course event"></a>',
+    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
     initialSlide: startIndex,
     adaptiveHeight: true, 
     infinite: false
   });
 }
+
+// Open class info card and submenu in top nav on click and hide on body click
+$(document).on('click', function(event) {
+  var $this = $(event.target);
+  var $dropdownContent = $('.dropdown-content');
+
+  if ($this.parent().hasClass('dropdown')) {
+    var $thisDropdownContent = $this.siblings('.dropdown-content');
+    $dropdownContent.not($thisDropdownContent).hide();
+    $thisDropdownContent.toggle();
+  } else if (!$this.closest('.dropdown').length) {
+    $dropdownContent.hide();
+  }
+});

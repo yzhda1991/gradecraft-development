@@ -5,55 +5,55 @@
     .card.quarter
       .card-text
         .center.bold.inverse.large= ungraded_submissions_count_for(current_course)
-        %h3.center.inverse Ungraded Submissions
+        %h2.grading-status-name.center.inverse Ungraded Submissions
 
     .card.quarter
       .card-text
         .center.bold.inverse.large= unreleased_grades_count_for(current_course)
-        %h3.center.inverse Unreleased Grades
+        %h2.grading-status-name.center.inverse Unreleased Grades
 
     .card.quarter
       .card-text
         .center.bold.inverse.large= in_progress_grades_count_for(current_course)
-        %h3.center.inverse In Progress Grades
+        %h2.grading-status-name.center.inverse In Progress Grades
 
     .card.quarter
       .card-text
         .center.bold.inverse.large= resubmission_count_for(current_course)
-        %h3.center.inverse Resubmissions
+        %h2.grading-status-name.center.inverse Resubmissions
 
   - if @ungraded_submissions_by_assignment.present?
     .collapseSection{id: "ungraded" }
       .collapse
-        %a
+        %h3
           %i.fa.fa-angle-double-right.fa-fw
-        Ungraded Submissions
+          Ungraded Submissions
       .collapse-hidden
         = render partial: "submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
 
   - if @unreleased_grades_by_assignment.present?
     .collapseSection{id: "unreleased" }
       .collapse
-        %a
+        %h3
           %i.fa.fa-angle-double-right.fa-fw
-        Unreleased Grades
+          Unreleased Grades
       .collapse-hidden
         = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @unreleased_grades_by_assignment, course: current_course }
 
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress" }
       .collapse
-        %a
+        %h3
           %i.fa.fa-angle-double-right.fa-fw
-        In Progress Grades
+          In Progress Grades
       .collapse-hidden
         = render partial: "grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions" }
       .collapse
-        %a
+        %h3
           %i.fa.fa-angle-double-right.fa-fw
-        Resubmissions
+          Resubmissions
       .collapse-hidden
         = render partial: "submissions_table", locals: { submission_type: "resubmissions", submissions_by_assignment: @resubmissions_by_assignment, course: current_course }

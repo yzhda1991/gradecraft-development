@@ -4,18 +4,18 @@
   = render partial: "layouts/alerts"
 
   - if @pending_groups.present?
-    %h3.subtitle= "Pending #{term_for :groups}"
+    %h2.subtitle= "Pending #{term_for :groups}"
 
     = render partial: "groups/groups_table", locals: { course: current_course, :groups => @pending_groups }
 
   - if @rejected_groups.present?
 
-    %h3.subtitle.fail= "Rejected #{term_for :groups}"
+    %h2.subtitle.fail= "Rejected #{term_for :groups}"
 
     = render partial: "groups/groups_table", locals: { course: current_course, :groups => @rejected_groups }
 
   - if @approved_groups.present?
 
-    %h3.subtitle.success= "Approved #{term_for :groups}"
+    %h2.subtitle.success= "Approved #{term_for :groups}"
 
     = render partial: "groups/groups_table", locals: { course: current_course, :groups => @approved_groups }

@@ -2,7 +2,7 @@
   = render "layouts/alerts"
 
   - unless @result.import_result.unsuccessful.empty?
-    %h3.subtitle
+    %h2.subtitle
       = "#{@result.import_result.unsuccessful.count} #{"Assignment".pluralize(@result.import_result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
@@ -15,7 +15,7 @@
             %td= row[:data]
             %td= row[:errors]
 
-  %h3.subtitle
+  %h2.subtitle
     = "#{@result.import_result.successful.count} #{"Assignment".pluralize(@result.import_result.successful.count)} Imported Successfully"
   %table.dynatable
     %thead

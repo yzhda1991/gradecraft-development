@@ -1,13 +1,13 @@
-.homepage
+%main.homepage{role: "main"}
   .alert-bkg= render "layouts/alerts"
-  .hero-section
+  %section.hero-section
     .hide-for-medium.hide-for-large.center= image_tag "gradecraft_logo.png", :width => "180"
     %h1.center A learning management system that supports gameful courses
     %p.center.hero-tagline
       %span.sr-only Subtitle:
       Encourage students to focus on the craft of learning
 
-  .feature-section.white.gameful
+  %section.feature-section.white.gameful
     %h2.center What is Gameful?
     .section-container
       .flex-container
@@ -31,7 +31,7 @@
             %p Students can see their progress at any time. Levels, unlocks, and badges provide feedback and support motivation to keep working.
 
 
-  .feature-section.alternate-white.feature-overview
+  %section.feature-section.alternate-white.feature-overview
     %h2.center Features to Support Gameful Design
     .section-container
       .flex-container
@@ -76,7 +76,7 @@
       .center.button-container
         = link_to "See More Features", features_path, class: "outline-button"
 
-  .feature-section.white.gameful.pedagogy
+  %section.feature-section.white.gameful.pedagogy
     %h2.center Learn More About Gameful Pedagogy
     .section-container
       .flex-container

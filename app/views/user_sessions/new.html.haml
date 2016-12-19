@@ -17,7 +17,7 @@
         = render partial: "user_sessions/form"
         %button.button-link.small#forgot-password Forgot your password?
 
-    .password-forgot-form
+    .password-forgot-form{"aria-hidden": "true"}
       %h2 Forgot Your Password?
       %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
       = render partial: "passwords/reset_form"
