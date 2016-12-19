@@ -68,12 +68,13 @@ class API::CriterionGradesController < ApplicationController
     result = cg.update_attributes(criterion_grade_params)
     if result
       render json: {
-        message: 'Criterion grade successfully updated', success: true
+        message: 'Criterion grade successfully updated', success: true,
+        status: 200
       }
     else
       render json: {
         errors: result.errors, success: false
-      }, status: :bad_request
+      }, status: 400
     end
   end
 
@@ -88,11 +89,12 @@ class API::CriterionGradesController < ApplicationController
       @criterion_grades << cg
     end
     if results.all?
-      render "api/criterion_grades/index", status: 201
+      render "api/criterion_grades/index", success: true,
+      status: 200
     else
       render json: {
         errors: results, success: false
-      }, status: :bad_request
+      }, status: 400
     end
   end
 
