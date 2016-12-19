@@ -27,10 +27,34 @@ describe Submission do
       expect(subject.errors[:base]).to include "Submission cannot be empty"
     end
 
-    it "permits only one submission per user, per assignment" do
-      course_submission = create(:submission)
-      expect{create(:submission, assignment: course_submission.assignment,
-        student: course_submission.student)}.to raise_error ActiveRecord::RecordInvalid
+    it "restricts duplicate submissions for a given student on an assignment" do
+      submission = create(:submission)
+      expect{create(:submission, assignment: submission.assignment,
+        student: submission.student)}.to raise_error ActiveRecord::RecordInvalid,
+        /should only have one submission per student or group/
+    end
+
+    it "restricts duplicate submissions for a given group on an assignment" do
+      submission = create(:group_submission)
+      expect{create(:group_submission, assignment: submission.assignment,
+        group: submission.group)}.to raise_error ActiveRecord::RecordInvalid,
+        /should only have one submission per student or group/
+    end
+
+    it "allows multiple group submissions to be created" do
+      group = create(:group)
+      expect{create_list(:group_submission, 3, group: group)}.not_to raise_error
+    end
+
+    it "allows multiple individual submissions to be created" do
+      expect{create_list(:submission, 3)}.not_to raise_error
+    end
+
+    it "requires either a group id or student id but not both" do
+      expect(build_stubbed(:submission)).to be_valid
+      expect(build_stubbed(:group_submission)).to be_valid
+      expect(build_stubbed(:submission, student: nil, group: nil)).not_to be_valid
+      expect(build_stubbed(:submission, student: build_stubbed(:user), group: build_stubbed(:group))).not_to be_valid
     end
   end
 
@@ -126,7 +150,7 @@ describe Submission do
     let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
     let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
     let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
-    let!(:submission) { create(:submission, assignment: assignment, group: assignment_group.group) }
+    let!(:submission) { create(:group_submission, assignment: assignment, group: assignment_group.group) }
 
     it "returns the submission for the group and assignment" do
       result = Submission.for_assignment_and_group(assignment.id, assignment_group.group_id).first
@@ -277,6 +301,7 @@ describe Submission do
     end
 
     it "returns one submission for a group resubmissions" do
+      subject = build(:group_submission)
       student1 = create(:user)
       student2 = create(:user)
       group = create(:group, assignments: [subject.assignment])
@@ -380,9 +405,9 @@ describe Submission do
   end
 
   describe "#submitter_id" do
-    let(:submission) { create :submission, group_id: 20, student_id: 30 }
-
     context "submission uses groups" do
+      let(:submission) { build_stubbed :group_submission, group_id: 20 }
+
       it "returns the group id" do
         allow(submission.assignment).to receive(:has_groups?) { true }
         expect(submission.submitter_id).to eq 20
@@ -390,13 +415,14 @@ describe Submission do
     end
 
     context "submissions doesn't use groups" do
+      let(:submission) { build_stubbed :submission, student_id: 30 }
+
       it "returns the student" do
         allow(submission.assignment).to receive(:has_groups?) { false }
         expect(submission.submitter_id).to eq 30
       end
     end
   end
-
 
   describe "#check_and_set_late_status!" do
     context "when the assignment has a due_at date" do

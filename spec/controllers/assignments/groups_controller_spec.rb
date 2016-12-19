@@ -23,7 +23,7 @@ describe Assignments::GroupsController do
     describe "GET grade" do
       it "assigns params" do
         group = create(:group)
-        submission = create(:submission, assignment: @assignment, group: group)
+        submission = create(:group_submission, assignment: @assignment, group: group)
         @assignment.groups << group
         group.students << @student
         get :grade, params: { assignment_id: @assignment.id, id: group.id }

@@ -39,7 +39,7 @@ describe Services::Actions::AssociatesSubmissionWithGrade do
   describe "with a group in the context" do
     it "adds the group submission_id to the grade" do
       context[:group] = world.group
-      submission = create(:submission, assignment: world.assignment, group: world.group)
+      submission = create(:group_submission, assignment: world.assignment, group: world.group)
       result = described_class.execute context
       expect(result[:grade].submission_id).to eq submission.id
     end

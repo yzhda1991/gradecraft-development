@@ -134,7 +134,7 @@ describe Group do
   describe "#submission_for_assignment(assignment)" do
     it "returns the group's submission for an assignment" do
       assignment = create(:assignment, grade_scope: "Group")
-      submission = create(:submission, group: subject, assignment: assignment)
+      submission = create(:group_submission, group: subject, assignment: assignment)
       expect(subject.submission_for_assignment(assignment)).to eq(submission)
     end
 

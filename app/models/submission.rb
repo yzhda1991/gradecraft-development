@@ -50,10 +50,11 @@ class Submission < ActiveRecord::Base
 
   before_validation :cache_associations
 
+  validate :student_xor_group
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
   validates_length_of :link, maximum: 255
-  validates :assignment, presence: true, uniqueness: { scope: :student,
-    message: "should only have one submission per student" }
+  validates :assignment, presence: true, uniqueness: { scope: [:student, :group],
+    message: "should only have one submission per student or group" }, allow_nil: true
   validates_with SubmissionValidator
 
   clean_html :text_comment
@@ -175,5 +176,9 @@ class Submission < ActiveRecord::Base
   def cache_associations
     self.assignment_id ||= assignment.id
     self.course_id ||= assignment.course_id
+  end
+
+  def student_xor_group
+    errors.add(:base, "must have either a student_id or group_id, but not both") unless student.nil? ^ group.nil?
   end
 end
