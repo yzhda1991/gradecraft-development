@@ -11,8 +11,8 @@
         %th
         - if @challenge.release_necessary?
           %th.center{"data-dynatable-no-sort" => "true" }
-            %button.button.select-all= "Check All"
-            %button.button.select-none= "Uncheck"
+            %button.button.select-all{role: "button", type: "button"}= "Check All"
+            %button.button.select-none{role: "button", type: "button"}= "Uncheck"
 
     %h2.subtitle Description
     .challenge-description

@@ -29,6 +29,5 @@
 
   - if presenter.assignment.release_necessary?
     %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-      - if presenter.has_grades? 
-        %button.button.select-all= "Check"
-        %button.button.select-none= "Uncheck"
+      %button.button.select-all{role: "button", type: "button"}= "Check"
+      %button.button.select-none{role: "button", type: "button"}= "Uncheck"

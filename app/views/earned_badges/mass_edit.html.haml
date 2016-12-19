@@ -12,10 +12,10 @@
             %th{:width => "15%"} Earned
             %th{"data-dynatable-no-sort" => "true", :width => "140px" }
               .center
-                %button.button.select-all
+                %button.button.select-all{role: "button", type: "button"}
                   %i.hide-for-small.fa.fa-check-square.fa-fw
                   = "Check"
-                %button.button.select-none
+                %button.button.select-none{role: "button", type: "button"}
                   %i.hide-for-small.fa.fa-square.fa-fw
                   = "Uncheck"
         - @earned_badges.each do |earned_badge|
