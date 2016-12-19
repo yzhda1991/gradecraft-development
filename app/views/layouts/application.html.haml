@@ -11,21 +11,27 @@
     = csrf_meta_tags
     = yield(:head)
 
-  %body(class="#{body_class}")
-    = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
-    - if current_user
-      %a.nav-flyout-contentmask
-      .inner-wrap
-        - if current_user_is_staff?
-          = render partial: "layouts/staff"
-        - else
-          = render partial: "layouts/student"
-    - else
-      = render partial: "layouts/public"
+  - if current_user && !current_user.course_memberships.any?
+    %body
+      = render partial: "layouts/content"
+    = render partial: "layouts/help/uservoice"
+  - else
+    %body(class="#{body_class}")
+      = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
+      - if current_user
+        %a.nav-flyout-contentmask
+        .inner-wrap
+          - if current_user_is_staff?
+            = render partial: "layouts/staff"
+          - else
+            = render partial: "layouts/student"
+      - else
+        = render partial: "layouts/public"
     = render partial: "layouts/help/uservoice"
     .footer
       = render partial: "layouts/footer"
-    = render partial: "layouts/background"
-    = render partial: "layouts/google_analytics"
-    = javascript_include_tag "application", "data-turbolinks-track" => true
-    = yield(:scripts)
+
+  = render partial: "layouts/background"
+  = render partial: "layouts/google_analytics"
+  = javascript_include_tag "application", "data-turbolinks-track" => true
+  = yield(:scripts)
