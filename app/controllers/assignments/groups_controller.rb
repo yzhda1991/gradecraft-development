@@ -8,7 +8,10 @@ class Assignments::GroupsController < ApplicationController
     @group = @assignment.groups.find(params[:id])
     @submission = @assignment.submissions.where(group_id: @group.id).first
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
-    @rubric = @assignment.rubric if @assignment.grade_with_rubric?
+    if @assignment.grade_with_rubric?
+      @rubric = @assignment.rubric
+      @grade_next_path = path_for_next_group_grade @assignment, @group
+    end
   end
 
   # PUT /assignments/:assignment_id/groups/:id/graded

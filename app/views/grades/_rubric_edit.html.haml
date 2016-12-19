@@ -97,8 +97,7 @@
 
     .right
       %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
-      - if recipient_type == "student"
-        %button#submit-grade(ng-click="submitGrade('#{grade_next_path}')" ng-class='{"disabled" : !grade.status}') Submit and Grade Next
+      %button#submit-grade(ng-click="submitGrade('#{grade_next_path}')" ng-class='{"disabled" : !grade.status}') Submit and Grade Next
 
     - if recipient_type == "student" && current_course.has_badges?
       %h3= "Award #{ @grade.student.name } #{term_for :badges} for #{ @grade.assignment.name }:"
