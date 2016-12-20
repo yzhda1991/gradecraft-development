@@ -7,7 +7,7 @@ $('.button-table-action').click(function() {
   var btnId = $(this).attr('id');
   var lowestRank = $tableRows.has('.graded').last().find('td:eq(1)').text();
 
-  $(this).addClass("selected").siblings().removeClass("selected");
+  $(this).addClass("selected").attr("aria-pressed", "true").siblings().removeClass("selected").attr("aria-pressed", "false");
   $tableRows.show();
   // only run filter function if buttons are any other than All students
   if (btnId != 'btn-all-students') {

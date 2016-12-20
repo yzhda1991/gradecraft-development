@@ -2,9 +2,9 @@
   .filter-container
     %p Filter:
     .filter-buttons
-      %button.button-table-action#btn-all-students= glyph(:users) + "All #{term_for :students}"
-      %button.button-table-action.selected#btn-leaderboard= glyph('list-ol') + "Leaderboard"
-      %button.button-table-action#btn-flagged-students= glyph(:flag) + "Flagged #{term_for :students}"
-      %button.button-table-action#btn-top10= glyph('star') + "Top 10"
-      %button.button-table-action#btn-bottom10= glyph('star-half-empty') + "Bottom 10"
-      %button.button-table-action#btn-auditors= glyph('user-o') + "Auditors"
+      %button.button-table-action#btn-all-students{role: "button", type: "button", "aria-pressed": "false"}= glyph(:users) + "All #{term_for :students}"
+      %button.button-table-action.selected#btn-leaderboard{role: "button", type: "button", "aria-pressed": "true"}= glyph('list-ol') + "Leaderboard"
+      %button.button-table-action#btn-flagged-students{role: "button", type: "button", "aria-pressed": "false"}= glyph(:flag) + "Flagged #{term_for :students}"
+      %button.button-table-action#btn-top10{role: "button", type: "button", "aria-pressed": "false"}= glyph('star') + "Top 10"
+      %button.button-table-action#btn-bottom10{role: "button", type: "button", "aria-pressed": "false"}= glyph('star-half-empty') + "Bottom 10"
+      %button.button-table-action#btn-auditors{role: "button", type: "button", "aria-pressed": "false"}= glyph('user-o') + "Auditors"

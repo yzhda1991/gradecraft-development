@@ -48,7 +48,7 @@
         %td= student.last_activity_at || '(never)'
         %td
           .right
-            %a.button.button-edit.button-options= glyph(:cog) + glyph("caret-down")
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= glyph(:cog) + glyph("caret-down")
             %ul.options-menu
               %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
