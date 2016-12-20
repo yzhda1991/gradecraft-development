@@ -4,22 +4,38 @@
   fileUploads = []
   gradeStatusOptions = []
 
+  # used for group grades:
+  grades = []
+  _recipientType = ""
+
   getGrade = (assignmentId, recipientType, recipientId)->
+    _recipientType = recipientType
     if recipientType == "student"
-      $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').success((response)->
-        angular.copy(response.data.attributes, grade)
-        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response)
-        angular.copy(response.meta.grade_status_options, gradeStatusOptions)
-        thresholdPoints = response.meta.threshold_points
+      $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').then(
+        (response) ->
+          angular.copy(response.data.data.attributes, grade)
+          GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
+          angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
+          thresholdPoints = response.data.meta.threshold_points
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
     else if recipientType == "group"
-      $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/grades/').success((response)->
+      $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/grades/').then(
+        (response) ->
 
-        # The API sends all student information so we can add the ability to custom grade group members
-        # For now we filter to the first student's grade since all students grades are identical
-        angular.copy(_.find(response.data, { attributes: {'student_id' : response.meta.student_ids[0] }}).attributes, grade)
-        angular.copy(response.meta.grade_status_options, gradeStatusOptions)
-        thresholdPoints = response.meta.threshold_points
+          # The API sends all student information so we can add the ability to custom grade group members
+          # For now we filter to the first student's grade to populate the view, since all students grades are identical
+          # We store all grades in grades, so that when updateGrade is called, we can iterate through all group grades
+          angular.copy(_.find(response.data.data, { attributes: {'student_id' : response.data.meta.student_ids[0] }}).attributes, grade)
+          GradeCraftAPI.loadMany(grades, response.data)
+
+          angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
+          thresholdPoints = response.data.meta.threshold_points
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
 
   toggleCustomValue = ()->
@@ -37,15 +53,22 @@
   timeSinceUpdate = ()->
     Math.abs(new Date() - grade.updated_at)
 
-  updateGrade = ()->
-    $http.put("/api/grades/#{grade.id}", grade: grade).success(
-      (data,status)->
-        console.log(data)
+  _updateGradeById = (id)->
+    $http.put("/api/grades/#{id}", grade: grade).then(
+      (response) ->
         grade.updated_at = new Date()
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
     )
-    .error((err)->
-      console.log(err)
-    )
+
+  updateGrade = ()->
+    if _recipientType == "student"
+      _updateGradeById(grade.id)
+    else if _recipientType == "group"
+      _.each(grades, (g)->
+        _updateGradeById(g.id)
+      )
 
   postAttachments = (files)->
     fd = new FormData();

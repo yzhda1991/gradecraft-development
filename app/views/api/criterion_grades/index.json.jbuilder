@@ -1,8 +1,6 @@
 json.data @criterion_grades do |criterion_grade|
-  json.type "criterion_grades"
-  json.id criterion_grade.id.to_s
-
-  json.attributes do
-    json.merge! criterion_grade.attributes
-  end
+  json.partial! 'api/criterion_grades/criterion_grade', criterion_grade: criterion_grade
 end
+
+
+

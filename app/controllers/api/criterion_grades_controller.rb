@@ -46,21 +46,6 @@ class API::CriterionGradesController < ApplicationController
     end
   end
 
-  # PUT api/assignments/:assignment_id/students/:student_id/criteria/:id/update_fields
-  def update_fields
-    cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
-    result = cg.update_attributes(criterion_grade_params)
-    if result
-      render json: {
-        message: 'Criterion grade successfully updated', success: true
-      }
-    else
-      render json: {
-        errors: result.errors, success: false
-      }, status: :bad_request
-    end
-  end
-
   # PUT api/assignments/:assignment_id/groups/:group_id/criterion_grades
   def group_update
     result = Services::CreatesGroupGradesUsingRubric.create params, current_user.id
@@ -74,6 +59,42 @@ class API::CriterionGradesController < ApplicationController
         errors: [{ detail: result.message }], success: false
         },
         status:  result.error_code || 400
+    end
+  end
+
+  # PUT api/assignments/:assignment_id/students/:student_id/criteria/:id/update_fields
+  def update_fields
+    cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
+    result = cg.update_attributes(criterion_grade_params)
+    if result
+      render json: {
+        message: 'Criterion grade successfully updated', success: true,
+        status: 200
+      }
+    else
+      render json: {
+        errors: result.errors, success: false
+      }, status: 400
+    end
+  end
+
+  # PUT api/assignments/:assignment_id/groups/:group_id/criteria/:id/update_fields
+  def group_update_fields
+    group = Group.find(params[:group_id])
+    results = []
+    @criterion_grades = []
+    group.students.each do |student|
+      cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], student.id)
+      results << cg.update_attributes(criterion_grade_params)
+      @criterion_grades << cg
+    end
+    if results.all?
+      render "api/criterion_grades/index", success: true,
+      status: 200
+    else
+      render json: {
+        errors: results, success: false
+      }, status: 400
     end
   end
 

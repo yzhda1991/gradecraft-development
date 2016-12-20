@@ -32,11 +32,16 @@
   # TODO: $scope should not be passed around if we want to avoid tight coupling
   getCriteria = (assignmentId, $scope)->
     _scope = $scope
-    $http.get('/api/assignments/' + assignmentId + '/criteria').success((response)->
-      angular.forEach(response.data, (criterion, index)->
-        criterionObject = new Criterion(criterion.attributes, _scope)
-        criteria.push criterionObject
-      )
+    $http.get('/api/assignments/' + assignmentId + '/criteria').then(
+      (response) ->
+        angular.forEach(response.data.data, (criterion, index)->
+          # sets off factory construction chain: Criterion -> Level -> LevelBadge
+          # that is dependent on badges being in scope
+          criterionObject = new Criterion(criterion.attributes, _scope)
+          criteria.push criterionObject
+        )
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
     )
 
   addCriterionGrades = (resData)->
@@ -48,48 +53,64 @@
   updateCriterion = (assignmentId, recipientType, recipientId, criterion, field)->
     requestData = {}
     requestData[field] = criterion[field]
-    # This doesn't handle group criterion grades, we need to add functionality
-    # to update on all group criterion grades.
+
     if recipientType == "student"
-      $http.put("/api/assignments/#{assignmentId}/students/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).success(
-        (data, status)->
-          console.log(data)
+      $http.put("/api/assignments/#{assignmentId}/students/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
-      .error((err)->
-        console.log(err)
+    else if recipientType == "group"
+      $http.put("/api/assignments/#{assignmentId}/groups/#{recipientId}/criteria/#{criterion.id}/update_fields", criterion_grade: requestData).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
 
   getCriterionGrades = (assignmentId, recipientType, recipientId)->
     if recipientType == "student"
-      $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/criterion_grades/').success((response)->
-        addCriterionGrades(response.data)
+      $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/criterion_grades/').then(
+        (response) ->
+          addCriterionGrades(response.data.data)
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
-    else if recipientType == "group"
-      $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/criterion_grades/').success((response)->
 
-        # The API sends all student information so we can add the ability to custom grade group members
-        # For now we filter to the first student's grade since all students grades are identical
-        addCriterionGrades(_.filter(response.data, { attributes: { 'student_id': response.meta.student_ids[0] }}))
+    else if recipientType == "group"
+      $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/criterion_grades/').then(
+        (response) ->
+          # The API sends all student information so we can add the ability to custom grade group members
+          # For now we filter to the first student's grade since all students grades are identical
+          addCriterionGrades(_.filter(response.data.data, { attributes: { 'student_id': response.data.meta.student_ids[0] }}))
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
 
   getBadges = ()->
-    $http.get('/api/badges').success((response)->
-      angular.forEach(response.data, (badge, index)->
-        courseBadge = new CourseBadge(badge.attributes)
-        badges[badge.id] = courseBadge
-      )
-      _badgesAvailable = true
+    $http.get('/api/badges').then(
+      (response) ->
+        angular.forEach(response.data.data, (badge, index)->
+          courseBadge = new CourseBadge(badge.attributes)
+          badges[badge.id] = courseBadge
+        )
+        _badgesAvailable = true
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
     )
 
   putRubricGradeSubmission = (assignmentId, recipientType, recipientId, params, returnURL)->
     scopeRoute = if recipientType == "student" then "students" else "groups"
-    $http.put("/api/assignments/#{assignmentId}/#{scopeRoute}/#{recipientId}/criterion_grades", params).success(
-      (data)->
-        console.log(data)
+    $http.put("/api/assignments/#{assignmentId}/#{scopeRoute}/#{recipientId}/criterion_grades", params).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
         window.location = returnURL
-    ).error(
-      (data)->
-        console.log(data)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
     )
 
   thresholdPoints = ()->
