@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   include ApplicationHelper
+  include ImpersonationHelper
 
   def not_authenticated
     if !request.env["REMOTE_USER"].nil?
