@@ -125,6 +125,12 @@ class ApplicationController < ActionController::Base
     user.set_last_ip_addess(request.remote_ip)
   end
 
+  def register_logout_time_to_db(user)
+    return unless Config.register_logout_time
+    user = impersonating? ? impersonating_agent : user
+    user.set_last_logout_at(Time.now.in_time_zone)
+  end
+
   private
 
   def current_ability
