@@ -53,7 +53,7 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def check_and_update_student_earned_level
-    course.grade_scheme_elements.order_by_lowest_points.map { |gse| gse.check_unlock_status(user) }
+    course.grade_scheme_elements.order_by_lowest_points.map { |gse| gse.unlock!(user) }
     update_attributes earned_grade_scheme_element_id: earned_grade_scheme_element.try(:id)
   end
 
@@ -83,7 +83,7 @@ class CourseMembership < ActiveRecord::Base
   def check_unlockables
     if self.course.is_a_condition?
       self.course.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.check_unlock_status(user)
+        unlockable.unlock!(user)
       end
     end
   end

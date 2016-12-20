@@ -127,10 +127,10 @@ class Submission < ActiveRecord::Base
         unlockable = condition.unlockable
         if self.assignment.has_groups?
           self.group.students.each do |student|
-            unlockable.check_unlock_status(student)
+            unlockable.unlock!(student)
           end
         else
-          unlockable.check_unlock_status(student)
+          unlockable.unlock!(student)
         end
       end
     end
