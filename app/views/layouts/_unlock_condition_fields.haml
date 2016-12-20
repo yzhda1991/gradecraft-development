@@ -24,4 +24,4 @@
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
   .right
     = f.hidden_field :_destroy, class: "destroy"
-    = link_to "Delete Condition", "#", class: "remove-unlock-condition button right"
+    %button.remove-unlock-condition.right Delete Condition
