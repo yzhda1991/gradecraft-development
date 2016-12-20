@@ -7,10 +7,10 @@ class API::AssignmentsController < ApplicationController
 
     if  current_user_is_student?
       @student = current_student
-      @allow_updates = !student_impersonation?
+      @allow_updates = !impersonating?
       @grades = Grade.for_course(current_course).for_student(current_student)
 
-      if !student_impersonation?
+      if !impersonating?
         @assignments.includes(:predicted_earned_grades)
         @predicted_earned_grades =
           PredictedEarnedGrade.for_course(current_course).for_student(current_student)

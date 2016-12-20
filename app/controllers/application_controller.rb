@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_not_impersonating?
-    redirect_to root_path unless !student_impersonation?
+    redirect_to root_path unless !impersonating?
   end
 
   def ensure_prof?

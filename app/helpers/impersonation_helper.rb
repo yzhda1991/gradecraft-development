@@ -22,7 +22,7 @@ module ImpersonationHelper
     session[:impersonating_agent_id]
   end
 
-  def student_impersonation?
+  def impersonating?
     impersonating_agent_id.present?
   end
 end

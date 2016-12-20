@@ -1,5 +1,5 @@
 -# do not allow faculty to switch courses in preview mode!
-- if current_user_is_student? && !student_impersonation?
+- if current_user_is_student? && !impersonating?
   = render partial: "layouts/navigation/course_search"
 %li.dropdown.my-account
   %a.section-title{:href => "#", :title => "My account management"}

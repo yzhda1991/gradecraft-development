@@ -29,7 +29,7 @@
             = f.label :display_name, "Pseudonym"
             = f.text_field :display_name
             .form-item What would you like your name to be on the leaderboards?
-        
+
         - if current_course.has_team_roles?
           .form-item
             = f.input :team_role, :input_html => { :maxlength => 255 }, :label => "#{term_for :team} Role"
@@ -41,7 +41,7 @@
               = p.input :character_profile
               .form_label What's the background of your character in this class? What skills do you have and what are you motivated by?
 
-      - if student_impersonation?
+      - if impersonating?
         You cannot update this information in preview mode
       - else
         .submit-buttons
