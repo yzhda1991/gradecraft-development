@@ -1011,6 +1011,24 @@ describe Assignment do
     end
   end
 
+  describe "#has_submitted_submissions?" do
+    let!(:draft_submission) { create(:draft_submission, assignment: subject) }
+
+    context "when there are submitted submissions" do
+      let!(:submitted_submission) { create(:submission, assignment: subject) }
+
+      it "returns true" do
+        expect(subject.has_submitted_submissions?).to eq true
+      end
+    end
+
+    context "when there are no submitted submissions" do
+      it "returns false" do
+        expect(subject.has_submitted_submissions?).to eq false
+      end
+    end
+  end
+
   describe "#soon?" do
     it "is not soon if there is no due date" do
       subject.due_at = nil

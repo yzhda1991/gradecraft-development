@@ -109,6 +109,10 @@ class Assignment < ActiveRecord::Base
     grade_scope=="Group"
   end
 
+  def has_submitted_submissions?
+    submissions.reject(&:draft?).any?
+  end
+
   # Custom point total if the class has weighted assignments
   def full_points_for_student(student)
     return 0 unless full_points
