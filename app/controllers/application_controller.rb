@@ -111,6 +111,20 @@ class ApplicationController < ActionController::Base
     session[:return_to] = request.referer
   end
 
+  # Sorcery activity logging overrides
+  def register_last_activity_time_to_db
+    return unless Config.register_last_activity_time
+    return unless logged_in?
+    user = impersonating? ? impersonating_agent : current_user
+    user.set_last_activity_at(Time.now.in_time_zone)
+  end
+
+  def register_last_ip_address(_user, _credentials)
+    return unless Config.register_last_ip_address
+    user = impersonating? ? impersonating_agent : current_user
+    user.set_last_ip_addess(request.remote_ip)
+  end
+
   private
 
   def current_ability
