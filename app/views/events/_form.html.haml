@@ -4,7 +4,7 @@
   %section
     %h2 Basic Settings
     .form-item
-      = f.input :name
+      = f.input :name, "aria-required": "true"
     .form-item
       = f.input :open_at, as: :string, :input_html => { class: "datetimepicker", :value => @event.try(:open_at) }, :label => "Start Date"
     .form-item
