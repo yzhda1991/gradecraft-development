@@ -392,14 +392,14 @@ describe Assignment do
     end
   end
 
-  describe "#check_unlock_status" do
+  describe "#unlock!" do
     let(:student) { create :user }
     before { subject.save }
 
     it "returns a new unlock state if the goal of unlockables does not meet the number of unlocks" do
       subject.unlock_conditions.create! condition_id: subject.id,
         condition_type: subject.class, condition_state: "Grade Earned"
-      expect(subject.check_unlock_status(student)).to be_an_instance_of UnlockState
+      expect(subject.unlock!(student)).to be_an_instance_of UnlockState
       expect(subject.unlock_states.last).to_not be_unlocked
     end
 
@@ -410,7 +410,7 @@ describe Assignment do
         allow(condition).to receive(:is_complete?).with(student).and_return true
         state = subject.unlock_states.create(student_id: student.id,
                                              unlocked: false)
-        expect(subject.check_unlock_status(student)).to eq state
+        expect(subject.unlock!(student)).to eq state
         expect(state.reload).to be_unlocked
       end
 
@@ -418,7 +418,7 @@ describe Assignment do
         condition = subject.unlock_conditions.create condition_id: subject.id,
           condition_type: subject.class, condition_state: "Submitted"
         allow(condition).to receive(:is_complete?).with(student).and_return true
-        expect(subject.check_unlock_status(student)).to eq \
+        expect(subject.unlock!(student)).to eq \
           subject.unlock_states.last
         expect(subject.unlock_states.last.unlockable_type).to eq subject.class.name
         expect(subject.unlock_states.last.student).to eq student

@@ -5,9 +5,14 @@ module UsersHelper
     end
   end
 
+  def flagged_users_icon(flagged_users, flagged_id)
+    flagged = flagged_users.any? { |f| f.flagged_id == flagged_id }
+    raw_flagged_user_icon flagged
+  end
+
   def flagged_user_icon(course, flagger, flagged_id)
     flagged = FlaggedUser.flagged? course, flagger, flagged_id
-    raw("<i class=\"fa fa-flag fa-fw #{"flagged" if flagged}\"></i>")
+    raw_flagged_user_icon flagged
   end
 
   def total_scores_for_chart(user, course)
@@ -26,5 +31,11 @@ module UsersHelper
       scores: scores,
       course_total: course.total_points + earned_badge_points
       }
+  end
+
+  private
+
+  def raw_flagged_user_icon(flagged)
+    raw("<i class=\"fa fa-flag fa-fw #{"flagged" if flagged}\"></i>")
   end
 end

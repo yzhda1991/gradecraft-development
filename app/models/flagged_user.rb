@@ -5,6 +5,7 @@ class FlaggedUser < ActiveRecord::Base
 
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_flagged, ->(user) { where(flagged_id: user.id) }
+  scope :for_flagger, ->(user) { where(flagger_id: user.id) }
 
   validates :course, presence: true
   validates :flagger, presence: true, course_membership: true, staff_flagger: true

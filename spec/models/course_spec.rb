@@ -525,14 +525,6 @@ describe Course do
     end
   end
 
-  describe "#membership_for_student(student)" do
-    it "returns the membership relationship for a student" do
-      student = create(:user)
-      course_membership = create(:course_membership, user: student, course: subject)
-      expect(subject.membership_for_student(student)).to eq(course_membership)
-    end
-  end
-
   describe "#assignment_weight_for_student(student)" do
     it "sums the assignment weights the student has spent" do
       student = create(:user)
@@ -667,7 +659,7 @@ describe Course do
       expect(subject.scores).to match_array({:scores => [100, 200, 300]})
     end
   end
-  
+
   describe "#nonpredictors" do
     it "returns the students who have not yet predicted any assignments" do
       student = create(:user)

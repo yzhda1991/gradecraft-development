@@ -150,10 +150,6 @@ class Course < ActiveRecord::Base
     weights_close_at.nil? || weights_close_at > Time.now
   end
 
-  def membership_for_student(student)
-    course_memberships.detect { |m| m.user_id == student.id }
-  end
-
   def assignment_weight_for_student(student)
     student.assignment_type_weights.where(course_id: self.id).pluck("weight").sum
   end

@@ -175,20 +175,6 @@ describe User do
     end
   end
 
-  describe "#auditing_course?(course)" do
-    let(:student) { create :user }
-
-    it "returns true if the student is auditing" do
-      create(:course_membership, course: course, user: student, auditing: true)
-      expect(student.auditing_course?(course)).to eq(true)
-    end
-
-    it "returns false if the student is being graded" do
-      membership = create(:course_membership, course: course, user: student, auditing: false)
-      expect(student.auditing_course?(course)).to eq(false)
-    end
-  end
-
   describe "#self_reported_done?" do
     it "is not self reported if there are no grades" do
       expect(student).to_not be_self_reported_done(world.assignment)

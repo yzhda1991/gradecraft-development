@@ -11,7 +11,7 @@ module UnlockableCondition
       reject_if: proc { |uc| uc["condition_type"].blank? || uc["condition_id"].blank? }
   end
 
-  def check_unlock_status(student)
+  def unlock!(student)
     unlocked = self.unlock_condition_count_to_meet == self.unlock_condition_count_met_for(student)
     unlock_state = unlock_states.where(student_id: student.id).first if unlocked
     unlock_state ||= unlock_states.build(student_id: student.id,
@@ -36,9 +36,9 @@ module UnlockableCondition
 
   def is_unlocked_for_student?(student)
     return true unless unlock_conditions.present?
+
     unlock_state = unlock_states.where(student_id: student.id).first
-    return true if unlock_state.present? && unlock_state.is_unlocked?
-    return false
+    unlock_state.present? && unlock_state.is_unlocked?
   end
 
   def is_unlocked_for_group?(group)

@@ -191,15 +191,14 @@ describe Badge do
     end
   end
 
-  describe "#check_unlock_status(student)" do
-
+  describe "#unlock!" do
     it "updates the unlock status to true if conditions are met" do
       locked_badge = create(:badge)
       student = create(:user)
       assignment = create(:assignment)
       submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
-      locked_badge.check_unlock_status(student)
+      locked_badge.unlock!(student)
       unlock_state = locked_badge.unlock_states.where(student: student).first
       expect(unlock_state.unlocked).to eq(true)
     end
@@ -212,7 +211,7 @@ describe Badge do
       submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
       unlock_condition_2 = create(:unlock_condition, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
-      locked_badge.check_unlock_status(student)
+      locked_badge.unlock!(student)
       unlock_state = locked_badge.unlock_states.where(student: student).first
       expect(unlock_state.unlocked).to eq(false)
     end

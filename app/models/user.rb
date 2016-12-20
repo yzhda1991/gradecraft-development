@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
       query = query.students_in_team(team.id, user_ids) if team
       query
     end
-    
+
     def students_being_graded_for_course(course, team=nil)
       user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
       query = User.where(id: user_ids)
@@ -169,10 +169,6 @@ class User < ActiveRecord::Base
     name.downcase == another_user.name.downcase
   end
 
-  def auditing_course?(course)
-    course.membership_for_student(self).auditing?
-  end
-
   Role.all.each do |role|
     define_method("is_#{role}?") do |course|
       self.role(course) == role
@@ -315,7 +311,7 @@ class User < ActiveRecord::Base
     membership.recalculate_and_update_student_score
     membership.check_and_update_student_earned_level
   end
-  
+
   ### SUBMISSIONS
 
   def submission_for_assignment(assignment)

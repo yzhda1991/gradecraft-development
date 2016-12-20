@@ -22,6 +22,7 @@ require "carrierwave"
 require "carrierwave/orm/activerecord"
 require "croutons"
 require "csv"
+require "database_cleaner"
 require "factory_girl"
 require "faker"
 require "sanitize"
@@ -105,14 +106,15 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
     FactoryGirl.factories.clear
     FactoryGirl.find_definitions
   end
 
   config.around do |example|
-    ActiveRecord::Base.transaction do
+    DatabaseCleaner.cleaning do
       example.run
-      raise ActiveRecord::Rollback
     end
   end
 end
