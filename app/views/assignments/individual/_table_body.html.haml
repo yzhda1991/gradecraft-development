@@ -76,4 +76,6 @@
       %td
         .center
           - if grade.is_graded?
-            = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }
+            %label
+              %span.sr-only Select Assignment to Update Grade Status
+              = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"
