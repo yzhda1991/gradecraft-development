@@ -6,7 +6,7 @@
   .layout-right-content
     %header{role: "banner"}
       .navbar.container
-        %nav.the-nav.nav-collapse{class: ("preview-mode" if student_impersonation?), role: "navigation"}
+        %nav.the-nav.nav-collapse{class: ("preview-mode" if impersonating?), role: "navigation"}
           %ul.nav.nav-pill.left
             %li.course-site
               %a.no-hover.site-title{:href => dashboard_path}
@@ -14,7 +14,7 @@
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
 
-          - if student_impersonation?
+          - if impersonating?
             .release-preview-link= link_to glyph('eye-slash') + "Exit #{term_for :student} Preview", exit_student_impersonation_path
           %ul.nav.nav-pill.right
             - if presenter.has_info?

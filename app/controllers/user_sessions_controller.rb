@@ -48,15 +48,12 @@ class UserSessionsController < ApplicationController
 
   def impersonate_student
     student = current_course.students.find(params[:student_id])
-    impersonating_agent current_user
-    auto_login(student)
+    impersonate! student
     redirect_to root_url
   end
 
   def exit_student_impersonation
-    faculty = User.find(impersonating_agent_id)
-    auto_login(faculty)
-    delete_impersonating_agent
+    unimpersonate!
     redirect_to students_path
   end
 

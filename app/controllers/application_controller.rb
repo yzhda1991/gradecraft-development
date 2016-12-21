@@ -30,6 +30,7 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   include ApplicationHelper
+  include ImpersonationHelper
 
   def not_authenticated
     if !request.env["REMOTE_USER"].nil?
@@ -95,7 +96,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_not_impersonating?
-    redirect_to root_path unless !student_impersonation?
+    redirect_to root_path unless !impersonating?
   end
 
   def ensure_prof?
@@ -108,6 +109,26 @@ class ApplicationController < ActionController::Base
 
   def save_referer
     session[:return_to] = request.referer
+  end
+
+  # Sorcery activity logging overrides
+  def register_last_activity_time_to_db
+    return unless Config.register_last_activity_time
+    return unless logged_in?
+    user = impersonating? ? impersonating_agent : current_user
+    user.set_last_activity_at(Time.now.in_time_zone)
+  end
+
+  def register_last_ip_address(_user, _credentials)
+    return unless Config.register_last_ip_address
+    user = impersonating? ? impersonating_agent : current_user
+    user.set_last_ip_addess(request.remote_ip)
+  end
+
+  def register_logout_time_to_db(user)
+    return unless Config.register_logout_time
+    user = impersonating? ? impersonating_agent : user
+    user.set_last_logout_at(Time.now.in_time_zone)
   end
 
   private

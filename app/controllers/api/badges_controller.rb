@@ -16,9 +16,9 @@ class API::BadgesController < ApplicationController
 
     if  current_user_is_student?
       @student = current_student
-      @allow_updates = !student_impersonation?
+      @allow_updates = !impersonating?
 
-      if !student_impersonation?
+      if !impersonating?
         @badges.includes(:predicted_earned_badges)
         @predicted_earned_badges =
           PredictedEarnedBadge.for_course(current_course).for_student(current_student)
