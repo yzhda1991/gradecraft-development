@@ -1,19 +1,22 @@
 .grade-scheme-row
 
-  %span.form_label Grade Letter
-  %input.letter(name='letter' ng-model='element.letter')
+  %label.form_label 
+    Grade Letter
+    %input.letter(name='letter' ng-model='element.letter')
 
-  %span.form_label Level name
-  %input.level(name='level' ng-model='element.level')
+  %label.form_label 
+    Level name
+    %input.level(name='level' ng-model='element.level')
 
-  %span.form_label Point Threshold
-  %input.low-range(type='number'
-                   ng-model='element.lowest_points'
-                   ng-model-options='{allowInvalid: true}'
-                   ng-change='validateElements($index)'
-                   required
-                   min=0
-                   name='lowest_points_{{$index}}')
+  %label.form_label 
+    Point Threshold
+    %input.low-range(type='number'
+                     ng-model='element.lowest_points'
+                     ng-model-options='{allowInvalid: true}'
+                     ng-change='validateElements($index)'
+                     required
+                     min=0
+                     name='lowest_points_{{$index}}')
 
   %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict')
     %a
@@ -29,9 +32,9 @@
 
   .right
     %span
-      %button.add-element.button(type='button' ng-click='gradeService.addNew($index)')
+      %button.add-element.button(type='button' ng-click='gradeService.addNew($index)' tabindex='0')
         %i.fa.fa-plus 
         Add a level below
-      %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)')
+      %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)' aria-label="Remove Level")
         Remove
         %i.fa.fa-times
