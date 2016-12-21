@@ -1,15 +1,15 @@
 - if badge.is_unlockable?
-  %a
+  %a{tabindex:'0', "aria-describedby" => "unlock-req-tip_#{badge.id}"}
     = glyph(:lock)
-  .display-on-hover.hover-style
+  .display-on-hover.hover-style{role: 'tooltip', :id => "unlock-req-tip_#{badge.id}"}
     %h3 Unlock Requirements
     %ul
       - badge.unlock_conditions.each do |condition|
         %li= "#{condition.name} must be #{condition.condition_state}"
 - if badge.is_a_condition?
-  %a
+  %a{tabindex:'0', "aria-describedby" => "unlock-key-tip_#{badge.id}"}
     = glyph(:key)
-  .display-on-hover.hover-style
+  .display-on-hover.hover-style{role: 'tooltip', :id => "unlock-key-tip_#{badge.id}"}
     %h3 Unlock Key
     %ul
       - badge.unlock_keys.each do |key|
