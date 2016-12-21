@@ -9,13 +9,17 @@ class InfoController < ApplicationController
 
   # Displays student and instructor dashboard
   def dashboard
-    @events = Timeline.new(current_course).events_by_due_date
-    render :dashboard, Info::DashboardCoursePlannerPresenter.build({
-      student: current_student,
-      assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
-      course: current_course,
-      view_context: view_context
-    })
+    presenter = nil
+    if current_user.course_memberships.any?
+      @events = Timeline.new(current_course).events_by_due_date
+      presenter = Info::DashboardCoursePlannerPresenter.build({
+        student: current_student,
+        assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
+        course: current_course,
+        view_context: view_context
+      })
+    end
+    render :dashboard, presenter unless presenter.nil?
   end
 
   # Display the grade predictor
