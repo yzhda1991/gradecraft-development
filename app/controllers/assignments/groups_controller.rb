@@ -28,8 +28,8 @@ class Assignments::GroupsController < ApplicationController
       grade_ids << grade.id
     end
 
-    # @mz TODO: add specs
     enqueue_multiple_grade_update_jobs(grade_ids)
+
     if params[:redirect_to_next_grade].present?
       path = path_for_next_group_grade @assignment, @group
     else

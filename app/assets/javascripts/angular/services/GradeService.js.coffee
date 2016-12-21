@@ -1,8 +1,10 @@
-@gradecraft.factory 'GradeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'GradeService', ['GradeCraftAPI', '$http', '$timeout', (GradeCraftAPI, $http, $timeout) ->
 
   grade = {}
   fileUploads = []
   gradeStatusOptions = []
+  autoSaveTimeInterval = 3000
+  updateTimeout = null
 
   # used for group grades:
   grades = []
@@ -54,13 +56,13 @@
     Math.abs(new Date() - grade.updated_at)
 
   _updateGradeById = (id)->
-    $http.put("/api/grades/#{id}", grade: grade).then(
-      (response) ->
-        grade.updated_at = new Date()
-        GradeCraftAPI.logResponse(response)
-      ,(response) ->
-        GradeCraftAPI.logResponse(response)
-    )
+      $http.put("/api/grades/#{id}", grade: grade).then(
+        (response) ->
+          grade.updated_at = new Date()
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
 
   updateGrade = ()->
     if _recipientType == "student"
@@ -69,6 +71,16 @@
       _.each(grades, (g)->
         _updateGradeById(g.id)
       )
+
+  queueUpdateGrade = (immediate = false) ->
+    if immediate is true
+      $timeout.cancel(self.updateTimeout)
+      updateGrade()
+    else
+      $timeout.cancel(self.updateTimeout) if self.updateTimeout?
+      self.updateTimeout = $timeout(() ->
+        updateGrade()
+      , 3500)
 
   postAttachments = (files)->
     fd = new FormData();
@@ -116,6 +128,7 @@
     timeSinceUpdate: timeSinceUpdate,
 
     getGrade: getGrade,
+    queueUpdateGrade: queueUpdateGrade,
     updateGrade: updateGrade,
     postAttachments: postAttachments,
     deleteAttachment: deleteAttachment

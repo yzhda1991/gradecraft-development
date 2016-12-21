@@ -1,0 +1,9 @@
+%section.grade-raw-points
+  %div "Raw Points ({{assignment().full_points}} Points Possible)"
+  %input{ 'type'=>"text",
+    "placeholder" => "Enter raw points for grade",
+    'ng-model'=>'grade.raw_points',
+    "smart-number" => "",
+    "ng-change" => "queueUpdateGrade()",
+    "ng-blur" => "queueUpdateGrade(true)",
+    }

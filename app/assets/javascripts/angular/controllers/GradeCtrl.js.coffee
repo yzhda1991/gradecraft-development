@@ -9,10 +9,6 @@
     AssignmentService.getAssignment(assignmentId)
     GradeService.getGrade(assignmentId, recipientType, recipientId)
 
-  $scope.services = (assignmentId)->
-    promises = []
-    return $q.all(promises)
-
   $scope.toggleCustomValue = ()->
     GradeService.toggleCustomValue()
   $scope.enableCustomValue = ()->

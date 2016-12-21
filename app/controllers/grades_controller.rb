@@ -20,7 +20,6 @@ class GradesController < ApplicationController
   # GET /grades/:id/edit
   def edit
     @grade = Grade.find params[:id]
-    @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
     if @grade.assignment.grade_with_rubric?
