@@ -37,6 +37,9 @@
   getAssignment = (assignmentId)->
     $http.get('/api/assignments/' + assignmentId).success( (response)->
       GradeCraftAPI.addItem(assignments, "assignments", response)
+      GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
+      GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
+      GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
     )
 
   # GET index list of assignments including a student's grades and predictions

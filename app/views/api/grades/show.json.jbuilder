@@ -9,6 +9,7 @@ json.data do
     json.feedback                   @grade.feedback
     json.status                     @grade.status
     json.raw_points                 @grade.raw_points
+    json.pass_fail_status           @grade.pass_fail_status
     json.adjustment_points          @grade.adjustment_points
     json.final_points               @grade.final_points
     json.is_custom_value            @grade.is_custom_value

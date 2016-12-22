@@ -1,15 +1,17 @@
-@gradecraft.directive 'gradePassFail', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+@gradecraft.directive 'gradePassFail', ['GradeCraftAPI', 'AssignmentService', 'GradeService', (GradeCraftAPI, AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/pass_fail.html'
     link: (scope, el, attr)->
 
-      scope.assignment = ()->
-        AssignmentService.assignment()
+      scope.switchState = ()->
+        if GradeService.grade.pass_fail_status == "Pass" then "on" else "off"
 
-      scope.grade = GradeService.grade
+      scope.textForSwitch = ()->
+        if GradeService.grade.pass_fail_status == "Pass" then GradeCraftAPI.termFor("pass") else GradeCraftAPI.termFor("fail")
 
-      scope.queueUpdateGrade = (immediate)->
-        GradeService.queueUpdateGrade(immediate)
+      scope.toggleSwitch = ()->
+        GradeService.grade.pass_fail_status = if GradeService.grade.pass_fail_status == "Pass" then "Fail" else "Pass"
+        GradeService.queueUpdateGrade()
   }
 ]
