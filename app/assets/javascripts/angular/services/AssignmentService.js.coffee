@@ -6,6 +6,9 @@
   assignments = []
   update = {}
 
+  assignment = ()->
+    assignments[0]
+
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
@@ -83,5 +86,6 @@
       getAssignment: getAssignment
       postPredictedAssignment: postPredictedAssignment
       assignments: assignments
+      assignment: assignment
   }
 ]

@@ -5,7 +5,7 @@
     link: (scope, el, attr)->
 
       scope.assignment = ()->
-        AssignmentService.assignments[0]
+        AssignmentService.assignment()
 
       scope.grade = GradeService.grade
 
