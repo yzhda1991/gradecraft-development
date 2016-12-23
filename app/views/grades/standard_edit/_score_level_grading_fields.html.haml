@@ -23,8 +23,8 @@
 
   .class-analytics-toggle
     %h4.class-analytics-label Enter as custom value
-    %label.rubric-switch-socket
+    %label.switch-socket
       %input#class-analytics-toggle(type="checkbox" ng-click="toggleCustomValue()" ng-checked="grade.is_custom_value")
-      .rubric-switch-handle.round
+      .switch-handle.round
 
 %input(type="hidden" name="grade[is_custom_value]" ng-value="grade.is_custom_value")

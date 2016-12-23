@@ -21,7 +21,7 @@
 
         if assignment.pass_fail == true
           return "PASS_FAIL"
-        if assignment.score_levels.length > 0
+        if assignment.score_levels
           "SCORE_LEVELS"
         else
           "DEFAULT"
@@ -38,7 +38,7 @@
       bindToController: true,
       controller: EditGradeCtrl,
       controllerAs: 'vm',
-      restrict: 'EA',
+      #restrict: 'EA',
       scope: {
          assignmentId: "=",
          recipientType: "@",

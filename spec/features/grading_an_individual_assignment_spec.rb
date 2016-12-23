@@ -37,7 +37,7 @@ feature "grading an individual assignment" do
       expect(current_path).to eq edit_grade_path(grade)
 
       within(".pageContent") do
-        fill_in("grade_raw_points", with: 100)
+        fill_in("grade-raw-points", with: 100)
         click_button "Submit Grade"
       end
       expect(page).to have_notification_message("notice", "Hermione Granger's Assignment Name was successfully updated")

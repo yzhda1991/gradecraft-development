@@ -7,7 +7,7 @@
       scope.switchState = ()->
         if GradeService.grade.pass_fail_status == "Pass" then "on" else "off"
 
-      scope.textForLabel = ()->
+      scope.textForTitle = ()->
         GradeCraftAPI.termFor("pass") + " / " + GradeCraftAPI.termFor("fail") + " Status"
 
       scope.textForSwitch = ()->
