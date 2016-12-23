@@ -1,6 +1,6 @@
 @gradecraft.directive 'gradeEdit', ['$q', 'AssignmentService', 'GradeService',
   ($q, AssignmentService, GradeService) ->
-    GradeCtrl = [()->
+    EditGradeCtrl = [()->
       vm = this
 
       vm.loading = true
@@ -9,6 +9,10 @@
 
       services(vm.assignmentId, vm.recipientType, vm.recipientId).then(()->
         vm.loading = false
+
+        # set a default state for new pass/fail grades
+        if AssignmentService.assignment().pass_fail && !GradeService.grade.pass_fail_status
+          GradeService.grade.pass_fail_status = "Pass"
       )
 
       vm.gradeType = ()->
@@ -32,7 +36,7 @@
 
     {
       bindToController: true,
-      controller: GradeCtrl,
+      controller: EditGradeCtrl,
       controllerAs: 'vm',
       restrict: 'EA',
       scope: {
