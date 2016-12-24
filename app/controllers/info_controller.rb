@@ -33,7 +33,7 @@ class InfoController < ApplicationController
 
   def earned_badges
     @teams = current_course.teams
-    @badges = current_course.badges
+    @badges = current_course.badges.ordered
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment

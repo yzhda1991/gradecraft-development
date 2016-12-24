@@ -5,7 +5,7 @@
       - if current_course.challenges.present?
         %th #{ term_for :challenge } Score
       %th Average Grade
-      - if current_course.badges.present?
+      - if current_course.has_badges?
         %th Badges
       %th= course.team_leader_term
   %tbody
@@ -16,7 +16,7 @@
           %td= points team.try(:challenge_grade_score)
 
         %td= points team.try(:average_score)
-        - if current_course.badges.present?
+        - if current_course.has_badges?
           %td= team.badge_count
         %td
           - if team.leaders.present?

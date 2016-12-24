@@ -8,7 +8,7 @@ class BadgesController < ApplicationController
   def index
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
-      badges: current_course.badges,
+      badges: current_course.badges.ordered,
       student: current_student
     })
   end
