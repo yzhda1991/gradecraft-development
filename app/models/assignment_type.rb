@@ -14,7 +14,7 @@ class AssignmentType < ActiveRecord::Base
   has_many :weights, class_name: "AssignmentTypeWeight", dependent: :destroy
 
   validates_presence_of :name
-  validate :positive_max_points
+  validates :max_points, numericality: { greater_than: 0 }, allow_nil: true
 
   scope :student_weightable, -> { where(student_weightable: true) }
   scope :with_submissions_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }
@@ -121,13 +121,5 @@ class AssignmentType < ActiveRecord::Base
     score = score_for_student(student)
     return max_points if score > max_points
     score
-  end
-
-  private
-
-  def positive_max_points
-    if max_points.present? && max_points < 0
-      errors.add :base, "Maximum points must be a positive number."
-    end
   end
 end
