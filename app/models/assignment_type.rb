@@ -15,6 +15,7 @@ class AssignmentType < ActiveRecord::Base
 
   validates_presence_of :name
   validates :max_points, numericality: { greater_than: 0 }, allow_nil: true
+  validates :top_grades_counted, numericality: { greater_than: -1 }
 
   scope :student_weightable, -> { where(student_weightable: true) }
   scope :with_submissions_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }

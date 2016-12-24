@@ -24,6 +24,11 @@ describe AssignmentType do
       subject.max_points = -1000
       expect(subject).to be_invalid
     end
+
+    it "is only valid with top_grades_counted" do
+      subject.top_grades_counted = -10
+      expect(subject).to be_invalid
+    end
   end
 
   describe "#copy" do
