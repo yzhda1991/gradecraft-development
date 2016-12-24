@@ -2,7 +2,7 @@ class API::BadgesController < ApplicationController
 
   # GET api/badges
   def index
-    @badges = current_course.badges.select(
+    @badges = current_course.badges.ordered.select(
       :can_earn_multiple_times,
       :course_id,
       :description,

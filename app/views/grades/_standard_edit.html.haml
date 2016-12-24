@@ -61,8 +61,5 @@
 
         %section
 
-        - if current_course.badges.present?
+        - if current_course.has_badges?
           %award-earned-badges(student-id="#{grade.student_id}" grade-id="#{grade.id}")
-
-
-
