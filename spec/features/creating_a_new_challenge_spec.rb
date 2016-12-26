@@ -24,6 +24,7 @@ feature "creating a new challenge" do
 
       within(".pageContent") do
         fill_in "Name", with: "New Section Challenge Name"
+        fill_in "challenge[full_points]", with: 100
         click_button "Create Section Challenge"
       end
 

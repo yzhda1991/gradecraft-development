@@ -35,7 +35,8 @@ class Challenge < ActiveRecord::Base
   validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
   in: [true, false], message: "must be true or false"
 
-  validate :positive_points, :open_before_close
+  validates_with PositivePointsValidator, attributes: [:full_points]
+  validates_with OpenBeforeCloseValidator, attributes: [:due_at, :open_at]
 
   def has_levels?
     challenge_score_levels.present?
@@ -47,32 +48,5 @@ class Challenge < ActiveRecord::Base
 
   def future?
     !due_at.nil? && due_at >= Date.today
-  end
-
-  # TODO: should be removed
-  def graded?
-    challenge_grades.present?
-  end
-
-  def find_or_create_predicted_earned_challenge(student_id)
-    if student_id == 0
-      NullPredictedEarnedChallenge.new
-    else
-      PredictedEarnedChallenge.find_or_create_by(student_id: student_id, challenge_id: self.id)
-    end
-  end
-
-  private
-
-  def open_before_close
-    if (due_at? && open_at?) && (due_at < open_at)
-      errors.add :base, "Due date must be after open date."
-    end
-  end
-
-  def positive_points
-    if full_points? && full_points < 1
-      errors.add :base, "Point total must be a positive number"
-    end
   end
 end

@@ -97,18 +97,6 @@ describe Challenge do
       subject.due_at = Date.today - 1
       expect(subject.future?).to be(false)
     end
-
-  end
-
-  describe "#graded?" do
-    it "returns true if challenge grades are present" do
-      create(:challenge_grade, challenge: subject)
-      expect(subject.graded?).to be(true)
-    end
-
-    it "returns false if no challenge grades are present" do
-      expect(subject.graded?).to be(false)
-    end
   end
 
   describe "#visible_for_student?(student)" do

@@ -13,6 +13,7 @@ class API::AssignmentTypesController < ApplicationController
         :course_id,
         :id,
         :name,
+        :has_max_points,
         :max_points,
         :description,
         :student_weightable,
