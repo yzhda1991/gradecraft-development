@@ -73,7 +73,7 @@ describe Students::IndexPresenter do
     let(:team) { create :team, course: course }
 
     it "returns a list of users that are being graded" do
-      expect(subject.students.map(&:id)).to eq [student1, student2].map(&:user_id)
+      expect(subject.students.map(&:id)).to match_array([student1, student2].map(&:user_id))
     end
 
     it "returns a list of users on the team that are being graded" do
