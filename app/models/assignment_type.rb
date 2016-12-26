@@ -33,7 +33,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def is_capped?
-    max_points.present? && max_points > 0
+    has_max_points? && max_points.present? && max_points > 0
   end
 
   # Checking to see if the instructor has set a maximum number of grades that
@@ -45,7 +45,7 @@ class AssignmentType < ActiveRecord::Base
   # Getting the assignment types max value if it's present, else returning the
   # summed total of assignment points
   def total_points
-    if max_points.present? && max_points > 0
+    if is_capped?
       max_points
     else
       summed_assignment_points
@@ -59,7 +59,7 @@ class AssignmentType < ActiveRecord::Base
 
   # total points a student can earn for this assignment type
   def total_points_for_student(student)
-    if max_points > 0
+    if is_capped?
       max_points
     else
       if student_weightable?
@@ -113,14 +113,14 @@ class AssignmentType < ActiveRecord::Base
       score = grades_for(student)
                     .order_by_highest_score
                     .first(top_grades_counted).sum(&:score) || 0
-      return max_points if (max_points > 0) && (score > max_points)
+      return max_points if is_capped? && (score > max_points)
       score
     end
   end
 
   def max_points_for_student(student)
     score = score_for_student(student)
-    return max_points if score > max_points
+    return max_points if is_capped? && score > max_points
     score
   end
 end
