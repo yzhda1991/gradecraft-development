@@ -1,4 +1,5 @@
 class Group < ActiveRecord::Base
+  include ActiveModel::Validations
   include Sanitizable
 
   APPROVED_STATUSES = ["Pending", "Approved", "Rejected"]
@@ -28,8 +29,9 @@ class Group < ActiveRecord::Base
 
   validates_presence_of :name, :approved
 
-  validate :max_group_number_not_exceeded, :min_group_number_met,
-    :unique_assignment_per_group_membership, :assignment_group_present
+  validates :group_size, group_size: true
+  validates_with UniqueAssignmentPerGroupMembershipValidator, attributes: [:assignments, :group_memberships]
+  validates_with AssignmentGroupPresentValidator, attributes: [:assignment_groups]
 
   scope :approved, -> { where approved: "Approved" }
   scope :rejected, -> { where approved: "Rejected" }
@@ -74,41 +76,6 @@ class Group < ActiveRecord::Base
   end
 
   private
-
-  # Checking to make sure any constraints the instructor has set up around
-  # min/max group members are honored
-  def min_group_number_met
-    return false unless self.assignments.present?
-    if self.students.to_a.size < self.assignments.first.min_group_size
-      errors.add :base, "You don't have enough group members."
-    end
-  end
-
-  def max_group_number_not_exceeded
-    return false unless self.assignments.present?
-    if self.students.to_a.size > self.assignments.first.max_group_size
-      errors.add :base, "You have too many group members."
-    end
-  end
-
-  # Checking to make sure the group is actually working on an assignment
-  def assignment_group_present
-    if self.assignment_groups.to_a.size == 0
-      errors.add :base, "You need to check off which #{(course.assignment_term).downcase} your #{(course.group_term).downcase} will work on."
-    end
-  end
-
-  # We need to make sure students only belong to one group working on a
-  # single assignment
-  def unique_assignment_per_group_membership
-    assignments.each do |a|
-      students.each do |s|
-        if s.group_for_assignment(a).present? && s.group_for_assignment(a).id != self.id
-          errors.add :base, "#{s.name} is already working on this with another #{(course.group_term)}."
-        end
-      end
-    end
-  end
 
   def submissions_by_assignment_id
     @submissions_by_assignment ||= submissions.group_by(&:assignment_id)

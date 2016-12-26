@@ -21,20 +21,53 @@ describe Group do
       expect(subject).to be_invalid
     end
 
-    it "does not allow more group members than the course max" do
-      skip "implement"
+    it "does not allow more group members than the assignment max" do
+      student1 = create :user 
+      student2 = create :user
+      student3 = create :user
+      student4 = create :user
+      student5 = create :user
+      assignment1 = create :assignment, max_group_size: 4
+
+      subject.assignments << assignment1
+      subject.students << [student1, student2, student3, student4, student5]
+
+      expect(subject).to be_invalid
     end
 
-    it "does not allow fewer group members than the course min" do
-      skip "implement"
+    it "does not allow fewer group members than the assignment min" do
+      student1 = create :user 
+      student2 = create :user
+      assignment1 = create :assignment, max_group_size: 4
+
+      subject.assignments << assignment1
+      subject.students << [student1, student2]
+
+      expect(subject).to be_invalid
     end
 
     it "does not allow students to belong to more than one group per assignment" do
-      skip "implement"
+      student1 = create :user 
+      student2 = create :user
+      student3 = create :user
+      assignment1 = create :assignment, max_group_size: 2
+      group_dup = create :group
+      group_dup.assignments << assignment1
+      group_dup.students << [student1, student3]
+      subject.assignments << assignment1
+      subject.students << [student1, student2]
+
+      expect(subject).to be_invalid
     end
 
     it "requires the group to work on at least one assignment" do
-      skip "implement"
+      student1 = create :user 
+      student2 = create :user
+      assignment1 = create :assignment, max_group_size: 4
+
+      subject.students << [student1, student2]
+
+      expect(subject).to be_invalid
     end
   end
 
