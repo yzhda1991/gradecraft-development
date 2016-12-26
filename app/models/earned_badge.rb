@@ -15,7 +15,7 @@ class EarnedBadge < ActiveRecord::Base
   before_save :update_visibility
   after_save :check_unlockables
 
-  validate :earnable?, on: :create
+  validates_with EarnableValidator, attributes: [:badge, :student], on: :create
 
   delegate :name, :description, :icon, to: :badge
 
@@ -49,12 +49,5 @@ class EarnedBadge < ActiveRecord::Base
 
   def add_associations
     self.course_id ||= badge.course_id
-  end
-
-  def earnable?
-    return true if self.badge.can_earn_multiple_times? ||
-      self.badge.available_for_student?(self.student)
-    errors.add :base, " Oops, they've already earned the '#{name}' #{course.badge_term.downcase}."
-    return false
   end
 end
