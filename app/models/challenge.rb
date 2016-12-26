@@ -50,16 +50,16 @@ class Challenge < ActiveRecord::Base
     !due_at.nil? && due_at >= Date.today
   end
 
-  # TODO: should be removed
-  def graded?
-    challenge_grades.present?
-  end
-
-  def find_or_create_predicted_earned_challenge(student_id)
-    if student_id == 0
-      NullPredictedEarnedChallenge.new
-    else
-      PredictedEarnedChallenge.find_or_create_by(student_id: student_id, challenge_id: self.id)
-    end
-  end
+  # # TODO: should be removed
+  # def graded?
+  #   challenge_grades.present?
+  # end
+  # 
+  # def find_or_create_predicted_earned_challenge(student_id)
+  #   if student_id == 0
+  #     NullPredictedEarnedChallenge.new
+  #   else
+  #     PredictedEarnedChallenge.find_or_create_by(student_id: student_id, challenge_id: self.id)
+  #   end
+  # end
 end
