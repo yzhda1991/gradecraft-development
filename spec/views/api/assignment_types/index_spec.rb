@@ -12,7 +12,7 @@ describe "api/assignment_types/index" do
       max_weights_per_assignment_type: 4,
       max_assignment_types_weighted: 2,
     )
-    assignment_type = create(:assignment_type, course: @course, student_weightable: true, max_points: 1234)
+    assignment_type = create(:assignment_type, course: @course, student_weightable: true, has_max_points: true, max_points: 1234)
     @assignment_types = [assignment_type]
     @student = create(:user)
   end
