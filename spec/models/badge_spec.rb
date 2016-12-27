@@ -1,5 +1,7 @@
 describe Badge do
-  subject { build(:badge) }
+  subject { create(:badge) }
+  let(:student) { create(:user) }
+  let(:assignment) { create(:assignment) }
 
   context "validations" do
     it "is valid with a name and a course" do
@@ -93,74 +95,61 @@ describe Badge do
 
   describe "#is_a_condition?" do
     it "returns true if the badge is an unlock condition" do
-      badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned")
-      expect(badge.is_a_condition?).to eq(true)
+      unlock_condition = create(:unlock_condition, condition_id: subject.id, condition_type: "Badge", condition_state: "Earned")
+      expect(subject.is_a_condition?).to eq(true)
     end
 
     it "returns false if the badge is an unlockable" do
-      badge = create(:badge)
       second_badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
-      expect(badge.is_a_condition?).to eq(false)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: subject.id, unlockable_type: "Badge")
+      expect(subject.is_a_condition?).to eq(false)
     end
   end
 
   describe "#is_unlockable?" do
     it "returns true if the badge is an unlockable" do
-      badge = create(:badge)
       second_badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
-      expect(badge.is_unlockable?).to eq(true)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: subject.id, unlockable_type: "Badge")
+      expect(subject.is_unlockable?).to eq(true)
     end
 
     it "returns false if the badge is a condition" do
-      badge = create(:badge)
       second_badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: second_badge.id, unlockable_type: "Badge")
-      expect(badge.is_unlockable?).to eq(false)
+      unlock_condition = create(:unlock_condition, condition_id: subject.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: second_badge.id, unlockable_type: "Badge")
+      expect(subject.is_unlockable?).to eq(false)
     end
   end
 
   describe "#unlockable" do
     it "returns the unlockable object from a condition" do
-      badge = create(:badge)
       second_badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
-      expect(second_badge.unlockable).to eq(badge)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: subject.id, unlockable_type: "Badge")
+      expect(second_badge.unlockable.id).to eq(subject.id)
     end
   end
 
   describe "#is_unlocked_for_student?(student)" do
     it "returns true if a student has met the necessary requirements to unlock the badge" do
       locked_badge = create(:badge)
-      badge = create(:badge)
-      assignment = create(:assignment)
-      student = create(:user)
       unlock_condition = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted")
-      unlock_condition_2 = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", condition_value: 2)
+      unlock_condition_2 = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: subject.id, condition_type: "Badge", condition_state: "Earned", condition_value: 2)
       submission = create(:submission, student: student, assignment: assignment)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
-      earned_badge_2 = create(:earned_badge, badge: badge, student: student)
+      earned_badge = create(:earned_badge, badge: subject, student: student)
+      earned_badge_2 = create(:earned_badge, badge: subject, student: student)
       expect(locked_badge.is_unlocked_for_student?(student)).to eq(true)
     end
 
     it "returns false if a student has not met the necessary requirements to unlock the badge" do
       locked_badge = create(:badge)
-      badge = create(:badge)
-      assignment = create(:assignment)
-      student = create(:user)
       unlock_condition = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted")
-      unlock_condition_2 = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", condition_value: 2)
+      unlock_condition_2 = create(:unlock_condition, unlockable_id: locked_badge.id, unlockable_type: "Badge", condition_id: subject.id, condition_type: "Badge", condition_state: "Earned", condition_value: 2)
       submission = create(:submission, student: student, assignment: assignment)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
+      earned_badge = create(:earned_badge, badge: subject, student: student)
       expect(locked_badge.is_unlocked_for_student?(student)).to eq(false)
     end
 
     it "returns true if the badge has no unlock conditions" do
-      badge = create(:badge)
-      student = create(:user)
-      expect(badge.is_unlocked_for_student?(student)).to eq(true)
+      expect(subject.is_unlocked_for_student?(student)).to eq(true)
     end
   end
 
@@ -178,12 +167,9 @@ describe Badge do
   describe "#unlock_condition_count_met_for" do
     it "tallies the number of unlock conditions a student has successfully completed" do
       unearned_badge = create(:badge)
-      student = create(:user)
-      assignment = create(:assignment)
       submission = create(:submission, assignment: assignment, student: student)
-      badge = create(:badge)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
-      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: unearned_badge.id, unlockable_type: "Badge")
+      earned_badge = create(:earned_badge, badge: subject, student: student)
+      unlock_condition = create(:unlock_condition, condition_id: subject.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: unearned_badge.id, unlockable_type: "Badge")
       unlock_condition_2 = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: unearned_badge.id, unlockable_type: "Badge")
       expect(unearned_badge.unlock_condition_count_met_for(student)).to eq(2)
     end
@@ -192,8 +178,6 @@ describe Badge do
   describe "#unlock!" do
     it "updates the unlock status to true if conditions are met" do
       locked_badge = create(:badge)
-      student = create(:user)
-      assignment = create(:assignment)
       submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
       locked_badge.unlock!(student)
@@ -203,8 +187,6 @@ describe Badge do
 
     it "does not update the unlock status to true if conditions are not met" do
       locked_badge = create(:badge)
-      student = create(:user)
-      assignment = create(:assignment)
       assignment_2 = create(:assignment)
       submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
@@ -217,85 +199,69 @@ describe Badge do
 
   describe "#visible_for_student?(student)" do
     it "returns true if the badge is visible" do
-      badge = create(:badge)
-      student = create(:user)
-      expect(badge.visible_for_student?(student)).to eq(true)
+      expect(subject.visible_for_student?(student)).to eq(true)
     end
 
     it "returns false if the badge is invisible" do
-      badge = create(:badge, visible: false)
-      student = create(:user)
-      expect(badge.visible_for_student?(student)).to eq(false)
+      subject.visible = false
+      expect(subject.visible_for_student?(student)).to eq(false)
     end
 
     it "returns true if the badge is invisible but has been earned by the student" do
-      badge = create(:badge)
-      student = create(:user)
-      earned_badge = create(:earned_badge, student: student, badge: badge)
-      expect(badge.visible_for_student?(student)).to eq(true)
+      earned_badge = create(:earned_badge, student: student, badge: subject)
+      expect(subject.visible_for_student?(student)).to eq(true)
     end
 
     it "returns true if the badge is locked but visible" do
-      badge = create(:badge, visible_when_locked: true)
-      student = create(:user)
-      unlock_condition = create(:unlock_condition, unlockable: badge)
-      expect(badge.visible_for_student?(student)).to eq(true)
+      subject.visible_when_locked = true
+      unlock_condition = create(:unlock_condition, unlockable: subject)
+      expect(subject.visible_for_student?(student)).to eq(true)
     end
 
     it "returns false if the badge is invisible when locked" do
-      badge = create(:badge, visible_when_locked: false)
-      student = create(:user)
-      unlock_condition = create(:unlock_condition, unlockable: badge)
-      expect(badge.visible_for_student?(student)).to eq(false)
+      subject.visible_when_locked = false
+      unlock_condition = create(:unlock_condition, unlockable: subject)
+      expect(subject.visible_for_student?(student)).to eq(false)
     end
 
     it "returns true if the badge is invisible when locked and the student has met the conditions" do
-      badge = create(:badge, visible_when_locked: false)
-      student = create(:user)
-      assignment = create(:assignment)
+      subject.visible_when_locked = false
       submission = create(:submission, assignment: assignment, student: student)
-      unlock_condition = create(:unlock_condition, unlockable: badge, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted")
-      expect(badge.visible_for_student?(student)).to eq(false)
+      unlock_condition = create(:unlock_condition, unlockable: subject, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(subject.visible_for_student?(student)).to eq(false)
     end
   end
 
   describe "#find_or_create_unlock_state" do
     it "creates an unlock state for a student" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      expect { badge.find_or_create_unlock_state(student.id) }.to \
+      expect { subject.find_or_create_unlock_state(student.id) }.to \
         change(UnlockState,:count).by 1
     end
 
     it "finds an existing unlock state for a student" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      unlock_state = create(:unlock_state, student: student, unlockable: badge)
-      expect(badge.find_or_create_unlock_state(student.id)).to \
+      unlock_state = create(:unlock_state, student: student, unlockable: subject)
+      expect(subject.find_or_create_unlock_state(student.id)).to \
         eq(unlock_state)
     end
   end
 
   describe "#earned_badge_count_for_student(student)" do
     it "sums up the number of times a student has earned a specific badge" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
-      second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
-      second_earned_badge = create(:earned_badge, badge: badge, student: student)
+      second_badge = create(:badge)
+      earned_badge = create(:earned_badge, badge: subject, student: student)
+      second_earned_badge = create(:earned_badge, badge: subject, student: student)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student)
-      expect(badge.earned_badge_count_for_student(student)).to eq(2)
+      expect(subject.earned_badge_count_for_student(student)).to eq(2)
     end
   end
 
   describe "#earned_badge_total_points_for_student(student)" do
     it "sums up the total points earned for a specific badge" do
-      student = create(:user)
-      badge = create(:badge, full_points: 1000)
+      subject.full_points = 1000
       second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: badge, student: student)
+      earned_badge = create(:earned_badge, badge: subject, student: student)
       second_earned_badge = create(:earned_badge, badge: second_badge, student: student)
-      expect(badge.earned_badge_total_points_for_student(student)).to eq(1000)
+      expect(subject.earned_badge_total_points_for_student(student)).to eq(1000)
     end
   end
 
