@@ -1,6 +1,6 @@
 describe Badge do
   subject { create(:badge) }
-  let(:student) { create(:user) }
+  let(:student) { build_stubbed(:user) }
   let(:assignment) { create(:assignment) }
 
   context "validations" do
