@@ -53,13 +53,7 @@ module UnlockableCondition
           achieved += 1
         end
       end
-      if goal == achieved
-        return true
-      else
-        return false
-      end
-    else
-      return false
+      return true if goal == achieved
     end
   end
 
@@ -73,7 +67,7 @@ module UnlockableCondition
   end
 
   def unlock_condition_count_met_for(student)
-    self.unlock_conditions.select { |c| c.is_complete?(student) }.size
+    self.unlock_conditions.to_a.count{ |c| c.is_complete?(student) }
   end
 
   def visible_for_student?(student)

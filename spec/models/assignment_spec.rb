@@ -608,7 +608,7 @@ describe Assignment do
     end
   end
 
-  describe "#unlock_condition_count_met_for" do
+  describe "#unlock_condition_count_met_for", focus: true do
     let(:student) { create :user }
     before { subject.save }
 
