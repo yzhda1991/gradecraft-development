@@ -375,7 +375,6 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
 
 #------------------------------------------------------------------------------#
 
-
 @assignments[:group_grade_assignment] = {
   quotes: {
     assignment_created: "I'm sorry, if you were right, I'd agree with you. - \
@@ -445,7 +444,6 @@ Tzu"
     grade_scope: "Group"
   }
 }
-
 
 #------------------------------------------------------------------------------#
 
@@ -1447,7 +1445,6 @@ test that teaches you a lesson. – Tom Bodett",
     predicted_points: -> { rand(15000) }
   }
 }
-
 
 #------------------------------------------------------------------------------#
 

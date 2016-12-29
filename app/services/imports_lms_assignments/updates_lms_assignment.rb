@@ -25,9 +25,9 @@ module Services
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
         begin
-        context.lms_assignment = syllabus.update_assignment course_id,
-          assignment_id,
-          params
+          context.lms_assignment = syllabus.update_assignment course_id,
+            assignment_id,
+            params
         rescue StandardError => e
           context.fail! e.message
         end

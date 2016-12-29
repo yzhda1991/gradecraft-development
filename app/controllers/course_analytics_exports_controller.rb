@@ -37,7 +37,6 @@ class CourseAnalyticsExportsController < ApplicationController
 
   def secure_download
     if presenter.secure_download_authenticates?
-      # rubocop:disable AndOr
       send_data(*presenter.send_data_options) and return
     else
       if presenter.token_expired?

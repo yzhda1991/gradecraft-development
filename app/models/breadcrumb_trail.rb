@@ -96,7 +96,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def assignments_grades_mass_edit
-
   end
 
   def assignment_type_weights_index
@@ -125,7 +124,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def assignments_groups_grade
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-
   end
 
   def badges_index

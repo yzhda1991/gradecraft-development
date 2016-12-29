@@ -64,12 +64,10 @@ class CourseMembership < ActiveRecord::Base
     elements.sort_by{ |element| element.lowest_points }.each_with_index do |gse, index|
       element_earned = gse if index == 0
 
-      if !gse.is_unlocked_for_student?(user)
-        break
-      else
-        if gse.lowest_points <= score
-          element_earned = gse
-        end
+      break if !gse.is_unlocked_for_student?(user)
+        
+      if gse.lowest_points <= score
+        element_earned = gse
       end
     end
 
