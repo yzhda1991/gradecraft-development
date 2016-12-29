@@ -232,6 +232,7 @@ Rails.application.routes.draw do
     get :press
     get :research
     get :um_pilot
+    get :sign_up
   end
 
   #12. Grade Schemes
