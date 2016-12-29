@@ -1,0 +1,35 @@
+@import "../utilities/variables"
+
+.center-items
+  padding-top: 50px
+  align-items: center
+  justify-content: center
+  display: flex
+
+section.pilot
+  color: $color-white
+
+  h1, p
+    color: $color-grey-2
+    text-align: center
+  
+  .instructor-pilot, .student-pilot
+    max-width: 500px
+    margin: 2em auto
+  
+    .pilot-text
+      background-color: $color-white
+      padding: 2em
+  
+.instructor-pilot
+  border-left: 10px solid $color-green-2
+
+.student-pilot
+  border-left: 10px solid $color-blue-3
+  
+@media (max-width: $media-small-max)
+  section.pilot
+    padding: .5em 1em
+
+  .center-items
+    display: block
