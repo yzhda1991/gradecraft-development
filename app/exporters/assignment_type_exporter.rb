@@ -29,9 +29,7 @@ class AssignmentTypeExporter
   end
 
   def assignment_type_names(assignment_types)
-    assignment_types.collect do |assignment_type|
-      [ assignment_type.try(:name) ]
-    end.flatten
+    assignment_types.flat_map(&:name)
   end
 
   def score_data(student, assignment_type)
