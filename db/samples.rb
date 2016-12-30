@@ -56,7 +56,6 @@ def create_groups(course_name, assignment)
   @courses[course_name][:groups] = groups
 end
 
-
 # ---------------------------- Users and Courses -----------------------------#
 
 user_names = ["Ron Weasley","Fred Weasley","Harry Potter","Hermione Granger",
