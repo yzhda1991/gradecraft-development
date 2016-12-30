@@ -32,9 +32,9 @@
       = f.check_box :visible
 
     .form-item
-      = f.label :check_box, "Will the #{term_for :team} submit materials?"
-      = f.check_box :accepts_submissions
-      .form_label All #{term_for :team} members will be able to submit work for their #{term_for :team} as a whole, and see their resulting grades.
+      = f.label :include_in_timeline, "Timeline"
+      = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
+      .form_label{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :challenge} in the course timeline? Note that #{term_for :challenges} without open or due dates will be excluded automatically.
 
     .form-item
       = f.label :release_necessary, "Release necessary?"
@@ -56,6 +56,8 @@
             = render partial: "challenge_score_level_fields", locals: { f: slf }
     = link_to "Add a Level", "#", class: "add-challenge-score-level button radius"
 
+  = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
+  
   %section
     %h4 Attachments
     = f.simple_fields_for :challenge_files, @challenge.challenge_files.new do |cf|

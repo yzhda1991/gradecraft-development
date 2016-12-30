@@ -12,7 +12,7 @@
   .show-page-wrapper
     %section
       %h3 Event Date
-      %p= "#{@event.open_at} - #{@event.due_at}"
+      %p= " - #{@event.due_at}"
 
     %section
       %h3 Description
@@ -20,9 +20,5 @@
 
     %section
       - if @event.media.present?
-        .event-image-show-wrapper{class: ('image-with-caption' if @event.media_caption? || @event.media_credit?)}
+        .event-image-show-wrapper
           %img.event-image-show{src: @event.media}
-          - if @event.media_caption.present? || @event.media_credit.present?
-            .photo-details
-              %p.photo-caption= @event.media_caption
-              %p.photo-credit= "Credit: #{@event.media_credit}"

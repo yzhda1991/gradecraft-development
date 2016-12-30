@@ -2,7 +2,6 @@ class Challenge < ActiveRecord::Base
   include Copyable
   include ScoreLevelable
   include UploadsMedia
-  include UploadsThumbnails
   include MultipleFileAttributes
 
   # grade points available to the predictor from the assignment controller
@@ -30,6 +29,7 @@ class Challenge < ActiveRecord::Base
   scope :visible, -> { where visible: TRUE }
   scope :chronological, -> { order("due_at ASC") }
   scope :alphabetical, -> { order("name ASC") }
+  scope :timelineable, -> { where include_in_timeline: true }
 
   validates_presence_of :course, :name
   validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
