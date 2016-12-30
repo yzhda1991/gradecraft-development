@@ -5,7 +5,6 @@ class Assignment < ActiveRecord::Base
   include Sanitizable
   include ScoreLevelable
   include UploadsMedia
-  include UploadsThumbnails
   include UnlockableCondition
 
   attr_accessor :current_student_grade

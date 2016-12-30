@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161216142745) do
+ActiveRecord::Schema.define(version: 20161230164929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 20161216142745) do
     t.string   "thumbnail"
     t.string   "media_credit"
     t.string   "media_caption"
+    t.boolean  "include_in_timeline", default: false, null: false
   end
 
   create_table "course_analytics_exports", force: :cascade do |t|

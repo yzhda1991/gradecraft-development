@@ -64,9 +64,8 @@ class ChallengesController < ApplicationController
 
   def challenge_params
     params.require(:challenge).permit :name, :description, :visible, :full_points,
-      :due_at, :open_at, :accepts_submissions, :release_necessary,
-      :course, :team, :challenge, :challenge_file_ids,
-      :challenge_files_attributes, :challenge_file, :challenge_grades_attributes, :challenge_score_level,
+      :due_at, :open_at, :release_necessary, :course, :team, :challenge, :challenge_file_ids,
+      :challenge_files_attributes, :challenge_file, :challenge_grades_attributes, :challenge_score_level, :media, :include_in_timeline, 
       challenge_score_levels_attributes: [:id, :name, :points, :_destroy],
       challenge_files_attributes: [:id, file: []]
   end

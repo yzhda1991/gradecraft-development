@@ -1,6 +1,5 @@
 class Event < ActiveRecord::Base
   include UploadsMedia
-  include UploadsThumbnails
 
   belongs_to :course, touch: true
 

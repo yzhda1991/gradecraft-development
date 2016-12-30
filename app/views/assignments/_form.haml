@@ -78,6 +78,8 @@
 
   %section
     %h3= "Advanced Settings"
+    
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @assignment }
 
     .form-item
       = f.label :visible, "Visible to students"
