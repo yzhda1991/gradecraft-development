@@ -68,12 +68,10 @@ class UnlockCondition < ActiveRecord::Base
       "Earn a grade for"
     elsif condition_state == "Feedback Read"
       "Read the feedback for"
-    elsif condition_state == "Earned"
+    elsif condition_state == "Earned" || condition_state == "Min Points"
       "Earn"
     elsif condition_state == "Passed"
       "Pass"
-    elsif condition_state == "Min Points"
-      "Earn #{condition_value} points"
     elsif condition_state == "Assignments Completed"
       "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize}"
     end

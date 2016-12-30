@@ -1,11 +1,13 @@
 require "active_record_spec_helper"
 
-describe UnlockCondition do
-  let(:badge) { create :badge, name: "fancy name" }
-  let(:unlockable_badge) { create :badge, name: "unlockable badge" }
-  let(:assignment) { create :assignment, name: "fancier name" }
+describe UnlockCondition, focus: true do
+  let(:course) { create :course }
+  let(:badge) { create :badge, name: "fancy name", course: course }
+  let(:unlockable_badge) { create :badge, name: "unlockable badge", course: course }
+  let(:assignment) { create :assignment, name: "fancier name", course: course }
+  let(:assignment_type) { create :assignment_type, name: "zootopian name", course: course }
   let :unlockable_assignment do
-    create :assignment, name: "unlockable assignment"
+    create :assignment, name: "unlockable assignment", course: course
   end
 
   subject do
@@ -455,77 +457,57 @@ describe UnlockCondition do
     let(:student) { create(:user) }
     let(:student_2) { create(:user) }
     let(:student_3) { create(:user) }
+    let(:student_4) { create(:user) }
     let(:group) { create(:group, course: course) }
-    let :assignment do
-      create(:assignment, grade_scope: "Group", course: course)
-    end
-    let :membership do
-      create(:group_membership, group: group, student: student)
-    end
-    let :membership_2 do
-      create(:group_membership, group: group, student: student_2)
-    end
-    let :membership_3 do
-      create(:group_membership, group: group, student: student_3)
-    end
-    let :assignment_group do
-      create(:assignment_group, group: group, assignment: assignment)
-    end
+    let(:gm) { create(:group_membership, group: group, student: student) }
+    let(:gm2) { create(:group_membership, group: group, student: student_2) }
+    let(:gm3) { create(:group_membership, group: group, student: student_3) }
+    let(:gm4) { create(:group_membership, group: group, student: student_4) }
+    let(:assignment) { create(:assignment, grade_scope: "Group", course: course) }
+    let(:assignment_group) { create(:assignment_group, group: group, assignment: assignment) }
     let(:new_badge) { create(:badge, course: course) }
+    let(:unlock_condition) { create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: new_badge.id, condition_type: "Badge", condition_state: "Earned") }
 
     it "returns false if students in the group have not earned the badge" do
-      unlock_condition = UnlockCondition.new(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
       expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
     end
 
     it "returns false if one student in the group has not earned the badge" do
-      unlock_condition = UnlockCondition.new(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student, student_visible: true
-      )
+      create(:earned_badge, badge: new_badge, student: student, student_visible: true)
       expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
     end
 
     it "returns true if all students in the group have earned the badge" do
-      skip "pending"
-      student.courses << course
-      student_2.courses << course
-      student_3.courses << course
-      create(
-        :assignment_group, group: group, assignment: assignment
-      )
-      new_badge = create(:badge, course: course)
-      unlock_condition = UnlockCondition.create(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student,
-                       student_visible: true
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student_2,
-                       student_visible: true
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student_3,
-                       student_visible: true
-      )
-      expect(group.group_memberships.count).to eq 3
-      expect(unlock_condition.is_complete_for_group?(@group)).to eq(true)
+      create(:earned_badge, badge: new_badge, student: student, student_visible: true)
+      create(:earned_badge, badge: new_badge, student: student_2, student_visible: true)
+      create(:earned_badge, badge: new_badge, student: student_3, student_visible: true)
+      create(:earned_badge, badge: new_badge, student: student_4, student_visible: true)
+      expect(group).should include(student_2)  
+      expect(unlock_condition.is_complete_for_group?(group)).to eq(true)
     end
   end
 
   describe "#requirements_description_sentence" do
+    it "returns a sentence summarizing an assignment type unlock condition" do
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment_type.id, condition_type: "AssignmentType",
+        condition_state: "Assignments Completed", condition_value: 21, 
+        unlockable_id: assignment.id, unlockable_type: "Assignment"
+      )
+      expect(unlock_condition.requirements_description_sentence).to \
+        eq("Complete 21 Assignments in the zootopian name Assignment Type")
+    end
+    
+    it "returns a sentence summarizing a course unlock condition" do
+      unlock_condition = UnlockCondition.new(
+        condition_id: course.id, condition_type: "Course",
+        condition_state: "Min Points", condition_value: 21, 
+        unlockable_id: assignment.id, unlockable_type: "Assignment"
+      )
+      expect(unlock_condition.requirements_description_sentence).to \
+        eq("Earn 21 points in this course")
+    end
+    
     it "returns a sentence summarizing a badge unlock condition" do
       expect(subject.requirements_description_sentence).to \
         eq("Earn the #{badge.name} Badge")
