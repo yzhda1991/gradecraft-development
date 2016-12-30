@@ -331,27 +331,19 @@ class Assignment < ActiveRecord::Base
   end
 
   def open_before_close
-    if (due_at.present? && open_at.present?) && (due_at < open_at)
-      errors.add :base, "Due date must be after open date."
-    end
+    errors.add :base, "Due date must be after open date." if (due_at.present? && open_at.present?) && (due_at < open_at)
   end
 
   def submissions_after_due
-    if (accepts_submissions_until.present? && due_at.present?) && (accepts_submissions_until < due_at)
-      errors.add :base, "Submission accept date must be after due date."
-    end
+    errors.add :base, "Submission accept date must be after due date." if (accepts_submissions_until.present? && due_at.present?) && (accepts_submissions_until < due_at)
   end
 
   def submissions_after_open
-    if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
-      errors.add :base, "Submission accept date must be after open date."
-    end
+    errors.add :base, "Submission accept date must be after open date." if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
   end
 
   def max_more_than_min
-    if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
-      errors.add :base, "Maximum group size must be greater than minimum group size."
-    end
+    errors.add :base, "Maximum group size must be greater than minimum group size." if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
   end
 
   def zero_points_for_pass_fail
