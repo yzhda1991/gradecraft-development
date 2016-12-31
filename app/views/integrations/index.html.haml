@@ -3,10 +3,4 @@
     %img{src: "/images/canvas-logo.png"}
   .card-block= integration_card_for(:canvas, @course)
 
-.card.left{style: "height: 350px;"}
-  .card-cap
-    %h1.center.bold.inverse LTI
-  .card-block
-    = render partial: "integrations/courses/lti_card", locals: { f: f }
-
 .clear
