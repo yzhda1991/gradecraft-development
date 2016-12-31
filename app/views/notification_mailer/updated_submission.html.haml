@@ -4,7 +4,7 @@
 %p
 %hr/
 %p{:align => "center"}
-  Check out what other #{ @course.assignment_term.pluralize.downcase } you can complete in #{ @course.name }
+  Don't forget to update your plan for the semester by checking your
   = succeed "." do
-    %a{:href => "https://www.gradecraft.com/predictor"} here
+    = link_to "grade predictor", predictor_url
 %hr/
