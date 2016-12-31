@@ -26,7 +26,7 @@ class NotificationMailer < ApplicationMailer
   def challenge_grade_released(challenge_grade)
     team = challenge_grade.team
     @challenge = challenge_grade.challenge
-    @course = challenge_grade.course
+    @course = @challenge.course
     team.students.each do |s|
       mail(to: s.email, subject: "#{@course.course_number} - #{@challenge.name} Graded") do |format|
         @student = s
