@@ -570,5 +570,12 @@ describe UnlockCondition do
         eq("Earning a grade for it unlocks the "\
           "#{unlockable_assignment.name} Assignment")
     end
+    
+    it "returns a summary of an assignment passed unlock condition" do
+      subject.condition_state = "Passed"
+      expect(subject.key_description_sentence).to \
+        eq("Earning it unlocks the "\
+          "#{unlockable_assignment.name} Assignment")
+    end
   end
 end
