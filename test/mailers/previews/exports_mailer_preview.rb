@@ -1,31 +1,46 @@
 class ExportsMailerPreview < ActionMailer::Preview
   
-  def submissions_export_started(professor, assignment)
-    mail_submissions_export("is being created", professor, assignment)
+  def submissions_export_started
+    assignment = Assignment.first
+    professor = User.with_role_in_course("professor", Course.first).first
+    ExportsMailer.submissions_export_started professor, assignment
   end
-
-  def submissions_export_success(professor, assignment, submissions_export,
-                                 secure_token)
-    cache_success_mailer_attrs(submissions_export, secure_token)
-    mail_submissions_export("is ready", professor, assignment)
+  
+  def submissions_export_success
+    assignment = Assignment.first
+    professor = User.with_role_in_course("professor", Course.first).first
+    submissions_export = SubmissionsExport.first
+    secure_token = SecureToken.first
+    ExportsMailer.submissions_export_success professor, assignment, submissions_export, secure_token
   end
-
-  def submissions_export_failure(professor, assignment)
-    mail_submissions_export("failed to build", professor, assignment)
+  
+  def submissions_export_failure
+    assignment = Assignment.first
+    professor = User.with_role_in_course("professor", Course.first).first
+    ExportsMailer.submissions_export_failure professor, assignment
   end
-
-  def team_submissions_export_started(professor, assignment, team)
-    mail_team_submissions_export("is being created", professor, assignment, team)
+  
+  def team_submissions_export_started
+    assignment = Assignment.first
+    professor = User.with_role_in_course("professor", Course.first).first
+    team = Team.first
+    ExportsMailer.team_submissions_export_started professor, assignment, team
   end
-
-  def team_submissions_export_success(professor, assignment, team,
-                                      submissions_export, secure_token)
-    cache_success_mailer_attrs(submissions_export, secure_token)
-    mail_team_submissions_export("is ready", professor, assignment, team)
+  
+  def team_submissions_export_success    
+  professor = User.with_role_in_course("professor", Course.first).first
+    assignment = Assignment.first
+    team = Team.first
+    submissions_export = SubmissionsExport.first
+    secure_token = SecureToken.first
+    ExportsMailer.team_submissions_export_success professor, assignment, team, submissions_export, secure_token
   end
-
-  def team_submissions_export_failure(professor, assignment, team)
-    mail_team_submissions_export("failed to build", professor, assignment, team)
+  
+  def team_submissions_export_failure
+    professor = User.with_role_in_course("professor", Course.first).first
+    assignment = Assignment.first
+    team = Team.first
+    ExportsMailer.team_submissions_export_failure professor, assignment, team
   end
   
   def grade_export
@@ -42,9 +57,9 @@ class ExportsMailerPreview < ActionMailer::Preview
     course = Course.first
     ExportsMailer.gradebook_export(
       course,
-      User.first,
-      "gradebook export", # export type
-      course.assignments.to_csv
+      user = User.first,
+      csv_data = course.assignments.to_a.to_csv
     )
+    ExportsMailer.gradebook_export course, user, "gradebook_export", csv_data
   end
 end
