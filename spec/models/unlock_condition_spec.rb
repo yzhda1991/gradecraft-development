@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe UnlockCondition do
+describe UnlockCondition, focus: true do
   let(:course) { create :course }
   let(:badge) { create :badge, name: "fancy name", course: course }
   let(:unlockable_badge) { create :badge, name: "unlockable badge", course: course }
@@ -574,8 +574,22 @@ describe UnlockCondition do
     it "returns a summary of an assignment passed unlock condition" do
       subject.condition_state = "Passed"
       expect(subject.key_description_sentence).to \
-        eq("Earning it unlocks the "\
+        eq("Passing it unlocks the "\
           "#{unlockable_assignment.name} Assignment")
+    end
+    
+    it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
+      subject.condition_state = "Min Points"
+      subject.condition_value = 1000
+      expect(subject.key_description_sentence).to \
+        eq("Earning 1000 points unlocks the #{unlockable_assignment.name} Assignment")
+    end
+    
+    it "returns a summary of the number of assignments completed as an unlock condition" do
+      subject.condition_state = "Assignments Completed"
+      subject.condition_value = 10
+      expect(subject.key_description_sentence).to \
+        eq("Completing 10 assignments")
     end
   end
 end

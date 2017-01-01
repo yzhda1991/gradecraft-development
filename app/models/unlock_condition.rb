@@ -45,7 +45,7 @@ class UnlockCondition < ActiveRecord::Base
 
   # Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
-    "#{ condition_state_doing } it unlocks the #{ unlockable.name } #{ unlockable_type }"
+    "#{ condition_state_doing } it unlocks the #{ unlockable.name } #{ unlockable_type }" unless condition_type == "Assignment Type"
   end
 
   # Counting how many students in a group have done the work to unlock an
@@ -73,7 +73,7 @@ class UnlockCondition < ActiveRecord::Base
     elsif condition_state == "Passed"
       "Pass"
     elsif condition_state == "Assignments Completed"
-      "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize}"
+      "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
     end
   end
 
@@ -91,7 +91,7 @@ class UnlockCondition < ActiveRecord::Base
     elsif condition_state == "Min Points"
       "Earning #{condition_value} points"
     elsif condition_state == "Assignments Completed"
-      "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize}"
+      "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
     end
   end
 
