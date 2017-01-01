@@ -59,3 +59,22 @@
     display: block
     @media (max-width: $media-small-max)
       margin: 0 auto
+
+.status
+  clear: both
+  font-size: .8rem
+  margin-top: .5rem
+.color-dot
+  border-radius: 99px
+  display: inline-block
+  width: 10px
+  height: 10px
+  margin-right: 5px
+  &.critical
+    background-color: $color-red-1
+  &.major
+    background-color: $color-orange-1
+  &.minor
+    background-color: $color-yellow-1
+  &.none
+    background-color: $color-green-3

@@ -9,6 +9,7 @@
     = stylesheet_link_tag "application", :media => "all"
     = render partial: "layouts/favicon"
     = csrf_meta_tags
+    = javascript_include_tag "https://cdn.statuspage.io/se-v2.js"
     = yield(:head)
 
   - if current_user && !current_user.course_memberships.any?
