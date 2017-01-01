@@ -1,12 +1,19 @@
 require "active_record_spec_helper"
 
 describe UnlockCondition do
-  let(:badge) { create :badge, name: "fancy name" }
-  let(:unlockable_badge) { create :badge, name: "unlockable badge" }
-  let(:assignment) { create :assignment, name: "fancier name" }
+  let(:course) { create :course }
+  let(:badge) { create :badge, name: "fancy name", course: course }
+  let(:unlockable_badge) { create :badge, name: "unlockable badge", course: course }
+  let(:assignment) { create :assignment, name: "fancier name", course: course }
+  let(:assignment_type) { create :assignment_type, name: "zootopian name", course: course }
   let :unlockable_assignment do
-    create :assignment, name: "unlockable assignment"
+    create :assignment, name: "unlockable assignment", course: course
   end
+  let(:student) { create(:user) }
+  let(:student_2) { create(:user) }
+  let(:student_3) { create(:user) }
+  let(:student_4) { create(:user) }
+  let(:group) { create(:group, course: course) }
 
   subject do
     UnlockCondition.new(
@@ -452,80 +459,59 @@ describe UnlockCondition do
 
   describe "#is_complete_for_group(group)" do
     let(:course) { create(:course) }
-    let(:student) { create(:user) }
-    let(:student_2) { create(:user) }
-    let(:student_3) { create(:user) }
-    let(:group) { create(:group, course: course) }
-    let :assignment do
-      create(:assignment, grade_scope: "Group", course: course)
-    end
-    let :membership do
-      create(:group_membership, group: group, student: student)
-    end
-    let :membership_2 do
-      create(:group_membership, group: group, student: student_2)
-    end
-    let :membership_3 do
-      create(:group_membership, group: group, student: student_3)
-    end
-    let :assignment_group do
-      create(:assignment_group, group: group, assignment: assignment)
-    end
+    let(:assignment) { create(:assignment, grade_scope: "Group", course: course) }
+    let(:assignment_group) { create(:assignment_group, group: group, assignment: assignment) }
     let(:new_badge) { create(:badge, course: course) }
+    let(:unlock_condition) { create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: new_badge.id, condition_type: "Badge", condition_state: "Earned") }
 
     it "returns false if students in the group have not earned the badge" do
-      unlock_condition = UnlockCondition.new(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
       expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
     end
 
     it "returns false if one student in the group has not earned the badge" do
-      unlock_condition = UnlockCondition.new(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student, student_visible: true
-      )
+      create(:earned_badge, badge: new_badge, student: student, student_visible: true)
       expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
     end
 
     it "returns true if all students in the group have earned the badge" do
-      skip "pending"
-      student.courses << course
-      student_2.courses << course
-      student_3.courses << course
-      create(
-        :assignment_group, group: group, assignment: assignment
-      )
-      new_badge = create(:badge, course: course)
-      unlock_condition = UnlockCondition.create(
-        unlockable_id: assignment.id, unlockable_type: "Assignment",
-        condition_id: new_badge.id, condition_type: "Badge",
-        condition_state: "Earned"
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student,
-                       student_visible: true
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student_2,
-                       student_visible: true
-      )
-      create(
-        :earned_badge, badge: new_badge, student: student_3,
-                       student_visible: true
-      )
-      expect(group.group_memberships.count).to eq 3
-      expect(unlock_condition.is_complete_for_group?(@group)).to eq(true)
+      group.students.each do |s|
+        create(:earned_badge, badge: new_badge, student: s, student_visible: true)
+      end
+      expect(unlock_condition.is_complete_for_group?(group)).to eq(true)
     end
   end
 
   describe "#requirements_description_sentence" do
+    it "returns a sentence summarizing an assignment type unlock condition" do
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment_type.id, condition_type: "AssignmentType",
+        condition_state: "Assignments Completed", condition_value: 21, 
+        unlockable_id: assignment.id, unlockable_type: "Assignment"
+      )
+      expect(unlock_condition.requirements_description_sentence).to \
+        eq("Complete 21 assignments in the zootopian name Assignment Type")
+    end
+    
+    it "returns a sentence summarizing a course unlock condition" do
+      unlock_condition = UnlockCondition.new(
+        condition_id: course.id, condition_type: "Course",
+        condition_state: "Min Points", condition_value: 21, 
+        unlockable_id: assignment.id, unlockable_type: "Assignment"
+      )
+      expect(unlock_condition.requirements_description_sentence).to \
+        eq("Earn 21 points in this course")
+    end
+    
+    it "returns a sentence summarizing an assignment pass unlock condition" do
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment.id, condition_type: "Assignment",
+        condition_state: "Passed", condition_value: 1, 
+        unlockable_id: badge.id, unlockable_type: "Badge"
+      )
+      expect(unlock_condition.requirements_description_sentence).to \
+        eq("Pass the #{ assignment.name } #{ course.assignment_term }")
+    end
+    
     it "returns a sentence summarizing a badge unlock condition" do
       expect(subject.requirements_description_sentence).to \
         eq("Earn the #{badge.name} Badge")
@@ -583,6 +569,72 @@ describe UnlockCondition do
       expect(subject.key_description_sentence).to \
         eq("Earning a grade for it unlocks the "\
           "#{unlockable_assignment.name} Assignment")
+    end
+    
+    it "returns a summary of an assignment passed unlock condition" do
+      subject.condition_state = "Passed"
+      expect(subject.key_description_sentence).to \
+        eq("Passing it unlocks the "\
+          "#{unlockable_assignment.name} Assignment")
+    end
+    
+    it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
+      subject.condition_state = "Min Points"
+      subject.condition_value = 1000
+      expect(subject.key_description_sentence).to \
+        eq("Earning 1000 points unlocks the #{unlockable_assignment.name} Assignment")
+    end
+    
+    it "returns a summary of the number of assignments completed as an unlock condition" do
+      subject.condition_state = "Assignments Completed"
+      subject.condition_value = 10
+      expect(subject.key_description_sentence).to \
+        eq("Completing 10 assignments unlocks the #{unlockable_assignment.name} Assignment")
+    end
+  end
+  
+  describe "#requirements_completed_sentence" do
+    it "returns a statement summarizing the badge as an unlock key" do
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned the #{subject.name} Badge")
+    end
+
+    it "returns a summary of an assignment feedback read unlock condition" do
+      subject.condition_state = "Feedback Read"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Read the feedback for the #{ subject.name } #{ subject.condition_type }")
+    end
+
+    it "returns a summary of an assignment submission unlock condition" do
+      subject.condition_state = "Submitted"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Submitted the #{subject.name} #{ subject.condition_type }")
+    end
+
+    it "returns a summary of an grade earned unlock condition" do
+      subject.condition_state = "Grade Earned"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned a grade for the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of an assignment passed unlock condition" do
+      subject.condition_state = "Passed"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Passed the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
+      subject = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Min Points",
+        unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 1000)
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned 1000 points in the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of the number of assignments completed as an unlock condition" do
+      subject = create(:unlock_condition, condition_id: assignment_type.id, condition_type: "AssignmentType", condition_state: "Assignments Completed",
+        unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 10)
+      expect(subject.requirements_completed_sentence).to \
+        eq("Completed 10 assignments in the #{subject.name} #{ subject.condition_type }")
     end
   end
 end

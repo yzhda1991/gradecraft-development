@@ -36,16 +36,13 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def requirements_completed_sentence
-    if condition_type == "Course"
-      "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
-    else
-      "Earned #{ condition_value } points in this course"
-    end
+    return "#{ condition_state_past } the #{ condition.name } #{ condition_type }" unless condition_type == "Course"
+    return "Earned #{ condition_value } points in this course"
   end
 
   # Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
-    "#{ condition_state_doing } it unlocks the #{ unlockable.name } #{ unlockable_type }"
+    "#{ condition_state_doing } unlocks the #{ unlockable.name } #{ unlockable_type }" 
   end
 
   # Counting how many students in a group have done the work to unlock an
@@ -68,32 +65,30 @@ class UnlockCondition < ActiveRecord::Base
       "Earn a grade for"
     elsif condition_state == "Feedback Read"
       "Read the feedback for"
-    elsif condition_state == "Earned"
+    elsif condition_state == "Earned" || condition_state == "Min Points"
       "Earn"
     elsif condition_state == "Passed"
       "Pass"
-    elsif condition_state == "Min Points"
-      "Earn #{condition_value} points"
     elsif condition_state == "Assignments Completed"
-      "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize}"
+      "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
     end
   end
 
   def condition_state_doing
     if condition_state == "Submitted"
-      "Submitting"
+      "Submitting it"
     elsif condition_state == "Grade Earned"
-      "Earning a grade for"
+      "Earning a grade for it"
     elsif condition_state == "Feedback Read"
-      "Reading the feedback for"
+      "Reading the feedback for it"
     elsif condition_state == "Earned"
-      "Earning"
+      "Earning it"
     elsif condition_state == "Passed"
-      "Passing"
+      "Passing it"
     elsif condition_state == "Min Points"
       "Earning #{condition_value} points"
     elsif condition_state == "Assignments Completed"
-      "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize}"
+      "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
     end
   end
 
@@ -109,9 +104,9 @@ class UnlockCondition < ActiveRecord::Base
     elsif condition_state == "Passed"
       "Passed"
     elsif condition_state == "Min Points"
-      "Earned #{condition_value} points"
+      "Earned #{condition_value} points in"
     elsif condition_state == "Assignments Completed"
-      "Completed"
+      "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
     end
   end
 
