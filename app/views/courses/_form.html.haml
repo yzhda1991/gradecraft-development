@@ -36,10 +36,6 @@
       = f.label :status, "Active?"
       = f.check_box :status
       .form_label Is this an active course?
-  -# .form-item
-  -#   = f.label :accepts_submissions, "Submissions"
-  -#   = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
-  -#   .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?  
 
 %section
   %h4.uppercase Enable Features
@@ -75,15 +71,11 @@
         %button.button-advanced-settings= glyph(:cog) + "Settings"
       .advanced-settings-card
         %a.button-close= glyph(:times)
-        = f.label :total_weights, "How many multipliers do #{term_for :students} have to allocate?"
-        = f.input :total_weights, {"aria-describedby" => "txtMultiplierCount", input_html: { min: 1 }}
+        = f.input :total_weights, {"aria-describedby" => "txtMultiplierCount", :label => "How many multipliers do #{term_for :students} have to allocate?" }
         = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
-        = f.label :max_weights_per_assignment_type, "Maximum Per #{term_for :assignment_type}"
-        = f.input :max_weights_per_assignment_type, {"aria-describedby" => "txtMaxPerAssignment", input_html: { min: 1 }}
-        = f.label :max_assignment_types_weighted, "Is there a maximum number of assignment types they can weight?"
-        = f.input :max_assignment_types_weighted, {"aria-describedby" => "txtMaxWeighted", input_html: { min: 1 }}
-        = f.label :weight_term, "What do you want to call these weights/multipliers?"
-        = f.text_field :weight_term, {"aria-describedby" => "txtWeightTerm"}
+        = f.input :max_weights_per_assignment_type, {"aria-describedby" => "txtMaxPerAssignment", input_html: { min: 1 } }
+        = f.input :max_assignment_types_weighted, {"aria-describedby" => "txtMaxWeighted", input_html: { min: 1 }, :label => "Is there a maximum number of assignment types they can weight?" }
+        = f.input :weight_term, {"aria-describedby" => "txtWeightTerm", :label => "What do you want to call these weights/multipliers?"}
 
 
     .form-card
