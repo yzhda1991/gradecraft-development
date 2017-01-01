@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe UnlockCondition, focus: true do
+describe UnlockCondition do
   let(:course) { create :course }
   let(:badge) { create :badge, name: "fancy name", course: course }
   let(:unlockable_badge) { create :badge, name: "unlockable badge", course: course }
@@ -489,7 +489,7 @@ describe UnlockCondition, focus: true do
         unlockable_id: assignment.id, unlockable_type: "Assignment"
       )
       expect(unlock_condition.requirements_description_sentence).to \
-        eq("Complete 21 Assignments in the zootopian name Assignment Type")
+        eq("Complete 21 assignments in the zootopian name Assignment Type")
     end
     
     it "returns a sentence summarizing a course unlock condition" do
@@ -589,7 +589,7 @@ describe UnlockCondition, focus: true do
       subject.condition_state = "Assignments Completed"
       subject.condition_value = 10
       expect(subject.key_description_sentence).to \
-        eq("Completing 10 assignments")
+        eq("Completing 10 assignments unlocks the #{unlockable_assignment.name} Assignment")
     end
   end
 end
