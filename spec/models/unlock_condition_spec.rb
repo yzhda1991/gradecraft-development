@@ -592,4 +592,49 @@ describe UnlockCondition do
         eq("Completing 10 assignments unlocks the #{unlockable_assignment.name} Assignment")
     end
   end
+  
+  describe "#requirements_completed_sentence" do
+    it "returns a statement summarizing the badge as an unlock key" do
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned the #{subject.name} Badge")
+    end
+
+    it "returns a summary of an assignment feedback read unlock condition" do
+      subject.condition_state = "Feedback Read"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Read the feedback for the #{ subject.name } #{ subject.condition_type }")
+    end
+
+    it "returns a summary of an assignment submission unlock condition" do
+      subject.condition_state = "Submitted"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Submitted the #{subject.name} #{ subject.condition_type }")
+    end
+
+    it "returns a summary of an grade earned unlock condition" do
+      subject.condition_state = "Grade Earned"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned a grade for the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of an assignment passed unlock condition" do
+      subject.condition_state = "Passed"
+      expect(subject.requirements_completed_sentence).to \
+        eq("Passed the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
+      subject = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Min Points",
+        unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 1000)
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned 1000 points in the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of the number of assignments completed as an unlock condition" do
+      subject = create(:unlock_condition, condition_id: assignment_type.id, condition_type: "AssignmentType", condition_state: "Assignments Completed",
+        unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 10)
+      expect(subject.requirements_completed_sentence).to \
+        eq("Completed 10 assignments in the #{subject.name} #{ subject.condition_type }")
+    end
+  end
 end

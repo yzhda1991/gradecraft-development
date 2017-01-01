@@ -36,11 +36,8 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def requirements_completed_sentence
-    if condition_type == "Course"
-      "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
-    else
-      "Earned #{ condition_value } points in this course"
-    end
+    return "#{ condition_state_past } the #{ condition.name } #{ condition_type }" unless condition_type == "Course"
+    return "Earned #{ condition_value } points in this course"
   end
 
   # Human readable sentence to describe what doing work on this thing unlocks
@@ -107,9 +104,9 @@ class UnlockCondition < ActiveRecord::Base
     elsif condition_state == "Passed"
       "Passed"
     elsif condition_state == "Min Points"
-      "Earned #{condition_value} points"
+      "Earned #{condition_value} points in"
     elsif condition_state == "Assignments Completed"
-      "Completed"
+      "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
     end
   end
 
