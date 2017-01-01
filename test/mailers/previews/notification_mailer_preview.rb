@@ -53,5 +53,4 @@ class NotificationMailerPreview < ActionMailer::Preview
     submission = Submission.last
     NotificationMailer.updated_submission submission
   end
- 
 end

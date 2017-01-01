@@ -9,8 +9,8 @@ RSpec.shared_examples "a submission email to a professor" do
     should include student.last_name
   end
 
-  it "includes the professor's last name" do
-    should include professor.last_name
+  it "includes the professor's first name" do
+    should include professor.first_name
   end
 
   it "includes the assignment name" do
