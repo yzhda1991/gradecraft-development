@@ -28,7 +28,7 @@ class ExportsMailerPreview < ActionMailer::Preview
   end
   
   def team_submissions_export_success    
-  professor = User.with_role_in_course("professor", Course.first).first
+    professor = User.with_role_in_course("professor", Course.first).first
     assignment = Assignment.first
     team = Team.first
     submissions_export = SubmissionsExport.first
