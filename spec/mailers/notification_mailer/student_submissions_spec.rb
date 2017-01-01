@@ -9,14 +9,6 @@ RSpec.shared_examples "a complete submission email body" do
     should include assignment.name
   end
 
-  it "includes the assignment term for the course" do
-    should include course.assignment_term.pluralize.downcase
-  end
-
-  it "includes the course name" do
-    should include course.name
-  end
-
   it "includes the submission created_at timestamp" do
     should include submission.submitted_at
   end
