@@ -446,7 +446,7 @@ describe UnlockCondition do
     end
   end
   
-  describe "#is_complete? assignment type conditions", focus: true do
+  describe "#is_complete? assignment type conditions" do
     describe "with a condition state of completing X assignments" do
       let(:course) { create :course }
       let(:student) { create :user }
