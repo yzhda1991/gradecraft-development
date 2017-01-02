@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe UnlockCondition do
+describe UnlockCondition, focus: true do
   let(:course) { create :course }
   let(:badge) { create :badge, name: "fancy name", course: course }
   let(:unlockable_badge) { create :badge, name: "unlockable badge", course: course }
@@ -428,6 +428,62 @@ describe UnlockCondition do
       end
     end
   end
+  
+  describe "#is_complete? assignment type conditions", focus: true do
+    describe "with a condition state of completing X assignments" do
+      let(:course) { create :course }
+      let(:student) { create :user }
+      let(:assignment_type_2) { create :assignment_type, course: course }
+      let(:assignment_at) { create(:assignment, assignment_type: assignment_type_2) }
+      let(:assignment_at2) { create(:assignment, assignment_type: assignment_type_2) }
+      let :unlock_condition do
+        UnlockCondition.create(
+          condition_id: assignment_type.id,
+          condition_type: "AssignmentType",
+          condition_state: "Assignments Completed",
+          condition_value: 2
+        )
+      end
+
+      it "return false if student has not done enough assignments" do
+        create(:grade, student: student, assignment: assignment_at)
+        expect(unlock_condition.is_complete?(student)).to eq(false)
+      end
+
+      it "return true if student has done enough assignments" do
+        g1 = create(:grade, score: 100, student: student, assignment: assignment_at, status: "Released")
+        g2 = create(:grade, score: 100, student: student, assignment: assignment_at2, status: "Released")
+        expect(assignment_type_2.count_grades_for(student)).to eq(2)
+        #expect(unlock_condition.is_complete?(student)).to eq(true)
+      end
+    end
+    
+    describe "with a condition state of earning a minimum of X points in the type" do
+      let(:course) { create :course }
+      let(:student) { create :user }
+      let :unlock_condition do
+        UnlockCondition.create(
+          condition_id: assignment_type.id,
+          condition_type: "AssignmentType",
+          condition_state: "Min Points",
+          condition_value: 100000
+        )
+      end
+      let(:assignment_2) { create(:assignment, assignment_type: assignment_type) }
+      let(:assignment_3) { create(:assignment, assignment_type: assignment_type) }
+
+      it "return false if student has not earned enough points" do
+        create(:grade, student: student, assignment: assignment_2, score: 5000)
+        expect(unlock_condition.is_complete?(student)).to eq(false)
+      end
+
+      it "return true if student has met the minimum number of points" do
+        create(:grade, student: student, assignment: assignment_2, score: 5000, status: "Released")
+        create(:grade, student: student, assignment: assignment_3, score: 5000, status: "Released")
+        expect(unlock_condition.is_complete?(student)).to eq(true)
+      end
+    end
+  end
 
   describe "with a condition state of 'Passed'" do
     it "returns true if the grade is passed and student visible" do
@@ -635,6 +691,13 @@ describe UnlockCondition do
         unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 10)
       expect(subject.requirements_completed_sentence).to \
         eq("Completed 10 assignments in the #{subject.name} #{ subject.condition_type }")
+    end
+    
+    it "returns a summary of the course requirements meant as an unlock condition" do
+      subject = create(:unlock_condition, condition_id: course.id, condition_type: "Course", condition_state: "Earned",
+        unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 10)
+      expect(subject.requirements_completed_sentence).to \
+        eq("Earned #{ subject.condition_value } points in this course")
     end
   end
 end
