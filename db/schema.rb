@@ -238,11 +238,11 @@ ActiveRecord::Schema.define(version: 20170110174401) do
   create_table "course_memberships", force: :cascade do |t|
     t.integer  "course_id"
     t.integer  "user_id"
-    t.integer  "score",                          default: 0,         null: false
+    t.integer  "score",                          default: 0,          null: false
     t.text     "character_profile"
     t.datetime "last_login_at"
-    t.boolean  "auditing",                       default: false,     null: false
-    t.string   "role",                           default: "student", null: false
+    t.boolean  "auditing",                       default: false,      null: false
+    t.string   "role",                           default: "observer", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
     t.boolean  "has_seen_course_onboarding",     default: false
