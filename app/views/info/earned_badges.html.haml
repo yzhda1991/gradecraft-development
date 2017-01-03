@@ -23,11 +23,8 @@
           - @badges.each do |badge|
             %td
               -if student.earned_badge_for_badge(badge.id).count > 0
-                %span
-                  %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name}
-                  %i
-                    x#{student.earned_badges_for_badge_count(badge.id)}
-                .display-on-hover.hover-style
-                  = badge.name
+                %img{:src => badge.try(:icon), :alt => badge.try(:name), :title => badge.name, :class=> "earned-badge-table-img"}
+                %span x#{student.earned_badges_for_badge_count(badge.id)}
+
           - if current_course.valuable_badges?
             %td= points student.earned_badge_score_for_course(current_course)

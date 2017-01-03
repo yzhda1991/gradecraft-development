@@ -1,0 +1,32 @@
+@import "../utilities/variables"
+
+span:hover + .display-on-hover,
+span:focus + .display-on-hover
+  display: block
+
+span[tabindex="0"]
+  color: $color-blue-2
+
+.hover-style
+  position: absolute
+  display: none
+  padding: 0.5rem
+  width: 250px
+  font-size: .8rem
+  background-color: $color-blue-1
+  color: $color-white
+  border-radius: $global-radius
+  z-index: 10
+
+  h6
+    color: $color-white
+    font-weight: bold
+
+  ul
+    margin: 0
+    padding: 0
+
+    li
+      color: $color-white
+      display: block
+      clear: both
