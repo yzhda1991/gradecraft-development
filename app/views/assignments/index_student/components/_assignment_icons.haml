@@ -1,28 +1,28 @@
 %span.assignment-details-icon
   - if assignment.has_groups?
-    %a= glyph(:group)
-    .display-on-hover.hover-style
+    %span{tabindex: "0", "aria-describedby": "group-assignment-tip_#{assignment.id}"}= glyph(:group)
+    .display-on-hover.hover-style{role: "tooltip", :id=> "group-assignment-tip_#{assignment.id}"}
       This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
   - if assignment.is_unlockable?
     - if ! assignment.is_unlocked_for_student?(presenter.student)
-      %a= glyph(:lock)
-      .display-on-hover.hover-style
+      %span{tabindex: "0", "aria-describedby": "unlock-assignment-tip_#{assignment.id}"}= glyph(:lock)
+      .display-on-hover.hover-style{role: "tooltip", :id=> "unlock-assignment-tip_#{assignment.id}"}
         %h3 This #{term_for :assignment} is Locked
         .small.italic In order to unlock it you must:
         %ol
           - assignment.unlock_conditions.each do |condition|
             %li= condition.requirements_description_sentence
     - else
-      %a= glyph(:unlock)
-      .display-on-hover.hover-style
+      %span{tabindex: "0", "aria-describedby": "unlocked-assignment-tip_#{assignment.id}"}= glyph(:unlock)
+      .display-on-hover.hover-style{role: "tooltip", :id=> "unlocked-assignment-tip_#{assignment.id}"}
         %h3 You have unlocked this #{term_for :assignment}
         .small.italic To achieve this you:
         %ol
           - assignment.unlock_conditions.each do |condition|
             %li= condition.requirements_completed_sentence
   - if assignment.is_a_condition?
-    %a= glyph(:key)
-    .display-on-hover.hover-style
+    %span{tabindex: "0", "aria-describedby": "key-assignment-tip_#{assignment.id}"}= glyph(:key)
+    .display-on-hover.hover-style{role: "tooltip", :id=> "key-assignment-tip_#{assignment.id}"}
       %h3 This #{term_for :assignment} is a Key
       %ol
         - assignment.unlock_keys.each do |key|

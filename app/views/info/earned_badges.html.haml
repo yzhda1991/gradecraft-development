@@ -23,7 +23,7 @@
           - @badges.each do |badge|
             %td
               -if student.earned_badge_for_badge(badge.id).count > 0
-                %a
+                %span
                   %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name}
                   %i
                     x#{student.earned_badges_for_badge_count(badge.id)}

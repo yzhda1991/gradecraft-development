@@ -32,12 +32,12 @@
     %td
       %span
       - if grade.feedback_read?
-        %a
+        %span
           %i.fa.fa-check
         .display-on-hover.hover-style
           This feedback has been <strong>marked as read</strong> by the #{term_for :student}.
       - elsif grade.feedback_reviewed?
-        %a
+        %span
           %i.fa.fa-eye
         .display-on-hover.hover-style
           This feedback has been <strong>viewed</strong> by the #{term_for :student}.
