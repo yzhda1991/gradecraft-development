@@ -160,7 +160,7 @@
       )
     _.each(badges,(badge)->
         # disregard for generic predictor
-        if badge.total_earned_point
+        if badge.total_earned_points
           total += badge.total_earned_points
       )
     _.each(challenges,(challenge)->
