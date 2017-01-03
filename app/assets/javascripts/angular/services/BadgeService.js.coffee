@@ -28,8 +28,9 @@
     $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
       GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
+        badge.earned_badge_count = 0 if !badge.earned_badge_count
         # add null prediction when JSON contains no prediction
-        badge.prediction = {predicted_times_earned: 0} if !badge.prediction
+        badge.prediction = {predicted_times_earned: badge.earned_badge_count} if !badge.prediction
       )
       GradeCraftAPI.loadFromIncluded(earnedBadges,"earned_badges", response)
       GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
