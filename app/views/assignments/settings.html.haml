@@ -8,55 +8,55 @@
 
   .assignments
     - @assignment_types.each do |assignment_type|
-      %h3= "#{assignment_type.try(:name)} – #{points assignment_type.total_points} points"
-      %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
+      %h3{:id => "assignment-settings-table-#{assignment_type.id}"}= "#{assignment_type.try(:name)} – #{points assignment_type.total_points} points"
+      %table{"aria-describedby" => "assignment-settings-table-#{assignment_type.id}"}
         %thead
           %tr
             %th{scope: "col"} Name
             %th{scope: "col"}
               %span
-                %span
+                %span{tabindex: "0", "aria-describedby": "visible-setting-tip_#{assignment_type.id}"}
                   %i.fa.fa-eye.fa-fw
-                .display-on-hover.hover-style
+                .display-on-hover.hover-style{role: "tooltip", :id=> "visible-setting-tip_#{assignment_type.id}"}
                   Visible to Students
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "required-setting-tip_#{assignment_type.id}"}
                 !
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "required-setting-tip_#{assignment_type.id}"}
                 Required
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "accepts-submissions-tip_#{assignment_type.id}"}
                 %i.fa.fa-paperclip.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "accepts-submissions-tip_#{assignment_type.id}"}
                 Accepts Submissions
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "shown-timeline-tip_#{assignment_type.id}"}
                 %i.fa.fa-calendar.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "shown-timeline-tip_#{assignment_type.id}"}
                 Shown in Timeline
 
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "shown-predictor-tip_#{assignment_type.id}"}
                 %i.fa.fa-sliders.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "shown-predictor-tip_#{assignment_type.id}"}
                 Shown in Predictor
 
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "due-this-week-tip_#{assignment_type.id}"}
                 %i.fa.fa-list.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "due-this-week-tip_#{assignment_type.id}"}
                 Shown in Due This Week
 
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "student-logged-tip_#{assignment_type.id}"}
                 %i.fa.fa-pencil.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "student-logged-tip_#{assignment_type.id}"}
                 Logged By Students
 
             %th{scope: "col"}
-              %span
+              %span{tabindex: "0", "aria-describedby": "release-required-tip_#{assignment_type.id}"}
                 %i.fa.fa-unlock-alt.fa-fw
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", :id=> "release-required-tip_#{assignment_type.id}"}
                 Release Required
 
             %th{scope: "col"} Grade Form Preview
@@ -129,16 +129,16 @@
                 - if assignment.grade_select?
                   %label.sr-only{:for => "score_levels"}
                     Score Levels
-                  = select_tag(:assignment_score_levels, options_from_collection_for_select(assignment.assignment_score_levels, :points, :name))
+                  = select_tag(:assignment_score_levels, options_from_collection_for_select(assignment.assignment_score_levels, :points, :name), id: "score_#{assignment.id}")
                 - elsif assignment.grade_radio?
                   - assignment.assignment_score_levels.each do |asl|
                     = radio_button_tag(asl.name, asl.points)
                     %span.not_bold= label_tag(asl.name)
                     %br
                 - elsif assignment.grade_checkboxes?
-                  = check_box_tag "score", "", false, :disabled => true
+                  = check_box_tag "score", "", false, disabled: true, id: "score_#{assignment.id}"
                 - else
-                  = text_field_tag "score", "", :disabled => true
+                  = text_field_tag "score", "", disabled: true, id: "score_#{assignment.id}"
               %td= points assignment.full_points
               %td
                 %ul
