@@ -70,9 +70,9 @@
           %li
             - if cf.file_processing
               = "#{cf.filename}"
-              %span
+              %span{tabindex: "0", "aria-describedby": "challenge-file-upload-tip"}
                 %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-              .display-on-hover.hover-style
+              .display-on-hover.hover-style{role: "tooltip", id: "challenge-file-upload-tip"}
                 Refresh page to confirm upload has completed
             - else
               = link_to cf.filename, cf.url, :target => "_blank"
