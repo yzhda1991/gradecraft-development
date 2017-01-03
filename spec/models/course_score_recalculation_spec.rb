@@ -4,10 +4,10 @@ include InQueueHelper # pulled from ResqueSpec
 describe Course do
   let(:course1) { create(:course) }
   let(:course2) { create(:course) }
-  let(:staff_membership) { create :staff_course_membership, course: course1, instructor_of_record: true }
-  let(:student_membership1) { create :student_course_membership, course: course1 }
-  let(:student_membership2) { create :student_course_membership, course: course1 }
-  let(:student_membership3) { create :student_course_membership, course: course2 }
+  let(:staff_membership) { create :course_membership, :staff, course: course1, instructor_of_record: true }
+  let(:student_membership1) { create :course_membership, :student, course: course1 }
+  let(:student_membership2) { create :course_membership, :student, course: course1 }
+  let(:student_membership3) { create :course_membership, :student, course: course2 }
 
   describe "recalculate_student_scores" do
     before do

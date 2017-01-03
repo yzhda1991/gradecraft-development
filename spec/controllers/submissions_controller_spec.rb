@@ -3,7 +3,7 @@ require "rails_spec_helper"
 describe SubmissionsController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
-  let!(:student) { create(:student_course_membership, course: course).user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
 
   before(:each) do
     session[:course_id] = course.id
@@ -11,7 +11,7 @@ describe SubmissionsController do
   end
 
   context "as a professor" do
-    let(:professor) { create(:professor_course_membership, course: course).user }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
     let(:submission) { create(:submission, assignment: assignment, student: student) }
 
     before(:each) do

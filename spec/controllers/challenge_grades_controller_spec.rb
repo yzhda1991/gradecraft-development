@@ -3,7 +3,7 @@ require "rails_spec_helper"
 describe ChallengeGradesController do
 
   let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:professor) { create(:course_membership, :professor, course: world.course).user }
   let(:team) { world.create_team.team }
   let(:challenge) { world.create_challenge.challenge }
 

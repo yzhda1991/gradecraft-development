@@ -135,7 +135,7 @@ describe Submission do
 
   describe ".for_assignment_and_student" do
     let(:assignment) { create(:assignment) }
-    let(:student)  { create(:student_course_membership, course: assignment.course).user }
+    let(:student)  { create(:course_membership, :student, course: assignment.course).user }
     let!(:submission) { create(:submission, assignment: assignment, student: student) }
 
     it "returns the submission for the student and assignment" do
@@ -147,7 +147,7 @@ describe Submission do
   describe ".for_assignment_and_group" do
     let(:assignment) { create(:group_assignment) }
     let(:student) { create(:user) }
-    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:course_membership) { create(:course_membership, :student, user: student, course: assignment.course) }
     let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
     let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
     let!(:submission) { create(:group_submission, assignment: assignment, group: assignment_group.group) }
@@ -183,7 +183,7 @@ describe Submission do
     let(:assignment_type) { create(:assignment_type) }
     let(:assignment) { create(:group_assignment, assignment_type: assignment_type) }
     let(:another_assignment) { create(:group_assignment, assignment_type: assignment_type) }
-    let(:student) { create(:student_course_membership, course: assignment.course).user }
+    let(:student) { create(:course_membership, :student, course: assignment.course).user }
     let!(:submission) { create(:submission, assignment: assignment, student: student) }
     let!(:another_submission) { create(:draft_submission, assignment: another_assignment, student: student) }
 

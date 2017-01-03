@@ -3,11 +3,11 @@ require "rails_spec_helper"
 feature "grading a group assignment" do
   context "as a professor" do
     let(:course) { create :course }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:assignment) { create :assignment, name: "Group Assignment", course: course, grade_scope: "Group" }
     let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
-    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
+    let!(:course_membership_2) { create :course_membership, :student, user: student, course: course }
     let!(:group) { create :group, course: course, name: "Group Name", approved: "Approved" }
     let!(:assignment_group) { create :assignment_group, group: group, assignment: assignment }
     let!(:group_membership) { create :group_membership, student: student, group: group }

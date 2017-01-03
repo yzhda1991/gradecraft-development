@@ -3,7 +3,7 @@ require "active_record_spec_helper"
 describe CourseMembershipBuilder do
   let(:builder) { create :user }
   let(:user) { create :user }
-  let!(:membership) { create :professor_course_membership, user: builder }
+  let!(:membership) { create :course_membership, :professor, user: builder }
 
   subject { described_class.new(builder) }
 

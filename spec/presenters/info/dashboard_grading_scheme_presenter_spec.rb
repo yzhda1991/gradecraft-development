@@ -8,7 +8,7 @@ describe Info::DashboardGradingSchemePresenter do
     @grade_scheme_element_1 = create(:grade_scheme_element_high, course: @course)
     @grade_scheme_element_2 = create(:grade_scheme_element_low, course: @course)  
     @grade_scheme_element_3 = create(:grade_scheme_element_highest, course: @course, lowest_points: 20001, highest_points: 30000)
-    @course_membership = create(:student_course_membership, user: @student, course: @course, score: 20000, earned_grade_scheme_element_id: @grade_scheme_element_1.id)
+    @course_membership = create(:course_membership, :student, user: @student, course: @course, score: 20000, earned_grade_scheme_element_id: @grade_scheme_element_1.id)
   end
   
   subject { described_class.new course: @course, student: @student }

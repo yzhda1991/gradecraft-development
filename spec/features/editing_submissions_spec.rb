@@ -7,7 +7,7 @@ feature "editing submissions" do
     end
 
     let(:assignment) { create :assignment, accepts_submissions: true, course: membership.course }
-    let(:membership) { create :student_course_membership, user: student }
+    let(:membership) { create :course_membership, :student, user: student }
     let(:student) { create :user }
 
     before { login_as student }

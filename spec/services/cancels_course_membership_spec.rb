@@ -3,7 +3,7 @@ require "./app/services/cancels_course_membership"
 
 describe Services::CancelsCourseMembership do
   let(:course) { membership.course }
-  let(:membership) { create(:student_course_membership) }
+  let(:membership) { create(:course_membership, :student) }
   let(:student) { membership.user }
 
   describe ".for_student" do

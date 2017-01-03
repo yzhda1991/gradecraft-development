@@ -3,12 +3,12 @@ require "rails_spec_helper"
 feature "grading an individual assignment" do
   context "as a professor" do
     let(:course) { create :course }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:assignment_type) { create :assignment_type, name: "Assignment Type Name", course: course }
     let!(:assignment) { create :assignment, name: "Assignment Name", course: course, assignment_type: assignment_type }
     let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
-    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
+    let!(:course_membership_2) { create :course_membership, :student, user: student, course: course }
     let!(:grade) { create :grade, assignment: assignment, student: student }
 
     before(:each) do

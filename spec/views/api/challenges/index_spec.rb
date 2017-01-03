@@ -56,7 +56,7 @@ describe "api/challenges/index" do
 
   describe "included" do
     it "contains the prediction" do
-      create :student_course_membership, user: @student, course: @challenge.course
+      create :course_membership, :student, user: @student, course: @challenge.course
       prediction = create :predicted_earned_challenge, challenge: @challenge, student: @student
       @predicted_earned_challenges =
         PredictedEarnedChallenge.where(student_id: @student.id)

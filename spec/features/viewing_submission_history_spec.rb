@@ -7,14 +7,14 @@ feature "viewing submission history" do
   let(:assignment) do
     create :assignment, accepts_submissions: true, course: membership.course
   end
-  let(:membership) { create :student_course_membership, user: student }
+  let(:membership) { create :course_membership, :student, user: student }
   let(:student) { create :user }
 
   before { PaperTrail.enabled = true }
 
   context "as a professor" do
     let(:professor) { create :user }
-    let!(:professor_membership) { create :professor_course_membership, user: professor, course: membership.course }
+    let!(:professor_membership) { create :course_membership, :professor, user: professor, course: membership.course }
 
     before { login_as professor }
 

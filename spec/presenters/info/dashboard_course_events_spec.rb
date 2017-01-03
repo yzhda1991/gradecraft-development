@@ -3,7 +3,7 @@ require "./app/presenters/info/dashboard_course_events_presenter.rb"
 
 describe Info::DashboardCourseEventsPresenter do
   let(:course) { create(:course) }
-  let(:student) { create :student_course_membership, course: course }
+  let(:student) { create :course_membership, :student, course: course }
   let(:event) { create :event, course: course }
   let(:event_with_open) { create :event, course: course, open_at: Date.yesterday }
   let(:assignment) { create :assignment, course: course, include_in_timeline: false, due_at: event.due_at }

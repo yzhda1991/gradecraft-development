@@ -6,8 +6,8 @@ describe FlaggedUser do
   let(:student) { build :user }
 
   before do
-    create :course_membership, course: course, user: professor, role: "professor"
-    create :course_membership, course: course, user: student, role: "student"
+    create :course_membership, :professor, course: course, user: professor
+    create :course_membership, :student, course: course, user: student
   end
 
   context "validations" do
@@ -49,7 +49,7 @@ describe FlaggedUser do
 
     it "does not allow a student to be flagged by another student" do
       another_student = create :user
-      create :course_membership, course: course, user: another_student, role: "student"
+      create :course_membership, :student, course: course, user: another_student
       subject = FlaggedUser.new course_id: course.id,
         flagger_id: another_student.id,
         flagged_id: student.id
@@ -72,10 +72,10 @@ describe FlaggedUser do
     it "returns all the flagged users for a specific course" do
       course_flagged_user = create(:flagged_user, flagger: professor, flagged: student, course: course)
       another_course = create(:course)
-      another_professor = create :course_membership, course: another_course,
-        user: professor, role: "professor"
-      another_student = create :course_membership, course: another_course,
-        user: student, role: "student"
+      another_professor = create :course_membership, :professor, course: another_course,
+        user: professor
+      another_student = create :course_membership, :student, course: another_course,
+        user: student
       create(:flagged_user, flagger: another_professor.user,
              flagged: another_student.user, course: another_course)
       results = FlaggedUser.for_course(course)
@@ -100,7 +100,7 @@ describe FlaggedUser do
     it "returns all the flagged users for a specific flagger user" do
       student_flagged_user = create(:flagged_user, flagger: professor,
                                     flagged: student, course: course)
-      another_flagger = create(:professor_course_membership, course: course).user
+      another_flagger = create(:course_membership, :professor, course: course).user
       another_flagged_user = create(:flagged_user, flagger: another_flagger,
                                     flagged: student, course: course)
       results = FlaggedUser.for_flagger(professor)

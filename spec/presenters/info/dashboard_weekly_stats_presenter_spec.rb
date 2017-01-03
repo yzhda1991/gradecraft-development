@@ -6,7 +6,7 @@ describe Info::DashboardWeeklyStatsPresenter do
   let(:another_assignment) { create(:assignment, assignment_type: another_assignment_type) }
   let(:assignment_type) { create(:assignment_type, course: course) }
   let(:another_assignment_type) { create(:assignment_type, course: course) }
-  let(:student) { create(:student_course_membership, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
   let!(:submission) { create(:submission, course: course, assignment: assignment) }
   let!(:draft_submission) { create(:draft_submission, course: course, assignment: another_assignment) }
 

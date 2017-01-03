@@ -4,12 +4,12 @@ describe Assignments::GradesController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }
-  let!(:student) { create(:student_course_membership, course: course).user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
 
   context "as professor" do
     let(:professor) { create(:user) }
-    let!(:professor_course_membership) { create(:professor_course_membership, course: course, user: professor) }
+    let!(:professor_course_membership) { create(:course_membership, :professor, course: course, user: professor) }
 
     before(:each) { login_user(professor) }
 
@@ -225,7 +225,7 @@ describe Assignments::GradesController do
       end
 
       context "when there is a team id" do
-        let!(:other_student) { create(:student_course_membership, course: course).user }
+        let!(:other_student) { create(:course_membership, :student, course: course).user }
         let!(:other_grade) { create(:grade, assignment: assignment, course: course, student: other_student) }
         let(:team) { create(:team, course: course) }
         let!(:team_membership) { create(:team_membership, team: team, student: student) }

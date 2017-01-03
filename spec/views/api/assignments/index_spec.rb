@@ -22,7 +22,7 @@ describe "api/assignments/index" do
   end
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
-    create :student_course_membership, user: @student, course: @assignment.course
+    create :course_membership, :student, user: @student, course: @assignment.course
     grade = create :grade, assignment: @assignment, student: @student,
       course: @assignment.course, pass_fail_status: "passed", raw_points: 1000,
       score: 1000, status: "Released"
@@ -142,7 +142,7 @@ describe "api/assignments/index" do
 
   describe "included" do
     it "contains the grade" do
-      create :student_course_membership, user: @student, course: @assignment.course
+      create :course_membership, :student, user: @student, course: @assignment.course
       grade = create :grade, assignment: @assignment, student: @student,
         course: @assignment.course, pass_fail_status: nil,
         raw_points: 1000, score: 1000, status: "Released"
@@ -163,7 +163,7 @@ describe "api/assignments/index" do
     end
 
     it "contains the prediction" do
-      create :student_course_membership, user: @student, course: @assignment.course
+      create :course_membership, :student, user: @student, course: @assignment.course
       prediction = create :predicted_earned_grade, assignment: @assignment, student: @student
       @predicted_earned_grades =
         PredictedEarnedGrade.where(assignment_id: @assignment.id, student_id: @student.id)

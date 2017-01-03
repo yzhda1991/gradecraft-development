@@ -16,7 +16,7 @@ describe AuthorizationsController do
       end
       let(:expires_at) { Time.now + (30 * 24 * 60 * 60) }
       let(:professor) { professor_membership.user }
-      let(:professor_membership) { create :professor_course_membership }
+      let(:professor_membership) { create :course_membership, :professor }
       let(:provider) { :canvas }
 
       before do

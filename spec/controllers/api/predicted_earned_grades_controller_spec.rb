@@ -3,7 +3,7 @@ include SessionHelper
 
 describe API::PredictedEarnedGradesController do
   let(:course) { create :course}
-  let(:student)  { create(:student_course_membership, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment) }
   let(:params) {{ assignment_id: assignment.id, predicted_points: (assignment.full_points * 0.75).to_i }}
 

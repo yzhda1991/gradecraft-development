@@ -15,9 +15,9 @@ describe CourseGradeExporter do
     it "generates a CSV with student grades for the course" do
       @student = create(:user, first_name: "Pinky", last_name: "Alpha")
       @student_2 = create(:user, first_name: "The Brain", last_name: "Zed")
-      create(:course_membership, course: course, user: @student, score: 80000)
+      create(:course_membership, :student, course: course, user: @student, score: 80000)
       @students = course.students
-      create(:course_membership, course: course, user: @student_2, score: 120000)
+      create(:course_membership, :student, course: course, user: @student_2, score: 120000)
       create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
       create(:grade_scheme_element, course: course, lowest_points: 100001, highest_points: 200000, level: "Phenomenal", letter: "B")
 

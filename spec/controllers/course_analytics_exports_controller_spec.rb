@@ -4,7 +4,7 @@ require "./app/presenters/course_analytics_exports/base"
 RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
   let(:course) { create(:course) }
-  let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:course_analytics_export) { create(:course_analytics_export, course: course) }
 
   let(:presenter) { double(presenter_class).as_null_object }

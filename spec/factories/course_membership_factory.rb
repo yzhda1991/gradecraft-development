@@ -2,26 +2,26 @@ FactoryGirl.define do
   factory :course_membership do
     association :course
     association :user
+    role :observer
 
-    factory :student_course_membership do
-      role "student"
+    trait :student do
+      role :student
     end
 
-    factory :staff_course_membership do
-      role "gsi"
+    trait :staff do
+      role :gsi
     end
 
-    factory :professor_course_membership do
-      role "professor"
+    trait :professor do
+      role :professor
     end
 
-    factory :admin_course_membership do
-      role "admin"
+    trait :admin do
+      role :admin
     end
 
-    factory :auditing_membership do
+    trait :audited do
       auditing true
     end
-
   end
 end

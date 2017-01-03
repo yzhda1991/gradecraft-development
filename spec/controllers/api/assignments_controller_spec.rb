@@ -3,8 +3,8 @@ include SessionHelper
 
 describe API::AssignmentsController do
   let(:course) { create :course}
-  let(:student)  { create(:student_course_membership, course: course).user }
-  let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:assignment) { create(:assignment, course: course) }
   let!(:predicted_earned_grade) { create :predicted_earned_grade, student: student, assignment: assignment }
   let!(:grade) { create :grade, student: student, assignment: assignment }

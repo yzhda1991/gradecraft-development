@@ -11,7 +11,7 @@ describe InstructorsOfRecord do
   end
 
   describe "#users" do
-    let!(:membership) { create :staff_course_membership, course: course, instructor_of_record: true }
+    let!(:membership) { create :course_membership, :staff, course: course, instructor_of_record: true }
 
     it "returns the users that are marked as instructors of record for the course" do
       expect(subject.users).to eq [membership.user]
@@ -19,7 +19,7 @@ describe InstructorsOfRecord do
   end
 
   describe "#update_course_memberships" do
-    let(:membership) { create :staff_course_membership, course: course }
+    let(:membership) { create :course_membership, :staff, course: course }
 
     context "for new instructors of record" do
       it "adds instructors of record to the course membership" do
@@ -39,8 +39,8 @@ describe InstructorsOfRecord do
     end
 
     it "returns all the course memberships that have instructors of record" do
-      membership1 = create :staff_course_membership, course: course, instructor_of_record: true
-      membership2 = create :staff_course_membership, course: course, instructor_of_record: true
+      membership1 = create :course_membership, :staff, course: course, instructor_of_record: true
+      membership2 = create :course_membership, :staff, course: course, instructor_of_record: true
       result = subject.update_course_memberships [membership1.user_id, membership2.user_id]
       expect(result).to eq [membership1, membership2]
     end

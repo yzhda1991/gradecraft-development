@@ -9,7 +9,7 @@ describe API::Assignments::SubmissionsController do
 
   context "with a group assignment" do
     let(:assignment) { create(:group_assignment) }
-    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:course_membership) { create(:course_membership, :student, user: student, course: assignment.course) }
     let!(:assignment_group) { create(:assignment_group, assignment: assignment) }
     let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
     let(:params) {{ assignment_id: assignment.id }}
@@ -69,7 +69,7 @@ describe API::Assignments::SubmissionsController do
 
   context "with an individual assignment" do
     let(:assignment) { create(:assignment) }
-    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:course_membership) { create(:course_membership, :student, user: student, course: assignment.course) }
 
     describe "#show" do
       context "when the submission exists" do
@@ -129,7 +129,7 @@ describe API::Assignments::SubmissionsController do
 
   describe "#update" do
     let(:assignment) { create(:assignment) }
-    let!(:course_membership) { create(:student_course_membership, user: student, course: assignment.course) }
+    let!(:course_membership) { create(:course_membership, :student, user: student, course: assignment.course) }
     let(:submission) { create(:submission, student: student, text_comment_draft: "I love school", assignment: assignment) }
 
     context "when no submission exists" do

@@ -18,7 +18,7 @@ describe "submissions/show" do
   let(:assignment) { build(:group_assignment, course: course) }
   let(:group) { create(:group, course: course) }
   let(:submission) { create(:group_submission, course: course, assignment: assignment, group: group) }
-  let(:student) { create(:student_course_membership, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
 
   before do
     allow(view).to receive_messages(

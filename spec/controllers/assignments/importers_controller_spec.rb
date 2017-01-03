@@ -4,7 +4,7 @@ require "./app/services/imports_lms_assignments"
 describe Assignments::ImportersController do
   let(:course) { create :course }
   let(:professor) { professor_membership.user }
-  let(:professor_membership) { create :professor_course_membership, course: course }
+  let(:professor_membership) { create :course_membership, :professor, course: course }
   let(:provider) { :canvas }
 
   before { allow(controller).to receive(:current_course).and_return course }

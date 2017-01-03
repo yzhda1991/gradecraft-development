@@ -5,7 +5,7 @@ describe Grades::ImportersController do
   before { allow(controller).to receive(:current_course).and_return world.course }
 
   context "as a professor" do
-    let(:membership) { create :professor_course_membership, course: world.course }
+    let(:membership) { create :course_membership, :professor, course: world.course }
     let(:professor) { membership.user }
 
     before { login_user professor }

@@ -22,10 +22,9 @@ describe SubmissionFilesController do
     let(:params) { { submission_file_id: submission_file.id, index: 20 } }
 
     before do
-      create(:course_membership,
+      create(:course_membership, :student,
         user: student,
-        course: course,
-        role: "student"
+        course: course
       )
     end
 

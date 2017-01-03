@@ -3,7 +3,7 @@ require "rails_spec_helper"
 feature "editing an event" do
   context "as a professor" do
     let(:course) { create :course}
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:event) { create :event, course: course, name: "Event Name", due_at: Date.today }
 

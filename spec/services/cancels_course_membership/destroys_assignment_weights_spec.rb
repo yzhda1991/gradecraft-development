@@ -4,7 +4,7 @@ require "./app/services/cancels_course_membership/destroys_assignment_type_weigh
 
 describe Services::Actions::DestroysAssignmentTypeWeights do
   let(:course) { membership.course }
-  let(:membership) { create :student_course_membership }
+  let(:membership) { create :course_membership, :student }
   let(:student) { membership.user }
 
   it "expects the membership to find the assignment weights to destroy" do

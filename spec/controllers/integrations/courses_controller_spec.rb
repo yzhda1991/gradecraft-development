@@ -7,7 +7,7 @@ describe Integrations::CoursesController do
   context "as a professor" do
     let(:course) { create :course }
     let(:professor) { professor_membership.user }
-    let(:professor_membership) { create :professor_course_membership, course: course }
+    let(:professor_membership) { create :course_membership, :professor, course: course }
 
     before { login_user(professor) }
 
@@ -87,7 +87,7 @@ describe Integrations::CoursesController do
 
   context "as a student" do
     let(:student) { student_membership.user }
-    let(:student_membership) { create :student_course_membership }
+    let(:student_membership) { create :course_membership, :student }
 
     before { login_user(student) }
 

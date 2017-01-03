@@ -3,7 +3,7 @@ include SessionHelper
 
 describe API::PredictedEarnedBadgesController do
   let(:course) { create :course}
-  let(:student)  { create(:student_course_membership, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:badge) { create :badge }
   let(:params) {{ badge_id: badge.id, predicted_times_earned: 2 }}
 

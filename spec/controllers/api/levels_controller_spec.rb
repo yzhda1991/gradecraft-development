@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 describe API::LevelsController do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion) }
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:professor) { create(:course_membership, :professor, course: world.course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }

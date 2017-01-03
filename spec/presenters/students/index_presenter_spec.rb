@@ -3,7 +3,7 @@ require "./app/presenters/students/index_presenter"
 
 describe Students::IndexPresenter do
   let(:course) { create(:course) }
-  let(:current_user) { create(:professor_course_membership, course: course).user }
+  let(:current_user) { create(:course_membership, :professor, course: course).user }
   subject { described_class.new course: course, current_user: current_user }
 
   describe "#display_pseudonyms?" do
@@ -21,8 +21,8 @@ describe Students::IndexPresenter do
   end
 
   describe "#earned_badges" do
-    let(:student1) { create :student_course_membership, course: course }
-    let(:student2) { create :student_course_membership, course: course }
+    let(:student1) { create :course_membership, :student, course: course }
+    let(:student2) { create :course_membership, :student, course: course }
     let!(:earned_badge1) { create :earned_badge, course: course, student: student1.user }
     let!(:earned_badge2) { create :earned_badge, course: course, student: student2.user }
 
@@ -32,8 +32,8 @@ describe Students::IndexPresenter do
   end
 
   describe "#flagged_users" do
-    let(:student1) { create(:student_course_membership, course: course).user }
-    let(:student2) { create(:student_course_membership, course: course).user }
+    let(:student1) { create(:course_membership, :student, course: course).user }
+    let(:student2) { create(:course_membership, :student, course: course).user }
     let!(:flagged_user1) { create :flagged_user, flagger: current_user, flagged: student1,
                            course: course }
     let!(:flagged_user2) { create :flagged_user, flagger: current_user, flagged: student2,
@@ -68,8 +68,8 @@ describe Students::IndexPresenter do
   end
 
   describe "#students" do
-    let!(:student1) { create :student_course_membership, course: course }
-    let!(:student2) { create :student_course_membership, course: course }
+    let!(:student1) { create :course_membership, :student, course: course }
+    let!(:student2) { create :course_membership, :student, course: course }
     let(:team) { create :team, course: course }
 
     it "returns a list of users that are being graded" do
@@ -85,8 +85,8 @@ describe Students::IndexPresenter do
   end
 
   describe "#student_ids" do
-    let!(:student1) { create :student_course_membership, course: course }
-    let!(:student2) { create :student_course_membership, course: course }
+    let!(:student1) { create :course_membership, :student, course: course }
+    let!(:student2) { create :course_membership, :student, course: course }
 
     it "returns the user ids for the students" do
       expect(subject.student_ids.sort).to eq [student1, student2].map(&:user_id)
@@ -113,8 +113,8 @@ describe Students::IndexPresenter do
   end
 
   describe "#team_memberships" do
-    let!(:student1) { create :student_course_membership, course: course }
-    let!(:student2) { create :student_course_membership, course: course }
+    let!(:student1) { create :course_membership, :student, course: course }
+    let!(:student2) { create :course_membership, :student, course: course }
     let(:team) { create :team, course: course }
 
     it "returns the team memberships for all the students" do

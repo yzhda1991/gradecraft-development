@@ -6,8 +6,8 @@ describe "assignment_types/all_grades" do
   before(:all) do
     @course = create(:course)
     @assignment_type = create(:assignment_type, course: @course)
-    @student_1 = create(:student_course_membership, course: @course).user
-    @student_2 = create(:student_course_membership, course: @course).user
+    @student_1 = create(:course_membership, :student, course: @course).user
+    @student_2 = create(:course_membership, :student, course: @course).user
     @students = @course.students
   end
 

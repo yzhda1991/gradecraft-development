@@ -3,7 +3,7 @@ require "cancan/matchers"
 
 describe Ability do
   let(:course) { student_course_membership.course }
-  let(:student_course_membership) { create :student_course_membership }
+  let(:student_course_membership) { create :course_membership, :student }
   let(:student) { student_course_membership.user }
 
   subject { described_class.new(student, course) }
@@ -30,7 +30,7 @@ describe Ability do
     end
 
     it "is creatable by any staff for the course" do
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: course
       subject = described_class.new(professor_course_membership.user, course)
       expect(subject).to be_able_to(:create, announcement)
@@ -42,14 +42,14 @@ describe Ability do
 
     it "is not creatable by an instructor in another course" do
       course = create :course
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: course
       subject = described_class.new(professor_course_membership.user, course)
       expect(subject).to_not be_able_to(:create, announcement)
     end
 
     it "is updatable by the author" do
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: course
       announcement.author_id =  professor_course_membership.user_id
       subject = described_class.new(professor_course_membership.user, course)
@@ -57,7 +57,7 @@ describe Ability do
     end
 
     it "is destroyable by the author" do
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: course
       announcement.author_id =  professor_course_membership.user_id
       subject = described_class.new(professor_course_membership.user, course)

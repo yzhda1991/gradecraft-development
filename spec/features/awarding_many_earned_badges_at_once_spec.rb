@@ -3,13 +3,13 @@ require "rails_spec_helper"
 feature "awarding many earned badges at once" do
   context "as a professor" do
     let(:course) { create :course, has_badges: true }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
     let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
     let(:student_2) { create :user, first_name: "Ron", last_name: "Weasley" }
-    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
-    let!(:course_membership_3) { create :student_course_membership, user: student_2, course: course }
+    let!(:course_membership_2) { create :course_membership, :student, user: student, course: course }
+    let!(:course_membership_3) { create :course_membership, :student, user: student_2, course: course }
 
     before(:each) do
       login_as professor

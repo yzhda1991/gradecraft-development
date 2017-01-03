@@ -236,7 +236,7 @@ describe Grade do
 
   describe ".find_or_create" do
     let(:course) { create :course }
-    let(:student) { create(:student_course_membership, course: course).user }
+    let(:student) { create(:course_membership, :student, course: course).user }
     let(:assignment) { create :assignment, course: course }
 
     it "finds and existing grade for assignment and student" do

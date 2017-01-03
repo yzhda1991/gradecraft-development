@@ -3,7 +3,7 @@ require "cancan/matchers"
 
 describe Ability do
   let(:course) { student_course_membership.course }
-  let(:student_course_membership) { create :student_course_membership }
+  let(:student_course_membership) { create :course_membership, :student }
   let(:student) { student_course_membership.user }
 
   subject { described_class.new(student, course) }
@@ -44,7 +44,7 @@ describe Ability do
     end
 
     it "is viewable by an instructor in the course" do
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: course
       subject = described_class.new(professor_course_membership.user, course)
       expect(subject).to be_able_to(:read, submission)
@@ -52,7 +52,7 @@ describe Ability do
 
     it "is not viewable by an instructor in another course" do
       another_course = create :course
-      professor_course_membership = create :professor_course_membership,
+      professor_course_membership = create :course_membership, :professor,
         course: another_course
       subject = described_class.new(professor_course_membership.user, course)
       expect(subject).to_not be_able_to(:read, submission)

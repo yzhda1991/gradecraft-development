@@ -3,7 +3,7 @@ require "active_record_spec_helper"
 describe User do
   let(:course) { create(:course) }
   let(:student) { create(:user) }
-  let(:course_membership) { create(:student_course_membership, user: student, course: course) }
+  let(:course_membership) { create(:course_membership, :student, user: student, course: course) }
   let(:grade_scheme_element) { create(:grade_scheme_element, course: course)}
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, course: course, student: student) }

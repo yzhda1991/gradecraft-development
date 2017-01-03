@@ -2,9 +2,9 @@ require "rails_spec_helper"
 
 describe CoursesController do
   let(:course) { create :course }
-  let(:professor) { create(:professor_course_membership, course: course).user }
-  let(:admin) { create(:admin_course_membership, course: course).user }
-  let(:student) { create(:student_course_membership, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:admin) { create(:course_membership, :admin, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
 
   before(:each) do
     session[:course_id] = course.id
@@ -15,7 +15,7 @@ describe CoursesController do
     before(:each) { login_user(admin) }
 
     describe "POST recalculate_student_scores" do
-      let!(:course_membership) { create(:student_course_membership, course: course) }
+      let!(:course_membership) { create(:course_membership, :student, course: course) }
 
       it "recalculates student scores" do
         expect_any_instance_of(Course).to receive(:recalculate_student_scores)
@@ -162,7 +162,7 @@ describe CoursesController do
     end
 
     describe "POST copy with students" do
-      let(:course_with_students) { create(:student_course_membership, course: course).course }
+      let(:course_with_students) { create(:course_membership, :student, course: course).course }
 
       it "creates a duplicate course" do
         expect{ post :copy,

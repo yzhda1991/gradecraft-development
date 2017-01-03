@@ -3,11 +3,11 @@ require "rails_spec_helper"
 feature "awarding a badge" do
   context "as a professor" do
     let(:course) { create :course, has_badges: true }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
     let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
-    let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
+    let!(:course_membership_2) { create :course_membership, :student, user: student, course: course }
 
     before(:each) do
       login_as professor

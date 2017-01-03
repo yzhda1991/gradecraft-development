@@ -2,7 +2,7 @@ require "active_record_spec_helper"
 
 describe Course do
   subject { build(:course) }
-  let(:staff_membership) { create :staff_course_membership, course: subject,
+  let(:staff_membership) { create :course_membership, :staff, course: subject,
                                   instructor_of_record: true }
 
   describe "validations" do
@@ -64,7 +64,7 @@ describe Course do
   end
 
   describe "#copy with students" do
-    let!(:student) { create(:student_course_membership, course: subject).user }
+    let!(:student) { create(:course_membership, :student, course: subject).user }
     subject { create :course }
 
     it "turns off the create_admin_memberships callback" do
@@ -160,8 +160,8 @@ describe Course do
       staff_1 = create(:user)
       staff_2 = create(:user)
       staff_3 = create(:user)
-      course_membership = create(:course_membership, user: staff_1, role: "gsi", course: course)
-      course_membership = create(:course_membership, user: staff_2, role: "gsi", course: course)
+      course_membership = create(:course_membership, :staff, user: staff_1, course: course)
+      course_membership = create(:course_membership, :staff, user: staff_2, course: course)
       expect(course.staff).to match_array([staff_2,staff_1])
     end
   end
@@ -193,11 +193,11 @@ describe Course do
   describe "#students_by_team(team)" do
     it "return a list of all students in a team" do
       student = create(:user)
-      course_membership = create(:auditing_membership, user: student, course: subject)
+      course_membership = create(:course_membership, :audited, :student, user: student, course: subject)
       student2 = create(:user)
       student2.courses << subject
       student3 = create(:user)
-      course_membership_2 = create(:auditing_membership, user: student3, course: subject)
+      course_membership_2 = create(:course_membership, :audited, :student, user: student3, course: subject)
       team = create(:team, course: subject)
       team.students << [ student, student2]
       expect(subject.students_by_team(team)).to  match_array([student2, student])
@@ -236,7 +236,7 @@ describe Course do
 
   describe "#instructors_of_record_ids=" do
     it "adds the instructors of record if they were not there before" do
-      membership = create :staff_course_membership, course: subject
+      membership = create :course_membership, :staff, course: subject
       subject.instructors_of_record_ids = [membership.user_id]
       expect(subject.instructors_of_record).to eq [membership.user]
     end
@@ -557,11 +557,11 @@ describe Course do
   describe "#minimum_course_score" do
     it "returns the lowest student score in the course" do
       student = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
       student_2 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
       student_3 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
       expect(subject.minimum_course_score).to eq(100)
     end
   end
@@ -569,11 +569,11 @@ describe Course do
   describe "#maximum_course_score" do
     it "returns the highest student score in the course" do
       student = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
       student_2 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
       student_3 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
       expect(subject.maximum_course_score).to eq(2990)
     end
   end
@@ -581,11 +581,11 @@ describe Course do
   describe "#average_course_score" do
     it "returns the average student score in the course" do
       student = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
       student_2 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
       student_3 = create(:user)
-      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
       expect(subject.average_course_score).to eq(1696)
     end
   end
@@ -609,8 +609,8 @@ describe Course do
       student2 = create(:user, last_name: "Alpha")
       student3 = create(:user)
       student3.courses << subject
-      course_membership = create(:auditing_membership, user: student, course: subject)
-      course_membership = create(:auditing_membership, user: student2, course: subject)
+      course_membership = create(:course_membership, :audited, :student, user: student, course: subject)
+      course_membership = create(:course_membership, :audited, :student, user: student2, course: subject)
       expect(subject.graded_student_count).to eq(1)
     end
   end
@@ -653,9 +653,9 @@ describe Course do
 
   describe "#scores" do
     it "returns the scores of all students being graded in the course" do
-      course_membership = create(:student_course_membership, course: subject, score: 100)
-      course_membership_2 = create(:student_course_membership, course: subject, score: 200)
-      course_membership_3 = create(:student_course_membership, course: subject, score: 300)
+      course_membership = create(:course_membership, :student, course: subject, score: 100)
+      course_membership_2 = create(:course_membership, :student, course: subject, score: 200)
+      course_membership_3 = create(:course_membership, :student, course: subject, score: 300)
       expect(subject.scores).to match_array({:scores => [100, 200, 300]})
     end
   end

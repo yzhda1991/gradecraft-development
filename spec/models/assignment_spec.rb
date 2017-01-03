@@ -838,10 +838,10 @@ describe Assignment do
     end
 
     describe "ungraded student methods" do
-      let!(:student_1) { create(:student_course_membership, course: subject.course).user }
-      let!(:student_2) { create(:student_course_membership, course: subject.course).user }
-      let!(:student_3) { create(:student_course_membership, course: subject.course).user }
-      let!(:student_4) { create(:student_course_membership, course: subject.course).user }
+      let!(:student_1) { create(:course_membership, :student, course: subject.course).user }
+      let!(:student_2) { create(:course_membership, :student, course: subject.course).user }
+      let!(:student_3) { create(:course_membership, :student, course: subject.course).user }
+      let!(:student_4) { create(:course_membership, :student, course: subject.course).user }
 
       describe "#ungraded_students" do
 
@@ -885,7 +885,7 @@ describe Assignment do
 
       %w"Zenith Apex Middleton".each do |name|
         let!(name.downcase.to_sym) do
-          create(:student_course_membership, course: subject.course,
+          create(:course_membership, :student, course: subject.course,
             user: create(:user,last_name: name)).user
         end
       end

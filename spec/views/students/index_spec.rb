@@ -4,10 +4,10 @@ include CourseTerms
 
 describe "students/index" do
   let(:course) { create :course }
-  let(:current_user) { create(:professor_course_membership, course: course).user }
+  let(:current_user) { create(:course_membership, :professor, course: course).user }
   let(:presenter) { Students::IndexPresenter.new({ course: course, current_user: current_user }) }
-  let(:student1) { create(:student_course_membership, course: course).user }
-  let(:student2) { create(:student_course_membership, course: course).user }
+  let(:student1) { create(:course_membership, :student, course: course).user }
+  let(:student2) { create(:course_membership, :student, course: course).user }
 
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)

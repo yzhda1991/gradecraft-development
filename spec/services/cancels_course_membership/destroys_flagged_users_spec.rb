@@ -4,7 +4,7 @@ require "./app/services/cancels_course_membership/destroys_flagged_users"
 
 describe Services::Actions::DestroysFlaggedUsers do
   let(:course) { membership.course }
-  let(:membership) { create :student_course_membership }
+  let(:membership) { create :course_membership, :student }
   let(:student) { membership.user }
 
   it "expects the membership to find the flagged users to destroy" do
@@ -13,11 +13,11 @@ describe Services::Actions::DestroysFlaggedUsers do
   end
 
   it "destroys the flagged users" do
-    another_flagger = create(:professor_course_membership)
+    another_flagger = create(:course_membership, :professor)
     student.courses << another_flagger.course
     another_flagged_user = create :flagged_user, flagged: student,
       flagger: another_flagger.user, course: another_flagger.course
-    flagger = create(:professor_course_membership, course: course)
+    flagger = create(:course_membership, :professor, course: course)
     course_flagged_user = create :flagged_user, flagged: student,
       course: course, flagger: flagger.user
     described_class.execute membership: membership
