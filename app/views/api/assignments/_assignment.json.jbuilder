@@ -13,6 +13,7 @@ json.attributes do
   json.position                   assignment.position
   json.purpose                    assignment.purpose
   json.threshold_points           assignment.threshold_points
+  json.release_necessary          assignment.release_necessary
 
   # boolean flags
 

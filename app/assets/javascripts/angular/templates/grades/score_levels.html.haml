@@ -5,8 +5,11 @@
   %grade-raw-points{'ng-show'=>'grade.is_custom_value'}
 
   %select.grade-score-level-selector{'ng-show'=>'!grade.is_custom_value',
-  'ng-model'=>'grade.raw_points', 'ng-change'=>'queueUpdateGrade()', 'ng-class'=>"{'disabled': grade.is_custom_value}"}
-    %option{'value'=>'{{scoreLevel.points}}', 'ng-repeat'=>'scoreLevel in assignment().score_levels', 'ng-selected'=>'grade.raw_points == scoreLevel.points'} {{scoreLevel.name}} {{scoreLevel.points | number}}
+    'ng-model'=>'grade.raw_points',
+    'ng-change'=>'queueUpdateGrade()'}
+    %option{'value'=>'{{scoreLevel.points}}',
+      'ng-repeat'=>'scoreLevel in assignment().score_levels',
+      'ng-selected'=>'grade.raw_points == scoreLevel.points'} {{scoreLevel.name}} {{scoreLevel.points | number}}
   .clear
 
   .custom-value-toggle.button{'ng-click'=>'toggleCustomValue()'}
