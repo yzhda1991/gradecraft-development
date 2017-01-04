@@ -20,7 +20,7 @@ FactoryGirl.define do
       role :admin
     end
 
-    trait :audited do
+    trait :auditing do
       auditing true
     end
   end

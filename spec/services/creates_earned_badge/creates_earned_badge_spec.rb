@@ -52,8 +52,7 @@ describe Services::Actions::CreatesEarnedBadge do
         badge.student_awardable = true
         badge.save
 
-        other_student = create(:user)
-        other_student.courses << course
+        other_student = create(:user, courses: [course], role: :student)
 
         {
           student_id: other_student.id,
@@ -77,8 +76,7 @@ describe Services::Actions::CreatesEarnedBadge do
 
     describe "awarding a non-student-awardable badge to another student" do
       let(:attributes) do
-        other_student = create(:user)
-        other_student.courses << course
+        other_student = create(:user, courses: [course], role: :student)
 
         {
           student_id: other_student.id,

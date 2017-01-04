@@ -3,8 +3,7 @@ require "rails_spec_helper"
 describe EarnedBadgesController do
   before(:all) do
     @course = create(:course)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
   end
   before(:each) do
     session[:course_id] = @course.id
@@ -13,8 +12,7 @@ describe EarnedBadgesController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
       @badge = create(:badge, course: @course)
     end
 
@@ -177,8 +175,7 @@ describe EarnedBadgesController do
       describe "with teams" do
         it "assigns team and students for team" do
           # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
+          other_student = create(:user, courses: [@course], role: :student)
 
           team = create(:team, course: @course)
           team.students << @student
@@ -192,8 +189,7 @@ describe EarnedBadgesController do
       describe "with no team id in params" do
         it "assigns all students if no team supplied" do
           # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
+          other_student = create(:user, courses: [@course], role: :student)
 
           get :mass_edit, params: { badge_id: @badge.id }
           expect(assigns(:students)).to include(@student)
@@ -204,8 +200,7 @@ describe EarnedBadgesController do
       describe "when badges can be earned multiple times" do
         it "assigns earned badges according to alphabetized students" do
           @student.update(last_name: "Zed")
-          student2 = create(:user, last_name: "Alpha")
-          student2.courses << @course
+          student2 = create(:user, last_name: "Alpha", courses: [@course], role: :student)
 
           get :mass_edit, params: { badge_id: @badge.id }
           expect(assigns(:earned_badges).count).to eq(2)
@@ -239,8 +234,7 @@ describe EarnedBadgesController do
       login_user(@student)
       @badge = create(:badge, course: @course)
       @badge_student_awardable = create(:badge, course: @course, student_awardable: true)
-      @other_student = create(:user)
-      @other_student.courses << @course
+      @other_student = create(:user, courses: [@course], role: :student)
     end
 
     describe "protected routes" do

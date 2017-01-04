@@ -3,8 +3,7 @@ require "rails_spec_helper"
 describe BadgesController do
   before(:all) do
     @course = create(:course)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
     @badge = create(:badge, course: @course)
   end
 
@@ -15,8 +14,7 @@ describe BadgesController do
 
   context "as professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
 
     before(:each) { login_user(@professor) }

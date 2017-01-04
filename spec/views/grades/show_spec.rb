@@ -9,8 +9,7 @@ describe "grades/show" do
     @course = create(:course)
     @assignment = create(:assignment)
     @course.assignments << @assignment
-    student = create(:user)
-    student.courses << @course
+    student = create(:user, courses: [@course], role: :student)
     @grade = create(:grade, course: @course, assignment: @assignment, student: student)
 
     allow(view).to receive(:current_student).and_return(student)

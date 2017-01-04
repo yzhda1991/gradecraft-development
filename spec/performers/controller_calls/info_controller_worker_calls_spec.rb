@@ -9,7 +9,7 @@ RSpec.describe InfoController, type: :controller, background_job: true do
   let(:course_membership_attributes) {{ user_id: professor.id, course_id: course.id }}
   let(:professor) { create(:user) }
   let(:professor) { create(:user) }
-  let(:enroll_professor) { CourseMembership.create(course_membership_attributes.merge(role: "professor")) }
+  let(:enroll_professor) { create(:course_membership, :professor, course_membership_attributes) }
   let(:job_attributes) { course_membership_attributes.merge(filename: "#{ course.name } Gradebook - #{ Date.today }.csv") }
 
   before do

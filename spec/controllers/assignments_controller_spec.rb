@@ -3,8 +3,7 @@ require "rails_spec_helper"
 describe AssignmentsController do
   before(:all) do
     @course = create(:course)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
   end
   before(:each) do
     session[:course_id] = @course.id
@@ -13,8 +12,7 @@ describe AssignmentsController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
       @assignment_type = create(:assignment_type, course: @course)
     end
 

@@ -11,8 +11,7 @@ describe "assignments/individual/_table_body" do
     @assignment_type = create(:assignment_type)
     @assignment = create(:assignment, assignment_type: @assignment_type)
     @course.assignments << @assignment
-    student = create(:user)
-    student.courses << @course
+    student = create(:user, courses: [@course], role: :student)
     @grade = create(:grade, course: @course, assignment: @assignment,
                     student: student)
     allow(view).to receive(:current_course).and_return(@course)

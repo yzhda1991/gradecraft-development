@@ -226,7 +226,7 @@ describe CoursesController do
       let(:another_course) { create :course }
 
       before do
-        student.courses << another_course
+        create(:course_membership, :student, course: another_course, user: student)
         login_user(student)
         session[:course_id] = course.id
         allow(Resque).to receive(:enqueue).and_return(true)

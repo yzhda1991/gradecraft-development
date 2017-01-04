@@ -79,7 +79,7 @@ module Toolkits
       end
 
       def enroll_student_in_active_course(student)
-        CourseMembership.create user_id: student[:id], course_id: @course[:id], role: "student"
+        create(:course_membership, :student, user_id: student[:id], course_id: @course[:id])
       end
 
       def grade_student_for_active_assignment(student)
@@ -109,9 +109,7 @@ module Toolkits
       end
 
       def create_professor_for_course
-        professor = create(:user)
-        CourseMembership.create user_id: professor[:id], course_id: @course[:id], role: "professor"
-        professor
+        create(:user, courses: [@course], role: :professor)
       end
 
       def create_assignment_for_course

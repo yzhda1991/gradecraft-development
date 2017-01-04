@@ -8,8 +8,7 @@ describe "grades/_standard_edit" do
     @course = create(:course)
     @assignment = create(:assignment)
     @course.assignments << @assignment
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
     @grade = create(:grade, course: @course, assignment: @assignment, student: @student)
     @assignment_score_levels = [] # add this so the view doesn't crash
     allow(view).to receive(:current_student).and_return(@student)
@@ -33,7 +32,7 @@ describe "grades/_standard_edit" do
   describe "when an assignment is pass fail" do
     before(:each) do
       @assignment.update(pass_fail: true)
-    end 
+    end
 
     it "renders Pass/Fail in the points possible field when incomplete" do
       render

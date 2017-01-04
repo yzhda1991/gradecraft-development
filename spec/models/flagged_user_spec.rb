@@ -2,13 +2,8 @@ require "active_record_spec_helper"
 
 describe FlaggedUser do
   let(:course) { build :course }
-  let(:professor) { build :user }
-  let(:student) { build :user }
-
-  before do
-    create :course_membership, :professor, course: course, user: professor
-    create :course_membership, :student, course: course, user: student
-  end
+  let!(:professor) { build :user, courses: [course], role: :professor }
+  let!(:student) { build :user, courses: [course], role: :student }
 
   context "validations" do
     subject do
@@ -48,8 +43,7 @@ describe FlaggedUser do
     end
 
     it "does not allow a student to be flagged by another student" do
-      another_student = create :user
-      create :course_membership, :student, course: course, user: another_student
+      another_student = create :user, courses: [course], role: :student
       subject = FlaggedUser.new course_id: course.id,
         flagger_id: another_student.id,
         flagged_id: student.id
@@ -87,8 +81,7 @@ describe FlaggedUser do
     it "returns all the flagged users for a specific flagged user" do
       student_flagged_user = create(:flagged_user, flagger: professor,
                                     flagged: student, course: course)
-      another_student = create(:user)
-      another_student.courses << course
+      another_student = create(:user, courses: [course], role: :student)
       another_flagged_user = create(:flagged_user, flagger: professor,
                                     flagged: another_student, course: course)
       results = FlaggedUser.for_flagged(student)

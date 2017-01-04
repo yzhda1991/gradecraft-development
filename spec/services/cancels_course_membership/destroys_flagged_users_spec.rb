@@ -14,7 +14,7 @@ describe Services::Actions::DestroysFlaggedUsers do
 
   it "destroys the flagged users" do
     another_flagger = create(:course_membership, :professor)
-    student.courses << another_flagger.course
+    create(:course_membership, :student, course: another_flagger.course, user: student)
     another_flagged_user = create :flagged_user, flagged: student,
       flagger: another_flagger.user, course: another_flagger.course
     flagger = create(:course_membership, :professor, course: course)

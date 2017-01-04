@@ -9,8 +9,7 @@ describe TeamsController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
     before(:each) do
       @team = create(:team, course: @course)
@@ -79,8 +78,7 @@ describe TeamsController do
 
   context "as a student" do
     before(:all) do
-      @student = create(:user)
-      @student.courses << @course
+      @student = create(:user, courses: [@course], role: :student)
     end
 
     before(:each) { login_user(@student) }

@@ -8,8 +8,7 @@ describe Assignments::GradesController do
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
 
   context "as professor" do
-    let(:professor) { create(:user) }
-    let!(:professor_course_membership) { create(:course_membership, :professor, course: course, user: professor) }
+    let(:professor) { create(:user, courses: [course], role: :professor) }
 
     before(:each) { login_user(professor) }
 
@@ -85,9 +84,9 @@ describe Assignments::GradesController do
       end
 
       it "orders grades by student name" do
-        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron", courses: [course])
+        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron", courses: [course], role: :student)
         create :grade, assignment: assignment, student: student_2
-        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron", courses: [course])
+        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron", courses: [course], role: :student)
         create :grade, assignment: assignment, student: student_3
 
         get :mass_edit, params: { assignment_id: assignment.id }
