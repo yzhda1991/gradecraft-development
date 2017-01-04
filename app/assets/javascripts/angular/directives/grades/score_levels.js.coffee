@@ -16,7 +16,7 @@
       scope.toggleCustomValue = ()->
         GradeService.toggleCustomValue()
 
-      scope.switchText = ()->
-        if GradeService.grade.is_custom_value then "Enter as score level" else "Enter as custom value"
+      scope.textForToggle = ()->
+        if GradeService.grade.is_custom_value then "Change to score level selector" else "Change to custom value"
   }
 ]

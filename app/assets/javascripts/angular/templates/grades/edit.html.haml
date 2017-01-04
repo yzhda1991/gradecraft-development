@@ -1,6 +1,32 @@
+-# This is the main template for the grading form,
+-# all partials are loaded through this page.
+
 %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade..."}
 
+-# Grade.raw_points handled for standard grading, score levels, and pass/fail
 %grade-raw-points{'ng-if'=>'vm.gradeType() == "DEFAULT"'}
-%grade-pass-fail{'ng-if'=>'vm.gradeType() == "PASS_FAIL"'}
 %grade-score-levels{'ng-if'=>'vm.gradeType() == "SCORE_LEVELS"'}
+%grade-pass-fail{'ng-if'=>'vm.gradeType() == "PASS_FAIL"'}
+%hr.dotted
+
+-# File attachments to the grade
+%file-uploader
+%hr.dotted
+
+-# text feedback field
+%grade-text-feedback
+%hr.dotted
+
+-# last updated at:
+%hr.dotted
+
+-# status selector (in progress / graded /released)
+%hr.dotted
+
+-# submit buttons ( submit / submit and grade next / cancel )
+%hr.dotted
+
+-# award badges,
+-# TODO: student only or make it work for groups
+%award-earned-badges{'student-id'=>'{{vm.recipientId}}', 'grade-id'=>'{{vm.gradeService.grade.id}}'}
 %hr.dotted

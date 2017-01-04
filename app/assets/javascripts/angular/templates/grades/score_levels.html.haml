@@ -1,16 +1,14 @@
 %section.grade-score-levels
 
-  .grade-raw-points-label{'ng-show'=>'!grade.is_custom_value'} Raw Score ({{assignment.full_points}} Points Possible)
-
-  %select.grade-score-level(ng-model="grade.raw_points" ng-show="!grade.is_custom_value" ng-change="queueUpdateGrade()" ng-class="{'disabled': grade.is_custom_value}")
-    %option(value="{{scoreLevel.points}}" ng-repeat="scoreLevel in assignment().score_levels" ng-selected="grade.raw_points == scoreLevel.points") {{scoreLevel.name}} {{scoreLevel.points | number}}
-  .clear
+  .grade-section-label{'ng-show'=>'!grade.is_custom_value'} Raw Score ({{assignment.full_points}} Points Possible)
 
   %grade-raw-points{'ng-show'=>'grade.is_custom_value'}
 
-  .grade-raw-points-label {{switchText()}}
-  %label.switch-socket
-    %input(type="checkbox" ng-click="toggleCustomValue()" ng-checked="grade.is_custom_value")
-    .switch-handle.round
+  %select.grade-score-level-selector{'ng-show'=>'!grade.is_custom_value',
+  'ng-model'=>'grade.raw_points', 'ng-change'=>'queueUpdateGrade()', 'ng-class'=>"{'disabled': grade.is_custom_value}"}
+    %option{'value'=>'{{scoreLevel.points}}', 'ng-repeat'=>'scoreLevel in assignment().score_levels', 'ng-selected'=>'grade.raw_points == scoreLevel.points'} {{scoreLevel.name}} {{scoreLevel.points | number}}
+  .clear
 
+  .custom-value-toggle.button{'ng-click'=>'toggleCustomValue()'}
+    {{textForToggle()}}
 
