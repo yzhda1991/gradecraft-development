@@ -16,15 +16,17 @@
         @create()
 
     create: ()->
-      $http.post("/level_badges", @createParams()).success(
-        (data,status)=>
-          @id = data.existing_level_badge.id
-          @level.badges[@badge_id] = @ # add level badge to level
-          delete @level.availableBadges[@badge_id] # remove badge from available badges on level
-          #self.selectedBadge = "" # reset selected badge
-      ).error((err)->
-        alert("create failed!")
-        return false
+      _this = @
+      $http.post("/level_badges", @createParams()).then(
+        (response)->
+          _this.id = response.data.id
+          _this.level.badges[_this.badge_id] = _this
+          delete _this.level.availableBadges[_this.badge_id]
+          console.log(response.statusText)
+          console.log(response.data)
+        ,(response) ->
+          console.log(response);
+          return false
       )
 
     createParams: ()->
