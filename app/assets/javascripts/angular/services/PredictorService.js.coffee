@@ -159,7 +159,9 @@
         total += assignmentTypePointTotal(assignmentType,true,true,false)
       )
     _.each(badges,(badge)->
-        total += badge.total_earned_points
+        # disregard for generic predictor
+        if badge.total_earned_points
+          total += badge.total_earned_points
       )
     _.each(challenges,(challenge)->
         total += challenge.grade.score

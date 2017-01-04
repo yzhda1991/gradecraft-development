@@ -28,6 +28,8 @@
     $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
       GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
+        # add earned badge count for generic predictor
+        badge.earned_badge_count = 0 if !badge.earned_badge_count
         # add null prediction when JSON contains no prediction
         badge.prediction = {predicted_times_earned: badge.earned_badge_count} if !badge.prediction
       )

@@ -19,8 +19,8 @@
   #---------------- Assignment Type Point Calculations ------------------------#
 
   # multiply points by the student's assignment type weight if weighted
-  # points is optional, defaults to total_points for Assignment Type
-  weightedPoints = (assignmentType, points)->
+  # points defaults to zero for generic predictor
+  weightedPoints = (assignmentType, points=0)->
     if assignmentType.student_weightable
       points * assignmentType.student_weight
     else
