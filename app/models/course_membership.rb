@@ -25,21 +25,25 @@ class CourseMembership < ActiveRecord::Base
 
   after_save :check_unlockables
 
-  def assign_role_from_lti(auth_hash)
-    return unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
+  def self.create_course_membership_from_lti(student, course, auth_hash)
+    return false unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
+    course_membership = student.course_memberships.new(course: course)
 
     auth_hash["extra"]["raw_info"].tap do |extra|
 
       case extra["roles"].downcase
       when /instructor/
-        self.update_attribute(:role, "professor")
+        course_membership.update(role: "professor")
       when /teachingassistant/
-        self.update_attribute(:role, "gsi")
+        course_membership.update(role: "gsi")
+      when /learner/
+        course_membership.update(role: "student")
+        course_membership.update(instructor_of_record: false)
       else
-        self.update_attribute(:role, "student")
-        self.update_attribute(:instructor_of_record, false)
+        course_membership.update(instructor_of_record: false)
       end
     end
+    course_membership.save
   end
 
   def recalculate_and_update_student_score
@@ -65,7 +69,7 @@ class CourseMembership < ActiveRecord::Base
       element_earned = gse if index == 0
 
       break if !gse.is_unlocked_for_student?(user)
-        
+
       if gse.lowest_points <= score
         element_earned = gse
       end
