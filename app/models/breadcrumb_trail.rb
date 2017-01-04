@@ -354,6 +354,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def grades_importers_import_results
     assignments_index
   end
+  
+  def passwords_new
+    breadcrumb('Dashboard', dashboard_path)
+  end
 
   def rubrics_index_for_copy
     dashboard
