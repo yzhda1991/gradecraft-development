@@ -1,6 +1,6 @@
 %section.grade-raw-points
   .grade-raw-points-label Raw Points ({{assignment().full_points}} Points Possible)
-  %input{ 'type'=>"text",
+  %input.raw-points-input{ 'type'=>"text",
     "placeholder" => "Enter raw points for grade",
     'ng-model'=>'grade.raw_points',
     "smart-number" => "",

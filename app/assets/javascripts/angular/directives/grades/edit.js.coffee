@@ -1,3 +1,6 @@
+# Main entry point for grading (standard/rubric individual/group)
+# Renders appropriate grading form for grade and assignment type
+
 @gradecraft.directive 'gradeEdit', ['$q', 'AssignmentService', 'GradeService',
   ($q, AssignmentService, GradeService) ->
     EditGradeCtrl = [()->
@@ -38,7 +41,6 @@
       bindToController: true,
       controller: EditGradeCtrl,
       controllerAs: 'vm',
-      #restrict: 'EA',
       scope: {
          assignmentId: "=",
          recipientType: "@",
@@ -47,9 +49,5 @@
       templateUrl: 'grades/edit.html'
     }
 ]
-
-
-
-
 
 

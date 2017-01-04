@@ -1,8 +1,8 @@
+# standard grade raw_points field
 @gradecraft.directive 'gradeRawPoints', ['GradeCraftAPI', 'AssignmentService', 'GradeService', (GradeCraftAPI, AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/raw_points.html'
-    #restrict: 'E'
     link: (scope, el, attr)->
 
       scope.api = GradeCraftAPI

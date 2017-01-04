@@ -1,3 +1,4 @@
+# switch for pass/fail grades, alternative to raw_points
 @gradecraft.directive 'gradePassFail', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
 
   return {

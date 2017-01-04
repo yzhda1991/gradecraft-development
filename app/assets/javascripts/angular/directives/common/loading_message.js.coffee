@@ -1,5 +1,6 @@
-# One "Card" in the predictor that displays an Assignment, Challenge, or Badge
-# Manages linking article to details section in student side panel
+# Displays "Loading..." icon with custom message while Angular app is loading
+# See usage in templates, example:
+# %loading-message{'loading'=>'loading', 'message'=>"Loading Badges..."}
 
 @gradecraft.directive 'loadingMessage', [()->
 

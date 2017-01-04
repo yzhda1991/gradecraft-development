@@ -56,14 +56,15 @@
     Math.abs(new Date() - grade.updated_at)
 
   _updateGradeById = (id)->
-      $http.put("/api/grades/#{id}", grade: grade).then(
-        (response) ->
-          grade.updated_at = new Date()
-          GradeCraftAPI.logResponse(response)
-        ,(response) ->
-          GradeCraftAPI.logResponse(response)
-      )
+    $http.put("/api/grades/#{id}", grade: grade).then(
+      (response) ->
+        grade.updated_at = new Date()
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
 
+  # update all calls to go through queueUpdateGrade
   updateGrade = ()->
     if _recipientType == "student"
       _updateGradeById(grade.id)

@@ -48,6 +48,7 @@ describe GradesController do
 
       context "with additional grade items" do
         it "assigns existing submissions, badges and score levels" do
+          pending
           submission = create(:submission, student: student, assignment: assignment)
           badge = create(:badge, course: course)
 

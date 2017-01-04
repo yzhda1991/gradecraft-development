@@ -1,3 +1,4 @@
+# raw_points field when grading with score levels
 @gradecraft.directive 'gradeScoreLevels', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
