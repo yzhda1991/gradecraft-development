@@ -2,7 +2,7 @@
 
   .grade-section-label Text Feedback
 
-  %textarea{ "froala"=>"froalaOptions",
+  %textarea{ "froala"=>"",
     'ng-model'=>'grade.feedback',
     "ng-change" => "queueUpdateGrade()",
     "ng-blur" => "queueUpdateGrade(true)",
