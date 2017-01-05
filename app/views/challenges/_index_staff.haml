@@ -2,7 +2,6 @@
   %thead
     %tr
       %th Name
-      %th Description
       %th{"data-dynatable-sorts" => "numericScore"} Max Points
       %th{"data-dynatable-sorts" => "dueDate"} Due
       %th{:style => "display: none"} Due Date
@@ -15,7 +14,6 @@
     - @challenges.chronological.alphabetical.each do |challenge|
       %tr
         %td= link_to challenge.name, challenge
-        %td= link_to "See Description", challenge
         %td= points challenge.full_points
         %td= challenge.due_at
         %td{:style => "display: none"}
