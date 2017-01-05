@@ -126,17 +126,13 @@
   .earned-column
     width: 100px
 
-  .button-bar li a.button
-    display: block
-    margin: .25em
-    border-radius: 0.1875rem
-    @media (max-width: 800px)
-      display: inline-block
+  .button-bar
+    text-align: right
 
   .button-bar li:not(:last-of-type) a.button
     @media (max-width: $media-medium-max)
       margin-right: 0
-    @media (max-width: 800px)
+    @media (max-width: $media-small-max)
       margin-right: .5rem
 
   .badge-icon
