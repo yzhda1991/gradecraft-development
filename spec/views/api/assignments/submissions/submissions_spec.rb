@@ -6,10 +6,11 @@ describe "api/assignments/submissions/submission" do
   it "includes the submission attributes" do
     render
     json = JSON.parse(response.body)
-    expect(json["data"]["attributes"].except("created_at", "updated_at")).to \
-      eq @submission.as_json(except: [:created_at, :updated_at])
+    expect(json["data"]["attributes"].except("created_at", "updated_at", "submitted_at")).to \
+      eq @submission.as_json(except: [:created_at, :updated_at, :submitted_at])
     expect(json["data"]["attributes"]["created_at"]).to eq @submission.created_at.as_json
     expect(json["data"]["attributes"]["updated_at"]).to eq @submission.updated_at.as_json
+    expect(json["data"]["attributes"]["submitted_at"]).to eq @submission.submitted_at.as_json
   end
 
   it "includes the id" do

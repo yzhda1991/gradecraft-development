@@ -65,6 +65,6 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def submitted_submissions_count(assignment)
-    assignment.submissions.reject(&:draft?).count
+    assignment.submissions.submitted.count
   end
 end

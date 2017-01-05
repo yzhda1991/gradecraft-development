@@ -159,10 +159,11 @@ describe Submission do
   end
 
   describe ".submitted" do
-    let!(:submitted_submission) { create(:submission) }
-    let!(:draft_submission) { create(:draft_submission) }
+    before { Submission.destroy_all }
 
     it "returns only submissions with a submitted at date" do
+      submitted_submission = create(:submission)
+      draft_submission = create(:draft_submission)
       expect(Submission.submitted).to eq [submitted_submission]
     end
   end
