@@ -166,6 +166,7 @@ puts "Generating students..."
     u.courses << courses
     u.display_name = pseuydonyms.sample
   end
+  user.course_memberships.each { |cm| cm.update_attributes(role: "student") }
   user.teams << teams
   user.activate!
   print "."
