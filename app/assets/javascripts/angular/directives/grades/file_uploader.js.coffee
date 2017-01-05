@@ -1,4 +1,4 @@
-@gradecraft.directive 'fileUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
+@gradecraft.directive 'gradeFileUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
   UploadCtrl = [()->
     vm = this
     vm.fileUploads = GradeService.fileUploads

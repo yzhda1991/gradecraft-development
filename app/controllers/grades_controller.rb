@@ -22,9 +22,8 @@ class GradesController < ApplicationController
     @grade = Grade.find params[:id]
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
-    if @grade.assignment.grade_with_rubric?
-      @grade_next_path = path_for_next_grade @grade, @team
-    end
+    @submit_path = URI(request.referer || "").path
+    @grade_next_path = path_for_next_grade @grade, @team
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will

@@ -15,10 +15,6 @@
     GradeService.enableCustomValue()
   $scope.enableScoreLevels = ()->
     GradeService.enableScoreLevels()
-  $scope.justUpdated = ()->
-    GradeService.justUpdated()
-  $scope.timeSinceUpdate = ()->
-    GradeService.timeSinceUpdate()
   $scope.updateGrade = ()->
     GradeService.updateGrade()
 

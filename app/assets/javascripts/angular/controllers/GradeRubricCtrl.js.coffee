@@ -221,24 +221,11 @@
       RubricService.putRubricGradeSubmission($scope.assignmentId, $scope.recipientType, $scope.recipientId, $scope.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
-    inlineMode: false,
     heightMin: 120,
     toolbarButtons: [
       'bold', 'italic', 'underline', 'strikeThrough',
       'sep', 'formatBlock', 'insertOrderedList', 'insertUnorderedList',
       'insertHorizontalRule', 'insertLink'
-    ]
-  }
-
-  $scope.froalaSummaryOptions = {
-    inlineMode: false,
-    heightMin: 200,
-    toolbarButtons: [
-      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-      'fontFamily', 'fontSize', 'color', 'sep', 'blockStyle', 'emoticons',
-      'insertTable', 'sep', 'formatBlock', 'align', 'insertOrderedList',
-      'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
-      'clearFormatting', 'selectAll', 'html'
     ]
   }
 ]

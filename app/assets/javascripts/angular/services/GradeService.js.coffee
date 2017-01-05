@@ -49,38 +49,37 @@
   enableScoreLevels = (event)->
     this.toggleCustomValue() if grade.is_custom_value == true
 
-  justUpdated = ()->
-    this.timeSinceUpdate() < 1000
-
-  timeSinceUpdate = ()->
-    Math.abs(new Date() - grade.updated_at)
-
-  _updateGradeById = (id)->
+  _updateGradeById = (id, returnURL=null)->
     $http.put("/api/grades/#{id}", grade: grade).then(
       (response) ->
         grade.updated_at = new Date()
         GradeCraftAPI.logResponse(response)
+        if returnURL
+          window.location = returnURL
       ,(response) ->
         GradeCraftAPI.logResponse(response)
     )
 
   # update all calls to go through queueUpdateGrade
-  updateGrade = ()->
+  updateGrade = (returnURL=null)->
     if _recipientType == "student"
-      _updateGradeById(grade.id)
+      _updateGradeById(grade.id, returnURL)
     else if _recipientType == "group"
       _.each(grades, (g)->
-        _updateGradeById(g.id)
+        if returnURL && g == _.last(grades)
+          _updateGradeById(g.id, returnURL)
+        else
+          _updateGradeById(g.id)
       )
 
-  queueUpdateGrade = (immediate = false) ->
+  queueUpdateGrade = (immediate=false, returnURL=null) ->
     if immediate is true
       $timeout.cancel(self.updateTimeout)
-      updateGrade()
+      updateGrade(returnURL)
     else
       $timeout.cancel(self.updateTimeout) if self.updateTimeout?
       self.updateTimeout = $timeout(() ->
-        updateGrade()
+        updateGrade(returnURL)
       , 3500)
 
   postAttachments = (files)->
@@ -125,8 +124,6 @@
     toggleCustomValue: toggleCustomValue,
     enableCustomValue: enableCustomValue,
     enableScoreLevels: enableScoreLevels,
-    justUpdated: justUpdated,
-    timeSinceUpdate: timeSinceUpdate,
 
     getGrade: getGrade,
     queueUpdateGrade: queueUpdateGrade,

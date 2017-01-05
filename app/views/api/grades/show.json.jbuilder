@@ -14,6 +14,7 @@ json.data do
     json.final_points               @grade.final_points
     json.is_custom_value            @grade.is_custom_value
     json.adjustment_points_feedback @grade.adjustment_points_feedback
+    json.updated_at                 @grade.updated_at
   end
 
   json.relationships do

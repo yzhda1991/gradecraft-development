@@ -44,7 +44,9 @@
       scope: {
          assignmentId: "=",
          recipientType: "@",
-         recipientId: "="
+         recipientId: "=",
+         submitPath: "@",
+         gradeNextPath: "@"
         },
       templateUrl: 'grades/edit.html'
     }

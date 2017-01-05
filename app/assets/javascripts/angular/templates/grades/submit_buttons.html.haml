@@ -1,0 +1,5 @@
+%section.grade-submit-buttons
+  .grade-section-label
+    Submit Buttons
+  %button#submit-grade(ng-click="submitGrade(submitPath)" ng-class='{"disabled" : !grade.status}') Submit Grade
+  %button#submit-grade(ng-click="submitGrade(gradeNextPath)" ng-class='{"disabled" : !grade.status}') Submit and Grade Next
