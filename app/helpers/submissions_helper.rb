@@ -9,9 +9,13 @@ module SubmissionsHelper
     "#{course.cache_key}/resubmission_count"
   end
 
-  def ungraded_submissions_count_for(course)
+  def ungraded_submissions_count_for(course, include_drafts=false)
     Rails.cache.fetch(ungraded_submissions_count_cache_key(course)) do
-      course.submissions.ungraded.count
+      if include_drafts
+        course.submissions.ungraded.count
+      else
+        course.submissions.submitted.ungraded.count
+      end
     end
   end
 
