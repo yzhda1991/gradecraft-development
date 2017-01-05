@@ -86,7 +86,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def assignments_edit
     breadcrumb('Dashboard', dashboard_path)
     breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Editing ' + objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Editing ' + objects[:assignment].name)
   end
 
   def assignments_new
