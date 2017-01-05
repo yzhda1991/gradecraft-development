@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "./app/helpers/submissions_helper"
 
-describe SubmissionsHelper, focus: true do
+describe SubmissionsHelper do
   let(:course) { create :course }
 
   describe "#resubmission_count_for" do
