@@ -52,7 +52,7 @@
           assignment.is_closed_by_condition = false
           _.each(assignment.conditional_assignment_ids, (id)->
             a = _.find(assignments, {id: id})
-            if a.is_closed_without_submission == true
+            if a && a.is_closed_without_submission == true
               assignment.is_closed_by_condition = true
           )
       )
