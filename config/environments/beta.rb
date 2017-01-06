@@ -35,9 +35,9 @@ Rails.application.configure do
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = "https://beta.gradecraft.com"
+  config.action_controller.asset_host = "https://app.gradecraft.com"
 
-  config.action_controller.default_url_options = { :host => "beta.gradecraft.com" }
+  config.action_controller.default_url_options = { :host => "app.gradecraft.com" }
 
   # Specifies the header that your server uses for sending files.
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
@@ -45,9 +45,9 @@ Rails.application.configure do
 
   # Mount Action Cable outside main process or domain
   config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://beta.gradecraft.com/cable'
-  config.action_cable.allowed_request_origins = [ 'http://beta.gradecraft.com',
-                                                  /http:\/\/beta.gradecraft.*/ ]
+  config.action_cable.url = 'wss://app.gradecraft.com/cable'
+  config.action_cable.allowed_request_origins = [ 'http://app.gradecraft.com',
+                                                  /http:\/\/app.gradecraft.*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
@@ -71,7 +71,8 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = { :host => "beta.gradecraft.com" }
+  config.action_mailer.default_url_options = { :host => "app.gradecraft.com" }
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     :authentication => :plain,
