@@ -2,8 +2,6 @@ class PasswordsController < ApplicationController
   skip_before_action :require_login
 
   # rubocop:disable AndOr
-  def new
-  end
 
   def create
     @user = User.find_by_insensitive_email(params[:email])
