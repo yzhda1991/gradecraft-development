@@ -102,7 +102,7 @@ gem 'underscore-rails'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'wysiwyg-rails'
-gem 'ruby-saml', '~> 1.0.0'
+gem 'ruby-saml', '~> 1.4.1'
 
 group :development do
   gem 'haml-rails'
