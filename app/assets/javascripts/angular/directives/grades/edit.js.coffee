@@ -10,6 +10,8 @@
       vm.gradeService = GradeService
       vm.AssignmentService = AssignmentService
 
+      vm.groupGrade = vm.recipientType == "group"
+
       services(vm.assignmentId, vm.recipientType, vm.recipientId).then(()->
         vm.loading = false
 

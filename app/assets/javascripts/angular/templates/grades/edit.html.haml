@@ -10,7 +10,7 @@
 %hr.dotted
 
 -# File attachments to the grade
-%grade-file-uploader
+%grade-file-uploader{'ng-if'=>'!vm.groupGrade'}
 %hr.dotted
 
 -# text feedback field
@@ -31,5 +31,5 @@
 
 -# award badges,
 -# TODO: student only or make it work for groups
-%award-earned-badges{'student-id'=>'{{vm.recipientId}}', 'grade-id'=>'{{vm.gradeService.grade.id}}'}
+%award-earned-badges{'ng-if'=>'!vm.groupGrade', 'student-id'=>'{{vm.recipientId}}', 'grade-id'=>'{{vm.gradeService.grade.id}}'}
 %hr.dotted
