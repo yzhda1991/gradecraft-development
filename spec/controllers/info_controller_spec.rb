@@ -203,4 +203,34 @@ describe InfoController do
       end
     end
   end
+
+  context "as an observer" do
+    before(:all) { @observer = create(:user, courses: [@course], role: :observer) }
+    before(:each) { login_user(@observer) }
+
+    describe "GET predictor" do
+      it "shows the grade predictor page" do
+        expect(get :predictor).to render_template(:predictor)
+      end
+    end
+
+    describe "protected routes" do
+      [
+        :dashboard,
+        :timeline_events,
+        :earned_badges,
+        :grading_status,
+        :per_assign,
+        :gradebook,
+        :multiplied_gradebook,
+        :final_grades,
+        :research_gradebook,
+        :multiplier_choices
+      ].each do |route|
+        it "#{route} redirects to root" do
+          expect(get route).to redirect_to(assignments_path)
+        end
+      end
+    end
+  end
 end

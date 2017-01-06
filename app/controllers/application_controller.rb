@@ -107,6 +107,10 @@ class ApplicationController < ActionController::Base
     return not_authenticated unless current_user_is_admin?
   end
 
+  def check_observer_role
+    redirect_to assignments_path if current_user_is_observer?
+  end
+
   def save_referer
     session[:return_to] = request.referer
   end

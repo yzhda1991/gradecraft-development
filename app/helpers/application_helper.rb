@@ -1,7 +1,7 @@
 module ApplicationHelper
   include CustomNamedRoutes
 
-  # current_user_is_student/professor/gsi/admin/staff?
+  # current_user_is_student/professor/gsi/admin/observer/staff?
   Role.all_with_staff.each do |role|
     define_method("current_user_is_#{role}?") do
       return unless current_user && current_course
