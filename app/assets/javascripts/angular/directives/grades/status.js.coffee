@@ -1,4 +1,5 @@
-# status selector for student visibility
+# Grade status selector for releasing grade to students
+
 @gradecraft.directive 'gradeStatus', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {

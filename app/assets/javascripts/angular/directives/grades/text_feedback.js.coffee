@@ -1,4 +1,5 @@
-# overall feedback text for grade
+# input feedback text for grade
+
 @gradecraft.directive 'gradeTextFeedback', ['GradeService', (GradeService) ->
 
   return {

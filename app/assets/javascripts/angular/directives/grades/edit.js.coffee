@@ -20,7 +20,7 @@
           GradeService.grade.pass_fail_status = "Pass"
       )
 
-      vm.gradeType = ()->
+      vm.rawPointsType = ()->
         assignment = AssignmentService.assignment()
         return "" if !assignment
 

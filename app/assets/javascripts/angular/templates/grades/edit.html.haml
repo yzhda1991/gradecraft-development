@@ -3,33 +3,25 @@
 
 %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade..."}
 
--# Grade.raw_points handled for standard grading, score levels, and pass/fail
-%grade-raw-points{'ng-if'=>'vm.gradeType() == "DEFAULT"'}
-%grade-score-levels{'ng-if'=>'vm.gradeType() == "SCORE_LEVELS"'}
-%grade-pass-fail{'ng-if'=>'vm.gradeType() == "PASS_FAIL"'}
+%grade-raw-points{'ng-if'=>'vm.rawPointsType() == "DEFAULT"'}
+%grade-score-levels{'ng-if'=>'vm.rawPointsType() == "SCORE_LEVELS"'}
+%grade-pass-fail{'ng-if'=>'vm.rawPointsType() == "PASS_FAIL"'}
 %hr.dotted
 
--# File attachments to the grade
 %grade-file-uploader{'ng-if'=>'!vm.groupGrade'}
 %hr.dotted
 
--# text feedback field
 %grade-text-feedback
 %hr.dotted
 
--# last updated at:
 %grade-last-updated
 %hr.dotted
 
--# status selector (in progress / graded /released)
 %grade-status
 %hr.dotted
 
--# submit buttons ( submit / submit and grade next / cancel )
 %grade-submit-buttons{'submit-path'=>'{{vm.submitPath}}', 'grade-next-path'=>'{{vm.gradeNextPath}}'}
 %hr.dotted
 
--# award badges,
--# TODO: student only or make it work for groups
 %award-earned-badges{'ng-if'=>'!vm.groupGrade', 'student-id'=>'{{vm.recipientId}}', 'grade-id'=>'{{vm.gradeService.grade.id}}'}
 %hr.dotted

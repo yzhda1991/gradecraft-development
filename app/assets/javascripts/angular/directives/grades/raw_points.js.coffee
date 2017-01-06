@@ -1,4 +1,5 @@
 # standard grade raw_points field
+
 @gradecraft.directive 'gradeRawPoints', ['GradeCraftAPI', 'AssignmentService', 'GradeService', (GradeCraftAPI, AssignmentService, GradeService) ->
 
   return {

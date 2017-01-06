@@ -1,4 +1,5 @@
-# switch for pass/fail grades, alternative to raw_points
+# buttons to submit grade and redirect on success
+
 @gradecraft.directive 'gradeSubmitButtons', ['GradeService', (GradeService) ->
 
   return {

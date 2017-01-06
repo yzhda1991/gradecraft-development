@@ -1,4 +1,5 @@
-# switch for pass/fail grades, alternative to raw_points
+# displays the last time the grade was updated
+
 @gradecraft.directive 'gradeLastUpdated', ['GradeService', (GradeService) ->
 
   return {
