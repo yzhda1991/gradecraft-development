@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/leshill/resque_spec.git
+  remote: https://github.com/leshill/resque_spec.git
   revision: ed0de7a78df23f483d258cd6d326657b7737ae76
+  branch: master
   specs:
     resque_spec (0.17.0)
       resque (>= 1.19.0)

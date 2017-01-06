@@ -131,7 +131,7 @@ group :test do
   gem 'rails-controller-testing', require: false
   gem 'rspec-rails', '~> 3.5.2'
   # add spec helpers for testing Resque objects and resque scheduler
-  gem 'resque_spec', github: 'leshill/resque_spec'
+  gem 'resque_spec', git: 'https://github.com/leshill/resque_spec.git', branch: 'master'
   gem 'rspec-html-matchers'
   gem 'simplecov'
   gem 'webmock'
