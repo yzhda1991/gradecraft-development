@@ -361,8 +361,6 @@ GEM
       multi_json (~> 1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    macaddr (1.7.1)
-      systemu (~> 2.6.2)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
@@ -537,9 +535,8 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    ruby-saml (1.0.0)
+    ruby-saml (1.4.1)
       nokogiri (>= 1.5.10)
-      uuid (~> 2.3)
     ruby_parser (3.8.2)
       sexp_processor (~> 4.1)
     rubystats (0.2.5)
@@ -603,7 +600,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    systemu (2.6.5)
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -614,8 +610,6 @@ GEM
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     underscore-rails (1.8.3)
-    uuid (2.3.8)
-      macaddr (~> 1.0)
     valid_attribute (2.0.0)
     vegas (0.1.11)
       rack (>= 1.0.0)
@@ -723,7 +717,7 @@ DEPENDENCIES
   rollbar
   rspec-html-matchers
   rspec-rails (~> 3.5.2)
-  ruby-saml (~> 1.0.0)
+  ruby-saml (~> 1.4.1)
   rubystats
   s3_direct_upload
   sampler
