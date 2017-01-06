@@ -1,8 +1,6 @@
 %ul.breadcrumbs
   - breadcrumbs.each do |breadcrumb|
     - if breadcrumb.link?
-      %li
-        -# evaluate expressions from breadcrumbs_trail.rb
-        = link_to html_escape instance_eval %{ "#{ breadcrumb.label }" }, breadcrumb.url
+      %li= link_to instance_eval(%{ "#{ breadcrumb.label }" }), breadcrumb.url
     - else
-      %li= html_escape instance_eval %{ "#{ breadcrumb.label }" }
+      %li= instance_eval(%{ "#{ breadcrumb.label }" })

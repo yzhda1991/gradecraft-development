@@ -128,9 +128,9 @@ en:
       title: "Editing #{ @event.name }"
   grade_scheme_elements:
     index:
-      title: "Grade Scheme"
+      title: "Grading Scheme"
     mass_edit:
-      title: "Edit Grade Scheme"
+      title: "Edit Grading Scheme"
     edit:
       title: "Editing #{ @grade_scheme_element.name } Level"
   grades:

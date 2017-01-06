@@ -1,269 +1,236 @@
 class BreadcrumbTrail < Croutons::BreadcrumbTrail
+  
+  def dashboard
+    breadcrumb('Dashboard', dashboard_path)
+  end
 
   def analytics_staff
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Staff Analytics', analytics_staff_path)
   end
 
   def analytics_students
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :student } Analytics', analytics_students_path)
   end
 
   def announcements_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Announcements', announcements_path)
   end
 
   def announcements_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Announcements', announcements_path)
+    announcements_index
     breadcrumb('New Announcement', new_announcement_path)
   end
 
   def announcements_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Announcements', announcements_path)
+    announcements_index
     breadcrumb(objects[:announcement].title, announcement_path(objects[:announcement]))
   end
 
-  def assignments_importers_index
-    breadcrumb('Dashboard', dashboard_path)
+  def assignments_index
+    dashboard
     breadcrumb('#{ term_for :assignments }', assignments_path)
+  end
+
+  def assignments_importers_index
+    assignments_index
     breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
   end
 
   def assignments_importers_assignments
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
+    assignments_importers_index
     breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
   end
 
   def assignments_importers_assignments_import_results
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
+    assignments_importers_index
     breadcrumb(objects[:provider_name].capitalize + ' #{ term_for :assignments }', assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
   end
 
   def assignments_groups_grades_mass_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb("Update Grades")
   end
 
   def assignments_grades_edit_status
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb("Update Grade Statuses")
   end
 
   def assignments_grades_review
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
     breadcrumb("Review Grades")
   end
 
   def assignments_settings
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Settings', settings_assignments_path)
-  end
-
-  def assignments_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
+    breadcrumb('Settings')
   end
 
   def assignments_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    assignments_index
+    breadcrumb(objects[:assignment].name)
   end
 
   def assignments_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb('Editing ' + objects[:assignment].name)
   end
 
   def assignments_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb('New #{ term_for :assignment }')
   end
 
   def assignments_grades_mass_edit
+    assignments_index
   end
 
   def assignment_type_weights_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('Edit My #{ term_for :weight } Choices', assignment_type_weights_path)
+    assignments_index
+    breadcrumb('Edit My #{ term_for :weight } Choices')
   end
 
   def assignment_types_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignment } Type Analytics', assignment_types_path)
+    dashboard
+    breadcrumb('#{ term_for :assignment } Type Analytics')
   end
 
   def assignment_types_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb('New #{ term_for :assignment } Type')
   end
 
   def assignment_types_edit
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :assignment } Types', assignment_types_path)
     breadcrumb('Editing ' + objects[:assignment_type].name)
   end
 
   def assignments_groups_grade
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
   end
 
   def badges_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :badges }', badges_path)
   end
 
   def badges_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
-    breadcrumb('Editing ' + objects[:badge].name, badge_path(objects[:badge]))
+    badges_index
+    breadcrumb('Editing ' + objects[:badge].name)
   end
 
   def badges_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
-    breadcrumb(objects[:badge].name, badge_path(objects[:badge]))
+    badges_index
+    breadcrumb(objects[:badge].name)
   end
 
   def badges_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
-    breadcrumb('New #{ term_for :badge }', new_badge_path)
+    badges_index
+    breadcrumb('New #{ term_for :badge }')
   end
 
   def challenges_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :challenges }', challenges_path)
   end
 
   def challenges_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb('Editing ' + objects[:challenge].name, assignment_path(objects[:challenge]))
+    challenges_index
+    breadcrumb('Editing ' + objects[:challenge].name)
   end
 
   def challenges_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
+    challenges_index
     breadcrumb(objects[:challenge].name, challenge_path(objects[:challenge]))
   end
 
   def challenges_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb('New Challenge', new_challenge_path)
+    challenges_index
+    breadcrumb('New Challenge')
   end
 
   def challenge_grades_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb(objects[:challenge].name, challenge_path(objects[:challenge]))
+    challenges_show
     breadcrumb('Editing #{ term_for :challenge } Grade')
   end
 
   def challenge_grades_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb(objects[:challenge].name, challenge_path(objects[:challenge]))
+    challenges_show
     breadcrumb(objects[:challenge_grade].team.name + "'s Challenge Grade")
   end
 
   def challenges_challenge_grades_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb(objects[:challenge].name, challenge_path(objects[:challenge]))
-    breadcrumb('New #{ term_for :challenge } Grade for #{ @team.name }', new_challenge_challenge_grade_path(objects[:challenge]))
+    challenges_show
+    breadcrumb('New #{ term_for :challenge } Grade for #{ @team.name }')
   end
 
   def challenges_challenge_grades_mass_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :challenges }', challenges_path)
-    breadcrumb(objects[:challenge].name, challenge_path(objects[:challenge]))
+    challenges_index
+    breadcrumb(objects[:challenge].name)
   end
 
   def courses_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Courses', courses_path)
   end
 
   def courses_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Courses', courses_path)
-    breadcrumb('New Course', new_course_path)
+    courses_index
+    breadcrumb('New Course')
   end
 
   def courses_edit
-    breadcrumb('Dashboard', dashboard_path)
+    courses_index
     breadcrumb('Course Settings')
   end
 
   def courses_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb(objects[:course].name, course_path(objects[:course]))
+    courses_index
+    breadcrumb(objects[:course].name)
   end
 
   def earned_badges_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
+    badges_index
     breadcrumb('Editing Awarded ' + objects[:earned_badge].name)
   end
 
   def earned_badges_mass_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
+    badges_index
     breadcrumb('Quick Award ' + objects[:badge].name)
   end
 
   def earned_badges_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
+    badges_index
     breadcrumb('Award ' + objects[:badge].name)
   end
 
   def earned_badges_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :badges }', badges_path)
+    badges_index
     breadcrumb(objects[:earned_badge].student.name + "'s " + objects[:earned_badge].name + ' Badge')
   end
 
   def groups_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :groups }', groups_path)
   end
 
   def groups_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :groups }', groups_path)
+    groups_index
     breadcrumb(objects[:group].name + ' #{ term_for :group }')
   end
 
   def groups_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :groups }', groups_path)
+    groups_index
     breadcrumb('New #{ term_for :group }')
   end
 
   def groups_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :groups }', groups_path)
+    groups_index
     breadcrumb('Editing ' + objects[:group].name + ' #{ term_for :group }')
   end
 
@@ -271,248 +238,218 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def info_earned_badges
-    breadcrumb('Dashboard', dashboard_path)
+    badges_index
     breadcrumb('Awarded #{ term_for :badges }')
   end
 
   def info_multiplier_choices
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :weight } Choices')
   end
 
   def info_predictor
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Predictor Preview', predictor_path)
   end
 
   def info_grading_status
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Grading Status', grading_status_path)
   end
 
   def info_per_assign
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignment } Analytics', per_assign_path)
+    dashboard
+    breadcrumb('#{ term_for :assignment } Analytics')
   end
 
   def integrations_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb(objects[:course].name, course_path(objects[:course]))
     breadcrumb('Integrations')
   end
 
   def integrations_courses_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb(objects[:course].name, course_path(objects[:course]))
+    courses_index
     breadcrumb('Integrations', integrations_path)
     breadcrumb("#{objects[:provider_name].capitalize} Integration")
   end
 
   def downloads_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Course Data Exports', downloads_path)
+    dashboard
+    breadcrumb('Course Data Exports')
   end
 
   def events_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Calendar Events', events_path)
   end
 
   def events_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Calendar Events', events_path)
-    breadcrumb(objects[:event].name, event_path(objects[:event]))
+    events_index
+    breadcrumb(objects[:event].name)
   end
 
   def events_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Calendar Events', events_path)
+    events_index
     breadcrumb('Editing ' + objects[:event].name)
   end
 
   def events_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Calendar Events', events_path)
-    breadcrumb('New Event', new_event_path)
+    events_index
+    breadcrumb('New Event')
   end
 
   def grade_scheme_elements_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Grading Scheme', grade_scheme_elements_path)
+    dashboard_path
+    breadcrumb('Grading Scheme')
   end
 
   def grade_scheme_elements_mass_edit
-    breadcrumb('Dashboard', dashboard_path)
+    grade_scheme_elements_index
     breadcrumb('Editing Grading Scheme')
   end
 
   def grade_scheme_elements_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Grading Scheme', grade_scheme_elements_path)
+    grade_scheme_elements_index
   end
 
   def grades_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
     breadcrumb('Showing Grade')
   end
 
   def grades_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
     breadcrumb('Editing Grade')
   end
 
   def grades_importers_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Grade Import')
+    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
   end
 
   def grades_importers_csv
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
+    grades_importers_index
     breadcrumb('CSV')
   end
 
   def grades_importers_assignments
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
+    grades_importers_index
     breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
   end
 
   def grades_importers_grades
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
+    grades_importers_index
     breadcrumb('#{@provider_name.capitalize} Grades')
   end
 
   def grades_importers_grades_import_results
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
-    breadcrumb('Grade Import', assignment_grades_importers_path(objects[:assignment]))
+    grades_importers_index
     breadcrumb('Import Results')
   end
 
   def grades_importers_import_results
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
   end
 
   def rubrics_index_for_copy
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
   end
 
   def rubrics_design
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    assignments_index
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
     breadcrumb('Design Rubric')
   end
 
   def staff_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Staff', staff_index_path)
   end
 
   def staff_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Staff', staff_index_path)
+    staff_index
     breadcrumb(objects[:staff_member].name)
   end
 
   def students_index
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :students }')
-  end
-
-  def students_show
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :students }', students_path)
   end
 
+  def students_show
+    students_index
+  end
+
   def submissions_show
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb(objects[:submission].assignment.name, assignment_path(objects[:submission].assignment))
   end
 
   def submissions_edit
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb("Edit Submission")
   end
 
   def submissions_new
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb("New Submission")
   end
 
   def teams_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('#{ term_for :teams }', teams_path)
   end
 
   def teams_show
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :teams }', teams_path)
+    teams_index
     breadcrumb(objects[:team].name)
   end
 
   def teams_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :teams }', teams_path)
+    teams_index
     breadcrumb('Editing ' + objects[:team].name)
   end
 
   def teams_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :teams }', teams_path)
+    teams_index
     breadcrumb('New #{ term_for :team }')
   end
   
   def user_sessions_new
-  end
-
-  def users_edit
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Users', users_path)
-    breadcrumb('Editing ' + objects[:user].name)
+    dashboard
   end
 
   def users_edit_profile
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Edit My Profile')
   end
 
   def users_import
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :students }', students_path)
+    students_index
     breadcrumb('Import #{ term_for :students }')
   end
 
   def users_import_results
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :students }', students_path)
+    students_index
     breadcrumb('Imported #{ term_for :students }')
   end
 
   def users_index
-    breadcrumb('Dashboard', dashboard_path)
+    dashboard
     breadcrumb('Users', users_path)
   end
 
   def users_new
-    breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('Users', users_path)
+    users_index
     breadcrumb('New User')
+  end
+
+  def users_edit
+    users_index
+    breadcrumb('Editing ' + objects[:user].name)
   end
 end
