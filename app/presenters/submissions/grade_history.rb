@@ -61,7 +61,7 @@ module Submissions::GradeHistory
   def last_item(history, object_type, changeset_key)
     history.sort { |h| h.version.id }
            .reverse { |h| h.changeset["object"] == object_type &&
-                         h.changeset.keys.include?(changeset_key) }.find
+                         h.changeset.keys.include?(changeset_key) }.first
   end
 
   def last_change?(history, history_item, object_type, changeset_key)
