@@ -158,6 +158,16 @@ describe Submission do
     end
   end
 
+  describe ".submitted" do
+    before { Submission.destroy_all }
+
+    it "returns only submissions with a submitted at date" do
+      submitted_submission = create(:submission)
+      draft_submission = create(:draft_submission)
+      expect(Submission.submitted).to eq [submitted_submission]
+    end
+  end
+
   describe "#submission_files_attributes=" do
     it "supports multiple file uploads" do
       file_attribute_1 = fixture_file "test_file.txt", "txt"
@@ -324,7 +334,7 @@ describe Submission do
 
     it "returns the submissions in the order they were submitted" do
       submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
-      never_submitted = create(:submission)
+      never_submitted = create(:submission, submitted_at: nil)
       just_submitted = create(:submission, submitted_at: DateTime.now)
       expect(Submission.order_by_submitted).to eq [submitted_yesterday, just_submitted, never_submitted]
     end
@@ -515,33 +525,14 @@ describe Submission do
   end
 
   describe "#draft?" do
-    it "returns false if it has a link" do
-      subject.link = "http://www.gradecraft.com"
-      subject.text_comment = nil
-      subject.submission_files.clear
-      expect(subject.draft?).to eq false
-    end
-
-    it "returns false if it has a text comment" do
-      subject.link = nil
-      subject.text_comment = "Hello"
-      subject.submission_files.clear
-      expect(subject.draft?).to eq false
-    end
-
-    it "returns false if it has a submission file" do
-      subject.save
-      subject.link = "http://www.gradecraft.com"
-      subject.text_comment = nil
-      subject.submission_files.create attributes_for(:submission_file)
-      expect(subject.draft?).to eq false
-    end
-
-    it "returns true if there is no link, text comment, or submission files" do
-      subject.link = nil
-      subject.text_comment = nil
-      subject.submission_files.clear
+    it "returns true if the submitted at date is nil" do
+      subject.submitted_at = nil
       expect(subject.draft?).to eq true
+    end
+
+    it "returns false if the submitted at date is not nil" do
+      subject.submitted_at = DateTime.now
+      expect(subject.draft?).to eq false
     end
   end
 

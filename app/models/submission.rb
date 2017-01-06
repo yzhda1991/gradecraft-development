@@ -45,7 +45,7 @@ class Submission < ActiveRecord::Base
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :for_assignment_and_student, ->(assignment_id, student_id) { where(assignment_id: assignment_id, student_id: student_id) }
   scope :for_assignment_and_group, ->(assignment_id, group_id) { where(assignment_id: assignment_id, group_id: group_id) }
-
+  scope :submitted, -> { where.not(submitted_at: nil) }
   scope :with_group, -> { where "group_id is not null" }
 
   before_validation :cache_associations
@@ -61,7 +61,7 @@ class Submission < ActiveRecord::Base
   multiple_files :submission_files
 
   def self.submitted_this_week(assignment_type)
-    assignment_type.submissions.where("submissions.updated_at > ? ", 7.days.ago).reject(&:draft?)
+    assignment_type.submissions.submitted.where("submissions.updated_at > ? ", 7.days.ago)
   end
 
   def graded_at
@@ -160,7 +160,7 @@ class Submission < ActiveRecord::Base
   end
 
   def draft?
-    link.blank? && text_comment.blank? && submission_files.empty? && submitted_at.nil?
+    submitted_at.nil?
   end
 
   def belongs_to?(user)

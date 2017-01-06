@@ -63,4 +63,8 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   def submitted?(assignment)
     student.submission_for_assignment(assignment).present?
   end
+
+  def submitted_submissions_count(assignment)
+    assignment.submissions.submitted.count
+  end
 end
