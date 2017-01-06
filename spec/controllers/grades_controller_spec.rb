@@ -279,4 +279,20 @@ describe GradesController do
       end
     end
   end
+
+  context "as an observer" do
+    let(:observer) { create(:user, courses: [course], role: :observer) }
+
+    before do
+      login_user(observer)
+      allow(controller).to receive(:current_student).and_return(observer)
+    end
+
+    describe "GET show" do
+      it "redirects to the assignment show page" do
+        expect(get :show, params: { id: grade.id }).to \
+          redirect_to(assignment_path(assignment))
+      end
+    end
+  end
 end
