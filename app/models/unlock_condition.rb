@@ -214,7 +214,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_course_condition(student)
     course_membership = student.course_memberships.where(course_id: condition_id).first
-    course_membership.score >= condition_value
+    course_membership.score >= condition_value if course_membership.present?
   end
 
   # Checking if the number of students who have completed the condition match

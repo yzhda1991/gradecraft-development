@@ -1,13 +1,6 @@
 require "rails_spec_helper"
 
 describe PasswordsController do
-  describe "GET new" do
-    it "exists" do
-      get :new
-      expect(response).to be_success
-    end
-  end
-
   describe "POST create" do
     let(:user) { create :user }
 
