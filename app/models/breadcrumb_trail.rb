@@ -452,4 +452,16 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     users_index
     breadcrumb('Editing ' + objects[:user].name)
   end
+  
+  def pages_press
+  end
+  
+  def pages_research
+  end
+  
+  def pages_team
+  end
+  
+  def pages_features
+  end
 end
