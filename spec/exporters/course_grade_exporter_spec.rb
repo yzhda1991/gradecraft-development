@@ -14,20 +14,19 @@ describe CourseGradeExporter do
 
     it "generates a CSV with student grades for the course" do
       @student = create(:user, first_name: "Pinky", last_name: "Alpha")
-      @student_2 = create(:user, last_name: "The Brain", last_name: "Zed")
+      @student_2 = create(:user, first_name: "The Brain", last_name: "Zed")
       create(:course_membership, course: course, user: @student, score: 80000)
       @students = course.students
       create(:course_membership, course: course, user: @student_2, score: 120000)
       create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
       create(:grade_scheme_element, course: course, lowest_points: 100001, highest_points: 200000, level: "Phenomenal", letter: "B")
-      @students = course.students
 
       csv = CSV.new(subject.final_grades_for_course(course)).read
       expect(csv.length).to eq 3
-      expect(csv[1][0]).to eq @student.first_name
-      expect(csv[2][0]).to eq @student_2.first_name
-      expect(csv[1][1]).to eq @student.last_name
-      expect(csv[2][1]).to eq @student_2.last_name
+      expect(csv[1][0]).to eq "Pinky"
+      expect(csv[2][0]).to eq "The Brain"
+      expect(csv[1][1]).to eq "Alpha"
+      expect(csv[2][1]).to eq "Zed"
       expect(csv[1][2]).to eq @student.email
       expect(csv[2][2]).to eq @student_2.email
       expect(csv[1][3]).to eq @student.username
