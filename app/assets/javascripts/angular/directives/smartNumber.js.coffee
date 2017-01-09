@@ -164,12 +164,17 @@ NumberModule.directive 'smartNumber',
       cursorPos = elem[0].selectionStart - 1
       elem.val().charAt(cursorPos) == ","
 
+    removeLeadingZeroes = (val) ->
+      while val.length > 1 && val.charAt(0) == "0"
+        val = val.substr(1)
+      return val
+
     # logic for handling insertion of number characters
     insertCharacter = (elem, event) ->
       character = keyCodes[event.which] # which character was entered
       originalValue = elem.val() # the original value of the field before keypress
       position = elem[0].selectionStart # cursor position
-      newValue = [originalValue.slice(0, position), character, originalValue.slice(position)].join('') # insert the new number into the field
+      newValue = removeLeadingZeroes([originalValue.slice(0, position), character, originalValue.slice(position)].join('')) # insert the new number into the field
       elem.val(newValue) # replace the original value with the new one
 
     # handle backspace keypresses
