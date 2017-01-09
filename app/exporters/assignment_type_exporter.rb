@@ -29,7 +29,7 @@ class AssignmentTypeExporter
   end
 
   def assignment_type_names(assignment_types)
-    assignment_types.flat_map(&:name)
+    assignment_types.ordered.flat_map(&:name)
   end
 
   def score_data(student, assignment_type)
@@ -41,7 +41,7 @@ class AssignmentTypeExporter
   end
 
   def assignment_type_scores(student, assignment_types)
-    assignment_types.collect do |assignment_type|
+    assignment_types.ordered.collect do |assignment_type|
       [ assignment_type.visible_score_for_student(student) ]
     end.flatten
   end

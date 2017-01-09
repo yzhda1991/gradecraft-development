@@ -4,7 +4,7 @@ class CourseGradeExporter
   def final_grades_for_course(course)
     CSV.generate do |csv|
       csv.add_row baseline_headers
-      course.students.each do |student|
+      course.students.order_by_name.each do |student|
         csv.add_row student_data(student, course)
       end
     end

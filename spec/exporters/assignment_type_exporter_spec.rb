@@ -5,8 +5,8 @@ describe AssignmentTypeExporter do
   let(:course) { create :course }
   let(:students) { create_list :user, 2 }
   subject { AssignmentTypeExporter.new }
-  let!(:assignment_type_1) { create(:assignment_type, course: course, name: "Charms") }
-  let!(:assignment_type_2) { create(:assignment_type, course: course, name: "History of Wizardry") }
+  let!(:assignment_type_1) { create(:assignment_type, course: course, name: "Charms", position: 1) }
+  let!(:assignment_type_2) { create(:assignment_type, course: course, name: "History of Wizardry", position: 2) }
   let!(:assignment) { create(:assignment, course: course, assignment_type: assignment_type_1) }
   let!(:assignment_2) { create(:assignment, course: course, assignment_type: assignment_type_1) }
   let!(:assignment_3) { create(:assignment, course: course, assignment_type: assignment_type_2) }
