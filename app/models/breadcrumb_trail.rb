@@ -1,5 +1,5 @@
 class BreadcrumbTrail < Croutons::BreadcrumbTrail
-  
+
   def dashboard
     breadcrumb('Dashboard', dashboard_path)
   end
@@ -111,7 +111,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def assignments_groups_grade
-    assignments_index
+    breadcrumb('Dashboard', dashboard_path)
+    breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb('#{ @assignment.name }', assignment_path(objects[:assignment]))
+    breadcrumb('Editing Group Grade')
   end
 
   def badges_index
@@ -418,7 +421,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     teams_index
     breadcrumb('New #{ term_for :team }')
   end
-  
+
   def user_sessions_new
     dashboard
   end
