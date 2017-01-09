@@ -155,7 +155,7 @@ describe Course do
   end
 
   describe "#staff" do
-    it "returns an alphabetical list of the staff in the course" do
+    it "returns a list of the staff in the course" do
       course = create(:course)
       staff_1 = create(:user, courses: [course], role: :gsi)
       staff_2 = create(:user, courses: [course], role: :gsi)
@@ -165,7 +165,7 @@ describe Course do
   end
 
   describe "#students_being_graded" do
-    it "returns an alphabetical list of students being graded" do
+    it "returns a list of students being graded" do
       student = create(:user, courses: [subject], role: :student)
       student2 = create(:user, courses: [subject], role: :student)
       expect(subject.students_being_graded).to match_array([student2,student])
