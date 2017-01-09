@@ -117,7 +117,7 @@ function rubricScreenSize() {
           prevArrow: '<a class="fa fa-caret-left previous rubric-slider-button"></a>',
           nextArrow: '<a class="fa fa-caret-right next rubric-slider-button"></a>',
           initialSlide: $thisSlider.data("start-index"),
-          adaptiveHeight: true, 
+          adaptiveHeight: true,
           infinite: false
         });
       });
