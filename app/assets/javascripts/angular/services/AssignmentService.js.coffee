@@ -1,10 +1,12 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService) ->
 
   assignments = []
   update = {}
+
+  rubric = RubricService.rubric
 
   # managing a single assignment resource,
   # must be a function for Angular two-way binding to work
@@ -39,6 +41,9 @@
   getAssignment = (assignmentId)->
     $http.get('/api/assignments/' + assignmentId).success( (response)->
       GradeCraftAPI.addItem(assignments, "assignments", response)
+      if response.data.relationships && response.data.relationships.rubric
+        RubricService.getRubric(response.data.relationships.rubric.data.id)
+
       GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
       GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
       GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)

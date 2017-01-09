@@ -19,7 +19,7 @@
     $http.get("/api/assignments/#{assignmentId}/submissions").then(
       (response) ->
         if response.data.data?  # if no submission is found, data is null
-          GradeCraftAPI.setItem(submission, "submission", response.data)
+          GradeCraftAPI.loadItem(submission, "submission", response.data)
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -28,7 +28,7 @@
   createDraftSubmission = (assignmentId) ->
     $http.post("/api/assignments/#{assignmentId}/submissions", submission).then(
       (response) ->
-        GradeCraftAPI.setItem(submission, "submission", response.data)
+        GradeCraftAPI.loadItem(submission, "submission", response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -37,7 +37,7 @@
   updateDraftSubmission = (assignmentId) ->
     $http.put("/api/assignments/#{assignmentId}/submissions/#{submission.id}", submission).then(
       (response) ->
-        GradeCraftAPI.setItem(submission, "submission", response.data)
+        GradeCraftAPI.loadItem(submission, "submission", response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
