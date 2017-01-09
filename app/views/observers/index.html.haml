@@ -1,0 +1,25 @@
+= render "buttons"
+
+.pageContent
+  = render "layouts/alerts"
+
+  %table.dynatable.no-table-header
+    %thead
+      %tr
+        %th First Name
+        %th Last Name
+        %th Avatar
+        %th{:style => "min-width: 200px"}
+    %tbody
+      - @observers.each do |user|
+        %tr
+          %td= user.first_name
+          %td= user.last_name
+          %td
+            - if user.avatar_file_name.present?
+              %img.img-rounded{:src => user.avatar_file_name, :width => 30}
+          %td
+            .right
+              %ul.button-bar
+                %li= link_to glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
+                %li= link_to glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete

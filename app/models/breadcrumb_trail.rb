@@ -368,6 +368,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Design Rubric')
   end
 
+  def observers_index
+    dashboard
+    breadcrumb('Observers', observers_path)
+  end
+
   def staff_index
     dashboard
     breadcrumb('Staff', staff_index_path)
@@ -458,16 +463,16 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     users_index
     breadcrumb('Editing ' + objects[:user].name)
   end
-  
+
   def pages_press
   end
-  
+
   def pages_research
   end
-  
+
   def pages_team
   end
-  
+
   def pages_features
   end
   

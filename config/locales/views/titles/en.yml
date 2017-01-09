@@ -167,6 +167,9 @@ en:
   students:
     index:
       title: "#{ term_for :student } Roster"
+  observers:
+    index:
+      title: "Observers"
   rubrics:
     design:
       title: "Design Rubric"

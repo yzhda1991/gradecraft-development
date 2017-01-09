@@ -1,0 +1,4 @@
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to_unless_current glyph(:plus) + "New User", new_user_path, class: "button button-edit"

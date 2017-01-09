@@ -40,6 +40,7 @@
   - if current_course.groups_to_review_count > 0
     %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
 %li= link_to_unless_current glyph("user-secret") + "Staff", staff_index_path
+%li= link_to_unless_current glyph("user-o") + "Observers", observers_path
 
 %hr
 
