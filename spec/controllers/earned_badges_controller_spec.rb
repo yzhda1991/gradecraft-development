@@ -306,4 +306,42 @@ describe EarnedBadgesController do
       end
     end
   end
+
+  context "as an observer" do
+    before(:all) do
+      @observer = create(:user, courses: [@course], role: :observer)
+    end
+    before(:each) { login_user(@observer) }
+
+    describe "protected routes not requiring id in params" do
+      params = { badge_id: "1" }
+      routes = [
+        { action: :index, request_method: :get },
+        { action: :create, request_method: :post },
+        { action: :new, request_method: :get }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
+            redirect_to(assignments_path)
+        end
+      end
+    end
+
+    describe "protected routes requiring id in params" do
+      params = { badge_id: "1", id: "1" }
+      routes = [
+        { action: :edit, request_method: :get },
+        { action: :show, request_method: :get },
+        { action: :update, request_method: :post },
+        { action: :destroy, request_method: :get }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
+            redirect_to(assignments_path)
+        end
+      end
+    end
+  end
 end
