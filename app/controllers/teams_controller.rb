@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   respond_to :html, :json
 
+  before_action :check_observer_role
   before_action :ensure_staff?, except: [:index]
 
   def index
