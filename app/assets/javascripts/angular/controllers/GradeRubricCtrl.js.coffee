@@ -1,11 +1,11 @@
 @gradecraft.controller 'GradeRubricCtrl', ['$scope','Restangular', 'RubricService', '$q', ($scope, Restangular, RubricService, $q) ->
 
-  $scope.courseBadges = RubricService.badges
-  $scope.criteria = RubricService.criteria
-  $scope.criterionGrades = RubricService.criterionGrades
-  $scope.grade = RubricService.grade
-  $scope.updateGrade = RubricService.updateGrade
-  $scope.gradeStatusOptions = RubricService.gradeStatusOptions
+  $scope.courseBadges = RubricFactoryService.badges
+  $scope.criteria = RubricFactoryService.criteria
+  $scope.criterionGrades = RubricFactoryService.criterionGrades
+  $scope.grade = RubricFactoryService.grade
+  $scope.updateGrade = RubricFactoryService.updateGrade
+  $scope.gradeStatusOptions = RubricFactoryService.gradeStatusOptions
 
   $scope.init = (assignmentId, recipientType, recipientId)->
     $scope.assignmentId = assignmentId
@@ -20,26 +20,26 @@
     # we need to wait until the badges are created before
     # making this call.
     queCriteriaAfterBadges = ()->
-      if (RubricService.badgesAvailable() == false)
+      if (RubricFactoryService.badgesAvailable() == false)
         window.setTimeout(queCriteriaAfterBadges, 100)
       else
-        RubricService.getCriteria($scope.assignmentId, $scope)
+        RubricFactoryService.getCriteria($scope.assignmentId, $scope)
 
     promises = [
-      RubricService.getBadges(),
-      RubricService.getCriterionGrades($scope.assignmentId, $scope.recipientType, $scope.recipientId),
+      RubricFactoryService.getBadges(),
+      RubricFactoryService.getCriterionGrades($scope.assignmentId, $scope.recipientType, $scope.recipientId),
       queCriteriaAfterBadges(),
-      RubricService.getGrade($scope.assignmentId, $scope.recipientType, $scope.recipientId)]
+      RubricFactoryService.getGrade($scope.assignmentId, $scope.recipientType, $scope.recipientId)]
     $q.all(promises)
 
   $scope.updateCriterion = (criterion, field)->
-    RubricService.updateCriterion($scope.assignmentId, $scope.recipientType, $scope.recipientId, criterion, field)
+    RubricFactoryService.updateCriterion($scope.assignmentId, $scope.recipientType, $scope.recipientId, criterion, field)
 
   $scope.pointsPossible = ()->
-    RubricService.pointsPossible()
+    RubricFactoryService.pointsPossible()
 
   $scope.thresholdPoints = ()->
-    RubricService.thresholdPoints()
+    RubricFactoryService.thresholdPoints()
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
@@ -197,7 +197,7 @@
     }
 
   # Document any updates to this format in the specs: /spec/support/api_calls/rubric_grade_put.rb
-  # student_id or group_id is now passed through the route, see RubricService.putRubricGradeSubmission
+  # student_id or group_id is now passed through the route, see RubricFactoryService.putRubricGradeSubmission
   $scope.gradedRubricParams = ()->
     {
       points_possible:  $scope.pointsPossible(),
@@ -218,7 +218,7 @@
     if !$scope.grade.status
       return alert "You must select a grade status before you can submit this grade"
     if confirm confirmMessage()
-      RubricService.putRubricGradeSubmission($scope.assignmentId, $scope.recipientType, $scope.recipientId, $scope.gradedRubricParams(), returnURL)
+      RubricFactoryService.putRubricGradeSubmission($scope.assignmentId, $scope.recipientType, $scope.recipientId, $scope.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
     heightMin: 120,

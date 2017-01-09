@@ -110,5 +110,10 @@ json.relationships do
       json.grade data: { type: "grades", id: grade.id.to_s }
     end
   end
+
+  if assignment.grade_with_rubric?
+    # change routing to api/rubric/:rubric_id
+    json.rubric links: { related: "api/assignments/#{assignment.id}/cirteria" }
+  end
 end
 
