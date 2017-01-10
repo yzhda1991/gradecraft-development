@@ -4,6 +4,8 @@
   fileUploads = []
   criterionGrades = []
   gradeStatusOptions = []
+  isRubricGraded = false
+
   autoSaveTimeInterval = 3000
   updateTimeout = null
 
@@ -21,6 +23,7 @@
           GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
+          isRubricGraded = response.data.meta.is_rubric_graded
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -41,6 +44,23 @@
         ,(response) ->
           GradeCraftAPI.logResponse(response)
       )
+
+  findCriterionGrade = (criterionId)->
+    return false unless isRubricGraded
+    _.find(criterionGrades,{criterion_id: criterionId})
+
+  addCriterionGrade = (criterionId, attr={})->
+    return false unless isRubricGraded
+    return false if findCriterionGrade(criterionId)
+
+    criterionGrade = {
+      "criterion_id": criterionId,
+      "grade_id": grade.id,
+      "student_id": grade.student_id,
+      "level_id": null,
+      "comments": null
+    }
+    criterionGrades.push(criterionGrade)
 
 
   # remove custom value, replace with adjustment points
@@ -124,6 +144,9 @@
     fileUploads: fileUploads,
     criterionGrades: criterionGrades,
     gradeStatusOptions: gradeStatusOptions,
+
+    findCriterionGrade: findCriterionGrade,
+    addCriterionGrade: addCriterionGrade,
 
     toggleCustomValue: toggleCustomValue,
     enableCustomValue: enableCustomValue,

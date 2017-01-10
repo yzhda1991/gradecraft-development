@@ -1,3 +1,4 @@
+# TODO break grade into partial, use for group_index and show
 json.data @grades do |grade|
   json.type "grades"
   json.id   grade.id.to_s

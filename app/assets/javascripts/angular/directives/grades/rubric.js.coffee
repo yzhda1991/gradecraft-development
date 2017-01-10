@@ -14,10 +14,11 @@
         GradeService.queueUpdateGrade(immediate)
 
       scope.queueUpdateCriterionGrade = (criterion, immediate)->
-        GradeService.queueUpdateCriterionGrade(immediate)
+        GradeService.queueUpdateCriterionGrade(criterion.id, immediate)
 
-      scope.selectLevel = (level)->
-        console.log("selectLevel")
+      scope.selectLevel = (criterion, level)->
+        criterionGrade = GradeService.findCriterionGrade(criterion.id) || GradeService.addCriterionGrade(criterion.id)
+        criterionGrade.level_id = level.id
 
       scope.LevelIsSelected = (criterion,level)->
         criterionGrade = _.find(GradeService.criterionGrades,{criterion_id: criterion.id})
@@ -27,6 +28,5 @@
       scope.levelMeetExpectations = (criterion, level)->
         return false if ! criterion.meets_expectations_level_id
         level.points >= criterion.meets_expectations_points
-
   }
 ]
