@@ -10,7 +10,7 @@
         %p.criterion-description {{criterion.description}}
 
       %ul.level-tabs
-        %li.level-tab(ng-repeat="level in criterion.levels" ng-click="selectLevel(level)" ng-class="{selected: LevelIsSelected(criterion,level), 'meets-expectations': levelMeetExpectations(level)}")
+        %li.level-tab(ng-repeat="level in criterion.levels" ng-click="selectLevel(level)" ng-class="{selected: LevelIsSelected(criterion,level), 'meets-expectations': levelMeetExpectations(criterion, level)}")
           .level-heading
             .level-details
               .level-name {{level.name}}
@@ -21,7 +21,7 @@
                 %img(ng-src="{{levelBadge.badge.icon}}")
 
           .level-description
-            .level-meets-expectations(ng-show="levelMeetExpectations(level)") Meets Expectations
+            .level-meets-expectations(ng-show="levelMeetExpectations(criterion, level)") Meets Expectations
             {{level.description}}
 
       .comments-box

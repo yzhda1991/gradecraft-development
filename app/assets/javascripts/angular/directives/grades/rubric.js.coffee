@@ -24,8 +24,9 @@
         return false if !criterionGrade
         criterionGrade.level_id == level.id
 
-      scope.levelMeetExpectations = (level)->
-        console.log("levelMeetExpectations")
+      scope.levelMeetExpectations = (criterion, level)->
+        return false if ! criterion.meets_expectations_level_id
+        level.points >= criterion.meets_expectations_points
 
   }
 ]
