@@ -6,8 +6,6 @@
   assignments = []
   update = {}
 
-  rubric = RubricService.rubric
-
   # managing a single assignment resource,
   # must be a function for Angular two-way binding to work
   assignment = ()->

@@ -3,14 +3,15 @@
 
 %grade-points-overview
 
-%loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade..."}
+%loading-message(loading='vm.loading' message="Loading Grade...")
 
-%grade-raw-points{'ng-if'=>'vm.rawPointsType() == "DEFAULT"'}
-%grade-score-levels{'ng-if'=>'vm.rawPointsType() == "SCORE_LEVELS"'}
-%grade-pass-fail{'ng-if'=>'vm.rawPointsType() == "PASS_FAIL"'}
+%grade-raw-points(ng-if='vm.rawPointsType() == "DEFAULT"')
+%grade-score-levels(ng-if='vm.rawPointsType() == "SCORE_LEVELS"')
+%grade-pass-fail(ng-if='vm.rawPointsType() == "PASS_FAIL"')
+%grade-rubric(ng-if='vm.rawPointsType() == "RUBRIC"')
 %hr.dotted
 
-%grade-file-uploader{'ng-if'=>'!vm.groupGrade'}
+%grade-file-uploader(ng-if='!vm.groupGrade')
 %hr.dotted
 
 %grade-text-feedback
@@ -19,9 +20,9 @@
 %grade-status
 %hr.dotted
 
-%grade-submit-buttons{'submit-path'=>'{{vm.submitPath}}', 'grade-next-path'=>'{{vm.gradeNextPath}}'}
+%grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
 %grade-last-updated
 %hr.dotted
 
-%award-earned-badges{'ng-if'=>'!vm.groupGrade', 'student-id'=>'{{vm.recipientId}}', 'grade-id'=>'{{vm.gradeService.grade.id}}'}
+%award-earned-badges(ng-if='!vm.groupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
 %hr.dotted

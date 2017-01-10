@@ -1,6 +1,5 @@
 %section.grade-status
   .grade-section-label Grade Status
-  %select.grade-status-selector{'ng-model'=>'grade.status', 'ng-change'=>'queueUpdateGrade()'}
-    %option{'value'=>'{{statusOption}}',
-      'ng-repeat'=>'statusOption in statusOptions()',
-      'ng-selected'=>'grade.status == statusOption'} {{statusOption}}
+  %select.grade-status-selector(ng-model='grade.status' ng-change='queueUpdateGrade()')
+    %option(value='{{statusOption}}' ng-repeat='statusOption in statusOptions()' ng-selected='grade.status == statusOption')
+      {{statusOption}}

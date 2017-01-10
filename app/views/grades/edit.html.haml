@@ -6,7 +6,6 @@
   %hr.dotted
 
   - if @grade.assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
-    %hr.dotted
 
     %section
 
