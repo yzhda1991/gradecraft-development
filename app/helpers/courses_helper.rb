@@ -12,6 +12,7 @@ module CoursesHelper
     if current_user.is_professor?(course) || current_user.is_admin?(course)
       roles << ["GSI", "gsi"]
       roles << ["Professor", "professor"]
+      roles << ["Observer", "observer"]
     end
     roles << ["Admin", "admin"] if current_user.is_admin?(course)
     roles
