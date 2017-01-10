@@ -2,6 +2,7 @@
 
   grade = {}
   fileUploads = []
+  criterionGrades = []
   gradeStatusOptions = []
   autoSaveTimeInterval = 3000
   updateTimeout = null
@@ -17,6 +18,7 @@
         (response) ->
           angular.copy(response.data.data.attributes, grade)
           GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
+          GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
           GradeCraftAPI.logResponse(response)
@@ -40,14 +42,15 @@
           GradeCraftAPI.logResponse(response)
       )
 
+
+  # remove custom value, replace with adjustment points
   toggleCustomValue = ()->
     grade.is_custom_value = !grade.is_custom_value
-
   enableCustomValue = ()->
     this.toggleCustomValue() if grade.is_custom_value == false
-
   enableScoreLevels = (event)->
     this.toggleCustomValue() if grade.is_custom_value == true
+
 
   _updateGradeById = (id, returnURL=null)->
     $http.put("/api/grades/#{id}", grade: grade).then(
@@ -119,6 +122,7 @@
   return {
     grade: grade,
     fileUploads: fileUploads,
+    criterionGrades: criterionGrades,
     gradeStatusOptions: gradeStatusOptions,
 
     toggleCustomValue: toggleCustomValue,

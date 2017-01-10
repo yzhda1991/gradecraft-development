@@ -15,7 +15,6 @@
         if response.data.data?  # if no rubric is found, data is null
           GradeCraftAPI.loadItem(rubric, "rubrics", response.data)
           GradeCraftAPI.loadFromIncluded(criteria, "criteria", response.data)
-          GradeCraftAPI.loadFromIncluded(criteria, "criteria", response.data)
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -23,5 +22,7 @@
 
   return {
     getRubric: getRubric
+    rubric: rubric
+    criteria: criteria
   }
 ]

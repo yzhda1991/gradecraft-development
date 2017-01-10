@@ -27,7 +27,7 @@
     #rubric-grade-edit.rubric.edit(ng-cloak)
       .criterion(ng-repeat="criterion in criteria")
         .criterion-heading
-          %h4.criterion-name {{criterion.name.replace(" ","&nbsp;")}} {{(criterion.max_points || 0) | number:0}}&nbsp;Points
+          %h4.criterion-name {{criterion.name}} {{(criterion.max_points || 0) | number:0}} Points
           %p.criterion-description {{criterion.description}}
 
         %ul.level-tabs.rubric-levels
@@ -35,9 +35,9 @@
             .level-heading
               .level-details
                 %span.check-mark= glyph("check")
-                .level-name {{level.name.replace(" ","&nbsp;")}}
+                .level-name {{level.name}}
                 .level-points
-                  {{level.points | number:0}}&nbsp;Points
+                  {{level.points | number:0}} Points
               %ul.badge-row.design-view
                 %li.level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
                   %img(ng-src="{{levelBadge.badge.icon}}")

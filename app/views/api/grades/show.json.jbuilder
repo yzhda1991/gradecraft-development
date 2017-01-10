@@ -26,6 +26,15 @@ json.data do
         end
       end
     end
+
+    if @grade.criterion_grades.present?
+      json.criterion_grades do
+        json.data @grade.criterion_grades do |criterion_grade|
+          json.type "criterion_grades"
+          json.id criterion_grade.id.to_s
+        end
+      end
+    end
   end
 end
 
@@ -40,6 +49,23 @@ json.included do
         json.filename file_upload.filename
         json.filepath file_upload.filepath
         json.file_processing file_upload.file_processing
+      end
+    end
+  end
+
+  if @grade.criterion_grades.present?
+    json.array! @grade.criterion_grades do |criterion_grade|
+      json.type "criterion_grades"
+      json.id criterion_grade.id.to_s
+      json.attributes do
+        json.id             criterion_grade.id
+        json.grade_id       criterion_grade.grade_id
+        json.assignment_id  criterion_grade.assignment_id
+        json.points         criterion_grade.points
+        json.criterion_id   criterion_grade.criterion_id
+        json.level_id       criterion_grade.level_id
+        json.student_id     criterion_grade.student_id
+        json.comments       criterion_grade.comments
       end
     end
   end
