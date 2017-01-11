@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161230164929) do
+ActiveRecord::Schema.define(version: 20170110174401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20161230164929) do
     t.string   "media_credit"
     t.string   "media_caption"
     t.string   "mass_grade_type"
-    t.boolean  "include_in_timeline",          default: false,        null: false
+    t.boolean  "include_in_timeline",          default: true,         null: false
     t.boolean  "include_in_predictor",         default: true,         null: false
     t.integer  "position",                                            null: false
     t.boolean  "include_in_to_do",             default: true,         null: false
@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 20161230164929) do
     t.string   "role",                           default: "student", null: false
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
-    t.boolean  "has_seen_course_onboarding",     default: true
+    t.boolean  "has_seen_course_onboarding",     default: false
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
