@@ -107,7 +107,7 @@ class ApplicationController < ActionController::Base
     return not_authenticated unless current_user_is_admin?
   end
 
-  def check_observer_role
+  def ensure_not_observer?
     redirect_to assignments_path, alert: "You do not have permission to access that page" \
       if current_user_is_observer?
   end

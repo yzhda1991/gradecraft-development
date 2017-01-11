@@ -1,7 +1,7 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_action :check_observer_role, except: [:predictor]
+  before_action :ensure_not_observer?, except: [:predictor]
   before_action :ensure_staff?, except: [:dashboard, :predictor, :timeline_events]
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]

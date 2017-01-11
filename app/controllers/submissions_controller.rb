@@ -1,7 +1,7 @@
 require_relative "../services/deletes_submission_draft_content"
 
 class SubmissionsController < ApplicationController
-  before_action :check_observer_role
+  before_action :ensure_not_observer?
   before_action :ensure_staff?, only: [:show, :destroy]
   before_action :save_referer, only: [:new, :edit]
 
