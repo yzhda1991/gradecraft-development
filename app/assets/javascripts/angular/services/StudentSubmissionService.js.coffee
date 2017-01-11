@@ -1,24 +1,16 @@
-@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', '$http', '$timeout', (GradeCraftAPI, $http, $timeout) ->
+@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
 
   self = this
   submission = {}
-  saveTimeout = null
 
-  # Custom debounce method for autosaving submissions
-  # Pass true for immediate to manually trigger save
-  queueSaveDraftSubmission = (assignmentId, immediate = false) ->
+  queueSaveDraftSubmission = (assignmentId, immediate=false) ->
+    # cancel update if the student has cleared out the text_comment_draft
     unless submission.text_comment_draft
-      $timeout.cancel(self.saveTimeout)
+      DebounceQueue.cancelEvent("submissions", assignmentId)
       return
 
-    if immediate is true
-      $timeout.cancel(self.saveTimeout)
-      saveDraftSubmission(assignmentId)
-    else
-      $timeout.cancel(self.saveTimeout) if self.saveTimeout?
-      self.saveTimeout = $timeout(() ->
-        saveDraftSubmission(assignmentId)
-      , 3500)
+    # using assignmentId for queue id since we are not assured to have a submission.id
+    DebounceQueue.addEvent("submissions", assignmentId, saveDraftSubmission, [assignmentId], immediate)
 
   saveDraftSubmission = (assignmentId) ->
     if submission.id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
