@@ -1,11 +1,16 @@
-@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', 'DelayedEvent', '$http', (GradeCraftAPI, DelayedEvent, $http) ->
+@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
 
   self = this
   submission = {}
 
   queueSaveDraftSubmission = (assignmentId, immediate=false) ->
+    # cancel update if the student has cleared out the text_comment_draft
+    unless submission.text_comment_draft
+      DebounceQueue.cancelEvent("submissions", assignmentId)
+      return
+
     # using assignmentId for queue id since we are not assured to have a submission.id
-    DelayedEvent.addQueue("submissions", assignmentId, saveDraftSubmission, [assignmentId], immediate)
+    DebounceQueue.addEvent("submissions", assignmentId, saveDraftSubmission, [assignmentId], immediate)
 
   saveDraftSubmission = (assignmentId) ->
     if submission.id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
