@@ -27,7 +27,8 @@
 
   %th{:style => "min-width: 180px"}
 
-  - if presenter.assignment.release_necessary? && presenter.has_grades?
+  - if presenter.assignment.release_necessary?
     %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-      %button.button.select-all= "Check"
-      %button.button.select-none= "Uncheck"
+      - if presenter.has_grades? 
+        %button.button.select-all= "Check"
+        %button.button.select-none= "Uncheck"
