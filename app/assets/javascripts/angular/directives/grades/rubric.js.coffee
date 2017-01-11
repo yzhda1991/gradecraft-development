@@ -10,6 +10,9 @@
       scope.rubric = RubricService.rubric
       scope.criteria = RubricService.criteria
 
+      scope.gradeForCriterion = (criterionId)->
+        GradeService.findCriterionGrade(criterionId) || GradeService.addCriterionGrade(criterionId)
+
       scope.queueUpdateGrade = (immediate)->
         GradeService.queueUpdateGrade(immediate)
 
@@ -17,8 +20,10 @@
         GradeService.queueUpdateCriterionGrade(criterion.id, immediate)
 
       scope.selectLevel = (criterion, level)->
-        criterionGrade = GradeService.findCriterionGrade(criterion.id) || GradeService.addCriterionGrade(criterion.id)
+        criterionGrade = scope.gradeForCriterion(criterion.id)
         criterionGrade.level_id = level.id
+        # TODO, level is not persisting
+        GradeService.queueUpdateCriterionGrade(criterion.id)
 
       scope.LevelIsSelected = (criterion,level)->
         criterionGrade = _.find(GradeService.criterionGrades,{criterion_id: criterion.id})
@@ -28,5 +33,6 @@
       scope.levelMeetExpectations = (criterion, level)->
         return false if ! criterion.meets_expectations_level_id
         level.points >= criterion.meets_expectations_points
+
   }
 ]

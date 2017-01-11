@@ -101,6 +101,6 @@ class API::CriterionGradesController < ApplicationController
   private
 
   def criterion_grade_params
-    params.require(:criterion_grade).permit(:comments)
+    params.require(:criterion_grade).permit(:comments, :level_id)
   end
 end

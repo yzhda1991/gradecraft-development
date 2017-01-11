@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradeService', ['GradeCraftAPI', '$http', '$timeout', (GradeCraftAPI, $http, $timeout) ->
+@gradecraft.factory 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
 
   grade = {}
   fileUploads = []
@@ -6,15 +6,14 @@
   gradeStatusOptions = []
   isRubricGraded = false
 
-  autoSaveTimeInterval = 3000
-  updateTimeout = null
-
   # used for group grades:
   grades = []
   _recipientType = ""
+  _recipientId = ""
 
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
+    _recipientId = recipientId
     if recipientType == "student"
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').then(
         (response) ->
@@ -45,6 +44,34 @@
           GradeCraftAPI.logResponse(response)
       )
 
+  _updateGradeById = (id, returnURL=null)->
+    $http.put("/api/grades/#{id}", grade: grade).then(
+      (response) ->
+        grade.updated_at = new Date()
+        GradeCraftAPI.logResponse(response)
+        if returnURL
+          window.location = returnURL
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  # TODO update all calls to go through queueUpdateGrade
+  updateGrade = (returnURL=null)->
+    if _recipientType == "student"
+      _updateGradeById(grade.id, returnURL)
+    else if _recipientType == "group"
+      _.each(grades, (g)->
+        if returnURL && g == _.last(grades)
+          _updateGradeById(g.id, returnURL)
+        else
+          _updateGradeById(g.id)
+      )
+
+  queueUpdateGrade = (immediate=false, returnURL=null) ->
+    DebounceQueue.addEvent("grades", grade.id, updateGrade, [returnURL], immediate)
+
+#------- Criterion Grade Methods for Rubric Grading -------------------------------------------------------------------#
+
   findCriterionGrade = (criterionId)->
     return false unless isRubricGraded
     _.find(criterionGrades,{criterion_id: criterionId})
@@ -62,48 +89,31 @@
     }
     criterionGrades.push(criterionGrade)
 
+  updateCriterionGrade = (criterionId)->
+    criterionGrade = findCriterionGrade(criterionId)
+    return false unless criterionGrade
 
-  # remove custom value, replace with adjustment points
-  toggleCustomValue = ()->
-    grade.is_custom_value = !grade.is_custom_value
-  enableCustomValue = ()->
-    this.toggleCustomValue() if grade.is_custom_value == false
-  enableScoreLevels = (event)->
-    this.toggleCustomValue() if grade.is_custom_value == true
-
-
-  _updateGradeById = (id, returnURL=null)->
-    $http.put("/api/grades/#{id}", grade: grade).then(
-      (response) ->
-        grade.updated_at = new Date()
-        GradeCraftAPI.logResponse(response)
-        if returnURL
-          window.location = returnURL
-      ,(response) ->
-        GradeCraftAPI.logResponse(response)
-    )
-
-  # update all calls to go through queueUpdateGrade
-  updateGrade = (returnURL=null)->
     if _recipientType == "student"
-      _updateGradeById(grade.id, returnURL)
+      $http.put("/api/assignments/#{grade.assignment_id}/students/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          #TODO: Add id if it's a new CG
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
     else if _recipientType == "group"
-      _.each(grades, (g)->
-        if returnURL && g == _.last(grades)
-          _updateGradeById(g.id, returnURL)
-        else
-          _updateGradeById(g.id)
+      $http.put("/api/assignments/#{grade.assignment_id}/groups/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
       )
 
-  queueUpdateGrade = (immediate=false, returnURL=null) ->
-    if immediate is true
-      $timeout.cancel(self.updateTimeout)
-      updateGrade(returnURL)
-    else
-      $timeout.cancel(self.updateTimeout) if self.updateTimeout?
-      self.updateTimeout = $timeout(() ->
-        updateGrade(returnURL)
-      , 3500)
+  queueUpdateCriterionGrade = (criterionId, immediate=false) ->
+    # using criterionId for queue id since we are not assured to have a criterionGrade.id
+    DebounceQueue.addEvent("criterion_grades", criterionId, updateCriterionGrade, [criterionId], immediate)
+
+#------- Grade File Methods -------------------------------------------------------------------------------------------#
 
   postAttachments = (files)->
     fd = new FormData();
@@ -139,23 +149,35 @@
         GradeCraftAPI.logResponse(response)
     )
 
+
+  # remove custom value, replace with adjustment points
+  toggleCustomValue = ()->
+    grade.is_custom_value = !grade.is_custom_value
+  enableCustomValue = ()->
+    this.toggleCustomValue() if grade.is_custom_value == false
+  enableScoreLevels = (event)->
+    this.toggleCustomValue() if grade.is_custom_value == true
+
+
   return {
-    grade: grade,
-    fileUploads: fileUploads,
-    criterionGrades: criterionGrades,
-    gradeStatusOptions: gradeStatusOptions,
+    grade: grade
+    fileUploads: fileUploads
+    criterionGrades: criterionGrades
+    gradeStatusOptions: gradeStatusOptions
 
-    findCriterionGrade: findCriterionGrade,
-    addCriterionGrade: addCriterionGrade,
+    findCriterionGrade: findCriterionGrade
+    addCriterionGrade: addCriterionGrade
 
-    toggleCustomValue: toggleCustomValue,
-    enableCustomValue: enableCustomValue,
-    enableScoreLevels: enableScoreLevels,
+    toggleCustomValue: toggleCustomValue
+    enableCustomValue: enableCustomValue
+    enableScoreLevels: enableScoreLevels
 
-    getGrade: getGrade,
-    queueUpdateGrade: queueUpdateGrade,
-    updateGrade: updateGrade,
-    postAttachments: postAttachments,
+    getGrade: getGrade
+    queueUpdateGrade: queueUpdateGrade
+    queueUpdateCriterionGrade: queueUpdateCriterionGrade
+
+    updateGrade: updateGrade # remove
+    postAttachments: postAttachments
     deleteAttachment: deleteAttachment
   }
 ]
