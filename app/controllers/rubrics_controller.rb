@@ -1,5 +1,5 @@
 class RubricsController < ApplicationController
-  before_action :ensure_staff?
+  before_action :ensure_staff?, except: [:export]
 
   before_action :find_rubric, only: [:destroy, :update]
 
