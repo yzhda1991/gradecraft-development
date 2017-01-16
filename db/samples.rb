@@ -148,6 +148,21 @@ end
   config[:events] = {}
 end
 
+# ---------------------------- Create Observers! ------------------------------#
+
+puts "Generating observers..."
+
+User.create! do |u|
+  u.username = "moaning.myrtle"
+  u.first_name = "Myrtle"
+  u.last_name = "Warren"
+  u.email = "moaning.myrtle@hogwarts.edu"
+  u.password = "basilisk"
+  u.courses << @courses.map {|course_name,config| config[:course]}
+  u.display_name = "Moaning Myrtle"
+  u.save!
+end.activate!
+
 # ---------------------------- Create Students! ------------------------------#
 puts "Generating students..."
 
