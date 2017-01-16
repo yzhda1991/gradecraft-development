@@ -11,7 +11,7 @@
   = render partial: "grades/components/threshold", locals: { grade: grade }
 
 - if grade.assignment.pass_fail?
-  = render partial: "grades/components/pass_fail", locals: { presenter: Assignments::StudentPresenter.new(student: current_student, assignment_types: current_course.assignment_types.ordered.includes(:assignments), course: current_course ), assignment: grade.assignment }
+  = render partial: "grades/components/pass_fail", locals: { presenter: Assignments::StudentPresenter.new(student: grade.student, assignment_types: current_course.assignment_types.ordered.includes(:assignments), course: current_course ), assignment: grade.assignment }
 - else
   = render partial: "grades/components/score", locals: { grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
 
