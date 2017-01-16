@@ -25,12 +25,11 @@ class CourseMembership < ActiveRecord::Base
 
   after_save :check_unlockables
 
-  def self.create_course_membership_from_lti(student, course, auth_hash)
+  def self.create_or_update_from_lti(student, course, auth_hash)
     return false unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
-    course_membership = student.course_memberships.new(course: course)
+    course_membership = student.course_memberships.find_or_create_by(course_id: course.id)
 
     auth_hash["extra"]["raw_info"].tap do |extra|
-
       case extra["roles"].downcase
       when /instructor/
         course_membership.update(role: "professor")

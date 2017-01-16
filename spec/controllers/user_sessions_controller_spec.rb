@@ -38,7 +38,7 @@ describe UserSessionsController do
 
   describe "lti_create" do
     let(:user) { build_stubbed(:user) }
-    let(:course) { build_stubbed(:course) }
+    let(:course) { create(:course) }
 
     before do
       allow(subject).to receive(:auth_hash).and_return params
@@ -65,7 +65,7 @@ describe UserSessionsController do
     context "when the course membership creation fails" do
       let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
 
-      before(:each) { allow(CourseMembership).to receive(:create_course_membership_from_lti).and_return false }
+      before(:each) { allow(CourseMembership).to receive(:create_or_update_from_lti).and_return false }
 
       it "redirects to root" do
         expect(post :lti_create, params: params).to redirect_to root_path

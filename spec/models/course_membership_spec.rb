@@ -1,37 +1,65 @@
 require "active_record_spec_helper"
 
 describe CourseMembership do
-  describe ".create_course_membership_from_lti" do
+  describe ".create_or_update_from_lti" do
     let(:user) { build_stubbed(:user) }
-    let(:course) { build_stubbed(:course) }
+    let(:course) { create(:course) }
 
     context "when there is no context role" do
       let(:auth_hash) { { "extra" => { "raw_info" => { "roles" => "" }}} }
 
-      it "creates a new course membership" do
-        expect{ CourseMembership.create_course_membership_from_lti(user, course, auth_hash) }.to \
-          change { CourseMembership.count }.by(1)
+      context "when no prior course membership exists" do
+        it "update the existing course membership" do
+          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
+            change { CourseMembership.count }.by(1)
+        end
+
+        it "sets the default course membership role" do
+          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
+          course_membership = CourseMembership.unscoped.last
+          expect(course_membership.role).to eq "observer"
+        end
       end
 
-      it "sets the default course membership role" do
-        CourseMembership.create_course_membership_from_lti(user, course, auth_hash)
-        course_membership = CourseMembership.unscoped.last
-        expect(course_membership.role).to eq "observer"
+      context "when there is a prior course membership" do
+        let!(:course_membership) { create(:course_membership, user: user, course: course) }
+
+        it "does not create a new course membership" do
+          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
+            change(CourseMembership, :count)
+        end
       end
     end
 
     context "when there is a context role" do
       let(:auth_hash) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
 
-      it "creates a new course membership" do
-        expect{ CourseMembership.create_course_membership_from_lti(user, course, auth_hash) }.to \
-          change { CourseMembership.count }.by(1)
+      context "when no prior course membership exists" do
+        it "creates a new course membership" do
+          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
+            change { CourseMembership.count }.by(1)
+        end
+
+        it "sets the course membership role" do
+          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
+          course_membership = CourseMembership.unscoped.last
+          expect(course_membership.role).to eq "professor"
+        end
       end
 
-      it "sets the course membership role" do
-        CourseMembership.create_course_membership_from_lti(user, course, auth_hash)
-        course_membership = CourseMembership.unscoped.last
-        expect(course_membership.role).to eq "professor"
+      context "when there is a prior course membership" do
+        let!(:course_membership) { create(:course_membership, user: user, course: course) }
+
+        it "does not create a new course membership" do
+          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
+            change(CourseMembership, :count)
+        end
+
+        it "updates the course membership role" do
+          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
+          course_membership = CourseMembership.unscoped.last
+          expect(course_membership.role).to eq "professor"
+        end
       end
     end
 
@@ -39,7 +67,7 @@ describe CourseMembership do
       let(:auth_hash) { { "extra" => { "raw_info": nil }} }
 
       it "does not create a course membership" do
-        expect{ CourseMembership.create_course_membership_from_lti(user, course, auth_hash) }.to_not \
+        expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
           change(CourseMembership, :count)
       end
     end

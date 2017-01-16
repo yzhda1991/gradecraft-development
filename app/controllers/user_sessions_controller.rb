@@ -37,7 +37,7 @@ class UserSessionsController < ApplicationController
       return
     end
     # TODO: should we rollback user, course creation if the course membership cannot be created?
-    if CourseMembership.create_course_membership_from_lti(@user, @course, auth_hash)
+    if CourseMembership.create_or_update_from_lti(@user, @course, auth_hash)
       save_lti_context
       session[:course_id] = @course.id
       auto_login @user
