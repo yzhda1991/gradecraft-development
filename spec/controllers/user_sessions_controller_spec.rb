@@ -7,10 +7,23 @@ describe UserSessionsController do
 
   describe "POST create" do
     context "user is successfully logged in" do
+      before(:each) { allow(subject).to receive(:login) { student } }
+
       it "records the course login event" do
-        allow(subject).to receive(:login) { student }
         expect(subject).to receive(:record_course_login_event)
         post :create, params: { user: student.attributes }
+      end
+
+      it "redirects to dashboard if the current user is not an observer" do
+        allow(subject).to receive(:current_user_is_observer?).and_return false
+        expect(post :create, params: { user: student.attributes }).to redirect_to \
+          dashboard_path
+      end
+
+      it "redirects to assignments show page if the current user is an observer" do
+        allow(subject).to receive(:current_user_is_observer?).and_return true
+        expect(post :create, params: { user: student.attributes }).to redirect_to \
+          assignments_path
       end
     end
 
