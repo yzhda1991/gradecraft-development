@@ -1,0 +1,7 @@
+.mainContainer.student{role: "main"}
+  / Display errors and notifications
+  = render partial: "layouts/navigation/observer_profile_tabs", locals: {nav_class: 'sub-nav'}
+  .mainContent
+    .page-header
+      %h1.pagetitle= title
+    = render partial: "layouts/content"

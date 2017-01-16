@@ -8,12 +8,14 @@
       %ul.course-list
         = render partial: "layouts/navigation/course_list"
     .mobile-menu-content
-      - if current_user_is_student? || current_user_is_observer?
+      - if current_user_is_student?
         .search
           = render partial: "layouts/navigation/course_search"
         = render partial: "layouts/navigation/student_profile_tabs"
       - elsif current_user_is_staff?
         = render partial: "layouts/navigation/staff_subnav"
+      - elsif current_user_is_observer?
+        = render partial: "layouts/navigation/observer_profile_tabs"
       %hr
       - if presenter.has_info?
         %a.course-info-btn-mobile
