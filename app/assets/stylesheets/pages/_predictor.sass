@@ -293,6 +293,8 @@ $card-margin-1 : 3px
     margin: 0
   &.focus-article
     outline: 3px solid $color-blue-3
+    @media (max-width: $media-medium-max)
+      outline: none
 
 .predictor-article-title
   background-color: $color-blue-3
@@ -309,6 +311,8 @@ $card-margin-1 : 3px
     right: -3px
     font-size: $predictor-font-size-3
     cursor: pointer
+    @media (max-width: $media-medium-max)
+      display: none
 
 .predictor-article-title-stripe
   background-color: $color-blue-5
@@ -550,8 +554,6 @@ $card-margin-1 : 3px
   .predictor-article-card
     width: $card-width-1
     margin: $card-margin-1
-    .info-icon
-      display: none
   .collapse-arrow.doubled
     margin: 35px 0 0 0
 
