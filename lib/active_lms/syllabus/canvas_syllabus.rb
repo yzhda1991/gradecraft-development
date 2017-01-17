@@ -339,7 +339,8 @@ module ActiveLMS
       grades = []
       params = { assignment_ids: assignment_ids,
                  student_ids: "all",
-                 include: ["assignment", "course", "user"] }
+                 include: ["assignment", "course", "user"],
+                 per_page: 100 }
       client.get_data("/courses/#{course_id}/students/submissions", params) do |data|
         if grade_ids.nil?
           grades += data

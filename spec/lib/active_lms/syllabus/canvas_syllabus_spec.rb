@@ -133,6 +133,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
                        "include" => ["assignment", "course", "user"],
+                       "per_page" => 100,
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
     end
