@@ -1,4 +1,5 @@
 require "httparty"
+require "active_support/core_ext/hash"
 
 module Canvas
   class API
@@ -15,7 +16,7 @@ module Canvas
     def get_data(path="/", params={})
       params.merge! access_token: access_token
       next_url = "#{self.class.base_uri}#{path}"
-      next_url += "?#{URI.encode_www_form(params)}" unless params.empty?
+      next_url += "?#{params.to_query}" unless params.empty?
       while next_url
         # Do not add the original query parameters here since they are already
         # attached to the next url in the header
