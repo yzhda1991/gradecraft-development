@@ -15,8 +15,11 @@ module Canvas
     def get_data(path="/", params={})
       params.merge! access_token: access_token
       next_url = "#{self.class.base_uri}#{path}"
+      next_url += "?#{URI.encode_www_form(params)}" unless params.empty?
       while next_url
-        response = self.class.get(next_url, query: params)
+        # Do not add the original query parameters here since they are already
+        # attached to the next url in the header
+        response = self.class.get(next_url, query: { access_token: access_token })
         raise ResponseError.new(response) unless response.success?
         yield response.parsed_response if block_given?
         next_url = get_next_url response
