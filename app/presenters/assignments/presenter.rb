@@ -173,7 +173,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def submission_for_assignment(student)
-    student.submission_for_assignment(assignment)
+    student.submission_for_assignment(assignment, false)
   end
 
   def submissions_for(student)

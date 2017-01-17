@@ -314,11 +314,12 @@ class User < ActiveRecord::Base
 
   ### SUBMISSIONS
 
-  def submission_for_assignment(assignment)
+  def submission_for_assignment(assignment, submitted_only=true)
     if self.has_group_for_assignment?(assignment)
-      self.group_for_assignment(assignment).submission_for_assignment(assignment)
+      self.group_for_assignment(assignment).submission_for_assignment(assignment, submitted_only)
     else
-      submissions.where(assignment_id: assignment.id).try(:first)
+      user_submissions = submitted_only ? submissions.submitted : submissions
+      user_submissions.where(assignment_id: assignment.id).try(:first)
     end
   end
 
