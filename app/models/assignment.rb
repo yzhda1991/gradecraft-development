@@ -109,7 +109,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def has_submitted_submissions?
-    submissions.reject(&:draft?).any?
+    submissions.reject(&:unsubmitted?).any?
   end
 
   # Custom point total if the class has weighted assignments

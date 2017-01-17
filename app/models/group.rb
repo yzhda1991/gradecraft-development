@@ -63,7 +63,7 @@ class Group < ActiveRecord::Base
     if submissions.nil?
       nil
     else
-      submitted_only ? submissions.reject(&:draft?).try(:first) : submissions.try(:first)
+      submitted_only ? submissions.reject(&:unsubmitted?).try(:first) : submissions.try(:first)
     end
   end
 

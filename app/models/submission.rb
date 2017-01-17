@@ -159,7 +159,7 @@ class Submission < ActiveRecord::Base
     end
   end
 
-  def draft?
+  def unsubmitted?
     submitted_at.nil?
   end
 

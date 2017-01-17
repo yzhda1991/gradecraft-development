@@ -7,7 +7,7 @@ class SubmissionProctor
   # Otherwise, it should only be visible if it is not a draft
   def viewable?(user)
     return @submission.belongs_to?(user) if user.is_student?(@submission.course)
-    !@submission.draft?
+    !@submission.unsubmitted?
   end
 
   def viewable_submission(user)
