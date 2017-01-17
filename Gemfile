@@ -59,7 +59,7 @@ gem 'oj'
 gem 'omniauth', '~> 1.3.1'
 gem 'omniauth-canvas'
 gem 'omniauth-kerberos'
-gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch: 'master'
+gem 'omniauth-lti', '~> 0.0.2'
 
 gem 'pacecar'
 gem 'paper_trail'

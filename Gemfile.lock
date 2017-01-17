@@ -9,13 +9,6 @@ GIT
       rspec-expectations (>= 3.0.0)
       rspec-mocks (>= 3.0.0)
 
-GIT
-  remote: https://github.com/venturit/omniauth-lti.git
-  revision: 8ef2d2bceb104fc9207a298e744926793fd0e8ac
-  branch: master
-  specs:
-    omniauth-lti (0.0.2.pre.SANPSHOT)
-
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -395,6 +388,9 @@ GEM
     omniauth-kerberos (0.3.0)
       omniauth-multipassword
       timfel-krb5-auth (~> 0.8)
+    omniauth-lti (0.0.2)
+      ims-lti
+      omniauth
     omniauth-multipassword (0.4.2)
       omniauth (~> 1.0)
     omniauth-oauth2 (1.4.0)
@@ -676,7 +672,7 @@ DEPENDENCIES
   omniauth (~> 1.3.1)
   omniauth-canvas
   omniauth-kerberos
-  omniauth-lti!
+  omniauth-lti (~> 0.0.2)
   pacecar
   paper_trail
   pg
@@ -730,4 +726,4 @@ RUBY VERSION
    ruby 2.2.2p95
 
 BUNDLED WITH
-   1.12.5
+   1.13.7
