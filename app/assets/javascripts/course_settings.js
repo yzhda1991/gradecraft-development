@@ -37,6 +37,7 @@ $('input.has-settings-menu').each(function() {
 function formDependencies() {
   var $dependentOnSection = $('.dependent-on-section');
   var $card = $dependentOnSection.parent().parent();
+  var $cardHeader = $dependentOnSection.parent();
   var $sectionsCheckbox = $('input[id="course_has_teams"]');
 
   if($sectionsCheckbox.is(":checked")) {
@@ -45,6 +46,8 @@ function formDependencies() {
   } else {
     $dependentOnSection.prop("disabled", true);
     $card.addClass("disabled");
+    $cardHeader.removeClass("enabled");
+    $dependentOnSection.prop("checked", false)
   }
 }
 
