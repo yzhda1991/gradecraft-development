@@ -11,6 +11,16 @@
   _recipientType = ""
   _recipientId = ""
 
+  calculateRawPoints = ()->
+    return grade.raw_points unless isRubricGraded
+    grade.raw_points = _.sum(_.map(criterionGrades, "points"))
+
+  _verifyRawPoints = ()->
+    console.log("verifying...");
+    oldVal = grade.raw_points
+    calculateRawPoints()
+    console.warn("Raw score was not aligned to Rubric: ", oldVal, grade.raw_points) if oldVal != grade.raw_points
+
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
     _recipientId = recipientId
@@ -23,6 +33,7 @@
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
           isRubricGraded = response.data.meta.is_rubric_graded
+          _verifyRawPoints() if isRubricGraded
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -70,6 +81,7 @@
   queueUpdateGrade = (immediate=false, returnURL=null) ->
     DebounceQueue.addEvent("grades", grade.id, updateGrade, [returnURL], immediate)
 
+
 #------- Criterion Grade Methods for Rubric Grading -------------------------------------------------------------------#
 
   findCriterionGrade = (criterionId)->
@@ -88,6 +100,12 @@
       "comments": null
     }
     criterionGrades.push(criterionGrade)
+
+  setCriterionGradeLevel = (criterionId, level)->
+    criterionGrade = findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
+    criterionGrade.level_id = level.id
+    criterionGrade.points = level.points
+    calculateRawPoints()
 
   updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
@@ -165,6 +183,7 @@
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
 
+    setCriterionGradeLevel: setCriterionGradeLevel
     findCriterionGrade: findCriterionGrade
     addCriterionGrade: addCriterionGrade
 
@@ -179,5 +198,6 @@
     updateGrade: updateGrade # remove
     postAttachments: postAttachments
     deleteAttachment: deleteAttachment
+
   }
 ]

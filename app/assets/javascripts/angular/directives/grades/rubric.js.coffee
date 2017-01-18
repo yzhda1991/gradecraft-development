@@ -20,9 +20,7 @@
         GradeService.queueUpdateCriterionGrade(criterion.id, immediate)
 
       scope.selectLevel = (criterion, level)->
-        criterionGrade = scope.gradeForCriterion(criterion.id)
-        criterionGrade.level_id = level.id
-        # TODO, level is not persisting
+        GradeService.setCriterionGradeLevel(criterion.id, level)
         GradeService.queueUpdateCriterionGrade(criterion.id)
 
       scope.LevelIsSelected = (criterion,level)->
