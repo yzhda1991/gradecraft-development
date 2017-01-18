@@ -16,12 +16,12 @@ $('.button-close').on('click',function(){
 // Disable settings menu button if form card feature is not checked
 function disableSettingsButton($thisInput) {
   var $thisSettingsBtn = $thisInput.closest('.form-card').find('.button-advanced-settings');
-  
+
   if ($thisInput.is(':checked')) {
     $thisSettingsBtn.prop('disabled', false);
   } else {
     $thisSettingsBtn.prop('disabled', true);
-  }  
+  }
 }
 
 $('input.has-settings-menu').change(function() {
@@ -37,6 +37,8 @@ $('input.has-settings-menu').each(function() {
 function formDependencies() {
   var $dependentOnSection = $('.dependent-on-section');
   var $card = $dependentOnSection.parent().parent();
+  var $cardHeader = $dependentOnSection.parent();
+  var $thisSettingsBtn = $card.find('.button-advanced-settings');
   var $sectionsCheckbox = $('input[id="course_has_teams"]');
 
   if($sectionsCheckbox.is(":checked")) {
@@ -45,6 +47,9 @@ function formDependencies() {
   } else {
     $dependentOnSection.prop("disabled", true);
     $card.addClass("disabled");
+    $cardHeader.removeClass("enabled");
+    $thisSettingsBtn.prop('disabled', true);
+    $dependentOnSection.prop("checked", false)
   }
 }
 
