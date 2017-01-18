@@ -68,7 +68,7 @@ module Analytics::Aggregate
 
     def incr(event)
       decorated_event = decorate_event(event)
-      self.aggregate_scope(event).find_and_modify({"$inc" => upsert_hash(decorated_event)}, {"upsert" => "true", new: true})
+      self.aggregate_scope(event).find_one_and_update({"$inc" => upsert_hash(decorated_event)}, { upsert: true, new: true})
     end
 
     def aggregate_scope(event)
@@ -107,7 +107,7 @@ module Analytics::Aggregate
       scope = self.aggregate_scope(event)
       # STDOUT.puts "  Decrementing #{self.name} #{scope.selector}"
 
-      record = scope.find_and_modify({ "$inc" => hash }, { new: true })
+      record = scope.find_one_and_update({ "$inc" => hash }, { new: true })
 
       # Then, remove if values empty (this is the opposite of the 'upsert' => 'true' in the #incr method)
       unset_keys = {}
