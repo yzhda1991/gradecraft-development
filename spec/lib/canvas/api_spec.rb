@@ -63,24 +63,27 @@ describe Canvas::API, type: :disable_external_api do
 
     it "automatically traverses the pages" do
       links = <<-LINKS
-      <https://canvas.instructure.com/api/v1/courses?page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?page=2&per_page=10>; rel="next"
+      <https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=2&per_page=10>; rel="next"
       LINKS
       headers = { "Link" => links }
 
       body1 = { name: "This is a course on page 1" }
-      first_stub = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
-        .with(query: { "access_token" => access_token })
+      first_request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
+        .with(query: { "enrollment_type" => "student", "access_token" => access_token })
         .to_return(status: 200, body: body1.to_json, headers: headers)
 
       body2 = { name: "This is a course on page 2" }
-      first_stub = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
-        .with(query: { "page" => "2", "per_page" => "10", "access_token" => access_token })
+      second_request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
+        .with(query: { "page" => "2", "per_page" => "10", "enrollment_type" => "student",
+                       "access_token" => access_token })
         .to_return(status: 200, body: body2.to_json, headers: {})
 
       result = []
-      subject.get_data("/courses") { |course| result << course }
+      subject.get_data("/courses", enrollment_type: :student) { |course| result << course }
 
       expect(result.count).to eq 2
+      expect(first_request).to have_been_made
+      expect(second_request).to have_been_made
     end
   end
 
