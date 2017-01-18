@@ -1,19 +1,23 @@
 @gradecraft.directive 'smartNumber', ['$filter', ($filter) ->
   return {
+    scope: {
+      allowNegatives: "="
+    }
     require: 'ngModel',
     link: (scope, element, attrs, modelCtrl)->
       modelCtrl.$parsers.push((inputValue)->
-        transformedInput = inputValue.replace(/[^\d-]/g, '')
-          .replace(/^0{2,}$/g, '0')
-          .replace(/^(-?)0([-\d])/g, '$1$2')
+        inputValue = inputValue.replace(/-/g, '') unless scope.allowNegatives
+        inputValue = inputValue.replace(/[^\d-]/g, '')
+          .replace(/^(-)0/g, '$1')
 
-        if transformedInput == '-'
+        if inputValue == '-'
           modelCtrl.$setViewValue('-')
+          inputValue = 0
         else
-          modelCtrl.$setViewValue($filter('number')(transformedInput))
+          modelCtrl.$setViewValue($filter('number')(inputValue))
 
         modelCtrl.$render()
-        return parseInt(transformedInput)
+        return parseInt(inputValue)
       )
 
       modelCtrl.$formatters.push((inputValue)->
