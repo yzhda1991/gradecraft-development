@@ -1,9 +1,10 @@
-.columns.panel
-  %span.columns
-    = f.input :name, :label => "Level Name"
-  %span.columns
-    = f.label :points, "Points Awarded"
-    = f.text_field :points, data: {autonumeric: true, "m-dec" => "0"}
-  %span.columns
+.score-level-container
+  .level-form-container
+    .level-name-form.score-level-form
+      = f.input :name, :label => "Level Name"
+    .points-awarded-form.score-level-form
+      = f.label :points, "Points Awarded"
+      = f.text_field :points, data: {autonumeric: true, "m-dec" => "0"}
+  .btn-container
     = f.hidden_field :_destroy, class: "destroy"
-    = link_to "Remove Level", '#', class: "remove-challenge-score-level button radius right"
+    %button.button.remove-challenge-score-level{role: "button", type: "button"} Remove Level
