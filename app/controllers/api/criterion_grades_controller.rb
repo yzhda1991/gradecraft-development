@@ -64,13 +64,12 @@ class API::CriterionGradesController < ApplicationController
 
   # PUT api/assignments/:assignment_id/students/:student_id/criteria/:id/update_fields
   def update_fields
-    cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
-    result = cg.update_attributes(criterion_grade_params)
+    @criterion_grade = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
+    result = @criterion_grade.update_attributes(criterion_grade_params)
     if result
-      render json: {
-        message: 'Criterion grade successfully updated', success: true,
-        status: 200
-      }
+      # TODO run GradeUpdaterJob.new(grade_id: @criterion_grade.grade_id) or similar if points changed?
+      render "api/criterion_grades/show", success: true,
+      status: 200
     else
       render json: {
         errors: result.errors, success: false
@@ -101,6 +100,6 @@ class API::CriterionGradesController < ApplicationController
   private
 
   def criterion_grade_params
-    params.require(:criterion_grade).permit(:comments, :level_id, :points)
+    params.require(:criterion_grade).permit(:comments, :level_id, :grade_id, :points)
   end
 end

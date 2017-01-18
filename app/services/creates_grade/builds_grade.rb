@@ -2,7 +2,7 @@ module Services
   module Actions
     class BuildsGrade
       extend LightService::Action
-      
+
       expects :attributes, :student, :assignment, :graded_by_id
       promises :grade
 
@@ -21,6 +21,14 @@ module Services
       # Updates the given attributes on the grade
       # Ideally this will be replaced by grade.assign_attributes context[:attributes]["grade"]
       # once we have identified and permitted inputs from all consumers of this service with strong params
+
+      # From Grade Form:
+      # adjustment_points
+      # adjustment_points_feedback
+      # feedback
+      # raw_points -> recalculate from criterion grades?
+      # status
+
       def self.update_grade_attributes(grade, attributes)
         attributes.each_pair do |key, value|
           method = "#{key}="
