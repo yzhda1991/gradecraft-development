@@ -52,10 +52,11 @@ class API::GradesController < ApplicationController
         },
         status: 400
     else
-      students = Group.find(params[:group_id]).students
-      @student_ids = students.pluck(:id)
-      @grades =
-        Grade.find_or_create_grades(params[:assignment_id], @student_ids)
+      @student_ids = Group.find(params[:group_id]).students.pluck(:id)
+      @assignment = Assignment.find(params[:assignment_id])
+      @grades = Grade.find_or_create_grades(@assignment.id, @student_ids)
+      # add file uploads here when group grades have file uploads
+      # add criterion grades
       if assignment.release_necessary?
         @grade_status_options = Grade::STATUSES
       else

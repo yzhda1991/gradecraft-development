@@ -17,7 +17,7 @@
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
     grade.final_points = grade.raw_points + grade.adjustment_points
     grade.final_points = 0 if grade.final_points < thresholdPoints
-    console.log("raw:", grade.raw_points, "final", grade.final_points);
+    console.log("raw:", grade.raw_points, "adjustment:", grade.adjustment_points, "final:", grade.final_points);
 
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
@@ -79,6 +79,7 @@
       )
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
+    calculatePoints()
     DebounceQueue.addEvent("grades", grade.id, updateGrade, [returnURL], immediate)
 
 
