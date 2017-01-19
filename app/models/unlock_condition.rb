@@ -193,6 +193,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_passed_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
+    return false unless grade.present?
     grade.pass_fail_status == "Pass"
   end
 
