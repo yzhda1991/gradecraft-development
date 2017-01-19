@@ -17,8 +17,8 @@
               .level-points
                 {{level.points | number:0}} Points
             %ul.badge-row.design-view
-              %li.level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
-                %img(ng-src="{{levelBadge.badge.icon}}")
+              %li.level-badge-image(ng-repeat="badge in badgesForLevel(level)")
+                %img(ng-src="{{badge.icon}}" alt="{{badge.name}}")
 
           .level-description
             .level-meets-expectations(ng-show="levelMeetExpectations(criterion, level)") Meets Expectations
