@@ -1,32 +1,23 @@
 .pageContent
-  .grading-scheme-bars
-    = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
-    - @grade_scheme_elements.each do |element|
-      - if current_user.score_for_course(current_course) < element.lowest_points || (current_user.score_for_course(current_course) >= element.lowest_points && ! element.is_unlocked_for_student?(current_user))
-        .progress.bar_magic.center
-          .meter
-            %i.fa.fa-lock
-            %span= element.name
-            %span= points element.lowest_points
+  / Grade Scheme Elements Table Display
+  %table{"aria-describedby" => "tableCaption"}
+    %thead
+      %tr
+        %th{scope: "col"} Grade
+        %th{scope: "col"} Level
+        %th{scope: "col"} Point Threshold
+        %th{scope: "col"} Locked?
+    %tbody
+      - @grade_scheme_elements.each do |element|
+        %tr
+          %td= element.letter
+          %td= element.level
+          %td{data: { :"sort-value" => "#{element.lowest_points}" }}= points element.lowest_points
+          %td
             - if element.unlock_conditions.present?
-              = render partial: "unlock_icons", locals: { student: current_user, gse: element }
-      - elsif current_user.score_for_course(current_course) >= element.highest_points && element.is_unlocked_for_student?(current_user)
-        .progress.bar_magic.success.center
-          .meter
-            %i.fa.fa-star
-            %span= element.name
-            %span has already been achieved!
-            %span=points element.lowest_points
-      - else
-        .progress.bar_magic.current.center
-          %span.your-rank Your rank:
-          %span.your-rank= element.name
-          .striped-bar-container
-            .striped{:style => "width: #{element.progress_percent(current_user)}%;"}
-          .left.left-points
-            %span Your Points:
-            %span.bold=points current_user.score_for_course(current_course)
-          .right.right-points
-            %span Points to next level:
-            %span.bold= points element.points_to_next_level(current_user, current_course)
+              - element.unlock_conditions.each do |uc|
+                .condition= glyph(:lock) + uc.requirements_description_sentence
+
+  = render partial: "courses/grading_philosophy", locals: { course: current_course }
