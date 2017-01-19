@@ -123,24 +123,6 @@ class Assignment < ActiveRecord::Base
     future? && due_at < 7.days.from_now
   end
 
-  # helper methods for finding #student_submissions
-  def student_submissions
-    Submission
-      .includes(:submission_files)
-      .includes(:student)
-      .where(assignment_id: self[:id])
-      .to_a # eager-load
-  end
-
-  def student_submissions_for_team(team)
-    Submission
-      .includes(:submission_files)
-      .includes(:student)
-      .where(assignment_id: self[:id])
-      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
-      .to_a # eager-load
-  end
-
   def student_submissions_with_files
     Submission
       .includes(:submission_files)
