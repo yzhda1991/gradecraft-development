@@ -162,9 +162,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
         allow(performer.assignment)
           .to receive(:student_submissions_with_files_for_team).with(team)
-          .and_return ["some-submissions"]
+          .and_return submissions
 
-        expect(fetch_submissions).to eq ["some-submissions"]
+        expect(fetch_submissions).to eq submissions
       end
     end
 
