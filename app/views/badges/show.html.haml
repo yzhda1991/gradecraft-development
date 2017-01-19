@@ -1,4 +1,6 @@
 - if current_user_is_staff?
   = render partial: "show_staff", locals: { presenter: presenter }
-- else
+- elsif current_user_is_student?
   = render partial: "show_student", locals: { presenter: presenter }
+- else
+  = render partial: "show_observer", locals: { presenter: presenter }
