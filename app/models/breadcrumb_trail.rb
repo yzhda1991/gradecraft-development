@@ -421,6 +421,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     teams_index
     breadcrumb('New #{ term_for :team }')
   end
+  
+  def users_activate
+  end
 
   def user_sessions_new
     dashboard
