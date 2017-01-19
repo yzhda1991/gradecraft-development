@@ -3,7 +3,7 @@ include SessionHelper
 
 describe API::PredictedEarnedChallengesController do
   let(:course) { create :course}
-  let(:student)  { create(:student_course_membership, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:team) { create :team }
   let(:challenge) { create(:challenge) }
   let(:params) {{ challenge_id: challenge.id, predicted_points: (challenge.full_points * 0.75).to_i }}

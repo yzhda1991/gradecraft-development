@@ -9,10 +9,8 @@ describe UsersController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
-      @student = create(:user)
-      @student.courses << @course
+      @professor = create(:user, courses: [@course], role: :professor)
+      @student = create(:user, courses: [@course], role: :student)
     end
     before(:each) { login_user(@professor) }
 
@@ -174,8 +172,7 @@ describe UsersController do
 
   context "as a student" do
     before do
-      @student = create(:user)
-      @student.courses << @course
+      @student = create(:user, courses: [@course], role: :student)
       login_user(@student)
     end
 

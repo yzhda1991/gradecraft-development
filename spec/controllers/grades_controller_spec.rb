@@ -5,7 +5,7 @@ describe GradesController do
   include PredictorEventJobsToolkit
 
   let(:course) { create :course }
-  let(:student) { create(:student_course_membership, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create :assignment, course: course }
   let(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
 
@@ -14,7 +14,7 @@ describe GradesController do
   end
 
   context "as professor" do
-    let(:professor) { create(:professor_course_membership, course: course).user }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
 
     before do
       login_user(professor)
@@ -102,7 +102,7 @@ describe GradesController do
 
       context "when grading a series of students" do
         let!(:next_student) do
-          create(:student_course_membership, course: course,
+          create(:course_membership, :student, course: course,
             user: create(:user, last_name: "Zzz")).user
         end
 
@@ -276,6 +276,22 @@ describe GradesController do
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
         end
+      end
+    end
+  end
+
+  context "as an observer" do
+    let(:observer) { create(:user, courses: [course], role: :observer) }
+
+    before do
+      login_user(observer)
+      allow(controller).to receive(:current_student).and_return(observer)
+    end
+
+    describe "GET show" do
+      it "redirects to the assignment show page" do
+        expect(get :show, params: { id: grade.id }).to \
+          redirect_to(assignment_path(assignment))
       end
     end
   end

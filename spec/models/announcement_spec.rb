@@ -65,8 +65,7 @@ describe Announcement do
     subject { create :announcement, course: course }
 
     before(:each) do
-      CourseMembership.create! course_id: course.id,
-        user_id: student.id, role: "student"
+      create(:course_membership, :student, course_id: course.id, user_id: student.id)
     end
 
     it "sends an email to all the users in the course" do
@@ -100,8 +99,7 @@ describe Announcement do
   describe "#unread_count" do
     it "is the number of students for the course who have not read the announcement" do
       announcement = create :announcement
-      CourseMembership.create course_id: announcement.course.id,
-        user_id: announcement.author.id, role: "student"
+      create(:course_membership, :student, course_id: announcement.course.id, user_id: announcement.author.id)
       expect(announcement.unread_count).to eq 1
     end
 
@@ -129,8 +127,7 @@ describe Announcement do
     subject { create :announcement }
 
     it "returns the number of read announcements for a specific student and course" do
-      CourseMembership.create course_id: subject.course.id,
-        user_id: subject.author.id, role: "student"
+      create(:course_membership, :student, course_id: subject.course.id, user_id: subject.author.id)
       create :announcement_state, announcement: subject, user: subject.author
       expect(Announcement.read_count_for(subject.author, subject.course)).to eq 1
     end
@@ -153,8 +150,7 @@ describe Announcement do
     subject { create :announcement }
 
     it "returns the number of unread announcements for a specific student and course" do
-      CourseMembership.create  course_id: subject.course.id,
-        user_id: subject.author.id, role: "student"
+      create(:course_membership, :student, course_id: subject.course.id, user_id: subject.author.id)
       expect(Announcement.unread_count_for(subject.author, subject.course)).to eq 1
     end
 
@@ -173,8 +169,7 @@ describe Announcement do
     subject { create :announcement }
 
     it "marks the announcement as read by the specific student" do
-      CourseMembership.create  course_id: subject.course.id,
-        user_id: user.id, role: "student"
+      create(:course_membership, :student, course_id: subject.course.id, user_id: user.id)
       subject.mark_as_read! user
       states = AnnouncementState.where(announcement_id: subject.id,
                                                user_id: user.id,
@@ -183,8 +178,7 @@ describe Announcement do
     end
 
     it "marks as read if the user is not a student" do
-      CourseMembership.create course_id: subject.course.id,
-        user_id: user.id, role: "professor"
+      create(:course_membership, :professor, course_id: subject.course.id, user_id: user.id)
       subject.mark_as_read! user
       states = AnnouncementState.where(announcement_id: subject.id,
                                                user_id: user.id,
@@ -194,15 +188,13 @@ describe Announcement do
 
     it "does not mark as read if the user is not part of the course" do
       new_course = create :course
-      CourseMembership.create course_id: new_course.id,
-        user_id: user.id, role: "student"
+      create(:course_membership, :student, course_id: new_course.id, user_id: user.id)
       subject.mark_as_read! user
       expect(subject.states).to be_empty
     end
 
     it "does not mark as read again if the user already has read it" do
-      CourseMembership.create course_id: subject.course.id,
-        user_id: user.id, role: "student"
+      create(:course_membership, :student, course_id: subject.course.id, user_id: user.id)
       2.times { subject.mark_as_read! user }
       states = AnnouncementState.where(announcement_id: subject.id,
                                                user_id: user.id,

@@ -1,0 +1,12 @@
+%ul{class: ("#{nav_class}" if local_assigns[:nav_class])}
+  %h5 Navigation
+  %li{class: ("active" if current_page?(assignments_path)) }
+    = link_to_unless_current "#{term_for :assignments}", assignments_path
+  - if current_course.grade_scheme_elements.present?
+    %li{class: ("active" if current_page?(grade_scheme_elements_path)) }
+      = link_to_unless_current "Grading Scheme", grade_scheme_elements_path
+  %li{class: ("active" if current_page?(predictor_path)) }
+    = link_to_unless_current "Grade Predictor", predictor_path
+  - if current_course.has_badges?
+    %li{class: ("active" if current_page?(badges_path)) }
+      = link_to_unless_current "#{term_for :badges}", badges_path

@@ -281,6 +281,8 @@ Rails.application.routes.draw do
 
   resources :staff, only: [:index, :show]
 
+  resources :observers, only: :index
+
   #15. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "/auth/:provider/callback", to: "authorizations#create"

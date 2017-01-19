@@ -1,14 +1,14 @@
 require "active_record_spec_helper"
 
 describe GradeSchemeElement do
-  
+
   let(:student) { create :user }
   let(:course) { create :course}
 
   subject { create(:grade_scheme_element, course: course) }
 
   before do
-    create(:course_membership, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id )
+    create(:course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id )
   end
 
   context "validations" do
@@ -118,9 +118,9 @@ describe GradeSchemeElement do
       expect(subject).to_not be_within_range 2000
     end
   end
-  
-  describe "#count_students_earned" do 
-    it "returns the number of students who have earned this grade scheme element" do 
+
+  describe "#count_students_earned" do
+    it "returns the number of students who have earned this grade scheme element" do
       expect(subject.count_students_earned).to eq(1)
     end
   end

@@ -195,7 +195,7 @@ describe LoginEventPerformer do
       end
 
       context "data[:created_at] exists" do
-        let(:course_membership) { create(:course_membership) }
+        let(:course_membership) { create(:course_membership, :student) }
 
         it "updates the course membership :last_login_at time" do
           subject.data[:created_at] = login_time
@@ -222,7 +222,7 @@ describe LoginEventPerformer do
     end
 
     context "all course membership attributes are present" do
-      let(:course_membership) { create(:course_membership) }
+      let(:course_membership) { create(:course_membership, :student) }
       let(:course_membership_attrs) do
         { user_id: course_membership.user_id,
           course_id: course_membership.course_id }

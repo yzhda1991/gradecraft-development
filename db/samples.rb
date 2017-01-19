@@ -148,6 +148,21 @@ end
   config[:events] = {}
 end
 
+# ---------------------------- Create Observers! ------------------------------#
+
+puts "Generating observers..."
+
+User.create! do |u|
+  u.username = "moaning.myrtle"
+  u.first_name = "Myrtle"
+  u.last_name = "Warren"
+  u.email = "moaning.myrtle@hogwarts.edu"
+  u.password = "basilisk"
+  u.courses << @courses.map {|course_name,config| config[:course]}
+  u.display_name = "Moaning Myrtle"
+  u.save!
+end.activate!
+
 # ---------------------------- Create Students! ------------------------------#
 puts "Generating students..."
 
@@ -166,6 +181,7 @@ puts "Generating students..."
     u.courses << courses
     u.display_name = pseuydonyms.sample
   end
+  user.course_memberships.each { |cm| cm.update_attributes(role: "student") }
   user.teams << teams
   user.activate!
   print "."

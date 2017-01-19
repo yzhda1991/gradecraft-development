@@ -19,7 +19,7 @@ describe LMSHelper do
       end
 
       context "the user belongs to the course" do
-        let!(:membership) { create :student_course_membership, user: student, course: course }
+        let!(:membership) { create :course_membership, :student, user: student, course: course }
 
         it "returns true if the user exists and belongs to the course" do
           expect(helper.lms_user_match?(email, course)).to eq true

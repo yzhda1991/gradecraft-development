@@ -6,12 +6,12 @@ module Toolkits
         def define_context
           # public methods
           let(:course) { create(:course) }
-          let(:professor_course_membership) { create(:professor_course_membership, course: course) }
+          let(:professor_course_membership) { create(:course_membership, :professor, course: course) }
           let(:professor) { professor_course_membership.user }
           let(:assignment) { create(:assignment, course: course) }
           let(:team) { create(:team) }
-          let(:student_course_membership1) { create(:student_course_membership, course: course) }
-          let(:student_course_membership2) { create(:student_course_membership, course: course) }
+          let(:student_course_membership1) { create(:course_membership, :student, course: course) }
+          let(:student_course_membership2) { create(:course_membership, :student, course: course) }
           let(:team_membership1) { create(:team_membership, student: student1, team: team) }
           let(:team_membership2) { create(:team_membership, student: student2, team: team) }
           let(:cache_team_memberships) { team_membership1; team_membership2 }

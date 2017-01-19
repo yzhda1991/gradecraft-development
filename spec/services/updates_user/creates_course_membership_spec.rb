@@ -24,8 +24,7 @@ describe Services::Actions::CreatesCourseMembership do
   end
 
   it "does not create the course membership if it already exists" do
-    CourseMembership.create user: user, course: course, role: :professor
-
+    create(:course_membership, :professor, course: course, user: user)
     described_class.execute course: course, user: user
     expect(CourseMembership.where(course: course, user: user).count).to eq 1
   end

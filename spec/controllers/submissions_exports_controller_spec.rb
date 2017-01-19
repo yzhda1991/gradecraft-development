@@ -8,7 +8,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   let(:submissions_exports) { create_list(:submissions_export, 2, course: course, assignment: assignment, s3_object_key: "some thing") }
   let(:submissions_export) { create(:submissions_export, course: course, assignment: assignment, s3_object_key: "some thing") }
   let(:assignment) { create(:assignment) }
-  let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:group) { double :group, id: 30 }
 
   before do

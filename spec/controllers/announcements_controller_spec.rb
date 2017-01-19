@@ -4,8 +4,7 @@ describe AnnouncementsController do
   context "as a student" do
     before(:all) do
       @course = create :course
-      @student = create :user
-      CourseMembership.create(course: @course, user: @student, role: "student")
+      @student = create :user, courses: [@course], role: :student
     end
     before(:each) do
       session[:course_id] = @course.id
@@ -38,8 +37,7 @@ describe AnnouncementsController do
   context "as a professor" do
     before(:all) do
       @course = create :course
-      @professor = create :user
-      CourseMembership.create course: @course, user: @professor, role: "professor"
+      @professor = create :user, courses: [@course], role: :professor
     end
 
     before(:each) do
@@ -84,9 +82,7 @@ describe AnnouncementsController do
         end
 
         it "sends out the announcement to all the students in the course" do
-          student = create :user
-          CourseMembership.create! course_id: @course.id,
-            user_id: student.id, role: "student"
+          student = create :user, courses: [@course], role: :student
           expect {
             post :create, params: { announcement: { title: "New Tour", body: body }}
           }.to change  { ActionMailer::Base.deliveries.count }.by 2

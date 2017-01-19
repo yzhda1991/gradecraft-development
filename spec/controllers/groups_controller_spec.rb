@@ -4,12 +4,9 @@ describe GroupsController do
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
-    @student = create(:user)
-    @student.courses << @course
-    @student_2 = create(:user)
-    @student_2.courses << @course
-    @student_3 = create(:user)
-    @student_3.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
+    @student_2 = create(:user, courses: [@course], role: :student)
+    @student_3 = create(:user, courses: [@course], role: :student)
   end
   before(:each) do
     session[:course_id] = @course.id
@@ -18,8 +15,7 @@ describe GroupsController do
 
   context "as professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
     before do
       @group = create(:group, course: @course)

@@ -1,5 +1,5 @@
 class Role
-  ROLES = %w(student professor gsi admin) unless defined? ROLES
+  ROLES = %w(student professor gsi admin observer) unless defined? ROLES
 
   def self.all
     ROLES.freeze

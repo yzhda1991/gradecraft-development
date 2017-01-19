@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "removing a course membership" do
   context "as an administrator" do
-    let!(:admin_course_membership) { create :admin_course_membership, course: course, user: admin }
+    let!(:admin_course_membership) { create :course_membership, :admin, course: course, user: admin }
     let(:admin) { create :user }
     let(:course) { create :course }
 
@@ -11,7 +11,7 @@ feature "removing a course membership" do
     context "by editing a student" do
       let!(:grade) { create :grade, student: student, course: course }
       let(:student) { create :user }
-      let!(:student_course_membership) { create :student_course_membership, course: course, user: student }
+      let!(:student_course_membership) { create :course_membership, :student, course: course, user: student }
 
       before(:each) { visit edit_user_path(student) }
 

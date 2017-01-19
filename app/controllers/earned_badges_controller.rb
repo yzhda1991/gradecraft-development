@@ -5,6 +5,7 @@ class EarnedBadgesController < ApplicationController
   # how what and how a student performed
 
   skip_before_action :require_login, only: [:confirm_earned]
+  before_action :ensure_not_observer?
   before_action :ensure_staff?, except: [:confirm_earned, :new, :create]
   before_action :find_badge, except: [:confirm_earned]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]

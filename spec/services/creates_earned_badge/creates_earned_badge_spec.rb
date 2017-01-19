@@ -5,9 +5,9 @@ require "./app/services/creates_earned_badge/creates_earned_badge"
 describe Services::Actions::CreatesEarnedBadge do
   let(:course) { create :course }
   let(:badge) { create :badge }
-  let(:student) { create(:student_course_membership, course: course).user}
+  let(:student) { create(:course_membership, :student, course: course).user}
   let(:grade) { create :grade, course: course, student: student }
-  let(:professor) { create(:professor_course_membership, course: course).user}
+  let(:professor) { create(:course_membership, :professor, course: course).user}
   let(:result) { described_class.execute attributes: attributes }
 
   context "as a professor" do
@@ -52,8 +52,7 @@ describe Services::Actions::CreatesEarnedBadge do
         badge.student_awardable = true
         badge.save
 
-        other_student = create(:user)
-        other_student.courses << course
+        other_student = create(:user, courses: [course], role: :student)
 
         {
           student_id: other_student.id,
@@ -77,8 +76,7 @@ describe Services::Actions::CreatesEarnedBadge do
 
     describe "awarding a non-student-awardable badge to another student" do
       let(:attributes) do
-        other_student = create(:user)
-        other_student.courses << course
+        other_student = create(:user, courses: [course], role: :student)
 
         {
           student_id: other_student.id,

@@ -4,8 +4,7 @@ describe Assignments::GroupsController do
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
   end
   before(:each) do
     @grade = create :grade, student: @student, assignment: @assignment,
@@ -15,10 +14,9 @@ describe Assignments::GroupsController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
-    before (:each) { login_user(@professor) }
+    before(:each) { login_user(@professor) }
 
     describe "GET grade" do
       it "assigns params" do

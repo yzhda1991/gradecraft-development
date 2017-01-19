@@ -3,14 +3,27 @@ require 'rails_spec_helper'
 describe UserSessionsController do
   let(:world) { World.create.with(:course, :student) }
   let(:student) { world.student}
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:professor) { create(:course_membership, :professor, course: world.course).user }
 
   describe "POST create" do
     context "user is successfully logged in" do
+      before(:each) { allow(subject).to receive(:login) { student } }
+
       it "records the course login event" do
-        allow(subject).to receive(:login) { student }
         expect(subject).to receive(:record_course_login_event)
         post :create, params: { user: student.attributes }
+      end
+
+      it "redirects to dashboard if the current user is not an observer" do
+        allow(subject).to receive(:current_user_is_observer?).and_return false
+        expect(post :create, params: { user: student.attributes }).to redirect_to \
+          dashboard_path
+      end
+
+      it "redirects to assignments show page if the current user is an observer" do
+        allow(subject).to receive(:current_user_is_observer?).and_return true
+        expect(post :create, params: { user: student.attributes }).to redirect_to \
+          assignments_path
       end
     end
 
@@ -19,6 +32,43 @@ describe UserSessionsController do
         allow(subject).to receive(:login) { nil }
         expect(subject).to_not receive(:record_course_login_event)
         post :create, params: { user: student.attributes }
+      end
+    end
+  end
+
+  describe "lti_create" do
+    let(:user) { build_stubbed(:user) }
+    let(:course) { create(:course) }
+
+    before do
+      allow(subject).to receive(:auth_hash).and_return params
+      allow(User).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return user
+      allow(Course).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return course
+    end
+
+    context "when there is no context role" do
+      let(:params) { { "extra" => { "raw_info" => { "roles" => "" }}} }
+
+      it "redirects to dashboard" do
+        expect(post :lti_create, params: params).to redirect_to dashboard_path
+      end
+    end
+
+    context "when there is a context role" do
+      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+
+      it "redirects to dashboard" do
+        expect(post :lti_create, params: params).to redirect_to dashboard_path
+      end
+    end
+
+    context "when the course membership creation fails" do
+      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+
+      before(:each) { allow(CourseMembership).to receive(:create_or_update_from_lti).and_return false }
+
+      it "redirects to root" do
+        expect(post :lti_create, params: params).to redirect_to root_path
       end
     end
   end

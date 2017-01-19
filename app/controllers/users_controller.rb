@@ -45,6 +45,9 @@ class UsersController < ApplicationController
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path,
           notice: "Staff Member #{@user.name} was successfully created!" and return
+      elsif @user.is_observer?(current_course)
+        redirect_to observers_path,
+          notice: "Observer #{@user.name} was successfully created!" and return
       end
     end
 
@@ -61,6 +64,9 @@ class UsersController < ApplicationController
         redirect_to students_path, notice: "#{term_for :student} #{@user.name} was successfully updated!" and return
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path, notice: "Staff Member #{@user.name} was successfully updated!" and return
+      elsif @user.is_observer?(current_course)
+        redirect_to observers_path,
+          notice: "Observer #{@user.name} was successfully updated!" and return
       end
     end
 

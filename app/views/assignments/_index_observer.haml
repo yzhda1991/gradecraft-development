@@ -1,0 +1,33 @@
+.pageContent
+  = render partial: "layouts/alerts"
+
+  .assignments
+    - @assignment_types.each do |assignment_type|
+      .assignment_type{id: "assignment-type-#{assignment_type.id}" }
+        .collapse
+          %h2.assignment-type-name
+            %i.fa.fa-angle-double-right.fa-fw
+            #{assignment_type.name} – #{points assignment_type.total_points} points
+        .collapse-hidden
+          %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
+            %thead
+              %tr
+                %th{scope: "col", :width => "20%"} Name
+                %th
+                %th Due
+                %th{:style => "display: none"} Due Date
+                %th{scope: "col", :width => "10%"}  Max Points
+            %tbody.sort-assignments
+              - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
+              - assignments.each do |assignment|
+                %tr{id: "assignment-#{assignment.id}"}
+                  %td= link_to assignment.name, assignment
+                  %td= render partial: "index_icons", locals: { assignment: assignment }
+                  %td= assignment.try(:due_at) || "Ongoing"
+                  %td{:style => "display: none"}
+                    - if assignment.due_at.present?
+                      = assignment.try(:due_at).to_formatted_s(:db)
+                  - if assignment.pass_fail?
+                    %td.foobers= "#{term_for :pass}/#{term_for :fail}"
+                  - else
+                    %td.doobers= points assignment.full_points

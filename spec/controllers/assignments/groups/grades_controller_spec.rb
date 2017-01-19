@@ -6,7 +6,7 @@ describe Assignments::Groups::GradesController do
 
   context "as a professor" do
     let(:professor) { create(:user) }
-    let!(:professor_membership) { create(:professor_course_membership, user: professor, course: course) }
+    let!(:professor_membership) { create(:course_membership, :professor, user: professor, course: course) }
 
     before(:each) do
       login_user(professor)

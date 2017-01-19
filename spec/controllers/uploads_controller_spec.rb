@@ -5,11 +5,10 @@ RSpec.describe UploadsController do
   let(:submission_file) { create(:submission_file) }
   let(:course) { create(:course) }
   let(:student) { create(:user) }
-  let(:create_student_course_membership) { CourseMembership.create user: student, course: create(:course), role: "student" }
+  let!(:student_course_membership) { create(:course_membership, :student, user: student) }
   let(:stub_submission_file) { allow(SubmissionFile).to receive(:find).with(submission_file.id) { submission_file }}
 
   before(:each) do
-    create_student_course_membership
     login_user(student)
     request.env["HTTP_REFERER"] = "localhost:8000"
   end

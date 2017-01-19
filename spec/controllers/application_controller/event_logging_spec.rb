@@ -77,7 +77,7 @@ RSpec.describe ApplicationController do
       let(:logger_class) { LoginEventLogger }
 
       before do
-        create :professor_course_membership, course: course, user: user
+        create :course_membership, :professor, course: course, user: user
       end
 
       context "the request is not html or xml" do

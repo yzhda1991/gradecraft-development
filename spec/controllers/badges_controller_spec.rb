@@ -3,8 +3,7 @@ require "rails_spec_helper"
 describe BadgesController do
   before(:all) do
     @course = create(:course)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
     @badge = create(:badge, course: @course)
   end
 
@@ -15,8 +14,7 @@ describe BadgesController do
 
   context "as professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
 
     before(:each) { login_user(@professor) }
@@ -147,6 +145,46 @@ describe BadgesController do
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)
+        end
+      end
+    end
+  end
+
+  context "as an observer" do
+    before(:all) { @observer = create(:user, courses: [@course], role: :observer) }
+    before(:each) { login_user(@observer) }
+
+    describe "GET index" do
+      it "returns badges for the current course" do
+        expect(get :index).to render_template(:index)
+      end
+    end
+
+    describe "protected routes not requiring id in params" do
+      routes = [
+        { action: :new, request_method: :get },
+        { action: :create, request_method: :post },
+        { action: :sort, request_method: :post }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}")).to \
+            redirect_to(assignments_path)
+        end
+      end
+    end
+
+    describe "protected routes requiring id in params" do
+      params = { id: "1" }
+      routes = [
+        { action: :edit, request_method: :get },
+        { action: :update, request_method: :post },
+        { action: :destroy, request_method: :get }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
+            redirect_to(assignments_path)
         end
       end
     end

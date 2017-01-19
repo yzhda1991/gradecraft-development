@@ -6,7 +6,7 @@ describe SubmissionFileAbility do
   describe SubmissionFileAbilityTest do
     subject { described_class.new(student) }
 
-    let(:student_course_membership) { create :student_course_membership }
+    let(:student_course_membership) { create :course_membership, :student }
     let(:student) { student_course_membership.user }
 
     before(:each) do

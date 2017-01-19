@@ -107,6 +107,11 @@ class ApplicationController < ActionController::Base
     return not_authenticated unless current_user_is_admin?
   end
 
+  def ensure_not_observer?
+    redirect_to assignments_path, alert: "You do not have permission to access that page" \
+      if current_user_is_observer?
+  end
+
   def save_referer
     session[:return_to] = request.referer
   end

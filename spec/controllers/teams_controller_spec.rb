@@ -9,8 +9,7 @@ describe TeamsController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
     before(:each) do
       @team = create(:team, course: @course)
@@ -79,8 +78,7 @@ describe TeamsController do
 
   context "as a student" do
     before(:all) do
-      @student = create(:user)
-      @student.courses << @course
+      @student = create(:user, courses: [@course], role: :student)
     end
 
     before(:each) { login_user(@student) }
@@ -115,6 +113,42 @@ describe TeamsController do
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "10" }).to redirect_to(:root)
+        end
+      end
+    end
+  end
+
+  context "as an observer" do
+    let(:observer) { create(:user, courses: [@course], role: :observer) }
+
+    before(:each) { login_user(observer) }
+
+    describe "protected routes not requiring id in params" do
+      routes = [
+        { action: :index, request_method: :get },
+        { action: :create, request_method: :post },
+        { action: :new, request_method: :get }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}")).to \
+            redirect_to(assignments_path)
+        end
+      end
+    end
+
+    describe "protected routes requiring id in params" do
+      params = { id: "1" }
+      routes = [
+        { action: :edit, request_method: :get },
+        { action: :show, request_method: :get },
+        { action: :update, request_method: :post },
+        { action: :destroy, request_method: :get }
+      ]
+      routes.each do |route|
+        it "#{route[:request_method]} :#{route[:action]} redirects to redirects to assignments index" do
+          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
+            redirect_to(assignments_path)
         end
       end
     end

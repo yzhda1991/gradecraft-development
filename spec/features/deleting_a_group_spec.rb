@@ -3,7 +3,7 @@ require "rails_spec_helper"
 feature "deleting a group" do
   context "as a professor" do
     let(:course) { create :course, has_team_challenges: true}
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:group) { create :group, name: "Group Name", course: course }
 

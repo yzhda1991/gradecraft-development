@@ -36,7 +36,7 @@ class World
     def criterion_grade
       criterion_grades.first
     end
-    
+
     def level
       levels.first
     end
@@ -128,7 +128,7 @@ class World
       rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
       criteria << FactoryGirl.create(:criterion, attributes.merge(rubric: rubric))
     end
-    
+
     def create_level(attributes={})
       assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
       rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
@@ -172,8 +172,8 @@ class World
     def create_professor(attributes={})
       course = attributes.delete(:course) || self.course
       user = FactoryGirl.create(:user, attributes)
-      course_memberships << FactoryGirl.create(:course_membership, course: course,
-                                               user: user, role: "professor") if course
+      course_memberships << FactoryGirl.create(:course_membership, :professor, course: course,
+                                               user: user) if course
       users << user
       self
     end
@@ -187,7 +187,7 @@ class World
     def create_student(attributes={})
       course = attributes.delete(:course) || self.course
       user = FactoryGirl.create(:user, attributes)
-      course_memberships << FactoryGirl.create(:course_membership, course: course, user: user, role: "student") if course
+      course_memberships << FactoryGirl.create(:course_membership, :student, course: course, user: user) if course
       users << user
       self
     end

@@ -3,8 +3,7 @@ require "rails_spec_helper"
 describe ChallengesController do
   before(:all) do
     @course = create(:course, add_team_score_to_student: true)
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
     @team = create(:team, course: @course)
     @team.students << @student
   end
@@ -15,8 +14,7 @@ describe ChallengesController do
 
   context "as professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
 
     before(:each) do

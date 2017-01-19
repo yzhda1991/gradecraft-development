@@ -5,7 +5,7 @@ describe CriterionGradesExporter do
   let(:course) { create :course }
   let(:assignment) { create :assignment, course: course }
   let(:rubric) { create :rubric_with_criteria, assignment: assignment }
-  let(:student) { create :user}
+  let!(:student) { create :user, courses: [course], role: :student }
 
   subject { CriterionGradesExporter.new }
 
@@ -16,7 +16,6 @@ describe CriterionGradesExporter do
     end
 
     it "generates a CSV with student criterion grades" do
-      student.courses << course
       course.students.each do |student|
         rubric.criteria.each do |criterion|
           level = Level.create(criterion_id: criterion.id, name: "Sushi Success", points: 2000)

@@ -22,8 +22,7 @@ describe MultipliedGradebookExporter do
       @assignment = create(:assignment, course: course, assignment_type: @assignment_type_1)
       @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type_1)
       @assignment_3 = create(:assignment, course: course, assignment_type: @assignment_type_1)
-      @student = create(:user)
-      @student.courses << course
+      @student = create(:user, courses: [course], role: :student)
       create(:grade, assignment: @assignment, student: @student, raw_points: 100, status: "Released" )
       create(:grade, assignment: @assignment_3, student: @student, raw_points: 200, status: "Released")
 
@@ -40,7 +39,6 @@ describe MultipliedGradebookExporter do
       expect(csv[1][8]).to eq ""
       expect(csv[1][9]).to eq "200"
       expect(csv[1][10]).to eq "200"
-
     end
   end
 end

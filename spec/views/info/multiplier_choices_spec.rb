@@ -6,8 +6,8 @@ describe "info/multiplier_choices" do
 
   before(:all) do
     @course = create(:course)
-    @student_1 = create(:student_course_membership, course: @course).user
-    @student_2 = create(:student_course_membership, course: @course).user
+    @student_1 = create(:course_membership, :student, course: @course).user
+    @student_2 = create(:course_membership, :student, course: @course).user
     @students = @course.students
 
     @assignment_type_1 = create(:assignment_type, course: @course)

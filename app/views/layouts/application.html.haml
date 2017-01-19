@@ -24,8 +24,10 @@
         .inner-wrap
           - if current_user_is_staff?
             = render partial: "layouts/staff"
-          - else
+          - elsif current_user_is_student?
             = render partial: "layouts/student"
+          - elsif current_user_is_observer?
+            = render partial: "layouts/observer"
       - else
         = render partial: "layouts/public"
     = render partial: "layouts/help/uservoice"

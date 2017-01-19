@@ -14,7 +14,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
 
   let(:student) { create(:user) }
   let(:professor) { create(:user) }
-  let(:enroll_professor) { CourseMembership.create(user_id: professor.id, course_id: course.id, role: "professor") }
+  let(:enroll_professor) { create(:course_membership, :professor, user_id: professor.id, course_id: course.id) }
 
   before(:each) { ResqueSpec.reset! }
 

@@ -12,7 +12,7 @@ class GradesController < ApplicationController
   def show
     @grade = Grade.find params[:id]
     # rubocop:disable AndOr
-    redirect_to @grade.assignment and return if current_user_is_student?
+    redirect_to @grade.assignment and return unless current_user_is_staff?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
   end

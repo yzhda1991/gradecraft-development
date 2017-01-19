@@ -5,8 +5,7 @@ describe Grades::ImportersController do
   before { allow(controller).to receive(:current_course).and_return world.course }
 
   context "as a professor" do
-    let(:membership) { create :professor_course_membership, course: world.course }
-    let(:professor) { membership.user }
+    let(:professor) { create :user, courses: [world.course], role: :professor }
 
     before { login_user professor }
 
@@ -26,8 +25,7 @@ describe Grades::ImportersController do
 
       it "renders the results from the import" do
         world.student.reload.update_attribute :email, "robert@example.com"
-        second_student = create(:user, username: "jimmy")
-        second_student.courses << world.course
+        second_student = create(:user, username: "jimmy", courses: [world.course], role: :student)
 
         post :upload, params: { assignment_id: world.assignment.id, importer_provider_id: :csv, file: file }
 
@@ -37,8 +35,7 @@ describe Grades::ImportersController do
 
       it "enqueues the resque job to update the grades" do
         world.student.reload.update_attribute :email, "robert@example.com"
-        second_student = create(:user, username: "jimmy")
-        second_student.courses << world.course
+        second_student = create(:user, username: "jimmy", courses: [world.course], role: :student)
         ResqueSpec.reset!
 
         post :upload, params: { assignment_id: world.assignment.id, importer_provider_id: :csv, file: file }

@@ -13,7 +13,7 @@ class UserSessionsController < ApplicationController
     respond_to do |format|
       if @user = login(params[:user][:email], params[:user][:password])
         record_course_login_event user: @user
-        format.html { redirect_back_or_to dashboard_path }
+        format.html { redirect_back_or_to current_user_is_observer? ? assignments_path : dashboard_path }
         format.xml { render xml: @user, status: :created, location: @user }
       else
         @user = User.new
@@ -36,14 +36,16 @@ class UserSessionsController < ApplicationController
       redirect_to auth_failure_path
       return
     end
-    @user.courses << @course unless @user.courses.include?(@course)
-    @course_membership = @user.course_memberships.where(course_id: @course).first
-    @course_membership.assign_role_from_lti(auth_hash) if @course_membership
-    save_lti_context
-    session[:course_id] = @course.id
-    auto_login @user
-    record_course_login_event user: @user
-    respond_with @user, location: dashboard_path
+    # TODO: should we rollback user, course creation if the course membership cannot be created?
+    if CourseMembership.create_or_update_from_lti(@user, @course, auth_hash)
+      save_lti_context
+      session[:course_id] = @course.id
+      auto_login @user
+      record_course_login_event user: @user
+      respond_with @user, location: dashboard_path
+    else
+      redirect_to root_path, alert: "An unknown error occurred."
+    end
   end
 
   def impersonate_student

@@ -6,8 +6,8 @@ describe "info/earned_badges" do
 
   before(:all) do
     @course = create(:course)
-    @student_1 = create(:student_course_membership, course: @course).user
-    @student_2 = create(:student_course_membership, course: @course).user
+    @student_1 = create(:course_membership, :student, course: @course).user
+    @student_2 = create(:course_membership, :student, course: @course).user
     @students = @course.students
 
     @badge_1 = create(:badge, course: @course)

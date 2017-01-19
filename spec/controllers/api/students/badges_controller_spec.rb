@@ -3,8 +3,8 @@ require "rails_spec_helper"
 describe API::Students::BadgesController do
   let(:course) { create :course }
   let(:badge) { create :badge }
-  let(:student) { create(:student_course_membership, course: course).user}
-  let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user}
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }

@@ -4,7 +4,7 @@ require "./app/services/cancels_course_membership/destroys_announcement_states"
 
 describe Services::Actions::DestroysAnnouncementStates do
   let(:course) { membership.course }
-  let(:membership) { create :student_course_membership }
+  let(:membership) { create :course_membership, :student }
   let(:student) { membership.user }
 
   it "expects the membership to find the announcement states to destroy" do

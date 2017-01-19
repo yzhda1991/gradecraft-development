@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 describe Students::BadgesController do
   let(:world) { World.create.with(:course, :student, :badge) }
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:professor) { create(:course_membership, :professor, course: world.course).user }
 
   context "as professor" do
 

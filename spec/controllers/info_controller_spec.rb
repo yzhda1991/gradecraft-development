@@ -10,9 +10,7 @@ describe InfoController do
 
   context "as a professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
-      CourseMembership.create user: @professor, course: @course_2, role: "professor"
+      @professor = create(:user, courses: [@course, @course_2], role: :professor)
     end
     before { login_user(@professor) }
 
@@ -144,11 +142,9 @@ describe InfoController do
 
       it "only shows the students for the team" do
         @team = create(:team, course: @course)
-        @student = create(:user)
-        @student.courses << @course
+        @student = create(:user, courses: [@course], role: :student)
         @student.teams << @team
-        @student_2 = create(:user)
-        @student_2.courses << @course
+        @student_2 = create(:user, courses: [@course], role: :student)
         get :multiplier_choices, params: { team_id: @team.id }
         expect(response).to render_template(:multiplier_choices)
         expect(assigns(:students)).to eq([@student])
@@ -165,9 +161,7 @@ describe InfoController do
 
   context "as a student" do
     before(:all) do
-      @student = create(:user)
-      @student.courses << @course
-      @student.courses << @course_2
+      @student = create(:user, courses: [@course, @course_2], role: :student)
     end
     before(:each) { login_user(@student) }
 
@@ -205,6 +199,36 @@ describe InfoController do
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)
+        end
+      end
+    end
+  end
+
+  context "as an observer" do
+    before(:all) { @observer = create(:user, courses: [@course], role: :observer) }
+    before(:each) { login_user(@observer) }
+
+    describe "GET predictor" do
+      it "shows the grade predictor page" do
+        expect(get :predictor).to render_template(:predictor)
+      end
+    end
+
+    describe "protected routes" do
+      [
+        :dashboard,
+        :timeline_events,
+        :earned_badges,
+        :grading_status,
+        :per_assign,
+        :gradebook,
+        :multiplied_gradebook,
+        :final_grades,
+        :research_gradebook,
+        :multiplier_choices
+      ].each do |route|
+        it "#{route} redirects to root" do
+          expect(get route).to redirect_to(assignments_path)
         end
       end
     end

@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
 
 describe CourseMembership do
-  let(:course_membership) { build(:student_course_membership, course: course, user: student) }
+  let(:course_membership) { build(:course_membership, :student, course: course, user: student) }
   let(:course) { build(:course) }
   let(:student) { build(:user) }
   let!(:gse) { create(:grade_scheme_element, course: course, lowest_points: 8000, highest_points: 9000) }

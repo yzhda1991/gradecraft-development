@@ -28,6 +28,7 @@ describe CoursesHelper do
           ["Student", "student"],
           ["GSI", "gsi"],
           ["Professor", "professor"],
+          ["Observer", "observer"],
           ["Admin", "admin"]
         ]
       end
@@ -43,7 +44,8 @@ describe CoursesHelper do
         expect(helper.available_roles(course)).to eq [
           ["Student", "student"],
           ["GSI", "gsi"],
-          ["Professor", "professor"]
+          ["Professor", "professor"],
+          ["Observer", "observer"]
         ]
       end
     end

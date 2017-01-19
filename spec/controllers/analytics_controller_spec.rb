@@ -6,8 +6,7 @@ describe AnalyticsController do
   context "as a professor" do
     before(:all) do
       @course = create(:course)
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @professor = create(:user, courses: [@course], role: :professor)
     end
 
     before(:each) do
@@ -33,8 +32,7 @@ describe AnalyticsController do
   context "as a student" do
     before(:all) do
       @course = create(:course)
-      @student = create(:user)
-      CourseMembership.create user: @student, course: @course, role: "student"
+      @student = create(:user, courses: [@course], role: :student)
     end
 
     before(:each) do

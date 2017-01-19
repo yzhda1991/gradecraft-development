@@ -12,8 +12,7 @@ describe GradesForResearchExporter do
     end
 
     it "generates a CSV with student grades for the course" do
-      @student = create(:user)
-      @student.courses << course
+      @student = create(:user, courses: [course], role: :student)
       @assignment_type = create(:assignment_type, course: course)
       @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz")
       @grade = create(:grade, raw_points: 100, course: course, student: @student, assignment: @assignment)

@@ -3,8 +3,8 @@ require "rails_spec_helper"
 describe RubricsController do
 
   let(:course) { create :course }
-  let(:professor) { create(:professor_course_membership, course: course).user }
-  let(:student) { create(:student_course_membership, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
   let!(:rubric) { create(:rubric_with_criteria, assignment: assignment) }
 

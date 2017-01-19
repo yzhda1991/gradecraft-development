@@ -13,8 +13,7 @@ describe EarnedBadgeExporter do
     end
 
     it "generates a CSV of earned badges" do
-      @student = create(:user)
-      @student.courses << course
+      @student = create(:user, courses: [course], role: :student)
       @badge = create(:badge, course: course)
       @earned_badge = create(:earned_badge, badge_id: @badge.id, student_id: @student.id, course_id: course.id)
       @earned_badges = course.earned_badges

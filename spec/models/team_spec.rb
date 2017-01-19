@@ -59,11 +59,11 @@ describe Team do
       course = create(:course)
       team = create(:team, course: course)
       student = create(:user)
-      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student, course: course, score: 100)
       student_2 = create(:user)
-      course_membership = create(:course_membership, user: student_2, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student_2, course: course, score: 100)
       student_3 = create(:user)
-      course_membership = create(:course_membership, user: student_3, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student_3, course: course, score: 100)
       team.students << [student, student_2]
       expect(team.total_earned_points).to eq(200)
     end
@@ -79,9 +79,9 @@ describe Team do
       course = create(:course)
       team = create(:team, course: course)
       student = create(:user)
-      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student, course: course, score: 100)
       student_2 = create(:user)
-      course_membership = create(:course_membership, user: student_2, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student_2, course: course, score: 100)
       team.students << [student, student_2]
       team.update_average_score!
       expect(team.reload.average_score).to eq(100)
@@ -131,9 +131,9 @@ describe Team do
     it "returns the average points for the team" do
       team.average_score = nil
       student = create(:user)
-      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      course_membership = create(:course_membership, :student, user: student, course: course, score: 100)
       student_2 = create(:user)
-      course_membership = create(:course_membership, user: student_2, course: course, score: 300)
+      course_membership = create(:course_membership, :student, user: student_2, course: course, score: 300)
       team.students << [student, student_2]
       team.update_average_score!
       expect( team.instance_eval { average_score } ).to eq(200)

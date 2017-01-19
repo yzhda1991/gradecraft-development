@@ -10,7 +10,7 @@ class AssignmentsController < ApplicationController
 
   def index
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
-    if current_user_is_student?
+    if current_user_is_student? || current_user_is_observer?
       render :index, Assignments::StudentPresenter.build({
         student: current_student,
         assignment_types: current_course.assignment_types.ordered.includes(:assignments),

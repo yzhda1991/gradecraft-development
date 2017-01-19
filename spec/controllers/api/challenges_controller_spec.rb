@@ -3,8 +3,8 @@ include SessionHelper
 
 describe API::ChallengesController  do
   let(:course) { create :course, add_team_score_to_student: true }
-  let(:student)  { create(:student_course_membership, course: course).user }
-  let(:professor) { create(:professor_course_membership, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:challenge) { create(:challenge, course: course) }
 
   context "as professor" do

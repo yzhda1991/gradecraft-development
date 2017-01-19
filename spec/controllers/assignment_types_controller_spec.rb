@@ -9,10 +9,8 @@ describe AssignmentTypesController do
 
   context "as professor" do
     before(:all) do
-      @professor = create(:user)
-      CourseMembership.create user: @professor, course: @course, role: "professor"
-      @student = create(:user)
-      @student.courses << @course
+      @professor = create(:user, courses: [@course], role: :professor)
+      @student = create(:user, courses: [@course], role: :student)
     end
 
     before(:each) do
@@ -127,8 +125,7 @@ describe AssignmentTypesController do
       describe "with team id in params" do
         it "assigns team and students for team" do
           # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
+          other_student = create(:user, courses: [@course], role: :student)
 
           team = create(:team, course: @course)
           team.students << @student
@@ -142,8 +139,7 @@ describe AssignmentTypesController do
       describe "with no team id in params" do
         it "assigns all students if no team supplied" do
           # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
+          other_student = create(:user, courses: [@course], role: :student)
 
           team = create(:team, course: @course)
           team.students << @student
@@ -165,8 +161,7 @@ describe AssignmentTypesController do
 
   context "as student" do
     before(:all) do
-      @student = create(:user)
-      @student.courses << @course
+      @student = create(:user, courses: [@course], role: :student)
     end
     before(:each) { login_user(@student) }
 

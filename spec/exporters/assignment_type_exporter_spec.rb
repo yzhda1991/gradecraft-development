@@ -10,11 +10,10 @@ describe AssignmentTypeExporter do
   let!(:assignment) { create(:assignment, course: course, assignment_type: assignment_type_1) }
   let!(:assignment_2) { create(:assignment, course: course, assignment_type: assignment_type_1) }
   let!(:assignment_3) { create(:assignment, course: course, assignment_type: assignment_type_2) }
-  let!(:student) { create(:user) }
+  let!(:student) { create(:user, courses: [course], role: :student) }
 
   before(:each) do
     @assignment_types = course.assignment_types
-    student.courses << course
   end
 
   describe "#export_summary_scores" do

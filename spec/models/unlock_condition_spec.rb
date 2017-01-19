@@ -435,12 +435,12 @@ describe UnlockCondition do
       end
 
       it "return false if student has not earned enough points" do
-        course_membership = create(:student_course_membership, score: 0, user: student, course: course)
+        course_membership = create(:course_membership, :student, score: 0, user: student, course: course)
         expect(unlock_condition.is_complete?(student)).to eq(false)
       end
 
       it "return true if student has met the minimum number of points" do
-        course_membership = create(:student_course_membership, score: 100000, user: student, course: course)
+        course_membership = create(:course_membership, :student, score: 100000, user: student, course: course)
         expect(unlock_condition.is_complete?(student)).to eq(true)
       end
     end

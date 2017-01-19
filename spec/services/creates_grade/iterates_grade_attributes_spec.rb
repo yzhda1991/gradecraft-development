@@ -5,8 +5,8 @@ require "./app/services/shared/iterates_grade_attributes"
 describe Services::Actions::IteratesGradeAttributes do
   let(:assignment) { create(:assignment, course: course) }
   let(:professor) { create(:user) }
-  let!(:course_membership_1) { create :student_course_membership, course: course }
-  let!(:course_membership_2) { create :student_course_membership, course: course }
+  let!(:course_membership_1) { create :course_membership, :student, course: course }
+  let!(:course_membership_2) { create :course_membership, :student, course: course }
   let(:course) { create(:course) }
   let(:grade_attributes) { { "0" => { graded_by_id: professor.id, instructor_modified: true, student_id: assignment.course.students.first,
     raw_points: 1000, status: "Graded" }, "1" => { graded_by_id: professor.id, instructor_modified: true, student_id: assignment.course.students.second,

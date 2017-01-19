@@ -19,8 +19,7 @@ describe CSVGradeImporter do
       context "with a student not in the file" do
         let(:student) { create :user }
         before do
-          create :course_membership, user_id: student.id, course_id: course.id,
-              role: "student"
+          create :course_membership, :student, user_id: student.id, course_id: course.id
         end
 
         it "does not create a grade if the student does not exist" do
@@ -37,8 +36,7 @@ describe CSVGradeImporter do
       context "with a student in the file" do
         let(:student) { create :user, email: "robert@example.com" }
         before do
-          create :course_membership, user_id: student.id, course_id: course.id,
-            role: "student"
+          create :course_membership, :student, user_id: student.id, course_id: course.id
         end
 
         it "creates the grade if it is not there" do
@@ -81,7 +79,7 @@ describe CSVGradeImporter do
         it "does not update the grade if it is already there and the score is null" do
           student = create(:user, email: "john@example.com")
           grade = create :grade, assignment: assignment, student: student, raw_points: 4000
-          create(:student_course_membership, course: course, user: student)
+          create(:course_membership, :student, course: course, user: student)
           result = subject.import(course, assignment)
           expect(grade.reload.raw_points).to eq 4000
           expect(grade.graded_at).to be_nil
@@ -105,8 +103,7 @@ describe CSVGradeImporter do
 
         it "creates a grade for a student by username" do
           username_student = create :user, username: "jimmy"
-          create :course_membership, user_id: username_student.id, course_id: course.id,
-            role: "student"
+          create :course_membership, :student, user_id: username_student.id, course_id: course.id
           result = subject.import(course, assignment)
           grade = assignment.grades.where(student_id: username_student.id).first
           expect(grade).to_not be_nil

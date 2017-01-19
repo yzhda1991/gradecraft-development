@@ -13,8 +13,7 @@ describe "assignments/_index_student" do
     @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
     @assignment = create(:assignment, assignment_type: @assignment_types[0])
     @course.assignments << @assignment
-    @student = create(:user)
-    @student.courses << @course
+    @student = create(:user, courses: [@course], role: :student)
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_student).and_return(@student)
     allow(view).to receive(:presenter).and_return presenter

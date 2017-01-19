@@ -4,11 +4,11 @@ describe GradeSchemeElementsController do
   let(:course) { create(:course) }
 
   context "as professor" do
-    let!(:course_membership) { create(:student_course_membership, course: course, score: 100000,
+    let!(:course_membership) { create(:course_membership, :student, course: course, score: 100000,
       earned_grade_scheme_element_id: grade_scheme_element.id) }
-    let!(:another_course_membership) { create(:student_course_membership, course: course, score: 80000,
+    let!(:another_course_membership) { create(:course_membership, :student, course: course, score: 80000,
       earned_grade_scheme_element_id: grade_scheme_element.id) }
-    let(:professor) { create(:professor_course_membership, course: course).user }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
     let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course) }
 
     before(:each) do
@@ -89,7 +89,7 @@ describe GradeSchemeElementsController do
   end
 
   context "as student" do
-    let(:student) { create(:student_course_membership, course: course).user }
+    let(:student) { create(:course_membership, :student, course: course).user }
 
     before(:each) do
       login_user(student)

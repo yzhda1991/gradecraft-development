@@ -8,7 +8,7 @@ feature "viewing submissions" do
   let(:student) { create :user }
 
   context "as a student" do
-    let(:membership) { create :student_course_membership, user: student }
+    let(:membership) { create :course_membership, :student, user: student }
 
     before { login_as student }
 
@@ -33,7 +33,7 @@ feature "viewing submissions" do
   end
 
   context "as a professor" do
-    let(:membership) { create :professor_course_membership, user: professor }
+    let(:membership) { create :course_membership, :professor, user: professor }
     let(:professor) { create :user }
 
     before do

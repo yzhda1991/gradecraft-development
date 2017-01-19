@@ -7,7 +7,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
   include InQueueHelper
 
   let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:professor_course_membership, course: world.course).user }
+  let(:professor) { create(:course_membership, :professor, course: world.course).user }
   let(:team) { world.create_team.team }
   let(:challenge) { world.create_challenge.challenge }
 

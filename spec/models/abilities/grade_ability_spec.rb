@@ -3,7 +3,7 @@ require "cancan/matchers"
 
 describe Ability do
   let(:course) { student_course_membership.course }
-  let(:student_course_membership) { create :student_course_membership }
+  let(:student_course_membership) { create :course_membership, :student }
   let(:student) { student_course_membership.user }
 
   subject { described_class.new(student, course) }
