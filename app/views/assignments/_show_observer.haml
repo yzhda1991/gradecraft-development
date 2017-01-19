@@ -1,0 +1,13 @@
+.pageContent
+  = render partial: "layouts/alerts"
+
+  .assignment-details-container
+    %section
+      %h2 Description
+      = render partial: "assignments/description", locals: { presenter: presenter }
+
+    - if presenter.grade_with_rubric?
+      %hr.dotted
+      %section
+        %h2 Grading Rubric
+        = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
