@@ -391,6 +391,19 @@ Robin Williams",
   }
 }
 
+@assignments[:group_score_levels] = {
+  quotes: {
+    assignment_created: "Karma of humans is AI ― Raghu Venkatesh"
+  },
+  assignment_type: :group_grading,
+  assign_groups: true,
+  attributes: {
+    name: "Group Assignment + Score Levels",
+    grade_scope: "Group"
+  },
+  assignment_score_levels: true
+}
+
 @assignments[:group_grade_submissions_assignment] = {
   quotes: {
     assignment_created: "Many highly talented, brilliant, creative people \

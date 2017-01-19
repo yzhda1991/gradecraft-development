@@ -35,7 +35,6 @@ json.included do
   end
 end
 
-
 json.meta do
   json.student_ids @student_ids
   json.grade_status_options @grade_status_options
