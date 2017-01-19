@@ -1,7 +1,7 @@
 Rails.application.configure do
   config.action_controller.perform_caching = false
   config.action_dispatch.best_standards_support = :builtin
-  config.asset_host = ENV["GC_ASSET_HOST"] || "http://localhost:5000"
+  config.asset_host = ENV["GC_ASSET_HOST"] || "//"
 
   config.action_mailer.default_url_options = { :host => "localhost:5000" }
   config.action_mailer.delivery_method = :sendmail

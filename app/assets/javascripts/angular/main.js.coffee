@@ -15,7 +15,6 @@
   'ngAnimate',
   'froala',
   'templates',
-  'smart-number',
   'fcsa-number',
   'helpers'
 ])

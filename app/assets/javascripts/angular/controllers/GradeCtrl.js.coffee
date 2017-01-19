@@ -26,14 +26,6 @@
   $scope.updateGrade = ()->
     GradeService.updateGrade()
 
-  $scope.modelOptions = {
-    updateOn: 'default blur',
-    debounce: {
-      default: 1800,
-      blur: 0
-    }
-  }
-
   $scope.froalaOptions = {
     inlineMode: false,
     heightMin: 200,
