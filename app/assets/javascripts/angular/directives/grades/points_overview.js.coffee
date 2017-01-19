@@ -11,16 +11,9 @@
 
       scope.grade = GradeService.grade
 
-      scope.pointsAllocated = ()->
-        return 0 if !scope.grade
-        scope.grade.raw_points
-
-      scope.pointsPossible = ()->
-        return 0 if !scope.assignment()
-        scope.assignment().full_points
-
       scope.pointsBelowFull = ()->
-        scope.pointsPossible() - scope.pointsAllocated()
+        return 0 if !scope.assignment() || !scope.grade
+        scope.assignment().full_points - scope.grade.raw_points
 
       #-------------------------------------------------------------------------
 
@@ -40,19 +33,15 @@
       scope.adjustmentPoints = ()->
         parseInt(scope.grade.adjustment_points) || 0
 
-      scope.finalPoints = ()->
-        return 0 if !scope.pointsArePresent()
-        scope.pointsAllocated() - scope.adjustmentPoints()
-
       #-------------------------------------------------------------------------
 
       scope.isBelowThreshold = ()->
-        return false if !scope.assignment()
-        scope.assignment().has_threshold && (scope.finalPoints() < scope.assignment().threshold_points)
+        return false if !(scope.assignment() && scope.grade)
+        scope.assignment().has_threshold && (scope.grade.final_points < scope.assignment().threshold_points)
 
       scope.pointsBelowThreshold = ()->
-        return 0 if !scope.assignment()
-        scope.assignment().threshold_points - scope.finalPoints()
+        return 0 if !(scope.assignment() && scope.grade)
+        scope.assignment().threshold_points - scope.grade.raw_points + scope.grade.adjustment_points
 
   }
 ]

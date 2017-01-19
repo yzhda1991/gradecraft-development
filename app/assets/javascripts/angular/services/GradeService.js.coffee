@@ -5,21 +5,19 @@
   criterionGrades = []
   gradeStatusOptions = []
   isRubricGraded = false
+  thresholdPoints = 0
 
   # used for group grades:
   grades = []
   _recipientType = ""
   _recipientId = ""
 
-  calculateRawPoints = ()->
-    return grade.raw_points unless isRubricGraded
-    grade.raw_points = _.sum(_.map(criterionGrades, "points"))
-
-  _verifyRawPoints = ()->
-    console.log("verifying...");
-    oldVal = grade.raw_points
-    calculateRawPoints()
-    console.warn("Raw score was not aligned to Rubric: ", oldVal, grade.raw_points) if oldVal != grade.raw_points
+  calculatePoints = ()->
+    if isRubricGraded
+      grade.raw_points = _.sum(_.map(criterionGrades, "points"))
+    grade.final_points = grade.raw_points + grade.adjustment_points
+    grade.final_points = 0 if grade.final_points < thresholdPoints
+    console.log("raw:", grade.raw_points, "final", grade.final_points);
 
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
@@ -33,7 +31,7 @@
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
           isRubricGraded = response.data.meta.is_rubric_graded
-          _verifyRawPoints() if isRubricGraded
+          calculatePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -50,6 +48,8 @@
 
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
+          isRubricGraded = response.data.meta.is_rubric_graded
+          calculatePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -82,6 +82,29 @@
     DebounceQueue.addEvent("grades", grade.id, updateGrade, [returnURL], immediate)
 
 
+  # Final "Submit" Button actions, includes cleanup and redirect
+  submitGrade = (returnURL=null)->
+    return queueUpdateGrade(true, returnURL) unless isRubricGraded
+
+    DebounceQueue.cancelEvent("grades", grade.id)
+    _.each(criterionGrades, (cg)->
+      DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
+    )
+
+    # TODO: determine Grade status (releasing to student?)
+
+    params = {
+      grade: grade,
+      criterion_grades: criterionGrades
+    }
+    $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+        window.location = returnURL
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
 #------- Criterion Grade Methods for Rubric Grading -------------------------------------------------------------------#
 
   findCriterionGrade = (criterionId)->
@@ -102,30 +125,22 @@
     criterionGrades.push(criterionGrade)
 
   setCriterionGradeLevel = (criterionId, level)->
+    console.log("setting level");
     criterionGrade = findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
     criterionGrade.level_id = level.id
     criterionGrade.points = level.points
-    calculateRawPoints()
+    calculatePoints()
 
   updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
     return false unless criterionGrade
-
-    if _recipientType == "student"
-      $http.put("/api/assignments/#{grade.assignment_id}/students/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
-        (response) ->
-          GradeCraftAPI.logResponse(response)
-          #TODO: Add id if it's a new CG
-        ,(response) ->
-          GradeCraftAPI.logResponse(response)
-      )
-    else if _recipientType == "group"
-      $http.put("/api/assignments/#{grade.assignment_id}/groups/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
-        (response) ->
-          GradeCraftAPI.logResponse(response)
-        ,(response) ->
-          GradeCraftAPI.logResponse(response)
-      )
+    $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+        #TODO: Add id if it's a new CG
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
 
   queueUpdateCriterionGrade = (criterionId, immediate=false) ->
     # using criterionId for queue id since we are not assured to have a criterionGrade.id
@@ -192,8 +207,10 @@
     enableScoreLevels: enableScoreLevels
 
     getGrade: getGrade
+
     queueUpdateGrade: queueUpdateGrade
     queueUpdateCriterionGrade: queueUpdateCriterionGrade
+    submitGrade: submitGrade
 
     updateGrade: updateGrade # remove
     postAttachments: postAttachments

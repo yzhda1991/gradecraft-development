@@ -18,7 +18,6 @@
   -# - if @grade.assignment.grade_with_rubric?
   -#   = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, recipient_type: "student", recipient_id: @grade.student.id, grade: @grade, return_path: URI(request.referer || "").path,  grade_next_path: @grade_next_path }
   -# - else
-
   %grade-edit{'assignment-id'=>"#{@grade.assignment.id}",
     'recipient-type'=>"student",
     'recipient-id'=>"#{@grade.student.id}",

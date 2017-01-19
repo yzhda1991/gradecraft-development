@@ -170,10 +170,10 @@
   # params for just the criterion
   $scope.criterionOnlyParams = (criterion,index)->
     {
-      criterion_name:        criterion.name,
-      criterion_description: criterion.description,
-      max_points:            criterion.max_points,
-      order:                 index,
+      #criterion_name:        criterion.name,
+      #criterion_description: criterion.description,
+      #max_points:            criterion.max_points,
+      #order:                 index,
       criterion_id:          criterion.id,
       comments:              criterion.comments
     }
@@ -181,8 +181,8 @@
   # additional level params if a level is selected
   $scope.gradedLevelParams = (criterion) ->
     {
-      level_name:        criterion.selectedLevel.name,
-      level_description: criterion.selectedLevel.description,
+      #level_name:        criterion.selectedLevel.name,
+      #level_description: criterion.selectedLevel.description,
       points:            criterion.selectedLevel.points,
       level_id:          criterion.selectedLevel.id
     }
@@ -200,10 +200,10 @@
   # student_id or group_id is now passed through the route, see RubricFactoryService.putRubricGradeSubmission
   $scope.gradedRubricParams = ()->
     {
-      points_possible:  $scope.pointsPossible(),
+      #points_possible:  $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
-      level_ids:        $scope.selectedLevelIds(),
-      criterion_ids:    $scope.allCriterionIds(),
+      #level_ids:        $scope.selectedLevelIds(),
+      #criterion_ids:    $scope.allCriterionIds(),
       grade:            $scope.gradeParams(),
     }
 

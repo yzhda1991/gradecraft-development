@@ -11,6 +11,6 @@
     link: (scope, el, attr)->
       scope.grade = GradeService.grade
       scope.submitGrade = (returnURL)->
-        GradeService.queueUpdateGrade(true, returnURL)
+        GradeService.submitGrade(returnURL)
   }
 ]
