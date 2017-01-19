@@ -115,9 +115,16 @@ describe SubmissionsController do
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }, format: :json
       end
 
-      it "checks if the submission is late" do
+      it "checks if the submission is late if it is not a resubmission" do
         params = attributes_for(:submission)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+      end
+
+      it "does not check if the submission is late if it is a resubmission" do
+        params = attributes_for(:submission)
+        allow_any_instance_of(Submission).to receive(:will_be_resubmitted?).and_return true
+        expect_any_instance_of(Submission).to_not receive(:check_and_set_late_status!)
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
     end
@@ -198,9 +205,16 @@ describe SubmissionsController do
         expect(submission.reload.submitted_at).to be > current_time
       end
 
-      it "checks if the submission is late" do
+      it "checks if the submission is late if it is not a resubmission" do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+      end
+
+      it "does not check if the submission is late if it is a resubmission" do
+        params = attributes_for(:submission)
+        allow_any_instance_of(Submission).to receive(:will_be_resubmitted?).and_return true
+        expect_any_instance_of(Submission).to_not receive(:check_and_set_late_status!)
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
 

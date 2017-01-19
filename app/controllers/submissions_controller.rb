@@ -52,7 +52,7 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&
         Services::DeletesSubmissionDraftContent.for(submission).success?
-        submission.check_and_set_late_status!
+        submission.check_and_set_late_status! unless submission.will_be_resubmitted?
         path = assignment.has_groups? ? { group_id: submission.group_id } :
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
