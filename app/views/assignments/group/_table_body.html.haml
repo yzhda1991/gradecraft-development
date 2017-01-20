@@ -37,7 +37,11 @@
               - grade = group_presenter.grade_for(student)
               %td
                 - if grade.present? && grade.instructor_modified?
-                  = points grade.final_points
+                  - if group_presenter.assignment.pass_fail?
+                    = grade.pass_fail_status
+                  - else
+                    = points grade.final_points
+
               - if group_presenter.assignment.assignment_type.student_weightable?
                 %td
                   - if grade.present?

@@ -44,7 +44,7 @@ class Assignments::GroupsController < ApplicationController
 
   def grade_params
     params.require(:grade).permit :graded_at, :group_id, :graded_by_id, :instructor_modified,
-      :submission_id, :raw_points, :feedback, :status
+      :submission_id, :pass_fail_status, :raw_points, :feedback, :status
   end
 
   # Schedule the `GradeUpdater` for all grades provided
