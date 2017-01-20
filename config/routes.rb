@@ -104,7 +104,6 @@ Rails.application.routes.draw do
 
     resources :groups, only: [], module: :assignments do
       get :grade, on: :member
-      put :graded, on: :member
     end
 
     resources :students, only: [], module: :assignments do

@@ -42,8 +42,12 @@
 
           # The API sends all student information so we can add the ability to custom grade group members
           # For now we filter to the first student's grade to populate the view, since all students grades are identical
-          # We store all grades in grades, so that when updateGrade is called, we can iterate through all group grades
+
           angular.copy(_.find(response.data.data, { attributes: {'student_id' : response.data.meta.student_ids[0] }}).attributes, grade)
+          grade.group_id = recipientId
+
+          # We store all grades in grades, so that when updateGrade is called, we can iterate through all group grades
+          # For now, only grade is updated on the edit page, so AJAX updates should be made passing grade in params
           GradeCraftAPI.loadMany(grades, response.data)
 
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)

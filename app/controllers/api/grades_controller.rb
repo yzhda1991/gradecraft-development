@@ -69,6 +69,10 @@ class API::GradesController < ApplicationController
 
   def grade_params
     params.require(:grade).permit(
-      :raw_points, :feedback, :status, :pass_fail_status, :is_custom_value)
+      :feedback, :group_id, :is_custom_value,
+      :pass_fail_status, :raw_points, :status,
+      # TODO: check for submission in workflow...
+      :submission_id
+    )
   end
 end
