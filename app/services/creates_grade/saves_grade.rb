@@ -10,6 +10,7 @@ module Services
         grade = context[:grade]
         context.fail_with_rollback!("The grade is invalid and cannot be saved", error_code: 422) \
           unless grade.save
+        grade.squish_history!
         context[:update_grade] = (grade.previous_changes[:raw_points].present? ||
                                   grade.previous_changes[:status].present?) &&
                                   grade.graded_or_released?

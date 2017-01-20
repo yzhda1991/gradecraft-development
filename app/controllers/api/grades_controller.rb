@@ -1,3 +1,5 @@
+require_relative "../../services/updates_grade"
+
 class API::GradesController < ApplicationController
 
   before_action :ensure_staff?
@@ -21,20 +23,10 @@ class API::GradesController < ApplicationController
 
   # POST api/grades/:grade_id
   def update
-    grade = Grade.find(params[:id])
-    grade.assign_attributes(grade_params)
-    grade.instructor_modified = true
-    grade.graded_by_id = current_user.id
-    if grade.raw_points_changed?
-      grade.graded_at = DateTime.now
-    end
-    changes = grade.changes
-    if grade.save
-      if GradeProctor.new(grade).viewable?
-        GradeUpdaterJob.new(grade_id: grade.id).enqueue
-      end
-      grade.squish_history!
-      render json: { message: {changes: changes}, success: true }
+    @grade = Grade.find(params[:id])
+    result = Services::UpdatesGrade.create @grade, params, current_user.id
+    if result
+      render "api/grades/show", success: true, status: 200
     else
       render json: {
         message: "failed to save grade", success: false
@@ -52,11 +44,10 @@ class API::GradesController < ApplicationController
         },
         status: 400
     else
-      @student_ids = Group.find(params[:group_id]).students.pluck(:id)
-      @assignment = Assignment.find(params[:assignment_id])
-      @grades = Grade.find_or_create_grades(@assignment.id, @student_ids)
-      # add file uploads here when group grades have file uploads
-      # add criterion grades
+      students = Group.find(params[:group_id]).students
+      @student_ids = students.pluck(:id)
+      @grades =
+        Grade.find_or_create_grades(params[:assignment_id], @student_ids)
       if assignment.release_necessary?
         @grade_status_options = Grade::STATUSES
       else
@@ -68,11 +59,6 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(
-      :feedback, :group_id, :is_custom_value,
-      :pass_fail_status, :raw_points, :status,
-      # TODO: check for submission in workflow...
-      :submission_id
-    )
+    params.require(:grade).permit(:raw_points, :feedback, :status, :is_custom_value)
   end
 end
