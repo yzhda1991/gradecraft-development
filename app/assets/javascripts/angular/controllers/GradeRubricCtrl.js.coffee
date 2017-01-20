@@ -1,4 +1,4 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'RubricService', '$q', ($scope, Restangular, RubricService, $q) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope','Restangular', 'RubricService', '$q', ($scope, Restangular, RubricService, $q) ->
 
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria

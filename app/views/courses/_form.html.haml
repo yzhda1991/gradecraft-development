@@ -2,7 +2,7 @@
 = render partial: "layouts/alerts", locals: { model: @course }
 
 %section
-  %h4 The Basics
+  %h2 Basics
   .form-item
     = f.label :name, "*Course Title"
     = f.text_field :name
@@ -31,14 +31,14 @@
 
 - if current_user_is_admin?
   %section
-    %h4.uppercase GradeCraft Settings
+    %h2 GradeCraft Settings
     .form-item
       = f.label :status, "Active?"
       = f.check_box :status
       .form_label Is this an active course?
 
 %section
-  %h4.uppercase Enable Features
+  %h2 Enable Features
   .form-card-grid
     .form-card
       .form-card-header

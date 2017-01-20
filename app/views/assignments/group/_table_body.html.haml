@@ -28,8 +28,8 @@
             - if group_presenter.assignment.release_necessary?
               %th Status
               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-                %button.button.select-all= "Check"
-                %button.button.select-none= "Uncheck"
+                %button.button.select-all{role: "button", type: "button"}= "Check"
+                %button.button.select-none{role: "button", type: "button"}= "Uncheck"
         %tbody
           - group_presenter.students.each do |student|
             %tr

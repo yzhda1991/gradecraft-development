@@ -16,7 +16,8 @@
   'froala',
   'templates',
   'fcsa-number',
-  'helpers'
+  'helpers',
+  'ngAria'
 ])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->

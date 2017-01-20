@@ -2,6 +2,5 @@
   .search
     = render partial: "layouts/navigation/student_search"
     = render partial: "layouts/navigation/course_search"
-  %nav.sr-only Staff navigation
-  %ul#staff-navigation.staff-sidenav{role: "navigation", "aria-labeledby" => "staff-navigation"}
+  %ul.staff-sidenav{role: "navigation", "aria-label" => "staff-navigation"}
     = render partial: "layouts/navigation/staff_subnav_links"

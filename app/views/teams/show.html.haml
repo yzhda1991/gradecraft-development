@@ -35,9 +35,9 @@
           - if current_course.has_badges?
             %td
               - student.earned_badges_for_course(current_course).each do |badge|
-                %a
+                %span{tabindex: "0", "aria-describedby": "earned-badge-tip_#{badge.id}"}
                   %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
-                .display-on-hover.hover-style
+                .display-on-hover.hover-style{role: "tooltip", id: "earned-badge-tip_#{badge.id}"}
                   = badge.try(:name)
 
             %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count

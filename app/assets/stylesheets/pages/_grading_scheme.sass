@@ -73,10 +73,13 @@ p.predictor-description
     color: #dd5555
 
   .add-element
-    visibility: hidden
-
-  .grade-scheme-row:hover .add-element
-    visibility: visible
+    opacity: 0
+    &:focus
+      opacity: 1
+  
+  .grade-scheme-row:hover
+    .add-element
+      opacity: 1
 
   .required-notice
     display: none

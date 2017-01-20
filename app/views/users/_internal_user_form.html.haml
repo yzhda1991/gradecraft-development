@@ -1,15 +1,15 @@
 = simple_form_for @user do |f|
   %section
-    %h4.uppercase= "User Profile"
+    %h2.uppercase= "User Profile"
     .form-item
       = f.label :first_name
-      = f.text_field :first_name
+      = f.text_field :first_name, "aria-required": "true"
     .form-item
       = f.label :last_name
-      = f.text_field :last_name
+      = f.text_field :last_name, "aria-required": "true"
     .form-item
       = f.label :email
-      = f.text_field :email
+      = f.text_field :email, "aria-required": "true"
     .form-item
       = f.label :display_name
       = f.text_field :display_name

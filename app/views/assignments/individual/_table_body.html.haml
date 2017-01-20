@@ -32,14 +32,14 @@
     %td
       %span
       - if grade.feedback_read?
-        %a
+        %span{tabindex: "0", "aria-describedby": "feedback-read-tip_#{presenter.assignment.id}"}
           %i.fa.fa-check
-        .display-on-hover.hover-style
+        .display-on-hover.hover-style{role: "tooltip", :id=> "feedback-read-tip_#{presenter.assignment.id}"}
           This feedback has been <strong>marked as read</strong> by the #{term_for :student}.
       - elsif grade.feedback_reviewed?
-        %a
+        %span{tabindex: "0", "aria-describedby": "feedback-viewed-tip_#{presenter.assignment.id}"}
           %i.fa.fa-eye
-        .display-on-hover.hover-style
+        .display-on-hover.hover-style{role: "tooltip", :id=> "feedback-viewed-tip_#{presenter.assignment.id}"}
           This feedback has been <strong>viewed</strong> by the #{term_for :student}.
 
     %td= grade.status
@@ -76,4 +76,6 @@
       %td
         .center
           - if grade.is_graded?
-            = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }
+            %label
+              %span.sr-only Select Assignment to Update Grade Status
+              = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"

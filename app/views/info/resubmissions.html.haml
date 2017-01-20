@@ -9,7 +9,8 @@
     %h5.section-title
       = link_to assignment.name, assignment
 
-    %table.dynatable{"aria-describedby" => "ungradedTableCaption"}
+    %table.dynatable
+      %caption.sr-only= "Resubmissions for #{assignment.name}"
       %thead
         %tr
           - if assignment.is_individual?

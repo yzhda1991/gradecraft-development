@@ -19,7 +19,7 @@
           %fieldset.unlock-condition
             = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
               = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
-      = link_to "Add a Condition", "#", class: "add-unlock-condition button"
+      %button.add-unlock-condition Add a Condition
 
     .submit-buttons
       %ul

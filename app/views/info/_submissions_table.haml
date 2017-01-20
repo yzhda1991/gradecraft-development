@@ -1,7 +1,8 @@
 - submissions_by_assignment.each do |assignment, submissions|
   %h4.assignment_name
     = link_to assignment.name, assignment
-  %table.dynatable.no-table-header{"aria-describedby" => "ungradedTableCaption"}
+  %table.dynatable.no-table-header
+    %caption.sr-only= "Ungraded Submissions for #{assignment.name}"
     %thead
       %tr
         - if assignment.is_individual?
@@ -11,7 +12,7 @@
             %th{scope: "col", :width => "15%"}= "#{term_for :team}"
         - elsif assignment.has_groups?
           %th{scope: "col"} Group
-        %th Date Submitted
+        %th{scope: "col"} Date Submitted
         %th{scope: "col", :style => "min-width: 200px"}
           %span.sr-only Actions
     %tbody

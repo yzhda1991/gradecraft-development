@@ -1,7 +1,7 @@
 = render partial: "layouts/alerts", locals: { model: @course }
 
 %section
-  %h4.uppercase Class Details
+  %h2 Class Details
   .form-item
     = f.label :location, "Location"
     = f.text_field :location
@@ -44,7 +44,7 @@
 
 - unless @course.new_record?
   %section
-    %h4.uppercase Professors
+    %h2 Professors
     .form-item
       = f.label :professors
       = f.input :instructors_of_record_ids, collection: f.object.staff,

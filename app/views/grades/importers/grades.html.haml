@@ -28,8 +28,8 @@
             %th{scope: "col"} GradeCraft Feedback
             %th{scope: "col"} User Found?
             %th
-              %button.button.select-all= "Check"
-              %button.button.select-none= "Uncheck"
+              %button.button.select-all{role: "button", type: "button"}= "Check"
+              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
         %tbody
           - @grades.each do |grade|
             - lms_user = lms_user(@syllabus, grade["user_id"])

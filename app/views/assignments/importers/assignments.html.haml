@@ -10,8 +10,8 @@
           %th{scope: "col"} Due
           %th{scope: "col"} Points
           %th{"data-dynatable-no-sort" => "true"}
-            %button.button.select-all= "Check"
-            %button.button.select-none= "Uncheck"
+            %button.button.select-all{role: "button", type: "button"}= "Check"
+            %button.button.select-none{role: "button", type: "button"}= "Uncheck"
       %tbody
         - @assignments.each do |assignment|
           %tr

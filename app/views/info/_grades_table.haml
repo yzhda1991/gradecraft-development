@@ -20,8 +20,8 @@
             %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
               %span.sr-only Actions
             %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-              %button.button.select-all= "Check"
-              %button.button.select-none= "Uncheck"
+              %button.button.select-all{role: "button", type: "button"}= "Check"
+              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
           %tbody
             - grades.each do |grade|
               - student = grade.student
@@ -46,7 +46,10 @@
                         %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
                       - elsif assignment.has_groups?
                         %li= link_to glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
-                %td.right= check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }
+                %td
+                  %label
+                    %span.sr-only Select grade to update status
+                    = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }
 
       .submit-buttons
         .right
