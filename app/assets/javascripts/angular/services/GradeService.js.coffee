@@ -89,6 +89,9 @@
 
   # Final "Submit" Button actions, includes cleanup and redirect
   submitGrade = (returnURL=null)->
+    if !grade.status
+      return alert "You must select a grade status before you can submit this grade"
+
     return queueUpdateGrade(true, returnURL) unless isRubricGraded
 
     DebounceQueue.cancelEvent("grades", grade.id)
