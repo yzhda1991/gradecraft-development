@@ -1,4 +1,36 @@
 .pageContent
   = render partial: "layouts/alerts"
   
-  = render partial: "grades/grade_content", locals: { grade: @grade }
+  // Note that things added here also need to be added to the assignments/_show_student view
+  .assignment-details-container
+    %section
+      = render partial: "grades/grade_content", locals: { grade: @grade }
+      %hr.dotted
+    
+    %section
+      %h2 Class Analytics
+      - if @grade.assignment.has_groups?
+        = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
+      - else
+        = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
+      %hr.dotted
+    
+    - if presenter.has_viewable_submission_for?(@grade.student)
+      %section
+        %h2 The Submission
+        = render partial: "submissions/submission_content",
+            locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(@grade.student).id,
+              assignment_id: @grade.assignment_id, course: current_course) }
+        = history_timeline presenter.submission_grade_history(@grade.student)
+        %hr.dotted
+    
+    %section
+      %h2 Description
+      = render partial: "assignments/description", locals: { presenter: presenter }
+      
+    - if presenter.grades_available_for?(@grade.student) && presenter.show_rubric_preview?(@grade.student)
+      %hr.dotted
+      %section
+        %h2 Grading Rubric
+        = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: @grade.student, include_grade_info: false }
+  
