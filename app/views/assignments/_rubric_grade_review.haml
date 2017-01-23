@@ -2,14 +2,14 @@
   - @criteria.each do |criterion|
     - criterion_grade = @criterion_grades.where(student_id: student.id, criterion_id: criterion.id).first
     .criterion
-      %ul.level-tabs
-        %li.criterion-tab
+      %ul.rubric-levels
+        %li.rubric-level.criterion-level
           .criterion-heading
             %h4.criterion-name= "#{criterion.name}"
             .level-points= "#{points criterion.max_points} Points"
 
         - criterion.levels.order("points ASC").each do |level|
-          %li.level-tab{class: ("earned selected" if criterion_grade.try(:level_id) == level.id)}
+          %li.rubric-level{class: ("earned selected" if criterion_grade.try(:level_id) == level.id)}
             .level-heading
               .level-details
                 - if criterion_grade.try(:level_id) == level.id
@@ -17,7 +17,7 @@
                 .level-name= level.name
                 .level-points
                   = "#{ points level.points } Points"
-              %ul.badge-row.design-view
+              %ul.badge-row
                 - level.level_badges.each_with_index do |level_badge, index|
                   %li.level-badge-image
                     %img{:src => level_badge.badge.try(:icon), class: "level_badge" }
@@ -26,6 +26,6 @@
                 .level-description
                   .level-meets-expectations Meets Expectations
 
-        %li.comments-tab
+        %li.rubric-level.comments-level
           .comments-heading Feedback
           .comments-text= raw criterion_grade.try(:comments)

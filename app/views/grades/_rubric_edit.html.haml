@@ -30,8 +30,8 @@
           %h4.criterion-name {{criterion.name.replace(" ","&nbsp;")}} {{(criterion.max_points || 0) | number:0}}&nbsp;Points
           %p.criterion-description {{criterion.description}}
 
-        %ul.level-tabs
-          %li.level-tab(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.pointsMeetExpectations()}")
+        %ul.level-tabs.rubric-levels
+          %li.level-tab.rubric-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.pointsMeetExpectations()}")
             .level-heading
               .level-details
                 %span.check-mark= glyph("check")
