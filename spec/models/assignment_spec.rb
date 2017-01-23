@@ -862,7 +862,7 @@ describe Assignment do
         end
       end
 
-      describe "#ungraded_students_with_submitted_submissions" do
+      describe "#ungraded_students_with_submissions" do
 
         before do
           subject.save
@@ -871,12 +871,12 @@ describe Assignment do
         end
 
         it "returns all students without a 'Graded' or 'Released' grade for the assignment" do
-          expect(subject.ungraded_students_with_submitted_submissions.count).to eq(2)
+          expect(subject.ungraded_students_with_submissions.count).to eq(2)
         end
 
         it "can add graded student for determining the 'next student'" do
-          expect(subject.ungraded_students_with_submitted_submissions([student_1.id]).count).to eq(3)
-          expect(subject.ungraded_students_with_submitted_submissions([student_1.id,student_2.id]).count).to eq(4)
+          expect(subject.ungraded_students_with_submissions([student_1.id]).count).to eq(3)
+          expect(subject.ungraded_students_with_submissions([student_1.id,student_2.id]).count).to eq(4)
         end
       end
     end
@@ -964,7 +964,7 @@ describe Assignment do
         end
       end
 
-      describe "ungraded_groups_with_submitted_submissions" do
+      describe "ungraded_groups_with_submissions" do
         before do
           group_1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
           create :submission, assignment: subject, student: nil, group: group_1
@@ -972,11 +972,11 @@ describe Assignment do
         end
 
         it "returns all ungraded groups that have submitted" do
-          expect(subject.ungraded_groups_with_submitted_submissions).to eq([group_2])
+          expect(subject.ungraded_groups_with_submissions).to eq([group_2])
         end
 
         it "can add graded group for determining the 'next group'" do
-          expect(subject.ungraded_groups_with_submitted_submissions(group_1).count).to eq(2)
+          expect(subject.ungraded_groups_with_submissions(group_1).count).to eq(2)
         end
       end
 

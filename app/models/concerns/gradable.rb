@@ -74,13 +74,13 @@ module Gradable
     students - (User.find(grades.graded_or_released.pluck(:student_id)) - User.find(ids_to_include))
   end
 
-  def ungraded_students_with_submitted_submissions(ids_to_include=[], team=nil)
+  def ungraded_students_with_submissions(ids_to_include=[], team=nil)
     ungraded_students(ids_to_include, team) & (User.find(submissions.submitted.pluck(:student_id)|ids_to_include))
   end
 
   def next_ungraded_student(student, team=nil)
     if accepts_submissions?
-      ungraded = ungraded_students_with_submitted_submissions([student.id], team)
+      ungraded = ungraded_students_with_submissions([student.id], team)
     else
       ungraded = ungraded_students([student.id], team)
     end
@@ -93,7 +93,7 @@ module Gradable
     ungraded_students(included_ids).map { |student| student.group_for_assignment(self) }.uniq
   end
 
-  def ungraded_groups_with_submitted_submissions(group_to_include=nil)
+  def ungraded_groups_with_submissions(group_to_include=nil)
     return nil unless accepts_submissions?
     if group_to_include.present?
       ungraded_groups(group_to_include) & Group.find(submissions.submitted.pluck(:group_id) << group_to_include.id)
@@ -105,7 +105,7 @@ module Gradable
   def next_ungraded_group(group)
     return nil unless has_groups?
     if accepts_submissions?
-      ungraded = ungraded_groups_with_submitted_submissions(group).sort_by(&:name)
+      ungraded = ungraded_groups_with_submissions(group).sort_by(&:name)
     else
       ungraded = ungraded_groups(group).sort_by(&:name)
     end
