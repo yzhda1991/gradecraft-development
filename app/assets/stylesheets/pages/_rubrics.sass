@@ -469,6 +469,8 @@ h4.notice
     margin-bottom: 0
     border: none
     border-bottom: 1px solid $color-white
+    @media (max-width: $media-small-max)
+      margin-bottom: 0.5em
     &:last-child
       border-bottom: none
   .comments-heading
@@ -480,7 +482,6 @@ h4.notice
   .rubric-levels
     @media (max-width: $media-small-max)
       display: block
-      margin-bottom: 0.25em
   .rubric-level
     cursor: default
     @media (max-width: $media-small-max)
@@ -492,10 +493,10 @@ h4.notice
       background-color: $level-selected-color
     &.criterion-level
       background-color: $color-blue-2
-      flex-basis: 5%
+      flex: 0 0 120px
     &.comments-level
       background-color: $color-white
-      flex-basis: 15%
+      flex: 0 0 220px
       padding: 0
 
 .rubric-grade-container
