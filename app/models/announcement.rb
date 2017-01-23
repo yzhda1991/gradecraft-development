@@ -4,10 +4,7 @@ class Announcement < ActiveRecord::Base
   belongs_to :recipient, class_name: "User"
   has_many :states, class_name: "AnnouncementState", dependent: :destroy
 
-  validates :author, presence: true
-  validates :body, presence: true
-  validates :course, presence: true
-  validates :title, presence: true
+  validates_presence_of :author, :body, :course, :title
 
   default_scope { order "created_at DESC" }
 

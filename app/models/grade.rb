@@ -37,6 +37,7 @@ class Grade < ActiveRecord::Base
   validates_presence_of :assignment, :assignment_type, :course, :student
   validates :student_id, uniqueness: { scope: :assignment_id,
     message: "has already been graded on this assignment" }
+  validates_numericality_of :raw_points, :final_points, :adjustment_points, allow_nil: true, length: { maximum: 9 }
 
   delegate :name, :description, :due_at, :assignment_type, :course, to: :assignment
 

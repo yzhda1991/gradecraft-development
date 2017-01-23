@@ -160,7 +160,7 @@ describe Assignment do
       expect(subject.errors[:show_purpose_when_locked]).to include "must be true or false"
     end
 
-    it "is invalid if it is due before it is open" do
+    it "is invalid if it is due before it is open", focus: true do
       subject.due_at = 2.days.from_now
       subject.open_at = 3.days.from_now
       expect(subject).to_not be_valid

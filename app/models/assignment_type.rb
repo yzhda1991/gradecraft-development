@@ -14,8 +14,8 @@ class AssignmentType < ActiveRecord::Base
   has_many :weights, class_name: "AssignmentTypeWeight", dependent: :destroy
 
   validates_presence_of :name
-  validates :max_points, numericality: { greater_than: 0 }, allow_nil: true
-  validates :top_grades_counted, numericality: { greater_than: -1 }
+  validates :max_points, numericality: { greater_than: 0 }, allow_nil: true, length: { maximum: 9 }
+  validates :top_grades_counted, numericality: { greater_than: -1 }, allow_nil: true, length: { maximum: 9 }
 
   scope :student_weightable, -> { where(student_weightable: true) }
   scope :with_submissions_this_week, -> { includes(:submissions).where("submissions.updated_at > ?", 7.days.ago).references(:submissions) }
