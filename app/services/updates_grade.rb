@@ -15,11 +15,11 @@ module Services
 
     aliases attributes: :raw_params
 
-    def self.create(grade, attributes, graded_by_id)
+    def self.create(grade, grade_params, graded_by_id)
       with(grade: grade,
            student: grade.student,
            assignment: grade.assignment,
-           attributes: attributes,
+           attributes: grade_params,
            graded_by_id: graded_by_id)
         .reduce(
           Actions::BuildsGrade,

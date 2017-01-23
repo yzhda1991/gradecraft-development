@@ -23,9 +23,10 @@ class API::GradesController < ApplicationController
 
   # POST api/grades/:grade_id
   def update
-    @grade = Grade.find(params[:id])
-    result = Services::UpdatesGrade.create @grade, params, current_user.id
+    grade = Grade.find(params[:id])
+    result = Services::UpdatesGrade.create grade, grade_params, current_user.id
     if result
+      @grade = result.grade
       render "api/grades/show", success: true, status: 200
     else
       render json: {
@@ -37,8 +38,8 @@ class API::GradesController < ApplicationController
 
   # GET api/assignments/:assignment_id/groups/:group_id/grades
   def group_index
-    assignment = Assignment.find(params[:assignment_id])
-    if !assignment.has_groups?
+    @assignment = Assignment.find(params[:assignment_id])
+    if !@assignment.has_groups?
       render json: {
         message: "not a group assignment", success: false
         },
@@ -48,7 +49,7 @@ class API::GradesController < ApplicationController
       @student_ids = students.pluck(:id)
       @grades =
         Grade.find_or_create_grades(params[:assignment_id], @student_ids)
-      if assignment.release_necessary?
+      if @assignment.release_necessary?
         @grade_status_options = Grade::STATUSES
       else
         @grade_status_options = Grade::UNRELEASED_STATUSES
@@ -59,6 +60,12 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(:raw_points, :feedback, :status)
+    params.require(:grade).permit(
+      :adjustment_points,
+      :adjustment_points_feedback,
+      :feedback,
+      :group_id,
+      :raw_points,
+      :status)
   end
 end

@@ -7,9 +7,11 @@
 angular.module('helpers').factory('DebounceQueue', ['$timeout', ($timeout)->
 
   queueStore = {}
-  TIME_TO_DELAY = 3500
+  TIME_TO_DELAY = 2500
 
   addEvent = (type, id, event, args=[], immediate=false)->
+    return console.warn("Unable to add event:", type, "for:", id) if !type || !id
+
     queueStore[type] = queueStore[type] || {}
 
     if immediate is true
