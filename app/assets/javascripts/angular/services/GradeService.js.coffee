@@ -15,6 +15,7 @@
   calculatePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
+    grade.adjustment_points = grade.adjustment_points || 0
     grade.final_points = grade.raw_points + grade.adjustment_points
     grade.final_points = 0 if grade.final_points < thresholdPoints
     console.log("raw:", grade.raw_points, "adjustment:", grade.adjustment_points, "final:", grade.final_points);

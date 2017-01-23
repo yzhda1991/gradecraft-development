@@ -10,5 +10,9 @@
 
       scope.queueUpdateGrade = (immediate)->
         GradeService.queueUpdateGrade(immediate)
+
+      scope.froalaOptions = {
+        heightMin: 50,
+      }
   }
 ]

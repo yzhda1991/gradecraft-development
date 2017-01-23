@@ -7,3 +7,8 @@
   smart-number
   allow-negatives="true"
   ng-change="queueUpdateGrade()")
+
+%section.grade-adjustment-points-feedback(ng-if="grade.adjustment_points && grade.adjustment_points != 0")
+  .grade-section-label Adjustment Points Feedback
+  %textarea(ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
+.clear
