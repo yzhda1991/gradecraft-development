@@ -60,7 +60,7 @@ $no-expectation-color: $color-grey-5
 
   .rubric-level, .level-tab
     list-style-type: none
-    display: inline-block
+    // display: inline-block
     flex: 1
     text-align: center
     padding: 0.25rem
@@ -89,6 +89,7 @@ $no-expectation-color: $color-grey-5
 
   .level-name
     display: inline
+    font-weight: 600
 
   .earned
     background-color: lighten($color-green-1, 20%)
@@ -105,6 +106,12 @@ $no-expectation-color: $color-grey-5
     a
       text-decoration: none
       cursor: pointer
+
+  .level-meets-expectations
+    background-color: $color-green-1
+    padding: 0.2rem
+    font-size: 0.65rem
+    text-align: center
 
   .tab-panel-body
     padding: 0.5rem
@@ -457,45 +464,47 @@ h4.notice
 
 // styles for the rubric grade review page
 #rubric-results-table
-  padding: 1px
   border: 1px solid $color-grey-6
   .criterion
     margin-bottom: 0
+    border: none
     border-bottom: 1px solid $color-white
+    &:last-child
+      border-bottom: none
   .comments-heading
     padding: 0.25rem
-    background-color: $color-grey-4
+    background-color: $color-blue-2
     color: $color-white
   .comments-text
     padding: 0.25rem
-  .level-heading
-    border-bottom: 0
-    .earned
-      background-color: $meets-expectations-color
-  .feedback-name
-    background-color: $color-grey-6
-    padding: .25rem
-  .level-comments
-    padding: .25rem
+  .rubric-levels
+    @media (max-width: $media-small-max)
+      display: block
+      margin-bottom: 0.25em
   .rubric-level
     cursor: default
-    &:hover, &.selected
+    @media (max-width: $media-small-max)
+      border: none
+      border-bottom: 1px solid $color-white
+    &:hover
       background-color: $color-grey-6
     &.earned
-      background-color: $meets-expectations-color
-      &:hover
-        background-color: $meets-expectations-color
+      background-color: $level-selected-color
     &.criterion-level
       background-color: $color-blue-2
       flex-basis: 5%
-      &:hover
-        background-color: $color-blue-2
     &.comments-level
       background-color: $color-white
       flex-basis: 15%
-      &:hover
-        background-color: $color-white
+      padding: 0
 
+.rubric-grade-container
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: 0.5em
+  .student-score-details p
+    margin: 0
 
 // styles for ungraded rubric view
 #rubric-ungraded
@@ -553,10 +562,6 @@ h4.notice
     text-align: left
     padding: 0.2rem 0.5rem
     font-size: 0.7rem
-
-  .level-meets-expectations
-    background-color: $color-green-1
-    padding: 0.2rem
 
   .level-tab.selected
     background-color: $level-selected-color

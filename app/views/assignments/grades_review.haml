@@ -6,12 +6,13 @@
   - presenter.students.each do |student|
     - grade = student.grade_for_assignment(presenter.assignment)
     - if grade.present? && grade.instructor_modified?
-      %h3.uppercase= student.name
-      .left= render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
-      .right= render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
+      .rubric-grade-container
+        .student-score-details
+          %h3.uppercase= student.name
+          = render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
+        = render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
 
     - if presenter.grade_with_rubric?
-      .clear
       = render partial: "assignments/rubric_grade_review", locals: { presenter: presenter, student: student, grade: grade }
 
     - if grade.graded_by.present? && grade.feedback.present?
@@ -19,5 +20,4 @@
     - if grade.file_uploads.present?
       = render partial: "grades/components/attachments", locals: { student: student, grade: grade }
 
-    .clear
     %hr.dotted
