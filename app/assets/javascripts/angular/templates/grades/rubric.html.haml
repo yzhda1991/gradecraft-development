@@ -1,9 +1,10 @@
 %section#rubric-grader
 
-  .grade-section-label Grade Assignment by Rubric
-  %h4.text-right (click to select the level earned for each criterion)
+  .grade-section-label.collapse-toggler
+    Grade Assignment by Rubric
 
-  #rubric-grade-edit.rubric.edit
+  #rubric-grade-edit.rubric.edit.collapse
+    .rubric-hint (click to select the level earned for each criterion)
     .criterion(ng-repeat="criterion in criteria")
       .criterion-heading
         %h4.criterion-name {{criterion.name}} {{(criterion.max_points || 0) | number:0}} Points
@@ -26,7 +27,3 @@
 
       .comments-box
         %textarea(ng-model="gradeForCriterion(criterion.id).comments" ng-change="queueUpdateCriterionGrade(criterion)" froala)
-
-%section.grade-raw-points
-  .grade-section-label
-    Raw Points {{grade.raw_points || 0 | number }} ({{assignment().full_points | number}} Points Possible)

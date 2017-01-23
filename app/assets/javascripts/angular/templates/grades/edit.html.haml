@@ -8,10 +8,11 @@
 %grade-rubric(ng-if='vm.rawPointsType() == "RUBRIC"')
 
 %article.grade-form-fields
-  %grade-pass-fail(ng-if='vm.rawPointsType() == "PASS_FAIL"')
 
   %grade-raw-points(ng-if='vm.rawPointsType() == "DEFAULT"')
   %grade-score-levels(ng-if='vm.rawPointsType() == "SCORE_LEVELS"')
+  %grade-pass-fail(ng-if='vm.rawPointsType() == "PASS_FAIL"')
+  %grade-raw-points-display(ng-if='vm.rawPointsType() == "RUBRIC"')
 
   %grade-adjustment-points(ng-if='vm.rawPointsType() != "PASS_FAIL"')
 
