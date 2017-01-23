@@ -4,9 +4,9 @@
       %h4.criterion-name= "#{criterion.name}: " "#{points criterion.max_points} Points"
       %p.criterion-description= criterion.description
 
-    %ul.level-tabs{:role => "tablist"}
+    %ul.level-tabs.rubric-levels{:role => "tablist"}
       - criterion.levels.ordered.each_with_index do |level, tindex|
-        %li.level-tab{:class => ("earned" if level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "panel#{tindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
+        %li.level-tab.rubric-level{:class => ("earned" if level.earned_for?(student.id)), "data-tab" => "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "panel#{tindex+1}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
           - if level.earned_for?(student.id)
             = glyph("check")
           %span= level.name

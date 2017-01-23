@@ -6,6 +6,164 @@ $meets-expectations-color: $color-green-1
 $level-selected-color: lighten($color-green-1, 10%)
 $no-expectation-color: $color-grey-5
 
+// base styles for graded rubric, ungraded rubric and rubric edit views
+.rubric
+  *
+    font-weight: 300
+
+  h5
+    font-size: 1em
+
+  h6
+    font-size: 0.9em
+
+  h5, h6
+    font-weight: 400
+    margin: 0
+
+  section
+    margin-bottom: 1rem
+    &:last-child
+      margin-bottom: 0
+  p
+    margin: 0
+
+  .criterion
+    background-color: $color-white
+    margin-bottom: 2rem
+    border: 1px solid $color-grey-6
+
+  .criterion-heading
+    background-color: $color-blue-2
+    color: $color-white
+    padding: 0.25rem 0.5rem
+
+  .criterion-name
+    font-size: 1.1em
+    font-weight: 600
+    text-transform: uppercase
+    margin: 0
+
+  .criterion-description
+    font-size: 0.75rem
+    font-style: italic
+
+  .level
+    background-color: inherit
+
+  ul.rubric-levels, .level-tabs
+    padding-left: 0
+    display: flex
+    margin: 0
+    @media (max-width: $media-small-max)
+      display: none
+
+  .rubric-level, .level-tab
+    list-style-type: none
+    display: inline-block
+    flex: 1
+    text-align: center
+    padding: 0.25rem
+    background-color: $color-grey-6
+    color: $color-grey-2
+    border-left: 1px solid $color-white
+    border-right: 1px solid $color-white
+    font-size: 0.8rem
+    cursor: pointer
+    position: relative
+    &:hover
+      background-color: lighten($color-grey-6, 5%)
+    &.selected
+      background-color: $color-white
+    i
+      padding-right: 0
+    &:first-child
+      border-left: none
+    &:last-child
+      border-right: none
+    &.earned
+      background-color: lighten($color-green-1, 20%)
+      border-bottom: none
+      &:hover
+        background-color: lighten($color-green-1, 22%)
+
+  .level-name
+    display: inline
+
+  .earned
+    background-color: lighten($color-green-1, 20%)
+
+  .level-description
+    font-size: 0.85rem
+
+  .graded-students
+    font-size: 0.65rem
+    font-style: italic
+
+  .meets-expectations-label
+    font-size: 0.8rem
+    a
+      text-decoration: none
+      cursor: pointer
+
+  .tab-panel-body
+    padding: 0.5rem
+
+  .tab-panel-header
+    padding: 0.5rem 2rem
+    background-color: $color-grey-6
+    display: none
+    text-align: center
+    font-weight: 400
+    @media (max-width: $media-small-max)
+      display: block
+
+  ul.badge-row
+    height: auto
+    margin: 0
+    padding-left: 0
+
+  .level-badge-image
+    float: none
+    list-style-type: none
+    img
+      height: 35px
+      display: inline-block
+
+  .tab-panel
+    display: none
+    &.selected
+      display: block
+    &.earned
+      background-color: lighten($color-green-1, 20%)
+      .tab-panel-header
+        background-color: lighten($color-green-1, 20%)
+      @media (max-width: $media-small-max)
+        background-color: inherit
+
+  // styles for slider on mobile graded rubric view
+  .slick-slide
+    padding: 0
+    display: block
+    height: auto
+
+  .rubric-slider-button
+    position: absolute
+    top: 10px
+    display: block
+    cursor: pointer
+    z-index: 1
+    color: $color-blue-3
+    font-size: 1.2rem
+    &:hover
+      text-decoration: none
+    &.slick-disabled
+      display: none !important
+    &.next
+      right: 16px
+    &.previous
+      left: 16px
+
 // styles for rubric design view
 #rubric-design
   textarea
@@ -288,165 +446,6 @@ h4.notice
   &.adjustment.positive-adjustment
     color: $color-green-2
 
-
-// base styles for graded rubric, ungraded rubric and rubric edit views
-.rubric
-  *
-    font-weight: 300
-  h4
-    font-size: 1.1em
-    text-transform: uppercase
-    margin: 0
-
-  h5
-    font-size: 1em
-    margin: 0
-
-  h6
-    font-size: 0.9em
-    margin: 0
-
-  h4, h5, h6
-    font-weight: 400
-
-  section
-    margin-bottom: 1rem
-    &:last-child
-      margin-bottom: 0
-  p
-    margin: 0
-
-  .criterion
-    background-color: $color-white
-    margin-bottom: 2rem
-    border: 1px solid $color-grey-6
-
-  .criterion-heading
-    background-color: $color-blue-2
-    color: $color-white
-    padding: 0.25rem 0.5rem
-
-  .criterion-description
-    font-size: 0.75rem
-    font-style: italic
-
-  .level
-    background-color: inherit
-
-  ul.level-tabs
-    padding-left: 0
-    display: flex
-    margin: 0
-    @media (max-width: $media-small-max)
-      display: none
-
-  .level-tab, .criterion-tab, .comments-tab
-    list-style-type: none
-    display: inline-block
-    flex: 1
-    text-align: center
-    padding: 0.25rem
-    background-color: $color-grey-6
-    color: $color-grey-2
-    border-left: 1px solid $color-white
-    border-right: 1px solid $color-white
-    font-size: 0.8rem
-    cursor: pointer
-    position: relative
-    &:hover
-      background-color: lighten($color-grey-6, 5%)
-    &.selected
-      background-color: $color-white
-    i
-      padding-right: 0
-    &:first-child
-      border-left: none
-    &:last-child
-      border-right: none
-    &.earned
-      background-color: lighten($color-green-1, 20%)
-      border-bottom: none
-      &:hover
-        background-color: lighten($color-green-1, 22%)
-
-  .level-name
-    display: inline
-
-  .earned
-    background-color: lighten($color-green-1, 20%)
-
-
-  .level-description
-    font-size: 0.85rem
-    font-weight: 300
-
-  .graded-students
-    font-size: 0.65rem
-    font-style: italic
-
-  .meets-expectations-label
-    font-size: 0.8rem
-    a
-      text-decoration: none
-      cursor: pointer
-
-  .tab-panel-body
-    padding: 0.5rem
-
-  .tab-panel-header
-    padding: 0.5rem 2rem
-    background-color: $color-grey-6
-    display: none
-    text-align: center
-    font-weight: 400
-    @media (max-width: $media-small-max)
-      display: block
-
-  ul.badge-row
-    height: auto
-    margin: 0
-    padding-left: 0
-
-  .level-badge-image
-    float: none
-    img
-      height: 35px
-      display: inline-block
-
-  .tab-panel
-    display: none
-    &.selected
-      display: block
-    &.earned
-      background-color: lighten($color-green-1, 20%)
-      .tab-panel-header
-        background-color: lighten($color-green-1, 20%)
-      @media (max-width: $media-small-max)
-        background-color: inherit
-
-  // styles for slider on mobile graded rubric view
-  .slick-slide
-    padding: 0
-    display: block
-    height: auto
-
-  .rubric-slider-button
-    position: absolute
-    top: 10px
-    display: block
-    cursor: pointer
-    z-index: 1
-    color: $color-blue-3
-    font-size: 1.2rem
-    &:hover
-      text-decoration: none
-    &.slick-disabled
-      display: none !important
-    &.next
-      right: 16px
-    &.previous
-      left: 16px
-
 .class-analytics-toggle, .download-link
   @media (max-width: $media-small-max)
     display: none
@@ -458,6 +457,44 @@ h4.notice
 
 // styles for the rubric grade review page
 #rubric-results-table
+  padding: 1px
+  border: 1px solid $color-grey-6
+  .criterion
+    margin-bottom: 0
+    border-bottom: 1px solid $color-white
+  .comments-heading
+    padding: 0.25rem
+    background-color: $color-grey-4
+    color: $color-white
+  .comments-text
+    padding: 0.25rem
+  .level-heading
+    border-bottom: 0
+    .earned
+      background-color: $meets-expectations-color
+  .feedback-name
+    background-color: $color-grey-6
+    padding: .25rem
+  .level-comments
+    padding: .25rem
+  .rubric-level
+    cursor: default
+    &:hover, &.selected
+      background-color: $color-grey-6
+    &.earned
+      background-color: $meets-expectations-color
+      &:hover
+        background-color: $meets-expectations-color
+    &.criterion-level
+      background-color: $color-blue-2
+      flex-basis: 5%
+      &:hover
+        background-color: $color-blue-2
+    &.comments-level
+      background-color: $color-white
+      flex-basis: 15%
+      &:hover
+        background-color: $color-white
 
 
 // styles for ungraded rubric view
@@ -483,10 +520,7 @@ h4.notice
       padding-right: 0
 
 // Edit rubric grade view
-#rubric-grade-edit, #rubric-results-table
-  .criterion-name, .level-name
-    font-weight: bold
-
+#rubric-grade-edit
   .criterion-name, .criterion-points
     color: $color-white
 
@@ -494,7 +528,7 @@ h4.notice
     font-size: 80%
     text-transform: uppercase
 
-  .level-tab, .criterion-tab, .comments-tab
+  .level-tab
     padding: 0
     &.selected
       .check-mark
@@ -528,7 +562,6 @@ h4.notice
     background-color: $level-selected-color
 
   .level-badge-image
-    list-style: none
     img
       height: 25px
 
@@ -544,42 +577,6 @@ h4.notice
 
   h4.notice
     color: $color-green-2
-
-#rubric-results-table
-  padding: 1px
-  border: 1px solid $color-grey-6
-  .criterion
-    margin-bottom: 0
-    border-bottom: 1px solid $color-white
-  .criterion-tab
-    background-color: $color-blue-2
-    &:hover
-      background-color: $color-blue-2
-  .comments-tab
-    background-color: $color-white
-    .comments-heading
-      padding: 0.25rem
-      background-color: $color-grey-4
-      color: $color-white
-    .comments-text, .comments-text:hover
-      background-color: $color-white
-      padding: 0.25rem
-  .level-heading
-    border-bottom: 0
-    .earned
-      background-color: $meets-expectations-color
-  .feedback-name
-    background-color: $color-grey-6
-    padding: .25rem
-  .level-comments
-    padding: .25rem
-  .level-tab, .criterion-tab, .comments-tab
-    &:hover, &.selected
-      background-color: $color-grey-6
-    &.earned
-      background-color: $meets-expectations-color
-      &:hover
-        background-color: $meets-expectations-color
 
 .points-adjustment-feedback
   margin-right: 1rem
