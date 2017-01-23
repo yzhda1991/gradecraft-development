@@ -1,12 +1,10 @@
-# standard grade raw_points field
+# standard grade raw_points input field
 
-@gradecraft.directive 'gradeRawPoints', ['GradeCraftAPI', 'AssignmentService', 'GradeService', (GradeCraftAPI, AssignmentService, GradeService) ->
+@gradecraft.directive 'gradeRawPoints', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/raw_points.html'
     link: (scope, el, attr)->
-
-      scope.api = GradeCraftAPI
 
       scope.assignment = ()->
         AssignmentService.assignment()

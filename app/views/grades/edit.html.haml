@@ -3,7 +3,7 @@
 
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @grade.assignment }
 
-  %hr.dotted
+  %hr.grading-divider
 
   - if @grade.assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
 
@@ -13,7 +13,7 @@
       = render partial: "submissions/submission_content",
         locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
             assignment_id: @grade.assignment.id, course: current_course) }
-    %hr.dotted
+    %hr.grading-divider
 
   -# - if @grade.assignment.grade_with_rubric?
   -#   = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, recipient_type: "student", recipient_id: @grade.student.id, grade: @grade, return_path: URI(request.referer || "").path,  grade_next_path: @grade_next_path }

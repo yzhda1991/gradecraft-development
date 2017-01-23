@@ -13,6 +13,9 @@
 
       vm.groupGrade = vm.recipientType == "group"
 
+      # This can be simplified once group grades can also handle grade file uploads
+      vm.feedbackMessage = if vm.recipientType == "group" then "Enter Text Feedback" else "Upload Feedback or Enter Below"
+
       services(vm.assignmentId, vm.recipientType, vm.recipientId).then(()->
         vm.loading = false
 
