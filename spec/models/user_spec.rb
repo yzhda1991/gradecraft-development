@@ -498,24 +498,57 @@ describe User do
   end
 
   describe "#submission_for_assignment(assignment)" do
-    let(:student) { create :user }
+    context "with a non-group assignment" do
+      let(:assignment) { create(:assignment) }
 
-    it "returns the submission for an assignment if it exists" do
-      assignment = create(:assignment)
-      submission = create(:submission, assignment: assignment, student: student)
-      expect(student.submission_for_assignment(assignment)).to eq(submission)
+      context "when there is not a draft submission" do
+        let!(:submitted_submission) { create(:submission, assignment: assignment, student: student) }
+
+        it "returns the submission for an assignment" do
+          expect(student.submission_for_assignment(assignment)).to eq(submitted_submission)
+        end
+      end
+
+      context "when there is a draft submission" do
+        let!(:draft_submission) { create(:draft_submission, assignment: assignment, student: student) }
+
+        it "returns nil if submitted_only is true" do
+          expect(student.submission_for_assignment(assignment)).to be_nil
+        end
+
+        it "returns the draft submission if submitted_only is false" do
+          expect(student.submission_for_assignment(assignment, false)).to eq(draft_submission)
+        end
+      end
     end
 
-    describe "when it is a group assignment" do
-      let!(:create_group) { world.create_group }
-      let(:group) { world.group }
+    context "with a group assignment" do
+      let(:assignment) { create(:group_assignment) }
+      let(:group) { create(:group) }
 
-      it "returns the group submission if it exists"  do
-        assignment = create(:assignment, grade_scope: "Group")
-        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-        FactoryGirl.create(:group_membership, student: student, group: group)
-        submission = create(:submission, assignment: assignment, student: nil, group: group)
-        expect(student.submission_for_assignment(assignment)).to eq(submission)
+      before(:each) do
+        create(:assignment_group, group: group, assignment: assignment)
+        create(:group_membership, student: student, group: group)
+      end
+
+      context "when the submission is not a draft submission" do
+        let!(:submitted_submission) { create(:group_submission, assignment: assignment, group: group) }
+
+        it "returns the group submission"  do
+          expect(student.submission_for_assignment(assignment)).to eq(submitted_submission)
+        end
+      end
+
+      context "when the submission is a draft submission" do
+        let!(:draft_submission) { create(:group_submission, assignment: assignment, group: group, submitted_at: nil) }
+
+        it "returns nil if submitted_only is true" do
+          expect(student.submission_for_assignment(assignment)).to be_nil
+        end
+
+        it "returns the draft submission if submitted_only is false" do
+          expect(student.submission_for_assignment(assignment, false)).to eq(draft_submission)
+        end
       end
     end
   end

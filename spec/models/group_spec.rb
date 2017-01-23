@@ -22,7 +22,7 @@ describe Group do
     end
 
     it "does not allow more group members than the assignment max" do
-      student1 = create :user 
+      student1 = create :user
       student2 = create :user
       student3 = create :user
       student4 = create :user
@@ -36,7 +36,7 @@ describe Group do
     end
 
     it "does not allow fewer group members than the assignment min" do
-      student1 = create :user 
+      student1 = create :user
       student2 = create :user
       assignment1 = create :assignment, max_group_size: 4
 
@@ -47,7 +47,7 @@ describe Group do
     end
 
     it "does not allow students to belong to more than one group per assignment" do
-      student1 = create :user 
+      student1 = create :user
       student2 = create :user
       student3 = create :user
       assignment1 = create :assignment, max_group_size: 2
@@ -61,7 +61,7 @@ describe Group do
     end
 
     it "requires the group to work on at least one assignment" do
-      student1 = create :user 
+      student1 = create :user
       student2 = create :user
       assignment1 = create :assignment, max_group_size: 4
 
@@ -165,15 +165,30 @@ describe Group do
   end
 
   describe "#submission_for_assignment(assignment)" do
-    it "returns the group's submission for an assignment" do
-      assignment = create(:assignment, grade_scope: "Group")
-      submission = create(:group_submission, group: subject, assignment: assignment)
-      expect(subject.submission_for_assignment(assignment)).to eq(submission)
+    let(:assignment) { create(:assignment, grade_scope: "Group") }
+
+    context "when there is not a draft submission" do
+      it "returns the group's submission for an assignment" do
+        submission = create(:group_submission, group: subject, assignment: assignment)
+        expect(subject.submission_for_assignment(assignment)).to eq(submission)
+      end
+
+      it "returns nil if the group doesn't have an assignment submission" do
+        # assignment = create(:assignment, grade_scope: "Group")
+        expect(subject.submission_for_assignment(assignment)).to eq nil
+      end
     end
 
-    it "returns nil if the group doesn't have an assignment submission" do
-      assignment = create(:assignment, grade_scope: "Group")
-      expect(subject.submission_for_assignment(assignment)).to eq(nil)
+    context "when there is a draft submission" do
+      let!(:draft_submission) { create(:group_submission, assignment: assignment, group: subject, submitted_at: nil) }
+
+      it "returns nil if submitted only is true" do
+        expect(subject.submission_for_assignment(assignment)).to eq nil
+      end
+
+      it "returns the draft submission" do
+        expect(subject.submission_for_assignment(assignment, false)).to eq draft_submission
+      end
     end
   end
 

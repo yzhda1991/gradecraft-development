@@ -58,8 +58,13 @@ class Group < ActiveRecord::Base
   end
 
   # Group submissions
-  def submission_for_assignment(assignment)
-    submissions_by_assignment_id[assignment.id].try(:first)
+  def submission_for_assignment(assignment, submitted_only=true)
+    submissions = submissions_by_assignment_id[assignment.id]
+    if submissions.nil?
+      nil
+    else
+      submitted_only ? submissions.reject(&:unsubmitted?).try(:first) : submissions.try(:first)
+    end
   end
 
   def submitter_directory_name

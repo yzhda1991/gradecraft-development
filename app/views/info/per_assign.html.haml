@@ -46,7 +46,7 @@
                 %td= points assignment.predicted_count
                 %td
                   - if assignment.accepts_submissions?
-                    = points assignment.submissions.count
+                    = points assignment.submissions.submitted.count
                 %th= points assignment.grade_count
                 %th
                   %ul.button-bar.right

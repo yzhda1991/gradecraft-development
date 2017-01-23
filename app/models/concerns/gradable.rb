@@ -75,7 +75,7 @@ module Gradable
   end
 
   def ungraded_students_with_submissions(ids_to_include=[], team=nil)
-    ungraded_students(ids_to_include, team) & (User.find(submissions.pluck(:student_id)|ids_to_include))
+    ungraded_students(ids_to_include, team) & (User.find(submissions.submitted.pluck(:student_id)|ids_to_include))
   end
 
   def next_ungraded_student(student, team=nil)
@@ -96,9 +96,9 @@ module Gradable
   def ungraded_groups_with_submissions(group_to_include=nil)
     return nil unless accepts_submissions?
     if group_to_include.present?
-      ungraded_groups(group_to_include) & Group.find(submissions.pluck(:group_id) << group_to_include.id)
+      ungraded_groups(group_to_include) & Group.find(submissions.submitted.pluck(:group_id) << group_to_include.id)
     else
-      ungraded_groups & Group.find(submissions.pluck(:group_id))
+      ungraded_groups & Group.find(submissions.submitted.pluck(:group_id))
     end
   end
 

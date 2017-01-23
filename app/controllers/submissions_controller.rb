@@ -48,7 +48,7 @@ class SubmissionsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.find(params[:id])
-    submission_was_draft = submission.draft?
+    submission_was_draft = submission.unsubmitted?
 
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&

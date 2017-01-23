@@ -174,9 +174,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     if @submissions_export.use_groups
       @assignment.submissions.with_group
     elsif @submissions_export.team
-      @assignment.student_submissions_with_files_for_team(@team)
+      @assignment.student_submissions_with_files_for_team(@team).reject(&:unsubmitted?)
     else
-      @assignment.student_submissions_with_files
+      @assignment.student_submissions_with_files.reject(&:unsubmitted?)
     end
   end
 

@@ -11,12 +11,12 @@ describe SubmissionProctor do
 
     context "when the current user is not a student in the course" do
       it "returns true if the submission is not a draft" do
-        allow(submission).to receive(:draft?).and_return false
+        allow(submission).to receive(:unsubmitted?).and_return false
         expect(subject.viewable?(user)).to be true
       end
 
       it "returns false if the submission is a draft" do
-        allow(submission).to receive(:draft?).and_return true
+        allow(submission).to receive(:unsubmitted?).and_return true
         expect(subject.viewable?(user)).to be false
       end
     end

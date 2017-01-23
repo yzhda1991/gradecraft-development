@@ -524,15 +524,15 @@ describe Submission do
     end
   end
 
-  describe "#draft?" do
+  describe "#unsubmitted?" do
     it "returns true if the submitted at date is nil" do
       subject.submitted_at = nil
-      expect(subject.draft?).to eq true
+      expect(subject.unsubmitted?).to eq true
     end
 
     it "returns false if the submitted at date is not nil" do
       subject.submitted_at = DateTime.now
-      expect(subject.draft?).to eq false
+      expect(subject.unsubmitted?).to eq false
     end
   end
 
