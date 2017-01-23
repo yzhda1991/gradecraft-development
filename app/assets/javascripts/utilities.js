@@ -36,7 +36,8 @@ $( "#tabs" ).tabs({
     'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
     'outdent', 'indent', 'insertLink', 'undo', 'redo',
     'clearFormatting', 'selectAll', 'html'
-  ]
+  ],
+  pluginsEnabled: ['align', 'charCounter', 'codeBeautifier', 'emoticons', 'entities', 'fullscreen', 'image', 'inlineStyle', 'link', 'lists', 'paragraphFormat', 'quote', 'table', 'url']
 })
 
 // handle 'select all' buttons, used on release grade forms
