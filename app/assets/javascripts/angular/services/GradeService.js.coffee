@@ -15,10 +15,10 @@
   calculatePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
+    grade.raw_points = parseInt(grade.raw_points) # selector converts to string
     grade.adjustment_points = grade.adjustment_points || 0
     grade.final_points = grade.raw_points + grade.adjustment_points
     grade.final_points = 0 if grade.final_points < thresholdPoints
-    console.log("raw:", grade.raw_points, "adjustment:", grade.adjustment_points, "final:", grade.final_points);
 
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
@@ -191,16 +191,6 @@
         GradeCraftAPI.logResponse(response)
     )
 
-
-  # remove custom value, replace with adjustment points
-  toggleCustomValue = ()->
-    grade.is_custom_value = !grade.is_custom_value
-  enableCustomValue = ()->
-    this.toggleCustomValue() if grade.is_custom_value == false
-  enableScoreLevels = (event)->
-    this.toggleCustomValue() if grade.is_custom_value == true
-
-
   return {
     grade: grade
     fileUploads: fileUploads
@@ -210,10 +200,6 @@
     setCriterionGradeLevel: setCriterionGradeLevel
     findCriterionGrade: findCriterionGrade
     addCriterionGrade: addCriterionGrade
-
-    toggleCustomValue: toggleCustomValue
-    enableCustomValue: enableCustomValue
-    enableScoreLevels: enableScoreLevels
 
     getGrade: getGrade
 

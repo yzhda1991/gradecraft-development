@@ -9,12 +9,6 @@
     AssignmentService.getAssignment(assignmentId)
     GradeService.getGrade(assignmentId, recipientType, recipientId)
 
-  $scope.toggleCustomValue = ()->
-    GradeService.toggleCustomValue()
-  $scope.enableCustomValue = ()->
-    GradeService.enableCustomValue()
-  $scope.enableScoreLevels = ()->
-    GradeService.enableScoreLevels()
   $scope.updateGrade = ()->
     GradeService.updateGrade()
 

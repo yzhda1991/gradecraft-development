@@ -14,10 +14,5 @@
       scope.queueUpdateGrade = (immediate)->
         GradeService.queueUpdateGrade(immediate)
 
-      scope.toggleCustomValue = ()->
-        GradeService.toggleCustomValue()
-
-      scope.textForToggle = ()->
-        if GradeService.grade.is_custom_value then "Change to score level selector" else "Change to custom value"
   }
 ]

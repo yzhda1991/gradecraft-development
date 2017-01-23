@@ -12,7 +12,6 @@ json.attributes do
   json.pass_fail_status           grade.pass_fail_status
   json.adjustment_points          grade.adjustment_points
   json.final_points               grade.final_points
-  json.is_custom_value            grade.is_custom_value
   json.adjustment_points_feedback grade.adjustment_points_feedback
   json.updated_at                 grade.updated_at
 end
