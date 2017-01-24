@@ -1,23 +1,18 @@
-%h4.bold Basic Stats
 - if presenter.has_grades?
+  %h3 Basic Stats
   %ul
-    %li
-      %span.small_uppercase Average Score:
-      = points presenter.assignment.average
-    %li
-      %span.small_uppercase Minimum Score:
-      = points presenter.assignment.low_score
-    %li
-      %span.small_uppercase High Score:
-      = points presenter.assignment.high_score
+    %li Average Score: #{points presenter.assignment.average}
+    %li Minimum Score: #{points presenter.assignment.low_score}
+    %li High Score: #{points presenter.assignment.high_score}
 
-  %h4.bold Grade Distribution
-  .grades_per_assign{ "data-scores" => presenter.scores_for(current_user).to_json }
+  .class-analytics-graph
+    %h3 Grade Distribution
+    .grades_per_assign{ "data-scores" => presenter.scores_for(current_student).to_json, :style => "width: 200px" }
 
-  - if presenter.assignment.accepts_submissions? && presenter.assignment.submissions.present?
-    %br
-    %h4.bold Participants
-    #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize} Submitted", "data-percent" => "#{presenter.assignment.submission_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.assignment.submissions.count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2"  }
+  .class-analytics-graph
+    %h3 Participants
+    #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize}", "data-percent" => "#{presenter.participation_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.participation_count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2" }
 
-  %h4.bold Percentage Scores Earned
-  #levels_per_assignment{"data-levels" =>  presenter.assignment.percentage_score_earned.to_json }
+  .class-analytics-graph
+    %h3 Percentage Scores Earned
+    #levels_per_assignment{"data-levels" =>  presenter.assignment.percentage_score_earned.to_json }

@@ -290,12 +290,6 @@ class Assignment < ActiveRecord::Base
     ((grade_count / course.graded_student_count.to_f) * 100).round(2)
   end
 
-  # Counting the percentage of submissions from the entire class
-  def submission_rate(course)
-    return 0 if course.graded_student_count.zero?
-    ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
-  end
-
   def grade_import(students, options = {})
     GradeExporter.new.export_grades(self, students, options)
   end

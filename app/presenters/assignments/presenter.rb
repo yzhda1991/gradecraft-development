@@ -173,8 +173,20 @@ class Assignments::Presenter < Showtime::Presenter
     student.submission_for_assignment(assignment, false)
   end
 
-  def submission_rate
-    assignment.submission_rate(course)
+  # Tallying the percentage of participation from the entire class
+  def participation_rate
+    return 0 if participation_count == 0
+    ((participation_actions / participation_count) * 100).round(2)
+  end
+  
+  def participation_actions
+    scores.count if assignment.is_individual?
+    grades.select(:group_id).distinct.count if assignment.has_groups?
+  end
+  
+  def participation_count
+    course.graded_student_count.to_f if assignment.is_individual?
+    assignment.groups.count.to_f if assignment.has_groups?
   end
 
   def submission_grade_history(student)
