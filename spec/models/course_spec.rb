@@ -638,7 +638,7 @@ describe Course do
       create(:course_membership, :student, course: subject, score: 100)
       create(:course_membership, :student, course: subject, score: 200)
       create(:course_membership, :student, course: subject, score: 300)
-      expect(subject.scores).to match_array({:scores => [100, 200, 300]})
+      expect(subject.scores) =~({:scores => [100, 200, 300]})
     end
   end
 
