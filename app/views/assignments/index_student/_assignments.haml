@@ -3,7 +3,7 @@
 .assignment-index-container
   - presenter.assignment_types.each do |assignment_type|
     .assignment_type.student{id: "assignment-type-#{assignment_type.id}" }
-      .collapse
+      .assignment-type-bar.collapse
         %h2= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
         .points-summary
           // Display the student's points out of assignment total, if there is an assignment max value. Else

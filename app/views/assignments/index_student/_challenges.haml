@@ -1,7 +1,7 @@
 - if current_course.has_team_challenges? && current_course.add_team_score_to_student? && current_student.team_for_course(current_course).present?
   .assignment_type.team-challenge.student
 
-    .collapse
+    .assignment-type-bar.collapse
       %h3= glyph('angle-double-right') + "#{term_for :challenges}" 
       .points-summary
         .assignment-type-points-graph
