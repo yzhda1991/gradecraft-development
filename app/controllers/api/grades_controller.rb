@@ -24,7 +24,7 @@ class API::GradesController < ApplicationController
   # POST api/grades/:grade_id
   def update
     grade = Grade.find(params[:id])
-    result = Services::UpdatesGrade.create grade, grade_params, current_user.id
+    result = Services::UpdatesGrade.update grade, grade_params, current_user.id
     if result
       @grade = result.grade
       render "api/grades/show", success: true, status: 200
