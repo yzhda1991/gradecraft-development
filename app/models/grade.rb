@@ -67,7 +67,8 @@ class Grade < ActiveRecord::Base
   def self.for_student_email_and_assignment_id(email_address, assignment_id)
     self
       .joins(:student)
-      .where("LOWER(users.email) = :email_address", email_address: email_address.downcase)
+      .where("LOWER(users.email) = :email_address",
+              email_address: (email_address || "").downcase)
       .where(assignment_id: assignment_id)
       .first
   end
