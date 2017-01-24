@@ -200,6 +200,7 @@
   position: absolute
   &.assignment-settings
     height: 20px
+    background-color: $color-blue-3
 
 .points-ratio
   display: inline-block
@@ -210,16 +211,15 @@
 .graph-fill-bar
   position: absolute
   height: 30px
-  background-color: $color-blue-2
+  background-color: $color-blue-3
   border-right: 1px solid $color-white
-  &.first-level-points-graph-fill-bar
-    background-color: $color-green-1
-  &.second-level-points-graph-fill-bar
-    background-color: $color-orange-1
-  &.third-level-points-graph-fill-bar
-    background-color: $color-purple-2
+  .display-on-hover
+    width: auto
+    top: -54px
+    right: -30px
 
 .grade-marker
   position: absolute
   top: -20px
   right: -8px
+  

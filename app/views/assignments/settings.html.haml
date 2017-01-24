@@ -11,11 +11,18 @@
     %h2= "#{points(current_course.total_points)} points"
   .total-points-graph
     .graph-fill-bar.first-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      .grade-marker= "#{current_course.grade_scheme_elements.order_by_highest_points[0].letter}"
+      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-top"}
+        = "#{current_course.grade_scheme_elements.order_by_highest_points[0].letter}"
+      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-top"}
+        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points)}"
     .graph-fill-bar.second-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[1].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      .grade-marker= "#{current_course.grade_scheme_elements.order_by_highest_points[1].letter}"
+      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-mid"}= "#{current_course.grade_scheme_elements.order_by_highest_points[1].letter}"
+      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-mid"}
+        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[1].lowest_points)}"
     .graph-fill-bar.third-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[2].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      .grade-marker= "#{current_course.grade_scheme_elements.order_by_highest_points[2].letter}"
+      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-low"}= "#{current_course.grade_scheme_elements.order_by_highest_points[2].letter}"
+      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-low"}
+        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[2].lowest_points)}"
 
   .assignment-index-container
     - @assignment_types.each do |assignment_type|
