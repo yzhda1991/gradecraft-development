@@ -10,19 +10,12 @@
     %h2 Total
     %h2= "#{points(current_course.total_points)} points"
   .total-points-graph
-    .graph-fill-bar.first-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-top"}
-        = "#{current_course.grade_scheme_elements.order_by_highest_points[0].letter}"
-      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-top"}
-        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points)}"
-    .graph-fill-bar.second-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[1].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-mid"}= "#{current_course.grade_scheme_elements.order_by_highest_points[1].letter}"
-      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-mid"}
-        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[1].lowest_points)}"
-    .graph-fill-bar.third-level-points-graph-fill-bar{:style => "width: #{(current_course.grade_scheme_elements.order_by_highest_points[2].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
-      %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-low"}= "#{current_course.grade_scheme_elements.order_by_highest_points[2].letter}"
-      .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-low"}
-        = "#{points(current_course.grade_scheme_elements.order_by_highest_points[2].lowest_points)}"
+    - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
+      .graph-fill-bar{:style => "width: #{percent_of_total_points(index)}%"}
+        %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-top"}
+          = level_letter_grade(index)
+        .display-on-hover.hover-style{role: "tooltip", :id=> "tip-grade-level-top"}
+          = level_point_threshold(index)
 
   .assignment-index-container
     - @assignment_types.each do |assignment_type|
@@ -31,4 +24,6 @@
         .points-ratio #{ points(assignment_type.total_points) }/#{ points(current_course.total_points) }
         .assignment-type-points-graph.assignment-settings
           .points-graph-fill-bar.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (current_course.total_points.to_f).to_f * 100}%;"}
+          - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
+            .grade-level-marker{:style => "width: #{percent_of_total_points(index)}%"}
         = link_to "Review Settings", "#", class: "button right"

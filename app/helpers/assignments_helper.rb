@@ -11,4 +11,16 @@ module AssignmentsHelper
   def find_earned_rubric_grade(criterion, student_id)
     criterion.levels.ordered.to_a.index{|level| level.earned_for?(student_id)}
   end
+
+  def percent_of_total_points(level_index)
+    (current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points).to_f / (current_course.total_points.to_f).to_f * 100
+  end
+
+  def level_letter_grade(level_index)
+    current_course.grade_scheme_elements.order_by_highest_points[level_index].letter
+  end
+
+  def level_point_threshold(level_index)
+    points(current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points)
+  end
 end
