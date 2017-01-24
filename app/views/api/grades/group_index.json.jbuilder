@@ -4,7 +4,7 @@ end
 
 json.included do
   if @file_uploads.present?
-    json.array! @grade.file_uploads do |file_upload|
+    json.array! @file_uploads do |file_upload|
       json.type "file_uploads"
       json.id file_upload.id.to_s
       json.attributes do
@@ -18,7 +18,7 @@ json.included do
   end
 
   if @criterion_grades.present?
-    json.array! @grade.criterion_grades do |criterion_grade|
+    json.array! @criterion_grades do |criterion_grade|
       json.type "criterion_grades"
       json.id criterion_grade.id.to_s
       json.attributes do

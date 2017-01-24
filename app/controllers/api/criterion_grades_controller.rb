@@ -65,7 +65,8 @@ class API::CriterionGradesController < ApplicationController
   # PUT api/assignments/:assignment_id/students/:student_id/criteria/:id/update_fields
   def update_fields
     @criterion_grade = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
-    result = @criterion_grade.update_attributes(criterion_grade_params)
+    grade_id = Grade.where(assignment_id: params[:assignment_id], student_id:  params[:student_id]).first.id
+    result = @criterion_grade.update_attributes(criterion_grade_params(grade_id))
     if result
       # TODO run GradeUpdaterJob.new(grade_id: @criterion_grade.grade_id) or similar if points changed?
       render "api/criterion_grades/show", success: true,
@@ -83,8 +84,9 @@ class API::CriterionGradesController < ApplicationController
     results = []
     @criterion_grades = []
     group.students.each do |student|
+      grade_id = Grade.where(assignment_id: params[:assignment_id], student_id: student.id).first.id
       cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], student.id)
-      results << cg.update_attributes(criterion_grade_params)
+      results << cg.update_attributes(criterion_grade_params(grade_id))
       @criterion_grades << cg
     end
     if results.all?
@@ -99,7 +101,7 @@ class API::CriterionGradesController < ApplicationController
 
   private
 
-  def criterion_grade_params
-    params.require(:criterion_grade).permit(:comments, :level_id, :grade_id, :points)
+  def criterion_grade_params(grade_id)
+    params.require(:criterion_grade).permit(:comments, :level_id, :points).merge(grade_id: grade_id)
   end
 end

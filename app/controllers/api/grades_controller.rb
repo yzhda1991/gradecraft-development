@@ -49,6 +49,7 @@ class API::GradesController < ApplicationController
       @student_ids = students.pluck(:id)
       @grades =
         Grade.find_or_create_grades(params[:assignment_id], @student_ids)
+      @criterion_grades = CriterionGrade.where(grade_id: @grades.pluck(:id))
       if @assignment.release_necessary?
         @grade_status_options = Grade::STATUSES
       else
