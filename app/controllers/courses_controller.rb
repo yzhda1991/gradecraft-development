@@ -76,6 +76,7 @@ class CoursesController < ApplicationController
     authorize! :update, @course
     respond_to do |format|
       if @course.update_attributes(course_params)
+        @course.recalculate_student_scores if add_team_score_to_student_changed?
         bust_course_list_cache current_user
         format.html do
           redirect_to edit_course_path(@course),
@@ -146,5 +147,10 @@ class CoursesController < ApplicationController
   def use_current_course
     @course = current_course
     authorize! :update, @course
+  end
+
+  def add_team_score_to_student_changed?
+    course_params[:add_team_score_to_student].present? &&
+      (@course.add_team_score_to_student != course_params[:add_team_score_to_student])
   end
 end

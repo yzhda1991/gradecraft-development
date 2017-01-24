@@ -190,6 +190,18 @@ describe CoursesController do
         post :update, params: { id: course.id, course: params }
         expect(response).to render_template(:edit)
       end
+
+      it "recalculates scores in the course if add_team_score_to_student changed" do
+        params = { add_team_score_to_student: true }
+        expect_any_instance_of(Course).to receive(:recalculate_student_scores)
+        post :update, params: { id: course.id, course: params }
+      end
+
+      it "does not recalculate scores in the course if add_team_score_to_student didn't change" do
+        params = { name: "new name" }
+        expect_any_instance_of(Course).to_not receive(:recalculate_student_scores)
+        post :update, params: { id: course.id, course: params }
+      end
     end
 
     describe "POST recalculate_student_scores" do
