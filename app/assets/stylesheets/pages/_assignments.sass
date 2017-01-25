@@ -62,15 +62,11 @@
   border-collapse: collapse
   &:hover
       background-color: $color-grey-7
-  .assignment-type-name
-    width: 40%
-    display: inline-block
-  h2
-    display: inline
-    font-size: 1.1rem
-    @media (max-width: $media-medium-max)
-      font-size: 1rem
-  a
+
+  &.open
+    border-bottom: 3px solid $color-blue-2
+
+  &.collapse a
     padding: 0.75rem
     display: block
     @media (max-width: $media-medium-max)
@@ -78,31 +74,23 @@
     &:hover
       text-decoration: none
       color: $color-blue-2
-  a.button
-    padding: inherit
-    display: inline-block
-    line-height: inherit
-    padding: 0.3rem 0.4rem
-    &:hover
-      color: $color-white
-  &.open
-    border-bottom: 3px solid $color-blue-2
+
   &.assignment-settings
     padding: 0.75rem
     &:hover
         background-color: inherit
 
-.total-points-label
-  display: flex
-  justify-content: space-between
-  align-items: center
-  padding: 0.5rem 0
+  .assignment-type-name
+    width: 40%
+    display: inline-block
+    font-size: 1.1rem
+    @media (max-width: $media-medium-max)
+      width: 100%
+      font-size: 1rem
 
-.total-points-graph
-  height: 30px
-  background-color: $color-grey-6
-  margin-bottom: 1rem
-  position: relative
+  .button
+    line-height: inherit
+    padding: 0.3rem 0.4rem
 
 .points-summary
   display: inline
@@ -144,63 +132,70 @@
       word-wrap: break-word
       white-space: nowrap
 
-.assignment-indicator-icon
-  width: 16px
-  @media (max-width: $media-medium-max)
-    width: auto
-    vertical-align: text-top
-  .checkmark
-    color: $color-green-1
-  .flag
-    color: $color-orange-1
-  .asterisk
-    color: $color-purple-2
+  .assignment-indicator-icon
+    width: 16px
+    @media (max-width: $media-medium-max)
+      width: auto
+      vertical-align: text-top
+    .checkmark
+      color: $color-green-1
+    .flag
+      color: $color-orange-1
+    .asterisk
+      color: $color-purple-2
 
-.assignment-details-icon
-  position: relative
-  .hover-style
-    left: 0
+  .assignment-details-icon
+    position: relative
+    .hover-style
+      left: 0
 
-.assignment-info
-  display: inline-block
-  font-size: 0.8rem
-  @media (max-width: $media-medium-max)
+  .assignment-info
+    display: inline-block
     font-size: 0.8rem
-  p
-    margin: 0
+    @media (max-width: $media-medium-max)
+      font-size: 0.8rem
+    p
+      margin: 0
 
-.assignment-points
-  width: 25%
-  @media (max-width: $media-medium-max)
-    width: 100%
+  .assignment-points
+    width: 25%
+    @media (max-width: $media-medium-max)
+      width: 100%
 
-.assignment-due-date
-  width: 20%
-  @media (max-width: $media-medium-max)
-    width: 100%
+  .assignment-due-date
+    width: 20%
+    @media (max-width: $media-medium-max)
+      width: 100%
 
-.assignment-type-points-graph
+.points-bar-graph
   width: 400px
   height: 10px
   background-color: $color-grey-6
   position: relative
-  @media (max-width: $media-medium-max)
-    display: inline-block
-    margin-top: 0.3rem
-    width: 50%
   &.assignment-settings
     width: 30%
     height: 20px
     display: inline-block
     vertical-align: middle
+  @media (max-width: $media-medium-max)
+    display: inline-block
+    margin-top: 0.3rem
+    width: 50%
 
-.points-graph-fill-bar
+.points-bar-graph-fill
   height: 10px
   background-color: $color-green-1
   position: absolute
+
   &.assignment-settings
     height: 20px
     background-color: $color-blue-3
+
+//markers for grade levels on assignment type graphs
+.grade-level-marker
+  height: 20px
+  border-right: 1px solid $color-white
+  position: absolute
 
 .points-ratio
   display: inline-block
@@ -208,22 +203,30 @@
   text-align: right
   margin-right: 0.5em
 
-.graph-fill-bar
-  position: absolute
+// graph at top of assignment settings page
+.total-points-label
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 0.5rem 0
+
+.total-points-graph
   height: 30px
-  background-color: $color-blue-3
-  border-right: 1px solid $color-white
-  .display-on-hover
-    width: auto
-    top: -54px
-    right: -30px
+  background-color: $color-grey-6
+  margin-bottom: 1rem
+  position: relative
 
-.grade-marker
-  position: absolute
-  top: -20px
-  right: -8px
+  .total-points-graph-fill-bar
+    position: absolute
+    height: 30px
+    background-color: $color-blue-3
+    border-right: 1px solid $color-white
+    .display-on-hover
+      width: auto
+      top: -54px
+      right: -30px
 
-.grade-level-marker
-  height: 20px
-  border-right: 1px solid $color-white
-  position: absolute
+  .grade-marker
+    position: absolute
+    top: -20px
+    right: -8px
