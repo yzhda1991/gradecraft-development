@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "grade_proctor"
 
-describe GradesController do
+describe GradesController , focus: true do
   include PredictorEventJobsToolkit
 
   let(:course) { create :course }
@@ -46,16 +46,11 @@ describe GradesController do
         expect(response).to render_template(:edit)
       end
 
-      context "with additional grade items" do
-        it "assigns existing submissions, badges and score levels" do
-          pending
-          submission = create(:submission, student: student, assignment: assignment)
-          badge = create(:badge, course: course)
+      it "assigns existing submissions" do
+        submission = create(:submission, student: student, assignment: assignment)
 
-          get :edit, params: { id: grade.id }
-          expect(assigns(:submission)).to eq(submission)
-          expect(assigns(:badges)).to eq([badge])
-        end
+        get :edit, params: { id: grade.id }
+        expect(assigns(:submission)).to eq(submission)
       end
     end
 
