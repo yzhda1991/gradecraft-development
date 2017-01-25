@@ -12,6 +12,7 @@
   _recipientType = ""
   _recipientId = ""
 
+  # This must be triggered whenever there is a change to points fields or selected levels
   calculatePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
@@ -20,6 +21,14 @@
     grade.final_points = grade.raw_points + grade.adjustment_points
     grade.final_points = 0 if grade.final_points < thresholdPoints
 
+
+  _getIncluded = (response)->
+    GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
+    GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
+    angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
+    thresholdPoints = response.data.meta.threshold_points
+    isRubricGraded = response.data.meta.is_rubric_graded
+
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
     _recipientId = recipientId
@@ -27,11 +36,7 @@
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').then(
         (response) ->
           angular.copy(response.data.data.attributes, grade)
-          GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
-          GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
-          angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
-          thresholdPoints = response.data.meta.threshold_points
-          isRubricGraded = response.data.meta.is_rubric_graded
+          _getIncluded(response)
           calculatePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
@@ -46,17 +51,16 @@
           angular.copy(_.find(response.data.data, { attributes: {'student_id' : response.data.meta.student_ids[0] }}).attributes, grade)
           grade.group_id = recipientId
 
-          # We store all grades in grades, so that when updateGrade is called, we can iterate through all group grades
-          # For now, only grade is updated on the edit page, so AJAX updates should be made passing grade in params
+          _getIncluded(response)
+
+          # We store all grades in grades, so that when updateGrade is called,
+          # we can iterate through all group grades by id passing in params from grade
           GradeCraftAPI.loadMany(grades, response.data)
 
           # The API sends criterion grades for all group members,
           # For now we filter to those for the first student
-          GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
           criterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
-          angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
-          thresholdPoints = response.data.meta.threshold_points
-          isRubricGraded = response.data.meta.is_rubric_graded
+
           calculatePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
@@ -74,8 +78,7 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  # TODO update all calls to go through queueUpdateGrade
-  updateGrade = (returnURL=null)->
+  _updateGrade = (returnURL=null)->
     if _recipientType == "student"
       _updateGradeById(grade.id, returnURL)
     else if _recipientType == "group"
@@ -88,7 +91,7 @@
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
     calculatePoints()
-    DebounceQueue.addEvent("grades", grade.id, updateGrade, [returnURL], immediate)
+    DebounceQueue.addEvent("grades", grade.id, _updateGrade, [returnURL], immediate)
 
 
   # Final "Submit" Button actions, includes cleanup and redirect
@@ -142,7 +145,7 @@
     criterionGrade.points = level.points
     calculatePoints()
 
-  updateCriterionGrade = (criterionId)->
+  _updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
     return false unless criterionGrade
     $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
@@ -155,7 +158,7 @@
 
   queueUpdateCriterionGrade = (criterionId, immediate=false) ->
     # using criterionId for queue id since we are not assured to have a criterionGrade.id
-    DebounceQueue.addEvent("criterion_grades", criterionId, updateCriterionGrade, [criterionId], immediate)
+    DebounceQueue.addEvent("criterion_grades", criterionId, _updateCriterionGrade, [criterionId], immediate)
 
 #------- Grade File Methods -------------------------------------------------------------------------------------------#
 
@@ -199,19 +202,16 @@
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
 
-    setCriterionGradeLevel: setCriterionGradeLevel
-    findCriterionGrade: findCriterionGrade
-    addCriterionGrade: addCriterionGrade
-
     getGrade: getGrade
-
     queueUpdateGrade: queueUpdateGrade
-    queueUpdateCriterionGrade: queueUpdateCriterionGrade
     submitGrade: submitGrade
 
-    updateGrade: updateGrade # remove
+    findCriterionGrade: findCriterionGrade
+    addCriterionGrade: addCriterionGrade
+    setCriterionGradeLevel: setCriterionGradeLevel
+    queueUpdateCriterionGrade: queueUpdateCriterionGrade
+
     postAttachments: postAttachments
     deleteAttachment: deleteAttachment
-
   }
 ]

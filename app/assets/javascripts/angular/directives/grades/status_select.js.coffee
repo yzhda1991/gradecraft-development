@@ -1,15 +1,15 @@
 # Grade status selector for releasing grade to students
 
-@gradecraft.directive 'gradeStatus', ['GradeService', (GradeService) ->
+# We don't allow auto-updates on grade status,
+# this could release a grade prematurely
+
+@gradecraft.directive 'gradeStatusSelect', ['GradeService', (GradeService) ->
 
   return {
-    templateUrl: 'grades/status.html'
+    templateUrl: 'grades/status_select.html'
     link: (scope, el, attr)->
 
       scope.grade = GradeService.grade
-
-      scope.queueUpdateGrade = (immediate)->
-        GradeService.queueUpdateGrade(immediate)
 
       scope.statusOptions = ()->
         GradeService.gradeStatusOptions

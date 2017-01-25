@@ -1,4 +1,4 @@
-# Grade status selector for releasing grade to students
+# Hovering synopsis of the grade calculation
 
 @gradecraft.directive 'gradePointsOverview', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
@@ -15,8 +15,6 @@
         return 0 if !scope.assignment() || !scope.grade
         scope.assignment().full_points - scope.grade.raw_points
 
-      #-------------------------------------------------------------------------
-
       scope.pointsArePresent = ()->
         scope.grade && scope.grade.raw_points != null
 
@@ -29,11 +27,8 @@
       scope.pointsAreOver = ()->
         scope.pointsArePresent() && (scope.pointsBelowFull() < 0)
 
-      #-------------------------------------------------------------------------
       scope.adjustmentPoints = ()->
         parseInt(scope.grade.adjustment_points) || 0
-
-      #-------------------------------------------------------------------------
 
       scope.isBelowThreshold = ()->
         return false if !(scope.assignment() && scope.grade)

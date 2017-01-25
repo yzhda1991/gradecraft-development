@@ -393,7 +393,7 @@ Robin Williams",
 
 @assignments[:group_score_levels] = {
   quotes: {
-    assignment_created: "Karma of humans is AI ― Raghu Venkatesh"
+    assignment_created: "You can't tell if a machine has gotten smarter or if you've just lowered your own standards of intelligence to such a degree that the machine seems smart. ― Jaron Lanier"
   },
   assignment_type: :group_grading,
   assign_groups: true,

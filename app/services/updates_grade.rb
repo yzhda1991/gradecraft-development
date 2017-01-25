@@ -8,8 +8,8 @@ require_relative "creates_grade/runs_grade_updater_job"
 
 
 # This grade service is called from GradesController#update
-# This service should merged with CreatesGrade when grading
-# routes are cleaned up and params are standardized
+# It's possible this service could be combined with CreatesGrade
+# when grading routes are cleaned up and params are standardized
 module Services
   class UpdatesGrade
     extend LightService::Organizer

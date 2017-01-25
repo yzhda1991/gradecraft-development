@@ -5,7 +5,7 @@
 
 %loading-message(loading='vm.loading' message="Loading Grade...")
 
-%grade-rubric(ng-if='vm.rawPointsType() == "RUBRIC"')
+%grade-rubric-edit(ng-if='vm.rawPointsType() == "RUBRIC"')
 
 %article.grade-form-fields
 
@@ -25,7 +25,7 @@
   %grade-earned-badges-select(ng-if='!vm.groupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
   %hr.grading-divider
 
-%grade-status
+%grade-status-select
 %hr.grading-divider
 
 %grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')

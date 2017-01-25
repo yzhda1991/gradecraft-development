@@ -68,7 +68,9 @@ class API::CriterionGradesController < ApplicationController
     grade_id = Grade.where(assignment_id: params[:assignment_id], student_id:  params[:student_id]).first.id
     result = @criterion_grade.update_attributes(criterion_grade_params(grade_id))
     if result
-      # TODO run GradeUpdaterJob.new(grade_id: @criterion_grade.grade_id) or similar if points changed?
+      # We will need to run GradeUpdaterJob.new(grade_id: @criterion_grade.grade_id)
+      # or similar if we want to update every time points change.
+      # Currently, this is handled only from the submit button.
       render "api/criterion_grades/show", success: true,
       status: 200
     else
