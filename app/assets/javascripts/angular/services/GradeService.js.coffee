@@ -43,7 +43,6 @@
 
           # The API sends all student information so we can add the ability to custom grade group members
           # For now we filter to the first student's grade to populate the view, since all students grades are identical
-
           angular.copy(_.find(response.data.data, { attributes: {'student_id' : response.data.meta.student_ids[0] }}).attributes, grade)
           grade.group_id = recipientId
 
@@ -51,6 +50,10 @@
           # For now, only grade is updated on the edit page, so AJAX updates should be made passing grade in params
           GradeCraftAPI.loadMany(grades, response.data)
 
+          # The API sends criterion grades for all group members,
+          # For now we filter to those for the first student
+          GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
+          criterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
           angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
           thresholdPoints = response.data.meta.threshold_points
           isRubricGraded = response.data.meta.is_rubric_graded
@@ -134,7 +137,6 @@
     criterionGrades.push(criterionGrade)
 
   setCriterionGradeLevel = (criterionId, level)->
-    console.log("setting level");
     criterionGrade = findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
     criterionGrade.level_id = level.id
     criterionGrade.points = level.points

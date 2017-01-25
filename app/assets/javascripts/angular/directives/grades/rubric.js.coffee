@@ -27,7 +27,7 @@
         GradeService.queueUpdateCriterionGrade(criterion.id)
 
       scope.LevelIsSelected = (criterion,level)->
-        criterionGrade = _.find(GradeService.criterionGrades,{criterion_id: criterion.id})
+        criterionGrade = GradeService.findCriterionGrade(criterion.id)
         return false if !criterionGrade
         criterionGrade.level_id == level.id
 
