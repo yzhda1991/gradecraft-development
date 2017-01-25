@@ -5,7 +5,7 @@ require_relative "creates_or_updates_user_from_lti/creates_or_updates_course_by_
 require_relative "creates_or_updates_user/creates_or_updates_user"
 
 module Services
-  class CreatesOrUpdatesUserFromLTI
+  class CreatesOrUpdatesModelsFromLTI
     extend LightService::Organizer
 
     aliases user_attributes: :attributes

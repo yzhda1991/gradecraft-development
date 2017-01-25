@@ -1,20 +1,23 @@
 require "active_record_spec_helper"
-require "./app/services/creates_or_updates_user_from_lti"
+require "./app/services/creates_or_updates_models_from_lti"
 
-describe Services::CreatesOrUpdatesUserFromLTI, focus: true do
-  let(:auth_hash) { OmniAuth::AuthHash.new({
-    extra: {
-      raw_info: {
-        lis_person_contact_email_primary: "john.doe@umich.edu",
-        lis_person_sourcedid: "johndoe",
-        lis_person_name_given: "john",
-        lis_person_name_family: "doe",
-        context_id: "cosc111",
-        context_label: "111",
-        context_title: "Intro to Computery Things"
+describe Services::CreatesOrUpdatesModelsFromLTI do
+  let(:auth_hash) do
+    OmniAuth::AuthHash.new(
+    {
+      extra: {
+        raw_info: {
+          lis_person_contact_email_primary: "john.doe@umich.edu",
+          lis_person_sourcedid: "johndoe",
+          lis_person_name_given: "john",
+          lis_person_name_family: "doe",
+          context_id: "cosc111",
+          context_label: "111",
+          context_title: "Intro to Computery Things"
+        }
       }
-    }})
-  }
+    })
+  end
 
   describe ".create_or_update" do
     it "parses user attributes from the auth hash" do
