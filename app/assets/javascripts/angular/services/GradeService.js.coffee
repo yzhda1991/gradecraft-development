@@ -113,8 +113,16 @@
       DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
     )
 
+    # parameters are configured to work with existing service
+    # BuildsGrade: /services/creates_grade/builds_grade.rb
     params = {
-      grade: grade,
+      grade: {
+        adjustment_points: grade.adjustment_points
+        adjustment_points_feedback: grade.adjustment_points_feedback
+        feedback: grade.feedback
+        raw_points: grade.raw_points
+        status: grade.status
+      }
       criterion_grades: criterionGrades
     }
     $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params).then(
