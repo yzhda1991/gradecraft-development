@@ -164,7 +164,6 @@
     $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
       (response) ->
         GradeCraftAPI.logResponse(response)
-        #TODO: Add id if it's a new CG
       ,(response) ->
         GradeCraftAPI.logResponse(response)
     )
