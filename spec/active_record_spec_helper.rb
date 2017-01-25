@@ -14,6 +14,9 @@ end
 
 require "spec_helper"
 require "active_record"
+require "paper_trail/config"
+PaperTrail::Config.instance.track_associations = true
+require "paper_trail"
 require "active_support/core_ext"
 require "acts_as_list"
 require "aws-sdk"
@@ -52,7 +55,6 @@ SorceryStubbing.sorcery_reset [:user_activation], user_activation_mailer: Sorcer
 connection_info = YAML.load_file("config/database.yml")["test"]
 ActiveRecord::Base.establish_connection(connection_info)
 
-require "paper_trail"
 require "paper_trail/frameworks/rspec"
 
 # stub out Rails.env
