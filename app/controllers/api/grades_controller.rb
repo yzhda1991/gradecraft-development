@@ -61,7 +61,7 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(:adjustment_points,:adjustment_points_feedback,
-      :feedback, :group_id, :raw_points, :status)
+    params.require(:grade).permit(:adjustment_points, :adjustment_points_feedback,
+      :feedback, :group_id, :pass_fail_status, :raw_points, :status )
   end
 end

@@ -3,7 +3,9 @@
   grade = {}
   fileUploads = []
   criterionGrades = []
+
   gradeStatusOptions = []
+
   isRubricGraded = false
   thresholdPoints = 0
 
@@ -26,6 +28,8 @@
     GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
     GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
     angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
+    # bind status changes to pending_status, only update on submit
+    grade.pending_status = grade.status
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
 
@@ -94,19 +98,20 @@
     DebounceQueue.addEvent("grades", grade.id, _updateGrade, [returnURL], immediate)
 
 
-  # Final "Submit" Button actions, includes cleanup and redirect
+  # Final "Submit Grade" actions, includes cleanup and redirect
   submitGrade = (returnURL=null)->
-    if !grade.status
+    if !grade.pending_status
       return alert "You must select a grade status before you can submit this grade"
+
+    grade.status = grade.pending_status
 
     return queueUpdateGrade(true, returnURL) unless isRubricGraded
 
+    # cancel all pending updates
     DebounceQueue.cancelEvent("grades", grade.id)
     _.each(criterionGrades, (cg)->
       DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
     )
-
-    # TODO: determine Grade status (releasing to student?)
 
     params = {
       grade: grade,

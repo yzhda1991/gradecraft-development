@@ -1,6 +1,9 @@
 %section.grade-status
   .grade-section-label Grade Status
 
-  %select.grade-status-selector(ng-model='grade.status')
-    %option(value='{{statusOption}}' ng-repeat='statusOption in statusOptions()' ng-selected='grade.status == statusOption')
+  %select.grade-status-selector(ng-model='grade.pending_status')
+    %option(value='{{statusOption}}' ng-repeat='statusOption in statusOptions()' ng-selected='grade.pending_status == statusOption')
       {{statusOption}}
+
+  .div grade.status = {{ grade.status }}
+  .div gradeStatus = {{ grade.pending_status }}
