@@ -1,9 +1,9 @@
 # input feedback text for grade
 
-@gradecraft.directive 'gradeTextFeedback', ['GradeService', (GradeService) ->
+@gradecraft.directive 'gradeFeedbackTextInput', ['GradeService', (GradeService) ->
 
   return {
-    templateUrl: 'grades/text_feedback.html'
+    templateUrl: 'grades/feedback_text_input.html'
     link: (scope, el, attr)->
 
       scope.grade = GradeService.grade

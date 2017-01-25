@@ -9,19 +9,18 @@
 
 %article.grade-form-fields
 
-  %grade-raw-points(ng-if='vm.rawPointsType() == "DEFAULT"')
-  %grade-score-levels(ng-if='vm.rawPointsType() == "SCORE_LEVELS"')
-  %grade-pass-fail(ng-if='vm.rawPointsType() == "PASS_FAIL"')
-  %grade-raw-points-display(ng-if='vm.rawPointsType() == "RUBRIC"')
+  %grade-raw-points-input(ng-if='vm.rawPointsType() == "DEFAULT"')
+  %grade-score-levels-select(ng-if='vm.rawPointsType() == "SCORE_LEVELS"')
+  %grade-pass-fail-switch(ng-if='vm.rawPointsType() == "PASS_FAIL"')
+  %grade-raw-points(ng-if='vm.rawPointsType() == "RUBRIC"')
 
-  %grade-adjustment-points(ng-if='vm.rawPointsType() != "PASS_FAIL"')
+  %grade-adjustment-points-input(ng-if='vm.rawPointsType() != "PASS_FAIL"')
 
   %grade-final-points(ng-if='vm.rawPointsType() != "PASS_FAIL"')
 
-
   .grade-section-label {{ vm.feedbackMessage }}
   %grade-file-uploader(ng-if='!vm.groupGrade')
-  %grade-text-feedback
+  %grade-feedback-text-input
 
   %award-earned-badges(ng-if='!vm.groupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
   %hr.grading-divider

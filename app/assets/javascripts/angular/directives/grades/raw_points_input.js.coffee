@@ -1,9 +1,9 @@
-# raw_points field when grading with score levels
+# standard grade raw_points input field
 
-@gradecraft.directive 'gradeScoreLevels', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+@gradecraft.directive 'gradeRawPointsInput', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
-    templateUrl: 'grades/score_levels.html'
+    templateUrl: 'grades/raw_points_input.html'
     link: (scope, el, attr)->
 
       scope.assignment = ()->
@@ -13,6 +13,5 @@
 
       scope.queueUpdateGrade = (immediate)->
         GradeService.queueUpdateGrade(immediate)
-
   }
 ]
