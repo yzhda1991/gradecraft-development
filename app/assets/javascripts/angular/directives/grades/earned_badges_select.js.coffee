@@ -1,4 +1,4 @@
-@gradecraft.directive 'awardEarnedBadges', ['BadgeService', (BadgeService) ->
+@gradecraft.directive 'gradeEarnedBadgesSelect', ['BadgeService', (BadgeService) ->
   AwardedBadgesCtrl = [()->
     vm = this
     vm.BadgeService = BadgeService
@@ -30,7 +30,7 @@
       studentId: '@'
       gradeId: '@'
     },
-    templateUrl: 'badges/award_earned_badges.html'
+    templateUrl: 'grades/earned_badges_select.html'
   }
 ]
 
