@@ -1,7 +1,8 @@
 .text-center.avatar
   .card-header
     %h2.flagged-state
-      = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
+      = content_tag_for :span, current_student do
+        = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
       = "#{current_student.first_name}'s Profile"
   .card-body
     - if current_student.predictions_for_course?(current_course) == false
@@ -10,15 +11,15 @@
     .module-section.center
       - if current_student.avatar_file_name.present?
         %img.img-rounded{:src => current_student.avatar_file_name, width: 200, height: 200 }
-    .module-section 
+    .module-section
       - if current_student.team_for_course(current_course).present?
         .small
           %b #{term_for :team}:
           #{current_student.team_for_course(current_course).name}
       .small
-        %b Last activity: 
+        %b Last activity:
         #{ current_student.try(:last_activity_at) || '(never)' }
-        
+
     .module-section
       %ul.button-bar
         %li= link_to glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
