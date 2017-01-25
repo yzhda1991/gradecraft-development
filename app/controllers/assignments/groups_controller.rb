@@ -9,9 +9,7 @@ class Assignments::GroupsController < ApplicationController
     @submission = @assignment.submissions.where(group_id: @group.id).first
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
     @grade_next_path = path_for_next_group_grade @assignment, @group
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-    end
+    @rubric = @assignment.rubric if @assignment.grade_with_rubric?
   end
 
   private

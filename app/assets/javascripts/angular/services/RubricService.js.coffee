@@ -9,7 +9,6 @@
   criteria = []
 
   getRubric = (rubricId)->
-    console.log("rubric: ", rubricId);
     $http.get("/api/rubrics/" + rubricId).then(
       (response) ->
         if response.data.data?  # if no rubric is found, data is null
