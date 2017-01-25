@@ -11,8 +11,7 @@ module Services
           context[:course_attributes] = {
             lti_uid: raw_info.context_id,
             course_number: raw_info.context_label,
-            name: raw_info.context_title,
-            year: Date.today.year
+            name: raw_info.context_title
           }
         end
       end
