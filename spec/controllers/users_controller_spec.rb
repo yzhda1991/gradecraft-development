@@ -150,13 +150,13 @@ describe UsersController do
 
       it "renders any errors that have occured" do
         user = User.create first_name: "Jimmy", last_name: "Page",
-          email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
+          email: "csv_jimmy@example.com", username: "csv_jimmy", password: "blah"
         user.update_attribute :username, "1" * 51
 
         post :upload, params: { file: file }
 
         expect(response.body).to include "1 Student Not Imported"
-        expect(response.body).to include "Jimmy,Page,jimmy,csv_jimmy@example.com"
+        expect(response.body).to include "Jimmy,Page,csv_jimmy,csv_jimmy@example.com"
         expect(response.body).to include "Username is too long"
       end
 
