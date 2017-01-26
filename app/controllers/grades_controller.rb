@@ -140,7 +140,7 @@ class GradesController < ApplicationController
 
   def path_for_next_grade(grade, team=nil)
     # we don't supply a next grade when editing existing grades
-    return nil if @grade.graded_or_released?
+    return nil if grade.graded_or_released?
     next_student = grade.assignment.next_ungraded_student(grade.student, team)
     team_params = team ? {team_id: team.id} : nil
     return assignment_path(grade.assignment, team_params) unless next_student.present?
