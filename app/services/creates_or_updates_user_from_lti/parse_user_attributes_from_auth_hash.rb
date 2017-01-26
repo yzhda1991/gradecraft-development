@@ -7,6 +7,7 @@ module Services
       promises :user_attributes
 
       executed do |context|
+        raise ArgumentError, "Unexpected auth_hash format" unless context.auth_hash.is_a? OmniAuth::AuthHash
         context.auth_hash.extra.raw_info.tap do |raw_info|
           email = raw_info.lis_person_contact_email_primary
           username = email.split("@")[0]
