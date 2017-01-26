@@ -1,4 +1,9 @@
-@gradecraft.factory 'RubricService', ['CourseBadge', 'Criterion', 'CriterionGrade', '$http', 'GradeCraftAPI', 'GradeService', (CourseBadge, Criterion, CriterionGrade, $http, GradeCraftAPI, GradeService) ->
+# This legacy service relies of passing scope through factories in order to construct
+# Criterion objects. It is used on the rubric design page.
+# This should be replaced by the newer RubricService that
+# holds a rubric state decoupled from the scope.
+
+@gradecraft.factory 'RubricFactoryService', ['CourseBadge', 'Criterion', 'CriterionGrade', '$http', 'GradeCraftAPI', 'GradeService', (CourseBadge, Criterion, CriterionGrade, $http, GradeCraftAPI, GradeService) ->
 
   _badgesAvailable = false
 
@@ -17,7 +22,7 @@
   getGrade = (assignment, recipientType, recipientId)->
     GradeService.getGrade(assignment, recipientType, recipientId)
   updateGrade = ()->
-    GradeService.updateGrade()
+    GradeService.queueUpdateGrade()
   postAttachments = (files)->
     GradeService.postAttachments(files)
   deleteAttachment = (file)->
@@ -25,11 +30,11 @@
 
   criteria = []
 
-  # TODO standardize to array
+  # standardize to array
   badges = {}
   criterionGrades = {}
 
-  # TODO: $scope should not be passed around if we want to avoid tight coupling
+  # $scope should not be passed around if we want to avoid tight coupling
   getCriteria = (assignmentId, $scope)->
     _scope = $scope
     $http.get('/api/assignments/' + assignmentId + '/criteria').then(
