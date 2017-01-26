@@ -31,7 +31,7 @@
                 %button.button.select-all{role: "button", type: "button"}= "Check"
                 %button.button.select-none{role: "button", type: "button"}= "Uncheck"
         %tbody
-          - group_presenter.students.each do |student|
+          - group_presenter.students.order_by_name.each do |student|
             %tr
               %td= link_to student.name, student_path(student)
               - grade = group_presenter.grade_for(student)
