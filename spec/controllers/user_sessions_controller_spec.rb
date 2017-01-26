@@ -42,12 +42,12 @@ describe UserSessionsController do
 
     before do
       allow(subject).to receive(:auth_hash).and_return params
-      allow(User).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return user
+      allow(Services::CreatesOrUpdatesUserFromLTI).to receive(:create_or_update).with(params).and_return({ user: user })
       allow(Course).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return course
     end
 
     context "when there is no context role" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "" }}) }
 
       it "redirects to dashboard" do
         expect(post :lti_create, params: params).to redirect_to dashboard_path
@@ -55,7 +55,7 @@ describe UserSessionsController do
     end
 
     context "when there is a context role" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "instructor" }}) }
 
       it "redirects to dashboard" do
         expect(post :lti_create, params: params).to redirect_to dashboard_path
@@ -63,7 +63,7 @@ describe UserSessionsController do
     end
 
     context "when the course membership creation fails" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "instructor" }}) }
 
       before(:each) { allow(CourseMembership).to receive(:create_or_update_from_lti).and_return false }
 

@@ -28,7 +28,7 @@ class UserSessionsController < ApplicationController
 
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
-    @user = User.find_or_create_by_lti_auth_hash(auth_hash)
+    @user = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)[:user]
     @course = Course.find_or_create_by_lti_auth_hash(auth_hash)
     if !@user || !@course
       lti_error_notification
