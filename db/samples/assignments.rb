@@ -455,7 +455,7 @@ Tzu"
   assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
-    name: "Rubric Edit Group Assignment",
+    name: "Rubric Graded Group Assignment",
     full_points: 15000,
     grade_scope: "Group",
     open_at: 1.weeks.ago,

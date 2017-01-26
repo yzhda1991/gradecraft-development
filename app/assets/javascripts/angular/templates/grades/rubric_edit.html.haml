@@ -3,7 +3,9 @@
   .grade-section-label.collapse-toggler
     Grade Assignment by Rubric
 
-  #rubric-grade-edit.rubric.edit.collapse
+  -# add .collapse to class list to enable a collapasable rubric
+  -# will require additional styling
+  #rubric-grade-edit.rubric.edit
     .rubric-hint (click to select the level earned for each criterion)
     .criterion(ng-repeat="criterion in criteria")
       .criterion-heading
@@ -26,4 +28,4 @@
             {{level.description}}
 
       .comments-box
-        %textarea(ng-model="gradeForCriterion(criterion.id).comments" ng-change="queueUpdateCriterionGrade(criterion)" froala)
+        %textarea(ng-model="gradeForCriterion(criterion.id).comments" ng-change="queueUpdateCriterionGrade(criterion)" froala="froalaOptions")

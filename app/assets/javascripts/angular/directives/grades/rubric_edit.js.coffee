@@ -35,5 +35,10 @@
         return false if ! criterion.meets_expectations_level_id
         level.points >= criterion.meets_expectations_points
 
+      scope.froalaOptions = {
+        heightMin: 100,
+        placeholderText: 'Enter Feedback for Criterion...',
+      }
+
   }
 ]
