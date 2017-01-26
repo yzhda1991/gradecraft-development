@@ -90,16 +90,6 @@ class Course < ActiveRecord::Base
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
-  def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
-    where(criteria).first || create!(criteria) do |c|
-      c.lti_uid = auth_hash["extra"]["raw_info"]["context_id"]
-      c.course_number = auth_hash["extra"]["raw_info"]["context_label"]
-      c.name = auth_hash["extra"]["raw_info"]["context_title"]
-      c.year = Date.today.year
-    end
-  end
-
   def copy(copy_type, attributes={})
     if copy_type != "with_students"
       copy_with_associations(attributes={lti_uid: nil}, [])

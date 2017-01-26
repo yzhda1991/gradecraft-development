@@ -43,7 +43,7 @@ describe UserSessionsController do
     before do
       allow(subject).to receive(:auth_hash).and_return params
       allow(Services::CreatesOrUpdatesUserFromLTI).to receive(:create_or_update).with(params).and_return({ user: user })
-      allow(Course).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return course
+      allow(Services::CreatesOrUpdatesCourseFromLTI).to receive(:create_or_update).with(params).and_return({ course: course })
     end
 
     context "when there is no context role" do
