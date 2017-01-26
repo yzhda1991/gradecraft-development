@@ -24,11 +24,20 @@
     grade.final_points = 0 if grade.final_points < thresholdPoints
 
 
+  # When we get a grade response for student or group,
+  # this initial setup is run to extract all included and meta information
   _getIncluded = (response)->
     GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
     GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
     angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
-    # bind status changes to pending_status, only update on submit
+
+    # - Uncomment this line if we want to force a status on autosave:
+    # - If no status has been sent, we set status as "In Progress" to be returned
+    # - on first autosave, in order to avoid faculty seeing partial grade information but no status.
+    # - This will make the check for "disabled" on the submit buttons obsolete
+    # grade.status = "In Progress" if !grade.status
+
+    # We bind status changes to pending_status and only update on submit
     grade.pending_status = grade.status
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
