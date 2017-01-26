@@ -22,9 +22,11 @@ class GradesController < ApplicationController
     @grade = Grade.find params[:id]
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
-    @submit_path = @team.present? ?
-      assignment_path(@grade.assignment, team_id: @team.id) :
-      assignment_path(@grade.assignment)
+    if @team.present?
+      @submit_path =  assignment_path(@grade.assignment, team_id: @team.id)
+    else
+      @submit_path = assignment_path(@grade.assignment)
+    end
     @grade_next_path = path_for_next_grade @grade, @team
   end
 
