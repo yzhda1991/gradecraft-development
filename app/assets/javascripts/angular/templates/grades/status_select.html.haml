@@ -1,6 +1,6 @@
 %section.grade-status
   .grade-section-label Grade Status
-
   %select.grade-status-selector(ng-model='grade.pending_status')
     %option(value='{{statusOption}}' ng-repeat='statusOption in statusOptions()' ng-selected='grade.pending_status == statusOption')
       {{statusOption}}
+  %p can the student see this grade?
