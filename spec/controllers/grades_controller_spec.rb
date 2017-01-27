@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "grade_proctor"
 
-describe GradesController , focus: true do
+describe GradesController do
   include PredictorEventJobsToolkit
 
   let(:course) { create :course }
@@ -102,7 +102,7 @@ describe GradesController , focus: true do
             user: create(:user, last_name: "Zzz")).user
         end
 
-        it "creates and redirects to grade the next ungraded student when not accepting submissions" , focus: true do
+        it "creates and redirects to grade the next ungraded student when not accepting submissions" do
           assignment.update(accepts_submissions: false)
           put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "In Progress"}, redirect_to_next_grade: true}
           expect(response).to redirect_to(edit_grade_path(

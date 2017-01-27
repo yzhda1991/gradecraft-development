@@ -23,7 +23,7 @@
       if assignment.grade.final_points != null
         if ! assignment.grade.is_excluded
           total += assignment.grade.final_points
-      else if ! assignment.pass_fail && ! assignment.closed_without_sumbission
+      else if ! assignment.pass_fail && ! assignment.closed_without_submission
         if !(assignment.is_closed_without_submission || assignment.is_closed_by_condition)
           total += assignment.prediction.predicted_points
     )
