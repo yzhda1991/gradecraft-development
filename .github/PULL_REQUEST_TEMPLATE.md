@@ -43,3 +43,6 @@ bundle; script/server
 List general components of the application that this PR will affect:
 
 * 
+
+======================
+Closes #[ISSUE NUMBER]
