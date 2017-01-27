@@ -87,6 +87,10 @@ class Assignments::Presenter < Showtime::Presenter
     has_viewable_submission?(submission, user)
   end
 
+  def has_viewable_analytics?(user)
+    AnalyticsProctor.new.viewable?(user, course) && !assignment.hide_analytics?
+  end
+
   def has_teams?
     course.has_teams?
   end
@@ -194,10 +198,6 @@ class Assignments::Presenter < Showtime::Presenter
     @students ||= AssignmentStudentCollection.new(User
       .students_being_graded_for_course(course, team)
       .order_by_name, self)
-  end
-
-  def viewable_analytics?(user)
-    AnalyticsProctor.new.viewable?(user, course) && !assignment.hide_analytics?
   end
 
   class AssignmentStudentCollection

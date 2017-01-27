@@ -1,7 +1,7 @@
 .download-link= link_to glyph("file-excel-o") + "Download Rubric", export_assignment_rubrics_path(presenter.assignment.id, format: :csv)
 
 - if include_grade_info
-  - if presenter.viewable_analytics?(student)
+  - if presenter.has_viewable_analytics?(student)
     .class-analytics-toggle
       %h4.class-analytics-label Show class analytics
       %label.rubric-switch-socket
