@@ -4,6 +4,6 @@ class AnalyticsProctor
 
   def viewable?(user, course)
     return true if user.is_staff? course
-    course.student_count >= MINIMUM_STUDENT_COUNT
+    course.show_analytics? && (course.student_count >= MINIMUM_STUDENT_COUNT)
   end
 end

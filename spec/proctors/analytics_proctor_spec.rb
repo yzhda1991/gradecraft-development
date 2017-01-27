@@ -25,16 +25,29 @@ describe AnalyticsProctor do
 
   context "as a student" do
     describe "viewable?" do
-      it "returns false if the student count is less than the minimum count" do
-        allow(user).to receive(:is_staff?).and_return false
-        allow(course).to receive(:student_count).and_return MINIMUM_STUDENT_COUNT-1
-        expect(subject.viewable? user, course).to be_falsey
+      context "when show_analytics? for the course is true" do
+        before(:each) { allow(course).to receive(:show_analytics?).and_return true }
+
+        it "returns false if the student count is less than the minimum count" do
+          allow(user).to receive(:is_staff?).and_return false
+          allow(course).to receive(:student_count).and_return MINIMUM_STUDENT_COUNT-1
+          expect(subject.viewable? user, course).to be_falsey
+        end
+
+        it "returns true if the student count is greater than or equal to the minimum count" do
+          allow(user).to receive(:is_staff?).and_return false
+          allow(course).to receive(:student_count).and_return MINIMUM_STUDENT_COUNT
+          expect(subject.viewable? user, course).to be_truthy
+        end
       end
 
-      it "returns true if the student count is greater than or equal to the minimum count" do
-        allow(user).to receive(:is_staff?).and_return false
-        allow(course).to receive(:student_count).and_return MINIMUM_STUDENT_COUNT
-        expect(subject.viewable? user, course).to be_truthy
+      context "when show_analytics? for the course is false" do
+        before(:each) { allow(course).to receive(:show_analytics?).and_return false }
+
+        it "returns false if the student count is less than the minimum count" do
+          allow(user).to receive(:is_staff?).and_return false
+          expect(subject.viewable? user, course).to be_falsey
+        end
       end
     end
   end
