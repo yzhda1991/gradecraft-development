@@ -138,24 +138,25 @@ describe UsersController do
       let(:file) { fixture_file "users.csv", "text/csv" }
       before { create :team, course: @course, name: "Zeppelin" }
 
-      # Sporadic failure!
       it "renders the results from the import" do
-        skip "pending fix"
         post :upload, params: { file: file }
+
         expect(response).to render_template :import_results
         expect(response.body).to include "3 Students Imported Successfully"
-        expect(response.body).to include "jimmy@example.com"
-        expect(response.body).to include "robert@example.com"
+        expect(response.body).to include "csv_jimmy@example.com"
+        expect(response.body).to include "csv_robert@example.com"
         expect(response.body).to include "whitespace@example.com"
       end
 
       it "renders any errors that have occured" do
         user = User.create first_name: "Jimmy", last_name: "Page",
-          email: "jimmy@example.com", username: "jimmy", password: "blah"
+          email: "csv_jimmy@example.com", username: "csv_jimmy", password: "blah"
         user.update_attribute :username, "1" * 51
+
         post :upload, params: { file: file }
+
         expect(response.body).to include "1 Student Not Imported"
-        expect(response.body).to include "Jimmy,Page,jimmy,jimmy@example.com"
+        expect(response.body).to include "Jimmy,Page,csv_jimmy,csv_jimmy@example.com"
         expect(response.body).to include "Username is too long"
       end
 

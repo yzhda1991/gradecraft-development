@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+require "./app/importers/student_importers/csv_student_importer"
 
 describe CSVStudentImporter do
   before(:all) { User.destroy_all }
@@ -22,7 +23,7 @@ describe CSVStudentImporter do
 
         it "creates the student accounts" do
           subject.import course
-          expect(user.email).to eq "jimmy@example.com"
+          expect(user.email).to eq "csv_jimmy@example.com"
           expect(user.crypted_password).to_not be_blank
           expect(user.course_memberships.first.course).to eq course
           expect(user.course_memberships.first.role).to eq "student"
@@ -38,7 +39,7 @@ describe CSVStudentImporter do
 
         it "does not create the student membership if it already exists" do
           user = User.create first_name: "Jimmy", last_name: "Page",
-              email: "jimmy@example.com", username: "jimmy", password: "blah"
+              email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
           user.course_memberships.create course_id: course.id, role: "student"
           expect { subject.import course }.to_not raise_error
         end
@@ -46,7 +47,7 @@ describe CSVStudentImporter do
         it "adds the students to the team if the team exists" do
           subject.import course
           expect(team.name).to eq "Zeppelin"
-          expect(team.students.first.email).to eq "jimmy@example.com"
+          expect(team.students.first.email).to eq "csv_jimmy@example.com"
         end
 
         it "handles empty fields with whitespace" do
@@ -56,16 +57,16 @@ describe CSVStudentImporter do
 
         it "just adds the student to the team if the student already exists" do
           User.create first_name: "Jimmy", last_name: "Page",
-              email: "jimmy@example.com", username: "jimmy", password: "blah"
+              email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
           subject.import course
-          expect(team.students.first.email).to eq "jimmy@example.com"
+          expect(team.students.first.email).to eq "csv_jimmy@example.com"
         end
 
         it "creates the team and adds the student if the team does not exist" do
           Team.unscoped.last.destroy
           subject.import course
           expect(team.name).to eq "Zeppelin"
-          expect(team.students.first.email).to eq "jimmy@example.com"
+          expect(team.students.first.email).to eq "csv_jimmy@example.com"
         end
 
         it "does not add the student to the team if a team is not specified" do
@@ -87,7 +88,7 @@ describe CSVStudentImporter do
 
         it "contains an unsuccessful row if the user is not valid" do
           user = User.create first_name: "Jimmy", last_name: "Page",
-              email: "jimmy@example.com", username: "jimmy", password: "blah"
+              email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
           user.update_attribute :username, ""
           result = subject.import course
           expect(result.successful.count).to eq 2
