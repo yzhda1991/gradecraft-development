@@ -19,6 +19,7 @@
   'helpers',
   'ngAria'
 ]).value('froalaConfig', {
+    key: '6Ud1QBRVCDLPAZMBQ==',
     inlineMode: false,
     heightMin: 200,
     toolbarButtons: [
