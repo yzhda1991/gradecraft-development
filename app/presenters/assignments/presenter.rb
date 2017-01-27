@@ -200,6 +200,10 @@ class Assignments::Presenter < Showtime::Presenter
       .order_by_name, self)
   end
 
+  def viewable_analytics?(user)
+    AnalyticsProctor.new.viewable?(user, course) && !assignment.hide_analytics?
+  end
+
   class AssignmentStudentCollection
     include Enumerable
 

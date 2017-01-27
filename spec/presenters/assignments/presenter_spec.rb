@@ -200,4 +200,28 @@ describe Assignments::Presenter do
       subject.has_viewable_submission_for?(user)
     end
   end
+
+  describe "#viewable_analytics?" do
+    let(:user) { double(:user) }
+    let(:analytics_proctor) { double(:analytics_proctor) }
+
+    before(:each) { allow(AnalyticsProctor).to receive(:new).and_return analytics_proctor }
+
+    it "returns true if it's viewable according to the analytics proctor and hide_analytics? is false" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return false
+      expect(subject.viewable_analytics?(user)).to be_truthy
+    end
+
+    it "returns false if it's viewable according to the analytics proctor and hide_analytics? is true" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return true
+      expect(subject.viewable_analytics?(user)).to be_falsey
+    end
+
+    it "returns false if it's not viewable according to the analytics proctor" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return false
+      expect(subject.viewable_analytics?(user)).to be_falsey
+    end
+  end
 end
