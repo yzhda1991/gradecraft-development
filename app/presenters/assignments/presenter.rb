@@ -87,6 +87,10 @@ class Assignments::Presenter < Showtime::Presenter
     has_viewable_submission?(submission, user)
   end
 
+  def has_viewable_analytics?(user)
+    AnalyticsProctor.new.viewable?(user, course) && !assignment.hide_analytics?
+  end
+
   def has_teams?
     course.has_teams?
   end
@@ -115,10 +119,6 @@ class Assignments::Presenter < Showtime::Presenter
           student.group_for_assignment(assignment))
       )
     )
-  end
-
-  def hide_analytics?
-    !course.show_analytics? || assignment.hide_analytics?
   end
 
   def individual_assignment?

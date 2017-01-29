@@ -77,26 +77,6 @@ describe Assignments::Presenter do
     end
   end
 
-  describe "#show_analytics?" do
-    it "is hidden if the course does not hide analytics but the assignment does" do
-      allow(course).to receive(:show_analytics?).and_return true
-      allow(assignment).to receive(:hide_analytics?).and_return true
-      expect(subject.hide_analytics?).to eq true
-    end
-
-    it "is hidden if the assignment does not hide analytics but the course does" do
-      allow(course).to receive(:show_analytics?).and_return false
-      allow(assignment).to receive(:hide_analytics?).and_return false
-      expect(subject.hide_analytics?).to eq true
-    end
-
-    it "is hidden if both the assignment and course hide analytics" do
-      allow(course).to receive(:show_analytics?).and_return false
-      allow(assignment).to receive(:hide_analytics?).and_return true
-      expect(subject.hide_analytics?).to eq true
-    end
-  end
-
   describe "#grade_with_rubric?" do
     it "is not to be used if the assignment doesn't grade with a rubric" do
       allow(assignment).to receive(:grade_with_rubric?).and_return false
@@ -198,6 +178,30 @@ describe Assignments::Presenter do
       allow(Submission).to receive(:for_assignment_and_student).and_return [submission]
       expect(subject).to receive(:has_viewable_submission?).with(submission, user)
       subject.has_viewable_submission_for?(user)
+    end
+  end
+
+  describe "#has_viewable_analytics?" do
+    let(:user) { double(:user) }
+    let(:analytics_proctor) { double(:analytics_proctor) }
+
+    before(:each) { allow(AnalyticsProctor).to receive(:new).and_return analytics_proctor }
+
+    it "returns true if it's viewable according to the analytics proctor and hide_analytics? is false" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return false
+      expect(subject.has_viewable_analytics?(user)).to be_truthy
+    end
+
+    it "returns false if it's viewable according to the analytics proctor and hide_analytics? is true" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return true
+      expect(subject.has_viewable_analytics?(user)).to be_falsey
+    end
+
+    it "returns false if it's not viewable according to the analytics proctor" do
+      allow(analytics_proctor).to receive(:viewable?).with(user, course).and_return false
+      expect(subject.has_viewable_analytics?(user)).to be_falsey
     end
   end
 end
