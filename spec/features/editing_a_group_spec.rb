@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing a group" do
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let(:professor) { create(:course_membership, :professor, course: course).user }
     let!(:group) { create :approved_group, course: course, name: "Group!" }
 

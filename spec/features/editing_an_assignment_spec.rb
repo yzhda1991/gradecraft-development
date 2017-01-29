@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing an assignment" do
   context "as a professor" do
-    let(:course) { create :course, assignment_term: "Assignment"}
+    let(:course) { build :course, assignment_term: "Assignment"}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:assignment_type) { create :assignment_type, name: "Assignment Type Name", course: course }

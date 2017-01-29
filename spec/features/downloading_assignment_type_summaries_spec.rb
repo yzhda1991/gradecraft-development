@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "downloading assignment type summary file" do
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 

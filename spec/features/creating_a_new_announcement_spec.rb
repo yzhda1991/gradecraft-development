@@ -2,8 +2,7 @@ require "rails_spec_helper"
 
 feature "creating a new announcement" do
   context "as a professor" do
-    let(:course) { create :course }
-    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
+    let!(:course_membership) { create :course_membership, :professor, user: professor }
     let(:professor) { create :user }
 
     before(:each) do

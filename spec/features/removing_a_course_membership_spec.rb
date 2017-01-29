@@ -4,7 +4,7 @@ feature "removing a course membership" do
   context "as an administrator" do
     let!(:admin_course_membership) { create :course_membership, :admin, course: course, user: admin }
     let(:admin) { create :user }
-    let(:course) { create :course }
+    let(:course) { build :course }
 
     before(:each) { login_as admin }
 

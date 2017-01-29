@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "reviewing a group" do
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let(:professor) { create(:course_membership, :professor, course: course).user }
     let!(:group) { create :group, course: course, name: "Group!", approved: "Pending" }
 
