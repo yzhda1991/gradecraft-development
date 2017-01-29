@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 
 feature "viewing submissions" do
-  let(:assignment) { create :assignment, accepts_submissions: true, course: membership.course }
+  let(:assignment) { build :assignment, accepts_submissions: true, course: membership.course }
   let!(:submission) do
     create :submission, course: membership.course, assignment: assignment, student: student
   end

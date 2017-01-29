@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "downloading multiplied gradebook file" do
   context "as a professor" do
-    let(:course) { create :course, name: "Course Name", has_multipliers: true }
+    let(:course) { build :course, name: "Course Name", has_multipliers: true }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 
