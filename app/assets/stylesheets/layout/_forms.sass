@@ -4,12 +4,6 @@
   display: block
   margin-left: 10.5rem
 
-label
-  text-transform: capitalize
-  font-weight: bold
-  display: inline-block
-  margin-bottom: 5px
-
 label, input
   padding-bottom: 0
 
@@ -18,14 +12,19 @@ label, input
   cursor: pointer
   display: inline
 
-label.checkbox input, label.check_boxes input, label.checkbox, label.radio, label.radio input
+label.checkbox input,
+label.check_boxes input,
+label.checkbox,
+label.radio,
+label.radio input
   clear: both
 
 fieldset
   border: none
   padding: 0
 
-select, .ui-tabs-panel select
+select,
+.ui-tabs-panel select
   background-color: $color-white
   width: 16rem
   height: 1.5rem
@@ -166,10 +165,16 @@ error
     padding-right: .5rem
     text-align: right
     font-size: 0.9rem
+    text-transform: capitalize
+    font-weight: bold
+    display: inline-block
+    margin-bottom: 5px
     @media (max-width: $media-small-max)
       text-align: left
 
-  input[type=text], input[type=password], input[type=number]
+  input[type=text],
+  input[type=password],
+  input[type=number]
     padding: .5rem
     width: 15rem
     font-size: 11px
@@ -235,8 +240,8 @@ error
       width: 6rem
 
 input[type=text]
-    padding: .5rem
-    width: 15rem
+  padding: .5rem
+  width: 15rem
 
 .switch-label
   text-transform: capitalize

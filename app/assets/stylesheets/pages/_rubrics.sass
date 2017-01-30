@@ -4,7 +4,7 @@
 $below-expectations-color: $color-grey-6
 $meets-expectations-color: $color-green-1
 $level-selected-color: lighten($color-green-1, 10%)
-$no-expectation-color: $color-grey-5
+$no-expectation-color: $color-grey-6
 
 // base styles for graded rubric, ungraded rubric and rubric edit views
 .rubric
@@ -310,16 +310,18 @@ button.delete
   &:hover
     background-color: $color-orange-1
 
-button.meets-expectations-status, button.meets-expectations-toggle
-  font-weight: bold
+button.meets-expectations-status,
+button.meets-expectations-toggle
   background: $color-green-1
+  color: $color-grey-2
   position: absolute
   left: 4%
   bottom: 2.5%
   border-radius: 12px
   width: 92%
   opacity: 0
-  &:hover
+  &:hover,
+  &:focus
     opacity: 1
     //background-color
 
@@ -329,7 +331,7 @@ button.meets-expectations-status.show
     opacity: 0
 
 button.meets-expectations-toggle.remove
-  background-color: $color-grey-5
+  background-color: $color-grey-6
 
 button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
@@ -370,7 +372,6 @@ button.meets-expectations-status.no-expectation
     color: $color-green-2
 
   input.ng-valid-required
-    @include rubric-level-input
 
     &:disabled
       background: $color-grey-5
@@ -383,7 +384,8 @@ button.meets-expectations-status.no-expectation
     background: $color-red-1
     color: $color-white
 
-.level-badge, .level-badge-image
+.level-badge,
+.level-badge-image
   font-size: 12px
   color: $color-white
   padding: 0 0 0 4px
@@ -402,7 +404,12 @@ button.meets-expectations-status.no-expectation
 .splash, #rubric-grader-splash
   display: none
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak
   display: none !important
 
   &.splash
@@ -425,7 +432,8 @@ button.meets-expectations-status.no-expectation
   border-bottom-right-radius: $global-radius
   background: $color-blue-2
 
-  h4#points-legend, h4.points-legend
+  h4#points-legend,
+  h4.points-legend
     font-size: 24px
     font-style: italic
     color: $color-blue-4
