@@ -26,9 +26,14 @@ class UserSessionsController < ApplicationController
     end
   end
 
+  # rubocop:disable AndOr
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
-    @user = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)[:user]
+    result = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)
+    redirect_to lti_error_path(message: result.message, status_code: result.error_code) \
+      and return unless result.success?
+
+    @user = result[:user]
     @course = Services::CreatesOrUpdatesCourseFromLTI.create_or_update(auth_hash)[:course]
     if !@user || !@course
       lti_error_notification
