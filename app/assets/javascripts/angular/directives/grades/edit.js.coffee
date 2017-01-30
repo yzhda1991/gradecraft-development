@@ -11,20 +11,19 @@
       vm.AssignmentService = AssignmentService
       vm.RubricService = RubricService
 
-      vm.groupGrade = vm.recipientType == "group"
-
       # This can be simplified once group grades can also handle grade file uploads
       vm.feedbackMessage = if vm.recipientType == "group" then "Enter Text Feedback" else "Upload Feedback or Enter Below"
 
       services(vm.assignmentId, vm.recipientType, vm.recipientId).then(()->
         vm.loading = false
 
-        # set a default state for new pass/fail grades
+        # Set a default state for new pass/fail grades, so that the
+        # Pass/Fail switch corresponds to the grade state on init.
         if AssignmentService.assignment().pass_fail && !GradeService.grade.pass_fail_status
-          GradeService.grade.pass_fail_status = "Pass"
+          GradeService.setGradeToPass()
       )
 
-      vm.rawPointsType = ()->
+      _rawPointsType = ()->
         assignment = AssignmentService.assignment()
         return "" if !assignment
 
@@ -36,6 +35,17 @@
           "SCORE_LEVELS"
         else
           "DEFAULT"
+
+      vm.isGroupGrade = vm.recipientType == "group"
+      vm.isStandardGraded = ()->
+        _rawPointsType() == "DEFAULT"
+      vm.isRubricGraded = ()->
+        _rawPointsType() == "RUBRIC"
+      vm.isPassFailGraded = ()->
+        _rawPointsType() == "PASS_FAIL"
+      vm.isScoreLevelGraded = ()->
+        _rawPointsType() == "SCORE_LEVELS"
+
     ]
 
     services = (assignmentId, recipientType, recipientId)->

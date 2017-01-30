@@ -13,6 +13,7 @@
 
       scope.pointsBelowFull = ()->
         return 0 if !scope.assignment() || !scope.grade
+        return 0 if !scope.assignment().full_points || !scope.pointsArePresent()
         scope.assignment().full_points - scope.grade.raw_points
 
       scope.pointsArePresent = ()->

@@ -32,7 +32,7 @@ class API::GradesController < ApplicationController
       render json: {
         message: "failed to save grade", success: false
         },
-        status: 500
+        status: 400
     end
   end
 

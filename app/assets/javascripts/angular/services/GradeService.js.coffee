@@ -14,8 +14,10 @@
   _recipientType = ""
   _recipientId = ""
 
+  #------- grade state management -------------------------------------------------------------------------------------#
+
   # This must be triggered whenever there is a change to points fields or selected levels
-  calculatePoints = ()->
+  calculateGradePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
     grade.raw_points = parseInt(grade.raw_points) || 0
@@ -23,6 +25,16 @@
     grade.final_points = grade.raw_points + grade.adjustment_points
     grade.final_points = 0 if grade.final_points < thresholdPoints
 
+  gradeIsPassing = ()->
+    grade.pass_fail_status == "Pass"
+
+  setGradeToPass = ()->
+    grade.pass_fail_status = "Pass"
+
+  toggeleGradePassFailStatus = ()->
+    grade.pass_fail_status = if grade.pass_fail_status == "Pass" then "Fail" else "Pass"
+
+  #------- grade API calls --------------------------------------------------------------------------------------------#
 
   # When we get a grade response for student or group,
   # this initial setup is run to extract all included and meta information
@@ -50,7 +62,7 @@
         (response) ->
           angular.copy(response.data.data.attributes, grade)
           _getIncluded(response)
-          calculatePoints()
+          calculateGradePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -74,7 +86,7 @@
           # For now we filter to those for the first student
           criterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
 
-          calculatePoints()
+          calculateGradePoints()
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -103,7 +115,7 @@
       )
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
-    calculatePoints()
+    calculateGradePoints()
     DebounceQueue.addEvent("grades", grade.id, _updateGrade, [returnURL], immediate)
 
 
@@ -165,7 +177,7 @@
     criterionGrade = findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
     criterionGrade.level_id = level.id
     criterionGrade.points = level.points
-    calculatePoints()
+    calculateGradePoints()
 
   _updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
@@ -222,6 +234,10 @@
     fileUploads: fileUploads
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
+
+    gradeIsPassing: gradeIsPassing
+    setGradeToPass: setGradeToPass
+    toggeleGradePassFailStatus: toggeleGradePassFailStatus
 
     getGrade: getGrade
     queueUpdateGrade: queueUpdateGrade
