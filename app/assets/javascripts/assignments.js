@@ -85,13 +85,10 @@ $('ul.level-tabs li').click(function(){
 
     $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
     $('#' + criterionId + ' ul.level-tabs li').attr('aria-selected', 'false');
-    $('#' + criterionId + ' .tab-panel').removeClass('selected');
-    $('#' + criterionId + ' .tab-panel').attr('aria-selected', 'false');
+    $('#' + criterionId + ' .tab-panel').removeClass('selected').attr('aria-hidden', 'true');
 
-    $(this).addClass('selected');
-    $(this).attr('aria-selected', 'true');
-    $("#" + tabId).addClass('selected');
-    $("#" + tabId).attr('aria-selected', 'true');
+    $(this).addClass('selected').attr('aria-selected', 'true');
+    $("#" + tabId).addClass('selected').attr('aria-hidden', 'false');
   })
 
 // toggle class analytics on rubric feedback
