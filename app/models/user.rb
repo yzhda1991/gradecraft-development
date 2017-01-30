@@ -120,19 +120,6 @@ class User < ActiveRecord::Base
     @internal = value
   end
 
-  def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { email: auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"] }
-    where(criteria).first || create!(criteria) do |u|
-      u.lti_uid = auth_hash["extra"]["raw_info"]["lis_person_sourcedid"]
-      u.first_name = auth_hash["extra"]["raw_info"]["lis_person_name_given"]
-      u.last_name = auth_hash["extra"]["raw_info"]["lis_person_name_family"]
-      email = auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"]
-      username = email.split("@")[0]
-      u.username = username
-      u.kerberos_uid = username
-    end
-  end
-
   def self.find_by_kerberos_auth_hash(auth_hash)
     where(kerberos_uid: auth_hash["uid"]).first
   end
