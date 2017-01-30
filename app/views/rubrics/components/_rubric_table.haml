@@ -7,8 +7,8 @@
       %label.rubric-switch-socket
         %input#class-analytics-toggle{:type => "checkbox", :checked => true}
         .rubric-switch-handle.round
-  #rubric-graded.rubric
+  .rubric.rubric-graded
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
 - else
-  #rubric-ungraded.rubric
+  .rubric.rubric-ungraded
     = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: false }

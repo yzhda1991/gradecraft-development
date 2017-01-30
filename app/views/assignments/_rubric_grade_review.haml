@@ -1,4 +1,4 @@
-#rubric-results-table.rubric
+.rubric.rubric-results-table
   - @criteria.each do |criterion|
     - criterion_grade = @criterion_grades.where(student_id: student.id, criterion_id: criterion.id).first
     .criterion
