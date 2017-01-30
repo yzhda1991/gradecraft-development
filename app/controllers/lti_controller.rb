@@ -18,4 +18,15 @@ class LTIController < ApplicationController
     @consumer.tool_consumer_instance_name = "Gradecraft"
     @consumer.tool_consumer_instance_guid = "gradecraft.com"
   end
+
+  def error
+    @error = ApplicationError.new application_error_params
+    render :error, status: @error.status_code
+  end
+
+  private
+
+  def application_error_params
+    params.permit(:message, :header, :status_code, :redirect_path)
+  end
 end
