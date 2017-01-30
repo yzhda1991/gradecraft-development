@@ -20,7 +20,7 @@
               %ul.badge-row
                 - level.level_badges.each_with_index do |level_badge, index|
                   %li.level-badge-image
-                    %img{:src => level_badge.badge.try(:icon), class: "level_badge" }
+                    %img{src: level_badge.badge.try(:icon), alt: level_badge.badge.try(:name), title: level_badge.badge.try(:name), class: "level_badge" }
 
               - if level.meets_expectations? || level.above_expectations?
                 .level-description
