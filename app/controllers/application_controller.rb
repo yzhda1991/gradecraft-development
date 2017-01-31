@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :require_login, except: [:not_authenticated]
+  before_action :require_course_membership, except: [:not_authenticated]
   before_action :increment_page_views
   before_action :course_scores
   before_action :set_paper_trail_whodunnit
@@ -110,6 +111,16 @@ class ApplicationController < ActionController::Base
   def ensure_not_observer?
     redirect_to assignments_path, alert: "You do not have permission to access that page" \
       if current_user_is_observer?
+  end
+
+  def require_course_membership
+    redirect_to errors_path(header: "You don't belong to any courses in GradeCraft!",
+      status_code: 400,
+      redirect_path: logout_url,
+      message: "If you're a student, ask your instructor to add you to their course site.<br><br>
+        If you're an instructor, email
+        <a href= \"mailto:help@gradecraft.com\">help@gradecraft.com</a>
+        to have them create a course shell for you.") unless current_user.course_memberships.any?
   end
 
   def save_referer

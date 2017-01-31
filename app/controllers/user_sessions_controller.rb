@@ -2,6 +2,7 @@ class UserSessionsController < ApplicationController
 
   before_action :ensure_staff?, only: [:impersonate_student]
   skip_before_action :require_login, except: [:index]
+  skip_before_action :require_course_membership, except: :index
   skip_before_action :verify_authenticity_token, only: [:lti_create]
 
   def new
@@ -30,7 +31,7 @@ class UserSessionsController < ApplicationController
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
     result = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)
-    redirect_to lti_error_path(message: result.message, status_code: result.error_code) \
+    redirect_to errors_path(message: result.message, status_code: result.error_code) \
       and return unless result.success?
 
     @user = result[:user]
