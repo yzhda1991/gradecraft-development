@@ -299,7 +299,6 @@ Rails.application.routes.draw do
   get "saml/logout"
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
-  get "lti/error", to: "lti#error"
 
   #16. Uploads
   resource :uploads, only: [] do
@@ -387,6 +386,9 @@ Rails.application.routes.draw do
         action: "secure_download", as: "secure_download"
     end
   end
+
+  #20. Errors
+  resource :errors, only: :show
 
   # root, bro
   root to: "pages#home"
