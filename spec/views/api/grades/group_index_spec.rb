@@ -2,8 +2,12 @@
 require "rails_spec_helper"
 
 describe "api/grades/group_index" do
+  let(:course) { build(:course) }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:grade) { create(:grade, assignment: assignment, student: student) }
+  
   before(:all) do
-
     # Expected instance variables on render:
     @grades = [create(:grade)]
     @student_ids = [1,2,3,4,5]
