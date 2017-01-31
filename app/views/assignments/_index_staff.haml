@@ -7,14 +7,14 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .assignments
+  .assignments{role: "tablist"}
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-#{assignment_type.id}" }
-        .collapse
+        .collapse{role: "tab"}
           %h2.assignment-type-name
             %i.fa.fa-angle-double-right.fa-fw
             #{assignment_type.name} – #{points assignment_type.total_points} points
-        .collapse-hidden
+        .collapse-hidden{role: "tabpanel"}
           = link_to "[ Edit ]", edit_assignment_type_path(assignment_type)
           = link_to "[ Delete ]", assignment_type_path(assignment_type), data: { confirm: "Are you sure?", method: :delete }
           %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
