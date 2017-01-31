@@ -1,12 +1,13 @@
 class ErrorsController < ApplicationController
   def show
-    @error = ApplicationError.new application_error_params
-    render status: @error.status_code, layout: "error"
+    presenter = Errors::ShowPresenter.new error_params
+    render status: params[:status_code].blank? ? 500 : params[:status_code],
+      layout: "error", locals: { presenter: presenter }
   end
 
   private
 
-  def application_error_params
-    params.permit(:message, :header, :status_code, :redirect_path)
+  def error_params
+    params.permit(:message, :header, :redirect_path)
   end
 end

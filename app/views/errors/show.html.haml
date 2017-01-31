@@ -195,10 +195,10 @@
     %div.cloud-bubble.cloud-bubble-5
 
 %div.night.message-container
-  %h1= @error.header
-  %div.message= @error.message
+  %h1= presenter.header
+  %div.message= presenter.message
   %div.back-to-site
-    %a{href: "#{@error.redirect_path}"} I want to go home
+    %a{href: "#{presenter.redirect_path}"} I want to go home
 
 %div.background-container
   %div.hills
