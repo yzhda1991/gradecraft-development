@@ -47,9 +47,10 @@
                       - elsif assignment.has_groups?
                         %li= link_to glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
                 %td
-                  %label
-                    %span.sr-only Select grade to update status
-                    = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }
+                  .center
+                    %label
+                      %span.sr-only Select grade to update status
+                      = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }, id: "grade_id_#{assignment.id}-#{grade.id}"
 
       .submit-buttons
         .right
