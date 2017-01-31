@@ -37,7 +37,6 @@ require "./lib/model_addons/improved_logging"
 require "./lib/s3_manager"
 require_relative "support/sorcery_stubbing"
 require_relative "support/file_helpers"
-require_relative "support/world"
 
 # stub out the process_in_background for carrierwave_backgrounder
 module CarrierWave
