@@ -33,13 +33,4 @@ describe "grades/show" do
       end
     end
   end
-
-  describe "viewed by student" do
-    before(:each) do
-      allow(view).to receive(:current_user_is_staff).and_return(false)
-    end
-    it "renders successfully" do
-      render
-    end
-  end
 end
