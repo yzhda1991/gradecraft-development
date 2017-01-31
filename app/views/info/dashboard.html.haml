@@ -1,4 +1,1 @@
-- if current_user.course_memberships.any?
-  #dashboard-timeline= render partial: "info/dashboard/#{current_user.role(current_course)}_dashboard", locals: { presenter: presenter }
-- else
-  = render partial: "without_course_memberships"
+#dashboard-timeline= render partial: "info/dashboard/#{current_user.role(current_course)}_dashboard", locals: { presenter: presenter }
