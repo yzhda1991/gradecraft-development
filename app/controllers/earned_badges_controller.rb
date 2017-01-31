@@ -4,10 +4,9 @@ class EarnedBadgesController < ApplicationController
   # Earned badges are to badges what grades are to assignments - the record of
   # how what and how a student performed
 
-  skip_before_action :require_login, only: [:confirm_earned]
   before_action :ensure_not_observer?
-  before_action :ensure_staff?, except: [:confirm_earned, :new, :create]
-  before_action :find_badge, except: [:confirm_earned]
+  before_action :ensure_staff?, except: [:new, :create]
+  before_action :find_badge
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
   def index
@@ -100,19 +99,6 @@ class EarnedBadgesController < ApplicationController
     expire_fragment "earned_badges"
     redirect_to @badge,
       notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
-  end
-
-  # Used for Badges Backpack integration
-  # GET /courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned
-  def confirm_earned
-    @course = Course.find(params[:course_id])
-    @badge = @course.badges.find(params[:badge_id])
-    @earned_badge = @badge.earned_badges.where(id: params[:id]).first
-    if @earned_badge.present?
-      render nothing: true, status: 200
-    else
-      redirect_to root_path
-    end
   end
 
   private
