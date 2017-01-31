@@ -48,3 +48,6 @@ spec_files:
 # (spec runner and asset cache)
 # defaults to tmp/jasmine
 tmp_dir: "tmp/jasmine"
+
+# run tests with `bundle exec rake spec:javascript`
+include_dir: "../mobile_app/public/js"
