@@ -195,17 +195,13 @@
     .cloud-bubble.cloud-bubble-5
 
 .night.message-container
-  %h1= presenter.header
-  %p.message= presenter.message.html_safe
-  .return-link
-    %a{href: "#{presenter.redirect_path}"} I want to go home
+  = render partial: "#{error_type}"
 
 .background-container
   .hills
     .hill.hill-3.night-hill-position-1
     .hill.hill-1.night-hill-position-2
     .hill.hill-2.night-hill-position-3
-
 
   .background-left-wrapper
     .mountain.mountain-size-1

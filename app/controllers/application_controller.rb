@@ -114,13 +114,8 @@ class ApplicationController < ActionController::Base
   end
 
   def require_course_membership
-    redirect_to errors_path(header: "You don't belong to any courses in GradeCraft!",
-      status_code: 400,
-      redirect_path: logout_url,
-      message: "If you're a student, ask your instructor to add you to their course site.<br><br>
-        If you're an instructor, email
-        <a href= \"mailto:help@gradecraft.com\">help@gradecraft.com</a>
-        to have them create a course shell for you.") unless current_user.course_memberships.any?
+    redirect_to errors_path(status_code: 401, error_type: "without_course_membership") \
+      unless current_user.course_memberships.any?
   end
 
   def save_referer

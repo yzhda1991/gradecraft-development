@@ -82,7 +82,7 @@ describe UserSessionsController do
       it "redirects to the errors path" do
         allow(user_create_result).to receive(:message).and_return "An error occurred"
         allow(user_create_result).to receive(:error_code).and_return "400"
-        expect(post :lti_create, params: params).to redirect_to errors_path(message: user_create_result.message,
+        expect(post :lti_create, params: params).to redirect_to errors_path(error_type: "lti_auth_with_email_but_not_name_info",
           status_code: user_create_result.error_code)
       end
     end

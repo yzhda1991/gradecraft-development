@@ -31,7 +31,7 @@ class UserSessionsController < ApplicationController
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
     result = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)
-    redirect_to errors_path(message: result.message, status_code: result.error_code) \
+    redirect_to errors_path(error_type: "lti_auth_with_email_but_not_name_info", status_code: result.error_code) \
       and return unless result.success?
 
     @user = result[:user]

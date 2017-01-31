@@ -1,24 +1,13 @@
 require "rails_spec_helper"
 
 describe ErrorsController do
-  let(:user) { build_stubbed(:user) }
-  let(:params) { ActionController::Parameters.new(
+  let(:params) { {
       status_code: 418,
-      message: "whoa what just happened?",
-      header: "Something went terribly wrong",
-      redirect_path: dashboard_path
-    )
+      error_type: "error"
+    }
   }
 
-  before(:each) { login_user(user) }
-
   describe "show" do
-    it "creates a presenter with the proper attributes" do
-      sanitized_params = params.permit(:message, :header, :redirect_path)
-      expect(Errors::ShowPresenter).to receive(:new).with sanitized_params
-      get :show, params: params
-    end
-
     it "renders with the template with the correct layout" do
       get :show, params: params
       expect(response).to render_template layout: "error"
