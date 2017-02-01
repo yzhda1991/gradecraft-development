@@ -4,7 +4,8 @@
 
   / Gradebook Table
   #gradebook
-    %table.dynatable{"aria-describedby" => "tableCaption"}
+    %table.dynatable
+      %caption.sr-only Gradebook
       %thead
         %tr
           %th{scope: "col"} First Name
