@@ -3,6 +3,8 @@
 span:hover + .display-on-hover,
 span:focus + .display-on-hover
   display: block
+  @media (max-width: $media-small-max)
+    display: none
 
 span[tabindex="0"]
   color: $color-blue-2

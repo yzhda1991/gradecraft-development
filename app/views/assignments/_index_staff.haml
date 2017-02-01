@@ -20,14 +20,14 @@
           %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
             %thead
               %tr
-                %th.draggable
+                %td.draggable
                 %th{scope: "col", :width => "20%"} Name
-                %th
+                %th.sr-only Icon
                 %th Due
                 %th{:style => "display: none"} Due Date
                 %th{scope: "col", :width => "10%"}  Max Points
                 %th Rubric?
-                %th{ :style => "min-width: 200px" }
+                %th.sr-only{ :style => "min-width: 200px" } Action Buttons
             %tbody.sort-assignments
               - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
               - assignments.each do |assignment|
