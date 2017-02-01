@@ -54,6 +54,6 @@
             %td
               .right
                 %ul.button-bar
-                  %li= link_to glyph(:edit) + "Edit", edit_course_path(course), class: "button"
-                  %li= link_to glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy
-                  %li= link_to glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), class: "button", :method => :copy
+                  %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course), class: "button"
+                  %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy
+                  %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), class: "button", :method => :copy

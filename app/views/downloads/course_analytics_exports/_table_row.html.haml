@@ -27,5 +27,5 @@
     .right
       %ul.button-bar
         - if export.downloadable?
-          %li= link_to glyph(:download) + "Download", download_course_analytics_export_path(export), class: 'button', style: "margin-right: 18px"
-        %li= link_to glyph(:trash) + "Delete", export, class: 'button', data: { confirm: 'This will delete the course analytics export. Are you sure?' }, :method => :delete
+          %li= link_to decorative_glyph(:download) + "Download", download_course_analytics_export_path(export), class: 'button', style: "margin-right: 18px"
+        %li= link_to decorative_glyph(:trash) + "Delete", export, class: 'button', data: { confirm: 'This will delete the course analytics export. Are you sure?' }, :method => :delete

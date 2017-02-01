@@ -43,8 +43,8 @@
             .right
               %ul.button-bar
                 - if user_is_student
-                  %li= link_to glyph(:dashboard) + "Dashboard", student_path(user), class: "button" if user_is_student
+                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(user), class: "button" if user_is_student
                 - elsif user_is_staff
-                  %li= link_to glyph(:dashboard) + "Dashboard", staff_path(user), class: "button" if user_is_staff
-                %li= link_to glyph(:edit) + "Edit", edit_user_path(user), class: "button"
-                %li= link_to glyph(:trash) + "Delete", course_membership, class: "button", data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete
+                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", staff_path(user), class: "button" if user_is_staff
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(user), class: "button"
+                %li= link_to decorative_glyph(:trash) + "Delete", course_membership, class: "button", data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete
