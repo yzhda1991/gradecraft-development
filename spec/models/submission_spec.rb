@@ -181,16 +181,15 @@ describe Submission do
 
   describe "#submitted_this_week" do
     let(:assignment_type) { create(:assignment_type) }
-    let(:assignment) { create(:group_assignment, assignment_type: assignment_type) }
-    let(:another_assignment) { create(:group_assignment, assignment_type: assignment_type) }
-    let(:student) { create(:course_membership, :student, course: assignment.course).user }
-    let!(:submission) { create(:submission, assignment: assignment, student: student) }
-    let!(:another_submission) { create(:draft_submission, assignment: another_assignment, student: student) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type) }
+    let!(:submission) { create(:submission, assignment: assignment, submitted_at: DateTime.now - 1.day) }
 
     it "returns non-draft submissions for the past week" do
+      create(:draft_submission, assignment: assignment)
+      create(:submission, assignment: assignment, submitted_at: DateTime.now - 8.day)
       result = Submission.submitted_this_week(assignment_type)
       expect(result.count).to eq 1
-      expect(result).to eq [submission]
+      expect(result).to include submission
     end
   end
 
