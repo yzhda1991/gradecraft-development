@@ -51,7 +51,7 @@ RSpec.describe ApplicationController do
           allow(logger_class).to receive_messages(new: event_logger)
         end
 
-        it "should create a new PageviewEventLogger", focus: true do
+        it "should create a new PageviewEventLogger" do
           expect(logger_class).to receive(:new).with(event_session)
             .and_return event_logger
           subject
