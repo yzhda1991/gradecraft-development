@@ -195,11 +195,6 @@ Rails.application.routes.draw do
     post :recalculate_student_scores, on: :member
     get :badges, on: :member
     get :change, on: :member
-    resources :badges do
-      resources :earned_badges do
-        get :confirm_earned, on: :member
-      end
-    end
   end
 
   resources :course_memberships, only: [:create, :delete, :destroy]
@@ -351,6 +346,8 @@ Rails.application.routes.draw do
     resources :badges, only: :index
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
     resources :earned_badges, only: [:create, :destroy]
+    get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
+      as: :earned_badge_confirm
     resources :grades, only: :update do
       resources :earned_badges, only: :create, module: :grades do
         delete :delete_all, on: :collection

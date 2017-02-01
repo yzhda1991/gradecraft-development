@@ -1,7 +1,21 @@
 require_relative "../../services/creates_earned_badge"
 
 class API::EarnedBadgesController < ApplicationController
-  before_action :ensure_staff?
+  skip_before_action :require_login, only: :confirm_earned
+  before_action :ensure_staff?, except: :confirm_earned
+
+  # Used for Badges Backpack integration
+  # GET /api/courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned
+  def confirm_earned
+    @course = Course.find_by_id(params[:course_id])
+    @badge = @course.badges.find_by_id(params[:badge_id]) unless @course.nil?
+
+    if @badge.present? && @badge.earned_badges.find_by_id(params[:id]).present?
+      head 200
+    else
+      render json: { message: "Earned badge not found", success: false }, status: 404
+    end
+  end
 
   # POST /api/earned_badges
   def create
