@@ -2,6 +2,7 @@ require_relative "../../services/creates_earned_badge"
 
 class API::EarnedBadgesController < ApplicationController
   skip_before_action :require_login, only: :confirm_earned
+  skip_before_action :require_course_membership, only: :confirm_earned
   before_action :ensure_staff?, except: :confirm_earned
 
   # Used for Badges Backpack integration
