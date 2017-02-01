@@ -7,6 +7,15 @@
 label, input
   padding-bottom: 0
 
+[type=text],
+[type=password],
+[type=number],
+textarea
+  border: 1px solid rgba(42, 43, 43, 0.2)
+  transition: border-color 0.2s
+  &:focus
+    border: 1px solid rgba(42, 43, 43, 0.8)
+
 .radio label,
 .checkbox label
   cursor: pointer
@@ -56,7 +65,12 @@ select:hover
   li a
     color: $color-grey-3 !important
 
-  li:hover, li a:hover, li.active a, li.active, li.active a:hover, li.active:hover
+  li:hover,
+  li a:hover,
+  li.active a,
+  li.active,
+  li.active a:hover,
+  li.active:hover
     background-color: $color-green-3 !important
     color: $color-white !important
     text-decoration: none
@@ -179,6 +193,10 @@ error
     width: 15rem
     font-size: 11px
     font-family: sans-serif
+    border: 1px solid rgba(42, 43, 43, 0.2)
+    transition: border-color 0.2s
+    &:focus
+      border: 1px solid rgba(42, 43, 43, 0.8)
 
   .form_label
     margin-left: 10.75rem

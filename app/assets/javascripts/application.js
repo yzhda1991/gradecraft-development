@@ -18,6 +18,7 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require stacktable.min
+//= require what-input
 //= require mobile_menu
 //= require mobile_tables
 //= require slick.min
