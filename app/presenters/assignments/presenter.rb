@@ -27,7 +27,7 @@ class Assignments::Presenter < Showtime::Presenter
     properties.key?(:team_id) && !team.nil?
   end
 
-  def grade_for(student)
+  def grade_for_student(student)
     grades.where(student_id: student.id).first ||
       Grade.new(assignment_id: assignment.id)
   end
@@ -177,7 +177,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def submission_grade_history(student)
-    grade = self.grade_for(student)
+    grade = self.grade_for_student(student)
     submission = self.submission_for_assignment(student)
     submission_grade_filtered_history(submission, grade)
   end

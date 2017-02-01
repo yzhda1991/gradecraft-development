@@ -34,7 +34,7 @@
           - group_presenter.students.each do |student|
             %tr
               %td= link_to student.name, student_path(student)
-              - grade = group_presenter.grade_for(student)
+              - grade = group_presenter.grade_for_student(student)
               %td
                 - if grade.present? && grade.instructor_modified?
                   = points grade.final_points
