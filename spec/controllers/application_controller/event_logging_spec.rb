@@ -27,7 +27,7 @@ RSpec.describe ApplicationController do
       allow(user).to receive_messages(current_course: course)
       define_test_routes # define dummy :html_page and :json_page routes
       allow(controller).to \
-        receive_messages(current_user: user, event_session: event_session)
+        receive_messages(current_user: user, event_session: event_session, require_course_membership: true)
     end
 
     describe "triggering pageview logger events" do
