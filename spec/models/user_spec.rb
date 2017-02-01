@@ -1,13 +1,13 @@
 require "active_record_spec_helper"
 
 describe User do
-  let!(:world) do
-    World.create.with(:course, :student, :assignment, :grade)
-  end
-  let(:course) { world.course }
-  let(:student) { world.student }
-  let(:assignment) { world.assignment }
-  let(:grade) { world.grade }
+  let(:course) { build(:course) }
+  let(:student) { create(:course_membership, :student, auditing: false, course: course).user }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:grade) { create(:grade, assignment: assignment, student:student) }
+  let(:badge) { create(:badge, course: course, can_earn_multiple_times: true) }
+  let(:single_badge) { create(:badge, course: course, can_earn_multiple_times: false) }
+  let!(:group) { create(:group, course: course) }
 
   describe "validations" do
     it "requires the password confirmation to match" do
@@ -26,9 +26,9 @@ describe User do
   describe "order_by_name" do
     it "should return users alphabetical by last name" do
       User.destroy_all
-      student = create(:user, last_name: "Zed")
+      student1 = create(:user, last_name: "Zed")
       student2 = create(:user, last_name: "Alpha")
-      expect(User.all.order_by_name).to eq([student2,student])
+      expect(User.all.order_by_name).to eq([student2,student1])
     end
   end
 
@@ -63,11 +63,11 @@ describe User do
   end
 
   describe "submitter directory names" do
-    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
+    #let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
 
-    describe "#submitter_directory_name" do
+    describe "#submitter_directory_name", focus: true do
       it "formats the submitter info into an alphabetical submitter directory name" do
-        expect(user.submitter_directory_name).to eq("Bailey, Ben")
+        expect(student.submitter_directory_name).to eq(student.last_name, student.first_name)
       end
     end
 
@@ -79,11 +79,8 @@ describe User do
   end
 
   describe "#time_zone" do
-    subject { user.time_zone }
-    let(:user) { create(:user) }
-
     it "defaults to Eastern Time" do
-      expect(subject).to eq("Eastern Time (US & Canada)")
+      expect(subject.time_zone).to eq("Eastern Time (US & Canada)")
     end
   end
 
@@ -136,7 +133,7 @@ describe User do
       create(:course_membership, :student, :auditing, course: course, user: student_not_being_graded)
     end
 
-    it "returns all the students that are being graded" do
+    it "returns all the students that are being graded", focus: true do
       result = User.students_being_graded_for_course(course)
       expect(result.pluck(:id)).to eq [student.id]
     end
@@ -183,12 +180,12 @@ describe User do
 
   describe "#self_reported_done?" do
     it "is not self reported if there are no grades" do
-      expect(student).to_not be_self_reported_done(world.assignment)
+      expect(student).to_not be_self_reported_done(assignment)
     end
 
     it "is self reported if there is at least one graded grade" do
-      world.grade.update_attribute :status, "Graded"
-      expect(student).to be_self_reported_done(world.assignment)
+      grade.update_attribute :status, "Graded"
+      expect(student).to be_self_reported_done(assignment)
     end
   end
 
@@ -682,20 +679,14 @@ describe User do
   end
 
   describe "#group_for_assignment(assignment)" do
-    let!(:create_group) { world.create_group }
-    let(:group) { world.group }
-
     it "returns a student's group for a particular assignment if present" do
       FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
       FactoryGirl.create(:group_membership, student: student, group: group)
-      expect(student.group_for_assignment(assignment)).to eq(world.group)
+      expect(student.group_for_assignment(assignment)).to eq(group)
     end
   end
 
   describe "#has_group_for_assignment?" do
-    let!(:create_group) { world.create_group }
-    let(:group) { world.group }
-
     it "returns false for individual assignments" do
       FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
       FactoryGirl.create(:group_membership, student: student, group: group)
@@ -766,26 +757,25 @@ describe User do
 
   context "instructor is editing the grade for a student's submission" do
     before(:each) do
-      @single_badge = world.create_badge(can_earn_multiple_times: false).badge
-      @multi_badge = world.create_badge(can_earn_multiple_times: true).badges.last
-
-      another_assignment = world.create_assignment.assignments.last
-      @another_grade = world.create_grade(assignment: another_assignment).grades.last
+      another_assignment = create(:assignment)
+      another_grade = create(:grade, assignment: assignment)
     end
 
     it "should not see badges that aren't included in the current course" do
-      bizarro = World.create.with(:course, :student, :assignment, :grade, :badge)
-      expect(student.earnable_course_badges_for_grade(world.grade)).not_to include(bizarro.badge)
+      bizarro_world = create(:course)
+      bizarro_badge = create(:badge, course: bizarro_world)
+      bizarro_grade = create(:grade, student: student, course: course)
+      expect(student.earnable_course_badges_for_grade(grade)).not_to include(bizarro_badge)
     end
 
     it "should see badges for the current course" do
       EarnedBadge.destroy_all course_id: course[:id]
-      expect(student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
+      expect(student.earnable_course_badges_for_grade(grade)).to include(badge, single_badge)
     end
 
     it "should show course badges that the student has yet to earn", broken: true do
       EarnedBadge.destroy_all course_id: course[:id]
-      expect(student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
+      expect(student.earnable_course_badges_for_grade(grade)).to include(badge, single_badge)
     end
   end
 end
