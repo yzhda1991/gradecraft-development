@@ -19,6 +19,21 @@ describe Team do
     end
   end
 
+  describe "#copy" do
+    let(:team) { build :team }
+    subject { team.copy }
+
+    it "makes a duplicated copy of itself" do
+      expect(subject).to_not eq team
+    end
+
+    it "copies the team memberships" do
+      create :team_membership, team: team
+      expect(subject.team_memberships.size).to eq 1
+      expect(subject.team_memberships.map(&:team_id)).to eq [subject.id]
+    end
+  end
+
   describe ".find_by_course_and_name" do
     let(:team) { create :team }
 

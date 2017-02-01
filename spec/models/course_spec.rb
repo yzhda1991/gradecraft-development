@@ -81,6 +81,13 @@ describe Course do
       duplicated = subject.copy "with_students"
       expect(duplicated.reload.users).to include student
     end
+
+    it "copies the teams" do
+      team = create :team, course: subject
+      duplicated = subject.copy "with_students"
+      expect(duplicated.teams.size).to eq 1
+      expect(duplicated.teams.map(&:course_id)).to eq [duplicated.id]
+    end
   end
 
   describe "#grade_scheme_elements" do

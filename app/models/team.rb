@@ -1,4 +1,6 @@
 class Team < ActiveRecord::Base
+  include Copyable
+
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 
@@ -28,6 +30,11 @@ class Team < ActiveRecord::Base
   scope :order_by_challenge_grade_score, -> { order("challenge_grade_score DESC")}
   scope :order_by_rank, -> { order("rank ASC")}
   scope :alpha, -> { order("name ASC") }
+
+  def copy(attributes={})
+    ModelCopier.new(self).copy(attributes: attributes,
+      associations: [{ team_memberships: { team_id: :id }}])
+  end
 
   def self.find_by_course_and_name(course_id, name)
     where(course_id: course_id)

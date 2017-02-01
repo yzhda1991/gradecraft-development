@@ -10,6 +10,15 @@ describe TeamMembership do
     end
   end
 
+  describe "#copy" do
+    let(:team_membership) { build :team_membership }
+    subject { team_membership.copy }
+
+    it "makes a duplicated copy of itself" do
+      expect(subject).to_not eq team_membership
+    end
+  end
+
   describe ".for_course" do
     it "returns all the team memberships for a specific course" do
       course = create(:course)
