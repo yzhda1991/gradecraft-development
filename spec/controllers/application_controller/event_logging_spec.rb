@@ -24,7 +24,7 @@ RSpec.describe ApplicationController do
     }}
 
     before do
-      allow(user).to receive_messages(current_course: course)
+      allow(user).to receive_messages(current_course: course, require_course_membership: true)
       define_test_routes # define dummy :html_page and :json_page routes
       allow(controller).to \
         receive_messages(current_user: user, event_session: event_session, require_course_membership: true)
@@ -51,7 +51,7 @@ RSpec.describe ApplicationController do
           allow(logger_class).to receive_messages(new: event_logger)
         end
 
-        it "should create a new PageviewEventLogger" do
+        it "should create a new PageviewEventLogger", focus: true do
           expect(logger_class).to receive(:new).with(event_session)
             .and_return event_logger
           subject

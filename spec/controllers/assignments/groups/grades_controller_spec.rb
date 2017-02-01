@@ -90,7 +90,10 @@ describe Assignments::Groups::GradesController do
   context "as a student" do
     let(:student) { create(:user) }
 
-    before(:each) { login_user(student) }
+    before(:each) do
+      login_user(student)
+      allow(controller).to receive(:require_course_membership).and_return true
+    end
 
     describe "GET mass_edit" do
       it "redirects back to the root" do
