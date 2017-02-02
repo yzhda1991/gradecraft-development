@@ -1,4 +1,5 @@
 %table.dynatable
+  %caption.sr-only Submissions Exports
   %thead
     %tr
       %th Assignment
@@ -9,6 +10,7 @@
       %th Completed&nbsp;At
       %th Status
       %th
+        %span.sr-only Action buttons
   %tbody
     - presenter.submissions_exports.each do |export|
       = render partial: "downloads/submissions_exports/table_row",

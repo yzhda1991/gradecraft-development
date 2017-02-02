@@ -1,6 +1,7 @@
 = render partial: "students/table_filter"
 
 %table.student-index-table.dynatable.no-table-header
+  %caption.sr-only= "#{term_for :students}"
   %thead
     %tr
       %th Flag

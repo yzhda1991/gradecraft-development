@@ -27,7 +27,8 @@
                 %th{:style => "display: none"} Due Date
                 %th{scope: "col", :width => "10%"}  Max Points
                 %th Rubric?
-                %th.sr-only{ :style => "min-width: 200px" } Action Buttons
+                %th{ :style => "min-width: 200px" } 
+                  %span.sr-only Action Buttons
             %tbody.sort-assignments
               - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
               - assignments.each do |assignment|

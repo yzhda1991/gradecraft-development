@@ -4,6 +4,7 @@
   = render "layouts/alerts"
 
   %table.dynatable.no-table-header
+    %caption.sr-only Staff Members
     %thead
       %tr
         %th First Name
@@ -12,6 +13,7 @@
         %th Role
         %th #{term_for :team}
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
     %tbody
       - @staff.each do |user|
         %tr

@@ -7,12 +7,14 @@
   = render partial: "layouts/alerts"
 
   %table.dynatable
+    %caption.sr-only Calendar Events
     %thead
       %tr
         %th{:width => "20%"} Name
         %th Open date
         %th Close date
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
 
     %tbody
       - @events.each do |event|

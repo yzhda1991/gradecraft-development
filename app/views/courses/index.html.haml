@@ -21,16 +21,24 @@
           %th{scope: "col"} Teams
           %th{scope: "col"} Badges
           %th
+            %span.sr-only Download Research Grades
           %th
+            %span.sr-only Download Final Grades
           %th
+            %span.sr-only= "Download #{term_for :assignment} structure"
           %th
+            %span.sr-only= "Download #{term_for :assignment} Submissions"
           %th
+            %span.sr-only= "Download #{term_for :assignment_type} summaries"
           %th
+            %span.sr-only Download Full Grade Book
           %th
+            %span.sr-only= "Download #{term_for :badges}"
           %th
+            %span.sr-only Download Grading Scheme
           %th
           %th{scope: "col" }
-            %span.sr-only Actions
+            %span.sr-only Action buttons
     %tbody
       - @courses.each do |course|
         %tr

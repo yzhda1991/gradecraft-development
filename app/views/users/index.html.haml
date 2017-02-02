@@ -6,6 +6,7 @@
   = team_filter(@teams) if current_course.has_teams?
 
   %table.dynatable.no-table-header
+    %caption.sr-only All Users
     %thead
       %tr
         %th First Name
@@ -15,6 +16,7 @@
         %th #{term_for :team}
         %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th{:style => "min-width: 250px"}
+          %span.sr-only Action Buttons
     %tbody
       - @users.each do |user|
         %tr

@@ -4,12 +4,14 @@
   = render "layouts/alerts"
 
   %table.dynatable.no-table-header
+    %caption.sr-only Class Observers
     %thead
       %tr
         %th First Name
         %th Last Name
         %th Avatar
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
     %tbody
       - @observers.each do |user|
         %tr
