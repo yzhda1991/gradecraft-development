@@ -1,5 +1,6 @@
 class SamlController < ApplicationController
   skip_before_action :require_login, except: [:logout]
+  skip_before_action :require_course_membership, except: :logout
   protect_from_forgery except: :consume
 
   def init

@@ -22,4 +22,11 @@ describe Services::Actions::ParseUserAttributesFromAuthHash do
     result = described_class.execute auth_hash: auth_hash
     expect(result).to have_key :user_attributes
   end
+
+  it "fails the context if the auth hash is invalid" do
+    auth_hash.extra.raw_info.lis_person_name_given = nil
+    auth_hash.extra.raw_info.lis_person_name_family = nil
+    result = described_class.execute auth_hash: auth_hash
+    expect(result.success?).to be_falsey
+  end
 end

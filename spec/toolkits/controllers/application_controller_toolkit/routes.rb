@@ -8,6 +8,7 @@ module Toolkits
             get "/html_page", to: "application_controller_test#html_page"
             get "/json_page", to: "application_controller_test#json_page"
             root to: "application_controller_test#html_page"
+            resource :errors, only: :show
           end
         end
 

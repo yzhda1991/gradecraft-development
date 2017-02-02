@@ -12,22 +12,9 @@
     = javascript_include_tag "https://cdn.statuspage.io/se-v2.js"
     = yield(:head)
 
-  %body(class="#{body_class}")
-    = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
-    - if current_user
-      %a.nav-flyout-contentmask
-      .inner-wrap
-        - if current_user_is_staff?
-          = render partial: "layouts/staff"
-        - elsif current_user_is_student?
-          = render partial: "layouts/student"
-        - elsif current_user_is_observer?
-          = render partial: "layouts/observer"
-    - else
-      = render partial: "layouts/public"
+  %body
+    = render partial: "layouts/content"
   = render partial: "layouts/help/uservoice"
-  .footer
-    = render partial: "layouts/footer"
 
   = render partial: "layouts/background"
   = render partial: "layouts/google_analytics"

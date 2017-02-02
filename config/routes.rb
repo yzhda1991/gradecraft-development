@@ -387,6 +387,9 @@ Rails.application.routes.draw do
     end
   end
 
+  #20. Errors
+  resource :errors, only: :show
+
   # root, bro
   root to: "pages#home"
 end

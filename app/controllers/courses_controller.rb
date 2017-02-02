@@ -3,6 +3,7 @@ class CoursesController < ApplicationController
   include CoursesHelper
 
   skip_before_action :require_login, only: [:badges]
+  skip_before_action :require_course_membership, only: :badges
   before_action :ensure_staff?, except: [:index, :badges, :change]
   before_action :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:recalculate_student_scores]

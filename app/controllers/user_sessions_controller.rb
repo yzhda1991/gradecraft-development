@@ -2,6 +2,7 @@ class UserSessionsController < ApplicationController
 
   before_action :ensure_staff?, only: [:impersonate_student]
   skip_before_action :require_login, except: [:index]
+  skip_before_action :require_course_membership, except: :index
   skip_before_action :verify_authenticity_token, only: [:lti_create]
 
   def new
@@ -26,9 +27,14 @@ class UserSessionsController < ApplicationController
     end
   end
 
+  # rubocop:disable AndOr
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
-    @user = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)[:user]
+    result = Services::CreatesOrUpdatesUserFromLTI.create_or_update(auth_hash)
+    redirect_to errors_path(error_type: "lti_auth_with_email_but_not_name_info", status_code: result.error_code) \
+      and return unless result.success?
+
+    @user = result[:user]
     @course = Services::CreatesOrUpdatesCourseFromLTI.create_or_update(auth_hash)[:course]
     if !@user || !@course
       lti_error_notification
