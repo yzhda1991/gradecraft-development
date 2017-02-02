@@ -58,7 +58,7 @@ class CoursesController < ApplicationController
 
   def copy
     authorize! :read, @course
-    duplicated = @course.copy(params[:copy_type], {})
+    duplicated = @course.copy(params[:copy_type])
     if duplicated.save
       if !current_user_is_admin? && current_user.role(duplicated).nil?
         duplicated.course_memberships.create(user: current_user, role: current_role)
