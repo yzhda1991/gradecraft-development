@@ -14,7 +14,11 @@ module AssignmentsHelper
 
   # Ten percent higher than threshold for highest level
   def total_available_points
-    (current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points * 110) / 100
+    if current_course.grade_scheme_elements.empty?
+      current_course.total_points
+    else
+      (current_course.grade_scheme_elements.order_by_highest_points[0].lowest_points * 110) / 100
+    end
   end
 
   def percent_of_total_points(level_index)
