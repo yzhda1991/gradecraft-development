@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_insensitive_email(email)
-    where("LOWER(email) = :email", email: email.downcase).first
+    where("LOWER(email) = :email", email: (email || "").downcase).first
   end
 
   def self.find_by_insensitive_username(username)
