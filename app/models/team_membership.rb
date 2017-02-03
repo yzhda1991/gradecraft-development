@@ -1,5 +1,7 @@
 # @mz TODO: add course_id attribute to team_memberships
 class TeamMembership < ActiveRecord::Base
+  include Copyable
+
   belongs_to :team
   belongs_to :student, class_name: "User"
 
