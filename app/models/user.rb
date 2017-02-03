@@ -125,11 +125,11 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_insensitive_email(email)
-    where("LOWER(email) = :email", email: email.downcase).first
+    where("LOWER(email) = :email", email: (email || "").downcase).first
   end
 
   def self.find_by_insensitive_username(username)
-    where("LOWER(username) = :username", username: username.downcase).first
+    where("LOWER(username) = :username", username: (username || "").downcase).first
   end
 
   def self.email_exists?(email)
