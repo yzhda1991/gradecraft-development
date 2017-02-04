@@ -79,17 +79,20 @@ function showVisibilityOptions() {
 showVisibilityOptions();
 
 // for student rubric feedback tab panels
-$('ul.level-tabs li').click(function(){
-  var criterionId = $(this).parent().parent().attr('id');
-  var tabId = $(this).attr('data-tab');
+function showSelectedTab() {
+  var $tab = $(this);
+  var tabPanelId = '#' + $tab.attr('aria-controls');
+  var $tabPanel = $(tabPanelId);
 
-    $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
-    $('#' + criterionId + ' ul.level-tabs li').attr('aria-selected', 'false');
-    $('#' + criterionId + ' .tab-panel').removeClass('selected').attr('aria-hidden', 'true');
+    // remove selected class from all tabs and assoc. tab panel other than clicked
+    $tab.siblings().removeClass('selected').attr('aria-selected', 'false');
+    $tabPanel.siblings().removeClass('selected').attr('aria-hidden', 'true');
+    // add selected class on clicked tab and associated tab panel
+    $tab.addClass('selected').attr('aria-selected', 'true');
+    $tabPanel.addClass('selected').attr('aria-hidden', 'false');
+}
 
-    $(this).addClass('selected').attr('aria-selected', 'true');
-    $("#" + tabId).addClass('selected').attr('aria-hidden', 'false');
-  })
+$('ul.level-tabs li').click(showSelectedTab);
 
 // toggle class analytics on rubric feedback
 $('#class-analytics-toggle').change(function(){
