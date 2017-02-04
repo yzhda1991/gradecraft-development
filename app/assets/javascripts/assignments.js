@@ -79,20 +79,45 @@ function showVisibilityOptions() {
 showVisibilityOptions();
 
 // for student rubric feedback tab panels
-function showSelectedTab() {
-  var $tab = $(this);
+function showSelectedTab($tab) {
   var tabPanelId = '#' + $tab.attr('aria-controls');
   var $tabPanel = $(tabPanelId);
 
     // remove selected class from all tabs and assoc. tab panel other than clicked
-    $tab.siblings().removeClass('selected').attr('aria-selected', 'false');
+    $tab.siblings().removeClass('selected').attr('aria-selected', 'false').attr('tabindex', '-1');
     $tabPanel.siblings().removeClass('selected').attr('aria-hidden', 'true');
     // add selected class on clicked tab and associated tab panel
-    $tab.addClass('selected').attr('aria-selected', 'true');
+    $tab.addClass('selected').attr('aria-selected', 'true').attr('tabindex', '0');
     $tabPanel.addClass('selected').attr('aria-hidden', 'false');
 }
 
-$('ul.level-tabs li').click(showSelectedTab);
+$('ul.level-tabs li').click(function() {
+  showSelectedTab($(this));
+});
+
+$('ul.level-tabs li').keydown(function(e) {
+  var $tab = $(this);
+  var $selectedTab = null;
+  var $firstTab = $tab.parent().children().first();
+  var $lastTab = $tab.parent().children().last();
+
+  if (e.which === 37) {
+    if ($tab.is($firstTab)) {
+      $selectedTab = $lastTab;
+    } else {
+      $selectedTab = $tab.prev();
+    }
+  } else if (e.which === 39) {
+    if ($tab.is($lastTab)) {
+      $selectedTab = $firstTab;
+    } else {
+      $selectedTab = $tab.next();
+    }
+  }
+  
+  $selectedTab.focus();
+  showSelectedTab($selectedTab);
+});
 
 // toggle class analytics on rubric feedback
 $('#class-analytics-toggle').change(function(){

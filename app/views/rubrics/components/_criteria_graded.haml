@@ -6,7 +6,7 @@
 
     %ul.level-tabs.rubric-levels{:role => "tablist"}
       - criterion.levels.ordered.each_with_index do |level, tindex|
-        %li.level-tab.rubric-level{:class => ("earned" if level.earned_for?(student.id)), "data-tab" => "tabpanel-#{cindex}-#{tindex}", id: "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "tabpanel-#{cindex}-#{tindex}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false")}
+        %li.level-tab.rubric-level{:class => ("earned" if level.earned_for?(student.id)), id: "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "tabpanel-#{cindex}-#{tindex}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false"), "tabindex" => (level.earned_for?(student.id) ? "0" : "-1")}
           - if level.earned_for?(student.id)
             = glyph("check")
           %span.level-name= level.name
