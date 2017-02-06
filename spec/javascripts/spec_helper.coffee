@@ -1,7 +1,6 @@
 #= require application
 #= require angular-mocks
-#= require sinon
-#= require jasmine-sinon
+#= require testdouble
 
 beforeEach(module('gradecraft'))
 
@@ -19,8 +18,12 @@ beforeEach inject (_$httpBackend_, _$compile_, $rootScope, _$controller_, $locat
   @eventLoop =
     flush: =>
       @scope.$digest()
-  @sandbox = sinon.sandbox.create()
+  # we could alternatively access testdouble within the tests as "td"
+  # I added this for now to make it explicit.
+  @testdouble = window.td
 
 afterEach ->
   @http.verifyNoOutstandingExpectation()
   @http.resetExpectations()
+  window.td.reset()
+  @testdouble.reset()
