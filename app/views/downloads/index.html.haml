@@ -4,6 +4,7 @@
   .download_type
     %h2 Data Downloads
     %table.dynatable
+      %caption.sr-only Course Data Downloads
       %thead
         %tr
           %th File Type
@@ -46,8 +47,9 @@
           %td Event data including pageviews, predictions, and logins
 
   .download_type
-    %h2 Assignment Type Downloads
+    %h2= "#{term_for :assignment_type} Downloads"
     %table.dynatable
+      %caption.sr-only= "#{term_for :assignment_type} Downloads"
       %thead
         %tr
           %th File Type

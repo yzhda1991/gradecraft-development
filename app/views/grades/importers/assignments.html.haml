@@ -21,4 +21,4 @@
               %ul.button-bar
                 %li
                   = link_to assignment_grades_importer_grades_path(@assignment, @provider_name, @course["id"], assignment_ids: assignment["id"]), class: "button" do
-                    = glyph(:download) + "Import Grades for this assignment"
+                    = decorative_glyph(:download) + "Import Grades for this assignment"

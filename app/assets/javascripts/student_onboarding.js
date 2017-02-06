@@ -1,19 +1,27 @@
 //initiate slick slider for student onboarding slides
-$('.student-onboarding-slides').slick({
-  prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous slide"></a>',
-  nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
-  adaptiveHeight: true,
-  dots: true,
-  infinite: false,
-  responsive: [
-    {
-      breakpoint: 640,
-      settings: {
-        arrows: false
+function initializeOnboardingSlider() {
+  $('.student-onboarding-slides').slick({
+    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous slide"></a>',
+    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
+    adaptiveHeight: true,
+    dots: true,
+    infinite: false,
+    responsive: [
+      {
+        breakpoint: 640,
+        settings: {
+          arrows: false
+        }
       }
-    }
-  ]
-});
+    ]
+  });
+
+  $('.slick-dots li').each(function () {
+    $(this).attr('role', 'tab').removeAttr('aria-controls');
+  });
+}
+
+initializeOnboardingSlider();
 
 //modal for student onboarding from Scott O'Hara (https://www.smashingmagazine.com/2014/09/making-modal-windows-better-for-everyone/)
 // helper function to place modal window as the first child

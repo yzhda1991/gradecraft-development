@@ -4,12 +4,14 @@
   = render "layouts/alerts"
 
   %table.dynatable.no-table-header
+    %caption.sr-only Class Observers
     %thead
       %tr
         %th First Name
         %th Last Name
         %th Avatar
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
     %tbody
       - @observers.each do |user|
         %tr
@@ -21,5 +23,5 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
-                %li= link_to glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+                %li= link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
+                %li= link_to decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete

@@ -1,7 +1,7 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      %li= link_to glyph(:plus) + "New #{(term_for :assignment).titleize}", new_assignment_path, class: "button button-edit"
+      %li= link_to decorative_glyph(:plus) + "New #{(term_for :assignment).titleize}", new_assignment_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -154,5 +154,5 @@
               %td
                 .right
                   %ul.button-bar
-                    %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                    %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"
+                    %li= link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
+                    %li= link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"

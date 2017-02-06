@@ -4,7 +4,7 @@
 $below-expectations-color: $color-grey-6
 $meets-expectations-color: $color-green-1
 $level-selected-color: lighten($color-green-1, 10%)
-$no-expectation-color: $color-grey-5
+$no-expectation-color: $color-grey-6
 
 // base styles for graded rubric, ungraded rubric and rubric edit views
 .rubric
@@ -60,7 +60,6 @@ $no-expectation-color: $color-grey-5
 
   .rubric-level, .level-tab
     list-style-type: none
-    // display: inline-block
     flex: 1
     text-align: center
     padding: 0.25rem
@@ -172,11 +171,11 @@ $no-expectation-color: $color-grey-5
       left: 16px
 
 // styles for rubric design view
-#rubric-design
+.rubric-design
   textarea
     @include rubric-level-input
     width: 11.75rem
-    border: 0
+    border: rgba(42, 43, 43, 0)
     height: 65px
     resize: none
     color: $color-black
@@ -189,8 +188,8 @@ $no-expectation-color: $color-grey-5
   input
     height: 2rem
     margin-bottom: .5rem
+    border: rgba(42, 43, 43, 0)
     width: 11.75rem
-    border: 0
     padding: .5rem
 
   .rubric-container
@@ -310,16 +309,18 @@ button.delete
   &:hover
     background-color: $color-orange-1
 
-button.meets-expectations-status, button.meets-expectations-toggle
-  font-weight: bold
+button.meets-expectations-status,
+button.meets-expectations-toggle
   background: $color-green-1
+  color: $color-grey-2
   position: absolute
   left: 4%
   bottom: 2.5%
   border-radius: 12px
   width: 92%
   opacity: 0
-  &:hover
+  &:hover,
+  &:focus
     opacity: 1
     //background-color
 
@@ -329,7 +330,7 @@ button.meets-expectations-status.show
     opacity: 0
 
 button.meets-expectations-toggle.remove
-  background-color: $color-grey-5
+  background-color: $color-grey-6
 
 button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
@@ -370,7 +371,6 @@ button.meets-expectations-status.no-expectation
     color: $color-green-2
 
   input.ng-valid-required
-    @include rubric-level-input
 
     &:disabled
       background: $color-grey-5
@@ -383,7 +383,8 @@ button.meets-expectations-status.no-expectation
     background: $color-red-1
     color: $color-white
 
-.level-badge, .level-badge-image
+.level-badge,
+.level-badge-image
   font-size: 12px
   color: $color-white
   padding: 0 0 0 4px
@@ -402,7 +403,12 @@ button.meets-expectations-status.no-expectation
 .splash, #rubric-grader-splash
   display: none
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak
   display: none !important
 
   &.splash
@@ -425,7 +431,8 @@ button.meets-expectations-status.no-expectation
   border-bottom-right-radius: $global-radius
   background: $color-blue-2
 
-  h4#points-legend, h4.points-legend
+  h4#points-legend,
+  h4.points-legend
     font-size: 24px
     font-style: italic
     color: $color-blue-4
@@ -463,7 +470,7 @@ h4.notice
   vertical-align: top
 
 // styles for the rubric grade review page
-#rubric-results-table
+.rubric.rubric-results-table
   border: 1px solid $color-grey-6
   .criterion
     margin-bottom: 0
@@ -508,7 +515,7 @@ h4.notice
     margin: 0
 
 // styles for ungraded rubric view
-#rubric-ungraded
+.rubric.rubric-ungraded
   .tab-panel
     border-bottom: 1px solid $color-grey-6
     padding: 0.5rem

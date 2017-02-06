@@ -18,4 +18,4 @@
                 %li
                   = form_tag integration_courses_path(@provider_name), method: :post do
                     = hidden_field_tag :id, course["id"]
-                    = button_tag glyph("link") + "Link Course", class: "button"
+                    = button_tag decorative_glyph("link") + "Link Course", class: "button"
