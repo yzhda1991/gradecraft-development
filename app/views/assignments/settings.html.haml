@@ -23,7 +23,11 @@
         %h2.assignment-type-name= "#{assignment_type.try(:name)}"
         .points-ratio #{ points(assignment_type.total_points) }/#{ points(total_available_points) }
         .points-bar-graph.assignment-settings
-          .points-bar-graph-fill.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (total_available_points).to_f * 100}%;"}
+          - if assignment_type.total_points > total_available_points
+            .points-bar-graph-fill.assignment-settings{:style => "width: 100%; background-color: #D1495B"}
+            %span.hint Total for this assignment type exceeds threshold for highest level
+          - else
+            .points-bar-graph-fill.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (total_available_points).to_f * 100}%"}
           - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
             .grade-level-marker{:style => "width: #{percent_of_total_points(index)}%"}
         = link_to "Review Settings", "#", class: "button right"
