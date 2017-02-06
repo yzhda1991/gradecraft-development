@@ -36,9 +36,10 @@ class Submission < ActiveRecord::Base
   end
 
   scope :resubmitted, -> {
-    includes(:grade)
-    .where(grades: { status: ["Graded", "Released"] })
+    includes(:grade, :assignment)
+    .where("grades.status = 'Released' OR (grades.status = 'Graded' AND NOT assignments.release_necessary)")
     .where("grades.graded_at < submitted_at")
+    .references(:grade, :assignment)
   }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }

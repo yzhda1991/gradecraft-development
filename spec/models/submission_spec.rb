@@ -289,8 +289,17 @@ describe Submission do
       expect(Submission.resubmitted).to eq [subject]
     end
 
-    it "does not return non-graded or released grades" do
-      grade = create(:grade, submission: subject, graded_at: 1.day.ago)
+    it "does not return ungraded submissions" do
+      create(:grade, submission: subject, graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.save
+      expect(Submission.resubmitted).to be_empty
+    end
+
+    it "does not return submissions that have unreleased grades" do
+      assignment = build(:assignment, release_necessary: true)
+      subject = build(:submission, assignment: assignment)
+      create(:unreleased_grade, submission: subject, graded_at: 1.day.ago)
       subject.submitted_at = DateTime.now
       subject.save
       expect(Submission.resubmitted).to be_empty
