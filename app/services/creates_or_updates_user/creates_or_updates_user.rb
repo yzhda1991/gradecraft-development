@@ -10,25 +10,34 @@ module Services
       expects :attributes, :send_welcome_email
 
       executed do |context|
-        attributes = context[:attributes]
-        email = attributes[:email].to_s.downcase
+        attributes = context.attributes
+        email = attributes[:email].to_s
+        username = attributes[:username].to_s
 
-        if email.blank?
-          context.fail! "Email can't be blank", 422
+        if email.blank? && username.blank?
+          context.fail! "Email and username cannot be blank", 422
           next context
         end
 
-        if User.email_exists? email
+        find_and_set_user_context context, email, username
+        if context[:user].nil?
+          context.add_to_context Services::CreatesNewUser.create attributes, context.send_welcome_email
+        else
           course = context[:course]
           if course.nil?
-            context.add_to_context Services::UpdatesUser.update(attributes)
+            context.add_to_context Services::UpdatesUser.update attributes
           else
-            context.add_to_context Services::UpdatesUserForCourse.update(attributes, course)
+            context.add_to_context Services::UpdatesUserForCourse.update attributes, course
           end
-        else
-          send_welcome_email = attributes[:send_welcome_email]
-          context.add_to_context Services::CreatesNewUser.create(attributes, send_welcome_email)
         end
+      end
+
+      private
+
+      def self.find_and_set_user_context(context, email, username)
+        user = User.find_by_insensitive_email email
+        user ||= User.find_by_insensitive_username username
+        context[:user] = user unless user.nil?
       end
     end
   end
