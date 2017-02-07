@@ -17,47 +17,38 @@
               %span
                 %span.has-tooltip{tabindex: "0", "aria-describedby": "visible-setting-tip_#{assignment_type.id}"}
                   %i.fa.fa-eye.fa-fw
-                  .display-on-hover.hover-style{role: "tooltip", :id=> "visible-setting-tip_#{assignment_type.id}"}
-                    Visible to Students
+                  = tooltip("visible-setting-tip_#{assignment_type.id}", "Visible to Students")
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "required-setting-tip_#{assignment_type.id}"}
                 !
-                .display-on-hover.hover-style{role: "tooltip", :id=> "required-setting-tip_#{assignment_type.id}"}
-                  Required
+                = tooltip("required-setting-tip_#{assignment_type.id}", "Required")
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "accepts-submissions-tip_#{assignment_type.id}"}
                 %i.fa.fa-paperclip.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "accepts-submissions-tip_#{assignment_type.id}"}
-                  Accepts Submissions
+                = tooltip("accepts-submissions-tip_#{assignment_type.id}", "Accepts Submissions")
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "shown-timeline-tip_#{assignment_type.id}"}
                 %i.fa.fa-calendar.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "shown-timeline-tip_#{assignment_type.id}"}
-                  Shown in Timeline
-
+                = tooltip("shown-timeline-tip_#{assignment_type.id}", "Shown in Timeline")
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "shown-predictor-tip_#{assignment_type.id}"}
                 %i.fa.fa-sliders.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "shown-predictor-tip_#{assignment_type.id}"}
-                  Shown in Predictor
+                = tooltip("shown-predictor-tip_#{assignment_type.id}", "Shown in Predictor")
 
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "due-this-week-tip_#{assignment_type.id}"}
                 %i.fa.fa-list.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "due-this-week-tip_#{assignment_type.id}"}
-                  Shown in Due This Week
+                = tooltip("due-this-week-tip_#{assignment_type.id}", "Shown in Due This Week")
 
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "student-logged-tip_#{assignment_type.id}"}
                 %i.fa.fa-pencil.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "student-logged-tip_#{assignment_type.id}"}
-                  Logged By Students
+                = tooltip("student-logged-tip_#{assignment_type.id}", "Logged By Students")
 
             %th{scope: "col"}
               %span.has-tooltip{tabindex: "0", "aria-describedby": "release-required-tip_#{assignment_type.id}"}
                 %i.fa.fa-unlock-alt.fa-fw
-                .display-on-hover.hover-style{role: "tooltip", :id=> "release-required-tip_#{assignment_type.id}"}
-                  Release Required
+                = tooltip("release-required-tip_#{assignment_type.id}", "Release Required")
 
             %th{scope: "col"} Grade Form Preview
             %th{scope: "col"} Points

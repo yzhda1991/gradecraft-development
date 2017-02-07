@@ -18,5 +18,4 @@
 - if assignment.has_groups?
   %span.has-tooltip{tabindex: "0", "aria-describedby": "group-assignment-tip_#{assignment.id}"}
     %i.fa.fa-group.fa-fw
-    .display-on-hover.hover-style{role: "tooltip", :id=> "group-assignment-tip_#{assignment.id}"}
-      This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
+    = tooltip("group-assignment-tip_#{assignment.id}", "This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}")
