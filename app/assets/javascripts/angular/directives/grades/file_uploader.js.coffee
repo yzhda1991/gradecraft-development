@@ -29,7 +29,7 @@
         scope.$apply(()->
           model.assign(scope, element[0].files)
           GradeService.postAttachments(element[0].files)
-        );
-      );
-    };
-]);
+        )
+      )
+    }
+])

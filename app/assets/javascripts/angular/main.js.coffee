@@ -1,11 +1,8 @@
 @gradecraft = angular.module('gradecraft', [
-  'angularMoment',
-  'hideAfterFade',
   'ngAnimate',
   'ngDragDrop',
   'ngDraggable',
   'uiFx',
-  '720kb.tooltips',
   'restangular',
   'ui.sortable',
   'puElasticInput',
@@ -15,22 +12,9 @@
   'ngAnimate',
   'froala',
   'templates',
-  'fcsa-number',
   'helpers',
   'ngAria'
-]).value('froalaConfig', {
-    key: '6Ud1QBRVCDLPAZMBQ==',
-    inlineMode: false,
-    heightMin: 200,
-    toolbarButtons: [
-      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-      'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
-      'outdent', 'indent', 'insertLink', 'undo', 'redo',
-      'clearFormatting', 'selectAll', 'html'
-    ],
-    placeholderText: 'Enter text here...',
-    pluginsEnabled: ['align', 'charCounter', 'codeBeautifier', 'emoticons', 'entities', 'image', 'inlineStyle', 'link', 'lists', 'paragraphFormat', 'quote', 'table', 'url']
-  });
+])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
 
