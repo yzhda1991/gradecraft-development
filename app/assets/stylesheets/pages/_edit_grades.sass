@@ -1,0 +1,64 @@
+@import "../utilities/variables"
+@import "../utilities/mixins"
+
+.grade-section-label
+  padding-top: 10px
+
+article.grade-form-fields
+  background-color: $color-grey-6
+  margin: 1.5rem auto
+  padding: 1.5rem
+
+section.grade-pass-fail
+  .binary-switch-socket
+    margin: 1em 1em 0 1em
+    border: 1px solid $color-blue-3
+  .binary-switch-socket.off
+    background: $color-red-1
+    border: 1px solid $color-red-1
+  .binary-switch-label
+    margin-left: 1em
+
+section.grade-score-levels
+  .grade-score-level-selector
+    margin-bottom: 9px
+
+
+section.grade-adjustment-points
+  float: left
+
+section.grade-adjustment-points-feedback
+ float: right
+
+section.grade-final-points
+  border-top: .75px solid $color-grey-3
+  margin-top: 1rem
+  width: 300px
+
+section.grade-feedback-upload
+  margin: 1rem 0
+
+section.grade-status
+  margin-bottom: 2rem
+  p
+    font-style: italic
+    margin: 0
+
+hr.grading-divider
+  border: .75px solid $color-grey-6
+  margin: 1.5rem auto
+
+
+#rubric-grade-edit
+  @include transition(all, .5s, ease-out)
+
+#rubric-grade-edit.collapse.collapsed
+  overflow: hidden
+  height: 0
+
+.rubric-hint
+  text-transform: capitalize
+  // margin: 0;
+  // padding: 0;
+  // clear: both;
+  // font-weight: 300;

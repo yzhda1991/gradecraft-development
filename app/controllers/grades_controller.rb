@@ -20,12 +20,14 @@ class GradesController < ApplicationController
   # GET /grades/:id/edit
   def edit
     @grade = Grade.find params[:id]
-    @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
-    if @grade.assignment.grade_with_rubric?
-      @grade_next_path = path_for_next_grade @grade, @team
+    if @team.present?
+      @submit_path =  assignment_path(@grade.assignment, team_id: @team.id)
+    else
+      @submit_path = assignment_path(@grade.assignment)
     end
+    @grade_next_path = path_for_next_grade @grade, @team
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will
@@ -123,7 +125,7 @@ class GradesController < ApplicationController
       :earned_badges_attributes, :excluded_by_id, :excluded_at, :excluded_from_course_score,
       :feedback, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
       :final_points, :graded_at, :graded_by_id,
-      :group_id, :instructor_modified, :is_custom_value, :pass_fail_status,
+      :group_id, :instructor_modified, :pass_fail_status,
       :full_points, :raw_points, :student_id, :submission_id, :team_id, :status
   end
 
@@ -137,6 +139,8 @@ class GradesController < ApplicationController
   end
 
   def path_for_next_grade(grade, team=nil)
+    # we don't supply a next grade when editing existing grades
+    return nil if grade.graded_or_released?
     next_student = grade.assignment.next_ungraded_student(grade.student, team)
     team_params = team ? {team_id: team.id} : nil
     return assignment_path(grade.assignment, team_params) unless next_student.present?

@@ -1,0 +1,31 @@
+-# This is the main template for the grading form,
+-# all partials are loaded below.
+
+%grade-points-overview(ng-if='!vm.loading && !vm.isPassFailGraded()')
+
+%loading-message(loading='vm.loading' message="Loading Grade...")
+
+%grade-rubric-edit(ng-if='vm.isRubricGraded()')
+
+%article.grade-form-fields
+
+  %grade-raw-points-input(ng-if='vm.isStandardGraded()')
+  %grade-score-levels-select(ng-if='vm.isScoreLevelGraded()')
+  %grade-pass-fail-switch(ng-if='vm.isPassFailGraded()')
+  %grade-raw-points(ng-if='vm.isRubricGraded()')
+
+  %grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()')
+
+  %grade-final-points(ng-if='!vm.isPassFailGraded()')
+
+  .grade-section-label {{ vm.feedbackMessage }}
+  %grade-file-uploader(ng-if='!vm.isGroupGrade')
+  %grade-feedback-text-input
+
+  %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
+  %hr.grading-divider
+
+%grade-status-select
+%grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
+%grade-last-updated
+%hr.grading-divider

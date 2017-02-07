@@ -1,4 +1,5 @@
-.badge-index-section
+%section.badge-index-section{'ng-if'=>'vm.BadgeService.badges.length > 0'}
+  .grade-section-label Award Earned {{vm.BadgeService.termFor("badges")}} for this {{vm.BadgeService.termFor("assignment")}}
   .badge-icon-container.badge-award-button{'ng-repeat'=>'badge in vm.BadgeService.badges',
     'ng-click'=>'vm.awardBadge(badge)',
     'ng-class'=>'{"unavailable":!vm.badgeAvailable(badge), "awardable":vm.badgeAwardable(badge), "awarded":vm.badgeEarnedForGrade(badge)}',

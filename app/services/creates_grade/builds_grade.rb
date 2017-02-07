@@ -2,7 +2,7 @@ module Services
   module Actions
     class BuildsGrade
       extend LightService::Action
-      
+
       expects :attributes, :student, :assignment, :graded_by_id
       promises :grade
 

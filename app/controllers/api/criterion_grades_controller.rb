@@ -64,13 +64,15 @@ class API::CriterionGradesController < ApplicationController
 
   # PUT api/assignments/:assignment_id/students/:student_id/criteria/:id/update_fields
   def update_fields
-    cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
-    result = cg.update_attributes(criterion_grade_params)
+    @criterion_grade = CriterionGrade.find_or_create(params[:assignment_id], params[:id], params[:student_id])
+    grade_id = Grade.where(assignment_id: params[:assignment_id], student_id:  params[:student_id]).first.id
+    result = @criterion_grade.update_attributes(criterion_grade_params(grade_id))
     if result
-      render json: {
-        message: 'Criterion grade successfully updated', success: true,
-        status: 200
-      }
+      # We will need to run GradeUpdaterJob.new(grade_id: @criterion_grade.grade_id)
+      # or similar if we want to update every time points change.
+      # Currently, this is handled only from the submit button.
+      render "api/criterion_grades/show", success: true,
+      status: 200
     else
       render json: {
         errors: result.errors, success: false
@@ -84,8 +86,9 @@ class API::CriterionGradesController < ApplicationController
     results = []
     @criterion_grades = []
     group.students.each do |student|
+      grade_id = Grade.where(assignment_id: params[:assignment_id], student_id: student.id).first.id
       cg = CriterionGrade.find_or_create(params[:assignment_id], params[:id], student.id)
-      results << cg.update_attributes(criterion_grade_params)
+      results << cg.update_attributes(criterion_grade_params(grade_id))
       @criterion_grades << cg
     end
     if results.all?
@@ -100,7 +103,7 @@ class API::CriterionGradesController < ApplicationController
 
   private
 
-  def criterion_grade_params
-    params.require(:criterion_grade).permit(:comments)
+  def criterion_grade_params(grade_id)
+    params.require(:criterion_grade).permit(:comments, :level_id, :points).merge(grade_id: grade_id)
   end
 end

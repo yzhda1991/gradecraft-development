@@ -1,10 +1,15 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService) ->
 
   assignments = []
   update = {}
+
+  # managing a single assignment resource,
+  # must be a function for Angular two-way binding to work
+  assignment = ()->
+    assignments[0]
 
   termFor = (article)->
     GradeCraftAPI.termFor(article)
@@ -18,7 +23,7 @@
       if assignment.grade.final_points != null
         if ! assignment.grade.is_excluded
           total += assignment.grade.final_points
-      else if ! assignment.pass_fail && ! assignment.closed_without_sumbission
+      else if ! assignment.pass_fail && ! assignment.closed_without_submission
         if !(assignment.is_closed_without_submission || assignment.is_closed_by_condition)
           total += assignment.prediction.predicted_points
     )
@@ -34,6 +39,12 @@
   getAssignment = (assignmentId)->
     $http.get('/api/assignments/' + assignmentId).success( (response)->
       GradeCraftAPI.addItem(assignments, "assignments", response)
+      if response.data.relationships && response.data.relationships.rubric
+        RubricService.getRubric(response.data.relationships.rubric.data.id)
+
+      GradeCraftAPI.setTermFor("assignment", response.meta.term_for_assignment)
+      GradeCraftAPI.setTermFor("pass", response.meta.term_for_pass)
+      GradeCraftAPI.setTermFor("fail", response.meta.term_for_fail)
     )
 
   # GET index list of assignments including a student's grades and predictions
@@ -83,5 +94,6 @@
       getAssignment: getAssignment
       postPredictedAssignment: postPredictedAssignment
       assignments: assignments
+      assignment: assignment
   }
 ]

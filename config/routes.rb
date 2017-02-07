@@ -105,7 +105,6 @@ Rails.application.routes.draw do
 
     resources :groups, only: [], module: :assignments do
       get :grade, on: :member
-      put :graded, on: :member
     end
 
     resources :students, only: [], module: :assignments do
@@ -362,6 +361,8 @@ Rails.application.routes.draw do
     resources :predicted_earned_badges, only: [:create, :update]
     resources :predicted_earned_challenges, only: [:create, :update]
     resources :predicted_earned_grades, only: [:create, :update]
+
+    resources :rubrics, only: [:show]
 
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do

@@ -324,19 +324,19 @@ ul.locked-display li
   list-style: none
 
 // Switch-slider used on rubric grade pages to toggle class analytics
-// Box around switch-slider 
-.rubric-switch-socket
+// Box around switch-slider
+.switch-socket
   position: relative
   display: inline-block
   width: 40px
   height: 24px
 
 // Hides default HTML checkbox
-.rubric-switch-socket input 
+.switch-socket input
   display: none
 
 // The slider
-.rubric-switch-handle
+.switch-handle
   position: absolute
   cursor: pointer
   top: 0
@@ -346,7 +346,7 @@ ul.locked-display li
   background-color: $color-grey-6
   transition: .4s
 
-.rubric-switch-handle:before
+.switch-handle:before
   position: absolute
   content: ""
   height: 20px
@@ -357,19 +357,19 @@ ul.locked-display li
   transition: .4s
 
 
-input:checked + .rubric-switch-handle
+input:checked + .switch-handle
   background-color: $color-green-1
 
-input:focus + .rubric-switch-handle
+input:focus + .switch-handle
   box-shadow: 0 0 1px #2196F3
 
-input:checked + .rubric-switch-handle:before
+input:checked + .switch-handle:before
   transform: translateX(16px)
 
-.rubric-switch-handle.round
+.switch-handle.round
   border-radius: 34px
 
-.rubric-switch-handle.round:before
+.switch-handle.round:before
   border-radius: 50%
 
 // score levels form (assignment and challenge edit)
