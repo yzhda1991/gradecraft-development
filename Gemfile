@@ -118,6 +118,7 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'better_errors'
+  gem 'jasmine-rails'
 end
 
 group :test do
