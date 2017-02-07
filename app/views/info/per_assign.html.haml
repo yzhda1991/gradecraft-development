@@ -18,15 +18,15 @@
             %th{"scope" => "col"} Median
             %th{"scope" => "col"}
               Ave
-              %span{tabindex: "0", "aria-describedby": "ave-tip_#{assignment_type.id}"}
+              %span.has-tooltip{tabindex: "0", "aria-describedby": "ave-tip_#{assignment_type.id}"}
                 %i.fa.fa-info-circle
-              .display-on-hover.hover-style{role: "tooltip", id: "ave-tip_#{assignment_type.id}"}
-                The average of all grades, including those who earned zero
+                .display-on-hover.hover-style{role: "tooltip", id: "ave-tip_#{assignment_type.id}"}
+                  The average of all grades, including those who earned zero
             %th{"scope" => "col"}
               Avg Earned
-              %span{tabindex: "0", "aria-describedby": "ave-earned-tip_#{assignment_type.id}"}
+              %span.has-tooltip{tabindex: "0", "aria-describedby": "ave-earned-tip_#{assignment_type.id}"}
                 %i.fa.fa-info-circle
-              .display-on-hover.hover-style{role: "tooltip", id: "ave-earned-tip_#{assignment_type.id}"}
+                .display-on-hover.hover-style{role: "tooltip", id: "ave-earned-tip_#{assignment_type.id}"}
                 The average of all scores above zero
             %th{"scope" => "col"} Predicted
             %th Submissions

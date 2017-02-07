@@ -25,7 +25,7 @@
 
         .predictor-excess-points{'ng-if'=>'assignmentTypeAtMaxPoints(assignmentType)'}
           .assignment-type-tooltip.icon
-            %span
+            %span.has-tooltip
               %i.fa.fa-fw.fa-exclamation-circle
-            .display-on-hover.hover-style
-              You've predicted {{assignmentTypePointExcess(assignmentType) | number}} more points than you are allowed to earn for this {{termFor("assignmentType")}}!
+              .display-on-hover.hover-style
+                You've predicted {{assignmentTypePointExcess(assignmentType) | number}} more points than you are allowed to earn for this {{termFor("assignmentType")}}!

@@ -20,16 +20,16 @@
       name='lowest_points_{{$index}}')
 
   %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict')
-    %span
+    %span.has-tooltip
       %i.fa.fa-exclamation-triangle
-    .display-on-hover.hover-style.gse-bar
-      This level has the same point threshold as another level.
+      .display-on-hover.hover-style.gse-bar
+        This level has the same point threshold as another level.
 
   %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict')
-    %span
+    %span.has-tooltip
       %i.fa.fa-exclamation-triangle
-    .display-on-hover.hover-style.gse-bar
-      This level is within one point of another level.
+      .display-on-hover.hover-style.gse-bar
+        This level is within one point of another level.
 
   .right
     %span

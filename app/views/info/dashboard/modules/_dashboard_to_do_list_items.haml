@@ -2,10 +2,10 @@
   - assignment_list.each do |assignment|
     %li{class: presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
       - if presenter.starred?(assignment)
-        %span.starred{tabindex: "0", "aria-describedby": "predicted-tip_#{assignment.id}"}
+        %span.has-tooltip.starred{tabindex: "0", "aria-describedby": "predicted-tip_#{assignment.id}"}
           %i.fa.fa-flag.fa-fw.orange
-        .display-on-hover.hover-style{role: "tooltip", :id=> "predicted-tip_#{assignment.id}"}
-          You have included this #{(term_for :assignment).downcase} in your grade prediction
+          .display-on-hover.hover-style{role: "tooltip", :id=> "predicted-tip_#{assignment.id}"}
+            You have included this #{(term_for :assignment).downcase} in your grade prediction
       - if presenter.submitted?(assignment)
         %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment
         .small.uppercase= "#{assignment.assignment_type.name}"
