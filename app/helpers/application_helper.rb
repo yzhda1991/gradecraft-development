@@ -64,4 +64,8 @@ module ApplicationHelper
     end
     "#{category}/#{arguments.join("/")}"
   end
+
+  def tooltip(tooltip_id, hover_content)
+    content_tag(:span, hover_content, class: "display-on-hover hover-style", id: tooltip_id, role: "tooltip")
+  end
 end
