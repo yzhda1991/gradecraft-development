@@ -2,7 +2,7 @@
   %span.has-tooltip{tabindex: "0", "aria-describedby" => "unlock-req-tip_#{badge.id}"}
     = glyph(:lock)
     .display-on-hover.hover-style{role: "tooltip", :id => "unlock-req-tip_#{badge.id}"}
-      %h3 Unlock Requirements
+      %p Unlock Requirements
       %ul
         - badge.unlock_conditions.each do |condition|
           %li= "#{condition.name} must be #{condition.condition_state}"
@@ -10,7 +10,7 @@
   %span.has-tooltip{tabindex: "0", "aria-describedby" => "unlock-key-tip_#{badge.id}"}
     = glyph(:key)
     .display-on-hover.hover-style{role: "tooltip", :id => "unlock-key-tip_#{badge.id}"}
-      %h3 Unlock Key
+      %p Unlock Key
       %ul
         - badge.unlock_keys.each do |key|
           %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"

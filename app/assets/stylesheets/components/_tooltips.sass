@@ -8,6 +8,10 @@
 
 .has-tooltip
   position: relative
+  color: $color-blue-1
+
+thead .has-tooltip
+  color: $color-white
 
 .hover-style
   position: absolute
@@ -16,36 +20,46 @@
   width: 200px
   font-size: .75rem
   font-weight: 300
+  font-style: normal
   text-transform: initial
   background-color: $color-blue-1
   color: $color-white
   border-radius: $global-radius
   z-index: 10
   opacity: 0.9
-  bottom: 100%
-  transform: translateX(-50%)
-  left: 50%
-  margin-bottom: 0.75rem
   &::after
     position: absolute
-    top: 100%
-    left: 50%
-    transform: translateX(-50%)
-    border-top: 8px solid $color-blue-1
-    border-top: 8px solid $color-blue-1(0, 0%, 20%, 0.9)
-    border-right: 8px solid transparent
-    border-left: 8px solid transparent
     content: " "
+  &-top
+    bottom: 100%
+    transform: translateX(-50%)
+    left: 50%
+    margin-bottom: 0.75rem
+    &::after
+      top: 100%
+      left: 50%
+      transform: translateX(-50%)
+      border-top: 8px solid $color-blue-1
+      border-right: 8px solid transparent
+      border-left: 8px solid transparent
+  &-right
+    left: 100%
+    transform: translateY(-50%)
+    top: 50%
+    margin-left: 0.75rem
+    &::after
+      right: 100%
+      top: 50%
+      transform: translateY(-50%)
+      border-right: 8px solid $color-blue-1
+      border-top: 8px solid transparent
+      border-bottom: 8px solid transparent
 
-  h6
-    color: $color-white
-    font-weight: bold
+  p
+    font-weight: 400
+    margin: 0.2rem 0
 
-  ul
+  ul,
+  ol
     margin: 0
-    padding: 0
-
-    li
-      color: $color-white
-      display: block
-      clear: both
+    padding-left: 0.75rem
