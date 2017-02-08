@@ -184,27 +184,14 @@ describe Submissions::ShowPresenter do
     end
 
     context "assignment is open" do
-      context "grade is not present" do
-        it "returns true" do
-          allow(grade).to receive(:present?) { false }
-          expect(result).to eq true
-        end
+      it "returns true if resubmissions are allowed" do
+        allow(subject).to receive(:resubmissions_allowed?).and_return true
+        expect(result).to eq true
       end
 
-      context "grade is present and re-submissions are allowed" do
-        it "returns true" do
-          allow(grade).to receive(:present?) { true }
-          allow(assignment).to receive(:resubmissions_allowed?) { true }
-          expect(result).to eq true
-        end
-      end
-
-      context "grades is present but re-submissions are not allowed" do
-        it "returns false" do
-          allow(grade).to receive(:present?) { true }
-          allow(assignment).to receive(:resubmissions_allowed?) { false }
-          expect(result).to eq false
-        end
+      it "returns true if resubmissions are not allowed" do
+        allow(subject).to receive(:resubmissions_allowed?).and_return false
+        expect(result).to eq false
       end
     end
   end
