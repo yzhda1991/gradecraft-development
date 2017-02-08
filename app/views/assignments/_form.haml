@@ -214,7 +214,8 @@
               = "#{af.filename}"
               %span.has-tooltip{tabindex: "0", "aria-describedby": "upload-process-tip"}
                 %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-                = tooltip("upload-process-tip", "Refresh page to confirm upload has completed")
+                = tooltip_content("upload-process-tip") do
+                  Refresh page to confirm upload has completed
             - else
               = link_to af.filename, af.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )

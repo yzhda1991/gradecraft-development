@@ -37,7 +37,8 @@
               - student.earned_badges_for_course(current_course).each do |badge|
                 %span.has-tooltip{tabindex: "0", "aria-describedby": "earned-badge-tip_#{badge.id}"}
                   %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
-                  = tooltip("earned-badge-tip_#{badge.id}", "#{badge.try(:name)}")
+                  = tooltip_content("earned-badge-tip_#{badge.id}") do
+                    #{badge.try(:name)}
 
             %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
           %td

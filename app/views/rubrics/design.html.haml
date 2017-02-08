@@ -19,7 +19,8 @@
       .meets-expectations-hint
         %span.has-tooltip.italic{tabindex:'0', 'aria-describedby': 'mem-tip'}
           What does "Set as 'meets expectations' mean?"
-          = tooltip("mem-tip", "Adding this marker to a level sets a threshold so that all levels below it do not award any points")
+          = tooltip_content("mem-tip") do
+            Adding this marker to a level sets a threshold so that all levels below it do not award any points
 
       - if ! @assignment.grade_with_rubric?
         .clear

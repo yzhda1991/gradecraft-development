@@ -64,8 +64,16 @@ module ApplicationHelper
     end
     "#{category}/#{arguments.join("/")}"
   end
+  
+  def tooltip(tooltip_id, icon, &block)
+    content_tag(:span, class: "has-tooltip", tabindex: "0", "aria-describedby": tooltip_id) do
+      concat(glyph(icon))
+      concat(tooltip_content(tooltip_id, &block))
+    end
+  end
 
-  def tooltip(tooltip_id, hover_content)
+  def tooltip_content(tooltip_id, &block)
+    hover_content = capture(&block)
     content_tag(:span, hover_content, class: "display-on-hover hover-style", id: tooltip_id, role: "tooltip")
   end
 end

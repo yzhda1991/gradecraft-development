@@ -18,14 +18,12 @@
             %th{"scope" => "col"} Median
             %th{"scope" => "col"}
               Ave
-              %span.has-tooltip{tabindex: "0", "aria-describedby": "ave-tip_#{assignment_type.id}"}
-                %i.fa.fa-info-circle
-                = tooltip("ave-tip_#{assignment_type.id}", "The average of all grades, including those who earned zero")
+              = tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
+                The average of all grades, including those who earned zero
             %th{"scope" => "col"}
               Avg Earned
-              %span.has-tooltip{tabindex: "0", "aria-describedby": "ave-earned-tip_#{assignment_type.id}"}
-                %i.fa.fa-info-circle
-                = tooltip("ave-earned-tip_#{assignment_type.id}", "The average of all scores above zero")
+              = tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
+                The average of all scores above zero
             %th{"scope" => "col"} Predicted
             %th Submissions
             %th Grades

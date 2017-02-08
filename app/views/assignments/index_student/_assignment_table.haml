@@ -7,9 +7,8 @@
         - elsif assignment.is_predicted_by_student?(current_student)
           %span.flag= glyph(:flag)
         - if assignment.required? && !assignment.is_predicted_by_student?(current_student) && !GradeProctor.new(presenter.grade_for(assignment)).viewable?
-          %span.has-tooltip.asterisk{tabindex: "0", "aria-describedby": "required-assignment-tip_#{assignment.id}"}
-            = glyph(:asterisk)
-            = tooltip("required-assignment-tip_#{assignment.id}", "This #{term_for :assignment} is required!")
+          = tooltip("required-assignment-tip_#{assignment.id}", :asterisk) do
+            This #{term_for :assignment} is required!
 
       .assignment-name
         - if presenter.name_visible?(assignment)
