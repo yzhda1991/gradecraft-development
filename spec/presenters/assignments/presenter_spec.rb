@@ -163,9 +163,10 @@ describe Assignments::Presenter do
     let(:submission) { double(:submission) }
 
     it "checks if there is a viewable submission" do
-      allow(Submission).to receive(:for_assignment_and_student).and_return [submission]
-      expect(subject).to receive(:has_viewable_submission?).with(submission, user)
-      subject.has_viewable_submission_for?(user)
+      allow(user).to receive(:submission_for_assignment).and_return submission
+      allow(subject).to receive(:has_viewable_submission?).with(submission, user)
+        .and_return true
+      expect(subject.has_viewable_submission_for?(user)).to eq true
     end
   end
 

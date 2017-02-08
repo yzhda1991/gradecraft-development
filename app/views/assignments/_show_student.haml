@@ -17,6 +17,7 @@
           %a{"href" => "#tab4"} Rubric
 
 
+<<<<<<< HEAD
     #tabt1.ui-tabs-panel
       - if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)
         .ui-tabs-panel#tab{class: ("active" if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
@@ -25,6 +26,17 @@
               %h2 My Grade
               = render partial: "grades/grade_content", locals: { grade: presenter.grade_for_student(current_student) }
               %hr.dotted
+=======
+    - submission = presenter.submission_for_assignment(current_student)
+    - if presenter.has_viewable_submission_for?(current_student) && submission.ungraded?
+      %section
+        %h2 My Submission
+        = render partial: "submissions/submission_content",
+            locals: { presenter: Submissions::ShowPresenter.new(id: submission.id,
+              assignment_id: presenter.assignment.id, course: current_course) }
+        = history_timeline presenter.submission_grade_history(current_student)
+        %hr.dotted
+>>>>>>> Hide edit submission button if graded
 
           - if presenter.has_viewable_submission_for?(current_student)
             %section.assignment-details-container

@@ -15,6 +15,10 @@ class Assignments::Presenter < Showtime::Presenter
     assignment.assignment_type
   end
 
+  def submission_for_assignment(user)
+    @submission ||= user.submission_for_assignment(assignment, false)
+  end
+
   def completion_rate
     assignment.completion_rate(course)
   end
@@ -77,15 +81,16 @@ class Assignments::Presenter < Showtime::Presenter
     grades.instructor_modified.present?
   end
 
-  def has_viewable_submission?(submission, current_user)
+  def has_viewable_submission?(user)
+    submission = submission_for_assignment(user)
     assignment.accepts_submissions? &&
       submission.present? &&
-      SubmissionProctor.new(submission).viewable?(current_user)
+      SubmissionProctor.new(submission).viewable?(user)
   end
 
   def has_viewable_submission_for?(user)
-    submission = Submission.for_assignment_and_student(assignment.id, user.id).first
-    has_viewable_submission?(submission, user)
+    submission = submission_for_assignment(user)
+    has_viewable_submission?(user)
   end
 
   def has_viewable_analytics?(user)
