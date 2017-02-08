@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
+@gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
 (GradeCraftAPI, DebounceQueue, $http) ->
 
   grade = {}
@@ -254,6 +254,8 @@
     fileUploads: fileUploads
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
+
+    calculateGradePoints: calculateGradePoints
 
     gradeIsPassing: gradeIsPassing
     setGradeToPass: setGradeToPass

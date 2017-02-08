@@ -2,6 +2,7 @@
 #= require angular-mocks
 #= require testdouble
 #= require testdouble-jasmine
+#= require ./support/apiTestDoubles
 
 beforeEach(module('gradecraft'))
 
