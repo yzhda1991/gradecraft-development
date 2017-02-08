@@ -1,6 +1,7 @@
 #= require application
 #= require angular-mocks
 #= require testdouble
+#= require testdouble-jasmine
 
 beforeEach(module('gradecraft'))
 
@@ -18,9 +19,14 @@ beforeEach inject (_$httpBackend_, _$compile_, $rootScope, _$controller_, $locat
   @eventLoop =
     flush: =>
       @scope.$digest()
+
   # we could alternatively access testdouble within the tests as "td"
   # I added this for now to make it explicit.
   @testdouble = window.td
+
+  # This adds testdouble "verify" functionality to Jasmine as toVerify(),
+  # so that the spec fails rather than throwing an error. See testdouble-jasmine
+  testdoubleMatchers.use(@testdouble)
 
 afterEach ->
   @http.verifyNoOutstandingExpectation()

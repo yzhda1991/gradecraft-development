@@ -18,8 +18,9 @@ describe 'GradeService', ()->
     }
   }
 
-  beforeEach inject (_GradeService_) ->
+  beforeEach inject (_GradeService_, _DebounceQueue_) ->
     @GradeService = _GradeService_
+    @DebounceQueue = _DebounceQueue_
 
   describe 'getGrade', ()->
     it 'should load the grade', ()->
@@ -34,14 +35,10 @@ describe 'GradeService', ()->
       @http.flush()
       expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])
 
-  describe 'justUpdated', ()->
+  describe 'queueUpdateGrade', ()->
     beforeEach ()->
-      @GradeService.timeSinceUpdate = @testdouble.function('timeSinceUpdate')
+      @DebounceQueue.addEvent = @testdouble.function('DebounceQueue')
 
-    it 'should be true when the last update was less than a second', ()->
-      @testdouble.when(@GradeService.timeSinceUpdate()).thenReturn(100)
-      expect(@GradeService.justUpdated()).toEqual(true)
-
-    it 'should be false when the last update was more than a second', ()->
-      @testdouble.when(@GradeService.timeSinceUpdate()).thenReturn(3000)
-      expect(@GradeService.justUpdated()).toEqual(false)
+    it 'should queue a call to update', ()->
+      @GradeService.queueUpdateGrade()
+      expect().toVerify(@DebounceQueue.addEvent(), {ignoreExtraArgs: true})
