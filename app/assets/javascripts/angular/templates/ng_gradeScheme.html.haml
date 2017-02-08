@@ -22,13 +22,13 @@
   %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict')
     %span.has-tooltip
       %i.fa.fa-exclamation-triangle
-      .display-on-hover.hover-style.gse-bar
+      .display-on-hover.hover-style.hover-style-right
         This level has the same point threshold as another level.
 
   %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict')
     %span.has-tooltip
       %i.fa.fa-exclamation-triangle
-      .display-on-hover.hover-style.gse-bar
+      .display-on-hover.hover-style.hover-style-right
         This level is within one point of another level.
 
   .right

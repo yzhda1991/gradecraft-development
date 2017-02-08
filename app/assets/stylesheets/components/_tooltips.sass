@@ -30,30 +30,48 @@ thead .has-tooltip
   &::after
     position: absolute
     content: " "
-  &-top
-    bottom: 100%
+  &-top, 
+  &-bottom
     transform: translateX(-50%)
     left: 50%
+    &::after
+      left: 50%
+      transform: translateX(-50%)
+      border-right: 8px solid transparent
+      border-left: 8px solid transparent
+  &-top
+    bottom: 100%
     margin-bottom: 0.75rem
     &::after
       top: 100%
-      left: 50%
-      transform: translateX(-50%)
       border-top: 8px solid $color-blue-1
-      border-right: 8px solid transparent
-      border-left: 8px solid transparent
-  &-right
-    left: 100%
+  &-bottom
+    top: 100%
+    margin-top: 0.75rem
+    &::after
+      bottom: 100%
+      border-bottom: 8px solid $color-blue-1
+  &-right, 
+  &-left
     transform: translateY(-50%)
     top: 50%
+    &::after
+      top: 50%
+      transform: translateY(-50%)
+      border-top: 8px solid transparent
+      border-bottom: 8px solid transparent
+  &-right
+    left: 100%
     margin-left: 0.75rem
     &::after
       right: 100%
-      top: 50%
-      transform: translateY(-50%)
       border-right: 8px solid $color-blue-1
-      border-top: 8px solid transparent
-      border-bottom: 8px solid transparent
+  &-left
+    right: 100%
+    margin-right: 0.75rem
+    &::after
+      left: 100%
+      border-left: 8px solid $color-blue-1
 
   p
     font-weight: 400
