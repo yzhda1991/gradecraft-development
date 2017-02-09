@@ -42,14 +42,15 @@ describe SubmissionProctor do
   end
 
   describe "#open_for_editing?" do
+    let(:grade) { double(:grade) }
     let(:assignment) { double(:assignment) }
 
-    context "when the submission is graded" do
-      before(:each) { allow(submission).to receive(:graded?).and_return true }
+    before(:each) { allow(submission).to receive(:grade).and_return grade }
 
-      it "returns false" do
-        expect(subject.open_for_editing?(assignment)).to be_falsey
-      end
+    it "returns false if the submission is graded but not yet released" do
+      allow(submission).to receive(:graded?).and_return true
+      allow(grade).to receive(:is_released?).and_return false
+      expect(subject.open_for_editing?(assignment)).to be_falsey
     end
   end
 end

@@ -16,7 +16,7 @@ class SubmissionProctor
   end
 
   def open_for_editing?(assignment)
-    return false if @submission.graded?
+    return false if @submission.graded? && !@submission.grade.is_released?
     if @submission.will_be_resubmitted?
       assignment.open? && assignment.resubmissions_allowed?
     else
