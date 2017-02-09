@@ -64,6 +64,12 @@ describe SubmissionsController do
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
       end
+
+      it "redirects to the assignment path if the submission is not open for editing" do
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+      end
     end
 
     describe "POST create" do
@@ -115,10 +121,7 @@ describe SubmissionsController do
       it "redirects to the assignments page if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
-        expect(response).to redirect_to(assignment_path(assignment,
-          anchor: "tab3",
-          notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released.")
-        )
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
       end
 
       it "checks if the submission is late if the submission is not a resubmission" do
@@ -154,6 +157,12 @@ describe SubmissionsController do
       it "shows the edit submission form" do
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
+      end
+
+      it "redirects to the assignment path if the submission is not open for editing" do
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
       end
     end
 
@@ -212,10 +221,7 @@ describe SubmissionsController do
       it "redirects to the assignments page if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         post :update, params: { assignment_id: assignment.id, id: submission, submission: attributes_for(:submission) }
-        expect(response).to redirect_to(assignment_path(assignment,
-          anchor: "tab3",
-          notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released.")
-        )
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
       end
 
       it "checks if the submission is late if the submission is not a resubmission" do

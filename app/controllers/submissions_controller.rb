@@ -41,6 +41,7 @@ class SubmissionsController < ApplicationController
 
   def edit
     presenter = Submissions::EditPresenter.new(presenter_attrs_with_id)
+    ensure_editable presenter.submission, current_course.assignments.find(params[:assignment_id]) or return
     authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end
@@ -48,9 +49,7 @@ class SubmissionsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.find(params[:id])
-    redirect_to assignment_path(assignment, anchor: "tab3"),
-      flash: { error: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released." } \
-      and return if !SubmissionProctor.new(submission).open_for_editing? assignment
+    ensure_editable submission, assignment or return
 
     submission_was_draft = submission.unsubmitted?
     respond_to do |format|
@@ -94,6 +93,13 @@ class SubmissionsController < ApplicationController
     else
       NotificationMailer.updated_submission(submission_id).deliver_now
     end
+  end
+
+  def ensure_editable(submission, assignment)
+    redirect_to assignment_path(assignment, anchor: "tab3"),
+      notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released." \
+      and return if !SubmissionProctor.new(submission).open_for_editing? assignment
+    return true
   end
 
   def presenter_attrs_with_id
