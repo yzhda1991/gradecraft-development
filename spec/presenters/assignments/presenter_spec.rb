@@ -164,7 +164,7 @@ describe Assignments::Presenter do
 
     it "checks if there is a viewable submission" do
       allow(user).to receive(:submission_for_assignment).and_return submission
-      allow(subject).to receive(:has_viewable_submission?).with(submission, user)
+      allow(subject).to receive(:has_viewable_submission?).with(user)
         .and_return true
       expect(subject.has_viewable_submission_for?(user)).to eq true
     end
