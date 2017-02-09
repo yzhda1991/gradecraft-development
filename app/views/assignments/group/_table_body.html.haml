@@ -9,7 +9,7 @@
           - if presenter.assignment.accepts_submissions? && !group_presenter.submission
             %li= link_to "Submit", new_assignment_submission_path(group_presenter.assignment, group_presenter.submission, group_id: group_presenter.group.id), class: "button"
           - if group_presenter.assignment_graded?
-            %li= link_to glyph(:eye) + "See Grade", grade_path(presenter.grade_for(group_presenter.group.students.first)), class: "button"
+            %li= link_to glyph(:eye) + "See Grade", grade_path(presenter.grade_for_student(group_presenter.group.students.first)), class: "button"
             %li= link_to glyph(:edit) + "Edit Grade", grade_assignment_group_path(group_presenter.assignment, group_presenter.group), class: "button"
           - else
             %li= link_to glyph(:edit) + "Grade", grade_assignment_group_path(group_presenter.assignment, group_presenter.group), class: "button"

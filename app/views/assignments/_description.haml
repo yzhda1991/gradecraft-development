@@ -7,10 +7,10 @@
   - if presenter.assignment.threshold_points?
     %p.assignment-description.italic= "#{points presenter.assignment.threshold_points} points threshold"
 
-- if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment)
+- if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment, current_student)
   %p.assignment-description.italic
     My Goal:
-    = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for(current_student) }
+    = render partial: "grades/components/prediction", locals: { grade: presenter.grade_for_student(current_student) }
 
 %p.assignment-description.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
 %p.assignment-description.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
