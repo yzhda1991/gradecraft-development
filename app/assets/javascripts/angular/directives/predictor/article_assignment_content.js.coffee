@@ -9,5 +9,8 @@
     link: (scope, el, attr)->
       scope.articleCompleted = ()->
         PredictorService.articleCompleted(@article)
+
+      scope.termFor = (term)->
+        PredictorService.termFor(term)
   }
 ]

@@ -13,7 +13,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   }
 
   termFor = (article)->
-    _termFor[article]
+    _termFor[article.toLowerCase()]
 
   setTermFor = (article,term)->
     _termFor[article] = term
