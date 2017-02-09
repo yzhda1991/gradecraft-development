@@ -92,7 +92,8 @@
 
           # The API sends criterion grades for all group members,
           # For now we filter to those for the first student
-          criterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
+          filteredCriterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
+          angular.copy(filteredCriterionGrades, criterionGrades)
 
           calculateGradePoints()
           GradeCraftAPI.logResponse(response)
@@ -216,7 +217,7 @@
 #------- Grade File Methods ---------------------------------------------------#
 
   postAttachments = (files)->
-    fd = new FormData();
+    fd = new FormData()
     angular.forEach(files, (file, index)->
       fd.append("file_uploads[]", file)
     )
@@ -251,6 +252,7 @@
 
   return {
     grade: grade
+    grades: grades
     fileUploads: fileUploads
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions

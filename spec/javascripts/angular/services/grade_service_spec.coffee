@@ -8,16 +8,64 @@ describe 'GradeService', ()->
     @DebounceQueue = _DebounceQueue_
 
   describe 'getGrade', ()->
-    beforeEach ()->
-      @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
-      @GradeService.getGrade(1, "student", 99)
-      @http.flush()
+    describe 'for student', ()->
+      beforeEach ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
 
-    it 'should load the grade', ()->
-      expect(@GradeService.grade.id).toEqual(1234)
+      it 'should load the grade', ()->
+        expect(@GradeService.grade.id).toEqual(1234)
 
-    it 'should load the options for grade status', ()->
-      expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])
+      it 'should calculate the final points, defaulting to zero', ()->
+        expect(@GradeService.grade.raw_points).toEqual(0)
+        expect(@GradeService.grade.adjustment_points).toEqual(0)
+        expect(@GradeService.grade.final_points).toEqual(0)
+
+    describe 'for student with included models', ()->
+      it 'should load the options for grade status', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])
+
+      it 'should include attachments', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.withAttachment)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.fileUploads[0].id).toEqual(555)
+        expect(@GradeService.fileUploads[0].filename).toEqual('image.jpg')
+
+      it 'should include rubric criteria', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.withRubric)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.criterionGrades.length).toEqual(5)
+
+    describe 'for group', ()->
+      beforeEach ()->
+        @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
+        @GradeService.getGrade(2, "group", 101)
+        @http.flush()
+
+      it 'should load the grade for the first student', ()->
+        expect(@GradeService.grade.id).toEqual(1609)
+
+      it 'should copy all the grades (for future functionality)', ()->
+        expect(@GradeService.grades.length).toEqual(3)
+
+    describe 'for group with included models', ()->
+      it 'should load the options for grade status', ()->
+        @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
+        @GradeService.getGrade(2, "group", 101)
+        @http.flush()
+        expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded", "Released"])
+
+      it 'should load criterion grades, filtered to the first student', ()->
+        @http.whenGET("/api/assignments/96/groups/3/grades/").respond(apiTestDoubles.grade.groupRubric)
+        @GradeService.getGrade(96, "group", 3)
+        @http.flush()
+        expect(@GradeService.criterionGrades.length).toEqual(5)
 
   describe 'queueUpdateGrade', ()->
     beforeEach ()->
