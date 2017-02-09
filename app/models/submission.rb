@@ -83,14 +83,13 @@ class Submission < ActiveRecord::Base
   # Used to report to the user that a change will be a resubmission because this
   # submission is already graded.
   def will_be_resubmitted?
-    grade.present? && grade.graded_and_visible_by_student?
+    grade.present?
   end
 
   # this is transitive so that once it is graded again, then
   # it will no longer be resubmitted
   def resubmitted?
-    grade.present? && grade.graded_and_visible_by_student? &&
-      !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
+    graded? && !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
   end
 
   # Getting the name of the student who submitted the work
