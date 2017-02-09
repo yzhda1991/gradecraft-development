@@ -54,27 +54,11 @@ module Submissions
       submission.submitted_at
     end
 
-    def open_for_editing?
-      assignment.open? && resubmissions_allowed?
-    end
-
     def term_for_edit(current_user)
       if !current_user.is_staff?(assignment.course) && submission.text_comment_draft.present?
         "Edit Draft"
       else
         "Edit Submission"
-      end
-    end
-
-    private
-
-    # If graded, the grade must be released and the assignment must allow resubmissions
-    # otherwise, the assignment must allow resubmissions
-    def resubmissions_allowed?
-      if grade.present?
-        grade.graded_and_visible_by_student? && assignment.resubmissions_allowed?
-      else
-        assignment.resubmissions_allowed?
       end
     end
   end

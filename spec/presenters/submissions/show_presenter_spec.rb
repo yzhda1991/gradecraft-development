@@ -169,33 +169,6 @@ describe Submissions::ShowPresenter do
     end
   end
 
-  describe "#open_for_editing?" do
-    let(:result) { subject.open_for_editing? }
-
-    before do
-      allow(subject).to receive(:grade) { grade }
-    end
-
-    context "assignment is not open" do
-      it "returns false" do
-        allow(assignment).to receive(:open?) { false }
-        expect(result).to eq false
-      end
-    end
-
-    context "assignment is open" do
-      it "returns true if resubmissions are allowed" do
-        allow(subject).to receive(:resubmissions_allowed?).and_return true
-        expect(result).to eq true
-      end
-
-      it "returns true if resubmissions are not allowed" do
-        allow(subject).to receive(:resubmissions_allowed?).and_return false
-        expect(result).to eq false
-      end
-    end
-  end
-
   describe "#present_submission_files" do
     # @present_submission_files ||= submission.submission_files.present
     let(:result) { subject.present_submission_files }
