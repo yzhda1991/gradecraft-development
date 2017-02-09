@@ -16,18 +16,11 @@ class SubmissionProctor
   end
 
   def open_for_editing?(assignment)
-    assignment.open? && resubmissions_allowed?(assignment)
-  end
-
-  private
-
-  # If graded, the grade must be released and the assignment must allow resubmissions
-  # otherwise, the assignment must allow resubmissions
-  def resubmissions_allowed?(assignment)
-    if @submission.grade.present?
-      @submission.grade.graded_and_visible_by_student? && assignment.resubmissions_allowed?
+    return false if @submission.graded?
+    if @submission.will_be_resubmitted?
+      assignment.open? && assignment.resubmissions_allowed?
     else
-      assignment.resubmissions_allowed?
+      assignment.open?
     end
   end
 end

@@ -43,25 +43,12 @@ describe SubmissionProctor do
 
   describe "#open_for_editing?" do
     let(:assignment) { double(:assignment) }
-    before(:each) { allow(assignment).to receive(:open?).and_return false }
 
-    context "when the assignment is not open" do
+    context "when the submission is graded" do
+      before(:each) { allow(submission).to receive(:graded?).and_return true }
+
       it "returns false" do
-        expect(subject.open_for_editing? assignment).to be_falsey
-      end
-    end
-
-    context "when the assignment is open" do
-      before(:each) { allow(assignment).to receive(:open?).and_return true }
-
-      it "returns false if resubmissions are not allowed" do
-        allow(subject).to receive(:resubmissions_allowed?).and_return false
-        expect(subject.open_for_editing? assignment).to be_falsey
-      end
-
-      it "returns true if resubmissions are allowed" do
-        allow(subject).to receive(:resubmissions_allowed?).and_return true
-        expect(subject.open_for_editing? assignment).to be_truthy
+        expect(subject.open_for_editing?(assignment)).to be_falsey
       end
     end
   end

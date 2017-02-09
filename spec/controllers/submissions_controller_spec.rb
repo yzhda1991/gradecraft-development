@@ -98,32 +98,38 @@ describe SubmissionsController do
     end
 
     describe "POST update" do
+      let(:submission_params) { attributes_for(:submission) }
+
       it "updates the submission successfully"  do
-        params = attributes_for(:submission)
-        params[:assignment_id] = assignment.id
-        params[:text_comment] = "Ausgezeichnet"
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        submission_params.merge!(assignment_id: assignment.id, text_comment: "Ausgezeichnet")
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
         expect(response).to redirect_to(assignment_submission_path(assignment, submission, student_id: student.id))
         expect(submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
       it "deletes the text comment draft content" do
-        params = attributes_for(:submission)
         expect(Services::DeletesSubmissionDraftContent).to receive(:for).and_call_original
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }, format: :json
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }, format: :json
       end
 
-      it "checks if the submission is late if it is not a resubmission" do
-        params = attributes_for(:submission)
+      it "redirects to the assignments page if the submission is not open for editing" do
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
+        expect(response).to redirect_to(assignment_path(assignment,
+          anchor: "tab3",
+          notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released.")
+        )
+      end
+
+      it "checks if the submission is late if the submission is not a resubmission" do
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
       end
 
-      it "does not check if the submission is late if it is a resubmission" do
-        params = attributes_for(:submission)
+      it "does not check if the submission is late if the submission is a resubmission" do
         allow_any_instance_of(Submission).to receive(:will_be_resubmitted?).and_return true
         expect_any_instance_of(Submission).to_not receive(:check_and_set_late_status!)
-        post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
       end
     end
 
@@ -203,13 +209,22 @@ describe SubmissionsController do
         expect(submission.reload.submitted_at).to be > current_time
       end
 
-      it "checks if the submission is late if it is not a resubmission" do
+      it "redirects to the assignments page if the submission is not open for editing" do
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: attributes_for(:submission) }
+        expect(response).to redirect_to(assignment_path(assignment,
+          anchor: "tab3",
+          notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released.")
+        )
+      end
+
+      it "checks if the submission is late if the submission is not a resubmission" do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
         post :update, params: { assignment_id: assignment.id, id: submission, submission: params }
       end
 
-      it "does not check if the submission is late if it is a resubmission" do
+      it "does not check if the submission is late if the submission is a resubmission" do
         params = attributes_for(:submission)
         allow_any_instance_of(Submission).to receive(:will_be_resubmitted?).and_return true
         expect_any_instance_of(Submission).to_not receive(:check_and_set_late_status!)

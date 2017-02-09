@@ -48,8 +48,11 @@ class SubmissionsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:assignment_id])
     submission = assignment.submissions.find(params[:id])
-    submission_was_draft = submission.unsubmitted?
+    redirect_to assignment_path(assignment, anchor: "tab3"),
+      flash: { error: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released." } \
+      and return if !SubmissionProctor.new(submission).open_for_editing? assignment
 
+    submission_was_draft = submission.unsubmitted?
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&
         Services::DeletesSubmissionDraftContent.for(submission).success?
