@@ -13,7 +13,7 @@
       - @assignments.each do |assignment|
         %tr
           %td= assignment["name"]
-          %td= assignment["description"].html_safe
+          %td= (assignment["description"] || "").html_safe
           %td= assignment["due_at"]
           %td= assignment["points_possible"]
           %td
