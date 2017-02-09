@@ -8,7 +8,7 @@ describe Services::UpdatesUser do
   describe ".update" do
     it "updates the existing user" do
       expect(Services::Actions::UpdatesUser).to receive(:execute).and_call_original
-      described_class.update params
+      described_class.update user, params
     end
   end
 end

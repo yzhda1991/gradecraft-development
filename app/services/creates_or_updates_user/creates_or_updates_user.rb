@@ -25,9 +25,9 @@ module Services
         else
           course = context[:course]
           if course.nil?
-            context.add_to_context Services::UpdatesUser.update attributes
+            context.add_to_context Services::UpdatesUser.update context[:user], attributes
           else
-            context.add_to_context Services::UpdatesUserForCourse.update attributes, course
+            context.add_to_context Services::UpdatesUserForCourse.update context[:user], attributes, course
           end
         end
       end

@@ -5,8 +5,8 @@ module Services
   class UpdatesUser
     extend LightService::Organizer
 
-    def self.update(attributes)
-      with(attributes: attributes)
+    def self.update(user, attributes)
+      with(user: user, attributes: attributes)
         .reduce(
           Actions::UpdatesUser
         )

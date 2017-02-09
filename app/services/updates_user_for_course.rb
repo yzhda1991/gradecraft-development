@@ -6,8 +6,8 @@ module Services
   class UpdatesUserForCourse
     extend LightService::Organizer
 
-    def self.update(attributes, course)
-      with(attributes: attributes, course: course)
+    def self.update(user, attributes, course)
+      with(user: user, attributes: attributes, course: course)
         .reduce(
           Actions::UpdatesUser,
           Actions::CreatesCourseMembership
