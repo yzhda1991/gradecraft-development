@@ -25,7 +25,7 @@
   # GET index list of badges
   # includes a student's predictions
   getBadges = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
+    $http.get('/api/badges').success( (response)->
       GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
         # add earned badge count for generic predictor

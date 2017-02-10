@@ -10,7 +10,7 @@ describe 'GradeService', ()->
   describe 'getGrade', ()->
     describe 'for student', ()->
       beforeEach ()->
-        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.standard)
         @GradeService.getGrade(1, "student", 99)
         @http.flush()
 
@@ -24,7 +24,7 @@ describe 'GradeService', ()->
 
     describe 'for student with included models', ()->
       it 'should load the options for grade status', ()->
-        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.standard)
         @GradeService.getGrade(1, "student", 99)
         @http.flush()
         expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])

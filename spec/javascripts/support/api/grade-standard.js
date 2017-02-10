@@ -1,7 +1,7 @@
 var apiTestDoubles = apiTestDoubles === undefined ? {} : apiTestDoubles;
 apiTestDoubles.grade = apiTestDoubles.grade === undefined ? {} : apiTestDoubles.grade;
 
-apiTestDoubles.grade.new =
+apiTestDoubles.grade.standard =
 {
   "data": {
     "type": "grades",
@@ -32,6 +32,6 @@ apiTestDoubles.grade.new =
 }
 
 // A grade with raw and adjustment points, to test that final points are calculated
-apiTestDoubles.grade.withPoints = (JSON.parse(JSON.stringify(apiTestDoubles.grade.new)));
+apiTestDoubles.grade.withPoints = (JSON.parse(JSON.stringify(apiTestDoubles.grade.standard)));
 apiTestDoubles.grade.withPoints.data.attributes.raw_points = 1000;
 apiTestDoubles.grade.withPoints.data.attributes.adjustment_points = -100;

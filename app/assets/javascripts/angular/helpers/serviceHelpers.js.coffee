@@ -18,14 +18,6 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   setTermFor = (article,term)->
     _termFor[article] = term
 
-  # used to destinguish student and faculty routes.
-  # On init, students views do not send student id.
-  uriPrefix = (studentId)->
-    if studentId
-      '/api/students/' + studentId + '/'
-    else
-      'api/'
-
   # ----------Methods for handling JSON API response data ---------------------#
   #     See http://jsonapi.org/format/ for details of data structure
 
@@ -101,7 +93,6 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   return {
     termFor: termFor
     setTermFor: setTermFor
-    uriPrefix: uriPrefix
     logResponse: logResponse
     loadMany: loadMany
     loadItem: loadItem

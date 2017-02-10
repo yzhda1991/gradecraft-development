@@ -11,6 +11,7 @@ beforeEach inject (_$httpBackend_, _$compile_, $rootScope, _$controller_, $locat
   @scope = $rootScope.$new()
   @http = _$httpBackend_
   @compile = _$compile_
+  @rootScope = $rootScope
   @location = $location
   @controller = _$controller_
   @injector = $injector
