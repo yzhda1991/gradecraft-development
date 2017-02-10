@@ -55,6 +55,13 @@ describe CSVGradeImporter do
             expect(result.successful.last).to eq grade
           end
 
+          it "rejects the row if the grade is unrecognized" do
+            allow(subject).to receive(:set_grade_score).and_raise ArgumentError
+            result = subject.import(course, assignment)
+            expect(result.unsuccessful.count).to eq 3
+            expect(result.unsuccessful.pluck(:errors)).to include "Row contains invalid data"
+          end
+
           it "updates the grade if it is already there" do
             create :grade, assignment: assignment, student: student, pass_fail_status: "Fail"
             subject.import(course, assignment)

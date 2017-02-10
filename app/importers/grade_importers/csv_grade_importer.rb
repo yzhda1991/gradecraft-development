@@ -30,14 +30,19 @@ class CSVGradeImporter
           end
 
           grade = assignment.grades.where(student_id: student.id).first
-          if row.update_grade? grade
-            grade = update_grade row, grade
-            report row, grade
-          elsif grade.present?
-            unchanged << grade
-          elsif grade.nil?
-            grade = create_grade row, assignment, student
-            report row, grade
+          begin
+            if row.update_grade? grade
+              grade = update_grade row, grade
+              report row, grade
+            elsif grade.present?
+              unchanged << grade
+            elsif grade.nil?
+              grade = create_grade row, assignment, student
+              report row, grade
+            end
+          rescue ArgumentError
+            append_unsuccessful row, "Row contains invalid data"
+            next
           end
         end
       end
@@ -89,12 +94,12 @@ class CSVGradeImporter
   end
 
   def set_grade_score(row, grade)
+    score = Integer(row.grade || "")  # vs to_i, since we don't want to cast to an int if it's invalid
     if grade.assignment.pass_fail?
-      score = Integer(row.grade) rescue nil # to_i converts non-ints to 0
       grade.pass_fail_status = "Pass" if score == 1
       grade.pass_fail_status = "Fail" if score == 0
     else
-      grade.raw_points = row.grade
+      grade.raw_points = score
     end
   end
 
@@ -112,7 +117,7 @@ class CSVGradeImporter
     end
 
     def grade
-      remove_smart_quotes(data[3]).to_i if data[3].present?
+      remove_smart_quotes data[3]
     end
 
     def has_grade?
@@ -121,7 +126,7 @@ class CSVGradeImporter
 
     def update_grade?(grade)
       grade.present? &&
-        (grade.raw_points != self.grade || grade.feedback != feedback)
+        (grade.raw_points != Integer(self.grade || "") || grade.feedback != feedback)
     end
 
     def initialize(data)
