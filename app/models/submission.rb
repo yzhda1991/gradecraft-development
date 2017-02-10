@@ -72,12 +72,14 @@ class Submission < ActiveRecord::Base
   def graded?
     !ungraded?
   end
+  
+  def submission_grade
+    student.grades.where(assignment_id: self.assignment_id).first
+  end
 
-  # Grabbing any submission that has NO instructor-defined grade (if the
-  # student has predicted the grade, it'll exist, but we still don't want to
-  # catch those here)
+  # Grabbing any submission that has NO instructor-defined grade
   def ungraded?
-    !grade || grade.status.nil?
+    !submission_grade || submission_grade.status.nil?
   end
 
   # Used to report to the user that a change will be a resubmission because this
