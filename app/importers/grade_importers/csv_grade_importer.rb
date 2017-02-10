@@ -53,11 +53,11 @@ class CSVGradeImporter
   end
 
   def assign_grade(row, grade)
-    grade.raw_points = row.grade
     grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
     grade.graded_at = DateTime.now
+    set_grade_score row, grade
   end
 
   def create_grade(row, assignment, student)
@@ -85,6 +85,16 @@ class CSVGradeImporter
       successful << grade
     else
       append_unsuccessful row, grade.errors.full_messages.join(", ")
+    end
+  end
+
+  def set_grade_score(row, grade)
+    if grade.assignment.pass_fail?
+      score = Integer(row.grade) rescue nil # to_i converts non-ints to 0
+      grade.pass_fail_status = "Pass" if score == 1
+      grade.pass_fail_status = "Fail" if score == 0
+    else
+      grade.raw_points = row.grade
     end
   end
 
