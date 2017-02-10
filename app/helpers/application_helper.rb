@@ -65,15 +65,19 @@ module ApplicationHelper
     "#{category}/#{arguments.join("/")}"
   end
   
-  def tooltip(tooltip_id, icon, placement="top", &block)
+  def icon_tooltip(tooltip_id, icon, placement="top", &block)
     content_tag(:span, class: "has-tooltip", tabindex: "0", "aria-describedby": tooltip_id) do
       concat(glyph(icon))
-      concat(tooltip_content(tooltip_id, placement, &block))
+      hover_content = capture(&block)
+      concat(content_tag(:span, hover_content, class: "display-on-hover hover-style hover-style-#{placement}", id: tooltip_id, role: "tooltip"))
     end
   end
 
-  def tooltip_content(tooltip_id, placement="top", &block)
-    hover_content = capture(&block)
-    content_tag(:span, hover_content, class: "display-on-hover hover-style hover-style-#{placement}", id: tooltip_id, role: "tooltip")
+  def img_tooltip(tooltip_id, image_src, placement="top", &block)
+    content_tag(:span, class: "has-tooltip", tabindex: "0", "aria-describedby": tooltip_id) do
+      concat(image_tag(image_src))
+      hover_content = capture(&block)
+      concat(content_tag(:span, hover_content, class: "display-on-hover hover-style hover-style-#{placement}", id: tooltip_id, role: "tooltip"))
+    end
   end
 end

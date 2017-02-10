@@ -2,20 +2,22 @@
 
 .has-tooltip:hover > .display-on-hover,
 .has-tooltip:focus > .display-on-hover
-  display: block
+  opacity: 0.9
   @media (max-width: $media-small-max)
     display: none
 
 .has-tooltip
   position: relative
   color: $color-blue-1
+  img
+    width: 20px
 
 thead .has-tooltip
   color: $color-white
 
 .hover-style
+  opacity: 0
   position: absolute
-  display: none
   padding: 0.25rem 0.5rem
   width: 200px
   font-size: .75rem
@@ -26,7 +28,8 @@ thead .has-tooltip
   color: $color-white
   border-radius: $global-radius
   z-index: 10
-  opacity: 0.9
+  transition: opacity 0.2s ease-in-out, transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24)
+  transform: translate3d(0, 0, 0)
   &::after
     position: absolute
     content: " "

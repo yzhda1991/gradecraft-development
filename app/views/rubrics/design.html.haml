@@ -18,7 +18,7 @@
 
       .meets-expectations-hint
         %span What does "Set as 'meets expectations' mean?"
-        = tooltip("mem-tip", "info-circle", "right") do
+        = icon_tooltip("mem-tip", "info-circle", "right") do
           Adding this marker to a level sets a threshold so that all levels below it do not award any points
 
       - if ! @assignment.grade_with_rubric?

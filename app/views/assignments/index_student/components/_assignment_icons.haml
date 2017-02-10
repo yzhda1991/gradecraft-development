@@ -1,11 +1,11 @@
 %span.assignment-details-icon
   - if assignment.has_groups?
-    = tooltip("group-assignment-tip_#{assignment.id}", :group) do
+    = icon_tooltip("group-assignment-tip_#{assignment.id}", :group) do
       This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
 
   - if assignment.is_unlockable?
     - if ! assignment.is_unlocked_for_student?(presenter.student)
-      = tooltip("unlock-assignment-tip_#{assignment.id}", :lock) do
+      = icon_tooltip("unlock-assignment-tip_#{assignment.id}", :lock) do
         %p This #{term_for :assignment} is Locked
         .small.italic In order to unlock it you must:
         %ol
@@ -13,14 +13,14 @@
             %li= condition.requirements_description_sentence
         
     - else
-      = tooltip("unlocked-assignment-tip_#{assignment.id}", :unlock) do
+      = icon_tooltip("unlocked-assignment-tip_#{assignment.id}", :unlock) do
         %p You have unlocked this #{term_for :assignment}
         .small.italic To achieve this you:
         %ol
           - assignment.unlock_conditions.each do |condition|
             %li= condition.requirements_completed_sentence
   - if assignment.is_a_condition?
-    = tooltip("key-assignment-tip_#{assignment.id}", :key) do
+    = icon_tooltip("key-assignment-tip_#{assignment.id}", :key) do
       %p This #{term_for :assignment} is a Key
       %ol
         - assignment.unlock_keys.each do |key|
