@@ -27,17 +27,14 @@ class Assignments::Presenter < Showtime::Presenter
     properties.key?(:team_id) && !team.nil?
   end
 
-  def grade_for(student)
+  def grade_for_student(student)
     grades.where(student_id: student.id).first ||
       Grade.new(assignment_id: assignment.id)
   end
 
-  def prediction_for(assignment)
-    grade_for(assignment).predicted_points
-  end
-
-  def positive_prediction_for?(assignment)
-    grade_for(assignment).predicted_points > 0
+  def positive_prediction_for?(assignment, student)
+    prediction = assignment.predicted_earned_grades.where(student: student).first
+    return true if prediction.present? && prediction.predicted_points > 0
   end
 
   def grades
@@ -181,7 +178,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def submission_grade_history(student)
-    grade = self.grade_for(student)
+    grade = self.grade_for_student(student)
     submission = self.submission_for_assignment(student)
     submission_grade_filtered_history(submission, grade)
   end

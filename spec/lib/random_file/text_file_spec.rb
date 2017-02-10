@@ -60,7 +60,7 @@ RSpec.describe RandomFile::TextFile do
 
   describe "#write" do
     subject { random_file.write }
-    it "writes the contents of the random string to a file at the file_path" do
+    it "writes the contents of the random string to a file at the file_path", :unreliable do
       subject
       expect(random_file.read.first).to eq(random_file.instance_variable_get(:@random_string) +"\n")
     end

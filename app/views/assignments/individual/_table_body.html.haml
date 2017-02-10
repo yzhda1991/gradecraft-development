@@ -1,6 +1,6 @@
 - presenter.students.each do |student|
   - student_submission = Submission.for_assignment_and_student(presenter.assignment.id, student.id).first
-  - grade = presenter.grade_for(student)
+  - grade = presenter.grade_for_student(student)
   %tr
     - if presenter.assignment.is_unlockable?
       %td
@@ -15,7 +15,7 @@
         = points grade.raw_points if grade.instructor_modified?
     %td.status-or-score
       - if presenter.assignment.pass_fail?
-        = grade.try(:pass_fail_status) if grade.instructor_modified?
+        = "#{ term_for grade.try(:pass_fail_status) }" if grade.instructor_modified?
       - else
         = points grade.final_points if grade.instructor_modified?
 

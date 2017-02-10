@@ -10,7 +10,7 @@ class Assignments::GroupPresenter < Showtime::Presenter
     !grade.nil? && grade.is_graded?
   end
 
-  def grade_for(student)
+  def grade_for_student(student)
     assignment.grades.find_by(student_id: student.id) || assignment.grades.build
   end
 
