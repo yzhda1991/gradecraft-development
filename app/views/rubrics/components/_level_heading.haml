@@ -3,9 +3,8 @@
 %h5.level-name= "#{level.name}: #{points level.points} Points"
 - if level.meets_expectations || level.above_expectations?
   .meets-expectations-label
-    %span.has-tooltip.italic{tabindex: "0", "aria-describedby": "me-tip_#{level.id}"} 
-      Meets Expectations
-      = tooltip_content("me-tip_#{level.id}", "right") do
-        Earning this level means that you met or surpassed the minimum expectations for this criterion, and will earn the associated points.
+    %span Meets Expectations
+    = tooltip("me-tip_#{level.id}", "info-circle", "right") do 
+      Earning this level means that you met or surpassed the minimum expectations for this criterion, and will earn the associated points.
 
 .level-description= level.description

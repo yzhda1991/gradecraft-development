@@ -17,10 +17,9 @@
       %span Rubric is saved automatically.
 
       .meets-expectations-hint
-        %span.has-tooltip.italic{tabindex:'0', 'aria-describedby': 'mem-tip'}
-          What does "Set as 'meets expectations' mean?"
-          = tooltip_content("mem-tip", "right") do
-            Adding this marker to a level sets a threshold so that all levels below it do not award any points
+        %span What does "Set as 'meets expectations' mean?"
+        = tooltip("mem-tip", "info-circle", "right") do
+          Adding this marker to a level sets a threshold so that all levels below it do not award any points
 
       - if ! @assignment.grade_with_rubric?
         .clear

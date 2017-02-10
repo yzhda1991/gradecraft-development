@@ -68,14 +68,8 @@
         - @challenge.challenge_files.each do |cf|
           - next if cf.new_record?
           %li
-            - if cf.file_processing
-              = "#{cf.filename}"
-              %span.has-tooltip{tabindex: "0", "aria-describedby": "challenge-file-upload-tip"}
-                %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-                = tooltip("challenge-file-upload-tip", "Refresh page to confirm upload has completed")
-            - else
-              = link_to cf.filename, cf.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", challenge_id: @challenge.id, :upload_id => cf.id } )
+            = link_to cf.filename, cf.url, :target => "_blank"
+            = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", challenge_id: @challenge.id, :upload_id => cf.id } )
 
   .submit-buttons
     %ul
