@@ -32,7 +32,7 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-    .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { status: ["In Progress", "Graded", "Released"] }))
   end
 
   scope :resubmitted, -> {
@@ -83,7 +83,7 @@ class Submission < ActiveRecord::Base
   # Used to report to the user that a change will be a resubmission because this
   # submission is already graded.
   def will_be_resubmitted?
-    grade.present?
+    grade.graded_and_visible_by_student? if grade.present?
   end
 
   # this is transitive so that once it is graded again, then
