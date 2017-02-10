@@ -22,6 +22,6 @@
 
     .module-section
       %ul.button-bar
-        %li= link_to glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
-        %li= link_to glyph(:envelope) + "Email", "mailto:#{current_student.email}", class: "button"
-        %li= link_to glyph(:refresh) + "Update Score", recalculate_student_path(current_student), class: "button"
+        %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
+        %li= link_to decorative_glyph(:envelope) + "Email", "mailto:#{current_student.email}", class: "button"
+        %li= link_to decorative_glyph(:refresh) + "Update Score", recalculate_student_path(current_student), class: "button"

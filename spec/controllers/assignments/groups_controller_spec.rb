@@ -33,21 +33,6 @@ describe Assignments::GroupsController do
         expect(response).to render_template(:grade)
       end
     end
-
-    describe "PUT graded" do
-      it "updates the group grades for the specific assignment" do
-        group = create(:group)
-        @assignment.groups << group
-        group.students << @student
-        current_time = DateTime.now
-        put :graded, params: { assignment_id: @assignment.id, id: group.id,
-          grade: { graded_by_id: @professor.id, instructor_modified: true,
-                   raw_points: 1000, status: "Graded" }}
-        expect(@grade.reload.raw_points).to eq 1000
-        expect(@grade.group_id).to eq(group.id)
-        expect(@grade.graded_at).to be > current_time
-      end
-    end
   end
 
   context "as student" do
@@ -63,13 +48,6 @@ describe Assignments::GroupsController do
     describe "GET grade" do
       it "redirects back to the root" do
         expect(get :grade, params: { assignment_id: @assignment.id, id: group.id }).to \
-          redirect_to(:root)
-      end
-    end
-
-    describe "PUT graded" do
-      it "redirects back to the root" do
-        expect(put :graded, params: { assignment_id: @assignment.id, id: group.id,grade: {}}).to \
           redirect_to(:root)
       end
     end

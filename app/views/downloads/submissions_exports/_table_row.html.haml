@@ -40,5 +40,5 @@
     .right
       %ul.button-bar
         - if export.downloadable?
-          %li= link_to glyph(:download) + "Download", download_submissions_export_path(export), class: 'button', style: "margin-right: 18px"
-        %li= link_to glyph(:trash) + "Delete", export, class: 'button', data: { confirm: 'This will delete the submissions export. Are you sure?' }, :method => :delete
+          %li= link_to decorative_glyph(:download) + "Download", download_submissions_export_path(export), class: 'button', style: "margin-right: 18px"
+        %li= link_to decorative_glyph(:trash) + "Delete", export, class: 'button', data: { confirm: 'This will delete the submissions export. Are you sure?' }, :method => :delete

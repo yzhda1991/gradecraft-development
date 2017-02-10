@@ -1,0 +1,14 @@
+%section.grade-adjustment-points
+  .grade-section-label Adjustment Points
+
+  %input.adjustment-points-input( type="text"
+  placeholder="Enter adjustment points for grade"
+  ng-model="grade.adjustment_points"
+  smart-number
+  allow-negatives="true"
+  ng-change="queueUpdateGrade()")
+
+%section.grade-adjustment-points-feedback(ng-if="grade.adjustment_points && grade.adjustment_points != 0")
+  .grade-section-label Adjustment Points Feedback
+  %textarea(ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
+.clear

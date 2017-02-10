@@ -2,12 +2,13 @@
   - content_for :context_menu do
     .context_menu
       %ul
-        %li= link_to glyph(:plus) + "New Course", new_course_path, class: "button button-edit"
+        %li= link_to decorative_glyph(:plus) + "New Course", new_course_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
 
-  %table.dynatable.scroll-table{"aria-describedby" => "tableCaption"}
+  %table.dynatable.scroll-table
+    %caption.sr-only My Courses
     %thead
       %tr
         %th{scope: "col"} Course No
@@ -20,16 +21,24 @@
           %th{scope: "col"} Teams
           %th{scope: "col"} Badges
           %th
+            %span.sr-only Download Research Grades
           %th
+            %span.sr-only Download Final Grades
           %th
+            %span.sr-only= "Download #{term_for :assignment} structure"
           %th
+            %span.sr-only= "Download #{term_for :assignment} Submissions"
           %th
+            %span.sr-only= "Download #{term_for :assignment_type} summaries"
           %th
+            %span.sr-only Download Full Grade Book
           %th
+            %span.sr-only= "Download #{term_for :badges}"
           %th
+            %span.sr-only Download Grading Scheme
           %th
           %th{scope: "col" }
-            %span.sr-only Actions
+            %span.sr-only Action buttons
     %tbody
       - @courses.each do |course|
         %tr
@@ -54,6 +63,6 @@
             %td
               .right
                 %ul.button-bar
-                  %li= link_to glyph(:edit) + "Edit", edit_course_path(course), class: "button"
-                  %li= link_to glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy
-                  %li= link_to glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), class: "button", :method => :copy
+                  %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course), class: "button"
+                  %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy
+                  %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), class: "button", :method => :copy

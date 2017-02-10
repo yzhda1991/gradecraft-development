@@ -1,4 +1,5 @@
 %table.dynatable
+  %caption.sr-only= "#{term_for :teams}"
   %thead
     %tr
       %th Rank
@@ -10,7 +11,8 @@
       %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
-      %th{:style => "min-width: 260px"}
+      %th{:style => "min-width: 260px"} 
+        %span.sr-only Action Buttons
   %tbody
     - @teams.each_with_index do |team, index|
       %tr
@@ -28,6 +30,6 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to glyph(:dashboard) + "See #{term_for :team}", team, class: "button"
-              %li= link_to glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), class: "button"
-              %li= link_to glyph(:trash) + "Delete #{term_for :team}", team_path(team), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+              %li= link_to decorative_glyph(:dashboard) + "See #{term_for :team}", team, class: "button"
+              %li= link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), class: "button"
+              %li= link_to decorative_glyph(:trash) + "Delete #{term_for :team}", team_path(team), class: "button", data: { confirm: "Are you sure?" }, :method => :delete

@@ -383,11 +383,41 @@ Robin Williams",
   assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
-    name: "Group Assignment + Standard Edit",
-    open_at: 3.weeks.ago,
-    due_at: 3.weeks.ago + 0.05,
+    name: "Standard Edit Group Assignment",
     full_points: 10000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
+  }
+}
+
+@assignments[:group_score_levels] = {
+  quotes: {
+    assignment_created: "You can't tell if a machine has gotten smarter or if you've just lowered your own standards of intelligence to such a degree that the machine seems smart. ― Jaron Lanier"
+  },
+  assignment_type: :group_grading,
+  assign_groups: true,
+  attributes: {
+    name: "Score Levels Group Assignment",
+    grade_scope: "Group",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
+  },
+  assignment_score_levels: true
+}
+
+@assignments[:group_pass_fail] = {
+  quotes: {
+    assignment_created: "Numbers have an important story to tell. They rely on you to give them a voice. – Stephen Few"
+  },
+  assignment_type: :group_grading,
+  assign_groups: true,
+  attributes: {
+    name: "Pass/Fail Group Assignment",
+    pass_fail: true,
+    grade_scope: "Group",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
   }
 }
 
@@ -400,14 +430,17 @@ valued, or was actually stigmatized. - Sir Ken Robinson",
   assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
-    name: "Group Assignment + Submissions",
-    due_at: 2.weeks.ago + 0.05,
+    name: "Submissions Group Assignment",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
     full_points: 15000,
     grade_scope: "Group",
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_text: true,
-    accepts_links: true
+    accepts_links: true,
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
   }
 }
 
@@ -422,10 +455,11 @@ Tzu"
   assignment_type: :group_grading,
   assign_groups: true,
   attributes: {
-    name: "Group Assignment + Rubric Edit",
-    due_at: 1.weeks.ago,
+    name: "Rubric Graded Group Assignment",
     full_points: 15000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
   },
   rubric: true
 }
@@ -438,10 +472,10 @@ Tzu"
   assign_groups: false,
   attributes: {
     name: "No Groups Assigned, Group Assignment",
-    open_at: 3.weeks.ago,
-    due_at: 3.weeks.ago + 0.05,
     full_points: 10000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    open_at: 1.weeks.ago,
+    due_at: 3.weeks.from_now,
   }
 }
 

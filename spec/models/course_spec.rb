@@ -61,6 +61,18 @@ describe Course do
       expect(subject.grade_scheme_elements.size).to eq 1
       expect(subject.grade_scheme_elements.map(&:course_id)).to eq [subject.id]
     end
+
+    it "overrides the specified attributes" do
+      attributes = { tagline: "Behold, the greatest course of all!" }
+      subject = course.copy nil, attributes
+      expect(subject.tagline).to eq attributes[:tagline]
+    end
+
+    it "resets the lti uid to nil" do
+      course = build_stubbed :course, lti_uid: "test_uid"
+      duplicated = course.copy nil
+      expect(duplicated.lti_uid).to be_nil
+    end
   end
 
   describe "#copy with students" do
@@ -80,6 +92,25 @@ describe Course do
     it "copies the students" do
       duplicated = subject.copy "with_students"
       expect(duplicated.reload.users).to include student
+    end
+
+    it "copies the teams" do
+      team = create :team, course: subject
+      duplicated = subject.copy "with_students"
+      expect(duplicated.teams.size).to eq 1
+      expect(duplicated.teams.map(&:course_id)).to eq [duplicated.id]
+    end
+
+    it "overrides the specified attributes" do
+      attributes = { tagline: "This course will blow your mind!" }
+      duplicated = subject.copy "with_students", attributes
+      expect(duplicated.tagline).to eq attributes[:tagline]
+    end
+
+    it "resets the lti uid to nil" do
+      subject = build_stubbed :course, lti_uid: "test_uid"
+      duplicated = subject.copy "with_students"
+      expect(duplicated.lti_uid).to be_nil
     end
   end
 

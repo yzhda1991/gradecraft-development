@@ -26,6 +26,7 @@ describe AnalyticsEventsController, type: :controller do
     allow(controller).to receive_messages({
       current_user: user,
       event_session: event_session,
+      require_course_membership: true,
       event_session_with_params: event_session_with_params
     })
   end

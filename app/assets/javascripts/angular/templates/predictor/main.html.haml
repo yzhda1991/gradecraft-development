@@ -3,11 +3,7 @@
 
   #student-main-column
 
-    #predictor-loading-message{'ng-if'=>'vm.loading'}
-
-      %h2
-        %i.fa.fa-spinner.fa-spin.fa-fw
-        Loading Predictor...
+    %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Predictions..."}
 
     #predictor-graph-section{'ng-if'=>'!vm.loading'}
       %predictor-graph.predictor-graph

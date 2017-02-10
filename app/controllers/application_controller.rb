@@ -25,6 +25,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :require_login, except: [:not_authenticated]
+  before_action :require_course_membership, except: [:not_authenticated]
   before_action :increment_page_views
   before_action :course_scores
   before_action :set_paper_trail_whodunnit
@@ -110,6 +111,11 @@ class ApplicationController < ActionController::Base
   def ensure_not_observer?
     redirect_to assignments_path, alert: "You do not have permission to access that page" \
       if current_user_is_observer?
+  end
+
+  def require_course_membership
+    redirect_to errors_path(status_code: 401, error_type: "without_course_membership") \
+      unless current_user.course_memberships.any?
   end
 
   def save_referer

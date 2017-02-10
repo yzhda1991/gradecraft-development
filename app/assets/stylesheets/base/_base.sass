@@ -25,6 +25,40 @@
 .dropdown
   position: relative
 
+/* Used for screen reader only item */
+.sr-only
+  position: absolute
+  width: 1px
+  height: 1px
+  padding: 0
+  margin: -1px
+  overflow: hidden
+  clip: rect(0,0,0,0)
+  border: 0
+
+/* mouse */
+[data-whatinput="mouse"] :focus
+  outline-width: 0
+
+#skiptocontent a
+  padding: 6px
+  position: absolute
+  top: -40px
+  left: 0px
+  color: $color-white
+  border-right: 1px solid $color-white
+  border-bottom: 1px solid $color-white
+  border-bottom-right-radius: 8px
+  background: transparent
+  transition: top 1s ease-out, background 1s linear
+  z-index: 100
+  &:focus
+    top: 0px
+    background: $color-red-1
+    outline: 0
+    -webkit-transition: top .1s ease-in, background .5s linear
+    transition: top .1s ease-in, background .5s linear
+
 .hide-for-xsmall
   @media (max-width: $media-xsmall-max)
     display: none

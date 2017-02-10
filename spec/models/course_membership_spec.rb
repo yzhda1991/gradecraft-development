@@ -1,6 +1,27 @@
 require "active_record_spec_helper"
 
 describe CourseMembership do
+  describe "#copy" do
+    let(:course_membership) { build :course_membership }
+    subject { course_membership.copy }
+
+    it "makes a duplicated copy of itself" do
+      expect(subject).to_not eq course_membership
+    end
+
+    it "overrides the specified attributes" do
+      attributes = { role: "some other role" }
+      subject = course_membership.copy attributes
+      expect(subject.role).to eq attributes[:role]
+    end
+
+    it "resets the values for the scores" do
+      course_membership = build_stubbed :course_membership, score: 0
+      subject = course_membership.copy
+      expect(subject.score).to be_zero
+    end
+  end
+
   describe ".create_or_update_from_lti" do
     let(:user) { build_stubbed(:user) }
     let(:course) { create(:course) }

@@ -1,18 +1,20 @@
 - if current_user_is_staff?
   - content_for :context_menu do
     .context_menu
-      %ul=link_to glyph(:plus) + "New Event", new_event_path, class: "button button-edit"
+      %ul=link_to decorative_glyph(:plus) + "New Event", new_event_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
 
   %table.dynatable
+    %caption.sr-only Calendar Events
     %thead
       %tr
         %th{:width => "20%"} Name
         %th Open date
         %th Close date
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
 
     %tbody
       - @events.each do |event|
@@ -24,5 +26,5 @@
             - if current_user_is_staff?
               .right
                 %ul.button-bar
-                  %li= link_to glyph(:edit) + "Edit", edit_event_path(event), class: "button"
-                  %li= link_to glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"
+                  %li= link_to decorative_glyph(:edit) + "Edit", edit_event_path(event), class: "button"
+                  %li= link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"

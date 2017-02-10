@@ -46,15 +46,11 @@ describe GradesController do
         expect(response).to render_template(:edit)
       end
 
-      context "with additional grade items" do
-        it "assigns existing submissions, badges and score levels" do
-          submission = create(:submission, student: student, assignment: assignment)
-          badge = create(:badge, course: course)
+      it "assigns existing submissions" do
+        submission = create(:submission, student: student, assignment: assignment)
 
-          get :edit, params: { id: grade.id }
-          expect(assigns(:submission)).to eq(submission)
-          expect(assigns(:badges)).to eq([badge])
-        end
+        get :edit, params: { id: grade.id }
+        expect(assigns(:submission)).to eq(submission)
       end
     end
 
@@ -108,7 +104,7 @@ describe GradesController do
 
         it "creates and redirects to grade the next ungraded student when not accepting submissions" do
           assignment.update(accepts_submissions: false)
-          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "Graded"}, redirect_to_next_grade: true}
+          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "In Progress"}, redirect_to_next_grade: true}
           expect(response).to redirect_to(edit_grade_path(
             Grade.where(
               student: next_student,
@@ -132,7 +128,7 @@ describe GradesController do
           team = create :team, course: course
           create :team_membership, team: team, student: student
           create :team_membership, team: team, student: next_student
-          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "Graded"},
+          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "In Progress"},
                                  redirect_to_next_team_grade: true}
           expect(response).to redirect_to(
             edit_grade_path(

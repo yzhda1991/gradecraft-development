@@ -30,7 +30,7 @@ feature "creating a new user" do
 
     context "for a UM student" do
       scenario "successfully" do
-        username = Faker::Internet.user_name
+        username = Faker::Internet.unique.user_name
         user = build(:user, email: "#{username}@umich.edu")
         within(".pageContent #tab2") do
           NewUserPage.new(user)

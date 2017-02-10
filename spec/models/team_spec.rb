@@ -19,6 +19,34 @@ describe Team do
     end
   end
 
+  describe "#copy" do
+    let(:team) { build :team }
+    subject { team.copy }
+
+    it "makes a duplicated copy of itself" do
+      expect(subject).to_not eq team
+    end
+
+    it "copies the team memberships" do
+      create :team_membership, team: team
+      expect(subject.team_memberships.size).to eq 1
+      expect(subject.team_memberships.map(&:team_id)).to eq [subject.id]
+    end
+
+    it "overrides the specified attributes" do
+      attributes = { rank: 9 }
+      subject = team.copy attributes
+      expect(subject.rank).to eq attributes[:rank]
+    end
+
+    it "resets the values for the scores" do
+      team = build_stubbed :team, challenge_grade_score: 100, average_score: 100
+      subject = team.copy
+      expect(subject.challenge_grade_score).to be_zero
+      expect(subject.average_score).to be_zero
+    end
+  end
+
   describe ".find_by_course_and_name" do
     let(:team) { create :team }
 

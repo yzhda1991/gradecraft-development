@@ -3,12 +3,12 @@ require "rails_spec_helper"
 
 describe "api/grades/group_index" do
   before(:all) do
-    world = World.create.with(:course, :assignment, :student, :grade)
 
     # Expected instance variables on render:
     @grades = [create(:grade)]
     @student_ids = [1,2,3,4,5]
     @grades_status_options = ["In Progress","Graded", "Released"]
+    @assignment = @grades[0].assignment
   end
 
   it "responds with an array of gradew" do

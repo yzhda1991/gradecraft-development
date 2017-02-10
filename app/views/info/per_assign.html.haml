@@ -50,5 +50,5 @@
                 %th= points assignment.grade_count
                 %th
                   %ul.button-bar.right
-                    %li= link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                    %li= link_to glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"
+                    %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
+                    %li= link_to decorative_glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"

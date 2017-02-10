@@ -1,7 +1,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  #rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
+  .rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
 
     #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
       %h4#points-legend

@@ -4,28 +4,36 @@
   display: block
   margin-left: 10.5rem
 
-label
-  text-transform: capitalize
-  font-weight: bold
-  display: inline-block
-  margin-bottom: 5px
-
 label, input
   padding-bottom: 0
+
+[type=text],
+[type=password],
+[type=number],
+textarea
+  border: 1px solid rgba(42, 43, 43, 0.2)
+  transition: border-color 0.2s
+  &:focus
+    border: 1px solid rgba(42, 43, 43, 0.8)
 
 .radio label,
 .checkbox label
   cursor: pointer
   display: inline
 
-label.checkbox input, label.check_boxes input, label.checkbox, label.radio, label.radio input
+label.checkbox input,
+label.check_boxes input,
+label.checkbox,
+label.radio,
+label.radio input
   clear: both
 
 fieldset
   border: none
   padding: 0
 
-select, .ui-tabs-panel select
+select,
+.ui-tabs-panel select
   background-color: $color-white
   width: 16rem
   height: 1.5rem
@@ -57,7 +65,12 @@ select:hover
   li a
     color: $color-grey-3 !important
 
-  li:hover, li a:hover, li.active a, li.active, li.active a:hover, li.active:hover
+  li:hover,
+  li a:hover,
+  li.active a,
+  li.active,
+  li.active a:hover,
+  li.active:hover
     background-color: $color-green-3 !important
     color: $color-white !important
     text-decoration: none
@@ -166,14 +179,24 @@ error
     padding-right: .5rem
     text-align: right
     font-size: 0.9rem
+    text-transform: capitalize
+    font-weight: bold
+    display: inline-block
+    margin-bottom: 5px
     @media (max-width: $media-small-max)
       text-align: left
 
-  input[type=text], input[type=password], input[type=number]
+  input[type=text],
+  input[type=password],
+  input[type=number]
     padding: .5rem
     width: 15rem
     font-size: 11px
     font-family: sans-serif
+    border: 1px solid rgba(42, 43, 43, 0.2)
+    transition: border-color 0.2s
+    &:focus
+      border: 1px solid rgba(42, 43, 43, 0.8)
 
   .form_label
     margin-left: 10.75rem
@@ -235,8 +258,8 @@ error
       width: 6rem
 
 input[type=text]
-    padding: .5rem
-    width: 15rem
+  padding: .5rem
+  width: 15rem
 
 .switch-label
   text-transform: capitalize
@@ -301,19 +324,19 @@ ul.locked-display li
   list-style: none
 
 // Switch-slider used on rubric grade pages to toggle class analytics
-// Box around switch-slider 
-.rubric-switch-socket
+// Box around switch-slider
+.switch-socket
   position: relative
   display: inline-block
   width: 40px
   height: 24px
 
 // Hides default HTML checkbox
-.rubric-switch-socket input 
+.switch-socket input
   display: none
 
 // The slider
-.rubric-switch-handle
+.switch-handle
   position: absolute
   cursor: pointer
   top: 0
@@ -323,7 +346,7 @@ ul.locked-display li
   background-color: $color-grey-6
   transition: .4s
 
-.rubric-switch-handle:before
+.switch-handle:before
   position: absolute
   content: ""
   height: 20px
@@ -334,19 +357,19 @@ ul.locked-display li
   transition: .4s
 
 
-input:checked + .rubric-switch-handle
+input:checked + .switch-handle
   background-color: $color-green-1
 
-input:focus + .rubric-switch-handle
+input:focus + .switch-handle
   box-shadow: 0 0 1px #2196F3
 
-input:checked + .rubric-switch-handle:before
+input:checked + .switch-handle:before
   transform: translateX(16px)
 
-.rubric-switch-handle.round
+.switch-handle.round
   border-radius: 34px
 
-.rubric-switch-handle.round:before
+.switch-handle.round:before
   border-radius: 50%
 
 // score levels form (assignment and challenge edit)

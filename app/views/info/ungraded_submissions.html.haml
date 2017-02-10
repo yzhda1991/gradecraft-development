@@ -40,8 +40,8 @@
             .right
               %ul.button-bar
                 - if submission.assignment.is_individual?
-                  %li= link_to glyph(:eye) + "See Submission",assignment_submission_path(submission.assignment, id: submission.id), class: "button"
-                  %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(submission.assignment, submission.student), method: :post, class: "button"
+                  %li= link_to decorative_glyph(:eye) + "See Submission",assignment_submission_path(submission.assignment, id: submission.id), class: "button"
+                  %li= link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(submission.assignment, submission.student), method: :post, class: "button"
                 - else
-                  %li= link_to glyph(:eye) + "See Submission",assignment_submission_path(submission.assignment, id: submission.id), class: "button"
-                  %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(submission.assignment, submission.group), class: "button"
+                  %li= link_to decorative_glyph(:eye) + "See Submission",assignment_submission_path(submission.assignment, id: submission.id), class: "button"
+                  %li= link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(submission.assignment, submission.group), class: "button"

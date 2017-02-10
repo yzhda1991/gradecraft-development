@@ -13,6 +13,7 @@ json.attributes do
   json.position                   assignment.position
   json.purpose                    assignment.purpose
   json.threshold_points           assignment.threshold_points
+  json.release_necessary          assignment.release_necessary
 
   # boolean flags
 
@@ -107,6 +108,13 @@ json.relationships do
     grade =  @grades.where(assignment_id: assignment.id).first
     if GradeProctor.new(grade).viewable?(@student)
       json.grade data: { type: "grades", id: grade.id.to_s }
+    end
+  end
+
+  if assignment.grade_with_rubric?
+    json.rubric do
+      json.data type: "rubrics", id: assignment.rubric.id.to_s
+      json.links related: api_rubric_path(assignment.rubric.id)
     end
   end
 end

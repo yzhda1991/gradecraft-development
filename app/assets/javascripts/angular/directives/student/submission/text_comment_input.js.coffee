@@ -22,16 +22,5 @@
       assignmentId: '@'
     }
     templateUrl: 'student/submission/text_comment_input.html'
-    link: (scope, el, attr) ->
-      scope.froalaOptions = {
-        inlineMode: false,
-        heightMin: 200,
-        toolbarButtons: [
-          'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-          'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
-          'outdent', 'indent', 'insertLink', 'undo', 'redo',
-          'clearFormatting', 'selectAll', 'html'
-        ]
-      }
   }
 ]

@@ -1,13 +1,14 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      %li= link_to glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
+      %li= link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
 
   / Grade Scheme Elements Table Display
-  %table{"aria-describedby" => "tableCaption"}
+  %table
+    %caption.sr-only Grading Scheme Levels
     %thead
       %tr
         %th{scope: "col"} Grade
@@ -15,6 +16,7 @@
         %th{scope: "col"} Point Threshold
         %th{scope: "col"} Locked?
         %th{scope: "col"}
+          %span.sr-only Action Buttons
     %tbody
       - @grade_scheme_elements.each do |element|
         %tr

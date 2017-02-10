@@ -1,4 +1,5 @@
 %table.dynatable
+  %caption.sr-only= #{term_for :groups}
   %thead
     %tr
       %th{:width => "20%"} #{term_for :group} Name
@@ -6,6 +7,7 @@
       %th{:width => "10%"} Status
       %th{:style => "min-width: 200px"} #{term_for :assignments}
       %th{:style => "min-width: 250px"}
+        %span.sr-only Action Buttons
   %tbody
     - groups.each do |group|
       %tr
@@ -21,7 +23,7 @@
           .right
             %ul.button-bar
               - if group.pending?
-                %li= link_to glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group), class: "button"
+                %li= link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group), class: "button"
               - else
-                %li= link_to glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group), class: "button"
-              %li= link_to glyph(:trash) + "Delete", group_path(group), class: "button", data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete
+                %li= link_to decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group), class: "button"
+              %li= link_to decorative_glyph(:trash) + "Delete", group_path(group), class: "button", data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete

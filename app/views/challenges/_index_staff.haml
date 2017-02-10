@@ -24,6 +24,6 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(challenge), class: "button"
-              %li= link_to glyph(:edit) + "Edit", edit_challenge_path(challenge), class: "button"
-              %li= link_to glyph(:trash) + "Delete", challenge, class: "button", :method => :delete, data: { confirm: "Are you sure?" }
+              %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(challenge), class: "button"
+              %li= link_to decorative_glyph(:edit) + "Edit", edit_challenge_path(challenge), class: "button"
+              %li= link_to decorative_glyph(:trash) + "Delete", challenge, class: "button", :method => :delete, data: { confirm: "Are you sure?" }

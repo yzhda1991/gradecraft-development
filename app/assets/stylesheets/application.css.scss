@@ -52,7 +52,6 @@
   *= require ./components/_history_timeline
   *= require ./components/_newsletter
   *= require ./components/_icons
-  *= require ./components/_accessibility
   *= require ./components/_alerts
   *= require ./components/_tooltips
   *= require ./pages/_analytics
@@ -60,6 +59,7 @@
   *= require ./pages/_downloads
   *= require ./pages/_features
   *= require ./pages/_grading_scheme
+  *= require ./pages/_edit_grades
   *= require ./pages/_predictor
   *= require ./pages/_grades
   *= require ./pages/_badges

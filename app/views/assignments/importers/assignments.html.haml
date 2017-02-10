@@ -16,7 +16,7 @@
         - @assignments.each do |assignment|
           %tr
             %td= assignment["name"]
-            %td= assignment["description"].html_safe if assignment["description"]
+            %td= (assignment["description"] || "").html_safe
             %td= assignment["due_at"]
             %td= assignment["points_possible"]
             %td.center= check_box_tag "assignment_ids[]", assignment["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-assignments-command']" }

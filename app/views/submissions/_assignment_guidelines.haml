@@ -12,7 +12,7 @@
   .italic.not_bold= "Due: #{assignment.due_at}"
 
 - if assignment.description.present?
-  %hr.dotted
+  %hr.grading-divider
 
   %h3.uppercase Guidelines:
   - if assignment.assignment_files.present?
@@ -24,7 +24,7 @@
   %p= raw assignment.description
 
 - if assignment.assignment_type.description.present?
-  %hr.dotted
+  %hr.grading-divider
   %h3.uppercase #{ assignment.assignment_type.name} Guidelines:
 
   %p= raw assignment.assignment_type.description

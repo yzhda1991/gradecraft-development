@@ -4,6 +4,7 @@
   = render "layouts/alerts"
 
   %table.dynatable.no-table-header
+    %caption.sr-only Staff Members
     %thead
       %tr
         %th First Name
@@ -12,6 +13,7 @@
         %th Role
         %th #{term_for :team}
         %th{:style => "min-width: 200px"}
+          %span.sr-only Action Buttons
     %tbody
       - @staff.each do |user|
         %tr
@@ -28,6 +30,6 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:dashboard) + "Dashboard",  staff_path(user), {class: "button"}
-                %li= link_to glyph(:edit) + "Edit",  edit_user_path(user), {class: "button"}
-                %li= link_to glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?"}, :method => :delete
+                %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user), {class: "button"}
+                %li= link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user), {class: "button"}
+                %li= link_to decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?"}, :method => :delete

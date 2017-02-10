@@ -72,9 +72,9 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     )
 
   # copy to a single model from a response
-  setItem = (model, type, response) ->
+  loadItem = (model, type, response, options={"include":[]}) ->
     if type == response.data.type
-      angular.copy(dataItem(response.data), model)
+      angular.copy(dataItem(response.data, response, options), model)
 
   # add to collection from a response with a single item
   addItem = (modelArray, type, response)->
@@ -104,7 +104,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     uriPrefix: uriPrefix
     logResponse: logResponse
     loadMany: loadMany
-    setItem: setItem
+    loadItem: loadItem
     addItem: addItem
     addItems: addItems
     deleteItem: deleteItem

@@ -102,7 +102,8 @@ class User < ActiveRecord::Base
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   validates :username, presence: true,
-                    length: { maximum: 50 }
+                    length: { maximum: 50 },
+                    uniqueness: { case_sensitive: false }
   validates :email, presence: true,
                     format: { with: email_regex },
                     uniqueness: { case_sensitive: false }
@@ -125,11 +126,11 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_insensitive_email(email)
-    where("LOWER(email) = :email", email: email.downcase).first
+    where("LOWER(email) = :email", email: (email || "").downcase).first
   end
 
   def self.find_by_insensitive_username(username)
-    where("LOWER(username) = :username", username: username.downcase).first
+    where("LOWER(username) = :username", username: (username || "").downcase).first
   end
 
   def self.email_exists?(email)

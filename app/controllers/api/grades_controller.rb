@@ -1,3 +1,5 @@
+require_relative "../../services/updates_grade"
+
 class API::GradesController < ApplicationController
 
   before_action :ensure_staff?
@@ -22,31 +24,22 @@ class API::GradesController < ApplicationController
   # POST api/grades/:grade_id
   def update
     grade = Grade.find(params[:id])
-    grade.assign_attributes(grade_params)
-    grade.instructor_modified = true
-    grade.graded_by_id = current_user.id
-    if grade.raw_points_changed?
-      grade.graded_at = DateTime.now
-    end
-    changes = grade.changes
-    if grade.save
-      if GradeProctor.new(grade).viewable?
-        GradeUpdaterJob.new(grade_id: grade.id).enqueue
-      end
-      grade.squish_history!
-      render json: { message: {changes: changes}, success: true }
+    result = Services::UpdatesGrade.update grade, grade_params, current_user.id
+    if result
+      @grade = result.grade
+      render "api/grades/show", success: true, status: 200
     else
       render json: {
         message: "failed to save grade", success: false
         },
-        status: 500
+        status: 400
     end
   end
 
   # GET api/assignments/:assignment_id/groups/:group_id/grades
   def group_index
-    assignment = Assignment.find(params[:assignment_id])
-    if !assignment.has_groups?
+    @assignment = Assignment.find(params[:assignment_id])
+    if !@assignment.has_groups?
       render json: {
         message: "not a group assignment", success: false
         },
@@ -56,7 +49,8 @@ class API::GradesController < ApplicationController
       @student_ids = students.pluck(:id)
       @grades =
         Grade.find_or_create_grades(params[:assignment_id], @student_ids)
-      if assignment.release_necessary?
+      @criterion_grades = CriterionGrade.where(grade_id: @grades.pluck(:id))
+      if @assignment.release_necessary?
         @grade_status_options = Grade::STATUSES
       else
         @grade_status_options = Grade::UNRELEASED_STATUSES
@@ -67,6 +61,7 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(:raw_points, :feedback, :status, :is_custom_value)
+    params.require(:grade).permit(:adjustment_points, :adjustment_points_feedback,
+      :feedback, :group_id, :pass_fail_status, :raw_points, :status )
   end
 end

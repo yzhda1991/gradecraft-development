@@ -79,20 +79,45 @@ function showVisibilityOptions() {
 showVisibilityOptions();
 
 // for student rubric feedback tab panels
-$('ul.level-tabs li').click(function(){
-  var criterionId = $(this).parent().parent().attr('id');
-  var tabId = $(this).attr('data-tab');
+function showSelectedTab($tab) {
+  var tabPanelId = '#' + $tab.attr('aria-controls');
+  var $tabPanel = $(tabPanelId);
 
-    $('#' + criterionId + ' ul.level-tabs li').removeClass('selected');
-    $('#' + criterionId + ' ul.level-tabs li').attr('aria-selected', 'false');
-    $('#' + criterionId + ' .tab-panel').removeClass('selected');
-    $('#' + criterionId + ' .tab-panel').attr('aria-selected', 'false');
+    // remove selected class from all tabs and assoc. tab panel other than clicked
+    $tab.siblings().removeClass('selected').attr('aria-selected', 'false').attr('tabindex', '-1');
+    $tabPanel.siblings().removeClass('selected').attr('aria-hidden', 'true');
+    // add selected class on clicked tab and associated tab panel
+    $tab.addClass('selected').attr('aria-selected', 'true').attr('tabindex', '0');
+    $tabPanel.addClass('selected').attr('aria-hidden', 'false');
+}
 
-    $(this).addClass('selected');
-    $(this).attr('aria-selected', 'true');
-    $("#" + tabId).addClass('selected');
-    $("#" + tabId).attr('aria-selected', 'true');
-  })
+$('ul.level-tabs li').click(function() {
+  showSelectedTab($(this));
+});
+
+$('ul.level-tabs li').keydown(function(e) {
+  var $tab = $(this);
+  var $selectedTab = null;
+  var $firstTab = $tab.parent().children().first();
+  var $lastTab = $tab.parent().children().last();
+
+  if (e.which === 37) {
+    if ($tab.is($firstTab)) {
+      $selectedTab = $lastTab;
+    } else {
+      $selectedTab = $tab.prev();
+    }
+  } else if (e.which === 39) {
+    if ($tab.is($lastTab)) {
+      $selectedTab = $firstTab;
+    } else {
+      $selectedTab = $tab.next();
+    }
+  }
+  
+  $selectedTab.focus();
+  showSelectedTab($selectedTab);
+});
 
 // toggle class analytics on rubric feedback
 $('#class-analytics-toggle').change(function(){

@@ -57,20 +57,20 @@
           - if presenter.assignment.accepts_submissions?
             - if presenter.has_viewable_submission?(student_submission, current_user)
               /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
-              %li= link_to glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, student_submission.id), class: "button"
+              %li= link_to decorative_glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, student_submission.id), class: "button"
 
           - if grade.instructor_modified?
-            %li= link_to glyph(:eye) + "See Grade", grade_path(grade), class: "button"
+            %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
             - if presenter.assignment.accepts_submissions? && presenter.submission_resubmitted?(student_submission)
-              %li= link_to glyph(:edit) + "Re-grade", edit_grade_path(grade), class: "button danger"
+              %li= link_to decorative_glyph(:edit) + "Re-grade", edit_grade_path(grade), class: "button danger"
             - else
-              %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
-            %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
+              %li= link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
+            %li= link_to decorative_glyph(:trash) + "Delete Grade", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
           - else
             - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
-              %li= link_to glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
+              %li= link_to decorative_glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
             - team_param = presenter.for_team? ? {team_id: presenter.team.id} : nil
-            %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{presenter.has_viewable_submission?(student_submission, current_user) ? "danger" : ""}"
+            %li= link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{presenter.has_viewable_submission?(student_submission, current_user) ? "danger" : ""}"
 
     - if presenter.assignment.release_necessary?
       %td

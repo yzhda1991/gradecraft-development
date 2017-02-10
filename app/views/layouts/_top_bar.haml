@@ -5,6 +5,8 @@
 
   .layout-right-content
     %header{role: "banner"}
+      %div#skiptocontent
+        = link_to "Skip to main content", "#main-content"
       .navbar.container
         %nav.the-nav.nav-collapse{class: ("preview-mode" if impersonating?), role: "navigation"}
           %ul.nav.nav-pill.left
