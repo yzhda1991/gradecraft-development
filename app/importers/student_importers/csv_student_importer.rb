@@ -1,5 +1,6 @@
 require "csv"
 require_relative "../../services/creates_new_user"
+require_relative "../../services/creates_course_membership"
 
 class CSVStudentImporter
   attr_reader :successful, :unsuccessful
@@ -25,14 +26,21 @@ class CSVStudentImporter
           next
         end
 
-        user = find_or_create_user row, course
+        result = Services::CreatesOrUpdatesUser.create_or_update row.to_h.merge(internal: internal_students), course, send_welcome
+        user = result[:user] if result.success?
 
-        if user.valid?
-          team.students << user if team
-          successful << user
-        else
-          append_unsuccessful row, user.errors.full_messages.join(", ")
+        unless result.success?
+          append_unsuccessful row, "Unable to create or update user"
+          next
         end
+
+        unless Services::CreatesCourseMembership.create(user, course).success?
+          append_unsuccessful row, "Unable to create course membership for student"
+          next
+        end
+
+        team.students << user if team
+        successful << user
       end
     end
 
@@ -43,18 +51,6 @@ class CSVStudentImporter
 
   def append_unsuccessful(row, errors)
     unsuccessful << { data: row.to_s, errors: errors }
-  end
-
-  def find_or_create_user(row, course)
-    user = User.find_by_insensitive_email row.email.downcase if row.email
-    user ||= User.find_by_insensitive_username row.username if row.username
-    user ||= Services::CreatesNewUser
-      .create(row.to_h.merge(internal: internal_students), send_welcome)[:user]
-
-    if course && user.valid? && !user.is_student?(course)
-      user.course_memberships.create(course_id: course.id, role: "student")
-    end
-    user
   end
 
   def find_or_create_team(row, course)

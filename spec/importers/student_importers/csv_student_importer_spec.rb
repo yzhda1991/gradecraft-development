@@ -38,10 +38,9 @@ describe CSVStudentImporter do
         end
 
         it "does not create the student membership if it already exists" do
-          user = User.create first_name: "Jimmy", last_name: "Page",
-              email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
-          user.course_memberships.create course_id: course.id, role: "student"
-          expect { subject.import course }.to_not raise_error
+          create :user, first_name: "Jimmy", last_name: "Page", email: "csv_jimmy@example.com",
+            username: "csv_jimmy", password: "blah", courses: [course], role: :student
+          expect { subject.import course }.to change { CourseMembership.count }.by(2)
         end
 
         it "adds the students to the team if the team exists" do
@@ -86,14 +85,12 @@ describe CSVStudentImporter do
           expect(result.successful.last).to eq user
         end
 
-        it "contains an unsuccessful row if the user is not valid" do
-          user = User.create first_name: "Jimmy", last_name: "Page",
-              email: "csv_jimmy@example.com", username: "jimmy", password: "blah"
-          user.update_attribute :username, ""
+        it "contains unsuccessful rows if the user cannot be created or updated" do
+          allow(Services::CreatesOrUpdatesUser).to receive(:create_or_update).and_return \
+            double(:result, success?: false, message: "")
           result = subject.import course
-          expect(result.successful.count).to eq 2
-          expect(result.unsuccessful.count).to eq 1
-          expect(result.unsuccessful.first[:errors]).to eq "Username can't be blank"
+          expect(result.unsuccessful.count).to eq 3
+          expect(result.unsuccessful.pluck(:errors)).to include "Unable to create or update user"
         end
 
         it "contains an unsuccessful row if the team is not valid" do
