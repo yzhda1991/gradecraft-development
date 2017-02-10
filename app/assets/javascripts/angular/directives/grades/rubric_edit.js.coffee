@@ -14,6 +14,7 @@
         GradeService.findCriterionGrade(criterionId) || GradeService.addCriterionGrade(criterionId)
 
       scope.badgesForLevel = (level)->
+        GradeService.criterionGrades
         RubricService.badgesForLevel(level)
 
       scope.queueUpdateGrade = (immediate)->

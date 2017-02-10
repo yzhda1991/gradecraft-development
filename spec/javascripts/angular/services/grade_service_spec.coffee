@@ -3,45 +3,84 @@
 # resource: https://nathanleclaire.com/blog/2014/04/12/unit-testing-services-in-angularjs-for-fun-and-for-profit/
 describe 'GradeService', ()->
 
-  response = {
-    data: {
-      type: "grades",
-      id: "101",
-      attributes: {
-        id: 101,
-        feedback: "great jorb!"
-      }
-    },
-    meta: {
-      grade_status_options: ["In Progress", "Graded"],
-      threshold_points: 100
-    }
-  }
-
-  beforeEach inject (_GradeService_) ->
+  beforeEach inject (_GradeService_, _DebounceQueue_) ->
     @GradeService = _GradeService_
+    @DebounceQueue = _DebounceQueue_
 
   describe 'getGrade', ()->
-    it 'should load the grade', ()->
-      @http.whenGET("/api/assignments/1/students/2/grade/").respond(response)
-      @GradeService.getGrade(1, "student", 2)
-      @http.flush()
-      expect(@GradeService.grade.id).toEqual(101)
+    describe 'for student', ()->
+      beforeEach ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
 
-    it 'should load the options for grade status', ()->
-      @http.whenGET("/api/assignments/1/students/2/grade/").respond(response)
-      @GradeService.getGrade(1, "student", 2)
-      @http.flush()
-      expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])
+      it 'should load the grade', ()->
+        expect(@GradeService.grade.id).toEqual(1234)
 
-  describe 'justUpdated', ()->
+      it 'should calculate the final points, defaulting to zero', ()->
+        expect(@GradeService.grade.raw_points).toEqual(0)
+        expect(@GradeService.grade.adjustment_points).toEqual(0)
+        expect(@GradeService.grade.final_points).toEqual(0)
+
+    describe 'for student with included models', ()->
+      it 'should load the options for grade status', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.new)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded"])
+
+      it 'should include attachments', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.withAttachment)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.fileUploads[0].id).toEqual(555)
+        expect(@GradeService.fileUploads[0].filename).toEqual('image.jpg')
+
+      it 'should include rubric criteria', ()->
+        @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.withRubric)
+        @GradeService.getGrade(1, "student", 99)
+        @http.flush()
+        expect(@GradeService.criterionGrades.length).toEqual(5)
+
+    describe 'for group', ()->
+      beforeEach ()->
+        @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
+        @GradeService.getGrade(2, "group", 101)
+        @http.flush()
+
+      it 'should load the grade for the first student', ()->
+        expect(@GradeService.grade.id).toEqual(1609)
+
+      it 'should copy all the grades (for future functionality)', ()->
+        expect(@GradeService.grades.length).toEqual(3)
+
+    describe 'for group with included models', ()->
+      it 'should load the options for grade status', ()->
+        @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
+        @GradeService.getGrade(2, "group", 101)
+        @http.flush()
+        expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded", "Released"])
+
+      it 'should load criterion grades, filtered to the first student', ()->
+        @http.whenGET("/api/assignments/96/groups/3/grades/").respond(apiTestDoubles.grade.groupRubric)
+        @GradeService.getGrade(96, "group", 3)
+        @http.flush()
+        expect(@GradeService.criterionGrades.length).toEqual(5)
+
+  describe 'queueUpdateGrade', ()->
     beforeEach ()->
-      @GradeService.timeSinceUpdate = @testdouble.function('timeSinceUpdate')
+      @DebounceQueue.addEvent = @testdouble.function('DebounceQueue')
 
-    it 'should be true when the last update was less than a second', ()->
-      @testdouble.when(@GradeService.timeSinceUpdate()).thenReturn(100)
-      expect(@GradeService.justUpdated()).toEqual(true)
+    it 'should queue a call to update', ()->
+      @GradeService.queueUpdateGrade()
+      expect().toVerify(@DebounceQueue.addEvent(), {ignoreExtraArgs: true})
 
-    it 'should be false when the last update was more than a second', ()->
-      @testdouble.when(@GradeService.timeSinceUpdate()).thenReturn(3000)
-      expect(@GradeService.justUpdated()).toEqual(false)
+    it 'should include a recalculation of the grade points', ()->
+      #seed the grade by mocking the internal call to get grade
+      @http.whenGET('/api/assignments/1/students/99/grade/').respond(apiTestDoubles.grade.withPoints)
+      @GradeService.getGrade(1, 'student', 99)
+      @http.flush()
+
+      @GradeService.queueUpdateGrade()
+      expect(@GradeService.grade.final_points).toEqual(900)
+

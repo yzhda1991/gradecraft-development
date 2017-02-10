@@ -21,7 +21,8 @@
       scope.textForSwitch = ()->
         if @article.type == 'assignments'
           if @article.pass_fail
-            if @article.prediction.predicted_points == @offValue then PredictorService.termFor("fail") else PredictorService.termFor("pass")
+            if @article.prediction.predicted_points == @offValue then \
+              PredictorService.termFor("fail") else PredictorService.termFor("pass")
           else
             if @article.prediction.predicted_points == @offValue then @offValue else @onValue
         else if @article.type == 'badges'
@@ -32,9 +33,11 @@
 
       scope.toggleSwitch = ()->
         if @article.type == 'assignments'
-          @article.prediction.predicted_points = if @article.prediction.predicted_points == @offValue then @onValue else @offValue
+          @article.prediction.predicted_points =
+            if @article.prediction.predicted_points == @offValue then @onValue else @offValue
         else if @article.type == 'badges'
-          @article.prediction.predicted_times_earned = if @article.prediction.predicted_times_earned == 0 then 1 else 0
+          @article.prediction.predicted_times_earned = \
+            if @article.prediction.predicted_times_earned == 0 then 1 else 0
         PredictorService.postPredictedArticle(@article)
   }
 ]

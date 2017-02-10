@@ -1,4 +1,5 @@
-@gradecraft.factory 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
+@gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
+(GradeCraftAPI, DebounceQueue, $http) ->
 
   grade = {}
   fileUploads = []
@@ -14,9 +15,10 @@
   _recipientType = ""
   _recipientId = ""
 
-  #------- grade state management -------------------------------------------------------------------------------------#
+  #------- grade state management ---------------------------------------------#
 
-  # This must be triggered whenever there is a change to points fields or selected levels
+  # This must be triggered whenever there is a
+  # change to points fields or selected levels
   calculateGradePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
@@ -32,9 +34,10 @@
     grade.pass_fail_status = "Pass"
 
   toggeleGradePassFailStatus = ()->
-    grade.pass_fail_status = if grade.pass_fail_status == "Pass" then "Fail" else "Pass"
+    grade.pass_fail_status =
+      if grade.pass_fail_status == "Pass" then "Fail" else "Pass"
 
-  #------- grade API calls --------------------------------------------------------------------------------------------#
+  #------- grade API calls ----------------------------------------------------#
 
   # When we get a grade response for student or group,
   # this initial setup is run to extract all included and meta information
@@ -44,8 +47,9 @@
     angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
 
     # - Uncomment this line if we want to force a status on autosave:
-    # - If no status has been sent, we set status as "In Progress" to be returned
-    # - on first autosave, in order to avoid faculty seeing partial grade information but no status.
+    # - If no status has been sent, we set status as "In Progress"
+    # - to be returned on first autosave, in order to avoid faculty seeing
+    # - partial grade information but no status.
     # - This will make the check for "disabled" on the submit buttons obsolete
     # grade.status = "In Progress" if !grade.status
 
@@ -71,20 +75,25 @@
       $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/grades/').then(
         (response) ->
 
-          # The API sends all student information so we can add the ability to custom grade group members
-          # For now we filter to the first student's grade to populate the view, since all students grades are identical
-          angular.copy(_.find(response.data.data, { attributes: {'student_id' : response.data.meta.student_ids[0] }}).attributes, grade)
+          # The API sends all student information so we can add the ability to
+          # custom grade group members. For now we filter to the first student's
+          # grade to populate the view, since all students grades are identical
+          angular.copy(_.find(response.data.data,
+            { attributes: {'student_id' : response.data.meta.student_ids[0] }
+            }).attributes, grade)
           grade.group_id = recipientId
 
           _getIncluded(response)
 
           # We store all grades in grades, so that when updateGrade is called,
-          # we can iterate through all group grades by id passing in params from grade
+          # we can iterate through all group grades by id passing in params
+          #from grade
           GradeCraftAPI.loadMany(grades, response.data)
 
           # The API sends criterion grades for all group members,
           # For now we filter to those for the first student
-          criterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
+          filteredCriterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
+          angular.copy(filteredCriterionGrades, criterionGrades)
 
           calculateGradePoints()
           GradeCraftAPI.logResponse(response)
@@ -116,7 +125,9 @@
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
     calculateGradePoints()
-    DebounceQueue.addEvent("grades", grade.id, _updateGrade, [returnURL], immediate)
+    DebounceQueue.addEvent(
+      "grades", grade.id, _updateGrade, [returnURL], immediate
+    )
 
 
   # Final "Submit Grade" actions, includes cleanup and redirect
@@ -146,7 +157,9 @@
       }
       criterion_grades: criterionGrades
     }
-    $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params).then(
+    $http.put(
+      "/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params
+    ).then(
       (response) ->
         GradeCraftAPI.logResponse(response)
         window.location = returnURL
@@ -154,7 +167,7 @@
         GradeCraftAPI.logResponse(response)
     )
 
-#------- Criterion Grade Methods for Rubric Grading -------------------------------------------------------------------#
+#------- Criterion Grade Methods for Rubric Grading ---------------------------#
 
   findCriterionGrade = (criterionId)->
     return false unless isRubricGraded
@@ -174,7 +187,8 @@
     criterionGrades.push(criterionGrade)
 
   setCriterionGradeLevel = (criterionId, level)->
-    criterionGrade = findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
+    criterionGrade =
+      findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
     criterionGrade.level_id = level.id
     criterionGrade.points = level.points
     calculateGradePoints()
@@ -182,7 +196,10 @@
   _updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
     return false unless criterionGrade
-    $http.put("/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields", criterion_grade: criterionGrade).then(
+    $http.put(
+      "/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields",
+      criterion_grade: criterionGrade
+    ).then(
       (response) ->
         GradeCraftAPI.logResponse(response)
       ,(response) ->
@@ -190,13 +207,17 @@
     )
 
   queueUpdateCriterionGrade = (criterionId, immediate=false) ->
-    # using criterionId for queue id since we are not assured to have a criterionGrade.id
-    DebounceQueue.addEvent("criterion_grades", criterionId, _updateCriterionGrade, [criterionId], immediate)
+    # using criterionId for queue id since we are not assured
+    # to have a criterionGrade.id
+    DebounceQueue.addEvent(
+      "criterion_grades", criterionId, _updateCriterionGrade,
+      [criterionId], immediate
+    )
 
-#------- Grade File Methods -------------------------------------------------------------------------------------------#
+#------- Grade File Methods ---------------------------------------------------#
 
   postAttachments = (files)->
-    fd = new FormData();
+    fd = new FormData()
     angular.forEach(files, (file, index)->
       fd.append("file_uploads[]", file)
     )
@@ -231,9 +252,12 @@
 
   return {
     grade: grade
+    grades: grades
     fileUploads: fileUploads
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
+
+    calculateGradePoints: calculateGradePoints
 
     gradeIsPassing: gradeIsPassing
     setGradeToPass: setGradeToPass

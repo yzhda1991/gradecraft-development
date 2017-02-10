@@ -1,6 +1,7 @@
 # raw_points (display only) for rubric
 
-@gradecraft.directive 'gradeRawPointsDisplay', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+@gradecraft.directive 'gradeRawPointsDisplay',
+['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/raw_points.html'
