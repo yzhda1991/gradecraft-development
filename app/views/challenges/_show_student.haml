@@ -26,5 +26,5 @@
           %td
             = @challenge.grade_level(grade) if challenge_grade
         %td 
-          - if team == current_student.team_for_course(current_course)
+          - if team == current_student.team_for_course(current_course) && challenge_grade
             = link_to glyph(:eye) + "See Grade Details", challenge_grade_path(challenge_grade.id), class: 'button'
