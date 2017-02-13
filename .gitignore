@@ -18,4 +18,3 @@ node_modules/*
 /.vagrant
 authorized_keys
 line-count.txt
-.byebug_history
