@@ -68,7 +68,11 @@ module ApplicationHelper
   def icon_tooltip(tooltip_id, icon, placement="top", &block)
     content_tag(:span, class: "has-tooltip", tabindex: "0", "aria-describedby": tooltip_id) do
       concat(glyph(icon))
-      hover_content = capture(&block)
+      if block_given?
+        hover_content = capture(&block)
+      else
+        ""
+      end
       concat(content_tag(:span, hover_content, class: "display-on-hover hover-style hover-style-#{placement}", id: tooltip_id, role: "tooltip"))
     end
   end

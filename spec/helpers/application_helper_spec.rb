@@ -18,8 +18,11 @@ describe ApplicationHelper do
       end
 
       it "renders the expected elements if no block is given" do
-        pending("the implementation")
-        your_test
+        icon_tooltip = helper.icon_tooltip(tooltip_id, icon) { }
+        expect(icon_tooltip).to have_tag "span", with: { class: "has-tooltip", "aria-describedby": "tooltip-id", tabindex: "0" } do
+          with_tag "i", with: { class: "fa-lock" }
+          with_tag "span", with: { class: "display-on-hover hover-style hover-style-top", id: "tooltip-id", role: "tooltip" }
+        end
       end
     end
 
@@ -35,8 +38,11 @@ describe ApplicationHelper do
       end
 
       it "renders the expected elements if no block is given" do
-        pending("the implementation")
-        your_test
+        icon_tooltip = helper.icon_tooltip(tooltip_id, icon, placement) { }
+        expect(icon_tooltip).to have_tag "span", with: { class: "has-tooltip", "aria-describedby": "tooltip-id", tabindex: "0" } do
+          with_tag "i", with: { class: "fa-lock" }
+          with_tag "span", with: { class: "display-on-hover hover-style hover-style-right", id: "tooltip-id", role: "tooltip" }
+        end
       end
     end
   end
