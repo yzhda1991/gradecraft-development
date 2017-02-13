@@ -35,7 +35,7 @@
           - if current_course.has_badges?
             %td
               - student.earned_badges_for_course(current_course).each do |badge|
-                = img_tooltip("earned-badge-tip_#{badge.id}", badge.try(:icon), "top") do
+                = tooltip("earned-badge-tip_#{badge.id}", nil, badge.try(:icon), "top") do
                   #{badge.try(:name)}
 
             %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count

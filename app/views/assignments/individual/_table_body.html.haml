@@ -32,11 +32,11 @@
     %td
       %span
       - if grade.feedback_read?
-        = icon_tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+        = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
           This feedback has been marked as read by the #{term_for :student}
 
       - elsif grade.feedback_reviewed?
-        = icon_tooltip("feedback-viewed-tip_#{presenter.assignment.id}", :eye) do
+        = tooltip("feedback-viewed-tip_#{presenter.assignment.id}", :eye) do
           This feedback has been viewed by the #{term_for :student}
 
     %td= grade.status

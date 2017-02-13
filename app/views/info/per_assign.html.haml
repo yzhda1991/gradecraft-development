@@ -18,11 +18,11 @@
             %th{"scope" => "col"} Median
             %th{"scope" => "col"}
               Ave
-              = icon_tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
+              = tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
                 The average of all grades, including those who earned zero
             %th{"scope" => "col"}
               Avg Earned
-              = icon_tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
+              = tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
                 The average of all scores above zero
             %th{"scope" => "col"} Predicted
             %th Submissions

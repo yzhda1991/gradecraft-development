@@ -2,7 +2,7 @@
   - assignment_list.each do |assignment|
     %li{class: presenter.starred?(assignment) ? "assignment-item starred" : "assignment-item"}
       - if presenter.starred?(assignment)
-        = icon_tooltip("predicted-tip_#{assignment.id}", :flag, "right") do
+        = tooltip("predicted-tip_#{assignment.id}", :flag, "right") do
           You have included this #{(term_for :assignment).downcase} in your grade prediction
       - if presenter.submitted?(assignment)
         %span.strikethrough.assignment-name= link_to "#{assignment.try(:name)}", assignment

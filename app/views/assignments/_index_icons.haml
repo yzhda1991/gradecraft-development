@@ -1,16 +1,16 @@
 - if assignment.is_unlockable?
-  = icon_tooltip("locked-assignment-tip_#{assignment.id}", :lock) do
+  = tooltip("locked-assignment-tip_#{assignment.id}", :lock) do
     %p This #{term_for :assignment} is Locked
     .small.italic In order to unlock it you must:
     %ol
       - assignment.unlock_conditions.each do |condition|
         %li= condition.requirements_description_sentence
 - if assignment.is_a_condition?
-  = icon_tooltip("key-assignment-tip_#{assignment.id}", :key) do
+  = tooltip("key-assignment-tip_#{assignment.id}", :key) do
     %p This #{term_for :assignment} is a Key
     %ol
       - assignment.unlock_keys.each do |key|
         %li= key.key_description_sentence
 - if assignment.has_groups?
-  = icon_tooltip("group-assignment-tip_#{assignment.id}", :group) do
+  = tooltip("group-assignment-tip_#{assignment.id}", :group) do
     This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}

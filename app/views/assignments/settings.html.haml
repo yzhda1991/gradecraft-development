@@ -15,35 +15,35 @@
             %th{scope: "col"} Name
 
             %th{scope: "col"}
-              = icon_tooltip("visible-setting-tip_#{assignment_type.id}", :eye) do
+              = tooltip("visible-setting-tip_#{assignment_type.id}", :eye) do
                 Visible to Students
 
             %th{scope: "col"}
-              = icon_tooltip("required-setting-tip_#{assignment_type.id}", :asterisk) do
+              = tooltip("required-setting-tip_#{assignment_type.id}", :asterisk) do
                 Required
 
             %th{scope: "col"}
-              = icon_tooltip("accepts-submissions-tip_#{assignment_type.id}", :paperclip) do
+              = tooltip("accepts-submissions-tip_#{assignment_type.id}", :paperclip) do
                 Accepts Submissions
 
             %th{scope: "col"}
-              = icon_tooltip("shown-timeline-tip_#{assignment_type.id}", :calendar) do
+              = tooltip("shown-timeline-tip_#{assignment_type.id}", :calendar) do
                 Shown in Timeline
 
             %th{scope: "col"}
-              = icon_tooltip("shown-predictor-tip_#{assignment_type.id}", :sliders) do
+              = tooltip("shown-predictor-tip_#{assignment_type.id}", :sliders) do
                 Shown in Predictor
 
             %th{scope: "col"}
-              = icon_tooltip("due-this-week-tip_#{assignment_type.id}", :list) do
+              = tooltip("due-this-week-tip_#{assignment_type.id}", :list) do
                 Shown in Due This Week
 
             %th{scope: "col"}
-              = icon_tooltip("student-logged-tip_#{assignment_type.id}", :pencil) do
+              = tooltip("student-logged-tip_#{assignment_type.id}", :pencil) do
                 Logged By Students
 
             %th{scope: "col"}
-              = icon_tooltip("release-required-tip_#{assignment_type.id}", "unlock-alt") do
+              = tooltip("release-required-tip_#{assignment_type.id}", "unlock-alt") do
                 Release Required
 
             %th{scope: "col"} Grade Form Preview
@@ -59,42 +59,42 @@
               %td= link_to assignment.name, assignment
               %td
                 - if assignment.visible?
-                  = icon_tooltip("visible-setting-tip_#{assignment_type.id}_#{assignment.id}", :eye) do
+                  = tooltip("visible-setting-tip_#{assignment_type.id}_#{assignment.id}", :eye) do
                     Visible to Students
 
               %td
                 - if assignment.required?
-                  = icon_tooltip("required-setting-tip_#{assignment_type.id}_#{assignment.id}", :asterisk) do
+                  = tooltip("required-setting-tip_#{assignment_type.id}_#{assignment.id}", :asterisk) do
                     Required
 
               %td
                 - if assignment.accepts_submissions?
-                  = icon_tooltip("accepts-submissions-tip_#{assignment_type.id}_#{assignment.id}", :paperclip) do
+                  = tooltip("accepts-submissions-tip_#{assignment_type.id}_#{assignment.id}", :paperclip) do
                     Accepts Submissions
 
               %td
                 - if assignment.include_in_timeline?
-                  = icon_tooltip("shown-timeline-tip_#{assignment_type.id}_#{assignment.id}", :calendar) do
+                  = tooltip("shown-timeline-tip_#{assignment_type.id}_#{assignment.id}", :calendar) do
                     Shown in Timeline
 
               %td
                 - if assignment.include_in_predictor?
-                  = icon_tooltip("shown-predictor-tip_#{assignment_type.id}_#{assignment.id}", :sliders) do
+                  = tooltip("shown-predictor-tip_#{assignment_type.id}_#{assignment.id}", :sliders) do
                     Shown in Predictor
 
               %td
                 - if assignment.include_in_to_do?
-                  = icon_tooltip("due-this-week-tip_#{assignment_type.id}_#{assignment.id}", :list) do
+                  = tooltip("due-this-week-tip_#{assignment_type.id}_#{assignment.id}", :list) do
                     Shown in Due This Week
 
               %td
                 - if assignment.student_logged?
-                  = icon_tooltip("student-logged-tip_#{assignment_type.id}_#{assignment.id}", :pencil) do
+                  = tooltip("student-logged-tip_#{assignment_type.id}_#{assignment.id}", :pencil) do
                     Logged By Students
 
               %td
                 - if assignment.release_necessary?
-                  = icon_tooltip("release-required-tip_#{assignment_type.id}_#{assignment.id}", "unlock-alt") do
+                  = tooltip("release-required-tip_#{assignment_type.id}_#{assignment.id}", "unlock-alt") do
                     Release Required
 
               %td
