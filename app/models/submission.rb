@@ -66,7 +66,7 @@ class Submission < ActiveRecord::Base
   end
 
   def graded_at
-    grade.graded_at if graded?
+    submission_grade.graded_at if graded?
   end
 
   def graded?
@@ -85,7 +85,7 @@ class Submission < ActiveRecord::Base
   # Used to report to the user that a change will be a resubmission because this
   # submission is already graded.
   def will_be_resubmitted?
-    grade.graded_and_visible_by_student? if grade.present?
+    submission_grade.graded_and_visible_by_student? if submission_grade.present?
   end
 
   # this is transitive so that once it is graded again, then
