@@ -2,6 +2,7 @@ require "csv"
 require "quote_helper"
 
 class CSVGradeImporter
+  PASS_FAIL_GRADE_VALUES = [0,1].freeze
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 
@@ -28,21 +29,20 @@ class CSVGradeImporter
             append_unsuccessful row, "Grade not specified"
             next
           end
+          if assignment.pass_fail? && !is_valid_pass_fail_grade(row.grade)
+            append_unsuccessful row, "Grade is invalid"
+            next
+          end
 
           grade = assignment.grades.where(student_id: student.id).first
-          begin
-            if row.update_grade? grade
-              grade = update_grade row, grade
-              report row, grade
-            elsif grade.present?
-              unchanged << grade
-            elsif grade.nil?
-              grade = create_grade row, assignment, student
-              report row, grade
-            end
-          rescue ArgumentError
-            append_unsuccessful row, "Row contains invalid data"
-            next
+          if row.update_grade? grade
+            grade = update_grade row, grade
+            report row, grade
+          elsif grade.present?
+            unchanged << grade
+          elsif grade.nil?
+            grade = create_grade row, assignment, student
+            report row, grade
           end
         end
       end
@@ -94,12 +94,21 @@ class CSVGradeImporter
   end
 
   def set_grade_score(row, grade)
-    score = Integer(row.grade || "")  # vs to_i, since we don't want to cast to an int if it's invalid
+    score = Integer(row.grade || "")
     if grade.assignment.pass_fail?
       grade.pass_fail_status = "Pass" if score == 1
       grade.pass_fail_status = "Fail" if score == 0
     else
       grade.raw_points = score
+    end
+  end
+
+  def is_valid_pass_fail_grade(grade)
+    begin
+      score = Integer(grade || "")  # vs to_i, since we don't want to cast to an int if it's invalid
+      return PASS_FAIL_GRADE_VALUES.include?(score)
+    rescue ArgumentError
+      return false
     end
   end
 
