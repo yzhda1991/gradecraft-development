@@ -129,6 +129,14 @@
       "grades", grade.id, _updateGrade, [returnURL], immediate
     )
 
+  _confirmMessage = ()->
+    message = "Are you sure you want to submit the grade for this assignment?"
+    if !isRubricGraded
+      return message
+    if _.every(criterionGrades, "level_id")
+      message
+    else
+      message + " You still have criteria without a selected level."
 
   # Final "Submit Grade" actions, includes cleanup and redirect
   submitGrade = (returnURL=null)->
@@ -136,6 +144,8 @@
       return alert "You must select a grade status before you can submit this grade"
 
     grade.status = grade.pending_status
+
+    return false unless confirm _confirmMessage()
 
     return queueUpdateGrade(true, returnURL) unless isRubricGraded
 
