@@ -25,7 +25,12 @@
   %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
   %hr.grading-divider
 
-%grade-status-select
-%grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
-%grade-last-updated
+.right
+  %grade-status-select
+  .right
+    %grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
+
+.clear
 %hr.grading-divider
+%span.italic 
+  %grade-last-updated
