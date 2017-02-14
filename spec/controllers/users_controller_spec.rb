@@ -149,15 +149,11 @@ describe UsersController do
       end
 
       it "renders any errors that have occured" do
-        user = User.create first_name: "Jimmy", last_name: "Page",
-          email: "csv_jimmy@example.com", username: "csv_jimmy", password: "blah"
-        user.update_attribute :username, "1" * 51
-
+        file = fixture_file "user_with_too_long_username.csv", "text/csv"
         post :upload, params: { file: file }
-
         expect(response.body).to include "1 Student Not Imported"
-        expect(response.body).to include "Jimmy,Page,csv_jimmy,csv_jimmy@example.com"
-        expect(response.body).to include "Username is too long"
+        expect(response.body).to include "csv_jimmy@example.com"
+        expect(response.body).to include "Unable to create or update user"
       end
 
       it "renders any errors that occur with the team creation" do
