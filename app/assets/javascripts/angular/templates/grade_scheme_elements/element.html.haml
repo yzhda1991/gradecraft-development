@@ -32,9 +32,9 @@
 
   .right
     %span
-      %button.add-element.button(type='button' ng-click='gradeService.addNew($index)' tabindex='0')
+      %button.add-element.button(type='button' ng-click='vm.addNew($index)' tabindex='0')
         %i.fa.fa-plus
         Add a level below
-      %button.remove-element.button.alert(type='button' ng-click='gradeService.remove($index)' aria-label="Remove Level")
+      %button.remove-element.button.alert(type='button' ng-click='vm.remove($index)' aria-label="Remove Level")
         Remove
         %i.fa.fa-times
