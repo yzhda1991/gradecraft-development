@@ -1,5 +1,4 @@
 require "spec_helper"
-require "./app/helpers/assignments_helper"
 
 describe AssignmentsHelper do
   class Helper

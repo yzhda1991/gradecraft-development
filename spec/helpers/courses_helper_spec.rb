@@ -1,5 +1,4 @@
 require "spec_helper"
-require "./app/helpers/courses_helper"
 
 describe CoursesHelper do
   let(:user) { double(:user) }

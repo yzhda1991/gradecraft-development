@@ -1,5 +1,4 @@
-require "rails_spec_helper"
-require "./app/helpers/history_helper"
+require "spec_helper"
 
 describe HistoryHelper do
   include RSpecHtmlMatchers

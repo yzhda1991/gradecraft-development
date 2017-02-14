@@ -1,5 +1,4 @@
-require "rails_spec_helper"
-require "./app/helpers/link_helper"
+require "spec_helper"
 
 describe LinkHelper do
   include RSpecHtmlMatchers
