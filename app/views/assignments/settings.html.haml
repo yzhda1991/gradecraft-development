@@ -15,7 +15,7 @@
         %span.grade-marker{tabindex: "0", "aria-describedby": "tip-grade-level-top"}
           = level_letter_grade(index)
           .display-on-hover.tooltip-with-caret.hover-style{role: "tooltip", :id=> "tip-grade-level-top"}
-            = level_point_threshold(index)
+            = points(level_point_threshold(index))
 
   .assignment-index-container
     - @assignment_types.each do |assignment_type|

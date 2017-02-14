@@ -22,7 +22,7 @@ module AssignmentsHelper
   end
 
   def percent_of_total_points(level_index)
-    (current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points).to_f / total_available_points.to_f * 100
+    ((current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points).to_f / total_available_points.to_f * 100).round(2)
   end
 
   def level_letter_grade(level_index)
@@ -30,6 +30,6 @@ module AssignmentsHelper
   end
 
   def level_point_threshold(level_index)
-    points(current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points)
+    current_course.grade_scheme_elements.order_by_highest_points[level_index].lowest_points
   end
 end
