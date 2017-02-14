@@ -7,7 +7,7 @@
       vm = this
 
       vm.loading = true
-      vm.gradeService = GradeService
+      vm.GradeService = GradeService
       vm.AssignmentService = AssignmentService
       vm.RubricService = RubricService
 

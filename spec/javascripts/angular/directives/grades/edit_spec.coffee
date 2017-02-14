@@ -2,21 +2,23 @@
 
 describe 'gradeEdit directive', ()->
 
+  beforeEach inject (_AssignmentService_,  _GradeService_, _RubricService_) ->
+
   describe 'for standard grades', ()->
 
     beforeEach ()->
       @http.whenGET("/api/assignments/1").respond(apiTestDoubles.assignment.standard)
       @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.standard)
-      @http.whenGET("/api/badges").respond(apiTestDoubles.badges)
+      @http.whenGET("/api/students/99/badges").respond(apiTestDoubles.badges)
       @element = @compile("<grade-edit assignment-id=1 recipient-type=student recipient-id=99 ></grade-edit>")(@rootScope)
       @rootScope.$digest()
 
     it 'loads the edit template', ()->
       expect($(@element).children("loading-message").length).toEqual(1)
       expect($(@element).children("article.grade-form-fields").length).toEqual(1)
-      expect($(@element).children("grade-status-select").length).toEqual(1)
-      expect($(@element).children("grade-submit-buttons").length).toEqual(1)
-      expect($(@element).children("grade-last-updated").length).toEqual(1)
+      expect($(@element).find("grade-status-select").length).toEqual(1)
+      expect($(@element).find("grade-submit-buttons").length).toEqual(1)
+      expect($(@element).find("grade-last-updated").length).toEqual(1)
 
     it 'adds a raw points input for standard grades', ()->
       expect($(@element).find("input.adjustment-points-input").length).toEqual(1)
@@ -30,9 +32,6 @@ describe 'gradeEdit directive', ()->
       expect($(@element).find("grade-file-uploader").length).toEqual(1)
       expect(@element.html()).toContain("Upload Feedback or Enter Below")
 
-    xit "includes earnable badges", ()->
-      expect((@element).find(".badge-index-section").length).toEqual(1)
-
   describe 'for group grades', ()->
 
     beforeEach ()->
@@ -44,6 +43,3 @@ describe 'gradeEdit directive', ()->
     it "does not include a file uploader", ()->
       expect($(@element).find("grade-file-uploader").length).toEqual(0)
       expect(@element.html()).toContain("Enter Text Feedback")
-
-    it "does not include earnable badges", ()->
-      expect($(@element).find(".badge-index-section").length).toEqual(0)
