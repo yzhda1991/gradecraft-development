@@ -113,9 +113,6 @@ end
 
 group :development, :test do
   gem 'pry'
-  gem 'byebug'
-  gem 'pry-remote'
-  gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'better_errors'
   gem 'jasmine-rails'

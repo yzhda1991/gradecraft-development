@@ -90,8 +90,6 @@ GEM
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
       rack (>= 0.9.0)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     bson (4.1.1)
     builder (3.2.3)
     byebug (9.0.5)
@@ -135,7 +133,6 @@ GEM
     dalli (2.7.6)
     database_cleaner (1.5.3)
     db-query-matchers (0.6.0)
-    debug_inspector (0.0.2)
     diff-lcs (1.2.5)
     docile (1.1.5)
     dotenv (2.1.1)
@@ -417,12 +414,6 @@ GEM
     pry-byebug (3.4.0)
       byebug (~> 9.0)
       pry (~> 0.10)
-    pry-remote (0.1.8)
-      pry (~> 0.9)
-      slop (~> 3.0)
-    pry-stack_explorer (0.4.9.2)
-      binding_of_caller (>= 0.7)
-      pry (>= 0.9.11)
     puma (3.6.0)
     rack (2.0.1)
     rack-mini-profiler (0.10.1)
@@ -638,7 +629,6 @@ DEPENDENCIES
   autoprefixer-rails
   aws-sdk (~> 2)
   better_errors
-  byebug
   cancancan
   capybara
   capybara-select2
@@ -686,8 +676,6 @@ DEPENDENCIES
   pg
   pry
   pry-byebug
-  pry-remote
-  pry-stack_explorer
   puma
   rack-mini-profiler
   rails
