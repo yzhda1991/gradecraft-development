@@ -1,5 +1,4 @@
-require "rails_spec_helper"
-require "./app/helpers/submissions_helper"
+require "spec_helper"
 
 describe SubmissionsHelper do
   let(:course) { create :course }

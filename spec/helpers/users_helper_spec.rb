@@ -1,5 +1,4 @@
 require "spec_helper"
-require "./app/helpers/users_helper"
 
 describe UsersHelper do
   class Helper
