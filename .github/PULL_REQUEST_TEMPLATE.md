@@ -22,6 +22,9 @@ other_pr_master | [link]()
 Notes regarding deployment the contained body of work.  These should note any
 db migrations, etc.
 
+### Gem dependencies
+- ADDED | REMOVED [gem_name](link)
+
 ### Migrations
 YES | NO
 
@@ -40,3 +43,6 @@ bundle; script/server
 List general components of the application that this PR will affect:
 
 * 
+
+======================
+Closes #[ISSUE NUMBER]

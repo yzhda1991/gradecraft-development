@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "deleting a team" do
   context "as a professor" do
-    let(:course) { create :course, has_teams: true }
+    let(:course) { build :course, has_teams: true }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:team) { create :team, name: "Section Name", course: course }

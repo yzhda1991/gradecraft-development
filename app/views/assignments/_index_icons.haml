@@ -1,22 +1,17 @@
 - if assignment.is_unlockable?
-  %span{tabindex: "0", "aria-describedby": "locked-assignment-tip_#{assignment.id}"}
-    %i.fa.fa-lock
-    .display-on-hover.hover-style{role: "tooltip", :id=> "locked-assignment-tip_#{assignment.id}"}
-      %h3 This #{term_for :assignment} is Locked
-      .small.italic In order to unlock it you must:
-      %ol
-        - assignment.unlock_conditions.each do |condition|
-          %li= condition.requirements_description_sentence
+  = tooltip("locked-assignment-tip_#{assignment.id}", :lock) do
+    %p This #{term_for :assignment} is Locked
+    .small.italic In order to unlock it you must:
+    %ol
+      - assignment.unlock_conditions.each do |condition|
+        %li= condition.requirements_description_sentence
 - if assignment.is_a_condition?
-  %span{tabindex: "0", "aria-describedby": "key-assignment-tip_#{assignment.id}"}
-    %i.fa.fa-key
-    .display-on-hover.hover-style{role: "tooltip", :id=> "key-assignment-tip_#{assignment.id}"}
-      %h3 This #{term_for :assignment} is a Key
-      %ol
-        - assignment.unlock_keys.each do |key|
-          %li= key.key_description_sentence
+  = tooltip("key-assignment-tip_#{assignment.id}", :key) do
+    %p This #{term_for :assignment} is a Key
+    %ol
+      - assignment.unlock_keys.each do |key|
+        %li= key.key_description_sentence
 - if assignment.has_groups?
-  %span{tabindex: "0", "aria-describedby": "group-assignment-tip_#{assignment.id}"}
-    %i.fa.fa-group.fa-fw
-    .display-on-hover.hover-style{role: "tooltip", :id=> "group-assignment-tip_#{assignment.id}"}
-      This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
+  = tooltip("group-assignment-tip_#{assignment.id}", :group) do
+    This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
+

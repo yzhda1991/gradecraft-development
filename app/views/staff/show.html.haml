@@ -30,5 +30,5 @@
           %td= grade.graded_at
           %td
             %ul.button-bar
-              %li= link_to glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
-              %li= link_to glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
+              %li= link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
+              %li= link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }

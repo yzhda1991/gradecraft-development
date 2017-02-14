@@ -1,4 +1,6 @@
 class Team < ActiveRecord::Base
+  include Copyable
+
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 
@@ -32,6 +34,11 @@ class Team < ActiveRecord::Base
   def self.find_by_course_and_name(course_id, name)
     where(course_id: course_id)
       .where("LOWER(name) = :name", name: name.downcase).first
+  end
+
+  def copy(attributes={})
+    ModelCopier.new(self).copy(attributes: attributes.merge(challenge_grade_score: nil, average_score: 0),
+      associations: [{ team_memberships: { team_id: :id }}])
   end
 
   # How many students are on the team

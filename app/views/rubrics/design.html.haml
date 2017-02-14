@@ -1,7 +1,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  #rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
+  .rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
 
     #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
       %h4#points-legend
@@ -17,10 +17,9 @@
       %span Rubric is saved automatically.
 
       .meets-expectations-hint
-        %span.italic{tabindex:'0', 'aria-describedby': 'mem-tip'}
-          What does "Set as 'meets expectations' mean?"
-          .display-on-hover.hover-style{role: 'tooltip', id: 'mem-tip'}
-            %p Adding this marker to a level sets a threshold so that all levels below it do not award any points.
+        %span What does "Set as 'meets expectations' mean?"
+        = tooltip("mem-tip", "info-circle", placement: "right") do
+          Adding this marker to a level sets a threshold so that all levels below it do not award any points
 
       - if ! @assignment.grade_with_rubric?
         .clear

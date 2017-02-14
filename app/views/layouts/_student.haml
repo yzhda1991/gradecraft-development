@@ -1,7 +1,7 @@
-.mainContainer.student{role: "main"}
+.mainContainer.student
   / Display errors and notifications
   = render partial: "layouts/navigation/student_profile_tabs", locals: {nav_class: 'sub-nav'}
-  .mainContent
+  %main.mainContent#main-content{role: "main"}
     .page-header
       %h1.pagetitle= title
     = render partial: "layouts/content"

@@ -1,30 +1,6 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
-.raw-points-wrapper
-  padding: 2px 0 6px 0
-
-.raw-points-wrapper.custom-input
-  padding: 0 0 5px 0
-
-.raw-points-label.disabled,
-select#grade_raw_points[disabled],
-input[type=text]#grade_raw_points[disabled]
-  display: none
-
-#updated-at, #updated-at-current
-  margin-top: .5rem
-  font-style: italic
-  float: left
-  padding: .25rem .5rem
-  border: 1px solid $color-grey-7
-  border-radius: $global-radius
-
-#updated-at-current
-  &.ng-animate
-    background: $color-white
-    border-color: $color-grey-7
-
 #available, #awarded
   padding: 1rem
   min-height: 150px
@@ -60,9 +36,6 @@ input[type=text]#grade_raw_points[disabled]
 .gradebox
   input
     border: none
-
-.grade-adjustment-points
- border: 1pt $color-blue-4 solid
 
 .grade-info-card-wrapper
   display: none

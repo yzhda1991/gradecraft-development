@@ -23,9 +23,14 @@
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of badges
-  # includes a student's predictions
+  # for students includes predictions
+  # for faculty using student id, includes badge awards and availability
   getBadges = (studentId)->
-    $http.get(GradeCraftAPI.uriPrefix(studentId) + 'badges').success( (response)->
+    if studentId
+      url = '/api/students/' + studentId + '/badges'
+    else
+      url = '/api/badges'
+    $http.get(url).success( (response)->
       GradeCraftAPI.loadMany(badges, response, {"include" : ['prediction']})
       _.each(badges, (badge)->
         # add earned badge count for generic predictor

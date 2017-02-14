@@ -1,3 +1,4 @@
+require_relative "../importers/student_importers/csv_student_importer"
 require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_or_updates_user"
 
@@ -10,6 +11,7 @@ class UsersController < ApplicationController
     except: [:activate, :activated, :edit_profile, :update_profile]
   before_action :ensure_admin?, only: [:all]
   skip_before_action :require_login, only: [:activate, :activated]
+  skip_before_action :require_course_membership, only: [:activate, :activated]
 
   def index
     @teams = current_course.teams

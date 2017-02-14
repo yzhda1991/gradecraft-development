@@ -1,10 +1,10 @@
 
 // Display top headers for expandable list of assignments.
-.assignment-index-container
+.assignment-index-container{role: "tablist"}
   - presenter.assignment_types.each do |assignment_type|
     .assignment_type.student{id: "assignment-type-#{assignment_type.id}" }
-      .assignment-type-bar.collapse
-        %h2.assignment-type-name= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
+      .collapse{role: "tab"}
+        %h2= glyph('angle-double-right') + "#{assignment_type.try(:name)}" 
         .points-summary
           // Display the student's points out of assignment total, if there is an assignment max value. Else
           // display the student's points out of the the current point total for assignment.
@@ -12,7 +12,7 @@
             .points-bar-graph-fill{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
           %span.assignment-type-points #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
 
-      .assignment-type-container
+      .assignment-type-container{role: "tabpanel"}
         - if presenter.assignment_type_message?(assignment_type)
           .assignment-type-message
             - if assignment_type.description?

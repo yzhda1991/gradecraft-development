@@ -55,6 +55,39 @@
 7. Browse to [http://localhost:5000/](http://localhost:5000/)
     - See db/samples.rb for dev usernames and passwords
 
+## Linting code
+
+Note: Both rubocop and coffeelint are installed directly on your machine, as they are
+not required for developement, and thus are not specified within the gemfile or node package.
+
+### To lint ruby:
+
+install rubocop:
+
+`gem install rubocop`
+
+then
+
+`$ rubocop [path/to/file.rb]`
+
+### To lint coffeescript:
+
+install coffeelint:
+
+`npm install -g coffeelint`
+
+to lint all files in `javascripts/`
+
+`rake lint:js`
+
+to lint a directory:
+
+`coffeelint -f coffeelint.json path/to/directory`
+
+to lint a single file:
+
+`coffeelint -f coffeelint.json path/to/file.coffee`
+
 ## Running specs
 
 To run all of the spec examples, you can run the following (this is also the default rake task):

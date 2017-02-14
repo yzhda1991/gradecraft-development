@@ -1,6 +1,7 @@
 = render partial: "students/table_filter"
 
 %table.student-index-table.dynatable.no-table-header
+  %caption.sr-only= "#{term_for :students}"
   %thead
     %tr
       %th Flag
@@ -47,10 +48,10 @@
           %td{ style: "display: none" }= student.earned_badges.count
         %td= student.last_activity_at || '(never)'
         %td
-          .right
-            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= glyph(:cog) + glyph("caret-down")
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
             %ul.options-menu
-              %li= link_to glyph(:eye) + "Preview as this student", student_preview_path(student)
+              %li= link_to decorative_glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
-              %li= link_to glyph(:edit) + "Edit", edit_user_path(student)
-              %li= link_to glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
+              %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(student)
+              %li= link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete

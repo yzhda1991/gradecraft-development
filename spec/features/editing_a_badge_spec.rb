@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing a badge" do
   context "as a professor" do
-    let(:course) { create :course, has_badges: true}
+    let(:course) { build :course, has_badges: true}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
@@ -20,7 +20,7 @@ feature "editing a badge" do
       expect(current_path).to eq badges_path
 
       within(".pageContent") do
-        first(:link, "Fancy Badge").click
+        click_link "Fancy Badge"
       end
 
       expect(current_path).to eq badge_path(badge.id)

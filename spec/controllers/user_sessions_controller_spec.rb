@@ -37,17 +37,19 @@ describe UserSessionsController do
   end
 
   describe "lti_create" do
+    let(:user_create_result) { { user: user } }
     let(:user) { build_stubbed(:user) }
     let(:course) { create(:course) }
 
-    before do
+    before(:each) do
       allow(subject).to receive(:auth_hash).and_return params
-      allow(User).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return user
-      allow(Course).to receive(:find_or_create_by_lti_auth_hash).with(params).and_return course
+      allow(user_create_result).to receive(:success?).and_return true
+      allow(Services::CreatesOrUpdatesUserFromLTI).to receive(:create_or_update).with(params).and_return user_create_result
+      allow(Services::CreatesOrUpdatesCourseFromLTI).to receive(:create_or_update).with(params).and_return({ course: course })
     end
 
     context "when there is no context role" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "" }}) }
 
       it "redirects to dashboard" do
         expect(post :lti_create, params: params).to redirect_to dashboard_path
@@ -55,7 +57,7 @@ describe UserSessionsController do
     end
 
     context "when there is a context role" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "instructor" }}) }
 
       it "redirects to dashboard" do
         expect(post :lti_create, params: params).to redirect_to dashboard_path
@@ -63,12 +65,25 @@ describe UserSessionsController do
     end
 
     context "when the course membership creation fails" do
-      let(:params) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "instructor" }}) }
 
       before(:each) { allow(CourseMembership).to receive(:create_or_update_from_lti).and_return false }
 
       it "redirects to root" do
         expect(post :lti_create, params: params).to redirect_to root_path
+      end
+    end
+
+    context "when the user creation fails" do
+      let(:params) { OmniAuth::AuthHash.new("extra" => { "raw_info" => { "roles" => "instructor" }}) }
+
+      before(:each) { allow(user_create_result).to receive(:success?).and_return false }
+
+      it "redirects to the errors path" do
+        allow(user_create_result).to receive(:message).and_return "An error occurred"
+        allow(user_create_result).to receive(:error_code).and_return "400"
+        expect(post :lti_create, params: params).to redirect_to errors_path(error_type: "lti_auth_with_email_but_not_name_info",
+          status_code: user_create_result.error_code)
       end
     end
   end
@@ -92,7 +107,6 @@ describe UserSessionsController do
   end
 
   describe "exit_student_impersonation" do
-
     it "returns session to faculty" do
       allow(subject).to receive(:login) { student }
       session[:impersonating_agent_id] = professor.id

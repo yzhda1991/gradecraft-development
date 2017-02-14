@@ -39,15 +39,67 @@ describe CSVGradeImporter do
           create :course_membership, :student, user_id: student.id, course_id: course.id
         end
 
-        it "creates the grade if it is not there" do
-          result = subject.import(course, assignment)
-          grade = Grade.unscoped.last
-          expect(grade.raw_points).to eq 4000
-          expect(grade.feedback).to eq "You did great!"
-          expect(grade.status).to eq "Graded"
-          expect(grade.instructor_modified).to eq true
-          expect(result.successful.count).to eq 1
-          expect(result.successful.last).to eq grade
+        context "when the assignment is of pass/fail type" do
+          let(:assignment) { create :assignment, course: course, pass_fail: true }
+          let(:file) { fixture_file "pass_fail_grades.csv", "text/csv" }
+
+          it "creates the grade if it is not there" do
+            result = subject.import(course, assignment)
+            grade = Grade.unscoped.last
+            expect(grade.raw_points).to eq 0
+            expect(grade.pass_fail_status).to eq "Pass"
+            expect(grade.feedback).to eq "Rock on!"
+            expect(grade.status).to eq "Graded"
+            expect(grade.instructor_modified).to eq true
+            expect(result.successful.count).to eq 1
+            expect(result.successful.last).to eq grade
+          end
+
+          it "contains an unsuccessful row if the grade is not valid" do
+            create :user, email: "don.henley@eagles.com", courses: [course], role: :student
+            result = subject.import(course, assignment)
+            expect(result.unsuccessful.count).to eq 4
+            expect(result.unsuccessful.pluck(:errors)).to include "Grade is invalid"
+          end
+
+          it "contains an unsuccessful row if the grade is not valid" do
+            create :user, email: "steve.perry@journey.com", courses: [course], role: :student
+            result = subject.import(course, assignment)
+            expect(result.unsuccessful.count).to eq 4
+            expect(result.unsuccessful.pluck(:errors)).to include "Grade is invalid"
+          end
+
+          it "updates the grade if it is already there" do
+            create :grade, assignment: assignment, student: student, pass_fail_status: "Fail"
+            subject.import(course, assignment)
+            grade = Grade.last
+            expect(grade.raw_points).to eq 0
+            expect(grade.pass_fail_status).to eq "Pass"
+            expect(grade.feedback).to eq "Rock on!"
+            expect(grade.graded_at).to_not be_nil
+          end
+        end
+
+        context "when the assignment is not pass/fail type" do
+          it "creates the grade if it is not there" do
+            result = subject.import(course, assignment)
+            grade = Grade.unscoped.last
+            expect(grade.raw_points).to eq 4000
+            expect(grade.feedback).to eq "You did great!"
+            expect(grade.status).to eq "Graded"
+            expect(grade.instructor_modified).to eq true
+            expect(result.successful.count).to eq 1
+            expect(result.successful.last).to eq grade
+          end
+
+          it "updates the grade if it is already there" do
+            create :grade, assignment: assignment, student: student, raw_points: 1000
+            subject.import(course, assignment)
+            grade = Grade.last
+            expect(grade.raw_points).to eq 4000
+            expect(grade.feedback).to eq "You did great!"
+            expect(grade.graded_at).to_not be_nil
+          end
         end
 
         it "timestamps the grade" do
@@ -55,15 +107,6 @@ describe CSVGradeImporter do
           result = subject.import(course, assignment)
           grade = Grade.unscoped.last
           expect(grade.graded_at).to be > current_time
-        end
-
-        it "updates the grade if it is already there" do
-          create :grade, assignment: assignment, student: student, raw_points: 1000
-          subject.import(course, assignment)
-          grade = Grade.last
-          expect(grade.raw_points).to eq 4000
-          expect(grade.feedback).to eq "You did great!"
-          expect(grade.graded_at).to_not be_nil
         end
 
         it "does not update the grade if the grade and the feedback are the same as the one being imported" do

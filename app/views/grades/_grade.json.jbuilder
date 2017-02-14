@@ -1,4 +1,4 @@
-json.(grade, :id, :status, :raw_points, :feedback, :is_custom_value, :student_id,
+json.(grade, :id, :status, :raw_points, :feedback, :student_id,
   :assignment_id)
 
 json.student_visible GradeProctor.new(grade).viewable?

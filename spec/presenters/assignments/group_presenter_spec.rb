@@ -20,7 +20,7 @@ describe Assignments::GroupPresenter do
       grade = double(:grade)
       grades= double(:relation, find_by: grade)
       allow(assignment).to receive(:grades).and_return grades
-      expect(subject.grade_for(double(:user, id: 123))).to eq grade
+      expect(subject.grade_for_student(double(:user, id: 123))).to eq grade
     end
   end
 

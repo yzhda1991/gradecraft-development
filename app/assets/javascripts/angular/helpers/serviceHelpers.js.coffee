@@ -13,18 +13,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   }
 
   termFor = (article)->
-    _termFor[article]
+    _termFor[article.toLowerCase()]
 
   setTermFor = (article,term)->
     _termFor[article] = term
-
-  # used to destinguish student and faculty routes.
-  # On init, students views do not send student id.
-  uriPrefix = (studentId)->
-    if studentId
-      '/api/students/' + studentId + '/'
-    else
-      'api/'
 
   # ----------Methods for handling JSON API response data ---------------------#
   #     See http://jsonapi.org/format/ for details of data structure
@@ -72,9 +64,9 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     )
 
   # copy to a single model from a response
-  setItem = (model, type, response) ->
+  loadItem = (model, type, response, options={"include":[]}) ->
     if type == response.data.type
-      angular.copy(dataItem(response.data), model)
+      angular.copy(dataItem(response.data, response, options), model)
 
   # add to collection from a response with a single item
   addItem = (modelArray, type, response)->
@@ -101,10 +93,9 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   return {
     termFor: termFor
     setTermFor: setTermFor
-    uriPrefix: uriPrefix
     logResponse: logResponse
     loadMany: loadMany
-    setItem: setItem
+    loadItem: loadItem
     addItem: addItem
     addItems: addItems
     deleteItem: deleteItem

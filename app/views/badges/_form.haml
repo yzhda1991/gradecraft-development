@@ -88,16 +88,8 @@
           - @badge.badge_files.each do |bf|
             - next if bf.new_record?
             %li
-              - if bf.file_processing
-                = "#{bf.filename}"
-                %span{tabindex: "0", "aria-describedby": "badge-file-upload-tip"}
-                  %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-                  .display-on-hover.hover-style{role: "tooltip", id: "badge-file-upload-tip"}
-                    Refresh page to confirm upload has completed
-              - else
-                = link_to bf.filename, bf.url, :target => "_blank"
-                = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", badge_id: @badge.id, :upload_id => bf.id } )
-
+              = link_to bf.filename, bf.url, :target => "_blank"
+              = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", badge_id: @badge.id, :upload_id => bf.id } )
   .submit-buttons
     %ul
       %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", class: "button"

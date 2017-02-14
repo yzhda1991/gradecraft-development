@@ -102,7 +102,8 @@ class User < ActiveRecord::Base
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   validates :username, presence: true,
-                    length: { maximum: 50 }
+                    length: { maximum: 50 },
+                    uniqueness: { case_sensitive: false }
   validates :email, presence: true,
                     format: { with: email_regex },
                     uniqueness: { case_sensitive: false }
@@ -120,29 +121,16 @@ class User < ActiveRecord::Base
     @internal = value
   end
 
-  def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { email: auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"] }
-    where(criteria).first || create!(criteria) do |u|
-      u.lti_uid = auth_hash["extra"]["raw_info"]["lis_person_sourcedid"]
-      u.first_name = auth_hash["extra"]["raw_info"]["lis_person_name_given"]
-      u.last_name = auth_hash["extra"]["raw_info"]["lis_person_name_family"]
-      email = auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"]
-      username = email.split("@")[0]
-      u.username = username
-      u.kerberos_uid = username
-    end
-  end
-
   def self.find_by_kerberos_auth_hash(auth_hash)
     where(kerberos_uid: auth_hash["uid"]).first
   end
 
   def self.find_by_insensitive_email(email)
-    where("LOWER(email) = :email", email: email.downcase).first
+    where("LOWER(email) = :email", email: (email || "").downcase).first
   end
 
   def self.find_by_insensitive_username(username)
-    where("LOWER(username) = :username", username: username.downcase).first
+    where("LOWER(username) = :username", username: (username || "").downcase).first
   end
 
   def self.email_exists?(email)

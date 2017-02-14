@@ -1,8 +1,9 @@
 %table.announcements
+  %caption.sr-only Announcements
   %thead
     %tr
       %th Author
-      %th Subject
+      %th Title
       %th Sent
       - if current_user.is_staff?(current_course)
         %th Read

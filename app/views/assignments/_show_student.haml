@@ -5,10 +5,10 @@
     - if presenter.grades_available_for? current_student
       %section
         %h2 My Grade
-        = render partial: "grades/grade_content", locals: { grade: presenter.grade_for(current_student) }
+        = render partial: "grades/grade_content", locals: { grade: presenter.grade_for_student(current_student) }
         %hr.dotted
 
-      - if !presenter.hide_analytics?
+      - if presenter.has_viewable_analytics? current_student
         %section
           %h2 Class Analytics
           - if presenter.assignment.has_groups?
@@ -17,7 +17,7 @@
             = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
           %hr.dotted
 
-    - if presenter.has_viewable_submission_for?(current_student)
+    - if presenter.has_viewable_submission_for? current_student
       %section
         %h2 My Submission
         = render partial: "submissions/submission_content",

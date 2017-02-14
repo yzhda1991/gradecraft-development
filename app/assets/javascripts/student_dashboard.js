@@ -149,7 +149,16 @@ function initSlickSlider(startIndex) {
     adaptiveHeight: true, 
     infinite: false
   });
+
+  $('.slide-header').each(function () {
+      var $slide = $(this).parent();
+      if ($slide.attr('aria-describedby') != undefined) { // ignore extra/cloned slides
+          $(this).attr('id', $slide.attr('aria-describedby'));
+      }
+  });
 }
+
+
 
 // Open class info card and submenu in top nav on click and hide on body click
 $(document).on('click', function(event) {

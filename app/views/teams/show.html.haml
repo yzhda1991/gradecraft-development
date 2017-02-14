@@ -35,17 +35,15 @@
           - if current_course.has_badges?
             %td
               - student.earned_badges_for_course(current_course).each do |badge|
-                %span{tabindex: "0", "aria-describedby": "earned-badge-tip_#{badge.id}"}
-                  %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
-                  .display-on-hover.hover-style{role: "tooltip", id: "earned-badge-tip_#{badge.id}"}
-                    = badge.try(:name)
+                = tooltip("earned-badge-tip_#{badge.id}", badge.try(:icon), type: "image") do
+                  #{badge.try(:name)}
 
             %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
-                %li= link_to glyph(:edit) + "Edit", edit_user_path(student), class: "button"
+                %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(student), class: "button"
 
   %h2.subtitle #{term_for :challenge } Grades
 
@@ -69,7 +67,7 @@
             .right
               %ul.button-bar
                 - if challenge.challenge_grade_for_team(@team).present?
-                  %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
-                  %li= link_to glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), class: "button", data: { confirm: "Are you sure?", method: :delete }
+                  %li= link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
+                  %li= link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), class: "button", data: { confirm: "Are you sure?", method: :delete }
                 - else
-                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id), class: "button"
+                  %li= link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id), class: "button"

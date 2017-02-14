@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "creating a new badge" do
   context "as a professor" do
-    let(:course) { create :course, has_badges: true}
+    let(:course) { build :course, has_badges: true}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 

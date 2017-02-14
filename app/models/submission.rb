@@ -61,7 +61,7 @@ class Submission < ActiveRecord::Base
   multiple_files :submission_files
 
   def self.submitted_this_week(assignment_type)
-    assignment_type.submissions.submitted.where("submissions.updated_at > ? ", 7.days.ago)
+    assignment_type.submissions.submitted.where("submissions.submitted_at > ? ", 7.days.ago)
   end
 
   def graded_at

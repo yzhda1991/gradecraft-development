@@ -18,16 +18,12 @@
             %th{"scope" => "col"} Median
             %th{"scope" => "col"}
               Ave
-              %span{tabindex: "0", "aria-describedby": "ave-tip_#{assignment_type.id}"}
-                %i.fa.fa-info-circle
-                .display-on-hover.hover-style{role: "tooltip", id: "ave-tip_#{assignment_type.id}"}
-                  The average of all grades, including those who earned zero
+              = tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
+                The average of all grades, including those who earned zero
             %th{"scope" => "col"}
               Avg Earned
-              %span{tabindex: "0", "aria-describedby": "ave-earned-tip_#{assignment_type.id}"}
-                %i.fa.fa-info-circle
-                .display-on-hover.hover-style{role: "tooltip", id: "ave-earned-tip_#{assignment_type.id}"}
-                  The average of all scores above zero
+              = tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
+                The average of all scores above zero
             %th{"scope" => "col"} Predicted
             %th Submissions
             %th Grades
@@ -50,5 +46,5 @@
                 %th= points assignment.grade_count
                 %th
                   %ul.button-bar.right
-                    %li= link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                    %li= link_to glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"
+                    %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
+                    %li= link_to decorative_glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"

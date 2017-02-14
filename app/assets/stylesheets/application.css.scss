@@ -7,7 +7,6 @@
   *= require font-awesome
   *= require select2
   *= require jquery.dynatable
-  *= require angular-tooltips.min
   *= require stacktable.css
   *= require slick.css
   *= require plugins/char_counter.min.css
@@ -52,7 +51,6 @@
   *= require ./components/_history_timeline
   *= require ./components/_newsletter
   *= require ./components/_icons
-  *= require ./components/_accessibility
   *= require ./components/_alerts
   *= require ./components/_tooltips
   *= require ./pages/_analytics
@@ -60,6 +58,7 @@
   *= require ./pages/_downloads
   *= require ./pages/_features
   *= require ./pages/_grading_scheme
+  *= require ./pages/_edit_grades
   *= require ./pages/_predictor
   *= require ./pages/_grades
   *= require ./pages/_badges

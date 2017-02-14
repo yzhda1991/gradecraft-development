@@ -1,20 +1,44 @@
 json.data @grades do |grade|
-  json.type "grades"
-  json.id   grade.id.to_s
+  json.partial! 'api/grades/grade', grade: grade
+end
 
-  json.attributes do
-    json.id                         grade.id
-    json.assignment_id              grade.assignment_id
-    json.student_id                 grade.student_id
-    json.feedback                   grade.feedback
-    json.status                     grade.status
-    json.adjustment_points          grade.adjustment_points
-    json.adjustment_points_feedback grade.adjustment_points_feedback
+json.included do
+  if @file_uploads.present?
+    json.array! @file_uploads do |file_upload|
+      json.type "file_uploads"
+      json.id file_upload.id.to_s
+      json.attributes do
+        json.id file_upload.id
+        json.grade_id file_upload.grade_id
+        json.filename file_upload.filename
+        json.filepath file_upload.filepath
+        json.file_processing file_upload.file_processing
+      end
+    end
+  end
+
+  if @criterion_grades.present?
+    json.array! @criterion_grades do |criterion_grade|
+      json.type "criterion_grades"
+      json.id criterion_grade.id.to_s
+      json.attributes do
+        json.id             criterion_grade.id
+        json.grade_id       criterion_grade.grade_id
+        json.assignment_id  criterion_grade.assignment_id
+        json.points         criterion_grade.points
+        json.criterion_id   criterion_grade.criterion_id
+        json.level_id       criterion_grade.level_id
+        json.student_id     criterion_grade.student_id
+        json.comments       criterion_grade.comments
+      end
+    end
   end
 end
 
 json.meta do
   json.student_ids @student_ids
   json.grade_status_options @grade_status_options
+  json.threshold_points     @assignment.threshold_points
+  json.is_rubric_graded     @assignment.grade_with_rubric?
 end
 

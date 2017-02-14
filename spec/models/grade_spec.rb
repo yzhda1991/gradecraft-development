@@ -232,6 +232,12 @@ describe Grade do
         described_class.for_student_email_and_assignment_id("blah", assignment.id)
       ).to be_nil
     end
+
+    it "returns nil if the specified student email is nil" do
+      expect(
+        described_class.for_student_email_and_assignment_id(nil, assignment.id)
+      ).to be_nil
+    end
   end
 
   describe ".find_or_create" do

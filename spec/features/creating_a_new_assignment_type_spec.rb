@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "creating a new assignment type" do
   context "as a professor" do
-    let(:course) { create :course, name: "Course Name", assignment_term: "Assignment"}
+    let(:course) { build :course }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 

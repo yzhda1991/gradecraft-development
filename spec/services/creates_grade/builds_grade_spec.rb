@@ -39,7 +39,7 @@ describe Services::Actions::BuildsGrade do
     result = described_class.execute context
     expect(result[:grade].assignment_id).to eq world.assignment.id
     expect(result[:grade].student_id).to eq world.student.id
-    expect(result[:grade].full_points).to eq attributes["points_possible"]
+    expect(result[:grade].full_points).to eq world.assignment.full_points
     expect(result[:grade].raw_points).to eq world.assignment.full_points - 10
     expect(result[:grade].status).to eq "Released"
     expect(result[:grade].feedback).to eq "good jorb!"

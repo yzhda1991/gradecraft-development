@@ -61,6 +61,7 @@ class Course < ActiveRecord::Base
     c.has_many :groups
     c.has_many :group_memberships
     c.has_many :linked_courses, dependent: :destroy
+    c.has_many :rubrics, through: :assignments
     c.has_many :submissions
     c.has_many :teams
     c.has_many :course_memberships
@@ -90,23 +91,13 @@ class Course < ActiveRecord::Base
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
-  def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
-    where(criteria).first || create!(criteria) do |c|
-      c.lti_uid = auth_hash["extra"]["raw_info"]["context_id"]
-      c.course_number = auth_hash["extra"]["raw_info"]["context_label"]
-      c.name = auth_hash["extra"]["raw_info"]["context_title"]
-      c.year = Date.today.year
-    end
-  end
-
   def copy(copy_type, attributes={})
     if copy_type != "with_students"
-      copy_with_associations(attributes={lti_uid: nil}, [])
+      copy_with_associations(attributes.merge(lti_uid: nil), [])
     else
       begin
         Course.skip_callback(:create, :after, :create_admin_memberships)
-        copy_with_associations(attributes={lti_uid: nil}, [:course_memberships])
+        copy_with_associations(attributes.merge(lti_uid: nil), [:course_memberships, :teams])
       ensure
         Course.set_callback(:create, :after, :create_admin_memberships)
       end

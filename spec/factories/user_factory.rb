@@ -7,8 +7,8 @@ FactoryGirl.define do
 
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    username { Faker::Internet.user_name }
-    email { Faker::Internet.email }
+    username { Faker::Internet.unique.user_name }
+    email { Faker::Internet.unique.email }
     password { "secret" }
 
     # Define course_memberships with an optional role

@@ -34,13 +34,21 @@ describe User do
 
   describe ".find_by_insensitive_email" do
     it "should return the user no matter what the case the email address is in" do
-      expect(User.find_by_insensitive_email(student.email.upcase)).to eq student
+      expect(described_class.find_by_insensitive_email(student.email.upcase)).to eq student
+    end
+
+    it "returns nil if the specified email is nil" do
+      expect(described_class.find_by_insensitive_email(nil)).to be_nil
     end
   end
 
   describe ".find_by_insensitive_username" do
     it "should return the user no matter what the case the username is in" do
       expect(User.find_by_insensitive_username(student.username.upcase)).to eq student
+    end
+
+    it "returns nil if the specified email is nil" do
+      expect(described_class.find_by_insensitive_email(nil)).to be_nil
     end
   end
 

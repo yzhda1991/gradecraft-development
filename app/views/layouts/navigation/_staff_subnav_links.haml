@@ -1,59 +1,59 @@
 %h5 Overview
-%li= link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
+%li= link_to_unless_current decorative_glyph(:home) + "Dashboard", dashboard_path
 %li
   - grading_status_count = grading_status_count_for(current_course)
-  = link_to_unless_current glyph("flag-checkered") + "Grading Status", grading_status_path do |name|
+  = link_to_unless_current decorative_glyph("flag-checkered") + "Grading Status", grading_status_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if grading_status_count > 0
     %div.notification-badge.staff-notification-badge= grading_status_count
 
 - if current_course.student_weighted?
-  %li= link_to_unless_current glyph(:cubes) + "#{term_for :weight} Choices", multiplier_choices_path
+  %li= link_to_unless_current decorative_glyph(:cubes) + "#{term_for :weight} Choices", multiplier_choices_path
 
 - if current_course.has_badges?
-  %li= link_to_unless_current glyph(:shield) + "Awarded #{current_course.badge_term} Chart", earned_badges_path
+  %li= link_to_unless_current decorative_glyph(:shield) + "Awarded #{current_course.badge_term} Chart", earned_badges_path
 
 %li
-  = link_to_unless_current glyph("file-archive-o") + "Course Data Exports", downloads_path
-%li= link_to_unless_current glyph("bar-chart") + "Analytics", analytics_students_path
-%li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path
-%li= link_to_unless_current glyph(:calendar) + "Calendar Events", events_path
+  = link_to_unless_current decorative_glyph("file-archive-o") + "Course Data Exports", downloads_path
+%li= link_to_unless_current decorative_glyph("bar-chart") + "Analytics", analytics_students_path
+%li= link_to_unless_current decorative_glyph(:bullhorn) + "Announcements", announcements_path
+%li= link_to_unless_current decorative_glyph(:calendar) + "Calendar Events", events_path
 
 %hr
 
 %h5 Coursework
-%li= link_to_unless_current glyph('file-text') + "#{term_for :assignments}", assignments_path
+%li= link_to_unless_current decorative_glyph('file-text') + "#{term_for :assignments}", assignments_path
 - if current_course.has_badges?
-  %li= link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
+  %li= link_to_unless_current decorative_glyph(:shield) + "#{term_for :badges}", badges_path
 - if current_course.has_team_challenges?
-  %li= link_to_unless_current glyph(:trophy) + "#{term_for :challenges}", challenges_path
+  %li= link_to_unless_current decorative_glyph(:trophy) + "#{term_for :challenges}", challenges_path
 
 %hr
 
 %h5 Users
-%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
+%li= link_to_unless_current decorative_glyph(:user) + "#{term_for :students}", students_path
 - if current_course.has_teams?
-  %li= link_to_unless_current glyph(:users) + "#{term_for :teams}", teams_path
+  %li= link_to_unless_current decorative_glyph(:users) + "#{term_for :teams}", teams_path
 %li
-  = link_to_unless_current glyph("user-plus") + "#{term_for :groups}", groups_path do |name|
+  = link_to_unless_current decorative_glyph("user-plus") + "#{term_for :groups}", groups_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if current_course.groups_to_review_count > 0
     %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
-%li= link_to_unless_current glyph("user-secret") + "Staff", staff_index_path
-%li= link_to_unless_current glyph("user-o") + "Observers", observers_path
+%li= link_to_unless_current decorative_glyph("user-secret") + "Staff", staff_index_path
+%li= link_to_unless_current decorative_glyph("user-o") + "Observers", observers_path
 
 %hr
 
 %h5 Course Setup
-%li= link_to_unless_current glyph(:cog) + "Course Settings", edit_course_path(current_course)
-%li= link_to_unless_current glyph(:tasks) + "Grade Predictor Preview", predictor_path
-%li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
+%li= link_to_unless_current decorative_glyph(:cog) + "Course Settings", edit_course_path(current_course)
+%li= link_to_unless_current decorative_glyph(:tasks) + "Grade Predictor Preview", predictor_path
+%li= link_to_unless_current decorative_glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 
 .hide-for-small
   %hr
 
   %h5{ class: "make-lizards" } Admin
-  %li= link_to_unless_current glyph(:plus) + "New Course", new_course_path
+  %li= link_to_unless_current decorative_glyph(:plus) + "New Course", new_course_path
   - if current_user_is_admin?
-    %li= link_to_unless_current glyph(:university) + "My Courses", courses_path
-    %li= link_to_unless_current glyph("user-times") + "All Users", users_path
+    %li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
+    %li= link_to_unless_current decorative_glyph("user-times") + "All Users", users_path

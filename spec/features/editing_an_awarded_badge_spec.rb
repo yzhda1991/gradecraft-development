@@ -2,14 +2,14 @@ require "rails_spec_helper"
 
 feature "editing an awarded a badge" do
   context "as a professor" do
-    let(:course) { create :course, has_badges: true }
+    let(:course) { build :course, has_badges: true }
     let!(:course_membership) do
       create :course_membership, :professor, user: professor, course: course
     end
     let(:professor) { create :user }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
-    let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
-    let(:student_2) { create :user, first_name: "Ron", last_name: "Weasley" }
+    let(:student) { build :user, first_name: "Hermione", last_name: "Granger" }
+    let(:student_2) { build :user, first_name: "Ron", last_name: "Weasley" }
     let!(:course_membership_2) do
       create :course_membership, :student, user: student, course: course
     end

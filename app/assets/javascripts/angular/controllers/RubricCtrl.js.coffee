@@ -1,8 +1,8 @@
-@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'RubricService', '$http', '$q', ($scope, Restangular, Criterion, CourseBadge, RubricService, $http, $q) ->
+@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'RubricFactoryService', '$http', '$q', ($scope, Restangular, Criterion, CourseBadge, RubricFactoryService, $http, $q) ->
   Restangular.setRequestSuffix('.json')
 
-  $scope.courseBadges = RubricService.badges
-  $scope.criteria = RubricService.criteria
+  $scope.courseBadges = RubricFactoryService.badges
+  $scope.criteria = RubricFactoryService.criteria
 
   $scope.savedCriterionCount = 0
 
@@ -18,13 +18,13 @@
     # we need to wait until the badges are created before
     # making this call.
     queCriteriaAfterBadges = ()->
-      if (RubricService.badgesAvailable() == false)
+      if (RubricFactoryService.badgesAvailable() == false)
         window.setTimeout(queCriteriaAfterBadges, 100)
       else
-        RubricService.getCriteria($scope.assignmentId, $scope)
+        RubricFactoryService.getCriteria($scope.assignmentId, $scope)
 
     promises = [
-      RubricService.getBadges(),
+      RubricFactoryService.getBadges(),
       queCriteriaAfterBadges()
       ]
     $q.all(promises)

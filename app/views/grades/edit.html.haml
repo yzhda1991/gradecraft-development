@@ -1,10 +1,11 @@
-.pageContent
+.pageContent{"ng-app" => "gradecraft"}
   = render partial: "layouts/alerts", locals: { model: @grade }
 
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @grade.assignment }
 
+  %hr.grading-divider
+
   - if @grade.assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
-    %hr.dotted
 
     %section
 
@@ -12,9 +13,11 @@
       = render partial: "submissions/submission_content",
         locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
             assignment_id: @grade.assignment.id, course: current_course) }
-    %hr.dotted
+    %hr.grading-divider
 
-  - if @grade.assignment.grade_with_rubric?
-    = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, recipient_type: "student", recipient_id: @grade.student.id, grade: @grade, return_path: URI(request.referer || "").path,  grade_next_path: @grade_next_path }
-  - else
-    = render partial: "standard_edit", locals: { grade: @grade, badges: @badges, submission: @submission, recipient_type: "student", recipient_id: @grade.student.id }
+  %grade-edit{'assignment-id'=>"#{@grade.assignment.id}",
+    'recipient-type'=>"student",
+    'recipient-id'=>"#{@grade.student.id}",
+    'submit-path'=>"#{@submit_path}",
+    'grade-next-path'=>"#{@grade_next_path}"}
+

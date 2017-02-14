@@ -1,11 +1,8 @@
 @gradecraft = angular.module('gradecraft', [
-  'angularMoment',
-  'hideAfterFade',
   'ngAnimate',
   'ngDragDrop',
   'ngDraggable',
   'uiFx',
-  '720kb.tooltips',
   'restangular',
   'ui.sortable',
   'puElasticInput',
@@ -15,7 +12,6 @@
   'ngAnimate',
   'froala',
   'templates',
-  'fcsa-number',
   'helpers',
   'ngAria'
 ])

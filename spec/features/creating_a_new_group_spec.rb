@@ -2,13 +2,13 @@ require "rails_spec_helper"
 
 feature "creating a new group" do
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:assignment) { create :group_assignment, course: course, min_group_size: 2, max_group_size: 5 }
-    let(:student_1) { create :user, first_name: "Hermione", last_name: "Granger"}
+    let(:student_1) { build :user, first_name: "Hermione", last_name: "Granger"}
     let!(:course_membership_2) { create :course_membership, :student, user: student_1, course: course }
-    let(:student_2) { create :user, first_name: "Ron", last_name: "Weasley"}
+    let(:student_2) { build :user, first_name: "Ron", last_name: "Weasley"}
     let!(:course_membership_3) { create :course_membership, :student, user: student_2, course: course }
 
     before(:each) do

@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "editing a course's basic settings" do
   context "as a professor" do
-    let(:course) { create :course, name: "Course Name"}
+    let(:course) { build :course, name: "Course Name"}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 
