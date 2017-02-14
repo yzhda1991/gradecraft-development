@@ -64,4 +64,16 @@ module ApplicationHelper
     end
     "#{category}/#{arguments.join("/")}"
   end
+  
+  def tooltip(tooltip_id, src, type: 'icon', placement: 'top', &block)
+    content_tag(:span, class: "has-tooltip", tabindex: "0", "aria-describedby": tooltip_id) do
+      type == 'icon' ? concat(glyph(src)) : concat(image_tag(src))
+      if block_given?
+        hover_content = capture(&block)
+      else
+        ""
+      end
+      concat(content_tag(:span, hover_content, class: "display-on-hover hover-style hover-style-#{placement}", id: tooltip_id, role: "tooltip"))
+    end
+  end
 end

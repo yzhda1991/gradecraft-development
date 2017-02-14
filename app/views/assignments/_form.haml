@@ -210,15 +210,8 @@
         - presenter.assignment.assignment_files.each do |af|
           - next if af.new_record?
           %li
-            - if af.file_processing
-              = "#{af.filename}"
-              %span{tabindex: "0", "aria-describedby": "upload-process-tip"}
-                %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-              .display-on-hover.hover-style{role: "tooltip", :id=> "upload-process-tip"}
-                Refresh page to confirm upload has completed
-            - else
-              = link_to af.filename, af.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )
+            = link_to af.filename, af.url, :target => "_blank"
+            = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )
   .submit-buttons
     %ul
       %li= f.button :submit, "#{presenter.assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"

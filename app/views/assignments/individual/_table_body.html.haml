@@ -32,15 +32,12 @@
     %td
       %span
       - if grade.feedback_read?
-        %span{tabindex: "0", "aria-describedby": "feedback-read-tip_#{presenter.assignment.id}"}
-          %i.fa.fa-check
-        .display-on-hover.hover-style{role: "tooltip", :id=> "feedback-read-tip_#{presenter.assignment.id}"}
-          This feedback has been <strong>marked as read</strong> by the #{term_for :student}.
+        = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+          This feedback has been marked as read by the #{term_for :student}
+
       - elsif grade.feedback_reviewed?
-        %span{tabindex: "0", "aria-describedby": "feedback-viewed-tip_#{presenter.assignment.id}"}
-          %i.fa.fa-eye
-        .display-on-hover.hover-style{role: "tooltip", :id=> "feedback-viewed-tip_#{presenter.assignment.id}"}
-          This feedback has been <strong>viewed</strong> by the #{term_for :student}.
+        = tooltip("feedback-viewed-tip_#{presenter.assignment.id}", :eye) do
+          This feedback has been viewed by the #{term_for :student}
 
     %td= grade.status
 
