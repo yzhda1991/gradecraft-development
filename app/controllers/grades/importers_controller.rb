@@ -20,7 +20,6 @@ class Grades::ImportersController < ApplicationController
     @assignments = syllabus.assignments(params[:id])
   end
 
-  # rubocop:disable AndOr
   # GET /assignments/:assignment_id/grades/download
   # Sends a CSV file to the user with the current grades for all students
   # in the course for the asisgnment

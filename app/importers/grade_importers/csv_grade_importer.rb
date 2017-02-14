@@ -2,6 +2,7 @@ require "csv"
 require "quote_helper"
 
 class CSVGradeImporter
+  PASS_FAIL_GRADE_VALUES = [0,1].freeze
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 
@@ -26,6 +27,10 @@ class CSVGradeImporter
           end
           if !row.has_grade?
             append_unsuccessful row, "Grade not specified"
+            next
+          end
+          if assignment.pass_fail? && !is_valid_pass_fail_grade(row.grade)
+            append_unsuccessful row, "Grade is invalid"
             next
           end
 
@@ -53,11 +58,11 @@ class CSVGradeImporter
   end
 
   def assign_grade(row, grade)
-    grade.raw_points = row.grade
     grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
     grade.graded_at = DateTime.now
+    set_grade_score row, grade
   end
 
   def create_grade(row, assignment, student)
@@ -88,6 +93,25 @@ class CSVGradeImporter
     end
   end
 
+  def set_grade_score(row, grade)
+    score = Integer(row.grade || "")
+    if grade.assignment.pass_fail?
+      grade.pass_fail_status = "Pass" if score == 1
+      grade.pass_fail_status = "Fail" if score == 0
+    else
+      grade.raw_points = score
+    end
+  end
+
+  def is_valid_pass_fail_grade(grade)
+    begin
+      score = Integer(grade || "")  # vs to_i, since we don't want to cast to an int if it's invalid
+      return PASS_FAIL_GRADE_VALUES.include?(score)
+    rescue ArgumentError
+      return false
+    end
+  end
+
   class GradeRow
     include QuoteHelper
 
@@ -102,7 +126,7 @@ class CSVGradeImporter
     end
 
     def grade
-      remove_smart_quotes(data[3]).to_i if data[3].present?
+      remove_smart_quotes data[3]
     end
 
     def has_grade?
@@ -111,7 +135,7 @@ class CSVGradeImporter
 
     def update_grade?(grade)
       grade.present? &&
-        (grade.raw_points != self.grade || grade.feedback != feedback)
+        (grade.raw_points != Integer(self.grade || "") || grade.feedback != feedback)
     end
 
     def initialize(data)

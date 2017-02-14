@@ -1,10 +1,11 @@
+- term_for_score = @assignment.pass_fail? ? "Pass / Fail Status" : "Score"
 %table.dynatable
   %thead
     %tr
       %th First Name
       %th Last Name
       %th Email
-      %th{ "data-dynatable-sorts" => "rawScore" } Score
+      %th{ "data-dynatable-sorts" => "rawScore" }= term_for_score
       %th Feedback
   %tbody
     - grades.each do |grade|
@@ -12,5 +13,8 @@
         %td= link_to grade.student.first_name, student_path(grade.student)
         %td= link_to grade.student.last_name, student_path(grade.student)
         %td= link_to grade.student.email, student_path(grade.student)
-        %td= grade.raw_points
+        - if @assignment.pass_fail?
+          %td= term_for grade.try(:pass_fail_status)
+        - else
+          %td= grade.raw_points
         %td= grade.feedback
