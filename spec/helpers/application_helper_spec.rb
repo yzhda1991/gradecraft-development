@@ -53,4 +53,17 @@ describe ApplicationHelper do
       end
     end
   end
+
+  describe "#text_tooltip" do
+    let(:tooltip_id) { "tooltip-id" }
+    let(:text) { "blah blah" }
+
+    it "renders the expected tooltip" do
+      tooltip = helper.tooltip(tooltip_id, text) { "blah blah" }
+      expect(tooltip).to have_tag "span", with: { class: "has-tooltip", "aria-describedby": "tooltip-id", tabindex: "0" } do
+        with_tag "i", with: { class: "fa-lock" }
+        with_tag "span", with: { class: "display-on-hover hover-style hover-style-top", id: "tooltip-id", role: "tooltip" }
+      end
+    end
+  end
 end
