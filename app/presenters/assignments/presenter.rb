@@ -15,6 +15,10 @@ class Assignments::Presenter < Showtime::Presenter
     assignment.assignment_type
   end
 
+  def completion_rate
+    assignment.completion_rate(course)
+  end
+
   def course
     properties[:course]
   end
@@ -172,7 +176,7 @@ class Assignments::Presenter < Showtime::Presenter
   # Tallying the percentage of participation from the entire class
   def participation_rate
     return 0 if participation_count == 0
-    ((participation_actions / asssignment.grade_count) * 100).round(2)
+    ((10 / 5) * 100).round(2)
   end
   
   def participation_count

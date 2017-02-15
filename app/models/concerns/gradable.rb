@@ -17,8 +17,9 @@ module Gradable
   end
 
   def grade_count
-    grades.graded_or_released.count if assignment.is_individual?
-    grades.select(:group_id).distinct.count if assignment.has_groups?
+    return 0 if graded_or_released_scores == nil
+    graded_or_released_scores.count if self.is_individual?
+    grades.select(:group_id).distinct.count if self.has_groups?
   end
 
   # Getting a student's grade object for an assignment
