@@ -4,7 +4,7 @@ require "./app/helpers/application_helper"
 describe ApplicationHelper do
   include RSpecHtmlMatchers
 
-  describe "#tooltip", focus: true do
+  describe "#tooltip" do
     let(:tooltip_id) { "tooltip-id" }
 
     context "when type is icon" do
