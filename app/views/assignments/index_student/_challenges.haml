@@ -4,8 +4,8 @@
     .collapse{role: "tab"}
       %h3= glyph('angle-double-right') + "#{term_for :challenges}" 
       .points-summary
-        .assignment-type-points-graph
-          .points-graph-fill-bar{:style => "width: #{(current_student.team_for_course(current_course).challenge_grade_score).to_f / (current_course.point_total_for_challenges).to_f * 100}%;"}
+        .points-bar-graph
+          .points-bar-graph-fill{:style => "width: #{(current_student.team_for_course(current_course).challenge_grade_score).to_f / (current_course.point_total_for_challenges).to_f * 100}%;"}
         %span.assignment-type-points #{ points current_student.team_for_course(current_course).challenge_grade_score }/#{ points current_course.point_total_for_challenges}
 
     .assignment-type-container{role: "tabpanel"}

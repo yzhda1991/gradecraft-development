@@ -19,11 +19,13 @@
         %ol
           - assignment.unlock_conditions.each do |condition|
             %li= condition.requirements_completed_sentence
+
   - if assignment.is_a_condition?
     = tooltip("key-assignment-tip_#{assignment.id}", :key) do
       %p This #{term_for :assignment} is a Key
       %ol
         - assignment.unlock_keys.each do |key|
           %li= key.key_description_sentence
+
   - if ! assignment.name_visible_for_student?(presenter.student) && current_user_is_staff?
     = glyph("eye-slash")

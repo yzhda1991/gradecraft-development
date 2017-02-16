@@ -135,3 +135,9 @@
 
 @mixin transition($property, $duration, $easing)
   transition: $property $duration $easing
+
+@mixin truncate-text($width)
+  width: $width
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis

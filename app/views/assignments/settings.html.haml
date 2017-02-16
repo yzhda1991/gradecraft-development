@@ -6,125 +6,119 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .assignments
+  .total-points-label
+    %h2 Total
+    %h2= "#{points(total_available_points)} points"
+  .total-points-graph
+    - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
+      .total-points-graph-fill-bar{:style => "width: #{percent_of_total_points(index)}%"}
+        = tooltip("tip-grade-level-#{index}", level_letter_grade(index), type: "text") do
+          = points(level_point_threshold(index))
+
+  .assignment-index-container{role: "tablist"}
     - @assignment_types.each do |assignment_type|
-      %h3{:id => "assignment-settings-table-#{assignment_type.id}"}= "#{assignment_type.try(:name)} – #{points assignment_type.total_points} points"
-      %table{"aria-describedby" => "assignment-settings-table-#{assignment_type.id}"}
-        %thead
-          %tr
-            %th{scope: "col"} Name
+      .assignment_type{id: "assignment-type-settings-#{assignment_type.id}" }
+        .assignment-type-bar.assignment-settings.collapse{role: "tab"}
+          %h2.assignment-type-name= glyph('angle-double-right') + "#{assignment_type.try(:name)}"
+          .points-summary
+            .points-bar-graph.assignment-settings
+              - if assignment_type.total_points > total_available_points
+                .points-bar-graph-fill.assignment-settings{:style => "width: 100%; background-color: #D1495B"}
+                %span.hint Total for this assignment type exceeds threshold for highest level
+              - else
+                .points-bar-graph-fill.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (total_available_points).to_f * 100}%"}
+              - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
+                .grade-level-marker{:style => "width: #{percent_of_total_points(index)}%"}
+            .assignment-type-points.assignment-settings #{ points(assignment_type.total_points) }/#{ points(total_available_points) }
 
-            %th{scope: "col"}
-              = tooltip("visible-setting-tip_#{assignment_type.id}", :eye) do
-                Visible to Students
-
-            %th{scope: "col"}
-              = tooltip("required-setting-tip_#{assignment_type.id}", :asterisk) do
-                Required
-
-            %th{scope: "col"}
-              = tooltip("accepts-submissions-tip_#{assignment_type.id}", :paperclip) do
-                Accepts Submissions
-
-            %th{scope: "col"}
-              = tooltip("shown-timeline-tip_#{assignment_type.id}", :calendar) do
-                Shown in Timeline
-
-            %th{scope: "col"}
-              = tooltip("shown-predictor-tip_#{assignment_type.id}", :sliders) do
-                Shown in Predictor
-
-            %th{scope: "col"}
-              = tooltip("due-this-week-tip_#{assignment_type.id}", :list) do
-                Shown in Due This Week
-
-            %th{scope: "col"}
-              = tooltip("student-logged-tip_#{assignment_type.id}", :pencil) do
-                Logged By Students
-
-            %th{scope: "col"}
-              = tooltip("release-required-tip_#{assignment_type.id}", "unlock-alt") do
-                Release Required
-
-            %th{scope: "col"} Grade Form Preview
-            %th{scope: "col"} Points
-
-            %th{scope: "col"} Dates
-            %th{scope: "col", :style => "min-width: 110px"}
-              %span.sr-only Actions
-        %tbody
-          - assignments = assignment_type.assignments.ordered
-          - assignments.each do |assignment|
-            %tr
-              %td= link_to assignment.name, assignment
-              %td
-                - if assignment.visible?
-                  = tooltip("visible-setting-tip_#{assignment_type.id}_#{assignment.id}", :eye) do
+        .assignment-type-container{role: "tabpanel"}
+          %table
+            %caption.sr-only= "#{term_for :assignments} for #{assignment_type.name}"
+            %thead
+              %tr
+                %th{scope: "col"} Name
+                %th{scope: "col"}
+                  = tooltip("visible-setting-tip_#{assignment_type.id}", :eye) do
                     Visible to Students
-
-              %td
-                - if assignment.required?
-                  = tooltip("required-setting-tip_#{assignment_type.id}_#{assignment.id}", :asterisk) do
+                %th{scope: "col"}
+                  = tooltip("required-setting-tip_#{assignment_type.id}", :asterisk) do
                     Required
-
-              %td
-                - if assignment.accepts_submissions?
-                  = tooltip("accepts-submissions-tip_#{assignment_type.id}_#{assignment.id}", :paperclip) do
+                %th{scope: "col"}
+                  = tooltip("accepts-submissions-tip_#{assignment_type.id}", :paperclip) do
                     Accepts Submissions
-
-              %td
-                - if assignment.include_in_timeline?
-                  = tooltip("shown-timeline-tip_#{assignment_type.id}_#{assignment.id}", :calendar) do
+                %th{scope: "col"}
+                  = tooltip("shown-timeline-tip_#{assignment_type.id}", :calendar) do
                     Shown in Timeline
-
-              %td
-                - if assignment.include_in_predictor?
-                  = tooltip("shown-predictor-tip_#{assignment_type.id}_#{assignment.id}", :sliders) do
+                %th{scope: "col"}
+                  = tooltip("shown-predictor-tip_#{assignment_type.id}", :sliders) do
                     Shown in Predictor
-
-              %td
-                - if assignment.include_in_to_do?
-                  = tooltip("due-this-week-tip_#{assignment_type.id}_#{assignment.id}", :list) do
+                %th{scope: "col"}
+                  = tooltip("due-this-week-tip_#{assignment_type.id}", :list) do
                     Shown in Due This Week
-
-              %td
-                - if assignment.student_logged?
-                  = tooltip("student-logged-tip_#{assignment_type.id}_#{assignment.id}", :pencil) do
+                %th{scope: "col"}
+                  = tooltip("student-logged-tip_#{assignment_type.id}", :pencil) do
                     Logged By Students
-
-              %td
-                - if assignment.release_necessary?
-                  = tooltip("release-required-tip_#{assignment_type.id}_#{assignment.id}", "unlock-alt") do
+                %th{scope: "col"}
+                  = tooltip("release-required-tip_#{assignment_type.id}", :unlock) do
                     Release Required
 
-              %td
-                - if assignment.grade_select?
-                  %label.sr-only{:for => "score_levels"}
-                    Score Levels
-                  = select_tag(:assignment_score_levels, options_from_collection_for_select(assignment.assignment_score_levels, :points, :name), id: "score_#{assignment.id}")
-                - elsif assignment.grade_radio?
-                  - assignment.assignment_score_levels.each do |asl|
-                    = radio_button_tag(asl.name, asl.points)
-                    %span.not_bold= label_tag(asl.name)
-                    %br
-                - elsif assignment.grade_checkboxes?
-                  = check_box_tag "score", "", false, disabled: true, id: "score_#{assignment.id}"
-                - else
-                  = text_field_tag "score", "", disabled: true, id: "score_#{assignment.id}"
-              %td= points assignment.full_points
-              %td
-                %ul
-                  %li
-                    Opens:
-                    = assignment.try(:opens_at) || "Always Open"
-                  %li
-                    Due At:
-                    = assignment.try(:due_at) || "No Due Date"
-                  %li
-                    Accepted Until:
-                    = assignment.try(:accepts_submissions_until) || "Always Accepted"
-              %td
-                .right
-                  %ul.button-bar
-                    %li= link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                    %li= link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"
+                %th{scope: "col"} Points
+
+                %th{scope: "col", :style => "width: 280px"} Dates
+                %th{scope: "col", :style => "min-width: 110px"}
+                  %span.sr-only Actions
+            %tbody
+              - assignments = assignment_type.assignments.ordered
+              - assignments.each do |assignment|
+                %tr
+                  %td= link_to assignment.name, assignment
+                  %td
+                    - if assignment.visible?
+                      = tooltip("visible-setting-tip_#{assignment_type.id}-#{assignment.id}", :eye) do
+                        Visible to Students
+                  %td
+                    - if assignment.required?
+                      = tooltip("required-setting-tip_#{assignment_type.id}-#{assignment.id}", :asterisk) do
+                        Required
+                  %td
+                    - if assignment.accepts_submissions?
+                      = tooltip("accepts-submissions-tip_#{assignment_type.id}-#{assignment.id}", :paperclip) do
+                        Accepts Submissions
+                  %td
+                    - if assignment.include_in_timeline?
+                      = tooltip("shown-timeline-tip_#{assignment_type.id}-#{assignment.id}", :calendar) do
+                        Shown in Timeline
+                  %td
+                    - if assignment.include_in_predictor?
+                      = tooltip("shown-predictor-tip_#{assignment_type.id}-#{assignment.id}", :sliders) do
+                        Shown in Predictor
+                  %td
+                    - if assignment.include_in_to_do?
+                      = tooltip("due-this-week-tip_#{assignment_type.id}-#{assignment.id}", :list) do
+                        Shown in Due This Week
+                  %td
+                    - if assignment.student_logged?
+                      = tooltip("student-logged-tip_#{assignment_type.id}-#{assignment.id}", :pencil) do
+                        Logged By Students
+                  %td
+                    - if assignment.release_necessary?
+                      = tooltip("release-required-tip_#{assignment_type.id}-#{assignment.id}", :unlock) do
+                        Release Required
+
+                  %td= points assignment.full_points
+                  %td
+                    %ul
+                      %li
+                        Opens:
+                        = assignment.try(:opens_at) || "Always Open"
+                      %li
+                        Due At:
+                        = assignment.try(:due_at) || "No Due Date"
+                      %li
+                        Accepted Until:
+                        = assignment.try(:accepts_submissions_until) || "Always Accepted"
+                  %td
+                    .right
+                      %ul.button-bar
+                        %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
+                        %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"
