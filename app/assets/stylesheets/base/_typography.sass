@@ -1,4 +1,5 @@
 @import "../utilities/variables"
+@import "../utilities/mixins"
 
 h1, h2, h3, h4, h5
   text-transform: capitalize
@@ -88,10 +89,7 @@ h1.pagetitle
 
 .staff
   h1.pagetitle
-    width: 70%
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
+    @include truncate-text(70%)
 
 /** Subtitle **/
 h2.subtitle
