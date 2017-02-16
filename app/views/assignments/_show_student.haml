@@ -1,6 +1,7 @@
 .pageContent
   = render partial: "layouts/alerts"
 
+  // Note that things added here also need to be added to the grade/show view for instructors
   .assignment-details-container
     - if presenter.grades_available_for? current_student
       %section

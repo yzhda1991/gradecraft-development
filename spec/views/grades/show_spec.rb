@@ -10,9 +10,11 @@ describe "grades/show" do
     @assignment = create(:assignment)
     @course.assignments << @assignment
     student = create(:user, courses: [@course], role: :student)
+    staff = create(:user, courses: [@course], role: :professor)
     @grade = create(:grade, course: @course, assignment: @assignment, student: student)
 
     allow(view).to receive(:current_student).and_return(student)
+    allow(view).to receive(:current_user).and_return(staff)
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:presenter).and_return presenter
     allow(view).to receive(:term_for).and_return("Assignments")

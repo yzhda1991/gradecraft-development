@@ -13,11 +13,13 @@ module Gradable
   end
 
   def graded_or_released_scores
-    grades.graded_or_released.pluck(:raw_points)
+    grades.graded_or_released.pluck(:final_points)
   end
 
   def grade_count
-    grades.graded_or_released.count
+    return 0 if graded_or_released_scores.nil?
+    return graded_or_released_scores.count if self.is_individual?
+    return grades.select(:group_id).distinct.count if self.has_groups?
   end
 
   # Getting a student's grade object for an assignment

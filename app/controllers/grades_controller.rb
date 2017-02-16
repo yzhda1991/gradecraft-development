@@ -15,6 +15,12 @@ class GradesController < ApplicationController
     redirect_to @grade.assignment and return unless current_user_is_staff?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
+    
+    render :show, Assignments::Presenter.build({
+      assignment: @grade.assignment,
+      course: current_course,
+      view_context: view_context
+      })
   end
 
   # GET /grades/:id/edit

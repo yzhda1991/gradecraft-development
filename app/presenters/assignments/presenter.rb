@@ -153,7 +153,7 @@ class Assignments::Presenter < Showtime::Presenter
 
   def scores_for(user)
     scores = self.scores
-    grade = grades.where(student_id: user.id).first
+    grade = grades.where(student_id: user.id).first if user.present?
     if GradeProctor.new(grade).viewable? user: user, course: course
       scores[:user_score] = grade.raw_points
     end
@@ -173,8 +173,16 @@ class Assignments::Presenter < Showtime::Presenter
     student.submission_for_assignment(assignment, false)
   end
 
-  def submission_rate
-    assignment.submission_rate(course)
+  # Tallying the percentage of participation from the entire class
+  def participation_rate
+    return 0 if participation_possible_count == 0
+    ((assignment.grade_count.to_f / participation_possible_count.to_f) * 100).round(2)
+  end
+  
+  # denominator
+  def participation_possible_count
+    return course.graded_student_count if assignment.is_individual?
+    return assignment.groups.count if assignment.has_groups?
   end
 
   def submission_grade_history(student)

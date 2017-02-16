@@ -632,20 +632,6 @@ describe Assignment do
     end
   end
 
-  describe "#completion_rate" do
-    let(:course) { double(:course, graded_student_count: 10) }
-    before { allow(subject).to receive(:grade_count).and_return 8 }
-
-    it "calculates the number of grades divided by the number of students in the course" do
-      expect(subject.completion_rate(course)).to eq 80
-    end
-
-    it "handles if there are no graded students" do
-      allow(course).to receive(:graded_student_count).and_return 0
-      expect(subject.completion_rate(course)).to be_zero
-    end
-  end
-
   describe "#copy" do
     let(:assignment) { build :assignment }
     subject { assignment.copy }
@@ -1043,21 +1029,6 @@ describe Assignment do
     it "is soon if the due date is within 7 days from now" do
       subject.due_at = 2.days.from_now
       expect(subject).to be_soon
-    end
-  end
-
-  describe "#submission_rate" do
-    let(:course) { double(:course, graded_student_count: 10) }
-    let(:submissions) { double(:submissions, count: 4) }
-    before { allow(subject).to receive(:submissions).and_return submissions }
-
-    it "calculates the number of submissions divided by the number of students in the course" do
-      expect(subject.submission_rate(course)).to eq 40
-    end
-
-    it "handles if there are no graded students" do
-      allow(course).to receive(:graded_student_count).and_return 0
-      expect(subject.submission_rate(course)).to be_zero
     end
   end
 
