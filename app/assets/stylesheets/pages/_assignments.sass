@@ -75,11 +75,6 @@
       text-decoration: none
       color: $color-blue-2
 
-  &.assignment-settings
-    padding: 0.75rem
-    &:hover
-        background-color: inherit
-
   .assignment-type-name
     width: 40%
     display: inline-block
@@ -173,12 +168,9 @@
     margin-top: 0.3rem
     width: 50%
   &.assignment-settings
-    width: 30%
     height: 20px
     display: inline-block
     vertical-align: middle
-    @media (max-width: $media-medium-max)
-      width: 50%
 
 .points-bar-graph-fill
   height: 10px
@@ -197,13 +189,11 @@
 
 .points-ratio
   display: inline-block
-  width: 15%
   text-align: right
   margin-right: 0.5em
   @media (max-width: $media-medium-max)
-    width: auto
+    float: right
     text-align: left
-    display: block
 
 // graph at top of assignment settings page
 .total-points-label
