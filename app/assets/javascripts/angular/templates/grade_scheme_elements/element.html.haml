@@ -1,30 +1,30 @@
 .grade-scheme-row
   %label.form_label
     Grade Letter
-    %input.letter(type='text' name='letter' ng-model='element.letter')
+    %input.letter{'type'=>'text', 'name'=>'letter', 'ng-model'=>'element.letter'}
 
   %label.form_label
     Level name
-    %input.level(type='text' name='level' ng-model='element.level')
+    %input.level{'type'=>'text', 'name'=>'level', 'ng-model'=>'element.level'}
 
   %label.form_label
     Point Threshold
-    %input.low-range(type='text'
-      ng-model='element.lowest_points'
-      ng-model-options='{allowInvalid: true}'
-      ng-change='validateElements($index)'
-      required
-      smart-number
-      allow-negatives="false"
-      name='lowest_points_{{$index}}')
+    %input.low-range{'type'=>'text',
+      'ng-model'=>'element.lowest_points',
+      'ng-model-options'=>'{allowInvalid: true}',
+      'ng-change'=>'validateElements()',
+      'required'=>'',
+      'smart-number'=>'',
+      'allow-negatives'=>"false",
+      'name'=>'lowest_points_{{$index}}'}
 
-  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict')
+  %span.validation-error{'ng-show'=>'gradeSchemeForm["lowest_points_{{$index}}"].$error.directConflict'}
     %span
       %i.fa.fa-exclamation-triangle
     .display-on-hover.hover-style.gse-bar
       This level has the same point threshold as another level.
 
-  %span.validation-error(ng-show='gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict')
+  %span.validation-error{'ng-show'=>'gradeSchemeForm["lowest_points_{{$index}}"].$error.nearConflict'}
     %span
       %i.fa.fa-exclamation-triangle
     .display-on-hover.hover-style.gse-bar
@@ -32,9 +32,9 @@
 
   .right
     %span
-      %button.add-element.button(type='button' ng-click='vm.addNew($index)' tabindex='0')
+      %button.add-element.button{'type'=>'button', 'ng-click'=>'vm.addNew($index)', 'tabindex'=>'0'}
         %i.fa.fa-plus
         Add a level below
-      %button.remove-element.button.alert(type='button' ng-click='vm.remove($index)' aria-label="Remove Level")
+      %button.remove-element.button.alert{'type'=>'button', 'ng-click'=>'vm.remove($index)', 'aria-label'=>"Remove Level"}
         Remove
         %i.fa.fa-times
