@@ -1,4 +1,9 @@
 %svg{"id" => "predictor-graph-svg"}
+  %defs
+    %pattern{"id"=>"pattern-stripe", "width"=>"4", "height"=>"4", "patternUnits"=>"userSpaceOnUse", "patternTransform"=>"rotate(45)"}
+      %rect{"width"=>"2", "height"=>"4", "transform"=>"translate(0,0)" ,"fill"=>"white"}
+    %mask{"id"=>"mask-stripe"}
+      %rect{"x"=>"0", "y"=>"0", "width"=>"100%", "height"=>"100%", "fill"=>"url(#pattern-stripe)"}
   %g{"id" => "svg-grade-levels"}
   %g{"id" => "svg-points"}
     %rect#svg-graph-points-predicted-locked{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedLockedBarWidth()}}", "height"=>"20"}
