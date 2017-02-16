@@ -18,10 +18,9 @@
   .assignment-index-container{role: "tablist"}
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-settings-#{assignment_type.id}" }
-        .assignment-type-bar.collapse{role: "tab"}
+        .assignment-type-bar.assignment-settings.collapse{role: "tab"}
           %h2.assignment-type-name= glyph('angle-double-right') + "#{assignment_type.try(:name)}"
           .points-summary
-            .points-ratio #{ points(assignment_type.total_points) }/#{ points(total_available_points) }
             .points-bar-graph.assignment-settings
               - if assignment_type.total_points > total_available_points
                 .points-bar-graph-fill.assignment-settings{:style => "width: 100%; background-color: #D1495B"}
@@ -30,6 +29,7 @@
                 .points-bar-graph-fill.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (total_available_points).to_f * 100}%"}
               - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
                 .grade-level-marker{:style => "width: #{percent_of_total_points(index)}%"}
+            .assignment-type-points.assignment-settings #{ points(assignment_type.total_points) }/#{ points(total_available_points) }
 
         .assignment-type-container{role: "tabpanel"}
           %table

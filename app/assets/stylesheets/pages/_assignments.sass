@@ -76,6 +76,9 @@
       text-decoration: none
       color: $color-blue-2
 
+  &.assignment-settings.collapse a
+    padding: 0.9rem 0.75rem
+
   .assignment-type-name
     @include truncate-text(40%)
     display: inline-block
@@ -97,6 +100,8 @@
     float: none
 
 .assignment-type-points
+  &.assignment-settings
+    font-size: 0.85rem
   @media (max-width: $media-medium-max)
     float: right
 
@@ -174,7 +179,6 @@
   height: 10px
   background-color: $color-green-1
   position: absolute
-
   &.assignment-settings
     height: 20px
     background-color: $color-blue-3
@@ -184,14 +188,6 @@
   height: 20px
   border-right: 1px solid $color-white
   position: absolute
-
-.points-ratio
-  display: inline-block
-  text-align: right
-  margin-right: 0.5em
-  @media (max-width: $media-medium-max)
-    float: right
-    text-align: left
 
 // graph at top of assignment settings page
 .total-points-label
