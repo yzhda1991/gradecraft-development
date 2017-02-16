@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 feature "editing submissions" do
   context "as a student" do

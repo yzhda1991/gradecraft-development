@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "rails_spec_helper"
+require "spec_helper"
 include CourseTerms
 
 describe "api/assignment_types/index" do

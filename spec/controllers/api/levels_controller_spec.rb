@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe API::LevelsController do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion) }

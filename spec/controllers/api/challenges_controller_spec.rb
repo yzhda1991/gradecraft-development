@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 include SessionHelper
 
 describe API::ChallengesController  do

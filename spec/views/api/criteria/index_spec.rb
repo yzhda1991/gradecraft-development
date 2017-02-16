@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "rails_spec_helper"
+require "spec_helper"
 
 describe "api/criteria/index" do
   let(:course) { build_stubbed(:course) }

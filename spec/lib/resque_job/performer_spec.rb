@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }

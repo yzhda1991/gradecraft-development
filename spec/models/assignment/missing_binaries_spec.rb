@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe "Assignment #missing_binaries methods" do
   let(:missing_submission_file) { create(:missing_submission_file, submission: submission_with_missing_file) }

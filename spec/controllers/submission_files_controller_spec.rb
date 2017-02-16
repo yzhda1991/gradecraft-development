@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe SubmissionFilesController do
   let(:course) { Course.last }

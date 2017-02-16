@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "resque-scheduler"
 require "resque_spec/scheduler"
 

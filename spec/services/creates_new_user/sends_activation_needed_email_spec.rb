@@ -1,5 +1,5 @@
 require "light-service"
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/services/creates_new_user/sends_activation_needed_email"
 
 describe Services::Actions::SendsActivationNeededEmail do

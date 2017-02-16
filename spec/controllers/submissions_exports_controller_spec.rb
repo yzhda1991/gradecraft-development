@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe SubmissionsExportsController, type: :controller do
 

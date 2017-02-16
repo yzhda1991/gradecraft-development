@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 feature "removing a course membership" do
   context "as an administrator" do

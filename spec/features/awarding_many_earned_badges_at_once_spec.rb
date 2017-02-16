@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 feature "awarding many earned badges at once" do
   context "as a professor" do

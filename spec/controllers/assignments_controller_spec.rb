@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe AssignmentsController do
   let(:course) { create(:course) }

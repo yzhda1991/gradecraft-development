@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 feature "downloading assignment type summary file" do
   context "as a professor" do

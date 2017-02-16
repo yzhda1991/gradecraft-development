@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 feature "creating a new assignment" do
   context "as a professor" do

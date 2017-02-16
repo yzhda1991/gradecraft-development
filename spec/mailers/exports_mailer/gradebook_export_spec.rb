@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe ExportsMailer do
   extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts

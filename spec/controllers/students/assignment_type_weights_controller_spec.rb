@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe Students::AssignmentTypeWeightsController do
   let(:world) { World.create.with(:course, :student) }

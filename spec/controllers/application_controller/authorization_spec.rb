@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe ApplicationController do
   let(:course) { double(:course, id: 123) }

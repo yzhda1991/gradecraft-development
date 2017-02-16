@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe ObserversController do
   let(:course) { build_stubbed(:course) }

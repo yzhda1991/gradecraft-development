@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "rails_spec_helper"
+require "spec_helper"
 
 describe "api/challenges/index" do
   before(:all) do

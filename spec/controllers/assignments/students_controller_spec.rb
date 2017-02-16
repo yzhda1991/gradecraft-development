@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe Assignments::StudentsController do
   let(:world) { World.create.with(:course, :assignment, :professor, :student) }

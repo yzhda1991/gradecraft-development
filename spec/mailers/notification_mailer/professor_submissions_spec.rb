@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.shared_examples "a submission email to a professor" do
   it "includes the student's first name" do

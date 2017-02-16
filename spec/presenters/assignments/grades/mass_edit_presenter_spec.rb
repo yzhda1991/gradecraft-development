@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/presenters/assignments/grades/mass_edit_presenter"
 
 describe Assignments::Grades::MassEditPresenter do

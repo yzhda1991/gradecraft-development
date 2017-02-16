@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/services/submissions/removes_text_comment_draft"
 
 describe Services::Actions::RemovesTextCommentDraft do

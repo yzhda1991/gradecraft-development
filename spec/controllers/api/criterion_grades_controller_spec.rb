@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe API::CriterionGradesController do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :level, :criterion_grade, :badge) }

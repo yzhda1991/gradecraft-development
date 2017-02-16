@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "rails_spec_helper"
+require "spec_helper"
 
 describe "api/grades/group_index" do
   let(:course) { build(:course) }

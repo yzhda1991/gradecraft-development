@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/importers/student_importers"
 
 describe CanvasStudentImporter do

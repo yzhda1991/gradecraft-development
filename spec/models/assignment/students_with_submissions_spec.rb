@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 describe "Assignment #students_with_submissions methods" do
   let(:submission) { create(:submission, assignment: assignment, student: student) }

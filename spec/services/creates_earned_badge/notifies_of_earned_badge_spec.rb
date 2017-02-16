@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/services/creates_earned_badge/notifies_of_earned_badge"
 
 describe Services::Actions::NotifiesOfEarnedBadge do

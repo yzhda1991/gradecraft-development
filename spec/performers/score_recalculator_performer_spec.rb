@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
   # public methods

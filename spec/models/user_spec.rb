@@ -65,7 +65,7 @@ describe User do
   describe "submitter directory names" do
     #let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
 
-    describe "#submitter_directory_name", focus: true do
+    describe "#submitter_directory_name" do
       it "formats the submitter info into an alphabetical submitter directory name" do
         expect(student.submitter_directory_name).to eq(student.last_name, student.first_name)
       end
@@ -133,7 +133,7 @@ describe User do
       create(:course_membership, :student, :auditing, course: course, user: student_not_being_graded)
     end
 
-    it "returns all the students that are being graded", focus: true do
+    it "returns all the students that are being graded" do
       result = User.students_being_graded_for_course(course)
       expect(result.pluck(:id)).to eq [student.id]
     end

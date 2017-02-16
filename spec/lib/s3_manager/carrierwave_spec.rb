@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe S3Manager::Carrierwave do
   subject { submission_file }

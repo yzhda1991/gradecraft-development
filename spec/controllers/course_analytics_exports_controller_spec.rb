@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/presenters/course_analytics_exports/base"
 
 RSpec.describe CourseAnalyticsExportsController, type: :controller do

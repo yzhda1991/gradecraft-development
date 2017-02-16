@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/services/imports_lms_grades/enqueues_grade_updater_jobs"
 
 describe Services::Actions::EnqueuesGradeUpdaterJobs do

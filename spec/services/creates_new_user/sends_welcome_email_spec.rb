@@ -1,5 +1,5 @@
 require "light-service"
-require "rails_spec_helper"
+require "spec_helper"
 require "./app/services/creates_new_user/sends_welcome_email"
 
 describe Services::Actions::SendsWelcomeEmail do

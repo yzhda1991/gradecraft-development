@@ -3,7 +3,7 @@
 # spec helper for now and we can pare this down later when we've extracted some
 # of the other behavior that's dependent on said helper
 #
-require "rails_spec_helper"
+require "spec_helper"
 
 describe CourseAnalyticsExportPerformer do
   subject { described_class.new export_id: export.id }

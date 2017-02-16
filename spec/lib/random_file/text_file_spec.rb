@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.describe RandomFile::TextFile do
   let(:rando_file_path) { Tempfile.new("rando-file").path }

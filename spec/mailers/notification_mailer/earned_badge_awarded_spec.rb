@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "spec_helper"
 
 RSpec.shared_examples "a complete earned badge email body" do
   it "includes the student's first name" do
