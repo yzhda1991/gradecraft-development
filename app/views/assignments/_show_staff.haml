@@ -40,4 +40,5 @@
           - if presenter.group_assignment?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else
-            = render partial: "grades/analytics/instructor_analytics", locals: { presenter: presenter }
+            .tab-container
+              = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }

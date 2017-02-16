@@ -11,8 +11,7 @@
 
   .class-analytics-graph
     %h3 Participants
-    #numberComplete{:"data-type" => "full", "data-info" => "#{term_for :students} Participated", "data-percent" => "#{presenter.participation_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.participation_count}", "data-dimension" => "225", "data-fontsize" => "48", "data-border" => "#222222", "data-bordersize" => "2"   }
-    = presenter.participation_count
+    #numberComplete{:"data-type" => "full", "data-info" => "#{term_for :students} Participated", "data-percent" => "#{presenter.participation_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.assignment.grade_count}", "data-dimension" => "225", "data-fontsize" => "48", "data-border" => "#222222", "data-bordersize" => "2"   }
 
   .class-analytics-graph
     %h3 Percentage Scores Earned

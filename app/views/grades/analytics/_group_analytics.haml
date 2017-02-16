@@ -7,12 +7,12 @@
 
   .class-analytics-graph
     %h3 Grade Distribution
-    .grades_per_assign{ "data-scores" => presenter.scores_for(current_student).to_json, :style => "width: 200px" }
-
+    .grades_per_assign{ "data-scores" => presenter.scores_for(current_user).to_json, :style => "width: 200px" }
+  
   .class-analytics-graph
     %h3 Participants
-    #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize}", "data-percent" => "#{presenter.participation_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.participation_count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2" }
-
+    #numberComplete{:"data-type" => "full", "data-info" => "#{term_for :groups} Participated", "data-percent" => "#{presenter.participation_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.assignment.grade_count}", "data-dimension" => "225", "data-fontsize" => "48", "data-border" => "#222222", "data-bordersize" => "2"}
+  
   .class-analytics-graph
     %h3 Percentage Scores Earned
     #levels_per_assignment{"data-levels" =>  presenter.assignment.percentage_score_earned.to_json }
