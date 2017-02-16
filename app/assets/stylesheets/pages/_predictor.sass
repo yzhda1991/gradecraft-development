@@ -57,7 +57,7 @@ $card-margin-1 : 3px
 
 #predictor-graph-svg
   width: 100%
-  height: 140px
+  height: 180px
   background-color: $color-white
   .grade-point-axis
     path, line
@@ -70,6 +70,9 @@ $card-margin-1 : 3px
     fill: $color-green-3
   #svg-graph-points-predicted
     fill: $color-blue-3
+  #svg-graph-points-predicted-locked
+    fill: $color-blue-3
+    mask: url(#mask-stripe)
   #svg-earned-key
     transform: translate(10px,90px)
     .key
@@ -82,10 +85,17 @@ $card-margin-1 : 3px
       fill: $color-blue-3
       width: 20
       height: 20
+  #svg-predicted-locked-key
+    transform: translate(10px,120px)
+    .key
+      fill: $color-blue-3
+      mask: url(#mask-stripe)
+      width: 20
+      height: 20
   #svg-predicted-grade
     font-size: $predictor-font-size-3
     font-weight: bold
-    transform: translate(10px, 130px)
+    transform: translate(10px, 165px)
 
 
 // ICONS AND TOOLTIPS

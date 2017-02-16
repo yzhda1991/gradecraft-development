@@ -153,6 +153,10 @@
     total += challengesPredictedPoints()
     total
 
+  lockedPointsPredicted = ()->
+    subset = _.where(assignments, {is_locked: true})
+    total = AssignmentService.assignmentsSubsetPredictedPoints(subset)
+
   # Total points actually earned to date
   allPointsEarned = ()->
     total = 0
@@ -200,6 +204,7 @@
       articleNoPoints: articleNoPoints
       postPredictedArticle: postPredictedArticle
       allPointsPredicted: allPointsPredicted
+      lockedPointsPredicted: lockedPointsPredicted
       allPointsEarned: allPointsEarned
       predictedGradeLevel: predictedGradeLevel
 

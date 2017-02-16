@@ -15,6 +15,9 @@
       scope.allPointsPredicted = ()->
         PredictorService.allPointsPredicted()
 
+      scope.lockedPointsPredicted = ()->
+        PredictorService.lockedPointsPredicted()
+
       scope.predictedGradeLevel = ()->
         PredictorService.predictedGradeLevel()
 
@@ -105,11 +108,15 @@
         width = scope.GraphsStats().scale(PredictorService.allPointsEarned())
         width = width || 0
 
-      # Calculetes width for Predicted Points (blue) bar
+      # Calculetes width for Predicted Points (blue) bar, minus the locked points
       scope.svgPredictedBarWidth = ()->
-        width = scope.GraphsStats().scale(PredictorService.allPointsPredicted())
+        width = scope.GraphsStats().scale(PredictorService.allPointsPredicted() - PredictorService.lockedPointsPredicted())
         width = width || 0
 
+      # Calculates width for Predicted Locked Points (light-blue) bar
+      scope.svgPredictedLockedBarWidth = ()->
+        width = scope.GraphsStats().scale(PredictorService.allPointsPredicted())
+        width = width || 0
 
       # render!
       scope.renderGradeLevelGraph()
