@@ -6,7 +6,8 @@ module CurrentScopes
 
   def current_course
     return unless current_user
-    @__current_course ||= CourseRouter.current_course_for(current_user, session[:course_id])
+    user = impersonating? ? impersonating_agent : current_user
+    @__current_course ||= CourseRouter.current_course_for(user, session[:course_id])
   end
 
   def current_student
@@ -25,5 +26,4 @@ module CurrentScopes
   def current_student=(student)
     @__current_student = student
   end
-
 end
