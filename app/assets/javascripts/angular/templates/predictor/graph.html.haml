@@ -6,7 +6,7 @@
       %rect{"x"=>"0", "y"=>"0", "width"=>"100%", "height"=>"100%", "fill"=>"url(#pattern-stripe)"}
   %g{"id" => "svg-grade-levels"}
   %g{"id" => "svg-points"}
-    %rect#svg-graph-points-predicted-locked{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedLockedBarWidth()}}", "height"=>"20"}
+    %rect#svg-graph-points-predicted-locked{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedLockedBarWidth()}}", "height"=>"20", "mask"=>"url(#mask-stripe)"}
     %rect#svg-graph-points-predicted{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedBarWidth()}}", "height"=>"20"}
     %rect#svg-graph-points-earned{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgEarnedBarWidth()}}", "height"=>"20"}
   %g{"id" => "svg-grade-level-text"}
@@ -20,7 +20,7 @@
       %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Verdana"}
         Total Predicted: {{allPointsPredicted() | number}} (left to earn: {{allPointsPredicted() - allPointsEarned() | number}})
     %g{"ng-if"=>"lockedPointsPredicted() > 0",  "id" => "svg-predicted-locked-key", "transform" => "translate(10,120)"}
-      %rect.key{"width"=>"20", "height"=>"20"}
+      %rect.key{"width"=>"20", "height"=>"20", "mask"=>"url(#mask-stripe)"}
       %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Verdana"}
         Predicted Points that are Locked: {{lockedPointsPredicted() | number}}
     %g{"id" => "svg-predicted-grade", "transform" => "translate(10,165)"}
