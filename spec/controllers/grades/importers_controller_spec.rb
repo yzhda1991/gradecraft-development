@@ -47,7 +47,7 @@ describe Grades::ImportersController do
         it "renders any errors that have occured" do
           post :upload, params: { assignment_id: world.assignment.id, importer_provider_id: :csv, file: file }
 
-          expect(response.body).to include "3 Grades Not Imported"
+          expect(response.body).to include "4 Grades Not Imported"
           expect(response.body).to include "Student not found in course"
         end
       end
