@@ -26,10 +26,10 @@
   %section
     .right
       %h4.text-right Points Adjustment
-      = f.input :adjustment_points
-      %br
-      = f.label :adjustment_points_feedback, "Feedback"
-      .right= f.text_area :adjustment_points_feedback
+      = f.text_field :adjustment_points, label: false, data: {autonumeric: true, "m-dec" => "0"}
+      %p
+      %h4.text-right Points Adjustment Feedback
+      = f.text_area :adjustment_points_feedback
       
     .clear
   .submit-buttons
