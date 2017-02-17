@@ -16,7 +16,7 @@
               #{link_to grade.assignment.name, grade.assignment}:
               %span #{number_with_delimiter(grade.final_points)} points earned
 
-    - if current_user_is_staff? && presenter.has_submitted_assignment_types_this_week?
+    - if !current_student.present? && current_user_is_staff? && presenter.has_submitted_assignment_types_this_week?
       .module-section
         %p #{term_for :assignments} submitted this week:
         %ul
