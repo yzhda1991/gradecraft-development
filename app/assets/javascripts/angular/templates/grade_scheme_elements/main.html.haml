@@ -1,9 +1,10 @@
 %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade Scheme Elements..."}
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
-  %grade-scheme-element{'ng-repeat'=>'element in vm.grade_scheme_elements'}
+  %grade-scheme-element{'ng-repeat'=>'element in vm.grade_scheme_elements',
+                        'grade_scheme_element'=>'element'}
 
-  %button.button.right{'ng-click'=>'vm.addFirst()',
+  %button.button.right{'ng-click'=>'vm.addElement()',
                        'ng-hide'=>'vm.grade_scheme_elements.length > 0'} Add Your Highest Grade
 
   .submit-button.right

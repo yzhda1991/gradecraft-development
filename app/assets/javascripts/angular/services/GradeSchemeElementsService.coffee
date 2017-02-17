@@ -1,94 +1,82 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
-    # It would be my preference to change this from elements
-    # to gradeSchemeElements
-    elements = []
-    deletedIds = []
+  gradeSchemeElements = []
+  _totalPoints  = 0
 
-    _totalPoints  = 0
+  totalPoints = () ->
+    _totalPoints
 
-    totalPoints = ()->
-      _totalPoints
+  validateElement = (currentElement) ->
+    validationError = null
+    for element in gradeSchemeElements
+      continue if angular.equals(element, currentElement) || !element.lowest_points?
 
+      # Invalid because it is in direct conflict with another level
+      if element.lowest_points == currentElement.lowest_points
+        validationError = "This level has the same point threshold as another level."
+        break
 
-    # we're doing so much index juggling here that we should really create a
-    # factory for both the overall grade scheme elements collection, as well as
-    # for the individual grade scheme elements so we don't have to do all of
-    # this work inside of the service object.
+      # Invalid because it is within one point of another level
+      if element.lowest_points - 1 == currentElement.lowest_points ||
+          element.lowest_points + 1 == currentElement.lowest_points
+        validationError = "This level is within one point of another level."
+        break
+    validationError
 
-    remove = (index) ->
-      deletedIds.push(elements.splice(index, 1)[0].id)
-
-    addNew = (index) ->
-      newElement = newElementAtIndex(index + 1)
-      elements.splice(index + 1, 0, newElement)
-
-    addFirst = () ->
-      elements.push({
-        letter: ''
-        level: ''
-        lowest_points: ''
-        highest_points: ''
-      })
-
-    # build a new element for the given index, taking its values from the
-    # elements surrounding it
-    newElementAtIndex = (index) ->
-      {
-        letter: ''
-        level: ''
-        lowest_points: null
-      }
-
-    highestPoints = (index) ->
-      prevElement = elements[index - 1]
-      if prevElement && prevElement.lowest_points > 0
-        prevElement.lowest_points - 1
-      else
-        null
-
-    lowestPoints = (index) ->
-      nextElement = elements[index]
-      if nextElement && nextElement.highest_points > 0
-        nextElement.highest_points + 1
-      else
-        null
-
-    getGradeSchemeElements = ()->
-      $http.get("/api/grade_scheme_elements").success((response)->
-        GradeCraftAPI.loadMany(elements,response)
-        _totalPoints = response.meta.total_points
-      )
-
-    postGradeSchemeElements = ()->
-      data = {
-        grade_scheme_elements_attributes: elements
-        deleted_ids: deletedIds
-      }
-
-      # Make sure we have a zero-level
-      thresholds = (element.lowest_points for element in elements)
-      if 0 in thresholds
-        $http.put('/grade_scheme_elements/mass_update', data).success(
-          (data) ->
-            angular.copy(data.grade_scheme_elements, elements)
-            window.location.href = '/grade_scheme_elements/'
-        ).error(
-          (error) ->
-            alert('An error occurred that prevented saving.')
-            console.log(error)
-        )
-      else
-        alert('A level with a Point Threshold of 0 (zero) is required.')
-
-    return {
-        getGradeSchemeElements: getGradeSchemeElements
-        postGradeSchemeElements: postGradeSchemeElements
-        totalPoints: totalPoints
-        elements: elements
-        remove: remove
-        addNew: addNew
-        addFirst: addFirst
+  newElement = () ->
+    {
+      letter: null
+      level: null
+      lowest_points: null
     }
 
+  removeElement = (currentElement) ->
+    gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)
+
+  addElement = (currentElement) ->
+    if currentElement?
+      for element, index in gradeSchemeElements
+        if angular.equals(element, currentElement)
+          gradeSchemeElements.splice(index + 1, 0, newElement())
+          return
+    else
+      gradeSchemeElements.push(newElement())
+
+  getGradeSchemeElements = () ->
+    $http.get("/api/grade_scheme_elements").success((response) ->
+      GradeCraftAPI.loadMany(gradeSchemeElements, response)
+      _totalPoints = response.meta.total_points
+      GradeCraftAPI.logResponse(response)
+    )
+
+  postGradeSchemeElements = () ->
+    data = {
+      grade_scheme_elements_attributes: gradeSchemeElements
+    }
+
+    # Ensure a zero-level
+    thresholds = (element.lowest_points for element in gradeSchemeElements)
+    if 0 in thresholds
+      $http.put('/grade_scheme_elements/mass_update', data).success(
+        (data) ->
+          angular.copy(data.grade_scheme_elements, gradeSchemeElements)
+          window.location.href = '/grade_scheme_elements/'
+          GradeCraftAPI.logResponse(data)
+      ).error(
+        (error) ->
+          alert('An error occurred that prevented saving.')
+          GradeCraftAPI.logResponse(error)
+      )
+    else
+      alert('A level with a Point Threshold of 0 (zero) is required.')
+
+  {
+    gradeSchemeElements: gradeSchemeElements
+    removeElement: removeElement
+    addElement: addElement
+    validateElement: validateElement
+    getGradeSchemeElements: getGradeSchemeElements
+    postGradeSchemeElements: postGradeSchemeElements
+    totalPoints: totalPoints
+  }
 ]
