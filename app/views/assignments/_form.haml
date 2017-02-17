@@ -24,7 +24,7 @@
       - else
         .pass-fail-contingent
           = f.label :full_points, "Total Points Possible"
-          = f.text_field :full_points
+          = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
 
     .form-item
       - if f.object.pass_fail?
@@ -35,7 +35,7 @@
       - else
         .pass-fail-contingent
           = f.label :threshold_points, "Points Threshold"
-          = f.text_field :threshold_points
+          = f.text_field :threshold_points, data: {autonumeric: true, "m-dec" => "0"}
           .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
 
     .form-item
