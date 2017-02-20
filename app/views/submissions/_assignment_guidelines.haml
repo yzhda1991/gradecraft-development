@@ -1,30 +1,36 @@
-- if assignment.pass_fail?
-  .italic.not_bold= "#{term_for :pass}/#{term_for :fail} Assignment"
-- else
-  .italic.not_bold= "#{points assignment.full_points} points possible"
-- if assignment.threshold_points?
-  .italic.not_bold= "#{points assignment.threshold_points} points threshold"
-%br
-- if assignment.open_at?
-  .italic.not_bold= "Opens: #{assignment.open_at}"
+%section.grade-edit-section.assignment-details
+  %h2.grade-edit-header #{ assignment.assignment_type.name} Details:
+  - if assignment.pass_fail?
+    %p= "#{term_for :pass}/#{term_for :fail} Assignment"
+  - else
+    %p= "#{points assignment.full_points} points possible"
 
-- if assignment.due_at?
-  .italic.not_bold= "Due: #{assignment.due_at}"
+  - if assignment.threshold_points?
+    %p= "#{points assignment.threshold_points} points threshold"
+
+  - if assignment.open_at?
+    %p= "Opens: #{assignment.open_at}"
+
+  - if assignment.due_at?
+    %p= "Due: #{assignment.due_at}"
 
 - if assignment.description.present?
-  %hr.grading-divider
+  %section.grade-edit-section
+    %h2.grade-edit-header #{term_for :assignment} Guidelines:
+    - if assignment.assignment_files.present?
+      %ul
+        Downloads
+        - assignment.assignment_files.each do |af|
+          %li= link_to af.filename, af.url
 
-  %h3.uppercase Guidelines:
-  - if assignment.assignment_files.present?
-    %ul
-      Downloads
-      - assignment.assignment_files.each do |af|
-        %li= link_to af.filename, af.url
-
-  %p= raw assignment.description
+    %p= raw assignment.description
 
 - if assignment.assignment_type.description.present?
-  %hr.grading-divider
-  %h3.uppercase #{ assignment.assignment_type.name} Guidelines:
+  %section.grade-edit-section
+    %h2.grade-edit-header #{ assignment.assignment_type.name} Guidelines:
 
-  %p= raw assignment.assignment_type.description
+    %p= raw assignment.assignment_type.description
+    %hr.grading-divider
+
+%section.grade-edit-section
+  %h2.grade-edit-header Grade for #{@grade.student.first_name} #{@grade.student.last_name}:

@@ -1,13 +1,26 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
+.grade-edit-header
+  font-size: 1.1rem
+  font-weight: 400
+
+.grade-edit-section 
+  margin-bottom: 1rem
+  p
+    margin: 0.5rem 0
+    font-weight: 300
+  &.assignment-details
+    p
+      margin: 0
+
 .grade-section-label
   padding-top: 10px
 
 article.grade-form-fields
   background-color: $color-grey-6
-  margin: 1.5rem auto
-  padding: 1.5rem
+  margin: 1rem auto
+  padding: 1rem
 
 section.grade-pass-fail
   .binary-switch-socket
@@ -45,8 +58,8 @@ section.grade-status
     margin: 0
 
 hr.grading-divider
-  border: .75px solid $color-grey-6
-  margin: 1.5rem auto
+  border: 1px solid $color-grey-6
+  margin: 1rem auto
 
 
 #rubric-grade-edit
