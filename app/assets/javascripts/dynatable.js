@@ -6,7 +6,7 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
     }).dynatable({
   features: {
       paginate: false,
-      search: false,
+      search: true,
       recordCount: false
     },
     dataset: {
@@ -46,3 +46,23 @@ function pad(n, width, z) {
   n = n + '';
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
+
+$('table.paginated_dynatable').bind('dynatable:init', function(e, dynatable) {
+      dynatable.sorts.functions["numeric"] = numeric;
+      dynatable.sorts.functions["date"] = date;
+      dynatable.sorts.functions["alphanum"] = alphanum;
+    }).dynatable({
+  features: {
+      paginate: true,
+      search: true,
+      recordCount: true
+    },
+    dataset: {
+      sortTypes: {
+        score: 'numeric',
+        rank: 'numeric',
+        date: 'date',
+        blog: 'alphanum'
+      }
+    }
+});

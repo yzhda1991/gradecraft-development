@@ -5,7 +5,7 @@
 
   = team_filter(@teams) if current_course.has_teams?
 
-  %table.dynatable.no-table-header
+  %table.paginated_dynatable.no-table-header
     %caption.sr-only All Users
     %thead
       %tr
