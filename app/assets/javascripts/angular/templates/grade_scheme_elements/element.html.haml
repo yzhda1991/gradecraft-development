@@ -12,17 +12,11 @@
     %input.low-range{'type'=>'text',
       'ng-model'=>'gradeSchemeElement.lowest_points',
       'ng-model-options'=>'{allowInvalid: true}',
-      'ng-blur'=>'validateElement()',
+      'ng-blur'=>'validateElements()',
       'required'=>'',
       'smart-number'=>'',
       'allow-negatives'=>"false",
       'ng-class'=>'{"ng-invalid": validationError != null}'}
-
-  %span.validation-error{'ng-show'=>'validationError'}
-    %span.has-tooltip
-      %i.fa.fa-exclamation-triangle
-      .display-on-hover.hover-style.hover-style-right
-        {{validationError}}
 
   .right
     %span
@@ -32,3 +26,9 @@
       %button.remove-element.button.alert{'type'=>'button', 'ng-click'=>'removeElement()', 'aria-label'=>"Remove Level"}
         Remove
         %i.fa.fa-times
+
+  %br.right
+  %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
+    %span.has-tooltip.error
+      %i.fa.fa-exclamation-triangle
+        {{gradeSchemeElement.validationError}}

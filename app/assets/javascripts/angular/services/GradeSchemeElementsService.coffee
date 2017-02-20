@@ -6,22 +6,23 @@
   totalPoints = () ->
     _totalPoints
 
+  validateElements = () ->
+    for element, i in gradeSchemeElements
+      validateElement(element)
+
   validateElement = (currentElement) ->
-    validationError = null
+    currentElement.validationError = undefined
     for element in gradeSchemeElements
       continue if angular.equals(element, currentElement) || !element.lowest_points?
 
       # Invalid because it is in direct conflict with another level
       if element.lowest_points == currentElement.lowest_points
-        validationError = "This level has the same point threshold as another level."
-        break
+        currentElement.validationError = "This level has the same point threshold as another level."
 
       # Invalid because it is within one point of another level
       if element.lowest_points - 1 == currentElement.lowest_points ||
           element.lowest_points + 1 == currentElement.lowest_points
-        validationError = "This level is within one point of another level."
-        break
-    validationError
+        currentElement.validationError = "This level is within one point of another level."
 
   newElement = () ->
     {
@@ -35,9 +36,9 @@
 
   addElement = (currentElement) ->
     if currentElement?
-      for element, index in gradeSchemeElements
+      for element, i in gradeSchemeElements
         if angular.equals(element, currentElement)
-          gradeSchemeElements.splice(index + 1, 0, newElement())
+          gradeSchemeElements.splice(i + 1, 0, newElement())
           return
     else
       gradeSchemeElements.push(newElement())
@@ -75,6 +76,7 @@
     removeElement: removeElement
     addElement: addElement
     validateElement: validateElement
+    validateElements: validateElements
     getGradeSchemeElements: getGradeSchemeElements
     postGradeSchemeElements: postGradeSchemeElements
     totalPoints: totalPoints

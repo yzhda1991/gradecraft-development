@@ -14,7 +14,7 @@
       scope.removeElement = () ->
         GradeSchemeElementsService.removeElement(@gradeSchemeElement)
 
-      scope.validateElement = () ->
-        scope.validationError = GradeSchemeElementsService.validateElement(@gradeSchemeElement)
+      scope.validateElements = () ->
+        GradeSchemeElementsService.validateElements()
   }
 ]
