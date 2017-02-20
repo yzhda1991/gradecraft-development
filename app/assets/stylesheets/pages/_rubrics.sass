@@ -420,11 +420,15 @@ button.meets-expectations-status.no-expectation
     font-size: 26px
 
 // Points tally in the upper right hand corner of rubric grader
+.points-overview-container
+  float: right
+
 #points-overview-floating
   text-align: right
   position: fixed
   top: 2.8rem
-  right: 28px
+  transform: translateX(-100%)
+  width: 250px
   z-index: 50
   padding: .5rem 1rem .5rem
   border-bottom-left-radius: $global-radius
