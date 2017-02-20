@@ -29,7 +29,7 @@ class CSVGradeImporter
             append_unsuccessful row, "Grade not specified"
             next
           end
-          if assignment.pass_fail? && !is_valid_pass_fail_grade(row.grade)
+          if !is_valid_grade? assignment, row.grade
             append_unsuccessful row, "Grade is invalid"
             next
           end
@@ -103,12 +103,13 @@ class CSVGradeImporter
     end
   end
 
-  def is_valid_pass_fail_grade(grade)
+  def is_valid_grade?(assignment, grade)
     begin
-      score = Integer(grade || "")  # vs to_i, since we don't want to cast to an int if it's invalid
-      return PASS_FAIL_GRADE_VALUES.include?(score)
+      score = Integer(grade || "")
+      return PASS_FAIL_GRADE_VALUES.include?(score) if assignment.pass_fail?
+      true
     rescue ArgumentError
-      return false
+      false
     end
   end
 

@@ -28,7 +28,7 @@ describe CSVGradeImporter do
 
         it "is unsuccessful if the student does not exist" do
           result = subject.import(course, assignment)
-          expect(result.unsuccessful.count).to eq 3
+          expect(result.unsuccessful.count).to eq 4
           expect(result.unsuccessful.first[:errors]).to eq "Student not found in course"
         end
       end
@@ -140,7 +140,7 @@ describe CSVGradeImporter do
           allow_any_instance_of(Grade).to receive(:valid?).and_return false
           allow_any_instance_of(Grade).to receive(:errors).and_return double(full_messages: ["The grade is not cool"])
           result = subject.import(course, assignment)
-          expect(result.unsuccessful.count).to eq 3
+          expect(result.unsuccessful.count).to eq 4
           expect(result.unsuccessful.first[:errors]).to eq "The grade is not cool"
         end
 
