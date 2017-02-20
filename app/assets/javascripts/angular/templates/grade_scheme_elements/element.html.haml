@@ -1,4 +1,4 @@
-.grade-scheme-row
+.grade-scheme-row{'ng-class'=>'{"row-conflict": gradeSchemeElement.validationError != null}'}
   %label.form_label
     Grade Letter
     %input.letter{'type'=>'text', 'name'=>'letter', 'ng-model'=>'gradeSchemeElement.letter'}
@@ -15,8 +15,8 @@
       'ng-blur'=>'validateElements()',
       'required'=>'',
       'smart-number'=>'',
-      'allow-negatives'=>"false",
-      'ng-class'=>'{"ng-invalid": validationError != null}'}
+      'allow-negatives'=>'false',
+      'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError}'}
 
   .right
     %span

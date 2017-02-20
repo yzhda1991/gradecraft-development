@@ -1,17 +1,13 @@
 %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade Scheme Elements..."}
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
-  %grade-scheme-element{'ng-repeat'=>'element in vm.grade_scheme_elements',
+  %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
                         'grade_scheme_element'=>'element'}
 
   %button.button.right{'ng-click'=>'vm.addElement()',
-                       'ng-hide'=>'vm.grade_scheme_elements.length > 0'} Add Your Highest Grade
+                       'ng-hide'=>'vm.gradeSchemeElements.length > 0'} Add Your Highest Grade
 
 .submit-buttons
   .right
     %button.button.right{'type'=>'button',
-                         'ng-click'=>'vm.postGradeSchemeElements()',
-                         'ng-disabled'=>'grade_scheme_element_form.$invalid'} Submit
-
-  .required-notice.right{'ng-if'=>'grade_scheme_element_form.$invalid'}
-    Fix any conflicts and fill in empty fields before saving.
+                         'ng-click'=>'vm.postGradeSchemeElements()'} Submit

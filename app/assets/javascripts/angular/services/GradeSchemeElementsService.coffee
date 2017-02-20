@@ -7,8 +7,11 @@
     _totalPoints
 
   validateElements = () ->
+    has_zero_threshold = false
     for element, i in gradeSchemeElements
       validateElement(element)
+      has_zero_threshold = true if element.lowest_points == 0
+    addZeroThreshold() if not has_zero_threshold
 
   validateElement = (currentElement) ->
     currentElement.validationError = undefined
@@ -33,6 +36,7 @@
 
   removeElement = (currentElement) ->
     gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)
+    validateElements()
 
   addElement = (currentElement) ->
     if currentElement?
@@ -42,6 +46,13 @@
           return
     else
       gradeSchemeElements.push(newElement())
+
+  addZeroThreshold = () ->
+    zeroElement = newElement()
+    zeroElement.level = "Not yet defined"
+    zeroElement.lowest_points = 0
+    gradeSchemeElements.push(zeroElement)
+    validateElements()  # ensure zero threshold does not conflict with existing
 
   getGradeSchemeElements = () ->
     $http.get("/api/grade_scheme_elements").success((response) ->
