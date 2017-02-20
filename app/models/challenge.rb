@@ -35,7 +35,7 @@ class Challenge < ActiveRecord::Base
   validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
   in: [true, false], message: "must be true or false"
 
-  validates_with PositivePointsValidator, attributes: [:full_points]
+  validates_with PositivePointsValidator, attributes: [:full_points], allow_nil: true
   validates_with OpenBeforeCloseValidator, attributes: [:due_at, :open_at]
 
   def has_levels?
