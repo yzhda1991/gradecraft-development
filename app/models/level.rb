@@ -10,6 +10,7 @@ class Level < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 30 }
 
   scope :ordered, -> { order("points ASC") }
+  scope :sorted, -> { order("sort_order ASC")}
 
   def above_expectations?
     # We treat criterion without a 'meets expectations' level as if none
