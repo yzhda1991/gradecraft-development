@@ -1,30 +1,30 @@
 require "rails_spec_helper"
 
-describe Level , focus: true do
+describe Level do
   let(:level) { create :level }
   subject { level }
 
   describe "sort order" do
-    let(:l1) { create :level, points: 100, sort_order: 2 }
-    let(:l2) { create :level, points: 1, sort_order: 3 }
-    let(:l3) { create :level, points: 100, sort_order: 1 }
+    let(:level_1) { create :level, points: 100, sort_order: 2 }
+    let(:level_2) { create :level, points: 1, sort_order: 3 }
+    let(:level_3) { create :level, points: 100, sort_order: 1 }
     let(:criterion) { create :criterion }
 
     before do
       criterion.levels.destroy_all
-      criterion.levels << [l1,l2,l3]
+      criterion.levels << [level_1,level_2,level_3]
     end
 
     it "orders by points" do
-      expect(criterion.levels.ordered.first).to eq(l2)
+      expect(criterion.levels.ordered.first).to eq(level_2)
     end
 
     it "sorts by sort_order" do
-      expect(criterion.levels.sorted).to eq([l3,l1,l2])
+      expect(criterion.levels.sorted).to eq([level_3,level_1,level_2])
     end
 
     it "can be scoped to order by points, and secondarily by sort_order" do
-      expect(criterion.levels.ordered.sorted).to eq([l2,l3,l1])
+      expect(criterion.levels.ordered.sorted).to eq([level_2,level_3,level_1])
     end
   end
 

@@ -5,7 +5,7 @@
       %p.criterion-description= criterion.description
 
     %ul.level-tabs.rubric-levels{:role => "tablist"}
-      - criterion.levels.ordered.each_with_index do |level, tindex|
+      - criterion.levels.ordered.sorted.each_with_index do |level, tindex|
         %li.level-tab.rubric-level{:class => ("earned" if level.earned_for?(student.id)), id: "tab-#{cindex}-#{tindex}", :role => "tab", "aria-controls" => "tabpanel-#{cindex}-#{tindex}", "aria-selected" => (level.earned_for?(student.id) ? "true" : "false"), "tabindex" => (level.earned_for?(student.id) ? "0" : "-1")}
           - if level.earned_for?(student.id)
             = glyph("check")
@@ -15,7 +15,7 @@
               %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
 
     .tab-panel-container{"data-start-index" => find_earned_rubric_grade(criterion, student.id)}
-      - criterion.levels.ordered.each_with_index do |level, lindex|
+      - criterion.levels.ordered.sorted.each_with_index do |level, lindex|
         .tab-panel{:class => ("earned selected" if level.earned_for?(student.id)), :id => "tabpanel-#{cindex}-#{lindex}", :role => "tabpanel", "aria-labelledby" => "tab-#{cindex}-#{lindex}"}
           .tab-panel-header
             - if level.earned_for?(student.id)
