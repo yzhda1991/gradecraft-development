@@ -1,8 +1,8 @@
 %section.grade-score-levels
 
-  .grade-section-label Select Points Level ({{assignment().full_points | number}} Points Possible)
+  %label.grade-section-label(for="grade-score-level-selector") Select Points Level ({{assignment().full_points | number}} Points Possible)
 
-  %select.grade-score-level-selector(ng-model='grade.raw_points' ng-change='queueUpdateGrade()')
+  %select#grade-score-level-selector(ng-model='grade.raw_points' ng-change='queueUpdateGrade()')
     %option(value='{{scoreLevel.points}}'
     ng-repeat='scoreLevel in assignment().score_levels'
     ng-selected='grade.raw_points == scoreLevel.points'

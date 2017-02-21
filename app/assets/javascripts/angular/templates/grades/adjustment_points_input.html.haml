@@ -1,7 +1,7 @@
 %section.grade-adjustment-points
-  .grade-section-label Adjustment Points
+  %label.grade-section-label{for: "adjustment-points-input"} Adjustment Points
 
-  %input.adjustment-points-input( type="text"
+  %input#adjustment-points-input( type="text"
   placeholder="Enter adjustment points for grade"
   ng-model="grade.adjustment_points"
   smart-number
@@ -9,6 +9,6 @@
   ng-change="queueUpdateGrade()")
 
 %section.grade-adjustment-points-feedback(ng-if="grade.adjustment_points && grade.adjustment_points != 0")
-  .grade-section-label Adjustment Points Feedback
-  %textarea(ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
+  %label.grade-section-label{for: "adjustment-points-feedback"} Adjustment Points Feedback
+  %textarea#adjustment-points-feedback(ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
 .clear

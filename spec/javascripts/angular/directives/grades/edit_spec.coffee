@@ -21,12 +21,12 @@ describe 'gradeEdit directive', ()->
       expect($(@element).find("grade-last-updated").length).toEqual(1)
 
     it 'adds a raw points input for standard grades', ()->
-      expect($(@element).find("input.adjustment-points-input").length).toEqual(1)
+      expect($(@element).find("input#adjustment-points-input").length).toEqual(1)
 
     it 'does not load inputs for pass/fail, score level or rubrics', ()->
       expect($(@element).find(".binary-switch-socket").length).toEqual(0)
       expect($(@element).find("#rubric-grade-edit").length).toEqual(0)
-      expect($(@element).find(".grade-score-level-selector").length).toEqual(0)
+      expect($(@element).find("#grade-score-level-selector").length).toEqual(0)
 
     it "includes a file uploader", ()->
       expect($(@element).find("grade-file-uploader").length).toEqual(1)

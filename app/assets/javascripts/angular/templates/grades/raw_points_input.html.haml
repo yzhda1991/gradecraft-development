@@ -1,9 +1,8 @@
 %section.grade-raw-points
-  .grade-section-label Raw Points ({{assignment().full_points | number}} Points Possible)
+  %label.grade-section-label{for: "raw-points-input"} Raw Points ({{assignment().full_points | number}} Points Possible)
 
-  %input.raw-points-input( type="text"
+  %input#raw-points-input( type="text"
   placeholder="Enter raw points for grade"
   ng-model="grade.raw_points"
   smart-number
   ng-change="queueUpdateGrade()")
-
