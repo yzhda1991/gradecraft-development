@@ -7,12 +7,13 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %table.dynatable.scroll-table
+  %table.paginated_dynatable.scroll-table
     %caption.sr-only My Courses
     %thead
       %tr
         %th{scope: "col"} Course No
         %th{scope: "col"} Name
+        %th{scope: "col"} Instructor(s)
         %th{scope: "col"} Year
         %th{scope: "col"} Semester
         %th{scope: "col"} Total Points
@@ -44,6 +45,10 @@
         %tr
           %td= course.course_number
           %td= link_to course.name, change_course_path(id: course.id)
+          %td
+            %ul
+              - course.staff.each do |staff_member|
+                %li= "#{staff_member.name}"
           %td= course.year
           %td= course.semester
           %td= points course.total_points
