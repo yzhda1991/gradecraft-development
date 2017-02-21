@@ -4,14 +4,11 @@
   $scope.courseBadges = RubricFactoryService.badges
   $scope.criteria = RubricFactoryService.criteria
 
-  $scope.savedCriterionCount = 0
-
   $scope.init = (rubricId, assignmentId, pointTotal)->
     $scope.rubricId = rubricId
     $scope.assignmentId = assignmentId
     $scope.pointTotal = parseInt(pointTotal)
     $scope.services()
-
 
   $scope.services = () ->
     # because getting Criteria requires badges from $scope
@@ -54,9 +51,6 @@
   $scope.pointsOverage = ()->
     $scope.pointsDifference() < 0
 
-  $scope.countSavedCriterion = () ->
-    $scope.savedCriterionCount += 1
-
   $scope.newCriterion = ()->
     m = new Criterion(null, $scope)
     $scope.criteria.push m
@@ -93,7 +87,7 @@
 
   # send the criterion order to the server with ids
   $scope.updateCriterionOrder = ()->
-    if $scope.savedCriterionCount > 0
+    if RubricFactoryService.criteria.length > 0
       $http.put("/criteria/update_order", criterion_order: $scope.orderedCriteria()).success(
       )
       .error(
