@@ -1,5 +1,5 @@
-%section.grade-edit-section.assignment-details
-  %h2.grade-edit-header #{ assignment.assignment_type.name} Details:
+%section.grade-form-section.assignment-details
+  %h2.grade-form-header #{ assignment.assignment_type.name} Details:
   - if assignment.pass_fail?
     %p= "#{term_for :pass}/#{term_for :fail} Assignment"
   - else
@@ -15,8 +15,8 @@
     %p= "Due: #{assignment.due_at}"
 
 - if assignment.description.present?
-  %section.grade-edit-section
-    %h2.grade-edit-header #{term_for :assignment} Guidelines:
+  %section.grade-form-section
+    %h2.grade-form-header #{term_for :assignment} Guidelines:
     - if assignment.assignment_files.present?
       %ul
         Downloads
@@ -26,11 +26,12 @@
     %p= raw assignment.description
 
 - if assignment.assignment_type.description.present?
-  %section.grade-edit-section
-    %h2.grade-edit-header #{ assignment.assignment_type.name} Guidelines:
+  %section.grade-form-section
+    %h2.grade-form-header #{ assignment.assignment_type.name} Guidelines:
 
     %p= raw assignment.assignment_type.description
     %hr.grading-divider
 
-%section.grade-edit-section
-  %h2.grade-edit-header Grade for #{@grade.student.first_name} #{@grade.student.last_name}:
+- if !current_student.present?
+  %section.grade-form-section
+    %h2.grade-form-header Grade for #{@grade.student.first_name} #{@grade.student.last_name}:

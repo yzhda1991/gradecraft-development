@@ -1,7 +1,5 @@
 = render partial: "assignment_guidelines", locals: { assignment: presenter.assignment }
 
-%hr
-
 %student-submission{"ng-app"=>"#{'gradecraft' if presenter.assignment.accepts_text}", class: "ng-cloak"}
   = simple_form_for [presenter.assignment, presenter.submission], :html => { class: "student-submission-form", "assignment_id"=>"#{presenter.assignment.id}" } do |f|
     %hidden-form-method
@@ -11,29 +9,32 @@
       = f.input :student_id, :input_html => { :value => presenter.student.id }, as: :hidden
 
     - if presenter.submission.will_be_resubmitted?
-      %section
+      %section.grade-form-section
         .italic.not_bold= "Graded: #{presenter.submission.graded_at}"
         %span.label.alert Resubmission!
 
-    %section
+    %section.grade-form-section
       - if presenter.assignment.accepts_attachments
-        %h4 Attachments
-        = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
-          = sf.file_field :file, :multiple => true
-        - if presenter.submission.submission_files.exists?
-          %h5.bold Uploaded files
-          %ul.uploaded-files
-            - presenter.submission.submission_files.each do |sf|
-              %li
-                = link_to sf.filename, sf.url, :target => "_blank"
-                = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id } )
+        .grade-form-subsection
+          %h3.grade-form-header Attachments
+          = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
+            = sf.file_field :file, :multiple => true
+          - if presenter.submission.submission_files.exists?
+            %h3.bold Uploaded files
+            %ul.uploaded-files
+              - presenter.submission.submission_files.each do |sf|
+                %li
+                  = link_to sf.filename, sf.url, :target => "_blank"
+                  = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id } )
 
       - if presenter.assignment.accepts_links
-        = f.input :link
+        .grade-form-subsection
+          = f.input :link, :label_html => {:class => "grade-section-label"}
 
       - if presenter.assignment.accepts_text
-        %h4.uppercase Content/Statement
-        %text-comment-input{"assignment_id"=>"#{presenter.assignment.id}"}
+        .grade-form-subsection
+          %h3.grade-form-header Content/Statement
+          %text-comment-input{"assignment_id"=>"#{presenter.assignment.id}"}
 
     .submit-buttons
       %ul
