@@ -1,11 +1,11 @@
-@gradecraft.directive 'gradeEarnedBadgesSelect', ['BadgeService', (BadgeService) ->
+@gradecraft.directive 'gradeEarnedBadgesSelect', ['GradeService', 'BadgeService', (GradeService, BadgeService) ->
   AwardedBadgesCtrl = [()->
     vm = this
     vm.BadgeService = BadgeService
     BadgeService.getBadges(vm.studentId)
 
     vm.badgeEarnedForGrade = (badge)->
-      BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, vm.gradeId)
+      BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, GradeService.grade.id)
 
     vm.badgeAvailable = (badge)->
       badge.available_for_student || vm.badgeEarnedForGrade(badge)
@@ -19,7 +19,7 @@
         BadgeService.deleteEarnedBadge(earnedBadge)
         badge.available_for_student = true
       else
-        BadgeService.createEarnedBadge(badge.id, vm.studentId, vm.gradeId)
+        BadgeService.createEarnedBadge(badge.id, vm.studentId, GradeService.grade.id)
   ]
 
   {
@@ -28,7 +28,6 @@
     controllerAs: 'vm',
     scope: {
       studentId: '@'
-      gradeId: '@'
     },
     templateUrl: 'grades/earned_badges_select.html'
   }

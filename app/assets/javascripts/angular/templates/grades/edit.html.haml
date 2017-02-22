@@ -22,7 +22,7 @@
   %grade-file-uploader(ng-if='!vm.isGroupGrade')
   %grade-feedback-text-input
 
-  %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}' grade-id='{{vm.gradeService.grade.id}}')
+  %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}')
   %hr.grading-divider
 
 .right
@@ -32,5 +32,5 @@
 
 .clear
 %hr.grading-divider
-%span.italic 
+%span.italic
   %grade-last-updated
