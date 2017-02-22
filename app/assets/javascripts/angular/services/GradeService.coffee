@@ -1,7 +1,14 @@
 @gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
 (GradeCraftAPI, DebounceQueue, $http) ->
 
+
+
+  # We bind to grade in the directives, to manage all grades through a
+  # single object. On update, these params are copied over into each grade.
+  # In this way individual and group grades can be treated the same.
   grade = {}
+  grades = []
+
   fileUploads = []
   criterionGrades = []
 
@@ -10,8 +17,7 @@
   isRubricGraded = false
   thresholdPoints = 0
 
-  # used for group grades:
-  grades = []
+  # used to distinguish group and individual grades:
   _recipientType = ""
   _recipientId = ""
 
@@ -39,6 +45,15 @@
 
   #------- grade API calls ----------------------------------------------------#
 
+  # Adjustment fields are unique to each grade, and are kept in the grades array.
+  # All other attributes are stored in the singular grade object to simplify
+  # updates via binding in the directives
+  _getGradeParams = (attributes)->
+    angular.copy(attributes, grade)
+    delete grade.adjustment_points
+    delete grade.adjustment_points_feedback
+    grade.group_id = _recipientId if _recipientType == "group"
+
   # When we get a grade response for student or group,
   # this initial setup is run to extract all included and meta information
   _getIncluded = (response)->
@@ -64,7 +79,8 @@
     if recipientType == "student"
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').then(
         (response) ->
-          angular.copy(response.data.data.attributes, grade)
+          GradeCraftAPI.addItem(grades, "grades", response.data)
+          _getGradeParams(response.data.data.attributes)
           _getIncluded(response)
           calculateGradePoints()
           GradeCraftAPI.logResponse(response)
@@ -75,23 +91,16 @@
       $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/grades/').then(
         (response) ->
 
-          # The API sends all student information so we can add the ability to
-          # custom grade group members. For now we filter to the first student's
-          # grade to populate the view, since all students grades are identical
-          angular.copy(_.find(response.data.data,
-            { attributes: {'student_id' : response.data.meta.student_ids[0] }
-            }).attributes, grade)
-          grade.group_id = recipientId
-
-          _getIncluded(response)
-
-          # We store all grades in grades, so that when updateGrade is called,
-          # we can iterate through all group grades by id passing in params
-          #from grade
           GradeCraftAPI.loadMany(grades, response.data)
 
+          # Copy the first student's grade
+          _getGradeParams(_.find(response.data.data,
+            { attributes: {'student_id' : response.data.meta.student_ids[0] }
+            }).attributes)
+          _getIncluded(response)
+
           # The API sends criterion grades for all group members,
-          # For now we filter to those for the first student
+          # We filter to a single set from the first student
           filteredCriterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
           angular.copy(filteredCriterionGrades, criterionGrades)
 
@@ -101,8 +110,8 @@
           GradeCraftAPI.logResponse(response)
       )
 
-  _updateGradeById = (id, returnURL=null)->
-    $http.put("/api/grades/#{id}", grade: grade).then(
+  _updateGradeById = (id, params, returnURL=null)->
+    $http.put("/api/grades/#{id}", grade: params).then(
       (response) ->
         grade.updated_at = new Date()
         GradeCraftAPI.logResponse(response)
@@ -112,15 +121,24 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  _params = (id)->
+    g = _.find(grades,{id: id})
+    params = _.clone(grade)
+    params.adjustment_points = g.adjustment_points
+    params.adjustment_points_feedback = g.adjustment_points_feedback
+    params
+
   _updateGrade = (returnURL=null)->
     if _recipientType == "student"
-      _updateGradeById(grade.id, returnURL)
+      params = _params(grade.id)
+      _updateGradeById(grade.id, params, returnURL)
     else if _recipientType == "group"
       _.each(grades, (g)->
+        params = _params(g.id)
         if returnURL && g == _.last(grades)
-          _updateGradeById(g.id, returnURL)
+          _updateGradeById(g.id, params, returnURL)
         else
-          _updateGradeById(g.id)
+          _updateGradeById(g.id, params)
       )
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
@@ -199,8 +217,8 @@
   setCriterionGradeLevel = (criterionId, level)->
     criterionGrade =
       findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
-    criterionGrade.level_id = level.id
-    criterionGrade.points = level.points
+    criterionGradeParams.level_id = level.id
+    criterionGradeParams.points = level.points
     calculateGradePoints()
 
   _updateCriterionGrade = (criterionId)->

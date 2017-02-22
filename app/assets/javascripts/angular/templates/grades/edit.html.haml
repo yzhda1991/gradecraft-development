@@ -14,7 +14,7 @@
   %grade-pass-fail-switch(ng-if='vm.isPassFailGraded()')
   %grade-raw-points(ng-if='vm.isRubricGraded()')
 
-  %grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()')
+  %grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()' group-grade='vm.isGroupGrade')
 
   %grade-final-points(ng-if='!vm.isPassFailGraded()')
 
