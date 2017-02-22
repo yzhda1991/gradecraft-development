@@ -4,6 +4,30 @@ describe Level do
   let(:level) { create :level }
   subject { level }
 
+  describe "sort order" do
+    let(:level_1) { create :level, points: 100, sort_order: 2 }
+    let(:level_2) { create :level, points: 1, sort_order: 3 }
+    let(:level_3) { create :level, points: 100, sort_order: 1 }
+    let(:criterion) { create :criterion }
+
+    before do
+      criterion.levels.destroy_all
+      criterion.levels << [level_1,level_2,level_3]
+    end
+
+    it "orders by points" do
+      expect(criterion.levels.ordered.first).to eq(level_2)
+    end
+
+    it "sorts by sort_order" do
+      expect(criterion.levels.sorted).to eq([level_3,level_1,level_2])
+    end
+
+    it "can be scoped to order by points, and secondarily by sort_order" do
+      expect(criterion.levels.ordered.sorted).to eq([level_2,level_3,level_1])
+    end
+  end
+
   describe "#above_expectations?" do
     it "is false if points are equal to or below expectations" do
       subject.criterion.update(meets_expectations_points: subject.points)
@@ -58,8 +82,8 @@ describe Level do
   end
 
   describe "#hide_analytics?" do
-    let(:criterion) { build :criterion, rubric: rubric }
     let(:rubric) { build :rubric }
+    let(:criterion) { build :criterion, rubric: rubric }
     subject { build :level, criterion: criterion }
 
     it "is hidden if the course and assignment are set to hide analytics" do

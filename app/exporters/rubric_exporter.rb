@@ -25,7 +25,7 @@ class RubricExporter
   def level_data_for(criterion)
     level_data = []
     # add the levels for the criteria
-    criterion.levels.ordered.inject(level_data) do |memo, level|
+    criterion.levels.ordered.sorted.inject(level_data) do |memo, level|
       memo << "#{level.name} (#{level.points} points) #{level.description}"
     end
   end
