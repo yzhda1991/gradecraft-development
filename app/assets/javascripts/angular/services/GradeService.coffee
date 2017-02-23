@@ -23,15 +23,22 @@
 
   #------- grade state management ---------------------------------------------#
 
+  # Final points is unique to each grade in grades
+  # when accounting for adjustment points
+  _updateFinalPoints = (g)->
+    g.raw_points = grade.raw_points
+    g.adjustment_points = parseInt(g.adjustment_points) || 0
+    g.final_points = g.raw_points + g.adjustment_points
+    g.final_points = 0 if g.final_points < thresholdPoints
+
   # This must be triggered whenever there is a
   # change to points fields or selected levels
   calculateGradePoints = ()->
     if isRubricGraded
       grade.raw_points = _.sum(_.map(criterionGrades, "points"))
     grade.raw_points = parseInt(grade.raw_points) || 0
-    grade.adjustment_points = parseInt(grades[0].adjustment_points) || 0
-    grade.final_points = grade.raw_points + grade.adjustment_points
-    grade.final_points = 0 if grade.final_points < thresholdPoints
+    _.each(grades, (g)->
+      _updateFinalPoints(g))
 
   gradeIsPassing = ()->
     grade.pass_fail_status == "Pass"
@@ -45,13 +52,14 @@
 
   #------- grade API calls ----------------------------------------------------#
 
-  # Adjustment fields are unique to each grade, and are kept in the grades array.
-  # All other attributes are stored in the singular grade object to simplify
-  # updates via binding in the directives
+  # Adjustment fields and final_points are unique to each grade,
+  # and are kept in the grades array. All other attributes are stored in the
+  # singular grade object to simplify updates via binding in the directives
   _getGradeParams = (attributes)->
     angular.copy(attributes, grade)
     delete grade.adjustment_points
     delete grade.adjustment_points_feedback
+    delete grade.final_points
     grade.group_id = _recipientId if _recipientType == "group"
 
   # When we get a grade response for student or group,
@@ -126,6 +134,7 @@
     params = _.clone(grade)
     params.adjustment_points = g.adjustment_points
     params.adjustment_points_feedback = g.adjustment_points_feedback
+    params.final_points = g.final_points
     params
 
   _updateGrade = (returnURL=null)->
@@ -172,6 +181,8 @@
     _.each(criterionGrades, (cg)->
       DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
     )
+
+    # TODO: handle custom adjustments per student with rubric group grades
 
     # parameters are configured to work with existing service
     # BuildsGrade: /services/creates_grade/builds_grade.rb

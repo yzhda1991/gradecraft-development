@@ -1,2 +1,4 @@
 %section.grade-final-points
-  {{ grade.final_points }} Total Points
+  .final-points-display(ng-repeat="grade in grades")
+    {{ grade.final_points }} Total Points
+    %span(ng-if="grades.length > 1") For {{ grade.student_name}}

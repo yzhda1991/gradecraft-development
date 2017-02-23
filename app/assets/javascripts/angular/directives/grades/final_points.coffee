@@ -5,6 +5,6 @@
   return {
     templateUrl: 'grades/final_points.html'
     link: (scope, el, attr)->
-      scope.grade = GradeService.grade
+      scope.grades = GradeService.grades
   }
 ]

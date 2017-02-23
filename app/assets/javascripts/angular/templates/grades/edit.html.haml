@@ -1,7 +1,7 @@
 -# This is the main template for the grading form,
 -# all partials are loaded below.
 
-%grade-points-overview(ng-if='!vm.loading && !vm.isPassFailGraded()')
+%grade-points-overview(ng-if='!vm.loading && !vm.isPassFailGraded() && !vm.isGroupGrade')
 
 %loading-message(loading='vm.loading' message="Loading Grade...")
 
