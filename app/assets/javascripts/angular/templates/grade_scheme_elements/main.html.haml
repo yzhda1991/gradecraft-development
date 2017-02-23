@@ -2,6 +2,7 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
+                        'set_has_invalid_elements'=>'vm.setHasInvalidElements',
                         'grade_scheme_element'=>'element'}
 
   %button.button.right{'ng-click'=>'vm.addElement()',
@@ -10,4 +11,6 @@
 .submit-buttons
   .right
     %button.button.right{'type'=>'button',
-                         'ng-click'=>'vm.postGradeSchemeElements()'} Submit
+                         'ng-click'=>'vm.postGradeSchemeElements()',
+                         'ng-class'=>'{"disabled": vm.hasInvalidElements}',
+                         'ng-disabled'=>'vm.hasInvalidElements'} Submit

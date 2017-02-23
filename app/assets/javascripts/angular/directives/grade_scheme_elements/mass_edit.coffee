@@ -7,12 +7,16 @@
 
     vm.loading = true
     vm.gradeSchemeElements = null
+    vm.hasInvalidElements = false
 
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
 
     vm.postGradeSchemeElements = () ->
       GradeSchemeElementsService.postGradeSchemeElements()
+
+    vm.setHasInvalidElements = (value) ->
+      vm.hasInvalidElements = value
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
