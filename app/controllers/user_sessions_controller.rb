@@ -35,7 +35,7 @@ class UserSessionsController < ApplicationController
       and return unless result.success?
 
     @user = result[:user]
-    @course = Services::CreatesOrUpdatesCourseFromLTI.create_or_update(auth_hash)[:course]
+    @course = Services::CreatesOrUpdatesCourseFromLTI.create_or_update(auth_hash, false)[:course]
     if !@user || !@course
       lti_error_notification
       flash[:alert] = t("sessions.create.error")
