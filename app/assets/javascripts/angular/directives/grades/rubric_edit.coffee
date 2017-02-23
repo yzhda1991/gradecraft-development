@@ -6,7 +6,7 @@
     templateUrl: 'grades/rubric_edit.html'
     link: (scope, el, attr)->
 
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
       scope.rubric = RubricService.rubric
       scope.criteria = RubricService.criteria
 

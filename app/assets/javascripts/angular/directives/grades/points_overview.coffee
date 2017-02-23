@@ -10,7 +10,7 @@
       scope.assignment = ()->
         AssignmentService.assignment()
 
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
 
       scope.pointsBelowFull = ()->
         return 0 if !scope.assignment() || !scope.grade

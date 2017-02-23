@@ -10,7 +10,7 @@
       scope.assignment = ()->
         AssignmentService.assignment()
 
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
 
       scope.queueUpdateGrade = (immediate)->
         GradeService.queueUpdateGrade(immediate)

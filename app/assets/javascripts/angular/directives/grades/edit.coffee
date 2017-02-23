@@ -20,7 +20,7 @@
 
         # Set a default state for new pass/fail grades, so that the
         # Pass/Fail switch corresponds to the grade state on init.
-        if AssignmentService.assignment().pass_fail && !GradeService.grade.pass_fail_status
+        if AssignmentService.assignment().pass_fail && !GradeService.modelGrade.pass_fail_status
           GradeService.setGradeToPass()
       )
 

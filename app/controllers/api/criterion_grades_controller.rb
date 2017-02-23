@@ -1,5 +1,4 @@
 require_relative "../../services/creates_grade_using_rubric"
-require_relative "../../services/creates_group_grades_using_rubric"
 
 class API::CriterionGradesController < ApplicationController
   before_action :ensure_staff?

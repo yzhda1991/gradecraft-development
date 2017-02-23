@@ -29,7 +29,7 @@
         BadgeService.deleteEarnedBadge(earnedBadge)
         badge.available_for_student = true
       else
-        BadgeService.createEarnedBadge(badge.id, vm.studentId, GradeService.grade.id)
+        BadgeService.createEarnedBadge(badge.id, vm.studentId, GradeService.grades[0].id)
   ]
 
   {
