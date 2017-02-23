@@ -37,7 +37,7 @@
 
   removeElement = (currentElement) ->
     deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
-    validateElements()
+    validateElements() if gradeSchemeElements.length > 0
 
   addElement = (currentElement) ->
     if currentElement?
@@ -74,8 +74,8 @@
       $http.put('/grade_scheme_elements/mass_update', data).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, gradeSchemeElements)
-          window.location.href = '/grade_scheme_elements/'
           GradeCraftAPI.logResponse(data)
+          window.location.href = '/grade_scheme_elements/'
       ).error(
         (error) ->
           alert('An error occurred that prevented saving.')
