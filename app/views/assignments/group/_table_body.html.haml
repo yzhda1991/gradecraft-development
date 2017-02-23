@@ -24,7 +24,6 @@
             - if group_presenter.assignment.has_levels?
               %th Level
 
-            %th
             - if group_presenter.assignment.release_necessary?
               %th Status
               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
@@ -54,8 +53,3 @@
                 %td.right
                   - if grade && grade.is_graded?
                     = check_box_tag "grade_ids[]", grade.id
-              %td
-                .right
-                  %ul.button-bar
-                    - if group_presenter.assignment_graded?
-                      %li= link_to decorative_glyph(:edit) + "Override Grade", assignment_student_grade_path(group_presenter.assignment, student), method: :post, class: "button"
