@@ -1,5 +1,6 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
+  deletedElementIds = []
   gradeSchemeElements = []
   _totalPoints  = 0
 
@@ -35,7 +36,7 @@
     }
 
   removeElement = (currentElement) ->
-    gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)
+    deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
     validateElements()
 
   addElement = (currentElement) ->
@@ -64,6 +65,7 @@
   postGradeSchemeElements = () ->
     data = {
       grade_scheme_elements_attributes: gradeSchemeElements
+      deleted_ids: deletedElementIds
     }
 
     # Ensure a zero-level
