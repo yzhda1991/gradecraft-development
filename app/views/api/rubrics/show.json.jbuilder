@@ -32,6 +32,7 @@ json.included do
         json.points level.points
         json.full_credit !!level.full_credit
         json.no_credit !!level.no_credit
+        json.sort_order level.sort_order
         json.meets_expectations level.meets_expectations
         json.level_badges level.level_badges do |level_badge|
           json.id level_badge.id

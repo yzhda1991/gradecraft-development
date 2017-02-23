@@ -3,6 +3,6 @@ class ExistingCriterionSerializer < ActiveModel::Serializer
   has_many :levels, serializer: ExistingLevelSerializer
 
   def levels
-    object.levels.order("points ASC")
+    object.levels.ordered.sorted
   end
 end

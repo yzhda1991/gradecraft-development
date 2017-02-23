@@ -5,7 +5,7 @@ class API::CriteriaController < ApplicationController
     assignment = current_course.assignments.find params[:assignment_id]
     rubric = assignment.rubric
     @criteria =
-      rubric.criteria.ordered.includes(:levels).order("levels.points").select(
+      rubric.criteria.ordered.includes(:levels).order("levels.points").order("levels.sort_order").select(
         :id, :name, :description, :max_points, :order
       )
   end
