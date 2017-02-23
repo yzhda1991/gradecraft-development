@@ -105,30 +105,6 @@ describe API::CriterionGradesController do
       end
     end
 
-    describe "PUT group_update" do
-      let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }
-      let(:params) do
-        RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, group_id: world.group.id)
-      end
-
-      it "updates the grade for all students in group" do
-        target = params["grade"]["raw_points"]
-        put :group_update, params: params
-        expect(Grade.where(
-          student_id: world.group.students.pluck(:id), assignment_id: world.assignment.id
-        ).pluck(:raw_points)).to eq([target, target, target, target])
-      end
-
-      it "adds the group id to all grades" do
-        target = world.group.id
-        put :group_update, params: params
-        expect(Grade.where(
-          student_id: world.group.students.pluck(:id), assignment_id: world.assignment.id
-        ).pluck(:group_id)).to eq([target, target, target, target])
-      end
-    end
-  end
-
   context "as student" do
     before(:each) { login_user(world.student) }
 

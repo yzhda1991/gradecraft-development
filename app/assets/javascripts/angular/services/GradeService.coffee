@@ -176,34 +176,44 @@
 
     return queueUpdateGrade(true, returnURL) unless isRubricGraded
 
+    # Rubric Grade Submission:
+
     # cancel all pending updates
     DebounceQueue.cancelEvent("grades", grade.id)
     _.each(criterionGrades, (cg)->
       DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
     )
 
-    # TODO: handle custom adjustments per student with rubric group grades
-
     # parameters are configured to work with existing service
     # BuildsGrade: /services/creates_grade/builds_grade.rb
-    params = {
-      grade: {
-        adjustment_points: grade.adjustment_points
-        adjustment_points_feedback: grade.adjustment_points_feedback
-        feedback: grade.feedback
-        raw_points: grade.raw_points
-        status: grade.status
+    groupParams = _.map(grades, (g)->
+      {
+        student_id: g.student_id
+        params: {
+          grade: {
+            adjustment_points: g.adjustment_points
+            adjustment_points_feedback: g.adjustment_points_feedback
+            feedback: grade.feedback
+            raw_points: grade.raw_points
+            status: grade.status
+          }
+          criterion_grades: criterionGrades
+        }
       }
-      criterion_grades: criterionGrades
-    }
-    $http.put(
-      "/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params
-    ).then(
-      (response) ->
-        GradeCraftAPI.logResponse(response)
-        window.location = returnURL
-      ,(response) ->
-        GradeCraftAPI.logResponse(response)
+    )
+
+    # Iterate over group member's and submit grades:
+    _.each(groupParams, (memberParams)->
+      $http.put(
+        "/api/assignments/#{grade.assignment_id}/students/#{memberParams.student_id}/criterion_grades", memberParams.params
+      ).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          if memberParams == _.last(groupParams)
+            window.location = returnURL
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
     )
 
 #------- Criterion Grade Methods for Rubric Grading ---------------------------#
@@ -228,8 +238,8 @@
   setCriterionGradeLevel = (criterionId, level)->
     criterionGrade =
       findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
-    criterionGradeParams.level_id = level.id
-    criterionGradeParams.points = level.points
+    criterionGrade.level_id = level.id
+    criterionGrade.points = level.points
     calculateGradePoints()
 
   _updateCriterionGrade = (criterionId)->
