@@ -18,12 +18,12 @@
         .grade-form-subsection
           %h3.grade-form-header Attachments
           = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
-            = sf.file_field :file, :multiple => true
+            = sf.file_field :file, :multiple => true, class: "file-upload-button"
           - if presenter.submission.submission_files.exists?
             %h3.bold Uploaded files
-            %ul.uploaded-files
+            %ul.file-attachments-list
               - presenter.submission.submission_files.each do |sf|
-                %li
+                %li.file-attachment-list-item
                   = link_to sf.filename, sf.url, :target => "_blank"
                   = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id } )
 

@@ -1,5 +1,5 @@
 %section.grade-feedback-upload
-  %input#feedback-upload(type="file" multiple="true" file-upload="feedbackFiles")
+  %input.file-upload-button#feedback-upload(type="file" multiple="true" file-upload="feedbackFiles")
 .clear
 
 %ul.file-attachments-list(ng-if='vm.fileUploads.length > 0')

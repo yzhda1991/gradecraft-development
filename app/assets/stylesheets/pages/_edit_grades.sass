@@ -19,7 +19,6 @@
 
 .simple_form section label.grade-section-label,
 .grade-section-label
-  padding-top: 10px
   display: block
   text-align: left
 
@@ -27,6 +26,8 @@ article.grade-form-fields
   background-color: $color-grey-6
   margin: 1rem auto
   padding: 1rem
+  section
+    margin-bottom: 0.5rem
 
 section.grade-pass-fail
   .binary-switch-socket
@@ -82,7 +83,7 @@ hr.grading-divider
   // clear: both;
   // font-weight: 300;
 
-input#feedback-upload
+input.file-upload-button
   color: transparent
   &::-webkit-file-upload-button
     visibility: hidden
