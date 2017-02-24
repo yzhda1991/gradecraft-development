@@ -86,13 +86,6 @@ describe Assignments::GroupPresenter do
   end
 
   describe "path helpers" do
-    it "returns the path_for_grade" do
-      grade = double(:grade)
-      allow(subject).to receive(:students).and_return [double(:students)]
-      allow(subject).to receive(:grade_for_student).and_return grade
-      expect(subject.path_for_grade).to match(/\/grades\/.*/)
-    end
-
     it "returns the path_for_new_assignment_submission" do
       submission = build(:submission, id: 777)
       allow(group).to receive(:id).and_return 333

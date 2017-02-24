@@ -9,7 +9,6 @@
           - if presenter.assignment.accepts_submissions? && !group_presenter.submission
             %li= link_to "Submit", group_presenter.path_for_new_submission, class: "button"
           - if group_presenter.assignment_graded?
-            %li= link_to decorative_glyph(:eye) + "See Grade", group_presenter.path_for_grade, class: "button"
             %li= link_to decorative_glyph(:edit) + "Edit Grade", group_presenter.path_for_grading_assignment, class: "button"
           - else
             %li= link_to decorative_glyph(:edit) + "Grade", group_presenter.path_for_grading_assignment, class: "button"
@@ -23,6 +22,7 @@
               %th Multiplied Scores
             - if group_presenter.has_levels?
               %th Level
+            %th
 
             - if group_presenter.release_necessary?
               %th Status
@@ -40,6 +40,9 @@
                     = grade.pass_fail_status
                   - else
                     = points grade.final_points
+              %td
+                - if group_presenter.assignment_graded?
+                  = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
 
               - if group_presenter.student_weightable?
                 %td

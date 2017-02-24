@@ -52,10 +52,6 @@ class Assignments::GroupPresenter < Showtime::Presenter
     group.students
   end
 
-  def path_for_grade
-    grade_path grade_for_student(students.first)
-  end
-
   def path_for_new_assignment_submission
     new_assignment_submission_path assignment, submission, group_id: group.id
   end
