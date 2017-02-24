@@ -8,6 +8,10 @@
   margin: 3px auto
   padding: .5rem
   width: 100%
+  @media (max-width: $media-small-max)
+    .left-points, .right-points
+      float: none
+      text-align: center
 
 .bar_magic.success
   background-color: $color-green-2
@@ -28,9 +32,13 @@
 
   .left-points
     margin-left: 4em
+    @media (max-width: $media-medium-max)
+      margin-left: 0
 
   .right-points
     margin-right: 4em
+    @media (max-width: $media-medium-max)
+      margin-right: 0
 
 p.predictor-description
   margin: 0.25rem 0 .5rem
@@ -57,20 +65,19 @@ p.predictor-description
     padding: 0
     margin: 0
 
-.right.radius.label
-  margin-left: 1rem
-
 /* for the grade scheme elements mass edit form */
 .grade-scheme-elements
-  .low-range
-    &.ng-invalid
-      background: #ffcfcf
-
-  input.low-range
-    width: 150px !important
+  input.ng-invalid
+    background-color: transparentize($color-red-1, 0.6)
 
   .validation-error
-    color: #dd5555
+    color: $color-red-1
+    width: 200px
+    font-size: 0.8rem
+    display: inline-block
+    vertical-align: middle
+    @media (max-width: $media-medium-max)
+      width: auto
 
   .add-element
     opacity: 0
@@ -103,16 +110,16 @@ p.predictor-description
 
 .grade-scheme-row
   background-color: $color-grey-7
-  margin: 1rem 0
+  margin: 0.5rem 0
   padding: 1rem
-  border-radius: 25px
-
-.row-conflict
-  border: 1px solid $color-red-1
+  border-radius: 3px
+  display: flex
+  align-items: center
+  justify-content: space-between
+  @media (max-width: $media-small-max)
+    display: block
 
 .grade-scheme-elements
-  .form_label
-    margin-right: .5rem
   input
     padding: .5rem
     border: 0
@@ -124,18 +131,12 @@ p.predictor-description
     &.low-range
       width: 6rem
 
-@media (max-width: $media-medium-max)
-  .bar_magic.current
-    .left-points
-      margin-left: 0
+.gse-label
+  @media (max-width: $media-small-max)
+    display: block
+    margin: 0.5rem 0
 
-    .right-points
-      margin-right: 0
-
-@media (max-width: 760px)
-  .bar_magic
-    width: 100%
-
-    .left-points, .right-points
-      float: none
-      text-align: center
+.action-button-container
+  flex: 0 0 auto
+  @media (max-width: $media-small-max)
+    text-align: right

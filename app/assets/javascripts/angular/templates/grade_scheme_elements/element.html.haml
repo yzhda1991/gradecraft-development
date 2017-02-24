@@ -1,24 +1,30 @@
 .grade-scheme-row{'ng-class'=>'{"row-conflict": gradeSchemeElement.validationError != null}'}
-  %label.form_label
-    Grade Letter
-    %input.letter{'type'=>'text', 'name'=>'letter', 'ng-model'=>'gradeSchemeElement.letter'}
+  .gse-form-container
+    %label.gse-label.form_label
+      Grade Letter
+      %input.letter{'type'=>'text', 'name'=>'letter', 'ng-model'=>'gradeSchemeElement.letter'}
 
-  %label.form_label
-    Level name
-    %input.level{'type'=>'text', 'name'=>'level', 'ng-model'=>'gradeSchemeElement.level'}
+    %label.gse-label.form_label
+      Level name
+      %input.level{'type'=>'text', 'name'=>'level', 'ng-model'=>'gradeSchemeElement.level'}
 
-  %label.form_label
-    Point Threshold
-    %input.low-range{'type'=>'text',
-      'ng-model'=>'gradeSchemeElement.lowest_points',
-      'ng-model-options'=>'{allowInvalid: true}',
-      'ng-blur'=>'validateElements()',
-      'required'=>'',
-      'smart-number'=>'',
-      'allow-negatives'=>'false',
-      'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError}'}
+    %label.gse-label.form_label
+      Point Threshold
+      %input.low-range{'type'=>'text',
+        'ng-model'=>'gradeSchemeElement.lowest_points',
+        'ng-model-options'=>'{allowInvalid: true}',
+        'ng-blur'=>'validateElements()',
+        'required'=>'',
+        'smart-number'=>'',
+        'allow-negatives'=>'false',
+        'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError}'}
 
-  .right
+    %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
+      %span.error
+        %i.fa.fa-exclamation-triangle
+        {{gradeSchemeElement.validationError}}
+
+  .action-button-container
     %span
       %button.add-element.button{'type'=>'button', 'ng-click'=>'addElement()', 'tabindex'=>'0'}
         %i.fa.fa-plus
@@ -26,9 +32,3 @@
       %button.remove-element.button.alert{'type'=>'button', 'ng-click'=>'removeElement()', 'aria-label'=>"Remove Level"}
         Remove
         %i.fa.fa-times
-
-  %br.right
-  %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
-    %span.has-tooltip.error
-      %i.fa.fa-exclamation-triangle
-        {{gradeSchemeElement.validationError}}
