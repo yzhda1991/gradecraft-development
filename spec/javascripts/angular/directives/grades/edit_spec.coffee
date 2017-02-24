@@ -20,8 +20,9 @@ describe 'gradeEdit directive', ()->
       expect($(@element).find("grade-submit-buttons").length).toEqual(1)
       expect($(@element).find("grade-last-updated").length).toEqual(1)
 
-    it 'adds a raw points input for standard grades', ()->
+    xit 'adds a raw points input for standard grades', ()->
       expect($(@element).find("input#adjustment-points-input").length).toEqual(1)
+      expect($(@element).find("grade-adjustment-points-input").length).toEqual(1)
 
     it 'does not load inputs for pass/fail, score level or rubrics', ()->
       expect($(@element).find(".binary-switch-socket").length).toEqual(0)
