@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "submissions/new", focus: true do
+describe "submissions/new" do
 
   let(:presenter) { Submissions::NewPresenter.new({ course: @course, assignment_id: @assignment.id, student: @student,
                                                  view_context: ActionController::Base.new.view_context })

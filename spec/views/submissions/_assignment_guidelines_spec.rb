@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe "submissions/_assignment_guidelines", focus: true do
+describe "submissions/_assignment_guidelines" do
 
   before(:each) do
     course = create(:course)
