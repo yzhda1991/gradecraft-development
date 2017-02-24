@@ -32,6 +32,6 @@
     %p.minimize= raw assignment.assignment_type.description
     %hr.grading-divider
 
-- if !current_student.present?
+- if current_user_is_staff?
   %section.grade-form-section
     %h2.grade-form-header Grade for #{@grade.student.first_name} #{@grade.student.last_name}:
