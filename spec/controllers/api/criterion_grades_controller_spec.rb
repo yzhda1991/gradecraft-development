@@ -104,6 +104,7 @@ describe API::CriterionGradesController do
         end
       end
     end
+  end
 
   context "as student" do
     before(:each) { login_user(world.student) }

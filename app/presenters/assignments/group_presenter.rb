@@ -1,6 +1,8 @@
 require "./lib/showtime"
 
 class Assignments::GroupPresenter < Showtime::Presenter
+  include Rails.application.routes.url_helpers
+
   def assignment
     properties[:assignment]
   end
@@ -8,6 +10,26 @@ class Assignments::GroupPresenter < Showtime::Presenter
   def assignment_graded?
     grade = group.students.first.grade_for_assignment(assignment)
     !grade.nil? && grade.is_graded?
+  end
+
+  def student_weightable?
+    assignment.assignment_type.student_weightable?
+  end
+
+  def has_levels?
+    assignment.has_levels?
+  end
+
+  def release_necessary?
+    assignment.release_necessary?
+  end
+
+  def pass_fail?
+    assignment.pass_fail?
+  end
+
+  def grade_level(grade)
+    assignment.grade_level(grade)
   end
 
   def grade_for_student(student)
@@ -28,5 +50,17 @@ class Assignments::GroupPresenter < Showtime::Presenter
 
   def students
     group.students
+  end
+
+  def path_for_grade
+    grade_path grade_for_student(students.first)
+  end
+
+  def path_for_new_assignment_submission
+    new_assignment_submission_path assignment, submission, group_id: group.id
+  end
+
+  def path_for_grading_assignment
+    grade_assignment_group_path assignment, group
   end
 end
