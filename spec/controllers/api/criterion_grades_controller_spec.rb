@@ -90,11 +90,6 @@ describe API::CriterionGradesController do
         expect { put :update, params: params }.to change { EarnedBadge.count }.by(0)
       end
 
-      it "renders success message when request format is JSON" do
-        put :update, params: params
-        expect(JSON.parse(response.body)).to eq("message" => "Grade successfully saved", "success" => true)
-      end
-
       describe "on error" do
         it "describes unfound student or assignment" do
           params["student_id"] = 0

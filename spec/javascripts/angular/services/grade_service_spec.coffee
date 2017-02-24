@@ -18,7 +18,6 @@ describe 'GradeService', ()->
         expect(@GradeService.grades[0].id).toEqual(1234)
 
       it 'should calculate the final points, defaulting to zero', ()->
-        debugger
         expect(@GradeService.grades[0].raw_points).toEqual(0)
         expect(@GradeService.grades[0].adjustment_points).toEqual(0)
         expect(@GradeService.grades[0].final_points).toEqual(0)

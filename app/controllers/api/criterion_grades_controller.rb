@@ -34,9 +34,8 @@ class API::CriterionGradesController < ApplicationController
   def update
     result = Services::CreatesGradeUsingRubric.create params, current_user.id
     if result.success?
-      render json: {
-        message: "Grade successfully submitted", success: true },
-        status: 200
+      @grade = result.grade.reload
+      render "api/grades/show", success: true, status: 200
     else
       render json: {
         errors: [{ detail: result.message }], success: false
