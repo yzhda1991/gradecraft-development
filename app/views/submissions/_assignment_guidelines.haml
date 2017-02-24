@@ -23,13 +23,13 @@
         - assignment.assignment_files.each do |af|
           %li= link_to af.filename, af.url
 
-    %p= raw assignment.description
+    %p.minimize= raw assignment.description
 
 - if assignment.assignment_type.description.present?
   %section.grade-form-section
     %h2.grade-form-header #{ assignment.assignment_type.name} Guidelines:
 
-    %p= raw assignment.assignment_type.description
+    %p.minimize= raw assignment.assignment_type.description
     %hr.grading-divider
 
 - if !current_student.present?
