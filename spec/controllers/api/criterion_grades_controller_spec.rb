@@ -52,19 +52,19 @@ describe API::CriterionGradesController do
       describe "finds or creates the grade for the assignment and student" do
         it "finds and updates existing grades" do
           create(:grade, assignment: world.assignment, student: world.student)
-          expect { put :update, params: params }.to change { Grade.count }.by(0)
+          expect { put :update, params: params, format: :json }.to change { Grade.count }.by(0)
         end
 
         it "assigns the grade to the submission" do
           submission = create :submission, assignment: world.assignment, student: world.student
-          put :update, params: params
+          put :update, params: params, format: :json
           grade = Grade.unscoped.last
           expect(grade.submission).to eq submission
         end
 
         it "timestamps the grade" do
           current_time = DateTime.now
-          put :update, params: params
+          put :update, params: params, format: :json
           grade = Grade.unscoped.last
           expect(grade.graded_at).to be > current_time
         end
@@ -76,24 +76,24 @@ describe API::CriterionGradesController do
         end
 
         it "does not create new when criterion grades exist" do
-          expect { put :update, params: params }.to change { CriterionGrade.count }.by(0)
+          expect { put :update, params: params, format: :json }.to change { CriterionGrade.count }.by(0)
         end
       end
 
       it "adds earned level badges" do
         world.badge.update(can_earn_multiple_times: false)
-        expect { put :update, params: params }.to change { EarnedBadge.count }.by(1)
+        expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
       end
 
       it "doesn't re-award existing level badges" do
-        expect { put :update, params: params }.to change { EarnedBadge.count }.by(1)
-        expect { put :update, params: params }.to change { EarnedBadge.count }.by(0)
+        expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
+        expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(0)
       end
 
       describe "on error" do
         it "describes unfound student or assignment" do
           params["student_id"] = 0
-          put :update, params: params
+          put :update, params: params, format: :json
           expect(JSON.parse(response.body)).to eq("errors"=>[{"detail"=>"Unable to verify both student and assignment"}], "success"=>false)
           expect(response.status).to eq(404)
         end
