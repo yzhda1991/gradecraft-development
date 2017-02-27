@@ -2,7 +2,7 @@
 
   deletedElementIds = []
   gradeSchemeElements = []
-  _totalPoints  = 0
+  _totalPoints = 0
 
   totalPoints = () ->
     _totalPoints
@@ -17,7 +17,7 @@
   validateElement = (currentElement) ->
     currentElement.validationError = undefined
     for element in gradeSchemeElements
-      continue if angular.equals(element, currentElement) || !element.lowest_points?
+      continue if element == currentElement || !element.lowest_points?
 
       # Invalid because it is in direct conflict with another level
       if element.lowest_points == currentElement.lowest_points
@@ -28,15 +28,8 @@
           element.lowest_points + 1 == currentElement.lowest_points
         currentElement.validationError = "This level is within one point of another level."
 
-  newElement = () ->
-    {
-      letter: null
-      level: null
-      lowest_points: null
-    }
-
   removeElement = (currentElement) ->
-    if currentElement.lowest_points? and currentElement.lowest_points == 0
+    if currentElement.lowest_points == 0 && isOnlyZeroThreshold(currentElement)
       currentElement.validationError = "Lowest level threshold must be 0"
     else
       deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
@@ -45,18 +38,32 @@
   addElement = (currentElement) ->
     if currentElement?
       for element, i in gradeSchemeElements
-        if angular.equals(element, currentElement)
-          gradeSchemeElements.splice(i + 1, 0, newElement())
+        if element == currentElement
+          gradeSchemeElements.splice(i + 1, 0, _newElement())
           return
     else
-      gradeSchemeElements.push(newElement())
+      gradeSchemeElements.push(_newElement())
+
+  # Create new empty grade scheme element object
+  _newElement = () ->
+    angular.copy({
+      letter: null
+      level: null
+      lowest_points: null
+    })
 
   addZeroThreshold = () ->
-    zeroElement = newElement()
+    zeroElement = _newElement()
     zeroElement.level = "Not yet defined"
     zeroElement.lowest_points = 0
     gradeSchemeElements.push(zeroElement)
     validateElements()  # ensure zero threshold does not conflict with existing
+
+  isOnlyZeroThreshold = (currentElement) ->
+    result = _.find(gradeSchemeElements, (element) ->
+      currentElement != element && element.lowest_points == 0
+    )?
+    !result
 
   getGradeSchemeElements = () ->
     $http.get("/api/grade_scheme_elements").success((response) ->
