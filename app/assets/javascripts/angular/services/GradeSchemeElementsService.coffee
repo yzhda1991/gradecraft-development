@@ -36,8 +36,11 @@
     }
 
   removeElement = (currentElement) ->
-    deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
-    validateElements() if gradeSchemeElements.length > 0
+    if currentElement.lowest_points? and currentElement.lowest_points == 0
+      currentElement.validationError = "Lowest level threshold must be 0"
+    else
+      deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
+      validateElements() if gradeSchemeElements.length > 0
 
   addElement = (currentElement) ->
     if currentElement?
