@@ -24,7 +24,7 @@
         if challenge.grade.score > 0
           total += challenge.grade.score
         else
-          total += challenge.prediction.predicted_points
+          total += challenge.prediction.predicted_points || 0
       )
     total
 
