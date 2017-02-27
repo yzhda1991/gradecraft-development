@@ -15,8 +15,7 @@
         %th Courses
         %th #{term_for :team}
         %th{ "data-dynatable-sorts" => "numericScore" } Score
-        %th{:style => "min-width: 250px"}
-          %span.sr-only Action Buttons
+        %th Options
     %tbody
       - @users.each do |user|
         %tr
@@ -42,11 +41,12 @@
             - if user_is_student
               = points user.score_for_course(current_course) if user.respond_to?(:grades)
           %td
-            .right
-              %ul.button-bar
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
                 - if user_is_student
-                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(user), class: "button" if user_is_student
+                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(user) if user_is_student
                 - elsif user_is_staff
-                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", staff_path(user), class: "button" if user_is_staff
-                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(user), class: "button"
-                %li= link_to decorative_glyph(:trash) + "Delete", course_membership, class: "button", data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete
+                  %li= link_to decorative_glyph(:dashboard) + "Dashboard", staff_path(user) if user_is_staff
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(user) 
+                %li= link_to decorative_glyph(:trash) + "Delete", course_membership, data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete

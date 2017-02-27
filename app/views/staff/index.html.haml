@@ -12,8 +12,7 @@
         %th Avatar
         %th Role
         %th #{term_for :team}
-        %th{:style => "min-width: 200px"}
-          %span.sr-only Action Buttons
+        %th Options
     %tbody
       - @staff.each do |user|
         %tr
@@ -28,8 +27,9 @@
             - user.team_leaderships_for_course(current_course).each do |leadership|
               %div= link_to leadership.team.try(:name), leadership.team
           %td
-            .right
-              %ul.button-bar
-                %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user), {class: "button"}
-                %li= link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user), {class: "button"}
-                %li= link_to decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?"}, :method => :delete
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
+                %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user)
+                %li= link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
+                %li= link_to decorative_glyph(:trash) + "Delete",  user, data: { confirm: "Are you sure?"}, :method => :delete
