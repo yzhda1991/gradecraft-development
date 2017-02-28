@@ -23,6 +23,7 @@
 //= require mobile_tables
 //= require slick.min
 //= require lodash.min
+//= require plotly-latest.min
 
 //= require angular/angular
 //= require angular-resource
