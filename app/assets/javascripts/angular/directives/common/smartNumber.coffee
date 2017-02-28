@@ -13,9 +13,6 @@
         if inputValue == '-' || inputValue == '0-'
           modelCtrl.$setViewValue('-')
           inputValue = 0
-        else if inputValue == ''
-          modelCtrl.$setViewValue('')
-          inputValue = 0
         else
           modelCtrl.$setViewValue($filter('number')(inputValue))
 
