@@ -11,7 +11,7 @@ if ($gradeDistro.length) {
 
   var layout = {
     showlegend: false,
-    height: 120,
+    height: 100,
     hovermode: !1,
     margin: {
       l: 8,
@@ -37,6 +37,7 @@ if ($gradeDistro.length) {
   }
 
   if ($gradeDistro.hasClass('student-distro')) {
+    layout.height = 130;
     layout.annotations = [{
       x: userScore,
       y: 0,
