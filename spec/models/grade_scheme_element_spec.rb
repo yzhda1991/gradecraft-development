@@ -1,14 +1,13 @@
 require "active_record_spec_helper"
 
 describe GradeSchemeElement do
+  let(:student) { build_stubbed :user }
+  let(:course) { build_stubbed :course }
 
-  let(:student) { create :user }
-  let(:course) { create :course}
-
-  subject { create(:grade_scheme_element, course: course) }
+  subject { create :grade_scheme_element, course: course }
 
   before do
-    create(:course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id )
+    create :course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id
   end
 
   context "validations" do
@@ -24,6 +23,25 @@ describe GradeSchemeElement do
     it "is invalid without a course" do
       subject.course = nil
       expect(subject).to be_invalid
+    end
+  end
+
+  describe ".next_highest_element" do
+    let!(:grade_scheme_element) { create :grade_scheme_element, lowest_points: 0, course: course }
+
+    context "when there is a grade scheme element with a higher point threshold" do
+      let!(:next_grade_scheme_element) { create :grade_scheme_element, lowest_points: 5000, course: course }
+
+      it "returns the next highest element" do
+        expect(GradeSchemeElement.next_highest_element(grade_scheme_element)).to \
+          eq next_grade_scheme_element
+      end
+    end
+
+    context "when there is not a grade scheme element with a higher point threshold" do
+      it "returns nil" do
+        expect(GradeSchemeElement.next_highest_element(grade_scheme_element)).to be_nil
+      end
     end
   end
 
@@ -69,34 +87,46 @@ describe GradeSchemeElement do
     end
   end
 
-  describe "#range" do
-    it "returns the difference between the high range and the low range" do
-      subject.highest_points = 100
-      subject.lowest_points = 0
-      expect(subject.range).to eq(100)
-    end
-  end
-
   describe "#points_to_next_level(student, course)" do
-    it "returns the difference between the current level high range and the student's
-    total score + 1 point - the value to achieve the next level" do
-      subject.highest_points = 100
-      subject.course = course
-      expect(subject.points_to_next_level(student, course)).to eq(19)
+    context "when the current element has the highest point threshold" do
+      it "returns 0" do
+        allow(subject).to receive(:next_highest_element).and_return nil
+        expect(subject.points_to_next_level(student, course)).to eq 0
+      end
+    end
+
+    context "when the current element does not have the highest point threshold" do
+      let(:next_highest_element) { double :element, lowest_points: 100 }
+      subject { build :grade_scheme_element, lowest_points: 0, course: course }
+
+      it "returns the difference between the next highest element's point threshold and
+      the student's current total score" do
+        allow(subject).to receive(:next_highest_element).and_return next_highest_element
+        expect(subject.points_to_next_level(student, course)).to eq(18)
+      end
     end
   end
 
   describe "#progress_percent(student)" do
-    it "returns the level's percent complete value for the student" do
-      subject.highest_points = 100
-      subject.lowest_points = 0
-      subject.course = course
-      expect(subject.progress_percent(student)).to eq(82)
+    context "when the current element is has the highest point threshold" do
+      it "returns one hundred (100)" do
+        allow(subject).to receive(:range).and_return Float::INFINITY
+        expect(subject.progress_percent(student)).to eq 100
+      end
+    end
+
+    context "when the current level does not have the highest point threshold" do
+      subject { build :grade_scheme_element, lowest_points: 0, course: course }
+
+      it "returns the percent complete value for the student" do
+        allow(subject).to receive(:range).and_return 100
+        expect(subject.progress_percent(student)).to eq 82
+      end
     end
   end
 
   describe "#within_range?" do
-    subject { build(:grade_scheme_element, lowest_points: 1000, highest_points: 1999) }
+    subject { build :grade_scheme_element, lowest_points: 1000, highest_points: 1999 }
 
     it "returns true if the score is between the low and high ranges" do
       expect(subject).to be_within_range 1500
@@ -122,6 +152,31 @@ describe GradeSchemeElement do
   describe "#count_students_earned" do
     it "returns the number of students who have earned this grade scheme element" do
       expect(subject.count_students_earned).to eq(1)
+    end
+  end
+
+  describe "#next_highest_element" do
+    it "returns the next highest level relative to itself" do
+      expect(GradeSchemeElement).to receive(:next_highest_element).with(subject)
+      subject.next_highest_element
+    end
+  end
+
+  describe "#range" do
+    context "when the current level has the highest points threshold in the course" do
+      it "returns infinity" do
+        allow(subject).to receive(:next_highest_element).and_return nil
+        expect(subject.range).to eq Float::INFINITY
+      end
+    end
+
+    context "when the current level does not have the highest points threshold in the course" do
+      let(:next_highest_element) { double :element, lowest_points: 1234 }
+
+      it "returns the range for the current level" do
+        allow(subject).to receive(:next_highest_element).and_return next_highest_element
+        expect(subject.range).to eq next_highest_element.lowest_points.to_f - subject.lowest_points.to_f
+      end
     end
   end
 end
