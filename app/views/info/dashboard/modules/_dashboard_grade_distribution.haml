@@ -2,23 +2,27 @@
   .card-header
     %h2 Points Distribution
   .card-body
-    - if current_student.present?
-      #grade_distro.student-distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
+    - if current_user.scores_for_course(current_course)[:scores].empty?
+      .dashboard-message
+        %p No points have been earned yet!
     - else
-      #grade_distro.instructor-distro{"data-scores"=> current_user.scores_for_course(current_course).to_json}
-    #gradeDistro
-    - if current_student.present? 
-      .small 
-        %b Your Score:
-        #{points current_student.score_for_course(current_course)} points
-    .small
-      %b Class Average: 
-      #{points current_course.average_course_score} points
-    .small
-      %b Low Score: 
-      #{points current_course.minimum_course_score} points
-    .small
-      %b High Score: 
-      #{points current_course.maximum_course_score} points
-    .small
-      .italic= link_to "How do I read this chart?", "http://www.youtube.com/watch?v=7UK2DK7rblw&feature=youtu.be", :target => "_blank"
+      - if current_student.present?
+        #grade_distro.student-distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
+      - else
+        #grade_distro.instructor-distro{"data-scores"=> current_user.scores_for_course(current_course).to_json}
+      #gradeDistro
+      - if current_student.present? 
+        .small 
+          %b Your Score:
+          #{points current_student.score_for_course(current_course)} points
+      .small
+        %b Class Average: 
+        #{points current_course.average_course_score} points
+      .small
+        %b Low Score: 
+        #{points current_course.minimum_course_score} points
+      .small
+        %b High Score: 
+        #{points current_course.maximum_course_score} points
+      .small
+        .italic= link_to "How do I read this chart?", "http://www.youtube.com/watch?v=7UK2DK7rblw&feature=youtu.be", :target => "_blank"

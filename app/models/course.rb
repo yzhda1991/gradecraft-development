@@ -193,15 +193,6 @@ class Course < ActiveRecord::Base
       .collect(&:id)
   end
 
-  # box plot for instructor dashboard
-  def scores
-    scores = CourseMembership.where(course: self, auditing: false,
-      role: "student").pluck("score")
-    return {
-      scores: scores
-    }
-  end
-
   # creating a list of students who do not have any predictions
   def nonpredictors
     nonpredictors = []
