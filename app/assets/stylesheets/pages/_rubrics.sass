@@ -335,26 +335,27 @@ button.meets-expectations-toggle.remove
 button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
 
-.level
-  background-color: $below-expectations-color
-  &.level-meets-expectations
-    background-color: $meets-expectations-color
+.level-wrapper
+  .level
+    background-color: $below-expectations-color
+    &.level-meets-expectations
+      background-color: $meets-expectations-color
 
-  &.nocredit
-    width: 180px
+    &.nocredit
+      width: 180px
 
-  .badge-messages
-    text-align: center
-    font-size: .7rem
-    font-weight: bold
+    .badge-messages
+      text-align: center
+      font-size: .7rem
+      font-weight: bold
 
-  .badge-row
-    overflow: hidden
-    height: 60px
-    margin-top: 7px
-    &.clickable
-      @include rubric-level-input
-      width: 11.75rem
+    .badge-row
+      overflow: hidden
+      height: 60px
+      margin-top: 7px
+      &.clickable
+        @include rubric-level-input
+        width: 11.75rem
 
   select
     color: $color-grey-2

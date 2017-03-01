@@ -1,94 +1,107 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
-    # It would be my preference to change this from elements
-    # to gradeSchemeElements
-    elements = []
-    deletedIds = []
+  deletedElementIds = []
+  gradeSchemeElements = []
+  _totalPoints = 0
 
-    _totalPoints  = 0
+  totalPoints = () ->
+    _totalPoints
 
-    totalPoints = ()->
-      _totalPoints
+  validateElements = () ->
+    has_zero_threshold = false
+    for element, i in gradeSchemeElements
+      validateElement(element)
+      has_zero_threshold = true if element.lowest_points == 0
+    addZeroThreshold() if not has_zero_threshold
 
+  validateElement = (currentElement) ->
+    currentElement.validationError = undefined
+    for element in gradeSchemeElements
+      continue if element == currentElement || !element.lowest_points?
 
-    # we're doing so much index juggling here that we should really create a
-    # factory for both the overall grade scheme elements collection, as well as
-    # for the individual grade scheme elements so we don't have to do all of
-    # this work inside of the service object.
+      # Invalid because it is in direct conflict with another level
+      if element.lowest_points == currentElement.lowest_points
+        currentElement.validationError = "This level has the same point threshold as another level."
 
-    remove = (index) ->
-      deletedIds.push(elements.splice(index, 1)[0].id)
+      # Invalid because it is within one point of another level
+      if element.lowest_points - 1 == currentElement.lowest_points ||
+          element.lowest_points + 1 == currentElement.lowest_points
+        currentElement.validationError = "This level is within one point of another level."
 
-    addNew = (index) ->
-      newElement = newElementAtIndex(index + 1)
-      elements.splice(index + 1, 0, newElement)
+  removeElement = (currentElement) ->
+    if currentElement.lowest_points == 0 && isOnlyZeroThreshold(currentElement)
+      currentElement.validationError = "Lowest level threshold must be 0"
+    else
+      deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
+      validateElements() if gradeSchemeElements.length > 0
 
-    addFirst = () ->
-      elements.push({
-        letter: ''
-        level: ''
-        lowest_points: ''
-        highest_points: ''
-      })
+  addElement = (currentElement) ->
+    if currentElement?
+      for element, i in gradeSchemeElements
+        if element == currentElement
+          gradeSchemeElements.splice(i + 1, 0, _newElement())
+          return
+    else
+      gradeSchemeElements.push(_newElement())
 
-    # build a new element for the given index, taking its values from the
-    # elements surrounding it
-    newElementAtIndex = (index) ->
-      {
-        letter: ''
-        level: ''
-        lowest_points: null
-      }
+  # Create new empty grade scheme element object
+  _newElement = () ->
+    angular.copy({
+      letter: null
+      level: null
+      lowest_points: null
+    })
 
-    highestPoints = (index) ->
-      prevElement = elements[index - 1]
-      if prevElement && prevElement.lowest_points > 0
-        prevElement.lowest_points - 1
-      else
-        null
+  addZeroThreshold = () ->
+    zeroElement = _newElement()
+    zeroElement.level = "Not yet defined"
+    zeroElement.lowest_points = 0
+    gradeSchemeElements.push(zeroElement)
+    validateElements()  # ensure zero threshold does not conflict with existing
 
-    lowestPoints = (index) ->
-      nextElement = elements[index]
-      if nextElement && nextElement.highest_points > 0
-        nextElement.highest_points + 1
-      else
-        null
+  isOnlyZeroThreshold = (currentElement) ->
+    result = _.find(gradeSchemeElements, (element) ->
+      currentElement != element && element.lowest_points == 0
+    )?
+    !result
 
-    getGradeSchemeElements = ()->
-      $http.get("/api/grade_scheme_elements").success((response)->
-        GradeCraftAPI.loadMany(elements,response)
-        _totalPoints = response.meta.total_points
-      )
+  getGradeSchemeElements = () ->
+    $http.get("/api/grade_scheme_elements").success((response) ->
+      GradeCraftAPI.loadMany(gradeSchemeElements, response)
+      _totalPoints = response.meta.total_points
+      GradeCraftAPI.logResponse(response)
+    )
 
-    postGradeSchemeElements = ()->
-      data = {
-        grade_scheme_elements_attributes: elements
-        deleted_ids: deletedIds
-      }
-
-      # Make sure we have a zero-level
-      thresholds = (element.lowest_points for element in elements)
-      if 0 in thresholds
-        $http.put('/grade_scheme_elements/mass_update', data).success(
-          (data) ->
-            angular.copy(data.grade_scheme_elements, elements)
-            window.location.href = '/grade_scheme_elements/'
-        ).error(
-          (error) ->
-            alert('An error occurred that prevented saving.')
-            console.log(error)
-        )
-      else
-        alert('A level with a Point Threshold of 0 (zero) is required.')
-
-    return {
-        getGradeSchemeElements: getGradeSchemeElements
-        postGradeSchemeElements: postGradeSchemeElements
-        totalPoints: totalPoints
-        elements: elements
-        remove: remove
-        addNew: addNew
-        addFirst: addFirst
+  postGradeSchemeElements = () ->
+    data = {
+      grade_scheme_elements_attributes: gradeSchemeElements
+      deleted_ids: deletedElementIds
     }
 
+    # Ensure a zero-level
+    thresholds = (element.lowest_points for element in gradeSchemeElements)
+    if 0 in thresholds
+      $http.put('/grade_scheme_elements/mass_update', data).success(
+        (data) ->
+          angular.copy(data.grade_scheme_elements, gradeSchemeElements)
+          GradeCraftAPI.logResponse(data)
+          window.location.href = '/grade_scheme_elements/'
+      ).error(
+        (error) ->
+          alert('An error occurred that prevented saving.')
+          GradeCraftAPI.logResponse(error)
+      )
+    else
+      alert('A level with a Point Threshold of 0 (zero) is required.')
+
+  {
+    gradeSchemeElements: gradeSchemeElements
+    removeElement: removeElement
+    addElement: addElement
+    validateElement: validateElement
+    validateElements: validateElements
+    getGradeSchemeElements: getGradeSchemeElements
+    postGradeSchemeElements: postGradeSchemeElements
+    totalPoints: totalPoints
+  }
 ]

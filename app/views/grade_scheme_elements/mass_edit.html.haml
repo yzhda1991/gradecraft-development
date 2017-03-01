@@ -1,26 +1,3 @@
 .pageContent
-  = render partial: "layouts/alerts"
-
-  - if ! current_course.grade_scheme_elements.present?
-    .italic Start by adding your highest level, and work your way down
-
-  .element-container(ng-form
-                     name="gradeSchemeForm"
-                     ng-app='gradecraft'
-                     ng-controller='GradeSchemeElementsCtrl')
-
-    .grade-scheme-elements
-      .grade-scheme-element(ng-repeat='element in grade_scheme_elements'
-                            ng-include="'ng_gradeScheme.html'"
-                            name="element_{{$index}}")
-
-      %button.button.right(ng-click='gradeService.addFirst()'
-                           ng-hide='gradeService.elements.length > 0') Add Your Highest Grade
-
-      .submit-button.right
-        %button.button.right(type='submit'
-                             ng-click='gradeService.postGradeSchemeElements()'
-                             ng-disabled="gradeSchemeForm.$invalid") Submit
-
-        .required-notice.right
-          Fix any conflicts and fill in empty fields before saving.
+  #grade_scheme_elements_main_content{'ng-app'=>'gradecraft', 'ng-form'=>'grade_scheme_element_form'}
+    %grade_scheme_elements_mass_edit_form
