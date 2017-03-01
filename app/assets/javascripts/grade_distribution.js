@@ -18,7 +18,7 @@ var layout = {
     l: 8,
     r: 8,
     b: 40,
-    t: 8,
+    t: 4,
     pad: 8
   },
   xaxis: {
@@ -43,7 +43,7 @@ if ($gradeDistro.hasClass('student-distro')) {
     y: 0,
     xref: 'x',
     yref: 'y',
-    text: numberWithCommas(userScore),
+    text: 'Your Score:<br>' + numberWithCommas(userScore),
     showarrow: true,
     arrowhead: 2,
     arrowsize: 1,
