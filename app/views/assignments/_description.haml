@@ -49,7 +49,7 @@
 
   - if presenter.assignment.is_unlockable?
     - if presenter.assignment.is_unlocked_for_student?(current_student)
-      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked:
+      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} has been Unlocked
       .italic To achieve this you:
       %ul
         - presenter.assignment.unlock_conditions.each do |condition|
@@ -66,11 +66,20 @@
         You must create a #{term_for :group} to complete this #{term_for :assignment}
 
     - else
-      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked:
+      %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked
       %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
       %ul
         - presenter.assignment.unlock_conditions.each do |uc|
           %li= link_to uc.requirements_description_sentence, uc.condition
+- elsif presenter.assignment.is_unlockable?
+  %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked
+  %p.italic To unlock it, #{ term_for :students } must:
+  %ul
+    - presenter.assignment.unlock_conditions.each do |condition|
+      - if !condition.unlockable_type == GradeSchemeElement
+        %li= link_to condition.requirements_description_sentence, condition.unlockable
+      - else 
+        %li= condition.requirements_description_sentence
 
 - if presenter.assignment.is_a_condition?
   %h3.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
