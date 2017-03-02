@@ -95,7 +95,7 @@ describe GradeSchemeElement do
 
     context "when the current element does not have the highest point threshold" do
       let(:next_highest_element) { double :element, lowest_points: 100 }
-      subject { build :grade_scheme_element, lowest_points: 0, course: course }
+      subject { create :grade_scheme_element, lowest_points: 0, course: course }
 
       it "returns the difference between the next highest element's point threshold and
       the student's current total score" do
@@ -114,7 +114,7 @@ describe GradeSchemeElement do
     end
 
     context "when the current level does not have the highest point threshold" do
-      subject { build :grade_scheme_element, lowest_points: 0, course: course }
+      subject { create :grade_scheme_element, lowest_points: 0, course: course }
 
       it "returns the percent complete value for the student" do
         allow(subject).to receive(:range).and_return 100
@@ -124,7 +124,7 @@ describe GradeSchemeElement do
   end
 
   describe "#within_range?" do
-    subject { build :grade_scheme_element, lowest_points: 1000, highest_points: 1999 }
+    subject { create :grade_scheme_element, lowest_points: 1000, course: course }
 
     it "returns true if the score is between the low and high ranges" do
       expect(subject).to be_within_range 1500
@@ -142,7 +142,14 @@ describe GradeSchemeElement do
       expect(subject).to_not be_within_range 999
     end
 
-    it "returns false if the score is higher the high range" do
+    it "returns true when the element has the highest point threshold
+      and is greater than the low range" do
+      expect(subject).to be_within_range 2000
+    end
+
+    it "returns false if the element is not the highest point threshold
+      and is greater than the low range" do
+      create :grade_scheme_element, lowest_points: 2000, course: course
       expect(subject).to_not be_within_range 2000
     end
   end

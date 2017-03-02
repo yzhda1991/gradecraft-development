@@ -58,14 +58,19 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   def next_highest_element
-    GradeSchemeElement.next_highest_element self
+    @next_highest_element ||= GradeSchemeElement.next_highest_element self
+  end
+
+  # The highest point value for the element
+  def highest_points
+    return Float::INFINITY if next_highest_element.nil?
+    next_highest_element.lowest_points - 1
   end
 
   # Calculating the points that covers this element
   # Returns infinity if the element has the highest ordered point value in the course
   def range
-    return Float::INFINITY if next_highest_element.nil?
-    (next_highest_element.lowest_points - 1).to_f - lowest_points.to_f
+    highest_points.to_f - lowest_points.to_f
   end
 
   def within_range?(score)
