@@ -1,14 +1,18 @@
 - if presenter.has_grades?
-  %h3 Basic Stats
-  %ul
-    %li Average Score: #{points presenter.assignment.average}
-    %li Minimum Score: #{points presenter.assignment.low_score}
-    %li High Score: #{points presenter.assignment.high_score}
 
   .class-analytics-wrapper
     .class-analytics-graph
       %h3 Grade Distribution
       #grades_per_assign{ "data-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
+      .small
+        %b Class Average: 
+        #{points presenter.assignment.average} points
+      .small
+        %b Low Score: 
+        #{points presenter.assignment.low_score} points
+      .small
+        %b High Score: 
+        #{points presenter.assignment.high_score} points
 
     .class-analytics-graph
       %h3 Participants
