@@ -16,15 +16,15 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   def self.next_highest_element(element)
-    nextElement = nil
+    next_element = nil
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
-    ordered_course_elements.each_with_index do |currentElement, i|
-      if element == currentElement
-        nextElement = ordered_course_elements[i+1]
+    ordered_course_elements.each_with_index do |current_element, i|
+      if element == current_element
+        next_element = ordered_course_elements[i+1]
         break
       end
     end
-    nextElement
+    next_element
   end
 
   # Getting the name of the Grade Scheme Element - the Level if it's present,
