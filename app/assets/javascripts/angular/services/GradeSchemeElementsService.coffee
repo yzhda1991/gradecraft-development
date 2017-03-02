@@ -54,7 +54,7 @@
 
   addZeroThreshold = () ->
     zeroElement = _newElement()
-    zeroElement.level = "Not yet defined"
+    zeroElement.level = "Not yet on board"
     zeroElement.lowest_points = 0
     gradeSchemeElements.push(zeroElement)
     validateElements()  # ensure zero threshold does not conflict with existing
