@@ -19,7 +19,7 @@ describe CourseGradeExporter do
       @students = course.students
       create(:course_membership, :student, course: course, user: @student_2, score: 120000)
       create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
-      create(:grade_scheme_element, course: course, lowest_points: 100001, highest_points: 200000, level: "Phenomenal", letter: "B")
+      create(:grade_scheme_element, course: course, lowest_points: 100001, level: "Phenomenal", letter: "B")
 
       csv = CSV.new(subject.final_grades_for_course(course)).read
       expect(csv.length).to eq 3
@@ -42,7 +42,5 @@ describe CourseGradeExporter do
       expect(csv[1][8]).to eq "#{@student.id}"
       expect(csv[2][8]).to eq "#{@student_2.id}"
     end
-
   end
-
 end
