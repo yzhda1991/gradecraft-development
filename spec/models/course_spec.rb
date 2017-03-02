@@ -664,15 +664,6 @@ describe Course do
     end
   end
 
-  describe "#scores" do
-    it "returns the scores of all students being graded in the course" do
-      create(:course_membership, :student, course: subject, score: 100)
-      create(:course_membership, :student, course: subject, score: 200)
-      create(:course_membership, :student, course: subject, score: 300)
-      expect(subject.scores) =~({:scores => [100, 200, 300]})
-    end
-  end
-
   describe "#nonpredictors" do
     it "returns the students who have not yet predicted any assignments" do
       course = create(:course)

@@ -257,13 +257,12 @@ ul.badge-grid
       a.button
         margin: 0
 
-/* Makes the box plot responsive */
-#student_grade_distro canvas
-  width: 100% !important
-  margin: 1rem 0
+/* Box plot */
+#grade_distro
+  box-sizing: border-box
 
-  .button
-    border-radius: $global-radius
+  &.js-plotly-plot .plotly .cursor-pointer
+    cursor: default
 
 /* Styles course events slider */
 #events-loading-spinner
