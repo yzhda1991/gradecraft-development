@@ -65,7 +65,7 @@ class GradeSchemeElement < ActiveRecord::Base
   # Returns infinity if the element has the highest ordered point value in the course
   def range
     return Float::INFINITY if next_highest_element.nil?
-    next_highest_element.lowest_points.to_f - lowest_points.to_f
+    (next_highest_element.lowest_points - 1).to_f - lowest_points.to_f
   end
 
   def within_range?(score)

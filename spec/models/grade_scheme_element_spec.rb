@@ -4,7 +4,7 @@ describe GradeSchemeElement do
   let(:student) { build_stubbed :user }
   let(:course) { build_stubbed :course }
 
-  subject { create :grade_scheme_element, course: course }
+  subject { create :grade_scheme_element, lowest_points: 1000, course: course }
 
   before do
     create :course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id
@@ -27,20 +27,18 @@ describe GradeSchemeElement do
   end
 
   describe ".next_highest_element" do
-    let!(:grade_scheme_element) { create :grade_scheme_element, lowest_points: 0, course: course }
-
     context "when there is a grade scheme element with a higher point threshold" do
       let!(:next_grade_scheme_element) { create :grade_scheme_element, lowest_points: 5000, course: course }
 
       it "returns the next highest element" do
-        expect(GradeSchemeElement.next_highest_element(grade_scheme_element)).to \
+        expect(GradeSchemeElement.next_highest_element(subject)).to \
           eq next_grade_scheme_element
       end
     end
 
     context "when there is not a grade scheme element with a higher point threshold" do
       it "returns nil" do
-        expect(GradeSchemeElement.next_highest_element(grade_scheme_element)).to be_nil
+        expect(GradeSchemeElement.next_highest_element(subject)).to be_nil
       end
     end
   end
@@ -175,7 +173,7 @@ describe GradeSchemeElement do
 
       it "returns the range for the current level" do
         allow(subject).to receive(:next_highest_element).and_return next_highest_element
-        expect(subject.range).to eq next_highest_element.lowest_points.to_f - subject.lowest_points.to_f
+        expect(subject.range).to eq 233
       end
     end
   end
