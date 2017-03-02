@@ -32,7 +32,6 @@ class GradeSchemeElementsController < ApplicationController
                                 :level,
                                 :lowest_points,
                                 :letter,
-                                :highest_points,
                                 :course_id)
   end
 
@@ -55,7 +54,6 @@ class GradeSchemeElementsController < ApplicationController
             :level,
             :lowest_points,
             :letter,
-            :highest_points,
             :course_id)
         end
       else
@@ -75,42 +73,11 @@ class GradeSchemeElementsController < ApplicationController
 
   def grade_scheme_element_params
     params.require(:grade_scheme_element).permit :id, :letter, :lowest_points,
-      :highest_points, :level, :description, :course_id, unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state, :condition_value, :condition_date, :_destroy]
+      :level, :description, :course_id, unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state, :condition_value, :condition_date, :_destroy]
   end
 
   def grade_scheme_elements_attributes_params
-    fix_grade_scheme_elements_attributes_params
     params.permit grade_scheme_elements_attributes: [:id, :letter, :lowest_points,
-      :highest_points, :level, :description, :course_id]
-  end
-
-  # Clean up the grade_scheme_elements_attributes param and modify
-  # highest_points for each Element to be one point lower than the next level's
-  # lowest_points.
-  def fix_grade_scheme_elements_attributes_params
-    gse_attributes = params["grade_scheme_elements_attributes"]
-
-    gse_attributes.sort_by! { |e| e["lowest_points"].to_i }
-
-    # Make sure first element's lowest_points is zero
-    if gse_attributes.first["lowest_points"].to_i != 0
-      gse_attributes.unshift({
-        "level"=>"-", "lowest_points"=>0, "letter"=>"", "highest_points"=>0
-      })
-    end
-
-    gse_attributes.each_with_index do |gse, i|
-      next_gse = gse_attributes[i+1]
-      if next_gse.nil?
-        # Make sure last element's highest_points is course's max points
-        if gse["lowest_points"].to_i < @course.total_points.to_i
-          gse["highest_points"] = @course.total_points.to_i
-        else
-          gse["highest_points"] = gse["highest_points"].to_i + 1
-        end
-      else
-        gse["highest_points"] = next_gse["lowest_points"].to_i - 1
-      end
-    end
+      :level, :description, :course_id]
   end
 end
