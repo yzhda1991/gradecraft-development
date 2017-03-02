@@ -1,28 +1,57 @@
-//
-  var sparkOpts = {
-    type: 'box',
-    width: '100%',
-  };
+var $assignmentDistro = $('#grades_per_assign');
+if ($assignmentDistro.length) {
+  var dataSet = JSON.parse($assignmentDistro.attr('data-scores'));
+  var scores = dataSet.scores;
+  var userScore = dataSet.user_score;
 
-  if ($('.grades_per_assign').length) {
-    var data = JSON.parse($('.grades_per_assign').attr('data-scores'));
-    if (data !== null) {
-      sparkOpts.target = data.user_score;
-      sparkOpts.tooltipOffsetY = -130;
-      sparkOpts.height = '35';
-      sparkOpts.width = '200';
-      sparkOpts.tooltipOffsetY = -80;
-      sparkOpts.targetColor = "#FF0000";
-      sparkOpts.boxFillColor = '#eee';
-      sparkOpts.lineColor = '#333';
-      sparkOpts.boxLineColor = '#333';
-      sparkOpts.whiskerColor = '#333';
-      sparkOpts.outlierLineColor = '#333';
-      sparkOpts.outlierFillColor = '#F4A425';
-      sparkOpts.spotRadius = '10';
-      sparkOpts.medianColor = '#0D9AFF';
-      $('.grades_per_assign').sparkline(data.scores, sparkOpts);
+  var data = [{
+    x: scores,
+    type: 'box'
+  }];
+
+  var layout = {
+    showlegend: false,
+    height: 100,
+    hovermode: !1,
+    margin: {
+      l: 8,
+      r: 8,
+      b: 40,
+      t: 4,
+      pad: 8
+    },
+    xaxis: {
+      fixedrange: true
+    },
+    yaxis: {
+      fixedrange: true,
+      showticklabels: false
+    },
+    marker: {
+      size: 4
     }
   };
 
-  $('#numberComplete').circliful();
+  if ($assignmentDistro.hasClass('student-distro')) {
+    layout.height = 130;
+    layout.annotations = [{
+      x: userScore,
+      y: 0,
+      xref: 'x',
+      yref: 'y',
+      text: 'Your Score:<br>' + userScore.toLocaleString(),
+      showarrow: true,
+      arrowhead: 2,
+      arrowsize: 1,
+      arrowwidth: 2,
+      ax: 0.5,
+      ay: -40
+    }]
+  }
+
+    // eslint-disable-next-line no-undef
+    Plotly.newPlot('grades_per_assign', data, layout, {displayModeBar: false});
+}
+
+
+$('#numberComplete').circliful();
