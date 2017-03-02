@@ -16,7 +16,7 @@
 
 - if assignment.description.present?
   %section.grade-form-section
-    %h2.grade-form-header #{term_for :assignment} Guidelines:
+    %h2.grade-form-header= "#{term_for :assignment} Guidelines:"
     - if assignment.assignment_files.present?
       %ul
         Downloads
@@ -34,4 +34,4 @@
 
 - if current_user_is_staff?
   %section.grade-form-section
-    %h2.grade-form-header Grade for #{@grade.student.first_name} #{@grade.student.last_name}:
+    %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:"

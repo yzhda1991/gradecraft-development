@@ -18,8 +18,6 @@ describe "submissions/_assignment_guidelines" do
 
   describe "with a pass fail assignment"  do
     it "renders Pass/Fail and not the points total" do
-      allow(view).to receive(:term_for).with(:pass).and_return "Pass"
-      allow(view).to receive(:term_for).with(:fail).and_return "Fail"
       @assignment.update(pass_fail: true)
       render
       assert_select "p", text: "#{points @assignment.full_points} points possible", count: 0
