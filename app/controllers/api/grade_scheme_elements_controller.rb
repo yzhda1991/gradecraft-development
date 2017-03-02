@@ -5,7 +5,7 @@ class API::GradeSchemeElementsController < ApplicationController
   def index
     @grade_scheme_elements = current_course
                              .grade_scheme_elements
-                             .order_by_highest_points.select(
+                             .order_by_points_desc.select(
                                :id,
                                :lowest_points,
                                :highest_points,

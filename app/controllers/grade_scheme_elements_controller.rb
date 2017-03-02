@@ -5,7 +5,7 @@ class GradeSchemeElementsController < ApplicationController
 
   def index
     @grade_scheme_elements = current_course
-                             .grade_scheme_elements.order_by_highest_points
+                             .grade_scheme_elements.order_by_points_desc
   end
 
   def edit
@@ -27,7 +27,7 @@ class GradeSchemeElementsController < ApplicationController
     @course = current_course
     @total_points = current_course.total_points
     @grade_scheme_elements =  current_course
-                              .grade_scheme_elements.order_by_highest_points.select(
+                              .grade_scheme_elements.order_by_points_desc.select(
                                 :id,
                                 :level,
                                 :lowest_points,

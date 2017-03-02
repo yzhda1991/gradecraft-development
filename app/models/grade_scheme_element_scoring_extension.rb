@@ -1,6 +1,6 @@
 module GradeSchemeElementScoringExtension
   def for_score(score)
-    elements = unscope(:order).order_by_lowest_points
+    elements = unscope(:order).order_by_points_asc
     unless elements.empty?
       earned_element = elements.find { |element| element.within_range?(score) }
       earned_element ||= elements.last if score > elements.last.highest_points

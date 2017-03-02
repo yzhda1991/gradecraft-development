@@ -8,8 +8,8 @@ class GradeSchemeElement < ActiveRecord::Base
   validates_presence_of :lowest_points, :course
 
   scope :for_course, -> (course_id) { where(course_id: course_id) }
-  scope :order_by_lowest_points, -> { order "lowest_points ASC" }
-  scope :order_by_highest_points, -> { order "lowest_points DESC" }
+  scope :order_by_points_asc, -> { order "lowest_points ASC" }
+  scope :order_by_points_desc, -> { order "lowest_points DESC" }
 
   def self.default
     GradeSchemeElement.new(level: "Not yet on board")
@@ -17,7 +17,7 @@ class GradeSchemeElement < ActiveRecord::Base
 
   def self.next_highest_element(element)
     nextElement = nil
-    ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_lowest_points
+    ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
     ordered_course_elements.each_with_index do |currentElement, i|
       if element == currentElement
         nextElement = ordered_course_elements[i+1]
