@@ -66,7 +66,7 @@ describe GradeSchemeElementsController do
           letter: "B", level: "Snail", lowest_points: nil,
           course_id: course.id}], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params: params, format: :json
-        expect(grade_scheme_element.reload.highest_points).to eq(100000)
+        expect(grade_scheme_element.reload).to eq grade_scheme_element
         expect(response.status).to eq(500)
       end
     end
