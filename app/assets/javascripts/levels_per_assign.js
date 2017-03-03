@@ -3,30 +3,39 @@ if ($('#levels_per_assignment').length) {
   var studentGrade = JSON.parse($('#grades_per_assign').attr('data-scores')).user_score;
   var grades = assignmentGrades.scores;
   
-  var xValues = grades.map(function(grade) {
-    return grade.name;
-  });
+  var xValues = [];
+  var yValues = [];
+  var colors = [];
+  var outlineColors = [];
+  var yStudentMarker;
   
-  var colors = xValues.map(function(x) {
-    if (x === studentGrade) {
-      return 'rgba(31, 119, 180, 1)';
-    }
+  grades.forEach(function(grade) {
+    var xValue = grade.name;
+    xValues.push(xValue);
     
-    return 'rgba(31, 119, 180, 0.5)';
+    var yValue = grade.data;
+    yValues.push(yValue);
+    
+    if (xValue === studentGrade) {
+      yStudentMarker = yValue;
+      colors.push('rgba(109, 214, 119, 0.5)');
+      outlineColors.push('rgba(109, 214, 119, 1)');
+    } else {
+      colors.push('rgba(31, 119, 180, 0.5)');
+      outlineColors.push('rgba(31, 119, 180, 1)');
+    }
   });
   
   var data = [
     {
       x: xValues,
-      y: grades.map(function(grade) {
-        return grade.data;
-      }),
+      y: yValues,
       type: 'bar',
       marker: {
         size: 4,
         color: colors,
         line: {
-          color: 'rgba(31, 119, 180, 1.0)',
+          color: outlineColors,
           width: 2
         }
       }
@@ -36,7 +45,7 @@ if ($('#levels_per_assignment').length) {
   var layout = {
     showlegend: false,
     hovermode: !1,
-    height: 200,
+    height: 240,
     margin: {
       l: 40,
       r: 8,
@@ -51,6 +60,26 @@ if ($('#levels_per_assignment').length) {
       fixedrange: true
     }
   };
+
+  if ($('#levels_per_assignment').hasClass('student-distro')) {
+      layout.height = 230;
+      layout.annotations = [{
+        x: studentGrade,
+        y: yStudentMarker,
+        xref: 'x',
+        yref: 'y',
+        yanchor: 'bottom',
+        xanchor: 'center',
+        text: 'Your Score',
+        showarrow: true,
+        arrowhead: 2,
+        arrowsize: 1,
+        arrowwidth: 2,
+        ax: 0,
+        ay: -20
+      }]
+    }
+
   // eslint-disable-next-line no-undef
   Plotly.newPlot('levels_per_assignment', data, layout, {displayModeBar: false});
 }
