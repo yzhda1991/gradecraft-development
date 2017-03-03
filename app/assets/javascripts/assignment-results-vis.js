@@ -44,7 +44,7 @@ if ($assignmentDistro.length) {
       arrowhead: 2,
       arrowsize: 1,
       arrowwidth: 2,
-      ax: 0.5,
+      ax: 0,
       ay: -40
     }]
   }
