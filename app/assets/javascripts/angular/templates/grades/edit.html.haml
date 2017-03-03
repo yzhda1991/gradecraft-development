@@ -14,13 +14,16 @@
   %grade-pass-fail-switch(ng-if='vm.isPassFailGraded()')
   %grade-raw-points(ng-if='vm.isRubricGraded()')
 
-  %grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()' group-grade='vm.isGroupGrade')
-
-  %grade-final-points(ng-if='!vm.isPassFailGraded()')
-
   %label.grade-section-label(for="feedback-upload") {{ vm.feedbackMessage }}
   %grade-file-uploader(ng-if='!vm.isGroupGrade')
   %grade-feedback-text-input
+
+
+%grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()' group-grade='vm.isGroupGrade')
+%grade-final-points(ng-if='!vm.isPassFailGraded()')
+
+
+%article.grade-form-fields
 
   %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}')
   %hr.grading-divider
