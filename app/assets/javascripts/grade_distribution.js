@@ -32,10 +32,6 @@ if ($gradeDistro.length) {
     }
   };
 
-  function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
-
   if ($gradeDistro.hasClass('student-distro')) {
     layout.height = 130;
     layout.annotations = [{
@@ -43,7 +39,7 @@ if ($gradeDistro.length) {
       y: 0,
       xref: 'x',
       yref: 'y',
-      text: 'Your Score:<br>' + numberWithCommas(userScore),
+      text: 'Your Score:<br>' + userScore.toLocaleString(),
       showarrow: true,
       arrowhead: 2,
       arrowsize: 1,
