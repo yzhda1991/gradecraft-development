@@ -74,6 +74,7 @@ if ($numberComplete.length) {
   var pieLayout = {
     showlegend: false,
     height: 220,
+    hovermode: !1,
     margin: {
       l: 8,
       r: 8,
