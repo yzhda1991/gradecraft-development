@@ -1,54 +1,45 @@
-$(document).ready(function() {
- var options = {
-      chart: {
-        backgroundColor: '#FFF',
-        plotBackgroundColor: "#FFF",
-        plotBorderWidth: null,
-        plotShadow: false,
-        renderTo: 'levels_per_assignment'
-        },
-      title: {
-        text: ''
-      },
-      tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-      },
-      credits: {
-        enabled: false
-      },
-      plotOptions: {
-        pie: {
-          allowPointSelect: false,
-          cursor: 'pointer',
-          dataLabels: {
-            enabled: true,
-            color: '#000000',
-            connectorColor: '#000000'
-          }
+if ($('#levels_per_assignment').length) {
+  var assignmentGrades = JSON.parse($('#levels_per_assignment').attr('data-levels'));
+  var grades = assignmentGrades.scores;
+
+  var data = [
+    {
+      x: grades.map(function(grade) {
+        return grade.name;
+      }),
+      y: grades.map(function(grade) {
+        return grade.data;
+      }),
+      type: 'bar',
+      marker: {
+        size: 4,
+        color: 'rgba(31, 119, 180, 0.5)',
+        line: {
+          color: 'rgba(31, 119, 180, 1.0)',
+          width: 2
         }
-      },
-      series: []
-    };
-
-    var seriesNew = {
-      type: 'pie',
-      data: []
-    };
-
-    if ($('#levels_per_assignment').length) {
-      data = JSON.parse($('#levels_per_assignment').attr('data-levels'));
-      myJson = data.scores;
-    
-      jQuery.each(myJson, function (itemNo, item) {
-        seriesNew.data.push({
-          name: String(item.name),
-          y: item.data
-        })
-      });
-
-      options.series.push(seriesNew); 
-
-      chart = new Highcharts.Chart(options);
+      }
     }
+  ];
 
-});
+  var layout = {
+    showlegend: false,
+    hovermode: !1,
+    height: 200,
+    margin: {
+      l: 40,
+      r: 8,
+      b: 40,
+      t: 4,
+      pad: 8
+    },
+    xaxis: {
+      fixedrange: true
+    },
+    yaxis: {
+      fixedrange: true
+    }
+  };
+
+  Plotly.newPlot('levels_per_assignment', data, layout, {displayModeBar: false});
+}
