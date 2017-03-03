@@ -1,12 +1,16 @@
 %section.badge-index-section(ng-if="vm.BadgeService.badges.length > 0")
   .grade-section-label Award {{vm.BadgeService.termFor("badges")}} for this {{vm.BadgeService.termFor("assignment")}}
-  .badge-award-container(ng-repeat="badge in vm.BadgeService.badges"
-  ng-click="vm.awardBadge(badge)"
+
+  %label.badge-award-container(for="{{vm.inputId(badge)}}"
+  ng-click="vm.awardBadge(badge)" ng-repeat="badge in vm.BadgeService.badges"
   ng-class='{"unavailable":!vm.badgeIsActionable(badge), "awardable":vm.badgeIsAwardable(badge), "awarded":vm.badgeIsEarnedForGrade(badge)}'
   )
-    .badge-award-checkmark
+    .badge-award-checkmark(id="{{vm.inputId(badge)}}")
       %input(ng-if="vm.badgeIsActionable(badge)" type="checkbox" ng-checked="vm.badgeIsEarnedForGrade(badge)")
-    .badge-award-image
+    .badge-award-image(ng-if="!badge.isUpdating")
       %img(ng-src="{{badge.icon}}")
+    .badge-award-is-updating(ng-if="badge.isUpdating")
+      %i.fa.fa-spinner.fa-spin.fa-fw
+
     .badge-award-name {{badge.name}}
 .clear

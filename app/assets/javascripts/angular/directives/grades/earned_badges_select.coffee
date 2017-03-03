@@ -16,6 +16,13 @@
     vm.badgeIsAwardable = (badge)->
       badge.available_for_student && !vm.badgeIsEarnedForGrade(badge)
 
+    # For accessibility, each checkbox must have a label with a unique id
+    vm.inputId = (badge)->
+      badge.name.toLowerCase().replace(/[\W]/g,"-") + badge.id
+
+    # ACTION: toggle the badge award on this grade.
+    #  - award if unawarded
+    #  - remove if currently awarded
     vm.awardBadge = (badge)->
       return if !vm.badgeIsActionable(badge)
       if earnedBadge = vm.badgeIsEarnedForGrade(badge)

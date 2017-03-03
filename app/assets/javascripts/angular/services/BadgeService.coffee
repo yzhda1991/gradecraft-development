@@ -20,6 +20,10 @@
   studentEarnedBadgeForGrade = (studentId, badgeId, gradeId)->
     _.find(earnedBadges,{ badge_id: parseInt(badgeId), grade_id: parseInt(gradeId) })
 
+  setBadgeIsUpdating = (badgeId, isUpdating=true)->
+    badge = _.find(badges, {id: badgeId})
+    badge.isUpdating = isUpdating
+
   #------ API Calls -----------------------------------------------------------#
 
   # GET index list of badges
@@ -59,6 +63,7 @@
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->
+    setBadgeIsUpdating(badgeId)
     requestParams = {
       "student_id": studentId,
       "badge_id": badgeId,
@@ -70,19 +75,23 @@
         if response.status == 201
           GradeCraftAPI.addItem(earnedBadges, "earned_badges", response.data)
         GradeCraftAPI.logResponse(response)
-
+        setBadgeIsUpdating(badgeId, false)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
+        setBadgeIsUpdating(badgeId, false)
     )
 
   deleteEarnedBadge = (earnedBadge)->
+    setBadgeIsUpdating(earnedBadge.badge_id)
     $http.delete("/api/earned_badges/#{earnedBadge.id}").then(
       (response)-> # success
         if response.status == 200
+          setBadgeIsUpdating(earnedBadge.badge_id, false)
           GradeCraftAPI.deleteItem(earnedBadges, earnedBadge)
         GradeCraftAPI.logResponse(response)
 
       ,(response)-> # error
+        setBadgeIsUpdating(earnedBadge.badge_id, false)
         GradeCraftAPI.logResponse(response)
     )
 
