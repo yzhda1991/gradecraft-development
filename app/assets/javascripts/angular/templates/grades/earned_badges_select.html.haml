@@ -2,11 +2,16 @@
   .grade-section-label Award {{vm.BadgeService.termFor("badges")}} for this {{vm.BadgeService.termFor("assignment")}}
 
   %label.badge-award-container(for="{{vm.inputId(badge)}}"
-  ng-click="vm.awardBadge(badge)" ng-repeat="badge in vm.BadgeService.badges"
+  ng-repeat="badge in vm.BadgeService.badges"
   ng-class='{"unavailable":!vm.badgeIsActionable(badge), "awardable":vm.badgeIsAwardable(badge), "awarded":vm.badgeIsEarnedForGrade(badge)}'
   )
-    .badge-award-checkmark(id="{{vm.inputId(badge)}}")
-      %input(ng-if="vm.badgeIsActionable(badge)" type="checkbox" ng-checked="vm.badgeIsEarnedForGrade(badge)")
+    .badge-award-checkmark
+      %input(id="{{vm.inputId(badge)}}"
+      ng-if="vm.badgeIsActionable(badge)"
+      type="checkbox"
+      ng-checked="vm.badgeIsEarnedForGrade(badge)"
+      ng-click="vm.awardBadge(badge)"
+    )
     .badge-award-image(ng-if="!badge.isUpdating")
       %img(ng-src="{{badge.icon}}")
     .badge-award-is-updating(ng-if="badge.isUpdating")
