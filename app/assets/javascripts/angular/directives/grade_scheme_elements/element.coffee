@@ -14,9 +14,14 @@
 
       scope.removeElement = () ->
         GradeSchemeElementsService.removeElement(@gradeSchemeElement)
+        scope.setValidity()
 
       scope.validateElements = () ->
         GradeSchemeElementsService.validateElements()
+        scope.setValidity()
+
+      # Sets the validity on the parent
+      scope.setValidity = () ->
         result = _.find(GradeSchemeElementsService.gradeSchemeElements, (element) ->
           element.validationError?
         )

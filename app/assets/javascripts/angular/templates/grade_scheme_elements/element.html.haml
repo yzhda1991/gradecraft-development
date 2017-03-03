@@ -17,7 +17,7 @@
         'required'=>'',
         'smart-number'=>'',
         'allow-negatives'=>'false',
-        'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError}'}
+        'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError || isNaN(gradeSchemeElement.lowest_points)}'}
 
     %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
       %span.error
