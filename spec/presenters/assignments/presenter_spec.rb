@@ -139,33 +139,25 @@ describe Assignments::Presenter do
     let(:user) { double(:user, id: 1) }
     let(:submission) { double(:submission) }
 
-    context "when the submission exists" do
-      before(:each) { allow(Submission).to receive(:for_assignment_and_student).and_return [submission] }
+    context "when the assignment accepts submissions" do
+      before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return true }
 
-      it "is false if the assignment doesn't accept submissions" do
-        allow(assignment).to receive(:accepts_submissions?).and_return false
-        expect(subject.has_viewable_submission_for?(user)).to eq false
+      it "is false if the submission is nil" do
+        expect(subject.has_viewable_submission?(nil, user)).to eq false
       end
 
-      it "is false if the submission is not viewable" do
-        allow(assignment).to receive(:accepts_submissions?).and_return(true)
-        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return false
-        expect(subject.has_viewable_submission_for?(user)).to eq false
-      end
-
-      it "is true when all criteria are met" do
-        allow(assignment).to receive(:accepts_submissions?).and_return(true)
+      it "is true when the submission is not nil and
+        all viewable conditions are met in the submission proctor" do
         allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
-        expect(subject.has_viewable_submission_for?(user)).to eq true
+        expect(subject.has_viewable_submission?(submission, user)).to eq true
       end
     end
 
-    context "when the submission does not exist" do
-      before(:each) { allow(Submission).to receive(:for).and_return [] }
+    context "when the assignment does not accept submissions" do
+      before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return false }
 
       it "is false" do
-        allow(assignment).to receive(:accepts_submissions?).and_return true
-        expect(subject.has_viewable_submission_for?(user)).to eq false
+        expect(subject.has_viewable_submission?(submission, user)).to eq false
       end
     end
   end
