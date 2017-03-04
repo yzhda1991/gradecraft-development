@@ -2,7 +2,7 @@ require "spec_helper"
 include SessionHelper
 
 describe API::AssignmentsController do
-  let(:course) { create :course}
+  let(:course) { build_stubbed :course}
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:assignment) { create(:assignment, course: course) }

@@ -1,15 +1,19 @@
 require "spec_helper"
 
 describe API::EarnedBadgesController do
-  let(:world) { World.create.with(:course, :student, :grade, :badge) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
+  let(:course) { create(:course) }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, role: "professor", course: course).user }
+  let(:grade) { create(:grade, student: student, course: course) }
+  let(:badge) { create(:badge, course: course, can_earn_multiple_times: true) }
+  let(:earned_badge) { create(:earned_badge, badge: badge, course: course) }
 
   context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "POST create" do
       it "creates a new student badge from params" do
-        params = { earned_badge: { badge_id: world.badge.id, student_id: world.student.id } }
+        params = { earned_badge: { badge_id: badge.id, student_id: student.id } }
         expect { post :create, params: params.merge(format: :json) }.to \
           change { EarnedBadge.count }.by(1)
       end
@@ -17,7 +21,6 @@ describe API::EarnedBadgesController do
 
     describe "DELETE destroy" do
       it "deletes a badge" do
-        earned_badge = create(:earned_badge, grade: world.grade, student: world.student)
         params = { id: earned_badge.id }
         expect { delete :destroy, params: params }.to \
           change { EarnedBadge.count }.by(-1)
@@ -36,10 +39,6 @@ describe API::EarnedBadgesController do
 
   context "as an unauthenticated user" do
     describe "GET confirm_earned" do
-      let(:course) { create(:course) }
-      let(:badge) { create(:badge, course: course) }
-      let(:earned_badge) { create(:earned_badge, badge: badge, course: course) }
-
       it "returns a 404 if the course was not found" do
         params = { course_id: "0", badge_id: badge.id, id: earned_badge.id }
         get :confirm_earned, params: params
