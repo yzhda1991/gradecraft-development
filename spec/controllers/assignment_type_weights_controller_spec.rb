@@ -1,13 +1,14 @@
 require "spec_helper"
 
 describe AssignmentTypeWeightsController do
-  let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
+  let(:course) { build(:course) }
+  let(:student) { create(:course_membership, course: course, role: :student).user}
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as student" do
 
     before(:each) do
-      login_user(world.student)
+      login_user(student)
     end
 
     describe "GET index" do
