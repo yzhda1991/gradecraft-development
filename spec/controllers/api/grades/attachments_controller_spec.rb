@@ -6,7 +6,7 @@ describe API::Grades::AttachmentsController do
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:team) { create(:team, course: course) }
   let(:challenge) { create(:challenge, course: course) }
-  let(:grade) { create(:grade, student: student)}
+  let(:grade) { create(:grade, student: student) }
 
   context "as professor" do
     before(:each) { login_user(professor) }
