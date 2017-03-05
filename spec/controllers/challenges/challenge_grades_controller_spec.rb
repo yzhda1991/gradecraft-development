@@ -1,11 +1,11 @@
 require "spec_helper"
 
 describe Challenges::ChallengeGradesController do
-
-  let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
-  let(:team) { world.create_team.team }
-  let(:challenge) { world.create_challenge.challenge }
+  let(:course) { create :course }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:team) { create(:team, course: course) }
+  let(:challenge) { create(:challenge, course: course) }
 
   context "as professor" do
 
@@ -25,7 +25,7 @@ describe Challenges::ChallengeGradesController do
 
     describe "POST create" do
       it "creates the challenge grade with valid attributes and redirects to the challenge show page" do
-        team2 = create(:team, course: world.course )
+        team2 = create(:team, course: course )
         params = attributes_for(:challenge_grade)
         params[:raw_points] = "101"
         params[:challenge_id] = challenge.id
