@@ -6,13 +6,14 @@ include ResqueJobSharedExamplesToolkit
 RSpec.describe ChallengeGradesController, type: :controller, background_job: true do
   include InQueueHelper
 
-  let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
-  let(:team) { world.create_team.team }
-  let(:challenge) { world.create_challenge.challenge }
-
-
+  let(:course) { create :course}
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:assignment) { build_stubbed(:assignment, course: course) }
+  let(:team) { create(:team, course: course) }
+  let(:challenge) { create(:challenge, course: course) }
   let(:challenge_grade) { create(:challenge_grade, team: team, challenge: challenge) }
+  
   let(:job_attributes) {{ challenge_grade_id: challenge_grade.id }} # for ChallengeGradeUpdaterJob calls
   let(:challenge_grade_attributes) {{ team_id: team.id, challenge_id: challenge.id }}
 
