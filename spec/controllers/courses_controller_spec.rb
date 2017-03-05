@@ -15,8 +15,6 @@ describe CoursesController do
     before(:each) { login_user(admin) }
 
     describe "POST recalculate_student_scores" do
-      let!(:course_membership) { create(:course_membership, :student, course: course) }
-
       it "recalculates student scores" do
         expect_any_instance_of(Course).to receive(:recalculate_student_scores)
         post :recalculate_student_scores, params: { id: course.id.to_s }
