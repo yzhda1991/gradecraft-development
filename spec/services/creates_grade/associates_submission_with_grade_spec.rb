@@ -4,8 +4,13 @@ require "./app/services/creates_grade/associates_submission_with_grade"
 
 describe Services::Actions::AssociatesSubmissionWithGrade do
 
-  let(:world) { World.create.with(:course, :student, :assignment, :grade, :group) }
-  let(:context) {{ assignment: world.assignment, student: world.student, grade: world.grade }}
+  let(:course) { create :course }
+  let(:assignment) { create :assignment, course: course }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:grade) { create(:grade, assignment: assignment, student: student) }
+  let(:group) { create(:group) }
+  
+  let(:context) {{ assignment: assignment, student: student, grade: grade }}
 
   it "expect student to be added to the context" do
     context.delete(:student)
@@ -26,7 +31,7 @@ describe Services::Actions::AssociatesSubmissionWithGrade do
   end
 
   it "adds a submission_id to the grade" do
-    submission = create(:submission, assignment: world.assignment, student: world.student)
+    submission = create(:submission, assignment: assignment, student: student)
     result = described_class.execute context
     expect(result[:grade].submission_id).to eq submission.id
   end
@@ -38,14 +43,14 @@ describe Services::Actions::AssociatesSubmissionWithGrade do
 
   describe "with a group in the context" do
     it "adds the group submission_id to the grade" do
-      context[:group] = world.group
-      submission = create(:group_submission, assignment: world.assignment, group: world.group)
+      context[:group] = group
+      submission = create(:group_submission, assignment: assignment, group: group)
       result = described_class.execute context
       expect(result[:grade].submission_id).to eq submission.id
     end
 
     it "adds nil as submission_id if no submission" do
-      context[:group] = world.group
+      context[:group] = group
       result = described_class.execute context
       expect(result[:grade].submission_id).to be_nil
     end
