@@ -3,16 +3,27 @@ require "active_record_spec_helper"
 require "./app/services/creates_criterion_grade/builds_earned_level_badges"
 
 describe Services::Actions::BuildsEarnedLevelBadges do
-  let(:world) { World.create.with(:course, :student, :professor, :assignment, :rubric, :criterion, :criterion_grade, :grade, :badge) }
-  let!(:level_badge) { create :level_badge, level: world.criterion_grade.level, badge: world.badge }
+  let(:course) { create :course }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:rubric) { create(:rubric, assignment: assignment) }
+  let(:criterion) { create(:criterion, rubric: rubric) }
+  let(:criterion_grade) { create(:criterion_grade, criterion: criterion) }
+  let(:criterion_grade_2) { create(:criterion_grade, criterion: criterion) }
+  let(:badge) { create(:badge, course: course) }
+  let(:group) { create(:group, course: course, assignments: [assignment]) }
+  let(:grade) { create(:grade, student: student, assignment: assignment) }
+
+  let!(:level_badge) { create :level_badge, level: criterion_grade.level, badge: badge }
 
   let(:context) do
     {
-      student: world.student,
-      assignment: world.assignment,
-      criterion_grades: world.criterion_grades,
-      grade: world.grade,
-      graded_by_id: world.professor.id
+      student: student,
+      assignment: assignment,
+      criterion_grades: criterion.criterion_grades,
+      grade: grade,
+      graded_by_id: professor.id
     }
   end
   it "expects attributes to assign to student" do
@@ -46,11 +57,11 @@ describe Services::Actions::BuildsEarnedLevelBadges do
 
   it "assigns level badges to the student for earned levels" do
     result = described_class.execute context
-    expect(world.student.earned_badges.count).to eq(1)
+    expect(student.earned_badges.count).to eq(1)
   end
 
   it "assigns the earned badge awarded_by_id" do
     result = described_class.execute context
-    expect(world.student.earned_badges.first.awarded_by_id).to eq(world.professor.id)
+    expect(student.earned_badges.first.awarded_by_id).to eq(professor.id)
   end
 end
