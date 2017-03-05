@@ -1,11 +1,12 @@
 require "spec_helper"
 
 describe ChallengeGradesController do
-
-  let(:world) { World.create.with(:course, :student) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
-  let(:team) { world.create_team.team }
-  let(:challenge) { world.create_challenge.challenge }
+  
+  let(:course) { create :course }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:team) { create(:team, course: course) }
+  let(:challenge) { create(:challenge, course: course) }
 
   context "as professor" do
     before(:each) do
@@ -63,7 +64,7 @@ describe ChallengeGradesController do
       end
 
       it "recalculates the team score" do
-        challenge = create(:challenge, course: world.course)
+        challenge = create(:challenge, course: course)
         @challenge_grade = create(:challenge_grade, challenge: challenge, team: team, raw_points: 100, status: "Released")
         expect(team.challenge_grade_score).to eq(100)
         post :destroy, params: { id: @challenge_grade, challenge_id: challenge.id }
@@ -76,7 +77,7 @@ describe ChallengeGradesController do
   context "as student" do
     before(:each) do
       @challenge_grade = create(:challenge_grade, team: team, challenge: challenge)
-      login_user(world.student)
+      login_user(student)
     end
 
     describe "GET show" do
