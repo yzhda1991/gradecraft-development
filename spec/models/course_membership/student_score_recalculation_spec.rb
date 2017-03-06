@@ -4,7 +4,7 @@ describe CourseMembership do
   let(:course_membership) { build(:course_membership, :student, course: course, user: student) }
   let(:course) { build(:course) }
   let(:student) { build(:user) }
-  let!(:gse) { create(:grade_scheme_element, course: course, lowest_points: 8000, highest_points: 9000) }
+  let!(:gse) { create(:grade_scheme_element, course: course, lowest_points: 8000) }
 
   describe "#recalculate_and_update_student_score" do
     subject { course_membership.recalculate_and_update_student_score }
@@ -48,8 +48,8 @@ describe CourseMembership do
   end
 
   describe "#earned_grade_scheme_element" do
-    let!(:low_gse) { create(:grade_scheme_element, course: course, lowest_points: 7000, highest_points: 7999) }
-    let!(:high_gse) { create(:grade_scheme_element, course: course, lowest_points: 9001, highest_points: 10000) }
+    let!(:low_gse) { create(:grade_scheme_element, course: course, lowest_points: 7000) }
+    let!(:high_gse) { create(:grade_scheme_element, course: course, lowest_points: 9001) }
 
     it "returns the element that matches the highest points the student has earned" do
       allow(course_membership).to receive(:score) { 8200 }

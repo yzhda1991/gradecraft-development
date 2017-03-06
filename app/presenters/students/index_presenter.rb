@@ -39,7 +39,7 @@ class Students::IndexPresenter < Showtime::Presenter
   end
 
   def grade_scheme_elements
-    @grade_scheme_elements ||= course.grade_scheme_elements.order_by_lowest_points
+    @grade_scheme_elements ||= course.grade_scheme_elements.order_by_points_asc
   end
 
   def student_ids

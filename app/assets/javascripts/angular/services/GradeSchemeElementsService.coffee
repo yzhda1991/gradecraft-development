@@ -21,12 +21,7 @@
 
       # Invalid because it is in direct conflict with another level
       if element.lowest_points == currentElement.lowest_points
-        currentElement.validationError = "This level has the same point threshold as another level."
-
-      # Invalid because it is within one point of another level
-      if element.lowest_points - 1 == currentElement.lowest_points ||
-          element.lowest_points + 1 == currentElement.lowest_points
-        currentElement.validationError = "This level is within one point of another level."
+        currentElement.validationError = "This level has the same point threshold as another level"
 
   removeElement = (currentElement) ->
     if currentElement.lowest_points == 0 && isOnlyZeroThreshold(currentElement)
@@ -54,7 +49,7 @@
 
   addZeroThreshold = () ->
     zeroElement = _newElement()
-    zeroElement.level = "Not yet defined"
+    zeroElement.level = "Not yet on the board"
     zeroElement.lowest_points = 0
     gradeSchemeElements.push(zeroElement)
     validateElements()  # ensure zero threshold does not conflict with existing

@@ -12,7 +12,7 @@
 
   #------ GRADE SCHEME ELEMENTS -----------------------------------------------#
 
-  gradeSchemeElements = GradeSchemeElementsService.elements
+  gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
 
   totalPoints = ()->
     GradeSchemeElementsService.totalPoints()

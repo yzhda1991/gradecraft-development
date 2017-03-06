@@ -2,13 +2,13 @@
 # earn course wide levels and grades
 class API::GradeSchemeElementsController < ApplicationController
 
+  # GET /api/grade_scheme_elements
   def index
     @grade_scheme_elements = current_course
                              .grade_scheme_elements
-                             .order_by_highest_points.select(
+                             .order_by_points_desc.select(
                                :id,
                                :lowest_points,
-                               :highest_points,
                                :letter,
                                :level)
     if @grade_scheme_elements.present?

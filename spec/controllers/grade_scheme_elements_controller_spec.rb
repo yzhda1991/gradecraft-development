@@ -50,8 +50,8 @@ describe GradeSchemeElementsController do
       it "updates the grade scheme elements all at once" do
         params = { "grade_scheme_elements_attributes" => [{
           id: grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0,
-          highest_points: 100000, course_id: course.id }, { id: GradeSchemeElement.new.id,
-          letter: "B", level: "Snail", lowest_points: 100001, highest_points: 200000,
+          course_id: course.id }, { id: GradeSchemeElement.new.id,
+          letter: "B", level: "Snail", lowest_points: 100001,
           course_id: course.id }], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params: params, format: :json
         expect(course.reload.grade_scheme_elements.count).to eq(2)
@@ -62,11 +62,11 @@ describe GradeSchemeElementsController do
         grade_scheme_element_2 = create(:grade_scheme_element, course: course)
         params = { "grade_scheme_elements_attributes" => [{
           id: grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", lowest_points: 0,
-          highest_points: 100010, course_id: course.id }, { id: GradeSchemeElement.new.id,
-          letter: "B", level: "Snail", lowest_points: nil, highest_points: 200000,
+          course_id: course.id }, { id: GradeSchemeElement.new.id,
+          letter: "B", level: "Snail", lowest_points: nil,
           course_id: course.id}], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params: params, format: :json
-        expect(grade_scheme_element.reload.highest_points).to eq(100000)
+        expect(grade_scheme_element.reload).to eq grade_scheme_element
         expect(response.status).to eq(500)
       end
     end
@@ -74,16 +74,17 @@ describe GradeSchemeElementsController do
     it "recalculates scores for all students in the course" do
       params = { "grade_scheme_elements_attributes" => [{
         id: grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0,
-        highest_points: 100000, course_id: course.id }, { id: GradeSchemeElement.new.id,
-        letter: "B", level: "Snail", lowest_points: 100001, highest_points: 200000,
+        course_id: course.id }, { id: GradeSchemeElement.new.id,
+        letter: "B", level: "Snail", lowest_points: 100001,
         course_id: course.id }], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
-      expect{ put :mass_update, params: params, format: :json }.to change { queue(ScoreRecalculatorJob).size }.by(course.students.count)
+      expect{ put :mass_update, params: params, format: :json }.to \
+        change { queue(ScoreRecalculatorJob).size }.by(course.students.count)
     end
 
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
         get :export_structure, params: { id: course.id }, format: :csv
-        expect(response.body).to include("Level ID,Letter Grade,Level Name,Lowest Points,Highest Points")
+        expect(response.body).to include("Level ID,Letter Grade,Level Name,Lowest Points")
       end
     end
   end
