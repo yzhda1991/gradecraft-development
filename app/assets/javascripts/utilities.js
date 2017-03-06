@@ -57,6 +57,20 @@ $(".select-none").click(function(e){
 
 });
 
+// select all but only within the table
+$(".table-select-all").click(function(e){
+  var $link = $(this);
+  e.preventDefault();
+  $link.parents("table").find('input[type="checkbox"]').prop('checked', 'checked').trigger('change');
+});
+
+// select none, but only within the table
+$(".table-select-none").click(function(e){
+  var $link = $(this);
+  e.preventDefault();
+  $link.parents("table").find('input[type="checkbox"]').prop('checked', false).trigger('change');
+});
+
 $(".assignmentType").collapse({
   show: function() {
     // The context of 'this' is applied to
@@ -120,7 +134,7 @@ jQuery(function(){
         t.slice(0,100)+'<span>... </span><a href="#" class="more">More</a>'+
         '<span style="display:none;">'+ t.slice(100,t.length)+' <a href="#" class="less">Less</a></span>'
     );
-  }); 
+  });
   $('a.more', minimized_elements).click(function(event){
       event.preventDefault();
       $(this).hide().prev().hide();
