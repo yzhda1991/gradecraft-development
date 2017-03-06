@@ -1,10 +1,11 @@
 # display calculated final_points
 
-@gradecraft.directive 'gradeFinalPoints', ['GradeService', (GradeService) ->
+@gradecraft.directive 'gradeFinalPoints', [() ->
 
   return {
     templateUrl: 'grades/final_points.html'
-    link: (scope, el, attr)->
-      scope.grades = GradeService.grades
+    scope: {
+      grade: "="
+    }
   }
 ]

@@ -20,12 +20,11 @@
 
 
 %grade-adjustment-points-input(ng-if='!vm.isPassFailGraded()' group-grade='vm.isGroupGrade')
-%grade-final-points(ng-if='!vm.isPassFailGraded()')
 
+.clear
 
-%article.grade-form-fields
-
-  %grade-earned-badges-select(ng-if='!vm.isGroupGrade' student-id='{{vm.recipientId}}')
+%article.grade-form-fields(ng-if='!vm.isGroupGrade')
+  %grade-earned-badges-select(student-id='{{vm.recipientId}}')
   %hr.grading-divider
 
 .right
@@ -34,6 +33,7 @@
     %grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
 
 .clear
+
 %hr.grading-divider
 %span.italic
   %grade-last-updated
