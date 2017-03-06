@@ -1,14 +1,19 @@
-%section.badge-index-section{'ng-if'=>'vm.BadgeService.badges.length > 0'}
-  .grade-section-label Award Earned {{vm.BadgeService.termFor("badges")}} for this {{vm.BadgeService.termFor("assignment")}}
-  .badge-icon-container.badge-award-button{'ng-repeat'=>'badge in vm.BadgeService.badges',
-    'ng-click'=>'vm.awardBadge(badge)',
-    'ng-class'=>'{"unavailable":!vm.badgeAvailable(badge), "awardable":vm.badgeAwardable(badge), "awarded":vm.badgeEarnedForGrade(badge)}',
-    }
-    %img.badge-icon{'ng-src'=>'{{badge.icon}}'}
+%section.badge-index-section(ng-if="vm.BadgeService.badges.length > 0")
+  .grade-section-label Award {{vm.BadgeService.termFor("badges")}} for this {{vm.BadgeService.termFor("assignment")}}
 
-    %p.badge-name {{badge.name}}
-    .status-icon
-      %i.fa.fa-fw.fa-star{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
-    .status-icon-hover
-      %i.fa.fa-fw.fa-minus-circle{'ng-show'=>'vm.badgeEarnedForGrade(badge)'}
-      %i.fa.fa-fw.fa-plus-circle{'ng-show'=>'vm.badgeAwardable(badge)'}
+  %label.badge-award-container(for="{{vm.inputId(badge)}}"
+  ng-repeat="badge in vm.BadgeService.badges"
+  ng-class='{"unavailable":!vm.badgeIsActionable(badge), "awardable":vm.badgeIsAwardable(badge), "awarded":vm.badgeIsEarnedForGrade(badge)}'
+  )
+    .badge-award-checkmark
+      %input(id="{{vm.inputId(badge)}}"
+      ng-if="vm.badgeIsActionable(badge)"
+      type="checkbox"
+      ng-checked="vm.badgeIsEarnedForGrade(badge)"
+      ng-click="vm.awardBadge(badge)"
+    )
+    .badge-award-image
+      %img(ng-src="{{badge.icon}}")
+
+    .badge-award-name {{badge.name}}
+.clear

@@ -141,38 +141,6 @@
     display: block
     margin: 0 auto
 
-// Award Earned Badges on Grading Page
-.badge-icon-container.badge-award-button
-  cursor: pointer
-  .status-icon, .status-icon-hover
-    position: absolute
-    top: 0px
-    right: 0px
-    height: 28px
-    width: 28px
-    border-radius: 50%
-    font-size: 2rem
-    color: $color-yellow-1
-    .fa-fw
-      text-align: left
-
-  &.unavailable
-    cursor: default
-    img
-      cursor: default
-    opacity: .5
-    &:hover
-      .status-icon-hover
-        display: none
-
-  .status-icon-hover
-    display: none
-  &:hover
-    .status-icon
-      display: none
-    .status-icon-hover
-      display: block
-
 ul.earned-badge-list
   list-style-type: none
   padding-left: 0
@@ -185,3 +153,38 @@ ul.earned-badge-list
 .earned-badge-table-img
   vertical-align: middle
   width: 20px
+
+// Award Earned Badges on Grading Page
+.badge-award-container
+  float: left
+  margin: 1rem
+  width: 29%
+  vertical-align: top
+  cursor: pointer
+  img
+    width: 40px
+  &.unavailable
+    cursor: default
+    img
+      cursor: default
+    opacity: .5
+
+.badge-award-checkmark
+  input
+    cursor: pointer
+  margin: 0.55rem
+  width: 1rem
+  float: left
+
+.badge-award-image
+  width: 50px
+  height: 50px
+  float: left
+  font-size: 1.5rem
+
+.badge-award-name
+  font-size: .7rem
+  margin: 0.55rem 0 0 0.55rem
+  display: inline-block
+
+
