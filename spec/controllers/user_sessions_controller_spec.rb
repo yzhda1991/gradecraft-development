@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe UserSessionsController do
-  let(:world) { World.create.with(:course, :student) }
-  let(:student) { world.student}
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
+  let(:course) { create :course }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   describe "POST create" do
     context "user is successfully logged in" do
@@ -90,7 +90,7 @@ describe UserSessionsController do
 
   describe "impersonate_student" do
     before do
-      allow(subject).to receive(:current_course) { world.course }
+      allow(subject).to receive(:current_course) { course }
     end
 
     it "stores the professor id in sessions" do
