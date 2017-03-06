@@ -12,10 +12,8 @@
       ng-checked="vm.badgeIsEarnedForGrade(badge)"
       ng-click="vm.awardBadge(badge)"
     )
-    .badge-award-image(ng-if="!badge.isUpdating")
+    .badge-award-image
       %img(ng-src="{{badge.icon}}")
-    .badge-award-is-updating(ng-if="badge.isUpdating")
-      %i.fa.fa-spinner.fa-spin.fa-fw
 
     .badge-award-name {{badge.name}}
 .clear
