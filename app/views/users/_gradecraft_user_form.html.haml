@@ -11,7 +11,7 @@
       = f.label :email
       = f.text_field :email, "aria-required": "true"
     .form-item
-      = f.label :display_name
+      = f.label :display_name, "Pseudonym"
       = f.text_field :display_name
   = render partial: "courses", locals: { form: f }
   = render partial: "users/submit_buttons"
