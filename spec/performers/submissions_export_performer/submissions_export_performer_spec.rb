@@ -175,10 +175,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     let(:submission5) { double(:submission, id: 5, submitter_id: student4.id) }
 
     let(:grouped_submission_expectation) {{
-      "Bailey, Ben - Benfriend" => [submission1],
+      "Bailey, Ben - benfriend" => [submission1],
       "McCaffrey, Mike" => [submission2, submission4],
       "Dafferty, Dana" => [submission3],
-      "Bailey, Ben - Benweirdo" => [submission5]
+      "Bailey, Ben - benweirdo" => [submission5]
     }}
 
     let(:submissions_by_id) { [submission1, submission2, submission3, submission4, submission5].sort_by(&:id) }
@@ -197,7 +197,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "should use 'last_name_first_name-id' for the hash keys" do
-      expect(subject.keys.first).to eq("Bailey, Ben - Benfriend")
+      expect(subject.keys.first).to eq("Bailey, Ben - benfriend")
     end
 
     it "should return an array of submissions for each student" do
