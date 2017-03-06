@@ -1,6 +1,6 @@
 if ($('#levels_per_assignment').length) {
   var assignmentGrades = JSON.parse($('#levels_per_assignment').attr('data-levels'));
-  var studentGrade = JSON.parse($('#grades_per_assign').attr('data-scores')).user_score;
+  var studentGrade = JSON.parse($('#levels_per_assignment').attr('data-scores')).user_score;
   var grades = assignmentGrades.scores;
   
   var xValues = [];
