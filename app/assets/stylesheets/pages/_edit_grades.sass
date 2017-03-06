@@ -1,13 +1,33 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
+.grade-form-header
+  font-size: 1.1rem
+  font-weight: 400
+
+.grade-form-section 
+  margin-bottom: 1rem
+  p
+    margin: 0.5rem 0
+    font-weight: 300
+  &.assignment-details
+    p
+      margin: 0
+
+.grade-form-subsection
+  margin-bottom: 1rem
+
+.simple_form section label.grade-section-label,
 .grade-section-label
-  padding-top: 10px
+  display: block
+  text-align: left
 
 article.grade-form-fields
   background-color: $color-grey-6
-  margin: 1.5rem auto
-  padding: 1.5rem
+  margin: 1rem auto
+  padding: 1rem
+  section
+    margin-bottom: 0.5rem
 
 section.grade-pass-fail
   .binary-switch-socket
@@ -20,7 +40,7 @@ section.grade-pass-fail
     margin-left: 1em
 
 section.grade-score-levels
-  .grade-score-level-selector
+  #grade-score-level-selector
     margin-bottom: 9px
 
 
@@ -36,7 +56,7 @@ section.grade-final-points
   width: 300px
 
 section.grade-feedback-upload
-  margin: 1rem 0
+  margin: 0.5rem 0
 
 section.grade-status
   margin-bottom: 2rem
@@ -45,8 +65,8 @@ section.grade-status
     margin: 0
 
 hr.grading-divider
-  border: .75px solid $color-grey-6
-  margin: 1.5rem auto
+  border: 1px solid $color-grey-6
+  margin: 1rem auto
 
 
 #rubric-grade-edit
@@ -62,3 +82,24 @@ hr.grading-divider
   // padding: 0;
   // clear: both;
   // font-weight: 300;
+
+input.file-upload-button
+  color: transparent
+  &::-webkit-file-upload-button
+    visibility: hidden
+  &::before
+    content: 'Choose files'
+    color: $color-white
+    display: inline-block
+    background-color: $color-blue-3
+    border-radius: 3px
+    padding: 5px 8px
+    white-space: nowrap
+    -webkit-user-select: none
+    cursor: pointer
+  &:hover::before
+    background-color: darken($color-blue-3, 10%)
+
+// remove when file uploads are consolidated
+.student-submission-form input.file-upload-button
+  color: inherit

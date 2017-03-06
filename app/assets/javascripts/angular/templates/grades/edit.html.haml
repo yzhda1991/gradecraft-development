@@ -18,7 +18,7 @@
 
   %grade-final-points(ng-if='!vm.isPassFailGraded()')
 
-  .grade-section-label {{ vm.feedbackMessage }}
+  %label.grade-section-label(for="feedback-upload") {{ vm.feedbackMessage }}
   %grade-file-uploader(ng-if='!vm.isGroupGrade')
   %grade-feedback-text-input
 

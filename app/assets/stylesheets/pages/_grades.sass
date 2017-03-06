@@ -49,6 +49,8 @@
 
 ul.file-attachments-list
   list-style: none
+  padding-left: 0
+  margin: 0.5rem 0
   .file-attachment-list-item
     .file-attachment-delete-button
       .hover-state, .no-hover-state
@@ -56,6 +58,7 @@ ul.file-attachments-list
       .hover-state
         display: none
     &:hover
+      cursor: pointer
       .file-attachment-delete-button
         .no-hover-state
           display: none
