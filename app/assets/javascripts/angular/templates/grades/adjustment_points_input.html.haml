@@ -16,9 +16,9 @@
       allow-negatives="true"
       ng-change="queueUpdateGrade()")
 
-    %section.grade-adjustment-points-feedback(ng-if="groupGrade || (grade.adjustment_points && grade.adjustment_points != 0)")
+    %section.grade-adjustment-points-feedback(ng-if="grade.adjustment_points && grade.adjustment_points != 0")
       %label.grade-section-label(for="adjustment-points-feedback-{{grade.id}}") Additional Feedback
-      %textarea(id="adjustment-points-feedback-{{grade.id}}" ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
+      %textarea(id="adjustment-points-feedback-{{grade.id}}" ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()")
     .clear
 
     %grade-final-points(ng-if='groupGrade' grade="grade")
