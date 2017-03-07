@@ -31,8 +31,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       if @group.save
         format.html { respond_with @group }
-        flash[:success]=
-          "#{(@group.name).capitalize} #{term_for :group} successfully created"
       else
         @other_students = potential_team_members
         format.html { render action: "new" }
@@ -48,8 +46,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       if @group.update_attributes(group_params)
         format.html { respond_with @group }
-        flash[:success]=
-          "#{@group.name} #{term_for :group} successfully updated"
       else
         @other_students = potential_team_members
         format.html { render action: "edit" }
@@ -70,8 +66,7 @@ class GroupsController < ApplicationController
 
   def group_params
     params.require(:group).permit :name, :approved, :course_id,
-      :text_feedback, :text_proposal, :proposals_attributes, :proposal, :approved,
-      proposal_attributes: [:approved, :title, :group_id, :submitted_by, :feedback, :proposal, :id],
+      proposals_attributes: [:approved, :title, :group_id, :submitted_by, :feedback, :proposal, :id],
       assignment_groups_attributes: [:assignment_id, :group_id, :id],
       group_membership_attributes: [:accepted, :group_id, :student_id, :id, :course_id],
       assignment_ids: [], student_ids: []

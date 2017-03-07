@@ -1,25 +1,6 @@
 %section
   .proposals
-    - if @group.persisted?
-      %script(id="proposal-template" type="text/x-template")
-        %fieldset.proposal.callout.panel
-          = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |pf|
-            = render partial: "proposal_fields", locals: { f: pf }
-      - i = 1
-      - @group.proposals.order_by_creation_date.each do |proposal|
-        %fieldset.proposal.panel
-          %span.columns
-            %h6= "Created: #{proposal.created_at}"
-            %p= raw proposal.proposal
-            - i += 1
-            = f.hidden_field :id
-    - else
-      = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |f|
-        %h2= "#{term_for :assignment} Proposal"
-        .textarea
-          .form_label= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
-          = f.text_area :proposal, class: "froala"
-          = f.hidden_field :id
+    = render partial: "proposal_fields", locals: { f: f }
+    = render partial: "groups/proposal_display", locals: { group: @group } if @group.persisted?
 
-    - if @group.persisted?
-      %button{role: "button", type: "button", class: "add-proposal button"} Add a Proposal
+    %button{role: "button", type: "button", class: "add-proposal button"} Add a Proposal
