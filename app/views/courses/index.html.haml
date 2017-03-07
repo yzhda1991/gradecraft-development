@@ -7,7 +7,7 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %table.paginated_dynatable.scroll-table
+  %table.paginated_dynatable
     %caption.sr-only My Courses
     %thead
       %tr
@@ -21,7 +21,7 @@
           %th{scope: "col"} # of Students
           %th{scope: "col"} Teams
           %th{scope: "col"} Badges
-          %th Downloads
+          %th{style: "text-align: right"} Downloads
           %th Option
     %tbody
       - @courses.each do |course|
