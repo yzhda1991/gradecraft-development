@@ -121,7 +121,7 @@ class CoursesController < ApplicationController
 
   def course_params
     params.require(:course).permit :course_number, :name,
-      :semester, :year, :has_badges, :has_teams, :instructors_of_record_ids,
+      :semester, :year, :has_badges, :has_teams, 
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
       :user_id, :course_id, :course_rules, :syllabus,
       :has_character_names, :has_team_roles, :has_character_profiles, :show_analytics,

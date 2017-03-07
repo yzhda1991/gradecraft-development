@@ -148,8 +148,7 @@ class AssignmentsController < ApplicationController
   def assignment_params
     params.require(:assignment).permit :accepts_attachments, :accepts_links,
       :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
-      :accepts_text, :assignment_file, :assignment_file_ids, :assignment_score_level,
-      :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
+      :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
       :include_in_predictor, :include_in_timeline, :include_in_to_do,
       :mass_grade_type, :name, :open_at, :pass_fail, :max_submissions,
       :full_points, :purpose, :release_necessary, :hide_analytics,
