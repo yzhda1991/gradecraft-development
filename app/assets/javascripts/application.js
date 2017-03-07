@@ -91,6 +91,7 @@
 //= require highcharts
 //= require select2
 //= require grade_distribution
+//= require team_analytics
 //= require jquery.highchartTable-min
 //= require jquery.collapse
 //= require jquery.collapse_storage
