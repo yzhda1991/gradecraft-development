@@ -59,9 +59,11 @@ if ($numberComplete.length) {
   var percentNotParticipated = 100 - percentParticipated;
   var participationData = [{
     values: [percentParticipated, percentNotParticipated],
-    labels: ['Learners Participated'],
+    labels: ['Learners Participated, Not Participated'],
     type: 'pie',
     hole: .6,
+    text: [percentParticipated + '%', null],
+    textinfo: 'text',
     marker: {
       colors: ['rgba(31, 119, 180, 0.5)', 'rgba(222,227,229, 0.5)' ],
       line: {
