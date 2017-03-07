@@ -47,17 +47,20 @@ if ($('#levels_per_assignment').length) {
     hovermode: !1,
     height: 240,
     margin: {
-      l: 40,
-      r: 8,
-      b: 40,
+      l: 50,
+      r: 20,
+      b: 60,
       t: 4,
       pad: 8
     },
     xaxis: {
-      fixedrange: true
+      fixedrange: true,
+      title: 'Score'
     },
     yaxis: {
-      fixedrange: true
+      fixedrange: true,
+      title: '# of Students',
+      tickformat: ',d'
     }
   };
 
