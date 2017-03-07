@@ -34,4 +34,10 @@
 
 - if current_user_is_staff?
   %section.grade-form-section
-    %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:"
+    - if assignment.has_groups?
+      %h2.grade-form-header= "Grade for #{@group.name}:" 
+      %ul
+        - @group.students.each do |s|
+          %li= link_to s.name, student_path(s)
+    - else
+      %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:" 
