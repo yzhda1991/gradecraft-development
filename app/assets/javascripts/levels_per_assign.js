@@ -66,21 +66,23 @@ if ($('#levels_per_assignment').length) {
 
   if ($('#levels_per_assignment').hasClass('student-distro')) {
       layout.height = 230;
-      layout.annotations = [{
-        x: studentGrade,
-        y: yStudentMarker,
-        xref: 'x',
-        yref: 'y',
-        yanchor: 'bottom',
-        xanchor: 'center',
-        text: 'Your Score',
-        showarrow: true,
-        arrowhead: 2,
-        arrowsize: 1,
-        arrowwidth: 2,
-        ax: 0,
-        ay: -20
-      }]
+      if (studentGrade) {
+        layout.annotations = [{
+          x: studentGrade,
+          y: yStudentMarker,
+          xref: 'x',
+          yref: 'y',
+          yanchor: 'bottom',
+          xanchor: 'center',
+          text: 'Your Score',
+          showarrow: true,
+          arrowhead: 2,
+          arrowsize: 1,
+          arrowwidth: 2,
+          ax: 0,
+          ay: -20
+        }]
+      }
     }
 
   // eslint-disable-next-line no-undef
