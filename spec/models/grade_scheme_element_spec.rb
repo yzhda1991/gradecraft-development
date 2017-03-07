@@ -9,13 +9,8 @@ describe GradeSchemeElement do
   end
 
   context "validations" do
-    it "is valid with a low range, a high range, and a course" do
+    it "is valid with a course" do
       expect(subject).to be_valid
-    end
-
-    it "is invalid without a low range" do
-      subject.lowest_points = nil
-      expect(subject).to be_invalid
     end
 
     it "is invalid without a course" do
