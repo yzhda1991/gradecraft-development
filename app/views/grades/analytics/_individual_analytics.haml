@@ -4,7 +4,7 @@
     .class-analytics-graph
       - if presenter.assignment.pass_fail?
         %h3 Scores Earned
-        #levels_per_assignment{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
+        #levels_per_assignment{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.pass_fail_scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
       - else
         %h3 Grade Distribution
         #grades_per_assign{ "data-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
