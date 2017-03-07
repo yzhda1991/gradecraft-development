@@ -8,8 +8,9 @@ describe API::CriterionGradesController do
   let!(:rubric) { create(:rubric, assignment: assignment) }
   let!(:criterion) { create(:criterion, rubric: rubric) }
   let(:level) { create(:level, criterion: criterion) }
-  let(:criterion_grade) { create(:criterion_grade, level: level, student: student, criterion: criterion) }
+  let(:criterion_grade) { create(:criterion_grade, assignment: assignment, level: level, student: student, criterion: criterion) }
   let(:badge) { create(:badge, course: course) }
+  let(:group) { create :group }
 
   let(:professor) { create(:course_membership, :professor, course: course).user }
 
@@ -28,9 +29,8 @@ describe API::CriterionGradesController do
 
     describe "GET group_index" do
       before(:each) do
-        create_group
         group.students.each do |student|
-          create_criterion_grade(assignment_id: assignment.id, student_id: student.id)
+          create :criterion_grade, assignment_id: assignment.id, student_id: student.id
         end
       end
 
@@ -55,7 +55,7 @@ describe API::CriterionGradesController do
 
     describe "PUT update" do
       let(:params) do
-        RubricGradePUT.new(world).params.merge(assignment_id: assignment.id, student_id: student.id)
+        RubricGradePUT.new(assignment, [criterion]).params.merge(assignment_id: assignment.id, student_id: student.id)
       end
 
       describe "finds or creates the grade for the assignment and student" do
@@ -85,18 +85,26 @@ describe API::CriterionGradesController do
         end
 
         it "does not create new when criterion grades exist" do
+          criterion_grade
           expect { put :update, params: params, format: :json }.to change { CriterionGrade.count }.by(0)
         end
       end
 
       it "adds earned level badges" do
+        LevelBadge.create(level_id: criterion.levels.first.id, badge_id: badge.id)
         badge.update(can_earn_multiple_times: false)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
       end
 
       it "doesn't re-award existing level badges" do
+        LevelBadge.create(level_id: criterion.levels.first.id, badge_id: badge.id)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(0)
+      end
+
+      it "renders success message when request format is JSON" do
+        put :update, params: params
+        expect(JSON.parse(response.body)).to eq("message" => "Grade successfully saved", "success" => true)
       end
 
       describe "on error" do
@@ -121,7 +129,7 @@ describe API::CriterionGradesController do
         -> { get :group_index, params: { assignment_id: assignment.id, group_id: 1 },
              format: :json },
         -> { put :update,
-             params: RubricGradePUT.new(world).params
+             params: RubricGradePUT.new(assignment, [criterion]).params
               .merge(assignment_id: assignment.id, student_id: student.id) }
       ].each do |protected_route|
         expect(protected_route.call).to redirect_to(:root)
