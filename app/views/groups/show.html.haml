@@ -25,10 +25,4 @@
     %p= raw @group.try(:text_feedback)
 
   - if @group.proposals.present?
-    - i = 1
-    - @group.proposals.order_by_creation_date.each do |p|
-      .panel
-        %h4.bold= "Proposal ##{i}: #{p.title}"
-        %h6= "Created: #{p.created_at}"
-        %p= raw p.proposal
-      - i += 1
+    = render partial: "groups/proposal_display", locals: { group: @group }
