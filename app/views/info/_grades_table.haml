@@ -20,37 +20,37 @@
             %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
               %span.sr-only Actions
             %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-              %button.button.select-all{role: "button", type: "button"}= "Check"
-              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
-          %tbody
-            - grades.each do |grade|
-              - student = grade.student
-              - team = student.team_for_course(course) if student
-              - group = grade.group
-              %tr
-                - if assignment.is_individual?
-                  %td= link_to student.first_name, student_path(student)
-                  %td= link_to student.last_name, student_path(student)
-                  - if course.has_teams?
-                    %td
-                      - if student.present? && team.present?
-                        = link_to team.name, team
-                - elsif assignment.has_groups?
-                  %td= link_to group.try(:name), group_path(group)
-                %td= points grade.score
-                %td= raw grade.feedback
-                %td
-                  .right
-                    %ul.button-bar
-                      - if assignment.is_individual?
-                        %li= link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
-                      - elsif assignment.has_groups?
-                        %li= link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
-                %td
-                  .center
-                    %label
-                      %span.sr-only Select grade to update status
-                      = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }, id: "grade_id_#{assignment.id}-#{grade.id}"
+              %button.button.table-select-all{role: "button", type: "button"}= "Check"
+              %button.button.table-select-none{role: "button", type: "button"}= "Uncheck"
+        %tbody
+          - grades.each do |grade|
+            - student = grade.student
+            - team = student.team_for_course(course) if student
+            - group = grade.group
+            %tr
+              - if assignment.is_individual?
+                %td= link_to student.first_name, student_path(student)
+                %td= link_to student.last_name, student_path(student)
+                - if course.has_teams?
+                  %td
+                    - if student.present? && team.present?
+                      = link_to team.name, team
+              - elsif assignment.has_groups?
+                %td= link_to group.try(:name), group_path(group)
+              %td= points grade.score
+              %td= raw grade.feedback
+              %td
+                .right
+                  %ul.button-bar
+                    - if assignment.is_individual?
+                      %li= link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
+                    - elsif assignment.has_groups?
+                      %li= link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
+              %td
+                .center
+                  %label
+                    %span.sr-only Select grade to update status
+                    = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }, id: "grade_id_#{assignment.id}-#{grade.id}"
 
       .submit-buttons
         .right
