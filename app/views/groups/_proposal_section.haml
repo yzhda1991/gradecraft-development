@@ -14,12 +14,8 @@
             - i += 1
             = f.hidden_field :id
     - else
-      = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |f|
-        %h2= "#{term_for :assignment} Proposal"
-        .textarea
-          .form_label= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
-          = f.text_area :proposal, class: "froala"
-          = f.hidden_field :id
+      = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |pf|
+        = render partial: "proposal_fields", locals: { f: pf }
 
     - if @group.persisted?
       %button{role: "button", type: "button", class: "add-proposal button"} Add a Proposal
