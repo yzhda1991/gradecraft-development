@@ -4,7 +4,9 @@ require "./app/services/creates_grade_using_rubric"
 
 describe Services::CreatesGradeUsingRubric do
   let(:professor) { create(:user) }
-  let(:params) { RubricGradePUT.new.params }
+  let(:assignment) { create :assignment }
+
+  let(:params) { RubricGradePUT.new(assignment).params }
 
   describe ".create" do
     it "confirms the student and assignment" do
