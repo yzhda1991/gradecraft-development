@@ -3,16 +3,11 @@ require "active_record_spec_helper"
 require "./app/services/creates_criterion_grade/builds_criterion_grades"
 
 describe Services::Actions::BuildsCriterionGrades do
-  let(:course) { create :course }
-  let(:student) { create(:course_membership, :student, course: course).user }
-  let(:assignment) { create(:assignment, course: course) }
-  let(:rubric) { create(:rubric, assignment: assignment) }
-  let(:criterion) { create(:criterion, rubric: rubric) }
-  let(:criterion_grade) { create(:criterion_grade, criterion: criterion) }
-  let(:badge) { create(:badge, course: course) }
-  let(:group) { create(:group, course: course, assignments: [assignment]) }
-  
-  let(:raw_params) { RubricGradePUT.new(world).params }
+
+  let(:student) { create :user }
+  let(:assignment) { create :assignment }
+  let(:criterion) { create :criterion }
+  let(:raw_params) { RubricGradePUT.new(assignment, [criterion]).params }
   let(:context) do
     { raw_params: raw_params, student: student, assignment: assignment }
   end
