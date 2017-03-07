@@ -2,37 +2,52 @@
   = render partial: "layouts/alerts"
 
   // Note that things added here also need to be added to the grade/show view for instructors
-  .assignment-details-container
-    - if presenter.grades_available_for? current_student
-      %section
-        %h2 My Grade
-        = render partial: "grades/grade_content", locals: { grade: presenter.grade_for_student(current_student) }
-        %hr.dotted
+  #tabs.ui-tabs.ui-widget
+    %ul.ui-tabs-nav{role: "tablist"}
+      %li
+        %a{"href" => "#tab"} Description
+      - if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)
+        %li
+          %a{"href" => "#tab2"} My Submission
+      - if presenter.has_viewable_analytics?(current_student)
+        %li
+          %a{"href" => "#tab3"} Class Analytics
 
-      - if presenter.has_viewable_analytics? current_student
-        %section
-          %h2 Class Analytics
-          - if presenter.assignment.has_groups?
-            = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
-          - else
-            = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
+    #tabt1.ui-tabs-panel
+      .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
+        %section.assignment-details-container
+          %h2 Description
+          = render partial: "assignments/description", locals: { presenter: presenter }
+
+        - if presenter.show_rubric_preview? current_student
           %hr.dotted
+          %section
+            %h2 Grading Rubric
+            = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
 
-    - if presenter.has_viewable_submission_for? current_student
-      %section
-        %h2 My Submission
-        = render partial: "submissions/submission_content",
-            locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
-              assignment_id: presenter.assignment.id, course: current_course) }
-        = history_timeline presenter.submission_grade_history(current_student)
-        %hr.dotted
+      - if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)
+        .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
+          - if presenter.grades_available_for?(current_student)
+            %section
+              %h2 My Grade
+              = render partial: "grades/grade_content", locals: { grade: presenter.grade_for_student(current_student) }
+              %hr.dotted
 
-    %section
-      %h2 Description
-      = render partial: "assignments/description", locals: { presenter: presenter }
+          - if presenter.has_viewable_submission_for?(current_student)
+            %section
+              %h2 My Submission
+              = render partial: "submissions/submission_content",
+                  locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
+                    assignment_id: presenter.assignment.id, course: current_course) }
+              = history_timeline presenter.submission_grade_history(current_student)
+              %hr.dotted
 
-    - if presenter.show_rubric_preview? current_student
-      %hr.dotted
-      %section
-        %h2 Grading Rubric
-        = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
+      - if presenter.has_viewable_analytics?(current_student)
+        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
+          %section.assignment-details-container
+            %h2 Class Analytics
+            - if presenter.assignment.has_groups?
+              = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
+            - else
+              = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
+            %hr.dotted
