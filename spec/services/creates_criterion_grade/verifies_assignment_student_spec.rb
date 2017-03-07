@@ -4,16 +4,11 @@ require "./app/services/creates_grade/verifies_assignment_student"
 
 describe Services::Actions::VerifiesAssignmentStudent do
   let(:course) { create :course }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
-  let(:rubric) { create(:rubric, assignment: assignment) }
-  let(:criterion) { create(:criterion, rubric: rubric) }
-  let(:criterion_grade) { create(:criterion_grade, criterion: criterion) }
-  let(:badge) { create(:badge, course: course) }
   let(:group) { create(:group, assignments: [assignment]) }
   let(:route_params) {{ "assignment_id" => assignment.id, "student_id" => student.id }}
-  let(:raw_params) { RubricGradePUT.new(world).params.merge route_params }
+  let(:raw_params) { RubricGradePUT.new(assignment).params.merge route_params }
 
   it "expects attributes to assign to assignment and student" do
     expect { described_class.execute }.to \
