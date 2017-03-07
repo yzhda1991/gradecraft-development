@@ -4,14 +4,6 @@
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
 
   %hr.grading-divider
-  %h3.uppercase #{term_for :students} in the #{term_for :group} "#{@group.name}"
-  %ul
-    - @group.students.each do |s|
-      %li= link_to s.name, student_path(s)
-
-    - if @group.proposals.present?
-      - @group.proposals.last do |prop|
-        = prop.title
 
   - if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
     %hr.grading-divider
