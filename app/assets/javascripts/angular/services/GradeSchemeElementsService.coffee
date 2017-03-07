@@ -43,22 +43,26 @@
       validateElements() if gradeSchemeElements.length > 0
 
   # Add a new element after the selected element, if one was given
-  addElement = (currentElement) ->
+  addElement = (currentElement, attributes=null) ->
     if currentElement?
       for element, i in gradeSchemeElements
         if element == currentElement
           gradeSchemeElements.splice(i + 1, 0, _newElement())
           return
     else
-      gradeSchemeElements.push(_newElement())
+      gradeSchemeElements.push(_newElement(attributes))
 
   # New empty grade scheme element object
-  _newElement = () ->
-    angular.copy({
+  _newElement = (attributes=null) ->
+    element = angular.copy({
       letter: null
       level: null
       lowest_points: null
     })
+    angular.forEach(attributes, (value, key) ->
+      element[key] = value
+    ) if attributes?
+    element
 
   # Add new element to represent zero threshold
   addZeroThreshold = () ->
@@ -83,8 +87,8 @@
     )
 
   # POST grade scheme element updates
-  postGradeSchemeElements = () ->
-    return if !hasValidPointThresholds()
+  postGradeSchemeElements = (validate=true) ->
+    return if validate && !hasValidPointThresholds()
     data = {
       grade_scheme_elements_attributes: gradeSchemeElements
       deleted_ids: deletedElementIds
