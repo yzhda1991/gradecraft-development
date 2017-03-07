@@ -40,11 +40,11 @@ if ($('#leaderboardBarChart').length) {
     },
     xaxis: {
       fixedrange: true,
-      title: 'Score'
+      title: 'Team'
     },
     yaxis: {
       fixedrange: true,
-      title: 'Team',
+      title: 'Score',
       tickformat: ',d'
     }
   };
