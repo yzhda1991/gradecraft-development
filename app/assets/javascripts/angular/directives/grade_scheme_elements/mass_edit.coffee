@@ -13,7 +13,9 @@
       GradeSchemeElementsService.addElement()
 
     vm.postGradeSchemeElements = () ->
-      GradeSchemeElementsService.postGradeSchemeElements()
+      GradeSchemeElementsService.postGradeSchemeElements().success(() ->
+        window.location.href = '/grade_scheme_elements/'  # redirect on success
+      )
 
     vm.setHasInvalidElements = (value) ->
       vm.hasInvalidElements = value

@@ -93,7 +93,6 @@
       (data) ->
         angular.copy(data.grade_scheme_elements, gradeSchemeElements)
         GradeCraftAPI.logResponse(data)
-        window.location.href = '/grade_scheme_elements/'
     ).error(
       (error) ->
         alert('An error occurred that prevented saving.')
