@@ -3,10 +3,10 @@ require "active_record_spec_helper"
 require "./app/services/creates_grade/verifies_assignment_student"
 
 describe Services::Actions::VerifiesAssignmentStudent do
-  let(:course) { create :course }
-  let(:student) { create(:course_membership, :student, course: course).user }
-  let(:assignment) { create(:assignment, course: course) }
-  let(:group) { create(:group, assignments: [assignment]) }
+  let(:course) { build_stubbed :course }
+  let(:student) { create :user }
+  let(:assignment) { create :assignment }
+  let(:group) { create :group }
   let(:route_params) {{ "assignment_id" => assignment.id, "student_id" => student.id }}
   let(:raw_params) { RubricGradePUT.new(assignment).params.merge route_params }
 
@@ -43,3 +43,5 @@ describe Services::Actions::VerifiesAssignmentStudent do
       raise_error LightService::FailWithRollbackError
   end
 end
+
+
