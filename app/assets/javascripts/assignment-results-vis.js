@@ -34,19 +34,21 @@ if ($assignmentDistro.length) {
 
   if ($assignmentDistro.hasClass('student-distro')) {
     layout.height = 130;
-    layout.annotations = [{
-      x: userScore,
-      y: 0,
-      xref: 'x',
-      yref: 'y',
-      text: 'Your Score:<br>' + userScore.toLocaleString(),
-      showarrow: true,
-      arrowhead: 2,
-      arrowsize: 1,
-      arrowwidth: 2,
-      ax: 0,
-      ay: -40
-    }]
+    if (userScore) {
+      layout.annotations = [{
+        x: userScore,
+        y: 0,
+        xref: 'x',
+        yref: 'y',
+        text: 'Your Score:<br>' + userScore.toLocaleString(),
+        showarrow: true,
+        arrowhead: 2,
+        arrowsize: 1,
+        arrowwidth: 2,
+        ax: 0,
+        ay: -40
+      }]
+    }
   }
 
     // eslint-disable-next-line no-undef
