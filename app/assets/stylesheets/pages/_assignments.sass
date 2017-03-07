@@ -32,9 +32,12 @@
 
 .class-analytics-graph
   flex: 1
-  margin-right: 1rem
-  &:last-child
+  &:not(:last-child)
+    margin-right: 1rem
+  @media (max-width: $media-small-max)
     margin-right: 0
+    margin-bottom: 1rem
+
 
 .in-page-nav-wrapper
   float: left

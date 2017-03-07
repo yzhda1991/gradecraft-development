@@ -91,7 +91,6 @@
 //= require highcharts
 //= require select2
 //= require grade_distribution
-//= require jquery.circliful.min
 //= require jquery.highchartTable-min
 //= require jquery.collapse
 //= require jquery.collapse_storage

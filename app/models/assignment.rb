@@ -292,6 +292,11 @@ class Assignment < ActiveRecord::Base
     { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
   end
 
+  # Creating an array with the set of pass/fail statuses earned on the assignment
+  def percentage_pass_fail_earned
+    { scores: earned_status_count.collect { |s| { data: s[1], name: s[0] }}}
+  end
+
   private
 
   def students_with_submissions_on_team_conditions
