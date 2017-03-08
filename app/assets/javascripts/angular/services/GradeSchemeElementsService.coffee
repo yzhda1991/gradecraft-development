@@ -1,4 +1,5 @@
-@gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+# Shared logic for creating, editing, and otherwise interacting with GradeSchemeElements
+@gradecraft.factory 'GradeSchemeElementsService', ['$q', '$http', 'GradeCraftAPI', ($q, $http, GradeCraftAPI) ->
 
   deletedElementIds = []
   gradeSchemeElements = []
@@ -79,26 +80,29 @@
     !result
 
   # GET grade scheme elements for the current course
+  # Returns a promise
   getGradeSchemeElements = () ->
-    $http.get("/api/grade_scheme_elements").success((response) ->
-      GradeCraftAPI.loadMany(gradeSchemeElements, response)
-      _totalPoints = response.meta.total_points
+    $http.get("/api/grade_scheme_elements").then((response) ->
+      GradeCraftAPI.loadMany(gradeSchemeElements, response.data)
+      _totalPoints = response.data.meta.total_points
       GradeCraftAPI.logResponse(response)
     )
 
   # POST grade scheme element updates
+  # Returns a promise
   postGradeSchemeElements = (validate=true) ->
-    return if validate && !hasValidPointThresholds()
+    if gradeSchemeElements.length < 1 || (validate && !hasValidPointThresholds())
+      return $q.when(null)  # wrap in a promise for consistent handling by callers
+
     data = {
       grade_scheme_elements_attributes: gradeSchemeElements
       deleted_ids: deletedElementIds
     }
-    $http.put('/grade_scheme_elements/mass_update', data).success(
-      (data) ->
-        angular.copy(data.grade_scheme_elements, gradeSchemeElements)
-        GradeCraftAPI.logResponse(data)
-    ).error(
-      (error) ->
+    $http.put('/grade_scheme_elements/mass_update', data).then(
+      (response) ->
+        angular.copy(response.grade_scheme_elements, gradeSchemeElements)
+        GradeCraftAPI.logResponse(response)
+      , (error) ->
         alert('An error occurred that prevented saving.')
         GradeCraftAPI.logResponse(error)
     )
