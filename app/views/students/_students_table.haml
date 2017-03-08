@@ -9,7 +9,7 @@
       %th Avatar
       %th First Name
       %th Last Name
-      %th= "Screenname" if presenter.display_pseudonyms?
+      %th= "Pseudonym" if presenter.display_pseudonyms?
       - if presenter.has_teams?
         %th= "#{presenter.course.team_term}"
         %th= "Role" if presenter.has_team_roles?
