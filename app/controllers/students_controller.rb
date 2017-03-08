@@ -1,6 +1,4 @@
 class StudentsController < ApplicationController
-  respond_to :html, :json
-
   before_action :ensure_staff?
   before_action :save_referer, only: [:recalculate]
 
@@ -22,14 +20,6 @@ class StudentsController < ApplicationController
       course: current_course,
       view_context: view_context
     })
-  end
-
-  # AJAX endpoint for student name search
-  def autocomplete_student_name
-    students = current_course.students.map do |u|
-      { name: [u.first_name, u.last_name].join(" "), id: u.id }
-    end
-    render json: MultiJson.dump(students)
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates

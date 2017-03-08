@@ -30,13 +30,6 @@ describe StudentsController do
       end
     end
 
-    describe "GET autocomplete_student_name" do
-      it "provides a list of all students and their ids" do
-        get :autocomplete_student_name, params: { id: 10 }
-        (expect(response.status).to eq(200))
-      end
-    end
-
     describe "GET grade_index" do
       it "shows the grade index page" do
         get :grade_index, params: { id: @student.id }

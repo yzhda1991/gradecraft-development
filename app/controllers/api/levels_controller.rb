@@ -1,4 +1,3 @@
-
 class API::LevelsController < ApplicationController
   before_action :ensure_staff?
 
