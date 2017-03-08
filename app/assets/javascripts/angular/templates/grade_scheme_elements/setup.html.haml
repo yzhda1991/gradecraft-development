@@ -1,0 +1,51 @@
+%h2 Add new grading scheme
+
+%dl{"ng-form"=>"", "name"=>"gradeSchemeSetupForm"}
+  %dt Are you using grade letters?
+  %dd
+    %input{"type"=>"radio",
+           "ng-model"=>"vm.isUsingGradeLetters",
+           "ng-value"=>"true",
+           "required"=>""} Yes
+    %input{"type"=>"radio",
+           "ng-model"=>"vm.isUsingGradeLetters",
+           "ng-value"=>"false",
+           "required"=>""} No
+
+  %additional-questions{"ng-if"=>"vm.isUsingGradeLetters"}
+    %dl
+      %dt Are you using +/- grades?
+      %dd
+        %input{"type"=>"radio",
+               "ng-model"=>"vm.isUsingPlusMinusGrades",
+               "ng-value"=>"true",
+               "ng-required"=>"vm.isUsingGradeLetters"} Yes
+        %input{"type"=>"radio",
+               "ng-model"=>"vm.isUsingPlusMinusGrades",
+               "ng-value"=>"false",
+               "ng-required"=>"vm.isUsingGradeLetters"} No
+
+    %dl
+      %dt Would you like to add levels below 'F'?
+      %dd
+        %input{"type"=>"radio", "ng-model"=>"vm.addLevelsBelowF",
+               "ng-value"=>"true",
+               "ng-required"=>"vm.isUsingGradeLetters"} Yes
+        %input{"type"=>"radio",
+               "ng-model"=>"vm.addLevelsBelowF",
+               "ng-value"=>"false",
+               "ng-required"=>"vm.isUsingGradeLetters"} No
+
+    %dl{"ng-if"=>"vm.addLevelsBelowF"}
+      %dt How many?
+      %dd
+        %input{"type"=>"number",
+               "ng-model"=>"vm.levelsBelowF",
+               "min"=>"0",
+               "size"=>"8",
+               "ng-required"=>"vm.isUsingGradeLetters && vm.addLevelsBelowF"}
+
+  %button.button.right{"type"=>"button",
+                       "ng-disabled"=>"gradeSchemeSetupForm.$invalid",
+                       "ng-class"=>'{"disabled": gradeSchemeSetupForm.$invalid}',
+                       "ng-click"=>"vm.postGradeSchemeElements()"} Get me started!
