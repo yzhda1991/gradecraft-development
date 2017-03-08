@@ -579,7 +579,7 @@ describe User do
     end
   end
 
-  describe "#earned_badges_for_course(course)" do
+  describe "#earned_badges_for_course(course)", :unreliable do
     let(:student) { create :user, courses: [course], role: :student }
 
     it "returns the students' earned_badges for a course" do
