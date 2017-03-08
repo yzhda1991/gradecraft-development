@@ -1,8 +1,9 @@
 require "rails_spec_helper"
 
-describe API::StudentsController do
-  let(:course) { create(:course)}
-  let!(:student)  { create(:course_membership, :student, course: course).user }
+describe API::CoursesController do
+  let!(:course) { create(:course)}
+  let!(:other_course) { create(:course)}
+  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as a professor" do
@@ -12,9 +13,17 @@ describe API::StudentsController do
     end
 
     describe "GET index" do
-      it "returns students and ids" do
+      it "returns course info for only the professor's courses" do
         get :index, format: :json
-        expect(JSON.parse(response.body)).to eq([{"name"=>"#{student.name}", "id"=>student.id}])
+        json = JSON.parse(response.body)
+        expect(json.length).to eq(1)
+        expect(json).to eq(
+          [{"id"=>course.id,
+            "name"=>course.name,
+            "course_number"=>course.course_number,
+            "year"=>course.year,
+            "semester"=>course.semester}
+          ])
         expect(response.status).to eq(200)
       end
     end
@@ -33,3 +42,6 @@ describe API::StudentsController do
     end
   end
 end
+
+
+

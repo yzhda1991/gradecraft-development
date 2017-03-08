@@ -19,13 +19,6 @@ class CoursesController < ApplicationController
 
   def index
     @courses = current_user.courses
-    # Used to return the course list to search
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: @courses.to_json(only: [:id, :name, :course_number, :year, :semester])
-      end
-    end
   end
 
   def new

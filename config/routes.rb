@@ -341,6 +341,7 @@ Rails.application.routes.draw do
       resources :assignment_type_weights, only: :create
     end
     resources :badges, only: :index
+    resources :courses, only: [:index]
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
     resources :earned_badges, only: [:create, :destroy]
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
@@ -360,7 +361,7 @@ Rails.application.routes.draw do
     resources :predicted_earned_grades, only: [:create, :update]
 
     resources :rubrics, only: [:show]
-    resources :students, only: :index
+    resources :students, only: [:index]
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index
