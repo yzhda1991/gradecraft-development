@@ -1,5 +1,5 @@
 if ($('#leaderboardBarChart').length) {
-  var teamScores = JSON.parse($('#leaderboardBarChart').attr('data-scores')).scores;
+  var teamScores = JSON.parse($('#leaderboardBarChart').attr('data-scores'));
 
   var xValues = [];
   var yValues = [];
