@@ -55,7 +55,7 @@ class TeamsController < ApplicationController
 
   def team_params
     params.require(:team).permit :name, :course, :course_id, :average_score,
-      :banner, :rank, :challenge_grade_score, student_ids: [], leader_ids: [],
+      :banner, :rank, :challenge_grade_score,
       team_memberships_attributes: [:id, :student_id, :team_id, :_destroy],
       team_leaderships_attributes: [:id, :leader_id, :team_id, :_destroy]
   end
