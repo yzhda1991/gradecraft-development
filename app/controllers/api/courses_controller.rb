@@ -4,7 +4,7 @@ class API::CoursesController < ApplicationController
   # accessed by the dashboard
   # GET api/courses
   def index
-    render json: current_user.courses.to_json(only: [:id, :name, :course_number, :year, :semester])
+    @courses = current_user.courses.select(:id, :name, :course_number, :year, :semester)
   end
 
   # accessed by the dashboard

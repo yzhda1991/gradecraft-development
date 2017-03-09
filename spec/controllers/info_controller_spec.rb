@@ -203,7 +203,6 @@ describe InfoController do
     describe "protected routes" do
       [
         :dashboard,
-        :timeline_events,
         :earned_badges,
         :grading_status,
         :per_assign,
