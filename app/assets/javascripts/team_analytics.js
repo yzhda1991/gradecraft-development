@@ -1,3 +1,8 @@
+// truncate function until plotlyjs handles axis label resizing
+function truncateLabel(label, max) {
+  return label.length > max ? label.substr(0, max-1) + '…' : label;
+}
+
 if ($('#leaderboardBarChart').length) {
   var teamScores = JSON.parse($('#leaderboardBarChart').attr('data-scores'));
 
@@ -5,7 +10,7 @@ if ($('#leaderboardBarChart').length) {
   var yValues = [];
 
   teamScores.forEach(function(score) {
-    var xValue = score.name;
+    var xValue = truncateLabel(score.name, 10);
     xValues.push(xValue);
 
     var yValue = score.data;
@@ -31,6 +36,7 @@ if ($('#leaderboardBarChart').length) {
   var layout = {
     showlegend: false,
     hovermode: !1,
+    height: 400,
     margin: {
       l: 80,
       r: 40,
@@ -39,13 +45,12 @@ if ($('#leaderboardBarChart').length) {
       pad: 8
     },
     xaxis: {
-      fixedrange: true,
-      title: 'Team'
+      fixedrange: true
     },
     yaxis: {
       fixedrange: true,
       title: 'Score',
-      tickformat: ',d'
+      tickprefix: '     '
     }
   };
 

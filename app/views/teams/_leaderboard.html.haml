@@ -1,5 +1,6 @@
 %h2.subtitle= "#{term_for :team} Leaderboard"
 - if @teams.present?
-  #leaderboardBarChart{"data-scores" => @team_names_and_scores.to_json }
+  .leaderboard-chart-container
+    #leaderboardBarChart{"data-scores" => @team_names_and_scores.to_json }
 - else
   %p There are no #{term_for :teams} in this course yet!

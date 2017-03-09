@@ -84,22 +84,6 @@ class Team < ActiveRecord::Base
     end
   end
 
-  # def team_earned_score_count
-  #   teams = course.teams
-  #   if course.team_score_average?
-  #     teams.pluck(:name, :average_score)
-  #       .map { |name, average_score| [name, average_score] }.to_h
-  #   elsif course.challenges.present?
-  #     teams.pluck(:name, :challenge_grade_score)
-  #       .map { |name, challenge_grade_score| [name, challenge_grade_score] }.to_h
-  #   end
-  # end
-
-  # Creating an array with the set of teams and scores
-  # def team_names_and_scores
-  #   { scores: team_earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
-  # end
-
   def update_ranks!
     course.teams.each do |team|
       if course.team_score_average?
