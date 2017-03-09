@@ -1,6 +1,6 @@
-require "spec_helper"
+require "rails_spec_helper"
 
-describe API::Grades::AttachmentsController do
+describe API::Grades::AttachmentsController, focus: true do
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }

@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 include SessionHelper
 
 describe API::PredictedEarnedBadgesController do

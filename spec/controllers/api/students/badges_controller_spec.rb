@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 
 describe API::Students::BadgesController do
   let(:course) { create :course }

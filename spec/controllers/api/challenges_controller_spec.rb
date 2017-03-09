@@ -1,7 +1,7 @@
-require "spec_helper"
+require "rails_spec_helper"
 include SessionHelper
 
-describe API::ChallengesController  do
+describe API::ChallengesController do
   let(:course) { create :course, add_team_score_to_student: true }
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }

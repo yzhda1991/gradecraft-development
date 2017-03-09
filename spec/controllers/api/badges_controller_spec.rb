@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 
 describe API::BadgesController do
   include SessionHelper

@@ -1,17 +1,3 @@
-RSpec.configure do |config|
-  # if we're loading more than one spec file just load the rails spec helper to
-  # save us from eternal suffering. However right now we're polluting inclusions
-  # with :focus on every call, and need to either remove config.filter_run from
-  # /spec/spec_helper or implement config.filter_run_when_matching with rspec
-  # v3.5.0.beta2 or greater
-  #
-  inclusions = config.filter_manager.inclusions.rules.keys - [:focus]
-  exclusions = config.filter_manager.exclusions
-  if config.files_to_run.size > 1 && inclusions.empty? && exclusions.empty?
-    require "rails_spec_helper"
-  end
-end
-
 require "spec_helper"
 require "active_record"
 require "paper_trail/config"
