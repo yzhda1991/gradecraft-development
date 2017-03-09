@@ -4,6 +4,7 @@ FactoryGirl.define do
     course_number { Faker::Internet.domain_word }
     semester "Fall"
     has_badges false
+    has_paid false
 
     factory :course_with_weighting do
       total_weights 6
