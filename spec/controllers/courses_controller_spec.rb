@@ -39,17 +39,6 @@ describe CoursesController do
         expect(assigns(:courses)).to eq([course])
         expect(response).to render_template(:index)
       end
-
-      # Powers the course search utility
-      context "with json format" do
-        it "returns all courses in json format" do
-          get :index, format: :json
-          json = JSON.parse(response.body)
-          expect(json.length).to eq 1
-          expect(json[0].keys).to eq ["id", "name", "course_number",
-                                      "year", "semester"]
-        end
-      end
     end
 
     describe "GET new" do
@@ -220,16 +209,6 @@ describe CoursesController do
         get :index
         expect(assigns(:courses)).to eq([course])
         expect(response).to render_template(:index)
-      end
-
-      # Powers the course search utility
-      context "with json format" do
-        it "returns all courses in json format" do
-          get :index, format: :json
-          json = JSON.parse(response.body)
-          expect(json.length).to eq 1
-          expect(json[0].keys).to eq ["id", "name", "course_number", "year", "semester"]
-        end
       end
     end
 
