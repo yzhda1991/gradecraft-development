@@ -52,8 +52,7 @@ describe StudentsController do
 
     describe "protected routes" do
       [
-        :index,
-        :autocomplete_student_name,
+        :index
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)

@@ -29,13 +29,6 @@ describe InfoController do
       end
     end
 
-    describe "GET timeline_events" do
-      it "retrieves the timeline events" do
-        get :timeline_events
-        expect(response).to render_template("info/_timeline")
-      end
-    end
-
     describe "GET earned_badges" do
       it "retrieves the awarded badges page" do
         get :earned_badges

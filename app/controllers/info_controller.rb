@@ -2,7 +2,7 @@ class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
   before_action :ensure_not_observer?, except: [:predictor]
-  before_action :ensure_staff?, except: [:dashboard, :predictor, :timeline_events]
+  before_action :ensure_staff?, except: [:dashboard, :predictor]
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
@@ -21,11 +21,6 @@ class InfoController < ApplicationController
 
   # Display the grade predictor
   def predictor
-  end
-
-  def timeline_events
-    @events = Timeline.new(current_course).events_by_due_date
-    render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 
   def earned_badges
