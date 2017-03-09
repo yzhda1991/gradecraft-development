@@ -1,10 +1,6 @@
 class EventsController < ApplicationController
-  include OAuthProvider
 
   before_action :ensure_staff?, except: [:show, :index]
-  before_action only: [:index, :refresh_google_token] do |controller|
-    controller.redirect_path google_calendar_index_url
-  end
 
   def index
     @events = current_course.events.order("due_at ASC")
