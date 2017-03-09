@@ -36,6 +36,10 @@
       = f.label :status, "Active?"
       = f.check_box :status
       .form_label Is this an active course?
+    .form-item
+      = f.label :has_paid, "Has Paid?"
+      = f.check_box :has_paid
+      .form_label If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users. 
 
 %section
   %h2 Enable Features

@@ -129,7 +129,7 @@ class CoursesController < ApplicationController
       :assignment_weight_type, :has_submissions, :teams_visible,
       :weight_term, :fail_term, :pass_term, :time_zone,
       :max_weights_per_assignment_type, :assignments,
-      :accepts_submissions, :tagline, :office, :phone,
+      :accepts_submissions, :tagline, :office, :phone, :has_paid,
       :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
       :meeting_times, :assignment_term, :challenge_term, :badge_term, :gameful_philosophy,
       :team_score_average, :has_team_challenges, :team_leader_term,
