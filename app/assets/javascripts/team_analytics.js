@@ -65,7 +65,9 @@ if ($('#leaderboardBarChart').length) {
     yaxis: {
       fixedrange: true,
       title: 'Score',
-      tickprefix: '     '
+      tickprefix: '     ',
+      tickformat: ',d',
+      rangemode: 'nonnegative'
     }
   };
 
