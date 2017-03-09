@@ -5,16 +5,30 @@ function truncateLabel(label, max) {
 
 if ($('#leaderboardBarChart').length) {
   var teamScores = JSON.parse($('#leaderboardBarChart').attr('data-scores'));
+  var studentTeam = $('#leaderboardBarChart').attr('data-team');
 
   var xValues = [];
   var yValues = [];
+  var colors = [];
+  var outlineColors = [];
+  var yStudentMarker;
 
   teamScores.forEach(function(score) {
-    var xValue = truncateLabel(score.name, 10);
-    xValues.push(xValue);
+    var xValue = score.name;
+    var truncatedXValue = truncateLabel(score.name, 10);
+    xValues.push(truncatedXValue);
 
     var yValue = score.data;
     yValues.push(yValue);
+
+    if (xValue === studentTeam) {
+      yStudentMarker = yValue;
+      colors.push('rgba(109, 214, 119, 0.5)');
+      outlineColors.push('rgba(109, 214, 119, 1)');
+    } else {
+      colors.push('rgba(31, 119, 180, 0.5)');
+      outlineColors.push('rgba(31, 119, 180, 1)');
+    }
   });
 
   var data = [
@@ -22,11 +36,12 @@ if ($('#leaderboardBarChart').length) {
       x: xValues,
       y: yValues,
       type: 'bar',
+      hoverinfo: 'x+y',
       marker: {
         size: 4,
-        color: 'rgba(31, 119, 180, 0.5)',
+        color: colors,
         line: {
-          color: 'rgba(31, 119, 180, 1)',
+          color: outlineColors,
           width: 2
         }
       }
@@ -35,8 +50,8 @@ if ($('#leaderboardBarChart').length) {
 
   var layout = {
     showlegend: false,
-    hovermode: !1,
     height: 400,
+    hovermode: 'closest',
     margin: {
       l: 80,
       r: 40,
@@ -53,6 +68,24 @@ if ($('#leaderboardBarChart').length) {
       tickprefix: '     '
     }
   };
+
+  if (studentTeam) {
+      layout.annotations = [{
+        x: truncateLabel(studentTeam, 10),
+        y: yStudentMarker,
+        xref: 'x',
+        yref: 'y',
+        yanchor: 'bottom',
+        xanchor: 'center',
+        text: 'Your Team',
+        showarrow: true,
+        arrowhead: 2,
+        arrowsize: 1,
+        arrowwidth: 2,
+        ax: 0,
+        ay: -20
+      }]
+    }
 
   // eslint-disable-next-line no-undef
   Plotly.newPlot('leaderboardBarChart', data, layout, {displayModeBar: false});
