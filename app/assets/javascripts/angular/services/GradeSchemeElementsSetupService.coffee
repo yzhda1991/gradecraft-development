@@ -13,9 +13,11 @@
 
   # Add additional levels
   addAdditionalLevels = (numberOfLevels) ->
-    _.times(numberOfLevels, () ->
+    _.times(numberOfLevels-1, () ->
       GradeSchemeElementsService.addElement()
     )
+    # Make last element the zero threshold
+    GradeSchemeElementsService.addZeroThreshold()
 
   # Create the grade scheme elements
   postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, addLevelsBelowF, levelsBelowF) ->

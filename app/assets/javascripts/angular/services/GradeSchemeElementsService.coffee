@@ -111,6 +111,7 @@
     gradeSchemeElements: gradeSchemeElements
     removeElement: removeElement
     addElement: addElement
+    addZeroThreshold: addZeroThreshold
     validateElements: validateElements
     getGradeSchemeElements: getGradeSchemeElements
     postGradeSchemeElements: postGradeSchemeElements

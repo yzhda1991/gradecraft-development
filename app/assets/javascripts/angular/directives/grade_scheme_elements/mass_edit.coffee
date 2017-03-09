@@ -7,7 +7,7 @@
 
     vm.loading = true
     vm.gradeSchemeElements = null
-    vm.hasInvalidElements = false
+    vm.formIsInvalid = false
 
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
@@ -17,12 +17,13 @@
         window.location.href = '/grade_scheme_elements/'
       )
 
-    vm.setHasInvalidElements = (value) ->
-      vm.hasInvalidElements = value
+    vm.setFormIsInvalid = (value) ->
+      vm.formIsInvalid = value
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
       vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
+      GradeSchemeElementsService.validateElements()
     )
   ]
 

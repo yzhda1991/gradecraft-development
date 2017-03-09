@@ -4,7 +4,7 @@
   GradeSchemeElementsSetupCtrl = [() ->
     vm = this
 
-    vm.isUsingGradeLetters = true
+    vm.isUsingGradeLetters = undefined
     vm.isUsingPlusMinusGrades = undefined
     vm.addLevelsBelowF = undefined
     vm.levelsBelowF = undefined

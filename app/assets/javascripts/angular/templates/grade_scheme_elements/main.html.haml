@@ -2,15 +2,17 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
-                        'set_has_invalid_elements'=>'vm.setHasInvalidElements',
+                        'set_form_is_invalid'=>'vm.setFormIsInvalid',
                         'grade_scheme_element'=>'element'}
 
-  %button.button.right{'ng-click'=>'vm.addElement()',
-                       'ng-hide'=>'vm.gradeSchemeElements.length > 0'} Add Your Highest Grade
+  %button.button.right{'type'=>'button',
+                       'ng-click'=>'vm.addElement()',
+                       'ng-if'=>'vm.gradeSchemeElements.length == 0'} Add Your Highest Grade
 
-.submit-buttons
-  .right
-    %button.button.right{'type'=>'button',
-                         'ng-click'=>'vm.postGradeSchemeElements()',
-                         'ng-class'=>'{"disabled": vm.hasInvalidElements}',
-                         'ng-disabled'=>'vm.hasInvalidElements'} Submit
+  .submit-buttons
+    .right
+      %button.button.right{'type'=>'button',
+                           'ng-click'=>'vm.postGradeSchemeElements()',
+                           'ng-class'=>'{"disabled": vm.formIsInvalid}',
+                           'ng-disabled'=>'vm.formIsInvalid',
+                           'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0'} Submit

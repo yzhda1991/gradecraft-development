@@ -5,7 +5,7 @@
   {
     scope:
       gradeSchemeElement: '='
-      setHasInvalidElements: '&'
+      setFormIsInvalid: '&'
     templateUrl: 'grade_scheme_elements/element.html'
     restrict: 'E'
     link: (scope, element, attrs) ->
@@ -25,6 +25,6 @@
         result = _.find(GradeSchemeElementsService.gradeSchemeElements, (element) ->
           element.validationError?
         )
-        @setHasInvalidElements()(result?)
+        @setFormIsInvalid()(result?)
   }
 ]
