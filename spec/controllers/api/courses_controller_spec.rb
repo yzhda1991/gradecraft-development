@@ -33,7 +33,6 @@ describe API::CoursesController do
         create :event, course: course, name: "Course-Event", due_at: Date.today
         get :timeline_events, format: :json
         expect(assigns(:events)).to eq(Timeline.new(course).events_by_due_date)
-        expect(response).to render_template("api/courses/timeline_events")
       end
     end
   end
@@ -47,6 +46,14 @@ describe API::CoursesController do
       it "redirects" do
         get :index, format: :json
         expect(response.status).to eq(302)
+      end
+    end
+
+    describe "GET timeline_events" do
+      it "returns a list of events for the dashboard" do
+        create :event, course: course, name: "Course-Event", due_at: Date.today
+        get :timeline_events, format: :json
+        expect(assigns(:events)).to eq(Timeline.new(course).events_by_due_date)
       end
     end
   end
