@@ -4,32 +4,22 @@
   // Note that things added here also need to be added to the grade/show view for instructors
   #tabs.ui-tabs.ui-widget
     %ul.ui-tabs-nav{role: "tablist"}
-      %li
-        %a{"href" => "#tab"} Description
-      - if presenter.show_rubric_preview?(current_student)
-        %li
-          %a{"href" => "#tab2"} Rubric
       - if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)
         %li
-          %a{"href" => "#tab3"} My Submission
+          %a{"href" => "#tab"} My Submission
       - if presenter.has_viewable_analytics?(current_student) && presenter.grades_available_for?(current_student)
         %li
-          %a{"href" => "#tab4"} Class Analytics
+          %a{"href" => "#tab2"} Class Analytics
+      %li
+        %a{"href" => "#tab3"} Description
+      - if presenter.show_rubric_preview?(current_student)
+        %li
+          %a{"href" => "#tab4"} Rubric
+
 
     #tabt1.ui-tabs-panel
-      .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
-        %section.assignment-details-container
-          %h2 Description
-          = render partial: "assignments/description", locals: { presenter: presenter }
-
-      - if presenter.show_rubric_preview?(current_student)
-        .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
-          %section.assignment-details-container
-            %h2 Grading Rubric
-            = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
-
       - if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)
-        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tab{class: ("active" if presenter.has_viewable_submission_for?(current_student) || presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
           - if presenter.grades_available_for?(current_student)
             %section.assignment-details-container
               %h2 My Grade
@@ -43,12 +33,23 @@
                   locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
                     assignment_id: presenter.assignment.id, course: current_course) }
               = history_timeline presenter.submission_grade_history(current_student)
+              
+        - if presenter.has_viewable_analytics?(current_student) && presenter.grades_available_for?(current_student)
+          .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
+            %section.assignment-details-container
+              %h2 Class Analytics
+              - if presenter.assignment.has_groups?
+                = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
+              - else
+                = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
 
-      - if presenter.has_viewable_analytics?(current_student) && presenter.grades_available_for?(current_student)
+      .ui-tabs-panel#tab3{class: ("active" if !presenter.has_viewable_submission_for?(current_student) && !presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
+        %section.assignment-details-container
+          %h2 Description
+          = render partial: "assignments/description", locals: { presenter: presenter }
+
+      - if presenter.show_rubric_preview?(current_student)
         .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
           %section.assignment-details-container
-            %h2 Class Analytics
-            - if presenter.assignment.has_groups?
-              = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
-            - else
-              = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
+            %h2 Grading Rubric
+            = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
