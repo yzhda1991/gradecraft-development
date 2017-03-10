@@ -8,6 +8,7 @@ if ($('#leaderboardBarChart').length) {
   var studentTeam = $('#leaderboardBarChart').attr('data-team');
 
   var xValues = [];
+  var xValueLabels = [];
   var yValues = [];
   var colors = [];
   var outlineColors = [];
@@ -15,6 +16,7 @@ if ($('#leaderboardBarChart').length) {
 
   teamScores.forEach(function(score) {
     var xValue = score.name;
+    xValueLabels.push(score.name);
     var truncatedXValue = truncateLabel(score.name, 10);
     xValues.push(truncatedXValue);
 
@@ -31,12 +33,17 @@ if ($('#leaderboardBarChart').length) {
     }
   });
 
+  var tooltips = xValueLabels.map(function (label, index) {
+    return label + '<br>' + yValues[index].toLocaleString();
+  });
+
   var data = [
     {
       x: xValues,
       y: yValues,
       type: 'bar',
-      hoverinfo: 'x+y',
+      text: tooltips,
+      hoverinfo: 'text',
       marker: {
         size: 4,
         color: colors,
