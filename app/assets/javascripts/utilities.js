@@ -114,9 +114,6 @@ $(document).find("[data-behavior~=multi-select]").select2({
   allowClear: true
 });
 
-// Initializing highcharts table data, currently used to display team charts
-$('table.highchart').highchartTable();
-
 //Toggle options menu on some table rows
 $(".button-options").click(function(){
     $(this).next('.options-menu').toggle();
