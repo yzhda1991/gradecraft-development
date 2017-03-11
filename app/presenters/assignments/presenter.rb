@@ -31,9 +31,13 @@ class Assignments::Presenter < Showtime::Presenter
     grades.where(student_id: student.id).first ||
       Grade.new(assignment_id: assignment.id)
   end
+  
+  def prediction(assignment, student)
+    assignment.predicted_earned_grades.where(student: student).first
+  end
 
   def positive_prediction_for?(assignment, student)
-    prediction = assignment.predicted_earned_grades.where(student: student).first
+    prediction = prediction(assignment, student)
     return true if prediction.present? && prediction.predicted_points > 0
   end
 
