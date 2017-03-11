@@ -22,6 +22,25 @@
   &.js-plotly-plot .plotly .cursor-pointer
     cursor: default
 
+#leaderboardBarChart
+
+  &.js-plotly-plot .plotly 
+    .cursor-pointer
+      cursor: default
+
+    .hovertext 
+      path
+        stroke: rgba(31, 119, 180, 1) !important
+        fill: transparentize($color-white, .1) !important
+        stroke-linecap: round !important
+        stroke-linejoin: round !important
+        stroke-width: 2 !important
+
+      text
+        font-size: 12px !important
+        fill: $color-grey-3 !important
+        font-family: 'Open Sans', sans-serif !important
+
 /* Styles the select menu on the analytics view for instructors */
 #analytics-switcher
   float: right

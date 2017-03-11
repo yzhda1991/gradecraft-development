@@ -9,6 +9,7 @@ class TeamsController < ApplicationController
     if current_user_is_student?
       @team = current_student.team_for_course(current_course)
     end
+    @team_names_and_scores = @teams.map { |t| { data: t.score, name: t.name } }
   end
 
   def show

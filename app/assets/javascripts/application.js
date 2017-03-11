@@ -11,7 +11,6 @@
 //= require_self
 //= require jquery.omniselect
 //= require autonumeric
-//= require jquery.sparkline.min
 //= require moment.min
 //= require s3_direct_upload
 //= require underscore
@@ -91,7 +90,7 @@
 //= require highcharts
 //= require select2
 //= require grade_distribution
-//= require jquery.highchartTable-min
+//= require team_analytics
 //= require jquery.collapse
 //= require jquery.collapse_storage
 //= require jquery.collapse_cookie_storage

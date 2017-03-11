@@ -76,6 +76,14 @@ class Team < ActiveRecord::Base
     return rank_index
   end
 
+  def score
+    if course.team_score_average?
+      average_score
+    elsif course.challenges.present?
+      challenge_grade_score
+    end
+  end
+
   def update_ranks!
     course.teams.each do |team|
       if course.team_score_average?
