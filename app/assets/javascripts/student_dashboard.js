@@ -6,7 +6,7 @@ $(document).ready(function() {
       type: 'bar',
       backgroundColor: null
     },
-    
+
     colors: [
      '#00274F',
      '#215089',
@@ -109,7 +109,7 @@ $('#course-planner').click(function() {
 if($("#dashboard-timeline").length) {
   $.ajax({
     type: 'GET',
-    url: '/timeline_events',
+    url: 'api/timeline_events',
     dataType: 'json',
     contentType: 'application/json',
     success: function (json) {
@@ -146,7 +146,7 @@ function initSlickSlider(startIndex) {
     prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous course event"></a>',
     nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
     initialSlide: startIndex,
-    adaptiveHeight: true, 
+    adaptiveHeight: true,
     infinite: false
   });
 

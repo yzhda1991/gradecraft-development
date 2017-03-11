@@ -217,7 +217,6 @@ Rails.application.routes.draw do
     get :multiplier_choices
     get :per_assign
     get :research_gradebook
-    get :timeline_events
   end
 
   controller :pages do
@@ -268,9 +267,6 @@ Rails.application.routes.draw do
     member do
       get :grade_index
       get :recalculate
-    end
-    collection do
-      get :autocomplete_student_name
     end
   end
 
@@ -344,6 +340,10 @@ Rails.application.routes.draw do
       resources :assignment_type_weights, only: :create
     end
     resources :badges, only: :index
+    resources :courses, only: [:index]
+
+    get "timeline_events", to: "courses#timeline_events"
+
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
     resources :earned_badges, only: [:create, :destroy]
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
@@ -363,7 +363,7 @@ Rails.application.routes.draw do
     resources :predicted_earned_grades, only: [:create, :update]
 
     resources :rubrics, only: [:show]
-
+    resources :students, only: [:index]
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index
