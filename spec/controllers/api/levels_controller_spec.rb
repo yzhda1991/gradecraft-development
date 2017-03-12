@@ -1,7 +1,7 @@
 describe API::LevelsController do
   let(:course) { build :course }
-  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
   let(:rubric) { create(:rubric, assignment: assignment) }
   let(:criterion) { create(:criterion, rubric: rubric) }

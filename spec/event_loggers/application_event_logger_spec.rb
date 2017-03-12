@@ -1,7 +1,10 @@
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
-RSpec.describe ApplicationEventLogger, type: :event_logger do
+RSpec.describe ApplicationEventLogger, type: :event_logger, focus: true do
   subject { described_class.new }
 
+  # let(:course) { build_stubbed :course}
+  # let(:user) { create(:user) }
+  # let(:course_membership)  { create(:course_membership, user: user, course: course) }
   let(:course_membership) do
     double(CourseMembership, course: course, user: user, role: "stuff")
   end

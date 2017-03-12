@@ -1,5 +1,5 @@
 describe API::CoursesController do
-  let!(:course) { create(:course)}
+  let!(:course) { build(:course)}
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
 

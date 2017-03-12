@@ -1,3 +1,5 @@
+include SessionHelper
+
 describe API::AssignmentsController do
   let(:course) { build_stubbed :course}
   let(:student)  { create(:course_membership, :student, course: course).user }

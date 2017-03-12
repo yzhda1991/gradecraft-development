@@ -1,5 +1,5 @@
 describe API::GradeSchemeElementsController do
-  let(:course) { create(:course) }
+  let(:course) { build(:course) }
   let(:student) { create(:course_membership, :student, course: course).user }
   let!(:grade_scheme_element_high) { create(:grade_scheme_element, course: course) }
   

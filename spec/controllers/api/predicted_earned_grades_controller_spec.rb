@@ -1,9 +1,8 @@
 describe API::PredictedEarnedGradesController do
-  let(:course) { create :course}
+  let(:course) { build :course}
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment) }
   let(:params) {{ assignment_id: assignment.id, predicted_points: (assignment.full_points * 0.75).to_i }}
-
 
   context "as student" do
     before do

@@ -1,7 +1,7 @@
 require "analytics"
 require "rails_spec_helper"
 require "./app/analytics_exports/export_contexts/course_export_context"
-# 
+
 describe CourseExportContext do
   subject { described_class.new course: course }
   let(:course) { create :course }

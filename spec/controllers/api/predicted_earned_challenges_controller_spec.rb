@@ -1,5 +1,5 @@
 describe API::PredictedEarnedChallengesController do
-  let(:course) { create :course}
+  let(:course) { build :course}
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:team) { create :team }
   let(:challenge) { create(:challenge) }
