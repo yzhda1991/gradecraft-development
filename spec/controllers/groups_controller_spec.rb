@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe GroupsController do
   before(:all) do
     @course = create(:course)

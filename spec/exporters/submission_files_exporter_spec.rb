@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe SubmissionFilesExporter, type: :exporter do
   let(:stubbed_submission) { @stubbed_submission || submission_double }
   let(:exporter) do

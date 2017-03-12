@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe CoursesHelper do
   let(:user) { double(:user) }
 

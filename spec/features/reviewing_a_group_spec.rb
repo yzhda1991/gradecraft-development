@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "reviewing a group" do
   context "as a professor" do
     let(:course) { build :course }

@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/presenters/course_analytics_exports/base"
-
 RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
   let(:course) { create(:course) }

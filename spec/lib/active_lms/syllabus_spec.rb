@@ -1,5 +1,3 @@
-require "./lib/active_lms"
-
 describe ActiveLMS::Syllabus do
   let(:access_token) { "BLAH" }
 

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe StaffController do
   before(:all) { @course = create(:course) }
   before(:each) do

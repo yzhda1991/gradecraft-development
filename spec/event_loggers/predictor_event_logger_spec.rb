@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "resque_spec/scheduler"
-
 RSpec.describe PredictorEventLogger, type: :event_logger do
   subject { described_class.new }
   let(:application_attrs) { { waffles: "son" } }

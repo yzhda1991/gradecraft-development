@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/importers/student_importers"
-
 describe CanvasStudentImporter do
   describe "#import" do
     it "returns empty results when there are no canvas users" do

@@ -1,9 +1,3 @@
-require "spec_helper"
-require "./lib/human_history/actor_history_token"
-require "./lib/human_history/history_tokenizer"
-require "./lib/human_history/history_token_registry"
-require "./lib/human_history/registered_token"
-
 describe HumanHistory::HistoryTokenizer do
   it "initializes with a changeset" do
     changeset = { "name" =>  ["Bill", "Jimmy"] }

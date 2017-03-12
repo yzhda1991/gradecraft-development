@@ -1,7 +1,3 @@
-require "spec_helper"
-require "active_support/inflector"
-require "./lib/human_history/date_history_token"
-
 describe HumanHistory::DateHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is a recorded at" do

@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "resque_spec/scheduler"
-
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe ApplicationEventLogger, type: :event_logger do
   subject { described_class.new }

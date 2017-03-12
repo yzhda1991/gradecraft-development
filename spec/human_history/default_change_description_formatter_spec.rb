@@ -1,7 +1,3 @@
-require "spec_helper"
-require "active_model"
-require "./lib/human_history/default_change_description_formatter"
-
 describe HumanHistory::DefaultChangeDescriptionFormatter do
   let(:attribute) { "attribute" }
   let(:changes) { ["previous", "current"] }

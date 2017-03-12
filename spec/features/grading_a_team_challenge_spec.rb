@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "grading a team challenge" do
   context "as a professor" do
     let(:course) { build :course, has_team_challenges: true }

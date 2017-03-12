@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "deleting an event" do
   context "as a professor" do
     let(:course) { build :course }

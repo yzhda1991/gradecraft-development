@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe PasswordsController do
   describe "POST create" do
     let(:user) { create :user }

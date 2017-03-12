@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "awarding a badge" do
   context "as a professor" do
     let(:course) { build :course, has_badges: true }

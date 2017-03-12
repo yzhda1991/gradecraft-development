@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe ObserversController do
   let(:course) { build_stubbed(:course) }
   before(:each) { allow(controller).to receive(:current_course).and_return course }

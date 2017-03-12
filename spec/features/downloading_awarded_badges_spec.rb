@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "downloading awarded badges file" do
   context "as a professor" do
     let(:course) { build :course, has_badges: true }

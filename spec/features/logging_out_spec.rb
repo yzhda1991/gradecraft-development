@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "logging out" do
   let(:password) { "p@ssword" }
 

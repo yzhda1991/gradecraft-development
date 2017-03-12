@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe LevelBadgesController do
   before(:all) { @course = create(:course) }
   before(:each) do

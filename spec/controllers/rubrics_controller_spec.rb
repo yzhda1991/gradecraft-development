@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe RubricsController do
 
   let(:course) { create :course }

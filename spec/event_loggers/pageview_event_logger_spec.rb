@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 RSpec.describe PageviewEventLogger, type: :event_logger do
   subject { described_class.new(request: request) }
   let(:request) { double(:request).as_null_object }

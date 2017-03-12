@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/assignment_exporter"
-
 describe AssignmentExporter do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course ) }

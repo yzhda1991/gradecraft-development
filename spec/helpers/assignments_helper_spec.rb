@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe AssignmentsHelper do
   class Helper
     include AssignmentsHelper

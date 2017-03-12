@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe TimelineHelper do
   include RSpecHtmlMatchers
 

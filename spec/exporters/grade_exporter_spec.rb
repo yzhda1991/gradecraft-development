@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/grade_exporter"
-
 describe GradeExporter do
   let(:assignment) { create(:assignment) }
   let(:students) { create_list :user, 2 }

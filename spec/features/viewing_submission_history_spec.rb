@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "viewing submission history" do
   let!(:submission) do
     create :submission, course: membership.course, assignment: assignment, student: student

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "creating a new team" do
   context "as a professor" do
     let(:course) { build :course, has_teams: true }

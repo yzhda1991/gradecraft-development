@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "editing submissions" do
   context "as a student" do
     let!(:submission) do

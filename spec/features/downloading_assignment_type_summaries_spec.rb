@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "downloading assignment type summary file" do
   context "as a professor" do
     let(:course) { build :course }

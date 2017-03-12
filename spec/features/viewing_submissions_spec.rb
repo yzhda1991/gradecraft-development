@@ -1,5 +1,3 @@
-require "spec_helper"
-
 feature "viewing submissions" do
   let(:assignment) { build :assignment, accepts_submissions: true, course: membership.course }
   let!(:submission) do

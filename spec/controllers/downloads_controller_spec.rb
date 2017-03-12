@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe DownloadsController, type: :controller do
 
   let(:course) { create :course }

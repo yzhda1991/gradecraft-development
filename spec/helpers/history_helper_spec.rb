@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe HistoryHelper do
   include RSpecHtmlMatchers
 

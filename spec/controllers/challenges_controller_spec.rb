@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe ChallengesController do
   before(:all) do
     @course = create(:course, add_team_score_to_student: true)
@@ -7,6 +5,7 @@ describe ChallengesController do
     @team = create(:team, course: @course)
     @team.students << @student
   end
+  
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)

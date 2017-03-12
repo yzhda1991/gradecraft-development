@@ -1,7 +1,4 @@
-require "spec_helper"
-
 describe ChallengeGradesController do
-  
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }

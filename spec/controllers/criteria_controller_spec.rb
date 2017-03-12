@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe CriteriaController do
   before(:all) { @course = create(:course) }
   before(:each) do

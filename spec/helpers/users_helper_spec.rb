@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe UsersHelper do
   class Helper
     include UsersHelper
