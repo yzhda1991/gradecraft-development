@@ -3,11 +3,6 @@ describe AssignmentsController do
   let(:assignment_type) { create(:assignment_type, course: course) }
   let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
 
-  before(:each) do
-    allow(controller).to receive(:current_course).and_return course
-    allow(Resque).to receive(:enqueue).and_return true
-  end
-
   context "as a professor" do
     let(:professor) { create(:user, courses: [course], role: :professor) }
     before(:each) { login_user(professor) }

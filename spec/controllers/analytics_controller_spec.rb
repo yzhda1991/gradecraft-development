@@ -1,15 +1,11 @@
 describe AnalyticsController do
-  before { allow(Resque).to receive(:enqueue).and_return(true) }
+  let(:course) { build(:course)}
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as a professor" do
-    before(:all) do
-      @course = create(:course)
-      @professor = create(:user, courses: [@course], role: :professor)
-    end
-
     before(:each) do
-      session[:course_id] = @course.id
-      login_user(@professor)
+      login_user(professor)
     end
 
     describe "GET students" do
@@ -28,14 +24,8 @@ describe AnalyticsController do
   end
 
   context "as a student" do
-    before(:all) do
-      @course = create(:course)
-      @student = create(:user, courses: [@course], role: :student)
-    end
-
     before(:each) do
-      session[:course_id] = @course.id
-      login_user(@student)
+      login_user(student)
     end
 
     describe "protected routes" do

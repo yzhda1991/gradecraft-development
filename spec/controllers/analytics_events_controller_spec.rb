@@ -1,5 +1,4 @@
 describe AnalyticsEventsController, type: :controller do
-
   let(:course) { build(:course) }
   let(:user) { build(:user) }
   let(:student) { build(:user) }
