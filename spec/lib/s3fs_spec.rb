@@ -1,5 +1,3 @@
-require "s3fs"
-
 describe S3fs do
   describe ".mktmpdir" do
     it "makes a tmpdir using the tmpdir_prefix" do

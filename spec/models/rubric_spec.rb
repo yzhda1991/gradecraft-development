@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Rubric do
 
   describe "validations" do

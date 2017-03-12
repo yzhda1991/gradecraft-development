@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }
   let(:performer) { ResqueJob::Performer.new(attrs) }

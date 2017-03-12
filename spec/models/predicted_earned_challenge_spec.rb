@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe PredictedEarnedGrade do
 
   before do

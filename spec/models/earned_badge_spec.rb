@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe EarnedBadge do
 
   subject { build(:earned_badge) }

@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe ModelCopier do
   let(:model) { create :course }
 

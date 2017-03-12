@@ -1,5 +1,3 @@
-require "./lib/quote_helper"
-
 describe QuoteHelper do
   class Container
     include QuoteHelper

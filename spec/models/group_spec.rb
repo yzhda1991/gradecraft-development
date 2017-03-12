@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "toolkits/sanitization_toolkit"
-
 describe Group do
   subject { create(:group) }
 

@@ -1,7 +1,3 @@
-require "analytics/export"
-require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
-require "./spec/support/test_classes/lib/analytics/export/test_context_filter"
-
 describe Analytics::Export::Model do
   subject { described_class.new context: context }
   let(:context) { double(:context, class: "TestContext").as_null_object }

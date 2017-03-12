@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe Timeline do
   let(:course) { create :course }
   subject { described_class.new(course) }

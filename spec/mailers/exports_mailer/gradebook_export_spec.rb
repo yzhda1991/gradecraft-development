@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe ExportsMailer do
   extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
   define_email_context # taken from the definitions toolkit

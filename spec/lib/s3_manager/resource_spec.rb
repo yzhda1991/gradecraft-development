@@ -1,8 +1,3 @@
-require "active_record_spec_helper"
-require "s3_manager/resource"
-require "support/uni_mock/rails"
-require_relative "../../support/test_classes/lib/s3_manager/s3_resource_test"
-
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new s3_object_key: s3_object_key }
 

@@ -1,6 +1,3 @@
-require "proctor"
-require_relative "../../support/test_classes/lib/proctor/proctor_condition_set_test_class"
-
 describe Proctor::ConditionSet do
   # Proctor::Conditions is included in the test class
   describe ProctorConditionSetTestClass do

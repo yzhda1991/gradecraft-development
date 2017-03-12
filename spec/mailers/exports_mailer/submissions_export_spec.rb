@@ -1,5 +1,3 @@
-require "spec_helper"
-
 # specs for submission notifications that are sent to students
 describe ExportsMailer do
   # brings in helpers for default emails and parts

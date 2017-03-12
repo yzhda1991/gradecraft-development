@@ -1,6 +1,3 @@
-require "s3_manager/basics"
-require "s3_manager/object_stream"
-
 describe S3Manager::ObjectStream do
   subject { described_class.new object_key: "some-key" }
   let(:object) { double(:s3_object, body: object_body) }

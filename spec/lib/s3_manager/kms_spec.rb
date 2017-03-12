@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe S3Manager::Kms do
   let(:s3_manager) { S3Manager::Manager.new }
 

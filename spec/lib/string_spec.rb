@@ -1,5 +1,3 @@
-require "./lib/string"
-
 describe Gradecraft::String do
   describe "#past_tense" do
     it "adds a 'd' to the end of the string if it ends in an 'e'" do

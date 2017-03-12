@@ -1,4 +1,3 @@
-require "active_record_spec_helper"
 require "api_spec_helper"
 
 describe UserAuthorization, type: :disable_external_api do

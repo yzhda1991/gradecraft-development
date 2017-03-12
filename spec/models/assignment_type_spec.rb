@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe AssignmentType do
   let(:course) { build(:course) }
   let(:assignment) { build(:assignment, course: course) }

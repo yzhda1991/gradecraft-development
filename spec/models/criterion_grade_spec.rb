@@ -1,7 +1,4 @@
-require "active_record_spec_helper"
-
 describe CriterionGrade do
-  
   let(:course) { create(:course) }
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment, course: course) }

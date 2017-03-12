@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe User do
   let(:course) { build(:course) }
   let(:student) { create(:user, username: "simple") }

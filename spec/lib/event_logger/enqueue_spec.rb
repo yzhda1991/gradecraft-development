@@ -1,7 +1,3 @@
-require "active_record_spec_helper"
-require "resque_spec/scheduler"
-require_relative "../../support/test_classes/lib/event_logger/test_event_logger"
-
 describe EventLogger::Enqueue, type: :vendor_library do
   include InQueueHelper
 

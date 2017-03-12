@@ -1,7 +1,3 @@
-require "analytics"
-require "archive/zip"
-require "exports_spec_helper"
-
 describe Analytics::Export::Builder do
   subject do
     described_class.new builder_attrs

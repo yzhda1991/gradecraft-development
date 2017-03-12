@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Level do
   let(:level) { create :level }
   subject { level }

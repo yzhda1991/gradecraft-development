@@ -1,9 +1,6 @@
-require "active_record_spec_helper"
-
 describe AssignmentTypeWeight do
 
   let(:student) { create(:user) }
-
   let(:subject) { create(:assignment_type_weight, student: student) }
 
   context "validations" do

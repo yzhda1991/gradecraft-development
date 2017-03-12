@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe GradeSchemeElement do
   let(:student) { build_stubbed :user }
   let(:course) { build_stubbed :course }

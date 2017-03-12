@@ -1,5 +1,3 @@
-require "./lib/active_lms"
-
 describe ActiveLMS do
   describe ".configure" do
     it "sets the configuration for ActiveLMS" do

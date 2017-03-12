@@ -1,5 +1,3 @@
-require "analytics/export"
-
 describe Analytics::Export::ContextFilter do
   subject { described_class.new course_context }
   let(:course_context) { double(:context, class: "CourseExportContext") }

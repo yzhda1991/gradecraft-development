@@ -1,5 +1,3 @@
-require "spec_helper"
-
 include Toolkits::S3Manager::EncryptionToolkit
 
 RSpec.describe S3Manager::Encryption do

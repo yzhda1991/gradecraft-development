@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe "Assignment #students_with_submissions methods" do
   let(:submission) { create(:submission, assignment: assignment, student: student) }
   let(:errant_submission) { create(:submission, student: errant_student) }

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe EarnedBadgeAnnouncement do
   let(:announcement) { Announcement.unscoped.last }
   let(:course) { earned_badge.course }

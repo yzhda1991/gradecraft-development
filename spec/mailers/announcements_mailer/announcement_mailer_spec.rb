@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe AnnouncementMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:announcement) { create :announcement, author: author }

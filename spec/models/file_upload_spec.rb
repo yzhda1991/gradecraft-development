@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require_relative "../toolkits/models/shared/files"
-
 describe FileUpload do
   subject { grade.file_uploads.new image_file_attrs }
 

@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe CourseMembership do
   let(:course_membership) { build(:course_membership, :student, course: course, user: student) }
   let(:course) { build(:course) }

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Criterion do
   subject { build(:criterion) }
 

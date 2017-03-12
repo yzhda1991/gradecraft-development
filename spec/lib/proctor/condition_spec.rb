@@ -1,5 +1,3 @@
-require "proctor"
-
 describe Proctor::Condition do
   subject do
     described_class.new(name: "Some Name") do

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 # test logging on a waffle
 class Waffle
   include ModelAddons::ImprovedLogging

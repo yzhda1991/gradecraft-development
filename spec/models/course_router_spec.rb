@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/models/course_router"
-
 describe CourseRouter do
   let(:course) { double(:course, id: 456) }
 

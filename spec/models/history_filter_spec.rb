@@ -1,6 +1,3 @@
-require "ostruct"
-require "./app/models/history_filter"
-
 describe HistoryFilter do
   it "initializes with the changeset passed in" do
     history = [double(:history_item, changeset: [{ "event" => "blah" }, { "event" => "bleh" }, {}])]

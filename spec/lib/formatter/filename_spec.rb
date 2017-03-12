@@ -1,6 +1,3 @@
-require 'active_support/inflector'
-require_relative '../../../lib/formatter/filename'
-
 describe Formatter::Filename do
   subject { described_class.new foo_filename }
   let(:foo_filename) { "some-rando-filename" }

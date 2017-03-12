@@ -1,10 +1,3 @@
-require_relative "../../../lib/event_logger/base"
-require_relative "../../../lib/analytics/event"
-require_relative "../../../lib/inheritable_ivars"
-require_relative "../../../lib/loggly_resque"
-require_relative "../../support/test_classes/lib/event_logger/" \
-  "logger_base_test_class"
-
 describe EventLogger::Base, type: :vendor_library do
   subject { described_class.new }
 

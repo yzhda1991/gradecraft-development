@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe LevelBadge do
   let(:level_badge) { create :level_badge }
 
