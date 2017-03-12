@@ -1,8 +1,3 @@
-require "active_record_spec_helper"
-require "./app/presenters/submissions/edit_presenter"
-require_relative "../../../app/presenters/submissions/grade_history"
-require "./app/models/submission"
-
 describe Submissions::EditPresenter do
   let(:assignment) { double(:assignment) }
   before { allow(subject).to receive(:assignment).and_return assignment }

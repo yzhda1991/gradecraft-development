@@ -1,11 +1,8 @@
-require "./app/proctors/badge_proctor"
-
 describe BadgeProctor::Viewable do
   let(:course) { build(:course) }
   let(:badge) { build(:badge, course: course, visible: false) }
   let(:student) { create(:course_membership, course: course, role: :student).user }
   let(:professor) { create(:course_membership, role: "professor", course: course).user }
-  
 
   describe "#viewable?" do
     subject { BadgeProctor.new(badge) }

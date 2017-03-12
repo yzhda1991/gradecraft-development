@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/deletes_submission_draft_content"
-
 describe Services::DeletesSubmissionDraftContent do
   let(:submission) { build(:submission, text_comment_draft: "Dear professor, ") }
 

@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/services/imports_lms_grades/enqueues_grade_updater_jobs"
-
 describe Services::Actions::EnqueuesGradeUpdaterJobs do
   let(:first_grade) { create :grade, status: "Graded" }
   let(:second_grade) { create :grade, status: "Graded" }

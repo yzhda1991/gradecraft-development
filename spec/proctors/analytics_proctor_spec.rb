@@ -1,5 +1,3 @@
-require_relative "../../app/proctors/analytics_proctor"
-
 describe AnalyticsProctor do
   subject { described_class.new }
   let(:user) { double(:staff) }

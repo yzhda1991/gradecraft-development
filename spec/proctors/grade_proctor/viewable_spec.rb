@@ -1,5 +1,3 @@
-require "./app/proctors/grade_proctor"
-
 describe GradeProctor::Viewable do
   let(:assignment) { double(:assignment, release_necessary?: true) }
   let(:course) { double(:course, id: 456) }

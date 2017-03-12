@@ -1,6 +1,3 @@
-require "light-service"
-require "./app/services/shared/iterates_assignment_groups_to_create_grades"
-
 describe Services::Actions::IteratesAssignmentGroupsToCreateGrades do
   let(:assignment) { create(:assignment) }
   let(:professor) { create(:user) }

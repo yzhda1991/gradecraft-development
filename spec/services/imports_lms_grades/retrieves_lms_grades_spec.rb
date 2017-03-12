@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_grades/retrieves_lms_grades"
-
 describe Services::Actions::RetrievesLMSGrades do
   let(:access_token) { "TOKEN" }
   let(:assignment_ids) { ["ASSIGNMENT_1", "ASSIGNMENT_2"] }

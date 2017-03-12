@@ -1,5 +1,3 @@
-require "./app/services/creates_grade"
-
 describe Services::CreatesGrade do
   let(:professor) { create(:user) }
   let(:group) { create(:group) }

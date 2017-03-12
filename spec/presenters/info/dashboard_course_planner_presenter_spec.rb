@@ -1,5 +1,3 @@
-require "./app/presenters/info/dashboard_course_planner_presenter"
-
 describe Info::DashboardCoursePlannerPresenter do
   let(:assignment) { build_stubbed(:assignment) }
   let(:course) { assignment.course }

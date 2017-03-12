@@ -1,7 +1,3 @@
-require "light-service"
-require "spec_helper"
-require "./app/services/creates_new_user/sends_activation_needed_email"
-
 describe Services::Actions::SendsActivationNeededEmail do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:user) { create :user }

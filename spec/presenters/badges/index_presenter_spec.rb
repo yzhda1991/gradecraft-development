@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/presenters/badges/index_presenter"
-
 describe Badges::IndexPresenter do
   let(:badge) do
     double(:badge,

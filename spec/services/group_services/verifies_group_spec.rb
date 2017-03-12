@@ -1,6 +1,3 @@
-require "light-service"
-require "./app/services/group_services/verifies_group"
-
 describe Services::Actions::VerifiesGroup do
   let(:raw_params) { { "group_id" => 1000 } }
 

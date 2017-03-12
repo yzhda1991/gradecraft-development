@@ -1,5 +1,3 @@
-require "./app/services/creates_many_group_grades"
-
 describe Services::CreatesManyGroupGrades do
   describe ".create" do
     let(:professor) { create(:user) }

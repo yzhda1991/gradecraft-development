@@ -1,6 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "api/challenges/index" do
   before(:all) do
     @course = create(:course, challenge_term: "tsallenze")

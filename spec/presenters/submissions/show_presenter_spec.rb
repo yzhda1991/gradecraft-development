@@ -1,9 +1,3 @@
-require "active_record_spec_helper"
-require "active_support/inflector"
-require "./app/presenters/submissions/presenter"
-require "./app/presenters/submissions/grade_history"
-require "./app/presenters/submissions/show_presenter"
-
 describe Submissions::ShowPresenter do
 
   # build a new presenter with some default properties

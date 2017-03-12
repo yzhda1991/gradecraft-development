@@ -1,7 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-include CourseTerms
-
 describe "api/badges/index" do
   before(:all) do
     @course = create(:course, badge_term: "baj")

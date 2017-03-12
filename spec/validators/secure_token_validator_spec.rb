@@ -1,6 +1,3 @@
-require 'active_model'
-require_relative "../../app/validators/secure_token_validator"
-
 describe SecureTokenValidator do
   subject { described_class.new }
 

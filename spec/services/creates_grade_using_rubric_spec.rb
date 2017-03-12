@@ -1,7 +1,3 @@
-require "active_record_spec_helper"
-
-require "./app/services/creates_grade_using_rubric"
-
 describe Services::CreatesGradeUsingRubric do
   let(:professor) { create(:user) }
   let(:assignment) { create :assignment }

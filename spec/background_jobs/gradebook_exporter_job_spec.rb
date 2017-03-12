@@ -1,9 +1,3 @@
-require "active_record_spec_helper"
-require "spec_helpers/resque_job_spec_helper"
-
-require_relative "../../app/performers/gradebook_export_performer"
-require_relative "../../app/background_jobs/gradebook_exporter_job"
-
 RSpec.describe GradebookExporterJob do
   include InQueueHelper # pulled from ResqueSpec
   let(:user) { create(:user) }

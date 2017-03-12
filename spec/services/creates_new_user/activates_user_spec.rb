@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_new_user/activates_user"
-
 describe Services::Actions::ActivatesUser do
   let(:user) { build :user, password: nil, internal: true }
 

@@ -1,9 +1,4 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/marks_as_graded"
-
 describe Services::Actions::MarksAsGraded do
-
   let(:grade) { create :grade }
 
   it "expect grade to be added to the context" do

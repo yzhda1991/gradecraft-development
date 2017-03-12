@@ -1,7 +1,4 @@
-require "spec_helper"
-
 RSpec.describe GradebookExportPerformer, type: :background_job do
-  # public methods
   let(:course) { create(:course) }
   let(:user) { create(:user) }
   let(:attrs) {{ user_id: user[:id], course_id: course[:id] }}

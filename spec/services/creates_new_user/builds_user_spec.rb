@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_new_user/builds_user"
-
 describe Services::Actions::BuildsUser do
   let(:user) { build :user }
   let(:attributes) { user.attributes }

@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/retrieves_lms_assignments"
-
 describe Services::Actions::RetrievesLMSAssignments do
   let(:access_token) { "TOKEN" }
   let(:assignment_ids) { ["ASSIGNMENT_1", "ASSIGNMENT_2"] }
@@ -43,4 +39,3 @@ describe Services::Actions::RetrievesLMSAssignments do
       assignment_ids: assignment_ids, course_id: course_id
   end
 end
-

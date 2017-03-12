@@ -1,6 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "api/grades/show" do
   let(:assignment) { create :assignment }
   let(:student) { create(:course_membership, :student).user } 

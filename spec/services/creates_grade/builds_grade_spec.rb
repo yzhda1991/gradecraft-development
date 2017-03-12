@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/builds_grade"
-
 describe Services::Actions::BuildsGrade do
   let(:professor) { build_stubbed :user }
   let(:student) { build_stubbed :user }

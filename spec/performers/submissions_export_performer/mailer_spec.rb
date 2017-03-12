@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context

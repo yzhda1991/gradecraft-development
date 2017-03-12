@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/presenters/submissions/new_presenter"
-
 describe Submissions::NewPresenter do
   let(:assignment) { double(:assignment) }
 

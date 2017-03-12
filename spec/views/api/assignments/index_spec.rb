@@ -1,7 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-include CourseTerms
-
 describe "api/assignments/index" do
   before(:all) do
     @course = create(:course, assignment_term: "mission", pass_term: "paz", fail_term: "fayl")

@@ -1,5 +1,3 @@
-require_relative "../../app/proctors/submission_proctor.rb"
-
 describe SubmissionProctor do
   subject { described_class.new submission }
   let(:user) { double(:user) }

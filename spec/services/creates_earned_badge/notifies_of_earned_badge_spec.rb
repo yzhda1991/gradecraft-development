@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/services/creates_earned_badge/notifies_of_earned_badge"
-
 describe Services::Actions::NotifiesOfEarnedBadge do
   let(:course) { earned_badge.course }
   let(:delivery) { double(:email, deliver_now: nil) }

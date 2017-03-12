@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_criterion_grade/builds_earned_level_badges"
-
 describe Services::Actions::BuildsEarnedLevelBadges do
   let(:course) { create :course }
   let(:student) { create(:course_membership, :student, course: course).user }

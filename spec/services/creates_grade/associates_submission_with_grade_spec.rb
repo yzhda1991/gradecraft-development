@@ -1,9 +1,4 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/associates_submission_with_grade"
-
 describe Services::Actions::AssociatesSubmissionWithGrade do
-
   let(:course) { create :course }
   let(:assignment) { create :assignment, course: course }
   let(:student) { create(:course_membership, :student, course: course).user }

@@ -1,6 +1,3 @@
-require "light-service"
-require "./app/services/creates_or_updates_user_from_lti/parse_course_attributes_from_auth_hash"
-
 describe Services::Actions::ParseCourseAttributesFromAuthHash do
   let(:auth_hash) { OmniAuth::AuthHash.new({
     extra: {

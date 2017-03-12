@@ -1,8 +1,4 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "grades/show" do
-
   let(:presenter) { Assignments::Presenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do

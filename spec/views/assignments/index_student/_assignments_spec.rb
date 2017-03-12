@@ -1,6 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "assignments/index_student/_assignments" do
 
   let(:user) { double(:user, is_student?: true) }

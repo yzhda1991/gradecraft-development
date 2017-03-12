@@ -1,7 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-include CourseTerms
-
 describe "api/grade_scheme_elements/index" do
   before(:all) do
     @grade_scheme_element = create(:grade_scheme_element_high)

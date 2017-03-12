@@ -1,4 +1,3 @@
-require "light-service"
 require "./app/services/creates_or_updates_user_from_lti/parse_user_attributes_from_auth_hash"
 
 describe Services::Actions::ParseUserAttributesFromAuthHash do

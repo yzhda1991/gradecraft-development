@@ -1,7 +1,4 @@
-require "spec_helper"
-
 RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
-  # public methods
   let(:student) { create(:user) }
   let(:course) { create(:course) }
   let(:attrs) {{ user_id: student[:id], course_id: course[:id] }}

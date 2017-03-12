@@ -1,5 +1,3 @@
-require "./app/proctors/grade_proctor"
-
 describe GradeProctor::Updatable do
   let(:assignment) { double(:assignment, student_logged?: false,
                             release_necessary?: true) }

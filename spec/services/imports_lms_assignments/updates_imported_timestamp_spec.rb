@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/updates_imported_timestamp"
-
 describe Services::Actions::UpdatesImportedTimestamp do
   let(:imported_assignment) { create :imported_assignment, :canvas }
 

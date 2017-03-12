@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/runs_grade_updater_job"
-
 describe Services::Actions::RunsGradeUpdaterJob do
   let(:grade) { build :grade }
   let(:update_grade) { true }

@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/updates_user/updates_user"
-
 describe Services::Actions::UpdatesUser do
   let(:user) { create :user }
   let(:attributes) { user.attributes.symbolize_keys }

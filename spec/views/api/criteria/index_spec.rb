@@ -1,6 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "api/criteria/index" do
   let(:course) { build_stubbed(:course) }
   let(:assignment) { create(:assignment, course: course) }

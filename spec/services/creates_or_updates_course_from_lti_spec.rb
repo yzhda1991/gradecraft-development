@@ -1,4 +1,3 @@
-require "active_record_spec_helper"
 require "./app/services/creates_or_updates_course_from_lti"
 
 describe Services::CreatesOrUpdatesCourseFromLTI do

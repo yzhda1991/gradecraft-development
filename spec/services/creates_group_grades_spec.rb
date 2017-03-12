@@ -1,5 +1,3 @@
-require "./app/services/creates_group_grades"
-
 describe Services::CreatesGroupGrades do
   describe ".create" do
     let(:group) { create(:group) }

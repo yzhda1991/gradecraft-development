@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe "submissions/_assignment_guidelines" do
 
   before(:each) do

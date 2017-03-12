@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_criterion_grade/saves_earned_level_badges"
-
 describe Services::Actions::SavesEarnedLevelBadges do
   let(:earned_badge) { build :earned_badge }
 

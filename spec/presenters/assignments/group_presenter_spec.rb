@@ -1,6 +1,3 @@
-require "rspec/core"
-require "./app/presenters/assignments/group_presenter"
-
 describe Assignments::GroupPresenter do
   let(:assignment) { double(:assignment) }
   let(:group) { double(:group, name: "My Group") }

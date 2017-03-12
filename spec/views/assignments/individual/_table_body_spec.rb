@@ -1,7 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-include CourseTerms
-
 describe "assignments/individual/_table_body" do
   let(:presenter) { Assignments::Presenter.new({ assignment: @assignment,
                                                  course: @course }) }

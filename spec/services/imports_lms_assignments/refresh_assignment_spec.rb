@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/refresh_assignment"
-
 describe Services::Actions::RefreshAssignment do
   let(:assignment) { create :assignment }
   let(:lms_assignment) do

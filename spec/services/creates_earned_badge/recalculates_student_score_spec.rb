@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_earned_badge/recalculates_student_score"
-
 describe Services::Actions::RecalculatesStudentScore do
   let(:earned_badge) { create :earned_badge }
 

@@ -1,8 +1,3 @@
-require "spec_helper"
-require "set"
-
-include ResqueJobSharedExamplesToolkit
-
 RSpec.describe ChallengeGradesController, type: :controller, background_job: true do
   include InQueueHelper
 

@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/verifies_assignment_student"
-
 describe Services::Actions::VerifiesAssignmentStudent do
   let(:course) { build_stubbed :course }
   let(:student) { create :user }
@@ -43,5 +39,3 @@ describe Services::Actions::VerifiesAssignmentStudent do
       raise_error LightService::FailWithRollbackError
   end
 end
-
-

@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_criterion_grade/builds_criterion_grades"
-
 describe Services::Actions::BuildsCriterionGrades do
 
   let(:student) { create :user }

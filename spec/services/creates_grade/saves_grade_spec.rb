@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/saves_grade"
-
 describe Services::Actions::SavesGrade do
   let(:grade) { build :grade }
   let(:previous_changes_with_raw_points) { { raw_points: 100 } }

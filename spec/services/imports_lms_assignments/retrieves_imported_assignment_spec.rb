@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/retrieves_imported_assignment"
-
 describe Services::Actions::RetrievesImportedAssignment do
   let(:assignment) { create :assignment }
   let(:provider) { "canvas" }

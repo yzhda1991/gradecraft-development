@@ -1,6 +1,3 @@
-# encoding: utf-8
-require "spec_helper"
-
 describe "api/grades/group_index" do
   let(:course) { build(:course) }
   let(:assignment) { create(:assignment, course: course) }

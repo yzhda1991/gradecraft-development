@@ -1,4 +1,3 @@
-require 'spec_helper'
 require "mongoid_spec_helper"
 
 describe LoginEventPerformer do

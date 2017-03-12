@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context

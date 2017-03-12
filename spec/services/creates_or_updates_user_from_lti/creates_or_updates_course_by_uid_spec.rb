@@ -1,6 +1,3 @@
-require "light-service"
-require "./app/services/creates_or_updates_user_from_lti/creates_or_updates_course_by_uid"
-
 describe Services::Actions::CreatesOrUpdatesCourseByUID do
   let(:course_attributes) do
     {

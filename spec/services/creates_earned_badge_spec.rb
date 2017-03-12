@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/creates_earned_badge"
-
 describe Services::CreatesEarnedBadge do
   describe ".award" do
     let(:course) { create :course }
