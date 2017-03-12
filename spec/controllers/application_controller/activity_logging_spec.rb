@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe ApplicationController do
   let(:student) { create :user }
   let(:instructor) { create :user }

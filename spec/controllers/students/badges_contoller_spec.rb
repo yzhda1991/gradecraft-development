@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Students::BadgesController do
   let(:course) { build(:course) }
   let(:student) { create(:course_membership, :student, course: course).user }

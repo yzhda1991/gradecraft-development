@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-include SessionHelper
-
 describe API::PredictedEarnedChallengesController do
   let(:course) { create :course}
   let(:student)  { create(:course_membership, :student, course: course).user }

@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe API::Grades::EarnedBadgesController do
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }

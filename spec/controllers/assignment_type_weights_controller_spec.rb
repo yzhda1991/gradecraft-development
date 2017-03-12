@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe AssignmentTypeWeightsController do
   let(:course) { build(:course) }
   let(:student) { create(:course_membership, course: course, role: :student).user}

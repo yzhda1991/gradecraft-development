@@ -1,7 +1,3 @@
-require "spec_helper"
-require "resque-scheduler"
-require "resque_spec/scheduler"
-
 describe AnalyticsEventsController, type: :controller do
 
   let(:course) { build(:course) }

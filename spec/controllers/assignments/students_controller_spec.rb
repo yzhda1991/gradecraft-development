@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Assignments::StudentsController do
   let(:course) { build(:course) }
   let(:assignment) { create(:assignment, course: course) }

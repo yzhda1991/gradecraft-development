@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Integrations::CoursesController do
   let(:course_id) { "COURSE_ID" }
   let(:provider) { :canvas }

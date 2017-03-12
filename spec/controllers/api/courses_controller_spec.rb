@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe API::CoursesController do
   let!(:course) { create(:course)}
   let(:student)  { create(:course_membership, :student, course: course).user }
@@ -50,6 +48,3 @@ describe API::CoursesController do
     end
   end
 end
-
-
-

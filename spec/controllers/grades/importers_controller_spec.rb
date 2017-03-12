@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Grades::ImportersController do
   let(:course) { create :course }
   let(:student) { create(:course_membership, :student, course: course).user }

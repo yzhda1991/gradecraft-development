@@ -1,5 +1,3 @@
-require "spec_helper"
-
 describe Assignments::Groups::GradesController do
   let(:course) { create(:course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }

@@ -1,8 +1,4 @@
-require "rails_spec_helper"
-
 describe API::BadgesController do
-  include SessionHelper
-
   let(:course) { build_stubbed(:course) }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:badge) { create(:badge, course: course) }

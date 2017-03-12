@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe API::GradeSchemeElementsController do
   let(:course) { create(:course) }
   let(:student) { create(:course_membership, :student, course: course).user }
