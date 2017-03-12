@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require_relative "../../app/authenticators/secure_token_authenticator"
 
 describe SecureTokenAuthenticator do
   subject { described_class.new authenticator_options }

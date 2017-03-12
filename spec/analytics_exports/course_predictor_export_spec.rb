@@ -1,4 +1,3 @@
-require "analytics"
 require "./app/analytics_exports/course_predictor_export"
 
 describe CoursePredictorExport do

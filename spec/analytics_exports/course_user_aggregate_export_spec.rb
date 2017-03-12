@@ -1,6 +1,4 @@
-require "analytics"
 require "./app/analytics_exports/course_user_aggregate_export"
-require "./app/analytics_exports/context_filters/user_aggregate_context_filter"
 
 describe CourseUserAggregateExport do
   subject { described_class.new context: context }
