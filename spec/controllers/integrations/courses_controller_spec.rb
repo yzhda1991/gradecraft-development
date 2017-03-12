@@ -3,7 +3,7 @@ describe Integrations::CoursesController do
   let(:provider) { :canvas }
 
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let(:professor) { professor_membership.user }
     let(:professor_membership) { create :course_membership, :professor, course: course }
 

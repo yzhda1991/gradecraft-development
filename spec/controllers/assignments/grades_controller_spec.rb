@@ -1,13 +1,12 @@
 describe Assignments::GradesController do
-  let(:course) { create(:course) }
+  let(:course) { build(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }
   let!(:student) { create(:course_membership, :student, course: course).user }
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as professor" do
-    let(:professor) { create(:user, courses: [course], role: :professor) }
-
     before(:each) { login_user(professor) }
 
     describe "GET edit_status" do

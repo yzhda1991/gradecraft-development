@@ -1,14 +1,13 @@
 describe Challenges::ChallengeGradesController do
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:team) { create(:team, course: course) }
   let(:challenge) { create(:challenge, course: course) }
-
+  let(:challenge_grade) { create(:challenge_grade, team: team, challenge: challenge) }
+    
   context "as professor" do
-
     before(:each) do
-      @challenge_grade = create(:challenge_grade, team: team, challenge: challenge)
       login_user(professor)
     end
 
@@ -52,20 +51,20 @@ describe Challenges::ChallengeGradesController do
 
     describe "POST mass_update" do
       it "updates the challenge grades for the specific challenge" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(@challenge_grade)}" =>
+        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
           { team_id: team.id, raw_points: 1000, status: "Released",
-            id: @challenge_grade.id
+            id: challenge_grade.id
           }
         }
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}
-        expect(@challenge_grade.reload.score).to eq 1000
+        expect(challenge_grade.reload.score).to eq 1000
       end
 
       it "redirects to the mass_edit form if attributes are invalid" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(@challenge_grade)}" =>
+        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
           { team_id: nil, raw_points: 1000, status: "Released",
-            id: @challenge_grade.id
+            id: challenge_grade.id
           }
         }
         put :mass_update, params: { challenge_id: challenge.id,
@@ -76,14 +75,14 @@ describe Challenges::ChallengeGradesController do
 
     describe "GET edit_status" do
       it "displays the edit_status page" do
-        get :edit_status, params: { challenge_id: challenge.id, challenge_grade_ids: [ @challenge_grade.id ] }
+        get :edit_status, params: { challenge_id: challenge.id, challenge_grade_ids: [ challenge_grade.id ] }
         expect(response).to render_template(:edit_status)
       end
     end
 
     describe "POST update_status" do
       it "updates the status of multiple challenge grades" do
-        post :update_status, params: { challenge_id: challenge.id, challenge_grade_ids: [ @challenge_grade.id ], challenge_grade: {"status"=> "Released"}}
+        post :update_status, params: { challenge_id: challenge.id, challenge_grade_ids: [ challenge_grade.id ], challenge_grade: {"status"=> "Released"}}
         expect(response).to redirect_to challenge_path(challenge)
       end
     end
