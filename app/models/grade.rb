@@ -42,7 +42,6 @@ class Grade < ActiveRecord::Base
 
   after_destroy :cache_student_and_team_scores
 
-  scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
   scope :order_by_highest_score, -> { order("score DESC") }
   scope :order_by_student, -> { joins(:student).order("users.last_name, users.first_name ASC") }
 
