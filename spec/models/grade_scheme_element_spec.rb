@@ -177,6 +177,13 @@ describe GradeSchemeElement do
     end
   end
 
+  describe "#next_lowest_element" do
+    it "returns the next highest element relative to itself" do
+      expect(GradeSchemeElement).to receive(:next_lowest_element).with(subject)
+      subject.next_lowest_element
+    end
+  end
+
   describe "#range" do
     context "when the current level has the highest points threshold in the course" do
       it "returns infinity" do

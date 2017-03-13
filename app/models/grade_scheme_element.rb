@@ -63,6 +63,10 @@ class GradeSchemeElement < ActiveRecord::Base
     @next_highest_element ||= GradeSchemeElement.next_highest_element self
   end
 
+  def next_lowest_element
+    @next_lowest_element ||= GradeSchemeElement.next_lowest_element self
+  end
+
   # The highest point value for the element
   def highest_points
     return Float::INFINITY if next_highest_element.nil?
