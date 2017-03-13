@@ -1,4 +1,4 @@
-describe EarnedBadgesController, focus: true do
+describe EarnedBadgesController do
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
@@ -71,13 +71,13 @@ describe EarnedBadgesController, focus: true do
 
       context "earned badges are created" do
         before do
-          earned_badges = @students.collect do |student|
+          @earned_badges = @students.collect do |student|
             create(:earned_badge, student_id: student[:id], badge: badge)
           end
         end
 
         it "redirects to the badge page" do
-          allow(controller).to receive(:parse_valid_earned_badges) { earned_badges }
+          allow(controller).to receive(:parse_valid_earned_badges) { @earned_badges }
           expect(subject).to redirect_to(badge_path(badge))
         end
 
