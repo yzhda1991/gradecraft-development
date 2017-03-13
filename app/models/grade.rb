@@ -44,6 +44,7 @@ class Grade < ActiveRecord::Base
 
   scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
   scope :order_by_highest_score, -> { order("score DESC") }
+  scope :order_by_student, -> { joins(:student).order("users.last_name, users.first_name ASC") }
 
   scope :excluded_from_course_score, -> { where excluded_from_course_score: true }
   scope :included_in_course_score, -> { where excluded_from_course_score: false }
