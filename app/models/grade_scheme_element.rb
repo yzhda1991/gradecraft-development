@@ -8,24 +8,25 @@ class GradeSchemeElement < ActiveRecord::Base
   validates_presence_of :course
   validates_numericality_of :lowest_points, length: { maximum: 9 }
 
+  scope :with_lowest_points, -> { where.not(lowest_points: nil) }
   scope :for_course, -> (course_id) { where(course_id: course_id) }
-  scope :order_by_points_asc, -> { order "lowest_points ASC" }
-  scope :order_by_points_desc, -> { order "lowest_points DESC" }
+  scope :order_by_points_asc, -> { with_lowest_points.order "lowest_points ASC" }
+  scope :order_by_points_desc, -> { with_lowest_points.order "lowest_points DESC" }
 
   def self.default
     GradeSchemeElement.new(level: "Not yet on board")
   end
 
   def self.next_highest_element(element)
-    next_element = nil
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
-    ordered_course_elements.each_with_index do |current_element, i|
-      if element == current_element
-        next_element = ordered_course_elements[i+1]
-        break
-      end
-    end
-    next_element
+    ordered_course_elements[ordered_course_elements.to_a.find_index(element) + 1]
+  end
+
+  def self.next_lowest_element(element)
+    ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
+    current_index = ordered_course_elements.to_a.find_index(element)
+    return nil if current_index == 0
+    ordered_course_elements[current_index - 1]
   end
 
   # Getting the name of the Grade Scheme Element - the Level if it's present,

@@ -36,6 +36,23 @@ describe GradeSchemeElement do
     end
   end
 
+  describe ".next_lowest_element" do
+    context "when there is a grade scheme element with a lower point threshold" do
+      let!(:next_grade_scheme_element) { create :grade_scheme_element, lowest_points: 500, course: course }
+
+      it "returns the next lowest element" do
+        expect(GradeSchemeElement.next_lowest_element(subject)).to \
+          eq next_grade_scheme_element
+      end
+    end
+
+    context "when there is not a grade scheme element with a lower point threshold" do
+      it "returns nil" do
+        expect(GradeSchemeElement.next_lowest_element(subject)).to be_nil
+      end
+    end
+  end
+
   describe "#copy" do
     let(:grade_scheme_element) { build :grade_scheme_element }
     subject { grade_scheme_element.copy }
