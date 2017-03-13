@@ -10,8 +10,8 @@ class GradeSchemeElement < ActiveRecord::Base
 
   scope :with_lowest_points, -> { where.not(lowest_points: nil) }
   scope :for_course, -> (course_id) { where(course_id: course_id) }
-  scope :order_by_points_asc, -> { with_lowest_points.order "lowest_points ASC" }
-  scope :order_by_points_desc, -> { with_lowest_points.order "lowest_points DESC" }
+  scope :order_by_points_asc, -> { order lowest_points: :asc }
+  scope :order_by_points_desc, -> { order lowest_points: :desc }
 
   def self.default
     GradeSchemeElement.new(level: "Not yet on board")
