@@ -15,12 +15,12 @@ describe 'GradeService', ()->
         @http.flush()
 
       it 'should load the grade', ()->
-        expect(@GradeService.grade.id).toEqual(1234)
+        expect(@GradeService.grades[0].id).toEqual(1234)
 
       it 'should calculate the final points, defaulting to zero', ()->
-        expect(@GradeService.grade.raw_points).toEqual(0)
-        expect(@GradeService.grade.adjustment_points).toEqual(0)
-        expect(@GradeService.grade.final_points).toEqual(0)
+        expect(@GradeService.grades[0].raw_points).toEqual(0)
+        expect(@GradeService.grades[0].adjustment_points).toEqual(0)
+        expect(@GradeService.grades[0].final_points).toEqual(0)
 
     describe 'for student with included models', ()->
       it 'should load the options for grade status', ()->
@@ -48,10 +48,7 @@ describe 'GradeService', ()->
         @GradeService.getGrade(2, "group", 101)
         @http.flush()
 
-      it 'should load the grade for the first student', ()->
-        expect(@GradeService.grade.id).toEqual(1609)
-
-      it 'should copy all the grades (for future functionality)', ()->
+      it 'should copy all the grades', ()->
         expect(@GradeService.grades.length).toEqual(3)
 
     describe 'for group with included models', ()->
@@ -82,5 +79,5 @@ describe 'GradeService', ()->
       @http.flush()
 
       @GradeService.queueUpdateGrade()
-      expect(@GradeService.grade.final_points).toEqual(900)
+      expect(@GradeService.grades[0].final_points).toEqual(900)
 

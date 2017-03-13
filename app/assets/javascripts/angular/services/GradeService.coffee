@@ -1,7 +1,14 @@
 @gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
 (GradeCraftAPI, DebounceQueue, $http) ->
 
-  grade = {}
+
+
+  # We bind to modelGrade in the directives, to manage all grades through a
+  # single object. On update, these params are copied over into each grade.
+  # In this way individual and group grades can be treated the same.
+  modelGrade = {}
+  grades = []
+
   fileUploads = []
   criterionGrades = []
 
@@ -10,34 +17,50 @@
   isRubricGraded = false
   thresholdPoints = 0
 
-  # used for group grades:
-  grades = []
+  # used to distinguish group and individual grades:
   _recipientType = ""
   _recipientId = ""
 
   #------- grade state management ---------------------------------------------#
 
+  # Final points is unique to each grade in grades
+  # when accounting for adjustment points
+  _updateFinalPoints = (g)->
+    g.raw_points = modelGrade.raw_points
+    g.adjustment_points = parseInt(g.adjustment_points) || 0
+    g.final_points = g.raw_points + g.adjustment_points
+    g.final_points = 0 if g.final_points < thresholdPoints
+
   # This must be triggered whenever there is a
   # change to points fields or selected levels
   calculateGradePoints = ()->
     if isRubricGraded
-      grade.raw_points = _.sum(_.map(criterionGrades, "points"))
-    grade.raw_points = parseInt(grade.raw_points) || 0
-    grade.adjustment_points = parseInt(grade.adjustment_points) || 0
-    grade.final_points = grade.raw_points + grade.adjustment_points
-    grade.final_points = 0 if grade.final_points < thresholdPoints
+      modelGrade.raw_points = _.sum(_.map(criterionGrades, "points"))
+    modelGrade.raw_points = parseInt(modelGrade.raw_points) || 0
+    _.each(grades, (g)->
+      _updateFinalPoints(g))
 
   gradeIsPassing = ()->
-    grade.pass_fail_status == "Pass"
+    modelGrade.pass_fail_status == "Pass"
 
   setGradeToPass = ()->
-    grade.pass_fail_status = "Pass"
+    modelGrade.pass_fail_status = "Pass"
 
   toggeleGradePassFailStatus = ()->
-    grade.pass_fail_status =
-      if grade.pass_fail_status == "Pass" then "Fail" else "Pass"
+    modelGrade.pass_fail_status =
+      if modelGrade.pass_fail_status == "Pass" then "Fail" else "Pass"
 
   #------- grade API calls ----------------------------------------------------#
+
+  # Adjustment fields and final_points are unique to each grade,
+  # and are kept in the grades array. All other attributes are stored in the
+  # singular grade object to simplify updates via binding in the directives
+  _getGradeParams = (attributes)->
+    angular.copy(attributes, modelGrade)
+    delete modelGrade.adjustment_points
+    delete modelGrade.adjustment_points_feedback
+    delete modelGrade.final_points
+    modelGrade.group_id = _recipientId if _recipientType == "group"
 
   # When we get a grade response for student or group,
   # this initial setup is run to extract all included and meta information
@@ -51,10 +74,10 @@
     # - to be returned on first autosave, in order to avoid faculty seeing
     # - partial grade information but no status.
     # - This will make the check for "disabled" on the submit buttons obsolete
-    # grade.status = "In Progress" if !grade.status
+    #  modelGrade.status = "In Progress" if ! modelGrade.status
 
     # We bind status changes to pending_status and only update on submit
-    grade.pending_status = grade.status
+    modelGrade.pending_status =  modelGrade.status
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
 
@@ -64,7 +87,8 @@
     if recipientType == "student"
       $http.get('/api/assignments/' + assignmentId + '/students/' + recipientId + '/grade/').then(
         (response) ->
-          angular.copy(response.data.data.attributes, grade)
+          GradeCraftAPI.addItem(grades, "grades", response.data)
+          _getGradeParams(response.data.data.attributes)
           _getIncluded(response)
           calculateGradePoints()
           GradeCraftAPI.logResponse(response)
@@ -75,24 +99,17 @@
       $http.get('/api/assignments/' + assignmentId + '/groups/' + recipientId + '/grades/').then(
         (response) ->
 
-          # The API sends all student information so we can add the ability to
-          # custom grade group members. For now we filter to the first student's
-          # grade to populate the view, since all students grades are identical
-          angular.copy(_.find(response.data.data,
-            { attributes: {'student_id' : response.data.meta.student_ids[0] }
-            }).attributes, grade)
-          grade.group_id = recipientId
-
-          _getIncluded(response)
-
-          # We store all grades in grades, so that when updateGrade is called,
-          # we can iterate through all group grades by id passing in params
-          #from grade
           GradeCraftAPI.loadMany(grades, response.data)
 
+          # Copy the first student's grade
+          _getGradeParams(_.find(response.data.data,
+            { attributes: {'student_id' : response.data.meta.student_ids[0] }
+            }).attributes)
+          _getIncluded(response)
+
           # The API sends criterion grades for all group members,
-          # For now we filter to those for the first student
-          filteredCriterionGrades = _.filter(criterionGrades, {'grade_id': grade.id})
+          # We filter to a single set from the first student
+          filteredCriterionGrades = _.filter(criterionGrades, {'grade_id': modelGrade.id})
           angular.copy(filteredCriterionGrades, criterionGrades)
 
           calculateGradePoints()
@@ -101,10 +118,10 @@
           GradeCraftAPI.logResponse(response)
       )
 
-  _updateGradeById = (id, returnURL=null)->
-    $http.put("/api/grades/#{id}", grade: grade).then(
+  _updateGradeById = (id, params, returnURL=null)->
+    $http.put("/api/grades/#{id}", grade: params).then(
       (response) ->
-        grade.updated_at = new Date()
+        modelGrade.updated_at = new Date()
         GradeCraftAPI.logResponse(response)
         if returnURL
           window.location = returnURL
@@ -112,21 +129,31 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  _params = (id)->
+    g = _.find(grades,{id: id})
+    params = _.clone(modelGrade)
+    params.adjustment_points = g.adjustment_points
+    params.adjustment_points_feedback = g.adjustment_points_feedback
+    params.final_points = g.final_points
+    params
+
   _updateGrade = (returnURL=null)->
     if _recipientType == "student"
-      _updateGradeById(grade.id, returnURL)
+      params = _params(modelGrade.id)
+      _updateGradeById(modelGrade.id, params, returnURL)
     else if _recipientType == "group"
       _.each(grades, (g)->
+        params = _params(g.id)
         if returnURL && g == _.last(grades)
-          _updateGradeById(g.id, returnURL)
+          _updateGradeById(g.id, params, returnURL)
         else
-          _updateGradeById(g.id)
+          _updateGradeById(g.id, params)
       )
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
     calculateGradePoints()
     DebounceQueue.addEvent(
-      "grades", grade.id, _updateGrade, [returnURL], immediate
+      "grades", modelGrade.id, _updateGrade, [returnURL], immediate
     )
 
   _confirmMessage = ()->
@@ -140,41 +167,53 @@
 
   # Final "Submit Grade" actions, includes cleanup and redirect
   submitGrade = (returnURL=null)->
-    if !grade.pending_status
+    if ! modelGrade.pending_status
       return alert "You must select a grade status before you can submit this grade"
 
-    grade.status = grade.pending_status
+    modelGrade.status =  modelGrade.pending_status
 
     return false unless confirm _confirmMessage()
 
     return queueUpdateGrade(true, returnURL) unless isRubricGraded
 
+    # Rubric Grade Submission:
+
     # cancel all pending updates
-    DebounceQueue.cancelEvent("grades", grade.id)
+    DebounceQueue.cancelEvent("grades", modelGrade.id)
     _.each(criterionGrades, (cg)->
       DebounceQueue.cancelEvent("criterion_grades", cg.criterion_id)
     )
 
     # parameters are configured to work with existing service
-    # BuildsGrade: /services/creates_grade/builds_grade.rb
-    params = {
-      grade: {
-        adjustment_points: grade.adjustment_points
-        adjustment_points_feedback: grade.adjustment_points_feedback
-        feedback: grade.feedback
-        raw_points: grade.raw_points
-        status: grade.status
+    # BuildsGrade: /services/creates_grade/builds_modelGrade.rb
+    groupParams = _.map(grades, (g)->
+      {
+        student_id: g.student_id
+        params: {
+          grade: {
+            adjustment_points: g.adjustment_points
+            adjustment_points_feedback: g.adjustment_points_feedback
+            feedback: modelGrade.feedback
+            raw_points: modelGrade.raw_points
+            status: modelGrade.status
+          }
+          criterion_grades: criterionGrades
+        }
       }
-      criterion_grades: criterionGrades
-    }
-    $http.put(
-      "/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criterion_grades", params
-    ).then(
-      (response) ->
-        GradeCraftAPI.logResponse(response)
-        window.location = returnURL
-      ,(response) ->
-        GradeCraftAPI.logResponse(response)
+    )
+
+    # Iterate over group member's and submit grades:
+    _.each(groupParams, (memberParams)->
+      $http.put(
+        "/api/assignments/#{modelGrade.assignment_id}/students/#{memberParams.student_id}/criterion_grades", memberParams.params
+      ).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          if memberParams == _.last(groupParams)
+            window.location = returnURL
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
     )
 
 #------- Criterion Grade Methods for Rubric Grading ---------------------------#
@@ -189,8 +228,8 @@
 
     criterionGrade = {
       "criterion_id": criterionId,
-      "grade_id": grade.id,
-      "student_id": grade.student_id,
+      "grade_id": modelGrade.id,
+      "student_id": modelGrade.student_id,
       "level_id": null,
       "comments": null
     }
@@ -207,7 +246,7 @@
     criterionGrade = findCriterionGrade(criterionId)
     return false unless criterionGrade
     $http.put(
-      "/api/assignments/#{grade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields",
+      "/api/assignments/#{modelGrade.assignment_id}/#{_recipientType}s/#{_recipientId}/criteria/#{criterionId}/update_fields",
       criterion_grade: criterionGrade
     ).then(
       (response) ->
@@ -233,7 +272,7 @@
     )
 
     $http.post(
-      "/api/grades/#{grade.id}/attachments",
+      "/api/grades/#{modelGrade.id}/attachments",
       fd,
       transformRequest: angular.identity,
       headers: { 'Content-Type': undefined }
@@ -261,7 +300,7 @@
     )
 
   return {
-    grade: grade
+    modelGrade: modelGrade
     grades: grades
     fileUploads: fileUploads
     criterionGrades: criterionGrades

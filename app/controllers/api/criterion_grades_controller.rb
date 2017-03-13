@@ -1,5 +1,4 @@
 require_relative "../../services/creates_grade_using_rubric"
-require_relative "../../services/creates_group_grades_using_rubric"
 
 class API::CriterionGradesController < ApplicationController
   before_action :ensure_staff?
@@ -35,25 +34,8 @@ class API::CriterionGradesController < ApplicationController
   def update
     result = Services::CreatesGradeUsingRubric.create params, current_user.id
     if result.success?
-      render json: {
-        message: "Grade successfully saved", success: true },
-        status: 200
-    else
-      render json: {
-        errors: [{ detail: result.message }], success: false
-        },
-        status:  result.error_code || 400
-    end
-  end
-
-  # PUT api/assignments/:assignment_id/groups/:group_id/criterion_grades
-  def group_update
-    result = Services::CreatesGroupGradesUsingRubric.create params, current_user.id
-    if result.success?
-      render json: {
-        message: "Grade successfully saved", success: true
-        },
-        status: 200
+      @grade = result.grade.reload
+      render "api/grades/show", success: true, status: 200
     else
       render json: {
         errors: [{ detail: result.message }], success: false

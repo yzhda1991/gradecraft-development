@@ -5,7 +5,7 @@
   return {
     templateUrl: 'grades/last_updated.html'
     link: (scope, el, attr)->
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
 
   }
 ]

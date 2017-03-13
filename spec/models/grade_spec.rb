@@ -61,6 +61,15 @@ describe Grade do
     end
   end
 
+  describe "order" do
+    it "is sortable by student names" do
+      subject.save!
+      subject.student.update(last_name: "Zerba")
+      another_grade = create(:grade, course: subject.course, assignment: subject.assignment, student: (create :user, last_name: "Aaron"))
+      expect(Grade.where(assignment: subject.assignment).order_by_student.first).to eq(another_grade)
+    end
+  end
+
   it_behaves_like "a historical model", :grade, raw_points: 1234
   it_behaves_like "a model that needs sanitization", :feedback
 

@@ -7,25 +7,24 @@
         %ul.button-bar
           %li= link_to "Review #{term_for :group}", edit_group_path(id: group_presenter.group), class: "button"
           - if presenter.assignment.accepts_submissions? && !group_presenter.submission
-            %li= link_to "Submit", new_assignment_submission_path(group_presenter.assignment, group_presenter.submission, group_id: group_presenter.group.id), class: "button"
+            %li= link_to "Submit", group_presenter.path_for_new_submission, class: "button"
           - if group_presenter.assignment_graded?
-            %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(presenter.grade_for_student(group_presenter.group.students.first)), class: "button"
-            %li= link_to decorative_glyph(:edit) + "Edit Grade", grade_assignment_group_path(group_presenter.assignment, group_presenter.group), class: "button"
+            %li= link_to decorative_glyph(:edit) + "Edit Grade", group_presenter.path_for_grading_assignment, class: "button"
           - else
-            %li= link_to decorative_glyph(:edit) + "Grade", grade_assignment_group_path(group_presenter.assignment, group_presenter.group), class: "button"
+            %li= link_to decorative_glyph(:edit) + "Grade", group_presenter.path_for_grading_assignment, class: "button"
     %td
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
           %tr
             %th= "#{current_course.student_term}s"
             %th Score
-            - if group_presenter.assignment.assignment_type.student_weightable?
+            - if group_presenter.student_weightable?
               %th Multiplied Scores
-            - if group_presenter.assignment.has_levels?
+            - if group_presenter.has_levels?
               %th Level
-
             %th
-            - if group_presenter.assignment.release_necessary?
+
+            - if group_presenter.release_necessary?
               %th Status
               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
                 %button.button.select-all{role: "button", type: "button"}= "Check"
@@ -37,25 +36,23 @@
               - grade = group_presenter.grade_for_student(student)
               %td
                 - if grade.present? && grade.instructor_modified?
-                  - if group_presenter.assignment.pass_fail?
+                  - if group_presenter.pass_fail?
                     = grade.pass_fail_status
                   - else
                     = points grade.final_points
+              %td
+                - if group_presenter.assignment_graded?
+                  = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
 
-              - if group_presenter.assignment.assignment_type.student_weightable?
+              - if group_presenter.student_weightable?
                 %td
                   - if grade.present?
                     = points grade.score
-              - if group_presenter.assignment.has_levels?
-                %td= group_presenter.assignment.grade_level(grade)
+              - if group_presenter.has_levels?
+                %td= group_presenter.grade_level(grade)
 
-              - if group_presenter.assignment.release_necessary?
+              - if group_presenter.release_necessary?
                 %td= grade.try(:status)
                 %td.right
                   - if grade && grade.is_graded?
                     = check_box_tag "grade_ids[]", grade.id
-              %td
-                .right
-                  %ul.button-bar
-                    - if group_presenter.assignment_graded?
-                      %li= link_to decorative_glyph(:edit) + "Override Grade", assignment_student_grade_path(group_presenter.assignment, student), method: :post, class: "button"

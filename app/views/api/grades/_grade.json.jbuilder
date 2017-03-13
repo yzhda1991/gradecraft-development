@@ -5,6 +5,7 @@ json.attributes do
   json.id                         grade.id
   json.assignment_id              grade.assignment_id
   json.student_id                 grade.student_id
+  json.student_name               grade.student.name
   json.group_id                   grade.group_id
   json.feedback                   grade.feedback
   json.status                     grade.status

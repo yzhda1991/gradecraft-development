@@ -1,4 +1,5 @@
 # Hovering synopsis of the grade calculation
+# Not used for group or pass/fail assignments
 
 @gradecraft.directive 'gradePointsOverview', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
@@ -9,7 +10,14 @@
       scope.assignment = ()->
         AssignmentService.assignment()
 
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
+
+      scope.firstGrade = ()->
+        GradeService.grades[0]
+
+      scope.finalPoints = ()->
+        return 0 if !GradeService.grades.length
+        GradeService.grades[0].final_points
 
       scope.pointsBelowFull = ()->
         return 0 if !scope.assignment() || !scope.grade
@@ -29,7 +37,7 @@
         scope.pointsArePresent() && (scope.pointsBelowFull() < 0)
 
       scope.adjustmentPoints = ()->
-        parseInt(scope.grade.adjustment_points) || 0
+        parseInt(GradeService.grades[0].adjustment_points) || 0
 
       scope.isBelowThreshold = ()->
         return false if !(scope.assignment() && scope.grade)

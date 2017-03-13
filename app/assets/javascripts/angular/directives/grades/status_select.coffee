@@ -11,7 +11,7 @@
     templateUrl: 'grades/status_select.html'
     link: (scope, el, attr)->
 
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
 
       scope.statusOptions = ()->
         GradeService.gradeStatusOptions

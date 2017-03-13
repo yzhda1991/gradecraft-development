@@ -9,7 +9,7 @@
     }
     templateUrl: 'grades/submit_buttons.html'
     link: (scope, el, attr)->
-      scope.grade = GradeService.grade
+      scope.grade = GradeService.modelGrade
       scope.submitGrade = (returnURL)->
         GradeService.submitGrade(returnURL)
   }

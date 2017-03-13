@@ -1,7 +1,7 @@
 .points-overview-container
   #points-overview-floating
     %h4#points-legend
-      %span.points-assigned(ng-class="{'points-missing': pointsAreLessThanFull(), 'points-satisfied': pointsAreSatisfied(), 'points-overage': pointsAreOver()}") {{ grade.final_points | number:0 }} Points
+      %span.points-assigned(ng-class="{'points-missing': pointsAreLessThanFull(), 'points-satisfied': pointsAreSatisfied(), 'points-overage': pointsAreOver()}") {{ finalPoints() | number:0 }} Points
 
     %h4.notice(ng-show="!pointsArePresent()") You have not yet allocated any points
     %h4.notice(ng-show="pointsArePresent()") {{ grade.raw_points | number:0 }} / {{ assignment().full_points | number:0 }} Points Allocated

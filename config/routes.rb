@@ -327,7 +327,6 @@ Rails.application.routes.draw do
           end
         end
         get 'grades', to: 'grades#group_index'
-        put "criterion_grades", to: "criterion_grades#group_update"
         get 'criterion_grades', to: 'criterion_grades#group_index'
       end
       resources :submissions, only: [:create, :update], module: :assignments do

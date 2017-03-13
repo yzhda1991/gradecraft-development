@@ -1,14 +1,30 @@
-%section.grade-adjustment-points
-  %label.grade-section-label{for: "adjustment-points-input"} Adjustment Points
+%h3.collapse-toggler
+  %i.fa.fa-angle-double-right.fa-fw
+  %span(ng-if="groupGrade")
+    Would you like to adjust a specific student’s grade or share individualized feedback?
+  %span(ng-if="!groupGrade")
+    Would you like to adjust the grade's final points?
 
-  %input#adjustment-points-input( type="text"
-  placeholder="Enter adjustment points for grade"
-  ng-model="grade.adjustment_points"
-  smart-number
-  allow-negatives="true"
-  ng-change="queueUpdateGrade()")
+%section.grade-adjustments-section.collapse.collapsed
+  %div.grade-adjustments(ng-repeat="grade in grades")
 
-%section.grade-adjustment-points-feedback(ng-if="grade.adjustment_points && grade.adjustment_points != 0")
-  %label.grade-section-label{for: "adjustment-points-feedback"} Adjustment Points Feedback
-  %textarea#adjustment-points-feedback(ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()" froala="froalaOptions")
-.clear
+    %article.grade-form-fields(ng-class='{"sectional": groupGrade}')
+      %section.grade-adjustment-points
+        %label.grade-section-label(for="adjustment-points-input-{{grade.id}}")
+          Adjustment Points
+          %span(ng-if="groupGrade") for {{grade.student_name}}
+
+        %input( type="text"
+        id="adjustment-points-input-grade.id}"
+        placeholder="Enter adjustment points for grade"
+        ng-model="grade.adjustment_points"
+        smart-number
+        allow-negatives="true"
+        ng-change="queueUpdateGrade()")
+
+      %section.grade-adjustment-points-feedback(ng-if="groupGrade || (grade.adjustment_points && grade.adjustment_points != 0)")
+        %label.grade-section-label(for="adjustment-points-feedback-{{grade.id}}") Additional Feedback
+        %textarea(id="adjustment-points-feedback-{{grade.id}}" ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()")
+      .clear
+
+      %grade-final-points(grade="grade")

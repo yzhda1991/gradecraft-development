@@ -6,7 +6,7 @@
 
     # Has the student currently earned this badge on this grade?
     vm.badgeIsEarnedForGrade = (badge)->
-      BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, GradeService.grade.id)
+      BadgeService.studentEarnedBadgeForGrade(vm.studentId, badge.id, GradeService.grades[0].id)
 
     # Can the badge be awarded or unawarded for this grade?
     vm.badgeIsActionable = (badge)->
@@ -29,7 +29,7 @@
         BadgeService.deleteEarnedBadge(earnedBadge)
         badge.available_for_student = true
       else
-        BadgeService.createEarnedBadge(badge.id, vm.studentId, GradeService.grade.id)
+        BadgeService.createEarnedBadge(badge.id, vm.studentId, GradeService.grades[0].id)
   ]
 
   {
