@@ -83,8 +83,10 @@ describe GradeSchemeElementsController do
     end
 
     describe "GET index" do
-      it "assigns all grade scheme elements" do
-        grade_scheme_element = create(:grade_scheme_element, letter: "A", course: course)
+      let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course, lowest_points: 3000) }
+      let(:empty_grade_scheme_element) { create(:grade_scheme_element, letter: "F", course: course) }
+
+      it "assigns grade scheme elements with point thresholds" do
         get :index
         expect(assigns(:grade_scheme_elements)).to eq([grade_scheme_element])
       end
