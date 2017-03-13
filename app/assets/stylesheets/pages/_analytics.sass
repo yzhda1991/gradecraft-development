@@ -1,45 +1,31 @@
 @import "../utilities/variables"
 
-.analytics-loading
-  background: $color-grey-3
-  cursor: default
-  &:hover
-    background: $color-grey-6
-
-.content#boxplot .chartcontainer
-  padding-top: 1rem
-
 /* Styles the hover state on the box plot on class analytics tab */
 #grades_per_assign
   box-sizing: border-box
-
   &.js-plotly-plot .plotly .cursor-pointer
     cursor: default
 
 #levels_per_assignment
   width: 60%
-
   &.js-plotly-plot .plotly .cursor-pointer
     cursor: default
 
-#leaderboardBarChart
 
-  &.js-plotly-plot .plotly 
-    .cursor-pointer
-      cursor: default
-
-    .hovertext 
-      path
-        stroke: rgba(31, 119, 180, 1) !important
-        fill: transparentize($color-white, .1) !important
-        stroke-linecap: round !important
-        stroke-linejoin: round !important
-        stroke-width: 2 !important
-
-      text
-        font-size: 12px !important
-        fill: $color-grey-3 !important
-        font-family: 'Open Sans', sans-serif !important
+.js-plotly-plot .plotly 
+  .cursor-pointer
+    cursor: default
+  .hovertext 
+    path
+      stroke: rgba(31, 119, 180, 1) !important
+      fill: transparentize($color-white, .1) !important
+      stroke-linecap: round !important
+      stroke-linejoin: round !important
+      stroke-width: 2 !important
+    text
+      font-size: 12px !important
+      fill: $color-grey-3 !important
+      font-family: 'Open Sans', sans-serif !important
 
 /* Styles the select menu on the analytics view for instructors */
 #analytics-switcher

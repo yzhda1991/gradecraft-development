@@ -24,6 +24,7 @@ if ($dataPredictor.length) {
   scores.forEach(function(score, index) {
     var points = score.data;
     var name = score.name;
+    var tooltip = name + '<br>' + points.toLocaleString() + ' points';
 
     var trace = {
       x: [points],
@@ -31,9 +32,11 @@ if ($dataPredictor.length) {
       orientation: 'h',
       marker: {
         color: colors[index],
-        width: 1
+        size: 1
       },
-      type: 'bar'
+      type: 'bar',
+      text: [tooltip],
+      hoverinfo: 'text'
     };
     traces.push(trace);
   });
@@ -42,14 +45,14 @@ if ($dataPredictor.length) {
 
   var layout = {
     showlegend: false,
-    hovermode: !1,
+    hovermode: 'closest',
     height: 100,
     barmode: 'stack',
     margin: {
-      l: 10,
-      r: 10,
+      l: 8,
+      r: 8,
       b: 40,
-      t: 4,
+      t: 8,
       pad: 8
     },
     xaxis: {
