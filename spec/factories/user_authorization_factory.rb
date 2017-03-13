@@ -6,5 +6,9 @@ FactoryGirl.define do
     trait :canvas do
       provider "canvas"
     end
+
+    trait :google do
+      provider "google_oauth2"
+    end
   end
 end
