@@ -1,94 +1,76 @@
-$(document).ready(function() {
+var $dataPredictor = $('#data-predictor');
+if ($dataPredictor.length) {
+  var assignmentTypeTotals = JSON.parse($('#data-predictor').attr('data-predictor'));
+  var scores = assignmentTypeTotals.scores;
+  var xMaxValue = assignmentTypeTotals.course_total;
 
-    function createOptions () {
-    return {
-    chart: {
-      type: 'bar',
-      backgroundColor: null
-    },
+  var traces = [];
+  var colors = [
+    '#00274F',
+    '#215089',
+    '#2E70BE',
+    '#B9D6F2',
+    '#8ED0FF',
+    '#490454',
+    '#8F27A1',
+    '#9FE88D',
+    '#6DD677',
+    '#25B256',
+    '#D1495B',
+    '#EDAE49',
+    '#FFCF06'
+  ];
 
-    colors: [
-     '#00274F',
-     '#215089',
-     '#2E70BE',
-     '#B9D6F2',
-     '#8ED0FF',
-     '#490454',
-     '#8F27A1',
-     '#9FE88D',
-     '#6DD677',
-     '#25B256',
-     '#D1495B',
-     '#EDAE49',
-     '#FFCF06'
-  ],
+  scores.forEach(function(score, index) {
+    var points = score.data;
+    var name = score.name;
 
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      gridLineWidth: 0,
-      lineColor: '#000',
-      title: {
-        text: ' '
+    var trace = {
+      x: [points],
+      name: name,
+      orientation: 'h',
+      marker: {
+        color: colors[index],
+        width: 1
       },
-      labels: {
-        style: {
-          color: "#000"
-        }
-      }
+      type: 'bar'
+    };
+    traces.push(trace);
+  });
+
+  var data = traces;
+
+  var layout = {
+    showlegend: false,
+    hovermode: !1,
+    height: 100,
+    barmode: 'stack',
+    margin: {
+      l: 10,
+      r: 10,
+      b: 40,
+      t: 4,
+      pad: 8
     },
-    yAxis: {
-      gridLineWidth: 1,
-      lineColor: '#000',
-      min: 0,
-      title: {
-        text: ' '
-      },
-      labels: {
-        style: {
-          color: "#000"
-        }
-      }
+    xaxis: {
+      fixedrange: true,
+      range: [0, xMaxValue]
     },
-    tooltip: {
-      formatter: function() {
-        return '<b>'+ this.series.name +'</b><br/>'+
-        this.y + ' points';
-      }
-    },
-    plotOptions: {
-      series: {
-        stacking: 'normal',
-        borderWidth: 0,
-        pointWidth: 40,
-        events: {
-          legendItemClick: function () {
-              return false;
-          }
-        }
-      }
-    },
-    legend: {
-      enabled: false
+    yaxis: {
+      autorange: true,
+      showgrid: false,
+      zeroline: false,
+      showline: false,
+      autotick: true,
+      ticks: '',
+      showticklabels: false,
+      fixedrange: true
     }
   };
-  }
 
-    var chart, categories, assignment_type_name, scores, grade_levels;
-    if ($('#userBarTotal').length) {
-      var data = JSON.parse($('#data-predictor').attr('data-predictor'));
-
-      var options = createOptions()
-      options.chart.renderTo = 'userBarTotal';
-      options.title = { text: '', margin: 0 };
-      options.xAxis.categories = { text: ' ' };
-      options.yAxis.max = data.course_total;
-      options.yAxis.plotBands = data.grade_levels;
-      options.series = data.scores;
-      chart = new Highcharts.Chart(options);
-    };
-});
+    // eslint-disable-next-line no-undef
+    Plotly.newPlot('data-predictor', data, layout, {displayModeBar: false});
+}
 
 // Filter my planner items in "due this week" module
 $('#my-planner').click(function() {

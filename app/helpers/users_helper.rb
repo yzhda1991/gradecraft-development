@@ -18,7 +18,7 @@ module UsersHelper
   def total_scores_for_chart(user, course)
     scores = []
     course.assignment_types.each do |assignment_type|
-      scores << { data: [assignment_type.visible_score_for_student(user)],
+      scores << { data: assignment_type.visible_score_for_student(user),
                   name: assignment_type.name }
     end
 
