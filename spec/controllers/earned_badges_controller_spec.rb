@@ -1,10 +1,12 @@
 describe EarnedBadgesController do
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:student) { create(:course_membership, :student, course: course).user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
   let(:observer) { create(:user, courses: [course]) }
   let(:badge) { create(:badge, course: course) }
-  let(:earned_badge) { create(:earned_badge, badge: badge, student: student) }
+  let!(:earned_badge) { create(:earned_badge, badge: badge, student: student) }
+  let(:badge_student_awardable)  { create(:badge, course: course, student_awardable: true) }
+  let(:other_student) { create(:user, courses: [course], role: :student) }
   
   context "as a professor" do
     before(:each) do
@@ -89,43 +91,41 @@ describe EarnedBadgesController do
     end
 
     describe "send_earned_badge_notifications" do
-      let(:user) { create :user }
-
       before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
       end
 
       before(:each) do
-        earned_badges = @students.collect do |student|
-          create(:earned_badge, student_id: student.id, badge: badge, awarded_by: user)
+        @earned_badges = @students.collect do |student|
+          create(:earned_badge, student_id: student.id, badge: badge, awarded_by: professor)
         end
-        controller = EarnedBadgesController.new
+        @controller = EarnedBadgesController.new
       end
 
       context "earned badges exist" do
         before(:each) do
-          controller.instance_variable_set(:valid_earned_badges, earned_badges)
+          @controller.instance_variable_set(:@valid_earned_badges, @earned_badges)
         end
 
         it "should send a notification" do
           mail_responder = double("earned badge mail responder!!")
           allow(mail_responder).to receive(:deliver_now)
           allow(NotificationMailer).to receive(:earned_badge_awarded) { mail_responder }
-          earned_badges.each do |earned_badge|
+          @earned_badges.each do |earned_badge|
             expect(NotificationMailer).to receive(:earned_badge_awarded).with(earned_badge)
           end
-          controller.instance_eval { send_earned_badge_notifications }
+          @controller.instance_eval { send_earned_badge_notifications }
         end
 
         it "should create an announcement" do
-          expect { controller.instance_eval { send_earned_badge_notifications }}.to \
+          expect { @controller.instance_eval { send_earned_badge_notifications }}.to \
             change { Announcement.count }.by 2
         end
       end
 
       context "no earned badges" do
-        before { controller.instance_variable_set(:valid_earned_badges, []) }
+        before { controller.instance_variable_set(:@valid_earned_badges, []) }
 
         it "should not send any notifications" do
           expect(NotificationMailer).not_to receive(:earned_badge_awarded)
@@ -156,7 +156,7 @@ describe EarnedBadgesController do
 
     describe "GET mass_edit" do
       it "assigns params" do
-        get :mass_edit, params: { badge_id: badge.id }
+        get :mass_edit, params: { badge_id: badge }
         expect(assigns(:badge)).to eq(badge)
         expect(assigns(:students)).to eq([student])
         expect(response).to render_template(:mass_edit)
@@ -222,9 +222,6 @@ describe EarnedBadgesController do
   context "as student" do
     before(:each) do
       login_user(student)
-      badge = create(:badge, course: course)
-      badge_student_awardable = create(:badge, course: course, student_awardable: true)
-      other_student = create(:user, courses: [course], role: :student)
     end
 
     describe "protected routes" do
