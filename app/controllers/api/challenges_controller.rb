@@ -29,8 +29,3 @@ class API::ChallengesController < ApplicationController
     current_course.add_team_score_to_student
   end
 end
-
-
-
-
-

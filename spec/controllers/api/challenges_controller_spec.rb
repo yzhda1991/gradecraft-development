@@ -5,6 +5,9 @@ describe API::ChallengesController do
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:challenge) { create(:challenge, course: course) }
+  let!(:team) { create(:team, course: course) }
+  let!(:predicted_earned_challenge) { create :predicted_earned_challenge, student: student, challenge: challenge }
+  let(:challenge_grade) { create(:challenge_grade, team_id: team.id, challenge_id: challenge.id) }
 
   context "as professor" do
     before do
@@ -26,24 +29,20 @@ describe API::ChallengesController do
   end
 
   context "as student" do
-    let!(:predicted_earned_challenge) { create :predicted_earned_challenge, student: student, challenge: challenge }
-    let(:team) { create :team, course: course }
-    let!(:grade) { create :challenge_grade, team: team, challenge: challenge }
-
     before do
-      team.students << student
       login_user(student)
       allow(controller).to receive(:current_course).and_return(course)
       allow(controller).to receive(:current_user).and_return(student)
+      team_membership = create(:team_membership, team: team, student: student)
     end
 
     describe "GET index" do
-      it "assigns the challenges with predictions and grades and a call to update" do
+      it "assigns the challenges with predictions and challenge grades and a call to update" do
         get :index, format: :json
         expect(assigns(:challenges).first.id).to eq(challenge.id)
         expect(assigns :student).to eq(student)
         expect(assigns :predicted_earned_challenges).to eq([predicted_earned_challenge])
-        expect(assigns :grades).to eq([grade])
+        expect(assigns :grades).to eq([challenge_grade])
         expect(assigns(:allow_updates)).to be_truthy
         expect(response).to render_template(:index)
       end
