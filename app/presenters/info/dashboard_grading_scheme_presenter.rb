@@ -33,11 +33,13 @@ class Info::DashboardGradingSchemePresenter < Showtime::Presenter
   end
 
   def next_element
-    student.get_element_level(course, :next)
+    return nil if current_element.nil?
+    current_element.next_highest_element
   end
 
   def previous_element
-    student.get_element_level(course, :previous)
+    return nil if current_element.nil?
+    current_element.next_lowest_element
   end
 
   def points_to_next_level

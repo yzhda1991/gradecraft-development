@@ -235,27 +235,6 @@ class User < ActiveRecord::Base
     @grade_letter_for_course ||= grade_for_course(course).try(:letter)
   end
 
-  def get_element_level(course, direction)
-    course_elements = course.grade_scheme_elements.order_by_points_asc.to_a
-
-    current_element = self.grade_for_course(course)
-    current_element_index = course_elements.index{ |item| item == current_element }
-
-    element = send("#{direction}_element_level", course_elements, current_element_index)
-  end
-
-  def next_element_level(course_elements, current_element_index)
-    next_element = course_elements[current_element_index + 1] unless current_element_index == (course_elements.size - 1)
-  end
-
-  def previous_element_level(course_elements, current_element_index)
-    previous_element = course_elements[current_element_index - 1] unless current_element_index == 0
-  end
-
-  def points_to_next_level(course)
-    get_element_level(course, :next).lowest_points - score_for_course(course)
-  end
-
   ### GRADES
 
   # Checking specifically if there is a released grade for an assignment
