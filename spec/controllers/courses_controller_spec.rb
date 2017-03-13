@@ -4,11 +4,6 @@ describe CoursesController do
   let(:admin) { create(:course_membership, :admin, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
 
-  before(:each) do
-    session[:course_id] = course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
-
   context "as admin" do
     before(:each) { login_user(admin) }
 
