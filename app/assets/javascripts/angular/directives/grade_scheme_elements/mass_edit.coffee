@@ -9,8 +9,10 @@
     vm.gradeSchemeElements = null
     vm.formIsInvalid = false
 
+    # Add first element
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
+      vm.formIsInvalid = true
 
     vm.postGradeSchemeElements = () ->
       GradeSchemeElementsService.postGradeSchemeElements().then(() ->

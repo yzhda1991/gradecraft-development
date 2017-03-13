@@ -55,18 +55,6 @@ describe GradeSchemeElementsController do
         expect(course.reload.grade_scheme_elements.count).to eq(2)
         expect(grade_scheme_element.reload.level).to eq("Sea Slug")
       end
-
-      it "does not save the changes if invalid" do
-        grade_scheme_element_2 = create(:grade_scheme_element, course: course)
-        params = { "grade_scheme_elements_attributes" => [{
-          id: grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", lowest_points: 0,
-          course_id: course.id }, { id: GradeSchemeElement.new.id,
-          letter: "B", level: "Snail", lowest_points: nil,
-          course_id: course.id}], "deleted_ids"=>nil, "grade_scheme_element"=>{} }
-        put :mass_update, params: params, format: :json
-        expect(grade_scheme_element.reload).to eq grade_scheme_element
-        expect(response.status).to eq(500)
-      end
     end
 
     it "recalculates scores for all students in the course" do

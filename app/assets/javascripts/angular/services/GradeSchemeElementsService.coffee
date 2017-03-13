@@ -28,6 +28,10 @@
   # Ensures that the current element does not have a point conflict with another
   validateElement = (currentElement) ->
     currentElement.validationError = undefined
+    
+    if !currentElement.lowest_points?
+      currentElement.validationError = "Point threshold does not have a value"
+
     for element in gradeSchemeElements
       continue if element == currentElement || !element.lowest_points? || isNaN(element.lowest_points)
 
