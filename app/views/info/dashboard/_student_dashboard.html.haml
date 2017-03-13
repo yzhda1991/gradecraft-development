@@ -19,7 +19,7 @@
 
 
     .flex-col-30.tablet-col-3
-      - if current_course.grade_scheme_elements.present?
+      - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
         .panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
       - if AnalyticsProctor.new.viewable? current_student, current_course

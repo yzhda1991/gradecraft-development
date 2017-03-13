@@ -17,6 +17,10 @@ class GradeSchemeElement < ActiveRecord::Base
     GradeSchemeElement.new(level: "Not yet on board")
   end
 
+  def self.has_valid_elements_for(course)
+    course.grade_scheme_elements.all? { |gse| !gse.lowest_points.nil? }
+  end
+
   def self.next_highest_element(element)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
     ordered_course_elements[ordered_course_elements.to_a.find_index(element) + 1]

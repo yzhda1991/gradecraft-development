@@ -7,7 +7,7 @@
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
   .flex-column
-    - if current_course.grade_scheme_elements.present?
+    - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
       .panel.dashboard-module.grading-scheme-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
 
     .stacked-column
