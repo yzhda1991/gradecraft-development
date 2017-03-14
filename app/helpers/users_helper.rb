@@ -24,7 +24,7 @@ module UsersHelper
 
     earned_badge_points = user.earned_badges.sum(&:points)
     if earned_badge_points > 0
-      scores << { data: [earned_badge_points], name: "#{course.badge_term.pluralize}" }
+      scores << { data: earned_badge_points, name: "#{course.badge_term.pluralize}" }
     end
 
     return {
