@@ -1,94 +1,85 @@
-$(document).ready(function() {
+var $pointBreakdownChart = $('#point-breakdown-chart');
+if ($pointBreakdownChart.length) {
+  var assignmentTypeTotals = JSON.parse($('#point-breakdown-chart').attr('data-pointbreakdown'));
+  var scores = assignmentTypeTotals.scores;
+  var xMaxValue = assignmentTypeTotals.course_total;
 
-    function createOptions () {
-    return {
-    chart: {
+  var traces = [];
+  var colors = [
+    '#00274F',
+    '#215089',
+    '#2E70BE',
+    '#B9D6F2',
+    '#8ED0FF',
+    '#490454',
+    '#8F27A1',
+    '#9FE88D',
+    '#6DD677',
+    '#25B256',
+    '#D1495B',
+    '#FEB130',
+    '#FFCF06'
+  ];
+
+  scores.forEach(function(score, index) {
+    var points = score.data;
+    var name = score.name;
+    var tooltip = name + '<br>' + points.toLocaleString() + ' points';
+    var colorsCount = colors.length;
+
+    var trace = {
+      x: [points],
+      name: name,
+      orientation: 'h',
+      marker: {
+        color: colors[index % colorsCount],
+        size: 1
+      },
       type: 'bar',
-      backgroundColor: null
-    },
+      text: [tooltip],
+      hoverinfo: 'text'
+    };
+    traces.push(trace);
+  });
 
-    colors: [
-     '#00274F',
-     '#215089',
-     '#2E70BE',
-     '#B9D6F2',
-     '#8ED0FF',
-     '#490454',
-     '#8F27A1',
-     '#9FE88D',
-     '#6DD677',
-     '#25B256',
-     '#D1495B',
-     '#EDAE49',
-     '#FFCF06'
-  ],
+  var data = traces;
 
-    credits: {
-      enabled: false
+  var layout = {
+    showlegend: false,
+    hovermode: 'closest',
+    height: 100,
+    barmode: 'stack',
+    margin: {
+      l: 8,
+      r: 8,
+      b: 40,
+      t: 8,
+      pad: 8
     },
-    xAxis: {
-      gridLineWidth: 0,
-      lineColor: '#000',
-      title: {
-        text: ' '
-      },
-      labels: {
-        style: {
-          color: "#000"
-        }
-      }
+    xaxis: {
+      fixedrange: true,
+      range: [0, xMaxValue]
     },
-    yAxis: {
-      gridLineWidth: 1,
-      lineColor: '#000',
-      min: 0,
-      title: {
-        text: ' '
-      },
-      labels: {
-        style: {
-          color: "#000"
-        }
-      }
-    },
-    tooltip: {
-      formatter: function() {
-        return '<b>'+ this.series.name +'</b><br/>'+
-        this.y + ' points';
-      }
-    },
-    plotOptions: {
-      series: {
-        stacking: 'normal',
-        borderWidth: 0,
-        pointWidth: 40,
-        events: {
-          legendItemClick: function () {
-              return false;
-          }
-        }
-      }
-    },
-    legend: {
-      enabled: false
+    yaxis: {
+      autorange: true,
+      showgrid: false,
+      zeroline: false,
+      showline: false,
+      autotick: true,
+      ticks: '',
+      showticklabels: false,
+      fixedrange: true
     }
   };
-  }
 
-    var chart, categories, assignment_type_name, scores, grade_levels;
-    if ($('#userBarTotal').length) {
-      var data = JSON.parse($('#data-predictor').attr('data-predictor'));
+    // eslint-disable-next-line no-undef
+    Plotly.newPlot('point-breakdown-chart', data, layout, {displayModeBar: false});
 
-      var options = createOptions()
-      options.chart.renderTo = 'userBarTotal';
-      options.title = { text: '', margin: 0 };
-      options.xAxis.categories = { text: ' ' };
-      options.yAxis.max = data.course_total;
-      options.yAxis.plotBands = data.grade_levels;
-      options.series = data.scores;
-      chart = new Highcharts.Chart(options);
-    };
-});
+    document.getElementById('point-breakdown-chart').on('plotly_hover', function(data) {
+      var barColor = data.points[0].fullData.marker.color;
+      $('.hovertext path').attr('data-color', barColor);
+    });
+}
 
 // Filter my planner items in "due this week" module
 $('#my-planner').click(function() {

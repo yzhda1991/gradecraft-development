@@ -24,7 +24,7 @@ describe UsersHelper do
 
       earned_badges = double(:earned_badges, sum: 1000)
       user = double(:user, earned_badges: earned_badges)
-      expect(helper.total_scores_for_chart(user,course)).to eq({scores: [{ data: [1000], name: "Badgeinskies" }], course_total: 1000 })
+      expect(helper.total_scores_for_chart(user,course)).to eq({scores: [{ data: 1000, name: "Badgeinskies" }], course_total: 1000 })
     end
   end
 end
