@@ -22,6 +22,9 @@
       stroke-linecap: round !important
       stroke-linejoin: round !important
       stroke-width: 2 !important
+      @each $color in $chart-colors
+        &[data-color="#{$color}"]
+          stroke: #{$color} !important
     text
       font-size: 12px !important
       fill: $color-grey-3 !important

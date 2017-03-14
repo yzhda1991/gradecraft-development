@@ -17,7 +17,7 @@ if ($dataPredictor.length) {
     '#6DD677',
     '#25B256',
     '#D1495B',
-    '#EDAE49',
+    '#FEB130',
     '#FFCF06'
   ];
 
@@ -73,6 +73,11 @@ if ($dataPredictor.length) {
 
     // eslint-disable-next-line no-undef
     Plotly.newPlot('data-predictor', data, layout, {displayModeBar: false});
+
+    document.getElementById('data-predictor').on('plotly_hover', function(data) {
+      var barColor = data.points[0].fullData.marker.color;
+      $('.hovertext path').attr('data-color', barColor);
+    });
 }
 
 // Filter my planner items in "due this week" module
