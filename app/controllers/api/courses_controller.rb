@@ -1,5 +1,4 @@
 class API::CoursesController < ApplicationController
-  before_action :ensure_staff?, except: [:timeline_events]
 
   # accessed by the dashboard
   # GET api/courses
