@@ -97,7 +97,6 @@ class UsersController < ApplicationController
   end
 
   def manually_activate
-    session[:return_to] ||= request.referer
     @user = User.find(params[:id])
     @user.activate!
     redirect_to session[:return_to] || dashboard_path, notice: "#{@user.first_name} #{@user.last_name} has been activated!" and return
