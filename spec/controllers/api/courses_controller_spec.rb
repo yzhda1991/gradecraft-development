@@ -35,8 +35,9 @@ describe API::CoursesController do
 
     describe "GET index" do
       it "redirects" do
+        outside_course = create(:course) #shouldn't appear in index
         get :index, format: :json
-        expect(response.status).to eq(302)
+        expect(assigns(:courses).length).to eq(1)
       end
     end
 
