@@ -1,6 +1,6 @@
-var $dataPredictor = $('#data-predictor');
-if ($dataPredictor.length) {
-  var assignmentTypeTotals = JSON.parse($('#data-predictor').attr('data-predictor'));
+var $pointBreakdownChart = $('#point-breakdown-chart');
+if ($pointBreakdownChart.length) {
+  var assignmentTypeTotals = JSON.parse($('#point-breakdown-chart').attr('data-pointbreakdown'));
   var scores = assignmentTypeTotals.scores;
   var xMaxValue = assignmentTypeTotals.course_total;
 
@@ -72,9 +72,9 @@ if ($dataPredictor.length) {
   };
 
     // eslint-disable-next-line no-undef
-    Plotly.newPlot('data-predictor', data, layout, {displayModeBar: false});
+    Plotly.newPlot('point-breakdown-chart', data, layout, {displayModeBar: false});
 
-    document.getElementById('data-predictor').on('plotly_hover', function(data) {
+    document.getElementById('point-breakdown-chart').on('plotly_hover', function(data) {
       var barColor = data.points[0].fullData.marker.color;
       $('.hovertext path').attr('data-color', barColor);
     });
