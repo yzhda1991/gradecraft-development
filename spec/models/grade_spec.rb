@@ -1,8 +1,3 @@
-require "active_record_spec_helper"
-require "toolkits/historical_toolkit"
-require "toolkits/sanitization_toolkit"
-require_relative "../support/uni_mock/rails"
-
 describe Grade do
   include UniMock::StubRails
 

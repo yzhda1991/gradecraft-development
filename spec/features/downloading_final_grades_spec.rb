@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "downloading final grades file" do
   context "as a professor" do
     let(:course) { build :course }

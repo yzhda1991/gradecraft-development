@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:sender) { NotificationMailer::SENDER_EMAIL }

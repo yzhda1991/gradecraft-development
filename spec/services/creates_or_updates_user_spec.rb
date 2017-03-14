@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/creates_or_updates_user"
-
 describe Services::CreatesOrUpdatesUser do
   let(:course) { create :course }
   let(:user) { build :user }

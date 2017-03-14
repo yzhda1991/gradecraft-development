@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "downloading gradebook file" do
   context "as a professor" do
     let(:course) { build :course, name: "Course Name" }

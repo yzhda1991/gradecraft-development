@@ -1,6 +1,5 @@
-require "rails_spec_helper"
 include InQueueHelper # pulled from ResqueSpec
-
+ 
 describe Course do
   let(:course1) { create(:course) }
   let(:course2) { create(:course) }

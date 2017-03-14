@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "cancan/matchers"
-
 describe Ability do
   let(:course) { student_course_membership.course }
   let(:student_course_membership) { create :course_membership, :student }

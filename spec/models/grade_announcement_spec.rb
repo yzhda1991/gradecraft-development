@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe GradeAnnouncement do
   let(:announcement) { Announcement.unscoped.last }
   let(:grade) { create :grade, graded_by: user }

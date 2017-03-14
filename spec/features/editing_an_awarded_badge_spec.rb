@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "editing an awarded a badge" do
   context "as a professor" do
     let(:course) { build :course, has_badges: true }

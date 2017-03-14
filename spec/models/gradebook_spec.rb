@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "db_query_matchers"
-
 describe Gradebook do
   let(:assignment) { create :assignment }
 

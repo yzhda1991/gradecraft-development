@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./lib/human_history/actor_history_token"
-
 describe HumanHistory::ActorHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an actor_id" do

@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/importers/assignment_importers/canvas_assignment_importer"
-
 describe CanvasAssignmentImporter do
   describe "#import" do
     it "returns empty results if there are no canvas assignments" do

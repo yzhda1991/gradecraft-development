@@ -1,6 +1,3 @@
-require "api_spec_helper"
-require "./lib/canvas"
-
 describe Canvas::API, type: :disable_external_api do
   let(:access_token) { "BLAH" }
 

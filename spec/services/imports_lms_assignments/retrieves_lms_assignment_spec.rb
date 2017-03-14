@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/retrieves_lms_assignment"
-
 describe Services::Actions::RetrievesLMSAssignment do
   let(:access_token) { "TOKEN" }
   let(:imported_assignment) { create :imported_assignment, provider: provider }

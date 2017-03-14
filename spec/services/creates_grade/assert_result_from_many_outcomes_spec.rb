@@ -1,5 +1,3 @@
-require "./app/services/creates_grade/assert_result_from_many_outcomes"
-
 describe Services::Actions::AssertResultFromManyOutcomes do
   it "expects unsuccessful" do
     expect { described_class.execute }.to \

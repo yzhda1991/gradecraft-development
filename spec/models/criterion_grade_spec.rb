@@ -1,6 +1,10 @@
-require "active_record_spec_helper"
-
 describe CriterionGrade do
+  let(:course) { create(:course) }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:rubric) { create(:rubric, assignment: assignment) }
+  let(:criterion) { create(:criterion, rubric: rubric) }
+  let(:criterion_grade) { create(:criterion_grade, assignment: assignment, criterion: criterion, student: student) }
 
   describe "validations" do
     it "requires an assignment" do
@@ -24,35 +28,29 @@ describe CriterionGrade do
 
   describe ".for_course" do
     it "returns all grades for assignments that belong to a specific course" do
-      course = create(:course)
-      course_assignment = create(:assignment, course: course)
-      course_grade = create(:criterion_grade, assignment: course_assignment)
       another_grade = create(:criterion_grade)
       results = CriterionGrade.for_course(course)
-      expect(results).to eq [course_grade]
+      expect(results).to eq [criterion_grade]
     end
   end
 
   describe ".for_student" do
     it "returns all rubric grades for a specific student" do
-      student = create(:user)
-      student_grade = create(:criterion_grade, student: student)
       another_grade = create(:criterion_grade)
       results = CriterionGrade.for_student(student)
-      expect(results).to eq [student_grade]
+      expect(results).to eq [criterion_grade]
     end
   end
 
   describe ".find_or_create" do
-    it "finds and existing grade for assignment criterion and student" do
-      world = World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade)
-      results = CriterionGrade.find_or_create(world.assignment.id, world.criterion.id, world.student.id)
-      expect(results).to eq world.criterion_grade
+    it "finds an existing grade for assignment criterion and student" do
+      criterion_grade
+      expect(CriterionGrade.find_or_create(assignment.id, criterion.id, student.id)).to eq criterion_grade
     end
 
     it "creates a grade for assignment and student if none exists" do
-      world = World.create.with(:course, :student, :assignment, :rubric, :criterion)
-      expect{ CriterionGrade.find_or_create(world.assignment.id, world.criterion.id, world.student.id) }.to change{ CriterionGrade.count }.by(1)
+      criterion_2 = create(:criterion)
+      expect{ CriterionGrade.find_or_create(assignment.id, criterion_2.id, student.id) }.to change{ CriterionGrade.count }.by(1)
     end
   end
 end

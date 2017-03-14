@@ -1,7 +1,3 @@
-require "spec_helper"
-require "./lib/human_history/actor_history_token"
-require "./lib/human_history/registered_token"
-
 describe HumanHistory::RegisteredToken do
   describe "#create" do
     subject { described_class.new HumanHistory::ActorHistoryToken, ->(key, value) { true } }

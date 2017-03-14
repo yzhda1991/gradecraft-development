@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments"
-
 describe Services::ImportsLMSAssignments do
   let(:access_token) { "TOKEN" }
   let(:provider) { :canvas }
@@ -94,4 +91,3 @@ describe Services::ImportsLMSAssignments do
     end
   end
 end
-

@@ -1,6 +1,4 @@
-require "active_record_spec_helper"
 require "cancan/matchers"
-require_relative "../../support/test_classes/models/abilities/submission_file_ability_test"
 
 describe SubmissionFileAbility do
   describe SubmissionFileAbilityTest do

@@ -1,8 +1,5 @@
-require "rails_spec_helper"
-include SessionHelper
-
 describe API::PredictedEarnedBadgesController do
-  let(:course) { create :course}
+  let(:course) { build :course}
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:badge) { create :badge }
   let(:params) {{ badge_id: badge.id, predicted_times_earned: 2 }}
@@ -11,7 +8,6 @@ describe API::PredictedEarnedBadgesController do
     before(:each) { login_user(student) }
 
     describe "POST create" do
-
       it "creates a new predicted earned badge" do
         expect{ post :create, params: { predicted_earned_badge: params }, format: :json }.to \
           change(PredictedEarnedBadge, :count).by(1)

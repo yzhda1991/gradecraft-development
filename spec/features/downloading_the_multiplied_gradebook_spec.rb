@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "downloading multiplied gradebook file" do
   context "as a professor" do
     let(:course) { build :course, name: "Course Name", has_multipliers: true }

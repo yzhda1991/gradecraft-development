@@ -1,6 +1,3 @@
-require 'rails_spec_helper'
-require 'scrypt'
-
 RSpec.describe SecureToken do
   subject { SecureToken.new }
 

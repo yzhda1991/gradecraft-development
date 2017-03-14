@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/importers/student_importers/csv_student_importer"
-
 describe CSVStudentImporter do
   before(:all) { User.destroy_all }
 

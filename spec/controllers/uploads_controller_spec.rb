@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe UploadsController do
   let(:controller_instance) { UploadsController.new }
   let(:submission_file) { create(:submission_file) }

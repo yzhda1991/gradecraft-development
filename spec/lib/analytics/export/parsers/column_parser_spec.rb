@@ -1,6 +1,3 @@
-require "analytics/export/parsers"
-require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
-
 describe Analytics::Export::Parsers::Column do
   subject { described_class.new export }
   let(:export) { AnalyticsExportModelTest.new context: course_context }

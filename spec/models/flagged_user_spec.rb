@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe FlaggedUser do
   let(:course) { build :course }
   let!(:professor) { build :user, courses: [course], role: :professor }

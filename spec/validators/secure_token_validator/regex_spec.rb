@@ -1,6 +1,3 @@
-require "active_model"
-require_relative "../../../app/validators/secure_token_validator/regex"
-
 describe SecureTokenValidator::Regex do
   describe ".uuid" do
     it "matches standard UUIDs" do

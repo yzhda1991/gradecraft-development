@@ -1,5 +1,3 @@
-require "./app/presenters/info/dashboard_weekly_stats_presenter"
-
 describe Info::DashboardWeeklyStatsPresenter do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, assignment_type: assignment_type) }

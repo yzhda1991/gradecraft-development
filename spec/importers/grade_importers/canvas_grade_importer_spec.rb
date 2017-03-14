@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/importers/grade_importers/canvas_grade_importer"
-
 describe CanvasGradeImporter do
   describe "#import" do
     it "returns empty results if there are no canvas grades" do

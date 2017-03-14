@@ -1,5 +1,3 @@
-require "./lib/collection_merger"
-
 describe CollectionMerger do
   describe "#merge" do
     let(:seed_date) { DateTime.now }

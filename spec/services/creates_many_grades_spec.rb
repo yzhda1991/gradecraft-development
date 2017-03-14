@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/creates_many_grades"
-
 describe Services::CreatesManyGrades do
   let(:student) { create(:user) }
   let(:assignment) { create(:assignment) }

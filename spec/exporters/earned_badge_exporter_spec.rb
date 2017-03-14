@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/earned_badge_exporter"
-
 describe EarnedBadgeExporter do
   let(:course) { create :course }
   let(:students) { create_list :user, 2 }

@@ -1,6 +1,3 @@
-require "./app/presenters/downloads/base"
-require "active_record_spec_helper"
-
 describe Presenters::Downloads::Base do
   subject do
     described_class.new \

@@ -1,7 +1,3 @@
-require "spec_helper"
-require "./app/presenters/assignments/presenter"
-require "./app/presenters/assignments/group_presenter"
-
 describe Assignments::Presenter do
   let(:assignment) { double(:assignment, id: 1, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
   let(:course) { double(:course) }

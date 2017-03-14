@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe User do
   let(:course) { create(:course) }
   let(:student) { create(:user) }

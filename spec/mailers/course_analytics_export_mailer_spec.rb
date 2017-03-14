@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 # specs for submission notifications that are sent to students
 describe CourseAnalyticsExportsMailer do
 

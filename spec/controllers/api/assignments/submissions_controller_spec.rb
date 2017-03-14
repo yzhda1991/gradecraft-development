@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe API::Assignments::SubmissionsController do
   let(:student) { create(:user) }
 

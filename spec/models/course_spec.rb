@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe Course do
   subject { build(:course) }
   let(:staff_membership) { create :course_membership, :staff, course: subject,

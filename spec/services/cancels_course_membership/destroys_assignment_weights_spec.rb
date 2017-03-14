@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/cancels_course_membership/destroys_assignment_type_weights"
-
 describe Services::Actions::DestroysAssignmentTypeWeights do
   let(:course) { membership.course }
   let(:membership) { create :course_membership, :student }

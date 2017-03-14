@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe UsersController do
   before(:all) { @course = create(:course) }
   before(:each) do

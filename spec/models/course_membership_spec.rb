@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe CourseMembership do
   describe "#copy" do
     let(:course_membership) { build :course_membership }

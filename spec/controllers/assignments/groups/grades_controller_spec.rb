@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe Assignments::Groups::GradesController do
   let(:course) { create(:course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }
@@ -14,8 +12,6 @@ describe Assignments::Groups::GradesController do
     end
 
     describe "GET mass_edit" do
-      let(:assignment_with_groups) { create(:group_assignment, course: course) }
-
       before(:each) do
         allow(controller).to receive(:current_course).and_return(course)
       end
@@ -88,11 +84,10 @@ describe Assignments::Groups::GradesController do
   end
 
   context "as a student" do
-    let(:student) { create(:user) }
+    let(:student) { create(:course_membership, :student, course: course).user }
 
     before(:each) do
       login_user(student)
-      allow(controller).to receive(:require_course_membership).and_return true
     end
 
     describe "GET mass_edit" do

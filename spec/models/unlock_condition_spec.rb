@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe UnlockCondition do
   let(:course) { create :course }
   let(:badge) { create :badge, name: "fancy name", course: course }

@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe GroupMembership do
   describe ".for_course" do
     it "returns all the group memberships for a specific course" do

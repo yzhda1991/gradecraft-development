@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/presenters/badges/show_presenter"
-
 describe Badges::ShowPresenter do
   let(:badge) do
     double(:badge,

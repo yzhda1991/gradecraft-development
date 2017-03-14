@@ -1,4 +1,3 @@
-require "analytics"
 require "./app/analytics_exports/course_event_export"
 
 describe CourseEventExport do

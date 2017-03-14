@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe IntegrationsController do
   let(:provider) { :canvas }
 

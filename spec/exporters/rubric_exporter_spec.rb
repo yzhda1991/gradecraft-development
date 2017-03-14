@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/rubric_exporter"
-
 describe RubricExporter do
   let(:course) { create :course }
   let(:assignment) { create :assignment, course: course }

@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/services/imports_lms_assignments"
-
 describe Assignments::ImportersController do
   let(:course) { create :course }
   let(:professor) { professor_membership.user }

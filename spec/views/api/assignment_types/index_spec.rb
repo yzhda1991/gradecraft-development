@@ -1,7 +1,3 @@
-# encoding: utf-8
-require "rails_spec_helper"
-include CourseTerms
-
 describe "api/assignment_types/index" do
 
   before(:all) do

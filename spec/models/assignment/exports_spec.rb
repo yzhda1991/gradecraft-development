@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 RSpec.describe "Assignment grade export methods" do
   let(:assignment) { build(:assignment, course: course) }
   let(:students) { build_list(:user, 2) }

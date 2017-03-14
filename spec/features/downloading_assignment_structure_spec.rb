@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "downloading assignment structure file" do
   context "as a professor" do
     let!(:course_membership) { create :course_membership, :professor, user: professor }

@@ -1,7 +1,3 @@
-require "spec_helper"
-require "active_model"
-require "./lib/human_history/change_history_token"
-
 describe HumanHistory::ChangeHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the value is an array" do

@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe AnnouncementState do
   describe ".for_course" do
     it "returns all the announcement states for a specific course" do

@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe InfoController, type: :controller, background_job: true do
   include InQueueHelper
 

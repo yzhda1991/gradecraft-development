@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./lib/human_history/history_token_parser"
-
 describe HumanHistory::HistoryTokenParser do
   it "initializes with a tokenizer" do
     tokenizer = double(:history_tokenizer)

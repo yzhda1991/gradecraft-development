@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/updates_user/creates_course_membership"
-
 describe Services::Actions::CreatesCourseMembership do
   let(:course) { create :course }
   let(:user) { create :user }

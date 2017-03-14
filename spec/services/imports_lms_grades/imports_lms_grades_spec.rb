@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_grades/imports_lms_grades"
-
 describe Services::Actions::ImportsLMSGrades do
   let(:assignment) { create :assignment }
   let(:grade) { Grade.unscoped.last }

@@ -1,10 +1,3 @@
-# there's a lot going on in this performer right now since we're refactoring
-# the export process itself in another branch, so let's just include the Rails
-# spec helper for now and we can pare this down later when we've extracted some
-# of the other behavior that's dependent on said helper
-#
-require "rails_spec_helper"
-
 describe CourseAnalyticsExportPerformer do
   subject { described_class.new export_id: export.id }
 

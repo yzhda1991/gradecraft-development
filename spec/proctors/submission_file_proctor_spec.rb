@@ -1,7 +1,3 @@
-require "proctor"
-require_relative "../../app/proctors/submission_file_proctor/submission_file_condition_set.rb"
-require_relative "../../app/proctors/submission_file_proctor.rb"
-
 describe SubmissionFileProctor do
   subject { described_class.new submission_file }
   let(:submission_file) { double(:submission_file, submission: submission) }

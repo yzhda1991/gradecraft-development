@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require_relative "../toolkits/models/shared/files"
-
 describe BadgeFile do
   let(:badge) { build(:badge) }
 

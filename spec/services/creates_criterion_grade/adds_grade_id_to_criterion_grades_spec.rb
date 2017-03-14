@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_criterion_grade/adds_grade_id_to_criterion_grades"
-
 describe Services::Actions::AddsGradeIdToCriterionGrades do
   let(:crt_grade) { build :criterion_grade }
   let(:grade) { double :grade, id: 777 }

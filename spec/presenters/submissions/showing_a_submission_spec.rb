@@ -1,5 +1,3 @@
-require "spec_helper"
-
 shared_examples_for "showing a submission" do
   let(:assignment) { double(:assignment) }
   let(:submission_id) { 123 }

@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/shared/iterates_grade_attributes"
-
 describe Services::Actions::IteratesGradeAttributes do
   let(:assignment) { create(:assignment, course: course) }
   let(:professor) { create(:user) }

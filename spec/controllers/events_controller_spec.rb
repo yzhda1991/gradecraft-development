@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe EventsController do
   before(:all) { @course = create(:course) }
   before(:each) do

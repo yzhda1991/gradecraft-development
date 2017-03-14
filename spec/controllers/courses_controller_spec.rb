@@ -1,22 +1,13 @@
-require "rails_spec_helper"
-
 describe CoursesController do
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:admin) { create(:course_membership, :admin, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
 
-  before(:each) do
-    session[:course_id] = course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
-
   context "as admin" do
     before(:each) { login_user(admin) }
 
     describe "POST recalculate_student_scores" do
-      let!(:course_membership) { create(:course_membership, :student, course: course) }
-
       it "recalculates student scores" do
         expect_any_instance_of(Course).to receive(:recalculate_student_scores)
         post :recalculate_student_scores, params: { id: course.id.to_s }

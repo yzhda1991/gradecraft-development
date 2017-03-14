@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/creates_new_user"
-
 describe Services::CreatesNewUser do
   let(:user) { build :user }
   let(:params) { user.attributes }

@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/assignment_type_exporter"
-
 describe AssignmentTypeExporter do
   let(:course) { create :course }
   let(:students) { create_list :user, 2 }

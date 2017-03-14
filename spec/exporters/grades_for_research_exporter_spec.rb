@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/exporters/grades_for_research_exporter"
-
 describe GradesForResearchExporter do
   let(:course) { create :course }
   subject { GradesForResearchExporter.new }

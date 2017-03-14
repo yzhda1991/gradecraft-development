@@ -1,8 +1,16 @@
-require "rails_spec_helper"
-
 describe API::CriterionGradesController do
-  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :level, :criterion_grade, :badge) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
+  let(:course) { create :course }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:assignment) { create :assignment, course: course }
+  let(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
+  let!(:rubric) { create(:rubric, assignment: assignment) }
+  let!(:criterion) { create(:criterion, rubric: rubric) }
+  let(:level) { create(:level, criterion: criterion) }
+  let(:criterion_grade) { create(:criterion_grade, assignment: assignment, level: level, student: student, criterion: criterion) }
+  let(:badge) { create(:badge, course: course) }
+  let(:group) { create :group }
+
+  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }
@@ -10,53 +18,52 @@ describe API::CriterionGradesController do
     describe "GET index" do
       it "returns a student's criterion grades for the current assignment" do
         get :index,
-          params: { assignment_id: world.assignment.id, student_id: world.student.id },
+          params: { assignment_id: assignment.id, student_id: student.id },
           format: :json
-        expect(assigns(:criterion_grades)).to eq([world.criterion_grade])
+        expect(assigns(:criterion_grades)).to eq([criterion_grade])
         expect(response).to render_template(:index)
       end
     end
 
     describe "GET group_index" do
       before(:each) do
-        world.create_group
-        world.group.students.each do |student|
-          world.create_criterion_grade(assignment_id: world.assignment.id, student_id: student.id)
+        group.students.each do |student|
+          create :criterion_grade, assignment_id: assignment.id, student_id: student.id
         end
       end
 
       it "returns 400 error code with individual assignment" do
-        world.assignment.update_attributes grade_scope: "Individual"
+        assignment.update_attributes grade_scope: "Individual"
         get :group_index,
-          params: { assignment_id: world.assignment.id, group_id: world.group.id },
+          params: { assignment_id: assignment.id, group_id: group.id },
           format: :json
         expect(response.status).to be(400)
       end
 
       it "returns criterion_grades and student ids for a group" do
-        world.assignment.update_attributes grade_scope: "Group"
+        assignment.update_attributes grade_scope: "Group"
         get :group_index,
-          params: { assignment_id: world.assignment.id, group_id: world.group.id },
+          params: { assignment_id: assignment.id, group_id: group.id },
           format: :json
-        expect(assigns(:student_ids)).to eq(world.group.students.pluck(:id))
-        expect(assigns(:criterion_grades).length).to eq(world.group.students.length)
+        expect(assigns(:student_ids)).to eq(group.students.pluck(:id))
+        expect(assigns(:criterion_grades).length).to eq(group.students.length)
         expect(response).to render_template(:group_index)
       end
     end
 
     describe "PUT update" do
       let(:params) do
-        RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, student_id: world.student.id)
+        RubricGradePUT.new(assignment, [criterion]).params.merge(assignment_id: assignment.id, student_id: student.id)
       end
 
       describe "finds or creates the grade for the assignment and student" do
         it "finds and updates existing grades" do
-          create(:grade, assignment: world.assignment, student: world.student)
+          create(:grade, assignment: assignment, student: student)
           expect { put :update, params: params, format: :json }.to change { Grade.count }.by(0)
         end
 
         it "assigns the grade to the submission" do
-          submission = create :submission, assignment: world.assignment, student: world.student
+          submission = create :submission, assignment: assignment, student: student
           put :update, params: params, format: :json
           grade = Grade.unscoped.last
           expect(grade.submission).to eq submission
@@ -72,22 +79,30 @@ describe API::CriterionGradesController do
 
       describe "when an additional `criterion_ids` parameter is supplied" do
         before do
-          params[:criterion_ids] = world.rubric.criteria.collect(&:id)
+          params[:criterion_ids] = rubric.criteria.collect(&:id)
         end
 
         it "does not create new when criterion grades exist" do
+          criterion_grade
           expect { put :update, params: params, format: :json }.to change { CriterionGrade.count }.by(0)
         end
       end
 
       it "adds earned level badges" do
-        world.badge.update(can_earn_multiple_times: false)
+        LevelBadge.create(level_id: criterion.levels.first.id, badge_id: badge.id)
+        badge.update(can_earn_multiple_times: false)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
       end
 
       it "doesn't re-award existing level badges" do
+        LevelBadge.create(level_id: criterion.levels.first.id, badge_id: badge.id)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(1)
         expect { put :update, params: params, format: :json }.to change { EarnedBadge.count }.by(0)
+      end
+
+      it "renders success message when request format is JSON" do
+        put :update, params: params, format: :json
+        expect(response).to render_template("api/grades/show")
       end
 
       describe "on error" do
@@ -102,18 +117,18 @@ describe API::CriterionGradesController do
   end
 
   context "as student" do
-    before(:each) { login_user(world.student) }
+    before(:each) { login_user(student) }
 
     it "redirects protected routes to root" do
       [
         -> { get :index,
-             params: { assignment_id: world.assignment.id, student_id: world.student.id },
+             params: { assignment_id: assignment.id, student_id: student.id },
              format: :json },
-        -> { get :group_index, params: { assignment_id: world.assignment.id, group_id: 1 },
+        -> { get :group_index, params: { assignment_id: assignment.id, group_id: 1 },
              format: :json },
         -> { put :update,
-             params: RubricGradePUT.new(world).params
-              .merge(assignment_id: world.assignment.id, student_id: world.student.id) }
+             params: RubricGradePUT.new(assignment, [criterion]).params
+              .merge(assignment_id: assignment.id, student_id: student.id) }
       ].each do |protected_route|
         expect(protected_route.call).to redirect_to(:root)
       end

@@ -1,7 +1,3 @@
-require "active_record_spec_helper"
-require "toolkits/sanitization_toolkit"
-require "toolkits/models/assignments_toolkit"
-
 describe Assignment do
   include Toolkits::Models::AssignmentsToolkit
 

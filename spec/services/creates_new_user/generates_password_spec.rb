@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_new_user/generates_password"
-
 describe Services::Actions::GeneratesPassword do
   let(:user) { build :user, password: nil }
 

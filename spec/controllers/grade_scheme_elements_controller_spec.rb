@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe GradeSchemeElementsController do
   let(:course) { create(:course) }
 

@@ -1,9 +1,3 @@
-require "active_record_spec_helper"
-require "./app/analytics_exports/course_event_export"
-require "./app/analytics_exports/course_predictor_export"
-require "./app/analytics_exports/course_user_aggregate_export"
-require "./app/analytics_exports/export_contexts/course_export_context"
-
 describe CourseAnalyticsExport do
   subject { create :course_analytics_export, course_id: course.id }
   let(:course) { create :course }

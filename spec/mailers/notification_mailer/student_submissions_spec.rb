@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.shared_examples "a complete submission email body" do
   it "includes the student's first name" do
     should include student.first_name

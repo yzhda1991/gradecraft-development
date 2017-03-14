@@ -1,8 +1,3 @@
-require "active_record_spec_helper"
-require "action_mailer"
-require "./app/mailers/application_mailer"
-require "./app/mailers/announcement_mailer"
-
 describe Announcement do
   describe "default scope" do
     it "should return the newest announcements first" do

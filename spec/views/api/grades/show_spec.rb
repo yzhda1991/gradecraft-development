@@ -1,13 +1,10 @@
-# encoding: utf-8
-require "rails_spec_helper"
-
 describe "api/grades/show" do
-  before(:all) do
-    world = World.create.with(:course, :assignment, :student, :grade)
+  let(:assignment) { create :assignment }
+  let(:student) { create(:course_membership, :student).user } 
+  let(:grade) { create(:grade, student: student, assignment: assignment) }
 
-    # Expected instance variables on render:
-    @grade = world.grade
-    @grade_status_options = ["In Progress","Graded", "Released"]
+  before(:each) do 
+    @grade = grade
   end
 
   it "responds with a grade" do
@@ -29,6 +26,7 @@ describe "api/grades/show" do
   end
 
   it "adds grading status options to meta data" do
+    @grade_status_options = ["In Progress","Graded", "Released"]
     render
     json = JSON.parse(response.body)
     expect(json["meta"]["grade_status_options"]).to eq(@grade_status_options)

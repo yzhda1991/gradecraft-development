@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/imports_lms_assignments/imports_lms_assignments"
-
 describe Services::Actions::ImportsLMSAssignments do
   let(:assignment) { Assignment.unscoped.last }
   let(:assignments) { [{ "id" => "ASSIGNMENT_1", "name" => "Assignment 1" }] }

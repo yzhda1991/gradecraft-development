@@ -1,6 +1,3 @@
-require "analytics/export"
-require "./spec/support/test_classes/lib/analytics/export/analytics_export_buildable_test"
-
 describe Analytics::Export::Buildable do
   # since this is a module intended for inclusion, let's test a class that's
   # actually using these behaviors

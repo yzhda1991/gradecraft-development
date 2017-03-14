@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "creating a new challenge" do
   context "as a professor" do
     let(:course) { build :course, has_team_challenges: true}

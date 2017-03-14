@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe ErrorsController do
   let(:params) { {
       status_code: 418,

@@ -1,9 +1,6 @@
 require "analytics"
-require "./app/analytics_aggregates/course_user_pageview"
-require "./app/analytics_aggregates/course_user_page_pageview"
-require "./app/analytics_aggregates/course_user_login"
+require "rails_spec_helper"
 require "./app/analytics_exports/export_contexts/course_export_context"
-require "active_record_spec_helper"
 
 describe CourseExportContext do
   subject { described_class.new course: course }

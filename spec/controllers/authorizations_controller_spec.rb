@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe AuthorizationsController do
   describe "GET #create" do
     context "as a professor" do

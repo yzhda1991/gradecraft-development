@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/presenters/info/dashboard_course_events_presenter.rb"
-
 describe Info::DashboardCourseEventsPresenter do
   let(:course) { create(:course) }
   let(:student) { create :course_membership, :student, course: course }

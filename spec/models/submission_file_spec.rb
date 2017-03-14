@@ -1,7 +1,3 @@
-require "active_record_spec_helper"
-require "toolkits/models/shared/files"
-require "toolkits/historical_toolkit"
-
 describe SubmissionFile do
   subject { new_submission_file }
 

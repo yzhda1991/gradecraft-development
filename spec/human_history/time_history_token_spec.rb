@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./lib/human_history/time_history_token"
-
 describe HumanHistory::TimeHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is a recorded at" do

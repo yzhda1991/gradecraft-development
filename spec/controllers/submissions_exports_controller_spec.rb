@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe SubmissionsExportsController, type: :controller do
 
   let(:teams) { create_list(:team, 2) }

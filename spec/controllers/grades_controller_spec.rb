@@ -1,9 +1,4 @@
-require "rails_spec_helper"
-require "grade_proctor"
-
 describe GradesController do
-  include PredictorEventJobsToolkit
-
   let(:course) { create :course }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create :assignment, course: course }

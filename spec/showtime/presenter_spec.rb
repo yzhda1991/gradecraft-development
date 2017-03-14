@@ -1,6 +1,3 @@
-require "rspec/core"
-require "./lib/showtime/presenter"
-
 describe Showtime::Presenter do
   subject { described_class.new }
 

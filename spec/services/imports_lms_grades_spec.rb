@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/services/imports_lms_grades"
-
 describe Services::ImportsLMSGrades do
   describe ".import" do
     let(:access_token) { "TOKEN" }

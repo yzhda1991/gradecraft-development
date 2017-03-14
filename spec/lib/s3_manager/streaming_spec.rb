@@ -1,7 +1,3 @@
-require "active_support"
-require "s3_manager"
-require_relative "../../support/test_classes/lib/s3_manager/s3_manager_streaming_test"
-
 describe S3Manager::Streaming do
   describe S3ManagerStreamingTest do
     subject { described_class.new }

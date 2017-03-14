@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 include Toolkits::S3Manager::BasicsToolkit
 
 RSpec.describe S3Manager::Manager do

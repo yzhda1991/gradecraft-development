@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "editing an event" do
   context "as a professor" do
     let(:course) { build :course}

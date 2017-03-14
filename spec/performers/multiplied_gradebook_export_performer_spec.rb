@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
 
   let(:course) { create(:course) }

@@ -1,7 +1,5 @@
-require "rails_spec_helper"
-
 describe API::Students::BadgesController do
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:badge) { create :badge }
   let(:student) { create(:course_membership, :student, course: course).user}
   let(:professor) { create(:course_membership, :professor, course: course).user }

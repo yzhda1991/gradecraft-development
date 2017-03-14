@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "creating a new assignment type" do
   context "as a professor" do
     let(:course) { build :course }

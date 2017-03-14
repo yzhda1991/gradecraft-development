@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "editing a course's basic settings" do
   context "as a professor" do
     let(:course) { build :course, name: "Course Name"}

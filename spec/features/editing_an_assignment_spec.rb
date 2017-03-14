@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "editing an assignment" do
   context "as a professor" do
     let(:course) { build :course, assignment_term: "Assignment"}

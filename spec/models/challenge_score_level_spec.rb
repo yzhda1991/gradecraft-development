@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe ChallengeScoreLevel do
 
   let(:challenge) {create :challenge}

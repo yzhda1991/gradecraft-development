@@ -1,7 +1,3 @@
-require "action_view"
-require "active_record_spec_helper"
-require_relative "../support/test_classes/validators/file_size_validator_test"
-
 describe FileSizeValidator do
 
   # load a test class from /spec/support/test_classes

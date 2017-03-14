@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./lib/human_history/event_history_token"
-
 describe HumanHistory::EventHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an event" do

@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe StudentsController do
   before(:all) do
     @course = create(:course)

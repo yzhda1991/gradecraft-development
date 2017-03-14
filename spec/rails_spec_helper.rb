@@ -13,29 +13,6 @@ if ENV["COVERAGE"]
   CodeClimate::TestReporter.start
 end
 
-# figure out where we are being loaded from
-if $LOADED_FEATURES.grep(/spec\/rails_spec_helper\.rb/).any?
-  begin
-    raise "foo"
-  rescue => e
-    puts <<-MSG
-  ===================================================
-  It looks like rails_spec_helper.rb has been loaded
-  multiple times. Normalize the require to:
-
-    require "spec/rails_spec_helper"
-
-  Things like File.join and File.expand_path will
-  cause it to be loaded multiple times.
-
-  Loaded this time from:
-
-    #{e.backtrace.join("\n    ")}
-  ===================================================
-    MSG
-  end
-end
-
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "paper_trail"

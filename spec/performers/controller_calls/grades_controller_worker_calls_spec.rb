@@ -1,8 +1,3 @@
-require "rails_spec_helper"
-require "set"
-
-include ResqueJobSharedExamplesToolkit
-
 RSpec.describe GradesController, type: :controller, background_job: true do
   include InQueueHelper
 

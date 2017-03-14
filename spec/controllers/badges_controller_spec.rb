@@ -1,23 +1,13 @@
-require "rails_spec_helper"
-
 describe BadgesController do
-  before(:all) do
-    @course = create(:course)
-    @student = create(:user, courses: [@course], role: :student)
-    @badge = create(:badge, course: @course)
-  end
-
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { build(:course) }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:observer) { create(:course_membership, course: course).user }
+  let(:badge) { create(:badge, course: course) }
+  let(:badge_2) { create(:badge, course: course) }
 
   context "as professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course], role: :professor)
-    end
-
-    before(:each) { login_user(@professor) }
+    before(:each) { login_user(professor) }
 
     describe "GET index" do
       it "returns badges for the current course" do
@@ -28,7 +18,7 @@ describe BadgesController do
 
     describe "GET show" do
       it "displays the badge page" do
-        get :show, params: { id: @badge.id }
+        get :show, params: { id: badge.id }
         expect(response).to render_template(:show)
       end
     end
@@ -43,8 +33,8 @@ describe BadgesController do
 
     describe "GET edit" do
       it "renders the edit badge form" do
-        get :edit, params: { id: @badge.id }
-        expect(assigns(:badge)).to eq(@badge)
+        get :edit, params: { id: badge.id }
+        expect(assigns(:badge)).to eq(badge)
         expect(response).to render_template(:edit)
       end
     end
@@ -71,26 +61,22 @@ describe BadgesController do
     end
 
     describe "POST update" do
-      before do
-        @badge_2 = create(:badge, course: @course)
-      end
-
       it "updates the badge" do
         params = { name: "new name" }
-        post :update, params: { id: @badge_2.id, badge: params }
+        post :update, params: { id: badge_2.id, badge: params }
         expect(response).to redirect_to(badges_path)
-        expect(@badge_2.reload.name).to eq("new name")
+        expect(badge_2.reload.name).to eq("new name")
       end
 
       it "manages file uploads" do
         params = {badge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, params: { id: @badge_2.id, badge: params }
-        expect expect(@badge_2.badge_files.count).to eq(1)
+        post :update, params: { id: badge_2.id, badge: params }
+        expect expect(badge_2.badge_files.count).to eq(1)
       end
 
       it "redirects to edit form with invalid attributes" do
         params = { name: nil }
-        post :update, params: { id: @badge.id, badge: params }
+        post :update, params: { id: badge.id, badge: params }
         expect(response).to render_template(:edit)
       end
     end
@@ -98,32 +84,32 @@ describe BadgesController do
     describe "GET sort" do
       it "sorts the badges by params" do
         second_badge = create(:badge)
-        @course.badges << second_badge
-        params = [second_badge.id, @badge.id]
+        course.badges << second_badge
+        params = [second_badge.id, badge.id]
         post :sort, params: { badge: params }
 
-        expect(@badge.reload.position).to eq(2)
+        expect(badge.reload.position).to eq(2)
         expect(second_badge.reload.position).to eq(1)
       end
     end
 
     describe "GET destroy" do
       it "destroys the badge" do
-        another_badge = create :badge, course: @course
+        another_badge = create :badge, course: course
         expect{ get :destroy, params: { id: another_badge }}.to change(Badge,:count).by -1
       end
     end
 
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
-        get :export_structure, params: { id: @course.id }, format: :csv
+        get :export_structure, params: { id: course.id }, format: :csv
         expect(response.body).to include("Badge ID,Name,Point Total,Description,Times Earned")
       end
     end
   end
 
   context "as student" do
-    before(:each) { login_user(@student) }
+    before(:each) { login_user(student) }
 
     describe "protected routes" do
       [
@@ -151,8 +137,7 @@ describe BadgesController do
   end
 
   context "as an observer" do
-    before(:all) { @observer = create(:user, courses: [@course], role: :observer) }
-    before(:each) { login_user(@observer) }
+    before(:each) { login_user(observer) }
 
     describe "GET index" do
       it "returns badges for the current course" do

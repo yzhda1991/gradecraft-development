@@ -1,7 +1,3 @@
-require "proctor"
-require_relative "../../../app/proctors/submission_file_proctor"
-require_relative "../../../app/proctors/submission_file_proctor/submission_file_condition_set"
-
 describe Proctors::SubmissionFileConditionSet do
   subject { described_class.new proctor: proctor }
   let(:proctor) { SubmissionFileProctor.new submission_file }

@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe SubmissionFilesController do
   let(:course) { Course.last }
   let(:student) { User.last }

@@ -1,5 +1,3 @@
-require "analytics/export"
-
 describe Analytics::Export::Parsers::Cell do
   subject do
     described_class.new \

@@ -1,8 +1,6 @@
 ENV["RAILS_ENV"] ||= "test"
 
 RSpec.configure do |config|
-  # this should be replaced with #filter_run_when_matching in RSpec ~> v3.5.0
-  # so we don't have to pollute inclusions with :focus on every rspec run
   config.filter_run :focus
   config.run_all_when_everything_filtered = true
 
@@ -15,7 +13,7 @@ RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
   end
-
+  
   # Print the 10 slowest examples and example groups at the
   # end of the spec run, to help surface which specs are running
   # particularly slow.

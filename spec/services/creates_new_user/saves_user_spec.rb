@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_new_user/saves_user"
-
 describe Services::Actions::SavesUser do
   let(:user) { build :user, password: nil }
 

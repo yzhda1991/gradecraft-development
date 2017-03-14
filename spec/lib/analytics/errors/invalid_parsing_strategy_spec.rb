@@ -1,5 +1,3 @@
-require "analytics/errors/invalid_parsing_strategy"
-
 describe Analytics::Errors::InvalidParsingStrategy do
   subject do
     described_class.new \

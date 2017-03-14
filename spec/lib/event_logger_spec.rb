@@ -1,6 +1,3 @@
-require_relative "../../lib/is_configurable"
-require_relative "../toolkits/lib/is_configurable/shared_examples"
-
 describe EventLogger, type: :vendor_library do
   include Toolkits::Lib::IsConfigurableToolkit::SharedExamples
 

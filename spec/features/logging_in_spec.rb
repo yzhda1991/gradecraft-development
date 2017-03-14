@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "logging in" do
   let(:password) { "p@ssword" }
 

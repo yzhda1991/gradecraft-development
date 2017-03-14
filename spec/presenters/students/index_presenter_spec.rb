@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/presenters/students/index_presenter"
-
 describe Students::IndexPresenter do
   let(:course) { create(:course) }
   let(:current_user) { create(:course_membership, :professor, course: course).user }

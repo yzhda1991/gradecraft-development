@@ -1,5 +1,3 @@
-# encoding: utf-8
-require "rails_spec_helper"
 include CourseTerms
 
 describe "assignments/_index_staff" do

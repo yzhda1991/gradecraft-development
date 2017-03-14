@@ -1,8 +1,4 @@
-# encoding: utf-8
-require "rails_spec_helper"
-
 describe "grades/show" do
-
   let(:presenter) { Assignments::Presenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
@@ -31,15 +27,6 @@ describe "grades/show" do
         render
         assert_select "p", text: "#{ points @grade.final_points } / #{ points @assignment.full_points } points earned", count: 1
       end
-    end
-  end
-
-  describe "viewed by student" do
-    before(:each) do
-      allow(view).to receive(:current_user_is_staff).and_return(false)
-    end
-    it "renders successfully" do
-      render
     end
   end
 end

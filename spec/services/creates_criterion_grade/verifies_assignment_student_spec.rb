@@ -1,11 +1,10 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_grade/verifies_assignment_student"
-
 describe Services::Actions::VerifiesAssignmentStudent do
-  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }
-  let(:route_params) {{ "assignment_id" => world.assignment.id, "student_id" => world.student.id }}
-  let(:raw_params) { RubricGradePUT.new(world).params.merge route_params }
+  let(:course) { build_stubbed :course }
+  let(:student) { create :user }
+  let(:assignment) { create :assignment }
+  let(:group) { create :group }
+  let(:route_params) {{ "assignment_id" => assignment.id, "student_id" => student.id }}
+  let(:raw_params) { RubricGradePUT.new(assignment).params.merge route_params }
 
   it "expects attributes to assign to assignment and student" do
     expect { described_class.execute }.to \
@@ -18,7 +17,7 @@ describe Services::Actions::VerifiesAssignmentStudent do
   end
 
   it "returns the group if present" do
-    raw_params["group_id"] = world.group.id
+    raw_params["group_id"] = group.id
     result = described_class.execute raw_params: raw_params
     expect(result).to have_key :group
   end

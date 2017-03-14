@@ -1,15 +1,16 @@
-require "rails_spec_helper"
-
 describe API::LevelsController do
-  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion) }
-  let(:professor) { create(:course_membership, :professor, course: world.course).user }
+  let(:course) { build :course }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:rubric) { create(:rubric, assignment: assignment) }
+  let(:criterion) { create(:criterion, rubric: rubric) }
 
   context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "PUT update" do
-      let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion) }
-      let(:level) { world.criterion.levels.last }
+      let(:level) { criterion.levels.last }
       let(:params) do
         { id: level.id, level: { description: "You have reached a new level", meets_expectations: true }}
       end
@@ -21,7 +22,7 @@ describe API::LevelsController do
       end
 
       it "insures only one level per criterion meets expectations" do
-        l_1 = world.criterion.levels.first
+        l_1 = criterion.levels.first
         l_1.update_attributes(meets_expectations: true)
         put :update, params: params, format: :json
         expect(l_1.reload.meets_expectations).to be_falsey
@@ -45,7 +46,7 @@ describe API::LevelsController do
   end
 
   context "as student" do
-    before(:each) { login_user(world.student) }
+    before(:each) { login_user(student) }
 
     it "redirects protected routes to root" do
       [

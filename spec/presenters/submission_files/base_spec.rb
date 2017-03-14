@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/presenters/submission_files/base"
-
 describe Presenters::SubmissionFiles::Base do
   subject { described_class.new }
 

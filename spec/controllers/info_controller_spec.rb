@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe InfoController do
   before(:all) { @course = create(:course) }
   before(:all) { @course_2 = create(:course) }

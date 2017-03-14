@@ -1,39 +1,29 @@
-require "rails_spec_helper"
-
 describe ChallengesController do
-  before(:all) do
-    @course = create(:course, add_team_score_to_student: true)
-    @student = create(:user, courses: [@course], role: :student)
-    @team = create(:team, course: @course)
-    @team.students << @student
-  end
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { build :course }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:team) { create(:team, course: course) }
+  let(:challenge) { create(:challenge, course: course) }
+  let(:challenge_2) { create(:challenge, course: course) } 
 
   context "as professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course], role: :professor)
-    end
-
     before(:each) do
-      @challenge = create(:challenge, course: @course)
-      login_user(@professor)
+      team.students << student
+      login_user(professor)
     end
 
     describe "GET index" do
       it "returns challenges for the current course" do
         get :index
-        expect(assigns(:challenges)).to eq(@course.reload.challenges)
+        expect(assigns(:challenges)).to eq(course.reload.challenges)
         expect(response).to render_template(:index)
       end
     end
 
     describe "GET show" do
       it "returns the challenge show page" do
-        get :show, params: { id: @challenge.id }
-        expect(assigns(:challenge)).to eq(@challenge)
+        get :show, params: { id: challenge.id }
+        expect(assigns(:challenge)).to eq(challenge)
         expect(response).to render_template(:show)
       end
     end
@@ -48,8 +38,8 @@ describe ChallengesController do
 
     describe "GET edit" do
       it "assigns the challenge and title" do
-        get :edit, params: { id: @challenge.id }
-        expect(assigns(:challenge)).to eq(@challenge)
+        get :edit, params: { id: challenge.id }
+        expect(assigns(:challenge)).to eq(challenge)
         expect(response).to render_template(:edit)
       end
     end
@@ -57,7 +47,7 @@ describe ChallengesController do
     describe "POST create" do
       it "creates the challenge with valid attributes"  do
         params = attributes_for(:challenge)
-        params[:challenge_id] = @challenge
+        params[:challenge_id] = challenge
         expect{ post :create, params: { challenge: params }}.to \
           change(Challenge,:count).by(1)
       end
@@ -65,7 +55,7 @@ describe ChallengesController do
       it "manages file uploads" do
         Challenge.delete_all
         params = attributes_for(:challenge)
-        params[:challenge_id] = @challenge
+        params[:challenge_id] = challenge
         params.merge! challenge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
         post :create, params: { challenge: params }
         challenge = Challenge.where(name: params[:name]).last
@@ -79,31 +69,29 @@ describe ChallengesController do
     end
 
     describe "POST update" do
-      before { @challenge_2 = create(:challenge, course: @course) }
-
       it "updates the challenge" do
         params = { name: "new name" }
-        post :update, params: { id: @challenge_2.id, challenge: params }
+        post :update, params: { id: challenge_2.id, challenge: params }
         expect(response).to redirect_to(challenges_path)
-        expect(@challenge_2.reload.name).to eq("new name")
+        expect(challenge_2.reload.name).to eq("new name")
       end
 
       it "redirects to the edit form if the update fails" do
         params = { name: nil }
-        post :update, params: { id: @challenge_2.id, challenge: params }
+        post :update, params: { id: challenge_2.id, challenge: params }
         expect(response).to render_template(:edit)
       end
 
       it "manages file uploads" do
         params = {challenge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, params: { id: @challenge_2.id, challenge: params }
-        expect expect(@challenge_2.challenge_files.count).to eq(1)
+        post :update, params: { id: challenge_2.id, challenge: params }
+        expect expect(challenge_2.challenge_files.count).to eq(1)
       end
     end
 
     describe "GET destroy" do
       it "destroys the challenge" do
-        another_challenge = create :challenge, course: @course
+        another_challenge = create :challenge, course: course
         expect{ get :destroy, params: { id: another_challenge }}.to \
           change(Challenge,:count).by(-1)
       end
@@ -111,10 +99,7 @@ describe ChallengesController do
   end
 
   context "as student" do
-    before(:all) do
-      @challenge = create(:challenge, course: @course)
-    end
-    before(:each) { login_user(@student) }
+    before(:each) { login_user(student) }
 
     describe "protected routes" do
       [
@@ -134,7 +119,7 @@ describe ChallengesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, params: { id: @challenge.id }).to redirect_to(:root)
+          expect(get route, params: { id: challenge.id }).to redirect_to(:root)
         end
       end
     end

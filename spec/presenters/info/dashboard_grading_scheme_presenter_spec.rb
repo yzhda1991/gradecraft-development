@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/presenters/info/dashboard_grading_scheme_presenter.rb"
-
 describe Info::DashboardGradingSchemePresenter do
   before do
     @course = create(:course)

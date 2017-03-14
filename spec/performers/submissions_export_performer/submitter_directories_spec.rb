@@ -1,8 +1,4 @@
-require "rails_spec_helper"
-
 RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :background_job do
-  include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::SubmissionsExport::SharedExamples
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 

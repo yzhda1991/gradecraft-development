@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "formatter"
-
 RSpec.describe SubmissionsExport do
   subject { build :submissions_export }
 

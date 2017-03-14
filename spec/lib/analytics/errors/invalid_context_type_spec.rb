@@ -1,5 +1,3 @@
-require "analytics/errors/invalid_context_type"
-
 describe Analytics::Errors::InvalidContextType do
   subject do
     described_class.new \

@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe AssignmentGroup do
 
   it "is valid with assignment and group" do

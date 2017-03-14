@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "creating a new group" do
   context "as a professor" do
     let(:course) { build :course }

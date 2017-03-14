@@ -1,8 +1,3 @@
-require "active_record_spec_helper"
-require "showtime"
-require "./app/presenters/course_analytics_exports/base"
-require "./app/background_jobs/course_analytics_export_job"
-
 describe Presenters::CourseAnalyticsExports::Base do
   subject { described_class.new params: params }
 

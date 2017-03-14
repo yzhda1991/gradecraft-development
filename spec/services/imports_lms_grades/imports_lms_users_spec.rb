@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/services/imports_lms_grades/imports_lms_users"
-
 describe Services::Actions::ImportsLMSUsers do
   let(:course) { create :course }
   let(:provider) { :canvas }

@@ -1,10 +1,11 @@
-# encoding: utf-8
-require "rails_spec_helper"
-
 describe "api/criteria/index" do
-  before(:all) do
-    world = World.create.with(:course, :assignment, :rubric, :criterion)
-    @criteria = [world.criterion]
+  let(:course) { build_stubbed(:course) }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:rubric) { create(:rubric, assignment: assignment) }
+  let(:criterion) { create(:criterion, rubric: rubric) }
+  
+  before(:each) do
+    @criteria = [criterion]
   end
 
   it "responds with an array of criteria" do

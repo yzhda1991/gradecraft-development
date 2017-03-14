@@ -1,11 +1,9 @@
-require "rails_spec_helper"
-
 describe Integrations::CoursesController do
   let(:course_id) { "COURSE_ID" }
   let(:provider) { :canvas }
 
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { build :course }
     let(:professor) { professor_membership.user }
     let(:professor_membership) { create :course_membership, :professor, course: course }
 

@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe ApplicationController do
   let(:course) { double(:course, id: 123) }
   let(:user) { double(:user, id: 456) }

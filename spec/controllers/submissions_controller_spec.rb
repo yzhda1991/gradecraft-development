@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 describe SubmissionsController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }

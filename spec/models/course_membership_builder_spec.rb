@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe CourseMembershipBuilder do
   let(:builder) { create :user }
   let(:user) { create :user }

@@ -1,6 +1,3 @@
-require "resque_job"
-require "./app/background_jobs/course_analytics_export_job"
-
 describe CourseAnalyticsExportJob do
   subject { described_class }
 

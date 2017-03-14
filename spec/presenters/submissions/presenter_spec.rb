@@ -1,6 +1,3 @@
-require "spec_helper"
-require "./app/presenters/submissions/presenter"
-
 describe Submissions::Presenter do
   subject do
     described_class.new assignment_id: assignment.id,

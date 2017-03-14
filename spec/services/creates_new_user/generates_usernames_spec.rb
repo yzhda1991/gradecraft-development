@@ -1,7 +1,3 @@
-require "light-service"
-require "active_record_spec_helper"
-require "./app/services/creates_new_user/generates_usernames"
-
 describe Services::Actions::GeneratesUsernames do
   let(:user) { build :user, email: "blah@example.com", password: nil, username: "bleh", internal: true }
 

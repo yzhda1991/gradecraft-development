@@ -1,5 +1,3 @@
-require "active_record_spec_helper"
-
 describe AssignmentScoreLevel do
 
   let(:assignment) {create :assignment}

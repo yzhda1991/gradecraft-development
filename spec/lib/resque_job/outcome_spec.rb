@@ -1,5 +1,3 @@
-require_relative "../../../lib/resque_job/outcome"
-
 describe ResqueJob::Outcome,  type: :vendor_library do
   subject { described_class.new result }
   # note that this is the result of the outcome block, not the conventional

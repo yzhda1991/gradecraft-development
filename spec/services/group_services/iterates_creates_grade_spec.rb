@@ -1,6 +1,3 @@
-require "light-service"
-require "./app/services/group_services/iterates_creates_grade"
-
 describe Services::Actions::IteratesCreatesGrade do
   let(:group) { create(:group) }
   let(:student) { create(:user) }

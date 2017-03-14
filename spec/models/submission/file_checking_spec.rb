@@ -1,4 +1,3 @@
-require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
 
 describe "Submission file checking" do

@@ -1,7 +1,3 @@
-require "rails_spec_helper"
-require "resque-scheduler"
-require "resque_spec/scheduler"
-
 # define routes for mapping #html_page and #json_page to the test controller
 include Toolkits::Controllers::ApplicationControllerToolkit::Routes
 

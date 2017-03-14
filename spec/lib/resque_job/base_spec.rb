@@ -1,12 +1,3 @@
-require "logglier"
-require_relative "../../../lib/resque_job/base"
-require_relative "../../../lib/resque_job/performer"
-require_relative "../../../lib/inheritable_ivars"
-require_relative "../../../lib/loggly_resque"
-require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
-require_relative "../../toolkits/lib/loggly_resque/shared_examples"
-require_relative "../../toolkits/lib/resque_retry/shared_examples"
-
 describe ResqueJob::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
   include Toolkits::Lib::LogglyResqueToolkit::SharedExamples

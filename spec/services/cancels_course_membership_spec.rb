@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/cancels_course_membership"
-
 describe Services::CancelsCourseMembership do
   let(:course) { membership.course }
   let(:membership) { create(:course_membership, :student) }

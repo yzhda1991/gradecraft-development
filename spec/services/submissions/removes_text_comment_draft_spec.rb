@@ -1,6 +1,3 @@
-require "rails_spec_helper"
-require "./app/services/submissions/removes_text_comment_draft"
-
 describe Services::Actions::RemovesTextCommentDraft do
   let(:submission) { create(:submission, text_comment_draft: "Dear Mr. Professor, ") }
 

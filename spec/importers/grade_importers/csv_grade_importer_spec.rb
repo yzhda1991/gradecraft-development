@@ -1,7 +1,3 @@
-require "active_record_spec_helper"
-require "./lib/quote_helper"
-require "./app/importers/grade_importers/csv_grade_importer"
-
 describe CSVGradeImporter do
   describe "#import" do
     it "returns empty results when there is no file" do

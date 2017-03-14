@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 feature "editing a team" do
   context "as a professor" do
     let(:course) { build :course, has_teams: true }

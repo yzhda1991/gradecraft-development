@@ -1,5 +1,3 @@
-require "rails_spec_helper"
-
 RSpec.describe GradeUpdatePerformer, type: :background_job do
   let(:assignment) { create(:assignment) }
   let(:instructor) { create :user }

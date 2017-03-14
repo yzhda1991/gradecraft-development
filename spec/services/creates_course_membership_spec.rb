@@ -1,6 +1,3 @@
-require "active_record_spec_helper"
-require "./app/services/creates_course_membership"
-
 describe Services::CreatesCourseMembership do
   let(:course) { create :course }
   let(:user) { create :user }
