@@ -95,6 +95,13 @@ class UsersController < ApplicationController
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
   end
 
+  def manually_activate
+    session[:return_to] ||= request.referer
+    @User = User.find(params[:id])
+    @User.activate!
+    redirect_to session.delete(:return_to), notice: "#{@User.first_name} #{@User.last_name} has been activated!" and return
+  end
+
   def activated
     @token = params[:token]
     @user = User.load_from_activation_token(@token)

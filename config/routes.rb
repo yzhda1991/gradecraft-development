@@ -250,6 +250,7 @@ Rails.application.routes.draw do
   resources :users, except: :show do
     member do
       get :activate
+      put :manually_activate
       post :activate, action: :activated
       post :flag
     end
