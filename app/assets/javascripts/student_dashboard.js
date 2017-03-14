@@ -32,7 +32,7 @@ if ($pointBreakdownChart.length) {
       name: name,
       orientation: 'h',
       marker: {
-        color: colors[index % colorsCount - 1],
+        color: colors[index % colorsCount],
         size: 1
       },
       type: 'bar',
