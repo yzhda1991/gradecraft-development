@@ -1,4 +1,4 @@
-.grade-scheme-row{'ng-class'=>'{"row-conflict": gradeSchemeElement.validationError != null}'}
+.grade-scheme-row
   .gse-form-container
     %label.gse-label.form_label
       Grade Letter
@@ -11,13 +11,12 @@
     %label.gse-label.form_label
       Point Threshold
       %input.low-range{'type'=>'text',
+        'name'=>'point_threshold_{{index}}',
         'ng-model'=>'gradeSchemeElement.lowest_points',
-        'ng-model-options'=>'{allowInvalid: true}',
         'ng-blur'=>'validateElements()',
         'required'=>'',
         'smart-number'=>'',
-        'allow-negatives'=>'false',
-        'ng-class'=>'{"ng-invalid": gradeSchemeElement.validationError || isNaN(gradeSchemeElement.lowest_points)}'}
+        'allow-negatives'=>'false'}
 
     %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
       %span.error

@@ -7,25 +7,19 @@
 
     vm.loading = true
     vm.gradeSchemeElements = null
-    vm.formIsInvalid = false
 
     # Add first element
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
-      vm.formIsInvalid = true
 
     vm.postGradeSchemeElements = () ->
       GradeSchemeElementsService.postGradeSchemeElements().then(() ->
         window.location.href = '/grade_scheme_elements/'
       )
 
-    vm.setFormIsInvalid = (value) ->
-      vm.formIsInvalid = value
-
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
       vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
-      GradeSchemeElementsService.validateElements()
     )
   ]
 
@@ -35,5 +29,11 @@
     controllerAs: 'vm'
     restrict: 'EA'
     templateUrl: 'grade_scheme_elements/main.html'
+    link: (scope, element, attrs, ctrl) ->
+      # For manually triggering form validation by child directives
+      ctrl.updateFormValidity = () ->
+        _.each(ctrl.gradeSchemeElements, (element, index) ->
+          scope.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
+        )
   }
 ]

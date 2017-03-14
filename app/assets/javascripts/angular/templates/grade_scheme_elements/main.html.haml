@@ -2,7 +2,8 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
-                        'set_form_is_invalid'=>'vm.setFormIsInvalid',
+                        'update_form_validity'=>'vm.updateFormValidity()',
+                        'index'=>'{{$index}}',
                         'grade_scheme_element'=>'element'}
 
   %button.button.right{'type'=>'button',
@@ -13,6 +14,6 @@
     .right
       %button.button.right{'type'=>'button',
                            'ng-click'=>'vm.postGradeSchemeElements()',
-                           'ng-class'=>'{"disabled": vm.formIsInvalid}',
-                           'ng-disabled'=>'vm.formIsInvalid',
+                           'ng-class'=>'{"disabled": gradeSchemeElementsForm.$invalid}',
+                           'ng-disabled'=>'gradeSchemeElementsForm.$invalid',
                            'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0'} Submit
