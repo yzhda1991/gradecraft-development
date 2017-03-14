@@ -97,9 +97,9 @@ class UsersController < ApplicationController
 
   def manually_activate
     session[:return_to] ||= request.referer
-    @User = User.find(params[:id])
-    @User.activate!
-    redirect_to session.delete(:return_to), notice: "#{@User.first_name} #{@User.last_name} has been activated!" and return
+    @user = User.find(params[:id])
+    @user.activate!
+    redirect_to session.delete(:return_to), notice: "#{@user.first_name} #{@user.last_name} has been activated!" and return
   end
 
   def activated
