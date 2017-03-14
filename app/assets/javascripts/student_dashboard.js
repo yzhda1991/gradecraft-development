@@ -25,13 +25,14 @@ if ($pointBreakdownChart.length) {
     var points = score.data;
     var name = score.name;
     var tooltip = name + '<br>' + points.toLocaleString() + ' points';
+    var colorsCount = colors.length;
 
     var trace = {
       x: [points],
       name: name,
       orientation: 'h',
       marker: {
-        color: colors[index],
+        color: colors[index % colorsCount - 1],
         size: 1
       },
       type: 'bar',
