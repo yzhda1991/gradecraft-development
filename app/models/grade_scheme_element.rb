@@ -21,13 +21,17 @@ class GradeSchemeElement < ActiveRecord::Base
     course.grade_scheme_elements.all? { |gse| !gse.lowest_points.nil? }
   end
 
-  def self.next_highest_element(element)
+  # By default, return only valid elements with lowest_points not equal to nil
+  def self.next_highest_element_for(element, with_lowest_points_only=true)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
+    ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
     ordered_course_elements[ordered_course_elements.to_a.find_index(element) + 1]
   end
 
-  def self.next_lowest_element(element)
+  # By default, return only valid elements with lowest_points not equal to nil
+  def self.next_lowest_element_for(element, with_lowest_points_only=true)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
+    ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
     current_index = ordered_course_elements.to_a.find_index(element)
     return nil if current_index == 0
     ordered_course_elements[current_index - 1]
@@ -64,11 +68,11 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   def next_highest_element
-    @next_highest_element ||= GradeSchemeElement.next_highest_element self
+    @next_highest_element ||= GradeSchemeElement.next_highest_element_for self
   end
 
   def next_lowest_element
-    @next_lowest_element ||= GradeSchemeElement.next_lowest_element self
+    @next_lowest_element ||= GradeSchemeElement.next_lowest_element_for self
   end
 
   # The highest point value for the element
