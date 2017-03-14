@@ -101,8 +101,8 @@ describe API::CriterionGradesController do
       end
 
       it "renders success message when request format is JSON" do
-        put :update, params: params
-        expect(JSON.parse(response.body)).to eq("message" => "Grade successfully saved", "success" => true)
+        put :update, params: params, format: :json
+        expect(response).to render_template("api/grades/show")
       end
 
       describe "on error" do
