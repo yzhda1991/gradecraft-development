@@ -1,5 +1,5 @@
 # Shared logic for creating, editing, and otherwise interacting with GradeSchemeElements
-@gradecraft.factory 'GradeSchemeElementsService', ['$q', '$http', 'GradeCraftAPI', ($q, $http, GradeCraftAPI) ->
+@gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   deletedElementIds = []
   gradeSchemeElements = []
@@ -28,7 +28,7 @@
   # Ensures that the current element does not have a point conflict with another
   validateElement = (currentElement) ->
     currentElement.validationError = undefined
-    
+
     if !currentElement.lowest_points?
       currentElement.validationError = "Point threshold does not have a value"
 
@@ -93,10 +93,10 @@
     )
 
   # POST grade scheme element updates
-  # Returns a promise
-  postGradeSchemeElements = (validate=true) ->
+  # Optionally redirects to a specified url
+  postGradeSchemeElements = (redirectUrl=null, validate=true) ->
     if gradeSchemeElements.length < 1 || (validate && !hasValidPointThresholds())
-      return $q.when(null)  # wrap in a promise for consistent handling by callers
+      return
 
     data = {
       grade_scheme_elements_attributes: gradeSchemeElements
@@ -106,6 +106,7 @@
       (response) ->
         angular.copy(response.grade_scheme_elements, gradeSchemeElements)
         GradeCraftAPI.logResponse(response)
+        window.location.href = redirectUrl if redirectUrl?
       , (error) ->
         alert('An error occurred that prevented saving.')
         GradeCraftAPI.logResponse(error)

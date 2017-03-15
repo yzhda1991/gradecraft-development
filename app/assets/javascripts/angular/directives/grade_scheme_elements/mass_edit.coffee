@@ -13,9 +13,7 @@
       GradeSchemeElementsService.addElement()
 
     vm.postGradeSchemeElements = () ->
-      GradeSchemeElementsService.postGradeSchemeElements().then(() ->
-        window.location.href = '/grade_scheme_elements/'
-      )
+      GradeSchemeElementsService.postGradeSchemeElements('/grade_scheme_elements/')
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false

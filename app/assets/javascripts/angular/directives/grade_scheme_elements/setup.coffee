@@ -14,8 +14,8 @@
         vm.isUsingGradeLetters,
         vm.isUsingPlusMinusGrades,
         vm.addLevelsBelowF,
-        vm.levelsBelowF).then(() ->
-        window.location.href = '/grade_scheme_elements/mass_edit'
+        vm.levelsBelowF,
+        '/grade_scheme_elements/mass_edit'
       )
   ]
 
