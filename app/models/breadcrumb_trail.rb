@@ -388,6 +388,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('#{ term_for :students }', students_path)
   end
 
+  def students_grade_index
+    dashboard
+    breadcrumb('Grades')
+  end
+
   def students_show
     students_index
   end
@@ -426,7 +431,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     teams_index
     breadcrumb('New #{ term_for :team }')
   end
-  
+
   def users_activate
   end
 
@@ -475,7 +480,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def pages_features
   end
-  
+
   def pages_sign_up
   end
 end
