@@ -240,9 +240,14 @@ error
   background-color: $color-blue-4
   border: 1px solid $color-grey-5 !important
 
-input[type=text]
+input[type=text],
+input[type=number]
   padding: .5rem
   width: 15rem
+  border: 1px solid rgba(42, 43, 43, 0.2)
+  transition: border-color 0.2s
+  &:focus
+    border: 1px solid rgba(42, 43, 43, 0.8)
 
 .switch-label
   text-transform: capitalize

@@ -1,16 +1,17 @@
-%h2 Add new grading scheme
+.grade_scheme_questions
+  %h2 Add new grading scheme
 
-%dl{"ng-form"=>"", "name"=>"gradeSchemeSetupForm"}
-  %dt Are you using grade letters?
-  %dd
-    %input{"type"=>"radio",
-           "ng-model"=>"vm.isUsingGradeLetters",
-           "ng-value"=>"true",
-           "required"=>""} Yes
-    %input{"type"=>"radio",
-           "ng-model"=>"vm.isUsingGradeLetters",
-           "ng-value"=>"false",
-           "required"=>""} No
+  %dl{"ng-form"=>"", "name"=>"gradeSchemeSetupForm"}
+    %dt Are you using grade letters?
+    %dd
+      %input{"type"=>"radio",
+             "ng-model"=>"vm.isUsingGradeLetters",
+             "ng-value"=>"true",
+             "required"=>""} Yes
+      %input{"type"=>"radio",
+             "ng-model"=>"vm.isUsingGradeLetters",
+             "ng-value"=>"false",
+             "required"=>""} No
 
   %additional-questions{"ng-if"=>"vm.isUsingGradeLetters"}
     %dl
@@ -45,7 +46,9 @@
                "size"=>"8",
                "ng-required"=>"vm.isUsingGradeLetters && vm.addLevelsBelowF"}
 
-  %button.button.right{"type"=>"button",
-                       "ng-disabled"=>"gradeSchemeSetupForm.$invalid",
-                       "ng-class"=>'{"disabled": gradeSchemeSetupForm.$invalid}',
-                       "ng-click"=>"vm.postGradeSchemeElements()"} Get me started!
+.clear
+
+%button.button.right{"type"=>"button",
+                     "ng-disabled"=>"gradeSchemeSetupForm.$invalid",
+                     "ng-class"=>'{"disabled": gradeSchemeSetupForm.$invalid}',
+                     "ng-click"=>"vm.postGradeSchemeElements()"} Get me started!
