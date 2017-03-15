@@ -1,4 +1,4 @@
-describe CourseGradeExporter, focus: true do
+describe CourseGradeExporter do
   let(:course) { create :course }
   subject { CourseGradeExporter.new }
 
