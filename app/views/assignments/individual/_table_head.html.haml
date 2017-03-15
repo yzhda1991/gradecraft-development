@@ -8,7 +8,7 @@
     %th Raw Score
   // If 'Score' only if the assignment type is not student_weightable
   - if !presenter.assignment_type.student_weightable? && !presenter.assignment.pass_fail?
-    %th{scope: "col", "data-dynatable-sorts" => "numericScore"} Score
+    %th{scope: "col"} Score
   - elsif presenter.assignment_type.student_weightable?
     %th{scope: "col"} Raw Score
     %th{scope: "col"} Multiplied Score
