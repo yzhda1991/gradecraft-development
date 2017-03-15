@@ -9,7 +9,7 @@
     _totalPoints
 
   # Ensure that there are no blank point thresholds
-  hasValidPointThresholds = () ->
+  _hasValidPointThresholds = () ->
     isValid = true
     for element in gradeSchemeElements
       if isNaN(element.lowest_points) || !element.lowest_points?
@@ -21,12 +21,12 @@
   validateElements = () ->
     has_zero_threshold = false
     for element, i in gradeSchemeElements
-      validateElement(element)
+      _validateElement(element)
       has_zero_threshold = true if element.lowest_points == 0
     addZeroThreshold() if not has_zero_threshold
 
   # Ensures that the current element does not have a point conflict with another
-  validateElement = (currentElement) ->
+  _validateElement = (currentElement) ->
     currentElement.validationError = undefined
 
     if !currentElement.lowest_points?
@@ -41,7 +41,7 @@
 
   # Remove the current element from the collection and add to deleted_ids array
   removeElement = (currentElement) ->
-    if currentElement.lowest_points == 0 && isOnlyZeroThreshold(currentElement)
+    if currentElement.lowest_points == 0 && _isOnlyZeroThreshold(currentElement)
       currentElement.validationError = "Lowest level threshold must be 0"
     else
       deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
@@ -77,7 +77,7 @@
     gradeSchemeElements.push(zeroElement)
 
   # Checks if there are more than one zero threshold elements
-  isOnlyZeroThreshold = (currentElement) ->
+  _isOnlyZeroThreshold = (currentElement) ->
     result = _.find(gradeSchemeElements, (element) ->
       currentElement != element && element.lowest_points == 0
     )?
@@ -95,7 +95,7 @@
   # POST grade scheme element updates
   # Optionally redirects to a specified url
   postGradeSchemeElements = (redirectUrl=null, validate=true) ->
-    if gradeSchemeElements.length < 1 || (validate && !hasValidPointThresholds())
+    if gradeSchemeElements.length < 1 || (validate && !_hasValidPointThresholds())
       return
 
     data = {

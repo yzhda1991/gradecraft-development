@@ -4,7 +4,7 @@
   standardGradeLetters = ['A', 'B', 'C', 'D', 'E', 'F']
 
   # Add grade scheme elements with the preset parameters
-  addGradeLevels = (includePlusMinusGrades) ->
+  _addGradeLevels = (includePlusMinusGrades) ->
     _.each(standardGradeLetters, (letter) ->
       GradeSchemeElementsService.addElement(null, { letter: letter + "+" }) if includePlusMinusGrades
       GradeSchemeElementsService.addElement(null, { letter: letter })
@@ -12,7 +12,7 @@
     )
 
   # Add additional levels
-  addAdditionalLevels = (numberOfLevels) ->
+  _addAdditionalLevels = (numberOfLevels) ->
     _.times(numberOfLevels-1, () ->
       GradeSchemeElementsService.addElement()
     )
@@ -21,8 +21,8 @@
 
   # Create the grade scheme elements
   postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, addLevelsBelowF, levelsBelowF, redirectUrl=null) ->
-    addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
-    addAdditionalLevels(levelsBelowF) if addLevelsBelowF
+    _addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
+    _addAdditionalLevels(levelsBelowF) if addLevelsBelowF
     GradeSchemeElementsService.postGradeSchemeElements(redirectUrl, false)
 
   {
