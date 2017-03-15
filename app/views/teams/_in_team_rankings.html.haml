@@ -13,7 +13,7 @@
           %th Character Profile
         - if current_course.has_team_roles?
           %th Role
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
     %tbody
       - team.students.reverse.each_with_index do |student, index|
         - if student.display_name?
