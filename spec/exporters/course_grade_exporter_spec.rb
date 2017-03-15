@@ -1,4 +1,4 @@
-describe CourseGradeExporter do
+describe CourseGradeExporter, focus: true do
   let(:course) { create :course }
   subject { CourseGradeExporter.new }
 
@@ -6,15 +6,15 @@ describe CourseGradeExporter do
 
     it "generates an empty CSV if there are no students" do
       csv = subject.final_grades_for_course(course)
-      expect(csv).to include "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID"
+      expect(csv).to include "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID,Last Logged In At,Auditing"
     end
 
     it "generates a CSV with student grades for the course" do
       @student = create(:user, first_name: "Pinky", last_name: "Alpha")
       @student_2 = create(:user, first_name: "The Brain", last_name: "Zed")
-      create(:course_membership, :student, course: course, user: @student, score: 80000)
+      create(:course_membership, :student, course: course, user: @student, score: 80000, auditing: true)
       @students = course.students
-      create(:course_membership, :student, course: course, user: @student_2, score: 120000)
+      create(:course_membership, :student, course: course, user: @student_2, score: 120000, auditing: false)
       create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
       create(:grade_scheme_element, course: course, lowest_points: 100001, level: "Phenomenal", letter: "B")
 
@@ -38,6 +38,8 @@ describe CourseGradeExporter do
       expect(csv[2][7]).to eq "0"
       expect(csv[1][8]).to eq "#{@student.id}"
       expect(csv[2][8]).to eq "#{@student_2.id}"
+      expect(csv[1][10]).to eq "Yes"
+      expect(csv[2][10]).to eq "No"
     end
   end
 end
