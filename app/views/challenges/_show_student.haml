@@ -12,10 +12,10 @@
   %thead
     %tr
       %th= current_course.team_term
-      %th{ "data-dynatable-sorts" => "numericScore" } Score
+      %th Score
       - if @challenge.has_levels?
         %th Level
-      %th 
+      %th
   %tbody
     - @teams.alpha.each do |team|
       - challenge_grade = @challenge.challenge_grades.find_by team: team
@@ -25,6 +25,6 @@
         - if @challenge.has_levels?
           %td
             = @challenge.grade_level(grade) if challenge_grade
-        %td 
+        %td
           - if team == current_student.team_for_course(current_course) && challenge_grade
             = link_to glyph(:eye) + "See Grade Details", challenge_grade_path(challenge_grade.id), class: 'button'
