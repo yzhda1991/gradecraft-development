@@ -15,7 +15,7 @@
           %th Role
         %th Score
     %tbody
-      - team.students.reverse.each_with_index do |student, index|
+      - team.students.sort_by { |s| s.score_for_course(current_course) }.reverse.each_with_index do |student, index|
         - if student.display_name?
           %tr{class: ("complete" if student == current_student) }
             %td{"data-title" => "Rank"}= index + 1
