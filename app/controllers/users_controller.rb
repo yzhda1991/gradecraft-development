@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   before_action :ensure_staff?,
     except: [:activate, :activated, :edit_profile, :update_profile]
   before_action :ensure_admin?, only: [:all]
+  before_action :save_referer, only: :manually_activate
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
 
@@ -93,6 +94,12 @@ class UsersController < ApplicationController
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+  end
+
+  def manually_activate
+    @user = User.find(params[:id])
+    @user.activate!
+    redirect_to session[:return_to] || dashboard_path, notice: "#{@user.first_name} #{@user.last_name} has been activated!" and return
   end
 
   def activated

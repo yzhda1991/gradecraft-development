@@ -3,6 +3,9 @@
 .pageContent
   = render "layouts/alerts"
 
+  - if !@staff_member.activated?
+    =link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
+
   %h4 Courses
   %ul
     - @staff_member.courses.each do |course|

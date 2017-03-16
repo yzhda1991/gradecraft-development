@@ -163,6 +163,25 @@ describe UsersController do
         expect(response.body).to include "The team is not cool"
       end
     end
+
+    describe "PUT manually_activate" do
+      let(:unactivated_user) { create(:user)}
+      it "activates the user" do
+        put :manually_activate, params:{id:unactivated_user.id}
+        expect(unactivated_user.activated?).to eq true
+      end
+
+      it "redirects to referer url if present" do
+        request.env["HTTP_REFERER"] = "http://some-referer.com"
+        put :manually_activate, params:{id:unactivated_user.id}
+        expect(response).to redirect_to("http://some-referer.com")
+      end
+
+      it "redirects to dashboard if referer url is not present" do
+        put :manually_activate, params:{id:unactivated_user.id}
+        expect(response).to redirect_to(dashboard_path)
+      end
+    end
   end
 
   context "as a student" do
@@ -307,7 +326,8 @@ describe UsersController do
       [
         :edit,
         :update,
-        :destroy
+        :destroy,
+        :manually_activate
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)

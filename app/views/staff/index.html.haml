@@ -33,3 +33,5 @@
                 %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user)
                 %li= link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
                 %li= link_to decorative_glyph(:trash) + "Delete",  user, data: { confirm: "Are you sure?"}, :method => :delete
+                - if !user.activated?
+                  %li= link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(user.id), :method => :put
