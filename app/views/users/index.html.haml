@@ -14,7 +14,7 @@
         %th Role
         %th Courses
         %th #{term_for :team}
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
         %th Options
     %tbody
       - @users.each do |user|
@@ -48,5 +48,5 @@
                   %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(user) if user_is_student
                 - elsif user_is_staff
                   %li= link_to decorative_glyph(:dashboard) + "Dashboard", staff_path(user) if user_is_staff
-                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(user) 
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_user_path(user)
                 %li= link_to decorative_glyph(:trash) + "Delete", course_membership, data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete

@@ -3,7 +3,7 @@
     %thead
       %tr
         %th= current_course.team_term
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
         - if @challenge.has_levels?
           %th Level
         - if @challenge.release_necessary?

@@ -14,7 +14,11 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         score: 'numeric',
         rank: 'numeric',
         date: 'date',
-        blog: 'alphanum'
+        blog: 'alphanum',
+        scoreWithWeights: 'numeric',
+        finalScore: 'numeric',
+        predictedScore: 'numeric',
+        id: 'numeric'
       }
     }
 });

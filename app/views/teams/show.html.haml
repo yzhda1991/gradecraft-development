@@ -16,7 +16,7 @@
         %th Email
         - if current_course.has_team_roles?
           %th Role
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
         %th Level
         - if current_course.has_badges?
           %th{scope: "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
@@ -51,7 +51,7 @@
     %thead
       %tr
         %th Name
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
         %th{:width => "80px"}
 
     %tbody

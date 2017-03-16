@@ -5,7 +5,7 @@
     %thead
       %tr
         %th= term_for :team
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Score
         %th Current Status
     %tbody
       - for challenge_grade in @challenge_grades
