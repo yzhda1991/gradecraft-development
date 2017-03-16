@@ -237,7 +237,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def grade_radio?
-    mass_grade_type == "Radio Buttons" && has_levels?
+    if pass_fail?
+      mass_grade_type == "Radio Buttons"
+    else
+      mass_grade_type == "Radio Buttons" && has_levels?
+    end
   end
 
   def grade_text?
