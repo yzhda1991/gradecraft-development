@@ -52,7 +52,7 @@ class Assignments::GroupPresenter < Showtime::Presenter
     group.students
   end
 
-  def path_for_new_assignment_submission
+  def path_for_new_submission
     new_assignment_submission_path assignment, submission, group_id: group.id
   end
 
