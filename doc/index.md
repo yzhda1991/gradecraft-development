@@ -19,10 +19,10 @@
 
 ### Grade submission
 
-  * All grades and assignments have to be submitted to Gradecraft.
-  * Some professors use GC for all grading, but house assignment files etc. in other location (Ctools, Canvas)
-  * Grades are imported into Gradecraft through a CSV import
-  * student grades come from multiple directions -- this is a heavy calculation (slowing down our app)
+  * All grades and assignments have to be submitted to GradeCraft.
+  * Some professors use GradeCraft for all grading, but house assignment files etc. in other location (Sakai, Canvas, Moodle)
+  * Grades are imported into GradeCraft through a CSV import
+  * Student grades come from multiple directions
 
 ### Rubrics for Grading
 
@@ -30,13 +30,13 @@
   * A Rubric is created on a per-assignment level
   * Rubrics break an assignment into grading categories, and a point spread is created for each category
 
-see [[Rubrics| rubrics]] for more information.
+see [Rubrics](rubrics.md) for more information.
 
 ### Assignment Types
 
   * Assignment types were created so that all assignments in that type will be graded similarly
 
-see [[Assignments| assignments]] for more information.
+see [Assignments](assignments.md) for more information.
 
 ### Assignments
 
@@ -44,12 +44,12 @@ see [[Assignments| assignments]] for more information.
 
 Pass Fail grades have no point value. The pass/fail behavior is set on the assignment, and then reflected in the grades as they are assigned.
 
-see [[Pass Fail Assignments|pass fail]] for more information.
+see [Pass Fail Assignments](pass_fail.md) for more information.
 
 ### Analytics
 
 * We are interested in what behavior is a recipe for success
-* Grade predictor is where the students can use analytics to maximize their potential in the class
+* The grade predictor is where the students can use analytics to maximize their potential in the class
 * grade predictors occur in three types
     * sliders
     * checkbox
