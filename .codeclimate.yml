@@ -44,3 +44,4 @@ exclude_paths:
 - vendor/**/*
 - assets/**/*
 - app/mailer_previews/*
+- doc/*

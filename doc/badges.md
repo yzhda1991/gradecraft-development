@@ -19,7 +19,7 @@
 
 #### has_many
 
-Note that when a Badge is destroyed, all of the following belonging to it will be destroyed as well.
+When a Badge is destroyed, all of the following belonging to it will be destroyed as well.
 
   * [[Earned Badges]]
   * [[Level Badges]]
@@ -37,11 +37,9 @@ Note that when a Badge is destroyed, all of the following belonging to it will b
   * `visible_when_locked` - boolean switch representing whether the badge will be visible when it is locked
   * `student_predicted_earned_badge` - predicted earned badge for students. Only ever set in the badges controller for use with the `student_predictor_data` jbuilder view in 'badges'. Not stored in the database
 
-### Instance Methods
+### Permissions
 
-  * `visible_for_student?(student)` - true when either of these conditions are met:
-    * badge is either visible when locked or already unlocked
-    * badge is visible
+BadgeProctor used to manage access
 
 #### Unlocks
 
@@ -55,7 +53,5 @@ Note that when a Badge is destroyed, all of the following belonging to it will b
 #### Earned Badges Metrics
 
   * `earned_count` - number of earned badges the badge has
-  * `earned_badges_by_student_id` - hash with each key being an earned badge's student id as the only indice in an array, and with each value being an array containing the student's earned badges
-  * `earned_badges_for_student(student)` - all of the earned badges for the student
   * `earned_badge_count_for_student(student)` - count of how many times the student has earned the badge
   * `earned_badge_total_points(student)` - sum of all the earned badges' points for this badge for the student

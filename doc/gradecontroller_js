@@ -1,0 +1,35 @@
+## Angular App for handling rubric grade submission
+
+This controller is a Work in Progress:
+
+current params on submit:
+
+```
+params => {"points_given"=>721000,
+           "rubric_id"=>1,
+           "student_id"=>16,
+           "points_possible"=>730000,
+           "criterion_grades"=>
+            [{"criterion_name"=>"Criteria #1", "criterion_description"=>"", "max_points"=>20000, "order"=>0, "criterion_id"=>1, "comments"=>"comments for criteria one", "level_name"=>"Level #2", "level_description"=>"", "points"=>18000, "level_id"=>4},
+             {"criterion_name"=>"Criteria #2", "criterion_description"=>"", "max_points"=>20000, "order"=>1, "criterion_id"=>2, "comments"=>nil, "level_name"=>"Level #3", "level_description"=>"", "points"=>17000, "level_id"=>12},
+             {"criterion_name"=>"Criteria #3", "criterion_description"=>"", "max_points"=>100000, "order"=>2, "criterion_id"=>3, "comments"=>nil, "level_name"=>"Level #4", "level_description"=>"", "points"=>96000, "level_id"=>20},
+             {"criterion_name"=>"Criteria #4", "criterion_description"=>"", "max_points"=>60000, "order"=>3, "criterion_id"=>4, "comments"=>"comments for cirteria 4", "level_name"=>"Full Credit", "level_description"=>"", "points"=>60000, "level_id"=>22},
+             {"criterion_name"=>"Criteria #5", "criterion_description"=>"", "max_points"=>30000, "order"=>4, "criterion_id"=>5, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>30000, "level_id"=>29},
+             {"criterion_name"=>"Criteria #6", "criterion_description"=>"", "max_points"=>100000, "order"=>5, "criterion_id"=>6, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>100000, "level_id"=>36},
+             {"criterion_name"=>"Criteria #7", "criterion_description"=>"", "max_points"=>70000, "order"=>6, "criterion_id"=>7, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>70000, "level_id"=>43},
+             {"criterion_name"=>"Criteria #8", "criterion_description"=>"", "max_points"=>50000, "order"=>7, "criterion_id"=>8, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>50000, "level_id"=>50},
+             {"criterion_name"=>"Criteria #9", "criterion_description"=>"", "max_points"=>50000, "order"=>8, "criterion_id"=>9, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>50000, "level_id"=>57},
+             {"criterion_name"=>"Criteria #10", "criterion_description"=>"", "max_points"=>20000, "order"=>9, "criterion_id"=>10, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>20000, "level_id"=>64},
+             {"criterion_name"=>"Criteria #11", "criterion_description"=>"", "max_points"=>60000, "order"=>10, "criterion_id"=>11, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>60000, "level_id"=>71},
+             {"criterion_name"=>"Criteria #12", "criterion_description"=>"", "max_points"=>10000, "order"=>11, "criterion_id"=>12, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>10000, "level_id"=>78},
+             {"criterion_name"=>"Criteria #13", "criterion_description"=>"", "max_points"=>70000, "order"=>12, "criterion_id"=>13, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>70000, "level_id"=>85},
+             {"criterion_name"=>"Criteria #14", "criterion_description"=>"", "max_points"=>70000, "order"=>13, "criterion_id"=>14, "comments"=>nil, "level_name"=>"Full Credit", "level_description"=>"", "points"=>70000, "level_id"=>92}],
+           "level_badges"=>nil,
+           "level_ids"=>[4, 12, 20, 22, 29, 36, 43, 50, 57, 64, 71, 78, 85, 92],
+           "criterion_ids"=>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+           "grade_status"=>"Released",
+           "controller"=>"grades",
+           "action"=>"submit_rubric",
+           "assignment_id"=>"41",
+           "grade"=>{"student_id"=>16}}
+```
