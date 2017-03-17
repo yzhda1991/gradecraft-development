@@ -14,9 +14,9 @@
 
             - if !presenter.grade_with_rubric?
               - if presenter.for_team?
-                %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(presenter.assignment, team: presenter.team)
+                %li= active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(presenter.assignment, team: presenter.team)
               - else
-                %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(presenter.assignment)
+                %li= active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(presenter.assignment)
 
             - if presenter.assignment.accepts_submissions?
               = render partial: "assignments/buttons/submissions_exports",
