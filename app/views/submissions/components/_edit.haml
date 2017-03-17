@@ -1,1 +1,1 @@
-= link_to glyph(:pencil) + "#{presenter.term_for_edit(current_user)}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"
+= active_course_link_to glyph(:pencil) + "#{presenter.term_for_edit(current_user)}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"
