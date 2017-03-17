@@ -8,7 +8,6 @@ describe SubmitTagHelper do
     it "renders the submit button if the current course is active" do
       course.status = true
       submit_button = helper.active_course_submit_tag("Click to claim your prize!")
-      binding.pry
       expect(submit_button).to have_tag("input", type: :submit, value: "Click to claim your prize!")
     end
 
