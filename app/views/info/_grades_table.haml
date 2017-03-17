@@ -54,6 +54,6 @@
 
       .submit-buttons
         .right
-          = submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-#{grade_type}-#{assignment.name}-grades-command" }
+          = active_course_submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-#{grade_type}-#{assignment.name}-grades-command" }
 
   %hr.dotted
