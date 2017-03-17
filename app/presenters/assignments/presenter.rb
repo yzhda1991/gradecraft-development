@@ -31,7 +31,7 @@ class Assignments::Presenter < Showtime::Presenter
     grades.where(student_id: student.id).first ||
       Grade.new(assignment_id: assignment.id)
   end
-  
+
   def prediction(assignment, student)
     assignment.predicted_earned_grades.where(student: student).first
   end
@@ -156,7 +156,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def pass_fail_scores
-    { scores: assignment.grades.graded_or_released }
+    { scores: assignment.grades.graded_or_released.pluck(:pass_fail_status) }
   end
 
   def scores_for(user)
@@ -195,7 +195,7 @@ class Assignments::Presenter < Showtime::Presenter
     return 0 if participation_possible_count == 0
     ((assignment.grade_count.to_f / participation_possible_count.to_f) * 100).round(2)
   end
-  
+
   # denominator
   def participation_possible_count
     return course.graded_student_count if assignment.is_individual?
