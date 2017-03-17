@@ -45,6 +45,10 @@ module LinkHelper
     link_to name, options, html_options, &block if current_course.active?
   end
 
+  def active_course_link_to_unless_current(name, options = {}, html_options = {}, &block)
+    link_to_unless_current name, options, html_options, &block if current_course.active?
+  end
+
   class InternalLinkScrubber < Rails::Html::PermitScrubber
     def scrub(node)
       return super unless (node.type == Nokogiri::XML::Node::ELEMENT_NODE) &&

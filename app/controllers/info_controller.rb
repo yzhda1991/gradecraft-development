@@ -3,6 +3,7 @@ class InfoController < ApplicationController
 
   before_action :ensure_not_observer?, except: [:predictor]
   before_action :ensure_staff?, except: [:dashboard, :predictor]
+  before_action :ensure_active_course?, only: :predictor
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
@@ -122,5 +123,9 @@ class InfoController < ApplicationController
     else
       @students = current_course.students_being_graded.order_by_name
     end
+  end
+
+  def ensure_active_course?
+    redirect_to dashboard_path unless current_course.active?
   end
 end
