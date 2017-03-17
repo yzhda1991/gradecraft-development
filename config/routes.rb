@@ -312,6 +312,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
 
     resources :assignments, only: [:index, :show] do
+      get "analytics"
       resources :criteria, only: :index
       resources :students, only: [] do
         resources :criteria, only: [] do
