@@ -16,6 +16,7 @@
     restrict: 'C'
     scope: {
       assignmentId: '@'
+      isActiveCourse: '='
     }
     templateUrl: 'student/submission/save_draft_button.html'
   }

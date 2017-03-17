@@ -2,4 +2,4 @@
   = link_to glyph("file-o") + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button"
 - else
   - if group && group.approved?
-    = link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, group_id: group), class: "button"
+    = active_course_link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, group_id: group), class: "button"
