@@ -39,6 +39,12 @@ module LinkHelper
     link_to name, options, html_options, &block
   end
 
+  # Conditionally renders a link_to helper based on whether the course is active
+  # or not
+  def active_course_link_to(name = nil, options = nil, html_options = nil, &block)
+    link_to name, options, html_options, &block if current_course.active?
+  end
+
   class InternalLinkScrubber < Rails::Html::PermitScrubber
     def scrub(node)
       return super unless (node.type == Nokogiri::XML::Node::ELEMENT_NODE) &&
