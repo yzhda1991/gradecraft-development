@@ -26,6 +26,6 @@
           %td= g.predicted_points
           %td= g.feedback
           %td= g.status
-          %td= link_to "Edit Grade", edit_grade_path(g), class: "button"
+          %td= active_course_link_to "Edit Grade", edit_grade_path(g), class: "button"
           %td= link_to "See Grade", grade_path(g), class: "button"
-          %td= link_to "Delete Grade", grade_path(g), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+          %td= active_course_link_to "Delete Grade", grade_path(g), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
