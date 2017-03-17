@@ -10,12 +10,12 @@ describe 'gradeEdit directive', ()->
       @http.whenGET("/api/assignments/1").respond(apiTestDoubles.assignment.standard)
       @http.whenGET("/api/assignments/1/students/99/grade/").respond(apiTestDoubles.grade.standard)
       @http.whenGET("/api/students/99/badges").respond(apiTestDoubles.badges)
-      @element = @compile("<grade-edit assignment-id=1 recipient-type=student recipient-id=99 ></grade-edit>")(@rootScope)
+      @element = @compile("<grade-edit assignment-id=1 recipient-type=student recipient-id=99 is-active-course='true'></grade-edit>")(@rootScope)
       @rootScope.$digest()
 
     it 'loads the edit template', ()->
       expect($(@element).children("loading-message").length).toEqual(1)
-      expect($(@element).children("article.grade-form-fields").length).toEqual(1)
+      expect($(@element).children("article.grade-form-fields").length).toEqual(2)
       expect($(@element).find("grade-status-select").length).toEqual(1)
       expect($(@element).find("grade-submit-buttons").length).toEqual(1)
       expect($(@element).find("grade-last-updated").length).toEqual(1)
@@ -38,7 +38,7 @@ describe 'gradeEdit directive', ()->
     beforeEach ()->
       @http.whenGET("/api/assignments/2").respond(apiTestDoubles.assignment.standard)
       @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
-      @element = @compile("<grade-edit assignment-id=2 recipient-type=group recipient-id=101 ></grade-edit>")(@rootScope)
+      @element = @compile("<grade-edit assignment-id=2 recipient-type=group recipient-id=101 is-active-course='true'></grade-edit>")(@rootScope)
       @rootScope.$digest()
 
     it "does not include a file uploader", ()->
