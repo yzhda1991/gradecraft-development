@@ -14,7 +14,7 @@ quick interaction when viewing analytics data in the analytics dashboard
 and to maximize scalability.
 
 For more background, [see discussion and links
-here](https://github.com/bellotastudios/gradecraft-development/issues/108).
+here](https://github.com/UM-USElab/gradecraft-development/issues/108).
 
 MongoDB was chosen for its document-based storage structure and quick
 nested upsert functionality.
