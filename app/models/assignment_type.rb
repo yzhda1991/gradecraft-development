@@ -4,7 +4,7 @@ class AssignmentType < ActiveRecord::Base
 
   acts_as_list scope: :course
 
-  belongs_to :course, touch: true
+  belongs_to :course
   has_many :assignments, -> { order("position ASC") }, dependent: :destroy
   has_many :submissions, through: :assignments
   has_many :grades

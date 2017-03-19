@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   include UploadsMedia
 
-  belongs_to :course, touch: true
+  belongs_to :course
 
   scope :with_dates, -> { where("events.due_at IS NOT NULL OR events.open_at IS NOT NULL") }
 

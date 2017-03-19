@@ -5,13 +5,13 @@ class Grade < ActiveRecord::Base
   include Sanitizable
 
   belongs_to :course, touch: true
-  belongs_to :assignment, touch: true
-  belongs_to :assignment_type, touch: true
-  belongs_to :student, class_name: "User", touch: true
-  belongs_to :team, touch: true
+  belongs_to :assignment
+  belongs_to :assignment_type
+  belongs_to :student, class_name: "User"
+  belongs_to :team
   belongs_to :submission
-  belongs_to :group, touch: true # Optional
-  belongs_to :graded_by, class_name: "User", touch: true
+  belongs_to :group # Optional
+  belongs_to :graded_by, class_name: "User"
 
   has_one :imported_grade, dependent: :destroy
   has_many :earned_badges, dependent: :destroy

@@ -1,5 +1,5 @@
 class AssignmentTypeWeight < ActiveRecord::Base
-  belongs_to :student, class_name: "User", touch: true
+  belongs_to :student, class_name: "User"
   belongs_to :assignment_type
   belongs_to :course
 

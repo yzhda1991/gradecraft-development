@@ -3,7 +3,7 @@ class GradeSchemeElement < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
 
-  belongs_to :course, touch: true
+  belongs_to :course
 
   validates_presence_of :lowest_points, :course
 
