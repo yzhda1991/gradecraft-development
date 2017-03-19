@@ -375,8 +375,8 @@ describe User do
     let(:assignment_2) { create :assignment, course: course }
 
     it "returns the student's earned grades for a course this week" do
-      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", updated_at: Date.today - 10)
-      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released")
+      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", graded_at: Date.today - 10)
+      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released", graded_at: Date.today)
       expect(student.grades_released_for_course_this_week(course)).to eq([grade_2])
     end
   end
@@ -385,8 +385,8 @@ describe User do
     let(:assignment_2) { create :assignment, course: course }
 
     it "returns the student's earned points for the course this week" do
-      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", updated_at: Date.today - 10)
-      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released")
+      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", graded_at: Date.today - 10)
+      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released", graded_at: Date.today)
       expect(student.points_earned_for_course_this_week(course)).to eq(300)
     end
   end
