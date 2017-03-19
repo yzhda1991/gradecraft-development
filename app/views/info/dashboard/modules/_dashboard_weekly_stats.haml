@@ -12,9 +12,14 @@
         %p Grades received this week:
         %ul
           - presenter.grades_this_week.each do |grade|
-            %li
-              #{link_to grade.assignment.name, grade.assignment}:
-              %span #{number_with_delimiter(grade.final_points)} points earned
+            - if grade.assignment.pass_fail?
+              %li
+                #{link_to grade.assignment.name, grade.assignment}:
+                %span #{term_for (grade.pass_fail_status) }
+            - else
+              %li
+                #{link_to grade.assignment.name, grade.assignment}:
+                %span #{number_with_delimiter(grade.final_points)} points earned
 
     - if !current_student.present? && current_user_is_staff? && presenter.has_submitted_assignment_types_this_week?
       .module-section
