@@ -1,8 +1,8 @@
 describe SubmissionProctor do
   subject { described_class.new submission }
-  let(:user) { double(:user) }
-  let(:course) { double(:course) }
-  let(:submission) { double(:submission, course: course) }
+  let(:user) { build(:user) }
+  let(:course) { build(:course) }
+  let(:submission) { build(:submission, course: course) }
 
   describe "#viewable" do
     before(:each) { allow(user).to receive(:is_student?).with(course).and_return false }
@@ -42,10 +42,10 @@ describe SubmissionProctor do
   end
 
   describe "#open_for_editing?" do
-    let(:grade) { double(:grade) }
-    let(:assignment) { double(:assignment) }
+    let(:grade) { build(:grade) }
+    let(:assignment) { build(:assignment) }
 
-    before(:each) { allow(submission).to receive(:grade).and_return grade }
+    before(:each) { allow(submission).to receive(:submission_grade).and_return grade }
 
     it "returns false if the submission is graded but not yet released" do
       allow(submission).to receive(:graded?).and_return true
