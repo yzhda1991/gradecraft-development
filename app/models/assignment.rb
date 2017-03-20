@@ -7,8 +7,6 @@ class Assignment < ActiveRecord::Base
   include UploadsMedia
   include UnlockableCondition
 
-  #attr_accessor :current_student_grade
-
   belongs_to :course, touch: true
   belongs_to :assignment_type, -> { order("position ASC") }, touch: true
 
