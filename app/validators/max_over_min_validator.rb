@@ -1,4 +1,4 @@
-class MaxMinValidator < ActiveModel::Validator
+class MaxOverMinValidator < ActiveModel::Validator
   def validate(record)
     record.errors.add :base,
       "Maximum group size must be greater than minimum group size." \
