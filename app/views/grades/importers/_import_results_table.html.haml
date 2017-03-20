@@ -14,7 +14,9 @@
         %td= link_to grade.student.last_name, student_path(grade.student)
         %td= link_to grade.student.email, student_path(grade.student)
         - if @assignment.pass_fail?
-          %td= term_for grade.try(:pass_fail_status)
+          %td
+            - if grade.pass_fail_status.present?
+              = term_for grade.try(:pass_fail_status)
         - else
           %td= grade.raw_points
         %td= grade.feedback
