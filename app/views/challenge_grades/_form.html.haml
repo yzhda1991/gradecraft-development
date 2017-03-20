@@ -34,5 +34,5 @@
     .clear
   .submit-buttons
     %ul
-      %li= active_course_submit_tag "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
+      %li= active_course_submit_tag "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}", class: "button"
       %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"
