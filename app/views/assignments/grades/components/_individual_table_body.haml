@@ -5,23 +5,26 @@
       = f.simple_fields_for :grades, grade do |gf|
         = gf.hidden_field :student_id
         = label_tag do
-          // Checking to see if the grade is actually graded before setting the default value to 0
-          - if @assignment.grade_select? && @assignment.has_levels?
-            = gf.select :raw_points, options_from_collection_for_select(@assignment_score_levels, :points, :formatted_name, grade.try(:raw_points)), include_blank: true
-          - elsif @assignment.grade_radio? &&
-            - if @assignment.has_levels?
+          - if @assignment.pass_fail? # quick grade styling does not apply - always render radio Buttons
+            = gf.collection_radio_buttons(:pass_fail_status,
+              [["nil", "No change"], ["Pass", "#{term_for :pass}"] ,["Fail", "#{term_for :fail}"]],
+              :first,
+              :last,
+              checked: "#{grade.pass_fail_status || "nil"}",
+              item_wrapper_tag: false) { |b| b.label(class: "radio_inline") { b.radio_button + b.text } }
+          - else
+            // Checking to see if the grade is actually graded before setting the default value to 0
+            - if @assignment.grade_select? && @assignment.has_levels?
+              = gf.select :raw_points, options_from_collection_for_select(@assignment_score_levels, :points, :formatted_name, grade.try(:raw_points)), include_blank: true
+            - elsif @assignment.grade_radio? && @assignment.has_levels?
               - @assignment_score_levels.each do |assignment_score_level|
                 = gf.label :raw_points, "#{assignment_score_level.formatted_name}", value: assignment_score_level.points
                 = gf.radio_button :raw_points, assignment_score_level.points, class: "radio_inline"
-            - elsif @assignment.pass_fail?
-              = gf.collection_radio_buttons :pass_fail_status, [["#{term_for :pass}", 'Pass'] ,["#{term_for :fail}", 'Fail']], :first, :last
-          - elsif @assignment.grade_checkboxes?
-            = gf.check_box :raw_points, {}, @assignment.full_points, nil
-          - elsif @assignment.pass_fail?
-            = gf.select :pass_fail_status, [[], ["#{term_for :pass}", "Pass"], ["#{term_for :fail}", "Fail"]]
-          - else
-            - if grade.persisted? && GradeProctor.new(grade).updatable?(user: current_user, course: current_course)
-              = gf.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}
+            - elsif @assignment.grade_checkboxes?
+              = gf.check_box :raw_points, {}, @assignment.full_points, nil
             - else
-              = gf.text_field :raw_points, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
+              - if grade.persisted? && GradeProctor.new(grade).updatable?(user: current_user, course: current_course)
+                = gf.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}
+              - else
+                = gf.text_field :raw_points, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
     %td{:style => "text-align: left"}= "/ #{points @assignment.full_points}" if !@assignment.pass_fail?

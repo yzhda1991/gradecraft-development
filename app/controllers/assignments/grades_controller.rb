@@ -173,9 +173,12 @@ class Assignments::GradesController < ApplicationController
       :instructor_modified, :student_id, :raw_points, :status, :pass_fail_status, :id]
   end
 
+  # Delete params that have no raw_points or pass_fail_status
+  # We remove pass_fail_status values of "nil" because we have a "No Change" radio button
+  # on the UI, and by default a radio button must have some sort of string value
   def filter_params_with_no_grades!
     params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].delete_if do |key, value|
-      value[:raw_points].blank? && value[:pass_fail_status].blank?
+      value[:raw_points].blank? && (value[:pass_fail_status].blank? || value[:pass_fail_status] == "nil")
     end
   end
 
