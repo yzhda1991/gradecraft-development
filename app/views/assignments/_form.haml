@@ -16,27 +16,14 @@
           = f.label :pass_fail, "Pass/Fail"
           = f.check_box :pass_fail
 
-    .form-item
-      - if f.object.pass_fail?
-        .pass-fail-contingent.hidden
-          = f.label :full_points, "Total Points Possible"
-          = f.text_field :full_points
-      - else
-        .pass-fail-contingent
-          = f.label :full_points, "Total Points Possible"
-          = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
+    .form-item.pass-fail-contingent{"class"=>("hidden" if f.object.pass_fail?)}
+      = f.label :full_points, "Total Points Possible"
+      = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
 
-    .form-item
-      - if f.object.pass_fail?
-        .pass-fail-contingent.hidden
-          = f.label :threshold_points, "Points Threshold"
-          = f.text_field :threshold_points
-          .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
-      - else
-        .pass-fail-contingent
-          = f.label :threshold_points, "Points Threshold"
-          = f.text_field :threshold_points, data: {autonumeric: true, "m-dec" => "0"}
-          .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
+    .form-item.pass-fail-contingent{"class"=>("hidden" if f.object.pass_fail?)}
+      = f.label :threshold_points, "Points Threshold"
+      = f.text_field :threshold_points, data: {autonumeric: true, "m-dec" => "0"}
+      .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
 
     .form-item
       = f.input :open_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }
@@ -59,7 +46,7 @@
     .form-item
       = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.try(:max_group_size) || 5 ] }
 
-    .form-item
+    .form-item{"class"=>("pass-fail-contingent hidden" if f.object.pass_fail?)}
       = f.label :mass_grade_type, "Quick Grade Style"
       = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
       .form_label How should this assignment appear in Quick Grade?
