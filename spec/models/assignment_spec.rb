@@ -210,6 +210,13 @@ describe Assignment do
       expect(subject).to be_valid
       expect(subject.errors[:min_group_size]).to be_empty
     end
+
+    it "verifies that max group size is greater than min group size" do
+      subject.max_group_size = 1
+      subject.min_group_size = 3
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Maximum group size must be greater than minimum group size."
+    end
   end
 
   describe "position" do

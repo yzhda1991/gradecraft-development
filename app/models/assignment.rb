@@ -53,7 +53,7 @@ class Assignment < ActiveRecord::Base
 
   validates :accepts_submissions_until, submission_after_due: true
   validates :accepts_submissions_until, submission_after_open: true
-  validates :max_group_size, max_more_than_min: true
+  validates_with MoreMaxThanMinValidator
   validates :open_at, open_before_close: true
   validates :full_points, less_than_assignment_type: true, allow_nil: true
   validates_numericality_of :max_group_size, :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
