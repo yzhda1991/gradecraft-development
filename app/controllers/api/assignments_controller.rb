@@ -50,7 +50,7 @@ class API::AssignmentsController < ApplicationController
   private
 
   def score_for(student_id)
-    grade = Grade.where(student_id: student_id).first
+    grade = Grade.where(student_id: student_id, assignment: @assignment).first
     if GradeProctor.new(grade).viewable? user: current_user, course: current_course
       return grade.raw_points
     end

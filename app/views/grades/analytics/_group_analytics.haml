@@ -1,16 +1,18 @@
 - if presenter.has_grades?
 
   .class-analytics-wrapper
-    .class-analytics-graph
+    .class-analytics-graph{"ng-app" => "gradecraft"}
       - if presenter.assignment.pass_fail?
         %h3 Scores Earned
         #levels_per_assignment{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.pass_fail_scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
       - else
         %h3 Grade Distribution
-        #grades_per_assign{ "data-scores" => presenter.scores_for(current_user).to_json,
-          "data-user" => current_user.id
-          class: ("student-distro" if current_student.present?)
-        }
+
+        %assignment-distribution-analytics{ "assignment-id" => presenter.assignment.id,
+          "student-id" => current_student.id || nil,
+          "student-distro" => current_student.present?.to_s }
+        #assignment-distribution-graph
+
         .small
           %b Class Average:
           #{points presenter.assignment.average} points
@@ -29,3 +31,6 @@
     .scores-earned-bar-chart
       %h3 Scores Earned
       #levels_per_assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-scores" => presenter.scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
+
+
+
