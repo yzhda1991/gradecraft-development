@@ -1,5 +1,9 @@
 describe CSVGradeImporter do
+  subject { described_class.new(file.tempfile) }
+
   describe "#import" do
+    let(:course) { create :course }
+
     it "returns empty results when there is no file" do
       result = described_class.new(nil).import
       expect(result.successful).to be_empty
@@ -8,15 +12,10 @@ describe CSVGradeImporter do
 
     context "with a file" do
       let(:file) { fixture_file "grades.csv", "text/csv" }
-      let(:course) { create :course }
       let(:assignment) { create :assignment, course: course }
-      subject { described_class.new(file.tempfile) }
 
       context "with a student not in the file" do
-        let(:student) { create :user }
-        before do
-          create :course_membership, :student, user_id: student.id, course_id: course.id
-        end
+        let!(:student) { create :user, courses: [course], role: :student }
 
         it "does not create a grade if the student does not exist" do
           expect { subject.import(course, assignment) }.to_not change { User.count }
@@ -30,10 +29,8 @@ describe CSVGradeImporter do
       end
 
       context "with a student in the file" do
-        let(:student) { create :user, email: "robert@example.com" }
-        before do
-          create :course_membership, :student, user_id: student.id, course_id: course.id
-        end
+        let!(:student) { create :user, email: "robert@example.com", courses: [course], role: :student }
+        let(:another_student) { create :user, email: "eric.clapton@guitarlegends.com", courses: [course], role: :student}
 
         context "when the assignment is of pass/fail type" do
           let(:assignment) { create :assignment, course: course, pass_fail: true }
@@ -54,24 +51,34 @@ describe CSVGradeImporter do
           it "contains an unsuccessful row if the grade is not valid" do
             create :user, email: "don.henley@eagles.com", courses: [course], role: :student
             result = subject.import(course, assignment)
-            expect(result.unsuccessful.count).to eq 4
+            expect(result.unsuccessful.count).to be >= 1
             expect(result.unsuccessful.pluck(:errors)).to include "Grade is invalid"
           end
 
           it "contains an unsuccessful row if the grade is not valid" do
             create :user, email: "steve.perry@journey.com", courses: [course], role: :student
             result = subject.import(course, assignment)
-            expect(result.unsuccessful.count).to eq 4
+            expect(result.unsuccessful.count).to be >= 1
             expect(result.unsuccessful.pluck(:errors)).to include "Grade is invalid"
           end
 
-          it "updates the grade if it is already there" do
-            create :grade, assignment: assignment, student: student, pass_fail_status: "Fail"
+          it "updates the grade to pass if the grade previously existed" do
+            grade = create :grade, assignment: assignment, student: student, pass_fail_status: "Fail"
             subject.import(course, assignment)
-            grade = Grade.last
+            grade.reload
             expect(grade.raw_points).to eq 0
             expect(grade.pass_fail_status).to eq "Pass"
             expect(grade.feedback).to eq "Rock on!"
+            expect(grade.graded_at).to_not be_nil
+          end
+
+          it "updates the grade to fail if the grade previously existed" do
+            grade = create :grade, assignment: assignment, student: another_student, pass_fail_status: "Pass"
+            subject.import(course, assignment)
+            grade.reload
+            expect(grade.raw_points).to eq 0
+            expect(grade.pass_fail_status).to eq "Fail"
+            expect(grade.feedback).to be_empty
             expect(grade.graded_at).to_not be_nil
           end
         end
