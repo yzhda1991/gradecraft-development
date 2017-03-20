@@ -5,8 +5,8 @@ class CSVGradeImporter
   include GradesHelper
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
-  
-  PASS_FAIL_GRADE_VALUES = [0,1].freeze
+
+  PASS_FAIL_GRADE_VALUES ||= [0,1].freeze
 
   def initialize(file)
     @file = file
