@@ -2,20 +2,20 @@ if ($('#levels_per_assignment').length) {
   var assignmentGrades = JSON.parse($('#levels_per_assignment').attr('data-levels'));
   var studentGrade = JSON.parse($('#levels_per_assignment').attr('data-scores')).user_score;
   var grades = assignmentGrades.scores;
-  
+
   var xValues = [];
   var yValues = [];
   var colors = [];
   var outlineColors = [];
   var yStudentMarker;
-  
+
   grades.forEach(function(grade) {
     var xValue = grade.name;
     xValues.push(xValue);
-    
+
     var yValue = grade.data;
     yValues.push(yValue);
-    
+
     if (xValue === studentGrade) {
       yStudentMarker = yValue;
       colors.push('rgba(109, 214, 119, 0.5)');
@@ -25,7 +25,7 @@ if ($('#levels_per_assignment').length) {
       outlineColors.push('rgba(31, 119, 180, 1)');
     }
   });
-  
+
   var data = [
     {
       x: xValues,

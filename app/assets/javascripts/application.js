@@ -71,6 +71,11 @@
 //= require plugins/url.min.js
 //= require plugins/video.min.js
 
+//= require plotly/levels_per_assign
+//= require plotly/grade_distribution
+//= require plotly/assignment-results-vis
+//= require plotly/team_analytics
+
 //= require gradecraft
 //= require preload_store
 //= require users
@@ -84,18 +89,14 @@
 //= require students_table_filter
 //= require public_pages
 //= require statuspages
-//= require levels_per_assign
 //= require earned_badges
 //= require file_upload
 //= require highcharts
 //= require select2
-//= require grade_distribution
-//= require team_analytics
 //= require jquery.collapse
 //= require jquery.collapse_storage
 //= require jquery.collapse_cookie_storage
 //= require datetimepicker
-//= require assignment-results-vis
 //= require uploads
 //= require course_switch
 //= require course_settings
