@@ -1,8 +1,15 @@
 var $assignmentDistro = $('#grades_per_assign');
 if ($assignmentDistro.length) {
-  var dataSet = JSON.parse($assignmentDistro.attr('data-scores'));
-  var scores = dataSet.scores;
-  var userScore = dataSet.user_score;
+  var assignment_id = $assignmentDistro.attr('data-assignment-id');
+  var student_id = $assignmentDistro.attr('data-student-id');
+  $.get( "/api/assignments/" + assignment_id + "/analytics?student_id=" + student_id, function( data ) {
+    PlotDistro(data);
+  });
+}
+
+var PlotDistro = function(data){
+  var scores = data.data_scores;
+  var userScore = data.user_score;
 
   var data = [{
     x: scores,
@@ -51,9 +58,10 @@ if ($assignmentDistro.length) {
     }
   }
 
-    // eslint-disable-next-line no-undef
-    Plotly.newPlot('grades_per_assign', data, layout, {displayModeBar: false});
+  // eslint-disable-next-line no-undef
+  Plotly.newPlot('grades_per_assign', data, layout, {displayModeBar: false});
 }
+
 
 var $numberComplete = $('#numberComplete');
 if ($numberComplete.length) {

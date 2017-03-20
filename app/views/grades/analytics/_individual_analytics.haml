@@ -7,15 +7,17 @@
         #levels_per_assignment{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.pass_fail_scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
       - else
         %h3 Grade Distribution
-        #grades_per_assign{ "data-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
+        #grades_per_assign{ "data-assignment-id" => presenter.assignment.id,
+          "data-student-id" => current_student.id || "",
+          class: ("student-distro" if current_student.present?) }
         .small
-          %b Class Average: 
+          %b Class Average:
           #{points presenter.assignment.average} points
         .small
-          %b Low Score: 
+          %b Low Score:
           #{points presenter.assignment.low_score} points
         .small
-          %b High Score: 
+          %b High Score:
           #{points presenter.assignment.high_score} points
 
     .class-analytics-graph

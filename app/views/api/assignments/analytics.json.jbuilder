@@ -1,2 +1,2 @@
-json.data_levels = @data_levels
-json.data_scores = @data_scores
+json.data_scores @scores
+json.user_score @user_score
