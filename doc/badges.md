@@ -1,6 +1,6 @@
 # Badges
 
-  * Is a [[customizable term | customizable terms]]
+  * Is a [customizable term](customizable terms)
   * Awarded to students by instructors
 
 ### Included Concerns

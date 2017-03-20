@@ -270,7 +270,7 @@ class User < ActiveRecord::Base
 
   # Returning all of the grades a student has received this week
   def grades_released_for_course_this_week(course)
-    grades = grades_for_course(course).where("updated_at > ? ", 7.days.ago)
+    grades = grades_for_course(course).where("graded_at > ? ", 7.days.ago)
     viewable_grades = []
     grades.each do |grade|
       viewable_grades << grade if GradeProctor.new(grade).viewable? && !grade.excluded_from_course_score

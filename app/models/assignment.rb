@@ -7,12 +7,11 @@ class Assignment < ActiveRecord::Base
   include UploadsMedia
   include UnlockableCondition
 
-  attr_accessor :current_student_grade
-
   belongs_to :course
   belongs_to :assignment_type, -> { order("position ASC") }
 
   has_one :rubric, dependent: :destroy
+  has_many :criterion_grades, dependent: :destroy
 
   multiple_files :assignment_files
   # Preventing malicious content from being submitted
@@ -30,7 +29,6 @@ class Assignment < ActiveRecord::Base
   # Student created submissions to be graded
   has_many :submissions, dependent: :destroy
 
-  has_many :criterion_grades, dependent: :destroy
   has_one :imported_assignment, dependent: :destroy
 
   # Instructor uploaded resource files
@@ -39,7 +37,6 @@ class Assignment < ActiveRecord::Base
 
   # Strip points from pass/fail assignments
   before_save :zero_points_for_pass_fail
-
   before_save :reset_default_for_nil_values
 
   validates_presence_of :name, :course_id, :assignment_type_id, :grade_scope, :threshold_points
