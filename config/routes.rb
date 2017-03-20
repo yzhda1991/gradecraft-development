@@ -251,6 +251,8 @@ Rails.application.routes.draw do
     member do
       get :activate
       put :manually_activate
+      get :change_password
+      put :update_password
       post :activate, action: :activated
       post :flag
     end

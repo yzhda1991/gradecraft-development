@@ -128,6 +128,12 @@ class UsersController < ApplicationController
       @user.course_memberships.where(course_id: current_course).first
   end
 
+  def change_password
+    @user = User.find(params[:id])
+    @course_membership =
+      @user.course_memberships.where(course_id: current_course).first
+  end
+
   def update_profile
     @user = current_user
 
@@ -140,6 +146,25 @@ class UsersController < ApplicationController
     if @user.update_attributes(up)
       redirect_to dashboard_path,
         notice: "Your profile was successfully updated!"
+    else
+      @course_membership =
+        @user.course_memberships.where(course_id: current_course).first
+      render :edit_profile
+    end
+  end
+
+  def update_password
+    @user = User.find(params[:id])
+
+    up = user_params
+    if up[:password].blank? && up[:password_confirmation].blank?
+      up.delete(:password)
+      up.delete(:password_confirmation)
+    end
+
+    if @user.update_attributes(up)
+      redirect_to dashboard_path,
+        notice: "#{@user.name}'s profile was successfully updated!"
     else
       @course_membership =
         @user.course_memberships.where(course_id: current_course).first

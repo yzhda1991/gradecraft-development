@@ -444,6 +444,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Edit My Profile')
   end
 
+  def users_change_password
+    dashboard
+    breadcrumb('Change Password for ' + objects[:user].name)
+  end
+
   def users_import
     students_index
     breadcrumb('Import #{ term_for :students }')
