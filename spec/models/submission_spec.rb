@@ -2,7 +2,8 @@ describe Submission do
   include UniMock::StubRails
 
   before { stub_env "development" }
-  subject { build(:submission) }
+  let(:course) { build(:course) }
+  subject { build(:submission, course: course) }
 
   describe "validations" do
     it { is_expected.to be_valid }
@@ -232,7 +233,7 @@ describe Submission do
       expect(subject).to be_ungraded
     end
 
-    it "returns true for a submission that has grade that is not student visible" do
+    it "returns true for a submission that has grade but no status" do
       subject.save
       grade = create(:grade, submission: subject)
       expect(subject).to be_ungraded
@@ -245,31 +246,21 @@ describe Submission do
     end
   end
 
-  describe ".ungraded" do
-    let(:course) { subject.course }
-    before do
-      Submission.destroy_all
-      subject.save
-    end
-
+  describe ".ungraded", focus: true do
     it "returns the submissions that do not have any grades" do
-      expect(Submission.ungraded).to eq [subject]
+      expect(Submission.ungraded).to eq [submission_2]
     end
 
-    it "returns the submissions that have a grade but it's in progress" do
+    it "does not return the submissions that have in progress grades" do
       create :grade, course: course, assignment: subject.assignment,
         student: subject.student, submission: subject, status: "In Progress"
-      expect(Submission.ungraded).to eq [subject]
+      expect(Submission.ungraded).to not_include [ungraded_submission]
     end
 
     it "does not return submissions that have been graded or released" do
       create :grade, course: course, assignment: subject.assignment,
         student: subject.student, submission: subject, status: "Graded"
       expect(Submission.ungraded).to be_empty
-    end
-
-    it "handles additional parameters" do
-      expect(subject.course.submissions.ungraded).to eq [subject]
     end
 
     it "returns the group submissions that do not have a grade" do
