@@ -49,4 +49,18 @@ describe GradesHelper do
       expect(helper.grading_status_count_for(course)).to eq 62
     end
   end
+
+  describe "#pass_fail_status_for" do
+    it "returns pass if the score is 1" do
+      expect(helper.pass_fail_status_for(1)).to eq "Pass"
+    end
+
+    it "returns fail if the score is 0" do
+      expect(helper.pass_fail_status_for(0)).to eq "Fail"
+    end
+
+    it "returns nil if the score is neither 1 nor 0" do
+      expect(helper.pass_fail_status_for(123)).to be_nil
+    end
+  end
 end
