@@ -1,19 +1,9 @@
 feature "editing an awarded a badge" do
   context "as a professor" do
-    let(:course) { build :course, has_badges: true }
-    let!(:course_membership) do
-      create :course_membership, :professor, user: professor, course: course
-    end
-    let(:professor) { create :user }
+    let(:professor) { create :user, courses: [course], role: :professor }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
-    let(:student) { build :user, first_name: "Hermione", last_name: "Granger" }
-    let(:student_2) { build :user, first_name: "Ron", last_name: "Weasley" }
-    let!(:course_membership_2) do
-      create :course_membership, :student, user: student, course: course
-    end
-    let!(:course_membership_3) do
-      create :course_membership, :student, user: student_2, course: course
-    end
+    let(:student) { build :user, first_name: "Hermione", last_name: "Granger", courses: [course], role: :student }
+    let(:student_2) { build :user, first_name: "Ron", last_name: "Weasley", courses: [course], role: :student }
     let!(:earned_badge) { create :earned_badge, badge: badge, student: student}
 
     before(:each) do
@@ -21,36 +11,67 @@ feature "editing an awarded a badge" do
       visit dashboard_path
     end
 
-    scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Badges"
+    context "with an active course" do
+      let(:course) { build :course, has_badges: true, status: true }
+
+      scenario "is successful" do
+        within(".sidebar-container") do
+          click_link "Badges"
+        end
+
+        expect(current_path).to eq badges_path
+
+        within(".pageContent") do
+          first(:link, "Fancy Badge").click
+        end
+
+        expect(current_path).to eq badge_path(badge.id)
+
+        within(".pageContent") do
+          click_link "Edit"
+        end
+
+        expect(current_path).to eq \
+          edit_badge_earned_badge_path(badge, earned_badge)
+
+        within(".pageContent") do
+          click_button "Update Badge"
+        end
+
+        expect(current_path).to eq badge_path(badge.id)
+
+        expect(page).to have_notification_message(
+          "notice",
+          "Hermione Granger's Fancy Badge Badge was successfully updated"
+        )
       end
+    end
 
-      expect(current_path).to eq badges_path
+    context "with an inactive course" do
+      let(:course) { build :course, has_badges: true, status: false }
 
-      within(".pageContent") do
-        first(:link, "Fancy Badge").click
+      scenario "is unsuccessful" do
+        within(".sidebar-container") do
+          click_link "Badges"
+        end
+
+        expect(current_path).to eq badges_path
+
+        within(".pageContent") do
+          first(:link, "Fancy Badge").click
+        end
+
+        expect(current_path).to eq badge_path(badge.id)
+
+        within(".pageContent") do
+          click_link "Edit"
+        end
+
+        expect(current_path).to eq \
+          edit_badge_earned_badge_path(badge, earned_badge)
+
+        expect(page).to_not have_selector(:link_or_button, "Update Badge")
       end
-
-      expect(current_path).to eq badge_path(badge.id)
-
-      within(".pageContent") do
-        click_link "Edit"
-      end
-
-      expect(current_path).to eq \
-        edit_badge_earned_badge_path(badge, earned_badge)
-
-      within(".pageContent") do
-        click_button "Update Badge"
-      end
-
-      expect(current_path).to eq badge_path(badge.id)
-
-      expect(page).to have_notification_message(
-        "notice",
-        "Hermione Granger's Fancy Badge Badge was successfully updated"
-      )
     end
   end
 end

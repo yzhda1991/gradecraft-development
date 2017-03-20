@@ -16,5 +16,5 @@
 
   .submit-buttons
     %ul
-      %li= active_course_link_to "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}"
+      %li= active_course_submit_tag "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}", class: "button"
       %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), class: "button"
