@@ -14,8 +14,8 @@ other_pr_master | [link]()
 
 
 ### Todos
-- [ ] Tests
-- [ ] Documentation
+- [ ] Add Tests
+- [ ] Update/Add Documentation
 - [ ] Update Sample Data
 
 
