@@ -1,13 +1,13 @@
 class GradeExporter
-
   def export_grades(assignment, students, options={})
     CSV.generate(options) do |csv|
       csv << headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
+        score = assignment.pass_fail? ? pass_fail_status_as_int(grade.pass_fail_status) : grade.score
         csv << [student.first_name, student.last_name,
                 student.email,
-                grade.score || "",
+                score || "",
                 grade.feedback || ""]
       end
     end
@@ -43,7 +43,6 @@ class GradeExporter
     end
   end
 
-
   def group_headers
     ["Group Name", "Score", "Feedback"].freeze
   end
@@ -56,5 +55,12 @@ class GradeExporter
 
   def detail_headers
     ["Raw Score", "Statement", "Last Updated"].freeze
+  end
+
+  def pass_fail_status_as_int(status)
+    case status
+    when "Pass" then 1
+    when "Fail" then 0
+    end
   end
 end

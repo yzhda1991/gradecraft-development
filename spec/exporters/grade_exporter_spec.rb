@@ -1,5 +1,5 @@
 describe GradeExporter do
-  let(:assignment) { create(:assignment) }
+  let(:assignment) { create :assignment }
   let(:students) { create_list :user, 2 }
   subject { GradeExporter.new }
 
@@ -14,7 +14,7 @@ describe GradeExporter do
       expect(csv).to eq "First Name,Last Name,Email,Score,Feedback\n"
     end
 
-    it "generates a CSV with student scores" do
+    it "generates a CSV with student scores if the assignment is not pass/fail" do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
           .and_return double(:grade, score: 123, feedback: nil)
@@ -34,6 +34,20 @@ describe GradeExporter do
       expect(csv[2][3]).to eq "456"
       expect(csv[1][4]).to eq ""
       expect(csv[2][4]).to eq "Grrrrreat!"
+    end
+
+    it "generates a CSV with student scores if the assignment is pass/fail" do
+      assignment.pass_fail = true
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return double(:grade, score: nil, pass_fail_status: "Pass", feedback: nil)
+
+      csv = CSV.new(subject.export_grades(assignment, students)).read
+      expect(csv.length).to eq 3
+      expect(csv[1][0]).to eq students[0].first_name
+      expect(csv[1][1]).to eq students[0].last_name
+      expect(csv[1][2]).to eq students[0].email
+      expect(csv[1][3]).to eq "1"
     end
 
     it "includes students that do not have grades for the assignment" do
