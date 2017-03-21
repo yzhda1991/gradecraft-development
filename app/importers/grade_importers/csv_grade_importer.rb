@@ -95,8 +95,9 @@ class CSVGradeImporter
     end
   end
 
+  # Precondition: row.grade has been validated by is_valid_grade?
   def set_grade_score(row, grade)
-    score = Integer(row.grade || "")
+    score = Integer(row.grade)
     if grade.assignment.pass_fail?
       grade.pass_fail_status = pass_fail_status_for score
     else
@@ -104,10 +105,12 @@ class CSVGradeImporter
     end
   end
 
+  # Ensures that the input is valid and integer-like
   def is_valid_grade?(assignment, grade)
     begin
-      score = Integer(grade || "")
-      return PASS_FAIL_GRADE_VALUES.include?(score) if assignment.pass_fail?
+      return false if grade.nil?
+      # Integer() vs to_i to prevent unwanted coercion
+      return PASS_FAIL_GRADE_VALUES.include?(Integer(grade)) if assignment.pass_fail?
       true
     rescue ArgumentError
       false
@@ -116,8 +119,9 @@ class CSVGradeImporter
 
   # If the assignment is pass/fail type, update the grade if the status or feedback changes
   # Else, update if the raw points or feedback changes
+  # Precondition: row.grade has been validated by is_valid_grade?
   def update_grade?(row, grade, assignment)
-    score = Integer(row.grade || "")
+    score = Integer(row.grade)
     if assignment.pass_fail?
       grade.present? && (grade.pass_fail_status != pass_fail_status_for(score) || grade.feedback != row.feedback)
     else
