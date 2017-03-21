@@ -22,6 +22,13 @@ describe Assignment do
       expect(subject.errors[:assignment_type_id]).to include "can't be blank"
     end
 
+    it "is invalid with points greater than assignment type cap" do
+      subject.assignment_type.update(max_points: 1000)
+      subject.full_points = 2000
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "The full points for the assignment must be less than the cap for the whole assignment type."
+    end
+
     it "is invalid without a course" do
       subject.course_id = nil
       expect(subject).to_not be_valid
@@ -209,6 +216,13 @@ describe Assignment do
       subject.min_group_size = nil
       expect(subject).to be_valid
       expect(subject.errors[:min_group_size]).to be_empty
+    end
+
+    it "verifies that max group size is greater than min group size" do
+      subject.max_group_size = 1
+      subject.min_group_size = 3
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Maximum group size must be greater than minimum group size."
     end
   end
 

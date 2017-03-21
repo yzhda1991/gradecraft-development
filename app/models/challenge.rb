@@ -32,6 +32,7 @@ class Challenge < ActiveRecord::Base
   scope :timelineable, -> { where include_in_timeline: true }
 
   validates_presence_of :course, :name
+  validates_numericality_of :full_points, allow_nil: true, length: { maximum: 9 }
   validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
   in: [true, false], message: "must be true or false"
 

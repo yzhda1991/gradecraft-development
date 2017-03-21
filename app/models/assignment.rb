@@ -48,10 +48,12 @@ class Assignment < ActiveRecord::Base
   :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
   :show_purpose_when_locked, in: [true, false], message: "must be true or false"
 
-  validate :open_before_close, :submissions_after_due, :submissions_after_open
-  validate :max_more_than_min
-  validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
-  validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_numericality_of :max_group_size, :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_with OpenBeforeCloseValidator
+  validates_with SubmissionsAcceptedAfterOpenValidator
+  validates_with SubmissionsAcceptedAfterDueValidator
+  validates_with PointsUnderCapValidator
+  validates_with MaxOverMinValidator
 
   scope :group_assignments, -> { where grade_scope: "Group" }
 
@@ -299,22 +301,6 @@ class Assignment < ActiveRecord::Base
   def students_with_submissions_on_team_conditions
     ["id in (#{student_with_submissions_query})",
      "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
-  end
-
-  def open_before_close
-    errors.add :base, "Due date must be after open date." if (due_at.present? && open_at.present?) && (due_at < open_at)
-  end
-
-  def submissions_after_due
-    errors.add :base, "Submission accept date must be after due date." if (accepts_submissions_until.present? && due_at.present?) && (accepts_submissions_until < due_at)
-  end
-
-  def submissions_after_open
-    errors.add :base, "Submission accept date must be after open date." if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
-  end
-
-  def max_more_than_min
-    errors.add :base, "Maximum group size must be greater than minimum group size." if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
   end
 
   def zero_points_for_pass_fail

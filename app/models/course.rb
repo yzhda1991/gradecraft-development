@@ -80,10 +80,7 @@ class Course < ActiveRecord::Base
 
   validates_presence_of :name, :course_number
 
-  validates_numericality_of :total_weights, allow_blank: true
-  validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
-  validates_numericality_of :max_assignment_types_weighted, allow_blank: true
-  validates_numericality_of :full_points, allow_blank: true
+  validates_numericality_of :total_weights, :max_weights_per_assignment_type, :max_assignment_types_weighted, :full_points, allow_blank: true, length: { maximum: 9 }
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
 

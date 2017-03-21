@@ -12,10 +12,8 @@ class CriterionGrade < ActiveRecord::Base
 
   scope :for_student, ->(student) { where(student_id: student.id) }
 
-  validates :assignment_id, presence: true
-  validates :criterion_id, presence: true
-  validates :student_id, presence: true
-
+  validates :assignment_id, :criterion_id, :student_id, presence: true
+  
   def self.find_or_create(assignment_id, criterion_id, student_id)
     CriterionGrade.find_or_create_by(
       assignment_id: assignment_id,

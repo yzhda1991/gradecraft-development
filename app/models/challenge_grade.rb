@@ -18,6 +18,7 @@ class ChallengeGrade < ActiveRecord::Base
 
   validates :challenge_id, uniqueness: { scope: :team_id }
   validates_presence_of :team_id
+  validates_numericality_of :raw_points, :final_points, :adjustment_points, allow_nil: true, length: { maximum: 9 }
 
   def score
     final_points
