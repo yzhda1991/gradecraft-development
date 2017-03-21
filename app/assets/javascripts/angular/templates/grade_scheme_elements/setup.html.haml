@@ -1,59 +1,65 @@
 %h2.form-title Add new grading scheme
 
 %form.grading-scheme-setup{"name"=>"gradeSchemeSetupForm"}
-  .form-question
-    %p Are you using grade letters?
-    %ul
-      %li
-        %label
-          %input{"type"=>"radio",
-                 "ng-model"=>"vm.isUsingGradeLetters",
-                 "ng-value"=>"true",
-                 "name"=>"gradeletters",
-                 "required"=>""} Yes
-      %li
-        %label
-          %input{"type"=>"radio",
-                 "ng-model"=>"vm.isUsingGradeLetters",
-                 "ng-value"=>"false",
-                 "name"=>"gradeletters",
-                 "required"=>""} No
+  %fieldset
+    .form-question
+      %legend Are you using grade letters?
+      %ul
+        %li
+          %label
+            %input{"type"=>"radio",
+                   "ng-model"=>"vm.isUsingGradeLetters",
+                   "ng-value"=>"true",
+                   "name"=>"gradeletters",
+                   "tabindex"=>"0",
+                   "required"=>""} Yes
+        %li
+          %label
+            %input{"type"=>"radio",
+                   "ng-model"=>"vm.isUsingGradeLetters",
+                   "ng-value"=>"false",
+                   "name"=>"gradeletters",
+                   "required"=>""} No
 
   %additional-questions.form-section{"ng-if"=>"vm.isUsingGradeLetters"}
-    .form-question
-      %p Are you using +/- grades?
-      %ul
-        %li
-          %label
-            %input{"type"=>"radio",
-                   "ng-model"=>"vm.isUsingPlusMinusGrades",
-                   "ng-value"=>"true",
-                   "name"=>"plusminus",
-                   "ng-required"=>"vm.isUsingGradeLetters"} Yes
-        %li
-          %label
-            %input{"type"=>"radio",
-                   "ng-model"=>"vm.isUsingPlusMinusGrades",
-                   "ng-value"=>"false",
-                   "name"=>"plusminus",
-                   "ng-required"=>"vm.isUsingGradeLetters"} No
+    %fieldset
+      .form-question
+        %legend Are you using +/- grades?
+        %ul{"role"=>"radiogroup"}
+          %li
+            %label
+              %input{"type"=>"radio",
+                     "ng-model"=>"vm.isUsingPlusMinusGrades",
+                     "ng-value"=>"true",
+                     "name"=>"plusminus",
+                     "tabindex"=>"0",
+                     "ng-required"=>"vm.isUsingGradeLetters"} Yes
+          %li
+            %label
+              %input{"type"=>"radio",
+                     "ng-model"=>"vm.isUsingPlusMinusGrades",
+                     "ng-value"=>"false",
+                     "name"=>"plusminus",
+                     "ng-required"=>"vm.isUsingGradeLetters"} No
 
-    .form-question
-      %p Would you like to add levels below 'F'?
-      %ul
-        %li
-          %label
-            %input{"type"=>"radio", "ng-model"=>"vm.addLevelsBelowF",
-                   "ng-value"=>"true",
-                    "name"=>"levelsbelow",
-                   "ng-required"=>"vm.isUsingGradeLetters"} Yes
-        %li
-          %label
-            %input{"type"=>"radio",
-                   "ng-model"=>"vm.addLevelsBelowF",
-                   "ng-value"=>"false",
-                  "name"=>"levelsbelow",
-                   "ng-required"=>"vm.isUsingGradeLetters"} No
+    %fieldset
+      .form-question
+        %legend Would you like to add levels below 'F'?
+        %ul{"role"=>"radiogroup"}
+          %li
+            %label
+              %input{"type"=>"radio", "ng-model"=>"vm.addLevelsBelowF",
+                     "ng-value"=>"true",
+                     "name"=>"levelsbelow",
+                     "tabindex"=>"0",
+                     "ng-required"=>"vm.isUsingGradeLetters"} Yes
+          %li
+            %label
+              %input{"type"=>"radio",
+                     "ng-model"=>"vm.addLevelsBelowF",
+                     "ng-value"=>"false",
+                     "name"=>"levelsbelow",
+                     "ng-required"=>"vm.isUsingGradeLetters"} No
 
     %additional-questions.form-section{"ng-if"=>"vm.addLevelsBelowF"}
       .form-question
