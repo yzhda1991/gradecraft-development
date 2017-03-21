@@ -16,7 +16,7 @@
       return $q.all(promises)
 
     plotGraph = (data, studentDistro)=>
-      scores = data.data_scores
+      scores = data.scores
       userScore = data.user_score
 
       data = [{

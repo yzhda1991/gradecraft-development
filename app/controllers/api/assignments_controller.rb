@@ -24,30 +24,40 @@ class API::AssignmentsController < ApplicationController
 
   # /api/assignments/:assignment_id/analytics
   # optional user for graph:
-  # /api/assignments/:assignment_id/analytics?user_id=:user_id
+  # /api/assignments/:assignment_id/analytics?student_id=:student_id
 
-  # Needs to replace:
+  # We should ideally remove:
   #  app/views/grades/analytics/_group_analytics.haml
   #  app/views/grades/analytics/_individual_analytics.haml
   #  methods on Assignments::Presenter
-  #    presenter.scores_for(current_student)
+  #    scores_for
+  #    pass_fail_scores_for
+  #    participation_rate
   #  methods on Gradable Concern
   #  methods on Assignment
+  #    percentage_pass_fail_earned
+  #    percentage_score_earned
+
   def analytics
     @assignment = Assignment.find(params[:assignment_id])
-    # data as presented in the analytics partials
+    @participation_rate = participation_rate
+    # is there a better name for levels and scores,
+    # or could they be combined into a single dataset?
     if @assignment.pass_fail?
-      #@data_levels = @assignment.percentage_pass_fail_earned
-      @scores = pass_fail_scores_for(current_user)
-      @user_score = grade.pass_fail_status
+      @levels = @assignment.percentage_pass_fail_earned
+      @user_score = pass_fail_score_for params[:student_id] if params[:student_id].present?
     else
-      #@data_levels = @assignment.percentage_score_earned
+      @levels = @assignment.percentage_score_earned
       @scores = @assignment.graded_or_released_scores
       @user_score = score_for params[:student_id] if params[:student_id].present?
     end
   end
 
   private
+
+  # These methods shouldn't be in a controller.
+  # Once they are removed from the spaces mentioned above, they
+  # could possibly go into a concern?
 
   def score_for(student_id)
     grade = Grade.where(student_id: student_id, assignment: @assignment).first
@@ -57,13 +67,24 @@ class API::AssignmentsController < ApplicationController
     nil
   end
 
-  # this is insanity!
-  def pass_fail_scores_for(user)
-    scores = { scores: @assignment.grades.graded_or_released }
-    grade = Grade.where(student_id: user.id).first if user.present?
-    if GradeProctor.new(grade).viewable? user: user, course: current_course
-      scores[:user_score] = grade.pass_fail_status
+  def pass_fail_score_for(student_id)
+    grade = Grade.where(student_id: student_id, assignment: @assignment).first
+    if GradeProctor.new(grade).viewable? user: current_user, course: current_course
+      grade.pass_fail_status
     end
-    scores
+    grade.pass_fail_status
   end
+
+  # Tallying the percentage of participation from the entire class
+  def participation_rate
+    return 0 if participation_possible_count == 0
+    ((@assignment.grade_count.to_f / participation_possible_count.to_f) * 100).round(2)
+  end
+
+  # denominator
+  def participation_possible_count
+    return current_course.graded_student_count if @assignment.is_individual?
+    return @assignment.groups.count if @assignment.has_groups?
+  end
+
 end
