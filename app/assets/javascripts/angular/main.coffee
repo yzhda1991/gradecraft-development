@@ -22,6 +22,12 @@
   $compileProvider.debugInfoEnabled(false)
 ])
 
+@gradecraft.config(['$ariaProvider', ($ariaProvider)->
+  $ariaProvider.config({
+    ariaRequired: false
+  })
+]);
+
 @gradecraft.directive "modalDialog", ->
   restrict: "E"
   scope:
