@@ -51,9 +51,10 @@ class Assignment < ActiveRecord::Base
   :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
   :show_purpose_when_locked, in: [true, false], message: "must be true or false"
 
-  validates :accepts_submissions_until, submission_after_open: true
+  #validates :accepts_submissions_until, submission_after_open: true
   validates :open_at, open_before_close: true
   validates_numericality_of :max_group_size, :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_with SubmissionsAcceptedAfterOpenValidator
   validates_with SubmissionsAcceptedAfterDueValidator
   validates_with PointsUnderCapValidator
   validates_with MaxOverMinValidator
