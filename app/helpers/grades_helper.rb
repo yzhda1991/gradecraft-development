@@ -29,4 +29,12 @@ module GradesHelper
     # This cache key is busted when a grade is updated
     "#{course.cache_key}/unreleased_grades_count"
   end
+
+  # Returns the corresponding pass/fail status for a score
+  # If the score is not a 0 or 1, the status will be nil
+  def pass_fail_status_for(score)
+    return status = "Pass" if score == 1
+    return status = "Fail" if score == 0
+    nil
+  end
 end

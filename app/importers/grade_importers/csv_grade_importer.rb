@@ -2,9 +2,11 @@ require "csv"
 require "quote_helper"
 
 class CSVGradeImporter
-  PASS_FAIL_GRADE_VALUES = [0,1].freeze
+  include GradesHelper
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
+
+  PASS_FAIL_GRADE_VALUES ||= [0,1].freeze
 
   def initialize(file)
     @file = file
@@ -35,7 +37,7 @@ class CSVGradeImporter
           end
 
           grade = assignment.grades.where(student_id: student.id).first
-          if row.update_grade? grade
+          if update_grade? row, grade, assignment
             grade = update_grade row, grade
             report row, grade
           elsif grade.present?
@@ -93,29 +95,42 @@ class CSVGradeImporter
     end
   end
 
+  # Precondition: row.grade has been validated by is_valid_grade?
   def set_grade_score(row, grade)
-    score = Integer(row.grade || "")
+    score = Integer(row.grade)
     if grade.assignment.pass_fail?
-      grade.pass_fail_status = "Pass" if score == 1
-      grade.pass_fail_status = "Fail" if score == 0
+      grade.pass_fail_status = pass_fail_status_for score
     else
       grade.raw_points = score
     end
   end
 
+  # Ensures that the input is valid and integer-like
   def is_valid_grade?(assignment, grade)
     begin
-      score = Integer(grade || "")
-      return PASS_FAIL_GRADE_VALUES.include?(score) if assignment.pass_fail?
+      return false if grade.nil?
+      # Integer() vs to_i to prevent unwanted coercion
+      return PASS_FAIL_GRADE_VALUES.include?(Integer(grade)) if assignment.pass_fail?
       true
     rescue ArgumentError
       false
     end
   end
 
+  # If the assignment is pass/fail type, update the grade if the status or feedback changes
+  # Else, update if the raw points or feedback changes
+  # Precondition: row.grade has been validated by is_valid_grade?
+  def update_grade?(row, grade, assignment)
+    score = Integer(row.grade)
+    if assignment.pass_fail?
+      grade.present? && (grade.pass_fail_status != pass_fail_status_for(score) || grade.feedback != row.feedback)
+    else
+      grade.present? && (grade.raw_points != score || grade.feedback != row.feedback)
+    end
+  end
+
   class GradeRow
     include QuoteHelper
-
     attr_reader :data
 
     def identifier
@@ -132,11 +147,6 @@ class CSVGradeImporter
 
     def has_grade?
       grade.present?
-    end
-
-    def update_grade?(grade)
-      grade.present? &&
-        (grade.raw_points != Integer(self.grade || "") || grade.feedback != feedback)
     end
 
     def initialize(data)
