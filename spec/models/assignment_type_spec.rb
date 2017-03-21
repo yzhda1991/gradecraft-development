@@ -157,7 +157,7 @@ describe AssignmentType do
     it "returns the max points if present" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 100
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true, full_points: 99)
       grade = create(:grade, student: student, raw_points: 1000, assignment: assignment, status: "Released")
       expect(assignment_type.visible_score_for_student(student)).to eq(100)
     end
@@ -270,7 +270,7 @@ describe AssignmentType do
     it "returns the max point value for the type if present and the student has earned MORE than that cap" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 100
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99, release_necessary: true)
       grade = create(:grade, student: student, raw_points: 200, assignment: assignment, status: "Released")
       expect(assignment_type.max_points_for_student(student)).to eq(100)
     end
@@ -278,7 +278,7 @@ describe AssignmentType do
     it "returns the student score if the max point total is present but they have earned less than that value" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 500
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99, release_necessary: true)
       grade = create(:grade, student: student, raw_points: 200, assignment: assignment, status: "Released")
       expect(assignment_type.max_points_for_student(student)).to eq(200)
     end

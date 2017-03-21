@@ -10,7 +10,7 @@ describe "assignments/index_student/_assignments" do
     @course = create(:course)
     @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
     @assignment_type_2 = create(:assignment_type, course: @course, max_points: 1000)
-    @assignment = create(:assignment, assignment_type: @assignment_type_1)
+    @assignment = create(:assignment, assignment_type: @assignment_type_1, full_points: 500)
     @course.assignment_types << [@assignment_type_1, @assignment_type_2]
     @assignment_types = @course.assignment_types
     @course.assignments << @assignment
