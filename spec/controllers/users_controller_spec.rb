@@ -69,7 +69,10 @@ describe UsersController do
         post :create, params: { user: { first_name: "Jimmy",
                                         last_name: "Page",
                                         username: "jimmy",
-                                        email: "jimmy@example.com" }}
+                                        email: "jimmy@example.com",
+                                        password: "hello",
+                                        password_confirmation: "hello"
+                                         }}
         expect(user.first_name).to_not eq existing_user.first_name
       end
 
