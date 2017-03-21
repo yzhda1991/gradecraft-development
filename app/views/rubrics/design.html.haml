@@ -3,13 +3,14 @@
 
   .rubric-design(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric.id}, #{@assignment.id}, #{@assignment.full_points})")
 
-    #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
-      %h4#points-legend
-        %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
-        \/#{number_with_delimiter(@assignment.full_points)} Points Allocated
-      %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
-      %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-      %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
+    .points-overview-container
+      #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
+        %h4#points-legend
+          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
+          \/#{number_with_delimiter(@assignment.full_points)} Points Allocated
+        %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
+        %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
+        %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
 
     .italic
       = link_to glyph("angle-double-left") + "Return to Assignment", assignment_path(@assignment), class: "return-link"
