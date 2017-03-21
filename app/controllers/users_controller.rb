@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   before_action :ensure_staff?,
     except: [:activate, :activated, :edit_profile, :update_profile]
-  before_action :ensure_admin?, only: [:all]
+  before_action :ensure_admin?, only: [:change_password, :update_password]
   before_action :save_referer, only: :manually_activate
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
@@ -128,12 +128,6 @@ class UsersController < ApplicationController
       @user.course_memberships.where(course_id: current_course).first
   end
 
-  def change_password
-    @user = User.find(params[:id])
-    @course_membership =
-      @user.course_memberships.where(course_id: current_course).first
-  end
-
   def update_profile
     @user = current_user
 
@@ -146,25 +140,6 @@ class UsersController < ApplicationController
     if @user.update_attributes(up)
       redirect_to dashboard_path,
         notice: "Your profile was successfully updated!"
-    else
-      @course_membership =
-        @user.course_memberships.where(course_id: current_course).first
-      render :edit_profile
-    end
-  end
-
-  def update_password
-    @user = User.find(params[:id])
-
-    up = user_params
-    if up[:password].blank? && up[:password_confirmation].blank?
-      up.delete(:password)
-      up.delete(:password_confirmation)
-    end
-
-    if @user.update_attributes(up)
-      redirect_to dashboard_path,
-        notice: "#{@user.name}'s profile was successfully updated!"
     else
       @course_membership =
         @user.course_memberships.where(course_id: current_course).first
