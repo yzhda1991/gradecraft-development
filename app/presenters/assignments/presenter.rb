@@ -177,13 +177,12 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   # Move to API
-  def pass_fail_scores_for(user)
-    scores = self.pass_fail_scores
+  def pass_fail_score_for(user)
     grade = grades.where(student_id: user.id).first if user.present?
     if GradeProctor.new(grade).viewable? user: user, course: course
-      scores[:user_score] = grade.pass_fail_status
+      return grade.pass_fail_status
     end
-    scores
+    return nil
   end
 
   def has_scores_for?(user)
