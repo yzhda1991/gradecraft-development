@@ -4,6 +4,7 @@
     .class-analytics-graph{"ng-app" => "gradecraft"}
       - if presenter.assignment.pass_fail?
         %h3 Scores Earned
+        -# Move to API: data-levels, data-scores
         #levels_per_assignment{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.pass_fail_scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
       - else
         %h3 Grade Distribution
@@ -30,7 +31,5 @@
   - if !presenter.assignment.pass_fail?
     .scores-earned-bar-chart
       %h3 Scores Earned
+      -# Move to API: data-levels, data-scores
       #levels_per_assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-scores" => presenter.scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
-
-
-

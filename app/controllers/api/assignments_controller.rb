@@ -25,6 +25,7 @@ class API::AssignmentsController < ApplicationController
   # /api/assignments/:assignment_id/analytics
   # optional user for graph:
   # /api/assignments/:assignment_id/analytics?user_id=:user_id
+
   # Needs to replace:
   #  app/views/grades/analytics/_group_analytics.haml
   #  app/views/grades/analytics/_individual_analytics.haml
@@ -32,7 +33,6 @@ class API::AssignmentsController < ApplicationController
   #    presenter.scores_for(current_student)
   #  methods on Gradable Concern
   #  methods on Assignment
-
   def analytics
     @assignment = Assignment.find(params[:assignment_id])
     # data as presented in the analytics partials

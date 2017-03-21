@@ -156,14 +156,17 @@ class Assignments::Presenter < Showtime::Presenter
     grade_with_rubric? && !grades_available_for?(user) && ( !user || assignment.description_visible_for_student?(user) )
   end
 
+  # Move to API
   def scores
     { scores: assignment.graded_or_released_scores }
   end
 
+  # Move to API
   def pass_fail_scores
     { scores: assignment.grades.graded_or_released.pluck(:pass_fail_status) }
   end
 
+  # Move to API
   def scores_for(user)
     scores = self.scores
     grade = grades.where(student_id: user.id).first if user.present?
@@ -173,6 +176,7 @@ class Assignments::Presenter < Showtime::Presenter
     scores
   end
 
+  # Move to API
   def pass_fail_scores_for(user)
     scores = self.pass_fail_scores
     grade = grades.where(student_id: user.id).first if user.present?
