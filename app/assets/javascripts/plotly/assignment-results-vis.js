@@ -1,6 +1,14 @@
-var $numberComplete = $('#numberComplete');
-if ($numberComplete.length) {
-  var percentParticipated = JSON.parse($numberComplete.attr('data-percent'));
+var $assignmentPariticpationAnalytics = $('#assignment-participation-analytics');
+if ($assignmentPariticpationAnalytics.length) {
+  var assignment_id = $assignmentPariticpationAnalytics.attr('data-assignment-id');
+  var student_id = $assignmentPariticpationAnalytics.attr('data-student-id');
+  $.get( "/api/assignments/" + assignment_id + "/analytics?student_id=" + student_id, function( data ) {
+    PlotDistro(data);
+  });
+}
+
+var PlotDistro = function(data){
+  var percentParticipated = data.participation_rate;
   var percentNotParticipated = 100 - percentParticipated;
   var participationData = [{
     values: [percentParticipated, percentNotParticipated],
@@ -41,5 +49,5 @@ if ($numberComplete.length) {
     }]
   };
 
-  Plotly.newPlot('numberComplete', participationData, pieLayout, {displayModeBar: false});
+  Plotly.newPlot('assignment-participation-analytics', participationData, pieLayout, {displayModeBar: false});
 }

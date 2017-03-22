@@ -1,6 +1,6 @@
-if ($('#levels_per_assignment').length) {
-  var assignmentGrades = JSON.parse($('#levels_per_assignment').attr('data-levels'));
-  var studentGrade = JSON.parse($('#levels_per_assignment').attr('data-user-score'));
+if ($('#levels-per-assignment').length) {
+  var assignmentGrades = JSON.parse($('#levels-per-assignment').attr('data-levels'));
+  var studentGrade = JSON.parse($('#levels-per-assignment').attr('data-user-scores'));
   var grades = assignmentGrades.scores;
 
   var xValues = [];
@@ -64,7 +64,7 @@ if ($('#levels_per_assignment').length) {
     }
   };
 
-  if ($('#levels_per_assignment').hasClass('student-distro')) {
+  if ($('#levels-per-assignment').hasClass('student-distro')) {
       layout.height = 230;
       if (studentGrade) {
         layout.annotations = [{
@@ -86,5 +86,5 @@ if ($('#levels_per_assignment').length) {
     }
 
   // eslint-disable-next-line no-undef
-  Plotly.newPlot('levels_per_assignment', data, layout, {displayModeBar: false});
+  Plotly.newPlot('levels-per-assignment', data, layout, {displayModeBar: false});
 }

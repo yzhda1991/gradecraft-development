@@ -26,10 +26,10 @@
 
     .class-analytics-graph
       %h3 Participants
-      #numberComplete{"data-percent" => "#{presenter.participation_rate}"}
+      #assignment-participation-analytics{ "data-assignment-id" => presenter.assignment.id, "data-student-id" => current_student.id || nil }
 
   - if !presenter.assignment.pass_fail?
     .scores-earned-bar-chart
       %h3 Scores Earned
       -# Move to API: data-levels, data-scores
-      #levels_per_assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-scores" => presenter.scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
+      #levels-per-assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-user-scores" => presenter.scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
