@@ -307,7 +307,7 @@ end
     course_config[:course].tap do |course|
       badge = Badge.create! do |b|
         @badge_default_config[:attributes].keys.each do |attr|
-          b[attr] = config[:attributes][attr] ||
+          b[attr] = config[:attributes].key?(attr) ? config[:attributes][attr] :
             @badge_default_config[:attributes][attr]
         end
         b.course = course
@@ -354,7 +354,7 @@ end
     course_config[:course].tap do |course|
       assignment_type = AssignmentType.create! do |at|
         @assignment_type_default_config[:attributes].keys.each do |attr|
-          at[attr] = config[:attributes][attr] ||
+          at[attr] = config[:attributes].key?(attr) ? config[:attributes][attr] :
             @assignment_type_default_config[:attributes][attr]
         end
         at.course = course
@@ -594,7 +594,7 @@ end
               elsif attr == :score
                 cg[attr] = rand(assignment_full_points)
               else
-                cg[attr] = grade_attributes[attr] ||
+                cg[attr] = grade_attributes.key?(attr) ? grade_attributes[attr] :
                   @challenge_default_config[:grade_attributes][attr]
               end
             end
