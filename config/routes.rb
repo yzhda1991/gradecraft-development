@@ -354,7 +354,9 @@ Rails.application.routes.draw do
       end
       resources :attachments, only: [:create, :destroy], module: :grades
     end
-    resources :grade_scheme_elements, only: :index
+    resources :grade_scheme_elements, only: :index do
+      delete :destroy, on: :collection
+    end
     resources :levels, only: :update
 
     # Student Predictor View, Predictor Preview
