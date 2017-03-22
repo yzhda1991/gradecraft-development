@@ -32,4 +32,4 @@
     .scores-earned-bar-chart
       %h3 Scores Earned
       -# Move to API: data-levels, data-scores
-      #levels_per_assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
+      #levels-per-assignment{"data-levels" => presenter.assignment.percentage_score_earned.to_json, "data-user-scores" => presenter.scores_for(current_student).to_json, class: ("student-distro" if current_student.present?) }
