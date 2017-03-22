@@ -1,14 +1,14 @@
 # Uses the GradeSchemeElementsService to aggregate a list of initialized levels
 # for the initial setup process in a course
 @gradecraft.factory 'GradeSchemeElementsSetupService', ['GradeSchemeElementsService', (GradeSchemeElementsService) ->
-  standardGradeLetters = ['A', 'B', 'C', 'D', 'E', 'F']
+  standardGradeLetters = ['A', 'B', 'C', 'D', 'F']
 
   # Add grade scheme elements with the preset parameters
   _addGradeLevels = (includePlusMinusGrades) ->
     _.each(standardGradeLetters, (letter) ->
-      GradeSchemeElementsService.addElement(null, { letter: letter + "+" }) if includePlusMinusGrades
+      GradeSchemeElementsService.addElement(null, { letter: letter + "+" }) if includePlusMinusGrades and letter != 'F'
       GradeSchemeElementsService.addElement(null, { letter: letter })
-      GradeSchemeElementsService.addElement(null, { letter: letter + "-" }) if includePlusMinusGrades
+      GradeSchemeElementsService.addElement(null, { letter: letter + "-" }) if includePlusMinusGrades and letter not in ['D','F']
     )
 
   # Add additional levels
