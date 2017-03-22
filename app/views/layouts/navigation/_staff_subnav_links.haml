@@ -46,7 +46,7 @@
 
 %h5 Course Setup
 %li= link_to_unless_current decorative_glyph(:cog) + "Course Settings", edit_course_path(current_course)
-%li= active_course_link_to_unless_current decorative_glyph(:tasks) + "Grade Predictor Preview", predictor_path
+%li= link_to_unless_current decorative_glyph(:tasks) + "Grade Predictor Preview", predictor_path
 %li= link_to_unless_current decorative_glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 
 .hide-for-small
