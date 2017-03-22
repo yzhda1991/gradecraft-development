@@ -14,9 +14,9 @@ class API::BadgesController < ApplicationController
       :visible,
       :visible_when_locked)
 
-    if  current_user_is_student?
+    if current_user_is_student?
       @student = current_student
-      @allow_updates = !impersonating?
+      @allow_updates = !impersonating? && current_course.active?
 
       if !impersonating?
         @badges.includes(:predicted_earned_badges)

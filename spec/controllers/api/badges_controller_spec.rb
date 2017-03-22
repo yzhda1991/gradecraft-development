@@ -1,10 +1,10 @@
 include SessionHelper
 
 describe API::BadgesController do
-  let(:course) { build_stubbed(:course) }
-  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:course) { build_stubbed(:course, status: true) }
+  let(:student) { build_stubbed(:user, courses: [course], role: :student) }
+  let(:professor) { build(:user, courses: [course], role: :professor) }
   let(:badge) { create(:badge, course: course) }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }
@@ -31,19 +31,35 @@ describe API::BadgesController do
     before(:each) { login_user(student) }
 
     describe "GET index" do
-      before do 
+      before do
         allow(controller).to receive(:current_course).and_return(course)
       end
-      
-      it "assigns the student and badges with the call to update" do
-        get :index, format: :json
-        expect(assigns(:student)).to eq(student)
-        badge.reload
-        predictor_badge_attributes.each do |attr|
-          expect(assigns(:badges)[0][attr]).to eq(badge[attr])
+
+      context "when the course is active" do
+        it "assigns the student and badges with the call to update" do
+          get :index, format: :json
+          expect(assigns(:student)).to eq(student)
+          badge.reload
+          predictor_badge_attributes.each do |attr|
+            expect(assigns(:badges)[0][attr]).to eq(badge[attr])
+          end
+          expect(assigns(:allow_updates)).to be_truthy
+          expect(response).to render_template(:index)
         end
-        expect(assigns(:allow_updates)).to be_truthy
-        expect(response).to render_template(:index)
+      end
+
+      context "when the course is inactive" do
+        it "assigns the student and badges with the call to update" do
+          course.status = false
+          get :index, format: :json
+          expect(assigns(:student)).to eq(student)
+          badge.reload
+          predictor_badge_attributes.each do |attr|
+            expect(assigns(:badges)[0][attr]).to eq(badge[attr])
+          end
+          expect(assigns(:allow_updates)).to be_falsey
+          expect(response).to render_template(:index)
+        end
       end
 
       it "adds the student's predicted earned badges" do
