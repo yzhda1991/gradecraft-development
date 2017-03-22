@@ -64,6 +64,7 @@
     twitter_hashtag: nil,
     student_term: "Student",
     year: Date.today.year,
+    status: true
   }
 }
 
@@ -320,6 +321,23 @@ Dracula",
     to the assignments. Show us you've completed the necessary competencies in any \
     way you like.",
     name: "Course with No Dates",
+    semester: "Fall",
+    has_teams: true,
+  }
+}
+
+@courses[:inactive_course] = {
+  quotes: {
+    course_created: "“Stay hungry, stay foolish” ― Steve Jobs",
+    grade_sceme_elements_created: "“Stay thirsty my friends” - The most interesting man in the world",
+    teams_created: "“Don't cry because it's over, smile because it happened.” - Dr. Seuss",
+  },
+  attributes: {
+    status: false,
+    accepts_submissions: true,
+    course_number: "GC106",
+    gameful_philosophy: "This course is inactive. None shall pass.",
+    name: "Inactive course",
     semester: "Fall",
     has_teams: true,
   }

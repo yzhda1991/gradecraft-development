@@ -91,12 +91,13 @@ User.create! do |u|
 end.activate!
 puts "Children must be taught how to think, not what to think. ― Margaret Mead"
 
-# Itereate through course names and create courses
+# Iterate through course names and create courses
 @courses.each do |course_name, config|
   course = Course.create! do |c|
     @course_default_config[:attributes].keys.each do |attr|
       c[attr] =
-        config[:attributes][attr] || @course_default_config[:attributes][attr]
+        config[:attributes].key?(attr) ? config[:attributes][attr] :
+          @course_default_config[:attributes][attr]
     end
 
     # Add weight attributes if course has weights
