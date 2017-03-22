@@ -42,11 +42,11 @@ module LinkHelper
   # Conditionally renders a link_to helper based on whether the course is active
   # or not
   def active_course_link_to(name = nil, options = nil, html_options = nil, &block)
-    link_to name, options, html_options, &block if current_course.active?
+    link_to name, options, html_options, &block if current_user_is_admin? || current_course.active?
   end
 
   def active_course_link_to_unless_current(name, options = {}, html_options = {}, &block)
-    link_to_unless_current name, options, html_options, &block if current_course.active?
+    link_to_unless_current name, options, html_options, &block if current_user_is_admin? || current_course.active?
   end
 
   class InternalLinkScrubber < Rails::Html::PermitScrubber
