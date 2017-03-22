@@ -45,35 +45,6 @@ describe Assignments::Presenter do
     end
   end
 
-  describe "#has_scores_for?" do
-    let(:user) { double(:user) }
-
-    it "does not have scores if the scores are nil" do
-      allow(subject).to receive(:scores_for).and_return nil
-      expect(subject.has_scores_for?(user)).to eq false
-    end
-
-    it "does not have scores if the scores are empty" do
-      allow(subject).to receive(:scores_for).and_return Hash.new
-      expect(subject.has_scores_for?(user)).to eq false
-    end
-
-    it "does not have scores if the scores is not in the right format" do
-      allow(subject).to receive(:scores_for).and_return({ blah: [1, 2] })
-      expect(subject.has_scores_for?(user)).to eq false
-    end
-
-    it "does not have scores if the scores returned are empty" do
-      allow(subject).to receive(:scores_for).and_return({ scores: [] })
-      expect(subject.has_scores_for?(user)).to eq false
-    end
-
-    it "has scores if the scores returned are not empty" do
-      allow(subject).to receive(:scores_for).and_return({ scores: [1,2] })
-      expect(subject.has_scores_for?(user)).to eq true
-    end
-  end
-
   describe "#grade_with_rubric?" do
     it "is not to be used if the assignment doesn't grade with a rubric" do
       allow(assignment).to receive(:grade_with_rubric?).and_return false

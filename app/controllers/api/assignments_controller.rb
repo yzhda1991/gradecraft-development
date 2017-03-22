@@ -22,25 +22,14 @@ class API::AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
   end
 
+  # optional student for graph point:
   # /api/assignments/:assignment_id/analytics
-  # optional user for graph:
   # /api/assignments/:assignment_id/analytics?student_id=:student_id
-
-  # We should ideally remove:
-
-  #  methods on Assignments::Presenter
-  #    scores_for
-  #    pass_fail_scores_for
-  #    participation_rate
-  #  methods on Gradable Concern
-  #  methods on Assignment
-  #    percentage_pass_fail_earned
-
   def analytics
     @assignment = Assignment.find(params[:assignment_id])
     @participation_rate = participation_rate
     if @assignment.pass_fail?
-      @assignment_score_frequency = @assignment.percentage_pass_fail_earned
+      @assignment_score_frequency = pass_fail_frequency
       @user_score = pass_fail_score_for params[:student_id] if params[:student_id].present?
     else
       @assignment_score_frequency = assignment_score_frequency
@@ -51,15 +40,20 @@ class API::AssignmentsController < ApplicationController
 
   private
 
-  # These methods shouldn't be in a controller.
-  # Once they are removed from the spaces mentioned above, they
-  # could possibly go into a concern?
+  # I have collected these methods from all over,
+  # but they shouldn't be in a controller, either.
+  # Could they go into a helper or a concern?
 
   # Creating an array with the set of scores earned on the assignment
   def assignment_score_frequency
+    # also remove methods on Gradable Concern?
     @assignment.earned_score_count.collect { |s| { frequency: s[1], score: s[0] }}
   end
 
+  # Creating an array with the set of pass/fail statuses earned on the assignment
+  def pass_fail_frequency
+    @assignment.earned_status_count.collect { |s| { frequency: s[1], score: s[0] }}}
+  end
 
   def score_for(student_id)
     grade = Grade.where(student_id: student_id, assignment: @assignment).first
@@ -88,5 +82,4 @@ class API::AssignmentsController < ApplicationController
     return current_course.graded_student_count if @assignment.is_individual?
     return @assignment.groups.count if @assignment.has_groups?
   end
-
 end

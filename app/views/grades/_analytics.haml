@@ -5,7 +5,10 @@
       - if presenter.assignment.pass_fail?
         %h3 Scores Earned
 
-        #assignment-levels-analytics{"data-levels" => presenter.assignment.percentage_pass_fail_earned.to_json, "data-scores" => presenter.pass_fail_scores_for(current_user).to_json, class: ("student-distro" if current_student.present?) }
+        #assignment-levels-analytics{ "data-assignment-id" => presenter.assignment.id,
+        "data-student-id" => current_student.id || nil,
+        "class" => ("student-distro" if current_student.present?)}
+
       - else
         %h3 Grade Distribution
 
