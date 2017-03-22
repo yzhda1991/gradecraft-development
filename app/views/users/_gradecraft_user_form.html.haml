@@ -13,7 +13,7 @@
     .form-item
       = f.label :display_name, "Pseudonym"
       = f.text_field :display_name
-    - if ! @user.kerberos_uid.present?
+    - if ! @user.kerberos_uid.present? && @user.persisted?
       .form-item
         = f.label :password
         = f.password_field :password, as: :password
