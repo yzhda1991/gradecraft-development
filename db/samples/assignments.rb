@@ -1021,18 +1021,6 @@ obvious mistake. Two hundred people can read two hundred books. ― John Cage",
   }
 }
 
-@assignments[:with_more_points_than_atype_cap] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :capped,
-  attributes: {
-    name: "Assignment with More Points than the Max Value for Assignment Type",
-    due_at: 3.weeks.from_now,
-    full_points: 150000,
-  }
-}
-
 @assignments[:sends_email_notes_on_release] = {
   quotes: {
     assignment_created: "People tend to forget that play is serious. – David \
