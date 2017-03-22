@@ -36,7 +36,8 @@ describe GradeExporter do
       expect(csv[2][4]).to eq "Grrrrreat!"
     end
 
-    it "generates a CSV with grade statuses if the assignment is pass/fail" do
+    it "generates a CSV with grade statuses if the assignment is pass/fail and we
+        want statuses as plaintext" do
       assignment.pass_fail = true
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
@@ -47,6 +48,17 @@ describe GradeExporter do
       expect(csv[1][0]).to eq students[0].first_name
       expect(csv[1][1]).to eq students[0].last_name
       expect(csv[1][2]).to eq students[0].email
+      expect(csv[1][3]).to eq "Pass"
+    end
+
+    it "generates a CSV with grade statuses if the assignment is pass/fail and we
+        want statuses as an integer" do
+      assignment.pass_fail = true
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return double(:grade, score: nil, pass_fail_status: "Pass", feedback: nil)
+      csv = CSV.new(subject.export_grades(assignment, students, true)).read
+      expect(csv.length).to eq 3
       expect(csv[1][3]).to eq "1"
     end
 
@@ -102,8 +114,8 @@ describe GradeExporter do
       csv = CSV.new(subject.export_group_grades(assignment, groups)).read
 
       expect(csv.length).to eq 3
-      expect(csv[1]).to eq [groups.first.name, "1", ""]
-      expect(csv[2]).to eq [groups.last.name, "0", "We need to talk..."]
+      expect(csv[1]).to eq [groups.first.name, "Pass", ""]
+      expect(csv[2]).to eq [groups.last.name, "Fail", "We need to talk..."]
     end
 
     it "includes groups that do not have grades for the assignment" do
@@ -160,6 +172,16 @@ describe GradeExporter do
       expect(csv[2][6]).to eq "Hello there"
       expect(csv[1][7]).to eq "#{updated_at}"
       expect(csv[2][7]).to eq "#{updated_at}"
+    end
+
+    it "generates a CSV with grade statuses if the assignment is pass/fail" do
+      assignment.pass_fail = true
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return double(:grade, instructor_modified?: true, graded_or_released?: true,
+                              score: 0, raw_points: 0, pass_fail_status: "Pass", feedback: nil, graded_at: DateTime.now)
+      csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
+      expect(csv[1][3]).to eq "Pass"
     end
 
     it "includes students that do not have grades for the assignment" do
