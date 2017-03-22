@@ -736,37 +736,15 @@ describe Assignment do
   end
 
   describe "#grade_radio?" do
-    context "when the assignment is pass/fail type" do
-      before(:each) { allow(subject).to receive(:pass_fail?).and_return true }
-
-      it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
-        subject.mass_grade_type = "Radio Buttons"
-        subject.assignment_score_levels.build
-        expect(subject).to be_grade_radio
-      end
-
-      it "should render a radio list if the mass grade type is radio and there are not assignment score levels" do
-        subject.mass_grade_type = "Radio Buttons"
-        expect(subject).to be_grade_radio
-      end
-
-      it "should not render a radio list if the mass grade type is not radio" do
-        subject.mass_grade_type = "Checkboxes galore"
-        expect(subject).to_not be_grade_radio
-      end
+    it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
+      subject.mass_grade_type = "Radio Buttons"
+      subject.assignment_score_levels.build
+      expect(subject).to be_grade_radio
     end
 
-    context "when the assignment is not pass/fail type" do
-      it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
-        subject.mass_grade_type = "Radio Buttons"
-        subject.assignment_score_levels.build
-        expect(subject).to be_grade_radio
-      end
-
-      it "should not render a radio list if there are no assignment score levels" do
-        subject.mass_grade_type = "Radio List"
-        expect(subject).to_not be_grade_radio
-      end
+    it "should not render a radio list if there are no assignment score levels" do
+      subject.mass_grade_type = "Radio List"
+      expect(subject).to_not be_grade_radio
     end
   end
 
