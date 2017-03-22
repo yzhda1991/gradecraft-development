@@ -27,8 +27,7 @@ class API::AssignmentsController < ApplicationController
   # /api/assignments/:assignment_id/analytics?student_id=:student_id
 
   # We should ideally remove:
-  #  app/views/grades/analytics/_group_analytics.haml
-  #  app/views/grades/analytics/_individual_analytics.haml
+
   #  methods on Assignments::Presenter
   #    scores_for
   #    pass_fail_scores_for
