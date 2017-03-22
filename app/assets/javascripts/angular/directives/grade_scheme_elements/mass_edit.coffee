@@ -15,6 +15,10 @@
     vm.postGradeSchemeElements = () ->
       GradeSchemeElementsService.postGradeSchemeElements('/grade_scheme_elements/')
 
+    vm.deleteGradeSchemeElements = () ->
+      if confirm "Are you sure you want to delete all grade scheme elements?"
+        GradeSchemeElementsService.deleteGradeSchemeElements('/grade_scheme_elements/')
+
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
       vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
@@ -31,7 +35,8 @@
       # For manually triggering form validation by child directives
       ctrl.updateFormValidity = () ->
         _.each(ctrl.gradeSchemeElements, (element, index) ->
-          scope.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
+          if scope.gradeSchemeElementsForm["point_threshold_#{index}"]?
+            scope.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
         )
   }
 ]

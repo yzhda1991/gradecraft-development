@@ -112,6 +112,16 @@
         GradeCraftAPI.logResponse(error)
     )
 
+  deleteGradeSchemeElements = (redirectUrl=null) ->
+    $http.delete('/api/grade_scheme_elements/').then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+        window.location.href = redirectUrl if redirectUrl?
+      , (error) ->
+        alert('Failed to delete grade scheme elements.')
+        GradeCraftAPI.logResponse(error)
+    )
+
   {
     gradeSchemeElements: gradeSchemeElements
     removeElement: removeElement
@@ -120,6 +130,7 @@
     validateElements: validateElements
     getGradeSchemeElements: getGradeSchemeElements
     postGradeSchemeElements: postGradeSchemeElements
+    deleteGradeSchemeElements: deleteGradeSchemeElements
     totalPoints: totalPoints
   }
 ]
