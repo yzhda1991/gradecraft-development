@@ -1,5 +1,5 @@
 # box plot for assignment grade distribution
-# includes an individuals grade if supplied
+# includes an individual's grade if supplied
 
 @gradecraft.directive 'assignmentDistributionAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
     analyticsDistCtrl = [()->

@@ -2,6 +2,10 @@
 
   assignmentData = {}
 
+
+  # We should add an indication if this has already loaded, so that each plot does not
+  # call the same endpoint again.
+
   getAssignmentAnalytics = (assignmentId, studentId)->
     $http.get("/api/assignments/#{assignmentId}/analytics?student_id=#{studentId}").then(
       (response) ->

@@ -52,7 +52,7 @@ class API::AssignmentsController < ApplicationController
 
   # Creating an array with the set of pass/fail statuses earned on the assignment
   def pass_fail_frequency
-    @assignment.earned_status_count.collect { |s| { frequency: s[1], score: s[0] }}}
+    @assignment.earned_status_count.collect { |s| { frequency: s[1], score: s[0] }}
   end
 
   def score_for(student_id)

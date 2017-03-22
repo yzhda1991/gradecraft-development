@@ -72,8 +72,8 @@
 //= require plugins/video.min.js
 
 //= require plotly/assignment_levels_analytics
+//= require plotly/assignment_participation_analytics
 //= require plotly/grade_distribution
-//= require plotly/assignment-results-vis
 //= require plotly/team_analytics
 
 //= require gradecraft
