@@ -35,18 +35,15 @@ class API::AssignmentsController < ApplicationController
   #  methods on Gradable Concern
   #  methods on Assignment
   #    percentage_pass_fail_earned
-  #    percentage_score_earned
 
   def analytics
     @assignment = Assignment.find(params[:assignment_id])
     @participation_rate = participation_rate
-    # is there a better name for levels and scores,
-    # or could they be combined into a single dataset?
     if @assignment.pass_fail?
-      @levels = @assignment.percentage_pass_fail_earned
+      @assignment_score_frequency = @assignment.percentage_pass_fail_earned
       @user_score = pass_fail_score_for params[:student_id] if params[:student_id].present?
     else
-      @levels = @assignment.percentage_score_earned
+      @assignment_score_frequency = assignment_score_frequency
       @scores = @assignment.graded_or_released_scores
       @user_score = score_for params[:student_id] if params[:student_id].present?
     end
@@ -57,6 +54,12 @@ class API::AssignmentsController < ApplicationController
   # These methods shouldn't be in a controller.
   # Once they are removed from the spaces mentioned above, they
   # could possibly go into a concern?
+
+  # Creating an array with the set of scores earned on the assignment
+  def assignment_score_frequency
+    @assignment.earned_score_count.collect { |s| { frequency: s[1], score: s[0] }}
+  end
+
 
   def score_for(student_id)
     grade = Grade.where(student_id: student_id, assignment: @assignment).first

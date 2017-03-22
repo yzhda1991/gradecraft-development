@@ -23,7 +23,7 @@ The `updated_at` attributes of both these models will be set to the current date
 #### has_one
 
   * [Rubric](rubrics) - when an Assignment is destroyed, its Rubric will be destroyed as well
-  * [Imported Assignment](imported_assignment) 
+  * [Imported Assignment](imported_assignment)
 
 #### has_many
 
@@ -54,7 +54,7 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * boolean methods that must be set to either true or false: `student_logged`, `required`, `accepts_submissions`,
   `release_necessary`, `visible`, `resubmissions_allowed`, `include_in_timeline`, `include_in_predictor`, `include_in_to_do`, `use_rubric`, `accepts_attachments`, `accepts_text`, `accepts_links`, `pass_fail`, `hide_analytics`, `visible_when_locked`, `show_name_when_locked`, `show_points_when_locked`, `show_description_when_locked`, `show_purpose_when_locked`
 
-### Callbacks 
+### Callbacks
 
 #### before_save
 
@@ -93,7 +93,7 @@ When an Assignment is destroyed, all of the following models that belong to it w
     * "Checkbox" - a checkbox that, when selected, gives the student the amount of points set by `full_points` multiplied by his/her assignment weight (if he/she has one)
     * "Select List" - a dropdown list, with the items being the grade levels
     * "Radio Buttons" - each radio button is a grade level
-    * "Text" - text field that accepts an integer between 0 and `full_points`  
+    * "Text" - text field that accepts an integer between 0 and `full_points`
   * `max_submissions`
   * `name` - name of assignment, required attribute
   * `notify_released` - whether a student should be notified by email when a grade is awarded. Defaults to true
@@ -110,7 +110,7 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `student_logged` - boolean switch controlling whether students can log grades themselves. When a student's grade is logged, the grade model's `raw_points` is set to the point total and its `status` is set to "Graded"
   * `threshold_points` - minimum amount of points students must receive to earn points for the assignment. If the threshold is not met, the student will earn 0 points for the assignment. Implemented in the grade model's method `calculate_final_points`
   * `use_rubric` - boolean switch controlling whether instructors must grade students using a rubric as opposed to quick grading. Instructors may still create a rubric regardless of this value. Defaults to true
-  * `visible` - whether the assignment is visible to students. If true, an assignment functions as you'd normally expect. If false, the assignment will be invisible to a student until they have been graded by their instructor. Defaults to true  
+  * `visible` - whether the assignment is visible to students. If true, an assignment functions as you'd normally expect. If false, the assignment will be invisible to a student until they have been graded by their instructor. Defaults to true
   * `visible_when_locked` - boolean switch controlling whether the assignment will be visible when it is locked
 
 ### Instance Methods
@@ -175,10 +175,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `is_unlocked_for_student?(student)` - true when either the assignment is unlocked for the student or no unlock conditions are present
   * `check_unlock_status(student)` - checks to see if all unlock conditions have been completed: if so, the assignment's unlock state for the student is set to unlocked
   * `find_or_create_unlock_state(student)` - finds the assignment's unlock state for the student, creating it if it does not already exist
-
-#### Analytics
-
-  * `percentage_score_earned` - returns a hash with one key, "scores", that is an array of hashes with the `earned_score_count` keys and values in them as "name" and "data", respectively
 
 #### Assignment Score Levels
 

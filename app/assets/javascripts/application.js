@@ -71,7 +71,7 @@
 //= require plugins/url.min.js
 //= require plugins/video.min.js
 
-//= require plotly/levels_per_assign
+//= require plotly/assignment_levels_analytics
 //= require plotly/grade_distribution
 //= require plotly/assignment-results-vis
 //= require plotly/team_analytics

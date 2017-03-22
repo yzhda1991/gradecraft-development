@@ -286,11 +286,6 @@ class Assignment < ActiveRecord::Base
     GradeExporter.new.export_grades(self, students, options)
   end
 
-  # Creating an array with the set of scores earned on the assignment
-  def percentage_score_earned
-    { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
-  end
-
   # Creating an array with the set of pass/fail statuses earned on the assignment
   def percentage_pass_fail_earned
     { scores: earned_status_count.collect { |s| { data: s[1], name: s[0] }}}

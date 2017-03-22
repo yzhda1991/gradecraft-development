@@ -1,7 +1,15 @@
-if ($('#levels-per-assignment').length) {
-  var assignmentGrades = JSON.parse($('#levels-per-assignment').attr('data-levels'));
-  var studentGrade = JSON.parse($('#levels-per-assignment').attr('data-user-scores')).user_score;
-  var grades = assignmentGrades.scores;
+var $assignmentLevelsAnalytics = $('#assignment-levels-analytics');
+if ($assignmentLevelsAnalytics.length) {
+  var assignment_id = $assignmentLevelsAnalytics.attr('data-assignment-id');
+  var student_id = $assignmentLevelsAnalytics.attr('data-student-id');
+  $.get( "/api/assignments/" + assignment_id + "/analytics?student_id=" + student_id, function( data ) {
+    plotAssignmentLevelsAnalytics(data);
+  });
+}
+
+var plotAssignmentLevelsAnalytics = function(data){
+  var studentGrade = data.user_score;
+  var scoreFrequency = data.assignment_score_frequency;
 
   var xValues = [];
   var yValues = [];
@@ -9,11 +17,11 @@ if ($('#levels-per-assignment').length) {
   var outlineColors = [];
   var yStudentMarker;
 
-  grades.forEach(function(grade) {
-    var xValue = grade.name;
+  scoreFrequency.forEach(function(scoreLevel) {
+    var xValue = scoreLevel.score;
     xValues.push(xValue);
 
-    var yValue = grade.data;
+    var yValue = scoreLevel.frequency;
     yValues.push(yValue);
 
     if (xValue === studentGrade) {
@@ -64,7 +72,7 @@ if ($('#levels-per-assignment').length) {
     }
   };
 
-  if ($('#levels-per-assignment').hasClass('student-distro')) {
+  if ($('#assignment-levels-analytics').hasClass('student-distro')) {
       layout.height = 230;
       if (studentGrade) {
         layout.annotations = [{
@@ -86,5 +94,5 @@ if ($('#levels-per-assignment').length) {
     }
 
   // eslint-disable-next-line no-undef
-  Plotly.newPlot('levels-per-assignment', data, layout, {displayModeBar: false});
+  Plotly.newPlot('assignment-levels-analytics', data, layout, {displayModeBar: false});
 }

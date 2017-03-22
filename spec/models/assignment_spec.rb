@@ -359,19 +359,6 @@ describe Assignment do
     end
   end
 
-  describe "#percentage_score_earned" do
-    before { subject.save }
-
-    it "returns the earned scores with a scores key" do
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 105, status: "Graded"
-      scores = subject.percentage_score_earned[:scores]
-      expect(scores).to include({ data: 1, name: 105 })
-      expect(scores).to include({ data: 2, name: 85 })
-    end
-  end
-
   describe "pass-fail assignments" do
     it "sets point total to zero on save" do
       subject.full_points = 3000
