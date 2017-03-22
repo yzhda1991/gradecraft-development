@@ -8,13 +8,28 @@ describe GradeSchemeElement do
     create :course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id
   end
 
-  context "validations" do
+  describe "validations" do
     it "is valid with a course" do
       expect(subject).to be_valid
     end
 
     it "is invalid without a course" do
       subject.course = nil
+      expect(subject).to be_invalid
+    end
+
+    it "is valid if lowest points is nil" do
+      subject.lowest_points = nil
+      expect(subject).to be_valid
+    end
+
+    it "is invalid if lowest points is not numeric" do
+      subject.lowest_points = "one"
+      expect(subject).to be_invalid
+    end
+
+    it "is invalid if lowest points is greater than a length of nine" do
+      subject.lowest_points = 1234567890
       expect(subject).to be_invalid
     end
   end
