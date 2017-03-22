@@ -186,7 +186,11 @@
 
     # parameters are configured to work with existing service
     # BuildsGrade: /services/creates_grade/builds_modelGrade.rb
-    groupParams = _.map(grades, (g)->
+    allGradesParams = _.map(grades, (g)->
+
+      # pass in group id if this is a group grade
+      group_id = if _recipientType == "group" then _recipientId else null
+
       {
         student_id: g.student_id
         params: {
@@ -194,6 +198,7 @@
             adjustment_points: g.adjustment_points
             adjustment_points_feedback: g.adjustment_points_feedback
             feedback: modelGrade.feedback
+            group_id: group_id
             raw_points: modelGrade.raw_points
             status: modelGrade.status
           }
@@ -202,14 +207,14 @@
       }
     )
 
-    # Iterate over group member's and submit grades:
-    _.each(groupParams, (memberParams)->
+    # Iterate over grades and submit each grade:
+    _.each(allGradesParams, (gradeParams)->
       $http.put(
-        "/api/assignments/#{modelGrade.assignment_id}/students/#{memberParams.student_id}/criterion_grades", memberParams.params
+        "/api/assignments/#{modelGrade.assignment_id}/students/#{gradeParams.student_id}/criterion_grades", gradeParams.params
       ).then(
         (response) ->
           GradeCraftAPI.logResponse(response)
-          if memberParams == _.last(groupParams)
+          if gradeParams == _.last(allGradesParams)
             window.location = returnURL
         ,(response) ->
           GradeCraftAPI.logResponse(response)
