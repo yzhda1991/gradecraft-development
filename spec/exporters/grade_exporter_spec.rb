@@ -57,9 +57,13 @@ describe GradeExporter do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
           .and_return double(:grade, score: nil, pass_fail_status: "Pass", feedback: nil)
+      allow(students[1]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return double(:grade, score: nil, pass_fail_status: "Fail", feedback: "Let's talk...")
       csv = CSV.new(subject.export_grades(assignment, students, true)).read
       expect(csv.length).to eq 3
       expect(csv[1][3]).to eq "1"
+      expect(csv[2][3]).to eq "0"
     end
 
     it "includes students that do not have grades for the assignment" do
