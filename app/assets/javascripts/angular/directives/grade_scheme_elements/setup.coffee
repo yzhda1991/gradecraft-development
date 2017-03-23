@@ -7,14 +7,13 @@
     vm.isUsingGradeLetters = undefined
     vm.isUsingPlusMinusGrades = undefined
     vm.addLevelsBelowF = undefined
-    vm.levelsBelowF = undefined
+    vm.additionalLevels = undefined
 
     vm.postGradeSchemeElements = () ->
       GradeSchemeElementsSetupService.postGradeSchemeElements(
         vm.isUsingGradeLetters,
         vm.isUsingPlusMinusGrades,
-        vm.addLevelsBelowF,
-        vm.levelsBelowF,
+        vm.additionalLevels,
         '/grade_scheme_elements/mass_edit'
       )
   ]

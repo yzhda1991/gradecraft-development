@@ -20,9 +20,9 @@
     GradeSchemeElementsService.addZeroThreshold()
 
   # Create the grade scheme elements
-  postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, addLevelsBelowF, levelsBelowF, redirectUrl=null) ->
+  postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, additionalLevels, redirectUrl=null) ->
     _addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
-    _addAdditionalLevels(levelsBelowF) if addLevelsBelowF
+    _addAdditionalLevels(additionalLevels) if additionalLevels? && additionalLevels > 0
     GradeSchemeElementsService.postGradeSchemeElements(redirectUrl, false)
 
   {

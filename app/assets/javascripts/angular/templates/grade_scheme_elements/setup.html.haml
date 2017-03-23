@@ -21,6 +21,17 @@
                    "name"=>"gradeletters",
                    "required"=>""} No
 
+  %additional-questions.form-section{"ng-if"=>"vm.isUsingGradeLetters === false"}
+    %fieldset
+      .form-question
+        %p How many levels would you like to start with?
+        %label
+          %input{"type"=>"number",
+                 "ng-model"=>"vm.additionalLevels",
+                 "min"=>"1",
+                 "size"=>"8",
+                 "ng-required"=>"!vm.isUsingGradeLetters"}
+
   %additional-questions.form-section{"ng-if"=>"vm.isUsingGradeLetters"}
     %fieldset
       .form-question
@@ -66,7 +77,7 @@
         %p How many?
         %label
           %input{"type"=>"number",
-                 "ng-model"=>"vm.levelsBelowF",
+                 "ng-model"=>"vm.additionalLevels",
                  "min"=>"1",
                  "size"=>"8",
                  "ng-required"=>"vm.isUsingGradeLetters && vm.addLevelsBelowF"}
