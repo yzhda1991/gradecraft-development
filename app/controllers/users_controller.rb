@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   respond_to :html, :json
 
   before_action :ensure_staff?,
-    except: [:activate, :activated, :edit_profile, :update_profile]
+    except: [:activate, :activated, :edit_profile, :update_profile] 
   before_action :save_referer, only: [:manually_activate, :resend_invite_email]
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
