@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   before_action :ensure_staff?,
     except: [:activate, :activated, :edit_profile, :update_profile]
   before_action :ensure_admin?, only: [:all]
-  before_action :save_referer, only: :manually_activate
+  before_action :save_referer, only: [:manually_activate, :resend_invite_email]
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
 
@@ -162,6 +162,14 @@ class UsersController < ApplicationController
         .import(current_course)
       render :import_results
     end
+  end
+
+  # resend invite email
+  def resend_invite_email
+    @user = User.find(params[:id])
+    UserMailer.welcome_email(@user).deliver
+    flash[:notice] = "Welcome email resent"
+    redirect_to session[:return_to] || dashboard_path, notice: "An Invite Email has been sent to #{@user.name}!" and return
   end
 
   private
