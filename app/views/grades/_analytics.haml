@@ -6,14 +6,14 @@
         %h3 Scores Earned
 
         #assignment-levels-analytics{ "data-assignment-id" => presenter.assignment.id,
-        "data-student-id" => current_student.id || nil,
+        "data-student-id" => current_student.present? ? current_student.id : nil,
         "class" => ("student-distro" if current_student.present?)}
 
       - else
         %h3 Grade Distribution
 
         %assignment-distribution-analytics{ "assignment-id" => presenter.assignment.id,
-          "student-id" => current_student.id || nil,
+          "student-id" => current_student.present? ? current_student.id : nil,
           "student-distro" => current_student.present?.to_s }
         #assignment-distribution-graph
 
@@ -29,12 +29,12 @@
 
     .class-analytics-graph
       %h3 Participants
-      #assignment-participation-analytics{ "data-assignment-id" => presenter.assignment.id, "data-student-id" => current_student.id || nil }
+      #assignment-participation-analytics{ "data-assignment-id" => presenter.assignment.id, "data-student-id" => current_student.present? ? current_student.id : nil }
 
   - if !presenter.assignment.pass_fail?
     .scores-earned-bar-chart
       %h3 Scores Earned
 
       #assignment-levels-analytics{ "data-assignment-id" => presenter.assignment.id,
-        "data-student-id" => current_student.id || nil,
+        "data-student-id" => current_student.present? ? current_student.id : nil,
         "class" => ("student-distro" if current_student.present?)}

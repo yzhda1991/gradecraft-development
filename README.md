@@ -85,6 +85,16 @@ to lint a single file:
 
 `coffeelint -f coffeelint.json path/to/file.coffee`
 
+### To lint javascript:
+
+install jslint:
+
+`npm install -g eslint`
+
+to lint the javacripts directory:
+
+`eslint ./app/assets/javascripts --ext .js`
+
 ## Running specs
 
 To run all of the spec examples, you can run the following (this is also the default rake task):

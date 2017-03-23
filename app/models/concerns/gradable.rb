@@ -12,16 +12,6 @@ module Gradable
     pass_fail ? attrs[:pass_fail_status].blank? : attrs[:raw_points].blank?
   end
 
-  def graded_or_released_scores
-    grades.graded_or_released.pluck(:final_points)
-  end
-
-  def grade_count
-    return 0 if graded_or_released_scores.nil?
-    return graded_or_released_scores.count if self.is_individual?
-    return grades.select(:group_id).distinct.count if self.has_groups?
-  end
-
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
     grades.graded_or_released.where(student_id: student.id).first

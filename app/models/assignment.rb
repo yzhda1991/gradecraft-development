@@ -1,6 +1,7 @@
 class Assignment < ActiveRecord::Base
   include Copyable
   include Gradable
+  include Analysable
   include MultipleFileAttributes
   include Sanitizable
   include ScoreLevelable

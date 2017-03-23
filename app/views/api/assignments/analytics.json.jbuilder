@@ -1,4 +1,4 @@
-json.participation_rate @participation_rate
-json.assignment_score_frequency @assignment_score_frequency
-json.scores @scores
+json.participation_rate @assignment.participation_rate
+json.assignment_score_frequency @assignment.score_frequency
+json.scores @assignment.graded_or_released_scores
 json.user_score @user_score
