@@ -8,7 +8,7 @@ class GradeExporter
         grade = student.grade_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
                 student.email,
-                score_for_assignment_type(assignment, grade, pass_fail_statuses_as_int) || "",
+                score_for_assignment(assignment, grade, pass_fail_statuses_as_int) || "",
                 grade.feedback || ""]
       end
     end
@@ -22,7 +22,7 @@ class GradeExporter
       groups.each do |group|
         grade = group.grade_for_assignment(assignment)
         csv << [group.name,
-                score_for_assignment_type(assignment, grade, false) || "",
+                score_for_assignment(assignment, grade, false) || "",
                 grade.feedback || ""]
       end
     end
@@ -39,7 +39,7 @@ class GradeExporter
         submission = student.submission_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
                 student.email,
-                score_for_assignment_type(assignment, grade, false) || "",
+                score_for_assignment(assignment, grade, false) || "",
                 grade.feedback || "",
                 grade.raw_points || "",
                 submission.try(:text_comment) || "",
@@ -62,7 +62,7 @@ class GradeExporter
     ["Raw Score", "Statement", "Last Updated"].freeze
   end
 
-  def score_for_assignment_type(assignment, grade, pass_fail_statuses_as_int)
+  def score_for_assignment(assignment, grade, pass_fail_statuses_as_int)
     if assignment.pass_fail?
       return grade.pass_fail_status unless pass_fail_statuses_as_int
       pass_fail_status_as_int(grade.pass_fail_status)
