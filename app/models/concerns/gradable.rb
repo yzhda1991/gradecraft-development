@@ -99,7 +99,7 @@ module Gradable
 
   def ungraded_groups(group_to_include=nil)
     included_ids = group_to_include.present? ? group_to_include.students.pluck(:id) : []
-    ungraded_students(included_ids).map { |student| student.group_for_assignment(self) }.uniq
+    ungraded_students(included_ids).map { |student| student.group_for_assignment(self) }.compact.uniq
   end
 
   def ungraded_groups_with_submissions(group_to_include=nil)
