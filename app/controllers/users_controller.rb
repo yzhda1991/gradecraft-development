@@ -149,6 +149,9 @@ class UsersController < ApplicationController
   def import
   end
 
+  def search
+  end
+
   # import users for class
   def upload
     if params[:file].blank?

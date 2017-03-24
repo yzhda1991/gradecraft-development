@@ -259,6 +259,7 @@ Rails.application.routes.draw do
       get :edit_profile
       put :update_profile
       get :import
+      get :search
       post :upload
     end
   end
@@ -370,6 +371,9 @@ Rails.application.routes.draw do
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index
+    end
+    resources :users, only: [] do
+      get :search, on: :collection
     end
   end
 
