@@ -167,8 +167,7 @@ class UsersController < ApplicationController
   def resend_invite_email
     @user = User.find(params[:id])
     UserMailer.welcome_email(@user).deliver
-    flash[:notice] = "Welcome email resent"
-    redirect_to session[:return_to] || dashboard_path, notice: "An Invite Email has been sent to #{@user.name}!" and return
+    redirect_to session[:return_to] || dashboard_path, notice: "An Invite Email has been sent to #{@user.name}!"
   end
 
   private
