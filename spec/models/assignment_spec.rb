@@ -1,9 +1,9 @@
 describe Assignment do
-  include Toolkits::Models::AssignmentsToolkit
-
   subject { build(:assignment) }
 
-  it_behaves_like "a model that needs sanitization", :description
+  context "with a persisted assignment" do 
+    it_behaves_like "a model that needs sanitization", :description
+  end
 
   context "validations" do
     it "is valid with a name and assignment type" do
@@ -227,7 +227,6 @@ describe Assignment do
   end
 
   describe "position" do
-
     it "sets the position by assignment type on save (using acts_as_list gem)" do
       expect(subject.position).to be_nil
       subject.save
