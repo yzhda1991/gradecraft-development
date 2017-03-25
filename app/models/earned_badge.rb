@@ -2,9 +2,9 @@ class EarnedBadge < ActiveRecord::Base
 
   before_validation :add_associations
 
-  belongs_to :course, touch: true
+  belongs_to :course
   belongs_to :badge
-  belongs_to :student, class_name: "User", touch: true
+  belongs_to :student, class_name: "User"
   belongs_to :submission # Optional
   belongs_to :grade # Optional
   belongs_to :awarded_by, class_name: 'User'

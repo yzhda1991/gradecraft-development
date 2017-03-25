@@ -5,7 +5,7 @@ class Team < ActiveRecord::Base
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 
   # Teams belong to a single course
-  belongs_to :course, touch: true
+  belongs_to :course
 
   has_many :team_memberships
   has_many :students, through: :team_memberships, autosave: true

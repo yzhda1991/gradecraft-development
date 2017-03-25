@@ -7,8 +7,8 @@ class Assignment < ActiveRecord::Base
   include UploadsMedia
   include UnlockableCondition
 
-  belongs_to :course, touch: true
-  belongs_to :assignment_type, -> { order("position ASC") }, touch: true
+  belongs_to :course
+  belongs_to :assignment_type, -> { order("position ASC") }
 
   has_one :rubric, dependent: :destroy
   has_many :criterion_grades, dependent: :destroy

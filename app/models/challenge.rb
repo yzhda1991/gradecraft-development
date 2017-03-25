@@ -7,7 +7,7 @@ class Challenge < ActiveRecord::Base
   # grade points available to the predictor from the assignment controller
   attr_accessor :prediction, :grade
 
-  belongs_to :course, touch: true
+  belongs_to :course
   has_many :submissions
   has_many :challenge_grades, dependent: :destroy do
     def find_or_initialize_for_team(team)

@@ -5,10 +5,10 @@ class Submission < ActiveRecord::Base
 
   has_paper_trail ignore: [:text_comment_draft]
 
-  belongs_to :assignment, touch: true
-  belongs_to :student, class_name: "User", touch: true
-  belongs_to :creator, class_name: "User", touch: true
-  belongs_to :group, touch: true
+  belongs_to :assignment
+  belongs_to :student, class_name: "User"
+  belongs_to :creator, class_name: "User"
+  belongs_to :group
   belongs_to :course, touch: true
 
   after_save :check_unlockables
