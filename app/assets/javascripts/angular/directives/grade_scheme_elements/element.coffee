@@ -5,7 +5,8 @@
   {
     scope:
       gradeSchemeElement: '='
-      setHasInvalidElements: '&'
+      updateFormValidity: '&'
+      index: '@'
     templateUrl: 'grade_scheme_elements/element.html'
     restrict: 'E'
     link: (scope, element, attrs) ->
@@ -14,12 +15,10 @@
 
       scope.removeElement = () ->
         GradeSchemeElementsService.removeElement(@gradeSchemeElement)
+        @updateFormValidity()
 
       scope.validateElements = () ->
         GradeSchemeElementsService.validateElements()
-        result = _.find(GradeSchemeElementsService.gradeSchemeElements, (element) ->
-          element.validationError?
-        )
-        @setHasInvalidElements()(result?)
+        @updateFormValidity()
   }
 ]

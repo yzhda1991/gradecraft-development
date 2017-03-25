@@ -1,32 +1,14 @@
-- content_for :context_menu do
-  .context_menu
-    %ul
-      %li= link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
+- if @grade_scheme_elements.count > 0
+  - content_for :context_menu do
+    .context_menu
+      %ul
+        %li= link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
 
-  / Grade Scheme Elements Table Display
-  %table
-    %caption.sr-only Grading Scheme Levels
-    %thead
-      %tr
-        %th{scope: "col"} Grade
-        %th{scope: "col"} Level
-        %th{scope: "col"} Point Threshold
-        %th{scope: "col"} Locked?
-        %th{scope: "col"}
-          %span.sr-only Action Buttons
-    %tbody
-      - @grade_scheme_elements.each do |element|
-        %tr
-          %td= element.letter
-          %td= element.level
-          %td{data: { :"sort-value" => "#{element.lowest_points }" }}= points element.lowest_points
-          %td
-            - if element.unlock_conditions.present?
-              - element.unlock_conditions.each do |uc|
-                .condition= glyph(:lock) + uc.requirements_description_sentence
-          %td= link_to "Set Lock Conditions", edit_grade_scheme_element_path(element), class: "button"
-
-  = render partial: "courses/grading_philosophy", locals: { course: current_course }
+  - if @grade_scheme_elements.count == 0
+    = render partial: "grade_scheme_elements/components/grade_scheme_elements_setup"
+  - else
+    = render partial: "grade_scheme_elements/components/grade_scheme_elements_table",
+      locals: { grade_scheme_elements: @grade_scheme_elements }

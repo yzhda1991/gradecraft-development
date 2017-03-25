@@ -2,15 +2,23 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
-                        'set_has_invalid_elements'=>'vm.setHasInvalidElements',
+                        'update_form_validity'=>'vm.updateFormValidity()',
+                        'index'=>'{{$index}}',
                         'grade_scheme_element'=>'element'}
 
-  %button.button.right{'ng-click'=>'vm.addElement()',
-                       'ng-hide'=>'vm.gradeSchemeElements.length > 0'} Add Your Highest Grade
+  %button.button.right{'type'=>'button',
+                       'ng-click'=>'vm.addElement()',
+                       'ng-if'=>'vm.gradeSchemeElements.length == 0'} Add Your Highest Grade
 
-.submit-buttons
-  .right
-    %button.button.right{'type'=>'button',
-                         'ng-click'=>'vm.postGradeSchemeElements()',
-                         'ng-class'=>'{"disabled": vm.hasInvalidElements}',
-                         'ng-disabled'=>'vm.hasInvalidElements'} Submit
+  .submit-buttons
+    %ul
+      %li
+        .button.right{'type'=>'button',
+                      'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0',
+                      'ng-click'=>'vm.deleteGradeSchemeElements()'} Delete All Elements
+      %li
+        .button.right{'type'=>'button',
+                      'ng-click'=>'vm.postGradeSchemeElements()',
+                      'ng-class'=>'{"disabled": gradeSchemeElementsForm.$invalid}',
+                      'ng-disabled'=>'gradeSchemeElementsForm.$invalid',
+                      'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0'} Submit

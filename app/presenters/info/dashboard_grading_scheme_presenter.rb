@@ -20,12 +20,12 @@ class Info::DashboardGradingSchemePresenter < Showtime::Presenter
   end
 
   def course_elements
-    GradeSchemeElement.for_course(course).order_by_points_asc
+    GradeSchemeElement.for_course(course).with_lowest_points.order_by_points_asc
   end
 
   # showing first element of grading scheme if current score does not reflect a level
   def first_element
-    GradeSchemeElement.for_course(course).order_by_points_asc.first
+    GradeSchemeElement.for_course(course).with_lowest_points.order_by_points_asc.first
   end
 
   def current_element
@@ -33,11 +33,13 @@ class Info::DashboardGradingSchemePresenter < Showtime::Presenter
   end
 
   def next_element
-    student.get_element_level(course, :next)
+    return nil if current_element.nil?
+    current_element.next_highest_element
   end
 
   def previous_element
-    student.get_element_level(course, :previous)
+    return nil if current_element.nil?
+    current_element.next_lowest_element
   end
 
   def points_to_next_level

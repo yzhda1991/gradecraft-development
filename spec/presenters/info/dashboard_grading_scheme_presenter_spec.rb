@@ -38,11 +38,21 @@ describe Info::DashboardGradingSchemePresenter do
     it "returns the next element the student needs to achieve" do
       expect(subject.next_element).to eq(@grade_scheme_element_3)
     end
+
+    it "returns nil if the current element is nil" do
+      allow(subject).to receive(:current_element).and_return nil
+      expect(subject.next_element).to be_nil
+    end
   end
 
   describe "#previous_element" do
     it "returns the previous_element the student earned" do
       expect(subject.previous_element).to eq(@grade_scheme_element_2)
+    end
+
+    it "returns nil if the current element is nil" do
+      allow(subject).to receive(:current_element).and_return nil
+      expect(subject.previous_element).to be_nil
     end
   end
 

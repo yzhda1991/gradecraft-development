@@ -4,8 +4,8 @@ class GradeSchemeElementsController < ApplicationController
   before_action :ensure_staff?, except: [:index]
 
   def index
-    @grade_scheme_elements = current_course
-                             .grade_scheme_elements.order_by_points_desc
+    @grade_scheme_elements = current_course.grade_scheme_elements.order_by_points_desc
+    @grade_scheme_elements = @grade_scheme_elements.with_lowest_points if !current_user_is_staff?
   end
 
   def edit

@@ -183,17 +183,17 @@ describe User do
 
   describe "#is_staff?(course)" do
     let(:user) { create :user }
-    
+
     it "returns true if the user is a professor in the course" do
       create(:course_membership, :professor, course: course, user: user)
       expect(user.is_staff?(course)).to eq(true)
     end
-    
+
     it "returns true if the user is a GSI in the course" do
       create(:course_membership, :staff, course: course, user: user)
       expect(user.is_staff?(course)).to eq(true)
     end
-    
+
     it "returns true if the user is an admin in the course" do
       create(:course_membership, :admin, course: course, user: user)
       expect(user.is_staff?(course)).to eq(true)
@@ -315,23 +315,6 @@ describe User do
     it "returns the grade scheme letter name that matches the student's score for the course" do
       gse = create(:grade_scheme_element, course: course, lowest_points: 80000, letter: "Q")
       expect(student.grade_letter_for_course(course)).to eq("Q")
-    end
-  end
-
-  describe "#get_element_level(course, :next)" do
-    it "returns the next level above a student's current score for the course" do
-      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, letter: "R")
-      gse_2 = create(:grade_scheme_element, course: course, lowest_points: 150001, letter: "S")
-      expect(student.get_element_level(course, :next)).to eq(gse_1)
-    end
-  end
-
-  describe "#points_to_next_level(course)" do
-    it "returns the next level above a student's current score for the course" do
-      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, letter: "R")
-      expect(student.points_to_next_level(course)).to eq(20001)
     end
   end
 
@@ -502,7 +485,7 @@ describe User do
 
   describe "#earned_badges_for_course(course)", :unreliable do
     let(:student) { create :user, courses: [course], role: :student }
-    
+
     it "returns the students' earned_badges for a course" do
       earned_badge_1 = create(:earned_badge, student: student, course: course)
       earned_badge_2 = create(:earned_badge, student: student, course: course)
