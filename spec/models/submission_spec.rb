@@ -4,6 +4,7 @@ describe Submission do
   before { stub_env "development" }
   let(:course) { build(:course) }
   subject { build(:submission, course: course) }
+  let(:ungraded_submission) { create(:submission, course: course) }
 
   describe "validations" do
     it { is_expected.to be_valid }
@@ -246,15 +247,17 @@ describe Submission do
     end
   end
 
-  describe ".ungraded", focus: true do
+  describe ".ungraded" do
+    let(:in_progress_submission) { create(:submission, course: course) }
+    
     it "returns the submissions that do not have any grades" do
-      expect(Submission.ungraded).to eq [submission_2]
+      expect(Submission.ungraded).to eq [ungraded_submission]
     end
 
     it "does not return the submissions that have in progress grades" do
-      create :grade, course: course, assignment: subject.assignment,
-        student: subject.student, submission: subject, status: "In Progress"
-      expect(Submission.ungraded).to not_include [ungraded_submission]
+      create :grade, course: course, assignment: in_progress_submission.assignment,
+        student: subject.student, submission: in_progress_submission, status: "In Progress"
+      expect(Submission.ungraded).to_not include [in_progress_submission]
     end
 
     it "does not return submissions that have been graded or released" do
