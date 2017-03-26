@@ -15,8 +15,8 @@ class Assignments::Presenter < Showtime::Presenter
     assignment.assignment_type
   end
 
-  def submission_for_assignment(user)
-    @submission ||= user.submission_for_assignment(assignment, false)
+  def submission_for_assignment(student)
+    @submission ||= student.submission_for_assignment(assignment, false)
   end
 
   def completion_rate
@@ -189,10 +189,6 @@ class Assignments::Presenter < Showtime::Presenter
 
   def student_logged?(user)
     assignment.student_logged? && assignment.open? && user.is_student?(course)
-  end
-
-  def submission_for_assignment(student)
-    student.submission_for_assignment(assignment, false)
   end
 
   # Tallying the percentage of participation from the entire class
