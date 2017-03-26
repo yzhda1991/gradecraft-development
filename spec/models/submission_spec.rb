@@ -188,7 +188,7 @@ describe Submission do
     it "returns when the grade was graded if it was graded" do
       graded_at = DateTime.now
       grade = create(:grade, assignment: assignment, student: student, submission: submission, status: "Graded", graded_at: graded_at)
-      expect(submission.graded_at).to eq graded_at
+      expect(submission.graded_at.strftime("%A, %B %d, %l:%M%p")).to eq graded_at.strftime("%A, %B %d, %l:%M%p")
     end
 
     it "returns nil if there is no grade" do
