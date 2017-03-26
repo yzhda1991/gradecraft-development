@@ -7,7 +7,7 @@ describe Submission do
   let(:ungraded_submission) { create(:submission, course: course) }
 
   describe "validations" do
-    it "is valid" do 
+    it "is valid" do
       expect(submission).to be_valid
     end
 

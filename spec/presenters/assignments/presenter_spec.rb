@@ -1,8 +1,9 @@
 describe Assignments::Presenter do
-  let(:assignment) { double(:assignment, id: 1, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
-  let(:course) { double(:course) }
+  let(:course) { build(:course) }
+  let(:assignment) { create(:assignment, id: 1, name: "Crazy Wizardry", pass_fail: false, full_points: 5000)}
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
+  let(:student) { create(:user) }
   subject { Assignments::Presenter.new({ assignment: assignment, course: course, view_context: view_context }) }
 
   describe "#assignment" do
@@ -132,20 +133,17 @@ describe Assignments::Presenter do
   end
 
   describe "#has_viewable_submission?" do
-    let(:user) { double(:user, id: 1) }
-    let(:submission) { double(:submission) }
-
     context "when the assignment accepts submissions" do
       before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return true }
 
       it "is false if the submission is nil" do
-        expect(subject.has_viewable_submission?(nil, user)).to eq false
+        expect(subject.has_viewable_submission?(student)).to eq false
       end
 
-      it "is true when the submission is not nil and
-        all viewable conditions are met in the submission proctor" do
-        allow_any_instance_of(SubmissionProctor).to receive(:viewable?).and_return true
-        expect(subject.has_viewable_submission?(submission, user)).to eq true
+      it "is true when the submission is not nil and all viewable conditions are met in the submission proctor" do
+        allow(SubmissionProctor).to receive(:viewable?).and_return true
+        create(:submission, assignment: assignment, student: student)
+        expect(subject.has_viewable_submission?(student)).to eq true
       end
     end
 
@@ -153,7 +151,7 @@ describe Assignments::Presenter do
       before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return false }
 
       it "is false" do
-        expect(subject.has_viewable_submission?(submission, user)).to eq false
+        expect(subject.has_viewable_submission?(student)).to eq false
       end
     end
   end
