@@ -76,8 +76,10 @@ describe Grade do
     end
   end
 
-  it_behaves_like "a historical model", :grade, raw_points: 1234
-  it_behaves_like "a model that needs sanitization", :feedback
+  context "with a persisted assignment" do 
+    it_behaves_like "a historical model", :grade, raw_points: 1234
+    it_behaves_like "a model that needs sanitization", :grade, :feedback
+  end
 
   describe "#squish_history!", versioning: true do
     it "squishes two previous changes into one" do

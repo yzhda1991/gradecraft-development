@@ -82,10 +82,11 @@ class Submission < ActiveRecord::Base
     !submission_grade || submission_grade.status.nil?
   end
 
-  # Used to report to the user that a change will be a resubmission because this
-  # submission is already graded.
+  # Reports to the user that a change will be a resubmission because this
+  # submission is already graded and visible to them.
   def will_be_resubmitted?
-    submission_grade.graded_and_visible_by_student? if submission_grade.present?
+    return false unless submission_grade.present? && submission_grade.graded_and_visible_by_student?
+    return true
   end
 
   # this is transitive so that once it is graded again, then

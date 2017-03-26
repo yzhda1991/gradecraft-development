@@ -1,7 +1,9 @@
 describe Group do
   subject { create(:group) }
 
-  it_behaves_like "a model that needs sanitization", :text_proposal
+  context "with a persisted assignment" do 
+    it_behaves_like "a model that needs sanitization", :group, :text_proposal
+  end
 
   describe "validations" do
     it "is valid with a name and an approval state" do

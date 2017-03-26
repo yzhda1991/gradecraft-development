@@ -61,6 +61,7 @@ module GradeStatus
   end
 
   def graded_and_visible_by_student?
-    is_released? || (is_graded? && !assignment.release_necessary?)
+    return false unless (is_released? || (is_graded? && !assignment.release_necessary?))
+    return true
   end
 end
