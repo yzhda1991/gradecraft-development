@@ -22,8 +22,8 @@ class Grade < ActiveRecord::Base
     reject_if: proc { |a| (a["score"].blank?) }, allow_destroy: true
 
   before_validation :cache_associations
-  before_save :calculate_points
   before_save :zero_points_for_pass_fail
+  before_save :calculate_points
   after_save :check_unlockables
   after_save :update_earned_badges
 
