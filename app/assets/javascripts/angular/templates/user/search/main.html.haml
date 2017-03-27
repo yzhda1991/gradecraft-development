@@ -1,0 +1,37 @@
+%loading-message{'loading'=>'vm.loading', 'message'=>"Searching users..."}
+
+%user-search-form{"ng-form"=>"userSearchForm"}
+  %panel
+    %legend Search Users
+
+    %p Find by name:
+    %label
+      First name:
+      %input{"type"=>"search",
+             "name"=>"firstName",
+             "ng-model"=>"vm.firstName"}
+    %label
+      Last name:
+      %input{"type"=>"search",
+             "name"=>"lastName",
+             "ng-model"=>"vm.lastName",
+             "ng-required"=>"!vm.email"}
+
+    %p Find by email address:
+    %label
+      Email:
+      %input{"type"=>"search",
+             "name"=>"email",
+             "ng-model"=>"vm.email",
+             "ng-required"=>"!vm.lastName"}
+
+  .submit-buttons
+    .right
+      %button.button.right{"type"=>"button",
+                           "ng-click"=>"vm.getSearchResults()",
+                           'ng-class'=>'{"disabled": userSearchForm.$invalid}',
+                           "ng-disabled"=>"userSearchForm.$invalid"} Search
+
+%results{"ng-if"=>"vm.users"}
+  %hr
+  %user-search-results
