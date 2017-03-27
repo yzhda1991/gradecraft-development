@@ -24,6 +24,3 @@
 
       - if AnalyticsProctor.new.viewable? current_student, current_course
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
-
-      - if current_course.has_badges?
-        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_badges"
