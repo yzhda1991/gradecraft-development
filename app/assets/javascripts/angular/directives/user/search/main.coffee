@@ -3,7 +3,6 @@
   UserSearchCtrl = [() ->
     vm = this
 
-    vm.users = UserSearchService.users
     vm.loading = false
     vm.firstName = undefined
     vm.lastName = undefined
@@ -22,5 +21,7 @@
     controllerAs: 'vm'
     restrict: 'EA'
     templateUrl: 'user/search/main.html'
+    link: (scope, element, attr) ->
+      scope.users = UserSearchService.users
   }
 ]

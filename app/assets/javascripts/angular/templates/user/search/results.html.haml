@@ -1,0 +1,14 @@
+%table
+  %thead
+    %tr
+      %th Id
+      %th First Name
+      %th Last Name
+  %tbody
+    %tr{"ng-if"=>"users.length < 1"}
+      %td{"colspan"=>"3"} No results found
+
+    %tr{"ng-if"=>"users.length > 0", "ng-repeat"=>"user in users"}
+      %td {{ user.id }}
+      %td {{ user.first_name }}
+      %td {{ user.last_name }}
