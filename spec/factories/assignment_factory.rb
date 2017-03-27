@@ -44,5 +44,9 @@ FactoryGirl.define do
     factory :assignment_with_due_at do
       due_at Date.today
     end
+
+    trait :pass_fail do
+      pass_fail true
+    end
   end
 end

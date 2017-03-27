@@ -64,7 +64,7 @@ Scores and point values are saved in several states on the model. See [[Points]]
   * `raw_points` - raw points for the grade. Unlike `score`, it is never weighted
   * `adjustment_points` - points to add or subtract from the raw points (+ bonus points, - tardiness etc.)
   * `final_points` - The sum of the raw points and the adjustment
-  * `score` - The final points multiplied by the student's weighting for the assignment type.
+  * `score` - The final points multiplied by the student's weighting for the assignment type. Currently set to `0` on a pass/fail type assignment.
 
 #### Future Use
 
