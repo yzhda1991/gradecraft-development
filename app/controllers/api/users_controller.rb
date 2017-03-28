@@ -21,8 +21,8 @@ class API::UsersController < ApplicationController
 
   # TODO: Possibly should be extracted into a service
   def find_user
-    if search_params[:email].nil?
-      @users = User.find_by_insensitive_last_name(search_params[:last_name]) if search_params[:first_name].nil?
+    if search_params[:email].blank?
+      @users = User.find_by_insensitive_last_name(search_params[:last_name]) if search_params[:first_name].blank?
       @users ||= User.find_by_insensitive_full_name(search_params[:first_name], search_params[:last_name])
     else
       user = User.find_by_insensitive_email(search_params[:email])
