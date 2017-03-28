@@ -12,6 +12,9 @@
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
     .flex-col.col-70.tablet-col
+      - if current_course.announcements.present?
+        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_announcements"
+
       - if @events.present?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
