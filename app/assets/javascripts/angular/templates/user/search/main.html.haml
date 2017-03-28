@@ -1,35 +1,36 @@
+%h1.form-title Search Users
+
 %form{"ng-submit"=>"vm.getSearchResults()", "name"=>"userSearchForm"}
   %loading-message{'loading'=>'vm.loading', 'message'=>"Searching users..."}
 
-  %panel
-    %legend Search Users
-
+  %fieldset
     %p Find by name:
     %label
-      First name:
       %input{"type"=>"search",
              "name"=>"firstName",
-             "ng-model"=>"vm.firstName"}
+             "ng-model"=>"vm.firstName",
+             "placeholder"=>"First name (Optional)"}
     %label
-      Last name:
       %input{"type"=>"search",
              "name"=>"lastName",
              "ng-model"=>"vm.lastName",
-             "ng-required"=>"!vm.email"}
+             "ng-required"=>"!vm.email",
+             "placeholder"=>"Last name"}
 
+  %fieldset
     %p Find by email address:
     %label
-      Email:
       %input{"type"=>"search",
              "name"=>"email",
              "ng-model"=>"vm.email",
-             "ng-required"=>"!vm.lastName"}
+             "ng-required"=>"!vm.lastName",
+             "placeholder"=>"Email",
+             "size"=>"30"}
 
-    .submit-buttons
-      .right
-        %button.button.right{"type"=>"submit",
-                             'ng-class'=>'{"disabled": userSearchForm.$invalid}',
-                             "ng-disabled"=>"userSearchForm.$invalid"} Search
+  .submit-buttons
+    .right
+      %button.button.right{"type"=>"submit",
+                           'ng-class'=>'{"disabled": userSearchForm.$invalid || vm.loading}',
+                           "ng-disabled"=>"userSearchForm.$invalid || vm.loading"} Search
 
-%br
-%user-search-results
+%user-search-results{'ng-if'=>'!vm.loading'}
