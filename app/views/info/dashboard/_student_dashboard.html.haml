@@ -5,22 +5,22 @@
   = render "layouts/alerts"
 
   .student-dashboard
-    .flex-col-30.tablet-col-2
+    .flex-col.col-30.tablet-col
       .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
 
       - if current_course.has_multipliers?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
-    .flex-col-40.tablet-col-1
+    .flex-col.col-70.tablet-col
       - if @events.present?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_course_events", locals: { presenter: Info::DashboardCourseEventsPresenter.new(course: current_course, student: current_student, assignments: presenter.assignments) }
 
-      .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
+      .flex-column
+        - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
+          .flex-row.panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
+        .stacked-column
+          .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
 
-    .flex-col-30.tablet-col-3
-      - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
-        .panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
-
-      - if AnalyticsProctor.new.viewable? current_student, current_course
-        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"
+          - if AnalyticsProctor.new.viewable? current_student, current_course
+            .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution"

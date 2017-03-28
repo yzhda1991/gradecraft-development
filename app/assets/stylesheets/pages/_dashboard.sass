@@ -1,37 +1,38 @@
 @import "../utilities/variables"
 
-.student-dashboard, .instructor-dashboard
+.student-dashboard, 
+.instructor-dashboard
   display: flex
   flex-direction: row
   @media (max-width: $media-small-max)
     flex-wrap: wrap
 
-  .flex-col-30
+  .col-30
     width: 30%
-
-  .flex-col-40
+  .col-40
     width: 40%
-
-  .flex-col-60
+  .col-50
+    width: 50%
+  .col-60
     width: 60%
+  .col-70
+    width: 70%
 
-  .flex-col-30, .flex-col-40, .flex-col-60
+  .flex-col
     display: flex
     flex-direction: column
     margin-right: 1rem
     min-width: 0
+    &:last-child
+      margin-right: 0
     @media (max-width: $media-medium-max)
       width: 50%
     @media (max-width: $media-small-max)
       width: 100%
       margin: 0
 
-    &:last-child
-      margin-right: 0
-
   .flex-column
     display: flex
-    flex-direction: row
     @media (max-width: $media-medium-max)
       display: block
 
@@ -39,42 +40,11 @@
     margin-right: 1rem
     flex: 1
 
-  .stacked-column
-    display: flex
-    flex-flow: column
-    flex: 1
-
   .stacked-module
     flex: 1 auto
 
   &.show-student
     padding: .25rem 1rem
-
-/* Styles the tablet layout for student dashboard */
-.student-dashboard,
-.instructor-dashboard.show-student
-  @media (max-width: $media-medium-max)
-    flex-wrap: wrap
-
-  .tablet-col-1
-    @media (max-width: $media-medium-max)
-      width: 100%
-      order: 1
-      flex-direction: column-reverse
-
-  .tablet-col-2
-    @media (max-width: $media-medium-max)
-      width: 48%
-      order: 2
-    @media (max-width: $media-small-max)
-      width: 100%
-
-  .tablet-col-3
-    @media (max-width: $media-medium-max)
-      width: 48%
-      order: 3
-    @media (max-width: $media-small-max)
-      width: 100%
 
 /* Base styles for dashboard modules */
 .dashboard-module
