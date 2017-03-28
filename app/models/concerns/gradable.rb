@@ -27,20 +27,6 @@ module Gradable
     grades.graded_or_released.where("score > 0").average(:score).to_i
   end
 
-  # Calculating how many of each score exists
-  def earned_score_count
-    grades.graded_or_released
-      .group_by { |g| g.raw_points }
-      .map { |score, grade| [score, grade.size ] }.to_h
-  end
-
-  # Calculating how many of each pass/fail exists
-  def earned_status_count
-    grades.graded_or_released
-      .group_by { |g| g.pass_fail_status }
-      .map { |score, grade| [score, grade.size ] }.to_h
-  end
-
   def high_score
     grades.graded_or_released.maximum(:raw_points)
   end

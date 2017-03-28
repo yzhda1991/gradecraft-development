@@ -1,8 +1,25 @@
-# Analytic responses to do with Scores
+# Analytic responses to do with Scores for Assigment
 
-module Analysable
+module AssignmentStats
   extend ActiveSupport::Concern
 
+  # Calculating how many of each pass/fail exists
+  def earned_status_count
+    grades.graded_or_released
+      .group_by { |g| g.pass_fail_status }
+      .map { |score, grade| [score, grade.size ] }.to_h
+  end
+
+  # Calculating how many of each score exists
+  # {1236=>1, 4935=>5, 3293=>10, 3566=>15, 2255=>10...}
+  def earned_score_count
+    grades.graded_or_released
+      .group_by { |g| g.raw_points }
+      .map { |score, grade| [score, grade.size ] }.to_h
+  end
+
+  # pass-fail:
+  # standard: [{:frequency=>1, :score=>1236}, {:frequency=>5, :score=>4935},...]
   def score_frequency
     if pass_fail?
       earned_status_count.collect { |s| { frequency: s[1], score: s[0] }}
