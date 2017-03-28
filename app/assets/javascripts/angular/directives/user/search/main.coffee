@@ -4,13 +4,12 @@
     vm = this
 
     vm.loading = false
-    vm.firstName = undefined
-    vm.lastName = undefined
-    vm.email = undefined
+    vm.searchTypes = ['Name', 'Email', 'Username']
+    vm.selectedSearchType = vm.searchTypes[0]
 
     vm.getSearchResults = () ->
       vm.loading = true
-      UserSearchService.getSearchResults(vm.firstName, vm.lastName, vm.email).then(() ->
+      UserSearchService.getSearchResults(vm.selectedSearchType).then(() ->
         vm.loading = false
       )
   ]
@@ -23,5 +22,6 @@
     templateUrl: 'user/search/main.html'
     link: (scope, element, attr) ->
       scope.users = UserSearchService.users
+      scope.searchCriteria = UserSearchService.searchCriteria
   }
 ]

@@ -4,28 +4,45 @@
   %loading-message{'loading'=>'vm.loading', 'message'=>"Searching users..."}
 
   %fieldset
+    %label
+      Search criteria:
+      %select{"ng-model"=>"vm.selectedSearchType"}
+        %option{"ng-repeat"=>"type in vm.searchTypes", "value"=>"{{type}}"}
+          {{type}}
+
+  %fieldset{"ng-if"=>"vm.selectedSearchType == 'Name'"}
     %p Find by name:
     %label
       %input{"type"=>"search",
              "name"=>"firstName",
-             "ng-model"=>"vm.firstName",
+             "ng-model"=>"searchCriteria.firstName",
              "placeholder"=>"First name (Optional)"}
+
     %label
       %input{"type"=>"search",
              "name"=>"lastName",
-             "ng-model"=>"vm.lastName",
-             "ng-required"=>"!vm.email",
+             "ng-model"=>"searchCriteria.lastName",
+             "ng-required"=>"vm.selectedSearchType == 'Name'",
              "placeholder"=>"Last name"}
 
-  %fieldset
+  %fieldset{"ng-if"=>"vm.selectedSearchType == 'Email'"}
     %p Find by email address:
     %label
       %input{"type"=>"search",
              "name"=>"email",
-             "ng-model"=>"vm.email",
-             "ng-required"=>"!vm.lastName",
+             "ng-model"=>"searchCriteria.email",
+             "ng-required"=>"vm.selectedSearchType == 'Email'",
              "placeholder"=>"Email",
              "size"=>"30"}
+
+  %fieldset{"ng-if"=>"vm.selectedSearchType == 'Username'"}
+    %p Find by username:
+    %label
+      %input{"type"=>"search",
+             "name"=>"username",
+             "ng-model"=>"searchCriteria.username",
+             "ng-required"=>"vm.selectedSearchType == 'Username'",
+             "placeholder"=>"Username"}
 
   .submit-buttons
     .right
