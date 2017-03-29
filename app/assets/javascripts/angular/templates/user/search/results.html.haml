@@ -4,6 +4,9 @@
       %th Id
       %th First Name
       %th Last Name
+      %th Courses
+      %th Role
+      %th Score
   %tbody
     %tr{"ng-if"=>"users.length < 1"}
       %td{"colspan"=>"3"} No results found
@@ -12,3 +15,6 @@
       %td {{ user.id }}
       %td {{ user.first_name }}
       %td {{ user.last_name }}
+      %td{"ng-bind-html"=>"course_membership_attribute_for(user, 'course_name')"}
+      %td{"ng-bind-html"=>"course_membership_attribute_for(user, 'role')"}
+      %td{"ng-bind-html"=>"course_membership_attribute_for(user, 'score')"}
