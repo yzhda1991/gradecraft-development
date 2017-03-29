@@ -16,13 +16,14 @@
       %input{"type"=>"search",
              "name"=>"firstName",
              "ng-model"=>"searchCriteria.firstName",
-             "placeholder"=>"First name (Optional)"}
+             "ng-required"=>"vm.selectedSearchType == 'Name' && searchCriteria.lastName == null",
+             "placeholder"=>"First name"}
 
     %label
       %input{"type"=>"search",
              "name"=>"lastName",
              "ng-model"=>"searchCriteria.lastName",
-             "ng-required"=>"vm.selectedSearchType == 'Name'",
+             "ng-required"=>"vm.selectedSearchType == 'Name' && searchCriteria.firstName == null",
              "placeholder"=>"Last name"}
 
   %fieldset{"ng-if"=>"vm.selectedSearchType == 'Email'"}

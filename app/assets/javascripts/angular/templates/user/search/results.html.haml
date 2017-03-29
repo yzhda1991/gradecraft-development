@@ -9,7 +9,7 @@
       %th Score
   %tbody
     %tr{"ng-if"=>"users.length < 1"}
-      %td{"colspan"=>"3"} No results found
+      %td{"colspan"=>"6"} No results found
 
     %tr{"ng-if"=>"users.length > 0", "ng-repeat"=>"user in users"}
       %td {{ user.id }}

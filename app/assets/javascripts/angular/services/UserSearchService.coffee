@@ -16,7 +16,7 @@
       GradeCraftAPI.loadMany(users, response.data)
       GradeCraftAPI.logResponse(response)
     , (error) ->
-      console.error "Not found"
+      console.log "Not found"
     )
 
   _paramsForSearchType = (searchType) ->
