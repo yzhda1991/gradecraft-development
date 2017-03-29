@@ -137,6 +137,10 @@ class User < ActiveRecord::Base
     where("LOWER(last_name) = :last_name", last_name: (last_name || "").downcase)
   end
 
+  def self.find_by_insensitive_first_name(first_name)
+    where("LOWER(first_name) = :first_name", first_name: (first_name || "").downcase)
+  end
+
   def self.find_by_insensitive_full_name(first_name, last_name)
     where("LOWER(first_name) = :first_name and LOWER(last_name) = :last_name",
       first_name: (first_name || "").downcase,
