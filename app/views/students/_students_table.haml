@@ -57,3 +57,4 @@
               %li= link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
               - if !student.activated?
                 %li= link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(student.id), :method => :put
+                %li= link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(student.id)
