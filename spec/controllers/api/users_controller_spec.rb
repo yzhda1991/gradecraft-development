@@ -10,32 +10,57 @@ describe API::UsersController do
     let(:current_user) { build_stubbed :user, courses: [course], role: :admin }
 
     describe "GET search" do
-      it "returns a Bad Request status if there is no email or name param" do
+      let!(:user) { create :user, first_name: "James", last_name: "Bond", username: "james.bond", email: "007@secretservice.com" }
+
+      it "returns a Bad Request status if there is no search criteria" do
         get :search, format: :json
         expect(response).to have_http_status :bad_request
       end
 
-      context "when the user exists" do
-        let!(:user) { create :user, first_name: "James", last_name: "Bond", email: "007@secretservice.com" }
-
-        it "returns the student if found using email" do
+      context "with unique search terms" do
+        it "returns the user if found using email" do
           get :search, params: { email: "007@secretservice.com" }, format: :json
+          expect(assigns(:users)).to eq [user]
           expect(response).to have_http_status :ok
           expect(response).to render_template :search
         end
 
-        it "returns the student if found using their name" do
-          get :search, params: { first_name: "James", last_name: "Bond" }, format: :json
+        it "returns the user if found using their username" do
+          get :search, params: { username: "james.bond" }, format: :json
+          expect(assigns(:users)).to eq [user]
           expect(response).to have_http_status :ok
           expect(response).to render_template :search
         end
       end
 
-      context "when the user does not exist" do
-        it "returns a Not Found status if no such user exists" do
-          get :search, params: { email: "006@secretservice.com" }, format: :json
-          expect(response).to have_http_status :not_found
+      context "with non-unique search terms" do
+        let!(:another_user) { create :user, first_name: "James", last_name: "Bond", username: "j.bond", email: "james.bond@umich.edu" }
+
+        it "returns the users if found using their full name" do
+          get :search, params: { first_name: "James", last_name: "Bond" }, format: :json
+          expect(assigns(:users)).to match_array [user, another_user]
+          expect(response).to have_http_status :ok
+          expect(response).to render_template :search
         end
+
+        it "returns the users if found using their first name" do
+          get :search, params: { first_name: "James" }, format: :json
+          expect(assigns(:users)).to match_array [user, another_user]
+          expect(response).to have_http_status :ok
+          expect(response).to render_template :search
+        end
+
+        it "returns the users if found using their last name" do
+          get :search, params: { last_name: "Bond" }, format: :json
+          expect(assigns(:users)).to match_array [user, another_user]
+          expect(response).to have_http_status :ok
+          expect(response).to render_template :search
+        end
+      end
+
+      it "returns a Not Found status if no matching users are found" do
+        get :search, params: { email: "006@secretservice.com" }, format: :json
+        expect(response).to have_http_status :not_found
       end
     end
   end
@@ -44,7 +69,7 @@ describe API::UsersController do
     let(:current_user) { build_stubbed :user, courses: [course], role: :student }
 
     describe "GET search" do
-      it "redirects to root" do
+      it "redirects" do
         get :search, format: :json
         expect(response).to have_http_status 302
       end
