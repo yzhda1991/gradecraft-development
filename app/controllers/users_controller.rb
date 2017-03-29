@@ -152,7 +152,7 @@ class UsersController < ApplicationController
   # import users for class
   def upload
     if (File.extname params[:file].original_filename) != ".csv"
-      redirect_to users_path, notice:"Only CSV files accepted for import" and return
+      redirect_to users_path, notice: "We're sorry, the user import utility only supports .csv files. Please try again using a .csv file." and return
     end
 
     if params[:file].blank?
