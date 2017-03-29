@@ -76,6 +76,11 @@ class Grades::ImportersController < ApplicationController
   def upload
     @assignment = current_course.assignments.find(params[:assignment_id])
 
+    if (File.extname params[:file].original_filename) != ".csv"
+      redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
+        notice: "Only CSV files accepted for import"
+    end
+
     if params[:file].blank?
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
         notice: "File is missing"
