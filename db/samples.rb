@@ -482,6 +482,10 @@ PaperTrail.whodunnit = nil
 
       if config[:grades]
         @students.each do |student|
+
+          # skip grades for some students, based on participation rate
+          next if config[:participation] && rand(100) > config[:participation]
+
           grade_attributes = config[:grade_attributes] || {}
           grade = student.grades.create! do |g|
             @assignment_default_config[:grade_attributes].keys.each do |attr|
@@ -493,10 +497,13 @@ PaperTrail.whodunnit = nil
               if attr == :raw_points && grade_attributes[attr]
                 g[attr] = grade_attributes[attr].call
               elsif attr == :raw_points
-                g[attr] = rand(assignment_full_points)
+                g[attr] = @assignment_default_config[:grade_attributes][attr].call
               else
                 g[attr] = grade_attributes[attr] ||
                   @assignment_default_config[:grade_attributes][attr]
+              end
+              if assignment.pass_fail
+                g.pass_fail_status = ["Pass", "Pass", "Pass", "Fail"].sample
               end
               g.graded_at = DateTime.now
               g.graded_by_id = course_config[:staff_ids].sample
