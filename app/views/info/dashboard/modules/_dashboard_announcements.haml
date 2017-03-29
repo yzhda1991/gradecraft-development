@@ -1,7 +1,11 @@
 .card-header
   %h2 Announcements
 .card-body
-  - unread_count = unread_count_for current_student, current_course
-  = link_to_unless_current "Announcements", announcements_path
-  - if unread_count > 0
-    %div.notification-badge.announcement-notification-badge= unread_count
+  %ul.unread-announcements
+    - current_course.announcements.each do |announcement|
+      - if !announcement.read?(current_user)
+        %li.unread-announcement-item
+          = link_to announcement.title, announcement_path(announcement)
+          %p.announcement-date= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+          %p= sanitize(announcement.body, tags: %w(p), attributes: %w()).truncate(100, :separator => "...").gsub(/<\/?p>/, " ")
+  
