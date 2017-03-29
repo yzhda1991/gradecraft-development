@@ -139,6 +139,13 @@ describe UsersController do
       let(:file) { fixture_file "users.csv", "text/csv" }
       before { create :team, course: @course, name: "Zeppelin" }
 
+      it "renders any errors that have occured" do
+        file = fixture_file "users.xlsx"
+        post :upload, params: { file: file }
+        expect(flash[:notice]).to eq("We're sorry, the user import utility only supports .csv files. Please try again using a .csv file.")
+        expect(response).to redirect_to(users_path)
+      end
+
       it "renders the results from the import" do
         post :upload, params: { file: file }
 
