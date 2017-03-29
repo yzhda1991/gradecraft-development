@@ -73,6 +73,7 @@ class Grades::ImportersController < ApplicationController
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
+  # rubocop:disable AndOr
   def upload
     @assignment = current_course.assignments.find(params[:assignment_id])
 

@@ -150,8 +150,8 @@ class UsersController < ApplicationController
   end
 
   # import users for class
+  # rubocop:disable AndOr
   def upload
-
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to users_path and return
