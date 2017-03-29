@@ -1,19 +1,18 @@
-.staff-layout-wrapper
-  .sidebar-container.hide-for-small.hide-for-medium
-    / Staff-only sidebar navigation
-    = render partial: "layouts/navigation/staff_subnav"
+.sidebar-container.hide-for-small.hide-for-medium
+  / Staff-only sidebar navigation
+  = render partial: "layouts/navigation/staff_subnav"
 
-  %main.mainContainer#main-content{role: "main", class: "staff"}
+%main.mainContainer#main-content{role: "main", class: "staff"}
 
-    / Page content
-    .mainContent
-      - if current_student.present?
-        .page-header
-          = breadcrumbs
-          %h1.pagetitle= current_student.name
-      - else
-        .page-header
-          = breadcrumbs
-          %h1.pagetitle= title
-          = yield(:context_menu)
-      = render partial: "layouts/content"
+  / Page content
+  .mainContent
+    - if current_student.present?
+      .page-header
+        = breadcrumbs
+        %h1.pagetitle= current_student.name
+    - else
+      .page-header
+        = breadcrumbs
+        %h1.pagetitle= title
+        = yield(:context_menu)
+    = render partial: "layouts/content"
