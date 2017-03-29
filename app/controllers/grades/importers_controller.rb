@@ -78,7 +78,7 @@ class Grades::ImportersController < ApplicationController
 
     if (File.extname params[:file].original_filename) != ".csv"
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
-        notice: "Only CSV files accepted for import"
+        notice: "Only CSV files accepted for import" and return
     end
 
     if params[:file].blank?
