@@ -85,7 +85,7 @@ class Submission < ActiveRecord::Base
   # Reports to the user that a change will be a resubmission because this
   # submission is already graded and visible to them.
   def will_be_resubmitted?
-    return false unless submission_grade.present? && submission_grade.graded_and_visible_by_student?
+    return false unless submission_grade.present? && submission_grade.student_visible?
     return true
   end
 
