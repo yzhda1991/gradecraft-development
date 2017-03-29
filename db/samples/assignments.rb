@@ -46,11 +46,11 @@
   grades: false,
   # only used if :grades is true:
   grade_attributes: {
-    raw_points: -> { rand(5000) },
-    instructor_modified: false,
+    raw_points: -> { qd_curve(5000) },
+    instructor_modified: true,
     status: nil,
     feedback: nil,
-    excluded_from_course_score: false
+    excluded_from_course_score: false,
   },
   prediction: false,
   prediction_attributes: {
@@ -69,6 +69,28 @@
 
 #------------------------------------------------------------------------------#
 
+#                        Maths
+
+#------------------------------------------------------------------------------#
+
+# Quick and Dirty bell curve:
+#   uses central limit theorum,
+#   adding a quarter of the points
+#   rounds to nearest 100
+# Simulates a bell curve around a "C+"
+def qd_curve(full_points, samples=10, capped=true)
+  val = (((((1..samples).each_with_object([]) {|v,m| m << rand(full_points)})
+     .inject(0){|sum,x| sum + x}) /samples) + (0.25 * full_points)).round(-2)
+
+  if capped
+    return val > full_points ? full_points : val
+  else
+    val
+  end
+end
+
+#------------------------------------------------------------------------------#
+
 #                        Grading Assignment Type
 
 #------------------------------------------------------------------------------#
@@ -78,18 +100,37 @@
 # Add each assignment below, override default configuration for custom
 # attributes
 
-@assignments[:pass_fail_grade] = {
+@assignments[:pass_fail_no_grade] = {
   quotes: {
     assignment_created: "You will always pass failure on the way to success. \
 – Mickey Rooney"
   },
   assignment_type: :grading,
   attributes: {
-    name: "Pass/Fail [no grades]",
+    name: "Pass/Fail [No grades]",
     open_at: 1.weeks.from_now,
     due_at: 1.weeks.from_now + 0.05,
     pass_fail: true,
 
+  }
+}
+
+@assignments[:pass_fail_with_grades] = {
+  quotes: {
+    assignment_created: "Do. Or do not. There is no try. -- Yoda"
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Pass/Fail [Has grades]",
+    open_at: 1.weeks.from_now,
+    due_at: 1.weeks.from_now + 0.05,
+    pass_fail: true,
+
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "Graded"
   }
 }
 
@@ -120,9 +161,9 @@ uncertainty! - Douglas Adams"
 
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -156,9 +197,9 @@ to bed. ― J.K. Rowling"
     mass_grade_type: "Checkbox",
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -193,9 +234,9 @@ of what it feels about education.― Harold Howe",
   },
   assignment_score_levels: true,
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -227,9 +268,9 @@ life.― John Holt",
     student_logged: true,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -248,9 +289,9 @@ met. Grades have a raw_points of 15000",
     threshold_points: 18000
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
     status: "Graded",
-    instructor_modified: true,
     raw_points: -> { 15000 },
   }
 }
@@ -263,7 +304,7 @@ One Day",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Self-Logged with Score Levels Assignment",
+    name: "Self-Logged with Score Levels Assignment [No Grades]",
     open_at: DateTime.now,
     due_at: DateTime.now + 0.05,
     full_points: 200000,
@@ -281,7 +322,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Standard Edit + Release Required",
+    name: "Standard Edit + Release Required [No Grades]",
     open_at: 3.weeks.from_now,
     due_at: 3.weeks.from_now + 0.05,
     release_necessary: true
@@ -360,10 +401,10 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
     release_necessary: true,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
     status: "Graded",
-    instructor_modified: true,
-    feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>'
+    feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>',
   },
   rubric: true,
   student_submissions: true
@@ -584,6 +625,105 @@ positive, because they allow you to work off something.–Charles Gwathmey",
   }
 }
 
+@assignments[:submission_assignment_submission_open] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Not Submitted, On Time",
+    description: "Displays 'Accepts Submissions' icon. Still accepts \
+predictions.",
+    due_at: 3.week.from_now,
+    accepts_submissions_until: 3.week.from_now,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  }
+}
+
+@assignments[:submission_past_assignment_submission_open] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Not Submitted, Late",
+    description: "Displays 'Accepts Submissions' and 'Late' icons. Still \
+accepts predictions.",
+    due_at: 1.week.ago,
+    accepts_submissions_until: 3.week.from_now,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  }
+}
+
+@assignments[:submission_past_assignment_submission_closed] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Not Submitted, Closed",
+    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons. Has prediction which should not be added to point calculations. Should be closed in predictor",
+    due_at: 1.week.ago,
+    accepts_submissions_until: 1.week.ago,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { qd_curve(15000) }
+  }
+}
+
+@assignments[:submission_past_assignment_with_submissions] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Has Submission, Closed",
+    description: "Displays 'Has Submission' icon. Has slider, accepts prediction.",
+    due_at: 1.week.ago,
+    accepts_submissions_until: 1.week.ago,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  },
+  student_submissions: true
+}
+
+@assignments[:submission_open_assignment_with_submissions] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Has Submission, Open",
+    description: "Displays 'Has Submission' icons, has slider, accepts
+      prediction.",
+    due_at: 5.weeks.from_now,
+    accepts_submissions_until: 5.weeks.from_now,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  },
+  student_submissions: true
+}
+
 #------------------------------------------------------------------------------#
 
 #                        Predictor Assignment Type
@@ -602,14 +742,13 @@ positive, because they allow you to work off something.–Charles Gwathmey",
     full_points: 15000,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    instructor_modified: true,
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -626,15 +765,14 @@ not added to total",
     full_points: 15000,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    instructor_modified: true,
     status: "Graded",
-    excluded_from_course_score: true,
-    instructor_modified: true
+    excluded_from_course_score: true
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -667,7 +805,7 @@ on hover",
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -685,120 +823,15 @@ should not have a visible grade",
     release_necessary: true,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    instructor_modified: true,
-    raw_points: -> { rand(15000) },
-    status: "Graded",
-    instructor_modified: true
+    raw_points: -> { qd_curve(15000) },
+    status: "Graded"
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
-}
-
-@assignments[:predictor_past_assignment_submission_open] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :predictor,
-  attributes: {
-    name: "Not Submitted, On Time",
-    description: "Displays 'Accepts Submissions' icon. Still accepts \
-predictions.",
-    due_at: 3.week.from_now,
-    accepts_submissions_until: 3.week.from_now,
-    full_points: 15000,
-    accepts_submissions: true,
-    resubmissions_allowed: true,
-    accepts_attachments: true,
-    accepts_text: true,
-    accepts_links: true,
-  }
-}
-
-@assignments[:predictor_past_assignment_submission_open] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :predictor,
-  attributes: {
-    name: "Not Submitted, Late",
-    description: "Displays 'Accepts Submissions' and 'Late' icons. Still \
-accepts predictions.",
-    due_at: 1.week.ago,
-    accepts_submissions_until: 3.week.from_now,
-    full_points: 15000,
-    accepts_submissions: true,
-    resubmissions_allowed: true,
-    accepts_attachments: true,
-    accepts_text: true,
-    accepts_links: true,
-  }
-}
-
-@assignments[:predictor_past_assignment_submission_closed] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :predictor,
-  attributes: {
-    name: "Not Submitted, Closed",
-    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons. Has prediction which should not be added to point calculations. Should be closed in predictor",
-    due_at: 1.week.ago,
-    accepts_submissions_until: 1.week.ago,
-    full_points: 15000,
-    accepts_submissions: true,
-    resubmissions_allowed: true,
-    accepts_attachments: true,
-    accepts_text: true,
-    accepts_links: true,
-  },
-  prediction: true,
-  prediction_attributes: {
-    predicted_points: -> { rand(15000) }
-  }
-}
-
-@assignments[:predictor_past_assignment_with_submissions] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :predictor,
-  attributes: {
-    name: "Has Submission, Closed",
-    description: "Displays 'Has Submission' icon. Has slider, accepts prediction.",
-    due_at: 1.week.ago,
-    accepts_submissions_until: 1.week.ago,
-    full_points: 15000,
-    accepts_submissions: true,
-    resubmissions_allowed: true,
-    accepts_attachments: true,
-    accepts_text: true,
-    accepts_links: true,
-  },
-  student_submissions: true
-}
-
-@assignments[:predictor_open_assignment_with_submissions] = {
-  quotes: {
-    assignment_created: nil,
-  },
-  assignment_type: :predictor,
-  attributes: {
-    name: "Has Submission, Open",
-    description: "Displays 'Has Submission' icons, has slider, accepts
-      prediction.",
-    due_at: 5.weeks.from_now,
-    accepts_submissions_until: 5.weeks.from_now,
-    full_points: 15000,
-    accepts_submissions: true,
-    resubmissions_allowed: true,
-    accepts_attachments: true,
-    accepts_text: true,
-    accepts_links: true,
-  },
-  student_submissions: true
 }
 
 @assignments[:predictor_fixed_assignment] = {
@@ -829,15 +862,9 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     due_at: 1.week.from_now,
     full_points: 15000,
   },
-  grades: true,
-  grade_attributes: {
-    instructor_modified: false,
-    raw_points: -> { nil },
-    status: nil,
-  },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -857,14 +884,14 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     full_points: 15000,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    instructor_modified: true,
     raw_points: -> { 15000 },
     status: "Graded"
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -895,15 +922,9 @@ Ralph Waldo Emerson",
     due_at: 1.week.from_now,
     full_points: 15000,
   },
-  grades: true,
-  grade_attributes: {
-    instructor_modified: false,
-    raw_points: -> { nil },
-    status: nil,
-  },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -935,12 +956,6 @@ to proceed with growing up. ― John Taylor Gatto",
     full_points: 25000,
   },
   assignment_score_levels: true,
-  grades: true,
-  grade_attributes: {
-    instructor_modified: false,
-    raw_points: -> { nil },
-    status: nil,
-  },
   prediction: true,
   prediction_attributes: {
     predicted_points: -> { 25000 }
@@ -1263,9 +1278,9 @@ treated like money, to be put away in a bank for the future. ― Seymour Papert"
     full_points: 180000,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
     status: "Graded",
-    instructor_modified: true,
     raw_points: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key
       to unlock the golden door of freedom."</strong>'
@@ -1309,9 +1324,9 @@ in the end you’ll fall right into my trap. ― Sophia Nikolaidou",
     full_points: 180000,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
     status: "Graded",
-    instructor_modified: true,
     raw_points: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not
       strength or intelligence - is the key to unlocking our potential.
@@ -1464,7 +1479,7 @@ test that teaches you a lesson. – Tom Bodett",
   },
   prediction: true,
   prediction_attributes: {
-    predicted_points: -> { rand(15000) }
+    predicted_points: -> { qd_curve(15000) }
   }
 }
 
@@ -1580,9 +1595,9 @@ the speed, and the route.― Jay Cross",
     due_at: 4.weeks.from_now,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -1609,9 +1624,9 @@ the speed, and the route.― Jay Cross",
     due_at: 4.weeks.from_now,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -1638,9 +1653,9 @@ the speed, and the route.― Jay Cross",
     due_at: 4.weeks.from_now,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
 
@@ -1667,8 +1682,8 @@ the speed, and the route.― Jay Cross",
     due_at: 4.weeks.from_now,
   },
   grades: true,
+  participation: 90,
   grade_attributes: {
-    status: "Graded",
-    instructor_modified: true
+    status: "Graded"
   }
 }
