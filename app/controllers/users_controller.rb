@@ -151,20 +151,21 @@ class UsersController < ApplicationController
 
   # import users for class
   def upload
+
+    if params[:file].blank?
+      flash[:notice] = "File missing"
+      redirect_to users_path and return
+    end
+
     if (File.extname params[:file].original_filename) != ".csv"
       redirect_to users_path, notice: "We're sorry, the user import utility only supports .csv files. Please try again using a .csv file." and return
     end
 
-    if params[:file].blank?
-      flash[:notice] = "File missing"
-      redirect_to users_path
-    else
-      @result = CSVStudentImporter.new(params[:file].tempfile,
-                                       params[:internal_students] == "1",
-                                       params[:send_welcome] == "1")
-        .import(current_course)
-      render :import_results
-    end
+    @result = CSVStudentImporter.new(params[:file].tempfile,
+                                     params[:internal_students] == "1",
+                                     params[:send_welcome] == "1")
+      .import(current_course)
+    render :import_results
   end
 
   private
