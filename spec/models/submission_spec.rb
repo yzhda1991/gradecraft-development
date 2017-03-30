@@ -235,6 +235,8 @@ describe Submission do
   end
 
   describe ".ungraded" do
+    before { Submission.destroy_all }
+      
     let(:in_progress_submission) { create(:submission, course: course) }
     
     it "returns the submissions that do not have any grades" do
