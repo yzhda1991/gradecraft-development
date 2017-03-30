@@ -30,6 +30,5 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to decorative_glyph(:dashboard) + "See #{term_for :team}", team, class: "button"
-              %li= link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), class: "button"
-              %li= link_to decorative_glyph(:trash) + "Delete #{term_for :team}", team_path(team), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+              %li= active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), class: "button"
+              %li= active_course_link_to decorative_glyph(:trash) + "Delete #{term_for :team}", team_path(team), class: "button", data: { confirm: "Are you sure?" }, :method => :delete

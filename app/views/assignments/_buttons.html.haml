@@ -2,13 +2,13 @@
   .context_menu(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{presenter.assignment.id}, #{presenter.assignment.use_rubric})")
     %ul
       - if !presenter.new_assignment?
-        %li= link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(presenter.assignment), class: "button button-edit"
+        %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(presenter.assignment), class: "button button-edit"
         %li.dropdown
           %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
           %ul.options-menu
             - if presenter.assignment.grades.present?
               %li= link_to decorative_glyph(:"check-square") + "Review Grades", grades_review_assignment_path(id: presenter.assignment)
-            %li= link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: presenter.assignment), method: :copy
+            %li= active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: presenter.assignment), method: :copy
             - if presenter.assignment.has_groups?
               %li= link_to decorative_glyph(:users) + "Create #{term_for :group}", new_group_path
 
@@ -24,11 +24,11 @@
 
             - unless presenter.assignment.imported_assignment.nil?
               %li.hide-for-small
-                = link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
+                = active_course_link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
                   = decorative_glyph(:refresh)
                   = "Update Assignment from #{presenter.assignment.imported_assignment.provider.capitalize}"
               %li.hide-for-small
-                = link_to assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
+                = active_course_link_to assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
                   = decorative_glyph(:refresh)
                   = "Update #{presenter.assignment.imported_assignment.provider.capitalize} with Assignment"
             %li.hide-for-small

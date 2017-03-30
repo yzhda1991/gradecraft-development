@@ -49,12 +49,13 @@
 %li= link_to_unless_current decorative_glyph(:tasks) + "Grade Predictor Preview", predictor_path
 %li= link_to_unless_current decorative_glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
 
-.hide-for-small
-  %hr
+- if current_course.active? 
+  .hide-for-small
+    %hr
 
-  %h5{ class: "make-lizards" } Admin
-  %li= link_to_unless_current decorative_glyph(:plus) + "New Course", new_course_path
-  - if current_user_is_admin?
-    %li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
-    %li= link_to_unless_current decorative_glyph("user-times") + "All Users", users_path
-    %li= link_to_unless_current decorative_glyph(:search) + "Search Users", search_users_path
+    %h5{ class: "make-lizards" } Admin
+    %li= active_course_link_to_unless_current decorative_glyph(:plus) + "New Course", new_course_path
+    - if current_user_is_admin?
+      %li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
+      %li= link_to_unless_current decorative_glyph("user-times") + "All Users", users_path
+      %li= link_to_unless_current decorative_glyph(:search) + "Search Users", search_users_path

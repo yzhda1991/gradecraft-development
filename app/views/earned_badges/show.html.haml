@@ -1,7 +1,7 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      %li= link_to decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
+      %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -9,7 +9,7 @@
   %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name), :width => "25", :height => "25"}
   %p
     %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)
-    - if @earned_badge.points?
+    - if @earned_badge.badge.full_points?
       = "(#{@earned_badge.points} points)"
 
   %p
