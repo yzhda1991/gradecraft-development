@@ -3,19 +3,18 @@
   - assignment = presenter.assignment
   - student_id = current_student.present? ? current_student.id : nil?
 
-  .class-analytics{"ng-app" => "gradecraft"}
-    .class-analytics-wrapper
+  .class-analytics{ "ng-app": "gradecraft" }
+    - if assignment.pass_fail?
+      .class-analytics-wrapper
+        .class-analytics-graph
+          %assignment-scores-earned-analytics{ "assignment-id": assignment.id, "student-id": student_id}
+        .class-analytics-graph
+          %assignment-participation-analytics{ "assignment-id": assignment.id, "student-id": student_id }
+    - else
+      .class-analytics-wrapper
+        .class-analytics-graph
+          %assignment-distribution-analytics{ "assignment-id": assignment.id, "student-id": student_id}
+        .class-analytics-graph
+          %assignment-participation-analytics{ "assignment-id": assignment.id, "student-id": student_id }
       .class-analytics-graph
-        - if assignment.pass_fail?
-          %assignment-scores-earned-analytics{ "assignment-id" => assignment.id, "student-id" => student_id}
-
-        - else
-          %assignment-distribution-analytics{ "assignment-id" => assignment.id, "student-id" => student_id}
-
-      .class-analytics-graph
-        %h3 Participants
-        #assignment-participation-analytics{ "data-assignment-id" => assignment.id, "data-student-id" => student_id }
-
-    - if !assignment.pass_fail?
-      .class-analytics-graph
-        %assignment-scores-earned-analytics{ "assignment-id" => assignment.id, "student-id" => student_id}
+        %assignment-scores-earned-analytics{ "assignment-id": assignment.id, "student-id": student_id}
