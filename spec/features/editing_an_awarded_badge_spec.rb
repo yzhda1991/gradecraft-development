@@ -64,13 +64,8 @@ feature "editing an awarded a badge" do
         expect(current_path).to eq badge_path(badge.id)
 
         within(".pageContent") do
-          click_link "Edit"
+          expect(page).to_not have_selector(:link_or_button, "Edit")
         end
-
-        expect(current_path).to eq \
-          edit_badge_earned_badge_path(badge, earned_badge)
-
-        expect(page).to_not have_selector(:link_or_button, "Update Badge")
       end
     end
   end
