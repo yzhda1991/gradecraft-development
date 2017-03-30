@@ -1,40 +1,22 @@
 - if presenter.has_grades?
 
+  - assignment = presenter.assignment
+  - student_id = current_student.present? ? current_student.id : nil?
+
   .class-analytics-wrapper
     .class-analytics-graph{"ng-app" => "gradecraft"}
-      - if presenter.assignment.pass_fail?
+      - if assignment.pass_fail?
         %h3 Scores Earned
-
-        #assignment-levels-analytics{ "data-assignment-id" => presenter.assignment.id,
-        "data-student-id" => current_student.present? ? current_student.id : nil,
-        "class" => ("student-distro" if current_student.present?)}
+        #assignment-levels-analytics{ "data-assignment-id" => assignment.id, "data-student-id" => student_id}
 
       - else
-        %h3 Grade Distribution
-
-        %assignment-distribution-analytics{ "assignment-id" => presenter.assignment.id,
-          "student-id" => current_student.present? ? current_student.id : nil,
-          "student-distro" => current_student.present?.to_s }
-        #assignment-distribution-graph
-
-        .small
-          %b Class Average:
-          #{points presenter.assignment.average} points
-        .small
-          %b Low Score:
-          #{points presenter.assignment.low_score} points
-        .small
-          %b High Score:
-          #{points presenter.assignment.high_score} points
+        %assignment-distribution-analytics{ "assignment-id" => assignment.id, "student-id" => student_id}
 
     .class-analytics-graph
       %h3 Participants
-      #assignment-participation-analytics{ "data-assignment-id" => presenter.assignment.id, "data-student-id" => current_student.present? ? current_student.id : nil }
+      #assignment-participation-analytics{ "data-assignment-id" => assignment.id, "data-student-id" => student_id }
 
-  - if !presenter.assignment.pass_fail?
+  - if !assignment.pass_fail?
     .scores-earned-bar-chart
       %h3 Scores Earned
-
-      #assignment-levels-analytics{ "data-assignment-id" => presenter.assignment.id,
-        "data-student-id" => current_student.present? ? current_student.id : nil,
-        "class" => ("student-distro" if current_student.present?)}
+      #assignment-levels-analytics{ "data-assignment-id" => assignment.id, "data-student-id" => student_id }

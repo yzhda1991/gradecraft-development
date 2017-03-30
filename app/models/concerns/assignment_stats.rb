@@ -3,6 +3,24 @@
 module AssignmentStats
   extend ActiveSupport::Concern
 
+  def average
+    grades.graded_or_released.average(:raw_points).to_i \
+      if grades.graded_or_released.present?
+  end
+
+  # Average of above-zero grades for an assignment
+  def earned_average
+    grades.graded_or_released.where("score > 0").average(:score).to_i
+  end
+
+  def high_score
+    grades.graded_or_released.maximum(:raw_points)
+  end
+
+  def low_score
+    grades.graded_or_released.minimum(:raw_points)
+  end
+
   # Calculating how many of each pass/fail exists
   def earned_status_count
     grades.graded_or_released

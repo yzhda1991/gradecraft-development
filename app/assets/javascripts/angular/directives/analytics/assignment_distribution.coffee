@@ -4,7 +4,11 @@
 @gradecraft.directive 'assignmentDistributionAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
     analyticsDistCtrl = [()->
       vm = this
+
       services(vm.assignmentId, vm.studentId).then(()->
+        vm.assignment_average = AnalyticsService.assignmentData.assignment_average
+        vm.assignment_low_score = AnalyticsService.assignmentData.assignment_low_score
+        vm.assignment_high_score = AnalyticsService.assignmentData.assignment_high_score
         plotGraph(AnalyticsService.assignmentData, vm.studentDistro)
       )
     ]
@@ -47,22 +51,21 @@
         }
       }
 
-      if studentDistro
+      if userScore
         layout.height = 130;
-        if userScore
-          layout.annotations = [{
-            x: userScore,
-            y: 0,
-            xref: 'x',
-            yref: 'y',
-            text: 'Your Score:<br>' + userScore.toLocaleString(),
-            showarrow: true,
-            arrowhead: 2,
-            arrowsize: 1,
-            arrowwidth: 2,
-            ax: 0,
-            ay: -40
-          }]
+        layout.annotations = [{
+          x: userScore,
+          y: 0,
+          xref: 'x',
+          yref: 'y',
+          text: 'Your Score:<br>' + userScore.toLocaleString(),
+          showarrow: true,
+          arrowhead: 2,
+          arrowsize: 1,
+          arrowwidth: 2,
+          ax: 0,
+          ay: -40
+        }]
 
       Plotly.newPlot('assignment-distribution-graph', data, layout, {displayModeBar: false})
 
@@ -73,9 +76,8 @@
       scope: {
          assignmentId: "=",
          studentId: "=",
-         # What does this mean, exactly?
-         studentDistro: "="
         }
+      templateUrl: 'analytics/assignment_distribution.html'
     }
 ]
 
