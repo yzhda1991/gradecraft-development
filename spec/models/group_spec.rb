@@ -2,7 +2,7 @@ describe Group do
 
   let(:group) { create(:group, name: "Steven's Wondersauce") }
 
-  describe "sanitization" do
+  describe "proposal sanitization" do
     it "has html save text text_proposal" do
       group.text_proposal = "Fine & Dandy"
       group.save
