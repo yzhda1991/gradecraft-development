@@ -69,12 +69,12 @@
     padding: 1em
 
 /* Styles the announcement module */
-.unread-announcements
+.announcements-list
   margin: 0
   padding-left: 0
   list-style-type: none
 
-.unread-announcement-item
+.announcement-item
   &:not(:first-child)
     margin: 1rem 0
   p
@@ -85,6 +85,9 @@
     font-size: 0.7rem
     color: $color-grey-3
     font-weight: 300
+  &.announcement-unread
+    padding-left: 0.25rem
+    border-left: 2px solid $color-blue-3
 
 /* Styles the assignment planner module */
 .todo .card-body

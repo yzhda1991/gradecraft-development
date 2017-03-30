@@ -1,11 +1,11 @@
 .card-header
   %h2 Announcements
 .card-body
-  %ul.unread-announcements
-    - current_course.announcements.each do |announcement|
-      - if !announcement.read?(current_user)
-        %li.unread-announcement-item
-          = link_to announcement.title, announcement_path(announcement)
-          %p.announcement-date= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
-          %p= sanitize(announcement.body, tags: %w(p), attributes: %w()).truncate(100, :separator => "...").gsub(/<\/?p>/, " ")
+  %ul.announcements-list
+    - current_course.announcements.first(3).each do |announcement|
+      %li.announcement-item{class: ("announcement-unread" if !announcement.read?(current_user))}
+        = link_to announcement.title, announcement_path(announcement)
+        %p.announcement-date= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+        %p= sanitize(announcement.body, tags: %w(p), attributes: %w()).truncate(100, :separator => "...").gsub(/<\/?p>/, " ")
+  =link_to "View all announcements", announcements_path
   
