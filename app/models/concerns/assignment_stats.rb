@@ -48,14 +48,10 @@ module AssignmentStats
 
   def score_for(student_id, viewer)
     student_grade = grades.where(student_id: student_id).first
-
     if GradeProctor.new(student_grade).viewable? user: viewer, course: course
-      if pass_fail?
-        return student_grade.pass_fail_status
-      else
-        # should this be unweighted full points? (inc. adjustment points)
-        return student_grade.raw_points
-      end
+      return student_grade.pass_fail_status if pass_fail?
+      # should this be unweighted full points? (inc. adjustment points)
+      return student_grade.raw_points
     end
     nil
   end
