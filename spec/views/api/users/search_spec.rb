@@ -23,10 +23,19 @@ describe "api/users/search" do
     expect(json["data"][0]["attributes"]["id"]).to eq student.id.to_s
     expect(json["data"][0]["attributes"]["first_name"]).to eq "Jacob"
     expect(json["data"][0]["attributes"]["last_name"]).to eq "Leinenkugel"
-    expect(json["data"][0]["attributes"]["course_memberships"]).to eq [{"role"=>"Learner", "course_name"=>"Rocket Science 601", "score"=>124816}]
+    expect(json["data"][0]["attributes"]["course_memberships"]).to eq [{
+      "course_id"=>course.id,
+      "role"=>"Learner",
+      "course_name"=>"Rocket Science 601",
+      "score"=>124816
+    }]
     expect(json["data"][1]["attributes"]["id"]).to eq professor.id.to_s
     expect(json["data"][1]["attributes"]["first_name"]).to eq "Jacob"
     expect(json["data"][1]["attributes"]["last_name"]).to eq "Leinenkugel"
-    expect(json["data"][1]["attributes"]["course_memberships"]).to eq [{"role"=>"Professor", "course_name"=>"Rocket Science 601"}]
+    expect(json["data"][1]["attributes"]["course_memberships"]).to eq [{
+      "course_id"=>course.id,
+      "role"=>"Professor",
+      "course_name"=>"Rocket Science 601"
+    }]
   end
 end
