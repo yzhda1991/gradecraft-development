@@ -1,21 +1,28 @@
 describe Group do
-  subject { create(:group) }
 
-  it_behaves_like "a model that needs sanitization", :text_proposal
+  let(:group) { create(:group, name: "Steven's Wondersauce") }
+
+  describe "proposal sanitization" do
+    it "has html save text text_proposal" do
+      group.text_proposal = "Fine & Dandy"
+      group.save
+      expect(group.text_proposal).to eq("Fine &amp; Dandy")
+    end
+  end
 
   describe "validations" do
     it "is valid with a name and an approval state" do
-      expect(subject).to be_valid
+      expect(group).to be_valid
     end
 
     it "is invalid without a name" do
-      subject.name = nil
-      expect(subject).to be_invalid
+      group.name = nil
+      expect(group).to be_invalid
     end
 
     it "is invalid without an approval state" do
-      subject.approved = nil
-      expect(subject).to be_invalid
+      group.approved = nil
+      expect(group).to be_invalid
     end
 
     it "does not allow more group members than the assignment max" do
@@ -26,10 +33,10 @@ describe Group do
       student5 = create :user
       assignment1 = create :assignment, max_group_size: 4
 
-      subject.assignments << assignment1
-      subject.students << [student1, student2, student3, student4, student5]
+      group.assignments << assignment1
+      group.students << [student1, student2, student3, student4, student5]
 
-      expect(subject).to be_invalid
+      expect(group).to be_invalid
     end
 
     it "does not allow fewer group members than the assignment min" do
@@ -37,10 +44,10 @@ describe Group do
       student2 = create :user
       assignment1 = create :assignment, max_group_size: 4
 
-      subject.assignments << assignment1
-      subject.students << [student1, student2]
+      group.assignments << assignment1
+      group.students << [student1, student2]
 
-      expect(subject).to be_invalid
+      expect(group).to be_invalid
     end
 
     it "does not allow students to belong to more than one group per assignment" do
@@ -51,10 +58,10 @@ describe Group do
       group_dup = create :group
       group_dup.assignments << assignment1
       group_dup.students << [student1, student3]
-      subject.assignments << assignment1
-      subject.students << [student1, student2]
+      group.assignments << assignment1
+      group.students << [student1, student2]
 
-      expect(subject).to be_invalid
+      expect(group).to be_invalid
     end
 
     it "requires the group to work on at least one assignment" do
@@ -62,52 +69,48 @@ describe Group do
       student2 = create :user
       assignment1 = create :assignment, max_group_size: 4
 
-      subject.students << [student1, student2]
+      group.students << [student1, student2]
 
-      expect(subject).to be_invalid
+      expect(group).to be_invalid
     end
   end
 
   describe "#approved?" do
     it "returns true if approved" do
-      subject.approved = "Approved"
-      expect(subject.approved?).to eq true
+      group.approved = "Approved"
+      expect(group.approved?).to eq true
     end
 
     it "returns false if any other state" do
-      subject.approved = "Rejected"
-      expect(subject.approved?).to eq false
+      group.approved = "Rejected"
+      expect(group.approved?).to eq false
     end
   end
 
-  describe "#assignment_ids=" do
+  describe "#assignment_ids" do
     let(:assignment1) { create :assignment }
     let(:assignment2) { create :assignment }
     let(:student) { create :user }
 
-    subject { build :group, student_ids: [student.id] }
-
     it "creates assignment groups for each assignment id" do
-      subject.assignment_ids = [assignment1, assignment2].map(&:id)
-      subject.save
+      group.assignment_ids = [assignment1, assignment2].map(&:id)
+      group.save
 
-      expect(subject.assignment_groups.count).to eq 2
+      expect(group.assignment_groups.count).to eq 2
     end
   end
 
   describe "submitter directory names" do
-    subject { create :group, name: "Steven's Wondersauce" }
-
     describe "#submitter_directory_name" do
       it "formats the submitter name into a directory name" do
-        expect(subject.submitter_directory_name).to eq("Stevens Wondersauce")
+        expect(group.submitter_directory_name).to eq("Stevens Wondersauce")
       end
     end
 
     describe "#submitter_directory_name_with_suffix" do
       it "formats the submitter name into a directory name with unique id" do
-        expect(subject.submitter_directory_name_with_suffix)
-          .to eq("Stevens Wondersauce - #{subject.id}")
+        expect(group.submitter_directory_name_with_suffix)
+          .to eq("Stevens Wondersauce - #{group.id}")
       end
     end
   end
@@ -139,25 +142,25 @@ describe Group do
 
   describe "#pending?" do
     it "returns true if pending" do
-      subject.approved = "Pending"
-      expect(subject.pending?).to eq true
+      group.approved = "Pending"
+      expect(group.pending?).to eq true
     end
 
     it "returns false if any other state" do
-      subject.approved = "Rejected"
-      expect(subject.pending?).to eq false
+      group.approved = "Rejected"
+      expect(group.pending?).to eq false
     end
   end
 
   describe "#rejected?" do
     it "returns true if rejected" do
-      subject.approved = "Rejected"
-      expect(subject.rejected?).to eq true
+      group.approved = "Rejected"
+      expect(group.rejected?).to eq true
     end
 
     it "returns false if any other state" do
-      subject.approved = "Approved"
-      expect(subject.rejected?).to eq false
+      group.approved = "Approved"
+      expect(group.rejected?).to eq false
     end
   end
 
@@ -166,25 +169,25 @@ describe Group do
 
     context "when there is not a draft submission" do
       it "returns the group's submission for an assignment" do
-        submission = create(:group_submission, group: subject, assignment: assignment)
-        expect(subject.submission_for_assignment(assignment)).to eq(submission)
+        submission = create(:group_submission, group: group, assignment: assignment)
+        expect(group.submission_for_assignment(assignment)).to eq(submission)
       end
 
       it "returns nil if the group doesn't have an assignment submission" do
         # assignment = create(:assignment, grade_scope: "Group")
-        expect(subject.submission_for_assignment(assignment)).to eq nil
+        expect(group.submission_for_assignment(assignment)).to eq nil
       end
     end
 
     context "when there is a draft submission" do
-      let!(:draft_submission) { create(:group_submission, assignment: assignment, group: subject, submitted_at: nil) }
+      let!(:draft_submission) { create(:group_submission, assignment: assignment, group: group, submitted_at: nil) }
 
       it "returns nil if submitted only is true" do
-        expect(subject.submission_for_assignment(assignment)).to eq nil
+        expect(group.submission_for_assignment(assignment)).to eq nil
       end
 
       it "returns the draft submission" do
-        expect(subject.submission_for_assignment(assignment, false)).to eq draft_submission
+        expect(group.submission_for_assignment(assignment, false)).to eq draft_submission
       end
     end
   end

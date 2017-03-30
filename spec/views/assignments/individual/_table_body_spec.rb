@@ -10,8 +10,8 @@ describe "assignments/individual/_table_body" do
     student = create(:user, courses: [@course], role: :student)
     @grade = create(:grade, course: @course, assignment: @assignment,
                     student: student)
-    allow(view).to receive(:current_course).and_return(@course)
-    allow(view).to receive(:presenter).and_return presenter
+    allow(view).to receive_messages(current_course: @course, presenter: presenter,
+      current_user: student)
   end
 
   it "renders successfully" do

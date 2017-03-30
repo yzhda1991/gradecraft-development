@@ -2,7 +2,7 @@ describe Assignment do
   subject { build(:assignment) }
 
   context "with a persisted assignment" do 
-    it_behaves_like "a model that needs sanitization", :description
+    it_behaves_like "a model that needs sanitization", :assignment, :description
   end
 
   context "validations" do

@@ -7,12 +7,12 @@ describe Submissions::ShowPresenter do
     { course: course }
   end
 
-  let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200, submitted_at: Time.now) }
-  let(:assignment) { double(:assignment, course: course, threshold_points: 13200, grade_scope: "Group", id: 300).as_null_object }
-  let(:course) { double(:course, name: "Some Course").as_null_object }
-  let(:student) { double(:user, first_name: "Jimmy", id: 500)}
-  let(:group) { double(:group, name: "My group", course: course, id: 400) }
-  let(:grade) { double(:grade).as_null_object }
+  let(:submission) { create(:submission, student: student, assignment: assignment, id: 200, submitted_at: Time.now) }
+  let(:assignment) { create(:assignment, course: course, threshold_points: 13200, grade_scope: "Group", id: 300) }
+  let(:course) { build(:course, name: "Some Course") }
+  let(:student) { create(:user, first_name: "Jimmy", id: 500)}
+  let(:group) { create(:group, name: "My group", course: course, id: 400) }
+  let(:grade) { create(:grade) }
 
   before(:each) do
     allow(subject).to receive_messages(
@@ -166,46 +166,6 @@ describe Submissions::ShowPresenter do
     it "returns the submitted_at date from the submission" do
       allow(subject).to receive(:submission) { submission }
       expect(subject.submitted_at).to eq submission.submitted_at
-    end
-  end
-
-  describe "#open_for_editing?" do
-    let(:result) { subject.open_for_editing? }
-
-    before do
-      allow(subject).to receive(:grade) { grade }
-    end
-
-    context "assignment is not open" do
-      it "returns false" do
-        allow(assignment).to receive(:open?) { false }
-        expect(result).to eq false
-      end
-    end
-
-    context "assignment is open" do
-      context "grade is not present" do
-        it "returns true" do
-          allow(grade).to receive(:present?) { false }
-          expect(result).to eq true
-        end
-      end
-
-      context "grade is present and re-submissions are allowed" do
-        it "returns true" do
-          allow(grade).to receive(:present?) { true }
-          allow(assignment).to receive(:resubmissions_allowed?) { true }
-          expect(result).to eq true
-        end
-      end
-
-      context "grades is present but re-submissions are not allowed" do
-        it "returns false" do
-          allow(grade).to receive(:present?) { true }
-          allow(assignment).to receive(:resubmissions_allowed?) { false }
-          expect(result).to eq false
-        end
-      end
     end
   end
 

@@ -32,13 +32,14 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-    .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { status: ["In Progress", "Graded", "Released"] }))
   end
 
   scope :resubmitted, -> {
-    includes(:grade)
-    .where(grades: { status: ["Graded", "Released"] })
+    includes(:grade, :assignment)
+    .where("grades.status = 'Released' OR (grades.status = 'Graded' AND NOT assignments.release_necessary)")
     .where("grades.graded_at < submitted_at")
+    .references(:grade, :assignment)
   }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
@@ -65,24 +66,27 @@ class Submission < ActiveRecord::Base
   end
 
   def graded_at
-    grade.graded_at if graded?
+    submission_grade.graded_at if graded?
   end
 
   def graded?
     !ungraded?
   end
-
-  # Grabbing any submission that has NO instructor-defined grade (if the
-  # student has predicted the grade, it'll exist, but we still don't want to
-  # catch those here)
-  def ungraded?
-    !grade || grade.status.nil?
+  
+  def submission_grade
+    student.grades.where(assignment_id: self.assignment_id).first
   end
 
-  # Used to report to the user that a change will be a resubmission because this
-  # submission is already graded.
+  # Grabbing any submission that has NO instructor-defined grade
+  def ungraded?
+    !submission_grade || submission_grade.status.nil?
+  end
+
+  # Reports to the user that a change will be a resubmission because this
+  # submission is already graded and visible to them.
   def will_be_resubmitted?
-    graded?
+    return false unless submission_grade.present? && submission_grade.student_visible?
+    return true
   end
 
   # this is transitive so that once it is graded again, then
