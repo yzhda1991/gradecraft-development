@@ -12,7 +12,7 @@
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
     .flex-col.col-70.tablet-col
-      - unread_count = unread_count_for current_student, current_course
+      - unread_count = Announcement.unread_count_for current_student, current_course
       - if current_course.announcements.present? && unread_count > 0
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_announcements"
 
