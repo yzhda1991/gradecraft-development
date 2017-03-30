@@ -2,8 +2,6 @@ describe Group do
 
   let(:group) { create(:group, name: "Steven's Wondersauce") }
 
-  it_behaves_like "a model that needs sanitization", :group, :text_proposal
-
   describe "sanitization" do
     it "has html save text text_proposal" do
       group.text_proposal = "Fine & Dandy"
