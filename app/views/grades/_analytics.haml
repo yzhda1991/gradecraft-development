@@ -3,7 +3,7 @@
   - assignment = presenter.assignment
   - student_id = current_student.present? ? current_student.id : nil?
 
-  .class-analytics-outer-wrapper{"ng-app" => "gradecraft"}
+  .class-analytics{"ng-app" => "gradecraft"}
     .class-analytics-wrapper
       .class-analytics-graph
         - if assignment.pass_fail?
@@ -17,5 +17,5 @@
         #assignment-participation-analytics{ "data-assignment-id" => assignment.id, "data-student-id" => student_id }
 
     - if !assignment.pass_fail?
-      .scores-earned-bar-chart
+      .class-analytics-graph
         %assignment-scores-earned-analytics{ "assignment-id" => assignment.id, "student-id" => student_id}
