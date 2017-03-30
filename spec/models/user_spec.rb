@@ -53,8 +53,38 @@ describe User do
       expect(User.find_by_insensitive_username(student.username.upcase)).to eq student
     end
 
-    it "returns nil if the specified email is nil" do
-      expect(described_class.find_by_insensitive_email(nil)).to be_nil
+    it "returns nil if the specified username is nil" do
+      expect(described_class.find_by_insensitive_username(nil)).to be_nil
+    end
+  end
+
+  describe ".find_by_insensitive_last_name" do
+    it "should return the user no matter what the case the last name is in" do
+      expect(User.find_by_insensitive_last_name(student.last_name.upcase)).to eq [student]
+    end
+
+    it "returns nil if the specified last name is nil" do
+      expect(described_class.find_by_insensitive_last_name(nil)).to be_empty
+    end
+  end
+
+  describe ".find_by_insensitive_first_name" do
+    it "should return the user no matter what the case the first name is in" do
+      expect(User.find_by_insensitive_first_name(student.first_name.upcase)).to eq [student]
+    end
+
+    it "returns nil if the specified first name is nil" do
+      expect(described_class.find_by_insensitive_first_name(nil)).to be_empty
+    end
+  end
+
+  describe ".find_by_insensitive_full_name" do
+    it "should return the user no matter what the case the name parts are in" do
+      expect(User.find_by_insensitive_full_name(student.first_name.upcase, student.last_name.upcase)).to eq [student]
+    end
+
+    it "returns nil if the specified name parts are nil" do
+      expect(described_class.find_by_insensitive_full_name(nil, nil)).to be_empty
     end
   end
 

@@ -373,6 +373,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Observers', observers_path)
   end
 
+  def users_search
+    dashboard
+    breadcrumb('Search Users', search_users_path)
+  end
+
   def staff_index
     dashboard
     breadcrumb('Staff', staff_index_path)
