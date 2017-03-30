@@ -4,7 +4,7 @@ describe Grades::ImportersController do
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:assignment) { create :assignment, course: course }
   let(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
-  
+
   before { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
@@ -23,6 +23,7 @@ describe Grades::ImportersController do
       render_views
 
       let(:file) { fixture_file "grades.csv", "text/csv" }
+      let(:bad_file) { fixture_file "grades.xlsx"}
 
       it "renders the results from the import" do
         student.reload.update_attribute :email, "robert@example.com"
@@ -58,6 +59,15 @@ describe Grades::ImportersController do
           post :upload, params: { assignment_id: assignment.id, importer_provider_id: :csv }
 
           expect(flash[:notice]).to eq("File is missing")
+          expect(response).to redirect_to(assignment_grades_importer_path(assignment, :csv))
+        end
+      end
+
+      context "with a file that is not csv to import with" do
+        it "renders the file not csv error" do
+          post :upload, params: { assignment_id: assignment.id, importer_provider_id: :csv, file: bad_file }
+
+          expect(flash[:notice]).to eq("We're sorry, the grade import utility only supports .csv files. Please try again using a .csv file.")
           expect(response).to redirect_to(assignment_grades_importer_path(assignment, :csv))
         end
       end

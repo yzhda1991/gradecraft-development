@@ -73,21 +73,27 @@ class Grades::ImportersController < ApplicationController
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
+  # rubocop:disable AndOr
   def upload
     @assignment = current_course.assignments.find(params[:assignment_id])
 
     if params[:file].blank?
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
-        notice: "File is missing"
-    else
-      @result = CSVGradeImporter.new(params[:file].tempfile)
-        .import(current_course, @assignment)
-
-      grade_ids = @result.successful.map(&:id)
-      enqueue_multiple_grade_update_jobs(grade_ids)
-
-      render :import_results
+        notice: "File is missing" and return
     end
+
+    if (File.extname params[:file].original_filename) != ".csv"
+      redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),
+        notice: "We're sorry, the grade import utility only supports .csv files. Please try again using a .csv file." and return
+    end
+
+    @result = CSVGradeImporter.new(params[:file].tempfile)
+      .import(current_course, @assignment)
+
+    grade_ids = @result.successful.map(&:id)
+    enqueue_multiple_grade_update_jobs(grade_ids)
+
+    render :import_results
   end
 
   private
