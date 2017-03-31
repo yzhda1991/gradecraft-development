@@ -27,7 +27,8 @@
   %ul
   - presenter.assignment.assignment_files.each do |af|
     %li= link_to af.filename, af.url
-- if current_user_is_staff?
+
+- if current_user_is_staff? && presenter.assignment.grades.instructor_modified.any?
   %h3.uppercase Downloads
   %p= link_to glyph(:download) + "Download Grades", export_assignment_grades_path(presenter.assignment, format: :csv)
 
@@ -78,7 +79,7 @@
     - presenter.assignment.unlock_conditions.each do |condition|
       - if !condition.unlockable_type == GradeSchemeElement
         %li= link_to condition.requirements_description_sentence, condition.unlockable
-      - else 
+      - else
         %li= condition.requirements_description_sentence
 
 - if presenter.assignment.is_a_condition?
@@ -87,7 +88,7 @@
     - presenter.assignment.unlock_keys.each do |key|
       - if !key.unlockable_type == GradeSchemeElement
         %li= link_to key.key_description_sentence, key.unlockable
-      - else 
+      - else
         %li= key.key_description_sentence
 
 - if presenter.assignment_has_viewable_description?(current_user)
