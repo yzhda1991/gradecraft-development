@@ -19,11 +19,17 @@
           - if impersonating?
             .release-preview-link= link_to glyph('eye-slash') + "Exit #{term_for :student} Preview", exit_student_impersonation_path
           %ul.nav.nav-pill.right
+            - if current_course.announcements.present? && current_user_is_student?
+            - unread_count = Announcement.unread_count_for current_student, current_course
+              %li.announcement-btn.dropdown
+                %button.icon-button.nav-button.announcement{type: "button"}= decorative_glyph(:bell)
+                .nav-dropdown-card-wrapper.dropdown-content
+                  = render partial: "announcements/announcements_dropdown"
             - if presenter.has_info?
               %li.course-info-btn.dropdown
-                = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title", data: { behavior: "toggle-card", "target-selector" => ".course-info-card-wrapper" }
-                %ul.course-info-card-wrapper.dropdown-content
-                  .course-info-card
+                %button.icon-button.nav-button{type: "button"}= decorative_glyph('info-circle hidden-sm') + "Class Info"
+                .nav-dropdown-card-wrapper.dropdown-content
+                  %ul.nav-dropdown-card
                     = render partial: "layouts/navigation/class_info", locals: { presenter: presenter }
             = render partial: "layouts/navigation/authenticated_nav"
         %a.btn-navbar-left.hide-for-large{"aria-label": "Mobile navigation"}

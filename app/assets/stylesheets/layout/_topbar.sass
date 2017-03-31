@@ -35,6 +35,15 @@ a.site-title
   background-color: $color-blue-1
   height: 45px
 
+  .nav-button
+    font-size: 0.9rem
+    font-weight: 300
+    padding: 0.8rem 0.5rem 0.95rem 0.5rem
+    &.announcement i
+      padding-right: 0
+    &:hover
+      color: $color-blue-5
+
 ul.subnav.logged-out
   left: -6.25rem
   background-color: $color-blue-3
@@ -94,12 +103,16 @@ ul.subnav.logged-out
 
   .the-nav .nav-pill.right
     z-index: 100
+    margin-top: 0.2rem
 
     .my-account
       margin-left: .25rem
 
     .course-info-btn
       margin-right: .25rem
+
+    .has-form
+      display: inline-block
 
     ul.typeahead.dropdown-menu.course-result
       width: 185px
@@ -139,10 +152,6 @@ ul.subnav.logged-out
     .tagline
       margin-left: .5rem
       color: $color-green-2
-
-  /* make icons in links clickable */
-  .nav > li a > i
-    pointer-events: none
 
   .logged-in .the-nav > .nav > li a
     padding-top: .85rem
@@ -282,13 +291,14 @@ ul.subnav.logged-out
   &:hover
     text-decoration: none
 
-.course-info-card-wrapper
+.nav-dropdown-card-wrapper
   display: none
   position: relative
 
-.course-info-card
+.nav-dropdown-card
   @include hover-card
-  right: -11.5em
+  left: 50%
+  transform: translateX(-50%)
   width: 400px
 
   & > li
