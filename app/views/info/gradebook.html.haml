@@ -25,7 +25,7 @@
             - current_course.assignments.each do |assignment|
               - assignment.grade_for_student(student).tap do |grade|
                 - if grade
-                  %td= link_to "#{grade.score}", edit_grade_path(grade)
+                  %td= active_course_link_to "#{grade.score}", edit_grade_path(grade)
                 - else
                   %td
             - if current_course.valuable_badges?

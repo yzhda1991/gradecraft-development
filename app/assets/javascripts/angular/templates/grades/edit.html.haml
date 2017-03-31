@@ -30,7 +30,7 @@
 .right
   %grade-status-select
   .right
-    %grade-submit-buttons(submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
+    %grade-submit-buttons(ng-if='vm.isActiveCourse' submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
 
 .clear
 

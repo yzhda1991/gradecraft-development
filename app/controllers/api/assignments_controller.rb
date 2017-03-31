@@ -5,9 +5,9 @@ class API::AssignmentsController < ApplicationController
   def index
     @assignments = current_course.assignments.ordered
 
-    if  current_user_is_student?
+    if current_user_is_student?
       @student = current_student
-      @allow_updates = !impersonating?
+      @allow_updates = !impersonating? && current_course.active?
       @grades = Grade.for_course(current_course).for_student(current_student)
 
       if !impersonating?

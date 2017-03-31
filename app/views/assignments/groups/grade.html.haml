@@ -19,4 +19,5 @@
     'recipient-type'=>"group",
     'recipient-id'=>"#{@group.id}",
     'submit-path'=>"#{assignment_path(@assignment)}",
-    'grade-next-path'=>"#{@grade_next_path}"}
+    'grade-next-path'=>"#{@grade_next_path}",
+    'is-active-course'=>"#{current_course.active?}"}

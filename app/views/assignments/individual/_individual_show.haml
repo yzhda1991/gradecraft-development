@@ -5,9 +5,7 @@
     = simple_form_for presenter.assignment, :url => delete_all_assignment_grades_path(assignment_id: presenter.assignment.id), method: :delete do |f|
       = hidden_field_tag :team_id, presenter.team.id unless presenter.team.nil?
       .submit-buttons
-        %button{ :type => "submit", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" } }
-          %i.fa.fa-trash
-          Delete All Grades
+        = active_course_submit_tag "Delete All Grades", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
 
 .progress
 = form_tag edit_status_assignment_grades_path(presenter.assignment), method: :get do
@@ -18,6 +16,6 @@
   - if presenter.assignment.release_necessary? && presenter.has_grades?
     .right
       %br
-      = submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-individual-grades-command" }
+      = active_course_submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-individual-grades-command" }
 
   .clear

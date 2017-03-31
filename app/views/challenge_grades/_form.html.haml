@@ -22,7 +22,7 @@
     %h4 Feedback
     .textarea
       = f.text_area :feedback, class: "froala"
-      
+
   %section
     .right
       %h4.text-right Points Adjustment
@@ -30,9 +30,9 @@
       %p
       %h4.text-right Points Adjustment Feedback
       = f.text_area :adjustment_points_feedback
-      
+
     .clear
   .submit-buttons
     %ul
-      %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
+      %li= active_course_submit_tag "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}", class: "button"
       %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"

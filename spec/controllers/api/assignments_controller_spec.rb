@@ -1,7 +1,7 @@
 include SessionHelper
 
 describe API::AssignmentsController do
-  let(:course) { build_stubbed :course}
+  let(:course) { build_stubbed :course, status: true }
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:assignment) { create(:assignment, course: course) }
@@ -43,14 +43,28 @@ describe API::AssignmentsController do
     end
 
     describe "GET index" do
-      it "assigns the assignments with predictions and grades and a call to update" do
-        get :index, format: :json
-        expect(assigns(:assignments).first.id).to eq(assignment.id)
-        expect(assigns :student).to eq(student)
-        expect(assigns :predicted_earned_grades).to eq([predicted_earned_grade])
-        expect(assigns :grades).to eq([grade])
-        expect(assigns(:allow_updates)).to be_truthy
-        expect(response).to render_template(:index)
+      context "when the course is active" do
+        it "assigns the assignments with predictions and grades and a call to update" do
+          get :index, format: :json
+          expect(assigns(:assignments).first.id).to eq(assignment.id)
+          expect(assigns :student).to eq(student)
+          expect(assigns :predicted_earned_grades).to eq([predicted_earned_grade])
+          expect(assigns :grades).to eq([grade])
+          expect(assigns(:allow_updates)).to be_truthy
+          expect(response).to render_template(:index)
+        end
+      end
+
+      context "when the course is not active" do
+        it "assigns the assignments with predictions and grades and a call to update" do
+          course.status = false
+          get :index, format: :json
+          expect(assigns :student).to eq(student)
+          expect(assigns :predicted_earned_grades).to eq([predicted_earned_grade])
+          expect(assigns :grades).to eq([grade])
+          expect(assigns(:allow_updates)).to be_falsey
+          expect(response).to render_template(:index)
+        end
       end
     end
   end

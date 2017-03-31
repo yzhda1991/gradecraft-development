@@ -145,6 +145,53 @@ describe LinkHelper do
     end
   end
 
+  describe "#active_course_link_to" do
+    let(:course) { build_stubbed :course }
+    before(:each) { allow(helper).to receive(:current_course).and_return course }
+
+    context "when the current user is not an admin" do
+      before(:each) { allow(helper).to receive(:current_user_is_admin?).and_return false }
+
+      it "renders the link if the current course is active" do
+        course.status = true
+        link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com")
+        expect(link).to have_tag("a", with: { href: "http://prosciutto.com" })
+      end
+
+      it "does not render the link if the current course is not active" do
+        course.status = false
+        link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com")
+        expect(link).to be_nil
+      end
+    end
+
+    context "when the current user is an admin" do
+      before(:each) { allow(helper).to receive(:current_user_is_admin?).and_return true }
+
+      it "renders the link" do
+        link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com")
+        expect(link).to have_tag("a", with: { href: "http://prosciutto.com" })
+      end
+    end
+  end
+
+  describe "#active_course_link_to_unless_current" do
+    let(:course) { build_stubbed :course }
+    before(:each) { allow(helper).to receive(:current_course).and_return course }
+
+    it "renders the link if the current course is active" do
+      course.status = true
+      link = helper.active_course_link_to_unless_current("Delicious cured ham", "http://prosciutto.com")
+      expect(link).to have_tag("a", with: { href: "http://prosciutto.com" })
+    end
+
+    it "does not render the link if the current course is not active" do
+      course.status = false
+      link = helper.active_course_link_to_unless_current("Delicious cured ham", "http://prosciutto.com")
+      expect(link).to be_nil
+    end
+  end
+
   describe "#sanitize_external_links" do
     let(:content) { "<p>This is some content for <a href='http://example.org'>External</a>" }
 

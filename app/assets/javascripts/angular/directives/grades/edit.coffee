@@ -65,10 +65,9 @@
          recipientType: "@",
          recipientId: "=",
          submitPath: "@",
-         gradeNextPath: "@"
+         gradeNextPath: "@",
+         isActiveCourse: "="
         },
       templateUrl: 'grades/edit.html'
     }
 ]
-
-

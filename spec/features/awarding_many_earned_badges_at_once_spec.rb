@@ -1,38 +1,51 @@
 feature "awarding many earned badges at once" do
   context "as a professor" do
-    let(:course) { build :course, has_badges: true }
-    let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
-    let(:professor) { create :user }
+    let(:professor) { create :user, courses: [course], role: :professor }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
-    let(:student) { build :user, first_name: "Hermione", last_name: "Granger" }
-    let(:student_2) { build :user, first_name: "Ron", last_name: "Weasley" }
-    let!(:course_membership_2) { create :course_membership, :student, user: student, course: course }
-    let!(:course_membership_3) { create :course_membership, :student, user: student_2, course: course }
+    let!(:student) { build :user, first_name: "Hermione", last_name: "Granger", courses: [course], role: :student }
+    let!(:student_2) { build :user, first_name: "Ron", last_name: "Weasley", courses: [course], role: :student }
 
     before(:each) do
       login_as professor
       visit dashboard_path
     end
 
-    scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Badges"
+    context "with an active course" do
+      let(:course) { build :course, has_badges: true, status: true }
+
+      scenario "is successful" do
+        within(".sidebar-container") do
+          click_link "Badges"
+        end
+
+        expect(current_path).to eq badges_path
+
+        within(".pageContent") do
+          click_link "Quick Award"
+        end
+
+        expect(current_path).to eq mass_edit_badge_earned_badges_path(badge)
+
+        within(".pageContent") do
+          find(:css, "#student-id-#{student.id}").set(true)
+          find(:css, "#student-id-#{student_2.id}").set(true)
+          click_button "Award"
+        end
+        expect(page).to have_notification_message("notice", "The Fancy Badge Badge was successfully awarded 2 times")
       end
+    end
 
-      expect(current_path).to eq badges_path
+    context "with an inactive course" do
+      let(:course) { build :course, has_badges: true, status: false }
 
-      within(".pageContent") do
-        click_link "Quick Award"
+      scenario "is unsuccessful" do
+        within(".sidebar-container") do
+          click_link "Badges"
+        end
+
+        expect(current_path).to eq badges_path
+        expect(page).to_not have_selector(:link_or_button, "Quick Award")
       end
-
-      expect(current_path).to eq mass_edit_badge_earned_badges_path(badge)
-
-      within(".pageContent") do
-        find(:css, "#student-id-#{student.id}").set(true)
-        find(:css, "#student-id-#{student_2.id}").set(true)
-        click_button "Award"
-      end
-      expect(page).to have_notification_message("notice", "The Fancy Badge Badge was successfully awarded 2 times")
     end
   end
 end

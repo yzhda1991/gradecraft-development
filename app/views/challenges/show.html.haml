@@ -2,11 +2,11 @@
   - content_for :context_menu do
     .context_menu
       %ul
-        %li= link_to decorative_glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path, class: "button button-edit"
+        %li= active_course_link_to decorative_glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path, class: "button button-edit"
 
-        %li= link_to decorative_glyph(:edit) + "Edit", edit_challenge_path(@challenge), class: "button button-edit"
+        %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_challenge_path(@challenge), class: "button button-edit"
 
-        %li= link_to decorative_glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(@challenge), class: "button button-edit"
+        %li= active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(@challenge), class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
