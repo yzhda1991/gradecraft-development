@@ -23,7 +23,7 @@
       yValues = []
       colors = []
       outlineColors = []
-      yStudentMarker
+      marker = this
 
       scoreFrequency.forEach((scoreLevel)->
         xValue = scoreLevel.score
@@ -33,7 +33,7 @@
         yValues.push(yValue)
 
         if (xValue == studentGrade)
-          yStudentMarker = yValue
+          marker.yStudentMarker = yValue
           colors.push('rgba(109, 214, 119, 0.5)')
           outlineColors.push('rgba(109, 214, 119, 1)')
         else
@@ -83,7 +83,7 @@
         layout.height = 230
         layout.annotations = [{
           x: studentGrade,
-          y: yStudentMarker,
+          y: marker.yStudentMarker,
           xref: 'x',
           yref: 'y',
           yanchor: 'bottom',
@@ -110,5 +110,3 @@
       templateUrl: 'analytics/assignment_scores_earned.html'
     }
 ]
-
-
