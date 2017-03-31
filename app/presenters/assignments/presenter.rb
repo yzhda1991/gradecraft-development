@@ -164,12 +164,6 @@ class Assignments::Presenter < Showtime::Presenter
     student.submission_for_assignment(assignment, false)
   end
 
-  # denominator
-  def participation_possible_count
-    return course.graded_student_count if assignment.is_individual?
-    return assignment.groups.count if assignment.has_groups?
-  end
-
   def submission_grade_history(student)
     grade = self.grade_for_student(student)
     submission = self.submission_for_assignment(student)
