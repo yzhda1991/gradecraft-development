@@ -19,6 +19,6 @@
           - if element.unlock_conditions.present?
             - element.unlock_conditions.each do |uc|
               .condition= glyph(:lock) + uc.requirements_description_sentence
-        %td= link_to "Set Lock Conditions", edit_grade_scheme_element_path(element), class: "button"
+        %td= active_course_link_to "Set Lock Conditions", edit_grade_scheme_element_path(element), class: "button"
 
 = render partial: "courses/grading_philosophy", locals: { course: current_course }
