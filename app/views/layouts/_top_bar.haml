@@ -22,7 +22,10 @@
             - if current_course.announcements.present? && current_user_is_student?
             - unread_count = Announcement.unread_count_for current_student, current_course
               %li.announcement-btn.dropdown
-                %button.icon-button.nav-button.announcement{type: "button"}= decorative_glyph(:bell)
+                %button.icon-button.nav-button.announcement{type: "button"}
+                  = decorative_glyph(:bell)
+                  - if unread_count > 0
+                    %div.notification-badge.announcement-notification-badge= unread_count
                 .nav-dropdown-card-wrapper.dropdown-content
                   = render partial: "announcements/announcements_dropdown"
             - if presenter.has_info?

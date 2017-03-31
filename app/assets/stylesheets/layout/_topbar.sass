@@ -39,8 +39,10 @@ a.site-title
     font-size: 0.9rem
     font-weight: 300
     padding: 0.8rem 0.5rem 0.95rem 0.5rem
-    &.announcement i
-      padding-right: 0
+    &.announcement 
+      position: relative
+      i
+        padding-right: 0
     &:hover
       color: $color-blue-5
 
@@ -308,3 +310,33 @@ ul.subnav.logged-out
     .logged-in .the-nav > .nav & > a
       padding: 0em
       color: $color-blue-3
+
+/* Styles the announcement module */
+.announcements-list
+  margin: 0
+  list-style-type: none
+
+.announcement-item
+  &:not(:first-child)
+    margin: 0.5rem 0
+    border-top: 1px solid $color-grey-6
+  p
+    margin: 0.2rem 0
+    font-size: 0.8rem
+
+  .announcement-date
+    font-size: 0.7rem
+    color: $color-grey-3
+    font-weight: 300
+  &.announcement-unread
+    padding-left: 0.5rem
+    border-left: 2px solid $color-blue-3
+    a 
+      font-weight: 600
+
+.notification-badge
+  &.announcement-notification-badge
+    width: 14px
+    line-height: 14px
+    top: 0.3rem
+    font-size: 0.6rem
