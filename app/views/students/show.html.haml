@@ -6,18 +6,16 @@
   = render "layouts/alerts"
 
 .instructor-dashboard.show-student
-  .flex-col-30.tablet-col-1
+  .flex-col.col-30
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_avatar"
 
     - if current_course.student_weighted?
       .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
-  .flex-col-40.tablet-col-2
+  .flex-col.col-40
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
-    - if current_course.has_badges?
-      .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_badges"
 
-  .flex-col-30.tablet-col-3
+  .flex-col.col-30
     - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
       .panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
