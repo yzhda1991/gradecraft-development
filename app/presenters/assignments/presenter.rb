@@ -19,10 +19,6 @@ class Assignments::Presenter < Showtime::Presenter
     @submission ||= student.submission_for_assignment(assignment, false)
   end
 
-  def completion_rate
-    assignment.completion_rate(course)
-  end
-
   def course
     properties[:course]
   end

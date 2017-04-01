@@ -21,6 +21,12 @@ module AssignmentStats
     grades.graded_or_released.minimum(:raw_points)
   end
 
+  def median
+    sorted = grades.graded_or_released.not_nil.pluck(:score).sort
+    return 0 if sorted.empty?
+    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
+  end
+
   # Calculating how many of each pass/fail exists
   def earned_status_count
     grades.graded_or_released
@@ -70,6 +76,10 @@ module AssignmentStats
     return graded_or_released_scores.count if self.is_individual?
     return grades.select(:group_id).distinct.count if self.has_groups?
   end
+  
+  def predicted_count
+    predicted_earned_grades.predicted_to_be_done.count
+  end
 
   # Tallying the percentage of participation from the entire class
   def participation_rate
@@ -84,4 +94,3 @@ module AssignmentStats
     0
   end
 end
-

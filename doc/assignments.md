@@ -3,6 +3,7 @@
   * Is a [customizable term](customizable terms)
 
 ### Concerns
+  * [AssignmentStats](assignment_stats)
   * [Copyable](copyable)
   * [Gradable](gradable)
   * [MultipleFileAttributes](multiple_file_attributes)
@@ -203,7 +204,6 @@ Each method returns a CSV string and has an optional argument `optional` that ca
     * `fixed?` - "Fixed"
     * `slider?` - "Slider"
     * `select?` - "Select List"
-  * `predicted_count` - number of grades in the assignment with predicted scores greater than 0
   * `predictor_display_type` - returns a string based on the following conditions:
     * points predictor display is set to fixed or the assignment is "pass or fail", in which case "checkbox" is returned
     * points predictor display is set to slider, in which case "slider" is returned

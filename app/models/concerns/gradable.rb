@@ -22,16 +22,6 @@ module Gradable
     !grade.nil? && grade.predicted_points > 0
   end
 
-  def median
-    sorted = grades.graded_or_released.not_nil.pluck(:score).sort
-    return 0 if sorted.empty?
-    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
-  end
-
-  def predicted_count
-    predicted_earned_grades.predicted_to_be_done.count
-  end
-
   def ungraded_students(ids_to_include=[], team=nil)
     if team
       students = course.students_by_team(team).order_by_name
