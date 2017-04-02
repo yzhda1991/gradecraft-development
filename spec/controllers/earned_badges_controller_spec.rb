@@ -1,5 +1,5 @@
 describe EarnedBadgesController do
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:student) { create(:course_membership, :student, course: course).user }
   let(:observer) { create(:user, courses: [course]) }

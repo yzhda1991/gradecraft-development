@@ -1,20 +1,16 @@
 describe InfoController do
-  before(:all) { @course = create(:course) }
-  before(:all) { @course_2 = create(:course) }
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { create(:course) }
+  let(:course_2) { create(:course) }
+  let(:professor) { create(:user, courses: [course], role: :professor) }
+  let(:assignment) { create(:assignment_with_due_at, course: course) }
+  let(:student) { create(:user, courses: [course, course_2], role: :student) }
+  let(:observer) { create(:user, courses: [course], role: :observer) }
 
   context "as a professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course, @course_2], role: :professor)
-    end
-    before { login_user(@professor) }
+    before { login_user(professor) }
 
     describe "GET dashboard" do
       it "retrieves the dashboard" do
-        @assignment = create(:assignment_with_due_at, course: @course)
         get :dashboard
         expect(response).to render_template(:dashboard)
       end
@@ -51,20 +47,20 @@ describe InfoController do
     describe "GET gradebook" do
       it "retrieves the gradebook" do
         expect(GradebookExporterJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Gradebook - #{ Date.today }.csv")
+          receive(:new).with(user_id: professor.id, course_id: course.id, filename: "#{ course.name } Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
-        get :gradebook, params: { id: @course.id }
+        get :gradebook, params: { id: course.id }
       end
 
       it "redirects to the root path if there is no referer" do
-        get :gradebook, params: { id: @course.id }
+        get :gradebook, params: { id: course.id }
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :gradebook, params: { id: @course.id }
+        get :gradebook, params: { id: course.id }
         expect(response).to redirect_to dashboard_path
       end
     end
@@ -72,34 +68,34 @@ describe InfoController do
     describe "GET multipled_gradebook" do
       it "retrieves the multiplied gradebook" do
         expect(MultipliedGradebookExporterJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Multiplied Gradebook - #{ Date.today }.csv")
+          receive(:new).with(user_id: professor.id, course_id: course.id, filename: "#{ course.name } Multiplied Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(MultipliedGradebookExporterJob).to receive(:enqueue)
-        get :multiplied_gradebook, params: { id: @course.id }
+        get :multiplied_gradebook, params: { id: course.id }
       end
 
       it "redirects to the root path if there is no referer" do
-        get :multiplied_gradebook, params: { id: @course.id }
+        get :multiplied_gradebook, params: { id: course.id }
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :multiplied_gradebook, params: { id: @course.id }
+        get :multiplied_gradebook, params: { id: course.id }
         expect(response).to redirect_to dashboard_path
       end
     end
 
     describe "GET export_earned_badges" do
       it "retrieves the export_earned_badges download" do
-        get :export_earned_badges, params: { id: @course.id }, format: :csv
+        get :export_earned_badges, params: { id: course.id }, format: :csv
         expect(response.body).to include("First Name,Last Name,Uniqname,Email,Badge ID,Badge Name,Feedback,Awarded Date")
       end
     end
 
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
-        get :final_grades, params: { id: @course.id }, format: :csv
+        get :final_grades, params: { id: course.id }, format: :csv
         expect(response.body).to include("First Name,Last Name,Email,Username,Score,Grade")
       end
     end
@@ -107,20 +103,20 @@ describe InfoController do
     describe "GET research_gradebook" do
       it "retrieves the research gradebook" do
         expect(GradeExportJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Research Gradebook - #{ Date.today }.csv")
+          receive(:new).with(user_id: professor.id, course_id: course.id, filename: "#{ course.name } Research Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradeExportJob).to receive(:enqueue)
-        get :research_gradebook, params: { id: @course.id }
+        get :research_gradebook, params: { id: course.id }
       end
 
       it "redirects to the root path if there is no referer" do
-        get :research_gradebook, params: { id: @course.id }
+        get :research_gradebook, params: { id: course.id }
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :research_gradebook, params: { id: @course.id }
+        get :research_gradebook, params: { id: course.id }
         expect(response).to redirect_to dashboard_path
       end
     end
@@ -132,29 +128,26 @@ describe InfoController do
       end
 
       it "only shows the students for the team" do
-        @team = create(:team, course: @course)
-        @student = create(:user, courses: [@course], role: :student)
-        @student.teams << @team
-        @student_2 = create(:user, courses: [@course], role: :student)
+        @team = create(:team, course: course)
+        student = create(:user, courses: [course], role: :student)
+        student.teams << @team
+        student_2 = create(:user, courses: [course], role: :student)
         get :multiplier_choices, params: { team_id: @team.id }
         expect(response).to render_template(:multiplier_choices)
-        expect(assigns(:students)).to eq([@student])
+        expect(assigns(:students)).to eq([student])
       end
     end
 
     describe "GET submissions export" do
       it "retrieves the submissions export download" do
-        get :submissions, params: { id: @course.id }, format: :csv
+        get :submissions, params: { id: course.id }, format: :csv
         expect(response.body).to include("Submission ID,Assignment ID,Assignment Name,Student ID,Group ID,Student Comment,Created At,Updated At,Score,Grader Feedback,Grade Last Updated")
       end
     end
   end
 
   context "as a student" do
-    before(:all) do
-      @student = create(:user, courses: [@course, @course_2], role: :student)
-    end
-    before(:each) { login_user(@student) }
+    before(:each) { login_user(student) }
 
     describe "GET dashboard" do
       it "retrieves the dashboard if turned on" do
@@ -189,8 +182,7 @@ describe InfoController do
   end
 
   context "as an observer" do
-    before(:all) { @observer = create(:user, courses: [@course], role: :observer) }
-    before(:each) { login_user(@observer) }
+    before(:each) { login_user(observer) }
 
     describe "GET predictor" do
       it "shows the grade predictor page" do

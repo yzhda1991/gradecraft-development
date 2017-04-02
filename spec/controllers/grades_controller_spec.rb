@@ -1,5 +1,5 @@
 describe GradesController do
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create :assignment, course: course }
   let(:grade) { create(:grade, student: student, assignment: assignment, course: course) }

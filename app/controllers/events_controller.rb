@@ -1,7 +1,5 @@
 class EventsController < ApplicationController
 
-  respond_to :html, :json
-
   before_action :ensure_staff?, except: [:show, :index]
 
   def index

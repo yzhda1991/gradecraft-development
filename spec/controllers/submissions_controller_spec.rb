@@ -1,16 +1,11 @@
 describe SubmissionsController do
-  let(:course) { create(:course) }
+  let(:course) { build(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let!(:student) { create(:course_membership, :student, course: course).user }
-
-  before(:each) do
-    session[:course_id] = course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:submission) { create(:submission, assignment: assignment, student: student) }
 
   context "as a professor" do
-    let(:professor) { create(:course_membership, :professor, course: course).user }
-    let(:submission) { create(:submission, assignment: assignment, student: student) }
 
     before(:each) do
       login_user(professor)

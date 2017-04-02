@@ -1,6 +1,5 @@
 RSpec.describe DownloadsController, type: :controller do
-
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:presenter) { double(:presenter).as_null_object }
 

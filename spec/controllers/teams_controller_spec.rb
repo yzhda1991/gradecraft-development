@@ -1,31 +1,26 @@
 describe TeamsController do
-  before(:all) { @course = create(:course) }
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { build(:course) }
+  let(:team) { create(:team, course: course) }
+  let(:professor) { create(:user, courses: [course], role: :professor) }
+  let(:student) { create(:user, courses: [course], role: :student) }
 
   context "as a professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course], role: :professor)
-    end
     before(:each) do
-      @team = create(:team, course: @course)
-      login_user(@professor)
+      login_user(professor)
     end
 
     describe "GET index" do
       it "returns all teams for the current course" do
         get :index
-        expect(assigns(:teams)).to eq(@course.reload.teams)
+        expect(assigns(:teams)).to eq(course.reload.teams)
         expect(response).to render_template(:index)
       end
     end
 
     describe "GET show" do
       it "returns the team show page" do
-        get :show, params: { id: @team.id }
-        expect(assigns(:team)).to eq(@team)
+        get :show, params: { id: team.id }
+        expect(assigns(:team)).to eq(team)
         expect(response).to render_template(:show)
       end
     end
@@ -40,8 +35,8 @@ describe TeamsController do
 
     describe "GET edit" do
       it "assigns name " do
-        get :edit, params: { id: @team.id }
-        expect(assigns(:team)).to eq(@team)
+        get :edit, params: { id: team.id }
+        expect(assigns(:team)).to eq(team)
         expect(response).to render_template(:edit)
       end
     end
@@ -49,7 +44,7 @@ describe TeamsController do
     describe "POST create" do
       it "creates the team with valid attributes"  do
         params = attributes_for(:team)
-        params[:id] = @team
+        params[:id] = team
         expect{ post :create, params: { team: params }}.to change(Team,:count).by(1)
       end
 
@@ -61,32 +56,28 @@ describe TeamsController do
     describe "POST update" do
       it "updates the team" do
         params = { name: "new name" }
-        post :update, params: { id: @team.id, team: params }
-        expect(response).to redirect_to(team_path(@team))
-        expect(@team.reload.name).to eq("new name")
+        post :update, params: { id: team.id, team: params }
+        expect(response).to redirect_to(team_path(team))
+        expect(team.reload.name).to eq("new name")
       end
     end
 
     describe "GET destroy" do
       it "destroys the team" do
+        @team = team
         expect{ get :destroy, params: { id: @team }}.to change(Team,:count).by(-1)
       end
     end
   end
 
   context "as a student" do
-    before(:all) do
-      @student = create(:user, courses: [@course], role: :student)
-    end
-
-    before(:each) { login_user(@student) }
+    before(:each) { login_user(student) }
 
     describe "GET index" do
       it "assigns the student's team and renders the index" do
-        @team = create(:team, course: @course)
-        @student.teams << @team
+        student.teams << team
         get :index
-        expect(assigns(:team)).to eq(@team)
+        expect(assigns(:team)).to eq(team)
         expect(response).to render_template(:index)
       end
     end
@@ -117,7 +108,7 @@ describe TeamsController do
   end
 
   context "as an observer" do
-    let(:observer) { create(:user, courses: [@course], role: :observer) }
+    let(:observer) { create(:user, courses: [course], role: :observer) }
 
     before(:each) { login_user(observer) }
 
