@@ -44,9 +44,9 @@
                 .right
                   %ul.button-bar
                     - if assignment.is_individual?
-                      %li= active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
+                      = active_course_link_to :li, decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
                     - elsif assignment.has_groups?
-                      %li= active_course_link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
+                      = active_course_link_to :li, decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
               - if current_course.active?
                 %td
                   .center

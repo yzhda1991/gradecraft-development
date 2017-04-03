@@ -1,7 +1,8 @@
 - if current_user_is_staff?
   - content_for :context_menu do
     .context_menu
-      %ul= active_course_link_to decorative_glyph(:plus) + "New Event", new_event_path, class: "button button-edit"
+      %ul
+        = active_course_link_to :li, decorative_glyph(:plus) + "New Event", new_event_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -26,5 +27,5 @@
             - if current_user_is_staff?
               .right
                 %ul.button-bar
-                  %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_event_path(event), class: "button"
-                  %li= active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"
+                  = active_course_link_to :li, decorative_glyph(:edit) + "Edit", edit_event_path(event), class: "button"
+                  = active_course_link_to :li, decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"
