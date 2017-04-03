@@ -71,6 +71,7 @@
 //= require plugins/url.min.js
 //= require plugins/video.min.js
 
+//= require plotly/grade_distro
 //= require plotly/team_analytics
 
 //= require gradecraft
