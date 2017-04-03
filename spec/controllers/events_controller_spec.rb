@@ -10,7 +10,7 @@ describe EventsController do
     end
 
     describe "GET index" do
-      it "assigns all events as @events" do
+      it "assigns all events as events" do
         get :index
         expect(assigns(:events)).to eq([event])
       end
@@ -31,7 +31,7 @@ describe EventsController do
     end
 
     describe "GET edit" do
-      it "assigns the requested event as @event" do
+      it "assigns the requested event as event" do
         get :edit, params: { id: event.to_param }
         expect(assigns(:event)).to eq(event)
       end
@@ -44,7 +44,7 @@ describe EventsController do
           expect{ post :create, params: { event: params }}.to change(Event,:count).by(1)
         end
 
-        it "assigns a newly created event as @event" do
+        it "assigns a newly created event as event" do
           params = attributes_for(:event)
           post :create, params: { event: params }
           expect(assigns(:event)).to be_a(Event)
@@ -59,7 +59,7 @@ describe EventsController do
       end
 
       describe "with invalid params" do
-        it "assigns a newly created but unsaved event as @event" do
+        it "assigns a newly created but unsaved event as event" do
           allow_any_instance_of(Event).to receive(:save).and_return(false)
           post :create, params: { event: { "name" => nil }}
           expect(assigns(:event)).to be_a_new(Event)
@@ -84,8 +84,8 @@ describe EventsController do
 
     describe "DELETE destroy" do
       it "destroys the requested event" do
-        @event = event
-        expect{ get :destroy, params: { id: @event } }.to change(Event,:count).by(-1)
+        event
+        expect{ get :destroy, params: { id: event } }.to change(Event,:count).by(-1)
         expect(response).to redirect_to(events_url)
       end
     end

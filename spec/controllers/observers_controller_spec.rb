@@ -9,9 +9,9 @@ describe ObserversController do
 
     describe "GET index" do
       it "returns all observers for the current course" do
-        @observer = observer
+        observer
         get :index
-        expect(assigns(:observers)).to eq([@observer])
+        expect(assigns(:observers)).to eq([observer])
         expect(response).to render_template(:index)
       end
     end

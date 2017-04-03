@@ -64,8 +64,8 @@ describe TeamsController do
 
     describe "GET destroy" do
       it "destroys the team" do
-        @team = team
-        expect{ get :destroy, params: { id: @team }}.to change(Team,:count).by(-1)
+        team
+        expect{ get :destroy, params: { id: team }}.to change(Team,:count).by(-1)
       end
     end
   end

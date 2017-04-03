@@ -72,8 +72,8 @@ describe GroupsController do
 
     describe "GET destroy" do
       it "destroys the group" do
-        @group = group
-        expect{ get :destroy, params: { id: @group }}.to change(Group,:count).by(-1)
+        group
+        expect{ get :destroy, params: { id: group }}.to change(Group,:count).by(-1)
       end
     end
   end

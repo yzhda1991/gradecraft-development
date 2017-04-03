@@ -60,18 +60,18 @@ describe UsersController do
       end
 
       it "updates an existing user" do
-        @user = user
+        user
         params = { first_name: "Jonathan" }
-        post :update, params: { id: @user.id, user: params }
-        expect(@user.reload.first_name).to eq "Jonathan"
+        post :update, params: { id: user.id, user: params }
+        expect(user.reload.first_name).to eq "Jonathan"
       end
 
     end
 
     describe "GET destroy" do
       it "destroys the user" do
-        @student = student
-        expect{ get :destroy, params: { id: @student } }.to change(User,:count).by(-1)
+        student
+        expect{ get :destroy, params: { id: student } }.to change(User,:count).by(-1)
       end
     end
 
