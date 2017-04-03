@@ -72,8 +72,9 @@ class Submission < ActiveRecord::Base
   def graded?
     !ungraded?
   end
-  
+
   def submission_grade
+    return nil if student.nil?
     student.grades.where(assignment_id: self.assignment_id).first
   end
 
