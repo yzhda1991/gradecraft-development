@@ -114,7 +114,7 @@ class CoursesController < ApplicationController
 
   def course_params
     params.require(:course).permit :course_number, :name,
-      :semester, :year, :has_badges, :has_teams, 
+      :semester, :year, :has_badges, :has_teams,
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
       :user_id, :course_id, :course_rules, :syllabus,
       :has_character_names, :has_team_roles, :has_character_profiles, :show_analytics,
@@ -128,7 +128,7 @@ class CoursesController < ApplicationController
       :team_score_average, :has_team_challenges, :team_leader_term,
       :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
       :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
-      :assignments_attributes, :start_date, :end_date,
+      :assignments_attributes, :start_date, :end_date, :allows_canvas,
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
         :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
       instructors_of_record_ids: [], course_memberships_attributes: [:id, :course_id, :user_id, :instructor_of_record]
