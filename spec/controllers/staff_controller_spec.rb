@@ -1,38 +1,30 @@
 describe StaffController do
-  before(:all) { @course = create(:course) }
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { build(:course) }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
 
   context "as a professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course], role: :professor)
-    end
-    before { login_user(@professor) }
+    before { login_user(professor) }
 
     describe "GET index" do
       it "returns all staff for the current course" do
         get :index
-        expect(assigns(:staff)).to eq([@professor])
+        expect(assigns(:staff)).to eq([professor])
         expect(response).to render_template(:index)
       end
     end
 
     describe "GET show" do
       it "displays a single staff member's page" do
-        get :show, params: { id: @professor.id }
-        expect(assigns(:staff_member)).to eq(@professor)
+        get :show, params: { id: professor.id }
+        expect(assigns(:staff_member)).to eq(professor)
         expect(response).to render_template(:show)
       end
     end
   end
 
   context "as a student" do
-    before(:all) do
-      @student = create(:user, courses: [@course], role: :student)
-    end
-    before(:each) { login_user(@student) }
+    before(:each) { login_user(student) }
 
     describe "protected routes" do
       [

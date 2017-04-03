@@ -1,5 +1,4 @@
 describe RubricsController do
-
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
@@ -8,8 +7,6 @@ describe RubricsController do
 
   context "as a professor" do
     before do
-      session[:course_id] = course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
       login_user(professor)
     end
 

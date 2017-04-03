@@ -1,17 +1,17 @@
 describe GradeSchemeElementsController do
-  let(:course) { create(:course) }
+  let(:course) { build(:course) }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course, lowest_points: 3000) }
+  let(:empty_grade_scheme_element) { create(:grade_scheme_element, letter: "F", course: course) }
+  let(:course_membership) { create(:course_membership, :student, course: course, score: 100000,
+    earned_grade_scheme_element_id: grade_scheme_element.id) }
+  let(:another_course_membership) { create(:course_membership, :student, course: course, score: 80000,
+    earned_grade_scheme_element_id: grade_scheme_element.id) }
 
   context "as professor" do
-    let!(:course_membership) { create(:course_membership, :student, course: course, score: 100000,
-      earned_grade_scheme_element_id: grade_scheme_element.id) }
-    let!(:another_course_membership) { create(:course_membership, :student, course: course, score: 80000,
-      earned_grade_scheme_element_id: grade_scheme_element.id) }
-    let(:professor) { create(:course_membership, :professor, course: course).user }
-    let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course) }
-
     before(:each) do
       login_user(professor)
-      allow(controller).to receive(:current_course).and_return course
     end
 
     describe "GET index" do
@@ -76,16 +76,11 @@ describe GradeSchemeElementsController do
   end
 
   context "as student" do
-    let(:student) { create(:course_membership, :student, course: course).user }
-
     before(:each) do
       login_user(student)
     end
 
     describe "GET index" do
-      let(:grade_scheme_element) { create(:grade_scheme_element, letter: "A", course: course, lowest_points: 3000) }
-      let(:empty_grade_scheme_element) { create(:grade_scheme_element, letter: "F", course: course) }
-
       it "assigns grade scheme elements with point thresholds" do
         get :index
         expect(assigns(:grade_scheme_elements)).to eq([grade_scheme_element])

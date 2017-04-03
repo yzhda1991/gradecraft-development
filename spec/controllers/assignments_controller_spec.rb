@@ -1,5 +1,5 @@
 describe AssignmentsController do
-  let(:course) { create(:course) }
+  let(:course) { build(:course) }
   let(:assignment_type) { create(:assignment_type, course: course) }
   let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
 

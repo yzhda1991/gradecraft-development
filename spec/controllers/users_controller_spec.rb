@@ -1,21 +1,16 @@
 describe UsersController do
-  before(:all) { @course = create(:course) }
-  before(:each) do
-    session[:course_id] = @course.id
-    allow(Resque).to receive(:enqueue).and_return(true)
-  end
+  let(:course) { create(:course) }
+  let(:professor) { create(:user, courses: [course], role: :professor) }
+  let(:student) { create(:user, courses: [course], role: :student) }
+  let(:user) { create(:user, first_name: "Jimmy", courses: [course]) }
 
   context "as a professor" do
-    before(:all) do
-      @professor = create(:user, courses: [@course], role: :professor)
-      @student = create(:user, courses: [@course], role: :student)
-    end
-    before(:each) { login_user(@professor) }
+    before(:each) { login_user(professor) }
 
     describe "GET index" do
       it "returns the users for the current course" do
         get :index
-        expect(assigns(:users)).to eq(@course.users.order_by_name)
+        expect(assigns(:users)).to eq(course.users.order_by_name)
         expect(response).to render_template(:index)
       end
     end
@@ -30,8 +25,8 @@ describe UsersController do
 
     describe "GET edit" do
       it "renders the edit user form" do
-        get :edit, params: { id: @student.id }
-        expect(assigns(:user)).to eq(@student)
+        get :edit, params: { id: student.id }
+        expect(assigns(:user)).to eq(student)
         expect(response).to render_template(:edit)
       end
     end
@@ -65,45 +60,33 @@ describe UsersController do
       end
 
       it "updates an existing user" do
-        existing_user = create :user, email: "jimmy@example.com"
-        post :create, params: { user: { first_name: "Jimmy",
-                                        last_name: "Page",
-                                        username: "jimmy",
-                                        email: "jimmy@example.com",
-                                        password: "hello",
-                                        password_confirmation: "hello"
-                                         }}
-        expect(user.first_name).to_not eq existing_user.first_name
+        user
+        params = { first_name: "Jonathan" }
+        post :update, params: { id: user.id, user: params }
+        expect(user.reload.first_name).to eq "Jonathan"
       end
 
-      it "sends an activation email for the user" do
-        expect {
-          post :create, params: { user: { first_name: "Jimmy",
-                                          last_name: "Page",
-                                          username: "jimmy",
-                                          email: "jimmy@example.com" }}
-        }.to change { ActionMailer::Base.deliveries.count }.by 1
-      end
     end
 
     describe "GET destroy" do
       it "destroys the user" do
-        expect{ get :destroy, params: { id: @student } }.to change(User,:count).by(-1)
+        student
+        expect{ get :destroy, params: { id: student } }.to change(User,:count).by(-1)
       end
     end
 
     describe "POST flag" do
       it "flags the student by the user if the student is not flagged" do
-        post :flag, params: { id: @student.id }, format: :js
+        post :flag, params: { id: student.id }, format: :js
         flagged_user = FlaggedUser.last
-        expect(flagged_user.flagged_id).to eq @student.id
-        expect(flagged_user.flagger_id).to eq @professor.id
-        expect(flagged_user.course_id).to eq @course.id
+        expect(flagged_user.flagged_id).to eq student.id
+        expect(flagged_user.flagger_id).to eq professor.id
+        expect(flagged_user.course_id).to eq course.id
       end
 
       it "unflags the student if the student is already flagged" do
-        FlaggedUser.flag! @course, @professor, @student.id
-        post :flag, params: { id: @student.id }, format: :js
+        FlaggedUser.flag! course, professor, student.id
+        post :flag, params: { id: student.id }, format: :js
         expect(FlaggedUser.count).to be_zero
       end
     end
@@ -111,7 +94,7 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        expect(assigns(:user)).to eq(@professor)
+        expect(assigns(:user)).to eq(professor)
         expect(response).to render_template(:edit_profile)
       end
     end
@@ -119,10 +102,10 @@ describe UsersController do
     describe "POST update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf", time_zone: "Chihuahua" }
-        post :update_profile, params: { id: @professor.id, user: params }
+        post :update_profile, params: { id: professor.id, user: params }
         expect(response).to redirect_to(dashboard_path)
-        expect(@professor.reload.display_name).to eq("gandalf")
-        expect(@professor.reload.time_zone).to eq("Chihuahua")
+        expect(professor.reload.display_name).to eq("gandalf")
+        expect(professor.reload.time_zone).to eq("Chihuahua")
       end
     end
 
@@ -137,7 +120,7 @@ describe UsersController do
       render_views
 
       let(:file) { fixture_file "users.csv", "text/csv" }
-      before { create :team, course: @course, name: "Zeppelin" }
+      before { create :team, course: course, name: "Zeppelin" }
 
       it "renders any errors that have occured" do
         file = fixture_file "users.xlsx"
@@ -216,15 +199,14 @@ describe UsersController do
 
   context "as a student" do
     before do
-      @student = create(:user, courses: [@course], role: :student)
-      login_user(@student)
+      login_user(student)
     end
 
     describe "GET activate" do
-      before(:each) { @student.update_attribute :activation_token, "blah" }
+      before(:each) { student.update_attribute :activation_token, "blah" }
 
       it "exists" do
-        get :activate, params: { id: @student.activation_token }
+        get :activate, params: { id: student.activation_token }
         expect(response).to be_success
       end
 
@@ -236,23 +218,23 @@ describe UsersController do
 
     describe "POST activated" do
       before do
-        @student.update_attribute :activation_token, "blah"
-        @student.update_attribute :activation_state, "pending"
+        student.update_attribute :activation_token, "blah"
+        student.update_attribute :activation_state, "pending"
       end
 
       context "with matching passwords" do
         before do
-          post :activated, params: { id: @student.activation_token,
-            token: @student.activation_token,
+          post :activated, params: { id: student.activation_token,
+            token: student.activation_token,
             user: { password: "blah", password_confirmation: "blah" }}
         end
 
         it "activates the user" do
-          expect(@student.reload.activation_state).to eq "active"
+          expect(student.reload.activation_state).to eq "active"
         end
 
         it "updates the user's password" do
-          expect(User.authenticate(@student.email, "blah")).to eq @student
+          expect(User.authenticate(student.email, "blah")).to eq student
         end
 
         it "logs the user in" do
@@ -262,17 +244,17 @@ describe UsersController do
 
       context "with a tampered activation token" do
         before do
-          post :activated, params: { id: @student.activation_token,
+          post :activated, params: { id: student.activation_token,
             token: "tampered",
             user: { password: "blah", password_confirmation: "blah" }}
         end
 
         it "does not activate the user" do
-          expect(@student.reload.activation_state).to eq "pending"
+          expect(student.reload.activation_state).to eq "pending"
         end
 
         it "does not update the user's password" do
-          expect(User.authenticate(@student.email, "blah")).to be_nil
+          expect(User.authenticate(student.email, "blah")).to be_nil
         end
 
         it "redirects to the root url" do
@@ -282,13 +264,13 @@ describe UsersController do
 
       context "with a non-matching password" do
         before do
-          post :activated, params: { id: @student.activation_token,
-            token: @student.activation_token,
+          post :activated, params: { id: student.activation_token,
+            token: student.activation_token,
             user: { password: "blah", password_confirmation: "blech" }}
         end
 
         it "does not activate the user" do
-          expect(@student.reload.activation_state).to eq "pending"
+          expect(student.reload.activation_state).to eq "pending"
         end
 
         it "renders the activate template" do
@@ -298,13 +280,13 @@ describe UsersController do
 
       context "with a blank password" do
         before do
-          post :activated, params: { id: @student.activation_token,
-            token: @student.activation_token,
+          post :activated, params: { id: student.activation_token,
+            token: student.activation_token,
             user: { password: "", password_confirmation: "" }}
         end
 
         it "does not activate the user" do
-          expect(@student.reload.activation_state).to eq "pending"
+          expect(student.reload.activation_state).to eq "pending"
         end
 
         it "renders the activate template" do
@@ -316,7 +298,7 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        expect(assigns(:user)).to eq(@student)
+        expect(assigns(:user)).to eq(student)
         expect(response).to render_template(:edit_profile)
       end
     end
@@ -324,17 +306,17 @@ describe UsersController do
     describe "POST update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "frodo", password: "", password_confirmation: "", time_zone: "Chihuahua" }
-        post :update_profile, params: { id: @student.id, user: params }
+        post :update_profile, params: { id: student.id, user: params }
         expect(response).to redirect_to(dashboard_path)
-        expect(@student.reload.display_name).to eq("frodo")
-        expect(@student.reload.time_zone).to eq("Chihuahua")
+        expect(student.reload.display_name).to eq("frodo")
+        expect(student.reload.time_zone).to eq("Chihuahua")
       end
 
       it "successfully updates the user's password" do
         params = { password: "test", password_confirmation: "test" }
-        post :update_profile, params: { id: @student.id, user: params }
+        post :update_profile, params: { id: student.id, user: params }
         expect(response).to redirect_to(dashboard_path)
-        expect(User.authenticate(@student.email, "test")).to eq @student
+        expect(User.authenticate(student.email, "test")).to eq student
       end
     end
 

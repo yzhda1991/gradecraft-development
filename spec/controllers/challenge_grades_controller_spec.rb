@@ -1,5 +1,5 @@
 describe ChallengeGradesController do
-  let(:course) { create :course }
+  let(:course) { build :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:team) { create(:team, course: course) }
@@ -51,7 +51,6 @@ describe ChallengeGradesController do
     end
 
     describe "GET destroy" do
-      
       it "destroys the challenge grade" do
         challenge_grade_2 = create(:challenge_grade, challenge: challenge)
         expect{ get :destroy, params: { id: challenge_grade_2,

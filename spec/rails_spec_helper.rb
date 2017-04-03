@@ -27,6 +27,10 @@ require "resque_spec/scheduler" # allow resque spec to test scheduled jobs
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/toolkits/**/*.rb")].each { |f| require f }
+Dir["./app/uploaders/*.rb"].each { |f| require f }
+Dir["./app/validators/*.rb"].each { |f| require f }
+Dir["./app/proctors/*.rb"].each { |f| require f }
+Dir["./app/models/concerns/*.rb"].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
