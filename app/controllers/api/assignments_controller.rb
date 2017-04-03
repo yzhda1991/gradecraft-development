@@ -21,4 +21,12 @@ class API::AssignmentsController < ApplicationController
   def show
     @assignment = Assignment.find(params[:id])
   end
+
+  # optional student for graph point:
+  # /api/assignments/:assignment_id/analytics
+  # /api/assignments/:assignment_id/analytics?student_id=:student_id
+  def analytics
+    @assignment = Assignment.find(params[:assignment_id])
+    @user_score = @assignment.score_for params[:student_id], current_user if params[:student_id].present?
+  end
 end

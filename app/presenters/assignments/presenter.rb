@@ -19,10 +19,6 @@ class Assignments::Presenter < Showtime::Presenter
     @submission ||= student.submission_for_assignment(assignment, false)
   end
 
-  def completion_rate
-    assignment.completion_rate(course)
-  end
-
   def course
     properties[:course]
   end
@@ -156,51 +152,8 @@ class Assignments::Presenter < Showtime::Presenter
     grade_with_rubric? && !grades_available_for?(user) && ( !user || assignment.description_visible_for_student?(user) )
   end
 
-  def scores
-    { scores: assignment.graded_or_released_scores }
-  end
-
-  def pass_fail_scores
-    { scores: assignment.grades.graded_or_released.pluck(:pass_fail_status) }
-  end
-
-  def scores_for(user)
-    scores = self.scores
-    grade = grades.where(student_id: user.id).first if user.present?
-    if GradeProctor.new(grade).viewable? user: user, course: course
-      scores[:user_score] = grade.raw_points
-    end
-    scores
-  end
-
-  def pass_fail_scores_for(user)
-    scores = self.pass_fail_scores
-    grade = grades.where(student_id: user.id).first if user.present?
-    if GradeProctor.new(grade).viewable? user: user, course: course
-      scores[:user_score] = grade.pass_fail_status
-    end
-    scores
-  end
-
-  def has_scores_for?(user)
-    scores = scores_for(user)
-    !scores.nil? && !scores.empty? && scores.key?(:scores) && !scores[:scores].empty?
-  end
-
   def student_logged?(user)
     assignment.student_logged? && assignment.open? && user.is_student?(course)
-  end
-
-  # Tallying the percentage of participation from the entire class
-  def participation_rate
-    return 0 if participation_possible_count == 0
-    ((assignment.grade_count.to_f / participation_possible_count.to_f) * 100).round(2)
-  end
-
-  # denominator
-  def participation_possible_count
-    return course.graded_student_count if assignment.is_individual?
-    return assignment.groups.count if assignment.has_groups?
   end
 
   def submission_grade_history(student)

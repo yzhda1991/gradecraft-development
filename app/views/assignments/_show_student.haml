@@ -33,15 +33,12 @@
                   locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(current_student).id,
                     assignment_id: presenter.assignment.id, course: current_course) }
               = history_timeline presenter.submission_grade_history(current_student)
-              
+
         - if presenter.has_viewable_analytics?(current_student) && presenter.grades_available_for?(current_student)
           .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
             %section.assignment-details-container
               %h2 Class Analytics
-              - if presenter.assignment.has_groups?
-                = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
-              - else
-                = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }
+              = render partial: "grades/analytics", locals: { presenter: presenter }
 
       .ui-tabs-panel#tab3{class: ("active" if !presenter.has_viewable_submission_for?(current_student) && !presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
         %section.assignment-details-container

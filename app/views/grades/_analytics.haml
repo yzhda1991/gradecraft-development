@@ -1,0 +1,20 @@
+- if presenter.has_grades?
+
+  - assignment = presenter.assignment
+  - student_id = current_student.present? ? current_student.id : nil?
+
+  .class-analytics{ "ng-app": "gradecraft" }
+    - if assignment.pass_fail?
+      .class-analytics-wrapper
+        .class-analytics-graph
+          %assignment-scores-earned-analytics{ "assignment-id": assignment.id, "student-id": student_id}
+        .class-analytics-graph
+          %assignment-participation-analytics{ "assignment-id": assignment.id, "student-id": student_id }
+    - else
+      .class-analytics-wrapper
+        .class-analytics-graph
+          %assignment-distribution-analytics{ "assignment-id": assignment.id, "student-id": student_id}
+        .class-analytics-graph
+          %assignment-participation-analytics{ "assignment-id": assignment.id, "student-id": student_id }
+      .class-analytics-graph
+        %assignment-scores-earned-analytics{ "assignment-id": assignment.id, "student-id": student_id}
