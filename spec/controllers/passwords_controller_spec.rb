@@ -24,13 +24,13 @@ describe PasswordsController do
 
     it "redirects to the password reset url if the token is not correct" do
       get :edit, params: { id: "blech" }
-      expect(response).to redirect_to new_password_path
+      expect(response).to redirect_to login_path
     end
 
     it "redirects to the password reset url if the token has expired" do
       user.update_attribute :reset_password_token_expires_at, 1.hour.ago
       get :edit, params: { id: user.reset_password_token }
-      expect(response).to redirect_to new_password_path
+      expect(response).to redirect_to login_path
     end
   end
 
@@ -73,7 +73,7 @@ describe PasswordsController do
       end
 
       it "redirects to the password reset url" do
-        expect(response).to redirect_to new_password_path
+        expect(response).to redirect_to login_path
       end
     end
 
