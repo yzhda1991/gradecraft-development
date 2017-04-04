@@ -724,6 +724,31 @@ accepts predictions.",
   student_submissions: true
 }
 
+@assignments[:submission_has_grade_no_submission] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Close without Submission, Has Grade",
+    description: "Displays 'No Submission' icons, displays as graded in predictor.",
+    due_at: 1.week.ago,
+    accepts_submissions_until: 1.week.ago,
+    accepts_submissions: false,
+    resubmissions_allowed: false,
+    accepts_attachments: false,
+    accepts_text: false,
+    accepts_links: false,
+  },
+  student_submissions: false,
+  grades: true,
+  participation: 100,
+  grade_attributes: {
+    status: "Graded"
+  }
+}
+
+
 #------------------------------------------------------------------------------#
 
 #                        Predictor Assignment Type
