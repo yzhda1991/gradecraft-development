@@ -6,7 +6,8 @@
     %li{class: ("active" if current_page?(grade_scheme_elements_path)) }
       = link_to_unless_current "Grading Scheme", grade_scheme_elements_path
   %li{class: ("active" if current_page?(predictor_path)) }
-    = active_course_link_to_unless_current "Grade Predictor", predictor_path
+    - if current_user_is_admin? || current_course.active?
+      = link_to_unless_current "Grade Predictor", predictor_path
   - if current_course.has_badges?
     %li{class: ("active" if current_page?(badges_path)) }
       = link_to_unless_current "#{term_for :badges}", badges_path

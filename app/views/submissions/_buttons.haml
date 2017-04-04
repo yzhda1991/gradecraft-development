@@ -2,23 +2,23 @@
   - content_for :context_menu do
     .context_menu
       %ul
-        %li= active_course_link_to decorative_glyph(:edit) + "Edit Submission",
+        = active_course_link_to decorative_glyph(:edit) + "Edit Submission",
           "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?student_id=#{presenter.student.id}",
           class: "button button-edit"
-        %li= active_course_link_to decorative_glyph(:trash) + "Delete Submission",
+        = active_course_link_to decorative_glyph(:trash) + "Delete Submission",
           assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), class: "button button-edit",
           data: { confirm: "Are you sure?", method: :delete }
-        %li= active_course_link_to decorative_glyph(:check) + "Grade",
+        = active_course_link_to decorative_glyph(:check) + "Grade",
           assignment_student_grade_path(presenter.assignment, presenter.student), class: "button button-edit", method: :post
 - elsif presenter.assignment.has_groups?
   - content_for :context_menu do
     .context_menu
       %ul
-        %li= active_course_link_to decorative_glyph(:edit) + "Edit Submission",
+        = active_course_link_to decorative_glyph(:edit) + "Edit Submission",
           "#{edit_assignment_submission_path(presenter.assignment, presenter.submission)}?group_id=#{presenter.group.id}",
           class: "button button-edit"
-        %li= active_course_link_to decorative_glyph(:trash) + "Delete Submission",
+        = active_course_link_to decorative_glyph(:trash) + "Delete Submission",
           assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ),
           data: { confirm: "Are you sure?",  method: :delete }, class: "button button-edit"
-        %li= active_course_link_to decorative_glyph(:check) + "Grade",
+        = active_course_link_to decorative_glyph(:check) + "Grade",
           grade_assignment_group_path(presenter.assignment,  presenter.group), class: "button button-edit"

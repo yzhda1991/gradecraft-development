@@ -22,8 +22,8 @@
 
     .module-section
       %ul.button-bar
-        %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
+        = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(current_student), class: "button"
         %li= link_to decorative_glyph(:envelope) + "Email", "mailto:#{current_student.email}", class: "button"
         %li= link_to decorative_glyph(:refresh) + "Update Score", recalculate_student_path(current_student), class: "button"
         - if !current_student.activated?
-          %li= active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(current_student.id), :method => :put, class: "button"
+          = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(current_student.id), :method => :put, class: "button"

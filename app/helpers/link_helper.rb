@@ -40,9 +40,12 @@ module LinkHelper
   end
 
   # Conditionally renders a link_to helper based on whether the course is active
-  # or not
-  def active_course_link_to(name = nil, options = nil, html_options = nil, &block)
-    link_to name, options, html_options, &block if current_user_is_admin? || current_course.active?
+  # or not - tag allows you to optionally wrap value in html tag
+  def active_course_link_to(name = nil, options = nil, html_options = nil, tag_class = nil, &block)
+    return unless current_user_is_admin? || current_course.active?
+    content_tag(:li, class: tag_class) do
+      link_to name, options, html_options, &block
+    end
   end
 
   def active_course_link_to_unless_current(name, options = {}, html_options = {}, &block)

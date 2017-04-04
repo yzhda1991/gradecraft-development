@@ -7,11 +7,11 @@
         %ul.button-bar
           %li= link_to "Review #{term_for :group}", edit_group_path(id: group_presenter.group), class: "button"
           - if presenter.assignment.accepts_submissions? && !group_presenter.submission
-            %li= active_course_link_to "Submit", group_presenter.path_for_new_submission, class: "button"
+            = active_course_link_to "Submit", group_presenter.path_for_new_submission, class: "button"
           - if group_presenter.assignment_graded?
-            %li= active_course_link_to decorative_glyph(:edit) + "Edit Grade", group_presenter.path_for_grading_assignment, class: "button"
+            = active_course_link_to decorative_glyph(:edit) + "Edit Grade", group_presenter.path_for_grading_assignment, class: "button"
           - else
-            %li= active_course_link_to decorative_glyph(:edit) + "Grade", group_presenter.path_for_grading_assignment, class: "button"
+            = active_course_link_to decorative_glyph(:edit) + "Grade", group_presenter.path_for_grading_assignment, class: "button"
     %td
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}

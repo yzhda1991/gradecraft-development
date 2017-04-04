@@ -150,12 +150,15 @@ describe LinkHelper do
     before(:each) { allow(helper).to receive(:current_course).and_return course }
 
     context "when the current user is not an admin" do
+      let(:tag_class) {'hide-for-small'}
       before(:each) { allow(helper).to receive(:current_user_is_admin?).and_return false }
 
       it "renders the link if the current course is active" do
         course.status = true
-        link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com")
-        expect(link).to have_tag("a", with: { href: "http://prosciutto.com" })
+        link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com", nil, tag_class)
+        expect(link).to have_tag("li", with: {class: "hide-for-small"}) do
+          with_tag("a", with: { href: "http://prosciutto.com" })
+        end
       end
 
       it "does not render the link if the current course is not active" do
@@ -170,7 +173,9 @@ describe LinkHelper do
 
       it "renders the link" do
         link = helper.active_course_link_to("Delicious cured ham", "http://prosciutto.com")
-        expect(link).to have_tag("a", with: { href: "http://prosciutto.com" })
+        expect(link).to have_tag("li") do
+          with_tag("a", with: { href: "http://prosciutto.com" })
+        end
       end
     end
   end
