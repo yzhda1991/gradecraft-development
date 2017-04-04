@@ -13,19 +13,20 @@
 
         = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
 
-    .card{style: "height: 400px;"}
-      .card-cap
-        %img{src: "/images/canvas-logo.png"}
-      .card-block
-        %h4.card-title Canvas LMS
-        .card-text
-        %p.card-text
-          An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
-
-        - if !@assignment.course.linked?(:canvas)
+    - if current_course.allows_canvas?
+      .card{style: "height: 400px;"}
+        .card-cap
+          %img{src: "/images/canvas-logo.png"}
+        .card-block
+          %h4.card-title Canvas LMS
+          .card-text
           %p.card-text
-            You must add the Canvas integration and link the course first in order to import any Canvas assignments.
+            An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
 
-          = link_to "Add a Canvas Integration", integrations_path, class: "card-link button"
-        -else
-          = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas, @assignment.course.linked_for(:canvas).provider_resource_id), class: "card-link button"
+          - if !@assignment.course.linked?(:canvas)
+            %p.card-text
+              You must add the Canvas integration and link the course first in order to import any Canvas assignments.
+
+            = link_to "Add a Canvas Integration", integrations_path, class: "card-link button"
+          -else
+            = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas, @assignment.course.linked_for(:canvas).provider_resource_id), class: "card-link button"

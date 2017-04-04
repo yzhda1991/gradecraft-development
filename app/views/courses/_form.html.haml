@@ -39,7 +39,11 @@
     .form-item
       = f.label :has_paid, "Has Paid?"
       = f.check_box :has_paid
-      .form_label If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users. 
+      .form_label If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users.
+    .form-item
+      = f.label :allows_canvas, "Allows Canvas?"
+      = f.check_box :allows_canvas
+      .form_label Does this course allow integration with Canvas?
 
 %section
   %h2 Enable Features
@@ -101,7 +105,7 @@
         = f.label :has_team_challenges, "Section Assignments"
         = f.check_box :has_team_challenges, {class: "feature-checkbox dependent-on-section has-settings-menu"}
       .form-card-body
-        .feature-description{id: "txtSectionAssignments"}  These are larger assignments to be completed by discussion section groups. 
+        .feature-description{id: "txtSectionAssignments"}  These are larger assignments to be completed by discussion section groups.
       .form-card-advanced-settings
         %button.button-advanced-settings= glyph(:cog) + "Settings"
       .advanced-settings-card

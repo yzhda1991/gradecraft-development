@@ -2,8 +2,8 @@
   .context_menu
     %ul
       = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
-      = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
-
+      - if current_course.allows_canvas?
+        = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
 .pageContent
   = render partial: "layouts/alerts"
 
@@ -61,7 +61,7 @@
                 - if current_user_is_admin? || current_course.active?
                   = link_to decorative_glyph(:plus) + "Add a New #{term_for :assignment}", new_assignment_path(assignment_type_id: assignment_type.id)
 
-  - if current_course.active? 
+  - if current_course.active?
     .box
       .center
         - if current_user_is_admin? || current_course.active?
