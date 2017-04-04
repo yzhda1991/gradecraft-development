@@ -19,6 +19,20 @@ describe API::AssignmentTypesController do
         expect(response).to render_template(:index)
       end
     end
+
+    describe "GET sort" do
+      it "sorts the assignment types by params" do
+        second_assignment_type = create(:assignment_type, course: course)
+        course.assignment_types << second_assignment_type
+        params = [second_assignment_type.id, assignment_type.id]
+        post :sort, params: { "assignment-type" => params }
+
+        assignment_type.reload
+        second_assignment_type.reload
+        expect(assignment_type.position).to eq(2)
+        expect(second_assignment_type.position).to eq(1)
+      end
+    end
   end
 
   context "as a student" do
@@ -33,6 +47,14 @@ describe API::AssignmentTypesController do
         expect(assigns(:assignment_types)).to eq([assignment_type])
         expect(assigns(:update_weights)).to be_truthy
         expect(response).to render_template(:index)
+      end
+    end
+
+    it "redirects protected routes to root" do
+      [
+        -> { post :sort, params: { "assignment-type" => [assignment_type] }, format: :json}
+      ].each do |protected_route|
+        expect(protected_route.call).to redirect_to(:root)
       end
     end
   end

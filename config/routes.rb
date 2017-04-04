@@ -152,7 +152,6 @@ Rails.application.routes.draw do
     get :all_grades, on: :member
     get :export_scores, on: :member
     get :export_all_scores, on: :collection
-    post :sort, on: :collection
   end
 
   #5. Assignment Type Weights
@@ -341,6 +340,7 @@ Rails.application.routes.draw do
     resources :challenges, only: :index
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create
+      post :sort, on: :collection
     end
     resources :badges, only: :index
     resources :courses, only: [:index]

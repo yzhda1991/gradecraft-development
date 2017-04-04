@@ -1,4 +1,7 @@
 class API::AssignmentTypesController < ApplicationController
+  include SortsPosition
+
+  before_action :ensure_staff?, only: [:sort]
 
   # GET api/assignment_types
   def index
@@ -20,5 +23,9 @@ class API::AssignmentTypesController < ApplicationController
         :position,
         :updated_at
       )
+  end
+
+  def sort
+    sort_position_for "assignment-type"
   end
 end
