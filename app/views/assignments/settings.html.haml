@@ -3,7 +3,9 @@
     %ul
       %li= link_to decorative_glyph(:plus) + "New #{(term_for :assignment).titleize}", new_assignment_path, class: "button button-edit"
 
-.pageContent
+.pageContent{"ng-app": "gradecraft"}
+  %has-interactive-assignments
+
   = render partial: "layouts/alerts"
 
   .total-points-label
