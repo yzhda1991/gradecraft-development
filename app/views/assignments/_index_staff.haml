@@ -1,10 +1,9 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      %li= active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
+      = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
       - if current_course.allows_canvas?
-        %li= active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
-
+        = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
 .pageContent
   = render partial: "layouts/alerts"
 
@@ -16,8 +15,9 @@
             %i.fa.fa-angle-double-right.fa-fw
             #{assignment_type.name} – #{points assignment_type.total_points} points
         .collapse-hidden{role: "tabpanel"}
-          = active_course_link_to "[ Edit ]", edit_assignment_type_path(assignment_type)
-          = active_course_link_to "[ Delete ]", assignment_type_path(assignment_type), data: { confirm: "Are you sure?", method: :delete }
+          %ul.assignment-action-buttons
+            = active_course_link_to "[ Edit ]", edit_assignment_type_path(assignment_type)
+            = active_course_link_to "[ Delete ]", assignment_type_path(assignment_type), data: { confirm: "Are you sure?", method: :delete }
           %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
             %thead
               %tr
@@ -51,16 +51,18 @@
                     .right
                       %ul.button-bar
                         - if !assignment.grade_with_rubric?
-                          %li= active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                        %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                        %li= active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), class: "button", :method => :copy
-                        %li= active_course_link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }, class: "button"
-          - if current_course.active?
+                          = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
+                        = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
+                        = active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), class: "button", :method => :copy
+                        = active_course_link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }, class: "button"
+          - if current_course.active? 
             .box{ style: "width: 95%; margin: 1em auto;"}
               .center
-                = active_course_link_to decorative_glyph(:plus) + "Add a New #{term_for :assignment}", new_assignment_path(assignment_type_id: assignment_type.id)
+                - if current_user_is_admin? || current_course.active?
+                  = link_to decorative_glyph(:plus) + "Add a New #{term_for :assignment}", new_assignment_path(assignment_type_id: assignment_type.id)
 
   - if current_course.active?
     .box
       .center
-        = active_course_link_to decorative_glyph(:plus) + "Add a New #{term_for :assignment} Type", new_assignment_type_path
+        - if current_user_is_admin? || current_course.active?
+          = link_to decorative_glyph(:plus) + "Add a New #{term_for :assignment} Type", new_assignment_type_path

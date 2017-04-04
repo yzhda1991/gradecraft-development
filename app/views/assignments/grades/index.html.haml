@@ -12,7 +12,8 @@
         %h4.uppercase= student.name
         .left
           %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.full_points} points "
-        .right= active_course_link_to "Edit #{student.first_name}'s Grade", edit_grade_path(presenter.grade_for_assignment), class: "button"
+        - if current_user_is_admin? || current_course.active?
+          .right= link_to "Edit #{student.first_name}'s Grade", edit_grade_path(presenter.grade_for_assignment), class: "button"
         %br
         %br
         .rubric-container= render partial: "grades/components/criterion_grade_results", locals: { presenter: presenter, current_student: student }

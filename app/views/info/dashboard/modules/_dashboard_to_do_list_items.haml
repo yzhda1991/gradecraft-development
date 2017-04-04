@@ -9,7 +9,9 @@
         .small.uppercase= "#{assignment.assignment_type.name}"
       - else
         - if assignment.name_visible_for_student?(current_student)
-          %span.bold.assignment-name= active_course_link_to assignment.name, grade_path(Grade.find_or_create(assignment.id, current_student.id))
+          %span.bold.assignment-name
+            - if current_user_is_admin? || current_course.active?
+              = link_to assignment.name, grade_path(Grade.find_or_create(assignment.id, current_student.id))
         - else
           %span.bold.assignment-name= "Locked #{(term_for :assignment ).titleize}"
           %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
