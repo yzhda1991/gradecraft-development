@@ -36,11 +36,11 @@
               - if challenge_grade
                 %ul.button-bar
                   %li= link_to decorative_glyph(:eye) + "See Grade", challenge_grade_path(challenge_grade.id), class: 'button'
-                  = active_course_link_to :li, decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge_grade.id), class: 'button'
-                  = active_course_link_to :li, decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge_grade.id), class: 'button', data: { confirm: 'Are you sure?', method: :delete }
+                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge_grade.id), class: 'button'
+                  = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge_grade.id), class: 'button', data: { confirm: 'Are you sure?', method: :delete }
               - else
                 %ul.button-bar
-                  = active_course_link_to :li, decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge, team_id: team.id), class: 'button'
+                  = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge, team_id: team.id), class: 'button'
           - if @challenge.release_necessary?
             %td
               - if challenge_grade && !challenge_grade.is_released?

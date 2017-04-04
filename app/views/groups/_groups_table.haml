@@ -23,7 +23,7 @@
           .right
             %ul.button-bar
               - if group.pending?
-                = active_course_link_to :li, decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group), class: "button"
+                = active_course_link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group), class: "button"
               - else
-                = active_course_link_to :li, decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group), class: "button"
-              = active_course_link_to :li, decorative_glyph(:trash) + "Delete", group_path(group), class: "button", data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete
+                = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group), class: "button"
+              = active_course_link_to decorative_glyph(:trash) + "Delete", group_path(group), class: "button", data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete

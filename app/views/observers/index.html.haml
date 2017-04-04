@@ -23,5 +23,5 @@
           %td
             .right
               %ul.button-bar
-                = active_course_link_to :li, decorative_glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
-                = active_course_link_to :li, decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+                = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
+                = active_course_link_to decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete

@@ -1,7 +1,7 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      = active_course_link_to :li, decorative_glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path, class: "button button-edit"
+      = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path, class: "button button-edit"
 
       - if @team.present? && @team.persisted?
-        = active_course_link_to :li, decorative_glyph(:edit) + "Edit #{(term_for :team).titleize}", edit_team_path(@team), class: "button button-edit"
+        = active_course_link_to decorative_glyph(:edit) + "Edit #{(term_for :team).titleize}", edit_team_path(@team), class: "button button-edit"

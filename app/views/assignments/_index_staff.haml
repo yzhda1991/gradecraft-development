@@ -1,8 +1,8 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      = active_course_link_to :li, decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
-      = active_course_link_to :li, decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
+      = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
+      = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"
@@ -50,10 +50,10 @@
                     .right
                       %ul.button-bar
                         - if !assignment.grade_with_rubric?
-                          = active_course_link_to :li, decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                        = active_course_link_to :li, decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                        = active_course_link_to :li, decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), class: "button", :method => :copy
-                        = active_course_link_to :li, decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }, class: "button"
+                          = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
+                        = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
+                        = active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), class: "button", :method => :copy
+                        = active_course_link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }, class: "button"
           - if current_course.active? 
             .box{ style: "width: 95%; margin: 1em auto;"}
               .center

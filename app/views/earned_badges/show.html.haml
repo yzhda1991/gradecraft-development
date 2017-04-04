@@ -1,7 +1,7 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      = active_course_link_to :li, decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
+      = active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
 
 .pageContent
   = render partial: "layouts/alerts"

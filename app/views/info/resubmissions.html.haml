@@ -44,7 +44,7 @@
                 .right
                   %ul.button-bar
                     %li= link_to decorative_glyph(:eye) + "See Submission", assignment_submission_path(re.assignment, id: re.id), class: "button"
-                    = active_course_link_to :li, decorative_glyph(:edit) + "Edit Grade", assignment_student_grade_path(re.assignment, re.student), method: :post, class: "button"
+                    = active_course_link_to decorative_glyph(:edit) + "Edit Grade", assignment_student_grade_path(re.assignment, re.student), method: :post, class: "button"
             - elsif re.assignment.has_groups?
               %td= link_to re.group.name, group_path(id: re.group.id)
               %td
