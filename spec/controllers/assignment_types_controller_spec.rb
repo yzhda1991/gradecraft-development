@@ -145,7 +145,6 @@ describe AssignmentTypesController do
         :index,
         :new,
         :create,
-        :sort,
         :export_all_scores
 
       ].each do |route|
