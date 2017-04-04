@@ -51,10 +51,6 @@ class AssignmentTypesController < ApplicationController
     end
   end
 
-  def sort
-    sort_position_for "assignment-type"
-  end
-
   def export_scores
     course = current_user.courses.find_by(id: params[:course_id])
     respond_to do |format|

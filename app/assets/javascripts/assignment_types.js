@@ -57,12 +57,12 @@
       $link.closest('fieldset.proposal').hide();
       return false;
     });
-  
+
     // persistence plugin and accordion behaviour
     $(".assignment_type").collapse({
       show: function() {
         // The context of 'this' is applied to
-        // the collapsed details in a jQuery wrapper 
+        // the collapsed details in a jQuery wrapper
         this.slideDown(100);
       },
       hide: function() {
@@ -75,8 +75,8 @@
     $('.assignments').sortable({
       items: 'div.assignment_type',
       update: function(event){
-        $.ajax({          
-          url: '/assignment_types/sort',
+        $.ajax({
+          url: 'api/assignment_types/sort',
           type: 'post',
           data: $('.assignments').sortable('serialize'),
           dataType: 'script',
@@ -88,7 +88,7 @@
     $('.sort-assignments').sortable({
       update: function(event, ui){
         var element = ui.item[0].parentElement;
-        $.ajax({          
+        $.ajax({
           url: '/assignments/sort',
           type: 'post',
           data: $(element).sortable('serialize'),

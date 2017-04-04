@@ -4,7 +4,7 @@ describe AssignmentTypesController do
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:assignment_type) { create(:assignment_type, course: course) }
   let(:assignment) { create(:assignment, assignment_type: assignment_type) }
-  
+
   context "as professor" do
     before(:each) do
       login_user(professor)
@@ -62,20 +62,6 @@ describe AssignmentTypesController do
         params = { name: nil }
         post :update, params: { id: assignment_type.id, assignment_type: params }
         expect(response).to render_template(:edit)
-      end
-    end
-
-    describe "GET sort" do
-      it "sorts the assignment types by params" do
-        second_assignment_type = create(:assignment_type, course: course)
-        course.assignment_types << second_assignment_type
-        params = [second_assignment_type.id, assignment_type.id]
-        post :sort, params: { "assignment-type" => params }
-
-        assignment_type.reload
-        second_assignment_type.reload
-        expect(assignment_type.position).to eq(2)
-        expect(second_assignment_type.position).to eq(1)
       end
     end
 
