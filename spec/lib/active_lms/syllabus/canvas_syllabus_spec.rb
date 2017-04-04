@@ -1,3 +1,5 @@
+require "api_spec_helper"
+
 describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   let(:access_token) { "BLAH" }
 
@@ -130,7 +132,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
                        "include" => ["assignment", "course", "user"],
-                       "per_page" => 100,
+                       "per_page" => 25,
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
     end
@@ -141,6 +143,18 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
       expect(grades.count).to eq 1
       expect(grades.first["score"]).to eq 87
+    end
+
+    it "merges options if provided" do
+      stub_request(:get,
+          "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
+        .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
+                       "include" => ["assignment", "course", "user"],
+                       "per_page" => 5, "test" => true,
+                       "access_token" => access_token })
+        .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
+      grades = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
+      expect(grades.count).to eq 1
     end
 
     context "for specific ids" do
