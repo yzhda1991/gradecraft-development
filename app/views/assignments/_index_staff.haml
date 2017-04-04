@@ -16,7 +16,7 @@
             #{assignment_type.name} – #{points assignment_type.total_points} points
         .collapse-hidden{role: "tabpanel"}
           %ul.assignment-action-buttons
-            = active_course_link_to "[Edit ]", edit_assignment_type_path(assignment_type)
+            = active_course_link_to "[ Edit ]", edit_assignment_type_path(assignment_type)
             = active_course_link_to "[ Delete ]", assignment_type_path(assignment_type), data: { confirm: "Are you sure?", method: :delete }
           %table.instructor-assignments.second-row-header{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
             %thead
