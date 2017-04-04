@@ -55,4 +55,6 @@
                   %ul.button-bar
                     %li= link_to re.group.name, group_path(re.group)
                     %li= link_to decorative_glyph(:eye) + "See Submission", assignment_submission_path(re.assignment.id, id: re.id), class: "button"
-              %td= active_course_link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(re.assignment, re.group), class: "button"
+              %td
+                - if current_user_is_admin? || current_course.active?
+                  = link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(re.assignment, re.group), class: "button"

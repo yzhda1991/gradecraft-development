@@ -23,15 +23,15 @@
                 locals: { assignment: presenter.assignment, team: presenter.team }
 
             - unless presenter.assignment.imported_assignment.nil?
-              = active_course_link_to 'hide-for-small', assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
+              = active_course_link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
                 = decorative_glyph(:refresh)
                 = "Update Assignment from #{presenter.assignment.imported_assignment.provider.capitalize}"
 
-              = active_course_link_to 'hide-for-small', assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
+              = active_course_link_to assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), method: :post do
                 = decorative_glyph(:refresh)
                 = "Update #{presenter.assignment.imported_assignment.provider.capitalize} with Assignment"
 
-            = active_course_link_to 'hide-for-small', decorative_glyph(:download) + "Import Grades", assignment_grades_importers_path(presenter.assignment)
+            = active_course_link_to(decorative_glyph(:download) + "Import Grades", assignment_grades_importers_path(presenter.assignment))
 
             %li.hide-for-small
               %a{:href => design_assignment_rubrics_path(presenter.assignment) }
