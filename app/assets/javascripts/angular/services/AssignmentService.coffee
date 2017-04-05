@@ -81,6 +81,22 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  # Assignment Attributes are updated individually from checkboxes on the
+  # settings page. Note that these do not update the state of the assignment
+  # in the service. We would have to convert the attribute to the equivalent
+  # boolean_attribute, or update the json and the predictor to use the attribute
+  # names. example: required -> is_required
+  updateAssignmentAttribute = (id, attribute, state) ->
+    params = { "#{attribute}" : state }
+    assignment = _.find(assignments, {id: id})
+    $http.put("/api/assignments/#{id}", assignment: params).then(
+      (response) ->
+        assignment.attribute = state
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
     if update.predicted_earned_grades
@@ -100,6 +116,7 @@
       assignmentsPredictedPoints: assignmentsPredictedPoints
       getAssignments: getAssignments
       getAssignment: getAssignment
+      updateAssignmentAttribute: updateAssignmentAttribute
       postPredictedAssignment: postPredictedAssignment
       assignments: assignments
       assignment: assignment

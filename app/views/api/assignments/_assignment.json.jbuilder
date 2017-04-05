@@ -25,6 +25,7 @@ json.attributes do
   json.is_earned_by_group   assignment.grade_scope == "Group"
   json.is_required          assignment.required
   json.is_rubric_graded     assignment.grade_with_rubric?
+  json.is_visible           assignment.visible?
 
   if @student.present?
     json.has_been_unlocked \
