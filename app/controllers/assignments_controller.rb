@@ -6,6 +6,7 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :grades_review]
+  responders :flash
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
@@ -54,15 +55,15 @@ class AssignmentsController < ApplicationController
   # Duplicate an assignment - important for super repetitive items like
   # attendance and reading reactions
   def copy
-    assignment = current_course.assignments.find(params[:id])
-    duplicated = assignment.copy
-    redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
+    original_assignment = current_course.assignments.find(params[:id])
+    @assignment = original_assignment.copy
+    respond_with @assignment, location: edit_assignment_path(@assignment)
   end
 
   def destroy
-    assignment = current_course.assignments.find(params[:id])
-    assignment.destroy
-    redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully deleted"
+    @assignment = current_course.assignments.find(params[:id])
+    @assignment.destroy
+    respond_with @assignment
   end
 
   def export_structure
@@ -85,4 +86,39 @@ class AssignmentsController < ApplicationController
       view_context: view_context
       })
   end
+<<<<<<< HEAD
+=======
+
+  private
+
+  def sanitize_params
+    [:full_points, :threshold_points].each do |points|
+      if params[:assignment][points].class == String
+        params[:assignment][points].delete!(",").to_i
+      end
+    end
+  end
+
+  def assignment_params
+    params.require(:assignment).permit :accepts_attachments, :accepts_links,
+      :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
+      :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
+      :include_in_predictor, :include_in_timeline, :include_in_to_do,
+      :mass_grade_type, :name, :open_at, :pass_fail, :max_submissions,
+      :full_points, :purpose, :release_necessary, :hide_analytics,
+      :required, :resubmissions_allowed, :show_description_when_locked,
+      :show_purpose_when_locked, :show_name_when_locked, :media, :remove_media,
+      :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
+      :visible, :visible_when_locked, :min_group_size, :max_group_size,
+      unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
+        :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
+      assignment_files_attributes: [:id, file: []],
+      assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
+      assignment_groups_attributes: [:group_id]
+  end
+
+  def flash_interpolation_options
+    { resource_name: @assignment.name }
+  end
+>>>>>>> Refactored assignments alerts
 end

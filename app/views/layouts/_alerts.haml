@@ -5,11 +5,3 @@
       = (message || "").html_safe
       %a{ href: "#", class: "close", "aria-label" => "close" }
         = "&times;".html_safe
-
-- if !request.get? && local_assigns.key?(:model) && !model.valid?
-  .alert-box.alert
-    - message_term = local_assigns.key?(:term) ? term : model.class.name.humanize.downcase
-    .italic= "#{pluralize(model.errors.count, "error")} prohibited this #{message_term} from being saved:"
-    %ul
-      - model.errors.full_messages.each do |message|
-        %li= message

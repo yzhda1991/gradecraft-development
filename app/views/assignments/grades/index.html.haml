@@ -1,8 +1,6 @@
 = render partial: "assignments/buttons", locals: { presenter: presenter }
 
 .pageContent
-  = render "layouts/alerts"
-
   = team_filter(presenter.teams) if presenter.has_teams? && presenter.assignment.is_individual?
 
   - if presenter.grade_with_rubric?

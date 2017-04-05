@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   = team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
 
   - presenter.students.each do |student|

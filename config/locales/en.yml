@@ -19,7 +19,7 @@ en:
   flash:
     assignments:
       copy:
-        success_html: "<strong>%{ assignment.name }</strong> successfully copied."
+        success_html: "<strong>%{resource_name}</strong> successfully copied."
       create:
         success_html: "<strong>%{resource_name}</strong> successfully created"
         alert: "We're sorry, your assignment could not be created. Check below for possible errors."

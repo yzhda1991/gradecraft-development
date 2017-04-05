@@ -11,8 +11,6 @@
           - if current_course.assignments.present?
             = active_course_link_to decorative_glyph(:calendar) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post
 .pageContent
-  = render partial: "layouts/alerts"
-
   .assignment-index-container.assignments{role: "tablist"}
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-#{assignment_type.id}" }
