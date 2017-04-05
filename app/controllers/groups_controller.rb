@@ -44,23 +44,19 @@ class GroupsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @group.update_attributes(group_params)
-        format.html { respond_with @group }
-      else
-        @other_students = potential_team_members
-        format.html { render action: "edit" }
-      end
+    if @group.update_attributes(group_params)
+      respond_with @group
+    else
+      @other_students = potential_team_members
+      render action: "edit"
     end
   end
 
   def destroy
     @group.destroy
 
-    respond_to do |format|
-      format.html { redirect_to groups_path }
-      flash[:success]= "#{@group.name} #{term_for :group} successfully deleted"
-    end
+    redirect_to groups_path,
+      success: "#{@group.name} #{term_for :group} successfully deleted"
   end
 
   private

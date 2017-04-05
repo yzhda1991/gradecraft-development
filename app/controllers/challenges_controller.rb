@@ -24,28 +24,22 @@ class ChallengesController < ApplicationController
   def create
     @challenge = current_course.challenges.create(challenge_params)
 
-    respond_to do |format|
-      if @challenge.save
-        format.html do
-          redirect_to @challenge,
-          notice: "Challenge #{@challenge.name} successfully created"
-        end
-      else
-        format.html { render action: "new" }
+    if @challenge.save
+      redirect_to @challenge,
+        notice: "Challenge #{@challenge.name} successfully created"
       end
+    else
+      render action: "new"
     end
   end
 
   def update
-    respond_to do |format|
-      if @challenge.update_attributes(challenge_params)
-        format.html do
-          redirect_to challenges_path,
-          notice: "Challenge #{@challenge.name} successfully updated"
-        end
-      else
-        format.html { render action: "edit" }
+    if @challenge.update_attributes(challenge_params)
+      redirect_to challenges_path,
+        notice: "Challenge #{@challenge.name} successfully updated"
       end
+    else
+      render action: "edit"
     end
   end
 
@@ -53,12 +47,8 @@ class ChallengesController < ApplicationController
     @name = "#{@challenge.name}"
     @challenge.destroy
 
-    respond_to do |format|
-      format.html do
-        redirect_to challenges_path,
-        notice: "Challenge #{@name} successfully deleted"
-      end
-    end
+    redirect_to challenges_path,
+      notice: "Challenge #{@name} successfully deleted"
   end
 
   private

@@ -120,12 +120,8 @@ class UsersController < ApplicationController
     @name = @user.name
     @user.destroy
 
-    respond_to do |format|
-      format.html do
-        redirect_to users_url,
-        notice: "#{@name} was successfully deleted"
-      end
-    end
+    redirect_to users_url,
+      success: "#{@name} was successfully deleted"
   end
 
   # There are now two forms of activate - the first one just has the activate button

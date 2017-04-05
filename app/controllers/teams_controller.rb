@@ -27,7 +27,7 @@ class TeamsController < ApplicationController
   def create
     @team =  current_course.teams.new(team_params)
     @team.save
-    respond_with @team, notice: "Team #{@team.name} successfully created"
+    respond_with @team, success: "Team #{@team.name} successfully created"
   end
 
   def edit
@@ -38,19 +38,15 @@ class TeamsController < ApplicationController
   def update
     @team = current_course.teams.find(params[:id])
     @team.update_attributes(team_params)
-    respond_with @team, notice: "Team #{@team.name} successfully updated"
+    respond_with @team, success: "Team #{@team.name} successfully updated"
   end
 
   def destroy
     @team = current_course.teams.find(params[:id])
     @name = "#{@team.name}"
     @team.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to teams_url,
-        notice: "#{(term_for :team).titleize} #{@name} successfully deleted"
-      end
-    end
+    redirect_to teams_url,
+      success: "#{(term_for :team).titleize} #{@name} successfully deleted"
   end
 
   private

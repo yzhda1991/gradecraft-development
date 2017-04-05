@@ -25,14 +25,11 @@ class AssignmentTypesController < ApplicationController
     @assignment_type =
       current_course.assignment_types.new(assignment_type_params)
 
-    respond_to do |format|
-      if @assignment_type.save
-        format.html do redirect_to assignments_path, flash: {
-          success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" }
-        end
-      else
-        format.html { render action: "new" }
-      end
+    if @assignment_type.save
+      redirect_to assignments_path,
+        success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created"
+    else
+      render action: "new"
     end
   end
 
@@ -40,14 +37,11 @@ class AssignmentTypesController < ApplicationController
   def update
     @assignment_type.update_attributes(assignment_type_params)
 
-    respond_to do |format|
-      if @assignment_type.save
-        format.html do redirect_to assignments_path, flash: {
-          success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
-        end
-      else
-        format.html { render action: "edit" }
-      end
+    if @assignment_type.save
+      redirect_to assignments_path,
+        success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated"
+    else
+      render action: "edit"
     end
   end
 
