@@ -120,18 +120,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "POST sort" do
-      it "sorts the assignments by params" do
-        second_assignment = create(:assignment, assignment_type: assignment_type)
-        course.assignments << second_assignment
-
-        post :sort, params: { assignment: [second_assignment.id, assignment.id] }
-
-        expect(assignment.reload.position).to eq(2)
-        expect(second_assignment.reload.position).to eq(1)
-      end
-    end
-
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
         get :export_structure, params: { id: course.id }, format: :csv
@@ -177,9 +165,7 @@ describe AssignmentsController do
       [
         :new,
         :copy,
-        :create,
-        :sort
-
+        :create
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)
@@ -221,7 +207,6 @@ describe AssignmentsController do
       routes = [
         { action: :new, request_method: :get },
         { action: :create, request_method: :post },
-        { action: :sort, request_method: :post },
         { action: :settings, request_method: :get }
       ]
       routes.each do |route|

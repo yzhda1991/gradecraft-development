@@ -43,6 +43,18 @@ describe API::AssignmentsController do
         expect(assignment.visible).to be_falsey
       end
     end
+
+    describe "POST sort" do
+      it "sorts the assignments by params" do
+        second_assignment = create(:assignment, assignment_type: assignment.assignment_type)
+        course.assignments << second_assignment
+
+        post :sort, params: { assignment: [second_assignment.id, assignment.id] }
+
+        expect(assignment.reload.position).to eq(2)
+        expect(second_assignment.reload.position).to eq(1)
+      end
+    end
   end
 
   context "as student" do

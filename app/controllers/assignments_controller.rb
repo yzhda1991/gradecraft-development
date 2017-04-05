@@ -3,7 +3,6 @@ require "canvas"
 
 class AssignmentsController < ApplicationController
   include AssignmentsHelper
-  include SortsPosition
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
@@ -102,10 +101,6 @@ class AssignmentsController < ApplicationController
       end
       format.json { render json: { errors: assignment.errors }, status: 400 }
     end
-  end
-
-  def sort
-    sort_position_for :assignment
   end
 
   def destroy

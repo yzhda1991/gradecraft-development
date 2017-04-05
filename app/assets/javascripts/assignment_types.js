@@ -89,7 +89,7 @@
       update: function(event, ui){
         var element = ui.item[0].parentElement;
         $.ajax({
-          url: '/assignments/sort',
+          url: 'api/assignments/sort',
           type: 'post',
           data: $(element).sortable('serialize'),
           dataType: 'script',
