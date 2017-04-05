@@ -27,7 +27,6 @@ class ChallengesController < ApplicationController
     if @challenge.save
       redirect_to @challenge,
         notice: "Challenge #{@challenge.name} successfully created"
-      end
     else
       render action: "new"
     end
@@ -37,7 +36,6 @@ class ChallengesController < ApplicationController
     if @challenge.update_attributes(challenge_params)
       redirect_to challenges_path,
         notice: "Challenge #{@challenge.name} successfully updated"
-      end
     else
       render action: "edit"
     end

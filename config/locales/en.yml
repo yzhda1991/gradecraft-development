@@ -17,28 +17,60 @@ en:
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
   flash:
+    assignments:
+      copy:
+        success_html: "<strong>%{ assignment.name }</strong> successfully copied."
+      create:
+        success_html: "<strong>%{resource_name}</strong> successfully created"
+        alert: "We're sorry, your assignment could not be created. Check below for possible errors."
+      update:
+        success_html: "<strong>%{resource_name}</strong> successfully updated"
+      delete_all:
+        success_html: "Successfully deleted all grades."
+    announcements:
+      create:
+        success_html: "Announcement created and sent."
+    challenge_grades:
+      create:
+        success_html: "Challenge Grade successfully created."
+      update_status:
+        success_html: "Challenge Grades successfully updated."
+      destroy:
+        success_html: "Challenge Grade successfully deleted."
+    courses:
+      copy:
+        success_html: "Course successfully copied"
+    course_memberships:
+      destroy:
+        success_html: "User was successfully removed from this course"
+    earned_badges:
+      create:
+        success_html: "The %{resource_name} was successfully awarded."
+    grades:
+      update_status:
+        success_html: "update_status"
     groups:
       create:
-        success: "Your group was successfully created."
+        success_html: "Your group was successfully created."
         alert: "We're sorry, your group could not be created. Check below for possible errors."
       update:
-        notice: "Your group was successfully updated."
-        alert: "We're sorry, your group could not be updated. Check below for possible errors."
+        success_html: "Your group was successfully updated."
+        alert: "We're sorry, your <strong>group<strong> could not be updated. Check below for possible errors."
       destroy:
-        notice: "Your group was successfully deleted."
+        success_html: "Your group was successfully deleted."
     actions:
       create:
-        notice: "%{resource_name} was successfully created."
+        success_html: "%{resource_name} was successfully created."
         alert: "We're sorry, your %{resource_name} could not be created. Check below for possible errors."
       update:
-        notice: "%{resource_name} was successfully updated."
+        success_html: "%{resource_name} was successfully updated."
         alert: "We're sorry, your  %{resource_name} could not be updated. Check below for possible errors."
       destroy:
-        notice: "%{resource_name} was successfully deleted."
+        success_html: "%{resource_name} was successfully deleted."
         alert: "We're sorry, your %{resource_name} could not be deleted. Check below for possible errors."
     assignment_type_weights:
       mass_update:
-        notice: "%{weights_term} were successfully updated."
+        success_html: "%{weights_term} were successfully updated."
         alert: "We're sorry, the requested %{weights_term} could not be updated. Check below for possible errors."
 
   sessions:
