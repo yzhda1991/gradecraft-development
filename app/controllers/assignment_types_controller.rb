@@ -1,5 +1,4 @@
 class AssignmentTypesController < ApplicationController
-  include SortsPosition
 
   before_action :ensure_staff?
   before_action :find_assignment_type,

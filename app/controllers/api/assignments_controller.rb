@@ -1,5 +1,7 @@
 class API::AssignmentsController < ApplicationController
-  before_action :ensure_staff?, only: [:show, :update]
+  include SortsPosition
+
+  before_action :ensure_staff?, only: [:show, :update, :sort]
 
   # GET api/assignments
   def index
@@ -33,6 +35,10 @@ class API::AssignmentsController < ApplicationController
         message: "failed to save assignment", success: false
         }, status: 400
     end
+  end
+
+  def sort
+    sort_position_for :assignment
   end
 
   # optional student for graph point:

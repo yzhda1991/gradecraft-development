@@ -58,7 +58,6 @@ Rails.application.routes.draw do
 
   resources :assignments do
     collection do
-      post :sort
       get :feed
       get :settings
       post "copy" => "assignments#copy"
@@ -312,6 +311,7 @@ Rails.application.routes.draw do
 
     resources :assignments, only: [:index, :show, :update] do
       get "analytics"
+      post :sort, on: :collection
       resources :criteria, only: :index
       resources :students, only: [] do
         resources :criteria, only: [] do
