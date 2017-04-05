@@ -33,6 +33,16 @@ describe API::AssignmentsController do
         expect(response).to render_template(:show)
       end
     end
+
+    describe "update" do
+      it "updates boolean attributes from params" do
+        expect(assignment.visible).to be_truthy
+        post :update, params: {
+          id: assignment.id, assignment: { visible: false}}, format: :json
+        assignment.reload
+        expect(assignment.visible).to be_falsey
+      end
+    end
   end
 
   context "as student" do

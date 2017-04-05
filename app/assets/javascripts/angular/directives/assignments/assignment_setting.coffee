@@ -11,8 +11,9 @@
 # dates, and calculate state management before being picked up by Angular.
 #
 # We could update this if we find a need to have the assigments in the service
-# remain in sync with updates performed on tehe settings page.
-# We would have to map all boolean attributes back to those on the server.
+# remain in sync with updates performed on the settings page.
+# We would have to map all boolean attributes back to those on the server, and
+# also update the predictor service to handle state logic.
 
 @gradecraft.directive 'assignmentSetting', ['AssignmentService', (AssignmentService) ->
 
@@ -26,9 +27,6 @@
     link: (scope, el, attr)->
       # For accessibility, each checkbox must have a label with a unique id
       scope.inputId = "checkbox-assignment-#{scope.assignmentId}-#{scope.attribute}"
-
-      scope.assignment = ()->
-        _.find(AssignmentService.assignments, {id: scope.assignmentId})
 
       scope.updateAttribute = ()->
         scope.checked = !scope.checked

@@ -1,7 +1,4 @@
-# This directive manages loading the assignments for the assignments settings page
-# The individual assignments each have their own component to toggle booleans, and
-# rely on these assignments being loaded on page load.
-
+# This directive manages loading the assignments once for the assignments settings page
 @gradecraft.directive 'hasInteractiveAssignments', ['$q', 'AssignmentService', ($q, AssignmentService) ->
   InteractiveAssignmentsCtrl = [()->
     vm = this

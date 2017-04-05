@@ -82,10 +82,9 @@
     )
 
   # Assignment Attributes are updated individually from checkboxes on the
-  # settings page. Note that these do not update the state of the assignment
-  # in the service. We would have to convert the attribute to the equivalent
-  # boolean_attribute, or update the json and the predictor to use the attribute
-  # names. example: required -> is_required
+  # settings page. Note that the updated attribute might be different from
+  # the one passed in by json and optimised for the predictor:
+  # example: required vs. is_required
   updateAssignmentAttribute = (id, attribute, state) ->
     params = { "#{attribute}" : state }
     assignment = _.find(assignments, {id: id})
