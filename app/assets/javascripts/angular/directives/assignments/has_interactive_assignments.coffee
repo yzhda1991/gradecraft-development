@@ -20,9 +20,6 @@
   {
     bindToController: true,
     controller: InteractiveAssignmentsCtrl,
-    controllerAs: 'vm',
-    scope: {
-      assignmentId: "=",
-    }
+    controllerAs: 'vm'
   }
 ]

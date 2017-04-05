@@ -75,9 +75,10 @@
                 %tr
                   %td= link_to assignment.name, assignment
                   %td
-                    - if assignment.visible?
-                      = tooltip("visible-setting-tip_#{assignment_type.id}-#{assignment.id}", :eye) do
-                        Visible to Students
+                    %assignment-setting
+                    -# - if assignment.visible?
+                    -#   = tooltip("visible-setting-tip_#{assignment_type.id}-#{assignment.id}", :eye) do
+                    -#     Visible to Students
                   %td
                     - if assignment.required?
                       = tooltip("required-setting-tip_#{assignment_type.id}-#{assignment.id}", :asterisk) do
