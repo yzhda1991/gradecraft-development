@@ -310,7 +310,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
 
-    resources :assignments, only: [:index, :show] do
+    resources :assignments, only: [:index, :show, :update] do
       get "analytics"
       resources :criteria, only: :index
       resources :students, only: [] do

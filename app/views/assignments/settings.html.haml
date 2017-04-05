@@ -3,7 +3,9 @@
     %ul
       %li= link_to decorative_glyph(:plus) + "New #{(term_for :assignment).titleize}", new_assignment_path, class: "button button-edit"
 
-.pageContent
+.pageContent{"ng-app": "gradecraft"}
+  %has-interactive-assignments
+
   = render partial: "layouts/alerts"
 
   .total-points-label
@@ -72,38 +74,23 @@
               - assignments.each do |assignment|
                 %tr
                   %td= link_to assignment.name, assignment
+
                   %td
-                    - if assignment.visible?
-                      = tooltip("visible-setting-tip_#{assignment_type.id}-#{assignment.id}", :eye) do
-                        Visible to Students
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "visible", "checked": "#{assignment.visible?}" }
                   %td
-                    - if assignment.required?
-                      = tooltip("required-setting-tip_#{assignment_type.id}-#{assignment.id}", :asterisk) do
-                        Required
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "required", "checked": "#{assignment.required?}" }
                   %td
-                    - if assignment.accepts_submissions?
-                      = tooltip("accepts-submissions-tip_#{assignment_type.id}-#{assignment.id}", :paperclip) do
-                        Accepts Submissions
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "accepts_submissions", "checked": "#{assignment.accepts_submissions?}" }
                   %td
-                    - if assignment.include_in_timeline?
-                      = tooltip("shown-timeline-tip_#{assignment_type.id}-#{assignment.id}", :calendar) do
-                        Shown in Timeline
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_timeline", "checked": "#{assignment.include_in_timeline?}" }
                   %td
-                    - if assignment.include_in_predictor?
-                      = tooltip("shown-predictor-tip_#{assignment_type.id}-#{assignment.id}", :sliders) do
-                        Shown in Predictor
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_predictor", "checked": "#{assignment.include_in_predictor?}" }
                   %td
-                    - if assignment.include_in_to_do?
-                      = tooltip("due-this-week-tip_#{assignment_type.id}-#{assignment.id}", :list) do
-                        Shown in Due This Week
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_to_do", "checked": "#{assignment.include_in_to_do?}" }
                   %td
-                    - if assignment.student_logged?
-                      = tooltip("student-logged-tip_#{assignment_type.id}-#{assignment.id}", :pencil) do
-                        Logged By Students
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "student_logged", "checked": "#{assignment.student_logged?}" }
                   %td
-                    - if assignment.release_necessary?
-                      = tooltip("release-required-tip_#{assignment_type.id}-#{assignment.id}", :unlock) do
-                        Release Required
+                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "release_necessary", "checked": "#{assignment.release_necessary?}" }
 
                   %td= points assignment.full_points
                   %td
