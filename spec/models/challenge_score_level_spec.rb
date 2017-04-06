@@ -28,14 +28,6 @@ describe ChallengeScoreLevel do
     end
   end
 
-  describe "#formatted_name" do
-    it "returns the level name followed by the point values in paraentheses" do
-      subject.name = "Level Name"
-      subject.points = 10000
-      expect(subject.formatted_name).to eq("Level Name (10000 points)")
-    end
-  end
-
   describe "#copy" do
     it "creates an identical level" do
       subject.name = "Example Name"

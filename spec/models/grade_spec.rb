@@ -76,7 +76,7 @@ describe Grade do
     end
   end
 
-  context "with a persisted assignment" do 
+  context "with a persisted assignment" do
     it_behaves_like "a historical model", :grade, raw_points: 1234
     it_behaves_like "a model that needs sanitization", :grade, :feedback
   end
@@ -103,43 +103,6 @@ describe Grade do
     it "is converts blank string to nil" do
       subject.update(raw_points: "")
       expect(subject.raw_points).to eq(nil)
-    end
-  end
-
-  describe ".not_released" do
-    it "returns all grades that are graded but require a release" do
-      assignment = create :assignment, release_necessary: true
-      not_released_grade = create :grade, assignment: assignment, status: "Graded"
-      create :grade, assignment: assignment, status: "Released"
-      create :grade, status: "Graded"
-
-      expect(described_class.not_released).to eq [not_released_grade]
-    end
-  end
-
-  describe ".released" do
-    it "returns all the grades that are released" do
-      released_grade = create :grade, status: "Released"
-      create :grade, status: "In Progress"
-
-      expect(described_class.released).to eq [released_grade]
-    end
-  end
-
-  describe ".student_visible" do
-    it "returns all grades that were released or were graded but no release was necessary" do
-      graded_grade = create :grade, status: "Graded"
-      released_grade = create :grade, status: "Released"
-      assignment = create :assignment, release_necessary: true
-      create :grade, assignment: assignment, status: "Graded"
-
-      expect(described_class.student_visible).to include(released_grade, graded_grade)
-    end
-  end
-
-  describe ".releasable_through" do
-    it "returns assignment" do
-      expect(described_class.releasable_relationship).to eq :assignment
     end
   end
 
