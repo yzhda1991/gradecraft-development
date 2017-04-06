@@ -135,8 +135,7 @@ describe BadgesController do
     describe "protected routes not requiring id in params" do
       routes = [
         { action: :new, request_method: :get },
-        { action: :create, request_method: :post },
-        { action: :sort, request_method: :post }
+        { action: :create, request_method: :post }
       ]
       routes.each do |route|
         it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
