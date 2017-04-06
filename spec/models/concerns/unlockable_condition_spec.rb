@@ -369,8 +369,8 @@ describe UnlockableCondition do
   describe "#unlockable" do
     it "returns the unlockable object from a condition" do
       second_badge = create(:badge)
-      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: assignment.id, unlockable_type: "Badge")
-      expect(second_badge.unlockable.id).to eq(assignment.id)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
+      expect(second_badge.unlockable.id).to eq(badge.id)
     end
   end
 
