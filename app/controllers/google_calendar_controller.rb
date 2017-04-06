@@ -14,6 +14,9 @@ class GoogleCalendarController < ApplicationController
   end
 
   def add_event_to_google_calendar
+    if !google_auth_present?(current_user)
+      redirect_to "/auth/google_oauth2", notice: "You are now authroized to use Google Calendar Integration. Please try to add your event to the Google Calendar again." and return
+    end
     google_authorization = get_google_authorization(current_user)
     event = current_course.events.find(params[:id])
     if event.open_at.nil? || event.due_at.nil?
@@ -33,4 +36,5 @@ class GoogleCalendarController < ApplicationController
       end
     end
   end
+
 end

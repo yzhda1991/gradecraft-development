@@ -7,19 +7,17 @@ module GoogleCalendarHelper
 
   def get_google_authorization(current_user)
     google_authorization = current_user.authorizations.find_by(provider: "google_oauth2")
-    reroute_to_google_login_if_unauthenticated(google_authorization)
     refresh_if_google_authorization_is_expired(google_authorization)
     google_authorization
-  end
-
-  def reroute_to_google_login_if_unauthenticated(google_authorization)
-    return unless google_authorization.nil?
-    redirect_to "/auth/google_oauth2"
   end
 
   def refresh_if_google_authorization_is_expired(google_authorization)
     return unless google_authorization.expired?
     google_authorization.refresh!({ client_id: ENV["GOOGLE_CLIENT_ID"], client_secret: ENV["GOOGLE_SECRET"] })
+  end
+
+  def google_auth_present?(current_user)
+    current_user.authorizations.find_by(provider: "google_oauth2").present?
   end
 
   def create_google_event(event)
