@@ -1,8 +1,6 @@
 = render partial: "groups/buttons"
 
 .pageContent
-  = render partial: "layouts/alerts"
-
   - if @pending_groups.present?
     %h2.subtitle= "Pending #{term_for :groups}"
 

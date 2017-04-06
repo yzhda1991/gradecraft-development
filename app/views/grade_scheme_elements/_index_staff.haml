@@ -5,8 +5,6 @@
         = active_course_link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 
 .pageContent
-  = render partial: "layouts/alerts"
-
   - if @grade_scheme_elements.count == 0
     = render partial: "grade_scheme_elements/components/grade_scheme_elements_setup"
   - else

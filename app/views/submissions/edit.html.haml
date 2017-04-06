@@ -1,5 +1,5 @@
 .pageContent
-  = render partial: "layouts/alerts", locals: { model: presenter.submission }
+  = render partial: "layouts/errors", locals: { model: presenter.submission }
 
   - if presenter.assignment.has_groups?
     - if current_user_is_student?

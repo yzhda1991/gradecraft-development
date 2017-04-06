@@ -9,23 +9,20 @@
             = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path
             = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_challenge_challenge_grades_path(@challenge)
 
-.pageContent
-  = render partial: "layouts/alerts"
+- if @challenge.media.present?
+  .event-image-show-wrapper
+    %img.event-image-show{src: @challenge.media}
 
-  - if @challenge.media.present?
-    .event-image-show-wrapper
-      %img.event-image-show{src: @challenge.media}
+- if @challenge.challenge_files.present?
+  %p
+    %b Documents:
+    %ul
+    - @challenge.challenge_files.each do |cf|
+      %li= link_to cf.filename, cf.url
+      - if current_user_is_staff?
+        = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", :upload_id => cf.id })
 
-  - if @challenge.challenge_files.present?
-    %p
-      %b Documents:
-      %ul
-      - @challenge.challenge_files.each do |cf|
-        %li= link_to cf.filename, cf.url
-        - if current_user_is_staff?
-          = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", :upload_id => cf.id })
-
-  - if current_user_is_staff?
-    = render partial: "challenges/show_staff"
-  - else
-    = render partial: "challenges/show_student"
+- if current_user_is_staff?
+  = render partial: "challenges/show_staff"
+- else
+  = render partial: "challenges/show_student"

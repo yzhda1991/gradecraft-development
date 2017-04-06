@@ -5,8 +5,6 @@
         %li= link_to decorative_glyph(:plus) + 'New Announcement', new_announcement_path, class: "button button-edit"
 
 .pageContent
-  = render partial: "layouts/alerts"
-
   %p
     %strong Sent:
     = @announcement.created_at.in_time_zone(current_user.time_zone)

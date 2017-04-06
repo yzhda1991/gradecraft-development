@@ -1,8 +1,6 @@
 = render partial: "assignment_types/buttons"
 
 .pageContent
-  = render partial: "layouts/alerts"
-
   = team_filter(@teams) if @teams.present?
 
   %table

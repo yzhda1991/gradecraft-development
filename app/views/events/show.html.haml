@@ -10,8 +10,6 @@
             %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(@event), method: :post
 
 .pageContent
-  = render partial: "layouts/alerts"
-
   .show-page-wrapper
     - if @event.media.present?
       .event-image-show-wrapper

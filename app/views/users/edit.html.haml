@@ -1,5 +1,5 @@
 .pageContent
-  = render partial: "layouts/alerts", locals: { model: @user, term: "user" }
+  = render partial: "layouts/errors", locals: { model: @user, term: "user" }
   - if @user.internal?
     = render partial: "internal_user_form"
   - else

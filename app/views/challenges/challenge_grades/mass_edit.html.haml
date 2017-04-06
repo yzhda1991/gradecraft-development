@@ -1,6 +1,4 @@
 .pageContent
-  = render partial: "layouts/alerts"
-
   #massGrade
     = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(@challenge) do |f|
       %table.dynatable
