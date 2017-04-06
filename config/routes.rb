@@ -158,7 +158,6 @@ Rails.application.routes.draw do
 
   #6. Badges
   resources :badges do
-    post :sort, on: :collection
     get "export_structure", on: :collection
     resources :earned_badges do
       get :mass_edit, on: :collection
@@ -337,26 +336,32 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :challenges, only: :index
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create
       post :sort, on: :collection
     end
-    resources :badges, only: :index
+
+    resources :badges, only: :index do
+      post :sort, on: :collection
+    end
+
+    resources :challenges, only: :index
     resources :courses, only: [:index]
 
     get "timeline_events", to: "courses#timeline_events"
-
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
+
     resources :earned_badges, only: [:create, :destroy]
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
       as: :earned_badge_confirm
+
     resources :grades, only: :update do
       resources :earned_badges, only: :create, module: :grades do
         delete :delete_all, on: :collection
       end
       resources :attachments, only: [:create, :destroy], module: :grades
     end
+
     resources :grade_scheme_elements, only: :index do
       delete :destroy, on: :collection
     end

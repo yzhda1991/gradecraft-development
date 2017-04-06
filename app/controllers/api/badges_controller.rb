@@ -1,4 +1,7 @@
 class API::BadgesController < ApplicationController
+  include SortsPosition
+
+  before_action :ensure_staff?, only: [:sort]
 
   # GET api/badges
   def index
@@ -24,5 +27,9 @@ class API::BadgesController < ApplicationController
           PredictedEarnedBadge.for_course(current_course).for_student(current_student)
       end
     end
+  end
+
+  def sort
+    sort_position_for :badge
   end
 end
