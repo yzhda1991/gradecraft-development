@@ -10,6 +10,7 @@ class Assignments::GradesController < ApplicationController
   # For changing the status of a group of grades passed in grade_ids
   # ("In Progress" => "Graded", or "Graded" => "Released")
   def edit_status
+    @course = current_course
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
@@ -74,6 +75,7 @@ class Assignments::GradesController < ApplicationController
   # GET /assignments/:assignment_id/grades/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
+    @course = current_course
     if @assignment.has_groups?
       redirect_to mass_edit_assignment_groups_grades_path and return
     end
@@ -81,10 +83,10 @@ class Assignments::GradesController < ApplicationController
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 
     if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
-      students = current_course.students_being_graded_by_team(@team).order_by_name
+      @team = @course.teams.find_by(id: params[:team_id])
+      students = @course.students_being_graded_by_team(@team).order_by_name
     else
-      students = current_course.students_being_graded.order_by_name
+      students = @course.students_being_graded.order_by_name
     end
 
     @grades = Gradebook.new(@assignment, students).grades

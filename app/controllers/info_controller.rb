@@ -24,8 +24,9 @@ class InfoController < ApplicationController
   end
 
   def earned_badges
-    @teams = current_course.teams
-    @badges = current_course.badges.ordered
+    @course = current_course
+    @teams = @course.teams
+    @badges = @course.badges.ordered
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment
@@ -41,7 +42,8 @@ class InfoController < ApplicationController
 
   # Displaying per assignment summary outcome statistics
   def per_assign
-    @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
+    @course = current_course
+    @assignment_types = @course.assignment_types.ordered.includes(:assignments)
   end
 
   def export_earned_badges

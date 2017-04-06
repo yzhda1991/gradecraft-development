@@ -5,18 +5,21 @@ class GroupsController < ApplicationController
   before_action :find_group_assignments, only: [:new, :edit, :create, :update]
 
   def index
-    groups = current_course.groups
+    @course = current_course
+    groups = @course.groups
     @pending_groups = groups.pending
     @approved_groups = groups.approved
     @rejected_groups = groups.rejected
-    @assignments = current_course.assignments.group_assignments
+    @assignments = @course.assignments.group_assignments
   end
 
   def show
+    @course = current_course
   end
 
   def new
-    @group = current_course.groups.new
+    @course = current_course
+    @group = @course.groups.new
     @other_students = potential_team_members
   end
 
@@ -39,6 +42,7 @@ class GroupsController < ApplicationController
   end
 
   def edit
+    @course = current_course
     @other_students = potential_team_members
   end
 

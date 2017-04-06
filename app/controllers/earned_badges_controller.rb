@@ -14,17 +14,20 @@ class EarnedBadgesController < ApplicationController
   end
 
   def show
+    @course = current_course
     @student = @earned_badge.student
   end
 
   def new
-    @earned_badge = @badge.earned_badges.new course: current_course
+    @course = current_course
+    @earned_badge = @badge.earned_badges.new course: @course
     authorize! :build, @earned_badge
     @students = earned_badge_students
   end
 
   def edit
-    @students = current_course.students.order_by_name
+    @course = current_course
+    @students = @course.students.order_by_name
   end
 
   def create
@@ -59,13 +62,14 @@ class EarnedBadgesController < ApplicationController
 
   # Quickly award a badge to multiple students
   def mass_edit
-    @teams = current_course.teams
+    @course = current_course
+    @teams = @course.teams
 
     if params[:team_id].present?
-      @team = current_course.teams.find params[:team_id]
-      @students = current_course.students_by_team(@team).order_by_name
+      @team = @course.teams.find params[:team_id]
+      @students = @course.students_by_team(@team).order_by_name
     else
-      @students = current_course.students.order_by_name
+      @students = @course.students.order_by_name
     end
 
     # build a new badge automatically if they can be earned at will

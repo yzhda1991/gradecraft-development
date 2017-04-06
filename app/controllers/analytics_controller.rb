@@ -3,10 +3,12 @@ class AnalyticsController < ApplicationController
   before_action :set_granularity_and_range
 
   def students
-    @nonpredictors = current_course.nonpredictors
+    @course = current_course
+    @nonpredictors = @course.nonpredictors
   end
 
   def staff
+    @course = current_course
   end
 
   def all_events

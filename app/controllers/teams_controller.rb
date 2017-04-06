@@ -5,21 +5,24 @@ class TeamsController < ApplicationController
   before_action :ensure_staff?, except: [:index]
 
   def index
-    @teams = current_course.teams.order_by_rank.includes(:earned_badges)
+    @course = current_course
+    @teams = @course.teams.order_by_rank.includes(:earned_badges)
     if current_user_is_student?
-      @team = current_student.team_for_course(current_course)
+      @team = current_student.team_for_course(@course)
     end
     @team_names_and_scores = @teams.map { |t| { data: t.score, name: t.name } }
   end
 
   def show
-    @team = current_course.teams.find(params[:id])
+    @course = current_course
+    @team = @course.teams.find(params[:id])
     @students = @team.students.order_by_name
-    @challenges = current_course.challenges.chronological.alphabetical
+    @challenges = @course.challenges.chronological.alphabetical
   end
 
   def new
-    @team =  current_course.teams.new
+    @course = current_course
+    @team =  @course.teams.new
     @submit_message = "Create #{term_for :team}"
   end
 
@@ -30,7 +33,8 @@ class TeamsController < ApplicationController
   end
 
   def edit
-    @team =  current_course.teams.find(params[:id])
+    @course = current_course
+    @team =  @course.teams.find(params[:id])
     @submit_message = "Update #{term_for :team}"
   end
 

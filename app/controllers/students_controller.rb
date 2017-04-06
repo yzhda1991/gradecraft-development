@@ -5,19 +5,21 @@ class StudentsController < ApplicationController
   # Lists all students in the course,
   # broken out by those being graded and auditors
   def index
-    render "index", Students::IndexPresenter.build(course: current_course,
+    @course = current_course
+    render "index", Students::IndexPresenter.build(course: @course,
                                                    current_user: current_user,
                                                    team_id: params[:team_id])
   end
 
   # Displaying student profile to instructors
   def show
-    @events = Timeline.new(current_course).events_by_due_date
-    self.current_student = current_course.students.where(id: params[:id]).first
+    @course = current_course
+    @events = Timeline.new(@course).events_by_due_date
+    self.current_student = @course.students.where(id: params[:id]).first
     render "show", Info::DashboardCoursePlannerPresenter.build({
       student: current_student,
-      assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
-      course: current_course,
+      assignments: @course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
+      course: @course,
       view_context: view_context
     })
   end

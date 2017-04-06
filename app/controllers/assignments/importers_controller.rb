@@ -13,6 +13,7 @@ class Assignments::ImportersController < ApplicationController
 
   # GET /assignments/importers
   def index
+    @course = current_course
   end
 
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
@@ -27,17 +28,17 @@ class Assignments::ImportersController < ApplicationController
   def assignments_import
     @provider_name = params[:importer_provider_id]
     @course_id = params[:id]
+    @course = current_course
 
     @result = Services::ImportsLMSAssignments.import @provider_name,
       authorization(@provider_name).access_token, @course_id, params[:assignment_ids],
-      current_course, params[:assignment_type_id]
+      @course, params[:assignment_type_id]
 
     if @result.success?
       render :assignments_import_results
     else
-      @course = syllabus.course(@course_id)
       @assignments = syllabus.assignments(@course_id)
-      @assignment_types = current_course.assignment_types.ordered
+      @assignment_types = @course.assignment_types.ordered
 
       render :assignments, alert: @result.message
     end

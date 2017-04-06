@@ -10,12 +10,13 @@ class GradesController < ApplicationController
 
   # GET /grades/:id
   def show
+    @course = current_course
     @grade = Grade.find params[:id]
     # rubocop:disable AndOr
     redirect_to @grade.assignment and return unless current_user_is_staff?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
-    
+
     render :show, Assignments::Presenter.build({
       assignment: @grade.assignment,
       course: current_course,
@@ -25,6 +26,7 @@ class GradesController < ApplicationController
 
   # GET /grades/:id/edit
   def edit
+    @course = current_course
     @grade = Grade.find params[:id]
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]

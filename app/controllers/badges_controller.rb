@@ -6,29 +6,33 @@ class BadgesController < ApplicationController
 
   # GET /badges
   def index
+    @course = current_course
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
-      badges: current_course.badges.ordered,
+      badges: @course.badges.ordered,
       student: current_student
     })
   end
 
   # GET /badges/:id
   def show
+    @course = current_course
     render Badges::ShowPresenter.build({
-      course: current_course,
+      course: @course,
       badge: @badge,
       student: current_student,
-      teams: current_course.teams,
+      teams: @course.teams,
       params: params
     })
   end
 
   def new
-    @badge = current_course.badges.new
+    @course = current_course
+    @badge = @course.badges.new
   end
 
   def edit
+    @course = current_course
   end
 
   def create

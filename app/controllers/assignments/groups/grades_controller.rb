@@ -6,6 +6,7 @@ class Assignments::Groups::GradesController < ApplicationController
 
   # GET /assignments/:assignment_id/groups/grades/mass_edit
   def mass_edit
+    @course = current_course
     presenter = Assignments::Grades::MassEditPresenter.build({
       assignment: @assignment
     })

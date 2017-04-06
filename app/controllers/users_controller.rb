@@ -152,6 +152,7 @@ class UsersController < ApplicationController
   end
 
   def import
+    @course = current_course
   end
 
   # import users for class
