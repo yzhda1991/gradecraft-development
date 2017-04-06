@@ -1,4 +1,4 @@
-= render partial: "layouts/alerts", locals: { model: @challenge, term: term_for(:challenge) }
+= render partial: "layouts/errors", locals: { model: @challenge, term: term_for(:challenge) }
 
 = simple_form_for(@challenge) do |f|
   %section.form-section

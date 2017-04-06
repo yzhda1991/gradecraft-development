@@ -1,4 +1,4 @@
-= render partial: "layouts/alerts", locals: { model: @earned_badge, term: term_for(:badge) }
+= render partial: "layouts/errors", locals: { model: @earned_badge, term: term_for(:badge) }
 
 = simple_form_for([@badge, @earned_badge]) do |f|
   .italic= "You are awarding the #{@badge.name} #{term_for :badge} to..."

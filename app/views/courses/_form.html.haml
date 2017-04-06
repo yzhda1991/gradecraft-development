@@ -1,4 +1,5 @@
-= render partial: "layouts/alerts", locals: { model: @course }
+
+= render partial: "layouts/errors", locals: { model: @course }
 
 = simple_form_for(@course)  do |f|
   #tabs.ui-tabs.ui-widget

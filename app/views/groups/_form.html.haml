@@ -1,6 +1,6 @@
 = simple_form_for @group do |f|
 
-  = render partial: "layouts/alerts", locals: { model: @group }
+  = render partial: "layouts/errors", locals: { model: @group }
 
   %section.form-section
     - if @group.pending? && current_user_is_staff?
