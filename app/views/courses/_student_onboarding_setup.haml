@@ -1,13 +1,13 @@
 = render partial: "layouts/alerts", locals: { model: @course }
 
-%section
+%section.form-section
   %h2 Gameful Philosophy
   .form-item
     .textarea
       .form-hint What would you like to tell students about how they should expect to be graded?
       = f.text_area :gameful_philosophy, class: "froala"
 
-%section
+%section.form-section
   %h2 Course Rules
   .form-item
     .textarea
