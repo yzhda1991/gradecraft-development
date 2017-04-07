@@ -2,7 +2,7 @@ json.data do
   json.array! @grades do |grade|
     user = lms_user(@syllabus, grade["user_id"])
 
-    json.type                           "canvas_grade"
+    json.type                           "imported_grade"
     json.id                             grade["id"].to_s
 
     json.attributes do
