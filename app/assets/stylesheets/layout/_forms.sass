@@ -1,8 +1,29 @@
 @import "../utilities/variables"
 
+// Multi-select box on create new team page
 .select2-container
   display: block
 
+.select2-container--default .select2-selection--multiple .select2-selection__choice
+  float: none
+  margin-right: 0
+  margin-top: 0
+  margin: 2px 0
+  background-color: $color-grey-7
+  border: 1px solid $color-grey-5
+  .select2-selection__choice__remove
+    margin-right: 0
+    padding: 0 4px
+
+.select2-container--default .select2-selection--multiple .select2-selection__clear
+  float: none
+  font-weight: bold
+  margin-top: 0
+  margin-right: 5px
+  text-align: right
+  display: block
+
+// base form styling
 label, input
   padding-bottom: 0
 
