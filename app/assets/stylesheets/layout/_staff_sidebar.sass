@@ -49,23 +49,24 @@
 ul.nav-pill
   .has-form
     margin-bottom: .75rem
+    display: flex
 
-  input[type=text]
-    height: 1.7rem
+  .search-input
+    padding: 0.7rem
     border: 0
-    padding: 5px
-    width: 188px
+    padding: 0.4rem
+    width: 190px
     border-top-left-radius: $global-radius
     border-bottom-left-radius: $global-radius
+    border: none
+    &:focus
+      border: none
 
-  a.button
+  .search-submit-button
     width: 20px
-    padding: 8px 6px 7px !important
-    float: right
+    padding: 0.4rem
     border-top-left-radius: 0
     border-bottom-left-radius: 0
-    &:hover
-      background-color: darken($color-blue-3, 10%) !important
 
 /* Positioning and styling of notification badges in staff-sidenav */
 .staff-sidenav li
