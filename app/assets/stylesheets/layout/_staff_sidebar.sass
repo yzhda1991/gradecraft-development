@@ -50,9 +50,9 @@ ul.nav-pill
   .has-form
     margin-bottom: .75rem
     display: flex
+    position: relative
 
   .search-input
-    padding: 0.7rem
     border: 0
     padding: 0.4rem
     width: 190px
@@ -63,10 +63,41 @@ ul.nav-pill
       border: none
 
   .search-submit-button
-    width: 20px
     padding: 0.4rem
     border-top-left-radius: 0
     border-bottom-left-radius: 0
+
+  .dropdown-menu
+    position: absolute
+    padding: 0
+    display: none
+    background-color: $color-white
+    margin: 2px 0 0
+    font-size: 14px
+    list-style: none
+    border: 1px solid $color-grey-6
+    border-bottom-left-radius: $global-radius
+    border-bottom-right-radius: $global-radius
+    background-clip: padding-box
+    overflow-y: visible !important
+    z-index: 10000
+    top: 24px
+
+    li
+      margin: 0 !important
+      padding: 0 0.75rem
+      a
+        color: $color-grey-3 !important
+
+    li:hover,
+    li a:hover,
+    li.active a,
+    li.active,
+    li.active a:hover,
+    li.active:hover
+      background-color: $color-blue-3 !important
+      color: $color-white !important
+      cursor: pointer
 
 /* Positioning and styling of notification badges in staff-sidenav */
 .staff-sidenav li

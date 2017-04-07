@@ -61,40 +61,6 @@ select,
 select:hover
   background-color: $color-grey-7
 
-.dropdown-menu
-  position: absolute
-  display: none
-  background-color: $color-white
-  margin: 2px 0 0
-  font-size: 14px
-  list-style: none
-  border: 1px solid $color-grey-6
-  border-top-left-radius: 0
-  border-top-right-radius: 0
-  border-bottom-left-radius: $global-radius
-  border-bottom-right-radius: $global-radius
-  background-clip: padding-box
-  overflow-y: visible !important
-  z-index: 10000
-
-  li
-    margin: 0 !important
-    padding: 0 0.75rem
-
-  li a
-    color: $color-grey-3 !important
-
-  li:hover,
-  li a:hover,
-  li.active a,
-  li.active,
-  li.active a:hover,
-  li.active:hover
-    background-color: $color-green-3 !important
-    color: $color-white !important
-    text-decoration: none
-    cursor: pointer
-
 ul.accepts_submission_types
   list-style-type: none
 
@@ -223,13 +189,13 @@ error
   .form-item
     margin-bottom: 1rem
 
-  .checkbox
-    position: relative
-    display: block
-    @media (max-width: $media-small-max)
-      margin-left: 0
-      margin-top: 0
-      margin-bottom: 0
+  // .checkbox
+  //   position: relative
+  //   display: block
+  //   @media (max-width: $media-small-max)
+  //     margin-left: 0
+  //     margin-top: 0
+  //     margin-bottom: 0
 
 .group_assignments .checkbox label
   width: 25rem
@@ -238,10 +204,9 @@ error
 .group_assignments .checkbox
   margin-left: 5rem
 
-.conditional-options.indented
-  margin-left: 7.5rem
-  @media (max-width: $media-small-max)
-    margin-left: 0
+.conditional-options
+  margin: 0
+  padding-left: 0.5rem
 
 .ui-datepicker
   margin-top: -2.7rem !important
@@ -393,18 +358,8 @@ input:checked + .switch-handle:before
 
 .simple_form section
   .score-level-form label
-    width: auto
-    text-align: left
     margin-bottom: 0
-    vertical-align: middle
     font-size: 0.8rem
-    @media (max-width: $media-medium-max)
-      display: block
-  .score-level-form input[type=text]
-    width: 12rem
-    @media (max-width: $media-medium-max)
-      width: 100%
-
 
 // course settings styles
 .form-wrapper
