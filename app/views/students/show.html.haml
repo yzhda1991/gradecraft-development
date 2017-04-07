@@ -2,9 +2,6 @@
   .right= link_to glyph(:eye) + "Preview GradeCraft as #{presenter.student.first_name}", student_preview_path(presenter.student), class: "button"
 
 .pageContent
-
-  = render "layouts/alerts"
-
 .instructor-dashboard.show-student
   .flex-col.col-50
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_avatar"

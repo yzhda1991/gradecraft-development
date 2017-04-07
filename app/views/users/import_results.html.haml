@@ -1,8 +1,6 @@
 = render "buttons"
 
 .pageContent
-  = render "layouts/alerts"
-
   - unless @result.unsuccessful.empty?
     %h2.subtitle
       = "#{@result.unsuccessful.count} #{"Student".pluralize(@result.unsuccessful.count)} Not Imported"

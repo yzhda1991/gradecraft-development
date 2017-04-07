@@ -1,8 +1,6 @@
 = render "buttons"
 
 .pageContent
-  = render "layouts/alerts"
-
   = team_filter(@teams) if current_course.has_teams?
 
   %table.paginated_dynatable.no-table-header

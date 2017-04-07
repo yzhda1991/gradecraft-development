@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   - if @team.present?
     %h2.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
     - if @team.banner.present?

@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   - unless @result.unsuccessful.empty?
     %h2.subtitle
       = "#{@result.unsuccessful.count} #{"Grade".pluralize(@result.unsuccessful.count)} Not Imported"
