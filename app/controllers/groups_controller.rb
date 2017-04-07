@@ -29,13 +29,11 @@ class GroupsController < ApplicationController
     else
       @group.approved = "Approved"
     end
-    respond_to do |format|
-      if @group.save
-        format.html { respond_with @group }
-      else
-        @other_students = potential_team_members
-        format.html { render action: "new" }
-      end
+    if @group.save
+      respond_with @group, location: groups_path
+    else
+      @other_students = potential_team_members
+      render action: "new"
     end
   end
 
@@ -45,7 +43,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update_attributes(group_params)
-      respond_with @group
+      respond_with @group, location: groups_path
     else
       @other_students = potential_team_members
       render action: "edit"
@@ -54,9 +52,7 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
-
-    redirect_to groups_path,
-      success: "#{@group.name} #{term_for :group} successfully deleted"
+    respond_with @group, location: groups_path
   end
 
   private
@@ -81,4 +77,7 @@ class GroupsController < ApplicationController
     @group_assignments = current_course.assignments.group_assignments
   end
 
+  def flash_interpolation_options
+    { resource_name: @group.name }
+  end
 end

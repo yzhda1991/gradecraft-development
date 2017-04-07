@@ -1,6 +1,4 @@
 class GradesController < ApplicationController
-  respond_to :html, :json
-
   before_action :ensure_staff?,
     except: [:feedback_read, :show, :async_update]
   before_action :ensure_student?, only: :feedback_read

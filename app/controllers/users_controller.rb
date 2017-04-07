@@ -75,20 +75,16 @@ class UsersController < ApplicationController
 
     if result.success?
       if @user.is_student?(current_course)
-        redirect_to students_path,
-          # rubocop:disable AndOr
-          notice: "#{term_for :student} #{@user.name} was successfully created!" and return
+        respond_with @user, location: students_path
       elsif @user.is_staff?(current_course)
-        redirect_to staff_index_path,
-          notice: "Staff Member #{@user.name} was successfully created!" and return
+        respond_with @user, location: staff_index_path
       elsif @user.is_observer?(current_course)
-        redirect_to observers_path,
-          notice: "Observer #{@user.name} was successfully created!" and return
+        respond_with @user, location: observers_path
       end
+    else
+      CourseMembershipBuilder.new(current_user).build_for(@user)
+      render :new
     end
-
-    CourseMembershipBuilder.new(current_user).build_for(@user)
-    render :new
   end
 
   def update
@@ -102,26 +98,22 @@ class UsersController < ApplicationController
     cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)
-        redirect_to students_path, notice: "#{term_for :student} #{@user.name} was successfully updated!" and return
+        respond_with @user, location: students_path
       elsif @user.is_staff?(current_course)
-        redirect_to staff_index_path, notice: "Staff Member #{@user.name} was successfully updated!" and return
+        respond_with @user, location: staff_index_path
       elsif @user.is_observer?(current_course)
-        redirect_to observers_path,
-          notice: "Observer #{@user.name} was successfully updated!" and return
+        respond_with @user, location: observers_path
       end
+    else
+      CourseMembershipBuilder.new(current_user).build_for(@user)
+      render :edit
     end
-
-    CourseMembershipBuilder.new(current_user).build_for(@user)
-    render :edit
   end
 
   def destroy
     @user = current_course.users.find(params[:id])
-    @name = @user.name
     @user.destroy
-
-    redirect_to users_url,
-      success: "#{@name} was successfully deleted"
+    respond_with @user, users_path
   end
 
   # There are now two forms of activate - the first one just has the activate button
@@ -197,8 +189,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update_attributes(up)
-      redirect_to dashboard_path,
-        notice: "Your profile was successfully updated!"
+      respond_with @user, location: dashboard_path
     else
       @course_membership =
         @user.course_memberships.where(course_id: current_course).first

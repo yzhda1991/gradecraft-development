@@ -25,8 +25,7 @@ class ChallengesController < ApplicationController
     @challenge = current_course.challenges.create(challenge_params)
 
     if @challenge.save
-      redirect_to @challenge,
-        notice: "Challenge #{@challenge.name} successfully created"
+      respond_with @challenge, location: challenges_path
     else
       render action: "new"
     end
@@ -34,19 +33,15 @@ class ChallengesController < ApplicationController
 
   def update
     if @challenge.update_attributes(challenge_params)
-      redirect_to challenges_path,
-        notice: "Challenge #{@challenge.name} successfully updated"
+      respond_with @challenge, location: challenges_path
     else
       render action: "edit"
     end
   end
 
   def destroy
-    @name = "#{@challenge.name}"
     @challenge.destroy
-
-    redirect_to challenges_path,
-      notice: "Challenge #{@name} successfully deleted"
+    respond_with @challenge, location: challenges_path
   end
 
   private
@@ -61,5 +56,9 @@ class ChallengesController < ApplicationController
 
   def find_challenge
     @challenge = current_course.challenges.includes(:challenge_score_levels).find(params[:id])
+  end
+
+  def flash_interpolation_options
+    { resource_name: @challenge.name }
   end
 end

@@ -51,8 +51,7 @@ class EarnedBadgesController < ApplicationController
                                  course_id: current_course.id).enqueue
       end
       expire_fragment "earned_badges"
-      redirect_to badge_path(@badge),
-        notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated"
+      respond_with @earned_badge, location: badge_path(@badge)
     else
       render action: "edit"
     end
@@ -94,12 +93,9 @@ class EarnedBadgesController < ApplicationController
   end
 
   def destroy
-    @name = "#{@badge.name}"
-    @student_name = "#{@earned_badge.student.name}"
     @earned_badge.destroy
     expire_fragment "earned_badges"
-    redirect_to @badge,
-      notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
+    respond_with @earned_badge, location: badges_path(@badge)
   end
 
   private
@@ -164,5 +160,9 @@ class EarnedBadgesController < ApplicationController
       redirect_to mass_edit_badge_earned_badges_path(@badge),
         notice: "No earned badges were sucessfully created."
     end
+  end
+
+  def flash_interpolation_options
+    { resource_name: @earned_badge.name }
   end
 end

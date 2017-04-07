@@ -3,8 +3,6 @@ class LevelsController < ApplicationController
 
   before_action :find_level, except: [:create]
 
-  respond_to :html, :json
-
   def create
     @level = Level.create level_params
     respond_with @level, layout: false

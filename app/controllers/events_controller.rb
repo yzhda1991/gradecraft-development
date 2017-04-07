@@ -27,8 +27,7 @@ class EventsController < ApplicationController
   def create
     @event = current_course.events.new(event_params)
     if @event.save
-      flash[:notice] = "Event #{@event.name} was successfully created"
-      respond_with(@event)
+      respond_with @event, location: events_path
     else
       render :new
     end
@@ -36,15 +35,17 @@ class EventsController < ApplicationController
 
   def update
     @event = current_course.events.find(params[:id])
-    flash[:notice] = "Event #{@event.name} was successfully updated" if @event.update(event_params)
-    respond_with(@event)
+    if @event.update_attributes(event_params)
+      respond_with @event, location: events_path
+    else
+      render :edit
+    end
   end
 
   def destroy
     @event = current_course.events.find(params[:id])
-    @name = @event.name
     @event.destroy
-    redirect_to events_url, notice: "#{@name} successfully deleted"
+    respond_with @event, location: events_url
   end
 
   private
@@ -52,5 +53,9 @@ class EventsController < ApplicationController
   def event_params
     params.require(:event).permit(:course_id, :name, :description, :open_at,
     :due_at, :media, :remove_media)
+  end
+
+  def flash_interpolation_options
+    { resource_name: @event.name }
   end
 end

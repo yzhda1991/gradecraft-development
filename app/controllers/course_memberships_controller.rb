@@ -49,4 +49,8 @@ class CourseMembershipsController < ApplicationController
       :course_id, :instructor_of_record, :user_id, :role, :last_login_at,
       :earned_grade_scheme_element_id, :has_seen_course_onboarding
   end
+
+  def flash_interpolation_options
+    { resource_name: @course_membership.user.name }
+  end
 end

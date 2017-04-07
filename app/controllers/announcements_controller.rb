@@ -28,11 +28,10 @@ class AnnouncementsController < ApplicationController
     authorize! :create, @announcement
     if @announcement.save
       @announcement.deliver!
-      redirect_to announcements_path,
-        # rubocop:disable AndOr
-        notice: "Announcement created and sent." and return
+      respond_with @announcement, location: announcements_path
+    else
+      render :new
     end
-    render :new
   end
 
   private

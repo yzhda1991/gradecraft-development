@@ -3,8 +3,6 @@ class StaffController < ApplicationController
   # Staff means everyone on the instructional team - TAs (we call them GSIs) who
   # usually do the grading, the professor, and any administrators
 
-  respond_to :html, :json
-
   before_action :ensure_staff?
 
   def index

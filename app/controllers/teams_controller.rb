@@ -1,6 +1,4 @@
 class TeamsController < ApplicationController
-  respond_to :html, :json
-
   before_action :ensure_not_observer?
   before_action :ensure_staff?, except: [:index]
   before_action :use_current_course, only: [:index, :show, :new, :edit]
@@ -25,9 +23,9 @@ class TeamsController < ApplicationController
   end
 
   def create
-    @team =  current_course.teams.new(team_params)
+    @team = current_course.teams.new(team_params)
     @team.save
-    respond_with @team, success: "Team #{@team.name} successfully created"
+    respond_with @team, location: teams_path
   end
 
   def edit
@@ -38,15 +36,13 @@ class TeamsController < ApplicationController
   def update
     @team = current_course.teams.find(params[:id])
     @team.update_attributes(team_params)
-    respond_with @team, success: "Team #{@team.name} successfully updated"
+    respond_with @team, location: teams_path
   end
 
   def destroy
     @team = current_course.teams.find(params[:id])
-    @name = "#{@team.name}"
     @team.destroy
-    redirect_to teams_url,
-      success: "#{(term_for :team).titleize} #{@name} successfully deleted"
+    respond_with @team, teams_path
   end
 
   private
