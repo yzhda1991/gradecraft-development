@@ -33,13 +33,13 @@
         - if current_course.has_team_roles?
           .form-item
             = f.input :team_role, :input_html => { :maxlength => 255 }, :label => "#{term_for :team} Role"
-            .form_label What will you contribute to your #{term_for :team}?
+            .form-hint What will you contribute to your #{term_for :team}?
 
         - if current_course.has_character_profiles?
           = f.simple_fields_for :course_memberships, @course_membership do |p|
             .form-item
               = p.input :character_profile
-              .form_label What's the background of your character in this class? What skills do you have and what are you motivated by?
+              .form-hint What's the background of your character in this class? What skills do you have and what are you motivated by?
 
       - if impersonating?
         You cannot update this information in preview mode

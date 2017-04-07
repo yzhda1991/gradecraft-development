@@ -5,13 +5,13 @@
 
   = f.hidden_field :badge_id, value: @badge.id
 
-  %section
+  %section.form-section
     = f.select :student_id, options_from_collection_for_select(@students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
 
-  %section
+  %section.form-section
     .textarea
       %h4 #{term_for :badge} Feedback
-      .form_label Enter a message to the #{term_for :student} regarding their work
+      .form-hint Enter a message to the #{term_for :student} regarding their work
       = f.text_area :feedback, class: "froala"
 
   .submit-buttons

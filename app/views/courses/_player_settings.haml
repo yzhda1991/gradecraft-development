@@ -3,14 +3,14 @@
   .form-item
     = f.label :has_character_names, "Character Names"
     = f.check_box :has_character_names, {"aria-describedby" => "txtCharacterRoles"}
-    .form_label{id: "txtCharacterRoles"} Do students create a new name for themselves?
+    .form-hint{id: "txtCharacterRoles"} Do students create a new name for themselves?
 
   .form-item
     = f.label :has_team_roles, "Character Roles"
     = f.check_box :has_team_roles, {"aria-describedby" => "txtTeamRoles"}
-    .form_label{id: "txtTeamRoles"} Do students self-declare their role within the section?
+    .form-hint{id: "txtTeamRoles"} Do students self-declare their role within the section?
 
   .form-item
     = f.label :has_character_profiles, "Character Profiles"
     = f.check_box :has_character_profiles, {"aria-describedby" => "has_character_profiles"}
-    .form_label{id: "has_character_profiles"} Do students create a profile for their character in the class?
+    .form-hint{id: "has_character_profiles"} Do students create a profile for their character in the class?

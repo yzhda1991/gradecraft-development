@@ -1,6 +1,6 @@
 %script(id="proposal-template" type="text/x-template")
   %fieldset.proposal.callout.panel
-    .form_label= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
+    .form-hint= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
     = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |f|
       %section
       .form-item

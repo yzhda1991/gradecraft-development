@@ -1,6 +1,6 @@
 = simple_form_for(@challenge_grade, url: form_path) do |f|
-  %section
-    %h4 Score
+  %section.form-section
+    %h2 Score
 
     = f.hidden_field :team_id, value: @team.id
     = f.hidden_field :challenge_id, value: @challenge.id
@@ -8,24 +8,24 @@
     .form-item
       = f.label :raw_points
       = f.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}
-      .form_label out of #{points @challenge.full_points} points
+      .form-hint out of #{points @challenge.full_points} points
 
     .form-item
       - if @challenge.release_necessary?
         = f.label :status
         = f.select :status, ChallengeGrade::STATUSES
-        .form_label= "Can the #{term_for :team} see this grade?"
+        .form-hint= "Can the #{term_for :team} see this grade?"
       - else
         = f.input :status, as: :hidden, :input_html => { :value => "Graded" }
 
-  %section
-    %h4 Feedback
+  %section.form-section
+    %h2 Feedback
     .textarea
       = f.text_area :feedback, class: "froala"
 
-  %section
+  %section.form-section
     .right
-      %h4.text-right Points Adjustment
+      %h2.text-right Points Adjustment
       = f.text_field :adjustment_points, label: false, data: {autonumeric: true, "m-dec" => "0"}
       %p
       %h4.text-right Points Adjustment Feedback
