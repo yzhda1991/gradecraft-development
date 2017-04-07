@@ -62,9 +62,10 @@ select,
 .ui-tabs-panel select
   display: block
   background-color: $color-white
-  width: 15rem
-  height: 1.5rem
-  font-size: 12px
+  min-width: 15rem
+  height: 2rem
+  font-size: 11px
+  font-family: 'Open Sans', sans-serif
 
 select:hover
   background-color: $color-grey-7
@@ -220,7 +221,7 @@ error
   input[type=password],
   input[type=number]
     padding: .5rem
-    width: 15rem
+    min-width: 15rem
     font-size: 11px
     font-family: sans-serif
     border: 1px solid rgba(42, 43, 43, 0.2)
@@ -416,3 +417,22 @@ input:checked + .switch-handle:before
 .form-hint
   font-style: italic
   margin: 0
+
+// course settings styles
+.form-wrapper
+  max-width: 960px
+  .form-item input, select
+    width: 100%
+
+.form-col-container
+  display: flex
+  @media (max-width: $media-small-max)
+    display: block
+
+.form-col
+  @media (max-width: $media-small-max)
+    width: 100%
+  &:not(:last-child)
+    margin-right: 3rem
+    @media (max-width: $media-small-max)
+      margin-right: 0

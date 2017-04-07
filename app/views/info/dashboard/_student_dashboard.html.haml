@@ -17,9 +17,9 @@
 
       .flex-column
         - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
-          .flex-row.panel.dashboard-module.grading-scheme-module.col-50= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
+          .flex-row.panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
-        .stacked-column.col-50
+        .stacked-column
           .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
 
           - if AnalyticsProctor.new.viewable? current_student, current_course
