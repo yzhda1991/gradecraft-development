@@ -41,12 +41,24 @@
             %td {{grade.feedback}}
             %td {{grade.gradecraft_score.raw_points}}
             %td {{grade.gradecraft_score.feedback}}
-            %td {{grade.user_exists}}
             %td
+              %div{"ng-if"=>"grade.user_exists"}
+                {{vm.termForUserExists(grade.user_exists)}}
+              %div{"ng-if"=>"!grade.user_exists"}
+                {{vm.termForUserExists(grade.user_exists)}}
+                %span.has-tooltip
+                  %i.fa.fa-info-circle
+                  .display-on-hover.hover-style
+                    Import grade to create GradeCraft account for this user
+            %td.center
               %input{"type"=>"checkbox",
                      "name"=>"grade_ids[]",
                      "value"=>"{{grade.id}}",
                      "ng-model"=>"grade.selected_for_import"}
+                %span.has-tooltip{'ng-style'=>'{"visibility": grade.gradecraft_score.raw_points == null ? "hidden" : "visible"}'}
+                  %i.fa.fa-info-circle
+                  .display-on-hover.hover-style
+                    Importing this grade would override the existing grade in GradeCraft with the grade from {{vm.provider}}
 
     .submit-buttons
       .right

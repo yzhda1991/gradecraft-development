@@ -20,6 +20,9 @@
         grade.selected_for_import is true
       )
 
+    vm.termForUserExists = (value) ->
+      if value is true then "Yes" else "No"
+
     initialize(@currentAssignmentId, @courseId, @provider, @assignmentIds).then(() ->
       vm.loading = false
     )
