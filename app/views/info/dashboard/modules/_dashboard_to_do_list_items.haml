@@ -32,5 +32,5 @@
           This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
       - elsif list_class == "my-planner-list"
         You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the
-        = active_course_link_to "grade predictor", predictor_path
+        = link_to "grade predictor", predictor_path
         to add #{(term_for :assignment).downcase.pluralize} to this planner.
