@@ -5,7 +5,8 @@
         %li= link_to decorative_glyph(:plus) + "New Calendar Event", new_event_path, class: "button button-edit"
         %li= link_to decorative_glyph(:edit) + "Edit", edit_event_path(@event), class: "button button-edit"
         %li= link_to decorative_glyph(:copy) + "Copy Event ", copy_events_path(id: @event.id), class: "button button-edit", method: :post
-        %li= link_to decorative_glyph(:copy) + "Add to Google Calendar ", add_event_to_google_calendar_google_calendar_index_path(@event), class: "button button-edit"
+        %li= link_to decorative_glyph(:copy) + "Add to Google Calendar ",
+          add_event_to_google_calendar_google_calendar_index_path(@event), class: "button button-edit", method: :post
 
 .pageContent
   = render partial: "layouts/alerts"

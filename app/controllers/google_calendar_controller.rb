@@ -31,7 +31,7 @@ class GoogleCalendarController < ApplicationController
         calendar.authorization.refresh!
         result = calendar.insert_event('primary', google_event)
         redirect_to events_path, notice: "Event " + event.name + " successfully added to your Google Calendar"
-      rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError
+      rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
         redirect_to events_path, alert: "Google Calendar encountered an Error. Your event was NOT copied to your Google calendar."
       end
     end

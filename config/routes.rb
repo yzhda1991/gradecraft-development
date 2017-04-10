@@ -187,7 +187,7 @@ Rails.application.routes.draw do
 
   resources :google_calendar, only: [ :index] do
     collection do
-      get "/event/:id", action: :add_event_to_google_calendar, as: :add_event_to_google_calendar
+      post "/event/:id", action: :add_event_to_google_calendar, as: :add_event_to_google_calendar
     end
   end
 
