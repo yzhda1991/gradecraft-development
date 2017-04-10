@@ -1,0 +1,42 @@
+.pageContent{"ng-app"=>"gradecraft"}
+  = render partial: "layouts/alerts"
+
+  - if @grades.empty?
+    %div
+      %div There are no grades to import for these #{term_for :assignments}.
+      %div
+        You can
+        =link_to "modify your assignment selection", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
+        to find grades to import.
+  -else
+    .table-header-information
+      %div
+        %strong Selected #{@provider_name.capitalize} #{term_for :assignment}: #{@provider_assignment["name"]}
+      %div
+        %em Wrong #{term_for :assignment}?
+        = link_to "Switch #{@provider_name.capitalize} assignment", assignment_grades_importer_assignments_path(@assignment, @provider_name, params[:id])
+    = form_tag assignment_grades_importer_grades_import_path(@assignment, :canvas, params[:id]) do
+      - [params[:assignment_ids]].flatten.each do |assignment_id|
+        = hidden_field_tag "assignment_ids[]", assignment_id
+      %table.no-table-header
+        %thead
+          %tr
+            %th{scope: "col"} Student Name
+            %th{scope: "col"} #{@provider_name.capitalize} Score
+            %th{scope: "col"} #{@provider_name.capitalize} Feedback
+            %th{scope: "col"} GradeCraft Score
+            %th{scope: "col"} GradeCraft Feedback
+            %th{scope: "col"} User Found?
+            %th
+              %button.button.select-all{role: "button", type: "button"}= "Check"
+              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+        %tbody
+          - @grades.each do |grade|
+            - lms_user = lms_user(@syllabus, grade["user_id"])
+            = render partial: "grade_row", locals: { lms_grade: grade,
+              lms_user: lms_user,
+              grade: Grade.for_student_email_and_assignment_id(lms_user["primary_email"],
+                                                               @assignment.id) || Grade.new }
+      .submit-buttons
+        .right
+          %p= submit_tag "Import Selected Grades for #{@assignment.name}", class: "button disabled", disabled: true, data: { behavior: "selected-grades-command" }

@@ -2,7 +2,7 @@ class API::Grades::ImportersController < ApplicationController
   include OAuthProvider
 
   oauth_provider_param :importer_provider_id
-  
+
   before_action :ensure_staff?
   before_action :require_authorization
 
@@ -17,7 +17,7 @@ class API::Grades::ImportersController < ApplicationController
   private
 
   def importer_params
-    params.permit(:page, :per_page, :assignment_ids)
+    params.permit(:page, :per_page)
   end
 
   def syllabus

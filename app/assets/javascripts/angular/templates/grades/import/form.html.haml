@@ -1,0 +1,56 @@
+%loading-message{"loading"=>"vm.loading", "message"=>"Loading Grades from {{vm.provider}}..."}
+
+.grade-import{"ng-if"=>"!vm.loading"}
+  %without_grades{"ng-if"=>"!grades || grade.length < 1"}
+    %p There are no grades to import for these {{termFor("assignment")}}s.
+    %div
+      You can
+      %a{'ng-href'=>"{{vm.detailsLink}}"} modify your assignment selection
+      to find grades to import.
+
+  %with_grades{"ng-if"=>"grades && grades.length > 0"}
+    %form{"action"=>"{{vm.formAction()}}"}
+      .table-header-information
+        %div
+          %strong Selected {{vm.provider}} {{termFor("assignment")}}: Test assignment
+          -# TODO: swap out "Test assignment" for assingment name from provider
+        %div
+          %em Wrong {{termFor("assignment")}}?
+          %a{'ng-href'=>"{{vm.detailsLink}}"} Switch {{vm.provider}} {{termFor("assignment")}}
+
+      %table.no-table-header
+        %thead
+          %tr
+            %th{scope: "col"} Student Name
+            %th{scope: "col"} {{vm.provider}} Score
+            %th{scope: "col"} {{vm.provider}} Feedback
+            %th{scope: "col"} GradeCraft Score
+            %th{scope: "col"} GradeCraft Feedback
+            %th{scope: "col"} User Found?
+            %th
+              %button.button.select-all{"role"=>"button",
+                                        "type"=>"button",
+                                        "ng-click"=>"vm.selectAllGrades()"}= "Check"
+              %button.button.select-none{"role"=>"button",
+                                         "type"=>"button",
+                                         "ng-click"=>"vm.deselectAllGrades()"}= "Uncheck"
+        %tbody
+          %tr{"ng-if"=>"grades.length > 0", "ng-repeat"=>"grade in grades"}
+            %td {{grade.primary_email}}
+            %td {{grade.score}}
+            %td {{grade.feedback}}
+            %td {{grade.gradecraft_score.raw_points}}
+            %td {{grade.gradecraft_score.feedback}}
+            %td {{grade.user_exists}}
+            %td
+              %input{"type"=>"checkbox",
+                     "name"=>"grade_ids[]",
+                     "value"=>"{{grade.id}}",
+                     "ng-model"=>"grade.selected_for_import"}
+
+    .submit-buttons
+      .right
+        %button{"type"=>"submit",
+                "class"=>"button",
+                "ng-disabled"=>"!vm.hasSelectedGrades()",
+                'ng-class'=>'{"disabled": !vm.hasSelectedGrades()}'} Import Selected Grades for {{assignment().name}}
