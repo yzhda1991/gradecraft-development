@@ -251,7 +251,7 @@ class Assignment < ActiveRecord::Base
 
   # Finding what grade level was earned for a particular assignment
   def grade_level(grade)
-    assignment_score_levels.find { |asl| grade.raw_points == asl.points }.try(:name)
+    assignment_score_levels.find { |asl| grade.final_points == asl.points }.try(:name)
   end
 
   def future?
