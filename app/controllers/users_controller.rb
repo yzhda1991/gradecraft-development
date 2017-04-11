@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   before_action :ensure_staff?,
     except: [:activate, :activated, :edit_profile, :update_profile]
-  before_action :save_referer, only: [:manually_activate, :resend_invite_email]
+  before_action :save_referer, only: [:manually_activate, :resend_invite_email, :destroy]
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
 
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to users_url,
+        redirect_to session[:return_to] || users_url,
         notice: "#{@name} was successfully deleted"
       end
     end
