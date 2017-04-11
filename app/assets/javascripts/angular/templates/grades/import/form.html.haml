@@ -12,8 +12,7 @@
     %form{"action"=>"{{vm.formAction()}}"}
       .table-header-information
         %div
-          %strong Selected {{vm.provider}} {{termFor("assignment")}}: Test assignment
-          -# TODO: swap out "Test assignment" for assingment name from provider
+          %strong Selected {{vm.provider}} {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
         %div
           %em Wrong {{termFor("assignment")}}?
           %a{'ng-href'=>"{{vm.detailsLink}}"} Switch {{vm.provider}} {{termFor("assignment")}}

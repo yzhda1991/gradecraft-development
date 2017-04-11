@@ -11,6 +11,7 @@ class API::Grades::ImportersController < ApplicationController
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
     @grades = syllabus.grades(params[:id], [params[:assignment_ids]].flatten, nil, false, importer_params.to_h)
+    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids])
     render template: "api/grades/importers/show"
   end
 

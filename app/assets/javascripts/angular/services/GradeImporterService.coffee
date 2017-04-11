@@ -11,6 +11,7 @@
         (response) ->
           GradeCraftAPI.addItems(grades, "imported_grade", response.data)
           GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+          GradeCraftAPI.setTermFor("provider_assignment_name", response.data.meta.term_for_provider_assignment)
           GradeCraftAPI.logResponse(response.data)
         , (response) ->
           GradeCraftAPI.logResponse(response.data)

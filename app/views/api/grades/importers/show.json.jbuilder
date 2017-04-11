@@ -16,6 +16,7 @@ json.data @grades do |grade|
 end
 
 json.meta do
+  json.term_for_provider_assignment   @provider_assignment["name"]
   json.term_for_assignment            term_for :assignment
   json.next_page                      true  # TODO
 end

@@ -11,8 +11,9 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
   context "as a professor" do
     let(:user) { build :user, courses: [course], role: :professor }
     let(:access_token) { "topsecret" }
-    let(:syllabus) { double(:syllabus, grades: grades) }
+    let(:syllabus) { double(:syllabus, grades: grades, assignment: provider_assignment ) }
     let(:grades) { [{ id: 1, score: 100 }, { id: 2, score: 120 }] }
+    let(:provider_assignment) { { name: "Pass/Fail" } }
     let!(:user_authorization) do
       create :user_authorization, :canvas, user: user, access_token: access_token,
         expires_at: 2.days.from_now
