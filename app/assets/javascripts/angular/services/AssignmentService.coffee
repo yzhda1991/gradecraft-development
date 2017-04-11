@@ -40,8 +40,8 @@
     $http.get('/api/assignments/' + assignmentId).then(
       (response)->
         GradeCraftAPI.addItem(assignments, "assignments", response.data)
-        if response.data.relationships && response.data.relationships.rubric
-          RubricService.getRubric(response.data.relationships.rubric.data.id)
+        if response.data.data.relationships && response.data.data.relationships.rubric
+          RubricService.getRubric(response.data.data.relationships.rubric.data.id)
 
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
@@ -55,7 +55,7 @@
   getAssignments = ()->
     $http.get('/api/assignments').then(
       (response)->
-        GradeCraftAPI.loadMany(assignments, response.data, {"include" : ['prediction','grade']})
+        GradeCraftAPI.loadMany(assignments, response.data.data, {"include" : ['prediction','grade']})
         _.each(assignments, (assignment)->
           # add null prediction and grades when JSON contains none
           assignment.prediction = { predicted_points: 0 } if !assignment.prediction
