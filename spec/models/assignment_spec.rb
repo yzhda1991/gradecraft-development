@@ -373,13 +373,13 @@ describe Assignment do
 
   describe "#grade_level" do
     it "returns the assignment score level for the grade's score" do
-      grade = build(:grade, raw_points: 123)
+      grade = build(:grade, final_points: 123)
       subject.assignment_score_levels.build name: "First level", points: 123
       expect(subject.grade_level(grade)).to eq "First level"
     end
 
     it "returns nil if there is no assignment score level found" do
-      grade = build(:grade, raw_points: 123)
+      grade = build(:grade, final_points: 123)
       subject.assignment_score_levels.build name: "First level", points: 456
       expect(subject.grade_level(grade)).to be_nil
     end
