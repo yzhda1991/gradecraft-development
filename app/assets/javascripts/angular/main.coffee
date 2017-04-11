@@ -2,7 +2,6 @@
   'ngAnimate',
   'ngDragDrop',
   'ngDraggable',
-  'ngSanitize',
   'uiFx',
   'restangular',
   'ui.sortable',
