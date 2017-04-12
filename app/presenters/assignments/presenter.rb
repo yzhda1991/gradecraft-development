@@ -77,16 +77,11 @@ class Assignments::Presenter < Showtime::Presenter
     grades.instructor_modified.present?
   end
 
-  def has_viewable_submission?(user)
-    submission = submission_for_assignment(user)
+  def has_viewable_submission?(student, user)
+    submission = student.submission_for_assignment(assignment)
     assignment.accepts_submissions? &&
       submission.present? &&
       SubmissionProctor.new(submission).viewable?(user)
-  end
-
-  def has_viewable_submission_for?(user)
-    submission = submission_for_assignment(user)
-    has_viewable_submission?(user)
   end
 
   def has_viewable_analytics?(user)

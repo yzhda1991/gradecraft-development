@@ -104,17 +104,31 @@ describe Assignments::Presenter do
   end
 
   describe "#has_viewable_submission?" do
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+
     context "when the assignment accepts submissions" do
       before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return true }
 
       it "is false if the submission is nil" do
-        expect(subject.has_viewable_submission?(student)).to eq false
+        expect(subject.has_viewable_submission?(student, student)).to eq false
       end
 
-      it "is true when the submission is not nil and all viewable conditions are met in the submission proctor" do
+      it "is visible for the student who owns it" do
         allow(SubmissionProctor).to receive(:viewable?).and_return true
         create(:submission, assignment: assignment, student: student)
-        expect(subject.has_viewable_submission?(student)).to eq true
+        expect(subject.has_viewable_submission?(student, student)).to eq true
+      end
+
+      it "is visible for staff in the course if the SubmissionProctor is satisifed" do
+        allow(SubmissionProctor).to receive(:viewable?).and_return true
+        create(:submission, assignment: assignment, student: student)
+        expect(subject.has_viewable_submission?(student, professor)).to eq true
+      end
+
+      it "is not visible for staff in the course if the SubmissionProctor says no" do
+        allow(SubmissionProctor).to receive(:viewable?).and_return false
+        create(:submission, assignment: assignment, student: student, submitted_at: nil)
+        expect(subject.has_viewable_submission?(student, professor)).to eq false
       end
     end
 
@@ -122,20 +136,8 @@ describe Assignments::Presenter do
       before(:each) { allow(assignment).to receive(:accepts_submissions?).and_return false }
 
       it "is false" do
-        expect(subject.has_viewable_submission?(student)).to eq false
+        expect(subject.has_viewable_submission?(student, professor)).to eq false
       end
-    end
-  end
-
-  describe "#has_viewable_submission_for?" do
-    let(:user) { double(:user, id: 1) }
-    let(:submission) { double(:submission) }
-
-    it "checks if there is a viewable submission" do
-      allow(user).to receive(:submission_for_assignment).and_return submission
-      allow(subject).to receive(:has_viewable_submission?).with(user)
-        .and_return true
-      expect(subject.has_viewable_submission_for?(user)).to eq true
     end
   end
 

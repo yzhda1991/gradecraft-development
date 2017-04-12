@@ -12,7 +12,7 @@
       = render partial: "grades/analytics", locals: { presenter: presenter, current_student: @grade.student }
       %hr.dotted
 
-    - if presenter.has_viewable_submission_for?(@grade.student)
+    - if presenter.has_viewable_submission?(@grade.student, current_user)
       %section
         %h2 The Submission
         = render partial: "submissions/submission_content",
@@ -30,4 +30,3 @@
       %section
         %h2 Grading Rubric
         = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: @grade.student, include_grade_info: false }
-
