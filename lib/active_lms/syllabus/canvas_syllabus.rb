@@ -315,7 +315,7 @@ module ActiveLMS
     #
     # GET: http://instructure.com/api/v1/courses/:id/students/submission
     #
-    # Returns an Array of Hashes representing multiple grades.
+    # Returns a Hash containing the grades and any additional metadata
     #
     # [{
     #   "assignment_id": 23,
@@ -345,7 +345,7 @@ module ActiveLMS
                  student_ids: "all",
                  include: ["assignment", "course", "user"],
                  per_page: options[:per_page] || 25 }.merge(options.except(:per_page))
-      client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
+      result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
         if grade_ids.nil?
           grades += data
         else
@@ -355,7 +355,7 @@ module ActiveLMS
           end
         end
       end
-      grades
+      { data: grades, has_next_page: result[:has_next_page] }
     end
 
     def update_assignment(course_id, assignment_id, params)

@@ -138,11 +138,12 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
     end
     subject { described_class.new access_token }
 
-    it "retrieves the grades from the api" do
-      grades = subject.grades(123, assignment_ids)
+    it "returns a hash containing the result" do
+      result = subject.grades(123, assignment_ids)
 
-      expect(grades.count).to eq 1
-      expect(grades.first["score"]).to eq 87
+      expect(result[:data].count).to eq 1
+      expect(result[:data].first["score"]).to eq 87
+      expect(result[:has_next_page]).to eq false
     end
 
     it "merges options if provided" do
@@ -153,27 +154,27 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                        "per_page" => 5, "test" => true,
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
-      grades = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
-      expect(grades.count).to eq 1
+      result = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
+      expect(result[:data].count).to eq 1
     end
 
     context "for specific ids" do
       it "filters out a single id" do
-        grades = subject.grades(123, assignment_ids, "456")
+        result = subject.grades(123, assignment_ids, "456")
 
-        expect(grades.first["id"]).to eq 456
+        expect(result[:data].first["id"]).to eq 456
       end
 
       it "does not duplicate the grades for double grade ids" do
-        grades = subject.grades(123, assignment_ids, [456, 456])
+        result = subject.grades(123, assignment_ids, [456, 456])
 
-        expect(grades.count).to eq 1
+        expect(result[:data].count).to eq 1
       end
 
       it "filters out the grade ids" do
-        grades = subject.grades(123, assignment_ids, [123])
+        result = subject.grades(123, assignment_ids, [123])
 
-        expect(grades).to be_empty
+        expect(result[:data]).to be_empty
       end
     end
   end
