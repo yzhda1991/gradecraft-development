@@ -3,8 +3,7 @@
   grades = []
   assignment = AssignmentService.assignment
 
-  # Optionally takes a page number in the event that we don't want to automatically
-  # fetch additional
+  # Fetch grades by batch with a page number
   getGrades = (assignmentId, courseId, provider, assignmentIds, page = 1) ->
     $http.get("/api/assignments/#{assignmentId}/grades/importers/#{provider}/course/#{courseId}",
       params: _gradeParams(page, assignmentIds)).then(
@@ -13,6 +12,7 @@
           GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
           GradeCraftAPI.setTermFor("provider_assignment_name", response.data.meta.term_for_provider_assignment)
           GradeCraftAPI.logResponse(response.data)
+          getGrades(assignmentId, courseId, provider, assignmentIds, page + 1) if _hasNextPage(response)
         , (response) ->
           GradeCraftAPI.logResponse(response.data)
     )
@@ -28,6 +28,9 @@
 
   deselectAllGrades = () ->
     _setGradesSelected(false)
+
+  _hasNextPage = (response) ->
+    response.data.meta.has_next_page
 
   _setGradesSelected = (selected) ->
     _.each(grades, (grade) ->

@@ -1,13 +1,12 @@
-# Main entry point for rendering a Canvas grade row
+# Main entry point for rendering the grade import form with data from the
+# the LMS provider
 @gradecraft.directive 'gradeImportForm', ['GradeImporterService', '$q', (GradeImporterService, $q) ->
   gradeImportFormCtrl = [() ->
     vm = this
     vm.loading = true
 
     vm.detailsLink = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/assignments"
-    vm.formAction = () ->
-      base_url = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/grades/import"
-      base_url + "?assignment_ids=#{@assignmentIds}"
+    vm.formAction = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/grades/import"
 
     vm.selectAllGrades = () ->
       GradeImporterService.selectAllGrades()
