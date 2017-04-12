@@ -20,9 +20,9 @@
         .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
       - if presenter.submittable?(assignment)
         - if assignment.is_individual?
-          .right= render "students/submissions", assignment: assignment
+          .right= render partial: "students/submissions", assignment: assignment
         - else
-          .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
+          .right= render partial: "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
   - if assignment_list.empty?
     %li.dashboard-message
       - if list_class == "course-planner-list"
