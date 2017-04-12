@@ -1,5 +1,7 @@
 %ul.announcements-list.nav-dropdown-card
-  - current_course.announcements.first(3).each do |announcement|
+  - @announcements = Announcement.where(course_id: current_course.id,
+                                        recipient_id: [nil, current_user.id])
+  - @announcements.first(3).each do |announcement|
     %li.announcement-item{class: ("announcement-unread" if !announcement.read?(current_user))}
       = link_to announcement.title, announcement_path(announcement)
       %p.announcement-date= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
