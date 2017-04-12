@@ -41,7 +41,7 @@ class Grades::ImportersController < ApplicationController
     @assignment_ids = params[:assignment_ids]
   end
 
-  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades_import
+  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades/import
   def grades_import
     @provider_name = params[:importer_provider_id]
     @assignment = Assignment.find params[:assignment_id]
@@ -53,7 +53,7 @@ class Grades::ImportersController < ApplicationController
     if @result.success?
       render :grades_import_results
     else
-      @grades = syllabus.grades(params[:id], params[:assignment_ids])
+      @grades = syllabus.grades(params[:id], params[:assignment_ids])[:data]
 
       render :grades, alert: @result.message
     end

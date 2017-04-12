@@ -111,7 +111,7 @@ describe Grades::ImportersController do
       context "with an invalid result" do
         it "re-renders the template with the error" do
           allow(result).to receive(:success?).and_return false
-          syllabus = double(course: {}, grades: [])
+          syllabus = double(course: {}, grades: { data: [] })
           allow(controller).to receive(:syllabus).and_return syllabus
 
           post :grades_import, params: { importer_provider_id: "canvas",
