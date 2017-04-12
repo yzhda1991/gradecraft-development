@@ -1,0 +1,17 @@
+%loading-message(loading="vm.loading" message="Loading Assignments...")
+
+.assignment-index-container(role="tablist")
+  .assignment_type(id="assignment-type-settings-{{assignment_type.id}}" ng-repeat="assignmentType in vm.assignmentTypes")
+    .assignment-type-bar.assignment-settings.collapse{role: "tab"}
+      %a(href="#")
+        %h2.assignment-type-name
+          %i.fa.fa-fw.fa-angle-double-right
+          {{assignmentType.name}}
+        .points-summary(ng-if="!vm.loading")
+
+          .points-bar-graph.assignment-settings
+            .points-bar-graph-fill.assignment-settings(style="{{vm.pointsGraphStyle(assignmentType)}}")
+            %span.hint(ng-if="pointsOver()") Total for this assignment type exceeds threshold for highest level
+            .grade-level-marker(ng-repeat="gse in vm.GradeSchemeElements" style="width: {{vm.pointsGraphPercentOfTotal(gse)}}")
+          .assignment-type-points.assignment-settings {{ assignmentType.total_points | number }} / {{ vm.totalPoints | number }}
+

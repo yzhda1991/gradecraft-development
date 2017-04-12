@@ -70,6 +70,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Settings')
   end
 
+  def assignments_ng_settings
+    assignments_index
+    breadcrumb('Settings')
+  end
+
   def assignments_show
     assignments_index
     breadcrumb(objects[:assignment].name)

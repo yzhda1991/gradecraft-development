@@ -25,6 +25,11 @@ class AssignmentsController < ApplicationController
     @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
   end
 
+  # Angular interactive version of the settings page
+  def ng_settings
+    @assignment_types = current_course.assignment_types.ordered.includes(:assignments)
+  end
+
   def show
     @assignment = current_course.assignments.find_by(id: params[:id])
     redirect_to assignments_path,

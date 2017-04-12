@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     collection do
       get :feed
       get :settings
+      get :ng_settings
       post "copy" => "assignments#copy"
       get "export_structure"
     end
