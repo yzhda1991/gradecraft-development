@@ -83,7 +83,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html do
-        redirect_to session[:return_to] || users_url,
+        redirect_to users_url,
         notice: "#{@name} was successfully deleted"
       end
     end
