@@ -13,5 +13,32 @@
             .points-bar-graph-fill.assignment-settings(style="{{vm.pointsGraphStyle(assignmentType)}}")
             %span.hint(ng-if="pointsOver()") Total for this assignment type exceeds threshold for highest level
             .grade-level-marker(ng-repeat="gse in vm.GradeSchemeElements" style="width: {{vm.pointsGraphPercentOfTotal(gse)}}")
-          .assignment-type-points.assignment-settings {{ assignmentType.total_points | number }} / {{ vm.totalPoints | number }}
+          .assignment-type-points.assignment-settings {{ assignmentType.total_points | number }} / {{ vm.totalPoints | number }
+    .assignment-type-container{role: "tabpanel"}
+      %table
+        %caption.sr-only {{vm.termFor("assignments")}} for {{assignmentType.name}}
+        %thead
+          %tr
+            %th{scope: "col"} Name
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="eye" tip-text="Visible to Students")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="asterisk" tip-text="Required")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="calendar" tip-text="Shown in Timeline")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="sliders" tip-text="Shown in Predictor")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="list" tip-text="Shown in Due This Week")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="pencil" tip-text="Logged By Students")
+            %th{scope: "col"}
+              %tooltip(id="{{assignmentType.id}}" glyph="unlock" tip-text="Release Required")
 
+            %th{scope: "col"} Points
+
+            %th{scope: "col", :style => "width: 280px"} Dates
+            %th{scope: "col", :style => "min-width: 110px"}
+              %span.sr-only Actions

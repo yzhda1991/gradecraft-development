@@ -6,6 +6,9 @@
     vm.assignmentTypes = AssignmentTypeService.assignmentTypes
     vm.GradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
 
+    vm.termFor = (term)->
+      AssignmentService.termFor(term)
+
     # ================ methods for Assignment Types ============================
 
     vm.pointsOver = (assignmentType)->
