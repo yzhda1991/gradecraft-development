@@ -2,11 +2,11 @@ require "rails_spec_helper"
 
   include GoogleCalendarHelper
 
-describe GoogleCalendarHelper do
+describe GoogleCalendarHelper, focus: true do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
-    it "calls #refresh_if_google_authorization_is_expired if the token has expired" do
+    it "refreshes the google authorization if the token has expired" do
       create :user_authorization, :google, user: user, access_token: "BLEH", refresh_token: "REFRESH", expires_at: Time.now - (60 * 60)
       expect(helper).to receive(:refresh_if_google_authorization_is_expired)
       helper.get_google_authorization(user)
@@ -37,7 +37,7 @@ describe GoogleCalendarHelper do
   describe "#create_google_event" do
     let(:course) { build(:course) }
     let(:event) { create(:event, course: course) }
-    it "creates a google calendar event" do
+    it "creates a google calendar event object" do
       event.open_at = Time.now - (24 * 60 * 60)
       google_event = create_google_event(event)
       expect(google_event).not_to be nil
