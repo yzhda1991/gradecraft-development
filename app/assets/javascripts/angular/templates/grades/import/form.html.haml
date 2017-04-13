@@ -21,7 +21,10 @@
 
     .table-header-information
       %div
-        %strong Selected {{vm.provider}} {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
+        %strong
+          Selected
+          %span.capitalize {{vm.provider}}
+          {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
       %div
         %em Wrong {{termFor("assignment")}}?
         %a{"ng-href"=>"{{vm.detailsLink}}"} Switch {{vm.provider}} {{termFor("assignment")}}
@@ -57,7 +60,7 @@
               %span.has-tooltip
                 %i.fa.fa-info-circle
                 .display-on-hover.hover-style
-                  Import grade to create GradeCraft account for this user
+                  Import grade to create a GradeCraft account for this user
           %td.center
             %input{"type"=>"checkbox",
                    "name"=>"grade_ids[]",
@@ -66,7 +69,8 @@
               %span.has-tooltip{"ng-style"=>"{'visibility': grade.gradecraft_score.raw_points == null ? 'hidden' : 'visible'}"}
                 %i.fa.fa-info-circle
                 .display-on-hover.hover-style
-                  Importing this grade would override the existing grade in GradeCraft with the grade from {{vm.provider}}
+                  Importing this grade would override the existing grade in GradeCraft with the grade from
+                  %span.capitalize {{vm.provider}}
         %tr{"ng-if"=>"vm.loading"}
           %td.center{"colspan"=>"7"}
             %i.fa.fa-spinner.fa-spin.fa-fw
