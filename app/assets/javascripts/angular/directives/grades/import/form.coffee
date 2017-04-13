@@ -4,6 +4,7 @@
   gradeImportFormCtrl = [() ->
     vm = this
     vm.loading = true
+    vm.formSubmitted = false
 
     vm.detailsLink = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/assignments"
     vm.formAction = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/grades/import"
@@ -36,6 +37,7 @@
 
   {
     scope:
+      authenticityToken: '@'  # for the form submit
       assignmentIds: '@'
       currentAssignmentId: '@'
       courseId: '@'

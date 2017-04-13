@@ -12,7 +12,11 @@
   %br
 
 %with_grades{"ng-if"=>"grades && grades.length > 0"}
-  %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8"}
+  %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8", "ng-submit"=>"vm.formSubmitted = true"}
+    -# Hidden inputs that Rails would normally generate for a form
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+
     %input{"type"=>"hidden", "name"=>"assignment_ids[]", "value"=>"{{vm.assignmentIds}}"}
 
     .table-header-information
@@ -72,6 +76,6 @@
       .right
         %input{"type"=>"submit",
                "class"=>"button",
-               "ng-disabled"=>"!vm.hasSelectedGrades()",
-               "ng-class"=>"{'disabled': !vm.hasSelectedGrades()}",
+               "ng-disabled"=>"!vm.hasSelectedGrades() || vm.formSubmitted",
+               "ng-class"=>"{'disabled': !vm.hasSelectedGrades() || vm.formSubmitted}",
                "value"=>"Import Selected Grades for {{assignment().name}}"}
