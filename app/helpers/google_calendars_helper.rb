@@ -2,7 +2,7 @@ require 'google/apis/calendar_v3'
 require 'google/api_client/client_secrets.rb'
 require 'googleauth'
 
-module GoogleCalendarHelper
+module GoogleCalendarsHelper
   Calendar = Google::Apis::CalendarV3
 
   def get_google_authorization(current_user)

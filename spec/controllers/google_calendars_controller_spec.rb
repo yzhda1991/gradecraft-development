@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "api_spec_helper"
 
-describe GoogleCalendarController, type:[:disable_external_api, :controller], focus: true do
+describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
   let(:provider) { :google_oauth2 }
 
   before do
@@ -27,7 +27,7 @@ describe GoogleCalendarController, type:[:disable_external_api, :controller], fo
 
     describe "POST add_event_to_google_calendar" do
       # Authorized User attempting add standard event
-      context "with an existing authentication", focus: true do
+      context "with an existing authentication" do
         let! (:user_auth) { create :user_authorization, :google, user: student, access_token: "token", expires_at: 2.days.from_now}
         before(:each) do
           stub_const('ENV', ENV.to_hash.merge('GOOGLE_CLIENT_ID' => 'GOOGLE_CLIENT_ID'))

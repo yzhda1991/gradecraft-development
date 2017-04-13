@@ -1,8 +1,8 @@
 require "rails_spec_helper"
 
-  include GoogleCalendarHelper
+  include GoogleCalendarsHelper
 
-describe GoogleCalendarHelper, focus: true do
+describe GoogleCalendarsHelper do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }

@@ -1,5 +1,5 @@
-class GoogleCalendarController < ApplicationController
-  include GoogleCalendarHelper
+class GoogleCalendarsController < ApplicationController
+  include GoogleCalendarsHelper
   include OAuthProvider
 
   oauth_provider_param :google_oauth2
@@ -8,10 +8,6 @@ class GoogleCalendarController < ApplicationController
   require 'googleauth'
 
   Calendar = Google::Apis::CalendarV3
-
-  def index
-    redirect_to events_path
-  end
 
   def add_event_to_google_calendar
     if !google_auth_present?(current_user)
