@@ -7,12 +7,16 @@ class GoogleCalendarsController < ApplicationController
   require 'google/api_client/client_secrets.rb'
   require 'googleauth'
 
+  before_action do |controller|
+    controller.redirect_path events_path
+  end
+
   Calendar = Google::Apis::CalendarV3
 
   def add_event_to_google_calendar
     if !google_auth_present?(current_user)
       # rubocop:disable AndOr
-      redirect_to "/auth/google_oauth2", notice: "You are now authroized to use Google Calendar Integration. Please try to add your event to the Google Calendar again." and return
+      redirect_to "/auth/google_oauth2" and return
     end
     google_authorization = get_google_authorization(current_user)
     event = current_course.events.find(params[:id])
