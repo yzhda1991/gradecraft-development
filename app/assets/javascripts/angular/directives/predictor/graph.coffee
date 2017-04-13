@@ -75,7 +75,8 @@
         g.append("path")
           .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
           .attr("class",(gse)-> "grade_scheme-pointer-" + gse.lowest_points)
-          .attr("transform","scale(2)")
+          # move the pins over so the point is on the right value
+          .attr("transform","scale(2) translate(-1.5,0)")
         txt = d3.select("#svg-grade-level-text").selectAll('g').data(PredictorService.gradeSchemeElements).enter()
                 .append('g')
                 .attr("class", (gse)->
