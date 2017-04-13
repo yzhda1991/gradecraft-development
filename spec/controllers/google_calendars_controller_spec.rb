@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 require "api_spec_helper"
 
-describe GoogleCalendarsController, type:[:disable_external_api, :controller], focus: true do
+describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
   let(:provider) { :google_oauth2 }
   let(:course) { build :course }
   let(:event) { create :event, course: course, open_at: DateTime.new(2017,4,1,16,0,0,-4), due_at: DateTime.new(2017,4,1,17,0,0,-4), name: "animi" }
