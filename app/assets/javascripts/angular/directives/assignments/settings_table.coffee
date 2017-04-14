@@ -5,6 +5,7 @@
     vm.loading = true
     vm.assignmentTypes = AssignmentTypeService.assignmentTypes
     vm.GradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
+    vm.assignments = AssignmentService.assignments
 
     vm.termFor = (term)->
       AssignmentService.termFor(term)
