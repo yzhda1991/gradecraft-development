@@ -15,7 +15,7 @@
             .grade-level-marker(ng-repeat="gse in vm.GradeSchemeElements" style="width: {{vm.pointsGraphPercentOfTotal(gse)}}")
           .assignment-type-points.assignment-settings {{ assignmentType.total_points | number }} / {{ vm.totalPoints | number }}
     .assignment-type-container.collapsable{role: "tabpanel"}
-      %table
+      %table(ng-if="!vm.loading")
         %caption.sr-only {{vm.termFor("assignments")}} for {{assignmentType.name}}
         %thead
           %tr
@@ -47,3 +47,43 @@
           %tr(ng-repeat="assignment in vm.assignments | filter:{assignment_type_id: assignmentType.id}:true")
             %td
               %a(href="/assignments/{{assignment.id}}") {{assignment.name}}
+
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="visible" checked="assignment.visible")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="required" checked="assignment.required")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="accepts_submissions" checked="assignment.accepts_submissions")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="include_in_timeline" checked="assignment.include_in_timeline")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="include_in_predictor" checked="assignment.include_in_predictor")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="include_in_to_do" checked="assignment.include_in_to_do")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="student_logged" checked="assignment.student_logged")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="release_necessary" checked="assignment.release_necessary")
+
+            %td {{assignment.full_points | number }}
+
+            %td
+              %ul
+                %li
+                  Opens: {{assignment.opens_at || "Always Open" | date }}
+                %li
+                  Due At: {{assignment.due_at || "No Due Date" | date }}
+                %li
+                  Accepted Until: {{assignment.accepts_submissions_until || "Always Accepted" | date }}
+
+            %td
+              .right
+                %ul.button-bar
+                  %li
+                    %a.button(href="/assignments/{{assignment.id}}/edit")
+                      %i.fa.fa-fw.fa-edit
+                      Edit
+                  %li
+                    %a.button(href="/assignments/{{assignment.id}}/delete" data-confirm="Are you sure?" data-method="delete")
+                      %i.fa.fa-fw.fa-trash
+                      Delete
