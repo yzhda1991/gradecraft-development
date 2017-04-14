@@ -465,6 +465,17 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Imported ' + objects[:course].student_term.pluralize)
   end
 
+  def users_importers_index
+    users_index
+    breadcrumb('Users Import')
+  end
+
+  def users_importers_users
+    users_index
+    users_importers_index
+    breadcrumb('Canvas Users')
+  end
+
   def users_index
     dashboard
     breadcrumb('Users', users_path)
