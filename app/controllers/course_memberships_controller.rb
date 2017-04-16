@@ -3,6 +3,7 @@ require_relative "../services/cancels_course_membership"
 class CourseMembershipsController < ApplicationController
 
   before_action :ensure_staff?
+  before_action :save_referer, only: [:destroy]
 
   def create
     @course_membership =
@@ -16,8 +17,7 @@ class CourseMembershipsController < ApplicationController
   def destroy
     course_membership = current_course.course_memberships.find(params[:id])
     Services::CancelsCourseMembership.for_student course_membership
-
-    redirect_to students_path,
+    redirect_to session[:return_to],
       notice: "#{course_membership.user.name} was successfully removed from course."
   end
 
