@@ -36,14 +36,15 @@
       .form-hint If you set a due date but no accept-until date, submissions and self-logged grades will be marked as late but always accepted.
 
     .form-item
-      = f.label :grade_scope, "Individual or Group?"
-      = f.select :grade_scope, [["Individual"], ["Group"]]
-      .form-hint Do students do this individually or as a group?
+      .individual-group-select
+        = f.label :grade_scope, "Individual or Group?"
+        = f.select :grade_scope, [["Individual"], ["Group"]]
+        .form-hint Do students do this individually or as a group?
 
-    .form-item
+    .form-item.individual-group-contingent{"class"=>("hidden" if f.object.grade_scope == 'Individual')}
       = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @assignment.try(:min_group_size) || 2 ] }
 
-    .form-item
+    .form-item.individual-group-contingent{"class"=>("hidden" if f.object.grade_scope == 'Individual')}
       = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.try(:max_group_size) || 5 ] }
 
     .form-item{"class"=>("pass-fail-contingent hidden" if f.object.pass_fail?)}
