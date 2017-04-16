@@ -369,15 +369,17 @@ input:checked + .switch-handle:before
   .form-item input[type="checkbox"]
     width: auto
 
-.form-col-container
+.form-flex-container
   display: flex
-  @media (max-width: $media-small-max)
-    display: block
+  flex-direction: column
 
-.form-col
-  @media (max-width: $media-small-max)
-    width: 100%
-  &:not(:last-child)
-    margin-right: 3rem
+.form-flex-row
+  display: flex
+  .form-item
     @media (max-width: $media-small-max)
       margin-right: 0
+      width: 100%
+    &:not(:last-child)
+      margin-right: 1rem
+  @media (max-width: $media-small-max)
+    display: block

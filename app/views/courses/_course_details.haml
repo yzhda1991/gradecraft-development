@@ -3,48 +3,51 @@
 .form-wrapper
   %section.form-section
     %h2 Class Details
-    .form-col-container
-      .form-col.col-50
-        .form-item
+    .form-flex-container
+      .form-flex-row
+        .form-item.col-50
           = f.label :location, "Location"
           = f.text_field :location
 
-        .form-item
+        .form-item.col-50
           = f.label :meeting_times, "Class Meeting Times"
           = f.text_field :meeting_times
 
-        .form-item
+      .form-flex-row
+        .form-item.col-50
           = f.label :office, "Professor's Office"
           = f.text_field :office
 
-        .form-item
+        .form-item.col-50
           = f.label :office_hours, "Office Hours"
           = f.text_field :office_hours
 
-        .form-item
+      .form-flex-row
+        .form-item.col-50
           = f.label :phone, "Contact Phone #"
           = f.text_field :phone
 
-      .form-col.col-50
-        .form-item
+        .form-item.col-50
           = f.label :class_email, "Class Email"
           = f.text_field :class_email
 
-        .form-item
+      .form-flex-row
+        .form-item.col-50
           = f.label :twitter_handle, "Twitter Handle"
           = f.text_field :twitter_handle
           .form-hint Don't include the @ sign
 
-        .form-item
+        .form-item.col-50
           = f.label :twitter_hashtag, "Hashtag"
           = f.text_field :twitter_hashtag
           .form-hint Don't include the hash sign
 
-    .form-item
-      = f.label :syllabus
-      = f.file_field :syllabus
-      - if current_course.syllabus.present?
-        .italic= link_to "Current Syllabus", current_course.syllabus_url
+      .form-flex-row
+        .form-item.col-100
+          = f.label :syllabus
+          = f.file_field :syllabus
+          - if current_course.syllabus.present?
+            .italic= link_to "Current Syllabus", current_course.syllabus_url
 
   - unless @course.new_record?
     %section.form-section

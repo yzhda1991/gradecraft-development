@@ -47,7 +47,7 @@
     .form-item.individual-group-contingent{"class"=>("hidden" if f.object.grade_scope == 'Individual')}
       = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.try(:max_group_size) || 5 ] }
 
-    .form-item{"class"=>("pass-fail-contingent hidden" if f.object.pass_fail?)}
+    .form-item.pass-fail-contingent{"class"=>("hidden" if f.object.pass_fail?)}
       = f.label :mass_grade_type, "Quick Grade Style"
       = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
       .form-hint How should this assignment appear in Quick Grade?
