@@ -344,7 +344,7 @@ module ActiveLMS
       params = { assignment_ids: assignment_ids,
                  student_ids: "all",
                  include: ["assignment", "course", "user"],
-                 per_page: options[:per_page] || 25 }.merge(options.except(:per_page))
+                 per_page: options.delete(:per_page) || 25 }.merge(options)
       result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
         if grade_ids.nil?
           grades += data
