@@ -18,6 +18,12 @@ class EventsController < ApplicationController
     @event = current_course.events.find(params[:id])
   end
 
+  def copy
+    event = current_course.events.find(params[:id])
+    duplicated = event.copy
+    redirect_to events_path, notice: "Event #{duplicated.name} was successfully created"
+  end
+
   def create
     @event = current_course.events.new(event_params)
     if @event.save

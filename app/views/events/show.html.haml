@@ -6,6 +6,8 @@
 
         %li= link_to decorative_glyph(:edit) + "Edit", edit_event_path(@event), class: "button button-edit"
 
+        %li= link_to decorative_glyph(:copy) + "Duplicate Event ", copy_events_path(id: @event.id), class: "button button-edit", method: :post
+
 .pageContent
   = render partial: "layouts/alerts"
 
