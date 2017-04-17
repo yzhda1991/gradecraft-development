@@ -113,8 +113,8 @@ $(document).find("[data-behavior~=multi-select]").select2({
   allowClear: true
 });
 
-//Toggle options menu on some table rows
-$(".button-options").click(function(){
+//Toggle options menu in table rows and page headers
+$("table, .context_menu").on('click', '.button-options', function(){
     $(this).next('.options-menu').toggle();
 });
 
