@@ -114,7 +114,7 @@ $(document).find("[data-behavior~=multi-select]").select2({
 });
 
 //Toggle options menu on some table rows
-$(".button-options").click(function(){
+$("table").on('click', '.button-options', function(){
     $(this).next('.options-menu').toggle();
 });
 
