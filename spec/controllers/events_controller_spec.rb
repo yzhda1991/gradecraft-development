@@ -89,6 +89,16 @@ describe EventsController do
         expect(response).to redirect_to(events_url)
       end
     end
+
+    describe "POST copy" do
+      it "duplicates the requested event" do
+        event
+        post :copy, params: { id: event.id }
+        expect expect(course.events.count).to eq(2)
+      end
+    end
+
+
   end
 
   context "as student" do
@@ -109,7 +119,8 @@ describe EventsController do
       [
         :edit,
         :update,
-        :destroy
+        :destroy,
+        :copy
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)
