@@ -1,3 +1,9 @@
+# common directive to create an icon with a tooltip on hover
+# id is used for accessibility and should be unique per page
+#
+# example usage:
+#   %tooltip-icon(id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
+#
 @gradecraft.directive 'tooltipIcon', [() ->
   return {
     scope: {

@@ -1,4 +1,4 @@
-# This directive manages loading the assignments once for the assignments settings page
+# A table of assignments with  editable settings
 @gradecraft.directive 'assignmentsSettingsTable', ['$q', 'AssignmentTypeService', 'AssignmentService', 'GradeSchemeElementsService', ($q, AssignmentTypeService, AssignmentService, GradeSchemeElementsService) ->
   AssignmentsSettingsCtrl = [()->
     vm = this
