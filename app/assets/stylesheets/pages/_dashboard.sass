@@ -29,6 +29,10 @@
     margin-right: 1rem
     flex: 1
 
+  .stacked-column
+    @media (max-width: $media-medium-max)
+      width: 100%
+
   .stacked-module
     flex: 1 auto
 
@@ -199,8 +203,7 @@ ul.badge-grid
 .avatar
   background-color: transparentize($color-blue-4, .8)
   ul.button-bar
-    width: 100%
-    margin: .5em auto
+    padding-left: 0
     li
       display: inline-block
       list-style-type: none
