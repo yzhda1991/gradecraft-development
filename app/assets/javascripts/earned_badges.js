@@ -11,7 +11,7 @@ $(document).ready(function() {
   	},
 	update: function (){
 	  $.ajax({
-        url: '/badges/sort',
+        url: 'api/badges/sort',
 	    type: 'post',
 	    data: $('.sort-badges').sortable('serialize'),
 	    dataType: 'script',

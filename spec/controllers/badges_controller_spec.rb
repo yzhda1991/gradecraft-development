@@ -81,18 +81,6 @@ describe BadgesController do
       end
     end
 
-    describe "GET sort" do
-      it "sorts the badges by params" do
-        second_badge = create(:badge)
-        course.badges << second_badge
-        params = [second_badge.id, badge.id]
-        post :sort, params: { badge: params }
-
-        expect(badge.reload.position).to eq(2)
-        expect(second_badge.reload.position).to eq(1)
-      end
-    end
-
     describe "GET destroy" do
       it "destroys the badge" do
         another_badge = create :badge, course: course
@@ -114,8 +102,7 @@ describe BadgesController do
     describe "protected routes" do
       [
         :new,
-        :create,
-        :sort
+        :create
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
@@ -148,8 +135,7 @@ describe BadgesController do
     describe "protected routes not requiring id in params" do
       routes = [
         { action: :new, request_method: :get },
-        { action: :create, request_method: :post },
-        { action: :sort, request_method: :post }
+        { action: :create, request_method: :post }
       ]
       routes.each do |route|
         it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do

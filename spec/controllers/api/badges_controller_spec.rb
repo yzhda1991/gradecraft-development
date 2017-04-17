@@ -25,6 +25,18 @@ describe API::BadgesController do
         expect(assigns(:allow_updates)).to be_falsey
       end
     end
+
+    describe "GET sort" do
+      it "sorts the badges by params" do
+        second_badge = create(:badge)
+        course.badges << second_badge
+        params = [second_badge.id, badge.id]
+        post :sort, params: { badge: params }
+
+        expect(badge.reload.position).to eq(2)
+        expect(second_badge.reload.position).to eq(1)
+      end
+    end
   end
 
   context "as student" do
@@ -66,6 +78,14 @@ describe API::BadgesController do
         prediction = create(:predicted_earned_badge, badge: badge, student: student)
         get :index, params: { id: student.id }, format: :json
         expect(assigns(:predicted_earned_badges)[0]).to eq(prediction)
+      end
+    end
+
+    it "redirects protected routes to root" do
+      [
+        -> { post :sort, params: { "badge" => [badge] }, format: :json}
+      ].each do |protected_route|
+        expect(protected_route.call).to redirect_to(:root)
       end
     end
   end

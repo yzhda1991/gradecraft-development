@@ -1,5 +1,4 @@
 class BadgesController < ApplicationController
-  include SortsPosition
 
   before_action :ensure_not_observer?, except: [:index, :show]
   before_action :ensure_staff?, except: [:index, :show]
@@ -50,10 +49,6 @@ class BadgesController < ApplicationController
     else
       render action: "edit"
     end
-  end
-
-  def sort
-    sort_position_for :badge
   end
 
   def destroy
