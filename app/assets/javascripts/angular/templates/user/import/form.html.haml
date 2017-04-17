@@ -1,0 +1,31 @@
+%loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
+
+-# TODO: create some sort of shared failure directive for failed $http calls
+-# %failure-message{"ng-if"=>"hasFailure"}
+
+%div{"ng-if"=>"!vm.loading"}
+  %without_users{"ng-if"=>"users.length < 1"}
+    %p There are no users to import for this course
+
+  %with_users{"ng-if"=>"users.length > 0"}
+    -# Need table info?
+    -# .table-header-information
+
+    %table.no-table-header
+      %thead
+        %tr
+          %th{"scope"=>"col"} Name
+          %th{"scope"=>"col"} Email
+          %th{"scope"=>"col"} Roles
+          %th{"scope"=>"col"} Enrollment State
+      %tbody
+        %tr{"ng-repeat"=>"user in users"}
+          %td
+          %td
+          %td
+          %td
+
+    .submit-buttons
+      .right
+        %button{"type"=>"button",
+                "class"=>"button"} Import Users
