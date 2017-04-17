@@ -25,6 +25,9 @@
     {{article.description}}
   %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
 
+%section.student-panel-article-description{'ng-if'=>'!article.has_info && article.type === "badges"'}
+  %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
+
 %section.student-panel-article-icons
   %student-panel-article-icon.student-panel-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'article'}
   .condition-icons{'ng-include'=> true, 'src' => "'student_panel/panel_article/condition_icons.html'"}
