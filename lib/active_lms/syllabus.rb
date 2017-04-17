@@ -41,5 +41,9 @@ module ActiveLMS
     def user(id)
       provider.user(id)
     end
+
+    def users(course_id, fetch_next=true, options={})
+      provider.users(course_id, fetch_next, options)
+    end
   end
 end

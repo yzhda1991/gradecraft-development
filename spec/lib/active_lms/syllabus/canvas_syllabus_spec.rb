@@ -220,4 +220,37 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       expect(user["name"]).to eq "Jimmy Page"
     end
   end
+
+  describe "#users" do
+    subject { described_class.new access_token }
+
+    it "retrieves the users for the course id from the api" do
+      body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
+      stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+        .with(query: { "access_token" => access_token,
+                       "include" => ["enrollments", "email"] })
+        .to_return(status: 200, body: body.to_json, headers: {})
+
+      users = subject.users(123)
+
+      expect(users[:data].length).to eq 2
+      expect(users[:has_next_page]).to be_falsey
+      expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
+      expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+    end
+
+    it "merges options if provided" do
+      body = [{ name: "Jimmy Page", id: 1 }]
+      stub_request(:get,
+          "https://canvas.instructure.com/api/v1/courses/123/users")
+        .with(query: { "access_token" => access_token,
+                       "enrollment_type" => ["student", "teacher"],
+                       "include" => ["enrollments", "email"] })
+        .to_return(status: 200, body: body.to_json, headers: {})
+
+      users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+
+      expect(users[:data].length).to eq 1
+    end
+  end
 end

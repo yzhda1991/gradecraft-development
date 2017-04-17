@@ -401,6 +401,54 @@ module ActiveLMS
       user
     end
 
+    # Internal: Returns the list of users in this course. And optionally the user's enrollments in the course.
+    #
+    # course_id - A String representing the course id from the Canvas API.
+    #
+    # GET http://instructure.com/api/v1/courses/:course_id/users
+    #
+    # Returns a Hash containing the users and any additional metadata
+    #
+    # {
+    #   data: {
+    #     [
+    #       {
+    #         "id": 1234,
+    #         "name": "Sample User",
+    #         "short_name": "Sample User",
+    #         "sortable_name": "user, sample",
+    #         "title": null,
+    #         "bio": null,
+    #         "primary_email": "sample_user@example.com",
+    #         "login_id": "sample_user@example.com",
+    #         "sis_user_id": "sis1",
+    #         "sis_login_id": "sis1-login",
+    #         "lti_user_id": null,
+    #         "avatar_url": "..url..",
+    #         "calendar": null,
+    #         "time_zone": "America/Denver",
+    #         "locale": null,
+    #         "enrollments": {
+    #           "role": "StudentEnrollment"
+    #           ...
+    #         }
+    #       },
+    #       ...
+    #     ]
+    #   },
+    #   has_next_page: true
+    # }
+    def users(course_id, fetch_next=false, options={})
+      users = []
+      params = {
+        include: ["enrollments", "email"]
+      }.merge(options)
+      result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
+        users += data
+      end
+      { data: users, has_next_page: result[:has_next_page] }
+    end
+
     private
 
     attr_reader :client
