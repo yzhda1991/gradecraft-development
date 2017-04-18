@@ -98,4 +98,14 @@ if ($('#leaderboardBarChart').length) {
 
   // eslint-disable-next-line no-undef
   Plotly.newPlot('leaderboardBarChart', data, layout, {displayModeBar: false});
+
+  // resize chart on window resize function to remove when chart is angularized
+  $(window).on('resize', function() {
+    var resizeTimer;
+    var leaderboardBarChartDiv = document.getElementById('leaderboardBarChart');
+
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {Plotly.Plots.resize(leaderboardBarChartDiv)}, 250);
+ });
+
 }
