@@ -16,20 +16,18 @@ module UsersHelper
   end
 
   def total_scores_for_chart(user, course)
-    scores = []
+    points = []
     course.assignment_types.each do |assignment_type|
-      scores << { data: assignment_type.visible_score_for_student(user),
+      points << { points: assignment_type.visible_score_for_student(user),
                   name: assignment_type.name }
     end
 
     earned_badge_points = user.earned_badges.sum(&:points)
-    if earned_badge_points > 0
-      scores << { data: earned_badge_points, name: "#{course.badge_term.pluralize}" }
-    end
 
     return {
-      scores: scores,
-      course_total: course.total_points + earned_badge_points
+      points_by_assignment_type: points,
+      earned_badge_points: { points: earned_badge_points, name: "#{course.badge_term.pluralize}"},
+      course_potential_for_student: course.total_points + earned_badge_points
       }
   end
 

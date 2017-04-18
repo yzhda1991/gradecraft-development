@@ -373,7 +373,9 @@ Rails.application.routes.draw do
     resources :predicted_earned_grades, only: [:create, :update]
 
     resources :rubrics, only: [:show]
-    resources :students, only: [:index]
+    resources :students, only: [:index] do
+      get "analytics"
+    end
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index
