@@ -19,13 +19,10 @@
 %section.student-panel-article-image{'ng-if'=>'article.type === "badges"'}
   %img{'ng-src'=>'{{article.icon}}', 'ng-class'=>"(article.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')"}
 
-%section.student-panel-article-description{'ng-if'=>'article.has_info'}
+%section.student-panel-article-description
   %h2 Description
   .student-panel-text-block{ 'ng-bind-html'=> 'article.description | limitTo:700 | html' }
     {{article.description}}
-  %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
-
-%section.student-panel-article-description{'ng-if'=>'!article.has_info && article.type === "badges"'}
   %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
 
 %section.student-panel-article-icons
