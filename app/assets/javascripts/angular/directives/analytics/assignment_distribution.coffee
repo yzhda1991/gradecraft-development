@@ -1,7 +1,7 @@
 # box plot for assignment grade distribution
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
+@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', 'AnalyticsService', '$window', ($q, AnalyticsService, $window) ->
     analyticsDistCtrl = [()->
       vm = this
 
@@ -67,7 +67,15 @@
           ay: -40
         }]
 
-      Plotly.newPlot('assignment-distribution-graph', data, layout, {displayModeBar: false})
+      plotAssignmentDistro = ->
+        Plotly.newPlot('assignment-distribution-graph', data, layout, {displayModeBar: false})
+
+      plotAssignmentDistro()
+
+      resizeTimer = undefined
+      angular.element($window).on 'resize', ->
+        clearTimeout resizeTimer
+        resizeTimer = setTimeout(plotAssignmentDistro, 250)
 
     {
       bindToController: true,
@@ -79,6 +87,5 @@
         }
       templateUrl: 'analytics/assignment_distribution.html'
     }
+
 ]
-
-

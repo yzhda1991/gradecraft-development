@@ -1,7 +1,7 @@
 # box plot for assignment grade distribution
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
+@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', 'AnalyticsService', '$window', ($q, AnalyticsService, $window) ->
     analyticsParticipationCtrl = [()->
       vm = this
 
@@ -40,6 +40,7 @@
 
       pieLayout = {
         showlegend: false,
+        autosize: true,
         height: 220,
         width: 220,
         hovermode: !1,
@@ -61,8 +62,15 @@
         }]
       }
 
-      Plotly.newPlot('assignment-participation-graph', participationData, pieLayout, {displayModeBar: false})
+      plotAssignmentParticipation = ->
+        Plotly.newPlot('assignment-participation-graph', participationData, pieLayout, {displayModeBar: false})
 
+      plotAssignmentParticipation()
+
+      resizeTimer = undefined
+      angular.element($window).on 'resize', ->
+        clearTimeout resizeTimer
+        resizeTimer = setTimeout(plotAssignmentParticipation, 250)
 
     {
       bindToController: true,
@@ -75,5 +83,3 @@
       templateUrl: 'analytics/assignment_participation.html'
     }
 ]
-
-
