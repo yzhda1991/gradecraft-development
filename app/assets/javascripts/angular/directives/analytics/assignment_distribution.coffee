@@ -67,15 +67,17 @@
           ay: -40
         }]
 
-      plotAssignmentDistro = ->
-        Plotly.newPlot('assignment-distribution-graph', data, layout, {displayModeBar: false})
+      Plotly.newPlot('assignment-distribution-graph', data, layout, {displayModeBar: false})
 
-      plotAssignmentDistro()
-
-      resizeTimer = undefined
       angular.element($window).on 'resize', ->
+        resizeTimer = undefined
+        assignmentDistributionGraph = document.getElementById('assignment-distribution-graph')
+
         clearTimeout resizeTimer
-        resizeTimer = setTimeout(plotAssignmentDistro, 250)
+        resizeTimer = setTimeout((->
+          Plotly.Plots.resize assignmentDistributionGraph
+          return
+        ), 250)
 
     {
       bindToController: true,

@@ -97,15 +97,17 @@
           ay: -20
         }]
 
-      plotAssignmentScoresGraph = ->
-        Plotly.newPlot('assignment-scores-earned-graph', data, layout, {displayModeBar: false})
+      Plotly.newPlot('assignment-scores-earned-graph', data, layout, {displayModeBar: false})
 
-      plotAssignmentScoresGraph()
-
-      resizeTimer = undefined
       angular.element($window).on 'resize', ->
+        resizeTimer = undefined
+        assignmentScoresGraph = document.getElementById('assignment-scores-earned-graph')
+
         clearTimeout resizeTimer
-        resizeTimer = setTimeout(plotAssignmentScoresGraph, 250)
+        resizeTimer = setTimeout((->
+          Plotly.Plots.resize assignmentScoresGraph
+          return
+        ), 250)
 
     {
       bindToController: true,

@@ -62,15 +62,17 @@
         }]
       }
 
-      plotAssignmentParticipation = ->
-        Plotly.newPlot('assignment-participation-graph', participationData, pieLayout, {displayModeBar: false})
+      Plotly.newPlot('assignment-participation-graph', participationData, pieLayout, {displayModeBar: false})
 
-      plotAssignmentParticipation()
-
-      resizeTimer = undefined
       angular.element($window).on 'resize', ->
+        resizeTimer = undefined
+        assignmentParticipationGraph = document.getElementById('assignment-participation-graph')
+
         clearTimeout resizeTimer
-        resizeTimer = setTimeout(plotAssignmentParticipation, 250)
+        resizeTimer = setTimeout((->
+          Plotly.Plots.resize assignmentParticipationGraph
+          return
+        ), 250)
 
     {
       bindToController: true,
