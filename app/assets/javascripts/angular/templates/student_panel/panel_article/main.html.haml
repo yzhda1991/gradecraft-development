@@ -19,7 +19,7 @@
 %section.student-panel-article-image{'ng-if'=>'article.type === "badges"'}
   %img{'ng-src'=>'{{article.icon}}', 'ng-class'=>"(article.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')"}
 
-%section.student-panel-article-description{'ng-if'=>'article.has_info'}
+%section.student-panel-article-description
   %h2 Description
   .student-panel-text-block{ 'ng-bind-html'=> 'article.description | limitTo:700 | html' }
     {{article.description}}
