@@ -1,6 +1,7 @@
 @gradecraft.factory 'GradeImporterService', ['$http', 'GradeCraftAPI', 'AssignmentService', ($http, GradeCraftAPI, AssignmentService) ->
 
   grades = []
+  hasError = false
   assignment = AssignmentService.assignment
 
   # Fetch grades by batch with a page number
@@ -14,6 +15,8 @@
           GradeCraftAPI.logResponse(response.data)
           getGrades(assignmentId, courseId, provider, assignmentIds, page + 1) if _hasNextPage(response)
         , (response) ->
+          hasError = true
+          window.location.replace("/auth/#{provider}") if response.status == 401
           GradeCraftAPI.logResponse(response.data)
     )
 
@@ -46,6 +49,7 @@
 
   {
     grades: grades
+    hasError: hasError
     assignment: assignment
     termFor: termFor
     getGrades: getGrades

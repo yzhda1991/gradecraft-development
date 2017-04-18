@@ -51,5 +51,6 @@
       scope.grades = GradeImporterService.grades
       scope.termFor = GradeImporterService.termFor
       scope.assignment = GradeImporterService.assignment
+      scope.hasError = GradeImporterService.hasError
   }
 ]
