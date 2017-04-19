@@ -1,4 +1,4 @@
-describe Services::Actions::RetrievesLMSUsers do
+describe Services::Actions::RetrievesLMSUsersById do
   let(:access_token) { "TOKEN" }
   let(:provider) { "canvas" }
   let(:user_ids) { ["USER_1", "USER_2"] }

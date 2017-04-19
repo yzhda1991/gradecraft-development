@@ -2,7 +2,7 @@ require "active_lms"
 
 module Services
   module Actions
-    class RetrievesLMSUsers
+    class RetrievesLMSUsersById
       extend LightService::Action
 
       expects :access_token, :provider, :user_ids

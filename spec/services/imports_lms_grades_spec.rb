@@ -22,7 +22,7 @@ describe Services::ImportsLMSGrades do
     end
 
     it "retrieves the user details from the lms provider" do
-      expect(Services::Actions::RetrievesLMSUsers).to \
+      expect(Services::Actions::RetrievesLMSUsersById).to \
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
@@ -30,7 +30,7 @@ describe Services::ImportsLMSGrades do
     end
 
     it "imports the users" do
-      expect(Services::Actions::ImportsLMSUsers).to \
+      expect(Services::Actions::ImportsLMSUsersById).to \
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,

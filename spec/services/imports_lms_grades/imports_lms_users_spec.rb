@@ -1,4 +1,4 @@
-describe Services::Actions::ImportsLMSUsers do
+describe Services::Actions::ImportsLMSUsersById do
   let(:course) { create :course }
   let(:provider) { :canvas }
   let(:student) { User.unscoped.last }

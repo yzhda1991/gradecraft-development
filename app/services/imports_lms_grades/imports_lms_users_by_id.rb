@@ -2,7 +2,7 @@ require_relative "../../importers/student_importers"
 
 module Services
   module Actions
-    class ImportsLMSUsers
+    class ImportsLMSUsersById
       extend LightService::Action
       extend ActiveSupport::Inflector
 
