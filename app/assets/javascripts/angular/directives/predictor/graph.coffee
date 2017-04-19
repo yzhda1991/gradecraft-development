@@ -125,7 +125,12 @@
       # Update graph x-axis for redraw
       scope.updateGradeLevelGraph = ()->
         d3.select("#predictor-graph-section svg .grade-point-axis").remove()
+        d3.select('#svg-grade-levels').selectAll('g').remove()
         scope.renderGradeLevelGraph()
+        d3.select("#svg-graph-points-earned").attr("width", scope.svgEarnedBarWidth())
+        d3.select("#svg-graph-points-predicted-locked").attr("width", scope.svgPredictedLockedBarWidth())
+        d3.select("#svg-graph-points-predicted").attr("width", scope.svgPredictedBarWidth())
+
 
       # re-render on window resize end!
       resizeTimer = undefined
