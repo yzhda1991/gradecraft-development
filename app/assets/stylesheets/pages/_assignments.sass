@@ -72,18 +72,20 @@
   p
     margin: 0.25rem 0
 
+.assignments-loading-message #loading-message
+  position: static
+
 // Assignment indexes and assignment review page
 .assignment-type-bar
   margin: 0 0 -1px 0
   border: 1px solid $color-grey-6
-  border-collapse: collapse
+  border-bottom: 3px solid $color-blue-2
   &:hover
       background-color: $color-grey-7
+  &.collapsed
+    border-bottom: 1px solid $color-grey-6
 
-  &.open
-    border-bottom: 3px solid $color-blue-2
-
-  &.collapse a
+  a
     padding: 0.75rem
     display: block
     @media (max-width: $media-medium-max)
@@ -91,9 +93,6 @@
     &:hover
       text-decoration: none
       color: $color-blue-2
-
-  &.assignment-settings.collapse a
-    padding: 0.9rem 0.75rem
 
   .assignment-type-name
     @include truncate-text(40%)
@@ -121,13 +120,17 @@
   @media (max-width: $media-medium-max)
     float: right
 
-.assignment-type-container
+.assignment-type-container.collapsable
   padding: 1rem
   border: 1px solid $color-grey-6
   margin-bottom: -1px
   background-color: $color-grey-7
   @media (max-width: $media-medium-max)
     padding: 0.5rem
+  &.collapsed
+    display: none
+  .button
+    display: inline
 
 .assignment-container
   border: 1px solid $color-grey-6

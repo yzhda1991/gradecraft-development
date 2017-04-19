@@ -4,7 +4,6 @@
       %li= link_to decorative_glyph(:plus) + "New #{(term_for :assignment).titleize}", new_assignment_path, class: "button button-edit"
 
 .pageContent{"ng-app": "gradecraft"}
-  %has-interactive-assignments
 
   = render partial: "layouts/alerts"
 
@@ -17,95 +16,4 @@
         = tooltip("tip-grade-level-#{index}", level_letter_grade(index), type: "text") do
           = points(level_point_threshold(index))
 
-  .assignment-index-container{role: "tablist"}
-    - @assignment_types.each do |assignment_type|
-      .assignment_type{id: "assignment-type-settings-#{assignment_type.id}" }
-        .assignment-type-bar.assignment-settings.collapse{role: "tab"}
-          %h2.assignment-type-name= glyph('angle-double-right') + "#{assignment_type.try(:name)}"
-          .points-summary
-            .points-bar-graph.assignment-settings
-              - if assignment_type.total_points > total_available_points
-                .points-bar-graph-fill.assignment-settings{:style => "width: 100%; background-color: #D1495B"}
-                %span.hint Total for this assignment type exceeds threshold for highest level
-              - else
-                .points-bar-graph-fill.assignment-settings{:style => "width: #{(assignment_type.total_points).to_f / (total_available_points).to_f * 100}%"}
-              - current_course.grade_scheme_elements.each_with_index do |grade_scheme_element, index|
-                .grade-level-marker{:style => "width: #{percent_of_total_points(index)}%"}
-            .assignment-type-points.assignment-settings #{ points(assignment_type.total_points) }/#{ points(total_available_points) }
-
-        .assignment-type-container{role: "tabpanel"}
-          %table
-            %caption.sr-only= "#{term_for :assignments} for #{assignment_type.name}"
-            %thead
-              %tr
-                %th{scope: "col"} Name
-                %th{scope: "col"}
-                  = tooltip("visible-setting-tip_#{assignment_type.id}", :eye) do
-                    Visible to Students
-                %th{scope: "col"}
-                  = tooltip("required-setting-tip_#{assignment_type.id}", :asterisk) do
-                    Required
-                %th{scope: "col"}
-                  = tooltip("accepts-submissions-tip_#{assignment_type.id}", :paperclip) do
-                    Accepts Submissions
-                %th{scope: "col"}
-                  = tooltip("shown-timeline-tip_#{assignment_type.id}", :calendar) do
-                    Shown in Timeline
-                %th{scope: "col"}
-                  = tooltip("shown-predictor-tip_#{assignment_type.id}", :sliders) do
-                    Shown in Predictor
-                %th{scope: "col"}
-                  = tooltip("due-this-week-tip_#{assignment_type.id}", :list) do
-                    Shown in Due This Week
-                %th{scope: "col"}
-                  = tooltip("student-logged-tip_#{assignment_type.id}", :pencil) do
-                    Logged By Students
-                %th{scope: "col"}
-                  = tooltip("release-required-tip_#{assignment_type.id}", :unlock) do
-                    Release Required
-
-                %th{scope: "col"} Points
-
-                %th{scope: "col", :style => "width: 280px"} Dates
-                %th{scope: "col", :style => "min-width: 110px"}
-                  %span.sr-only Actions
-            %tbody
-              - assignments = assignment_type.assignments.ordered
-              - assignments.each do |assignment|
-                %tr
-                  %td= link_to assignment.name, assignment
-
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "visible", "checked": "#{assignment.visible?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "required", "checked": "#{assignment.required?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "accepts_submissions", "checked": "#{assignment.accepts_submissions?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_timeline", "checked": "#{assignment.include_in_timeline?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_predictor", "checked": "#{assignment.include_in_predictor?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "include_in_to_do", "checked": "#{assignment.include_in_to_do?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "student_logged", "checked": "#{assignment.student_logged?}" }
-                  %td
-                    %assignment-setting{ "assignment-id": assignment.id, "attribute": "release_necessary", "checked": "#{assignment.release_necessary?}" }
-
-                  %td= points assignment.full_points
-                  %td
-                    %ul
-                      %li
-                        Opens:
-                        = assignment.try(:opens_at) || "Always Open"
-                      %li
-                        Due At:
-                        = assignment.try(:due_at) || "No Due Date"
-                      %li
-                        Accepted Until:
-                        = assignment.try(:accepts_submissions_until) || "Always Accepted"
-                  %td
-                    .right
-                      %ul.button-bar
-                        %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                        %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"
+  %assignments-settings-table

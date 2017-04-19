@@ -15,7 +15,17 @@ json.attributes do
   json.threshold_points           assignment.threshold_points
   json.release_necessary          assignment.release_necessary
 
-  # boolean flags
+  # boolean attributes
+  json.visible                    assignment.visible
+  json.required                   assignment.required
+  json.accepts_submissions        assignment.accepts_submissions
+  json.include_in_timeline        assignment.include_in_timeline
+  json.include_in_predictor       assignment.include_in_predictor
+  json.include_in_to_do           assignment.include_in_to_do
+  json.student_logged             assignment.student_logged
+  json.release_necessary          assignment.release_necessary
+
+  # boolean flags (for predictor logic)
 
   json.has_info             !assignment.description.blank?
   json.has_levels           assignment.assignment_score_levels.present?
