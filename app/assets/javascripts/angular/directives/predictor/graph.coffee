@@ -2,7 +2,7 @@
 # Must not render until Grade Scheme Elements are loaded,
 # to position high and low point ranges.
 
-@gradecraft.directive 'predictorGraph', [ 'PredictorService', (PredictorService)->
+@gradecraft.directive 'predictorGraph', [ 'PredictorService', '$window', (PredictorService, $window)->
 
   return {
     templateUrl: 'predictor/graph.html'
@@ -121,6 +121,17 @@
 
       # render!
       scope.renderGradeLevelGraph()
+
+      # Update graph x-axis for redraw
+      scope.updateGradeLevelGraph = ()->
+        d3.select("#predictor-graph-section svg .grade-point-axis").remove()
+        scope.renderGradeLevelGraph()
+
+      # re-render on window resize end!
+      resizeTimer = undefined
+      angular.element($window).on 'resize', ->
+        clearTimeout resizeTimer
+        resizeTimer = setTimeout(scope.updateGradeLevelGraph, 250)
 
   }
 ]
