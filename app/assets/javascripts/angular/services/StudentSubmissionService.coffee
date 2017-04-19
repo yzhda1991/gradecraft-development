@@ -4,13 +4,15 @@
   submission = {}
 
   queueSaveDraftSubmission = (assignmentId, immediate=false) ->
+    delay = if immediate then 0 else null
+
     # cancel update if the student has cleared out the text_comment_draft
     unless submission.text_comment_draft
       DebounceQueue.cancelEvent("submissions", assignmentId)
       return
 
     # using assignmentId for queue id since we are not assured to have a submission.id
-    DebounceQueue.addEvent("submissions", assignmentId, saveDraftSubmission, [assignmentId], immediate)
+    DebounceQueue.addEvent("submissions", assignmentId, saveDraftSubmission, [assignmentId], delay)
 
   saveDraftSubmission = (assignmentId) ->
     if submission.id? then updateDraftSubmission(assignmentId) else createDraftSubmission(assignmentId)
