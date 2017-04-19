@@ -12,6 +12,6 @@ class Event < ActiveRecord::Base
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes,
                                options: { prepend: { name: "Copy of "}}
-    )
+                              )
   end
 end
