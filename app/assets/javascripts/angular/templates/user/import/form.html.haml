@@ -1,33 +1,45 @@
-%loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
+%error-message{"visible"=>"hasError", "message"=>"An error occurred while loading users."}
 
--# TODO: create some sort of shared failure directive for failed $http calls
--# %failure-message{"ng-if"=>"hasFailure"}
+%loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
 
 %div{"ng-if"=>"!vm.loading"}
   %without_users{"ng-if"=>"users.length < 1"}
     %p There are no users to import for this course
 
   %with_users{"ng-if"=>"users.length > 0"}
-    -# Need table info?
-    -# .table-header-information
-
     %table.no-table-header
       %thead
         %tr
           %th{"scope"=>"col"} Name
           %th{"scope"=>"col"} Email
-          %th{"scope"=>"col"} Roles
-          %th{"scope"=>"col"} Enrollment State
-          %th{"scope"=>""} User Exists?
+          %th{"scope"=>"col"} Roles (Enrollment State)
+          %th{"scope"=>"col"} User Exists?
+          %th
+            %button.button.select-all{"role"=>"button",
+                                      "type"=>"button",
+                                      "ng-click"=>"vm.selectAllUsers()"}= "Check"
+            %button.button.select-none{"role"=>"button",
+                                       "type"=>"button",
+                                       "ng-click"=>"vm.deselectAllUsers()"}= "Uncheck"
       %tbody
         %tr{"ng-repeat"=>"user in users"}
+          %td {{user.name}}
+          %td {{user.email}}
           %td
-          %td
-          %td
-          %td
-          %td
+            %ul
+              %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
+          %td {{vm.termForUserExists(user.user_exists)}}
+          %td.center
+            %input{"type"=>"checkbox", "ng-model"=>"user.selected_for_import"}
+              %span.has-tooltip{"ng-style"=>"{'visibility': user.user_exists ? 'visible' : 'hidden'}"}
+                %i.fa.fa-info-circle
+                .display-on-hover.hover-style
+                  Importing this user will overwrite the existing data in GradeCraft with the data from
+                  %span.capitalize {{vm.provider}}
 
     .submit-buttons
       .right
         %button{"type"=>"button",
-                "class"=>"button"} Import Users
+                "class"=>"button"}
+          %i.fa.fa-download
+          Import Users

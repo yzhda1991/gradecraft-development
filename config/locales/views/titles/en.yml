@@ -201,3 +201,8 @@ en:
       title: "Edit My Profile"
     import:
       title: "Import Users"
+    importers:
+      index:
+        title: "User Import"
+      users:
+        title: "Import Users from #{ @provider_name.capitalize }"
