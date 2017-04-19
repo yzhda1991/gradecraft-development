@@ -30,7 +30,7 @@ describe Services::ImportsLMSGrades do
     end
 
     it "imports the users" do
-      expect(Services::Actions::ImportsLMSUsersById).to \
+      expect(Services::Actions::ImportsLMSUsers).to \
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, assignment_ids,
