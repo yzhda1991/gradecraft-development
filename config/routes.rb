@@ -302,8 +302,6 @@ Rails.application.routes.draw do
   end
 
   #17. Events
-
-
   resources :events do
     post :copy, on: :collection
   end
