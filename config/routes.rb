@@ -302,10 +302,10 @@ Rails.application.routes.draw do
   end
 
   #17. Events
+
+
   resources :events do
-    collection do
-      post "copy" => "events#copy"
-    end
+    post :copy, on: :collection
   end
 
   #18. API Calls

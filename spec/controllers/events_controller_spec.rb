@@ -92,9 +92,8 @@ describe EventsController do
 
     describe "POST copy" do
       it "duplicates the requested event" do
-        event
         post :copy, params: { id: event.id }
-        expect expect(course.events.count).to eq(2)
+        expect(course.events.count).to eq(2)
       end
     end
 

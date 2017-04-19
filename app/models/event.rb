@@ -10,6 +10,8 @@ class Event < ActiveRecord::Base
   validates_presence_of :name
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(attributes: attributes)
+    ModelCopier.new(self).copy(attributes: attributes,
+                               options: { prepend: { name: "Copy of "}}
+    )
   end
 end
