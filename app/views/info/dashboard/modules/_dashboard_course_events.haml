@@ -18,6 +18,7 @@
                 = sanitize(event.description, tags: %w(p), attributes: %w()).truncate(250, :separator => " ").gsub(/<\/?p>/, " ")
                 = link_to "See the Details", event
           %ul.assignments-due
-            - presenter.assignments_due_on(event).each do |assignment|
-              - if (assignment != event) && (assignment.visible_for_student?(current_student) || current_user_is_staff?)
-                %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.strftime("%l:%M%p") }
+            - presenter.assignments_due_on(event).ordered.each do |assignment|
+              - if assignment != event
+                - if ((current_student && assignment.visible_for_student?(current_student)) || current_user_is_staff?)
+                  %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.strftime("%l:%M%p") }
