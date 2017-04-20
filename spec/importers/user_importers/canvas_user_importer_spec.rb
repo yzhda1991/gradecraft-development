@@ -1,4 +1,4 @@
-describe CanvasStudentImporter do
+describe CanvasUserImporter do
   describe "#import" do
     it "returns empty results when there are no canvas users" do
       result = described_class.new(nil).import(nil)

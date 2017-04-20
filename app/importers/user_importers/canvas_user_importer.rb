@@ -1,26 +1,26 @@
 require_relative "../../services/creates_new_user"
 
-class CanvasStudentImporter
+class CanvasUserImporter
   attr_reader :successful, :unsuccessful
-  attr_accessor :send_welcome, :students
+  attr_accessor :send_welcome, :users
 
-  def initialize(students, send_welcome=false)
-    @students = students
+  def initialize(users, send_welcome=false, enrollments={})
+    @users = users
     @send_welcome = send_welcome
     @successful = []
     @unsuccessful = []
   end
 
   def import(course)
-    unless students.nil?
-      students.each do |canvas_student|
-        user = find_or_create_user UserRow.new(canvas_student), course
+    unless users.nil?
+      users.each do |canvas_user|
+        user = find_or_create_user UserRow.new(canvas_user), course
 
         if user.valid?
-          link_imported canvas_student["id"], user
+          link_imported canvas_user["id"], user
           successful << user unless user.previous_changes.empty?
         else
-          unsuccessful << { data: canvas_student,
+          unsuccessful << { data: canvas_user,
                             errors: user.errors.full_messages.join(", ") }
         end
       end

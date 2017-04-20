@@ -1,4 +1,4 @@
-require_relative "../../importers/student_importers"
+require_relative "../../importers/user_importers"
 
 module Services
   module Actions
@@ -14,7 +14,7 @@ module Services
         users = context.users
         provider = context.provider
 
-        klass = constantize("#{camelize(provider)}StudentImporter")
+        klass = constantize("#{camelize(provider)}UserImporter")
         context.users_import_result = klass.new(users).import course
       end
     end
