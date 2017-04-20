@@ -1,4 +1,4 @@
-feature "editing an assignment type" do
+feature "editing an assignment type", focus: true do
   context "as a professor" do
     let(:course) { build :course, assignment_term: "Assignment"}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
@@ -7,16 +7,10 @@ feature "editing an assignment type" do
 
     before(:each) do
       login_as professor
-      visit assignments_path
+      visit edit_assignment_type_path(assignment_type)
     end
 
     scenario "successfully" do
-      within(".assignments") do
-        click_link "[ Edit ]"
-      end
-
-      expect(current_path).to eq edit_assignment_type_path(assignment_type)
-
       within(".pageContent") do
         fill_in "Name", with: "Edited Assignment Type Name"
         click_button "Update Assignment type"
