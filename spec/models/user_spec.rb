@@ -1,6 +1,6 @@
 describe User do
   let(:course) { build(:course) }
-  let(:student) { create(:user, username: "simple") }
+  let(:student) { create(:user, username: "simple", last_name: "Oneofakind") }
   let(:student_not_being_graded) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, student:student) }
