@@ -1,7 +1,7 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService, DebounceQueue) ->
 
   assignments = []
   update = {}
@@ -81,10 +81,12 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  # Assignment Attributes are updated individually from checkboxes on the
+  # Assignment Attributes are updated individually from directives on the
   # settings page. Note that the updated attribute might be different from
   # the one passed in by json and optimised for the predictor:
   # example: required vs. is_required
+  # Therefore we don't rely on the assignment models but pass the attribute
+  # state in directly.
   updateAssignmentAttribute = (id, attribute, state) ->
     params = { "#{attribute}" : state }
     assignment = _.find(assignments, {id: id})
@@ -94,6 +96,15 @@
         GradeCraftAPI.logResponse(response)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
+    )
+
+  # This is used to manage the date-pickers which require multiple
+  # updates to both month, day and time.
+  # queued uniquely on id and attribute, so that multiple updates to
+  # the same assignment can be in que independently
+  queueUpdateAttribute = (id, attribute, state, immediate=false) ->
+    DebounceQueue.addEvent(
+      "assignments", "#{id}-#{attribute}", updateAssignmentAttribute, [id, attribute, state], immediate
     )
 
   # PUT a predicted earned grade for assignment
@@ -110,14 +121,15 @@
         GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
   return {
-      termFor: termFor
-      assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
-      assignmentsPredictedPoints: assignmentsPredictedPoints
-      getAssignments: getAssignments
-      getAssignment: getAssignment
-      updateAssignmentAttribute: updateAssignmentAttribute
-      postPredictedAssignment: postPredictedAssignment
-      assignments: assignments
       assignment: assignment
+      assignments: assignments
+      assignmentsPredictedPoints: assignmentsPredictedPoints
+      assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
+      getAssignment: getAssignment
+      getAssignments: getAssignments
+      postPredictedAssignment: postPredictedAssignment
+      queueUpdateAttribute: queueUpdateAttribute
+      termFor: termFor
+      updateAssignmentAttribute: updateAssignmentAttribute
   }
 ]

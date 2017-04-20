@@ -9,6 +9,7 @@ json.attributes do
   json.full_points                assignment.full_points
   json.id                         assignment.id
   json.name                       assignment.name
+  json.open_at                    assignment.open_at
   json.pass_fail                  assignment.pass_fail
   json.position                   assignment.position
   json.purpose                    assignment.purpose
