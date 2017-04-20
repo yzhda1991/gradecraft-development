@@ -8,4 +8,4 @@ json.earned_badge_points do
   json.points @earned_badge_points
 end
 
-json.course_potential_for_student @course_potential_for_student
+json.course_potential_points_for_student @course_potential_points_for_student

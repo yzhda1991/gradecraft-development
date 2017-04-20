@@ -19,7 +19,7 @@
     plotGraph = (data)->
       assignmentTypeScores = data.points_by_assignment_type
       assignmentTypeScores.push(data.earned_badge_points)
-      xMaxValue = data.course_potential_for_student
+      xMaxValue = data.course_potential_points_for_student
 
 
       traces = []

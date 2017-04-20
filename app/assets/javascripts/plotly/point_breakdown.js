@@ -3,7 +3,7 @@ if ($pointBreakdownChart.length) {
   var assignmentTypeTotals = JSON.parse($('#point-breakdown-chart').attr('data-pointbreakdown'));
   var assignmentTypeScores = assignmentTypeTotals.points_by_assignment_type;
   assignmentTypeScores.push(assignmentTypeTotals.earned_badge_points);
-  var xMaxValue = assignmentTypeTotals.course_potential_for_student;
+  var xMaxValue = assignmentTypeTotals.course_potential_points_for_student;
 
   var traces = [];
   var colors = [

@@ -32,18 +32,17 @@ describe API::StudentsController do
 
     describe "GET analytics" do
 
+      it "assigns information for charting course progress" do
+        assignment_type = create(:assignment_type, course: course)
+        allow(student).to receive(:earned_badges).and_return double(points: [100, 200, 300])
+        allow(course).to receive(:total_points).and_return 1000
+        get :analytics, format: :json
 
-      describe "#total_scores_for_chart" do
-        it "handles the summing of earned badges, including old badges cached with nil points" do
-          course = double(:course, assignment_types: [], badge_term: "Badgeinskies", total_points: 0)
-
-          earned_badges = double(:earned_badges, sum: 1000)
-          user = double(:user, earned_badges: earned_badges)
-          expect(helper.total_scores_for_chart(user,course)).to eq({scores_by_assignment_type: [{ data: 1000, name: "Badgeinskies" }], course_total: 1000 })
-        end
+        expect(assigns(:student)).to eq(student)
+        expect(assigns(:assignment_type)).to eq([assignment_type])
+        expect(assigns(:earned_badge_points)).to eq(600)
+        expect(assigns(:course_potential_points_for_student)).to eq(1600)
       end
-
-
     end
   end
 end
