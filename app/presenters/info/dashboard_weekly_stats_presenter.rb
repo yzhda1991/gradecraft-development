@@ -65,6 +65,6 @@ class Info::DashboardWeeklyStatsPresenter < Showtime::Presenter
   end
 
   def has_weekly_stats?
-    has_points_this_week? || has_grades_this_week? || has_badges_this_week?
+    has_points_this_week? || has_grades_this_week? || has_badges_this_week? || has_submitted_assignment_types_this_week?
   end
 end
