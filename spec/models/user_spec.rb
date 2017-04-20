@@ -1,15 +1,13 @@
 describe User do
   let(:course) { build(:course) }
   let(:student) { create(:user, username: "simple", last_name: "Oneofakind") }
-  let(:student_not_being_graded) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, student:student) }
   let(:badge) { create(:badge, course: course, can_earn_multiple_times: true) }
   let(:single_badge) { create(:badge, course: course, can_earn_multiple_times: false) }
-  let!(:group) { create(:group, course: course) }
+
   before do
     create(:course_membership, user: student, course: course, role: "student", score: 100000, character_profile: "The six-fingered man.")
-    create(:course_membership, user: student_not_being_graded, course: course, role: "student", auditing: true)
   end
 
   describe "validations" do
@@ -135,7 +133,9 @@ describe User do
 
   describe ".students_for_course" do
     it "returns all the students for a course" do
-      expect(User.students_for_course(course).pluck(:id)).to include(student.id, student_not_being_graded.id)
+      auditor = create(:course_membership, course: course, role: "student", auditing: true).user
+      expect(User.students_for_course(course).count).to eq(2)
+      expect(User.students_for_course(course).pluck(:id)).to include(student.id, auditor.id)
     end
   end
 
@@ -550,32 +550,36 @@ describe User do
     end
   end
 
-  describe "#group_for_assignment(assignment)" do
-    it "returns a student's group for a particular assignment if present" do
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      expect(student.group_for_assignment(assignment)).to eq(group)
-    end
-  end
+  context "when course has groups" do
+    let!(:group) { create(:group, course: course) }
 
-  describe "#has_group_for_assignment?" do
-    it "returns false for individual assignments" do
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      assignment.update(grade_scope: "Individual")
-      expect(student.has_group_for_assignment?(assignment)).to be_falsey
+    describe "#group_for_assignment(assignment)" do
+      it "returns a student's group for a particular assignment if present" do
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        expect(student.group_for_assignment(assignment)).to eq(group)
+      end
     end
 
-    it "returns false if the student has no group membership" do
-      assignment.update(grade_scope: "Group")
-      expect(student.has_group_for_assignment?(assignment)).to be_falsey
-    end
+    describe "#has_group_for_assignment?" do
+      it "returns false for individual assignments" do
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        assignment.update(grade_scope: "Individual")
+        expect(student.has_group_for_assignment?(assignment)).to be_falsey
+      end
 
-    it "returns true if the student is in a group" do
-      assignment.update(grade_scope: "Group")
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      expect(student.has_group_for_assignment?(assignment)).to be_truthy
+      it "returns false if the student has no group membership" do
+        assignment.update(grade_scope: "Group")
+        expect(student.has_group_for_assignment?(assignment)).to be_falsey
+      end
+
+      it "returns true if the student is in a group" do
+        assignment.update(grade_scope: "Group")
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        expect(student.has_group_for_assignment?(assignment)).to be_truthy
+      end
     end
   end
 
