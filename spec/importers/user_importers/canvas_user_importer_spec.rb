@@ -30,22 +30,6 @@ describe CanvasUserImporter do
         expect(student.last_name).to eq "Page"
       end
 
-      it "creates the course membership if it does not exist" do
-        subject.import(course)
-
-        expect(student.course_memberships.first.course).to eq course
-        expect(student.course_memberships.first.role).to eq "student"
-      end
-
-      it "does not create the student membership if it already exists" do
-        user = User.create first_name: "Jimmy", last_name: "Page",
-              email: "jimmy@example.com", username: "jimmy", password: "blah"
-        user.course_memberships.create course_id: course.id, role: "student"
-
-        expect { subject.import course }.to_not raise_error
-        expect(student.course_memberships.count).to eq 1
-      end
-
       it "sends the activation email to each student" do
         expect { subject.import course }.to \
           change { ActionMailer::Base.deliveries.count }.by 1
@@ -85,6 +69,51 @@ describe CanvasUserImporter do
         expect(result.successful.count).to eq 0
         expect(result.unsuccessful.count).to eq 1
         expect(result.unsuccessful.first[:errors]).to eq "Email is invalid"
+      end
+
+      context "when there are no enrollments provided" do
+        it "creates the course membership if it does not exist" do
+          subject.import(course)
+
+          expect(student.course_memberships.first.course).to eq course
+          expect(student.course_memberships.first.role).to eq "student"
+        end
+
+        it "does not create the student membership if it already exists" do
+          user = User.create first_name: "Jimmy", last_name: "Page",
+                email: "jimmy@example.com", username: "jimmy", password: "blah"
+          user.course_memberships.create course_id: course.id, role: "student"
+
+          expect { subject.import course }.to_not raise_error
+          expect(student.course_memberships.count).to eq 1
+        end
+      end
+
+      context "when there are enrollments provided" do
+        let(:enrollments) do
+          {
+            enrollments: [
+              { "type" => "TeacherEnrollment" }
+            ]
+          }.stringify_keys
+        end
+
+        before(:each) { canvas_user.merge!(enrollments) }
+
+        it "creates the professor course membership if it does not exist" do
+          subject.import(course)
+
+          expect(student.course_memberships.first.course).to eq course
+          expect(student.course_memberships.first.role).to eq "professor"
+        end
+
+        it "does not create the professor membership if it already exists" do
+          user = User.create first_name: "Jimmy", last_name: "Page",
+                email: "jimmy@example.com", username: "jimmy", password: "blah"
+          user.course_memberships.create course_id: course.id, role: "professor"
+
+          expect { subject.import course }.to_not change(CourseMembership, :count)
+        end
       end
     end
   end

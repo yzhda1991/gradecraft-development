@@ -4,7 +4,7 @@ class CanvasUserImporter
   attr_reader :successful, :unsuccessful
   attr_accessor :send_welcome, :users
 
-  def initialize(users, send_welcome=false, enrollments={})
+  def initialize(users, send_welcome=false)
     @users = users
     @send_welcome = send_welcome
     @successful = []
@@ -36,8 +36,8 @@ class CanvasUserImporter
     user ||= Services::CreatesNewUser
       .create(row.to_h.merge(internal: false), send_welcome)[:user]
 
-    if user.valid? && !user.is_student?(course)
-      user.course_memberships.create(course_id: course.id, role: :student)
+    if user.valid? && !user.role(course)
+      user.course_memberships.create(course_id: course.id, role: row.role)
     end
 
     user
@@ -52,6 +52,8 @@ class CanvasUserImporter
   end
 
   class UserRow
+    include LMSHelper
+    
     attr_reader :data
 
     def first_name
@@ -64,6 +66,12 @@ class CanvasUserImporter
 
     def email
       data["primary_email"]
+    end
+
+    def role
+      enrollments = data["enrollments"]
+      return :student if enrollments.nil?
+      lms_user_role enrollments
     end
 
     def initialize(data)

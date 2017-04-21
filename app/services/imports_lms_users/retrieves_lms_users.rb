@@ -16,7 +16,7 @@ module Services
         context.users = []
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.users << syllabus.users(course_id, true)
+        context.users << syllabus.users(course_id, true)[:data]
       end
     end
   end

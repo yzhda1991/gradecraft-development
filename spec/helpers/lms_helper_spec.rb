@@ -25,4 +25,25 @@ describe LMSHelper do
       end
     end
   end
+
+  describe "#lms_user_role" do
+    it "returns the observer role if no enrollments are given" do
+      expect(helper.lms_user_role([])).to eq :observer
+    end
+
+    it "returns the observer role if the only enrollment type is unrecognized" do
+      enrollments = [{ "type" => "HackerEnrollment" }]
+      expect(helper.lms_user_role(enrollments)).to eq :observer
+    end
+
+    it "returns the translated Gradecraft role of highest precedence" do
+      enrollments = [
+        { "type" => "ObserverEnrollment" },
+        { "type" => "TaEnrollment" },
+        { "type" => "TeacherEnrollment" },
+        { "type" => "DesignerEnrollment"}
+      ]
+      expect(helper.lms_user_role(enrollments)).to eq :professor
+    end
+  end
 end
