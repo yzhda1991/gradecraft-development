@@ -1,5 +1,5 @@
 # Common Methods and Objects for Services using the GradeCraft api routes
-angular.module('helpers').factory('GradeCraftAPI', ()->
+angular.module('helpers').factory('GradeCraftAPI', ['$filter', ($filter)->
 
   # stores custom terms, default to GC defaults
   _termFor = {
@@ -90,10 +90,12 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         modelArray.push(item.attributes)
     )
 
+  # need to format dates in format exepcted by datepicker
+  # or it won't work
   formatDates = (article,date_fields)->
     _.each(date_fields, (field)->
       if article[field]
-        article[field] = new Date(article[field])
+        article[field] = $filter('date')(article[field], 'MMMM d, y - h:mma')
     )
 
   return {
@@ -108,4 +110,4 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     formatDates: formatDates
     loadFromIncluded: loadFromIncluded
   }
-)
+])
