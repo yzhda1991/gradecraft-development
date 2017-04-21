@@ -256,9 +256,9 @@ describe User do
 
     # There is a non-null constraint on course_membership.score, so I'm not
     # sure what this is really testing.
-    it "returns 0 if the student has no score" do
-      student.course_memberships.where(course_id: course).first.update(score: 0)
-      expect(student.score_for_course(course)).to eq(0)
+    it "returns null if the student has no course memebership" do
+      student.course_memberships.where(course_id: course).destroy_all
+      expect(student.score_for_course(course)).to be_nil
     end
   end
 
