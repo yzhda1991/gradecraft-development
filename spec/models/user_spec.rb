@@ -1,18 +1,13 @@
 describe User do
   let(:course) { build(:course) }
-  let(:student) { create(:user, username: "simple") }
-  let(:student_not_being_graded) { create(:user) }
+  let(:student) { create(:user, username: "simple", last_name: "Oneofakind") }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, student:student) }
   let(:badge) { create(:badge, course: course, can_earn_multiple_times: true) }
   let(:single_badge) { create(:badge, course: course, can_earn_multiple_times: false) }
-  let!(:group) { create(:group, course: course) }
-  let(:team) { create(:team, course: course) }
-  let(:student_in_team) { create :user, courses: [course], last_name: "Team", role: :student }
+
   before do
-    team.students << student_in_team
     create(:course_membership, user: student, course: course, role: "student", score: 100000, character_profile: "The six-fingered man.")
-    create(:course_membership, user: student_not_being_graded, course: course, role: "student", auditing: true)
   end
 
   describe "validations" do
@@ -138,25 +133,15 @@ describe User do
 
   describe ".students_for_course" do
     it "returns all the students for a course" do
-      expect(User.students_for_course(course).pluck(:id)).to include(student.id, student_not_being_graded.id)
-    end
-
-    context "with a team" do
-      it "returns only students in the team" do
-        expect(User.students_for_course(course, team)).to eq [student_in_team]
-      end
+      auditor = create(:course_membership, course: course, role: "student", auditing: true).user
+      expect(User.students_for_course(course).count).to eq(2)
+      expect(User.students_for_course(course).pluck(:id)).to include(student.id, auditor.id)
     end
   end
 
   describe ".students_being_graded_for_course" do
     it "returns all the students that are being graded" do
       expect(User.students_being_graded_for_course(course).pluck(:id)).to include(student.id)
-    end
-
-    context "with a team" do
-      it "returns only students in the team that are being graded" do
-        expect(User.students_being_graded_for_course(course, team)).to eq [student_in_team]
-      end
     end
   end
 
@@ -250,43 +235,6 @@ describe User do
     end
   end
 
-  describe "#team_for_course(course)" do
-    it "returns the student's team for the course" do
-      expect(student_in_team.team_for_course(course)).to eq(team)
-    end
-
-    it "returns nil if the student doesn't have a team" do
-      expect(student.team_for_course(course)).to eq(nil)
-    end
-  end
-
-  describe "#team_leaders(course)" do
-    let(:team_leader) { create :user }
-
-    it "returns the students team leaders if they're present" do
-      create(:team_leadership, team: team, leader: team_leader)
-      expect(student_in_team.team_leaders(course)).to eq([team_leader])
-
-    end
-
-    it "returns nil if there are no team leaders present" do
-      expect(student_in_team.team_leaders(course)).to eq([])
-    end
-  end
-
-  describe "#team_leaderships_for_course(course)" do
-    let(:team_leader) { create :user }
-
-    it "returns the team leaderships if they're present" do
-      leadership = create(:team_leadership, team: team, leader: team_leader)
-      expect(team_leader.team_leaderships(course)).to eq([leadership])
-    end
-
-    it "returns nil if there are no team leaderships present" do
-      expect(team_leader.team_leaderships(course)).to eq([])
-    end
-  end
-
   describe "#character_profile(course)" do
     it "returns the student's character profile if it's present" do
       expect(student.character_profile(course)).to eq("The six-fingered man.")
@@ -306,8 +254,11 @@ describe User do
       expect(student.score_for_course(course)).to eq(100000)
     end
 
-    it "returns 0 if the student has no score" do
-      expect(student_in_team.score_for_course(course)).to eq(0)
+    # There is a non-null constraint on course_membership.score, so I'm not
+    # sure what this is really testing.
+    it "returns null if the student has no course memebership" do
+      student.course_memberships.where(course_id: course).destroy_all
+      expect(student.score_for_course(course)).to be_nil
     end
   end
 
@@ -599,32 +550,87 @@ describe User do
     end
   end
 
-  describe "#group_for_assignment(assignment)" do
-    it "returns a student's group for a particular assignment if present" do
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      expect(student.group_for_assignment(assignment)).to eq(group)
+  context "when course has groups" do
+    let!(:group) { create(:group, course: course) }
+
+    describe "#group_for_assignment(assignment)" do
+      it "returns a student's group for a particular assignment if present" do
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        expect(student.group_for_assignment(assignment)).to eq(group)
+      end
+    end
+
+    describe "#has_group_for_assignment?" do
+      it "returns false for individual assignments" do
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        assignment.update(grade_scope: "Individual")
+        expect(student.has_group_for_assignment?(assignment)).to be_falsey
+      end
+
+      it "returns false if the student has no group membership" do
+        assignment.update(grade_scope: "Group")
+        expect(student.has_group_for_assignment?(assignment)).to be_falsey
+      end
+
+      it "returns true if the student is in a group" do
+        assignment.update(grade_scope: "Group")
+        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+        FactoryGirl.create(:group_membership, student: student, group: group)
+        expect(student.has_group_for_assignment?(assignment)).to be_truthy
+      end
     end
   end
 
-  describe "#has_group_for_assignment?" do
-    it "returns false for individual assignments" do
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      assignment.update(grade_scope: "Individual")
-      expect(student.has_group_for_assignment?(assignment)).to be_falsey
+  context "when the course has teams" do
+    let(:team) { create(:team, course: course) }
+    let(:student_in_team) { create :user, courses: [course], last_name: "Team", role: :student }
+
+    before do
+      team.students << student_in_team
     end
 
-    it "returns false if the student has no group membership" do
-      assignment.update(grade_scope: "Group")
-      expect(student.has_group_for_assignment?(assignment)).to be_falsey
+    describe ".students_for_course with a team" do
+      it "returns only students in the team" do
+        expect(User.students_for_course(course, team)).to eq [student_in_team]
+      end
     end
 
-    it "returns true if the student is in a group" do
-      assignment.update(grade_scope: "Group")
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
-      expect(student.has_group_for_assignment?(assignment)).to be_truthy
+    describe ".students_for_course with a team" do
+      it "returns only students in the team" do
+        expect(User.students_for_course(course, team)).to eq [student_in_team]
+      end
+    end
+
+    describe ".students_being_graded_for_course with a team" do
+      it "returns only students in the team that are being graded" do
+        expect(User.students_being_graded_for_course(course, team)).to eq [student_in_team]
+      end
+    end
+
+    describe "#team_for_course(course)" do
+      it "returns the student's team for the course" do
+        expect(student_in_team.team_for_course(course)).to eq(team)
+      end
+
+      it "returns nil if the student doesn't have a team" do
+        expect(student.team_for_course(course)).to eq(nil)
+      end
+    end
+
+    describe "#team_leaders(course)" do
+      let(:team_leader) { create :user }
+
+      it "returns the students team leaders if they're present" do
+        create(:team_leadership, team: team, leader: team_leader)
+        expect(student_in_team.team_leaders(course)).to eq([team_leader])
+
+      end
+
+      it "returns nil if there are no team leaders present" do
+        expect(student_in_team.team_leaders(course)).to eq([])
+      end
     end
   end
 
