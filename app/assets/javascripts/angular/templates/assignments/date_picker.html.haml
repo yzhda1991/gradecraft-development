@@ -2,12 +2,12 @@
   %li
     Open At:
     %label(for="{{assignment.id}}-open-at")
-      %input(id="{{assignment.id}}-open-at" ng-model="assignment.open_at" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{assignment.id}}-open-at" ng-model="assignment.open_at" gc-date-time ng-change="updateAssignmentDates()")
   %li
     Due At:
     %label(for="{{assignment.id}}-due-at")
-      %input(id="{{assignment.id}}-due-at" ng-model="assignment.due_at" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{assignment.id}}-due-at" ng-model="assignment.due_at" gc-date-time ng-change="updateAssignmentDates()")
   %li
     Accepted Until:
     %label(for="{{assignment.id}}-accepts-until")
-      %input(id="{{assignment.id}}-accepts-until" ng-model="assignment.accepts_submissions_until" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{assignment.id}}-accepts-until" ng-model="assignment.accepts_submissions_until" gc-date-time ng-change="updateAssignmentDates()")

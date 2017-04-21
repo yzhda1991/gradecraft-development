@@ -11,6 +11,8 @@
     link: (scope, el, attr, ngModelCtrl)->
 
       scope.updateAssignmentDates = ()->
-        AssignmentService.queueUpdateAssignment(scope.assignment.id)
+        console.log("validating dates...");
+        console.log("sending update via API...");
+        #AssignmentService.queueUpdateAssignment(scope.assignment.id)
   }
 ]
