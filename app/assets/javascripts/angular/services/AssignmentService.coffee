@@ -33,6 +33,23 @@
   assignmentsPredictedPoints = ()->
     assignmentsSubsetPredictedPoints(assignments)
 
+  ValidateDates = (assignment)->
+    valid = true
+    messages = []
+
+    # verify OpenBeforeCloseValidator will pass
+    if (assignment.due_at? && assignment.open_at?) && (assignment.due_at < assignment.open_at)
+      messages.push("Due date must be after open date.")
+      valid = false
+    # verify SubmissionsAcceptedAfterOpenValidator will pass
+    if (assignment.accepts_submissions_until? && assignment.open_at?) && (assignment.accepts_submissions_until < assignment.open_at)
+      messages.push("Submission accept date must be after open date.")
+    # verify SubmissionsAcceptedAfterDueValidator will pass
+    if (assignment.due_at? && assignment.accepts_submissions_until?) && (assignment.accepts_submissions_until < assignment.due_at)
+      messages.push("Submission accept date must be after due date.")
+      valid = false
+    return { valid: valid, messages: messages}
+
   #------ API Calls -----------------------------------------------------------#
 
   # GET single assignment, will be the only item in the assignments array
@@ -100,13 +117,20 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  # This is used to manage the date-pickers which require multiple
-  # updates to both month, day and time.
-  # queued uniquely on id and attribute, so that multiple updates to
-  # the same assignment can be in que independently
-  queueUpdateAttribute = (id, attribute, state, immediate=false) ->
+  _updateAssignment = (id)->
+    assignment = _.find(assignments, {id: id})
+    if assignment && ValidateDates(assignment).valid
+      $http.put("/api/assignments/#{id}", assignment: assignment).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+
+  queueUpdateAssignment = (id, attribute, state) ->
     DebounceQueue.addEvent(
-      "assignments", "#{id}-#{attribute}", updateAssignmentAttribute, [id, attribute, state], immediate
+      "assignments", id, _updateAssignment, [id]
     )
 
   # PUT a predicted earned grade for assignment
@@ -129,8 +153,9 @@
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       getAssignment: getAssignment
       getAssignments: getAssignments
+      ValidateDates: ValidateDates
       postPredictedAssignment: postPredictedAssignment
-      queueUpdateAttribute: queueUpdateAttribute
+      queueUpdateAssignment: queueUpdateAssignment
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
   }

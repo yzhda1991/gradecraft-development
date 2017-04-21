@@ -10,9 +10,11 @@
     templateUrl: 'assignments/date_picker.html',
     link: (scope, el, attr, ngModelCtrl)->
 
+      scope.dateValidator = { valid: true }
+
       scope.updateAssignmentDates = ()->
-        console.log("validating dates...");
-        console.log("sending update via API...");
-        #AssignmentService.queueUpdateAssignment(scope.assignment.id)
+        scope.dateValidator =  AssignmentService.ValidateDates(scope.assignment)
+        if scope.dateValidator.valid
+          AssignmentService.queueUpdateAssignment(scope.assignment.id)
   }
 ]
