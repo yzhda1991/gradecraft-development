@@ -376,6 +376,8 @@ Rails.application.routes.draw do
 
     resources :rubrics, only: [:show]
     resources :students, only: [:index]
+    get "students/analytics", to: "students#analytics"
+
     # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index

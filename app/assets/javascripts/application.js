@@ -72,6 +72,7 @@
 //= require plugins/video.min.js
 
 //= require plotly/grade_distro
+//= require plotly/point_breakdown
 //= require plotly/team_analytics
 
 //= require gradecraft

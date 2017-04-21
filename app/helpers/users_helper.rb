@@ -15,24 +15,6 @@ module UsersHelper
     raw_flagged_user_icon flagged
   end
 
-  def total_scores_for_chart(user, course)
-    scores = []
-    course.assignment_types.each do |assignment_type|
-      scores << { data: assignment_type.visible_score_for_student(user),
-                  name: assignment_type.name }
-    end
-
-    earned_badge_points = user.earned_badges.sum(&:points)
-    if earned_badge_points > 0
-      scores << { data: earned_badge_points, name: "#{course.badge_term.pluralize}" }
-    end
-
-    return {
-      scores: scores,
-      course_total: course.total_points + earned_badge_points
-      }
-  end
-
   private
 
   def raw_flagged_user_icon(flagged)

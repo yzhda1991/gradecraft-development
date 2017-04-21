@@ -4,6 +4,7 @@
   # to limit it to one call to the API, and put the directives in waiting pattern.
   # For simplicity sake, each graph on the analytics page initiating the api call.
   assignmentData = {}
+  studentData = {}
 
   getAssignmentAnalytics = (assignmentId, studentId)->
     $http.get("/api/assignments/#{assignmentId}/analytics?student_id=#{studentId}").then(
@@ -14,8 +15,20 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  getStudentAnalytics = ()->
+    $http.get("/api/students/analytics").then(
+      (response) ->
+        angular.copy(response.data, studentData)
+        GradeCraftAPI.logResponse(response.data)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+
   return {
       getAssignmentAnalytics: getAssignmentAnalytics
+      getStudentAnalytics: getStudentAnalytics
       assignmentData: assignmentData
+      studentData: studentData
   }
 ]
