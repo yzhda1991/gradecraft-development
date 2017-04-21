@@ -8,31 +8,13 @@ feature "editing an awarded a badge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
     end
 
     context "with an active course" do
       let(:course) { build :course, has_badges: true, status: true }
 
       scenario "is successful" do
-        within(".sidebar-container") do
-          click_link "Badges"
-        end
-
-        expect(current_path).to eq badges_path
-
-        within(".pageContent") do
-          first(:link, "Fancy Badge").click
-        end
-
-        expect(current_path).to eq badge_path(badge.id)
-
-        within(".pageContent") do
-          click_link "Edit"
-        end
-
-        expect(current_path).to eq \
-          edit_badge_earned_badge_path(badge, earned_badge)
+        visit edit_badge_earned_badge_path(badge, earned_badge)
 
         within(".pageContent") do
           click_button "Update Badge"
@@ -51,17 +33,7 @@ feature "editing an awarded a badge" do
       let(:course) { build :course, has_badges: true, status: false }
 
       scenario "is unsuccessful" do
-        within(".sidebar-container") do
-          click_link "Badges"
-        end
-
-        expect(current_path).to eq badges_path
-
-        within(".pageContent") do
-          first(:link, "Fancy Badge").click
-        end
-
-        expect(current_path).to eq badge_path(badge.id)
+        visit badge_path(badge)
 
         within(".pageContent") do
           expect(page).to_not have_selector(:link_or_button, "Edit")

@@ -7,26 +7,10 @@ feature "editing a challenge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_challenge_path(challenge)
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Section Challenges"
-      end
-
-      expect(current_path).to eq challenges_path
-
-      within(".pageContent") do
-        click_link "Section Challenge Name"
-      end
-
-      expect(current_path).to eq challenge_path(challenge.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
-
       within(".pageContent") do
         fill_in "Name", with: "Edited Section Challenge Name"
         click_button "Update Section Challenge"

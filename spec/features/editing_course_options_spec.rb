@@ -6,14 +6,10 @@ feature "editing a course's basic settings" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_course_path(course.id)
     end
 
     scenario "successfully" do
-      within(".sidebar-container .staff-sidenav") do
-        click_link "Course Settings"
-      end
-
       within(".pageContent") do
         fill_in "Course Title", with: "New Course Name"
         click_button "Save Settings"

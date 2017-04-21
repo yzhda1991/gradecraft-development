@@ -1,4 +1,4 @@
-feature "editing an assignment", focus: true do
+feature "editing an assignment" do
   context "as a professor" do
     let(:course) { build :course, assignment_term: "Assignment"}
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
