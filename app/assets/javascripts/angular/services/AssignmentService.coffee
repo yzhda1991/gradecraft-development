@@ -61,6 +61,8 @@
           assignment.prediction = { predicted_points: 0 } if !assignment.prediction
           assignment.grade = { score: null, final_points: null, is_excluded: false } if !assignment.grade
 
+          GradeCraftAPI.formatDates(assignment,["open_at", "due_at", "accepts_submissions_until"])
+
           # Iterate through all Assignments that are conditions,
           # If they are closed_without_submission,
           # flag this assignment to be closed as well

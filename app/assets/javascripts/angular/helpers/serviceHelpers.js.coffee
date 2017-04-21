@@ -90,6 +90,12 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         modelArray.push(item.attributes)
     )
 
+  formatDates = (article,date_fields)->
+    _.each(date_fields, (field)->
+      if article[field]
+        article[field] = new Date(article[field])
+    )
+
   return {
     termFor: termFor
     setTermFor: setTermFor
@@ -99,6 +105,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     addItem: addItem
     addItems: addItems
     deleteItem: deleteItem
+    formatDates: formatDates
     loadFromIncluded: loadFromIncluded
   }
 )

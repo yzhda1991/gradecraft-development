@@ -1,3 +1,4 @@
+# TODO: refactor once working from within directive
 @gradecraft.directive 'gcDateTime', [ "$timeout", ($timeout) ->
 
   linker = (scope, element, attrs, ctrl)->
