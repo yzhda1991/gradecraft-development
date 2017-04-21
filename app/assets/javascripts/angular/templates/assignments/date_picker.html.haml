@@ -1,14 +1,13 @@
 %ul(ng-if="!AssignmentService.isLoading")
-  %li - {{assignment().name}} -
   %li
     Open At:
     %label(for="{{inputId}}-open-at")
-      %input(id="{{inputId}}-open-at" ng-model="assigment().open_at" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{inputId}}-open-at" ng-model="assignment.open_at" gc-date-time ng-change="updateAssignment()")
   %li
     Due At:
     %label(for="{{inputId}}-due-at")
-      %input(id="{{inputId}}-due-at" ng-model="assigment().due_at" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{inputId}}-due-at" ng-model="assignment.due_at" gc-date-time ng-change="updateAssignment()")
   %li
     Accepted Until:
     %label(for="{{inputId}}-accepts-until")
-      %input(id="{{inputId}}-accepts-until" ng-model="assigment().accepts_submissions_until" gc-date-time ng-change="updateAssignment()")
+      %input(id="{{inputId}}-accepts-until" ng-model="assignment.accepts_submissions_until" gc-date-time ng-change="updateAssignment()")

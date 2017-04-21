@@ -4,22 +4,13 @@
 
   return {
     scope: {
-      assignmentId: "="
+      assignment: "="
     }
 
     templateUrl: 'assignments/date_picker.html',
     link: (scope, el, attr, ngModelCtrl)->
 
-      scope.AssignmentService = AssignmentService
-      scope.assignments = AssignmentService.assignments
-
-      scope.assignment = ()->
-        _.find(AssignmentService.assignments, { id: scope.assignmentId })
-
-      # For accessibility, each checkbox must have a label with a unique id
-      scope.inputId = "assignment-#{scope.assignmentId}"
-
       scope.updateAssignmentDates = ()->
-        AssignmentService.queueUpdateAssignment(id)
+        AssignmentService.queueUpdateAssignment(scope.assignment.id)
   }
 ]
