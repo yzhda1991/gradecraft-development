@@ -5,18 +5,20 @@ module Services
     class RetrievesLMSUsers
       extend LightService::Action
 
-      expects :access_token, :provider, :course_id
+      expects :access_token, :provider, :user_ids
       promises :users
 
       executed do |context|
         provider = context.provider
         access_token = context.access_token
-        course_id = context.course_id
+        user_ids = context.user_ids
 
         context.users = []
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.users << syllabus.users(course_id, true)[:data]
+        user_ids.each do |user_id|
+          context.users << syllabus.user(user_id)
+        end
       end
     end
   end

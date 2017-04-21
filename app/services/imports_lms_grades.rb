@@ -15,7 +15,7 @@ module Services
            assignment_ids: assignment_ids, grade_ids: grade_ids,
            assignment: assignment, course: assignment.course, user: user).reduce(
              Actions::RetrievesLMSGrades,
-             Actions::RetrievesLMSUsersById,
+             Actions::RetrievesLMSUsers,
              Actions::ImportsLMSUsers,
              Actions::ImportsLMSGrades,
              Actions::EnqueuesGradeUpdaterJobs)

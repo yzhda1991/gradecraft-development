@@ -9,7 +9,7 @@ module Services
     def self.import(provider, access_token, course_id, course)
       with(provider: provider, access_token: access_token,
         course_id: course_id, course: course).reduce(
-          Actions::RetrievesLMSUsers,
+          Actions::RetrievesLMSUsersWithRoles,
           Actions::ImportsLMSUsers
       )
     end

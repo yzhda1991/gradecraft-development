@@ -16,7 +16,7 @@ describe Services::ImportsLMSUsers do
     end
 
     it "retrieves the users from the lms provider" do
-      expect(Services::Actions::RetrievesLMSUsers).to \
+      expect(Services::Actions::RetrievesLMSUsersWithRoles).to \
         receive(:execute).and_call_original
 
       described_class.import provider, access_token, course_id, course
