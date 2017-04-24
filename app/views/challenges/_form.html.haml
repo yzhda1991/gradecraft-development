@@ -19,7 +19,7 @@
       = f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @challenge.try(:due_at) }
 
   %section.form-section
-    %h2 Description
+    %h2.form-title Description
 
     .textarea
       .form-hint What do the #{term_for :teams} need to do to succeed?
