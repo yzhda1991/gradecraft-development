@@ -7,28 +7,10 @@ feature "editing an event" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_event_path(event.id)
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Calendar Events"
-      end
-
-      expect(current_path).to eq events_path
-
-      within(".pageContent") do
-        click_link "Event Name"
-      end
-
-      expect(current_path).to eq event_path(event.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
-
-      expect(current_path).to eq edit_event_path(event.id)
-
       within(".pageContent") do
         fill_in "Name", with: "Edited Event Name"
         click_button "Update Event"

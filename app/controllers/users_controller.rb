@@ -59,7 +59,12 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.assign_attributes user_params
+    up = user_params
+    if up[:password].blank? && up[:password_confirmation].blank?
+      up.delete(:password)
+      up.delete(:password_confirmation)
+    end
+    @user.assign_attributes up
     cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)

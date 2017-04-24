@@ -7,26 +7,10 @@ feature "editing a badge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_badge_path(badge.id)
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Badges"
-      end
-
-      expect(current_path).to eq badges_path
-
-      within(".pageContent") do
-        click_link "Fancy Badge"
-      end
-
-      expect(current_path).to eq badge_path(badge.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
-
       within(".pageContent") do
         fill_in "Name", with: "Edited Badge Name"
         click_button "Update Badge"

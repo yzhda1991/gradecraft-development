@@ -9,33 +9,15 @@ feature "editing a team challenge grade" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_challenge_grade_path(challenge_grade)
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Section Challenges"
-      end
-
-      expect(current_path).to eq challenges_path
-
-      within(".pageContent") do
-        click_link "Section Challenge Name"
-      end
-
-      expect(current_path).to eq challenge_path(challenge.id)
-
-      within(".pageContent") do
-        click_link "Edit Grade"
-      end
-
-      expect(current_path).to eq edit_challenge_grade_path(challenge_grade)
-
       within(".pageContent") do
         fill_in("challenge_grade_raw_points", with: 101)
         click_button "Update Grade"
       end
-      
+
       expect(current_path).to eq challenge_path(challenge.id)
       expect(page).to have_notification_message("notice", "Section Name's Grade for Section Challenge Name Section Challenge successfully updated")
     end

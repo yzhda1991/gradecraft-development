@@ -7,33 +7,17 @@ feature "editing a team" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit edit_team_path(team.id)
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Sections"
-      end
-
-      expect(current_path).to eq teams_path
-
-      within(".pageContent") do
-        click_link "Section Name"
-      end
-
-      expect(current_path).to eq team_path(team.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
-
       within(".pageContent") do
         fill_in "Name", with: "Edited Section Name"
         click_button "Update Section"
       end
-      
+
       expect(current_path).to eq team_path(team)
-      
+
       expect(page).to have_content("Edited Section Name")
     end
   end
