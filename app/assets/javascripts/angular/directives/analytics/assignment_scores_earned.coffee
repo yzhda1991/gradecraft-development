@@ -1,12 +1,17 @@
 # bar graph for assignment grades earned
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', 'AnalyticsService', '$window', ($q, AnalyticsService, $window) ->
+@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsScoresEarnedCtrl = [()->
       vm = this
       services(vm.assignmentId, vm.studentId).then(()->
         plotGraph(AnalyticsService.assignmentData)
       )
+      
+      angular.element($window).on 'resize', ->
+        DebounceQueue.addEvent(
+          "graphs", 'assignmentScoresEarnedAnalytics', refreshGraph, [], 250
+        )
     ]
 
     services = (assignmentId, studentId)->
@@ -99,15 +104,8 @@
 
       Plotly.newPlot('assignment-scores-earned-graph', data, layout, {displayModeBar: false})
 
-      angular.element($window).on 'resize', ->
-        resizeTimer = undefined
-        assignmentScoresGraph = document.getElementById('assignment-scores-earned-graph')
-
-        clearTimeout resizeTimer
-        resizeTimer = setTimeout((->
-          Plotly.Plots.resize assignmentScoresGraph
-          return
-        ), 250)
+    refreshGraph = ()=>
+      Plotly.Plots.resize document.getElementById('assignment-scores-earned-graph')
 
     {
       bindToController: true,
