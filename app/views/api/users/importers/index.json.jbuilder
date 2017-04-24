@@ -12,5 +12,6 @@ json.data @users[:data] do |user|
 end
 
 json.meta do
+  # rubocop:disable Style/SpaceBeforeFirstArg
   json.has_next_page                          @users[:has_next_page]
 end

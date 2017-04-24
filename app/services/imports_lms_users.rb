@@ -11,7 +11,7 @@ module Services
         course_id: course_id, course: course, user_ids: user_ids).reduce(
           Actions::RetrievesLMSUsersWithRoles,
           Actions::ImportsLMSUsers
-      )
+        )
     end
   end
 end
