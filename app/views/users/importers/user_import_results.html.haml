@@ -1,0 +1,35 @@
+.pageContent
+  = render "layouts/alerts"
+
+  - unless @result.users_import_result.unsuccessful.empty?
+    .table-header-information
+      %h4.subtitle
+        = "#{@result.users_import_result.unsuccessful.count} #{"User".pluralize(@result.users_import_result.unsuccessful.count)} Not Imported"
+      %table.dynatable
+        %thead
+          %tr
+            %th Data
+            %th Error(s)
+        %tbody
+          - @result.users_import_result.unsuccessful.each do |row|
+            %tr
+              %td= row[:data]
+              %td= row[:errors]
+
+  .table-header-information
+    %h4.subtitle
+      = "#{@result.users_import_result.successful.count} #{"User".pluralize(@result.users_import_result.successful.count)} Imported Successfully"
+    %table.dynatable
+      %thead
+        %tr
+          %th First Name
+          %th Last Name
+          %th Username
+          %th Email
+      %tbody
+        - @result.users_import_result.successful.each do |user|
+          %tr
+            %td= link_to user.first_name, student_path(user)
+            %td= link_to user.last_name, student_path(user)
+            %td= link_to user.username, student_path(user)
+            %td= link_to user.email, student_path(user)
