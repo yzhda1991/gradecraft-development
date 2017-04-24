@@ -53,7 +53,7 @@ class CanvasUserImporter
 
   class UserRow
     include LMSHelper
-    
+
     attr_reader :data
 
     def first_name
@@ -65,7 +65,7 @@ class CanvasUserImporter
     end
 
     def email
-      data["primary_email"]
+      data["primary_email"] || data["email"]
     end
 
     def role

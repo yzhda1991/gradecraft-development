@@ -1,6 +1,6 @@
 require "light-service"
 require_relative "imports_lms_users/imports_lms_users"
-require_relative "imports_lms_users/retrieves_lms_users"
+require_relative "imports_lms_users/retrieves_lms_users_with_roles"
 
 module Services
   class ImportsLMSUsers

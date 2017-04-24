@@ -1,9 +1,9 @@
 json.data @users[:data] do |user|
   json.type                                   "imported_user"
-  json.id                                     user["id"].to_s
+  json.id                                     user["id"]
 
   json.attributes do
-    json.id                                   user["id"].to_s
+    json.id                                   user["id"]
     json.name                                 user["name"]
     json.email                                user["email"]
     json.enrollments                          user["enrollments"]
