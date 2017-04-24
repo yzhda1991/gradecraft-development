@@ -4,7 +4,10 @@
     vm = this
 
     vm.loading = true
+    vm.formSubmitted = false
     vm.options = undefined
+
+    vm.formAction = "/users/importers/#{@provider}/course/#{@courseId}/users/import"
 
     vm.termForUserExists = (value) ->
       if value is true then "Yes" else "No"
@@ -14,6 +17,11 @@
 
     vm.deselectAllUsers = () ->
       UserImportService.setUsersSelected(false)
+
+    vm.hasSelectedGrades = () ->
+      _.any(UserImportService.users, (user) ->
+        user.selected_for_import is true
+      )
 
     initialize(@provider, @courseId, vm.options).then(() ->
       vm.loading = false
@@ -27,6 +35,7 @@
     scope:
       provider: '@'
       courseId: '@'
+      authenticityToken: '@'  # for the form submit
     bindToController: true
     controller: UserImportFormCtrl
     controllerAs: 'vm'
@@ -34,6 +43,6 @@
     templateUrl: 'user/import/form.html'
     link: (scope, element, attr) ->
       scope.users = UserImportService.users
-      scope.hasError = UserImportService.hasError
+      scope.error = UserImportService.error
   }
 ]

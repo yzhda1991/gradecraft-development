@@ -270,7 +270,7 @@ Rails.application.routes.draw do
   namespace :users do
     resources :importers, param: :provider_id do
       get "/course/:id", action: :users, as: :users
-      post "/course/:id/import", action: :import_users, as: :users_import
+      post "/course/:id/users/import", action: :users_import, as: :users_import
     end
   end
 
