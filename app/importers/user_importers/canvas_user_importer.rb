@@ -1,7 +1,7 @@
 require_relative "../../services/creates_new_user"
 
 class CanvasUserImporter
-  attr_reader :successful, :unsuccessful
+  attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :send_welcome, :users
 
   def initialize(users, send_welcome=false)
@@ -9,6 +9,7 @@ class CanvasUserImporter
     @send_welcome = send_welcome
     @successful = []
     @unsuccessful = []
+    @unchanged = []
   end
 
   def import(course)
@@ -18,7 +19,11 @@ class CanvasUserImporter
 
         if user.valid?
           link_imported canvas_user["id"], user
-          successful << user unless user.previous_changes.empty?
+          if user.previous_changes.empty?
+            unchanged << user
+          else
+            successful << user
+          end
         else
           unsuccessful << { data: canvas_user,
                             errors: user.errors.full_messages.join(", ") }

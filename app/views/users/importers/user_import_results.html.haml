@@ -16,6 +16,25 @@
               %td= row[:data]
               %td= row[:errors]
 
+  - unless @result.users_import_result.unchanged.empty?
+    .table-header-information
+      %h4.subtitle
+        = "#{@result.users_import_result.unchanged.count} #{"User".pluralize(@result.users_import_result.unchanged.count)} Were Unchanged"
+      %table.dynatable
+        %thead
+          %tr
+            %th First Name
+            %th Last Name
+            %th Username
+            %th Email
+        %tbody
+          - @result.users_import_result.unchanged.each do |user|
+            %tr
+              %td= link_to user.first_name, student_path(user)
+              %td= link_to user.last_name, student_path(user)
+              %td= link_to user.username, student_path(user)
+              %td= link_to user.email, student_path(user)
+
   .table-header-information
     %h4.subtitle
       = "#{@result.users_import_result.successful.count} #{"User".pluralize(@result.users_import_result.successful.count)} Imported Successfully"

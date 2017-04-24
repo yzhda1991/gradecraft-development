@@ -1,4 +1,5 @@
 require "active_lms"
+require_relative "../../services/imports_lms_users"
 
 class Users::ImportersController < ApplicationController
   include OAuthProvider

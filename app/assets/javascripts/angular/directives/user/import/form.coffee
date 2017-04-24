@@ -43,6 +43,6 @@
     templateUrl: 'user/import/form.html'
     link: (scope, element, attr) ->
       scope.users = UserImportService.users
-      scope.error = UserImportService.error
+      scope.hasError = UserImportService.hasError
   }
 ]

@@ -1,17 +1,17 @@
 @gradecraft.factory 'UserImportService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   users = []
-  error = null
+  hasError = false
 
   getUsers = (provider, courseId) ->
     $http.get("/api/users/importers/#{provider}/course/#{courseId}/users").then(
-        (response) ->
-          GradeCraftAPI.loadMany(users, response.data)
-          GradeCraftAPI.logResponse(response)
-        , (error) ->
-          error = "An error occurred while loading users. Please try again later."
-          GradeCraftAPI.logResponse(error)
-      )
+      (response) ->
+        GradeCraftAPI.loadMany(users, response.data)
+        GradeCraftAPI.logResponse(response)
+      , (error) ->
+        hasError = true
+        GradeCraftAPI.logResponse(error)
+    )
 
   # Sets value to dictate whether all users should be selected/deselected for import
   setUsersSelected = (selectedValue) ->
@@ -22,7 +22,7 @@
 
   {
     users: users
-    error: error
+    hasError: hasError
     getUsers: getUsers
     setUsersSelected: setUsersSelected
   }
