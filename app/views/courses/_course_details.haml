@@ -2,7 +2,7 @@
 
 .form-wrapper
   %section.form-section
-    %h2 Class Details
+    %h2.form-title Class Details
     .form-flex-container
       .form-flex-row
         .form-item.col-50
@@ -51,7 +51,7 @@
 
   - unless @course.new_record?
     %section.form-section
-      %h2 Professors
+      %h2.form-title Professors
       .form-item
         = f.label :professors
         = f.input :instructors_of_record_ids, collection: f.object.staff,

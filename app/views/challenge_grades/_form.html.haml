@@ -1,6 +1,6 @@
 = simple_form_for(@challenge_grade, url: form_path) do |f|
   %section.form-section
-    %h2 Score
+    %h2.form-title Score
 
     = f.hidden_field :team_id, value: @team.id
     = f.hidden_field :challenge_id, value: @challenge.id
@@ -19,7 +19,7 @@
         = f.input :status, as: :hidden, :input_html => { :value => "Graded" }
 
   %section.form-section
-    %h2 Feedback
+    %h2.form-title Feedback
     .textarea
       = f.text_area :feedback, class: "froala"
 

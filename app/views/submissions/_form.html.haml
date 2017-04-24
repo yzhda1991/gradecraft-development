@@ -15,7 +15,7 @@
 
   %section.form-section
     - if presenter.assignment.accepts_attachments
-      %h2 Attachments
+      %h2.form-title Attachments
       = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
         = sf.file_field :file, :multiple => true
       - if presenter.submission.submission_files.exists?
@@ -30,7 +30,7 @@
       = f.input :link
 
     - if presenter.assignment.accepts_text
-      %h2.uppercase Content/Statement
+      %h2.form-title.uppercase Content/Statement
       = f.text_area :text_comment, class: "froala"
 
   .submit-buttons

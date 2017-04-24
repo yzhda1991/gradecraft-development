@@ -1,6 +1,6 @@
 = simple_form_for @user do |f|
   %section.form-section
-    %h2.uppercase= "User Profile"
+    %h2.form-title= "User Profile"
     .form-item
       = f.label :first_name
       = f.text_field :first_name, "aria-required": "true"
