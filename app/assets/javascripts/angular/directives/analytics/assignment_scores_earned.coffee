@@ -64,6 +64,7 @@
 
       layout = {
         showlegend: false,
+        autosize: true,
         hovermode: !1,
         height: 240,
         margin: {

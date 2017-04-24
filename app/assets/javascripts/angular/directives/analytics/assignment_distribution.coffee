@@ -36,6 +36,7 @@
       layout = {
         showlegend: false,
         height: 100,
+        autosize: true,
         hovermode: !1,
         margin: {
           l: 8,
