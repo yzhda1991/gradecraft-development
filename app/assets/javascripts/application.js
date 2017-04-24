@@ -23,6 +23,7 @@
 //= require slick.min
 //= require lodash.min
 //= require plotly-latest.min
+//= require date
 
 //= require angular/angular
 //= require angular-resource
