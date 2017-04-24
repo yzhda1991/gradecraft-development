@@ -1,4 +1,3 @@
-# TODO: refactor once working from within directive
 @gradecraft.directive 'gcDateTime', [ "$timeout", "$filter", ($timeout, $filter) ->
 
   return {
@@ -6,6 +5,7 @@
     require: 'ngModel',
     transclude: true,
     link : (scope, element, attrs, modelCtrl)->
+      # timeout is necessary for jQuery UI to work on the element
       $timeout( ()->
         element.datetimepicker({
           controlType: 'select',

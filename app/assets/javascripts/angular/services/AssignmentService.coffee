@@ -153,10 +153,10 @@
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       getAssignment: getAssignment
       getAssignments: getAssignments
-      ValidateDates: ValidateDates
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
+      ValidateDates: ValidateDates
   }
 ]

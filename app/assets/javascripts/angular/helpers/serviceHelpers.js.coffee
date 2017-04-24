@@ -1,5 +1,5 @@
 # Common Methods and Objects for Services using the GradeCraft api routes
-angular.module('helpers').factory('GradeCraftAPI', [()->
+angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # stores custom terms, default to GC defaults
   _termFor = {
@@ -110,4 +110,4 @@ angular.module('helpers').factory('GradeCraftAPI', [()->
     formatDates: formatDates
     loadFromIncluded: loadFromIncluded
   }
-])
+)
