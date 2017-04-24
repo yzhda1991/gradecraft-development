@@ -185,6 +185,12 @@ Rails.application.routes.draw do
     resources :courses, only: [:create, :destroy, :index], module: :integrations
   end
 
+  resource :google_calendar, only: [ ] do
+    collection do
+      post "/event/:id", action: :add_event_to_google_calendar, as: :add_event_to_google_calendar
+    end
+  end
+
   #9. Courses
 
   resources :courses, except: [:show, :destroy] do
