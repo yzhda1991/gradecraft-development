@@ -13,12 +13,12 @@
         angular.element('#tabs').on 'tabsactivate', ->
           if event.currentTarget.classList.contains('class-analytics-tab')
             plotGraph(AnalyticsService.assignmentData, vm.studentDistro)
-      )
 
-      angular.element($window).on 'resize', ->
-        DebounceQueue.addEvent(
-          "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
-        )
+            angular.element($window).on 'resize', ->
+              DebounceQueue.addEvent(
+                "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
+              )
+      )
     ]
 
     services = (assignmentId, studentId)->
