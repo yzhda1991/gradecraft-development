@@ -105,9 +105,7 @@ class Assignments::GradesController < ApplicationController
       ScoreRecalculatorJob.new(user_id: grade.student_id, course_id: current_course.id).enqueue
     end
 
-    redirect_to assignment_path(@assignment), flash: {
-      success: "Successfully deleted grades for #{ @assignment.name }"
-    }
+    respond_with @assignment
   end
 
   # PUT /assignments/:assignment_id/grades/self_log

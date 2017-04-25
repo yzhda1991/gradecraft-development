@@ -31,6 +31,8 @@ en:
       create:
         success_html: "<strong>%{resource_name}</strong> successfully created"
         alert: "We're sorry, your assignment could not be created. Check below for possible errors."
+      show:
+        alert: "The assignment could not be found."
       update:
         success_html: "<strong>%{resource_name}</strong> successfully updated"
       delete_all:
