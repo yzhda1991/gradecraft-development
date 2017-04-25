@@ -38,12 +38,13 @@ describe LMSHelper do
 
     it "returns the translated Gradecraft role of highest precedence" do
       enrollments = [
-        { "type" => "ObserverEnrollment" },
-        { "type" => "TaEnrollment" },
-        { "type" => "TeacherEnrollment" },
-        { "type" => "DesignerEnrollment"}
+        { "type" => "ObserverEnrollment", "enrollment_state" => "inactive" },
+        { "type" => "TaEnrollment", "enrollment_state" => "active" },
+        { "type" => "TeacherEnrollment", "enrollment_state" => "inactive" },
+        { "type" => "DesignerEnrollment", "enrollment_state" => "active" },
+        { "type" => "StudentEnrollment", "enrollment_state" => "active" }
       ]
-      expect(helper.lms_user_role(enrollments)).to eq :professor
+      expect(helper.lms_user_role(enrollments)).to eq :gsi
     end
   end
 end

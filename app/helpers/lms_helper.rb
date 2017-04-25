@@ -38,7 +38,8 @@ module LMSHelper
 
   # Return only the role with the highest level of precedence in Gradecraft
   def find_principal_role(enrollments)
-    principal_enrollment = enrollments.max_by do |enrollment|
+    active_enrollments = enrollments.select { |e| e["enrollment_state"] == "active" }
+    principal_enrollment = active_enrollments.max_by do |enrollment|
       lms_role = enrollment["type"]
       ROLES_BY_PRECEDENCE[lms_role.to_sym]
     end

@@ -93,7 +93,7 @@ describe CanvasUserImporter do
         let(:enrollments) do
           {
             enrollments: [
-              { "type" => "TeacherEnrollment" }
+              { "type" => "TeacherEnrollment", "enrollment_state" => "active" }
             ]
           }.stringify_keys
         end
