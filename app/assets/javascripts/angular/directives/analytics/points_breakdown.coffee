@@ -1,13 +1,18 @@
 # graph of student's points, broken down by assignment type
 # Used on student dashboard
 
-@gradecraft.directive 'pointsBreakdownAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
+@gradecraft.directive 'pointsBreakdownAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     pointsBreakdownCtrl = [()->
       vm = this
 
       services(vm.assignmentId, vm.studentId).then(()->
         plotGraph(AnalyticsService.studentData)
       )
+
+      angular.element($window).on 'resize', ->
+        DebounceQueue.addEvent(
+          "graphs", 'pointsBreakdownAnalytics', refreshGraph, [], 250
+        )
     ]
 
     services = (assignmentId, studentId)->
@@ -97,6 +102,9 @@
         $('.hovertext path').attr('data-color', barColor)
       )
 
+    refreshGraph = ()=>
+      Plotly.Plots.resize document.getElementById('point-breakdown-chart')
+
     {
       bindToController: true,
       controller: pointsBreakdownCtrl,
@@ -105,5 +113,3 @@
       templateUrl: 'analytics/points_breakdown.html'
     }
 ]
-
-

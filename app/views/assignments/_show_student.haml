@@ -9,7 +9,7 @@
           %a{"href" => "#tab"} My Submission
       - if presenter.has_viewable_analytics?(current_student) && presenter.grades_available_for?(current_student)
         %li
-          %a{"href" => "#tab2"} Class Analytics
+          %a.class-analytics-tab{"href" => "#tab2"} Class Analytics
       %li
         %a{"href" => "#tab3"} Description
       - if presenter.show_rubric_preview?(current_student)

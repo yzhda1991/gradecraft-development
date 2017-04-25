@@ -53,4 +53,13 @@ if ($gradeDistro.length) {
 
     // eslint-disable-next-line no-undef
     Plotly.newPlot('grade_distro', data, layout, {displayModeBar: false});
+
+    // resize chart on window resize function to remove when chart is angularized
+    $(window).on('resize', function() {
+      var resizeTimer;
+      var gradeDistroDiv = document.getElementById('grade_distro');
+
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {Plotly.Plots.resize(gradeDistroDiv)}, 250);
+   });
 }

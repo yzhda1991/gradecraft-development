@@ -1,7 +1,7 @@
 # box plot for assignment grade distribution
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
+@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsParticipationCtrl = [()->
       vm = this
 
@@ -9,8 +9,16 @@
         vm.assignment_average = AnalyticsService.assignmentData.assignment_average
         vm.assignment_low_score = AnalyticsService.assignmentData.assignment_low_score
         vm.assignment_high_score = AnalyticsService.assignmentData.assignment_high_score
-        plotGraph(AnalyticsService.assignmentData)
+        # plot graph when tab is activated for chart usage in jquery ui tabs
+        angular.element('#tabs').on 'tabsactivate', ->
+          if event.currentTarget.classList.contains('class-analytics-tab')
+            plotGraph(AnalyticsService.assignmentData)
       )
+
+      angular.element($window).on 'resize', ->
+        DebounceQueue.addEvent(
+          "graphs", 'assignmentParticipationAnalytics', refreshGraph, [], 250
+        )
     ]
 
     services = (assignmentId, studentId)->
@@ -40,6 +48,7 @@
 
       pieLayout = {
         showlegend: false,
+        autosize: true,
         height: 220,
         width: 220,
         hovermode: !1,
@@ -63,6 +72,8 @@
 
       Plotly.newPlot('assignment-participation-graph', participationData, pieLayout, {displayModeBar: false})
 
+    refreshGraph = ()=>
+      Plotly.Plots.resize document.getElementById('assignment-participation-graph')
 
     {
       bindToController: true,
@@ -75,5 +86,3 @@
       templateUrl: 'analytics/assignment_participation.html'
     }
 ]
-
-

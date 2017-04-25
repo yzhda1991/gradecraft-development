@@ -7,19 +7,24 @@
 angular.module('helpers').factory('DebounceQueue', ['$timeout', ($timeout)->
 
   queueStore = {}
-  TIME_TO_DELAY = 2500
 
-  addEvent = (type, id, event, args=[], immediate=false)->
+  # Standard delay for making model updates via api
+  API_REQUEST_DELAY = 2500
+
+  # type and id are used to create a unique timout
+  # event will be called with args
+  # add custom delay, or 0 to cancel existing timeout and fire immediately
+  addEvent = (type, id, event, args=[], delay=API_REQUEST_DELAY)->
     return console.warn("Unable to add event:", type, "for:", id) if not type? || not id?
 
-    if immediate is true
+    if delay == 0
       cancelEvent(type, id)
       event.apply(null, args)
     else
       cancelEvent(type, id)
       queueStore[type + id] = $timeout(() ->
         event.apply(null, args)
-      , TIME_TO_DELAY)
+      , delay)
 
   cancelEvent = (type, id)->
     storeId = type + id

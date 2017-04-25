@@ -151,9 +151,10 @@
       )
 
   queueUpdateGrade = (immediate=false, returnURL=null) ->
+    delay = if immediate then 0 else null
     calculateGradePoints()
     DebounceQueue.addEvent(
-      "grades", modelGrade.id, _updateGrade, [returnURL], immediate
+      "grades", modelGrade.id, _updateGrade, [returnURL], delay
     )
 
   _confirmMessage = ()->
@@ -261,11 +262,12 @@
     )
 
   queueUpdateCriterionGrade = (criterionId, immediate=false) ->
+    delay = if immediate then 0 else null
     # using criterionId for queue id since we are not assured
     # to have a criterionGrade.id
     DebounceQueue.addEvent(
       "criterion_grades", criterionId, _updateCriterionGrade,
-      [criterionId], immediate
+      [criterionId], delay
     )
 
 #------- Grade File Methods ---------------------------------------------------#
