@@ -2,7 +2,7 @@
 # Must not render until Grade Scheme Elements are loaded,
 # to position high and low point ranges.
 
-@gradecraft.directive 'predictorGraph', [ 'PredictorService', '$window', (PredictorService, $window)->
+@gradecraft.directive 'predictorGraph', [ '$window', 'PredictorService', 'DebounceQueue',  ($window, PredictorService, DebounceQueue)->
 
   return {
     templateUrl: 'predictor/graph.html'
@@ -133,10 +133,9 @@
 
 
       # re-render on window resize end!
-      resizeTimer = undefined
       angular.element($window).on 'resize', ->
-        clearTimeout resizeTimer
-        resizeTimer = setTimeout(scope.updateGradeLevelGraph, 250)
-
+        DebounceQueue.addEvent(
+          "graphs", 'predictorGraph', scope.updateGradeLevelGraph, [], 250
+          )
   }
 ]
