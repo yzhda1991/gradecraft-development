@@ -9,7 +9,7 @@
 
     %section
       %h2 Class Analytics
-      = render partial: "grades/analytics", locals: { presenter: presenter, current_student: @grade.student }
+      = render partial: "grades/analytics", locals: { presenter: presenter, current_student: @grade.student, analytics_class: "" }
       %hr.dotted
 
     - if presenter.has_viewable_submission?(@grade.student, current_user)

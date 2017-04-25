@@ -1,19 +1,25 @@
 # bar graph for assignment grades earned
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
     analyticsScoresEarnedCtrl = [()->
       vm = this
-      services(vm.assignmentId, vm.studentId).then(()->
-      # plot graph when tab is activated for chart usage in jquery ui tabs
-      angular.element('#tabs').on 'tabsactivate', ->
-        if event.currentTarget.classList.contains('class-analytics-tab')
-          plotGraph(AnalyticsService.assignmentData)
 
-          angular.element($window).on 'resize', ->
-            DebounceQueue.addEvent(
-              "graphs", 'assignmentScoresEarnedAnalytics', refreshGraph, [], 250
-            )
+      initializeGraph = () ->
+        plotGraph(AnalyticsService.assignmentData)
+        angular.element($window).on 'resize', ->
+          DebounceQueue.addEvent(
+            "graphs", 'assignmentScoresEarnedAnalytics', refreshGraph, [], 250
+          )
+
+      services(vm.assignmentId, vm.studentId).then(()->
+        # plot graph when tab is activated for chart usage in jquery ui tabs
+        if angular.element($rootElement).hasClass('analytics-tab-panel')
+          angular.element('#tabs').on 'tabsactivate', ->
+            if event.currentTarget.classList.contains('class-analytics-tab')
+              initializeGraph()
+        else
+          initializeGraph()
       )
     ]
 
@@ -36,10 +42,10 @@
       scoreFrequency.forEach((scoreLevel)->
         xValue = scoreLevel.score
         xValues.push(xValue)
-
+      
         yValue = scoreLevel.frequency
         yValues.push(yValue)
-
+      
         if (xValue == studentGrade)
           marker.yStudentMarker = yValue
           colors.push('rgba(109, 214, 119, 0.5)')

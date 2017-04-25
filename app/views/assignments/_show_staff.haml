@@ -38,7 +38,7 @@
       - if presenter.has_persisted_grades?
         .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
-            = render partial: "grades/analytics", locals: { presenter: presenter }
+            = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
           - else
             .tab-container
-              = render partial: "grades/analytics", locals: { presenter: presenter }
+              = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }

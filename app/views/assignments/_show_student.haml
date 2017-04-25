@@ -38,7 +38,7 @@
           .ui-tabs-panel#tab2{role: "tabpanel", "aria-hidden" => false }
             %section.assignment-details-container
               %h2 Class Analytics
-              = render partial: "grades/analytics", locals: { presenter: presenter }
+              = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
 
       .ui-tabs-panel#tab3{class: ("active" if !presenter.has_viewable_submission?(current_student, current_user) && !presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
         %section.assignment-details-container
