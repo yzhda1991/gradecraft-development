@@ -9,7 +9,10 @@
         vm.assignment_average = AnalyticsService.assignmentData.assignment_average
         vm.assignment_low_score = AnalyticsService.assignmentData.assignment_low_score
         vm.assignment_high_score = AnalyticsService.assignmentData.assignment_high_score
-        plotGraph(AnalyticsService.assignmentData)
+        # plot graph when tab is activated for chart usage in jquery ui tabs
+        angular.element('#tabs').on 'tabsactivate', ->
+          if event.currentTarget.classList.contains('class-analytics-tab')
+            plotGraph(AnalyticsService.assignmentData)
       )
 
       angular.element($window).on 'resize', ->
