@@ -2,7 +2,7 @@
   %label(for="{{assignment.id}}-full-points")
     %input( id="{{assignment.id}}-full-points"
       ng-model="assignment.full_points"
-      smart-number
+      gc-number-input
       ng-change="updateAssignmentPoints()")
 .assignment-settings--full-points(ng-if="assignment.pass_fail")
   {{termFor("pass")}}/{{termFor("fail")}}
