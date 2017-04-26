@@ -1,8 +1,8 @@
-%error-message{"visible"=>"hasError", "message"=>"An error occurred while loading users. Please try again later."}
+%error-message{"visible"=>"vm.hasError()", "message"=>"An unexpected error occurred while loading users."}
 
 %loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
 
-%div{"ng-if"=>"!vm.loading"}
+%loaded{"ng-if"=>"!vm.loading"}
   %without_users{"ng-if"=>"users.length < 1"}
     %p There are no users to import for this course
 

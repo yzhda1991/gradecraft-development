@@ -4,6 +4,10 @@ class API::Users::ImportersController < ApplicationController
   oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
+  before_action only: :show do |controller|
+    controller.redirect_path \
+      users_importer_users_path(params[:importer_provider_id], params[:id])
+  end
   before_action :require_authorization
 
   # GET /api/users/importers/:importer_provider_id/course/:id/users

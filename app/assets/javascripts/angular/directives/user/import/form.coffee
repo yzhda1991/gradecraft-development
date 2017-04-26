@@ -1,5 +1,5 @@
 # Main entry point for LMS user import form
-@gradecraft.directive 'userImportForm', ['UserImportService', (UserImportService) ->
+@gradecraft.directive 'userImportForm', ['UserImporterService', (UserImporterService) ->
   UserImportFormCtrl = [() ->
     vm = this
 
@@ -13,15 +13,18 @@
       if value is true then "Yes" else "No"
 
     vm.selectAllUsers = () ->
-      UserImportService.setUsersSelected(true)
+      UserImporterService.setUsersSelected(true)
 
     vm.deselectAllUsers = () ->
-      UserImportService.setUsersSelected(false)
+      UserImporterService.setUsersSelected(false)
 
     vm.hasSelectedGrades = () ->
-      _.any(UserImportService.users, (user) ->
+      _.any(UserImporterService.users, (user) ->
         user.selected_for_import is true
       )
+
+    vm.hasError = () ->
+      UserImporterService.checkHasError()
 
     initialize(@provider, @courseId, vm.options).then(() ->
       vm.loading = false
@@ -29,7 +32,7 @@
   ]
 
   initialize = (provider, courseId) ->
-    UserImportService.getUsers(provider, courseId)
+    UserImporterService.getUsers(provider, courseId)
 
   {
     scope:
@@ -42,7 +45,6 @@
     restrict: 'EA'
     templateUrl: 'user/import/form.html'
     link: (scope, element, attr) ->
-      scope.users = UserImportService.users
-      scope.hasError = UserImportService.hasError
+      scope.users = UserImporterService.users
   }
 ]

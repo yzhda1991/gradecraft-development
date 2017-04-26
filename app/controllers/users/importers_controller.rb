@@ -8,7 +8,8 @@ class Users::ImportersController < ApplicationController
 
   before_action :ensure_staff?
   before_action except: :index do |controller|
-    controller.redirect_path users_importers_path
+    controller.redirect_path \
+      users_importer_users_path(params[:importer_provider_id], params[:id])
   end
   before_action :require_authorization, except: :index
 
