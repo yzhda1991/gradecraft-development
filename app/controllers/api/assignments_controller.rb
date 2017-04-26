@@ -32,7 +32,9 @@ class API::AssignmentsController < ApplicationController
       render "api/assignments/show", success: true, status: 200
     else
       render json: {
-        message: "failed to save assignment", success: false
+        message: "failed to save assignment",
+        errors: @assignment.errors.messages,
+        success: false
         }, status: 400
     end
   end
@@ -53,8 +55,8 @@ class API::AssignmentsController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit(
-      :accepts_submissions, :include_in_predictor, :include_in_timeline,
-      :include_in_to_do, :release_necessary, :required, :student_logged, :visible
+      :accepts_submissions, :accepts_submissions_until, :due_at, :include_in_predictor, :include_in_timeline,
+      :include_in_to_do, :open_at, :release_necessary, :required, :student_logged, :visible
     )
   end
 end

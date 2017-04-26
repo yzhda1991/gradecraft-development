@@ -90,6 +90,14 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         modelArray.push(item.attributes)
     )
 
+  # need to format dates in format exepcted by datepicker
+  # or it won't work
+  formatDates = (article,date_fields)->
+    _.each(date_fields, (field)->
+      if article[field]
+        article[field] = new Date(article[field]);
+    )
+
   return {
     termFor: termFor
     setTermFor: setTermFor
@@ -99,6 +107,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     addItem: addItem
     addItems: addItems
     deleteItem: deleteItem
+    formatDates: formatDates
     loadFromIncluded: loadFromIncluded
   }
 )

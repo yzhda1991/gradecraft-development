@@ -68,13 +68,7 @@
             %td {{assignment.full_points | number }}
 
             %td
-              %ul
-                %li
-                  Opens: {{assignment.opens_at || "Always Open" | date }}
-                %li
-                  Due At: {{assignment.due_at || "No Due Date" | date }}
-                %li
-                  Accepted Until: {{assignment.accepts_submissions_until || "Always Accepted" | date }}
+              %assignment-date-picker(assignment="assignment")
 
             %td
               .right

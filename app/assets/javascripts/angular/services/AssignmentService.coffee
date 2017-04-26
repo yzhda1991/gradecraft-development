@@ -1,7 +1,7 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService) ->
+@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService, DebounceQueue) ->
 
   assignments = []
   update = {}
@@ -33,6 +33,23 @@
   assignmentsPredictedPoints = ()->
     assignmentsSubsetPredictedPoints(assignments)
 
+  ValidateDates = (assignment)->
+    valid = true
+    messages = []
+
+    # verify OpenBeforeCloseValidator will pass
+    if (assignment.due_at? && assignment.open_at?) && (assignment.due_at < assignment.open_at)
+      messages.push("Due date must be after open date.")
+      valid = false
+    # verify SubmissionsAcceptedAfterOpenValidator will pass
+    if (assignment.accepts_submissions_until? && assignment.open_at?) && (assignment.accepts_submissions_until < assignment.open_at)
+      messages.push("Submission accept date must be after open date.")
+    # verify SubmissionsAcceptedAfterDueValidator will pass
+    if (assignment.due_at? && assignment.accepts_submissions_until?) && (assignment.accepts_submissions_until < assignment.due_at)
+      messages.push("Submission accept date must be after due date.")
+      valid = false
+    return { valid: valid, messages: messages}
+
   #------ API Calls -----------------------------------------------------------#
 
   # GET single assignment, will be the only item in the assignments array
@@ -61,6 +78,8 @@
           assignment.prediction = { predicted_points: 0 } if !assignment.prediction
           assignment.grade = { score: null, final_points: null, is_excluded: false } if !assignment.grade
 
+          GradeCraftAPI.formatDates(assignment,["open_at", "due_at", "accepts_submissions_until"])
+
           # Iterate through all Assignments that are conditions,
           # If they are closed_without_submission,
           # flag this assignment to be closed as well
@@ -81,10 +100,12 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  # Assignment Attributes are updated individually from checkboxes on the
+  # Assignment Attributes are updated individually from directives on the
   # settings page. Note that the updated attribute might be different from
   # the one passed in by json and optimised for the predictor:
   # example: required vs. is_required
+  # Therefore we don't rely on the assignment models but pass the attribute
+  # state in directly.
   updateAssignmentAttribute = (id, attribute, state) ->
     params = { "#{attribute}" : state }
     assignment = _.find(assignments, {id: id})
@@ -94,6 +115,22 @@
         GradeCraftAPI.logResponse(response)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
+    )
+
+  _updateAssignment = (id)->
+    assignment = _.find(assignments, {id: id})
+    if assignment && ValidateDates(assignment).valid
+      $http.put("/api/assignments/#{id}", assignment: assignment).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+
+  queueUpdateAssignment = (id, attribute, state) ->
+    DebounceQueue.addEvent(
+      "assignments", id, _updateAssignment, [id]
     )
 
   # PUT a predicted earned grade for assignment
@@ -110,14 +147,16 @@
         GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
   return {
-      termFor: termFor
-      assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
-      assignmentsPredictedPoints: assignmentsPredictedPoints
-      getAssignments: getAssignments
-      getAssignment: getAssignment
-      updateAssignmentAttribute: updateAssignmentAttribute
-      postPredictedAssignment: postPredictedAssignment
-      assignments: assignments
       assignment: assignment
+      assignments: assignments
+      assignmentsPredictedPoints: assignmentsPredictedPoints
+      assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
+      getAssignment: getAssignment
+      getAssignments: getAssignments
+      postPredictedAssignment: postPredictedAssignment
+      queueUpdateAssignment: queueUpdateAssignment
+      termFor: termFor
+      updateAssignmentAttribute: updateAssignmentAttribute
+      ValidateDates: ValidateDates
   }
 ]
