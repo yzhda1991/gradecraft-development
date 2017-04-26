@@ -65,7 +65,8 @@
             %td
               %assignment-setting(assignment-id="assignment.id" attribute="release_necessary" checked="assignment.release_necessary")
 
-            %td {{assignment.full_points | number }}
+            %td
+              %assignment-full-points(assignment="assignment")
 
             %td
               %assignment-date-picker(assignment="assignment")
