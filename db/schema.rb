@@ -503,6 +503,12 @@ ActiveRecord::Schema.define(version: 20170515165329) do
     t.index ["user_id"], name: "index_imported_users_on_user_id", using: :btree
   end
 
+  create_table "institutions", force: :cascade do |t|
+    t.string  "name",                             null: false
+    t.boolean "has_site_license", default: false, null: false
+    t.index ["name"], name: "index_institutions_on_name", using: :btree
+  end
+
   create_table "level_badges", force: :cascade do |t|
     t.integer  "level_id"
     t.integer  "badge_id"
