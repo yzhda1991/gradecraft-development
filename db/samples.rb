@@ -163,6 +163,24 @@ User.create! do |u|
   u.save!
 end.activate!
 
+# ---------------------------- Create Auditors! ------------------------------#
+#Delphini Diggory
+
+puts "Generating auditors..."
+
+auditor = User.create! do |u|
+  u.username = "delphini.diggory"
+  u.first_name = "Delphini"
+  u.last_name = "Diggory"
+  u.email = "delphini.diggory@hogwarts.edu"
+  u.password = "keepthesecrets"
+  u.courses << @courses.map {|course_name,config| config[:course]}
+  u.display_name = "Delphini Diggory"
+  u.save!
+end
+auditor.activate!
+auditor.course_memberships.each { |cm| cm.update_attributes(role: "student", auditing: true) }
+
 # ---------------------------- Create Students! ------------------------------#
 puts "Generating students..."
 
