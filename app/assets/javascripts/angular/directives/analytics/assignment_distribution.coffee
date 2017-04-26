@@ -1,24 +1,29 @@
 # box plot for assignment grade distribution
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this
+      
+      initializeGraph = () ->
+        plotGraph(AnalyticsService.assignmentData, vm.studentDistro)
+        angular.element($window).on 'resize', ->
+          DebounceQueue.addEvent(
+            "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
+          )
 
       services(vm.assignmentId, vm.studentId).then(()->
         vm.assignment_average = AnalyticsService.assignmentData.assignment_average
         vm.assignment_low_score = AnalyticsService.assignmentData.assignment_low_score
         vm.assignment_high_score = AnalyticsService.assignmentData.assignment_high_score
         # plot graph when tab is activated for chart usage in jquery ui tabs
-        angular.element('#tabs').on 'tabsactivate', ->
-          if event.currentTarget.classList.contains('class-analytics-tab')
-            plotGraph(AnalyticsService.assignmentData, vm.studentDistro)
+        if angular.element($rootElement).hasClass('analytics-tab-panel')
+          angular.element('#tabs').on 'tabsactivate', ->
+            if event.currentTarget.classList.contains('class-analytics-tab')
+              initializeGraph()
+        else
+          initializeGraph()
       )
-
-      angular.element($window).on 'resize', ->
-        DebounceQueue.addEvent(
-          "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
-        )
     ]
 
     services = (assignmentId, studentId)->
