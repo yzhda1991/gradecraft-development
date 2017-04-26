@@ -23,8 +23,11 @@
     vm.termForUserExists = (value) ->
       if value is true then "Yes" else "No"
 
-    initialize(@currentAssignmentId, @courseId, @provider, @assignmentIds).then(() ->
-      vm.loading = false
+    vm.hasError = () ->
+      GradeImporterService.checkHasError()
+
+    initialize(@currentAssignmentId, @courseId, @provider, @assignmentIds).finally(() ->
+      vm.loading = false  # regardless of whether promise is a success or failure
     )
   ]
 
@@ -51,6 +54,5 @@
       scope.grades = GradeImporterService.grades
       scope.termFor = GradeImporterService.termFor
       scope.assignment = GradeImporterService.assignment
-      scope.hasError = GradeImporterService.hasError
   }
 ]

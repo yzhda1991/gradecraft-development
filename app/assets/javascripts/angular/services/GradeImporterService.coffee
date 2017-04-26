@@ -32,6 +32,9 @@
   deselectAllGrades = () ->
     _setGradesSelected(false)
 
+  checkHasError = () ->
+    hasError
+
   _hasNextPage = (response) ->
     response.data.meta.has_next_page
 
@@ -49,12 +52,12 @@
 
   {
     grades: grades
-    hasError: hasError
     assignment: assignment
     termFor: termFor
     getGrades: getGrades
     getAssignment: getAssignment
     selectAllGrades: selectAllGrades
     deselectAllGrades: deselectAllGrades
+    checkHasError: checkHasError
   }
 ]
