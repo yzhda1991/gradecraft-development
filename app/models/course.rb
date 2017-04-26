@@ -72,6 +72,7 @@ class Course < ActiveRecord::Base
   end
 
   has_many :users, through: :course_memberships
+  belongs_to :institution
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :assignments
 

@@ -306,6 +306,8 @@ ActiveRecord::Schema.define(version: 20170515165329) do
     t.boolean  "has_multipliers",                                         default: false,                        null: false
     t.boolean  "has_paid",                                                default: true,                         null: false
     t.boolean  "allows_canvas",                                           default: true,                         null: false
+    t.integer  "institution_id"
+    t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|
@@ -826,6 +828,7 @@ ActiveRecord::Schema.define(version: 20170515165329) do
   add_foreign_key "announcements", "courses"
   add_foreign_key "announcements", "users", column: "author_id"
   add_foreign_key "announcements", "users", column: "recipient_id"
+  add_foreign_key "courses", "institutions"
   add_foreign_key "earned_badges", "users", column: "awarded_by_id"
   add_foreign_key "flagged_users", "courses"
   add_foreign_key "flagged_users", "users", column: "flagged_id"
