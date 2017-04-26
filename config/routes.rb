@@ -375,7 +375,6 @@ Rails.application.routes.draw do
     end
     resources :levels, only: :update
 
-    # Student Predictor View, Predictor Preview
     resources :predicted_earned_badges, only: [:create, :update]
     resources :predicted_earned_challenges, only: [:create, :update]
     resources :predicted_earned_grades, only: [:create, :update]
@@ -384,7 +383,6 @@ Rails.application.routes.draw do
     resources :students, only: [:index]
     get "students/analytics", to: "students#analytics"
 
-    # Instructor View of Student's Predictor
     resources :students, only: [], module: :students do
       resources :badges, only: :index
     end
