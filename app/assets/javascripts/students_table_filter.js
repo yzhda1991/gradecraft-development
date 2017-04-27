@@ -36,16 +36,25 @@
 
 var studentIndexDynatable = $('#student-index-table')
   .bind('dynatable:init', function(e, dynatable) {
+    dynatable.queries.functions['all-students'] = function(record) {
+      return true;
+    };
     dynatable.queries.functions['leaderboard'] = function(record) {
       return record.rank.length;
     };
     dynatable.queries.functions['top10'] = function(record) {
       return record.rank.length && parseInt(record.rank) <= 10
     };
-    // dynatable.queries.functions['bottom10'] = function(record) {
-    //   return true;
-    //   //return record.rank.length && parseInt(record.rank) > "data-last-ten"
-    // };
+    dynatable.queries.functions['bottom10'] = function(record) {
+      return true;
+      //return record.rank.length && parseInt(record.rank) > "data-last-ten"
+    };
+    dynatable.queries.functions['flagged-students'] = function(record) {
+      return $(record.flag).find("i").hasClass("flagged");
+    };
+    dynatable.queries.functions['auditors'] = function(record) {
+      return !record.rank.length;
+    };
   })
   .dynatable({
     features: {
@@ -59,7 +68,7 @@ var removeStudentIndexFilters = function() {
   studentIndexDynatable.queries.remove('leaderboard');
   studentIndexDynatable.queries.remove('top10');
   studentIndexDynatable.queries.remove('bottom10');
-  studentIndexDynatable.queries.remove('flagged');
+  studentIndexDynatable.queries.remove('flagged-students');
   studentIndexDynatable.queries.remove('auditors');
 }
 
@@ -68,20 +77,6 @@ $('.button-table-action').click( function() {
   var btnId = $(this).attr('id');
   console.log(btnId);
   removeStudentIndexFilters();
-  switch(btnId) {
-    // case 'btn-all-students', just remove filters
-    case 'btn-leaderboard':
-      studentIndexDynatable.queries.add("leaderboard");
-    case 'btn-top10':
-      studentIndexDynatable.queries.add("top10");
-    case 'btn-bottom10':
-      //return (rank.length) ? parseInt(rank) <= parseInt(lowestRank) - 10 : true;
-    case 'btn-flagged-students':
-      //var flagged = $(this).find('td:eq(0) i').hasClass('flagged');
-      //return !flagged;
-    case 'btn-auditors':
-      // auditors have no rank, so hide all students that have a rank in the class
-      //return rank.length;
-  }
+  studentIndexDynatable.queries.add(btnId.replace('btn-',''));
   studentIndexDynatable.process();
 });
