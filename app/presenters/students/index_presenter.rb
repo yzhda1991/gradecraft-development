@@ -63,10 +63,6 @@ class Students::IndexPresenter < Showtime::Presenter
     @students
   end
 
-  def lowest_ranking
-    students.last.rank
-  end
-
   def team_id
     properties[:team_id]
   end
