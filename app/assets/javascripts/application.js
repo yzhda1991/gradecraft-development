@@ -83,7 +83,7 @@
 //= require analytics
 //= require assignment_types
 //= require assignments
-//= require pass_fail
+//= require assignment_form
 //= require student_dashboard
 //= require student_onboarding
 //= require students_table_filter

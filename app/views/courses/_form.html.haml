@@ -1,127 +1,132 @@
 
 = render partial: "layouts/alerts", locals: { model: @course }
 
-%section
-  %h2 Basics
-  .form-item
-    = f.label :name, "*Course Title"
-    = f.text_field :name
+.form-wrapper
+  %section.form-section
+    %h2.form-title Basics
+    .form-flex-container
+      .form-flex-row
+        .form-item.col-50
+          = f.label :course_number, "*Course Number"
+          = f.text_field :course_number
 
-  .form-item
-    = f.label :course_number, "*Course Number"
-    = f.text_field :course_number
+        .form-item.col-50
+          = f.label :name, "*Course Title"
+          = f.text_field :name
+      .form-flex-row
+        .form-item.col-50
+          = f.label :semester
+          = f.select :semester, [["Winter", "winter"], ["Spring", "spring"], ["Summer", "summer"], ["Fall", "fall"]]
 
-  .form-item
-    = f.label :tagline, "Tagline"
-    = f.text_field :tagline
+        .form-item.col-50
+          = f.label :year
+          = f.select :year, (Date.today.year - 3)..(Date.today.year + 2), :selected => "#{@course.year || Date.today.year}"
 
-  .form-item
-    = f.label :semester
-    = f.select :semester, [["Winter", "winter"], ["Spring", "spring"], ["Summer", "summer"], ["Fall", "fall"]]
+      .form-flex-row
+        .form-item.col-50
+          = f.input :start_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:start_date) }
 
-  .form-item
-    = f.label :year
-    = f.select :year, (Date.today.year - 3)..(Date.today.year + 2), :selected => "#{@course.year || Date.today.year}"
+        .form-item.col-50
+          = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
 
-  .form-item
-    = f.input :start_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:start_date) }
+      .form-flex-row
+        .form-item.col-100
+          = f.label :tagline, "Course Tagline"
+          = f.text_field :tagline
 
-  .form-item
-    = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
+  - if current_user_is_admin?
+    %section.form-section
+      %h2.form-title GradeCraft Settings
+      .form-item
+        = f.label :status, "Active?"
+        = f.check_box :status
+        .form-hint Is this an active course?
+      .form-item
+        = f.label :has_paid, "Has Paid?"
+        = f.check_box :has_paid
+        .form-hint If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users.
+      .form-item
+        = f.label :allows_canvas, "Allows Canvas?"
+        = f.check_box :allows_canvas
+        .form-hint Does this course allow integration with Canvas?
 
-- if current_user_is_admin?
-  %section
-    %h2 GradeCraft Settings
-    .form-item
-      = f.label :status, "Active?"
-      = f.check_box :status
-      .form_label Is this an active course?
-    .form-item
-      = f.label :has_paid, "Has Paid?"
-      = f.check_box :has_paid
-      .form_label If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users.
-    .form-item
-      = f.label :allows_canvas, "Allows Canvas?"
-      = f.check_box :allows_canvas
-      .form_label Does this course allow integration with Canvas?
-
-%section
-  %h2 Enable Features
-  .form-card-grid
-    .form-card
-      .form-card-header
-        = f.label :has_badges, "Badges"
-        = f.check_box :has_badges, {class: "feature-checkbox has-settings-menu"}
-      .form-card-body
-        .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course.
-      .form-card-advanced-settings
-        %button.button-advanced-settings= glyph(:cog) + "Settings"
-      .advanced-settings-card
-        %a.button-close= glyph(:times)
-        = f.check_box :has_public_badges
-        = f.label :has_public_badges, "Allow students to export badges earned in your course"
-
-
-    .form-card
-      .form-card-header
-        = f.label :show_analytics, "Analytics"
-        = f.check_box :show_analytics, {class: "feature-checkbox"}
-      .form-card-body
-        .feature-description{id: "showAnalytics"}  Show course and assignment learning analytics displays that help students stay informed about their own work.
-
-    .form-card
-      .form-card-header
-        = f.label :has_multipliers, "Multipliers"
-        = f.check_box :has_multipliers, {class: "feature-checkbox has-settings-menu"}
-      .form-card-body
-        .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
-      .form-card-advanced-settings
-        %button.button-advanced-settings= glyph(:cog) + "Settings"
-      .advanced-settings-card
-        %a.button-close= glyph(:times)
-        = f.input :total_weights, {"aria-describedby" => "txtMultiplierCount", :label => "How many multipliers do #{term_for :students} have to allocate?" }
-        = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
-        = f.input :max_weights_per_assignment_type, {input_html: { min: 1 } }
-        = f.input :max_assignment_types_weighted, {input_html: { min: 1 }, :label => "Is there a maximum number of assignment types they can weight?" }
-        = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}
+  %section.form-section
+    %h2.form-title Enable Features
+    .form-card-grid
+      .form-card
+        .form-card-header
+          = f.label :has_badges, "Badges"
+          = f.check_box :has_badges, {class: "feature-checkbox has-settings-menu"}
+        .form-card-body
+          .feature-description Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course.
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.check_box :has_public_badges
+          = f.label :has_public_badges, "Allow students to export badges earned in your course"
 
 
-    .form-card
-      .form-card-header
-        = f.label :has_teams, "Sections"
-        = f.check_box :has_teams, {class: "feature-checkbox sections-enabled has-settings-menu"}
-      .form-card-body
-        .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
-      .form-card-advanced-settings
-        %button.button-advanced-settings= glyph(:cog) + "Settings"
-      .advanced-settings-card
-        %a.button-close= glyph(:times)
-        = f.check_box :team_score_average, {class: "feature-checkbox"}
-        = f.label :team_score_average, "Allow sections' scores to be the average of their students' scores"
+      .form-card
+        .form-card-header
+          = f.label :show_analytics, "Analytics"
+          = f.check_box :show_analytics, {class: "feature-checkbox"}
+        .form-card-body
+          .feature-description{id: "showAnalytics"}  Show course and assignment learning analytics displays that help students stay informed about their own work.
+
+      .form-card
+        .form-card-header
+          = f.label :has_multipliers, "Multipliers"
+          = f.check_box :has_multipliers, {class: "feature-checkbox has-settings-menu"}
+        .form-card-body
+          .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.input :total_weights, {"aria-describedby" => "txtMultiplierCount", :label => "How many multipliers do #{term_for :students} have to allocate?" }
+          = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
+          = f.input :max_weights_per_assignment_type, {input_html: { min: 1 } }
+          = f.input :max_assignment_types_weighted, {input_html: { min: 1 }, :label => "Is there a maximum number of assignment types they can weight?" }
+          = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}
 
 
-    .form-card
-      .form-card-header
-        = f.label :has_team_challenges, "Section Assignments"
-        = f.check_box :has_team_challenges, {class: "feature-checkbox dependent-on-section has-settings-menu"}
-      .form-card-body
-        .feature-description{id: "txtSectionAssignments"}  These are larger assignments to be completed by discussion section groups.
-      .form-card-advanced-settings
-        %button.button-advanced-settings= glyph(:cog) + "Settings"
-      .advanced-settings-card
-        %a.button-close= glyph(:times)
-        = f.check_box :add_team_score_to_student
-        = f.label :add_team_score_to_student, "Allow team assignment scores to be added directly into student scores"
+      .form-card
+        .form-card-header
+          = f.label :has_teams, "Sections"
+          = f.check_box :has_teams, {class: "feature-checkbox sections-enabled has-settings-menu"}
+        .form-card-body
+          .feature-description{id: "txtSections"}  Will you have semester-long sections in your course?
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.check_box :team_score_average, {class: "feature-checkbox"}
+          = f.label :team_score_average, "Allow sections' scores to be the average of their students' scores"
 
-    .form-card
-      .form-card-header
-        = f.label :teams_visible, "Section Leaderboard"
-        = f.check_box :teams_visible, {class: "feature-checkbox dependent-on-section has-settings-menu"}
-      .form-card-body
-        .feature-description{id: "txtSectionLeaderboard"} Students can choose to participate in anonymous, section-based leaderboards if they enjoy competition, and opt-out if they don't.
-      .form-card-advanced-settings
-        %button.button-advanced-settings= glyph(:cog) + "Settings"
-      .advanced-settings-card
-        %a.button-close= glyph(:times)
-        = f.check_box :has_in_team_leaderboards
-        = f.label :has_in_team_leaderboards, "Allow students to opt in to see in-section rankings and points (using pseudonyms to protect their privacy)"
+
+      .form-card
+        .form-card-header
+          = f.label :has_team_challenges, "Section Assignments"
+          = f.check_box :has_team_challenges, {class: "feature-checkbox dependent-on-section has-settings-menu"}
+        .form-card-body
+          .feature-description{id: "txtSectionAssignments"}  These are larger assignments to be completed by discussion section groups.
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.check_box :add_team_score_to_student
+          = f.label :add_team_score_to_student, "Allow team assignment scores to be added directly into student scores"
+
+      .form-card
+        .form-card-header
+          = f.label :teams_visible, "Section Leaderboard"
+          = f.check_box :teams_visible, {class: "feature-checkbox dependent-on-section has-settings-menu"}
+        .form-card-body
+          .feature-description{id: "txtSectionLeaderboard"} Students can choose to participate in anonymous, section-based leaderboards if they enjoy competition, and opt-out if they don't.
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.check_box :has_in_team_leaderboards
+          = f.label :has_in_team_leaderboards, "Allow students to opt in to see in-section rankings and points (using pseudonyms to protect their privacy)"

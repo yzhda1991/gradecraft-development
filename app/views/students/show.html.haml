@@ -6,18 +6,17 @@
   = render "layouts/alerts"
 
 .instructor-dashboard.show-student
-  .flex-col.col-30
+  .flex-col.col-50
     .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_avatar"
 
-    - if current_course.student_weighted?
-      .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
-
-  .flex-col.col-40
-    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
-
-  .flex-col.col-30
     - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
       .panel.dashboard-module.grading-scheme-module= render partial: "info/dashboard/modules/dashboard_grading_scheme", locals: { presenter: Info::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
+  .flex-col.col-50
     - if AnalyticsProctor.new.viewable? current_student, current_course
       .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution", locals: { current_student: current_student }
+
+    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
+
+    - if current_course.student_weighted?
+      .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"

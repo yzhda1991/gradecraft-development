@@ -7,17 +7,6 @@
   @media (max-width: $media-small-max)
     flex-wrap: wrap
 
-  .col-30
-    width: 30%
-  .col-40
-    width: 40%
-  .col-50
-    width: 50%
-  .col-60
-    width: 60%
-  .col-70
-    width: 70%
-
   .flex-col
     display: flex
     flex-direction: column
@@ -39,6 +28,10 @@
   .flex-row
     margin-right: 1rem
     flex: 1
+
+  .stacked-column
+    @media (max-width: $media-medium-max)
+      width: 100%
 
   .stacked-module
     flex: 1 auto
@@ -83,10 +76,10 @@
   li
     list-style-type: none
 
-  .form_label
+  .due-date
     color: $color-grey-2
-    font-style: normal
     font-weight: 300
+    font-size: 80%
 
 .assignment-item
   position: relative
@@ -210,8 +203,7 @@ ul.badge-grid
 .avatar
   background-color: transparentize($color-blue-4, .8)
   ul.button-bar
-    width: 100%
-    margin: .5em auto
+    padding-left: 0
     li
       display: inline-block
       list-style-type: none

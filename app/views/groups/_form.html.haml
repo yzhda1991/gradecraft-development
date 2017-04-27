@@ -2,11 +2,11 @@
 
   = render partial: "layouts/alerts", locals: { model: @group }
 
-  %section
+  %section.form-section
     - if @group.pending? && current_user_is_staff?
       = f.label :approved, "Status"
       = f.select :approved, [["Pending"], ["Approved"], ["Rejected"]]
-      .form_label If rejected, this #{term_for :group} will be unable to submit any further work for these assignments
+      .form-hint If rejected, this #{term_for :group} will be unable to submit any further work for these assignments
 
       %hr.dotted
 
@@ -15,17 +15,17 @@
 
     .form-item
       = f.association :assignments, :collection => @group_assignments, as: :check_boxes, :label => "#{(term_for :assignments).titleize}"
-      .form_label{id: "txtGroupAssignment"} What #{term_for :assignments} will this #{term_for :group} work on together?
+      .form-hint{id: "txtGroupAssignment"} What #{term_for :assignments} will this #{term_for :group} work on together?
 
     - if current_user_is_student? && !@group.persisted?
       .form-item
         = f.association :students, :collection => @other_students, as: :select, :label => "#{term_for :students}"
-        .form_label= "You (#{current_student.name }) will be automatically included in this group."
+        .form-hint= "You (#{current_student.name }) will be automatically included in this group."
     - elsif current_user_is_student?
       .form-item= f.association :students, :collection => current_course.students.order_by_name, as: :select, :label => "#{term_for :students}"
     - if current_user_is_staff?
       .form-item= f.association :students, :collection => current_course.students.order_by_name, as: :select, :label => "#{term_for :students}"
-    .form_label{id: "txtStudentName"} Enter a fellow student's name to add them to this #{term_for :group}. Only one student needs to create the #{term_for :group}, after which all #{term_for :group} members will be able to submit work, see submitted materials, and see instructor grades and feedback.
+    .form-hint{id: "txtStudentName"} Enter a fellow student's name to add them to this #{term_for :group}. Only one student needs to create the #{term_for :group}, after which all #{term_for :group} members will be able to submit work, see submitted materials, and see instructor grades and feedback.
 
   = render partial: "groups/proposal_section", locals: { f: f }
 

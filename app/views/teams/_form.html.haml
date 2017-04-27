@@ -1,13 +1,13 @@
 = simple_form_for @team do |f|
-  %section
-    %h4 Basic Info
+  %section.form-section
+    %h2.form-title Basic Info
     .form-item
       = f.label :name, "#{current_course.team_term} Name"
       = f.text_field :name
     .form-item
       %label Banner
       = f.file_field :banner
-      .form_label= "Upload a banner for this #{term_for :team}"
+      .form-hint= "Upload a banner for this #{term_for :team}"
 
     .form-item
       = f.association :students, :collection => current_course.students, as: :select

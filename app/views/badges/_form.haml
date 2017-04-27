@@ -1,9 +1,9 @@
 = render partial: "layouts/alerts", locals: { model: @badge, term: term_for(:badge) }
 
 = simple_form_for @badge do |f|
-  %section
+  %section.form-section
 
-    %h2 Basic Settings
+    %h2.form-title Basic Settings
 
     .form-item
       = f.label :name, "Name"
@@ -21,27 +21,27 @@
     .form-item
       = f.label :visible
       = f.check_box :visible
-      .form_label Can #{term_for :students} see this #{term_for :badge}?
+      .form-hint Can #{term_for :students} see this #{term_for :badge}?
 
     .form-item
       = f.label :can_earn_multiple_times,"Multi-award"
       = f.check_box :can_earn_multiple_times
-      .form_label Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
+      .form-hint Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
 
     .form-item
       = f.label :student_awardable,"Student-awardable"
       = f.check_box :student_awardable
-      .form_label Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
+      .form-hint Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
 
-  %section
-    %h2 Description
+  %section.form-section
+    %h2.form-title Description
 
     .textarea
-      .form_label Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
+      .form-hint Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
       = f.text_area :description, class: "froala"
 
-  %section
-    %h2 Unlocks
+  %section.form-section
+    %h2.form-title Unlocks
     .unlock-conditions
       %p.hint Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :badge }?
       %script(id="unlock-condition-template" type="text/x-template")
@@ -55,7 +55,7 @@
     %button.add-unlock-condition Add a Condition
 
     .unlock-visibility-settings
-      %h2 Unlock Visibility Settings
+      %h2.form-title Unlock Visibility Settings
       .form-item
         .locked-visibility-options.form-item-with-options
           = f.label :visible_when_locked, :label => "Visible when Locked"
@@ -77,8 +77,8 @@
 
 
 
-  %section
-    %h2 Attachments
+  %section.form-section
+    %h2.form-title Attachments
     .form-item
       = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|
         = bf.file_field :file, :multiple => true

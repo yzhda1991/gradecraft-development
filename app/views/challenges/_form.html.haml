@@ -1,8 +1,8 @@
 = render partial: "layouts/alerts", locals: { model: @challenge, term: term_for(:challenge) }
 
 = simple_form_for(@challenge) do |f|
-  %section
-    %h2 Basic Info
+  %section.form-section
+    %h2.form-title Basic Info
 
     .form-item
       = f.label :name
@@ -18,15 +18,15 @@
     .form-item
       = f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @challenge.try(:due_at) }
 
-  %section
-    %h2 Description
+  %section.form-section
+    %h2.form-title Description
 
     .textarea
-      .form_label What do the #{term_for :teams} need to do to succeed?
+      .form-hint What do the #{term_for :teams} need to do to succeed?
       = f.text_area :description, class: "froala"
 
-  %section
-    %h2 GradeCraft Settings
+  %section.form-section
+    %h2.form-title GradeCraft Settings
     .form-item
       = f.label :visible, "Visible to students?"
       = f.check_box :visible
@@ -34,16 +34,16 @@
     .form-item
       = f.label :include_in_timeline, "Timeline"
       = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
-      .form_label{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :challenge} in the course timeline? Note that #{term_for :challenges} without open or due dates will be excluded automatically.
+      .form-hint{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :challenge} in the course timeline? Note that #{term_for :challenges} without open or due dates will be excluded automatically.
 
     .form-item
       = f.label :release_necessary, "Release necessary?"
       = f.check_box :release_necessary
-      .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
+      .form-hint Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
 
-  %section
-    %h2 Grade Levels
+  %section.form-section
+    %h2.form-title Grade Levels
     .challenge-score-levels
       %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :challenge} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
       %script(id="challenge-score-level-template" type="text/x-template")
@@ -58,8 +58,8 @@
 
   = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
   
-  %section
-    %h2 Attachments
+  %section.form-section
+    %h2.form-title Attachments
     = f.simple_fields_for :challenge_files, @challenge.challenge_files.new do |cf|
       = cf.file_field :file, :multiple => true
     - if @challenge.challenge_files.exists?

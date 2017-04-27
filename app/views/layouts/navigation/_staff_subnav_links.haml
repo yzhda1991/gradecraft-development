@@ -54,7 +54,7 @@
     %hr
 
     %h5{ class: "make-lizards" } Admin
-    = active_course_link_to_unless_current decorative_glyph(:plus) + "New Course", new_course_path
+    = active_course_link_to decorative_glyph(:plus) + "New Course", new_course_path
     - if current_user_is_admin?
       %li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
       %li= link_to_unless_current decorative_glyph("user-times") + "All Users", users_path

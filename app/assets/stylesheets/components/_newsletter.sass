@@ -1,16 +1,20 @@
 @import "../utilities/variables"
 
 .newsletter_bar
-  padding-top: .5rem
-  padding-bottom: .5rem
+  padding: .5rem 0
   text-align: center
   margin: 0 auto
-  clear: both
   background-color: $color-blue-5
   width: 100%
+  @media (max-width: $media-small-max)
+    padding: 1rem 0
 
   .title
     display: inline
+    @media (max-width: $media-medium-max)
+      display: block
+      font-size: 1rem
+      margin-bottom: .5rem
 
   form
     display: inline
@@ -20,53 +24,39 @@
     padding: .5rem
     margin-right: .5rem
     width: 200px
+    display: inline-block
+    @media (max-width: $media-small-max)
+      width: 80%
+      font-size: 0.9rem
+      margin-right: 0
 
   input.button
-    padding: .5rem
     width: 100px
-    background-color: $color-blue-3
-
-    &:hover
-      background-color: darken($color-blue-3, 10%)
-
-  div.mce_inline_error
-    margin-top: .75rem !important
 
   div.mce-error-response
-    margin-top: .75rem !important
-    clear: both
+    margin-top: .75rem
 
-@media (max-width: 920px)
-  .newsletter_bar
+#mc_embed_signup div.mce_inline_error
+  margin: 0 !important
+  padding: 4px !important
+  background-color: $color-red-1 !important
+  position: relative
+  display: inline-block
+  font-size: 0.8rem
+  font-weight: 400 !important
+  &::after
+    position: absolute
+    content: " "
+    transform: translateY(-50%)
+    top: 50%
+    border-top: 8px solid transparent
+    border-bottom: 8px solid transparent
+    right: 100%
+    margin-left: 0.75rem
+    border-right: 8px solid $color-red-1
 
-    input
-      width: 20%
-    
-    .title
+span#mc_embed_signup_scroll
+  @media (max-width: $media-small-max)
+    .mc-field-group
       display: block
-      padding: 0 0 .5rem 0
-
-@media (max-width: $media-small-max)
-  .newsletter_bar
-    padding-top: 1rem
-    padding-bottom: 1rem
-    span#mc_embed_signup_scroll
-      .mc-field-group
-        display: block
-        margin-bottom: 1.5rem
-
-        input
-          width: 80%
-          height: 2.5rem
-          font-size: 1rem
-
-    .button
-      font-size: 1rem
-      padding: .75rem !important
-      width: auto !important
-
-    .title
-      font-size: 1rem
-      color: $color-black
-      font-weight: bold
-      padding-bottom: .5rem
+      margin-bottom: 1rem

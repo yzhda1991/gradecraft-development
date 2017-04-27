@@ -18,5 +18,14 @@
       $('.pass-fail-contingent label').text(on) :
       $('.pass-fail-contingent label').text(off);
   });
+  
+  $('.individual-group-select select').change(function(){
+    if ($(this).val() === "Group") {
+      $('.individual-group-contingent').removeClass("hidden");
+    }
+    else {
+      $('.individual-group-contingent').addClass("hidden");
+    }
+  })
 
 }(jQuery);

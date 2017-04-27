@@ -1,7 +1,7 @@
 - if current_user_is_staff?
   = form.simple_fields_for :course_memberships do |cmf|
     - unless current_user.role(cmf.object.course).nil?
-      %section
+      .form-item.course-selection
         %h4.uppercase
           = "#{cmf.object.course.course_number} #{cmf.object.course.name} #{cmf.object.course.try(:semester)} #{cmf.object.course.try(:year)} Settings"
           .right
@@ -20,4 +20,4 @@
           .form-item
             = cmf.label :auditing
             = cmf.check_box :auditing
-            .form_label This #{term_for(:student).downcase}'s grades will be excluded from course analysis
+            .form-hint This #{term_for(:student).downcase}'s grades will be excluded from course analysis

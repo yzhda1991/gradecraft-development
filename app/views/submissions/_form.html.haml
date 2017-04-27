@@ -9,13 +9,13 @@
     = f.input :student_id, :input_html => { :value => presenter.student.id }, as: :hidden
 
   - if presenter.submission.will_be_resubmitted?
-    %section
+    %section.form-section
       .italic.not_bold= "Graded: #{presenter.submission.graded_at}"
       %span.label.alert Resubmission!
 
-  %section
+  %section.form-section
     - if presenter.assignment.accepts_attachments
-      %h4 Attachments
+      %h2.form-title Attachments
       = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
         = sf.file_field :file, :multiple => true
       - if presenter.submission.submission_files.exists?
@@ -30,7 +30,7 @@
       = f.input :link
 
     - if presenter.assignment.accepts_text
-      %h4.uppercase Content/Statement
+      %h2.form-title.uppercase Content/Statement
       = f.text_area :text_comment, class: "froala"
 
   .submit-buttons

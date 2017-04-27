@@ -1,13 +1,13 @@
 = render partial: "layouts/alerts", locals: { model: @announcement }
 
 = simple_form_for(@announcement) do |f|
-  %section
-    %h2 Basics
+  %section.form-section
+    %h2.form-title Basics
     .form-item
       = f.input :title, "aria-required": "true"
 
-  %section
-    %h2 Body
+  %section.form-section
+    %h2.form-title Body
     = f.text_area :body, class: "froala"
 
   .submit-buttons
