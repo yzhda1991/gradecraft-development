@@ -1,8 +1,6 @@
-// //Filter content on the student index page table for instructors
-
 if($('#student-index-table').length > 0 ) {
 
-  var studentIndexDynatable = $('#student-index-table')
+  var dynatable = $('#student-index-table')
     .bind('dynatable:init', function(e, dynatable) {
       dynatable.sorts.functions["numeric"] = numeric;
 
@@ -47,24 +45,24 @@ if($('#student-index-table').length > 0 ) {
   $('#student-index-table').data('bottom10Cutoff', bottom10Cutoff);
 
   var removeStudentIndexFilters = function() {
-    studentIndexDynatable.queries.remove('leaderboard');
-    studentIndexDynatable.queries.remove('top10');
-    studentIndexDynatable.queries.remove('bottom10');
-    studentIndexDynatable.queries.remove('flagged-students');
-    studentIndexDynatable.queries.remove('auditors');
+    dynatable.queries.remove('leaderboard');
+    dynatable.queries.remove('top10');
+    dynatable.queries.remove('bottom10');
+    dynatable.queries.remove('flagged-students');
+    dynatable.queries.remove('auditors');
   }
 
   $('.button-table-action').click( function() {
     $(this).addClass("selected").attr("aria-pressed", "true").siblings().removeClass("selected").attr("aria-pressed", "false");
     var btnId = $(this).attr('id');
     removeStudentIndexFilters();
-    studentIndexDynatable.queries.add(btnId.replace('btn-',''));
-    studentIndexDynatable.process();
+    dynatable.queries.add(btnId.replace('btn-',''));
+    dynatable.process();
   });
 
   //start by hiding auditors in table since default button selected is leaderboard
-  studentIndexDynatable.queries.add('leaderboard');
-  studentIndexDynatable.process();
+  dynatable.queries.add('leaderboard');
+  dynatable.process();
 }
 
 
