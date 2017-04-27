@@ -1,8 +1,11 @@
 // //Filter content on the student index page table for instructors
 
 if($('#student-index-table').length > 0 ) {
+
   var studentIndexDynatable = $('#student-index-table')
     .bind('dynatable:init', function(e, dynatable) {
+      dynatable.sorts.functions["numeric"] = numeric;
+
       // Custom filter logic is defined here:
       dynatable.queries.functions['all-students'] = function(record) {
         return true;
@@ -28,7 +31,14 @@ if($('#student-index-table').length > 0 ) {
       features: {
         paginate: false,
         recordCount: false,
-        sorting: false
+        sorting: false,
+        search: true
+      },
+      dataset: {
+        sortTypes: {
+          score: 'numeric',
+          rank: 'numeric',
+        }
       }
     }).data('dynatable');
 
