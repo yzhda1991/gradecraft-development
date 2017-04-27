@@ -1541,8 +1541,6 @@
             var queries = settings.inputs.queries || [],
                 inputQueries = $.makeArray(queries.map(function() { return $(this).attr('name') }));
 
-            if (settings.features.search) { inputQueries.push('search'); }
-
             for (var i = 0, len = inputQueries.length; i < len; i++) {
               var attr = inputQueries[i];
               if (data[label][attr]) {
@@ -1552,6 +1550,7 @@
                 delete urlOptions[label][attr];
               }
             }
+            if (settings.features.search) { inputQueries.push('search'); }
             continue;
           }
 
