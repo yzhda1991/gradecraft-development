@@ -342,6 +342,12 @@ Rails.application.routes.draw do
       resources :submissions, only: [:create, :update], module: :assignments do
         get :show, on: :collection
       end
+
+      namespace :grades do
+        resources :importers, only: [], param: :provider_id do
+          get "/course/:id", action: :show, as: :grades
+        end
+      end
     end
 
     resources :assignment_types, only: :index do

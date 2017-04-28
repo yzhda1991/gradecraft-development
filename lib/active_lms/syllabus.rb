@@ -30,8 +30,8 @@ module ActiveLMS
       provider.assignments(course_id, assignment_ids)
     end
 
-    def grades(course_id, assignment_ids, grade_ids=nil)
-      provider.grades(course_id, assignment_ids, grade_ids)
+    def grades(course_id, assignment_ids, grade_ids=nil, fetch_next=true, options={})
+      provider.grades(course_id, assignment_ids, grade_ids, fetch_next, options)
     end
 
     def update_assignment(course_id, assignment_id, params)

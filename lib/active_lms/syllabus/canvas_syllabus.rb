@@ -306,12 +306,16 @@ module ActiveLMS
     # assignment_ids - An Array of ids that can filter out the assignments
     # there were retrieved.
     # grade_ids - An array of ids that can filter out the grades that were retrieved.
+    # fetch_next - A boolean representing whether additional pages should be fetched
+    # automatically
+    # options - A hash representing any additional parameters that should be included
+    # in the query
     #
     # Examples
     #
     # GET: http://instructure.com/api/v1/courses/:id/students/submission
     #
-    # Returns an Array of Hashes representing multiple grades.
+    # Returns a Hash containing the grades and any additional metadata
     #
     # [{
     #   "assignment_id": 23,
@@ -335,13 +339,13 @@ module ActiveLMS
     #   "assignment_visible": true,
     #   "excused": true
     # }]
-    def grades(course_id, assignment_ids, grade_ids=nil)
+    def grades(course_id, assignment_ids, grade_ids=nil, fetch_next=false, options={})
       grades = []
       params = { assignment_ids: assignment_ids,
                  student_ids: "all",
                  include: ["assignment", "course", "user"],
-                 per_page: 100 }
-      client.get_data("/courses/#{course_id}/students/submissions", params) do |data|
+                 per_page: options.delete(:per_page) || 25 }.merge(options)
+      result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
         if grade_ids.nil?
           grades += data
         else
@@ -351,7 +355,7 @@ module ActiveLMS
           end
         end
       end
-      grades
+      { data: grades, has_next_page: result[:has_next_page] }
     end
 
     def update_assignment(course_id, assignment_id, params)

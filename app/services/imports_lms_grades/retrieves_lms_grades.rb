@@ -16,7 +16,7 @@ module Services
         grade_ids = context.grade_ids
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.grades = syllabus.grades course_id, assignment_ids, grade_ids
+        context.grades = syllabus.grades(course_id, assignment_ids, grade_ids)[:data]
         context.user_ids = context.grades.map { |h| h["user_id"] }.compact.uniq
       end
     end
