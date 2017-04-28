@@ -86,7 +86,7 @@
 //= require assignment_form
 //= require student_dashboard
 //= require student_onboarding
-//= require students_table_filter
+//= require dynatable_student_index
 //= require public_pages
 //= require statuspages
 //= require earned_badges
