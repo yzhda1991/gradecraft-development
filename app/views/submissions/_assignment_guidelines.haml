@@ -32,7 +32,7 @@
     %p.minimize= raw assignment.assignment_type.description
     %hr.grading-divider
 
-- if current_user_is_staff? && @grade.present?
+- if current_user_is_staff? 
   %section.grade-form-section
     - if assignment.has_groups?
       %h2.grade-form-header= "Grade for #{@group.name}:" 
