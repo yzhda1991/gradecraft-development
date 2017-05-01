@@ -80,6 +80,33 @@ hr.light-grey
 .page-header
   padding: 0.5rem 1rem
 
+.collapse-toggler
+  i.fa.fa-angle-double-right.fa-fw
+    transform: rotate(90deg)
+
+.collapse-toggler.collapsed
+  i.fa.fa-angle-double-right.fa-fw
+    transform: rotate(0deg)
+
+.unpublished-course-notification
+  background-color: $color-red-1
+  width: 100%
+  height: 2.5rem
+  color: white
+  font-size: 1.25rem
+  text-transform: uppercase
+  text-align: center
+  padding-top: .5rem
+  font-weight: 100
+  .publish-button
+    border: 1px solid white
+    border-radius: .5rem
+    margin-left: 2rem
+    padding: 0 .5rem
+    a
+      color: white
+      text-transform: capitalize
+
 @media (min-width: $media-medium-max)
   .panel .row
     margin-bottom: 1rem

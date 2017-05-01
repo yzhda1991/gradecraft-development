@@ -13,6 +13,7 @@ class CoursesController < ApplicationController
                                      :update,
                                      :destroy,
                                      :badges,
+                                     :publish,
                                      :recalculate_student_scores]
   skip_before_action :verify_authenticity_token, only: [:change]
   before_action :ensure_not_impersonating?, only: [:change]
@@ -81,6 +82,14 @@ class CoursesController < ApplicationController
         format.html { render action: "edit" }
       end
     end
+  end
+
+  def publish
+    authorize! :update, @course
+    @course.update(published: true)
+    redirect_to dashboard_path, flash: {
+      success: "This course has been published"
+    }
   end
 
   # Switch between enrolled courses

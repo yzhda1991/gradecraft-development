@@ -199,6 +199,7 @@ Rails.application.routes.draw do
   resources :courses, except: [:show, :destroy] do
     post :copy, on: :collection
     post :recalculate_student_scores, on: :member
+    put :publish, on: :member
     get :badges, on: :member
     get :change, on: :member
   end

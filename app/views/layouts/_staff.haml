@@ -3,7 +3,7 @@
   = render partial: "layouts/navigation/staff_subnav"
 
 %main.mainContainer#main-content{role: "main", class: "staff"}
-
+  = render partial: "layouts/course_publication"
   / Page content
   .mainContent
     - if current_student.present?
