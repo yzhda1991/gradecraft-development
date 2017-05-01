@@ -41,6 +41,9 @@ en:
     grades:
       mass_edit:
         title: "Quick Grade #{ @assignment.name }"
+    groups:
+      grade:
+        title: "Editing #{ @group.name }'s Grade for #{ @assignment.name }"
   importers:
     importers:
       index:
