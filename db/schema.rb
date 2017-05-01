@@ -306,8 +306,9 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.boolean  "has_multipliers",                                         default: false,                        null: false
     t.boolean  "has_paid",                                                default: true,                         null: false
     t.boolean  "allows_canvas",                                           default: true,                         null: false
+    t.boolean  "published",                                               default: false,                        null: false
     t.integer  "institution_id"
-    t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
+    t.index ["institution_id"], name: "index_courses_on_institution_id",  using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|
