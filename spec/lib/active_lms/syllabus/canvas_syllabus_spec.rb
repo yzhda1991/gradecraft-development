@@ -127,6 +127,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
   describe "#grades" do
     let(:assignment_ids) { [456, 789] }
+    let(:grades) { [{ id: 456, score: 87 }, { id: 789, score: "" }] }
     let!(:stub) do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
@@ -134,11 +135,11 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                        "include" => ["assignment", "course", "user"],
                        "per_page" => 25,
                        "access_token" => access_token })
-        .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
+        .to_return(status: 200, body: grades.to_json, headers: {})
     end
     subject { described_class.new access_token }
 
-    it "returns a hash containing the result" do
+    it "returns a hash containing only grades with scores" do
       result = subject.grades(123, assignment_ids)
 
       expect(result[:data].count).to eq 1
