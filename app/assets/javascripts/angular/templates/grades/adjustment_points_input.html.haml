@@ -5,7 +5,7 @@
   %span(ng-if="!groupGrade")
     Would you like to adjust the grade's final points?
 
-%section.grade-adjustments-section.collapse.collapsed
+%section.grade-adjustments-section.collapse.collapsed(ng-class='{"flex-wrapper": groupGrade}')
   %div.grade-adjustments(ng-repeat="grade in grades")
 
     %article.grade-form-fields(ng-class='{"sectional": groupGrade}')
