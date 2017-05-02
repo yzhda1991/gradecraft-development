@@ -5,6 +5,10 @@
 
   return {
     templateUrl: 'grades/points_overview.html'
+    scope: {
+      rawPointsType: "=",
+      gradeType: "@"
+    }
     link: (scope, el, attr)->
 
       scope.assignment = ()->
@@ -49,4 +53,3 @@
 
   }
 ]
-

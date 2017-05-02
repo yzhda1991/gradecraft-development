@@ -80,6 +80,18 @@ hr.grading-divider
   border: 1px solid $color-grey-6
   margin: 1rem auto
 
+.grading-summary
+  float: right
+
+.lower-points-summary
+  margin: 1rem 0
+  .grading-divider
+    margin: 0.5rem 0
+  p
+    margin: 0
+    font-weight: 300
+    &.total-points-score
+      font-weight: 400
 
 #rubric-grade-edit
   @include transition(all, .5s, ease-out)

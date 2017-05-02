@@ -24,7 +24,7 @@
           GradeService.setGradeToPass()
       )
 
-      _rawPointsType = ()->
+      rawPointsType = ()->
         assignment = AssignmentService.assignment()
         return "" if !assignment
 
@@ -39,13 +39,13 @@
 
       vm.isGroupGrade = vm.recipientType == "group"
       vm.isStandardGraded = ()->
-        _rawPointsType() == "DEFAULT"
+        rawPointsType() == "DEFAULT"
       vm.isRubricGraded = ()->
-        _rawPointsType() == "RUBRIC"
+        rawPointsType() == "RUBRIC"
       vm.isPassFailGraded = ()->
-        _rawPointsType() == "PASS_FAIL"
+        rawPointsType() == "PASS_FAIL"
       vm.isScoreLevelGraded = ()->
-        _rawPointsType() == "SCORE_LEVELS"
+        rawPointsType() == "SCORE_LEVELS"
 
     ]
 
