@@ -134,11 +134,11 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         { id: 777, score: nil, submission_comments: "good jorb!" }
       ]
     end
-    let!(:stub)
+    let!(:stub) do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
-                       "include" => ["assignment", "course", "user"],
+                       "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 25,
                        "access_token" => access_token })
         .to_return(status: 200, body: grades.to_json, headers: {})
@@ -158,7 +158,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
-                       "include" => ["assignment", "course", "user"],
+                       "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 5, "test" => true,
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})

@@ -1,6 +1,8 @@
 require "quote_helper"
 
 class CanvasGradeImporter
+  include CanvasAPIHelper
+
   attr_reader :successful, :unsuccessful
   attr_accessor :grades
 
@@ -23,7 +25,7 @@ class CanvasGradeImporter
         end
 
         grade.raw_points = canvas_grade["score"]
-        grade.feedback = canvas_grade["submission_comments"]
+        grade.feedback = concat_submission_comments canvas_grade["submission_comments"]
         grade.status = "Graded" if grade.status.nil?
         grade.instructor_modified = true
 

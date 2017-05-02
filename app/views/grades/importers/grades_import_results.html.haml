@@ -60,6 +60,7 @@
           %th Last Name
           %th Raw Points
           %th Score
+          %th Feedback
       %tbody
         - @result.grades_import_result.successful.each do |grade|
           %tr
@@ -67,3 +68,4 @@
             %td= grade.student.last_name
             %td= points grade.raw_points
             %td= grade.score
+            %td= grade.feedback
