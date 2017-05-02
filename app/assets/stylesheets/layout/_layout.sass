@@ -80,13 +80,13 @@ hr.light-grey
 .page-header
   padding: 0.5rem 1rem
 
-.collapse-toggler
-  i.fa.fa-angle-double-right.fa-fw
-    transform: rotate(90deg)
+.collapse-toggler .fa
+  padding-right: 0
+  transition: all 0.25s
+  transform: rotate(90deg)
 
-.collapse-toggler.collapsed
-  i.fa.fa-angle-double-right.fa-fw
-    transform: rotate(0deg)
+.collapse-toggler.collapsed .fa
+  transform: rotate(0deg)
 
 @media (min-width: $media-medium-max)
   .panel .row
