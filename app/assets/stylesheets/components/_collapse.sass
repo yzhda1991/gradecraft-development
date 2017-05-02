@@ -4,5 +4,11 @@
 .collapse
   margin: 0
 
-.collapse.open a i.fa.fa-angle-double-right.fa-fw
+.collapse-toggler .fa
+  padding-right: 0
+  transition: all 0.25s
   transform: rotate(90deg)
+
+.collapse-toggler.collapsed .fa,
+.collapse-toggler.open .fa
+  transform: rotate(0deg)

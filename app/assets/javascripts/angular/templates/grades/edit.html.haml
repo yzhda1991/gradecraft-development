@@ -18,8 +18,9 @@
   %grade-file-uploader(ng-if='!vm.isGroupGrade')
   %grade-feedback-text-input
 
-%article.grade-form-fields(ng-if='!vm.isPassFailGraded()' group-grade='vm.isGroupGrade')
-  %grade-adjustment-points-input
+
+%article.grade-form-fields(ng-if='!vm.isPassFailGraded()')
+  %grade-adjustment-points-input(group-grade='vm.isGroupGrade')
 
 %article.grade-form-fields(ng-if='!vm.isGroupGrade')
   %grade-earned-badges-select(student-id='{{vm.recipientId}}')
