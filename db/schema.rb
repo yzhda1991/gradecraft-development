@@ -589,6 +589,19 @@ ActiveRecord::Schema.define(version: 20170515165329) do
     t.datetime "updated_at"
   end
 
+  create_table "providers", force: :cascade do |t|
+    t.string  "name",            null: false
+    t.string  "consumer_key",    null: false
+    t.string  "consumer_secret", null: false
+    t.string  "base_url"
+    t.integer "provider_id"
+    t.integer "provider_type"
+    t.string  "providee_type"
+    t.integer "providee_id"
+    t.index ["name"], name: "index_providers_on_name", using: :btree
+    t.index ["providee_type", "providee_id"], name: "index_providers_on_providee_type_and_providee_id", using: :btree
+  end
+
   create_table "rubrics", force: :cascade do |t|
     t.integer  "assignment_id"
     t.datetime "created_at"
