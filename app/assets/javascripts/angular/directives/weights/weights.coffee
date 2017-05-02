@@ -1,5 +1,5 @@
 @gradecraft.directive 'assignmentTypeWeights', ['$q', 'AssignmentTypeService', ($q, AssignmentTypeService) ->
-    WeightsCtrlr = [()->
+    WeightsCtrl = [()->
       vm = this
 
       vm.loading = true
@@ -15,7 +15,6 @@
       vm.weightsAvailable = ()->
         AssignmentTypeService.weightsAvailable()
 
-
       services().then(()->
         vm.loading = false
       )
@@ -27,7 +26,7 @@
 
     {
       bindToController: true,
-      controller: WeightsCtrlr,
+      controller: WeightsCtrl,
       controllerAs: 'vm',
       restrict: 'EA',
       scope: {

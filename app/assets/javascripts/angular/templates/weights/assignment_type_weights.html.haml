@@ -5,7 +5,7 @@
         Unused {{vm.termFor("weights")}} :
       .predictor-section-title-weights
         .coin-stack
-          .coin{'ng-repeat' => 'coin in unusedWeightsRange()'}
+          .coin{'ng-repeat' => 'coin in vm.unusedWeightsRange()'}
           .coin-stack-count {{vm.unusedWeightsRange().length}}
 
 
