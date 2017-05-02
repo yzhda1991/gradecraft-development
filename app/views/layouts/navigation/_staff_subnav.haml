@@ -3,4 +3,6 @@
     = render partial: "layouts/navigation/student_search"
     = render partial: "layouts/navigation/course_search"
   %ul.staff-sidenav{role: "navigation", "aria-label" => "staff-navigation"}
+    - if !current_course.published
+      %course-creation-checklist
     = render partial: "layouts/navigation/staff_subnav_links"
