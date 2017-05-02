@@ -13,7 +13,8 @@
         - if current_course.max_assignment_types_weighted?
           %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
 
-    #weights-widget{"ng-app" => "gradecraft", "ng-init" => "init(#{params[:student_id]})", "ng-controller" => "WeightsCtrl", "ng-include" => true,  "src" => "'weights/main.html'"}
+    -# #weights-widget{"ng-app" => "gradecraft", "ng-init" => "init(#{params[:student_id]})", "ng-controller" => "WeightsCtrl", "ng-include" => true,  "src" => "'weights/main.html'"}
+    %assignment-type-weights{"ng-app" => "gradecraft"}
 
   - else
     %h3 Your #{term_for :weight} choices:
