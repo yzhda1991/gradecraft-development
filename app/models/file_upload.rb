@@ -6,22 +6,15 @@
 class FileUpload < ActiveRecord::Base
   include S3Manager::Carrierwave
 
-  belongs_to :grade, inverse_of: :file_uploads
+  belongs_to :course
+  belongs_to :assignment
+  has_many :attachments
+  has_many :grades, through: :attachments
 
   validates :filename, presence: true, length: { maximum: 50 }
 
   mount_uploader :file, AttachmentUploader
   process_in_background :file
-
-  # remove once attachments rake task is run
-  def course
-    grade.course
-  end
-
-  # remove once attachments rake task is run
-  def assignment
-    grade.assignment
-  end
 
   def klass_name
     "attachments"

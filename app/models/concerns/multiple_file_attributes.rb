@@ -1,3 +1,15 @@
+# Define file attributes on models for creation of multiple files from form data.
+#
+# example
+#   def badge_params
+#     params.require(:badge).permit(...,
+#       badge_files_attributes: [:id, file: []])
+#   end
+#
+# Note: These are no longer used on Grades (file_uploads_attributes)
+# since grade files are uploaded via AJAX in Angular, and not submitted through
+# any form data.
+
 module MultipleFileAttributes
   extend ActiveSupport::Concern
 
