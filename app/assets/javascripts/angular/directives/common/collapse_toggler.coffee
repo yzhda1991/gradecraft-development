@@ -9,6 +9,7 @@
   link: (scope, elm, attrs) ->
     elm.bind('click', (event)->
       unless angular.element(event.target).is('.coins, .coin-slot, .coin-stack, .coin-remove-icon, .coin-add-icon')
+        event.preventDefault()
         elm.siblings().toggleClass('collapsed')
         elm.toggleClass('collapsed')
     )
