@@ -21,3 +21,5 @@
 .level-container(ng-show="!criterionIsNew()")
   .level-wrapper
     %rubric-level-design.level(ng-repeat="level in criterion.levels" criterion="criterion" level="level")
+    %button.add-level(name="newLevel" ng-click="insertLevel(criterion)" ng-show="criterionIsSaved()")
+      + Level
