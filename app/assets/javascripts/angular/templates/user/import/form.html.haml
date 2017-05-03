@@ -33,7 +33,13 @@
             %td
               %ul
                 %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
-            %td {{vm.termForUserExists(user.user_exists)}}
+            %td
+              {{vm.termForUserExists(user.user_exists)}}
+              %span.has-tooltip{"ng-style"=>"{'visibility': user.role_changed ? 'visible' : 'hidden'}"}
+                %i.fa.fa-info-circle
+                .display-on-hover.hover-style
+                  This user's role in Gradecraft will be overridden with the new role returned by Canvas if
+                  selected for import.
             %td.center
               %input{"type"=>"checkbox",
                      "name"=>"user_ids[]",

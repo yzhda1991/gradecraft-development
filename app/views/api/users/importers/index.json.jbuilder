@@ -8,6 +8,8 @@ json.data @users[:data] do |user|
     json.email                                user["email"]
     json.enrollments                          user["enrollments"]
     json.user_exists                          lms_user_match?(user["email"], current_course)
+    json.role_changed                         lms_user_role(user["enrollments"]) != User.find_by_insensitive_email(user["email"]).role(current_course) \
+                                                if lms_user_match?(user["email"], current_course)
   end
 end
 

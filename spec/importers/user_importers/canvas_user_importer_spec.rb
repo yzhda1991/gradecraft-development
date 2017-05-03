@@ -84,8 +84,10 @@ describe CanvasUserImporter do
             email: "jimmy@example.com", username: "jimmy", password: "blah",
             courses: [course], role: :student
 
-          expect { subject.import course }.to_not raise_error
+          result = subject.import course
+
           expect(student.course_memberships.count).to eq 1
+          expect(result.unchanged.count).to eq 1
         end
       end
 
@@ -112,8 +114,11 @@ describe CanvasUserImporter do
             email: "jimmy@example.com", username: "jimmy", password: "blah",
             courses: [course], role: :student
 
-          expect { subject.import course }.to_not change(CourseMembership, :count)
+          result = subject.import course
+
+          expect(user.course_memberships.count).to eq 1
           expect(user.role(course)).to eq "professor"
+          expect(subject.successful.count).to eq 1
         end
       end
     end

@@ -15,11 +15,12 @@ class CanvasUserImporter
   def import(course)
     unless users.nil?
       users.each do |canvas_user|
-        user = find_or_create_user UserRow.new(canvas_user), course
+        result = find_or_create_user UserRow.new(canvas_user), course
+        user = result[:user]
 
         if user.valid?
           link_imported canvas_user["id"], user
-          if user.previous_changes.empty?
+          if !result[:changed?]
             unchanged << user
           else
             successful << user
@@ -40,6 +41,7 @@ class CanvasUserImporter
     user = User.find_by_insensitive_email row.email if row.email
     user ||= Services::CreatesNewUser
       .create(row.to_h.merge(internal: false), send_welcome)[:user]
+    role_changed = false
 
     if user.valid?
       current_role = user.role(course)
@@ -47,11 +49,11 @@ class CanvasUserImporter
         user.course_memberships.create(course_id: course.id, role: row.role)
       elsif current_role != row.role
         cm = user.course_memberships.find_by(course_id: course.id)
-        cm.update(role: row.role)
+        role_changed = cm.update(role: row.role)
       end
     end
 
-    user
+    { user: user, changed?: !user.previous_changes.empty? || role_changed }
   end
 
   def link_imported(provider_resource_id, user)
@@ -81,7 +83,7 @@ class CanvasUserImporter
 
     def role
       enrollments = data["enrollments"]
-      return :student if enrollments.nil?
+      return "student" if enrollments.nil?
       lms_user_role enrollments
     end
 

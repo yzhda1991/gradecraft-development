@@ -18,17 +18,17 @@ module CanvasAPIHelper
   # translate to a Gradecraft role
   def lms_user_role(enrollments)
     lms_role = find_principal_role enrollments
-    return :observer if lms_role.nil?
+    return "observer" if lms_role.nil?
 
     case lms_role.downcase
     when "studentenrollment"
-      :student
+      "student"
     when "teacherenrollment"
-      :professor
+      "professor"
     when "taenrollment", "designerenrollment"
-      :gsi
+      "gsi"
     else
-      :observer
+      "observer"
     end
   end
 
