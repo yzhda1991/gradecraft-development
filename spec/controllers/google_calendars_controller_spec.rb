@@ -87,7 +87,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
     end
   end
 
-  describe "POST add_assignment_to_google_calendar", focus: true do
+  describe "POST add_assignment_to_google_calendar" do
     before(:each) do
       stub_request(:post, "https://www.googleapis.com/calendar/v3/calendars/primary/events").
         to_return(:status => 200, :body => "", :headers => {})

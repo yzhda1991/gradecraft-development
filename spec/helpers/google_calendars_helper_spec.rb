@@ -47,7 +47,7 @@ describe GoogleCalendarsHelper do
     end
   end
 
-  describe "#create_google_event_from_assignment", focus: true do
+  describe "#create_google_event_from_assignment" do
     let(:course) { build(:course) }
     let(:assignment_type) { create(:assignment_type, course: course) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
