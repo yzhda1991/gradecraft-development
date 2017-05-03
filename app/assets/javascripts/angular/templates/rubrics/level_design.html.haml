@@ -1,0 +1,5 @@
+.level-items(name="levelForm" ng-form ng-submit="createLevel()" ng-class="{saved: levelIsSaved(), nocredit: level.noCredit, 'level-meets-expectations': level.pointsMeetExpectations()}")
+  -#= render partial: "rubrics/new_level"
+%button.add-level(name="newLevel" ng-click="insertLevel(criterion)" ng-show="criterionIsSaved()")
+  + Level
+

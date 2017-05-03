@@ -16,19 +16,6 @@
       vm.loading = false
     )
 
-    vm.createCriterion = ()->
-      console.log("createCriterion");
-    vm.createLevel = ()->
-      console.log("createLevel");
-    vm.criterionIsNew = ()->
-      console.log("criterionIsNew");
-    vm.criterionIsSaved = ()->
-      console.log("criterionIsSaved");
-    vm.insertLevel = (criterion)->
-      console.log("insertLevel");
-    vm.levelIsSaved = ()->
-      console.log("levelIsSaved");
-
   ]
 
   services = (rubricId)->
