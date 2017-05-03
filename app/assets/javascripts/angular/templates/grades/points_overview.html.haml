@@ -15,8 +15,8 @@
 .lower-points-summary(ng-if="gradeType == 'STANDARD_ASSIGNMENT'")
   %h2.grade-form-header Points Summary
   %p(ng-show="pointsArePresent()") Awarded Points: {{ grade.raw_points | number:0 }} / {{ assignment().full_points | number:0 }}
-  %p(ng-show="isBelowThreshold()") {{ pointsBelowThreshold() | number:0 }} points below the threshold
-  %p.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}" ng-show="adjustmentPoints() != 0") Adjusted Points: {{adjustmentPoints()}}
+  %p.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}") Adjusted Points: {{adjustmentPoints()}}
+  %p(ng-show="isBelowThreshold()") Points below the threshold: {{ pointsBelowThreshold() | number:0 }}
   %hr.grading-divider
-  %p.total-points-score(ng-show="pointsArePresent()") Total Points: {{ grade.raw_points + adjustmentPoints() | number:0 }} / {{ assignment().full_points | number:0 }}
+  %p.total-points-score(ng-show="pointsArePresent()") Total Points: {{ finalPoints() | number:0 }} / {{ assignment().full_points | number:0 }}
     
