@@ -164,6 +164,8 @@ en:
   rubric:
     design:
       title: "Design Rubric for #{ @assignment.name }"
+    designed:
+      title: "Design Rubric for #{ @assignment.name }"
   staff:
     index:
       title: "Staff Index"

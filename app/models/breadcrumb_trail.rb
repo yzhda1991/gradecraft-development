@@ -374,6 +374,13 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Design Rubric')
   end
 
+  # TEMPORARY -- REMOVE BEFORE MERGE
+  def rubrics_designed
+    assignments_index
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Design Rubric')
+  end
+
   def observers_index
     dashboard
     breadcrumb('Observers', observers_path)
