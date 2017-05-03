@@ -72,17 +72,17 @@ describe CanvasUserImporter do
       end
 
       context "when there are no enrollments provided" do
-        it "creates the course membership if it does not exist" do
+        it "creates the course membership with a student role if it does not exist" do
           subject.import(course)
 
           expect(student.course_memberships.first.course).to eq course
           expect(student.course_memberships.first.role).to eq "student"
         end
 
-        it "does not create the student membership if it already exists" do
-          user = User.create first_name: "Jimmy", last_name: "Page",
-                email: "jimmy@example.com", username: "jimmy", password: "blah"
-          user.course_memberships.create course_id: course.id, role: "student"
+        it "does not create a course membership if one already exists" do
+          user = build :user, first_name: "Jimmy", last_name: "Page",
+            email: "jimmy@example.com", username: "jimmy", password: "blah",
+            courses: [course], role: :student
 
           expect { subject.import course }.to_not raise_error
           expect(student.course_memberships.count).to eq 1
@@ -100,19 +100,20 @@ describe CanvasUserImporter do
 
         before(:each) { canvas_user.merge!(enrollments) }
 
-        it "creates the professor course membership if it does not exist" do
+        it "creates the course membership with the given role if it does not exist" do
           subject.import(course)
 
           expect(student.course_memberships.first.course).to eq course
           expect(student.course_memberships.first.role).to eq "professor"
         end
 
-        it "does not create the professor membership if it already exists" do
-          user = User.create first_name: "Jimmy", last_name: "Page",
-                email: "jimmy@example.com", username: "jimmy", password: "blah"
-          user.course_memberships.create course_id: course.id, role: "professor"
+        it "updates the course membership if one exists and the role has changed" do
+          user = build :user, first_name: "Jimmy", last_name: "Page",
+            email: "jimmy@example.com", username: "jimmy", password: "blah",
+            courses: [course], role: :student
 
           expect { subject.import course }.to_not change(CourseMembership, :count)
+          expect(user.role(course)).to eq "professor"
         end
       end
     end

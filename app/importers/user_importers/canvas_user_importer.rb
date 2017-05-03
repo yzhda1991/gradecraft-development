@@ -41,8 +41,14 @@ class CanvasUserImporter
     user ||= Services::CreatesNewUser
       .create(row.to_h.merge(internal: false), send_welcome)[:user]
 
-    if user.valid? && !user.role(course)
-      user.course_memberships.create(course_id: course.id, role: row.role)
+    if user.valid?
+      current_role = user.role(course)
+      if current_role.nil?
+        user.course_memberships.create(course_id: course.id, role: row.role)
+      elsif current_role != row.role
+        cm = user.course_memberships.find_by(course_id: course.id)
+        cm.update(role: row.role)
+      end
     end
 
     user
@@ -57,7 +63,7 @@ class CanvasUserImporter
   end
 
   class UserRow
-    include LMSHelper
+    include CanvasAPIHelper
 
     attr_reader :data
 
