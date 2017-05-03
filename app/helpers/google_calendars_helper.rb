@@ -33,6 +33,20 @@ module GoogleCalendarsHelper
     google_event
   end
 
+  def create_google_event_from_assignment(assignment)
+    google_event = Calendar::Event.new({
+      summary: assignment.name,
+      description: assignment.description,
+      start: {
+        date_time: (assignment.due_at - 30.minutes).to_datetime.rfc3339
+      },
+      end: {
+        date_time: assignment.due_at.to_datetime.rfc3339
+      }
+    })
+    google_event
+  end
+
   def create_google_secrets(google_authorization)
     Google::APIClient::ClientSecrets.new({"web" =>
       {"access_token" => google_authorization.access_token,

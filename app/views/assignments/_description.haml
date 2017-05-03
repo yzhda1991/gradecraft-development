@@ -15,6 +15,11 @@
 %p.assignment-description.italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
 %p.assignment-description.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
+%p.assignment-description= active_course_link_to decorative_glyph(:copy) + "Add to Google Calendar",
+  add_assignment_to_google_calendar_google_calendar_path(presenter.assignment),
+  class: "button button-edit",
+    method: :post
+
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_viewable_submission?(current_student, current_user)
   = render partial: "students/submissions", locals: { assignment: presenter.assignment }
 
