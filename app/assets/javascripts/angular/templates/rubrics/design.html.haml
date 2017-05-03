@@ -1,0 +1,26 @@
+.points-overview-container
+  #points-overview-floating
+    %h4#points-legend
+      %span.points-assigned(ng-class="{'points-missing': vm.pointsMissing(), 'points-satisfied': vm.pointsSatisfied(), 'points-overage': vm.pointsOverage()}") {{vm.pointsAssigned() | number:0}}
+      \/ {{vm.full_points}} Points Allocated
+    %h4.notice(ng-show="vm.pointsMissing()") You have {{vm.pointsRemaining()}} point{{vm.pointsRemaining() > 1 ? "s" : ""}} left to assign
+    %h4.notice(ng-show="vm.pointsSatisfied()") You have allocated all possible points
+    %h4.notice(ng-show="vm.pointsOverage()") You have allocated more points than the assignment total
+
+.splash(ng-cloak) Loading rubric...
+
+#criterion-box(ng-cloak)
+
+  .rubric-container.divider(ng-repeat="criterion in vm.criteria")
+    .criterion(name="criterionForm" ng-form ng-submit="vm.createCriterion()" ng-class="{saved: vm.criterionIsSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
+      .order-label {{$index + 1}}
+      -#= render partial: "rubrics/new_criterion"
+    .new-criterion-notice(ng-show="vm.criterionIsNew()") "Criterion Name" and "Max Points" are required fields
+    .level-container(ng-show="!vm.criterionIsNew()")
+      .level-wrapper
+        .level(name="levelForm" ng-repeat="level in criterion.levels" ng-form ng-submit="vm.createLevel()" ng-class="{saved: vm.levelIsSaved(), nocredit: level.noCredit, 'level-meets-expectations': level.vm.pointsMeetExpectations()}")
+          -#= render partial: "rubrics/new_level"
+        %button.add-level(name="newLevel" ng-click="insertLevel(criterion)" ng-show="vm.criterionIsSaved()")
+          + Level
+
+%button#new-rubric-criterion(type="button" ng-click="vm.newCriterion()" ng-hide) + Criterion

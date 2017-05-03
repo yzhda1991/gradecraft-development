@@ -44,4 +44,8 @@ json.included do
   end
 end
 
+json.meta do
+  json.full_points @rubric.assignment.full_points
+end
+
 

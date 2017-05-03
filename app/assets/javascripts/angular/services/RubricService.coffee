@@ -7,6 +7,7 @@
 
   rubric = {}
   criteria = []
+  full_points = 0
 
   getRubric = (rubricId)->
     $http.get("/api/rubrics/" + rubricId).then(
@@ -14,6 +15,7 @@
         if response.data.data?  # if no rubric is found, data is null
           GradeCraftAPI.loadItem(rubric, "rubrics", response.data)
           GradeCraftAPI.loadFromIncluded(criteria, "criteria", response.data)
+          full_points = response.data.meta.full_points
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -29,6 +31,7 @@
     getRubric: getRubric
     rubric: rubric
     criteria: criteria
+    full_points: full_points
     badgesForLevel: badgesForLevel
   }
 ]
