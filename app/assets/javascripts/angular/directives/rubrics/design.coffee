@@ -9,7 +9,7 @@
     vm.RubricService = RubricService
 
     vm.rubric = RubricService.rubric
-    vm.criteria = RubricService.cirteria
+    vm.criteria = RubricService.criteria
     vm.full_points = RubricService.full_points
 
     services(vm.rubricId).then(()->
@@ -28,18 +28,6 @@
       console.log("insertLevel");
     vm.levelIsSaved = ()->
       console.log("levelIsSaved");
-    vm.pointsAssigned = ()->
-      console.log("pointsAssigned");
-    vm.pointsMeetExpectations = ()->
-      console.log("pointsMeetExpectations");
-    vm.pointsMissing = ()->
-      console.log("pointsMissing");
-    vm.pointsOverage = ()->
-      console.log("pointsOverage");
-    vm.pointsRemaining = ()->
-      console.log("pointsRemaining");
-    vm.pointsSatisfied = ()->
-      console.log("pointsSatisfied");
 
   ]
 

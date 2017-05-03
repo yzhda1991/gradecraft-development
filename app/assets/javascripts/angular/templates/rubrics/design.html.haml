@@ -1,20 +1,31 @@
-.points-overview-container
-  #points-overview-floating
-    %h4#points-legend
-      %span.points-assigned(ng-class="{'points-missing': vm.pointsMissing(), 'points-satisfied': vm.pointsSatisfied(), 'points-overage': vm.pointsOverage()}") {{vm.pointsAssigned() | number:0}}
-      \/ {{vm.full_points}} Points Allocated
-    %h4.notice(ng-show="vm.pointsMissing()") You have {{vm.pointsRemaining()}} point{{vm.pointsRemaining() > 1 ? "s" : ""}} left to assign
-    %h4.notice(ng-show="vm.pointsSatisfied()") You have allocated all possible points
-    %h4.notice(ng-show="vm.pointsOverage()") You have allocated more points than the assignment total
+%rubric-points-overview(ng-if='!vm.loading')
 
-.splash(ng-cloak) Loading rubric...
+%loading-message(loading='vm.loading' message="Loading Rubric...")
 
-#criterion-box(ng-cloak)
+#criterion-box
 
   .rubric-container.divider(ng-repeat="criterion in vm.criteria")
     .criterion(name="criterionForm" ng-form ng-submit="vm.createCriterion()" ng-class="{saved: vm.criterionIsSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
       .order-label {{$index + 1}}
       -#= render partial: "rubrics/new_criterion"
+      %label
+        %span.sr-only Criterion Name
+        %input(type="text" ng-model="criterion.name" name="name" placeholder="Criterion Name" value="{{criterion.name}}"  required ng-blur="criterion.modify(criterionForm)" ng-Maxlength=30 ng-change="criterion.change()" maxlength=30)
+      %label
+        %span.sr-only Criterion Max Points
+        %input.points(type="number" ng-model="criterion.max_points" name="maxPoints" placeholder="Max Points"  required integer min=0 ng-blur="criterion.modify(criterionForm)" ng-change="criterion.change()")
+
+      %label
+        %span.sr-only Criterion Description
+        %textarea.criterion-description(ng-model="criterion.description" placeholder="Description" value="{{criterion.description}}" ng-change="criterion.change()" ng-blur="criterion.update()")
+          -#
+            %option(ng-repeat="(availableBadgeId, availableBadge) in criterion.availableBadges" value="{{availableBadge.id}}") {{availableBadge.name}}
+
+
+      %input(type="hidden" value="{{$index}}")
+      %button.delete(type="button" ng-click="criterion.delete($index)") X
+
+
     .new-criterion-notice(ng-show="vm.criterionIsNew()") "Criterion Name" and "Max Points" are required fields
     .level-container(ng-show="!vm.criterionIsNew()")
       .level-wrapper

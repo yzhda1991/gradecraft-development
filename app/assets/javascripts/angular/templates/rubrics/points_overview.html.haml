@@ -1,0 +1,8 @@
+.points-overview-container
+  #points-overview-floating
+    %h4#points-legend
+      %span.points-assigned(ng-class="{'points-missing': vm.pointsMissing(), 'points-satisfied': vm.pointsSatisfied(), 'points-overage': vm.pointsOverage()}") {{vm.pointsAssigned() | number:0}}
+      \/ {{vm.full_points}} Points Allocated
+    %h4.notice(ng-show="vm.pointsMissing()") You have {{vm.pointsRemaining()}} point{{vm.pointsRemaining() > 1 ? "s" : ""}} left to assign
+    %h4.notice(ng-show="vm.pointsSatisfied()") You have allocated all possible points
+    %h4.notice(ng-show="vm.pointsOverage()") You have allocated more points than the assignment total
