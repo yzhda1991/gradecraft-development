@@ -2,11 +2,7 @@ require_relative "active_lms"
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :canvas, ActiveLMS.configuration.providers[:canvas].client_id,
-    ActiveLMS.configuration.providers[:canvas].client_secret,
-    setup: lambda { |env|
-      env["omniauth.strategy"].options[:client_options]
-        .merge! ActiveLMS.configuration.providers[:canvas].client_options
-  }
+    ActiveLMS.configuration.providers[:canvas].client_secret, setup: true
   provider :developer unless Rails.env.production?
   provider :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_SECRET"],
     scope: 'userinfo.email, calendar', prompt: 'consent', select_account: true, access_type: 'offline'
