@@ -24,7 +24,7 @@
 
   - if @ungraded_submissions_by_assignment.present?
     .collapseSection{id: "ungraded", role: "tablist"}
-      .collapse.collapse-toggler{role: "tab"}
+      .collapse{role: "tab"}
         %h3
           %i.fa.fa-chevron-circle-right.fa-fw
           Ungraded Submissions
@@ -33,7 +33,7 @@
 
   - if @unreleased_grades_by_assignment.present?
     .collapseSection{id: "unreleased", role: "tablist"}
-      .collapse.collapse-toggler{role: "tab"}
+      .collapse{role: "tab"}
         %h3
           %i.fa.fa-chevron-circle-right.fa-fw
           Unreleased Grades
@@ -42,7 +42,7 @@
 
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress", role: "tablist"}
-      .collapse.collapse-toggler{role: "tab"}
+      .collapse{role: "tab"}
         %h3
           %i.fa.fa-chevron-circle-right.fa-fw
           In Progress Grades
@@ -51,7 +51,7 @@
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions", role: "tablist"}
-      .collapse.collapse-toggler{role: "tab"}
+      .collapse{role: "tab"}
         %h3
           %i.fa.fa-chevron-circle-right.fa-fw
           Resubmissions

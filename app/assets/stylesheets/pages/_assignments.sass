@@ -83,11 +83,12 @@
 .assignment-type-bar
   margin: 0 0 -1px 0
   border: 1px solid $color-grey-6
-  border-bottom: 3px solid $color-blue-2
   &:hover
       background-color: $color-grey-7
   &.collapsed
     border-bottom: 1px solid $color-grey-6
+  &.open
+    border-bottom: 3px solid $color-blue-2
 
   a
     padding: 0.75rem
@@ -124,7 +125,7 @@
   @media (max-width: $media-medium-max)
     float: right
 
-.assignment-type-container.collapsable
+.assignment-type-container
   padding: 1rem
   border: 1px solid $color-grey-6
   margin-bottom: -1px

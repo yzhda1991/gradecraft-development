@@ -4,7 +4,7 @@
   .assignments{role: "tablist"}
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-#{assignment_type.id}" }
-        .collapse.collapse-toggler{role: "tab"}
+        .collapse.collapse-toggle{role: "tab"}
           %h2.assignment-type-name
             %i.fa.fa-chevron-circle-right.fa-fw
             #{assignment_type.name} – #{points assignment_type.total_points} points

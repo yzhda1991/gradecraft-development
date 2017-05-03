@@ -1,7 +1,7 @@
 - if current_course.has_team_challenges? && current_course.add_team_score_to_student? && current_student.team_for_course(current_course).present?
   .assignment_type.team-challenge.student{role: "tablist"}
 
-    .collapse.collapse-toggler{role: "tab"}
+    .collapse{role: "tab"}
       %h3= glyph('chevron-circle-right') + "#{term_for :challenges}" 
       .points-summary
         .points-bar-graph

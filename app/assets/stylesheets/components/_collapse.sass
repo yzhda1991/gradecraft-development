@@ -9,6 +9,13 @@
   transition: all 0.25s
   transform: rotate(90deg)
 
-.collapse-toggler.collapsed .fa,
-.collapse-toggler.open .fa
+.collapse-toggler.collapsed .fa
   transform: rotate(0deg)
+
+.collapse .fa
+  padding-right: 0
+  transition: all 0.25s
+  transform: rotate(0deg)
+
+.collapse.open .fa
+  transform: rotate(90deg)
