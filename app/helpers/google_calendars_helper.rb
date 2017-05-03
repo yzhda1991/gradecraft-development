@@ -38,13 +38,21 @@ module GoogleCalendarsHelper
       summary: assignment.name,
       description: assignment.description,
       start: {
-        date_time: (assignment.due_at - 30.minutes).to_datetime.rfc3339
+        date_time: (generate_open_date_if_one_does_not_exist(assignment)).to_datetime.rfc3339
       },
       end: {
         date_time: assignment.due_at.to_datetime.rfc3339
       }
     })
     google_event
+  end
+
+  def generate_open_date_if_one_does_not_exist(assignment)
+    if assignment.open_at.nil?
+      assignment.due_at - 30.minutes
+    else
+      assignment.open_at
+    end
   end
 
   def create_google_secrets(google_authorization)

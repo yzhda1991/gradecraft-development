@@ -37,13 +37,27 @@ describe GoogleCalendarsHelper do
   describe "#create_google_event" do
     let(:course) { build(:course) }
     let(:event) { create(:event, course: course) }
-    it "creates a google calendar event object" do
+    it "creates a google calendar event object from a GradeCraft event" do
       event.open_at = Time.now - (24 * 60 * 60)
       google_event = create_google_event(event)
       expect(google_event).not_to be nil
       expect(event.name).to be google_event.summary
       expect(event.open_at.to_datetime.rfc3339).to eq google_event.start[:date_time]
       expect(event.due_at.to_datetime.rfc3339).to eq google_event.end[:date_time]
+    end
+  end
+
+  describe "#create_google_event_from_assignment", focus: true do
+    let(:course) { build(:course) }
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    it "creates a google calendar event object from a GradeCraft assignment" do
+      assignment.due_at = Time.now - (24 * 60 * 60)
+      google_event = create_google_event_from_assignment(assignment)
+      expect(google_event).not_to be nil
+      expect(assignment.name).to be google_event.summary
+      expect((assignment.due_at - 30.minutes).to_datetime.rfc3339).to eq google_event.start[:date_time]
+      expect(assignment.due_at.to_datetime.rfc3339).to eq google_event.end[:date_time]
     end
   end
 
