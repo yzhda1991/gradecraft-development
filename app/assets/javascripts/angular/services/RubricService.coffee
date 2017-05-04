@@ -27,11 +27,29 @@
     # change indexBy to keyBy if lowdash is updated to v4
     badges = _(BadgeService.badges).indexBy('id').at(ids).value();
 
+
+  # This criterion has a level set as "meets expectations"
+  meetsExpectationsSet = (criterion)->
+    criterion.meets_expectations_points > 0
+
+  # This is the level that is set for "meets expectations"
+  isMeetsExpectationsLevel = (criterion, level)->
+    criterion.meets_expectations_level_id == level.id
+
+  # This level is or exceeds the "meets expectations" level
+  satifiesExpectations = (criterion, level)->
+    meetsExpectationsSet(criterion) && (level.points >= criterion.meets_expectations_points)
+
+
   return {
     getRubric: getRubric
     rubric: rubric
     criteria: criteria
     full_points: full_points
     badgesForLevel: badgesForLevel
+
+    meetsExpectationsSet: meetsExpectationsSet
+    isMeetsExpectationsLevel: isMeetsExpectationsLevel
+    satifiesExpectations: satifiesExpectations
   }
 ]

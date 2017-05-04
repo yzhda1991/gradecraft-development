@@ -1,7 +1,7 @@
 # Main entry point for grading (standard/rubric individual/group)
 # Renders appropriate grading form for grade and assignment type
 
-@gradecraft.directive 'rubricDesign', ['$q', 'RubricService', ($q, RubricService) ->
+@gradecraft.directive 'rubricDesign', ['$q', 'RubricService', 'BadgeService', ($q, RubricService, BadgeService) ->
   RubricDesignCtrl = [()->
     vm = this
 
@@ -12,6 +12,8 @@
     vm.criteria = RubricService.criteria
     vm.full_points = RubricService.full_points
 
+    vm.badges = BadgeService.badges
+
     services(vm.rubricId).then(()->
       vm.loading = false
     )
@@ -21,6 +23,7 @@
   services = (rubricId)->
     promises = [
       RubricService.getRubric(rubricId)
+      BadgeService.getBadges()
     ]
     return $q.all(promises)
 

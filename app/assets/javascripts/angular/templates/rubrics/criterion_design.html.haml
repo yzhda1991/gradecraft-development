@@ -19,7 +19,4 @@
 
 .new-criterion-notice(ng-show="criterionIsNew()") "Criterion Name" and "Max Points" are required fields
 .level-container(ng-show="!criterionIsNew()")
-  .level-wrapper
-    %rubric-level-design.level(ng-repeat="level in criterion.levels" criterion="criterion" level="level")
-    %button.add-level(name="newLevel" ng-click="insertLevel(criterion)" ng-show="criterionIsSaved()")
-      + Level
+  %rubric-criterion-levels.level-wrapper(criterion="criterion")

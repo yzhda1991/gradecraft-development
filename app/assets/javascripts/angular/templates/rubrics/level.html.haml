@@ -1,8 +1,9 @@
-.level-items(name="levelForm" ng-form ng-submit="createLevel()" ng-class="{saved: levelIsSaved(), nocredit: level.noCredit, 'level-meets-expectations': level.pointsMeetExpectations()}")
+.level-items(name="levelForm" ng-form ng-submit="createLevel()" ng-class="{saved: levelIsSaved(), nocredit: level.noCredit, 'level-meets-expectations': satifiesExpectations()}")
 
   %label
     %span.sr-only Level Name
     %input(type="text" ng-model="level.name" placeholder="Level Name" required ng-blur="level.modify(levelForm)" ng-Maxlength=30 ng-change="level.change()" maxlength=30)
+
   %label
     %span.sr-only Level Points
     %input(type="number" ng-model="level.points" placeholder="Points" min=0 ng-blur="level.modify(levelForm)" ng-change="level.change()" required)
@@ -11,8 +12,7 @@
     %span.sr-only Level Description
     %textarea(ng-model="level.description" placeholder="Description" value="{{level.description}}" ng-blur="level.modify(levelForm)" ng-change="level.change()")
 
-  -#- if @course_badge_count > 0
-  .badge-row.clickable(ng-click="level.editBadges()" ng-show="levelIsSaved()")
+  .badge-row.clickable(ng-if="levelIsSaved()" ng-click="level.editBadges()")
     .badge-messages Badges
     .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
       %img(ng-src="{{levelBadge.badge.icon}}" alt="{{levelBadge.badge.name}}" title="{{levelBadge.badge.name}}" width="35px" height="35px")
@@ -31,7 +31,7 @@
       %button.close-modal(ng-click="level.closeBadges()") Update Badges
 
 
-  %button.meets-expectations-status(type="button" ng-class="{'no-expectation': !level.meetExpectationSet(),'show': level.meetsExpectations || level.showExpectationStatus()}") {{level.label()[0]}}
-  %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectations}" ng-click="level.toggleMeetsExpectations()") {{level.label()[1]}}
-  %button.delete(type="button" ng-click="level.delete($index)" ng-hide="level.required") X
+  %button.meets-expectations-status(ng-if="showExpectationButton()" type="button" ng-class="{'no-expectation': !meetsExpectationsSet()}") {{expectationsLabel()}}
+  %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectation}" ng-click="level.toggleMeetsExpectationsLevel()") {{expectationsHoverLabel()}}
+  %button.delete(type="button" ng-click="deleteLevel()" ng-hide="level.required") X
 

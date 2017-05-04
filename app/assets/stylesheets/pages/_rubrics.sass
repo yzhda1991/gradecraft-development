@@ -323,16 +323,18 @@ button.meets-expectations-toggle
   bottom: 2.5%
   border-radius: 12px
   width: 92%
-  opacity: 0
-  &:hover,
   &:focus
     opacity: 1
     //background-color
 
-button.meets-expectations-status.show
-  opacity: 1
+button.meets-expectations-status
   &:hover
     opacity: 0
+
+button.meets-expectations-toggle
+  opacity: 0
+  &:hover
+    opacity: 1
 
 button.meets-expectations-toggle.remove
   background-color: $color-grey-6
@@ -341,10 +343,6 @@ button.meets-expectations-status.no-expectation
   background-color: $no-expectation-color
 
 .level-wrapper
-  .level-repeat-wrapper
-     white-space: nowrap
-     .level
-       float: left
   .level
     background-color: $below-expectations-color
     &.level-meets-expectations

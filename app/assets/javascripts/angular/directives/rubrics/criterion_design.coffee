@@ -8,18 +8,18 @@
       criterion: "="
     }
     link: (scope, el, attr)->
+      scope.criterionIsSaved = ()->
+        @criterion.id != undefined
+
       scope.createCriterion = ()->
         console.log("createCriterion");
-      scope.criterionIsSaved = ()->
-        console.log("criterionIsSaved");
       scope.createLevel = ()->
         console.log("createLevel");
       scope.criterionIsNew = ()->
-        console.log("criterionIsNew");
-      scope.insertLevel = (criterion)->
-        console.log("insertLevel");
-      scope.levelIsSaved = ()->
-        console.log("levelIsSaved");
+        #console.log("criterionIsNew");
+
+      scope.insertLevel = ()->
+        console.log("inserting level into criterrion #{@criterion.id}");
   }
 ]
 
