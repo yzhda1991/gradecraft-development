@@ -1,5 +1,5 @@
-%a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
-  %h3 
+%a.grade-form-collapsible.collapse-toggler.collapsed(ng-if="vm.BadgeService.badges.length > 0")
+  %h3
     %i.fa.fa-chevron-circle-right.fa-fw
     %span Award {{vm.BadgeService.termFor("badges")}}
 
