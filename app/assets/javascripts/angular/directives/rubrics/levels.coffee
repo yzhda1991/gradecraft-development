@@ -1,4 +1,4 @@
-# Hovering synopsis of the rubric points assigned
+# Iterates through levels in a criterion
 
 @gradecraft.directive 'rubricCriterionLevels', ['RubricService', (RubricService) ->
 

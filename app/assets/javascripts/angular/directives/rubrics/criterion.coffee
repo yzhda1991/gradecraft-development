@@ -1,9 +1,9 @@
-# Hovering synopsis of the rubric points assigned
+#renders design container for one criterion in a rubric
 
-@gradecraft.directive 'rubricCriterionDesign', ['RubricService', (RubricService) ->
+@gradecraft.directive 'rubricCriterion', ['RubricService', (RubricService) ->
 
   return {
-    templateUrl: 'rubrics/criterion_design.html'
+    templateUrl: 'rubrics/criterion.html'
     scope: {
       criterion: "="
     }

@@ -1,5 +1,4 @@
-# Main entry point for grading (standard/rubric individual/group)
-# Renders appropriate grading form for grade and assignment type
+# Main entry point for editing rubrics
 
 @gradecraft.directive 'rubricDesign', ['$q', 'RubricService', 'BadgeService', ($q, RubricService, BadgeService) ->
   RubricDesignCtrl = [()->
