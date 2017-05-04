@@ -5,8 +5,6 @@ class CreateProviders < ActiveRecord::Migration[5.0]
       t.string :consumer_key, null: false
       t.string :consumer_secret, null: false
       t.string :base_url
-      t.integer :provider_id
-      t.integer :provider_type
       t.references :providee, polymorphic: true, index: true
     end
 

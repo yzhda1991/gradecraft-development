@@ -594,8 +594,6 @@ ActiveRecord::Schema.define(version: 20170515165329) do
     t.string  "consumer_key",    null: false
     t.string  "consumer_secret", null: false
     t.string  "base_url"
-    t.integer "provider_id"
-    t.integer "provider_type"
     t.string  "providee_type"
     t.integer "providee_id"
     t.index ["name"], name: "index_providers_on_name", using: :btree
