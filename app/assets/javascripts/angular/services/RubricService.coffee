@@ -9,6 +9,8 @@
   criteria = []
   full_points = 0
 
+  _editingBadgesId = null
+
   getRubric = (rubricId)->
     $http.get("/api/rubrics/" + rubricId).then(
       (response) ->
@@ -26,6 +28,15 @@
     ids = _.map(level.level_badges, (badge)->badge["badge_id"])
     # change indexBy to keyBy if lowdash is updated to v4
     badges = _(BadgeService.badges).indexBy('id').at(ids).value();
+
+
+  # We only allow one open modal for editing badges
+  editBadgesForLevel = (level)->
+     _editingBadgesId = level.id
+  editingBadgesForLevel = (level)->
+    level.id == _editingBadgesId
+  closeBadgesForLevel = ()->
+    _editingBadgesId = null
 
 
   # This criterion has a level set as "meets expectations"
@@ -47,6 +58,10 @@
     criteria: criteria
     full_points: full_points
     badgesForLevel: badgesForLevel
+
+    editBadgesForLevel: editBadgesForLevel
+    editingBadgesForLevel: editingBadgesForLevel
+    closeBadgesForLevel: closeBadgesForLevel
 
     meetsExpectationsSet: meetsExpectationsSet
     isMeetsExpectationsLevel: isMeetsExpectationsLevel

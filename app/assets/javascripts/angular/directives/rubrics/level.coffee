@@ -47,15 +47,3 @@
         console.log("deleting level #{@level.id}");
   }
 ]
-
-
-
-
-
-# level.change()
-# level.editBadges()
-# level.selectBadge()
-# level.closeBadges()
-
-
-

@@ -18,17 +18,6 @@
       scope.satifiesExpectations = (level)->
         RubricService.satifiesExpectations(@criterion, level)
 
+      # level.change()
   }
 ]
-
-
-
-
-
-# level.change()
-# level.editBadges()
-# level.selectBadge()
-# level.closeBadges()
-
-
-

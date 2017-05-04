@@ -1,0 +1,18 @@
+.badge-row.clickable(ng-click="editBadges()")
+  .badge-messages Badges
+  .level-badge-image(ng-repeat="badge in badgesForLevel()")
+    %img(ng-src="{{badge.icon}}" alt="{{badge.name}}" title="{{badge.name}}" width="35px" height="35px")
+
+.badge-modal-window(ng-if="editingBadges()")
+
+  %select(ng-change="selectBadge()" ng-model="selectedBadge" ng-options="badge as badge.name for (badgeId, badge) in availableBadges() track by badge.id")
+    %option.default(value="" selected disabled ng-show="availableBadges().length > 0") select a badge to add...
+    %option.default(value="" selected disabled ng-show="availableBadges().length == 0") all available badges selected
+
+  .level-badge(ng-repeat="badge in badgesForLevel()")
+    %img(ng-src="{{badge.icon}}" width="20px" height="20px" alt="{{badge.name}}")
+    {{badge.name}}
+    %button.delete(type="button" ng-click="level.deleteLevelBadge(levelBadge)") X
+
+  .update-badges
+    %button.close-modal(ng-click="closeBadges()") Update Badges

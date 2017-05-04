@@ -12,24 +12,7 @@
     %span.sr-only Level Description
     %textarea(ng-model="level.description" placeholder="Description" value="{{level.description}}" ng-blur="level.modify(levelForm)" ng-change="level.change()")
 
-  .badge-row.clickable(ng-if="levelIsSaved()" ng-click="level.editBadges()")
-    .badge-messages Badges
-    .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
-      %img(ng-src="{{levelBadge.badge.icon}}" alt="{{levelBadge.badge.name}}" title="{{levelBadge.badge.name}}" width="35px" height="35px")
-
-  .badge-modal-window(ng-show="level.editingBadges")
-    %select(ng-disabled="! levelIsSaved()" ng-change="level.selectBadge()" ng-model="level.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in level.availableBadges")
-      %option.default(value="" selected disabled ng-show="level.availableBadges.length > 0") select a badge to add...
-      %option.default(value="" selected disabled ng-show="level.availableBadges.length == 0") all available badges selected
-
-    .level-badge(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
-      %img(ng-src="{{levelBadge.badge.icon}}" width="20px" height="20px" alt="{{levelBadge.badge.name}}")
-      {{levelBadge.name}}
-      %button.delete(type="button" ng-click="level.deleteLevelBadge(levelBadge)") X
-
-    .update-badges
-      %button.close-modal(ng-click="level.closeBadges()") Update Badges
-
+  %rubric-level-badges(ng-if="levelIsSaved()" level="level")
 
   %button.meets-expectations-status(ng-if="showExpectationButton()" type="button" ng-class="{'no-expectation': !meetsExpectationsSet()}") {{expectationsLabel()}}
   %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectation}" ng-click="level.toggleMeetsExpectationsLevel()") {{expectationsHoverLabel()}}
