@@ -46,9 +46,6 @@
         _rawPointsType() == "PASS_FAIL"
       vm.isScoreLevelGraded = ()->
         _rawPointsType() == "SCORE_LEVELS"
-        
-      vm.hasAwardableBadges = ()->
-        GradeService.hasAwardableBadges
 
     ]
 
@@ -69,7 +66,8 @@
          recipientId: "=",
          submitPath: "@",
          gradeNextPath: "@",
-         isActiveCourse: "="
+         isActiveCourse: "=",
+         hasAwardableBadges: "="
         },
       templateUrl: 'grades/edit.html'
     }

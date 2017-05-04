@@ -15,7 +15,6 @@
   gradeStatusOptions = []
 
   isRubricGraded = false
-  hasAwardableBadges = false
   thresholdPoints = 0
 
   # used to distinguish group and individual grades:
@@ -81,7 +80,6 @@
     modelGrade.pending_status =  modelGrade.status
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
-    hasAwardableBadges = response.data.meta.has_awardable_badges
 
   getGrade = (assignmentId, recipientType, recipientId)->
     _recipientType = recipientType
@@ -314,8 +312,6 @@
     fileUploads: fileUploads
     criterionGrades: criterionGrades
     gradeStatusOptions: gradeStatusOptions
-
-    hasAwardableBadges: hasAwardableBadges
 
     calculateGradePoints: calculateGradePoints
 

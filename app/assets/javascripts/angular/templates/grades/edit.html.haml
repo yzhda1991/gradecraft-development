@@ -20,7 +20,7 @@
 %article.grade-form-fields(ng-if='!vm.isPassFailGraded()')
   %grade-adjustment-points-input(group-grade='vm.isGroupGrade')
 
-%article.grade-form-fields(ng-if='!vm.isGroupGrade && vm.hasAwardableBadges()')
+%article.grade-form-fields(ng-if='!vm.isGroupGrade && vm.hasAwardableBadges')
   %grade-earned-badges-select(student-id='{{vm.recipientId}}')
 
 .grading-summary

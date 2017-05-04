@@ -39,5 +39,4 @@ json.meta do
   json.grade_status_options @grade_status_options if @grade_status_options
   json.threshold_points     @grade.assignment.threshold_points
   json.is_rubric_graded     @grade.assignment.grade_with_rubric?
-  json.has_awardable_badges @grade.course.has_badges?
 end
