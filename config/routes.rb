@@ -323,8 +323,9 @@ Rails.application.routes.draw do
     post :copy, on: :collection
   end
 
-  #18. Sessions
   resources :canvas_session, only: [:index, :new]
+
+  resources :institutions, only: [:new, :create]
 
   #18. API Calls
 

@@ -105,6 +105,9 @@ en:
       title: "#{ term_for :assignment } Analytics"
     multiplier_choices:
       title: "#{ term_for :weight } Choices"
+  institutions:
+    new:
+      title: "Create a New institution"
   integrations:
     courses:
       index:

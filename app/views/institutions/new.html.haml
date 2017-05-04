@@ -1,0 +1,31 @@
+.pageContent
+  = render partial: "layouts/alerts", locals: { model: @institution, term: "institution" }
+
+  = simple_form_for(@institution) do |f|
+    %section.form-section
+      %h2.form-title= "Institution Information"
+      .form-item
+        = f.input :name, "aria-required": "true"
+      .form-item
+        = f.label :has_site_license
+        = f.check_box :has_site_license
+
+    %section.form-section
+      %h2.form-title= "Canvas Credentials"
+      = f.simple_fields_for :providers, Provider.new do |pf|
+        = pf.hidden_field :name, value: "canvas"
+        .form-item
+          = pf.input :consumer_key
+        .form-item
+          = pf.label :consumer_secret
+          = pf.password_field :consumer_secret, as: :consumer_secret
+        .form-item
+          = pf.label :consumer_secret_confirmation
+          = pf.password_field :consumer_secret_confirmation, as: :consumer_secret
+        .form-item
+          = pf.input :base_url, as: :string, placeholder: "Optional"
+
+    .submit-buttons
+      %ul
+        %li= f.button :submit, "Create Institution"
+        %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

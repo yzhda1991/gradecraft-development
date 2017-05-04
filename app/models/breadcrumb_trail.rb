@@ -271,6 +271,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:assignment_types].first.course.assignment_term + " Analytics")
   end
 
+  def institutions_new
+    dashboard
+    breadcrumb('New Institution')
+  end
+
   def integrations_index
     dashboard
     breadcrumb(objects[:course].name, course_path(objects[:course]))
