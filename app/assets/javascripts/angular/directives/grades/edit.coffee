@@ -46,6 +46,9 @@
         _rawPointsType() == "PASS_FAIL"
       vm.isScoreLevelGraded = ()->
         _rawPointsType() == "SCORE_LEVELS"
+        
+      vm.hasAwardableBadges = ()->
+        GradeService.hasAwardableBadges
 
     ]
 

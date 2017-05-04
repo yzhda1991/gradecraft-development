@@ -1,9 +1,9 @@
-%a.grade-form-collapsible.collapse-toggler.collapsed(ng-if="vm.BadgeService.badges.length > 0")
+%a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
   %h3
     %i.fa.fa-chevron-circle-right.fa-fw
     %span Award {{vm.BadgeService.termFor("badges")}}
 
-%section.badge-index-section.collapse.collapsed(ng-if="vm.BadgeService.badges.length > 0")
+%section.badge-index-section.collapse.collapsed
   %label.badge-award-container(for="{{vm.inputId(badge)}}"
   ng-repeat="badge in vm.BadgeService.badges"
   ng-class='{"unavailable":!vm.badgeIsActionable(badge), "awardable":vm.badgeIsAwardable(badge), "awarded":vm.badgeIsEarnedForGrade(badge)}'
