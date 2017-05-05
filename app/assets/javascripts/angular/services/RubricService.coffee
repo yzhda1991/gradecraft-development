@@ -23,6 +23,25 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
+  addLevelBadge = (level, badgeId)->
+    $http.post("/api/level_badges", {level_id: level.id, badge_id: badgeId}).then(
+      (response)-> # success
+        if response.status == 201
+          updatedCriteria = _.map(criteria, (criterion)->
+            if( _.find(criterion.levels, level))
+              _.map(criterion.levels, (currentLevel)->
+                if(currentLevel.id == level.id)
+                  currentLevel.level_badges.push(response.data.data.attributes)
+            )
+            return criterion
+          )
+          angular.copy(updatedCriteria, criteria)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+
   badgesForLevel = (level)->
     return [] unless level.level_badges.length && BadgeService.badges.length
     ids = _.map(level.level_badges, (badge)->badge["badge_id"])
@@ -54,6 +73,8 @@
 
   return {
     getRubric: getRubric
+    addLevelBadge: addLevelBadge
+
     rubric: rubric
     criteria: criteria
     full_points: full_points

@@ -1,6 +1,6 @@
 # Selector for earned badges in modal
 
-@gradecraft.directive 'rubricLevelBadgeSelector', [() ->
+@gradecraft.directive 'rubricLevelBadgeSelector', ['RubricService', (RubricService) ->
 
   return {
     templateUrl: 'rubrics/level_badge_selector.html'
@@ -11,6 +11,6 @@
     link: (scope, el, attr)->
 
       scope.selectBadge = ()->
-        console.log(scope.selectedBadge.id);
+        RubricService.addLevelBadge(scope.level, scope.selectedBadge.id)
   }
 ]

@@ -145,6 +145,8 @@ Rails.application.routes.draw do
   end
 
   resources :levels, only: [:create, :destroy, :update]
+
+  # remove!
   resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
@@ -391,6 +393,7 @@ Rails.application.routes.draw do
       delete :destroy, on: :collection
     end
     resources :levels, only: :update
+    resources :level_badges, only: [:create, :destroy]
 
     resources :predicted_earned_badges, only: [:create, :update]
     resources :predicted_earned_challenges, only: [:create, :update]
