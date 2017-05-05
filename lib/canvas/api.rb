@@ -4,13 +4,13 @@ require "active_support/core_ext/hash"
 module Canvas
   class API
     include HTTParty
-    base_uri "#{ENV["CANVAS_BASE_URL"]}/api/v1"
     format :json
 
-    attr_reader :access_token
+    attr_reader :access_token, :base_uri
 
-    def initialize(access_token)
+    def initialize(access_token, options={})
       @access_token = access_token
+      @base_uri = "#{options[:base_uri] || ENV["CANVAS_BASE_URL"]}/api/v1"
     end
 
     # Fetch data from Canvas
@@ -18,7 +18,7 @@ module Canvas
     def get_data(path="/", params={}, fetch_next=true)
       result = {}
       params.merge! access_token: access_token
-      next_url = "#{self.class.base_uri}#{path}"
+      next_url = "#{base_uri}#{path}"
       next_url += "?#{params.to_query}" unless params.empty?
       loop do
         # Do not add the original query parameters here since they are already
@@ -34,7 +34,7 @@ module Canvas
     end
 
     def set_data(path="/", method=:post, params={})
-      url = "#{self.class.base_uri}#{path}"
+      url = "#{base_uri}#{path}"
       response = self.class.send method, url, body: params.to_json,
         headers: { "Content-Type" => "application/json" },
         query: { access_token: access_token }

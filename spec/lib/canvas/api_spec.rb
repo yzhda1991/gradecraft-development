@@ -1,14 +1,19 @@
 describe Canvas::API, type: :disable_external_api do
   let(:access_token) { "BLAH" }
+  let(:options) { { base_uri: "https://thecanvas.instructure.com" } }
 
-  before do
-    allow(Canvas::API).to \
-      receive(:base_uri).and_return "https://canvas.instructure.com/api/v1"
-  end
+  ENV["CANVAS_BASE_URL"] = "https://canvas.instructure.com"
 
   describe "#initialize" do
     it "initializes with an access token" do
       expect(described_class.new(access_token).access_token).to eq access_token
+      expect(described_class.new(access_token).base_uri).to eq \
+        "https://canvas.instructure.com/api/v1"
+    end
+
+    it "initializes with options" do
+      expect(described_class.new(access_token, options).base_uri).to eq \
+        "https://thecanvas.instructure.com/api/v1"
     end
   end
 
