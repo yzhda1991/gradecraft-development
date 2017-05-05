@@ -5,6 +5,9 @@
 
   return {
     templateUrl: 'grades/points_overview.html'
+    scope: {
+      gradeType: "@"
+    }
     link: (scope, el, attr)->
 
       scope.assignment = ()->
@@ -41,12 +44,11 @@
 
       scope.isBelowThreshold = ()->
         return false if !(scope.assignment() && scope.grade)
-        scope.assignment().has_threshold && (scope.grade.final_points < scope.assignment().threshold_points)
+        scope.assignment().has_threshold && (scope.finalPoints() < scope.assignment().threshold_points)
 
       scope.pointsBelowThreshold = ()->
         return 0 if !(scope.assignment() && scope.grade)
-        scope.assignment().threshold_points - scope.grade.raw_points + scope.grade.adjustment_points
+        scope.assignment().threshold_points - scope.grade.raw_points + scope.adjustmentPoints()
 
   }
 ]
-

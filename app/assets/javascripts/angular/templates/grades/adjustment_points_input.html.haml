@@ -1,11 +1,12 @@
-%h3.collapse-toggler.collapsed
-  %i.fa.fa-angle-double-right.fa-fw
-  %span(ng-if="groupGrade")
-    Would you like to adjust a specific student’s grade or share individualized feedback?
-  %span(ng-if="!groupGrade")
-    Would you like to adjust the grade's final points?
+%a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
+  %h3
+    %i.fa.fa-chevron-circle-right.fa-fw
+    %span(ng-if="groupGrade")
+      Adjust a specific student’s grade
+    %span(ng-if="!groupGrade")
+      Adjust final points
 
-%section.grade-adjustments-section.collapse.collapsed
+%section.grade-adjustments-section.collapse.collapsed(ng-class='{"flex-wrapper": groupGrade}')
   %div.grade-adjustments(ng-repeat="grade in grades")
 
     %article.grade-form-fields(ng-class='{"sectional": groupGrade}')

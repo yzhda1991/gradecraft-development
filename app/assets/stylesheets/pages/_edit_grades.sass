@@ -17,22 +17,12 @@
 .grade-form-subsection
   margin-bottom: 1rem
 
-.simple_form section label.grade-section-label,
-.grade-section-label
-  display: block
-  text-align: left
-
 article.grade-form-fields
-  background-color: $color-grey-6
-  margin: 1rem auto
+  background-color: $color-grey-7
+  // margin: 1rem auto
   padding: 1rem
-  section
+  section:not(:last-child)
     margin-bottom: 0.5rem
-
-article.grade-form-fields.sectional
-  width: 28%
-  margin: 1rem
-  float: left
 
 section.grade-pass-fail
   .binary-switch-socket
@@ -48,26 +38,41 @@ section.grade-score-levels
   #grade-score-level-selector
     margin-bottom: 9px
 
-section.grade-adjustments-section.collapse.collapsed
+section.grade-adjustments-section.flex-wrapper
+  display: flex
+  flex-wrap: wrap
+  input[type="text"]
+   width: 100%
+  textarea
+   width: 100%
+   min-height: 100px
+  .grade-adjustments
+    width: 250px
+    margin: 0.5rem
+    background-color: $color-grey-7
+    border: 1px solid $color-grey-6
+    @media (max-width: $media-small-max)
+      width: 100%
+
+.grade-form-collapsible
+  color: $color-blue-2
+  &:hover
+    text-decoration: none
+
+.grade-form-fields section.collapse.collapsed
   overflow: hidden
   height: 0
 
-section.grade-adjustment-points-feedback
- width: 100%
- textarea
-   width: 100%
-   min-height: 100px
-
 section.grade-final-points
-  margin-top: 1rem
-  font-size: 1.25rem
-  padding: .25rem
+  margin-top: 0.5rem
+  font-size: 1rem
+  font-weight: 600
 
 section.grade-feedback-upload
   margin: 0.5rem 0
 
 section.grade-status
-  margin-bottom: 2rem
+  margin: 2rem 0
   p
     font-style: italic
     margin: 0
@@ -76,6 +81,18 @@ hr.grading-divider
   border: 1px solid $color-grey-6
   margin: 1rem auto
 
+.grading-summary
+  float: right
+
+.lower-points-summary
+  margin: 1rem 0
+  .grading-divider
+    margin: 0.5rem 0
+  p
+    margin: 0
+    font-weight: 300
+    &.total-points-score
+      font-weight: 400
 
 #rubric-grade-edit
   @include transition(all, .5s, ease-out)

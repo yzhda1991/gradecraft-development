@@ -66,7 +66,8 @@
          recipientId: "=",
          submitPath: "@",
          gradeNextPath: "@",
-         isActiveCourse: "="
+         isActiveCourse: "=",
+         hasAwardableBadges: "="
         },
       templateUrl: 'grades/edit.html'
     }

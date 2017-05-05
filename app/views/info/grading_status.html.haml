@@ -26,7 +26,7 @@
     .collapseSection{id: "ungraded", role: "tablist"}
       .collapse{role: "tab"}
         %h3
-          %i.fa.fa-angle-double-right.fa-fw
+          %i.fa.fa-chevron-circle-right.fa-fw
           Ungraded Submissions
       .collapse-hidden{role: "tabpanel"}
         = render partial: "submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
@@ -35,7 +35,7 @@
     .collapseSection{id: "unreleased", role: "tablist"}
       .collapse{role: "tab"}
         %h3
-          %i.fa.fa-angle-double-right.fa-fw
+          %i.fa.fa-chevron-circle-right.fa-fw
           Unreleased Grades
       .collapse-hidden{role: "tabpanel"}
         = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @unreleased_grades_by_assignment, course: current_course }
@@ -44,7 +44,7 @@
     .collapseSection{id: "in_progress", role: "tablist"}
       .collapse{role: "tab"}
         %h3
-          %i.fa.fa-angle-double-right.fa-fw
+          %i.fa.fa-chevron-circle-right.fa-fw
           In Progress Grades
       .collapse-hidden{role: "tabpanel"}
         = render partial: "grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
@@ -53,7 +53,7 @@
     .collapseSection{id: "resubmissions", role: "tablist"}
       .collapse{role: "tab"}
         %h3
-          %i.fa.fa-angle-double-right.fa-fw
+          %i.fa.fa-chevron-circle-right.fa-fw
           Resubmissions
       .collapse-hidden{role: "tabpanel"}
         = render partial: "submissions_table", locals: { submission_type: "resubmissions", submissions_by_assignment: @resubmissions_by_assignment, course: current_course }

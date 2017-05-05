@@ -2,7 +2,7 @@
   .assignment_type.team-challenge.student{role: "tablist"}
 
     .collapse{role: "tab"}
-      %h3= glyph('angle-double-right') + "#{term_for :challenges}" 
+      %h3= glyph('chevron-circle-right') + "#{term_for :challenges}" 
       .points-summary
         .points-bar-graph
           .points-bar-graph-fill{:style => "width: #{(current_student.team_for_course(current_course).challenge_grade_score).to_f / (current_course.point_total_for_challenges).to_f * 100}%;"}
