@@ -5,9 +5,7 @@
 
 .badge-modal-window(ng-if="editingBadges()")
 
-  %select(ng-change="selectBadge()" ng-model="selectedBadge" ng-options="badge as badge.name for (badgeId, badge) in availableBadges() track by badge.id")
-    %option.default(value="" selected disabled ng-show="availableBadges().length > 0") select a badge to add...
-    %option.default(value="" selected disabled ng-show="availableBadges().length == 0") all available badges selected
+  %rubric-level-badge-selector(badges="availableBadges()" level="level")
 
   .level-badge(ng-repeat="badge in badgesForLevel()")
     %img(ng-src="{{badge.icon}}" width="20px" height="20px" alt="{{badge.name}}")

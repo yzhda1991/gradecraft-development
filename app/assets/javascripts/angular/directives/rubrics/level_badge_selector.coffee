@@ -6,15 +6,11 @@
     templateUrl: 'rubrics/level_badge_selector.html'
     scope: {
       badges: "="
+      level: "="
     }
     link: (scope, el, attr)->
 
       scope.selectBadge = ()->
-        el
-        attr
-        scope.selectedBadge
-        debugger
-        console.log("selectBadge")
-
+        console.log(scope.selectedBadge.id);
   }
 ]
