@@ -2,17 +2,13 @@ require "api_spec_helper"
 
 describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   let(:access_token) { "BLAH" }
-
-  before do
-    allow(Canvas::API).to \
-      receive(:base_uri).and_return "https://canvas.instructure.com/api/v1"
-  end
+  let(:options) { { base_uri: "https://canvas.instructure.com" } }
 
   describe "#initialize" do
     it "initializes a new canvas API wrapper" do
       expect(Canvas::API).to \
-        receive(:new).with(access_token).and_call_original
-      described_class.new access_token
+        receive(:new).with(access_token, options).and_call_original
+      described_class.new access_token, options
     end
   end
 
@@ -22,7 +18,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                    "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
         .with(query: { "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "retrieves the assignment for the id from the api" do
@@ -54,7 +50,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/assignments")
         .with(query: { "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "retrieves the published assignments for the course from the api" do
@@ -131,7 +127,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123")
         .with(query: { "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "retrieves the course for the id from the api" do
@@ -163,7 +159,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
         .with(query: { "enrollment_type" => "teacher", "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "retrieves the courses from the api" do
@@ -207,7 +203,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                        "per_page" => 25,
                        "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       let!(:successful_stub) do
@@ -277,7 +273,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                    "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
         .with(query: { "access_token" => access_token }, body: request.to_json)
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "updates the assignment for the id from the api" do
@@ -309,7 +305,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get, "https://canvas.instructure.com/api/v1/users/123/profile")
         .with(query: { "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       it "retrieves the user for the id from the api" do
