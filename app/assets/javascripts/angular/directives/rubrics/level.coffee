@@ -10,6 +10,9 @@
     }
     link: (scope, el, attr)->
 
+      scope.availableBadgesForLevel = ()->
+        RubricService.availableBadgesForLevel(scope.level)
+
       #--------------------- meets expectations -------------------------------#
 
       scope.meetsExpectationsSet = ()->

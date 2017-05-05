@@ -5,7 +5,7 @@
 
 .badge-modal-window(ng-if="editingBadges()")
 
-  %rubric-level-badge-selector(badges="availableBadges()" level="level")
+  %rubric-level-badge-selector(level="level")
 
   .level-badge(ng-repeat="badge in badgesForLevel()")
     %img(ng-src="{{badge.icon}}" width="20px" height="20px" alt="{{badge.name}}")

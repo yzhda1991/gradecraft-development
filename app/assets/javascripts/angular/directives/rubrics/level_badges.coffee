@@ -15,11 +15,6 @@
       scope.badgesForLevel = ()->
         RubricService.badgesForLevel(@level)
 
-      scope.availableBadges = ()->
-        # edit out the badges that can only be earned once, etc.?
-        # or all badges already earned?
-        BadgeService.badges
-
       # globally set this level as the one with an open badge edit modal
       scope.editBadges = ()->
         RubricService.editBadgesForLevel(@level)
@@ -34,10 +29,6 @@
       scope.selectedBadge = BadgeService.badges[0]
 
       scope.selectBadge = ()->
-        el
-        attr
-        scope.selectedBadge
-        debugger
         console.log("selectBadge")
 
   }

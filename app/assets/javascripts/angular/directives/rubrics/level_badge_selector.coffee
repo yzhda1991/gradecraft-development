@@ -5,12 +5,12 @@
   return {
     templateUrl: 'rubrics/level_badge_selector.html'
     scope: {
-      badges: "="
       level: "="
     }
     link: (scope, el, attr)->
 
       scope.selectBadge = ()->
+        # add check for valid ids before submit!
         RubricService.addLevelBadge(scope.level, scope.selectedBadge.id)
   }
 ]

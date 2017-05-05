@@ -32,6 +32,7 @@
               _.map(criterion.levels, (currentLevel)->
                 if(currentLevel.id == level.id)
                   currentLevel.level_badges.push(response.data.data.attributes)
+                  currentLevel.available_badges = _.reject(currentLevel.available_badges,(id: response.data.data.attributes.badge_id))
             )
             return criterion
           )
@@ -47,7 +48,6 @@
     ids = _.map(level.level_badges, (badge)->badge["badge_id"])
     # change indexBy to keyBy if lowdash is updated to v4
     badges = _(BadgeService.badges).indexBy('id').at(ids).value();
-
 
   # We only allow one open modal for editing badges
   editBadgesForLevel = (level)->

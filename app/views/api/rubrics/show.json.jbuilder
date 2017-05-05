@@ -39,6 +39,14 @@ json.included do
           json.level_id level_badge.level_id
           json.badge_id level_badge.badge_id
         end
+        # For performance, we determine available badges here rather than in Angular
+        badge_ids = level.level_badges.pluck(:badge_id)
+        json.available_badges current_course.badges do |badge|
+          if !badge_ids.include?(badge.id)
+            json.id badge.id
+            json.name badge.name
+          end
+        end
       end
     end
   end
