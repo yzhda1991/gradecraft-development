@@ -1,4 +1,4 @@
-describe CanvasAPIHelper, focus: true do
+describe CanvasAPIHelper do
   subject { helper }
 
   describe "#concat_submission_comments" do
