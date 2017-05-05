@@ -203,7 +203,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                        "per_page" => 25,
                        "access_token" => access_token })
     end
-    subject { described_class.new access_token }
+    subject { described_class.new access_token, options }
 
     context "with a successful API call" do
       let!(:successful_stub) do

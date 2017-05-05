@@ -1,9 +1,15 @@
 describe ActiveLMS::Syllabus do
   let(:access_token) { "BLAH" }
+  let(:options) { { base_uri: "https://canvas.instructure.com" } }
 
   describe "#initialize" do
     it "initializes with a provider" do
       expect(described_class.new(:canvas, access_token).provider).to \
+        be_kind_of ActiveLMS::CanvasSyllabus
+    end
+
+    it "initializes with options" do
+      expect(described_class.new(:canvas, access_token, options).provider).to \
         be_kind_of ActiveLMS::CanvasSyllabus
     end
 
