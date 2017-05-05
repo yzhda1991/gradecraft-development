@@ -14,7 +14,7 @@ describe CanvasGradeImporter do
           id: canvas_grade_id,
           score: 98.0,
           user_id: "USER_1",
-          submission_comments: "This is great!"
+          submission_comments: [{"comment" => "This is great!"}]
         }.stringify_keys
       end
       let(:canvas_user) do
@@ -34,7 +34,7 @@ describe CanvasGradeImporter do
         expect(grade.assignment).to eq assignment
         expect(grade.student).to eq user
         expect(grade.raw_points).to eq 98
-        expect(grade.feedback).to eq "This is great!"
+        expect(grade.feedback).to eq "Comment 1: This is great!"
         expect(grade.status).to eq "Graded"
         expect(grade).to be_instructor_modified
       end
@@ -80,7 +80,7 @@ describe CanvasGradeImporter do
             expect(grade.assignment).to eq assignment
             expect(grade.student).to eq user
             expect(grade.raw_points).to eq 98
-            expect(grade.feedback).to eq "This is great!"
+            expect(grade.feedback).to eq "Comment 1: This is great!"
           end
         end
 
