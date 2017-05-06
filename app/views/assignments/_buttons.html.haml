@@ -23,11 +23,11 @@
                 locals: { assignment: presenter.assignment, team: presenter.team }
 
             - unless presenter.assignment.imported_assignment.nil?
-              = active_course_link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), nil, "hide-for-small", method: :post do
+              = active_course_link_to assignments_importer_refresh_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), { method: :post }, nil, "hide-for-small" do
                 = decorative_glyph(:refresh)
                 = "Update Assignment from #{presenter.assignment.imported_assignment.provider.capitalize}"
 
-              = active_course_link_to assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), nil, "hide-for-small", method: :post do
+              = active_course_link_to assignments_importer_update_assignment_path(presenter.assignment.imported_assignment.provider, presenter.assignment), { method: :post }, nil, "hide-for-small" do
                 = decorative_glyph(:refresh)
                 = "Update #{presenter.assignment.imported_assignment.provider.capitalize} with Assignment"
 
