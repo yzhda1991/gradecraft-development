@@ -127,22 +127,30 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
 
   describe "#grades" do
     let(:assignment_ids) { [456, 789] }
+    let(:grades) do
+      [
+        { id: 456, score: 87 },
+        { id: 789, score: "" },
+        { id: 777, score: nil, submission_comments: "good jorb!" }
+      ]
+    end
     let!(:stub) do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
-                       "include" => ["assignment", "course", "user"],
+                       "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 25,
                        "access_token" => access_token })
-        .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
+        .to_return(status: 200, body: grades.to_json, headers: {})
     end
     subject { described_class.new access_token }
 
-    it "returns a hash containing the result" do
+    it "returns a hash containing only grades with scores or feedback" do
       result = subject.grades(123, assignment_ids)
 
-      expect(result[:data].count).to eq 1
-      expect(result[:data].first["score"]).to eq 87
+      expect(result[:data].count).to eq 2
+      expect(result[:data]).to include({ "id" => 456, "score" => 87 },
+        { "id" => 777, "score" => nil, "submission_comments" => "good jorb!" })
       expect(result[:has_next_page]).to eq false
     end
 
@@ -150,7 +158,7 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
-                       "include" => ["assignment", "course", "user"],
+                       "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 5, "test" => true,
                        "access_token" => access_token })
         .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
