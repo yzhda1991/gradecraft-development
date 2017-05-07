@@ -429,13 +429,11 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.datetime "excluded_at"
     t.integer  "excluded_by_id"
     t.index ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-    t.index ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
     t.index ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
     t.index ["course_id"], name: "index_grades_on_course_id", using: :btree
     t.index ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
     t.index ["score"], name: "index_grades_on_score", using: :btree
-    t.index ["task_id"], name: "index_grades_on_task_id", using: :btree
   end
 
   create_table "group_memberships", force: :cascade do |t|
