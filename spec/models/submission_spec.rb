@@ -1,6 +1,5 @@
 describe Submission do
-  
-  let(:course) { build(:course) }
+  let(:course) { create(:course) }
   let(:assignment) { create(:assignment) }
   let(:student) { create(:user) }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }
@@ -40,7 +39,7 @@ describe Submission do
     end
 
     it "allows multiple group submissions to be created" do
-      group = create(:group)
+      group = create(:group, course_id: course.id)
       expect{create_list(:group_submission, 3, group: group)}.not_to raise_error
     end
 
@@ -56,7 +55,7 @@ describe Submission do
     end
   end
 
-  context "with a persisted assignment" do 
+  context "with a persisted assignment" do
     it_behaves_like "a historical model", :submission, link: "http://example.org"
     it_behaves_like "a model that needs sanitization", :submission, :text_comment
   end
@@ -140,7 +139,7 @@ describe Submission do
   describe ".for_assignment_and_group" do
     let(:group_assignment) { create(:group_assignment) }
     let!(:assignment_group) { create(:assignment_group, assignment: group_assignment) }
-    let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group) }
+    let!(:group_membership) { create(:group_membership, student: student, group: assignment_group.group, course: course) }
     let!(:group_submission) { create(:group_submission, assignment: group_assignment, group: assignment_group.group) }
 
     it "returns the submission for the group and assignment" do
@@ -213,7 +212,7 @@ describe Submission do
     end
 
     it "returns true for a submission that has grade that is student visible" do
-      # because of the way that the submission_grades query is written, we need to create both the assignment and the student for the test to pass 
+      # because of the way that the submission_grades query is written, we need to create both the assignment and the student for the test to pass
       grade = create(:grade, assignment: assignment, student: student, submission: submission, status: "Graded")
       expect(submission).to be_graded
     end
@@ -237,9 +236,9 @@ describe Submission do
 
   describe ".ungraded" do
     before { Submission.destroy_all }
-      
+
     let(:in_progress_submission) { create(:submission, course: course) }
-    
+
     it "returns the submissions that do not have any grades" do
       expect(Submission.ungraded).to eq [ungraded_submission]
     end
@@ -529,7 +528,7 @@ describe Submission do
     context "when the assignment is for groups" do
       before(:each) { allow(submission).to receive(:assignment).and_return build_stubbed(:group_assignment) }
 
-      let!(:group_membership) { create(:group_membership, student: student) }
+      let!(:group_membership) { create(:group_membership, student: student, course: course) }
 
       it "returns true if the student's group memberships include the group id" do
         submission.group_id = group_membership.group_id

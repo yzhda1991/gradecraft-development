@@ -1,6 +1,5 @@
-describe Group do
-
-  let(:group) { create(:group, name: "Steven's Wondersauce") }
+describe Group, focus: true do
+  let!(:group) { create(:group, name: "Steven's Wondersauce") }
 
   describe "proposal sanitization" do
     it "has html save text text_proposal" do

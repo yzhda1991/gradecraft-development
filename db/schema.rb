@@ -442,7 +442,7 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.string   "accepted"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "course_id",                        null: false
+    t.integer  "course_id"
     t.index ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
     t.index ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
   end

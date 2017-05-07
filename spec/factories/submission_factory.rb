@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :submission do
     association :assignment
+    association :course
     text_comment "needs a link, file, or text comment to be valid"
     submitted_at Faker::Date.backward(14)
     association :student, factory: :user
