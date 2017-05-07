@@ -10,6 +10,10 @@ class Provider < ActiveRecord::Base
   validates :consumer_secret, confirmation: true
   validates :consumer_secret_confirmation, presence: true, if: :consumer_secret, on: :update
 
+  def self.for(course)
+    course.institution.providers.first
+  end
+
   def decrypted_consumer_secret
     SCrypt::Password.new consumer_secret
   end
