@@ -432,7 +432,6 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.index ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
     t.index ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
     t.index ["course_id"], name: "index_grades_on_course_id", using: :btree
-    t.index ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
     t.index ["score"], name: "index_grades_on_score", using: :btree
   end
 
@@ -444,7 +443,6 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.datetime "updated_at", null: false
     t.integer  "course_id",                        null: false
     t.index ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
-    t.index ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
     t.index ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
   end
 
