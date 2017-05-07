@@ -1,4 +1,4 @@
-describe Group, focus: true do
+describe Group do
   let!(:group) { create(:group, name: "Steven's Wondersauce") }
 
   describe "proposal sanitization" do
