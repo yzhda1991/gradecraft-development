@@ -390,7 +390,7 @@ ActiveRecord::Schema.define(version: 20170403145349) do
 
   create_table "grade_scheme_elements", force: :cascade do |t|
     t.string   "level"
-    t.integer  "lowest_points",                        null: false
+    t.integer  "lowest_points"
     t.string   "letter"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false

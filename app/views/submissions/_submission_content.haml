@@ -1,5 +1,5 @@
 // Allow students to edit the submission if that's still possible
-- if SubmissionProctor.new(presenter.submission).open_for_editing? presenter.assignment
+- if SubmissionProctor.new(presenter.submission).open_for_editing? presenter.assignment, current_user
   = render partial: "submissions/components/edit", locals: { presenter: presenter }
 
 // Displaying when the assignment was submitted and if it was late/resubmitted

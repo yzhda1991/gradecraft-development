@@ -1,9 +1,9 @@
 describe SubmissionsController do
-  let(:course) { build(:course) }
+  let!(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let!(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:submission) { create(:submission, assignment: assignment, student: student) }
+  let!(:submission) { create(:submission, assignment: assignment, student: student, submitted_at: Date.today - 1) }
 
   context "as a professor" do
 
@@ -56,12 +56,12 @@ describe SubmissionsController do
 
     describe "GET edit" do
       it "display the edit form" do
-        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return true
+        get :edit, params: { assignment_id: assignment.id,  id: submission.id }
         expect(response).to render_template(:edit)
       end
 
       it "redirects to the assignment path if the submission is not open for editing" do
-        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
       end
