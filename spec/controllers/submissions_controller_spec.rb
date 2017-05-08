@@ -1,9 +1,9 @@
-describe SubmissionsController do
-  let!(:course) { create(:course) }
+describe SubmissionsController, focus: true do
+  let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
-  let!(:student) { create(:course_membership, :student, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
-  let!(:submission) { create(:submission, assignment: assignment, student: student, submitted_at: Date.today - 1) }
+  let(:submission) { create(:submission, assignment: assignment, student: student) }
 
   context "as a professor" do
 
@@ -62,6 +62,7 @@ describe SubmissionsController do
       end
 
       it "redirects to the assignment path if the submission is not open for editing" do
+        allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
       end
