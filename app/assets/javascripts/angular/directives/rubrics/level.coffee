@@ -50,6 +50,6 @@
         console.log("createLevel");
 
       scope.deleteLevel = ()->
-        console.log("deleting level #{@level.id}");
+        RubricService.deleteLevel(@level)
   }
 ]

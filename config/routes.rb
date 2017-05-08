@@ -396,7 +396,7 @@ Rails.application.routes.draw do
     resources :grade_scheme_elements, only: :index do
       delete :destroy, on: :collection
     end
-    resources :levels, only: :update
+    resources :levels, only: [:update, :destroy]
     resources :level_badges, only: [:create, :destroy]
 
     resources :predicted_earned_badges, only: [:create, :update]

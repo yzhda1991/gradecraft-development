@@ -8,7 +8,8 @@ module Services
 
       executed do |context|
         context[:criterion].levels do |level|
-          if level == context[:level]
+          # this doesn't work:
+          if level.id == context[:level].id
             level.update(meets_expectations: true)
           else
             level.update(meets_expectations: false)
