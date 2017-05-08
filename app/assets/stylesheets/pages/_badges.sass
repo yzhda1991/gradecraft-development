@@ -80,7 +80,7 @@
       @media (max-width: $media-small-max)
         flex-direction: column
 
-    .badge-icon-container
+    .badge-icon-wrapper
       margin: 0 1rem 0 0
 
     .badge-icon
@@ -190,3 +190,61 @@ ul.earned-badge-list
 .badge-award-name
   font-size: .7rem
   display: inline-block
+
+// preview of image uploaded in create badge page
+.preview-wrapper
+  display: flex
+  align-items: flex-end
+
+.icon-preview
+  border-bottom: 1px dashed $color-grey-5
+  border-left: 1px dashed $color-grey-5
+  padding: 0.5rem
+  margin: 1rem 1rem 2rem 2rem
+  position: relative
+  &.large-preview
+    width: 150px
+    height: 150px
+  &.medium-preview
+    width: 80px
+    height: 80px
+  &.small-preview
+    width: 40px
+    height: 40px
+
+.xaxis-label,
+.yaxis-label
+  position: absolute
+  color: $color-grey-3
+  font-size: 0.8rem
+
+.xaxis-label
+  top: 50%
+  left: -40px
+  transform: translateY(-50%)
+
+.yaxis-label
+  bottom: -24px
+  left: 50%
+  transform: translateX(-50%)
+
+// image cropper for badges 
+.img-cropper
+  position: relative
+  overflow: hidden
+  &.large-crop
+    width: 150px
+    height: 150px
+  &.med-crop
+    width: 80px
+    height: 80px
+  &.small-crop
+    width: 40px
+    height: 40px
+  img
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    height: 100%
+    width: auto
