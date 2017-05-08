@@ -10,7 +10,7 @@
   .level-badge(ng-repeat="badge in badgesForLevel()")
     %img(ng-src="{{badge.icon}}" width="20px" height="20px" alt="{{badge.name}}")
     {{badge.name}}
-    %button.delete(type="button" ng-click="level.deleteLevelBadge(levelBadge)") X
+    %button.delete(type="button" ng-click="deleteLevelBadge(badge.id)") X
 
   .update-badges
     %button.close-modal(ng-click="closeBadges()") Update Badges

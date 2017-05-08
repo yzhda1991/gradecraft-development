@@ -10,7 +10,6 @@
     link: (scope, el, attr)->
 
       scope.selectBadge = ()->
-        # add check for valid ids before submit!
         RubricService.addLevelBadge(scope.level, scope.selectedBadge.id)
   }
 ]

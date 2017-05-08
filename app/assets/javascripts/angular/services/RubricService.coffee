@@ -42,6 +42,29 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  deleteLevelBadge = (level, badgeId)->
+    levelBadge = _.find(level.level_badges, {badge_id: badgeId})
+    if levelBadge
+      $http.delete("/api/level_badges/#{levelBadge.id}").then(
+        (response)-> # success
+          if response.status == 200
+            updatedCriteria = _.map(criteria, (criterion)->
+              if( _.find(criterion.levels, level))
+                _.map(criterion.levels, (currentLevel)->
+                  if(currentLevel.id == level.id)
+                    currentLevel.level_badges = _.reject(currentLevel.level_badges,(badge_id: badgeId))
+                    badge = _.find(BadgeService.badges, {id: badgeId})
+                    currentLevel.available_badges.push({id: badge.id, name: badge.name})
+              )
+              return criterion
+            )
+            angular.copy(updatedCriteria, criteria)
+          GradeCraftAPI.logResponse(response)
+        ,(response)-> # error
+          GradeCraftAPI.logResponse(response)
+      )
+    else
+      console.log("error: level badge not found");
 
   badgesForLevel = (level)->
     return [] unless level.level_badges.length && BadgeService.badges.length
@@ -74,6 +97,7 @@
   return {
     getRubric: getRubric
     addLevelBadge: addLevelBadge
+    deleteLevelBadge: deleteLevelBadge
 
     rubric: rubric
     criteria: criteria

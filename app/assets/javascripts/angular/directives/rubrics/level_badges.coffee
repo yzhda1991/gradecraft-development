@@ -26,10 +26,7 @@
       scope.closeBadges = ()->
         RubricService.closeBadgesForLevel()
 
-      scope.selectedBadge = BadgeService.badges[0]
-
-      scope.selectBadge = ()->
-        console.log("selectBadge")
-
+      scope.deleteLevelBadge = (badgeId)->
+        RubricService.deleteLevelBadge(scope.level, badgeId)
   }
 ]
