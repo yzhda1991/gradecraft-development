@@ -3,7 +3,11 @@ class API::CoursesController < ApplicationController
   # accessed by the dashboard
   # GET api/courses
   def index
-    @courses = current_user.courses.select(:id, :name, :course_number, :year, :semester)
+    @courses = []
+    current_user.courses.each do |course|
+      @courses << course.create_searchable_course
+    end
+    return @courses
   end
 
   # accessed by the dashboard
