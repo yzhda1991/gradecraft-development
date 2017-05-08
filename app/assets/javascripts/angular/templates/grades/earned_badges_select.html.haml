@@ -16,7 +16,8 @@
       ng-click="vm.awardBadge(badge)"
     )
     .badge-award-image
-      %img(ng-src="{{badge.icon}}" alt="")
+      .img-cropper.small-crop
+        %img(ng-src="{{badge.icon}}" alt="")
 
     .badge-award-name {{badge.name}}
 .clear

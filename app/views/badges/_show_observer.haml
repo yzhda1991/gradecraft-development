@@ -5,6 +5,7 @@
     %section.badge-container
       %h1.badge-title
         = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
+      .img-cropper.large-crop
         = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: nil }
     %section.badge-description
       %h2 Description
