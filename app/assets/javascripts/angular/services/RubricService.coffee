@@ -75,11 +75,48 @@
   # We only allow one open modal for editing badges
   editBadgesForLevel = (level)->
      _editingBadgesId = level.id
+
   editingBadgesForLevel = (level)->
     level.id == _editingBadgesId
+
   closeBadgesForLevel = ()->
     _editingBadgesId = null
 
+  setMeetsExpectations = (level)->
+    $http.put("/api/criteria/#{level.criterion_id}/levels/#{level.id}/set_expectations").then(
+      (response)-> # success
+        if response.status == 200
+          updatedCriteria = _.map(criteria, (criterion)->
+            if(criterion.id == level.criterion_id)
+              criterion = response.data.data.attributes
+            return criterion
+          )
+          angular.copy(updatedCriteria, criteria)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  removeMeetsExpectations = (level)->
+    $http.put("/api/criteria/#{level.criterion_id}/remove_expectations").then(
+      (response)-> # success
+        if response.status == 200
+          updatedCriteria = _.map(criteria, (criterion)->
+            if(criterion.id == level.criterion_id)
+              criterion = response.data.data.attributes
+            return criterion
+          )
+          angular.copy(updatedCriteria, criteria)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  updateMeetsExpectationsLevel = (criterion, level)->
+    if isMeetsExpectationsLevel(criterion, level)
+      removeMeetsExpectations(level)
+    else
+      setMeetsExpectations(level)
 
   # This criterion has a level set as "meets expectations"
   meetsExpectationsSet = (criterion)->
@@ -108,6 +145,7 @@
     editingBadgesForLevel: editingBadgesForLevel
     closeBadgesForLevel: closeBadgesForLevel
 
+    updateMeetsExpectationsLevel: updateMeetsExpectationsLevel
     meetsExpectationsSet: meetsExpectationsSet
     isMeetsExpectationsLevel: isMeetsExpectationsLevel
     satifiesExpectations: satifiesExpectations

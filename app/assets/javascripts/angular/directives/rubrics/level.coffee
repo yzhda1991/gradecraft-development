@@ -15,6 +15,9 @@
 
       #--------------------- meets expectations -------------------------------#
 
+      scope.updateMeetsExpectationsLevel = ()->
+        RubricService.updateMeetsExpectationsLevel(@criterion, @level)
+
       scope.meetsExpectationsSet = ()->
         RubricService.meetsExpectationsSet(@criterion)
 

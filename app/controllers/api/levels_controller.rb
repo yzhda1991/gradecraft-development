@@ -6,6 +6,8 @@ class API::LevelsController < ApplicationController
     level = Level.find(params[:id])
 
     if params[:level].key? :meets_expectations
+
+      # don't handle sets_expectations here!
       level.criterion.update_meets_expectations!(
         level,
         ActiveRecord::Type::Boolean.new.deserialize(params[:level][:meets_expectations])

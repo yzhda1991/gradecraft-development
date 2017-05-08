@@ -15,6 +15,6 @@
   %rubric-level-badges(ng-if="levelIsSaved()" level="level")
 
   %button.meets-expectations-status(ng-if="showExpectationButton()" type="button" ng-class="{'no-expectation': !meetsExpectationsSet()}") {{expectationsLabel()}}
-  %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectation}" ng-click="level.toggleMeetsExpectationsLevel()") {{expectationsHoverLabel()}}
+  %button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectation}" ng-click="updateMeetsExpectationsLevel()") {{expectationsHoverLabel()}}
   %button.delete(type="button" ng-click="deleteLevel()" ng-hide="level.required") X
 
