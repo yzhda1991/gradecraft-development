@@ -18,7 +18,8 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         scoreWithWeights: 'numeric',
         finalScore: 'numeric',
         predictedScore: 'numeric',
-        id: 'numeric'
+        id: 'numeric',
+        lastLogin: 'date'
       }
     }
 });

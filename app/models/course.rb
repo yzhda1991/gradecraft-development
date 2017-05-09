@@ -191,10 +191,11 @@ class Course < ActiveRecord::Base
       .collect(&:id)
   end
 
-  # creating a list of students who do not have any predictions
+  # creating a list of students who are taking the class for a grade who do
+  # not have any predictions
   def nonpredictors
     nonpredictors = []
-    self.students.each do |student|
+    self.students_being_graded.each do |student|
       if student.predictions_for_course?(self) == false
         nonpredictors << student
       end
