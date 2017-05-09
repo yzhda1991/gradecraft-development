@@ -7,8 +7,7 @@ module Services
       expects :level
 
       executed do |context|
-        context[:criterion].levels do |level|
-          # this doesn't work:
+        context[:criterion].levels.each do |level|
           if level.id == context[:level].id
             level.update(meets_expectations: true)
           else

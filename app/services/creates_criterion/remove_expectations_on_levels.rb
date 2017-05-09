@@ -6,7 +6,7 @@ module Services
       expects :criterion
 
       executed do |context|
-        context[:criterion].levels do |level|
+        context[:criterion].levels.each do |level|
           if level.meets_expectations
             level.update(meets_expectations: false)
           end
