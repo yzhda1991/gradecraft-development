@@ -3,9 +3,10 @@ describe "api/criteria/index" do
   let(:assignment) { create(:assignment, course: course) }
   let(:rubric) { create(:rubric, assignment: assignment) }
   let(:criterion) { create(:criterion, rubric: rubric) }
-  
+
   before(:each) do
     @criteria = [criterion]
+    allow(view).to receive(:current_course).and_return(course)
   end
 
   it "responds with an array of criteria" do
@@ -31,12 +32,32 @@ describe "api/criteria/index" do
     expect(json["data"][0]["attributes"]["levels"][0]["id"]).to eq(@criteria[0].levels.first.id)
   end
 
-  it "adds level badges to the level" do
-    allow_any_instance_of(Level).to receive(:level_badges)
-      .and_return [double(:level_badge, id: 123, level_id: 456, badge_id: 789)]
-    render
-    json = JSON.parse(response.body)
-    expect(json["data"][0]["attributes"]["levels"][0]["level_badges"][0]).to \
-      eq("id" => 123, "level_id" => 456, "badge_id" => 789)
+  describe "level badges" do
+    before do
+      allow_any_instance_of(Level).to receive(:level_badges)
+      .and_return [double(:level_badge, id: 123, level_id: 456, badge_id: 789, "[]" => [789])]
+    end
+
+    it "adds level badges to the level" do
+      render
+      json = JSON.parse(response.body)
+      expect(json["data"][0]["attributes"]["levels"][0]["level_badges"][0]).to \
+        eq("id" => 123, "level_id" => 456, "badge_id" => 789)
+    end
+
+    it "adds level available badges to the level" do
+      allow(course).to receive(:badges).and_return [double(:badge, id: 122, name: "availbadge")]
+      render
+      json = JSON.parse(response.body)
+      expect(json["data"][0]["attributes"]["levels"][0]["available_badges"][0]).to \
+        eq("id" => 122, "name" => "availbadge")
+    end
+
+    it "remove awarded badges from the available badges" do
+      render
+      json = JSON.parse(response.body)
+      allow(course).to receive(:badges).and_return [double(:badge, id: 789, name: "unavailbadge")]
+      expect(json["data"][0]["attributes"]["levels"][0]["available_badges"][0]).to eq nil
+    end
   end
 end
