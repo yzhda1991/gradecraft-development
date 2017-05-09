@@ -182,22 +182,20 @@ class Course < ActiveRecord::Base
     end
   end
 
-  def create_searchable_course
-    searchable_course = {"id"=>self.id,
-      "name"=>self.name,
-      "course_number"=>self.course_number,
-      "year"=>self.year,
-      "semester"=>self.semester,
-      "names"=>professor_last_names}
+  def formatted_long_name
+    if semester.present? && year.present?
+      "#{self.course_number} #{self.name} #{(self.semester).capitalize} #{self.year}"
+    else
+      "#{self.name}"
+    end
   end
 
-  def professor_last_names
-    User
-      .joins(:course_memberships)
-      .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "professor")
-      .select(:id, :last_name) # only need the ids, please
-      .order("last_name ASC")
-      .collect(&:last_name)
+  def searchable_name
+    @name || "#{ formatted_long_name} - #{ professor_names}"
+  end
+
+  def professor_names
+    self.staff.map(&:name)
   end
 
   def ordered_student_ids

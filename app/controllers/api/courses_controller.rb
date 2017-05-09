@@ -3,11 +3,10 @@ class API::CoursesController < ApplicationController
   # accessed by the dashboard
   # GET api/courses
   def index
-    @courses = []
-    current_user.courses.each do |course|
-      @courses << course.create_searchable_course
+    @courses = current_user.courses.map do |c|
+      { name: c.formatted_long_name, id: c.id, search_string: c.searchable_name }
     end
-    return @courses
+    render json: MultiJson.dump(@courses)
   end
 
   # accessed by the dashboard
