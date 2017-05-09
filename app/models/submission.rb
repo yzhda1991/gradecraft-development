@@ -7,7 +7,6 @@ class Submission < ActiveRecord::Base
 
   belongs_to :assignment
   belongs_to :student, class_name: "User"
-  belongs_to :creator, class_name: "User"
   belongs_to :group
   belongs_to :course, touch: true
 
