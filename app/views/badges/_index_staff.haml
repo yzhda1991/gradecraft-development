@@ -27,7 +27,8 @@
 
             // Badge Icon
             %td
-              = render partial: "badges/components/icon", locals: { badge: badge, count: 1 }
+              .img-cropper.med-crop
+                = render partial: "badges/components/icon", locals: { badge: badge, count: 1 }
 
             // Point Value
             %td

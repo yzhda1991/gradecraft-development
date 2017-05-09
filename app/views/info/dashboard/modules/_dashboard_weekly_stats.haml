@@ -34,7 +34,8 @@
         %ul
           - presenter.badges_this_week.each do |badge|
             %li
-              %img{src: badge.icon, width: 25, alt: "#{badge.name} icon" }
+              .img-cropper.xsmall-crop
+                %img{src: badge.icon, alt: "#{badge.name} icon" }
               - if current_student.present?
                 %span #{badge.name} #{ (term_for :badge).downcase } earned
               - elsif current_user_is_staff?

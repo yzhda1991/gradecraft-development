@@ -1,27 +1,5 @@
 @import "../utilities/variables"
 
-// used on the badge index for students, and grade standard edit form
-.badge-icon-container
-  display: inline-block
-  margin: 1rem
-  position: relative
-  vertical-align: top
-
-  .badge-icon
-    width: 80px
-    display: block
-    margin: 0 auto
-    cursor: pointer
-    &.unearned, &.unavailable
-      opacity: .2 !important
-    &.earned
-      opacity: 1
-
-  &.focus-article
-    background-color: transparentize($color-blue-3, .8)
-    @media (max-width: $media-medium-max)
-      background-color: initial
-
 // base badge styles
 .badge-name
   font-size: .7rem
@@ -51,6 +29,36 @@
   &.unearned
     display: none
 
+// used on the badge index for students
+.badge-icon-container
+  display: inline-block
+  margin: 1rem
+  position: relative
+  vertical-align: top
+
+  .img-cropper
+    margin: 0 auto
+
+  .badge-icon
+    cursor: pointer
+    &.unearned, &.unavailable
+      opacity: .2 !important
+    &.earned
+      opacity: 1
+
+  &.focus-article
+    background-color: transparentize($color-blue-3, .8)
+    @media (max-width: $media-medium-max)
+      background-color: initial
+
+.mobile-click
+  display: none
+  @media (max-width: $media-medium-max)
+    display: block
+    width: 110px
+    height: 94px
+    position: absolute
+    z-index: 2
 
 // show page base styles
 .badge-show-page
@@ -66,9 +74,7 @@
       max-width: 720px
       margin: 1rem auto
 
-    .badge-icon
-      width: 150px
-      display: block
+    .img-cropper
       margin: 0 auto
 
 // staff badge show page
@@ -80,38 +86,20 @@
       @media (max-width: $media-small-max)
         flex-direction: column
 
-    .badge-icon-container
-      margin: 0 1rem 0 0
-
     .badge-icon
-      width: 100%
-      max-width: 120px
       &.unearned, &.unavailable
         opacity: 1 !important
 
     .badge-description
+      margin-left: 0.5rem
       max-width: 50%
       @media (max-width: $media-small-max)
         max-width: 100%
+        margin-left: 0
 
     .team-filter
       width: 100%
       text-align: right
-
-// Student Badge Index Page
-.badge-container
-  .badge-description
-    .badge-title
-      font-size: 1.25rem
-
-.mobile-click
-  display: none
-  @media (max-width: $media-medium-max)
-    display: block
-    width: 110px
-    height: 94px
-    position: absolute
-    z-index: 2
 
 
 // badge index table on instructor side
@@ -135,24 +123,19 @@
     @media (max-width: $media-small-max)
       margin-right: .5rem
 
-  .badge-icon
-    width: 80%
-    max-width: 100px
-    display: block
-    margin: 0 auto
-
+// earned badges in student grade show
 ul.earned-badge-list
   list-style-type: none
   padding-left: 0
-  img
-    max-width: 30px
-    vertical-align: middle
   li
     padding: 0.1rem 0
+  .img-cropper
+    display: inline-block
+    vertical-align: middle
 
 .earned-badge-table-img
   vertical-align: middle
-  width: 20px
+  display: inline-block
 
 // Award Earned Badges on Grading Page
 .badge-award-container
@@ -164,14 +147,12 @@ ul.earned-badge-list
   align-items: center
   margin: 0.25rem 0
   padding: 0 0.25rem
-
-  img
-    width: 40px
   &.unavailable
     cursor: default
+    opacity: .5
     img
       cursor: default
-    opacity: .5
+
   @media (max-width: $media-small-max)
     width: 48%
     padding: 0
@@ -183,10 +164,70 @@ ul.earned-badge-list
   width: 1rem
 
 .badge-award-image
-  display: inline-block
-  vertical-align: middle
   margin-right: 0.5rem
 
 .badge-award-name
   font-size: .7rem
-  display: inline-block
+
+// preview of image uploaded in create badge page
+.preview-wrapper
+  display: flex
+  align-items: flex-end
+  &.hidden
+    display: none
+
+.icon-preview
+  border-bottom: 1px dashed $color-grey-5
+  border-left: 1px dashed $color-grey-5
+  padding: 0.5rem
+  margin: 1rem 1rem 2rem 2rem
+  position: relative
+  &.large-preview
+    width: 150px
+    height: 150px
+  &.medium-preview
+    width: 80px
+    height: 80px
+  &.small-preview
+    width: 40px
+    height: 40px
+
+.xaxis-label,
+.yaxis-label
+  position: absolute
+  color: $color-grey-3
+  font-size: 0.8rem
+
+.xaxis-label
+  top: 50%
+  left: -40px
+  transform: translateY(-50%)
+
+.yaxis-label
+  bottom: -24px
+  left: 50%
+  transform: translateX(-50%)
+
+// image cropper for badges 
+.img-cropper
+  position: relative
+  overflow: hidden
+  &.large-crop
+    width: 150px
+    height: 150px
+  &.med-crop
+    width: 80px
+    height: 80px
+  &.small-crop
+    width: 40px
+    height: 40px
+  &.xsmall-crop
+    width: 20px
+    height: 20px
+  img
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    height: 100%
+    width: auto

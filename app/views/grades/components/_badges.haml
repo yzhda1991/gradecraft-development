@@ -2,5 +2,6 @@
 %ul.earned-badge-list
   - grade.earned_badges.each do |earned_badge|
     %li
-      %img{ src: earned_badge.icon, width: 80 }
+      .img-cropper.small-crop
+        %img{ src: earned_badge.icon }
       = link_to earned_badge.name, earned_badge.badge
