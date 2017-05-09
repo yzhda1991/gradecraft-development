@@ -84,6 +84,7 @@
 //= require assignment_types
 //= require assignments
 //= require assignment_form
+//= require image_upload
 //= require student_dashboard
 //= require student_onboarding
 //= require dynatable_student_index

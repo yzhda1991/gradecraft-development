@@ -6,15 +6,12 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name), :width => "25", :height => "25"}
+  .img-cropper.large-crop
+    %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name)}
   %p
     %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)
     - if @earned_badge.badge.full_points?
       = "(#{@earned_badge.points} points)"
-
-  %p
-    %b= "Earned by:"
-    = link_to @earned_badge.student.name, student_path(@earned_badge.student)
 
   %p
     %b= "Earned on:"
