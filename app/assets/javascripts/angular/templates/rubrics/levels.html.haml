@@ -1,5 +1,5 @@
 .level(ng-repeat="level in criterion.levels" ng-class="{saved: levelIsSaved(level), nocredit: level.no_credit, 'level-meets-expectations': satifiesExpectations(level)}")
   %rubric-level(criterion="criterion" level="level")
 
-%button.add-level(name="newLevel" ng-click="insertLevel()" ng-show="criterionIsSaved()")
+%button.add-level(name="newLevel" ng-click="addLevel()" ng-show="criterionIsSaved()")
   + Level

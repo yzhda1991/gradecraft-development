@@ -24,7 +24,7 @@ class LevelsController < ApplicationController
 
   def level_params
     params.require(:level).permit :name, :description, :points, :criterion_id, :full_credit,
-      :no_credit, :meets_expectations, :sort_order
+      :no_credit, :sort_order
   end
 
   def find_level

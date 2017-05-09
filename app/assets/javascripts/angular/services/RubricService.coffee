@@ -24,7 +24,24 @@
     )
 
   addLevel = (criterion)->
-    console.log("adding a level...");
+    params = {
+      criterion_id: criterion.id,
+      name: "A new level",
+      points: 0
+    }
+    $http.post("/api/levels", params).then(
+      (response)-> # success
+        if response.status == 201
+          updatedCriteria = _.map(criteria, (crit)->
+            if(crit.id == criterion.id)
+              crit.levels.push response.data.data.attributes
+            return crit
+          )
+          angular.copy(updatedCriteria, criteria)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
 
   deleteLevel = (level)->
     if confirm("Are you sure you want to delete this level?")
@@ -155,6 +172,7 @@
   return {
     getRubric: getRubric
 
+    addLevel: addLevel
     deleteLevel: deleteLevel
 
     addLevelBadge: addLevelBadge

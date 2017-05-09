@@ -3,6 +3,15 @@ require_relative "../../services/removes_criterion_expectations"
 class API::LevelsController < ApplicationController
   before_action :ensure_staff?
 
+  def create
+    @level = Level.new(level_params)
+    if @level.save
+      render "api/levels/show", status: 201
+    else
+      render json: { message: "level failed to create", success: false }, status: 400
+    end
+  end
+
   # PUT api/levels/:id
   def update
     level = Level.find(params[:id])
@@ -48,7 +57,7 @@ class API::LevelsController < ApplicationController
   end
 
   def level_params
-    params.require(:level).permit(:name, :description)
+    params.require(:level).permit(:criterion_id, :description, :name, :points)
   end
 end
 
