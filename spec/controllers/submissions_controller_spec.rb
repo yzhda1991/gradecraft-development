@@ -1,9 +1,9 @@
-describe SubmissionsController, focus: true do
+describe SubmissionsController do
   let(:course) { create(:course) }
   let(:assignment) { create(:assignment, course: course) }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:submission) { create(:submission, assignment: assignment, student: student) }
+  let(:submission) { create(:submission, assignment: assignment, course: course, student: student) }
 
   context "as a professor" do
 
@@ -143,7 +143,6 @@ describe SubmissionsController, focus: true do
 
   context "as a student" do
     let(:delivery) { double(:email, deliver_now: nil) }
-    let(:submission) { create(:submission, assignment: assignment, student: student) }
 
     before do
       login_user(student)
