@@ -182,6 +182,22 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def formatted_long_name
+    if semester.present? && year.present?
+      "#{self.course_number} #{self.name} #{(self.semester).capitalize} #{self.year}"
+    else
+      "#{self.name}"
+    end
+  end
+
+  def searchable_name
+    @name || "#{ formatted_long_name} - #{ professor_names}"
+  end
+
+  def professor_names
+    self.staff.map(&:name)
+  end
+
   def ordered_student_ids
     User
       .joins(:course_memberships)

@@ -13,8 +13,7 @@
             resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
             itemLabel: function(course) {
-              return course.course_number + " " + course.name +
-                " (" + course.semester + " " + course.year + ")";
+              return course.name;
             },
             itemId: function(course) {
               return course.id;
@@ -23,8 +22,7 @@
               return '<li><a href="#">' + label + '</a></li>';
             },
             filter: function(item, query) {
-              var regex = new RegExp(query, 'i');
-              return item.name.match(regex) || item.course_number.match(regex);
+              return item.search_string.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
             window.location = "/courses/" + id + "/change"
