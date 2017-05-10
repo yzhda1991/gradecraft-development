@@ -21,7 +21,7 @@ class GoogleCalendarsController < ApplicationController
     google_authorization = get_google_authorization(current_user)
     item = get_event_or_assignment(params[:class], params[:id])
     if item.due_at.nil?
-      redirect_to assignments_path, alert: "Google Calendar requires " + params[:class] + " assignment have at least END time!" and return
+      redirect_to get_path(params[:class]), alert: "Google Calendar requires " + params[:class] + " have at least END time!" and return
     end
     begin
       google_event = create_google_event(item)
@@ -34,12 +34,6 @@ class GoogleCalendarsController < ApplicationController
       redirect_to get_path(params[:class]), notice: params[:class].capitalize + " " + item.name + " successfully added to your Google Calendar"
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
       redirect_to get_path(params[:class]), alert: "Google Calendar encountered an Error. Your " + params[:class] + " was NOT copied to your Google calendar."
-      # if item.is_a?(Assignment)
-      #   redirect_to assignments_path, alert: "Google Calendar encountered an Error. Your assignment was NOT copied to your Google calendar."
-      # end
-      # if item.is_a?(Event)
-      #   redirect_to events_path, alert: "Google Calendar encountered an Error. Your event was NOT copied to your Google calendar."
-      # end
     end
   end
 
