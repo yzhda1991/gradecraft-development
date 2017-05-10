@@ -5,15 +5,17 @@
     .ui-tabs.ui-widget.course-settings-tabs
       %ul.ui-tabs-nav{role: "tablist"}
         %li
-          %a{ "href" => "#tab"} Basic Settings
+          %a{ "href" => "#tab" } Basic Settings
         %li
-          %a{ "href" => "#tab2"} Course Details
+          %a{ "href" => "#tab2" } Course Details
         %li
-          %a{ "href" => "#tab3"} Integrations
+          %a{ "href" => "#tab3" } Integrations
         %li
-          %a{ "href" => "#tab4"} Student Onboarding
+          %a{ "href" => "#tab4" } Student Onboarding
         %li
-          %a{ "href" => "#tab5"} Advanced Settings
+          %a{ "href" => "#tab5" } Advanced Settings
+        %li
+          %a{ "href" => "#tab6" } Admin Only
 
       .ui-tabs-panel#tab{role: "tabpanel", "aria-hidden" => false }
         = render partial: "courses/form", locals: { f: f }
@@ -25,7 +27,10 @@
         = render partial: "courses/student_onboarding_setup", locals: { f: f }
       .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
         = render partial: "courses/advanced_settings", locals: { f: f }
-  
+      - if current_user_is_admin?
+        .ui-tabs-panel#tab6{role: "tabpanel", "aria-hidden" => false }
+          = render partial: "courses/admin_only", locals: { f: f }
+
       .submit-buttons
         %ul
           %li= f.button :submit, "Save Settings", class: "button"
