@@ -1,6 +1,7 @@
 # rubocop:disable AndOr
 class Integrations::CoursesController < ApplicationController
   include OAuthProvider
+  include CanvasAuthorization
 
   oauth_provider_param :integration_id
 
@@ -8,6 +9,7 @@ class Integrations::CoursesController < ApplicationController
   before_action do |controller|
     controller.redirect_path(integration_courses_path(params[:integration_id]))
   end
+  before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:integration_id] == "canvas" }
   before_action :require_authorization
   before_action :use_current_course
 

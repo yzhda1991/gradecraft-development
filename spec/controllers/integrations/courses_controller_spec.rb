@@ -10,6 +10,11 @@ describe Integrations::CoursesController do
     before { login_user(professor) }
 
     describe "POST #create" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :create, params: { integration_id: provider, id: course_id }
+      end
+
       context "without an existing authentication" do
         it "redirects to authorize the integration" do
           post :create, params: { integration_id: provider, id: course_id }
@@ -58,6 +63,11 @@ describe Integrations::CoursesController do
     end
 
     describe "DELETE #destroy" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :create, params: { integration_id: provider, id: course_id }
+      end
+
       context "with an existing authentication" do
         let(:course_id) { "COURSE_1" }
         let!(:linked_course) { LinkedCourse.create provider: provider,

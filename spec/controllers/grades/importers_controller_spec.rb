@@ -108,6 +108,18 @@ describe Grades::ImportersController do
       end
     end
 
+    describe "GET grades" do
+      let(:course_id) { "COURSE_ID" }
+      let(:assignment_ids) { ["ASSIGNMENT_1"] }
+      let(:importer_provider_id) { :canvas }
+
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        get :grades, params: { importer_provider_id: importer_provider_id,
+          assignment_id: assignment.id, id: course_id, assignment_ids: assignment_ids }
+      end
+    end
+
     describe "POST grades_import" do
       let(:access_token) { "BLAH" }
       let(:assignment_ids) { ["ASSIGNMENT_1"] }
@@ -121,6 +133,13 @@ describe Grades::ImportersController do
 
       before do
         allow(Services::ImportsLMSGrades).to receive(:import).and_return result
+      end
+
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :grades_import, params: { importer_provider_id: "canvas",
+          assignment_id: assignment.id, id: course_id, grade_ids: grade_ids,
+          assignment_ids: assignment_ids }
       end
 
       it "imports the selected grades" do

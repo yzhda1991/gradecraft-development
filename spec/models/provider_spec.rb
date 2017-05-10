@@ -1,17 +1,33 @@
 describe Provider do
-  subject { create :provider, consumer_secret: "password1" }
+  subject { create :provider }
 
-  describe "callbacks" do
-    it "encrypts and stores the consumer key" do
-      expect(subject).to receive(:encrypt_consumer_secret)
-      subject.save
-      expect(subject).to_not eq "password1"
+  describe "#for_course" do
+    context "with a course that does not belong to an institution" do
+      let(:course) { build_stubbed :course }
+
+      it "returns nil" do
+        expect(Provider.for_course course).to be_nil
+      end
     end
-  end
 
-  describe "#consumer_secret" do
-    it "returns the decrypted key" do
-      expect(subject.decrypted_consumer_secret).to eq "password1"
+    context "with a course that belongs to an institution" do
+      let(:institution) { create :institution }
+      let(:course) { create :course, institution: institution }
+
+      context "when there are no linked providers" do
+        it "returns nil" do
+          expect(Provider.for_course course).to be_nil
+        end
+      end
+
+      context "when there is a linked provider" do
+        let(:provider) { create :provider }
+
+        it "returns the provider" do
+          institution.providers << provider
+          expect(Provider.for_course course).to eq provider
+        end
+      end
     end
   end
 end

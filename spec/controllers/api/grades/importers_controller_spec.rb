@@ -25,6 +25,12 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
     end
 
     describe "#show" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        get :show, params: { assignment_id: assignment.id, id: course.id, importer_provider_id: provider },
+          format: :json
+      end
+
       it "returns the assignment, grades, and provider name" do
         get :show, params: { assignment_id: assignment.id, id: course.id, importer_provider_id: provider },
           format: :json

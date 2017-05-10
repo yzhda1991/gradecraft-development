@@ -4,6 +4,7 @@ require_relative "../../services/imports_lms_grades"
 # rubocop:disable AndOr
 class Grades::ImportersController < ApplicationController
   include OAuthProvider
+  include CanvasAuthorization
 
   oauth_provider_param :importer_provider_id
 
@@ -12,6 +13,8 @@ class Grades::ImportersController < ApplicationController
     controller.redirect_path \
       assignment_grades_importers_path(params[:assignment_id])
   end
+  before_action :link_canvas_credentials, except: [:download, :index, :show, :upload],
+    if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: [:download, :index, :show, :upload]
   before_action :use_current_course, only: [:upload, :grades, :grades_import, :index, :show, :upload, :assignments]
 

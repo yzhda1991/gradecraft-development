@@ -16,6 +16,8 @@ FactoryGirl.define do
       name nil
     end
 
+    trait :for_institution do
+      association :institution
+    end
   end
-
 end

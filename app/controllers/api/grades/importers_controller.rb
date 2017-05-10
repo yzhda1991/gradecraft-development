@@ -1,6 +1,7 @@
 # rubocop:disable AndOr
 class API::Grades::ImportersController < ApplicationController
   include OAuthProvider
+  include CanvasAuthorization
 
   oauth_provider_param :importer_provider_id
 
@@ -10,6 +11,7 @@ class API::Grades::ImportersController < ApplicationController
       assignment_grades_importer_grades_path(params[:assignment_id],
         params[:importer_provider_id], params[:id], assignment_ids: params[:assignment_ids])
   end
+  before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization
 
   # GET /api/assignments/:assignment_id/grades/importers/:importer_provider_id/course/:id
