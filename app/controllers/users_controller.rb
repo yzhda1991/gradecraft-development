@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   before_action :save_referer, only: [:manually_activate, :resend_invite_email]
   skip_before_action :require_login, only: [:activate, :activated]
   skip_before_action :require_course_membership, only: [:activate, :activated]
+  before_action :use_current_course, only: :import
 
   def index
     @teams = current_course.teams
@@ -152,7 +153,6 @@ class UsersController < ApplicationController
   end
 
   def import
-    @course = current_course
   end
 
   # import users for class

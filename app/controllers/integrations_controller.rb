@@ -8,9 +8,9 @@ class IntegrationsController < ApplicationController
     controller.redirect_path(integration_courses_path(params[:integration_id]))
   end
   before_action :require_authorization, except: :index
+  before_action :use_current_course, only: :index
 
   def index
-    @course = current_course
     authorize! :read, @course
   end
 

@@ -10,10 +10,10 @@ class Assignments::ImportersController < ApplicationController
     controller.redirect_path assignments_importers_path
   end
   before_action :require_authorization, except: :index
+  before_action :use_current_course, only: [:index, :assignments_import]
 
   # GET /assignments/importers
   def index
-    @course = current_course
   end
 
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
@@ -28,7 +28,6 @@ class Assignments::ImportersController < ApplicationController
   def assignments_import
     @provider_name = params[:importer_provider_id]
     @course_id = params[:id]
-    @course = current_course
 
     @result = Services::ImportsLMSAssignments.import @provider_name,
       authorization(@provider_name).access_token, @course_id, params[:assignment_ids],

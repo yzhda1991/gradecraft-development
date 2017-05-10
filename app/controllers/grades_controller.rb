@@ -5,12 +5,12 @@ class GradesController < ApplicationController
     except: [:feedback_read, :show, :async_update]
   before_action :ensure_student?, only: :feedback_read
   before_action :save_referer, only: :edit
+  before_action :use_current_course, only: [:show, :edit]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
   # GET /grades/:id
   def show
-    @course = current_course
     @grade = Grade.find params[:id]
     # rubocop:disable AndOr
     redirect_to @grade.assignment and return unless current_user_is_staff?
@@ -26,7 +26,6 @@ class GradesController < ApplicationController
 
   # GET /grades/:id/edit
   def edit
-    @course = current_course
     @grade = Grade.find params[:id]
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]

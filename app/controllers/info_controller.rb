@@ -7,6 +7,7 @@ class InfoController < ApplicationController
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
     only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
+  before_action :use_current_course, only: [:earned_badges, :per_assign]
 
   # Displays student and instructor dashboard
   def dashboard
@@ -24,7 +25,6 @@ class InfoController < ApplicationController
   end
 
   def earned_badges
-    @course = current_course
     @teams = @course.teams
     @badges = @course.badges.ordered
   end
@@ -42,7 +42,6 @@ class InfoController < ApplicationController
 
   # Displaying per assignment summary outcome statistics
   def per_assign
-    @course = current_course
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
   end
 

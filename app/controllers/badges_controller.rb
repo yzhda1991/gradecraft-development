@@ -3,10 +3,10 @@ class BadgesController < ApplicationController
   before_action :ensure_not_observer?, except: [:index, :show]
   before_action :ensure_staff?, except: [:index, :show]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
+  before_action :use_current_course, only: [:index, :show, :new, :edit]
 
   # GET /badges
   def index
-    @course = current_course
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
       badges: @course.badges.ordered,
@@ -16,7 +16,6 @@ class BadgesController < ApplicationController
 
   # GET /badges/:id
   def show
-    @course = current_course
     render Badges::ShowPresenter.build({
       course: @course,
       badge: @badge,
@@ -27,12 +26,10 @@ class BadgesController < ApplicationController
   end
 
   def new
-    @course = current_course
     @badge = @course.badges.new
   end
 
   def edit
-    @course = current_course
   end
 
   def create

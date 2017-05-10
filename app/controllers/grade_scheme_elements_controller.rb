@@ -2,6 +2,7 @@
 # earn course wide levels and grades
 class GradeSchemeElementsController < ApplicationController
   before_action :ensure_staff?, except: [:index]
+  before_action :use_current_course, only: [:mass_edit, :mass_update]
 
   def index
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_points_desc
@@ -24,7 +25,6 @@ class GradeSchemeElementsController < ApplicationController
 
   # Edit all the grade scheme items for a course
   def mass_edit
-    @course = current_course
     @total_points = current_course.total_points
     @grade_scheme_elements =  current_course
                               .grade_scheme_elements.order_by_points_desc.select(
@@ -36,7 +36,6 @@ class GradeSchemeElementsController < ApplicationController
   end
 
   def mass_update
-    @course = current_course
     GradeSchemeElement.transaction do
       begin
         @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all

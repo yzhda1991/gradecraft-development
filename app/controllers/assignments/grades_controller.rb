@@ -5,12 +5,12 @@ class Assignments::GradesController < ApplicationController
   before_action :ensure_student?, only: :self_log
   before_action :save_referer, only: :edit_status
   before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
+  before_action :use_current_course, only: [:edit_status, :mass_edit]
 
   # GET /assignments/:assignment_id/grades/edit_status
   # For changing the status of a group of grades passed in grade_ids
   # ("In Progress" => "Graded", or "Graded" => "Released")
   def edit_status
-    @course = current_course
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
@@ -75,7 +75,6 @@ class Assignments::GradesController < ApplicationController
   # GET /assignments/:assignment_id/grades/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
-    @course = current_course
     if @assignment.has_groups?
       redirect_to mass_edit_assignment_groups_grades_path and return
     end

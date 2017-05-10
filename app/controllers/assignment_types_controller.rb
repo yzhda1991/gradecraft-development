@@ -3,10 +3,10 @@ class AssignmentTypesController < ApplicationController
   before_action :ensure_staff?
   before_action :find_assignment_type,
     only: [:show, :edit, :update, :export_scores, :all_grades, :destroy]
+  before_action :use_current_course, only: :index
 
   # Display list of assignment types
   def index
-    @course = current_course
     @assignment_types = @course.assignment_types.ordered.includes(assignments: :assignment_type)
     @students = @course.students.order_by_name
   end

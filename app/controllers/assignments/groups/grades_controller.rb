@@ -3,10 +3,10 @@ require_relative "../../../services/creates_many_group_grades"
 class Assignments::Groups::GradesController < ApplicationController
   before_action :ensure_staff?
   before_action :find_assignment
+  before_action :use_current_course, only: :mass_edit
 
   # GET /assignments/:assignment_id/groups/grades/mass_edit
   def mass_edit
-    @course = current_course
     presenter = Assignments::Grades::MassEditPresenter.build({
       assignment: @assignment
     })

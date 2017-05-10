@@ -87,6 +87,11 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # For breadcrumbs
+  def use_current_course
+    @course = current_course
+  end
+
   # Core role authentication
   def ensure_student?
     return not_authenticated unless current_user_is_student?

@@ -3,9 +3,9 @@ class TeamsController < ApplicationController
 
   before_action :ensure_not_observer?
   before_action :ensure_staff?, except: [:index]
+  before_action :use_current_course, only: [:index, :show, :new, :edit]
 
   def index
-    @course = current_course
     @teams = @course.teams.order_by_rank.includes(:earned_badges)
     if current_user_is_student?
       @team = current_student.team_for_course(@course)
@@ -14,14 +14,12 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @course = current_course
     @team = @course.teams.find(params[:id])
     @students = @team.students.order_by_name
     @challenges = @course.challenges.chronological.alphabetical
   end
 
   def new
-    @course = current_course
     @team =  @course.teams.new
     @submit_message = "Create #{term_for :team}"
   end
@@ -33,7 +31,6 @@ class TeamsController < ApplicationController
   end
 
   def edit
-    @course = current_course
     @team =  @course.teams.find(params[:id])
     @submit_message = "Update #{term_for :team}"
   end

@@ -3,9 +3,9 @@ class GroupsController < ApplicationController
 
   before_action :find_group, only: [:show, :edit, :update, :destroy]
   before_action :find_group_assignments, only: [:new, :edit, :create, :update]
+  before_action :use_current_course, except: [:create, :update]
 
   def index
-    @course = current_course
     groups = @course.groups
     @pending_groups = groups.pending
     @approved_groups = groups.approved
@@ -14,11 +14,9 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @course = current_course
   end
 
   def new
-    @course = current_course
     @group = @course.groups.new
     @other_students = potential_team_members
   end
@@ -42,7 +40,6 @@ class GroupsController < ApplicationController
   end
 
   def edit
-    @course = current_course
     @other_students = potential_team_members
   end
 

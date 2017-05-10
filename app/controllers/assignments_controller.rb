@@ -6,9 +6,9 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :grades_review]
 
   def index
-    @course = current_course
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
     if current_user_is_student? || current_user_is_observer?
       render :index, Assignments::StudentPresenter.build({
@@ -23,12 +23,10 @@ class AssignmentsController < ApplicationController
   # Gives the instructor the chance to quickly check all assignment settings
   # for the whole course
   def settings
-    @course = current_course
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
   end
 
   def show
-    @course = current_course
     @assignment = @course.assignments.find_by(id: params[:id])
     redirect_to assignments_path,
       alert: "The #{(term_for :assignment)} could not be found." and return unless @assignment.present?
@@ -43,7 +41,6 @@ class AssignmentsController < ApplicationController
   end
 
   def new
-    @course = current_course
     render :new, Assignments::Presenter.build({
       assignment: @course.assignments.new,
       course: @course,
@@ -52,7 +49,6 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    @course = current_course
     @assignment = @course.assignments.find(params[:id])
     render :edit, Assignments::Presenter.build({
       assignment: @assignment,
@@ -122,7 +118,6 @@ class AssignmentsController < ApplicationController
   end
 
   def grades_review
-    @course = current_course
     @assignment = @course.assignments.find(params[:id])
     if @assignment.grade_with_rubric?
       @criteria = @assignment.rubric.criteria.includes(levels: :level_badges)

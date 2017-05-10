@@ -1,11 +1,11 @@
 class StudentsController < ApplicationController
   before_action :ensure_staff?
   before_action :save_referer, only: [:recalculate]
+  before_action :use_current_course, only: [:index, :show]
 
   # Lists all students in the course,
   # broken out by those being graded and auditors
   def index
-    @course = current_course
     render "index", Students::IndexPresenter.build(course: @course,
                                                    current_user: current_user,
                                                    team_id: params[:team_id])
@@ -13,7 +13,6 @@ class StudentsController < ApplicationController
 
   # Displaying student profile to instructors
   def show
-    @course = current_course
     @events = Timeline.new(@course).events_by_due_date
     self.current_student = @course.students.where(id: params[:id]).first
     render "show", Info::DashboardCoursePlannerPresenter.build({
