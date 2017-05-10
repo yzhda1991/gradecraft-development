@@ -87,7 +87,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # For breadcrumbs
   def use_current_course
     @course = current_course
   end
