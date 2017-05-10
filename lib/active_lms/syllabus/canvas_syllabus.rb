@@ -13,9 +13,11 @@ module ActiveLMS
     # the Canvas API.
     # options - A Hash containing any additional options
     # e.g. base_uri to specify the base site uri
-    def initialize(access_token, options={})
-      @client = Canvas::API.new(access_token, options)
-      @options = options
+    def initialize(access_token)
+      @client = Canvas::API.new(
+        access_token,
+        ActiveLMS.configuration.providers[:canvas].base_uri
+      )
     end
 
     # Internal: Retrieves a single course from the Canvas API.
@@ -562,7 +564,7 @@ module ActiveLMS
 
     private
 
-    attr_reader :client, :options
+    attr_reader :client
 
     def handle_exceptions(exception_handler, &blk)
       blk.call

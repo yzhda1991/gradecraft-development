@@ -8,9 +8,9 @@ module Canvas
 
     attr_reader :access_token, :base_uri
 
-    def initialize(access_token, options={})
+    def initialize(access_token, base_uri=nil)
       @access_token = access_token
-      @base_uri = "#{options[:base_uri] || ENV["CANVAS_BASE_URL"]}/api/v1"
+      @base_uri = "#{base_uri || ENV["CANVAS_BASE_URL"]}/api/v1"
     end
 
     # Fetch data from Canvas

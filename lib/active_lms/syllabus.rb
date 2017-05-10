@@ -7,9 +7,9 @@ module ActiveLMS
 
     attr_reader :provider
 
-    def initialize(provider, access_token, options={})
+    def initialize(provider, access_token)
       klass = constantize("ActiveLMS::#{camelize(provider)}Syllabus")
-      @provider = klass.new access_token, options
+      @provider = klass.new access_token
     rescue NameError
       raise InvalidProviderError.new(provider)
     end
