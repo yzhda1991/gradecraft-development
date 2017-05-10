@@ -16,7 +16,7 @@
 %p.assignment-description.italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
 %p.assignment-description= active_course_link_to decorative_glyph(:copy) + "Add to Google Calendar",
-  add_assignment_to_google_calendar_google_calendar_path(presenter.assignment),
+  add_to_google_calendar_google_calendar_path("assignment", presenter.assignment),
   class: "button button-edit",
     method: :post
 

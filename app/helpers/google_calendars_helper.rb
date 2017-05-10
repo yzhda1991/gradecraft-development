@@ -11,6 +11,24 @@ module GoogleCalendarsHelper
     google_authorization
   end
 
+  def get_event_or_assignment(class_name, id)
+    if class_name == "event"
+      return current_course.events.find(id)
+    end
+    if class_name == "assignment"
+      return current_course.assignments.find(id)
+    end
+  end
+
+  def get_path(class_name)
+    if class_name == "assignment"
+      return assignments_path
+    end
+    if class_name == "event"
+      return events_path
+    end
+  end
+
   def refresh_if_google_authorization_is_expired(google_authorization)
     return unless google_authorization.expired?
     google_authorization.refresh!({ client_id: ENV["GOOGLE_CLIENT_ID"], client_secret: ENV["GOOGLE_SECRET"] })
