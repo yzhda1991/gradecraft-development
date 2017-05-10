@@ -61,6 +61,12 @@ describe Assignments::ImportersController do
           assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
       end
 
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
+      end
+
       it "imports the selected assignments" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:import).with(provider.to_s, access_token, course_id,
