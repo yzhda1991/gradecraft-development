@@ -47,7 +47,7 @@ describe InstitutionsController do
         expect(provider.name).to eq "canvas"
         expect(provider.base_url).to eq "www.canvas.edu"
         expect(provider.consumer_key).to eq "abc"
-        expect(provider.decrypted_consumer_secret).to eq "123"
+        expect(provider.consumer_secret).to eq "123"
       end
     end
   end
