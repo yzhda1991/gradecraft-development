@@ -45,16 +45,26 @@ describe CanvasUserImporter do
         expect(imported_user.last_imported_at).to be_within(1.second).of(DateTime.now)
       end
 
-      it "contains a successful row if the user is valid and changed" do
+      it "contains a successful row if the user is created" do
         result = subject.import course
 
         expect(result.successful.count).to eq 1
         expect(result.successful.last).to eq student
       end
 
-      it "does not contain a successful row if the user was not changed" do
-        existing_student = create :user, email: "jimmy@example.com", first_name: "Jimmy",
+      it "contains a successful row if the user's course membership is created" do
+        create :user, email: "jimmy@example.com", first_name: "Jimmy",
           last_name: "Page"
+        result = subject.import course
+
+        expect(result.successful.count).to eq 1
+        expect(result.successful.last).to eq student
+      end
+
+      it "does not contain a successful row if the user was not changed and
+        their role in the course already exists" do
+        create :user, email: "jimmy@example.com", first_name: "Jimmy",
+          last_name: "Page", courses: [course], role: :student
 
         result = subject.import course
 
@@ -80,7 +90,7 @@ describe CanvasUserImporter do
         end
 
         it "does not create a course membership if one already exists" do
-          user = build :user, first_name: "Jimmy", last_name: "Page",
+          build :user, first_name: "Jimmy", last_name: "Page",
             email: "jimmy@example.com", username: "jimmy", password: "blah",
             courses: [course], role: :student
 

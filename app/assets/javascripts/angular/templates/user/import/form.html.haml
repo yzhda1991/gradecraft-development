@@ -17,7 +17,8 @@
           %tr
             %th{"scope"=>"col"} Name
             %th{"scope"=>"col"} Email
-            %th{"scope"=>"col"} Roles (Enrollment State)
+            %th{"scope"=>"col"} {{vm.provider}} Roles (Enrollment State)
+            %th{"scope"=>"col"} GradeCraft Role
             %th{"scope"=>"col"} User Exists?
             %th
               %button.button.select-all{"role"=>"button",
@@ -34,12 +35,14 @@
               %ul
                 %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
             %td
-              {{vm.termForUserExists(user.user_exists)}}
+              %span.capitalize {{user.gradecraft_role}}
               %span.has-tooltip{"ng-style"=>"{'visibility': user.role_changed ? 'visible' : 'hidden'}"}
                 %i.fa.fa-info-circle
                 .display-on-hover.hover-style
-                  This user's role in Gradecraft will be overridden with the new role returned by Canvas if
+                  The user's current role in Gradecraft will be overridden with the new role returned by Canvas if
                   selected for import.
+            %td
+              {{vm.termForUserExists(user.user_exists)}}
             %td.center
               %input{"type"=>"checkbox",
                      "name"=>"user_ids[]",

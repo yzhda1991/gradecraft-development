@@ -456,8 +456,8 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def users_import
-    students_index
-    breadcrumb('Import ' + objects[:course].student_term)
+    users_importers_index
+    breadcrumb('Import users')
   end
 
   def users_import_results
@@ -467,13 +467,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_importers_index
     users_index
-    breadcrumb('Users Import')
+    breadcrumb('Users Import', users_importers_path)
   end
 
   def users_importers_users
-    users_index
     users_importers_index
-    breadcrumb('Canvas Users')
+    breadcrumb('#{@provider_name.capitalize} Users')
   end
 
   def users_importers_user_import_results

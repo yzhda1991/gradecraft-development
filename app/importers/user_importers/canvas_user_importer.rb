@@ -47,6 +47,7 @@ class CanvasUserImporter
       current_role = user.role(course)
       if current_role.nil?
         user.course_memberships.create(course_id: course.id, role: row.role)
+        role_changed = true
       elsif current_role != row.role
         cm = user.course_memberships.find_by(course_id: course.id)
         role_changed = cm.update(role: row.role)

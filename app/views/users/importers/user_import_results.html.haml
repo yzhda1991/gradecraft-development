@@ -25,14 +25,14 @@
           %tr
             %th First Name
             %th Last Name
-            %th Username
+            %th Site Role
             %th Email
         %tbody
           - @result.users_import_result.unchanged.each do |user|
             %tr
               %td= link_to user.first_name, student_path(user)
               %td= link_to user.last_name, student_path(user)
-              %td= link_to user.username, student_path(user)
+              %td= user.role(current_course).capitalize unless user.role(current_course).nil?
               %td= link_to user.email, student_path(user)
 
   .table-header-information
@@ -43,12 +43,12 @@
         %tr
           %th First Name
           %th Last Name
-          %th Username
+          %th Site Role
           %th Email
       %tbody
         - @result.users_import_result.successful.each do |user|
           %tr
             %td= link_to user.first_name, student_path(user)
             %td= link_to user.last_name, student_path(user)
-            %td= link_to user.username, student_path(user)
+            %td= user.role(current_course).capitalize unless user.role(current_course).nil?
             %td= link_to user.email, student_path(user)
