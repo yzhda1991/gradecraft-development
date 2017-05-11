@@ -1,4 +1,4 @@
-.level(ng-repeat="level in criterion.levels" ng-class="{nocredit: level.no_credit, 'level-meets-expectations': satifiesExpectations(level)}")
+.level(ng-repeat="level in criterionLevels()" ng-class="{nocredit: level.no_credit, 'level-meets-expectations': satifiesExpectations(level)}")
   %rubric-level(criterion="criterion" level="level")
 
 .level(ng-repeat="level in newLevels()" ng-class="{'level-not-saved': !levelIsSaved(level)}")

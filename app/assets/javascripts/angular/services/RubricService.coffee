@@ -7,6 +7,7 @@
 
   rubric = {}
   criteria = []
+  levels = []
   newLevels = []
   full_points = 0
 
@@ -18,25 +19,21 @@
         if response.data.data?  # if no rubric is found, data is null
           GradeCraftAPI.loadItem(rubric, "rubrics", response.data)
           GradeCraftAPI.loadFromIncluded(criteria, "criteria", response.data)
+          GradeCraftAPI.loadFromIncluded(levels, "levels", response.data)
           full_points = response.data.meta.full_points
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
     )
 
+  criterionLevels = (criterion)->
+    _.filter(levels, {criterion_id: criterion.id})
+
   deleteLevel = (level)->
     if confirm("Are you sure you want to delete this level?")
       $http.delete("/api/levels/#{level.id}").then(
         (response)-> # success
-          updatedCriteria = _.map(criteria, (criterion)->
-            if( _.find(criterion.levels, level))
-              criterion.levels = _.reject(criterion.levels, {id: level.id})
-              if level.meets_expectations
-                criterion.meets_expectations_level_id = null
-                criterion.meets_expectations_points = 0
-            return criterion
-          )
-          angular.copy(updatedCriteria, criteria)
+          angular.copy(_.reject(levels, {id: level.id}), levels)
           GradeCraftAPI.logResponse(response)
         ,(response)-> # error
           GradeCraftAPI.logResponse(response)
@@ -115,16 +112,13 @@
     $http.post("/api/level_badges", {level_id: level.id, badge_id: badgeId}).then(
       (response)-> # success
         if response.status == 201
-          updatedCriteria = _.map(criteria, (criterion)->
-            if( _.find(criterion.levels, level))
-              _.map(criterion.levels, (currentLevel)->
-                if(currentLevel.id == level.id)
-                  currentLevel.level_badges.push(response.data.data.attributes)
-                  currentLevel.available_badges = _.reject(currentLevel.available_badges,(id: response.data.data.attributes.badge_id))
-              )
-            return criterion
+          updatedLevels = _.map(levels, (currentLevel)->
+            if currentLevel.id == level.id
+              currentLevel.level_badges.push(response.data.data.attributes)
+              currentLevel.available_badges = _.reject(currentLevel.available_badges,(id: response.data.data.attributes.badge_id))
+            return currentLevel
           )
-          angular.copy(updatedCriteria, criteria)
+          angular.copy(updatedLevels, levels)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
@@ -136,17 +130,14 @@
       $http.delete("/api/level_badges/#{levelBadge.id}").then(
         (response)-> # success
           if response.status == 200
-            updatedCriteria = _.map(criteria, (criterion)->
-              if( _.find(criterion.levels, level))
-                _.map(criterion.levels, (currentLevel)->
-                  if(currentLevel.id == level.id)
-                    currentLevel.level_badges = _.reject(currentLevel.level_badges,(badge_id: badgeId))
-                    badge = _.find(BadgeService.badges, {id: badgeId})
-                    currentLevel.available_badges.push({id: badge.id, name: badge.name})
-              )
-              return criterion
+            updatedLevels = _.map(levels, (currentLevel)->
+              if currentLevel.id == level.id
+                currentLevel.level_badges = _.reject(currentLevel.level_badges,(badge_id: badgeId))
+                badge = _.find(BadgeService.badges, {id: badgeId})
+                currentLevel.available_badges.push({id: badge.id, name: badge.name})
+              return currentLevel
             )
-            angular.copy(updatedCriteria, criteria)
+            angular.copy(updatedLevels, levels)
           GradeCraftAPI.logResponse(response)
         ,(response)-> # error
           GradeCraftAPI.logResponse(response)
@@ -170,16 +161,23 @@
   closeBadgesForLevel = ()->
     _editingBadgesId = null
 
+  _refreshExpectations = (level,data)->
+    updatedCriteria = _.map(criteria, (criterion)->
+      if(criterion.id == level.criterion_id)
+        criterion = data.data.attributes
+      return criterion
+    )
+    angular.copy(updatedCriteria, criteria)
+    updatedLevels = _.reject(levels, {criterion_id: level.criterion_id})
+    GradeCraftAPI.loadFromIncluded(updatedLevels, "levels", data)
+    angular.copy(updatedLevels, levels)
+
+
   setMeetsExpectations = (level)->
     $http.put("/api/criteria/#{level.criterion_id}/levels/#{level.id}/set_expectations").then(
       (response)-> # success
         if response.status == 200
-          updatedCriteria = _.map(criteria, (criterion)->
-            if(criterion.id == level.criterion_id)
-              criterion = response.data.data.attributes
-            return criterion
-          )
-          angular.copy(updatedCriteria, criteria)
+          _refreshExpectations(level, response.data)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
@@ -189,12 +187,7 @@
     $http.put("/api/criteria/#{level.criterion_id}/remove_expectations").then(
       (response)-> # success
         if response.status == 200
-          updatedCriteria = _.map(criteria, (criterion)->
-            if(criterion.id == level.criterion_id)
-              criterion = response.data.data.attributes
-            return criterion
-          )
-          angular.copy(updatedCriteria, criteria)
+          _refreshExpectations(level, response.data)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
@@ -221,6 +214,7 @@
 
   return {
     getRubric: getRubric
+    criterionLevels: criterionLevels
 
     deleteLevel: deleteLevel
 

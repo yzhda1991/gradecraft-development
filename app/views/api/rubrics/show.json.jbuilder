@@ -21,6 +21,9 @@ json.included do
   json.array! @criteria do |criterion|
     json.partial! 'api/criteria/criterion', criterion: criterion
   end
+  json.array! @levels do |level|
+    json.partial! 'api/levels/level', level: level
+  end
 end
 
 json.meta do

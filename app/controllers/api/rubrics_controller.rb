@@ -4,8 +4,7 @@ class API::RubricsController < ApplicationController
   def show
     @rubric = current_course.rubrics.find params[:id]
     @criteria =
-      @rubric.criteria.ordered.includes(:levels).order("levels.points").order("levels.sort_order").select(
-        :id, :name, :description, :max_points, :order
-      )
+      @rubric.criteria.ordered.includes(:levels)
+    @levels = Level.where(criterion_id: @criteria.pluck(:id)).order("criterion_id").order("points").order("sort_order")
   end
 end

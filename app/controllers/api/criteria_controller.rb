@@ -9,9 +9,8 @@ class API::CriteriaController < ApplicationController
     assignment = current_course.assignments.find params[:assignment_id]
     rubric = assignment.rubric
     @criteria =
-      rubric.criteria.ordered.includes(:levels).order("levels.points").order("levels.sort_order").select(
-        :id, :name, :description, :max_points, :order
-      )
+      rubric.criteria.ordered
+    @levels = Level.where(criterion_id: @criteria.pluck(:id)).order("criterion_id").order("points").order("sort_order")
   end
 
   # PUT /api/criteria/:criterion_id/levels/:level_id/set_expectations
@@ -20,9 +19,8 @@ class API::CriteriaController < ApplicationController
     level = Level.find(params[:level_id])
     result = Services::UpdatesCriterionExpectations.update criterion, level
     if result
-       @criterion = Criterion.includes(:levels).order("levels.points").order("levels.sort_order").select(
-        :id, :name, :description, :max_points, :order
-      ).find(params[:criterion_id])
+       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
+       @levels = @criterion.levels.order("points").order("sort_order")
       render "api/criteria/show", success: true, status: 200
     else
       render json: {
@@ -37,9 +35,8 @@ class API::CriteriaController < ApplicationController
     criterion = Criterion.find(params[:criterion_id])
     result = Services::RemovesCriterionExpectations.update criterion
     if result
-      @criterion = Criterion.includes(:levels).order("levels.points").order("levels.sort_order").select(
-        :id, :name, :description, :max_points, :order
-      ).find(params[:criterion_id])
+       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
+       @levels = @criterion.levels.order("points").order("sort_order")
       render "api/criteria/show", success: true, status: 200
     else
       render json: {

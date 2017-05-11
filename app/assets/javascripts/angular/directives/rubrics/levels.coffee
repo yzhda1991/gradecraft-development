@@ -9,14 +9,17 @@
     }
     link: (scope, el, attr)->
 
+      scope.criterionLevels = ()->
+        RubricService.criterionLevels(@criterion)
+
       scope.levelIsSaved = (level)->
         level.id != undefined
 
       scope.criterionIsSaved = ()->
         @criterion.id != undefined
 
-      scope.meetsExpectationSet = (criterion)->
-        RubricService.meetsExpectationSet(criterion)
+      scope.meetsExpectationSet = ()->
+        RubricService.meetsExpectationSet(@criterion)
 
       scope.satifiesExpectations = (level)->
         RubricService.satifiesExpectations(@criterion, level)
