@@ -5,6 +5,7 @@ $below-expectations-color: $color-grey-6
 $meets-expectations-color: $color-green-1
 $level-selected-color: lighten($color-green-1, 10%)
 $no-expectation-color: $color-grey-6
+$not-saved-color: $color-yellow-1
 
 // base styles for graded rubric, ungraded rubric and rubric edit views
 .rubric
@@ -347,6 +348,8 @@ button.meets-expectations-status.no-expectation
     background-color: $below-expectations-color
     &.level-meets-expectations
       background-color: $meets-expectations-color
+    &.level-not-saved
+      background-color: $not-saved-color
 
     &.nocredit
       width: 180px
@@ -390,6 +393,12 @@ button.meets-expectations-status.no-expectation
   input.ng-invalid
     background: $color-red-1
     color: $color-white
+
+ul.level-requirements
+  list-style-type: none
+  font-style: italic
+  padding-left: 0
+
 
 .level-badge,
 .level-badge-image

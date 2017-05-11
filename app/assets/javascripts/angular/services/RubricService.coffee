@@ -3,10 +3,11 @@
 # Ideally this service should be expanded to handle the rubric design process too.
 
 
-@gradecraft.factory 'RubricService', ['GradeCraftAPI', 'BadgeService', '$http', (GradeCraftAPI, BadgeService, $http) ->
+@gradecraft.factory 'RubricService', ['BadgeService', 'GradeCraftAPI', 'DebounceQueue', '$http', (BadgeService, GradeCraftAPI, DebounceQueue, $http) ->
 
   rubric = {}
   criteria = []
+  newLevels = []
   full_points = 0
 
   _editingBadgesId = null
@@ -21,26 +22,6 @@
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
-    )
-
-  addLevel = (criterion)->
-    params = {
-      criterion_id: criterion.id,
-      name: "A new level",
-      points: 0
-    }
-    $http.post("/api/levels", params).then(
-      (response)-> # success
-        if response.status == 201
-          updatedCriteria = _.map(criteria, (crit)->
-            if(crit.id == criterion.id)
-              crit.levels.push response.data.data.attributes
-            return crit
-          )
-          angular.copy(updatedCriteria, criteria)
-        GradeCraftAPI.logResponse(response)
-      ,(response)-> # error
-        GradeCraftAPI.logResponse(response)
     )
 
   deleteLevel = (level)->
@@ -61,6 +42,75 @@
           GradeCraftAPI.logResponse(response)
       )
 
+#----------- NEW LEVELS -------------------------------------------------------#
+
+# New Levels are not saved until they are valid
+# Until then they exist in the newLevels array
+
+# Assumes only one new level per criterion
+
+  addNewLevel = (criterion)->
+    newLevels.push({
+      criterion_id: criterion.id,
+      name: "",
+      points: null
+      description: ""
+    })
+
+  levelIsValid = (level)->
+    return false if !level.name || level.name.length < 1
+    return false if level.points == null
+    return true
+
+  # Refresh the array of new levels with a successfull response from the API
+  _refreshNewLevel = (newLevel, data)->
+    updatedLevels = _.map(newLevels, (level)->
+      if(level.criterion_id == newLevel.criterion_id)
+        level = data
+      return level
+    )
+    angular.copy(updatedLevels, newLevels)
+
+
+  # When valid, the new level is created, but not added to the
+  # criterion levels array until blur, to avoid shuffling the
+  # levels by points while the user is in the middle of editing
+  _saveNewLevel = (newLevel)->
+    $http.post("/api/levels", newLevel).then(
+      (response)-> # success
+        _refreshNewLevel(newLevel,response.data.data.attributes)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  _updateNewLevel = (newLevel)->
+    $http.post("/api/levels/#{newLevel.id}").then(
+      (response)-> # success
+        _refreshNewLevel(newLevel,response.data.data.attributes)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateNewLevel = (newLevel)->
+    return if newLevel.is_saving
+    return if !levelIsValid(newLevel)
+    if newLevel.id == undefined
+      newLevel.is_saving = true
+      _saveNewLevel(newLevel)
+    else
+      DebounceQueue.addEvent(
+        "levels", newLevel.criterion_id, _updateNewLevel, [newLevel]
+      )
+
+
+  removeNewLevel = (newLevel)->
+    updatedNewLevels = _.reject(newLevels, {criterion_id: newLevel.criterion_id})
+    angular.copy(updatedNewLevels, newLevels)
+
+#----------- LEVELS BADGES -------------------------------------------------------#
+
   addLevelBadge = (level, badgeId)->
     $http.post("/api/level_badges", {level_id: level.id, badge_id: badgeId}).then(
       (response)-> # success
@@ -71,7 +121,7 @@
                 if(currentLevel.id == level.id)
                   currentLevel.level_badges.push(response.data.data.attributes)
                   currentLevel.available_badges = _.reject(currentLevel.available_badges,(id: response.data.data.attributes.badge_id))
-            )
+              )
             return criterion
           )
           angular.copy(updatedCriteria, criteria)
@@ -172,8 +222,12 @@
   return {
     getRubric: getRubric
 
-    addLevel: addLevel
     deleteLevel: deleteLevel
+
+    newLevels: newLevels
+    addNewLevel: addNewLevel
+    removeNewLevel: removeNewLevel
+    queueUpdateNewLevel: queueUpdateNewLevel
 
     addLevelBadge: addLevelBadge
     deleteLevelBadge: deleteLevelBadge
