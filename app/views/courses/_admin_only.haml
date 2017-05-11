@@ -17,4 +17,4 @@
       .form-hint Does this course allow integration with Canvas?
     .form-item
       = f.label :institution_id
-      = f.select :institution_id, options_from_collection_for_select(@institutions, "id", "name", @course.institution_id)
+      = f.select :institution_id, options_from_collection_for_select(@institutions, "id", "name", @course.institution_id), prompt: "Select an institution"

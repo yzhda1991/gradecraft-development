@@ -480,8 +480,6 @@ valued, or was actually stigmatized. - Sir Ken Robinson",
     accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
-    open_at: 1.weeks.ago,
-    due_at: 3.weeks.from_now,
   }
 }
 
