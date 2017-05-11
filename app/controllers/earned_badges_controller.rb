@@ -108,8 +108,8 @@ class EarnedBadgesController < ApplicationController
   end
 
   def earned_badge_students
-    current_course.students if current_user_is_staff?
-    current_course.students - [current_user]
+    current_course.students.order_by_name if current_user_is_staff?
+    current_course.students.order_by_name - [current_user]
   end
 
   def find_badge
