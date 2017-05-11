@@ -11,7 +11,7 @@ module GoogleCalendarsHelper
     google_authorization
   end
 
-  def get_event_or_assignment(class_name, id)
+  def get_event_or_assignment(current_course, class_name, id)
     return current_course.events.find(id) if class_name == "event"
     return current_course.assignments.find(id) if class_name == "assignment"
   end

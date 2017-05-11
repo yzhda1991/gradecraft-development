@@ -1,19 +1,8 @@
 require "rails_spec_helper"
 
-# include GoogleCalendarsHelper
+include GoogleCalendarsHelper
 
-describe GoogleCalendarsHelper, focus: true do
-  let(:course) { double(:course) }
-
-  class Helper
-    include GoogleCalendarsHelper
-
-    def current_course
-    end
-  end
-
-  subject(:helper) { Helper.new }
-  before {allow(helper).to receive(:current_course).and_return course}
+describe GoogleCalendarsHelper do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
@@ -31,14 +20,14 @@ describe GoogleCalendarsHelper, focus: true do
     let(:assignment_type) { create(:assignment_type, course: course) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
     it "returns the event of the corresponding event object" do
-      # allow(helper).to receive(:current_course).and_return course
-      expect(get_event_or_assignment("event", event.id).id).to be event.id
-      expect(get_event_or_assignment("event", event.id).class).to be Event
+      expect(get_event_or_assignment(course, "event", event.id).id).to be event.id
+      expect(get_event_or_assignment(course, "event", event.id).class).to be Event
     end
 
-    # it "returns the assignment of the corresponding event object" do
-    #
-    # end
+    it "returns the assignment of the corresponding event object" do
+      expect(get_event_or_assignment(course, "assignment", assignment.id).id).to be assignment.id
+      expect(get_event_or_assignment(course, "assignment", assignment.id).class).to be Assignment
+    end
   end
 
   describe "#refresh_if_google_authorization_is_expired" do
