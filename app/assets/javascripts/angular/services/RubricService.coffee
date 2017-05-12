@@ -54,15 +54,19 @@
     newLevel.is_saving = true
     $http.post("/api/levels", newLevel).then(
       (response)-> # success
-        GradeCraftAPI.addItem(levels, "levels", response.data)
-        removeNewLevel(newLevel)
+        updatedLevels = _.map(levels, (level)->
+          if(level.criterion_id == newLevel.criterion_id && level.id == undefined)
+            level = response.data.data.attributes
+          return level
+        )
+        angular.copy(updatedLevels, levels)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
     )
 
   removeNewLevel = (newLevel)->
-    updatedlevels = _.reject(levels, {criterion_id: newLevel.criterion_id})
+    updatedlevels = _.reject(levels, {id: undefined, criterion_id: newLevel.criterion_id})
     angular.copy(updatedlevels, levels)
 
 

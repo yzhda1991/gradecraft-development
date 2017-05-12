@@ -44,9 +44,31 @@
         console.log("toggling meets expectations");
 
       scope.queueUpdateLevel = ()->
-        RubricService.queueUpdateLevel(@level)
+        if scope.levelIsSaved()
+          RubricService.queueUpdateLevel(@level)
+        else if scope.requirementsMet()
+          RubricService.saveNewLevel(@level)
 
       scope.deleteLevel = ()->
-        RubricService.deleteLevel(@level)
+        if scope.levelIsSaved()
+           RubricService.deleteLevel(@level)
+        else
+          RubricService.removeNewLevel(@level)
+
+      #--------------------- NEW LEVELS ---------------------------------------#
+
+      scope.levelIsSaved = ()->
+        @level.id != undefined
+
+      scope.requirements = ()->
+        reqs = []
+        if !@level.name || @level.name.length < 1
+          reqs.push "The level must have a name"
+        if @level.points == null
+          reqs.push "The level must have points assigned"
+        return reqs
+
+      scope.requirementsMet = ()->
+        scope.requirements().length == 0
   }
 ]
