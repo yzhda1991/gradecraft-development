@@ -6,6 +6,7 @@ describe "api/criteria/index" do
 
   before(:each) do
     @criteria = [criterion]
+    @levels = criterion.levels
     allow(view).to receive(:current_course).and_return(course)
   end
 
@@ -25,11 +26,11 @@ describe "api/criteria/index" do
     expect(json["data"][0]["attributes"]["order"]).to eq(@criteria[0].order)
   end
 
-  it "adds the levels to the criteria attributes" do
+  it "adds levels in included" do
     render
     json = JSON.parse(response.body)
-    expect(json["data"][0]["attributes"]["levels"].count).to eq(@criteria[0].levels.count)
-    expect(json["data"][0]["attributes"]["levels"][0]["id"]).to eq(@criteria[0].levels.first.id)
+    expect(json["included"].count).to eq(@criteria[0].levels.count)
+    expect(json["included"][0]["attributes"]["id"]).to eq(@criteria[0].levels.first.id)
   end
 
   describe "level badges" do
@@ -41,7 +42,7 @@ describe "api/criteria/index" do
     it "adds level badges to the level" do
       render
       json = JSON.parse(response.body)
-      expect(json["data"][0]["attributes"]["levels"][0]["level_badges"][0]).to \
+      expect(json["included"][0]["attributes"]["level_badges"][0]).to \
         eq("id" => 123, "level_id" => 456, "badge_id" => 789)
     end
 
@@ -49,7 +50,7 @@ describe "api/criteria/index" do
       allow(course).to receive(:badges).and_return [double(:badge, id: 122, name: "availbadge")]
       render
       json = JSON.parse(response.body)
-      expect(json["data"][0]["attributes"]["levels"][0]["available_badges"][0]).to \
+      expect(json["included"][0]["attributes"]["available_badges"][0]).to \
         eq("id" => 122, "name" => "availbadge")
     end
 
@@ -57,7 +58,7 @@ describe "api/criteria/index" do
       render
       json = JSON.parse(response.body)
       allow(course).to receive(:badges).and_return [double(:badge, id: 789, name: "unavailbadge")]
-      expect(json["data"][0]["attributes"]["levels"][0]["available_badges"][0]).to eq nil
+      expect(json["included"][0]["attributes"]["available_badges"][0]).to eq nil
     end
   end
 end
