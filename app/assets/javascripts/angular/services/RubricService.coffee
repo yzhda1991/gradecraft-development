@@ -8,7 +8,6 @@
   rubric = {}
   criteria = []
   levels = []
-  newLevels = []
   full_points = 0
 
   _editingBadgesId = null
@@ -29,13 +28,13 @@
 #----------- NEW LEVELS -------------------------------------------------------#
 
 # New Levels are not saved until they are valid
-# Until then they exist in the newLevels array
+# Until then they exist in the levels array
 
 # Assumes only one new level per criterion, add new button is hidden in view
 # if one already exists.
 
   openNewLevel = (criterion)->
-    newLevels.push({
+    levels.push({
       criterion_id: criterion.id,
       name: "",
       points: null
@@ -48,7 +47,9 @@
     return true
 
   saveNewLevel = (newLevel)->
+    # TODO: verify again this is on the level in array:
     return if newLevel.is_saving
+
     return if !levelIsValid(newLevel)
     newLevel.is_saving = true
     $http.post("/api/levels", newLevel).then(
@@ -61,8 +62,8 @@
     )
 
   removeNewLevel = (newLevel)->
-    updatedNewLevels = _.reject(newLevels, {criterion_id: newLevel.criterion_id})
-    angular.copy(updatedNewLevels, newLevels)
+    updatedlevels = _.reject(levels, {criterion_id: newLevel.criterion_id})
+    angular.copy(updatedlevels, levels)
 
 
 #----------- EXISTING LEVELS --------------------------------------------------#
@@ -78,7 +79,7 @@
         level = data
       return level
     )
-    angular.copy(updatedLevels, levels)
+    levels = updatedLevels
 
   _updateLevel = (level)->
     $http.put("/api/levels/#{level.id}", level).then(
@@ -214,8 +215,8 @@
   return {
     getRubric: getRubric
     criterionLevels: criterionLevels
+    levels: levels
 
-    newLevels: newLevels
     openNewLevel: openNewLevel
     saveNewLevel: saveNewLevel
     removeNewLevel: removeNewLevel
