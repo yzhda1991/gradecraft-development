@@ -5,7 +5,7 @@
   #assignment-types-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => current_course.assignment_types.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment} Type"
     = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => "State Achieved"
-    = f.input :condition_value, :label => "Amount"
+    = f.input :condition_value, :label => "Amount", :required => true, :input_html => { min: '0' }
     = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
   #assignments-list{:style => "display: none", class: "unlock-conditions-list"}
     = f.input :condition_id, :collection => current_course.assignments.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
