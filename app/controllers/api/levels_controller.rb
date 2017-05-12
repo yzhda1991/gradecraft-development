@@ -14,19 +14,10 @@ class API::LevelsController < ApplicationController
 
   # PUT api/levels/:id
   def update
-    level = Level.find(params[:id])
+    @level = Level.find(params[:id])
 
-    if params[:level].key? :meets_expectations
-
-      # don't handle sets_expectations here!
-      level.criterion.update_meets_expectations!(
-        level,
-        ActiveRecord::Type::Boolean.new.deserialize(params[:level][:meets_expectations])
-      )
-    end
-
-    if level.update_attributes(level_params)
-      render json: { message: "level successfully updated", success: true }
+    if @level.update_attributes(level_params)
+      render "api/levels/show", status: 200
     else
       render json: {
         errors: [{ detail: "failed to update level" }], success: false

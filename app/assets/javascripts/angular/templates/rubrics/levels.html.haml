@@ -4,6 +4,6 @@
 .level(ng-repeat="level in newLevels()" ng-class="{'level-not-saved': !levelIsSaved(level)}")
   %rubric-new-level(criterion="criterion" level="level")
 
-%button.add-level(ng-if="canAddNewLevel()" name="newLevel" ng-click="addNewLevel()" ng-show="criterionIsSaved()")
+%button.add-level(ng-if="canAddNewLevel()" name="newLevel" ng-click="openNewLevel()" ng-show="criterionIsSaved()")
   + Level
 

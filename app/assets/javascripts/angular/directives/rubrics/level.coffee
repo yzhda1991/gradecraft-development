@@ -40,14 +40,11 @@
 
       #--------------------- CRUD ---------------------------------------------#
 
-      scope.levelIsSaved = ()->
-        @level.id != undefined
-
       scope.toggleMeetsExpectations = ()->
         console.log("toggling meets expectations");
 
-      scope.createLevel = ()->
-        console.log("createLevel");
+      scope.queueUpdateLevel = ()->
+        RubricService.queueUpdateLevel(@level)
 
       scope.deleteLevel = ()->
         RubricService.deleteLevel(@level)

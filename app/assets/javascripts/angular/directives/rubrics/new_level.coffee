@@ -10,9 +10,6 @@
     }
     link: (scope, el, attr)->
 
-      scope.levelIsSaved = ()->
-        @level.id != undefined
-
       scope.requirements = ()->
         reqs = []
         if !@level.name || @level.name.length < 1
@@ -27,8 +24,8 @@
       scope.removeNewLevel = ()->
         RubricService.removeNewLevel(@level)
 
-      scope.updateLevel = ()->
+      scope.saveNewLevel = ()->
         if scope.requirementsMet()
-          RubricService.queueUpdateNewLevel(@level)
+          RubricService.saveNewLevel(@level)
   }
 ]

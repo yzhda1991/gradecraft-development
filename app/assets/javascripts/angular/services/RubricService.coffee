@@ -26,27 +26,15 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
-  criterionLevels = (criterion)->
-    _.filter(levels, {criterion_id: criterion.id})
-
-  deleteLevel = (level)->
-    if confirm("Are you sure you want to delete this level?")
-      $http.delete("/api/levels/#{level.id}").then(
-        (response)-> # success
-          angular.copy(_.reject(levels, {id: level.id}), levels)
-          GradeCraftAPI.logResponse(response)
-        ,(response)-> # error
-          GradeCraftAPI.logResponse(response)
-      )
-
 #----------- NEW LEVELS -------------------------------------------------------#
 
 # New Levels are not saved until they are valid
 # Until then they exist in the newLevels array
 
-# Assumes only one new level per criterion
+# Assumes only one new level per criterion, add new button is hidden in view
+# if one already exists.
 
-  addNewLevel = (criterion)->
+  openNewLevel = (criterion)->
     newLevels.push({
       criterion_id: criterion.id,
       name: "",
@@ -59,52 +47,63 @@
     return false if level.points == null
     return true
 
-  # Refresh the array of new levels with a successfull response from the API
-  _refreshNewLevel = (newLevel, data)->
-    updatedLevels = _.map(newLevels, (level)->
-      if(level.criterion_id == newLevel.criterion_id)
-        level = data
-      return level
-    )
-    angular.copy(updatedLevels, newLevels)
-
-
-  # When valid, the new level is created, but not added to the
-  # criterion levels array until blur, to avoid shuffling the
-  # levels by points while the user is in the middle of editing
-  _saveNewLevel = (newLevel)->
-    $http.post("/api/levels", newLevel).then(
-      (response)-> # success
-        _refreshNewLevel(newLevel,response.data.data.attributes)
-        GradeCraftAPI.logResponse(response)
-      ,(response)-> # error
-        GradeCraftAPI.logResponse(response)
-    )
-
-  _updateNewLevel = (newLevel)->
-    $http.post("/api/levels/#{newLevel.id}").then(
-      (response)-> # success
-        _refreshNewLevel(newLevel,response.data.data.attributes)
-        GradeCraftAPI.logResponse(response)
-      ,(response)-> # error
-        GradeCraftAPI.logResponse(response)
-    )
-
-  queueUpdateNewLevel = (newLevel)->
+  saveNewLevel = (newLevel)->
     return if newLevel.is_saving
     return if !levelIsValid(newLevel)
-    if newLevel.id == undefined
-      newLevel.is_saving = true
-      _saveNewLevel(newLevel)
-    else
-      DebounceQueue.addEvent(
-        "levels", newLevel.criterion_id, _updateNewLevel, [newLevel]
-      )
-
+    newLevel.is_saving = true
+    $http.post("/api/levels", newLevel).then(
+      (response)-> # success
+        GradeCraftAPI.addItem(levels, "levels", response.data)
+        removeNewLevel(newLevel)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
 
   removeNewLevel = (newLevel)->
     updatedNewLevels = _.reject(newLevels, {criterion_id: newLevel.criterion_id})
     angular.copy(updatedNewLevels, newLevels)
+
+
+#----------- EXISTING LEVELS --------------------------------------------------#
+
+
+  criterionLevels = (criterion)->
+    _.filter(levels, {criterion_id: criterion.id})
+
+  # Refresh the array of new levels with a successful response from the API
+  _refreshLevel = (id, data)->
+    updatedLevels = _.map(levels, (level)->
+      if(level.id == id)
+        level = data
+      return level
+    )
+    angular.copy(updatedLevels, levels)
+
+  _updateLevel = (level)->
+    $http.put("/api/levels/#{level.id}", level).then(
+      (response)-> # success
+        _refreshLevel(level.id, response.data.data.attributes)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateLevel = (level)->
+    DebounceQueue.addEvent(
+      "levels", level.id, _updateLevel, [level]
+    )
+
+  deleteLevel = (level)->
+    if confirm("Are you sure you want to delete this level?")
+      $http.delete("/api/levels/#{level.id}").then(
+        (response)-> # success
+          angular.copy(_.reject(levels, {id: level.id}), levels)
+          GradeCraftAPI.logResponse(response)
+        ,(response)-> # error
+          GradeCraftAPI.logResponse(response)
+      )
+
 
 #----------- LEVELS BADGES -------------------------------------------------------#
 
@@ -216,12 +215,13 @@
     getRubric: getRubric
     criterionLevels: criterionLevels
 
-    deleteLevel: deleteLevel
-
     newLevels: newLevels
-    addNewLevel: addNewLevel
+    openNewLevel: openNewLevel
+    saveNewLevel: saveNewLevel
     removeNewLevel: removeNewLevel
-    queueUpdateNewLevel: queueUpdateNewLevel
+
+    queueUpdateLevel: queueUpdateLevel
+    deleteLevel: deleteLevel
 
     addLevelBadge: addLevelBadge
     deleteLevelBadge: deleteLevelBadge
