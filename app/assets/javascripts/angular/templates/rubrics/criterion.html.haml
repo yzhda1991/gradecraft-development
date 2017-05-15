@@ -1,10 +1,10 @@
-.criterion(name="criterionForm" ng-class="{saved: criterionIsSaved()}")
+.criterion(name="criterionForm" ng-class="{'criterion-not-saved': !criterionIsSaved()}")
   %label
     %span.sr-only Criterion Name
-    %input(type="text" ng-model="criterion.name" name="name" placeholder="Criterion Name" value="{{criterion.name}}"  required ng-change="queueUpdateCriterion()" ng-Maxlength=30 maxlength=30)
+    %input(type="text" ng-model="criterion.name" name="name" placeholder="Criterion Name" value="{{criterion.name}}"  required ng-blur="queueUpdateCriterion()" ng-Maxlength=30 maxlength=30)
   %label
     %span.sr-only Criterion Max Points
-    %input.points(type="number" ng-model="criterion.max_points" name="maxPoints" placeholder="Max Points"  required integer min=0 ng-change="queueUpdateCriterion()")
+    %input.points(type="number" ng-model="criterion.max_points" name="maxPoints" placeholder="Max Points"  required integer min=0 ng-blur="queueUpdateCriterion()")
 
   %label
     %span.sr-only Criterion Description
@@ -12,6 +12,10 @@
 
   %button.delete(type="button" ng-click="deleteCriterion()") X
 
-.new-criterion-notice(ng-show="criterionIsNew()") "Criterion Name" and "Max Points" are required fields
-.level-container(ng-show="!criterionIsNew()")
+%ul.criterion-requirements(ng-if="!requirementsMet()")
+  %li.requirements(ng-repeat="requirement in requirements()")
+    {{ requirement }}
+
+
+.level-container(ng-if="criterionIsSaved()")
   %rubric-criterion-levels.level-wrapper(criterion="criterion")

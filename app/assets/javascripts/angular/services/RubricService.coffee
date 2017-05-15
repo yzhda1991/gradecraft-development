@@ -26,6 +26,46 @@
     )
 
 
+#----------- NEW CRITERIA -----------------------------------------------------#
+
+# New Criteria are not saved until they are valid.
+# We allow only one new criteria in process at a time.
+
+  openNewCriterion = ()->
+    criteria.push({
+      new_criterion: true
+      rubric_id: rubric.id
+      name: "",
+      max_points: null
+      description: ""
+      order: criteria.length + 1
+    })
+
+  criterionIsValid = (criterion)->
+    return false if !criterion.name || criterion.name.length < 1
+    return false if criterion.max_points == null
+    return true
+
+  saveNewCriterion = (newCriterion)->
+    # TODO: verify this works:
+    return if newCriterion.is_saving
+
+    return if !criterionIsValid(newCriterion)
+    newCriterion.is_saving = true
+    $http.post("/api/criteria", newCriterion).then(
+      (response)-> # success
+        updatedCriterion = _.map(criteria, (criterion)->
+          if(criterion.new_criterion == true)
+            criterion = response.data.data.attributes
+          return criterion
+        )
+        angular.copy(updatedCriterion, criteria)
+        GradeCraftAPI.loadFromIncluded(levels, "levels", response.data)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
 #----------- EXISTING CRITERIA ------------------------------------------------#
 
   deleteCriterion = (criterion)->
@@ -64,13 +104,13 @@
 #----------- NEW LEVELS -------------------------------------------------------#
 
 # New Levels are not saved until they are valid
-# Until then they exist in the levels array
 
 # Assumes only one new level per criterion, add new button is hidden in view
-# if one already exists.
+# if one new level already in progress and not saved.
 
   openNewLevel = (criterion)->
     levels.push({
+      new_level: true,
       criterion_id: criterion.id,
       name: "",
       points: null
@@ -102,7 +142,7 @@
     )
 
   removeNewLevel = (newLevel)->
-    updatedLevels = _.reject(levels, {id: undefined, criterion_id: newLevel.criterion_id})
+    updatedLevels = _.reject(levels, {new_level: true, criterion_id: newLevel.criterion_id})
     angular.copy(updatedLevels, levels)
 
 
@@ -256,6 +296,9 @@
     getRubric: getRubric
     criterionLevels: criterionLevels
     levels: levels
+
+    openNewCriterion: openNewCriterion
+    saveNewCriterion: saveNewCriterion
 
     queueUpdateCriterion: queueUpdateCriterion
     deleteCriterion: deleteCriterion

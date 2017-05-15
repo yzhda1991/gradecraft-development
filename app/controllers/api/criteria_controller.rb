@@ -4,6 +4,17 @@ require_relative "../../services/updates_criterion_expectations"
 
 class API::CriteriaController < ApplicationController
 
+  def create
+    @criterion = Criterion.new(criterion_params)
+
+    if @criterion.save
+      @levels = @criterion.levels.order("criterion_id").order("points").order("sort_order")
+      render "api/criteria/show", status: 201
+    else
+      render json: { message: "criterion failed to create", success: false }, status: 400
+    end
+  end
+
   # GET api/assignments/:assignment_id/criteria
   def index
     assignment = current_course.assignments.find params[:assignment_id]
@@ -75,6 +86,6 @@ class API::CriteriaController < ApplicationController
   private
 
   def criterion_params
-    params.require(:criterion).permit(:name, :max_points, :description)
+    params.require(:criterion).permit(:rubric_id, :name, :max_points, :description, :order)
   end
 end

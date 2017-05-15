@@ -27,14 +27,11 @@
       scope.addLevel = ()->
         RubricService.addLevel(@criterion)
 
-      scope.newLevels = ()->
-        _.filter(RubricService.newLevels, {criterion_id: @criterion.id})
-
       scope.openNewLevel = ()->
         RubricService.openNewLevel(@criterion)
 
       scope.canAddNewLevel = ()->
-        _.filter(RubricService.newLevels, {criterion_id : @criterion.id}).length == 0
+        _.filter(RubricService.levels, {new_level: true, criterion_id : @criterion.id}).length == 0
 
   }
 ]

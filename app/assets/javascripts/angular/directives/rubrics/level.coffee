@@ -1,4 +1,4 @@
-# Interactive container for one level in a criterion
+# Renders container for one level in a criterion
 
 @gradecraft.directive 'rubricLevel', ['RubricService', (RubricService) ->
 

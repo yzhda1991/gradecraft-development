@@ -8,6 +8,16 @@ describe API::CriteriaController do
   context "as professor" do
     before(:each) { login_user(professor) }
 
+    describe "POST create" do
+      it "creates a new criteria" do
+        expect{ post :create,
+                params: { criterion: {rubric_id: rubric.id, name: "New Criterion", max_points: 1000, order: 2 }},
+                format: :json
+              }.to change(rubric.criteria, :count).by(1)
+        expect(assigns(:criterion).name).to eq("New Criterion")
+      end
+    end
+
     describe "GET index" do
       it "returns criteria for the current assignment" do
         get :index, params: { assignment_id: assignment.id }, format: :json

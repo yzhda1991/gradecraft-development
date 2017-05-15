@@ -13,6 +13,12 @@
 
     vm.badges = BadgeService.badges
 
+    vm.openNewCriterion = ()->
+      RubricService.openNewCriterion()
+
+    vm.hasNewCriterion = ()->
+      _.filter(vm.criteria, { new_criteria: true }).length > 0
+
     services(vm.rubricId).then(()->
       vm.loading = false
     )
