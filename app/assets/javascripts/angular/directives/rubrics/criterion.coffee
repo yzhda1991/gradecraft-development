@@ -18,6 +18,9 @@
       scope.createCriterion = ()->
         console.log("createCriterion");
 
+      scope.queueUpdateCriterion = ()->
+        RubricService.queueUpdateCriterion(@criterion)
+
       scope.deleteCriterion = ()->
         RubricService.deleteCriterion(@criterion)
 

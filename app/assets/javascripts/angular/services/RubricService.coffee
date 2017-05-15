@@ -38,6 +38,28 @@
           GradeCraftAPI.logResponse(response)
       )
 
+  _refreshCritera = (id, data)->
+    updatedCriteria = _.map(criteria, (criterion)->
+      if(criterion.id == id)
+        criterion = data
+      return criterion
+    )
+    criteria = updatedLevels
+
+  _updateCriterion = (criterion)->
+    $http.put("/api/criteria/#{criterion.id}", criterion).then(
+      (response)-> # success
+        _refreshLevel(criterion.id, response.data.data.attributes)
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateCriterion = (criterion)->
+    DebounceQueue.addEvent(
+      "criteria", criterion.id, _updateCriterion, [criterion]
+    )
+
 
 #----------- NEW LEVELS -------------------------------------------------------#
 
@@ -235,6 +257,7 @@
     criterionLevels: criterionLevels
     levels: levels
 
+    queueUpdateCriterion: queueUpdateCriterion
     deleteCriterion: deleteCriterion
 
     openNewLevel: openNewLevel

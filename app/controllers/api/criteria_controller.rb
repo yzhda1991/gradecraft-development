@@ -13,6 +13,21 @@ class API::CriteriaController < ApplicationController
     @levels = Level.where(criterion_id: @criteria.pluck(:id)).order("criterion_id").order("points").order("sort_order")
   end
 
+  # PUT api/criteria/:id
+  def update
+    @criterion = Criterion.find(params[:id])
+
+    if @criterion.update_attributes(criterion_params)
+      render "api/criteria/show", status: 200
+    else
+      render json: {
+        errors: [{ detail: "failed to update criterion" }], success: false
+        },
+        status: 500
+    end
+  end
+
+  # DELETE api/criteria/:id
   def destroy
     criterion = Criterion.find(params[:id])
     if criterion.destroy
@@ -55,5 +70,11 @@ class API::CriteriaController < ApplicationController
         },
         status: 400
     end
+  end
+
+  private
+
+  def criterion_params
+    params.require(:criterion).permit(:name, :max_points, :description)
   end
 end

@@ -16,6 +16,34 @@ describe API::CriteriaController do
       end
     end
 
+    describe "PUT update" do
+      let(:params) do
+        { id: criterion.id, criterion: { name: "A new name", max_points: 54321, description: "A new description" }}
+      end
+
+      it "updates the criterion attributes" do
+        put :update, params: params, format: :json
+        expect(criterion.reload.name).to eq("A new name")
+        expect(criterion.max_points).to eq(54321)
+        expect(criterion.description).to eq("A new description")
+      end
+
+      it "renders success message when request format is JSON" do
+        put :update, params: params, format: :json
+        expect(response.status).to eq(200)
+        expect(assigns(:criterion)).to eq(criterion)
+      end
+
+      describe "on error" do
+        it "describes failure to update" do
+          allow_any_instance_of(Criterion).to receive(:update_attributes) { false }
+          put :update, params: params, format: :json
+          expect(JSON.parse(response.body)).to eq("errors"=>[{"detail"=>"failed to update criterion"}], "success"=>false)
+          expect(response.status).to eq(500)
+        end
+      end
+    end
+
     describe "DELETE criterion" do
       it "removes the criterion from the rubric" do
         delete :destroy, params: { id: criterion.id}, format: :json

@@ -372,7 +372,7 @@ Rails.application.routes.draw do
     resources :challenges, only: :index
     resources :courses, only: [:index]
 
-    resources :criteria, only: [:destroy] do
+    resources :criteria, only: [:update, :destroy] do
       put "levels/:level_id/set_expectations", to: "criteria#set_expectations"
       put "remove_expectations"
     end
