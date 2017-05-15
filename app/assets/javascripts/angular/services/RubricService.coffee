@@ -102,8 +102,8 @@
     )
 
   removeNewLevel = (newLevel)->
-    updatedlevels = _.reject(levels, {id: undefined, criterion_id: newLevel.criterion_id})
-    angular.copy(updatedlevels, levels)
+    updatedLevels = _.reject(levels, {id: undefined, criterion_id: newLevel.criterion_id})
+    angular.copy(updatedLevels, levels)
 
 
 #----------- EXISTING LEVELS --------------------------------------------------#
