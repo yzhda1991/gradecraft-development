@@ -60,6 +60,11 @@ ul.accepts_submission_types
   border: 0
   border-bottom: 1px dashed $color-green-2
 
+.form-subsection
+  background-color: $color-grey-7
+  padding: 1rem
+  margin-bottom: 1rem
+
 .form-title
   margin-bottom: 0.5rem
   text-transform: capitalize
@@ -68,6 +73,8 @@ ul.accepts_submission_types
 
 .form-item
   margin-bottom: 1rem
+  &.no-margin
+    margin-bottom: 0
 
 .form-hint
   font-size: 80%
@@ -104,7 +111,7 @@ error
 
 .conditional-options
   margin: 0
-  padding-left: 0.5rem
+  padding-left: 1rem
 
 .ui-datepicker
   margin-top: -2.7rem !important
@@ -116,7 +123,6 @@ ul.locked-display li
 
 .simple_form 
   label
-    padding-right: .5rem
     font-size: 0.9rem
     text-transform: capitalize
     font-weight: bold
