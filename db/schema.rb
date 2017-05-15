@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515144320) do
+ActiveRecord::Schema.define(version: 20170515165329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 20170515144320) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: true,                        null: false
+    t.boolean  "teams_visible",                                           default: true,                         null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
