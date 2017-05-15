@@ -98,7 +98,7 @@ class SubmissionsController < ApplicationController
   def ensure_editable(submission, assignment)
     redirect_to assignment_path(assignment, anchor: "tab3"),
       notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released." \
-      and return if !SubmissionProctor.new(submission).open_for_editing? assignment
+      and return if !SubmissionProctor.new(submission).open_for_editing? assignment, current_user
     return true
   end
 
@@ -116,8 +116,8 @@ class SubmissionsController < ApplicationController
   end
 
   def submission_params
-    params.require(:submission).permit :assignment_id, :assignment_type_id,
-      :group_id, :link, :student_id, :creator_id, :text_comment, :submitted_at,
-      :course_id, :released_at, submission_files_attributes: [:id, file: []]
+    params.require(:submission).permit :assignment_id, :group_id, :link,
+    :student_id, :text_comment, :submitted_at, :course_id,
+    submission_files_attributes: [:id, file: []]
   end
 end

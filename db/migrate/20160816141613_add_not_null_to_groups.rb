@@ -5,7 +5,7 @@ class AddNotNullToGroups < ActiveRecord::Migration
     change_column :group_memberships, :created_at, :datetime, null: false
     change_column :group_memberships, :updated_at, :datetime, null: false
     remove_column :group_memberships, :group_type
-    
+
     change_column :groups, :name, :string, null: false
     change_column :groups, :created_at, :datetime, null: false
     change_column :groups, :updated_at, :datetime, null: false

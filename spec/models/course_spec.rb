@@ -405,13 +405,13 @@ describe Course do
   end
 
   describe "#teams_visible?" do
-    it "does not have team visible by default" do
-      expect(subject.teams_visible?).to eq(false)
+    it "has teams visible by default" do
+      expect(subject.teams_visible?).to eq(true)
     end
 
-    it "has team visible if it's turned on" do
-      subject.teams_visible = true
-      expect(subject.teams_visible?).to eq(true)
+    it "has team invisible if it's turned off" do
+      subject.teams_visible = false
+      expect(subject.teams_visible?).to eq(false)
     end
   end
 

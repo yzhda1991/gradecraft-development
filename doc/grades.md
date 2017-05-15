@@ -99,7 +99,6 @@ Scores and point values are saved in several states on the model. See [[Points]]
 
   * `cache_associations` - the following attributes are set to attributes of the same names in the specified models if they are not already present:
     * `student_id` - submission model
-    * `task_id` - submission model
     * `assignment_id` - submission model
     * `assignment_type_id` - assignment model
     * `course_id` - assignment model

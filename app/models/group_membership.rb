@@ -1,5 +1,6 @@
 class GroupMembership < ActiveRecord::Base
   belongs_to :group
+  belongs_to :course
   belongs_to :student, class_name: "User"
 
   scope :for_course, ->(course) do

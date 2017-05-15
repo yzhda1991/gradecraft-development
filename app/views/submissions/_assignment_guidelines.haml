@@ -32,12 +32,13 @@
     %p.minimize= raw assignment.assignment_type.description
     %hr.grading-divider
 
-- if current_user_is_staff? 
+- if current_user_is_staff?
   %section.grade-form-section
     - if assignment.has_groups?
-      %h2.grade-form-header= "Grade for #{@group.name}:" 
+      %h2.grade-form-header= "Grade for #{@group.name}:"
       %ul
         - @group.students.each do |s|
           %li= link_to s.name, student_path(s)
     - else
-      %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:" 
+      - if @grade.present?
+        %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:"
