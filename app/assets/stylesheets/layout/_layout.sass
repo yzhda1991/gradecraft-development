@@ -32,12 +32,19 @@ body
     padding-top: 0
 
 .box
-  margin-top: 1rem
-  border: 1px dashed $color-blue-3
-  padding: 1rem
-  &:hover
-    border: 1px dashed $color-green-2
+  a, button
     display: block
+    margin: 1rem 0
+    padding: 1rem
+    font-size: 0.9rem
+    text-align: center
+    border: 1px dashed $color-blue-2
+    width: 100%
+    &:hover
+      text-decoration: none
+      border: 1px dashed $color-blue-3
+    &-padded
+      padding: 0 0.5rem
 
 .no-bullet li
   list-style-type: none
@@ -114,11 +121,6 @@ hr.light-grey
 @media (min-width: $media-medium-max)
   .panel .row
     margin-bottom: 1rem
-
-@media (max-width: $media-medium-max)
-  .box
-    border-bottom: 1px solid $color-grey-3
-    padding: 1rem
 
 @media (max-width: $media-small-max)
   .badge-icon
