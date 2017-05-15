@@ -12,6 +12,7 @@ class Grades::ImportersController < ApplicationController
       assignment_grades_importers_path(params[:assignment_id])
   end
   before_action :require_authorization, except: [:download, :index, :show, :upload]
+  before_action :use_current_course, only: [:upload]
 
   def assignments
     @assignment = Assignment.find params[:assignment_id]
