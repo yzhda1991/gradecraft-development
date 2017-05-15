@@ -11,7 +11,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def analytics_students
     dashboard
-    breadcrumb('#{ term_for :student } Analytics', analytics_students_path)
+    breadcrumb(objects[:course].student_term.pluralize, analytics_students_path)
   end
 
   def announcements_index
@@ -31,22 +31,22 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignments_index
     dashboard
-    breadcrumb('#{ term_for :assignments }', assignments_path)
+    breadcrumb(objects[:course].assignment_term.pluralize, assignments_path)
   end
 
   def assignments_importers_index
     assignments_index
-    breadcrumb('#{ term_for :assignment } Import', assignments_importers_path)
+    breadcrumb("Import " + objects[:course].assignment_term.pluralize)
   end
 
   def assignments_importers_assignments
     assignments_importers_index
-    breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
+    breadcrumb(objects[:provider_name].capitalize + " " + objects[:course].assignment_term.pluralize)
   end
 
   def assignments_importers_assignments_import_results
     assignments_importers_index
-    breadcrumb(objects[:provider_name].capitalize + ' #{ term_for :assignments }', assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
+    breadcrumb(objects[:provider_name].capitalize + " " + objects[:course].assignment_term.pluralize, assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
   end
 
   def assignments_groups_grades_mass_edit
@@ -87,7 +87,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignments_new
     assignments_index
-    breadcrumb('New #{ term_for :assignment }')
+    breadcrumb('New ' +  objects[:course].assignment_term)
   end
 
   def assignments_grades_mass_edit
@@ -96,35 +96,35 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignment_type_weights_index
     assignments_index
-    breadcrumb('Edit My #{ term_for :weight } Choices')
+    breadcrumb('Edit My ' + objects[:course].weight_term + ' Choices')
   end
 
   def assignment_types_index
     dashboard
-    breadcrumb('#{ term_for :assignment } Type Analytics')
+    breadcrumb(objects[:course].assignment_term + ' Type Analytics')
   end
 
   def assignment_types_new
     assignments_index
-    breadcrumb('New #{ term_for :assignment } Type')
+    breadcrumb('New ' + objects[:course].assignment_term + ' Type')
   end
 
   def assignment_types_edit
     dashboard
-    breadcrumb('#{ term_for :assignment } Types', assignment_types_path)
+    breadcrumb(objects[:assignment_type].course.assignment_term + " Types", assignment_types_path)
     breadcrumb('Editing ' + objects[:assignment_type].name)
   end
 
   def assignments_groups_grade
     breadcrumb('Dashboard', dashboard_path)
-    breadcrumb('#{ term_for :assignments }', assignments_path)
-    breadcrumb('#{ @assignment.name }', assignment_path(objects[:assignment]))
-    breadcrumb('Editing Group Grade')
+    breadcrumb(objects[:course].assignment_term.pluralize, assignments_path)
+    breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
+    breadcrumb('Editing ' + objects[:course].group_term + ' Grade')
   end
 
   def badges_index
     dashboard
-    breadcrumb('#{ term_for :badges }', badges_path)
+    breadcrumb(objects[:course].badge_term.pluralize, badges_path)
   end
 
   def badges_edit
@@ -139,12 +139,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def badges_new
     badges_index
-    breadcrumb('New #{ term_for :badge }')
+    breadcrumb('New ' + objects[:course].badge_term)
   end
 
   def challenges_index
     dashboard
-    breadcrumb('#{ term_for :challenges }', challenges_path)
+    breadcrumb(objects[:course].challenge_term.pluralize, challenges_path)
   end
 
   def challenges_edit
@@ -159,22 +159,22 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def challenges_new
     challenges_index
-    breadcrumb('New Challenge')
+    breadcrumb('New ' + objects[:course].challenge_term)
   end
 
   def challenge_grades_edit
     challenges_show
-    breadcrumb('Editing #{ term_for :challenge } Grade')
+    breadcrumb('Editing ' + objects[:challenge_grade].team.name + "'s " +  objects[:challenge_grade].challenge.course.challenge_term + " Grade")
   end
 
   def challenge_grades_show
     challenges_show
-    breadcrumb(objects[:challenge_grade].team.name + "'s Challenge Grade")
+    breadcrumb(objects[:challenge_grade].team.name + "'s " + objects[:course].challenge_term + ' Grade')
   end
 
   def challenges_challenge_grades_new
     challenges_show
-    breadcrumb('New #{ term_for :challenge } Grade for #{ @team.name }')
+    breadcrumb('New ' + objects[:course].challenge_term + ' Grade for ' + objects[:team].name)
   end
 
   def challenges_challenge_grades_mass_edit
@@ -219,27 +219,28 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def earned_badges_show
     badges_index
-    breadcrumb(objects[:earned_badge].student.name + "'s " + objects[:earned_badge].name + ' Badge')
+    breadcrumb(objects[:earned_badge].student.name + "'s " + objects[:earned_badge].name + objects[:course].badge_term)
   end
 
   def groups_index
     dashboard
-    breadcrumb('#{ term_for :groups }', groups_path)
+    breadcrumb(objects[:course].group_term.pluralize, groups_path)
   end
 
   def groups_show
-    groups_index
-    breadcrumb(objects[:group].name + ' #{ term_for :group }')
+    dashboard
+    breadcrumb(objects[:group].course.group_term.pluralize, groups_path)
+    breadcrumb(objects[:group].name + " " + objects[:group].course.group_term)
   end
 
   def groups_new
     groups_index
-    breadcrumb('New #{ term_for :group }')
+    breadcrumb('New ' + objects[:course].group_term)
   end
 
   def groups_edit
     groups_index
-    breadcrumb('Editing ' + objects[:group].name + ' #{ term_for :group }')
+    breadcrumb('Editing ' + objects[:group].name + ' ' + objects[:course].group_term)
   end
 
   def info_dashboard
@@ -247,12 +248,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def info_earned_badges
     badges_index
-    breadcrumb('Awarded #{ term_for :badges }')
+    breadcrumb('Awarded ' + objects[:course].badge_term.pluralize, badges_path)
   end
 
   def info_multiplier_choices
     dashboard
-    breadcrumb('#{ term_for :weight } Choices')
+    breadcrumb(objects[:course].weight_term + ' Choices')
   end
 
   def info_predictor
@@ -267,7 +268,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def info_per_assign
     dashboard
-    breadcrumb('#{ term_for :assignment } Analytics')
+    breadcrumb(objects[:assignment_types].first.course.assignment_term + " Analytics")
   end
 
   def integrations_index
@@ -323,13 +324,13 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def grades_show
     assignments_index
-    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
+    breadcrumb(objects[:grade].assignment.name, assignment_path(objects[:grade].assignment))
     breadcrumb('Showing Grade')
   end
 
   def grades_edit
     assignments_index
-    breadcrumb('#{ @grade.assignment.name }', assignment_path(objects[:grade].assignment))
+    breadcrumb(objects[:grade].assignment.name, assignment_path(objects[:grade].assignment))
     breadcrumb('Editing Grade')
   end
 
@@ -346,12 +347,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def grades_importers_assignments
     grades_importers_index
-    breadcrumb('#{@provider_name.capitalize} #{ term_for :assignments }')
+    breadcrumb(objects[:provider_name].capitalize + ' ' + objects[:course].assignment_term)
   end
 
   def grades_importers_grades
     grades_importers_index
-    breadcrumb('#{@provider_name.capitalize} Grades')
+    breadcrumb(objects[:provider_name].capitalize + ' Grades')
   end
 
   def grades_importers_grades_import_results
@@ -395,7 +396,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def students_index
     dashboard
-    breadcrumb('#{ term_for :students }', students_path)
+    breadcrumb(objects[:course].student_term.pluralize, students_path)
   end
 
   def students_grade_index
@@ -424,7 +425,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def teams_index
     dashboard
-    breadcrumb('#{ term_for :teams }', teams_path)
+    breadcrumb(objects[:course].team_term.pluralize, teams_path)
   end
 
   def teams_show
@@ -439,7 +440,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def teams_new
     teams_index
-    breadcrumb('New #{ term_for :team }')
+    breadcrumb('New ' + objects[:course].team_term)
   end
 
   def users_activate
@@ -456,12 +457,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_import
     students_index
-    breadcrumb('Import #{ term_for :students }')
+    breadcrumb('Import ' + objects[:course].student_term)
   end
 
   def users_import_results
     students_index
-    breadcrumb('Imported #{ term_for :students }')
+    breadcrumb('Imported ' + objects[:course].student_term.pluralize)
   end
 
   def users_index

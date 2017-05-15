@@ -138,11 +138,6 @@ class CoursesController < ApplicationController
     @course = Course.find(params[:id])
   end
 
-  def use_current_course
-    @course = current_course
-    authorize! :update, @course
-  end
-
   def add_team_score_to_student_changed?
     course_params[:add_team_score_to_student].present? &&
       (@course.add_team_score_to_student != course_params[:add_team_score_to_student])

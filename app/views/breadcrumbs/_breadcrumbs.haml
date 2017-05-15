@@ -1,6 +1,6 @@
 %ul.breadcrumbs{"aria-label": "Breadcrumb"}
   - breadcrumbs.each do |breadcrumb|
     - if breadcrumb.link?
-      %li= link_to instance_eval(%{ "#{ breadcrumb.label }" }), breadcrumb.url
+      %li= link_to %{ #{ breadcrumb.label.html_safe } }, breadcrumb.url
     - else
-      %li= instance_eval(%{ "#{ breadcrumb.label }" })
+      %li= %{ #{ breadcrumb.label.html_safe } }

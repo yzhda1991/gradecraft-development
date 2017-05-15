@@ -5,6 +5,7 @@ class Assignments::GradesController < ApplicationController
   before_action :ensure_student?, only: :self_log
   before_action :save_referer, only: :edit_status
   before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
+  before_action :use_current_course, only: [:edit_status, :update_status, :mass_edit, :mass_update]
 
   # GET /assignments/:assignment_id/grades/edit_status
   # For changing the status of a group of grades passed in grade_ids
@@ -15,7 +16,7 @@ class Assignments::GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grades/update_status
   def update_status
-    assignment = current_course.assignments.find(params[:assignment_id])
+    assignment = @course.assignments.find(params[:assignment_id])
     grades = assignment.grades.find(params[:grade_ids])
     status = params[:grade][:status]
 
@@ -81,10 +82,10 @@ class Assignments::GradesController < ApplicationController
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 
     if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
-      students = current_course.students_being_graded_by_team(@team).order_by_name
+      @team = @course.teams.find_by(id: params[:team_id])
+      students = @course.students_being_graded_by_team(@team).order_by_name
     else
-      students = current_course.students_being_graded.order_by_name
+      students = @course.students_being_graded.order_by_name
     end
 
     @grades = Gradebook.new(@assignment, students).grades

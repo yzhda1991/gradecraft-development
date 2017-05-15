@@ -3,6 +3,7 @@ class ChallengeGradesController < ApplicationController
   before_action :ensure_staff?, except: [:show]
   before_action :find_challenge_grade
   before_action :find_challenge
+  before_action :use_current_course
 
   # GET /challenge_grades/:id
   def show

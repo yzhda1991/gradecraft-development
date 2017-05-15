@@ -12,6 +12,7 @@ class Grades::ImportersController < ApplicationController
       assignment_grades_importers_path(params[:assignment_id])
   end
   before_action :require_authorization, except: [:download, :index, :show, :upload]
+  before_action :use_current_course, only: [:upload, :grades, :grades_import, :index, :show, :upload]
 
   def assignments
     @assignment = Assignment.find params[:assignment_id]
@@ -75,7 +76,7 @@ class Grades::ImportersController < ApplicationController
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/upload
   # rubocop:disable AndOr
   def upload
-    @assignment = current_course.assignments.find(params[:assignment_id])
+    @assignment = @course.assignments.find(params[:assignment_id])
 
     if params[:file].blank?
       redirect_to assignment_grades_importer_path(@assignment, params[:importer_provider_id]),

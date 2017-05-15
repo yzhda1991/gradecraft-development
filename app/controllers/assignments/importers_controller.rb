@@ -10,6 +10,7 @@ class Assignments::ImportersController < ApplicationController
     controller.redirect_path assignments_importers_path
   end
   before_action :require_authorization, except: :index
+  before_action :use_current_course, only: [:index, :assignments_import]
 
   # GET /assignments/importers
   def index
@@ -30,14 +31,13 @@ class Assignments::ImportersController < ApplicationController
 
     @result = Services::ImportsLMSAssignments.import @provider_name,
       authorization(@provider_name).access_token, @course_id, params[:assignment_ids],
-      current_course, params[:assignment_type_id]
+      @course, params[:assignment_type_id]
 
     if @result.success?
       render :assignments_import_results
     else
-      @course = syllabus.course(@course_id)
       @assignments = syllabus.assignments(@course_id)
-      @assignment_types = current_course.assignment_types.ordered
+      @assignment_types = @course.assignment_types.ordered
 
       render :assignments, alert: @result.message
     end

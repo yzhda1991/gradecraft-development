@@ -5,6 +5,7 @@ class GradesController < ApplicationController
     except: [:feedback_read, :show, :async_update]
   before_action :ensure_student?, only: :feedback_read
   before_action :save_referer, only: :edit
+  before_action :use_current_course, only: [:show, :edit]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
@@ -15,7 +16,7 @@ class GradesController < ApplicationController
     redirect_to @grade.assignment and return unless current_user_is_staff?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
-    
+
     render :show, Assignments::Presenter.build({
       assignment: @grade.assignment,
       course: current_course,

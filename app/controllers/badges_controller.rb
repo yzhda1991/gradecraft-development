@@ -3,12 +3,13 @@ class BadgesController < ApplicationController
   before_action :ensure_not_observer?, except: [:index, :show]
   before_action :ensure_staff?, except: [:index, :show]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
+  before_action :use_current_course, only: [:index, :show, :new, :edit]
 
   # GET /badges
   def index
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
-      badges: current_course.badges.ordered,
+      badges: @course.badges.ordered,
       student: current_student
     })
   end
@@ -16,16 +17,16 @@ class BadgesController < ApplicationController
   # GET /badges/:id
   def show
     render Badges::ShowPresenter.build({
-      course: current_course,
+      course: @course,
       badge: @badge,
       student: current_student,
-      teams: current_course.teams,
+      teams: @course.teams,
       params: params
     })
   end
 
   def new
-    @badge = current_course.badges.new
+    @badge = @course.badges.new
   end
 
   def edit

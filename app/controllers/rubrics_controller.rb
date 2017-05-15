@@ -2,6 +2,7 @@ class RubricsController < ApplicationController
   before_action :ensure_staff?, except: [:export]
 
   before_action :find_rubric, only: [:destroy, :update]
+  before_action :use_current_course, only: [:design]
 
   respond_to :html, :json
 

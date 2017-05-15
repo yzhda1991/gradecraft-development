@@ -2,6 +2,7 @@ class Challenges::ChallengeGradesController < ApplicationController
   before_action :ensure_staff?
 
   before_action :find_challenge
+  before_action :use_current_course
 
   # GET /challenges/:challenge_id/challenge_grade?team_id=:team_id
   def new
