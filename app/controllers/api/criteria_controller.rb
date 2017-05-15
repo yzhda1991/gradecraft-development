@@ -13,6 +13,17 @@ class API::CriteriaController < ApplicationController
     @levels = Level.where(criterion_id: @criteria.pluck(:id)).order("criterion_id").order("points").order("sort_order")
   end
 
+  def destroy
+    criterion = Criterion.find(params[:id])
+    if criterion.destroy
+      render json: { message: "criterion successfully deleted", success: true },
+        status: 200
+    else
+      render json: { message: "criterion failed to delete", success: false },
+        status: 400
+    end
+  end
+
   # PUT /api/criteria/:criterion_id/levels/:level_id/set_expectations
   def set_expectations
     criterion = Criterion.find(params[:criterion_id])

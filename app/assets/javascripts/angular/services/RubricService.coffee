@@ -25,6 +25,20 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
+
+#----------- EXISTING CRITERIA ------------------------------------------------#
+
+  deleteCriterion = (criterion)->
+    if confirm("Are you sure you want to delete this criterion?")
+      $http.delete("/api/criteria/#{criterion.id}").then(
+        (response)-> # success
+          angular.copy(_.reject(criteria, {id: criterion.id}), criteria)
+          GradeCraftAPI.logResponse(response)
+        ,(response)-> # error
+          GradeCraftAPI.logResponse(response)
+      )
+
+
 #----------- NEW LEVELS -------------------------------------------------------#
 
 # New Levels are not saved until they are valid
@@ -220,6 +234,8 @@
     getRubric: getRubric
     criterionLevels: criterionLevels
     levels: levels
+
+    deleteCriterion: deleteCriterion
 
     openNewLevel: openNewLevel
     saveNewLevel: saveNewLevel

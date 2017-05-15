@@ -16,6 +16,14 @@ describe API::CriteriaController do
       end
     end
 
+    describe "DELETE criterion" do
+      it "removes the criterion from the rubric" do
+        delete :destroy, params: { id: criterion.id}, format: :json
+        expect(rubric.criteria.count).to eq(0)
+        expect(JSON.parse(response.body)).to eq("message"=>"criterion successfully deleted", "success"=>true)
+      end
+    end
+
     describe "PUT set_expectations" do
       let(:level) { criterion.levels.last }
 

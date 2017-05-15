@@ -15,7 +15,7 @@
 
 
   %input(type="hidden" value="{{$index}}")
-  %button.delete(type="button" ng-click="criterion.delete($index)") X
+  %button.delete(type="button" ng-click="deleteCriterion()") X
 
 .new-criterion-notice(ng-show="criterionIsNew()") "Criterion Name" and "Max Points" are required fields
 .level-container(ng-show="!criterionIsNew()")
