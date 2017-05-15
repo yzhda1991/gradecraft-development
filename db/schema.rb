@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.boolean  "accepts_text",                 default: true,         null: false
     t.boolean  "accepts_links",                default: true,         null: false
     t.boolean  "pass_fail",                    default: false,        null: false
-    t.boolean  "hide_analytics",               default: true,        null: false
+    t.boolean  "hide_analytics",               default: false,        null: false
     t.boolean  "visible_when_locked",          default: true,         null: false
     t.boolean  "show_name_when_locked",        default: false,        null: false
     t.boolean  "show_points_when_locked",      default: false,        null: false
@@ -269,7 +269,7 @@ ActiveRecord::Schema.define(version: 20170403145349) do
     t.string   "team_leader_term",                                        default: "TA",                         null: false
     t.string   "group_term",                                              default: "Group",                      null: false
     t.boolean  "accepts_submissions",                                     default: true,                         null: false
-    t.boolean  "teams_visible",                                           default: false,                        null: false
+    t.boolean  "teams_visible",                                           default: true,                        null: false
     t.string   "weight_term",                                             default: "Multiplier",                 null: false
     t.decimal  "default_weight",                  precision: 4, scale: 1, default: "1.0"
     t.string   "tagline"
@@ -390,7 +390,7 @@ ActiveRecord::Schema.define(version: 20170403145349) do
 
   create_table "grade_scheme_elements", force: :cascade do |t|
     t.string   "level"
-    t.integer  "lowest_points"
+    t.integer  "lowest_points",      null: false
     t.string   "letter"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
