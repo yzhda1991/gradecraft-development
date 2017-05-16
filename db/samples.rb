@@ -4,6 +4,7 @@ require "./db/samples/assignment_types.rb"
 require "./db/samples/assignments.rb"
 require "./db/samples/challenges.rb"
 require "./db/samples/events.rb"
+require "./db/samples/announcements.rb"
 
 # ---------------------------- Shared Methods --------------------------------#
 
@@ -146,6 +147,7 @@ end
   config[:assignments] = {}
   config[:challenges] = {}
   config[:events] = {}
+  config[:announcements] = {}
 end
 
 # ---------------------------- Create Observers! ------------------------------#
@@ -645,6 +647,28 @@ end
     end
   end
   puts_success :event, event_name, :event_created
+end
+
+# ---------------------------- Create Announcements! ----------------------------#
+
+@announcements.each do |announcement_title,config|
+  @courses.each do |course_name,course_config|
+    course_config[:course].tap do |course|
+      announcement = Announcement.create! do |a|
+        @announcement_default_config[:attributes].keys.each do |attr|
+          a[attr] =
+            config[:attributes].key?(attr) ? config[:attributes][attr] :
+              @announcement_default_config[:attributes][attr]
+        end
+        a.course = course
+        a.author = course.staff.first
+      end
+      # Store models on each course in the @courses hash
+      @courses[course_name][:announcements][announcement_title] = announcement  #Why does this fail?
+      puts_success :announcement, announcement_title, :announcement_created
+    end
+  end
+  puts_success :announcement, announcement_title, :announcement_created
 end
 
 @students.each do |s|
