@@ -664,7 +664,7 @@ end
         a.author = course.staff.first
       end
       # Store models on each course in the @courses hash
-      @courses[course_name][:announcements][announcement_title] = announcement  #Why does this fail?
+      @courses[course_name][:announcements][announcement_title] = announcement
       puts_success :announcement, announcement_title, :announcement_created
     end
   end
