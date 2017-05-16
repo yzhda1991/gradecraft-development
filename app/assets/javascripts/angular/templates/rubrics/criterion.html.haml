@@ -8,11 +8,11 @@
 
   %label
     %span.sr-only Criterion Description
-    %textarea.criterion-description(ng-model="criterion.description" placeholder="Description" value="{{criterion.description}}" ng-change="queueUpdateCriterion()")
+    %textarea.criterion-description(ng-if="requirementsMet() || criterionIsSaved()" ng-model="criterion.description" placeholder="Description" value="{{criterion.description}}" ng-change="queueUpdateCriterion()")
 
   %button.delete(type="button" ng-click="deleteCriterion()") X
 
-%ul.criterion-requirements(ng-if="!requirementsMet()")
+%ul.criterion-requirements(ng-if="!requirementsMet() && !criterionIsSaved()")
   %li.requirements(ng-repeat="requirement in requirements()")
     {{ requirement }}
 
