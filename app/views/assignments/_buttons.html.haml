@@ -3,6 +3,7 @@
     %ul
       - if !presenter.new_assignment?
         = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(presenter.assignment), class: "button button-edit"
+
         %li.dropdown
           %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
           %ul.options-menu
@@ -40,3 +41,6 @@
                   Edit Rubric
                 - else
                   Create Rubric
+
+        = active_course_link_to decorative_glyph(:copy) + "Add to Google Calendar",
+          add_to_google_calendar_google_calendar_path("assignment", presenter.assignment), class: "button button-edit", method: :post
