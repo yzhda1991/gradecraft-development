@@ -6,16 +6,10 @@ feature "reviewing a group" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit groups_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Groups"
-      end
-
-      expect(current_path).to eq groups_path
-
       within(".pageContent") do
         click_link "Review Group"
       end

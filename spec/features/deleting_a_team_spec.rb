@@ -7,16 +7,10 @@ feature "deleting a team" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit teams_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Section"
-      end
-
-      expect(current_path).to eq teams_path
-
       within(".pageContent") do
         click_link "Delete"
       end
