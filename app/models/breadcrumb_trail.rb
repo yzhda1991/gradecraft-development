@@ -472,7 +472,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_importers_users
     users_importers_index
-    breadcrumb('#{@provider_name.capitalize} Users')
+    breadcrumb("#{objects[:provider_name].capitalize} Users")
   end
 
   def users_importers_user_import_results
