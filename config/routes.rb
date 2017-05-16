@@ -114,7 +114,6 @@ Rails.application.routes.draw do
 
     resource :rubrics, except: [:edit, :index, :new] do
       get :design, on: :collection
-      get :designed, on: :collection
       get :index_for_copy, on: :collection
       post :copy, on: :collection
       get :export, on: :collection

@@ -13,13 +13,6 @@ class RubricsController < ApplicationController
     respond_with @rubric
   end
 
-  def designed
-    @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = @assignment.fetch_or_create_rubric
-    @course_badge_count = @assignment.course.badges.visible.count
-    respond_with @rubric
-  end
-
   def create
     @rubric = Rubric.create params[:rubric]
     respond_with @rubric
