@@ -533,7 +533,7 @@ GEM
     resque-throttler (0.1.5)
       resque (~> 1.25)
     retriable (3.0.1)
-    rollbar (2.12.0)
+    rollbar (2.14.1)
       multi_json
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
