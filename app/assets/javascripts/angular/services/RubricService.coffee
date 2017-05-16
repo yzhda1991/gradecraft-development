@@ -8,7 +8,7 @@
   rubric = {}
   criteria = []
   levels = []
-  full_points = 0
+  _fullPoints = 0
 
   _editingBadgesId = null
 
@@ -19,11 +19,21 @@
           GradeCraftAPI.loadItem(rubric, "rubrics", response.data)
           GradeCraftAPI.loadFromIncluded(criteria, "criteria", response.data)
           GradeCraftAPI.loadFromIncluded(levels, "levels", response.data)
-          full_points = response.data.meta.full_points
+          _fullPoints = response.data.meta.full_points
           GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response.data)
     )
+
+  fullPoints = ()->
+    _fullPoints
+
+  pointsAssigned = ()->
+    # use sumBy if lodash version > 4.0
+    x = _.map(criteria, (criterion)->
+      criterion.max_points
+    )
+    _.sum(x)
 
 #----------- NEW CRITERIA -----------------------------------------------------#
 
@@ -295,8 +305,13 @@
 
   return {
     getRubric: getRubric
-    criterionLevels: criterionLevels
+    rubric: rubric
+    criteria: criteria
     levels: levels
+    fullPoints: fullPoints
+
+    pointsAssigned: pointsAssigned
+    criterionLevels: criterionLevels
 
     openNewCriterion: openNewCriterion
     saveNewCriterion: saveNewCriterion
@@ -314,10 +329,6 @@
 
     addLevelBadge: addLevelBadge
     deleteLevelBadge: deleteLevelBadge
-
-    rubric: rubric
-    criteria: criteria
-    full_points: full_points
     badgesForLevel: badgesForLevel
 
     editBadgesForLevel: editBadgesForLevel
