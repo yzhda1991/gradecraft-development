@@ -25,7 +25,6 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
-
 #----------- NEW CRITERIA -----------------------------------------------------#
 
 # New Criteria are not saved until they are valid.
@@ -66,6 +65,10 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  removeNewCriterion = ()->
+    updatedCriteria = _.reject(criteria, { new_criterion: true })
+    angular.copy(updatedCriteria, criteria)
+
 #----------- EXISTING CRITERIA ------------------------------------------------#
 
   deleteCriterion = (criterion)->
@@ -99,7 +102,6 @@
     DebounceQueue.addEvent(
       "criteria", criterion.id, _updateCriterion, [criterion]
     )
-
 
 #----------- NEW LEVELS -------------------------------------------------------#
 
@@ -145,9 +147,7 @@
     updatedLevels = _.reject(levels, {new_level: true, criterion_id: newLevel.criterion_id})
     angular.copy(updatedLevels, levels)
 
-
 #----------- EXISTING LEVELS --------------------------------------------------#
-
 
   criterionLevels = (criterion)->
     _.filter(levels, {criterion_id: criterion.id})
@@ -185,8 +185,7 @@
           GradeCraftAPI.logResponse(response)
       )
 
-
-#----------- LEVELS BADGES -------------------------------------------------------#
+#----------- LEVELS BADGES ----------------------------------------------------#
 
   addLevelBadge = (level, badgeId)->
     $http.post("/api/level_badges", {level_id: level.id, badge_id: badgeId}).then(
@@ -240,6 +239,8 @@
 
   closeBadgesForLevel = ()->
     _editingBadgesId = null
+
+#----------- EXPECTATIONS -----------------------------------------------------#
 
   _refreshExpectations = (level,data)->
     updatedCriteria = _.map(criteria, (criterion)->
@@ -299,6 +300,7 @@
 
     openNewCriterion: openNewCriterion
     saveNewCriterion: saveNewCriterion
+    removeNewCriterion: removeNewCriterion
 
     queueUpdateCriterion: queueUpdateCriterion
     deleteCriterion: deleteCriterion

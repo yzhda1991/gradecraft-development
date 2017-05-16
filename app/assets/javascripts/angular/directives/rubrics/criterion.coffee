@@ -17,12 +17,17 @@
 
 
       scope.deleteCriterion = ()->
-        RubricService.deleteCriterion(@criterion)
+        if scope.criterionIsSaved()
+          RubricService.deleteCriterion(@criterion)
+        else
+          RubricService.removeNewCriterion()
+
+
 
       #--------------------- NEW LEVELS ---------------------------------------#
 
       scope.criterionIsSaved = ()->
-        @criterion.id != undefined
+        !@criterion.new_criterion
 
       scope.requirements = ()->
         reqs = []
