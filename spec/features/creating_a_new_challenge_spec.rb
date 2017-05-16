@@ -6,14 +6,10 @@ feature "creating a new challenge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit challenges_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Section Challenges"
-      end
-
       within(".context_menu") do
         click_link "New Section Challenge"
       end

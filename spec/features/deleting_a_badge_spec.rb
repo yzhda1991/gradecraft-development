@@ -7,16 +7,10 @@ feature "deleting a badge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit badges_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Badges"
-      end
-
-      expect(current_path).to eq badges_path
-
       within(".pageContent") do
         click_link "Delete"
       end

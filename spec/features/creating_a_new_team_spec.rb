@@ -6,14 +6,10 @@ feature "creating a new team" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit teams_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Sections"
-      end
-
       within(".context_menu") do
         click_link "New Section"
       end
@@ -24,7 +20,7 @@ feature "creating a new team" do
         fill_in "Name", with: "New Section Name"
         click_button "Create Section"
       end
-      
+
       expect(current_path).to eq team_path(Team.last)
       expect(page).to have_content("New Section Name")
     end
