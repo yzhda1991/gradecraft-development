@@ -7,7 +7,7 @@ angular.module('froala', []).
     heightMin: 200,
     toolbarButtons: [
       'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-      'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
+      'sep', 'blockStyle', 'insertTable', 'formatOL', 'formatUL','align',
       'outdent', 'indent', 'insertLink', 'undo', 'redo',
       'clearFormatting', 'selectAll', 'html', 'insertVideo'
     ],
