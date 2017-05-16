@@ -6,21 +6,13 @@ feature "editing a group" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit groups_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Groups"
-      end
-
-      expect(current_path).to eq groups_path
-
       within(".pageContent") do
         click_link "Edit Group"
       end
-
-      expect(current_path).to eq edit_group_path(group)
 
       within(".pageContent") do
         fill_in "Name", with: "Less Excited Group Name"

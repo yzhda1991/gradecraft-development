@@ -6,17 +6,12 @@ feature "downloading assignment type summary file" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit downloads_path
     end
 
     scenario "successfully" do
 
       @assignment_type = create(:assignment_type, course: course)
-
-      within(".sidebar-container") do
-        click_link "Course Data Exports"
-      end
-
       within(".pageContent") do
         click_link "Assignment Type Summaries"
       end

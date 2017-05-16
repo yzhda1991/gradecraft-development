@@ -5,14 +5,10 @@ feature "creating a new announcement" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit announcements_path
     end
 
     scenario "unsuccessfully with just a title" do
-      within(".sidebar-container") do
-        click_link "Announcements"
-      end
-
       within(".context_menu") do
         click_link "New Announcement"
       end

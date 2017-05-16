@@ -7,16 +7,10 @@ feature "deleting an event" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit events_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Calendar Events"
-      end
-
-      expect(current_path).to eq events_path
-
       within(".pageContent") do
         click_link "Delete"
       end

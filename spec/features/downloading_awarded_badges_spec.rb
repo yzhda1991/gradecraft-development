@@ -7,15 +7,10 @@ feature "downloading awarded badges file" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit downloads_path
     end
 
     scenario "successfully" do
-
-      within(".sidebar-container") do
-        click_link "Course Data Exports"
-      end
-
       within(".pageContent") do
         click_link "Awarded Badges"
       end

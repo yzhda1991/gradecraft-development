@@ -6,14 +6,10 @@ feature "creating a new event" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit events_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Calendar Events"
-      end
-
       within(".context_menu") do
         click_link "New Event"
       end

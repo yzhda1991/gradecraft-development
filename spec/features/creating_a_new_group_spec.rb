@@ -11,16 +11,10 @@ feature "creating a new group" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit groups_path
     end
 
     scenario "unsuccessfully without group members" do
-      within(".sidebar-container") do
-        click_link "Groups"
-      end
-
-      expect(current_path).to eq groups_path
-
       within(".context_menu") do
         click_link "New Group"
       end
@@ -37,12 +31,6 @@ feature "creating a new group" do
     end
 
     scenario "unsuccessfully without an assignment" do
-      within(".sidebar-container") do
-        click_link "Groups"
-      end
-
-      expect(current_path).to eq groups_path
-
       within(".context_menu") do
         click_link "New Group"
       end

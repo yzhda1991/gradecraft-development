@@ -7,20 +7,10 @@ feature "creating a new assignment" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit new_assignment_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Assignments"
-      end
-
-      within(".assignments") do
-        click_link "New Assignment"
-      end
-
-      expect(current_path).to eq new_assignment_path
-
       within(".pageContent") do
         select "Assignment Type Name", from: "assignment_assignment_type_id"
         fill_in "Name", with: "New Assignment Name"

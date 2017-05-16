@@ -6,14 +6,10 @@ feature "creating a new badge" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit badges_path
     end
 
     scenario "successfully" do
-      within(".sidebar-container") do
-        click_link "Badges"
-      end
-
       within(".context_menu") do
         click_link "New Badge"
       end

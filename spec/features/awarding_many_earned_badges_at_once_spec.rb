@@ -7,19 +7,13 @@ feature "awarding many earned badges at once" do
 
     before(:each) do
       login_as professor
-      visit dashboard_path
+      visit badges_path
     end
 
     context "with an active course" do
       let(:course) { build :course, has_badges: true, status: true }
 
       scenario "is successful" do
-        within(".sidebar-container") do
-          click_link "Badges"
-        end
-
-        expect(current_path).to eq badges_path
-
         within(".pageContent") do
           click_link "Quick Award"
         end
@@ -39,11 +33,6 @@ feature "awarding many earned badges at once" do
       let(:course) { build :course, has_badges: true, status: false }
 
       scenario "is unsuccessful" do
-        within(".sidebar-container") do
-          click_link "Badges"
-        end
-
-        expect(current_path).to eq badges_path
         expect(page).to_not have_selector(:link_or_button, "Quick Award")
       end
     end
