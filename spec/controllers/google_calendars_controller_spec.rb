@@ -39,7 +39,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
       it "redirects to events path with a successful notice when attempting to add a standard event" do
         post :add_to_google_calendar, params: { class: "event", id: standard_event.id }
 
-        expect(response).to redirect_to events_path
+        expect(response).to redirect_to event_path(standard_event)
         expect(flash[:notice]).to eq("Event " + standard_event.name + " successfully added to your Google Calendar")
       end
 
@@ -47,7 +47,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
       it "redirects to events path with an alert notice when attempting to add an event with no due date" do
         post :add_to_google_calendar, params: { class: "event", id: no_end_event.id }
 
-        expect(response).to redirect_to events_path
+        expect(response).to redirect_to event_path(no_end_event)
         expect(flash[:alert]).to eq("Google Calendar requires event have at least END time!")
       end
 
@@ -63,7 +63,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
 
         post :add_to_google_calendar, params: { class: "event", id: standard_event.id }
 
-        expect(response).to redirect_to events_path
+        expect(response).to redirect_to event_path(standard_event)
         expect(flash[:alert]).to eq("Google Calendar encountered an Error. Your event was NOT copied to your Google calendar.")
       end
     end
@@ -92,7 +92,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
       it "redirects to assignments path with a successful notice when attempting to add a standard assignment" do
         post :add_to_google_calendar, params: { class: "assignment", id: assignment.id }
 
-        expect(response).to redirect_to assignments_path
+        expect(response).to redirect_to assignment_path(assignment)
         expect(flash[:notice]).to eq("Assignment " + assignment.name + " successfully added to your Google Calendar")
       end
 
@@ -100,7 +100,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
       it "redirects to assignments path with a successful notice when attempting to add an assignment with no open date, generates open date to be 30 minutes prior to due date" do
         post :add_to_google_calendar, params: { class: "assignment", id: no_start_assignment.id}
 
-        expect(response).to redirect_to assignments_path
+        expect(response).to redirect_to assignment_path(no_start_assignment)
         expect(flash[:notice]).to eq("Assignment " + no_start_assignment.name + " successfully added to your Google Calendar")
       end
 
@@ -108,7 +108,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
       it "redirects to assignments path with an alert notice when attempting to add an event with no due date" do
         post :add_to_google_calendar, params: { class: "assignment", id: no_end_assignment.id}
 
-        expect(response).to redirect_to assignments_path
+        expect(response).to redirect_to assignment_path(no_end_assignment)
         expect(flash[:alert]).to eq("Google Calendar requires assignment have at least END time!")
       end
 
@@ -124,7 +124,7 @@ describe GoogleCalendarsController, type:[:disable_external_api, :controller] do
 
         post :add_to_google_calendar, params: { class: "assignment", id: assignment.id}
 
-        expect(response).to redirect_to assignments_path
+        expect(response).to redirect_to assignment_path(assignment)
         expect(flash[:alert]).to eq("Google Calendar encountered an Error. Your assignment was NOT copied to your Google calendar.")
       end
     end

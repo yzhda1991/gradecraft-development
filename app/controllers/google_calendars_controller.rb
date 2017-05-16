@@ -21,7 +21,7 @@ class GoogleCalendarsController < ApplicationController
     google_authorization = get_google_authorization(current_user)
     item = get_event_or_assignment(current_course, params[:class], params[:id])
     if item.due_at.nil?
-      redirect_to get_path(params[:class]), alert: "Google Calendar requires " + params[:class] + " have at least END time!" and return
+      redirect_to item, alert: "Google Calendar requires " + params[:class] + " have at least END time!" and return
     end
     begin
       google_event = create_google_event(item)
