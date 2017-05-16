@@ -32,11 +32,16 @@ $( "#tabs" ).tabs({
   inlineMode: false,
   heightMin: 200,
   toolbarButtons: [
-    'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-    'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
-    'outdent', 'indent', 'insertLink', 'undo', 'redo',
-    'clearFormatting', 'selectAll', 'html', 'insertVideo'
-  ]
+    'bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align',
+    'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html'
+  ],
+  toolbarButtonsSM: [
+    'bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align',
+    'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html'
+  ],
+  toolbarButtonsXS: ['bold', 'italic', 'underline'],
+  toolbarButtonsMD: ['bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align',
+  'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html']
 })
 
 // handle 'select all' buttons, used on release grade forms
