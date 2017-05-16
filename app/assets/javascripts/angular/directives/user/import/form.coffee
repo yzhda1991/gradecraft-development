@@ -12,12 +12,6 @@
     vm.termForUserExists = (value) ->
       if value is true then "Yes" else "No"
 
-    vm.selectAllUsers = () ->
-      UserImporterService.setUsersSelected(true)
-
-    vm.deselectAllUsers = () ->
-      UserImporterService.setUsersSelected(false)
-
     vm.hasSelectedGrades = () ->
       _.any(UserImporterService.users, (user) ->
         user.selected_for_import is true

@@ -14,10 +14,25 @@
     )
 
   # Sets value to dictate whether all users should be selected/deselected for import
-  setUsersSelected = (selectedValue) ->
-    _.each(users, (user) ->
+  setUsersSelected = (selectedValue, subset = null) ->
+    _.each(subset || users, (user) ->
       user.selected_for_import = selectedValue
       true  # if selected is false, this loop is broken without this line
+    )
+
+  unchangedUsers = () ->
+    _.filter(users, (user) ->
+      user.user_exists is true and user.role_changed is false
+    )
+
+  changedUsers = () ->
+    _.filter(users, (user) ->
+      user.user_exists is true and user.role_changed is true
+    )
+
+  newUsers = () ->
+    _.filter(users, (user) ->
+      user.user_exists is false
     )
 
   checkHasError = () ->
@@ -27,6 +42,9 @@
     users: users
     hasError: hasError
     getUsers: getUsers
+    newUsers: newUsers
+    changedUsers: changedUsers
+    unchangedUsers: unchangedUsers
     setUsersSelected: setUsersSelected
     checkHasError: checkHasError
   }

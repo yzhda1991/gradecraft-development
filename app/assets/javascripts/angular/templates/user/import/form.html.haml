@@ -3,7 +3,7 @@
 %loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
 
 %loaded{"ng-if"=>"!vm.loading"}
-  %without_users{"ng-if"=>"users.length < 1"}
+  %without-users{"ng-if"=>"users.length < 1"}
     %p There are no users to import for this course
 
   %with_users{"ng-if"=>"users.length > 0"}
@@ -12,47 +12,9 @@
       %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
       %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
 
-      %table.no-table-header
-        %thead
-          %tr
-            %th{"scope"=>"col"} Name
-            %th{"scope"=>"col"} Email
-            %th{"scope"=>"col"} {{vm.provider}} Roles (Enrollment State)
-            %th{"scope"=>"col"} GradeCraft Role
-            %th{"scope"=>"col"} User Exists?
-            %th
-              %button.button.select-all{"role"=>"button",
-                                        "type"=>"button",
-                                        "ng-click"=>"vm.selectAllUsers()"}= "Check"
-              %button.button.select-none{"role"=>"button",
-                                         "type"=>"button",
-                                         "ng-click"=>"vm.deselectAllUsers()"}= "Uncheck"
-        %tbody
-          %tr{"ng-repeat"=>"user in users"}
-            %td {{user.name}}
-            %td {{user.email}}
-            %td
-              %ul
-                %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
-            %td
-              %span.capitalize {{user.gradecraft_role}}
-              %span.has-tooltip{"ng-style"=>"{'visibility': user.role_changed ? 'visible' : 'hidden'}"}
-                %i.fa.fa-info-circle
-                .display-on-hover.hover-style
-                  The user's current role in Gradecraft will be overridden with the new role returned by Canvas if
-                  selected for import.
-            %td
-              {{vm.termForUserExists(user.user_exists)}}
-            %td.center
-              %input{"type"=>"checkbox",
-                     "name"=>"user_ids[]",
-                     "value"=>"{{user.id}}",
-                     "ng-model"=>"user.selected_for_import"}
-                %span.has-tooltip{"ng-style"=>"{'visibility': user.user_exists ? 'visible' : 'hidden'}"}
-                  %i.fa.fa-info-circle
-                  .display-on-hover.hover-style
-                    Importing this user will overwrite the existing data in GradeCraft with the data from
-                    %span.capitalize {{vm.provider}}
+      %new-users
+      %users-with-changes
+      %users-without-changes
 
       .submit-buttons
         .right
