@@ -31,9 +31,9 @@ class GoogleCalendarsController < ApplicationController
       calendar.authorization = secrets.to_authorization
       calendar.authorization.refresh!
       result = calendar.insert_event('primary', google_event)
-      redirect_to get_path(params[:class]), notice: params[:class].capitalize + " " + item.name + " successfully added to your Google Calendar"
+      redirect_to item, notice: params[:class].capitalize + " " + item.name + " successfully added to your Google Calendar"
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
-      redirect_to get_path(params[:class]), alert: "Google Calendar encountered an Error. Your " + params[:class] + " was NOT copied to your Google calendar."
+      redirect_to item, alert: "Google Calendar encountered an Error. Your " + params[:class] + " was NOT copied to your Google calendar."
     end
   end
 
