@@ -305,6 +305,13 @@ $not-saved-color: $color-yellow-1
 .criterion.ng-valid .messages
   color:  $color-white
 
+.criterion
+  input.ng-pristine.ng-invalid
+    background: $color-white
+
+  input.ng-invalid
+    background: $color-red-invalid
+
 button.delete
   font-weight: bold
   background-color: $color-red-1
@@ -393,7 +400,7 @@ button.meets-expectations-status.no-expectation
     background: $color-white
 
   input.ng-invalid
-    background: $color-red-1
+    background: $color-red-invalid
     color: $color-white
 
 ul.level-requirements

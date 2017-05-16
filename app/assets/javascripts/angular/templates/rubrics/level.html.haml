@@ -1,8 +1,8 @@
-.level-items(name="levelForm" ng-form ng-submit="queueUpdateLevel()" ng-class="{nocredit: level.noCredit, 'level-meets-expectations': satifiesExpectations()}")
+.level-items(ng-class="{nocredit: level.noCredit, 'level-meets-expectations': satifiesExpectations()}")
 
   %label
     %span.sr-only Level Name
-    %input(type="text" ng-model="level.name" placeholder="Level Name" required ng-Maxlength=30 ng-blur="queueUpdateLevel()" maxlength=30)
+    %input(type="text" ng-model="level.name" placeholder="Level Name" required ng-blur="queueUpdateLevel()")
 
   %label
     %span.sr-only Level Points

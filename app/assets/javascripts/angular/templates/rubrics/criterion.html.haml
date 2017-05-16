@@ -1,4 +1,4 @@
-.criterion(name="criterionForm" ng-class="{'criterion-not-saved': !criterionIsSaved()}")
+.criterion(ng-class="{'criterion-not-saved': !criterionIsSaved()}")
   %label
     %span.sr-only Criterion Name
     %input(type="text" ng-model="criterion.name" name="name" placeholder="Criterion Name" value="{{criterion.name}}"  required ng-blur="queueUpdateCriterion()" ng-Maxlength=30 maxlength=30)
