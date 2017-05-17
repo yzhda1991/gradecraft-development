@@ -1,0 +1,7 @@
+%section.form-section
+  %h2.form-title Course
+  .form-item
+    %select{"ng-model"=>"vm.currentCourseId", "ng-model-options"=>"{ getterSetter: true }", "ng-disabled"=>"vm.loading"}
+      %option{"value"=>""} - Select a {{vm.provider}} course -
+      %option{"ng-repeat"=>"course in vm.courses", "value"=>"{{course.id}}"}
+        {{course.name}}
