@@ -267,6 +267,13 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :users do
+    resources :importers, only: :index, param: :provider_id do
+      get "/course/:id", action: :users, as: :users
+      post "/course/:id/users/import", action: :users_import, as: :users_import
+    end
+  end
+
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
@@ -396,7 +403,12 @@ Rails.application.routes.draw do
       resources :badges, only: :index
     end
     resources :users, only: [] do
-      get :search, on: :collection
+      collection do
+        get :search
+        resources :importers, only: [], module: :users, param: :provider_id do
+          get "/course/:id/users", action: :index, as: :users
+        end
+      end
     end
   end
 

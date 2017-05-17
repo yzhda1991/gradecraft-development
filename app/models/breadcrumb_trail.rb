@@ -456,13 +456,28 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def users_import
-    students_index
-    breadcrumb('Import ' + objects[:course].student_term)
+    users_importers_index
+    breadcrumb('Import users')
   end
 
   def users_import_results
     students_index
     breadcrumb('Imported ' + objects[:course].student_term.pluralize)
+  end
+
+  def users_importers_index
+    users_index
+    breadcrumb('Users Import', users_importers_path)
+  end
+
+  def users_importers_users
+    users_importers_index
+    breadcrumb("#{objects[:provider_name].capitalize} Users")
+  end
+
+  def users_importers_user_import_results
+    users_importers_index
+    breadcrumb('Import Results')
   end
 
   def users_index

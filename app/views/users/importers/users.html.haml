@@ -1,0 +1,6 @@
+.pageContent{"ng-app"=>"gradecraft"}
+  = render partial: "layouts/alerts"
+  
+  %user-import-form{"provider"=>"#{@provider_name}",
+                     "course-id"=>"#{@course_id}",
+                     "authenticity-token"=>"#{form_authenticity_token}"}

@@ -1,4 +1,4 @@
-require_relative "../importers/student_importers/csv_student_importer"
+require_relative "../importers/user_importers/csv_student_importer"
 require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_or_updates_user"
 

@@ -75,4 +75,13 @@ describe ActiveLMS::Syllabus do
       subject.user(123)
     end
   end
+
+  describe "#users" do
+    subject { described_class.new :canvas, access_token }
+
+    it "delegates to the provider" do
+      expect(subject.provider).to receive(:users).with(123, true, {})
+      subject.users(123)
+    end
+  end
 end
