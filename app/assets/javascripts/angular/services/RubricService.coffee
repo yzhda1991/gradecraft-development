@@ -42,7 +42,7 @@
 
   openNewCriterion = ()->
     criteria.push({
-      new_criterion: true
+      newCriterion: true
       rubric_id: rubric.id
       name: "",
       max_points: null
@@ -56,19 +56,10 @@
     return true
 
   saveNewCriterion = (newCriterion)->
-    # TODO: verify this works:
-    return if newCriterion.is_saving
-
     return if !criterionIsValid(newCriterion)
-    newCriterion.is_saving = true
     $http.post("/api/criteria", newCriterion).then(
       (response)-> # success
-        updatedCriterion = _.map(criteria, (criterion)->
-          if(criterion.new_criterion == true)
-            criterion = response.data.data.attributes
-          return criterion
-        )
-        angular.copy(updatedCriterion, criteria)
+        angular.copy(response.data.data.attributes, newCriterion)
         GradeCraftAPI.loadFromIncluded(levels, "levels", response.data)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
@@ -76,7 +67,7 @@
     )
 
   removeNewCriterion = ()->
-    updatedCriteria = _.reject(criteria, { new_criterion: true })
+    updatedCriteria = _.reject(criteria, { newCriterion: true })
     angular.copy(updatedCriteria, criteria)
 
 #----------- EXISTING CRITERIA ------------------------------------------------#
@@ -91,18 +82,10 @@
           GradeCraftAPI.logResponse(response)
       )
 
-  _refreshCritera = (id, data)->
-    updatedCriteria = _.map(criteria, (criterion)->
-      if(criterion.id == id)
-        criterion = data
-      return criterion
-    )
-    criteria = updatedLevels
-
   _updateCriterion = (criterion)->
     $http.put("/api/criteria/#{criterion.id}", criterion).then(
       (response)-> # success
-        _refreshLevel(criterion.id, response.data.data.attributes)
+        criterion =  response.data.data.attributes
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
@@ -122,7 +105,7 @@
 
   openNewLevel = (criterion)->
     levels.push({
-      new_level: true,
+      newLevel: true,
       criterion_id: criterion.id,
       name: "",
       points: null
@@ -135,26 +118,17 @@
     return true
 
   saveNewLevel = (newLevel)->
-    # TODO: verify again this is on the level in array:
-    return if newLevel.is_saving
-
     return if !levelIsValid(newLevel)
-    newLevel.is_saving = true
     $http.post("/api/levels", newLevel).then(
       (response)-> # success
-        updatedLevels = _.map(levels, (level)->
-          if(level.criterion_id == newLevel.criterion_id && level.id == undefined)
-            level = response.data.data.attributes
-          return level
-        )
-        angular.copy(updatedLevels, levels)
+        angular.copy(response.data.data.attributes, newLevel)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)
     )
 
   removeNewLevel = (newLevel)->
-    updatedLevels = _.reject(levels, {new_level: true, criterion_id: newLevel.criterion_id})
+    updatedLevels = _.reject(levels, {newLevel: true, criterion_id: newLevel.criterion_id})
     angular.copy(updatedLevels, levels)
 
 #----------- EXISTING LEVELS --------------------------------------------------#
@@ -162,19 +136,10 @@
   criterionLevels = (criterion)->
     _.filter(levels, {criterion_id: criterion.id})
 
-  # Refresh the array of new levels with a successful response from the API
-  _refreshLevel = (id, data)->
-    updatedLevels = _.map(levels, (level)->
-      if(level.id == id)
-        level = data
-      return level
-    )
-    levels = updatedLevels
-
   _updateLevel = (level)->
     $http.put("/api/levels/#{level.id}", level).then(
       (response)-> # success
-        _refreshLevel(level.id, response.data.data.attributes)
+        angular.copy(response.data.data.attributes, level)
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)

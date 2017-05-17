@@ -58,7 +58,7 @@
       #--------------------- NEW LEVELS ---------------------------------------#
 
       scope.levelIsSaved = ()->
-        @level.id != undefined
+        !@level.newLevel
 
       scope.requirements = ()->
         reqs = []

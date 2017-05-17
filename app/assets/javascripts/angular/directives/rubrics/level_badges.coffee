@@ -15,7 +15,7 @@
       scope.badgesForLevel = ()->
         RubricService.badgesForLevel(@level)
 
-      # globally set this level as the one with an open badge edit modal
+      # set this level as the one with an open badge edit modal (per page)
       scope.editBadges = ()->
         RubricService.editBadgesForLevel(@level)
 
@@ -23,6 +23,7 @@
       scope.editingBadges = ()->
         RubricService.editingBadgesForLevel(@level)
 
+      # release this level as the one with an open badge edit modal (per page)
       scope.closeBadges = ()->
         RubricService.closeBadgesForLevel()
 

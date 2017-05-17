@@ -15,19 +15,16 @@
         else if scope.requirementsMet()
           RubricService.saveNewCriterion(@criterion)
 
-
       scope.deleteCriterion = ()->
         if scope.criterionIsSaved()
           RubricService.deleteCriterion(@criterion)
         else
           RubricService.removeNewCriterion()
 
-
-
       #--------------------- NEW LEVELS ---------------------------------------#
 
       scope.criterionIsSaved = ()->
-        !@criterion.new_criterion
+        !@criterion.newCriterion
 
       scope.requirements = ()->
         reqs = []
