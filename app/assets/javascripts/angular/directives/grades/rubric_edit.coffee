@@ -13,6 +13,9 @@
       scope.gradeForCriterion = (criterionId)->
         GradeService.findCriterionGrade(criterionId) || GradeService.addCriterionGrade(criterionId)
 
+      scope.criterionLevels = (criterion)->
+        RubricService.criterionLevels(criterion)
+
       scope.badgesForLevel = (level)->
         GradeService.criterionGrades
         RubricService.badgesForLevel(level)
