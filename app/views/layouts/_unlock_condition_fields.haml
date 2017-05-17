@@ -1,27 +1,70 @@
 .conditions
-  %h4 Requirement
   .assignment-or-badge
-    = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", "Course"], :label => "Type", include_blank: true
+    .form-item
+      = f.label :condition_type, "Requirement"
+      = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", "Earned Point Value"], :label => "Type", include_blank: true
+
   #assignment-types-list{:style => "display: none", class: "unlock-conditions-list"}
-    = f.input :condition_id, :collection => current_course.assignment_types.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment} Type"
-    = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => "State Achieved"
-    = f.input :condition_value, :label => "Amount", :required => true, :input_html => { min: '0' }
-    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
+    .form-flex-row
+      .form-item
+        = f.label :condition_id, "#{term_for :assignment} Type", :for => "assignment_type_selection"
+        = f.input :condition_id, :collection => current_course.assignment_types.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => false, input_html: { :id => "assignment_type_selection" }
+      .form-item
+        = f.label :condition_state, "State Achieved", :for => "at_state_achieved"
+        = f.input :condition_state, :collection => ["Assignments Completed", "Min Points"], :label => false, input_html: { :id => "at_state_achieved" }
+    .form-flex-row
+      .form-item
+        = f.label :condition_value, "Amount", :for => "at_amount"
+        = f.input :condition_value, :label => false, :required => true, :input_html => { min: '0', id: "at_amount"}
+      .form-item
+        = f.label :condition_date, "Completed by", :for => "at_completed_date"
+        = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", id: "at_completed_date" }, :label => false
+
   #assignments-list{:style => "display: none", class: "unlock-conditions-list"}
-    = f.input :condition_id, :collection => current_course.assignments.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
-    = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read", "Passed"], :label => "State Achieved"
-    = f.input :condition_value, :label => "Min Points"
-    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
+    .form-flex-row
+      .form-item
+        = f.label :condition_id, "#{term_for :assignment}", :for => "assignment_selection"
+        = f.input :condition_id, :collection => current_course.assignments.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => false, input_html: { :id => "assignment_selection" }
+      .form-item
+        = f.label :condition_state, "State Achieved", :for => "assignment_state_achieved"
+        = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read", "Passed"], :label => false, input_html: { :id => "assignment_state_achieved" }
+    .form-flex-row
+      .form-item
+        = f.label :condition_value, "Min Points", :for => "assignment_min_points"
+        = f.input :condition_value, :label => false, input_html: { :id => "assignment_min_points" }
+      .form-item
+        = f.label :condition_date, "Completed By", :for => "assignment_completed_date"
+        = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", id: "assignment_completed_date" }, :label => false
+
   #badges-list{:style => "display: none", class: "unlock-conditions-list"}
-    = f.input :condition_id, :collection => current_course.badges.order(:name).map { |l| [l.name, l.id] }, :include_blank => true, :label => "#{term_for :badge}"
-    = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
-    = f.input :condition_value, :label => "Number of Times Earned"
-    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
-  #courses-list{:style => "display: none", class: "unlock-conditions-list"}
-    = f.input :condition_id, :collection => [["#{current_course.name}", current_course.id]], label: "Course", include_blank: false
-    = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
-    = f.input :condition_value, :label => "Min Points"
-    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Done By"
+    .form-flex-row
+      .form-item
+        = f.label :condition_id, "#{term_for :badge}", :for => "badge_selection"
+        = f.input :condition_id, :collection => current_course.badges.order(:name).map { |l| [l.name, l.id] }, :include_blank => true, :label => false, input_html: { :id => "badge_selection" }
+      .form-item
+        = f.label :condition_state, "State Achieved", :for => "badge_state_achieved"
+        = f.input :condition_state, :collection => ["Earned"], :label => false, input_html: { :id => "badge_state_achieved" }
+    .form-flex-row
+      .form-item
+        = f.label :condition_value, "Number of Times Earned", :for => "badge_times_earned"
+        = f.input :condition_value, :label => false, input_html: { :id => "badge_times_earned" }
+      .form-item
+        = f.label :condition_date, "Completed By", :for => "badge_completed_date"
+        = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", id: "badge_completed_date" }, :label => false
+
+  #earned-point-values-list{:style => "display: none", class: "unlock-conditions-list"}
+    .form-item
+      = f.hidden_field :condition_id, :collection => [["#{current_course.name}", current_course.id]], label: "Course", include_blank: false
+    .form-item
+      = f.hidden_field :condition_state, :collection => ["Earned"], :label => "State Achieved", :selected => "Earned"
+    .form-flex-row
+      .form-item
+        = f.label :condition_value, "Min Points", :for => "course_min_points"
+        = f.input :condition_value, :label => false, input_html: { :id => "course_min_points" }
+      .form-item
+        = f.label :condition_date, "Completed By", :for => "course_completed_date"
+        = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", id: "course_completed_date" }, :label => false
+
   .right
     = f.hidden_field :_destroy, class: "destroy"
     %button.remove-unlock-condition.right Delete Condition
