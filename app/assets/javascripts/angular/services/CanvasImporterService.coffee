@@ -8,7 +8,7 @@
     if angular.isDefined(id) then (_currentCourseId = id) else _currentCourseId
 
   getCourses = (provider) ->
-    $http.get("/integrations/#{provider}/courses").then((response) ->
+    $http.get("/api/courses/importers/#{provider}/courses").then((response) ->
       GradeCraftAPI.loadMany(courses, response.data)
       GradeCraftAPI.logResponse(response)
     , (error) ->

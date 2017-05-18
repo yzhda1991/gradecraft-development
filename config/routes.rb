@@ -183,7 +183,7 @@ Rails.application.routes.draw do
   #8. Integrations
 
   resources :integrations, only: [:create, :index] do
-    resources :courses, only: [:create, :destroy, :index], module: :integrations
+    resources :courses, only: [:create, :destroy], module: :integrations
   end
 
   resource :google_calendar, only: [ ] do
@@ -361,6 +361,14 @@ Rails.application.routes.draw do
       namespace :grades do
         resources :importers, only: [], param: :provider_id do
           get "/course/:id", action: :show, as: :grades
+        end
+      end
+    end
+
+    resources :courses, only: [] do
+      collection do
+        resources :importers, only: [], module: :courses, param: :provider_id do
+          get "courses", action: :index
         end
       end
     end

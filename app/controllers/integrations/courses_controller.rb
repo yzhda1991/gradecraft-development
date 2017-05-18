@@ -13,16 +13,6 @@ class Integrations::CoursesController < ApplicationController
   before_action :require_authorization
   before_action :use_current_course
 
-  def index
-    authorize! :read, @course
-
-    @provider_name = params[:integration_id]
-    @courses = syllabus(@provider_name).courses do
-      redirect_to integrations_path,
-        alert: "There was an issue trying to retrieve the courses from #{@provider_name.capitalize}." and return
-    end
-  end
-
   def create
     authorize! :update, @course
 
@@ -46,13 +36,5 @@ class Integrations::CoursesController < ApplicationController
                        provider_resource_id: params[:id]).destroy_all
 
     redirect_to integrations_path, notice: "The #{provider_name.capitalize} course has been unlinked from #{@course.name}"
-  end
-
-  private
-
-  def syllabus(provider)
-    @syllabus ||= ActiveLMS::Syllabus.new \
-      provider,
-      authorization(provider).access_token
   end
 end
