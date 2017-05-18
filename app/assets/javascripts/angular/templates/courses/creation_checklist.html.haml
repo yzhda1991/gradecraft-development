@@ -1,2 +1,15 @@
 .course-creation-checklist
-  .title Course Creation
+  .course-creation-checklist-title Course Creation
+
+  .course-creation-progress-bar
+
+  %ul
+    %li.course-creation-checklist-item(ng-repeat="item in checklistItems")
+      %input(id="{{inputId(item)}}"
+        type="checkbox"
+        ng-checked="checked"
+        ng-click="toggleChecklistItem(item)"
+      )
+      .title {{ item }}
+
+

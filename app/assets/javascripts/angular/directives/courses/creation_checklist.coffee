@@ -9,6 +9,17 @@
     }
     templateUrl: 'courses/creation_checklist.html',
     link: (scope, el, attr)->
-      console.log("sam i am");
+      scope.checklistItems = [
+        "Course Settings",
+        "Attendance",
+        "Assignments",
+        "Calendar Events",
+        "Set Up Teaching Term",
+        "Import Roster"
+      ]
+
+      scope.toggleChecklistItem = (item)->
+        debugger
+        console.log(item)
   }
 ]
