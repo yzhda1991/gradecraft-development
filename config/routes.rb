@@ -363,6 +363,12 @@ Rails.application.routes.draw do
           get "/course/:id", action: :show, as: :grades
         end
       end
+
+      collection do
+        resources :importers, only: [], param: :provider_id, module: :assignments do
+          get "/course/:id/assignments", action: :index, as: :assignments
+        end
+      end
     end
 
     resources :courses, only: [] do

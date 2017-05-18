@@ -1,4 +1,4 @@
-class API::Courses::ImportersController < ApplicationController
+class API::Assignments::ImportersController < ApplicationController
   include OAuthProvider
   include CanvasAuthorization
 
@@ -8,16 +8,14 @@ class API::Courses::ImportersController < ApplicationController
   before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization
 
-  # Retrieves all courses for the current user for a given provider
-  # GET /api/courses/importers/:importer_provider_id/courses
+  # Retrieves all assignments for a given provider course
+  # GET /api/assignments/importers/:importer_provider_id/course/:id/assignments
   def index
     @provider_name = params[:importer_provider_id]
-    @courses = syllabus(@provider_name).courses
+    @assignments = syllabus(@provider_name).assignments(params[:id])
 
-    render "api/integrations/courses/index", status: 200
+    render "api/importers/grades/assignments", status: 200
   end
-
-  private
 
   def syllabus(provider)
     @syllabus ||= ActiveLMS::Syllabus.new \

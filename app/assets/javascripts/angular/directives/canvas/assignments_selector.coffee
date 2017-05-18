@@ -15,7 +15,7 @@
 
     vm.getAssignments = () ->
       vm.loading = true
-      CanvasImporterService.getAssignments(vm.assignmentId, vm.provider).finally(() ->
+      CanvasImporterService.getAssignments(vm.provider).finally(() ->
         vm.loading = false
       )
 
@@ -31,7 +31,6 @@
   {
     scope:
       provider: '@'
-      assignmentId: '@'
     bindToController: true
     controller: CanvasAssignmentsSelectorCtrl
     controllerAs: 'vm'

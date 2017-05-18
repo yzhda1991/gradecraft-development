@@ -15,11 +15,10 @@
       GradeCraftAPI.logResponse(error)
     )
 
-  getAssignments = (assignmentId, provider) ->
-    # TODO: refactor out assignmentId in API route
+  getAssignments = (provider) ->
     _clearAssignments()
     return unless _currentCourseId
-    $http.get("/assignments/#{assignmentId}/grades/importers/#{provider}/courses/#{_currentCourseId}/assignments").then((response) ->
+    $http.get("/api/assignments/importers/#{provider}/course/#{_currentCourseId}/assignments").then((response) ->
       GradeCraftAPI.loadMany(assignments, response.data)
       GradeCraftAPI.logResponse(response)
     , (error) ->
