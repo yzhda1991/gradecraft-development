@@ -16,7 +16,7 @@ class Assignment < ActiveRecord::Base
 
   multiple_files :assignment_files
   # Preventing malicious content from being submitted
-  clean_html :description
+  # clean_html :description
   clean_html :purpose
 
   # For instances where the assignment needs its own unique score levels
