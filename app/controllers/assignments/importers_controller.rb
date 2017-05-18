@@ -19,9 +19,10 @@ class Assignments::ImportersController < ApplicationController
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments
     @provider_name = params[:importer_provider_id]
-    @course = syllabus.course(params[:id])
+    @lms_course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
     @assignment_types = current_course.assignment_types.ordered
+    @course = current_course
   end
 
   # POST /assignments/importers/:importer_provider_id/courses/:id/assignments

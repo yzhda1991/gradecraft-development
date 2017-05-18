@@ -17,8 +17,9 @@ class Grades::ImportersController < ApplicationController
   def assignments
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @course = syllabus.course(params[:id])
+    @lms_course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
+    @course = current_course
   end
 
   # GET /assignments/:assignment_id/grades/download
