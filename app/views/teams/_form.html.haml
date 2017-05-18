@@ -8,6 +8,10 @@
       %label Banner
       = f.file_field :banner
       .form-hint= "Upload a banner for this #{term_for :team}"
+      - if @team.banner.present? && @team.errors[:banner].empty?
+        %img{src: @team.banner, width: 40, alt: "Media Image" }
+        = f.check_box :remove_banner
+        Remove Image
 
     .form-item
       = f.association :students, :collection => current_course.students, as: :select
