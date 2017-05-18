@@ -55,7 +55,7 @@ module LinkHelper
   class InternalLinkScrubber < Rails::Html::PermitScrubber
     def scrub(node)
       return super unless (node.type == Nokogiri::XML::Node::ELEMENT_NODE) &&
-        (node.name == "a")
+        (node.name == "a") || node.name == "iframe"
       node.set_attribute("target", "_blank") if UriInspector.new(node["href"]).external?
     end
   end

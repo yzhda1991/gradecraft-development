@@ -5,17 +5,15 @@ angular.module('froala', []).
 		key: '6Ud1QBRVCDLPAZMBQ==',
     inlineMode: false,
     heightMin: 200,
-    toolbarButtons: [
-      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
-      'sep', 'blockStyle', 'emoticons', 'insertTable', 'formatOL', 'formatUL','align',
-      'outdent', 'indent', 'insertLink', 'undo', 'redo',
-      'clearFormatting', 'selectAll', 'html', 'insertVideo'
-    ],
+    toolbarButtons: [ 'bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align', 'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html' ],
+		toolbarButtonsSM: ['bold', 'italic', 'underline', 'paragraphFormat'],
+	  toolbarButtonsXS: ['bold', 'italic', 'underline'],
+	  toolbarButtonsMD: ['bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align', 'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html']
     placeholderText: 'Enter text here...'
 	}).
 	directive('froala', ['froalaConfig', '$timeout', function(froalaConfig, $timeout) {
 		froalaConfig = froalaConfig || {};
-		var froalaEvents = ['afterPaste','afterRemoveImage','afterSave','afterUploadPastedImage','align','backColor','badLink','beforeDeleteImage','beforeFileUpload','beforeImageUpload','beforePaste','beforeRemoveImage','beforeSave','blur','bold','cellDeleted','cellHorizontalSplit','cellInsertedAfter','cellInsertedBefore','cellVerticalSplit','cellsMerged','columnDeleted','columnInsertedAfter','columnInsertedBefore','contentChanged','fileError','fileUploaded','focus','fontFamily','fontSize','foreColor','formatBlock','htmlHide','htmlShow','imageAltSet','imageDeleteError','imageDeleteSuccess','imageError','imageFloatedLeft','imageFloatedNone','imageFloatedRight','imageInserted','imageLinkInserted','imageLinkRemoved','imageLoaded','imageReplaced','imagesLoadError','imagesLoaded','indent','initialized','italic','linkInserted','linkRemoved','onPaste','orderedListInserted','outdent','redo','rowDeleted','rowInsertedAbove','rowInsertedBelow','saveError','selectAll','strikeThrough','subscript','superscript','tableDeleted','tableInserted','underline','undo','unorderedListInserted','videoError','videoFloatedLeft','videoFloatedNone','videoFloatedRight','videoInserted','videoRemoved'];
+		var froalaEvents = ['afterPaste','afterRemoveImage','afterSave','afterUploadPastedImage','align','badLink','beforeDeleteImage','beforeImageUpload','beforePaste','beforeRemoveImage','beforeSave','blur','bold','cellDeleted','cellHorizontalSplit','cellInsertedAfter','cellInsertedBefore','cellVerticalSplit','cellsMerged','columnDeleted','columnInsertedAfter','columnInsertedBefore','contentChanged','fileError','focus','formatBlock','htmlHide','htmlShow','imageAltSet','imageDeleteError','imageDeleteSuccess','imageError','imageFloatedLeft','imageFloatedNone','imageFloatedRight','imageInserted','imageLinkInserted','imageLinkRemoved','imageLoaded','imageReplaced','imagesLoadError','imagesLoaded','indent','initialized','italic','linkInserted','linkRemoved','onPaste','orderedListInserted','outdent','redo','rowDeleted','rowInsertedAbove','rowInsertedBelow','saveError','selectAll','strikeThrough','subscript','superscript','tableDeleted','tableInserted','underline','undo','unorderedListInserted','videoError','videoFloatedLeft','videoFloatedNone','videoFloatedRight','videoInserted','videoRemoved'];
 		var generatedIds = 0;
 		var slugToEventName = function(slug){
 			if(slug.search('froalaEvent') >= 0){

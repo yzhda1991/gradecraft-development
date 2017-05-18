@@ -149,7 +149,7 @@ class AssignmentsController < ApplicationController
       :mass_grade_type, :name, :open_at, :pass_fail, :max_submissions,
       :full_points, :purpose, :release_necessary, :hide_analytics,
       :required, :resubmissions_allowed, :show_description_when_locked,
-      :show_purpose_when_locked, :show_name_when_locked, :media,
+      :show_purpose_when_locked, :show_name_when_locked, :media, :remove_media,
       :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
       :visible, :visible_when_locked, :min_group_size, :max_group_size,
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
