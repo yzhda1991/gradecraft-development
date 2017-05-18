@@ -40,9 +40,6 @@
 
       #--------------------- CRUD ---------------------------------------------#
 
-      scope.toggleMeetsExpectations = ()->
-        console.log("toggling meets expectations");
-
       scope.queueUpdateLevel = ()->
         if scope.levelIsSaved()
           RubricService.queueUpdateLevel(@level)

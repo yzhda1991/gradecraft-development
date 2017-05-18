@@ -145,7 +145,6 @@ Rails.application.routes.draw do
 
   resources :levels, only: [:create, :destroy, :update]
 
-  # remove!
   resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types

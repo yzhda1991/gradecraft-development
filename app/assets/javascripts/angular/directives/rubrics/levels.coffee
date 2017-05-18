@@ -13,10 +13,10 @@
         RubricService.criterionLevels(@criterion)
 
       scope.levelIsSaved = (level)->
-        level.id != undefined
+        !@level.newLevel
 
       scope.criterionIsSaved = ()->
-        @criterion.id != undefined
+        !@criterion.newCriterion
 
       scope.meetsExpectationSet = ()->
         RubricService.meetsExpectationSet(@criterion)
