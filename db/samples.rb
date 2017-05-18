@@ -576,8 +576,31 @@ PaperTrail.whodunnit = nil
       if config[:unlock_condition]
         add_unlock_conditions(assignment, config, course_config)
       end
+
+# --------------------------- Create Resubmissions! --------------------------#
+
+      if config[:attributes][:resubmissions_allowed]
+        puts "Generating Resubmissions"
+        @students.each do |student|
+          # Only occurs in course GC105 course_id = 5 because it is the only one with assignments open
+          if assignment.resubmissions_allowed? && assignment.open? && Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).present?
+            PaperTrail.whodunnit = student.id
+            submission = student.submissions.create! do |s|
+              s.assignment = assignment
+              s.text_comment = "Wingardium Leviosa"
+              s.link = "http://www.facebook.com"
+              s.submitted_at = DateTime.now
+            end
+            submission.update_attributes(link: "http://twitch.tv")
+          end
+          print "."
+        end
+        print "\n"
+        puts_success :assignment, assignment_name,
+          :submissions_created if course_name == @courses.keys[-1]
+      end
     end # tap course
-  end
+  end #@courses
   puts_success :assignment, assignment_name, :assignment_created
 end
 
@@ -649,7 +672,7 @@ end
   puts_success :event, event_name, :event_created
 end
 
-# ---------------------------- Create Announcements! ----------------------------#
+# ---------------------------- Create Announcements! --------------------------#
 
 @announcements.each do |announcement_title,config|
   @courses.each do |course_name,course_config|
