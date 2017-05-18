@@ -8,12 +8,12 @@ module Services
 
     def self.update(criterion)
       with(
-          criterion: criterion
-        )
-        .reduce(
-          Actions::RemoveExpectationsOnCriterion,
-          Actions::RemoveExpectationsOnLevels
-        )
+        criterion: criterion
+      )
+      .reduce(
+        Actions::RemoveExpectationsOnCriterion,
+        Actions::RemoveExpectationsOnLevels
+      )
     end
   end
 end

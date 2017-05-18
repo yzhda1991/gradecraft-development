@@ -1,7 +1,6 @@
 require_relative "../../services/removes_criterion_expectations"
 require_relative "../../services/updates_criterion_expectations"
 
-
 class API::CriteriaController < ApplicationController
 
   def create
@@ -33,8 +32,7 @@ class API::CriteriaController < ApplicationController
     else
       render json: {
         errors: [{ detail: "failed to update criterion" }], success: false
-        },
-        status: 500
+        }, status: 500
     end
   end
 
@@ -56,14 +54,13 @@ class API::CriteriaController < ApplicationController
     level = Level.find(params[:level_id])
     result = Services::UpdatesCriterionExpectations.update criterion, level
     if result
-       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
-       @levels = @criterion.levels.order("points").order("sort_order")
+      @criterion = Criterion.includes(:levels).find(params[:criterion_id])
+      @levels = @criterion.levels.order("points").order("sort_order")
       render "api/criteria/show", success: true, status: 200
     else
       render json: {
         message: "failed to update criterion", success: false
-        },
-        status: 400
+      }, status: 400
     end
   end
 
@@ -72,14 +69,13 @@ class API::CriteriaController < ApplicationController
     criterion = Criterion.find(params[:criterion_id])
     result = Services::RemovesCriterionExpectations.update criterion
     if result
-       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
-       @levels = @criterion.levels.order("points").order("sort_order")
+      @criterion = Criterion.includes(:levels).find(params[:criterion_id])
+      @levels = @criterion.levels.order("points").order("sort_order")
       render "api/criteria/show", success: true, status: 200
     else
       render json: {
         message: "failed to update criterion", success: false
-        },
-        status: 400
+        }, status: 400
     end
   end
 
