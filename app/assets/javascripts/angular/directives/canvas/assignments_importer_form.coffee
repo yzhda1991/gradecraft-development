@@ -1,7 +1,7 @@
 # Main entry point for Canvas assignment importer form
-@gradecraft.directive 'canvasAssignmentImporterForm', ['CanvasImporterService', 'AssignmentTypeService',
-  (CanvasImporterService, AssignmentTypeService) ->
-    CanvasAssignmentImporterCtrl = ['$scope', '$sce', ($scope, $sce) ->
+@gradecraft.directive 'canvasAssignmentImporterForm', ['CanvasImporterService', 'AssignmentTypeService', '$sce',
+  (CanvasImporterService, AssignmentTypeService, $sce) ->
+    CanvasAssignmentImporterCtrl = ['$scope', ($scope) ->
       vm = this
       vm.loading = true
       vm.formSubmitted = false
@@ -13,9 +13,6 @@
 
       vm.formAction = () ->
         "/assignments/importers/#{@provider}/courses/#{vm.currentCourseId()}/assignments/import"
-
-      vm.renderDescription = (description) ->
-        $sce.trustAsHtml(description)
 
       # The service keeps track of the current Canvas course context;
       # when the course changes, we should fetch the new set of assignments
@@ -40,5 +37,8 @@
       controllerAs: 'vm'
       restrict: 'EA'
       templateUrl: 'canvas/assignments_importer_form.html'
+      link: (scope, el, attr) ->
+        scope.sanitize = (html) ->
+          $sce.trustAsHtml(html)
     }
 ]

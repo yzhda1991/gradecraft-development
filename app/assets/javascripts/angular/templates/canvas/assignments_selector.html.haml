@@ -18,7 +18,7 @@
             Loading assignments..
         %tr{"ng-if"=>"!vm.loading", "ng-repeat"=>"assignment in vm.assignments"}
           %td {{assignment.name}}
-          %td {{vm.renderDescription(assignment.description)}}
+          %td{"ng-bind-html"=>"sanitize(assignment.description)"}
           %td {{assignment.due_at}}
           %td {{assignment.points_possible}}
           %td
