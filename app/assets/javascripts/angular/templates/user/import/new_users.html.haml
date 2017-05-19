@@ -17,10 +17,10 @@
                                      "type"=>"button",
                                      "ng-click"=>"deselectNewUsers()"}= "Uncheck"
     %tbody
-      %tr{"ng-if"=>"newUsers.length < 1"}
+      %tr{"ng-if"=>"newUsers().length < 1"}
         %td{"colspan"=>"6"} None
-        
-      %tr{"ng-if"=>"newUsers.length > 0", "ng-repeat"=>"user in newUsers"}
+
+      %tr{"ng-if"=>"newUsers().length > 0", "ng-repeat"=>"user in newUsers()"}
         %td {{user.name}}
         %td {{user.email}}
         %td

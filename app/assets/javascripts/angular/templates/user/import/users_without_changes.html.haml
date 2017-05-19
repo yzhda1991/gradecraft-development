@@ -1,8 +1,8 @@
 %section.form-section
   %h2.form-title Unchanged Users
 
-  %p {{unchangedUsers.length}} users already exist.
-  %p
+  %p {{unchangedUsers().length}} users already exist.
+  %p{"ng-if"=>"unchangedUsers().length > 0"}
     %a{"ng-click"=>"showInfo = true", "ng-show"=>"showInfo === false"}
       %i.fa.fa-search-plus View additional information
     %a{"ng-click"=>"showInfo = false", "ng-show"=>"showInfo === true"}
@@ -17,7 +17,7 @@
         %th{"scope"=>"col"} GradeCraft Role
         %th{"scope"=>"col"} User Exists?
     %tbody
-      %tr{"ng-repeat"=>"user in unchangedUsers"}
+      %tr{"ng-repeat"=>"user in unchangedUsers()"}
         %td {{user.name}}
         %td {{user.email}}
         %td

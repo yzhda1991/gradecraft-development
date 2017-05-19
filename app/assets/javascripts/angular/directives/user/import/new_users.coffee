@@ -1,15 +1,18 @@
 # Main entry point for rendering new users when importing from an LMS
-@gradecraft.directive 'newUsers', ['UserImporterService', (UserImporterService) ->
+@gradecraft.directive 'newUsers', ['CanvasImporterService', (CanvasImporterService) ->
   {
     restrict: 'EA'
     templateUrl: 'user/import/new_users.html'
     link: (scope, element, attr) ->
-      scope.newUsers = UserImporterService.newUsers()
+      scope.newUsers = () ->
+        _.filter(CanvasImporterService.users, (user) ->
+          user.user_exists is false
+        )
 
       scope.selectNewUsers = () ->
-        UserImporterService.setUsersSelected(true, UserImporterService.newUsers())
+        CanvasImporterService.setUsersSelected(true, @newUsers())
 
       scope.deselectNewUsers = () ->
-        UserImporterService.setUsersSelected(false, UserImporterService.newUsers())
+        CanvasImporterService.setUsersSelected(false, @newUsers())
   }
 ]
