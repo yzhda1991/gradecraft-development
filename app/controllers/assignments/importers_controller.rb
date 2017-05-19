@@ -10,7 +10,7 @@ class Assignments::ImportersController < ApplicationController
     controller.redirect_path assignments_importers_path
   end
   before_action :require_authorization, except: :index
-  before_action :use_current_course, only: [:index, :assignments_import]
+  before_action :use_current_course, only: [:index, :assignments_import, :assignments]
 
   # GET /assignments/importers
   def index
@@ -19,7 +19,7 @@ class Assignments::ImportersController < ApplicationController
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments
     @provider_name = params[:importer_provider_id]
-    @course = syllabus.course(params[:id])
+    @lms_course = syllabus.course(params[:id])
     @assignments = syllabus.assignments(params[:id])
     @assignment_types = current_course.assignment_types.ordered
   end

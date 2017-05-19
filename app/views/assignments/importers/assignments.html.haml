@@ -1,7 +1,7 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  = form_tag assignments_importer_assignments_import_path(@provider_name, @course["id"]) do
+  = form_tag assignments_importer_assignments_import_path(@provider_name, @lms_course["id"]) do
     %table.dynatable.no-table-header
       %thead
         %tr
