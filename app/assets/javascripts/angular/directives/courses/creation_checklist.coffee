@@ -14,6 +14,9 @@
     vm.inputId = (item)->
       "course_#{vm.courseId}-#{item.item}"
 
+    vm.termFor = (term)->
+      vm.CourseService.termFor(term)
+
     vm.checklistItems = ()->
       vm.CourseService.creationChecklist()
 

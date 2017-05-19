@@ -10,6 +10,6 @@
         ng-checked="item.done"
         ng-click="vm.toggleChecklistItem(item)"
       )
-      .title {{ item.title }}
+      .title {{ vm.termFor(item.title) }}
 
 

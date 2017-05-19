@@ -15,3 +15,10 @@ json.data do
     end
   end
 end
+
+json.meta do
+  json.term_for_assignments term_for :assignments
+  json.term_for_teams term_for :teams
+  json.term_for_badges term_for :badges
+end
+
