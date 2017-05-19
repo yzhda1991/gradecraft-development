@@ -14,24 +14,16 @@ class Assignments::ImportersController < ApplicationController
   before_action :link_canvas_credentials, except: :index,
     if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: :index
-  before_action :use_current_course, only: [:index, :assignments_import, :assignments]
+  before_action :use_current_course, only: [:index, :assignments, :assignments_import]
 
   # GET /assignments/importers
   def index
   end
 
   # Entry point for importing assignments from a provider
-  # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
+  # GET /assignments/importers/:importer_provider_id/assignments
   def assignments
     @provider_name = params[:importer_provider_id]
-    @lms_course = syllabus.course(params[:id]) do
-      redirect_to assignments_importers_path,
-        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
-    end
-    @assignments = syllabus.assignments(params[:id]) do
-      redirect_to assignments_importers_path,
-        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
-    end
     @assignment_types = current_course.assignment_types.ordered
   end
 

@@ -11,10 +11,4 @@
         %p.card-text
           An open-source LMS from Instructure. Import any assignment for courses you are enrolled as a teacher.
 
-        - if !current_course.linked?(:canvas)
-          %p.card-text
-            You must add the Canvas integration and link the course first in order to import any Canvas assignments.
-
-          = link_to "Add a Canvas Integration", integrations_path, class: "card-link button"
-        - else
-          = link_to "Import Canvas Assignments", assignments_importer_assignments_path(:canvas, current_course.linked_for(:canvas).provider_resource_id), class: "card-link button"
+        = link_to "Import Canvas Assignments", assignments_importer_assignments_path(:canvas), class: "card-link button"

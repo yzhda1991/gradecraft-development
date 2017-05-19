@@ -2,5 +2,5 @@
   = render partial: "layouts/alerts"
 
   %canvas_assignment_importer_form{"provider"=>"#{@provider_name}",
-                                   "current_course_name"=>"#{current_course.name}",
+                                   "current_course_name"=>"#{@course.name}",
                                    "authenticity_token"=>"#{form_authenticity_token}"}

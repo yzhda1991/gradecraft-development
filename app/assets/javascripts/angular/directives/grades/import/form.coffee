@@ -33,11 +33,13 @@
 
   {
     # authenticityToken: for the form submit
+    # assignmentName: the GC name of the assignment to import grades to
     # assignmentIds: the provider assignments id(s) to import grades from
     # currentAssignmentId: the GC assignment id to import grades to
     # courseId: the provider course id
     scope:
       authenticityToken: '@'
+      assignmentName: '@'
       assignmentIds: '@'
       currentAssignmentId: '@'
       courseId: '@'

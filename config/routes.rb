@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   #3. Assignments, Submissions, Grades
   namespace :assignments do
     resources :importers, param: :provider_id, only: :index do
-      get "/courses/:id/assignments", action: :assignments, as: :assignments
+      get :assignments
       post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import
       post "/assignments/:id/refresh", action: :refresh_assignment, as: :refresh_assignment
