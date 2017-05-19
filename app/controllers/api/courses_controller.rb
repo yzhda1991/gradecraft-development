@@ -10,11 +10,6 @@ class API::CoursesController < ApplicationController
     render json: MultiJson.dump(@courses)
   end
 
-  # GET api/courses/:course_id/course_creation
-  def course_creation
-    @course_creation = CourseCreation.find_or_create_for_course(params[:course_id])
-  end
-
   # accessed by the dashboard
   # GET api/timeline_events
   def timeline_events

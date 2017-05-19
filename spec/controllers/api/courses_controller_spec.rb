@@ -24,19 +24,6 @@ describe API::CoursesController do
         expect(assigns(:events)).to eq(Timeline.new(course).events_by_due_date)
       end
     end
-
-    describe "GET course creation" do
-      it "returns the CourseCreation checklist for course" do
-        course_creation = create :course_creation, course: course
-        get :course_creation, params: {course_id: course.id}, format: :json
-        expect(assigns(:course_creation)).to eq(course_creation)
-      end
-
-      it "creates the CourseCreation model if none exists" do
-        expect{get :course_creation, params: {course_id: course.id}, format: :json}.to \
-          change{ CourseCreation.count }.by(1)
-      end
-    end
   end
 
   context "as a student" do

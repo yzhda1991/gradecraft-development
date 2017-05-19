@@ -18,7 +18,8 @@
       vm.CourseService.creationChecklist()
 
     vm.toggleChecklistItem = (item)->
-      console.log(item)
+      item.done = !item.done
+      CourseService.updateCourseCreationItem(item)
   ]
 
   services = (courseId)->

@@ -392,9 +392,10 @@ Rails.application.routes.draw do
     end
 
     resources :challenges, only: :index
-    resources :courses, only: [:index] do
-      get :course_creation
-    end
+    resources :courses, only: [:index]
+
+    get "course_creation", to: "course_creation#show"
+    put "course_creation", to: "course_creation#update"
 
     resources :criteria, only: [:create, :update, :destroy] do
       put "levels/:level_id/set_expectations", to: "criteria#set_expectations"

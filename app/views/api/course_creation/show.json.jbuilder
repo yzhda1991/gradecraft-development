@@ -8,11 +8,10 @@ json.data do
 
     json.checklist do
       json.array! @course_creation.checklist do |item|
-        json.item item
+        json.name item
         json.title @course_creation.title_for_item(item)
         json.done @course_creation[item]
       end
     end
   end
 end
-
