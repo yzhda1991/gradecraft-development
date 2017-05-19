@@ -1,5 +1,6 @@
 class Assignments::GroupsController < ApplicationController
   before_action :ensure_staff?
+  before_action :use_current_course
 
   # GET /assignments/:assignment_id/groups/:id/grade
   # Grading an assignment for a group
