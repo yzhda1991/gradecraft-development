@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   end
 
   resources :levels, only: [:create, :destroy, :update]
+
   resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
@@ -369,6 +370,10 @@ Rails.application.routes.draw do
     resources :challenges, only: :index
     resources :courses, only: [:index]
 
+    resources :criteria, only: [:create, :update, :destroy] do
+      put "levels/:level_id/set_expectations", to: "criteria#set_expectations"
+      put "remove_expectations"
+    end
     get "timeline_events", to: "courses#timeline_events"
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
 
@@ -389,7 +394,8 @@ Rails.application.routes.draw do
     resources :grade_scheme_elements, only: :index do
       delete :destroy, on: :collection
     end
-    resources :levels, only: :update
+    resources :levels, only: [:create, :update, :destroy]
+    resources :level_badges, only: [:create, :destroy]
 
     resources :predicted_earned_badges, only: [:create, :update]
     resources :predicted_earned_challenges, only: [:create, :update]

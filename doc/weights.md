@@ -57,7 +57,7 @@ Previously, there was a `default_weight` attribute in the Course model. When an 
 
 ## Step by Step
 
-1. A student is taken to the assignment type weight's index view, where the current course's weighting rules are and where weights are added/removed
+1. A student can change the assignment type weight's at `/assignment_type_weights/`, where the current course's weighting rules are and where weights are added/removed, or alternatively, directly from the weights as displayed on the `predictor`.
 2. In the index view, the page where weights are edited, `/app/assets/javascripts/angular/templates/weights/main.html.haml`, is included using angular and assigned the `WeightsCtrl` controller. The controller's `init` method is then called and passed in the student
 3. In `init`, AssignmentTypeService's `getAssignmentTypes` method is called, where a GET request is sent to the index action of `API::Students::AssignmentTypesController`
 5. The index action sends back JSON data from `/app/views/api/assignment_types/index.json.jbuilder`. Included in the JSON data is `meta.update_weights`, which is set to the controller's `@update_weights` (which is always false)

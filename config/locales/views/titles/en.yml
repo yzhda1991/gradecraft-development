@@ -176,6 +176,8 @@ en:
   rubrics:
     design:
       title: "Design Rubric"
+    designed:
+      title: "Design Rubric"
   submissions:
     show:
       title: "#{ @submission.assignment.name } Submission"

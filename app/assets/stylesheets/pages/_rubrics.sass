@@ -5,6 +5,7 @@ $below-expectations-color: $color-grey-6
 $meets-expectations-color: $color-green-1
 $level-selected-color: lighten($color-green-1, 10%)
 $no-expectation-color: $color-grey-6
+$not-saved-color: $color-yellow-1
 
 // base styles for graded rubric, ungraded rubric and rubric edit views
 .rubric
@@ -251,6 +252,8 @@ $no-expectation-color: $color-grey-6
     width: 100%
     background-color: $color-blue-2
     box-sizing: border-box
+    &.criterion-not-saved
+      background-color: $not-saved-color
 
     input
       margin-right: 0.2rem
@@ -302,6 +305,13 @@ $no-expectation-color: $color-grey-6
 .criterion.ng-valid .messages
   color:  $color-white
 
+.criterion
+  input.ng-pristine.ng-invalid
+    background: $color-white
+
+  input.ng-invalid
+    background: $color-red-invalid
+
 button.delete
   font-weight: bold
   background-color: $color-red-1
@@ -323,16 +333,18 @@ button.meets-expectations-toggle
   bottom: 2.5%
   border-radius: 12px
   width: 92%
-  opacity: 0
-  &:hover,
   &:focus
     opacity: 1
     //background-color
 
-button.meets-expectations-status.show
-  opacity: 1
+button.meets-expectations-status
   &:hover
     opacity: 0
+
+button.meets-expectations-toggle
+  opacity: 0
+  &:hover
+    opacity: 1
 
 button.meets-expectations-toggle.remove
   background-color: $color-grey-6
@@ -345,6 +357,8 @@ button.meets-expectations-status.no-expectation
     background-color: $below-expectations-color
     &.level-meets-expectations
       background-color: $meets-expectations-color
+    &.level-not-saved
+      background-color: $not-saved-color
 
     &.nocredit
       width: 180px
@@ -386,8 +400,14 @@ button.meets-expectations-status.no-expectation
     background: $color-white
 
   input.ng-invalid
-    background: $color-red-1
+    background: $color-red-invalid
     color: $color-white
+
+ul.level-requirements
+  list-style-type: none
+  font-style: italic
+  padding-left: 0
+
 
 .level-badge,
 .level-badge-image
