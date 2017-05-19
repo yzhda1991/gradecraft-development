@@ -2,13 +2,14 @@
 
 There are many ways to initiate an Angular app, the primary way we have settled on in GC is by using directives.
 In order to "wire-up" a directive from the rails view, we need two things. We need to call our gradecraft app using `ng-app` on a parent element, and we need to add an element whose name will be picked up by our Angular directive.
+Currently, we declare ng-app directly on the body element.
 
 ## Initiating in the View
 
 Let's say we are going to create a directive called `myAwesomeGraph`, which needs two pieces of information, a student's id to collect the data from the endpoint, and a student's name in order to title the graph. In our rails view, we have something like this:
 
 ```
-#class-analytics-graph{"ng-app" => "gradecraft"}
+#class-analytics-graph
     %my-awesome-graph{ "student-name" => @student.name,
       "student-id" => @student.id}
 ```

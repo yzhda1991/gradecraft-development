@@ -1,6 +1,6 @@
 = render partial: "assignment_guidelines", locals: { assignment: presenter.assignment }
 
-%student-submission{"ng-app"=>"#{'gradecraft' if presenter.assignment.accepts_text}", class: "ng-cloak"}
+%student-submission{class: "ng-cloak"}
   = simple_form_for [presenter.assignment, presenter.submission], :html => { class: "student-submission-form", "assignment_id"=>"#{presenter.assignment.id}" } do |f|
     %hidden-form-method
     - if presenter.assignment.has_groups?

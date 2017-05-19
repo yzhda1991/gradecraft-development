@@ -13,7 +13,7 @@
         - if current_course.max_assignment_types_weighted?
           %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
 
-    %assignment-type-weights{"ng-app" => "gradecraft"}
+    %assignment-type-weights
 
   - else
     %h3 Your #{term_for :weight} choices:
