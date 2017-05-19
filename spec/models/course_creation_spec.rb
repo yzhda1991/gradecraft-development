@@ -1,5 +1,5 @@
 describe CourseCreation do
-  let(:course) { create :course }
+  let(:course) { create :course, has_badges: true, has_teams: true }
   subject { create :course_creation, course: course }
 
   context "validations" do
@@ -51,6 +51,16 @@ describe CourseCreation do
          "badges_done",
          "teams_done"]
       )
+    end
+
+    it "does not return badges if the course has no badges" do
+      course.update(has_badges: false)
+      expect(subject.checklist).not_to include("badges_done")
+    end
+
+    it "does not return teams if the course has no teams" do
+      course.update(has_teams: false)
+      expect(subject.checklist).not_to include("teams_done")
     end
   end
 end

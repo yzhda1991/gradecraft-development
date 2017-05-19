@@ -32,7 +32,10 @@ class CourseCreation < ActiveRecord::Base
 
   # returns all boolean fields as array of checklist items
   def checklist
-    self.class.columns.map(&:name) - ["id", "course_id", "created_at", "updated_at"]
+    ignored_fields = ["id", "course_id", "created_at", "updated_at"]
+    ignored_fields << "badges_done" unless self.course.has_badges
+    ignored_fields << "teams_done" unless self.course.has_teams
+    self.class.columns.map(&:name) - ignored_fields
   end
 end
 
