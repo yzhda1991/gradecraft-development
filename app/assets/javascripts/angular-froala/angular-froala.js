@@ -8,7 +8,7 @@ angular.module('froala', []).
     toolbarButtons: [ 'bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align', 'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html' ],
 		toolbarButtonsSM: ['bold', 'italic', 'underline', 'paragraphFormat'],
 	  toolbarButtonsXS: ['bold', 'italic', 'underline'],
-	  toolbarButtonsMD: ['bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align', 'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html']
+	  toolbarButtonsMD: ['bold', 'italic', 'underline', 'paragraphFormat', 'insertTable', 'formatOL', 'formatUL','align', 'outdent', 'indent', 'insertLink', 'undo', 'redo', 'clearFormatting', 'image', 'insertVideo', 'html'],
     placeholderText: 'Enter text here...'
 	}).
 	directive('froala', ['froalaConfig', '$timeout', function(froalaConfig, $timeout) {
