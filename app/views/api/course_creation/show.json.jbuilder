@@ -10,6 +10,7 @@ json.data do
       json.array! @course_creation.checklist do |item|
         json.name item
         json.title @course_creation.title_for_item(item)
+        json.url @course_creation.url_for_item(item)
         json.done @course_creation[item]
       end
     end

@@ -29,7 +29,7 @@ describe CourseCreation do
   describe "title for item" do
     it "returns the human readable expanation for each list item" do
       expect(subject.title_for_item("settings_done")).to eq("course settings")
-      expect(subject.title_for_item("attendance_done")).to eq("attendance")
+      #expect(subject.title_for_item("attendance_done")).to eq("attendance")
       expect(subject.title_for_item("assignments_done")).to eq("assignments")
       expect(subject.title_for_item("calendar_done")).to eq("calendar events")
       expect(subject.title_for_item("instructors_done")).to eq("set up teaching team")
@@ -39,11 +39,24 @@ describe CourseCreation do
     end
   end
 
+  describe "url for item" do
+    it "returns the url for each list item" do
+      expect(subject.url_for_item("settings_done")).to eq("/courses/#{course.id}/edit")
+      #expect(subject.url_for_item("attendance_done")).to eq("...")
+      expect(subject.url_for_item("assignments_done")).to eq("/assignments")
+      expect(subject.url_for_item("calendar_done")).to eq("/events")
+      expect(subject.url_for_item("instructors_done")).to eq("/staff")
+      expect(subject.url_for_item("roster_done")).to eq("/users/import")
+      expect(subject.url_for_item("badges_done")).to eq("/badges")
+      expect(subject.url_for_item("teams_done")).to eq("/teams")
+    end
+  end
+
   describe "checklist" do
     it "returns all checklist items on the model" do
       expect(subject.checklist).to eq(
         ["settings_done",
-         "attendance_done",
+         #"attendance_done",
          "assignments_done",
          "calendar_done",
          "instructors_done",

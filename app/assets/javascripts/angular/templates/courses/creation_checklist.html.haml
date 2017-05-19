@@ -10,6 +10,6 @@
         ng-checked="item.done"
         ng-click="vm.toggleChecklistItem(item)"
       )
-      .title {{ vm.termFor(item.title) }}
-
+      .title
+        %a{"ng-href"=>"{{item.url}}"} {{ vm.termFor(item.title) }}
 

@@ -1,4 +1,5 @@
 class CourseCreation < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
   belongs_to :course
 
   validates_presence_of :course
@@ -9,7 +10,6 @@ class CourseCreation < ActiveRecord::Base
 
   # returns the human readable version of any checklist item
   def title_for_item(item)
-    # settings_done => :settings
     case item[0..-6].to_sym
     when :settings
       "course settings"
@@ -30,9 +30,32 @@ class CourseCreation < ActiveRecord::Base
     end
   end
 
+  def url_for_item(item)
+    case item[0..-6].to_sym
+    when :settings
+      edit_course_url(self.course, only_path: true)
+    when :attendance
+      # add when feature is implemented
+    when :assignments
+      assignments_url(only_path: true)
+    when :calendar
+      events_url(only_path: true)
+    when :instructors
+      staff_index_url(only_path: true)
+    when :roster
+     import_users_url(only_path: true)
+    when :badges
+      badges_url(only_path: true)
+    when :teams
+      teams_url(only_path: true)
+    end
+  end
+
   # returns all boolean fields as array of checklist items
+  # only adds badges and teams for courses with these items
+  # attendance is ignored for now, until the feature is in place
   def checklist
-    ignored_fields = ["id", "course_id", "created_at", "updated_at"]
+    ignored_fields = ["id", "course_id", "created_at", "updated_at", "attendance_done"]
     ignored_fields << "badges_done" unless self.course.has_badges
     ignored_fields << "teams_done" unless self.course.has_teams
     self.class.columns.map(&:name) - ignored_fields
