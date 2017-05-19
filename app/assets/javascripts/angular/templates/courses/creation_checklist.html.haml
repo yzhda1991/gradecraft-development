@@ -1,15 +1,15 @@
-.course-creation-checklist
+.course-creation-checklist(ng-if="!vm.loading")
   .course-creation-checklist-title Course Creation
 
   .course-creation-progress-bar
 
   %ul
-    %li.course-creation-checklist-item(ng-repeat="item in checklistItems")
-      %input(id="{{inputId(item)}}"
+    %li.course-creation-checklist-item(ng-repeat="item in vm.checklistItems()")
+      %input(id="{{vm.inputId(item)}}"
         type="checkbox"
-        ng-checked="checked"
-        ng-click="toggleChecklistItem(item)"
+        ng-checked="item.done"
+        ng-click="vm.toggleChecklistItem(item)"
       )
-      .title {{ item }}
+      .title {{ item.title }}
 
 

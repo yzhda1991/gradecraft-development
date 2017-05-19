@@ -4,5 +4,5 @@
     = render partial: "layouts/navigation/course_search"
   %ul.staff-sidenav{role: "navigation", "aria-label" => "staff-navigation"}
     - if !current_course.published
-      %course-creation-checklist
+      %course-creation-checklist(course-id="#{current_course.id}")
     = render partial: "layouts/navigation/staff_subnav_links"
