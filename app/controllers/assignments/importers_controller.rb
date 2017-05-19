@@ -20,6 +20,7 @@ class Assignments::ImportersController < ApplicationController
   def index
   end
 
+  # Entry point for importing assignments from a provider
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments
     @provider_name = params[:importer_provider_id]

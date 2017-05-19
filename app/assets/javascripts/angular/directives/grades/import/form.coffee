@@ -1,12 +1,12 @@
 # Main entry point for rendering the grade import form with data from the
 # the LMS provider
-@gradecraft.directive 'gradeImportForm', ['GradeImporterService', '$q', (GradeImporterService, $q) ->
+@gradecraft.directive 'gradeImportForm', ['GradeImporterService', (GradeImporterService) ->
   gradeImportFormCtrl = [() ->
     vm = this
     vm.loading = true
     vm.formSubmitted = false
 
-    vm.detailsLink = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/assignments"
+    vm.assignmentLink = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/assignments"
     vm.formAction = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/grades/import"
 
     vm.selectAllGrades = () ->
@@ -26,21 +26,18 @@
     vm.hasError = () ->
       GradeImporterService.checkHasError()
 
-    initialize(@currentAssignmentId, @courseId, @provider, @assignmentIds).finally(() ->
-      vm.loading = false  # regardless of whether promise is a success or failure
+    GradeImporterService.getGrades(@currentAssignmentId, @courseId, @provider, @assignmentIds).finally(() ->
+      vm.loading = false
     )
   ]
 
-  initialize = (currentAssignmentId, courseId, provider, assignmentIds) ->
-    promises = [
-      GradeImporterService.getGrades(currentAssignmentId, courseId, provider, assignmentIds)
-      GradeImporterService.getAssignment(currentAssignmentId)
-    ]
-    $q.all(promises)
-
   {
+    # authenticityToken: for the form submit
+    # assignmentIds: the provider assignments id(s) to import grades from
+    # currentAssignmentId: the GC assignment id to import grades to
+    # courseId: the provider course id
     scope:
-      authenticityToken: '@'  # for the form submit
+      authenticityToken: '@'
       assignmentIds: '@'
       currentAssignmentId: '@'
       courseId: '@'
@@ -53,6 +50,5 @@
     link: (scope, element, attr) ->
       scope.grades = GradeImporterService.grades
       scope.termFor = GradeImporterService.termFor
-      scope.assignment = GradeImporterService.assignment
   }
 ]

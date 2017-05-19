@@ -96,7 +96,7 @@ Rails.application.routes.draw do
       resources :importers, param: :provider_id, only: [:index, :show] do
         get :download
         post :upload
-        get "/courses/:id/assignments", action: :assignments, as: :assignments
+        get :assignments
         get "/courses/:id/grades", action: :grades, as: :grades
         post "/courses/:id/grades/import", action: :grades_import, as: :grades_import
       end
@@ -270,7 +270,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :importers, only: :index, param: :provider_id do
-      get "/course/:id", action: :users, as: :users
+      get :users
       post "/course/:id/users/import", action: :users_import, as: :users_import
     end
   end

@@ -31,6 +31,7 @@
   {
     scope:
       provider: '@'
+      assignmentId: '@'
     bindToController: true
     controller: CanvasAssignmentsSelectorCtrl
     controllerAs: 'vm'
