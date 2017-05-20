@@ -1,5 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
 
   - if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)

@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   %span.label.alert= "You have #{@ungraded_submissions_count} ungraded #{term_for :assignments}"
 
   = team_filter(@teams) if current_course.has_teams?

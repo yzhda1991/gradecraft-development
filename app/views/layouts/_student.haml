@@ -4,6 +4,7 @@
   %main.mainContent#main-content{role: "main"}
     - if current_course.published
       .page-header
+        = render partial: "layouts/alerts"
         %h1.pagetitle= title
       -# = render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course, current_user: current_student) }
       = render partial: "layouts/content"

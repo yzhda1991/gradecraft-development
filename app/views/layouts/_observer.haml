@@ -3,5 +3,6 @@
   = render partial: "layouts/navigation/observer_profile_tabs", locals: {nav_class: 'sub-nav'}
   .mainContent
     .page-header
+      = render partial: "layouts/alerts"
       %h1.pagetitle= title
     = render partial: "layouts/content"

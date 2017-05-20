@@ -1,6 +1,3 @@
-.pageContent
-  = render partial: "layouts/alerts"
-
-  %canvas-assignment-importer-form{"provider"=>"#{@provider_name}",
-                                   "current-course-name"=>"#{@course.name}",
-                                   "authenticity-token"=>"#{form_authenticity_token}"}
+%canvas-assignment-importer-form{"provider"=>"#{@provider_name}",
+                                 "current-course-name"=>"#{@course.name}",
+                                 "authenticity-token"=>"#{form_authenticity_token}"}

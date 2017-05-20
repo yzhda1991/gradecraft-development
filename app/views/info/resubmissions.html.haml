@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   %span.label.alert= "You have #{@resubmission_count} resubmissions to grade"
 
   = team_filter(@teams) if current_course.has_teams?

@@ -1,8 +1,6 @@
 = render "students/buttons"
 
 .pageContent
-  = render "layouts/alerts"
-
   = team_filter(presenter.teams) if presenter.has_teams?
 
   / Display the table of course students, their leaderboard display, their team affiliation, their score and their grade

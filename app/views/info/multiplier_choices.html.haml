@@ -1,6 +1,4 @@
 .pageContent
-  = render "layouts/alerts"
-
   = team_filter(@teams) if current_course.has_teams?
 
   %table.dynatable

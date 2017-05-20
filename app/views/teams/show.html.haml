@@ -1,8 +1,6 @@
 = render "buttons"
 
 .pageContent
-  = render 'layouts/alerts'
-
   - if @team.banner.present?
     %img{:src => @team.banner, :height => 150 }
 
