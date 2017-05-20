@@ -1,33 +1,32 @@
-.pageContent
-  = render partial: "analytics/in_page_nav"
+= render partial: "analytics/in_page_nav"
 
-  / Login counts
-  #role-logins-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/login_role_events.json", :url_data => "role_group=student", :title => "Logins", :subtitle => "{{granularity}}", :y_axis_label => "Logins {{granularity}}"}}
+/ Login counts
+#role-logins-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/login_role_events.json", :url_data => "role_group=student", :title => "Logins", :subtitle => "{{granularity}}", :y_axis_label => "Logins {{granularity}}"}}
 
-  / Pageviews Total
-  #all-pageviews-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/all_role_pageview_events.json?role_group=student", :title => "Pageviews", :subtitle => "{{granularity}}"}}
+/ Pageviews Total
+#all-pageviews-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/all_role_pageview_events.json?role_group=student", :title => "Pageviews", :subtitle => "{{granularity}}"}}
 
-  / Pageviews per page
-  -# %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=student", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
-  -#   %caption.sr-only= "#{term_for :student} page views per page"
-  -#   %thead
-  -#     %tr
-  -#       %th{:"data-dynatable-column" => "name"} Page
-  -#       %th{:"data-dynatable-column" => "total"} Pageviews
-  -#   %tbody
+/ Pageviews per page
+-# %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=student", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
+-#   %caption.sr-only= "#{term_for :student} page views per page"
+-#   %thead
+-#     %tr
+-#       %th{:"data-dynatable-column" => "name"} Page
+-#       %th{:"data-dynatable-column" => "total"} Pageviews
+-#   %tbody
 
-  / Students who have not predicted any grades for this course
-  %h3.bold Non-predictors
-  .italic.small= "#{term_for :students} who have not yet used the grade predictor"
-  %table.dynatable
-    %thead
+/ Students who have not predicted any grades for this course
+%h3.bold Non-predictors
+.italic.small= "#{term_for :students} who have not yet used the grade predictor"
+%table.dynatable
+  %thead
+    %tr
+      %th #{ term_for :student }
+      %th.hidden Last Login Date
+      %th{:"data-dynatable-column" => "lastLoginDate"} Last Login
+  %tbody
+    - @nonpredictors.each do |student|
       %tr
-        %th #{ term_for :student }
-        %th.hidden Last Login Date
-        %th{:"data-dynatable-column" => "lastLoginDate"} Last Login
-    %tbody
-      - @nonpredictors.each do |student|
-        %tr
-          %td= link_to student.name, student_path(student)
-          %td.hidden= student.last_course_login(current_course).strftime("%H%M%m%Y") if student.last_course_login(current_course).present?
-          %td= student.last_course_login(current_course)
+        %td= link_to student.name, student_path(student)
+        %td.hidden= student.last_course_login(current_course).strftime("%H%M%m%Y") if student.last_course_login(current_course).present?
+        %td= student.last_course_login(current_course)
