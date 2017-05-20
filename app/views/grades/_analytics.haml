@@ -3,7 +3,7 @@
   - assignment = presenter.assignment
   - student_id = current_student.present? ? current_student.id : nil?
 
-  .class-analytics{ "ng-app": "gradecraft", class: analytics_class }
+  .class-analytics.analytics_class
     - if assignment.pass_fail?
       .class-analytics-wrapper
         .class-analytics-graph
