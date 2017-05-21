@@ -3,12 +3,12 @@
 
   %p {{unchangedUsers().length}} users already exist.
   %p{"ng-if"=>"unchangedUsers().length > 0"}
-    %a{"ng-click"=>"vm.showInfo = true", "ng-show"=>"vm.showInfo === false"}
+    %a{"ng-click"=>"ctrl.showInfo = true", "ng-show"=>"ctrl.showInfo === false"}
       %i.fa.fa-search-plus View additional information
-    %a{"ng-click"=>"vm.showInfo = false", "ng-show"=>"vm.showInfo === true"}
+    %a{"ng-click"=>"ctrl.showInfo = false", "ng-show"=>"ctrl.showInfo === true"}
       %i.fa.fa-search-minus Hide additional information
 
-  %table.no-table-header{"ng-show"=>"vm.showInfo === true"}
+  %table.no-table-header{"ng-show"=>"ctrl.showInfo === true"}
     %thead
       %tr
         %th{"scope"=>"col"} Name

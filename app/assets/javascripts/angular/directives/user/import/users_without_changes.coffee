@@ -8,7 +8,7 @@
   {
     bindToController: true
     controller: UsersWithoutChangesCtrl
-    controllerAs: 'vm'
+    controllerAs: 'ctrl'
     restrict: 'EA'
     templateUrl: 'user/import/users_without_changes.html'
     link: (scope, element, attr) ->

@@ -7,7 +7,11 @@
 
 %with_users{"ng-if"=>"vm.users.length > 0"}
 
-  %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8", "ng-submit"=>"vm.formSubmitted = true"}
+  %form{"action"=>"{{vm.formAction()}}",
+        "method"=>"post",
+        "accept-charset"=>"UTF-8",
+        "ng-submit"=>"vm.formSubmitted = true",
+        "name"=>"userImportForm"}
     %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
     %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
 
@@ -20,7 +24,7 @@
         %button{"type"=>"submit",
                 "class"=>"button",
                 "ng-click"=>"vm.importUsers()",
-                'ng-class'=>'{"disabled": !vm.hasSelectedGrades() || vm.formSubmitted}',
-                "ng-disabled"=>"!vm.hasSelectedGrades() || vm.formSubmitted"}
+                'ng-class'=>'{"disabled": !hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted}',
+                "ng-disabled"=>"!hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted"}
           %i.fa.fa-download
           Import Users

@@ -44,6 +44,22 @@
       true  # if selected is false, this loop is broken without this line
     )
 
+  setAssignmentsSelected = (selectedValue, subset = null) ->
+    _.each(subset || assignments, (assignment) ->
+      assignment.selected_for_import = selectedValue
+      true  # if selected is false, this loop is broken without this line
+    )
+
+  hasSelectedUsers = () ->
+    _.any(users, (user) ->
+      user.selected_for_import is true
+    )
+
+  hasSelectedAssignments = () ->
+    _.any(assignments, (assignment) ->
+      assignment.selected_for_import is true
+    )
+
   _clearAssignments = () ->
     assignments.length = 0
 
@@ -59,5 +75,8 @@
     getCourses: getCourses
     getAssignments: getAssignments
     setUsersSelected: setUsersSelected
+    setAssignmentsSelected: setAssignmentsSelected
+    hasSelectedUsers: hasSelectedUsers
+    hasSelectedAssignments: hasSelectedAssignments
   }
 ]

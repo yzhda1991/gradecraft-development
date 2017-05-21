@@ -14,6 +14,9 @@
       vm.formAction = () ->
         "/assignments/importers/#{@provider}/courses/#{vm.currentCourseId()}/assignments/import"
 
+      vm.setAssignmentsSelected = (val) ->
+        CanvasImporterService.setAssignmentsSelected(val)
+
       # The service keeps track of the current Canvas course context;
       # when the course changes, we should fetch the new set of assignments
       $scope.$watch(() ->
@@ -38,6 +41,8 @@
       restrict: 'EA'
       templateUrl: 'canvas/assignments_importer_form.html'
       link: (scope, el, attr) ->
+        scope.hasSelectedAssignments = CanvasImporterService.hasSelectedAssignments
+
         scope.sanitize = (html) ->
           $sce.trustAsHtml(html)
     }
