@@ -15,3 +15,19 @@ $('.badge-image-upload').change(function () {
       previewWrapper.removeClass('hidden');
   }
 });
+
+// display media image preview after image upload
+$('.media-image-upload').change(function () {
+  var file = this.files[0];
+  var imageType = /^image\//;
+
+    if (imageType.test(file.type)) {
+      var previewImg = $('.image-preview');
+      var reader = new FileReader();
+
+      reader.addEventListener( 'load', function() {
+        previewImg.css('background-image', 'url('+ reader.result +')');
+      }, false);
+      reader.readAsDataURL(file);
+  }
+});
