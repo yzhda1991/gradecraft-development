@@ -39,6 +39,8 @@ describe CourseMembership do
         course_membership = create(:course_membership, user: user, course: course, role: "professor")
         expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
           change(CourseMembership, :count)
+        expect(course_membership.reload.role).to eq "observer"
+        expect(course_membership.reload.instructor_of_record).to eq false
         expect(course_membership.reload.last_login_at).to be_within(1.second).of(DateTime.now)
       end
     end

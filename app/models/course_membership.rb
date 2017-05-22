@@ -39,6 +39,7 @@ class CourseMembership < ActiveRecord::Base
         course_membership.role = "student"
         course_membership.instructor_of_record = false
       else
+        course_membership.role = "observer"
         course_membership.instructor_of_record = false
       end
     end
