@@ -79,7 +79,7 @@ RSpec.describe ApplicationController do
       context "the request is not html or xml" do
         let(:format) {{ html?: false, xml?: false, json?: true }}
 
-        it "should not build a LoginEventLogger" do
+        it "should not build an event logger" do
           allow(controller.request.format).to receive_messages(format)
           expect(logger_class).not_to receive(:new)
           result
