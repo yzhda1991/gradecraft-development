@@ -73,35 +73,6 @@ describe Grades::ImportersController do
       end
     end
 
-    describe "GET grades" do
-      let(:access_token) { "BLAH" }
-
-      before do
-        UserAuthorization.create user: professor,
-          provider: :canvas, access_token: access_token, refresh_token: "BLAH",
-          expires_at: 2.days.from_now
-        WebMock.disable_net_connect!(allow_localhost: true)
-      end
-      after { WebMock.allow_net_connect! }
-
-      context "unable to connect to Canvas" do
-        it "redirects back to the importers selection" do
-          stub_request(:get,
-                       "https://umich-dev.instructure.com/api/v1/courses/123/assignments/")
-            .with(query: { "access_token" => access_token })
-            .to_raise(JSON::ParserError)
-
-          get :grades, params: { assignment_id: world.assignment.id,
-                                 importer_provider_id: :canvas,
-                                 id: "123" }
-
-          expect(flash[:alert]).to eq \
-            "There was an issue trying to retrieve the assignment from Canvas."
-          expect(response).to redirect_to assignment_grades_importers_path(world.assignment)
-        end
-      end
-    end
-
     describe "POST grades_import" do
       let(:access_token) { "BLAH" }
       let(:assignment_ids) { ["ASSIGNMENT_1"] }
