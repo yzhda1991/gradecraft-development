@@ -57,6 +57,17 @@ describe EventLoggers::LoginEvent do
 
       subject.log data
     end
+
+    describe "rescuing from errors" do
+      it "logs the error" do
+        expect(Rails.logger).to receive(:error).with "Nice try!"
+
+        allow_any_instance_of(EventLoggers::RecordLoginEvent).to receive(:call)
+          .and_raise "Nice try!"
+
+        subject.log data
+      end
+    end
   end
 
   describe "#log_later" do

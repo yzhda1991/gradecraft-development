@@ -10,6 +10,10 @@ module EventLoggers
   class LoginEvent
     include Porch::Organizer
 
+    rescue_from StandardError do |exception|
+      Rails.logger.error exception.message
+    end
+
     def log(data)
       with(data.merge(created_at: Time.now)) do |chain|
         chain.add PrepareLoginEventData
