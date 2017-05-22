@@ -35,9 +35,6 @@
     bindToController: true,
     controller: CourseCreationController,
     controllerAs: 'vm',
-    scope: {
-      courseId: "="
-    }
     templateUrl: 'courses/creation_checklist.html',
   }
 ]
