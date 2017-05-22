@@ -339,33 +339,52 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   describe "#users" do
     subject { described_class.new access_token }
 
-    it "retrieves the users for the course id from the api" do
-      body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
-      stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
-        .with(query: { "access_token" => access_token,
-                       "include" => ["enrollments", "email"] })
-        .to_return(status: 200, body: body.to_json, headers: {})
+    context "with a successful API call" do
+      it "retrieves the users for the course id from the api" do
+        body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "include" => ["enrollments", "email"] })
+          .to_return(status: 200, body: body.to_json, headers: {})
 
-      users = subject.users(123)
+        users = subject.users(123)
 
-      expect(users[:data].length).to eq 2
-      expect(users[:has_next_page]).to be_falsey
-      expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
-      expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+        expect(users[:data].length).to eq 2
+        expect(users[:has_next_page]).to be_falsey
+        expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
+        expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+      end
+
+      it "merges options if provided" do
+        body = [{ name: "Jimmy Page", id: 1 }]
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "enrollment_type" => ["student", "teacher"],
+                         "include" => ["enrollments", "email"] })
+          .to_return(status: 200, body: body.to_json, headers: {})
+
+        users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+
+        expect(users[:data].length).to eq 1
+      end
     end
 
-    it "merges options if provided" do
-      body = [{ name: "Jimmy Page", id: 1 }]
-      stub_request(:get,
-          "https://canvas.instructure.com/api/v1/courses/123/users")
-        .with(query: { "access_token" => access_token,
-                       "enrollment_type" => ["student", "teacher"],
-                       "include" => ["enrollments", "email"] })
-        .to_return(status: 200, body: body.to_json, headers: {})
+    context "with an API error" do
+      let(:stub) {
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "include" => ["enrollments", "email"] })
+      }
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
 
-      users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.users(123, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
 
-      expect(users[:data].length).to eq 1
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.users(123) }.to raise_error JSON::ParserError
+      end
     end
   end
 end

@@ -544,15 +544,17 @@ module ActiveLMS
     #   },
     #   has_next_page: true
     # }
-    def users(course_id, fetch_next=false, options={})
-      users = []
-      params = {
-        include: ["enrollments", "email"]
-      }.merge(options)
-      result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
-        users += data
+    def users(course_id, fetch_next=false, options={}, &exception_handler)
+      handle_exceptions(exception_handler) do
+        users = []
+        params = {
+          include: ["enrollments", "email"]
+        }.merge(options)
+        result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
+          users += data
+        end
+        { data: users, has_next_page: result[:has_next_page] }
       end
-      { data: users, has_next_page: result[:has_next_page] }
     end
 
     private
