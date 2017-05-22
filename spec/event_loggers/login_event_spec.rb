@@ -26,7 +26,8 @@ describe EventLoggers::LoginEvent do
     end
 
     it "logs that the job is starting" do
-      expect_any_instance_of(EventLoggers::LogJobStarting).to receive(:call).and_call_original
+      expect_any_instance_of(EventLoggers::LogJobStarting).to receive(:call)
+        .and_call_original
 
       subject.log data
     end
@@ -40,7 +41,8 @@ describe EventLoggers::LoginEvent do
 
     it "updates the last login time" do
       expect_any_instance_of(EventLoggers::UpdateLastLogin).to \
-        receive(:call).with(hash_including(:course_membership, :created_at)).and_call_original
+        receive(:call).with(hash_including(:course_membership, :created_at))
+        .and_call_original
 
       subject.log data
     end
@@ -53,9 +55,21 @@ describe EventLoggers::LoginEvent do
     end
 
     it "logs that the job has ended" do
-      expect_any_instance_of(EventLoggers::LogJobEnded).to receive(:call).and_call_original
+      expect_any_instance_of(EventLoggers::LogJobEnded).to receive(:call)
+        .and_call_original
 
       subject.log data
+    end
+
+    context "with a failing step" do
+      it "logs the failure" do
+        expect(Rails.logger).to receive(:error).with "Nice try!"
+
+        allow_any_instance_of(Porch::Context).to \
+          receive_messages(failure?: true, message: "Nice try!")
+
+        subject.log data
+      end
     end
 
     describe "rescuing from errors" do

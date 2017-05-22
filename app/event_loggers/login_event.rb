@@ -23,11 +23,18 @@ module EventLoggers
         chain.add RecordLoginEvent
         chain.add LogJobEnded
       end
+      log_failures
     end
 
     def log_later(data)
       EventLoggerJob.set(queue: :login_event_logger)
         .perform_later self.class.name, "log", data
+    end
+
+    private
+
+    def log_failures
+      Rails.logger.error(context.message) if context.failure?
     end
   end
 end
