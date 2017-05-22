@@ -97,13 +97,12 @@
     )
 
   updateCriterionOrder = (start, end)->
+    criteria.splice( end, 0, criteria.splice(start, 1)[0])
     criteriaIds = _.map(criteria, (criterion)->
       criterion.id
     )
-    criteriaIds.splice( end, 0, criteriaIds.splice(start, 1)[0])
-    $http.put("/api/criteria/update_order", criteriaIds).then(
+    $http.put("/api/criteria/update_order", criteria_ids: criteriaIds).then(
       (response)-> # success
-        criterion =  response.data.data.attributes
         GradeCraftAPI.logResponse(response)
       ,(response)-> # error
         GradeCraftAPI.logResponse(response)

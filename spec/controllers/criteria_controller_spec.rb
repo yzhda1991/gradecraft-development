@@ -5,7 +5,7 @@ describe CriteriaController do
   let(:assignment) { create(:assignment, course: course) }
   let(:rubric) { create(:rubric, assignment: assignment) }
   let(:criterion) { create(:criterion, rubric: rubric) }
-  
+
   context "as a professor" do
     before(:each) { login_user(professor) }
 
@@ -31,18 +31,6 @@ describe CriteriaController do
         post :update, params: { id: criterion.id, criterion: params }
         expect(criterion.reload.name).to eq("new name")
       end
-    end
-
-    describe "POST update_order" do
-      it "changes the order of the criteria for the rubric" do
-        criterion = create(:criterion, order: 0, rubric: rubric)
-        criterion_2 = create(:criterion, order: 1, rubric: rubric)
-        params = {"criterion_order"=>{"#{criterion.id}"=>{"order"=>1}, "#{criterion_2.id}"=>{"order"=>0} } }
-        post :update_order, params: params
-        expect(criterion.reload.order).to eq(1)
-        expect(criterion_2.reload.order).to eq(0)
-      end
-
     end
   end
 

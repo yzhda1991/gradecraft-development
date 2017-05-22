@@ -21,11 +21,6 @@ class CriteriaController < ApplicationController
     respond_with @criterion, layout: false
   end
 
-  def update_order
-    Criterion.update params[:criterion_order].keys, params[:criterion_order].values
-    render head: :ok, body: :nothing
-  end
-
   private
 
   def criterion_params

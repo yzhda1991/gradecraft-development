@@ -54,6 +54,17 @@ describe API::CriteriaController do
       end
     end
 
+    describe "PUT update_order" do
+      it "changes the order of the criteria for the rubric" do
+        criterion = create(:criterion, order: 0, rubric: rubric)
+        criterion_2 = create(:criterion, order: 1, rubric: rubric)
+        params = {"criteria_ids"=>[criterion_2.id,criterion.id] }
+        put :update_order, params: params, format: :json
+        expect(criterion.reload.order).to eq(1)
+        expect(criterion_2.reload.order).to eq(0)
+      end
+    end
+
     describe "DELETE criterion" do
       it "removes the criterion from the rubric" do
         delete :destroy, params: { id: criterion.id}, format: :json

@@ -48,6 +48,18 @@ class API::CriteriaController < ApplicationController
     end
   end
 
+  def update_order
+    params[:criteria_ids].each_with_index do |id, index|
+      Criterion.find(id).update(order: index)
+    end
+    @criteria = Criterion.where(id: params[:criteria_ids]).ordered
+    if @criteria.pluck(:id) == params[:criteria_ids]
+      render "api/criteria/index", status: 200
+    else
+      render "api/criteria/index", status: 400
+    end
+  end
+
   # PUT /api/criteria/:criterion_id/levels/:level_id/set_expectations
   def set_expectations
     criterion = Criterion.find(params[:criterion_id])
