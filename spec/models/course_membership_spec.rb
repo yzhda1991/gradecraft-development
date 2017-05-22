@@ -23,66 +23,46 @@ describe CourseMembership do
   describe ".create_or_update_from_lti" do
     let(:user) { build_stubbed(:user) }
     let(:course) { create(:course) }
+    let(:course_membership) { CourseMembership.unscoped.last }
 
     context "when there is no context role" do
       let(:auth_hash) { { "extra" => { "raw_info" => { "roles" => "" }}} }
 
-      context "when no prior course membership exists" do
-        it "update the existing course membership" do
-          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
-            change { CourseMembership.count }.by(1)
-        end
-
-        it "sets the default course membership role" do
-          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
-          course_membership = CourseMembership.unscoped.last
-          expect(course_membership.role).to eq "observer"
-        end
+      it "creates the course membership if no prior course membership exists" do
+        expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
+          change { CourseMembership.count }.by(1)
+        expect(course_membership.role).to eq "observer"
+        expect(course_membership.last_login_at).to be_within(1.second).of(DateTime.now)
       end
 
-      context "when there is a prior course membership" do
-        let!(:course_membership) { create(:course_membership, user: user, course: course) }
-
-        it "does not create a new course membership" do
-          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
-            change(CourseMembership, :count)
-        end
+      it "updates the course membership if there is a prior course membership" do
+        course_membership = create(:course_membership, user: user, course: course, role: "professor")
+        expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
+          change(CourseMembership, :count)
+        expect(course_membership.reload.last_login_at).to be_within(1.second).of(DateTime.now)
       end
     end
 
     context "when there is a context role" do
       let(:auth_hash) { { "extra" => { "raw_info" => { "roles" => "instructor" }}} }
 
-      context "when no prior course membership exists" do
-        it "creates a new course membership" do
-          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
-            change { CourseMembership.count }.by(1)
-        end
-
-        it "sets the course membership role" do
-          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
-          course_membership = CourseMembership.unscoped.last
-          expect(course_membership.role).to eq "professor"
-        end
+      it "creates a new course membership if no prior course membership exists" do
+        expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to \
+          change { CourseMembership.count }.by(1)
+        expect(course_membership.role).to eq "professor"
+        expect(course_membership.last_login_at).to be_within(1.second).of(DateTime.now)
       end
 
-      context "when there is a prior course membership" do
-        let!(:course_membership) { create(:course_membership, user: user, course: course) }
-
-        it "does not create a new course membership" do
-          expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
-            change(CourseMembership, :count)
-        end
-
-        it "updates the course membership role" do
-          CourseMembership.create_or_update_from_lti(user, course, auth_hash)
-          course_membership = CourseMembership.unscoped.last
-          expect(course_membership.role).to eq "professor"
-        end
+      it "updates the course membership if there is a prior course membership" do
+        course_membership = create(:course_membership, user: user, course: course, role: "student")
+        expect{ CourseMembership.create_or_update_from_lti(user, course, auth_hash) }.to_not \
+          change(CourseMembership, :count)
+        expect(course_membership.reload.role).to eq "professor"
+        expect(course_membership.reload.last_login_at).to be_within(1.second).of(DateTime.now)
       end
     end
 
-    context "when the authorization hash is invalid" do
+    context "when the given authorization hash is invalid" do
       let(:auth_hash) { { "extra" => { "raw_info": nil }} }
 
       it "does not create a course membership" do
