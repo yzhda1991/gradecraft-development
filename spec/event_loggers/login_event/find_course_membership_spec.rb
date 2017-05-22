@@ -1,5 +1,4 @@
 require "porch"
-require "active_record_spec_helper"
 require "./app/event_loggers/login_event/find_course_membership"
 
 describe EventLoggers::FindCourseMembership do

@@ -1,5 +1,4 @@
 require "porch"
-require "active_record_spec_helper"
 require "./app/event_loggers/login_event/prepare_login_event_data"
 
 describe EventLoggers::PrepareLoginEventData do
