@@ -6,8 +6,6 @@ class PageviewEventLogger < ApplicationEventLogger
 
   attr_accessor :page
 
-  # instance methods, for use as a LoginEventLogger instance
-
   # used by enqueuing methods in EventLogger::Enqueue
   def event_type
     "pageview"
