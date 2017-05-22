@@ -2,7 +2,7 @@
 
 %loading-message(loading='vm.loading' message="Loading Rubric...")
 
-#criterion-box
+#criterion-box(ui-sortable ng-model="vm.criteria" ng-change="vm.updateOrder()")
 
   .rubric-container.divider(ng-repeat="criterion in vm.criteria")
     %rubric-criterion(criterion="criterion")

@@ -96,6 +96,20 @@
       "criteria", criterion.id, _updateCriterion, [criterion]
     )
 
+  updateCriterionOrder = (start, end)->
+    criteriaIds = _.map(criteria, (criterion)->
+      criterion.id
+    )
+    criteriaIds.splice( end, 0, criteriaIds.splice(start, 1)[0])
+    $http.put("/api/criteria/update_order", criteriaIds).then(
+      (response)-> # success
+        criterion =  response.data.data.attributes
+        GradeCraftAPI.logResponse(response)
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+
 #----------- NEW LEVELS -------------------------------------------------------#
 
 # New Levels are not saved until they are valid
@@ -283,6 +297,7 @@
     removeNewCriterion: removeNewCriterion
 
     queueUpdateCriterion: queueUpdateCriterion
+    updateCriterionOrder: updateCriterionOrder
     deleteCriterion: deleteCriterion
 
     openNewLevel: openNewLevel
