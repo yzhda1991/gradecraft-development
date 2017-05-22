@@ -55,4 +55,14 @@ describe Services::Actions::RetrievesLMSGrades do
 
     expect(result).to have_key :user_ids
   end
+
+  it "fails the context if an error occurs" do
+    allow_any_instance_of(ActiveLMS::Syllabus).to receive(:grades) { |&b| b.call }
+
+    result = described_class.execute provider: provider, access_token: access_token,
+      course_id: course_id, assignment_ids: assignment_ids, grade_ids: grade_ids
+
+    expect(result).to_not be_success
+    expect(result.message).to eq "An error occurred while attempting to retrieve #{provider} grades"
+  end
 end

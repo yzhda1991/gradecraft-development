@@ -17,11 +17,12 @@ module Services
         context.lms_assignment = nil
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        begin
-          context.lms_assignment = syllabus.assignment course_id, assignment_id
-        rescue StandardError => e
-          context.fail! e.message
+        context.lms_assignment = syllabus.assignment(course_id, assignment_id) do
+          context.fail!("An error occurred while attempting to retrieve the #{provider} assignment", error_code: 500)
+          next context
         end
+
+        next context if context.failure?
       end
     end
   end

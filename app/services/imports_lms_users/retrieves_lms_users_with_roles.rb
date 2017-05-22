@@ -19,6 +19,8 @@ module Services
           context.fail!("An error occurred while attempting to retrieve #{provider} users", error_code: 500)
           next context
         end[:data]
+
+        next context if context.failure?
       end
     end
   end

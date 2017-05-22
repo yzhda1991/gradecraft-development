@@ -39,8 +39,7 @@ describe Services::Actions::RetrievesLMSUsersWithRoles, type: :disable_external_
   end
 
   it "fails the context if an error occurs" do
-    allow_any_instance_of(Canvas::API).to \
-      receive(:get_data).and_raise(JSON::ParserError)
+    allow_any_instance_of(ActiveLMS::Syllabus).to receive(:users) { |&b| b.call }
 
     result = described_class.execute provider: provider, access_token: access_token,
       course_id: course_id, user_ids: user_ids
