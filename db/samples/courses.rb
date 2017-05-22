@@ -52,6 +52,7 @@
     office: nil,
     office_hours: nil,
     phone: nil,
+    published: true,
     semester: "Winter",
     tagline: nil,
     has_team_challenges: false,

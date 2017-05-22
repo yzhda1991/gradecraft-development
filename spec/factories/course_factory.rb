@@ -5,6 +5,7 @@ FactoryGirl.define do
     semester "Fall"
     has_badges false
     has_paid false
+    published true
 
     factory :course_with_weighting do
       total_weights 6
