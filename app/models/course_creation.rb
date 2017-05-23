@@ -10,7 +10,7 @@ class CourseCreation < ActiveRecord::Base
 
   # returns the human readable version of any checklist item
   def title_for_item(item)
-    case item[0..-6].to_sym
+    case checklist_sym item
     when :settings
       "course settings"
     when :attendance
@@ -31,7 +31,7 @@ class CourseCreation < ActiveRecord::Base
   end
 
   def url_for_item(item)
-    case item[0..-6].to_sym
+    case checklist_sym item
     when :settings
       edit_course_url(self.course, only_path: true)
     when :attendance
@@ -43,7 +43,7 @@ class CourseCreation < ActiveRecord::Base
     when :instructors
       staff_index_url(only_path: true)
     when :roster
-     import_users_url(only_path: true)
+      import_users_url(only_path: true)
     when :badges
       badges_url(only_path: true)
     when :teams
@@ -60,7 +60,12 @@ class CourseCreation < ActiveRecord::Base
     ignored_fields << "teams_done" unless self.course.has_teams
     self.class.columns.map(&:name) - ignored_fields
   end
+
+  private
+
+  # Convert column attributes into symbols for evaluating
+  # example: "settings_done" => :settings
+  def checklist_sym(item)
+    item[0..-6].to_sym
+  end
 end
-
-
-

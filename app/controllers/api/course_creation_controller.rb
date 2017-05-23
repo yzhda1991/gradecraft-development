@@ -6,7 +6,6 @@ class API::CourseCreationController < ApplicationController
     @course_creation = CourseCreation.find_or_create_for_course(current_course.id)
   end
 
-
   # PUT api/course_creation
   def update
     @course_creation = CourseCreation.find_or_create_for_course(current_course.id)
