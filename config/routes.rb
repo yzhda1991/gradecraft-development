@@ -139,8 +139,6 @@ Rails.application.routes.draw do
   end
   resources :unlock_conditions, only: [:create, :destroy, :update]
 
-  resources :criteria, only: [:create, :destroy, :update]
-
   resources :levels, only: [:create, :destroy, :update]
 
   resources :level_badges, only: [:create, :destroy]
