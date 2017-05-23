@@ -21,8 +21,15 @@ describe Assignments::ImportersController do
     end
 
     describe "GET assignments" do
+      let(:syllabus) { double :syllabus, course: {}, assignments: [] }
+
+      before(:each) do
+        allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
+          syllabus
+      end
+
       it "redirects to the assignment importers page if the course cannot be retrieved" do
-        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:course) { |&b| b.call }
+        allow(syllabus).to receive(:course) { |&b| b.call }
         get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
           id: course_id }
 
@@ -30,7 +37,7 @@ describe Assignments::ImportersController do
       end
 
       it "redirects to the assignment importers page if the assignments cannot be retrieved" do
-        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:assignments) { |&b| b.call }
+        allow(syllabus).to receive(:assignments) { |&b| b.call }
         get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
           id: course_id }
 
@@ -41,6 +48,12 @@ describe Assignments::ImportersController do
     describe "POST assignments_import" do
       let(:assignment_ids) { ["123", "456"] }
       let(:assignment_type) { build_stubbed :assignment_type }
+      let(:syllabus) { double(course: {}, assignments: []) }
+
+      before(:each) do
+        allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
+          syllabus
+      end
 
       it "imports the selected assignments" do
         expect(Services::ImportsLMSAssignments).to \
@@ -62,8 +75,6 @@ describe Assignments::ImportersController do
       context "with an invalid request" do
         it "re-renders the template with the error" do
           allow(result).to receive(:success?).and_return false
-          syllabus = double(course: {}, assignments: [])
-          allow(controller).to receive(:syllabus).and_return syllabus
 
           post :assignments_import, params: { importer_provider_id: provider,
             id: course_id, assignment_ids: assignment_ids,

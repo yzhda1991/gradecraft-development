@@ -15,13 +15,19 @@ describe Grades::ImportersController do
       let(:provider) { :canvas }
       let(:course_id) { "COURSE_ID" }
       let(:access_token) { "BLAH" }
+      let(:syllabus) { double :syllabus, course: {}, assignments: [] }
       let!(:user_authorization) do
         create :user_authorization, :canvas, user: professor, access_token: access_token,
           expires_at: 2.days.from_now
       end
 
+      before(:each) do
+        allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
+          syllabus
+      end
+
       it "redirects to the grade import page if the course cannot be retrieved" do
-        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:course) { |&b| b.call }
+        allow(syllabus).to receive(:course) { |&b| b.call }
         get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
           id: course_id }
 
@@ -30,7 +36,7 @@ describe Grades::ImportersController do
       end
 
       it "redirects to the grade import page if the assignments cannot be retrieved" do
-        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:assignments) { |&b| b.call }
+        allow(syllabus).to receive(:assignments) { |&b| b.call }
         get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
           id: course_id }
 
