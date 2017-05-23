@@ -44,7 +44,6 @@
       $timeout( ()->
         scope.dragStart = (e, ui)->
           ui.item.data "start", ui.item.index()
-          return
 
         scope.dragEnd = (e, ui)->
          start = ui.item.data("start")
