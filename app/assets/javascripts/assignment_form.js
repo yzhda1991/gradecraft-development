@@ -21,10 +21,10 @@
   
   $('.individual-group-select select').change(function(){
     if ($(this).val() === "Group") {
-      $('.individual-group-contingent').removeClass("hidden");
+      $('.individual-group-contingent').removeClass("visually-hidden");
     }
     else {
-      $('.individual-group-contingent').addClass("hidden");
+      $('.individual-group-contingent').addClass("visually-hidden");
     }
   })
 

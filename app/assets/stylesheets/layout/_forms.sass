@@ -87,6 +87,21 @@ ul.accepts_submission_types
   font-style: italic
   margin: 0
 
+.form-flex-row
+  display: flex
+  flex-wrap: wrap
+  .form-item
+    flex: 1
+    input, select
+      width: 100%
+    @media (max-width: $media-small-max)
+      margin-right: 0
+      width: 100%
+    &:not(:last-child)
+      margin-right: 1rem
+  @media (max-width: $media-small-max)
+    display: block
+
 span.checkbox
   display: block
 
@@ -168,25 +183,9 @@ ul.locked-display li
 // course settings styles
 .form-wrapper
   max-width: 960px
-  .form-item input, select
-    width: 100%
   .form-item input[type="checkbox"]
     width: auto
 
-.form-flex-container
-  display: flex
-  flex-direction: column
-
-.form-flex-row
-  display: flex
-  .form-item
-    @media (max-width: $media-small-max)
-      margin-right: 0
-      width: 100%
-    &:not(:last-child)
-      margin-right: 1rem
-  @media (max-width: $media-small-max)
-    display: block
 
 // Multi-select box on create new team page
 .select2-container
@@ -223,3 +222,14 @@ select.dynatable-per-page-select,
 // froala toolbar fix
 .fr-sticky
   position: inherit
+
+// assignment creation form
+.individual-group-contingent
+  visibility: visible
+  opacity: 1
+  transition: visibility 0s linear 0s, opacity 300ms
+  &.visually-hidden
+    height: 0
+    visibility: hidden
+    opacity: 0
+    transition: visibility 0s linear 300ms, opacity 300ms
