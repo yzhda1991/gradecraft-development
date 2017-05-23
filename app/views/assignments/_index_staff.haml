@@ -4,6 +4,7 @@
       = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
       - if current_course.allows_canvas?
         = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path, class: "button button-edit"
+      = active_course_link_to decorative_glyph(:copy) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, class: "button button-edit", method: :post
 .pageContent
   = render partial: "layouts/alerts"
 

@@ -5,15 +5,34 @@ require 'googleauth'
 module GoogleCalendarsHelper
   Calendar = Google::Apis::CalendarV3
 
+  def redirect_if_auth_not_present
+    redirect_to "/auth/google_oauth2" and return unless google_auth_present?(current_user)
+  end
+
   def get_google_authorization(current_user)
     google_authorization = current_user.authorizations.find_by(provider: "google_oauth2")
     refresh_if_google_authorization_is_expired(google_authorization)
     google_authorization
   end
 
-  def get_event_or_assignment(current_course, class_name, id)
+  def get_item(current_course, class_name, id)
     return current_course.events.find(id) if class_name == "event"
     return current_course.assignments.find(id) if class_name == "assignment"
+  end
+
+  def get_all_items_for_current_course(current_course, class_name)
+    return current_course.events if class_name == "event"
+    return current_course.assignments if class_name == "assignment"
+  end
+
+  def filter_items_with_no_end_date(item_list)
+    list = []
+    item_list.each do |item|
+      if !item.due_at.nil?
+        list.append(item)
+      end
+    end
+    return list
   end
 
   def refresh_if_google_authorization_is_expired(google_authorization)
@@ -47,6 +66,15 @@ module GoogleCalendarsHelper
     end
   end
 
+  def refresh_google_calendar_authorization(current_user)
+      calendar = Calendar::CalendarService.new
+      client_id = Google::Auth::ClientId.new(ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_SECRET'])
+      secrets = create_google_secrets(get_google_authorization(current_user))
+      calendar.authorization = secrets.to_authorization
+      calendar.authorization.refresh!
+      return calendar
+  end
+
   def create_google_secrets(google_authorization)
     Google::APIClient::ClientSecrets.new({"web" =>
       {"access_token" => google_authorization.access_token,
@@ -55,4 +83,44 @@ module GoogleCalendarsHelper
         "client_secret" => ENV['GOOGLE_SECRET']}
         })
   end
+
+  def add_single_item(current_user, item)
+    begin
+      add(current_user, item)
+      return {"redirect_to" => item, "message_type" => "notice", "message" => "Item " + item.name + " successfully added to your Google Calendar"}
+    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
+      return {"redirect_to" => item, "message_type" => "alert", "message" => "Google Calendar encountered an Error. Your Assignment was NOT copied to your Google calendar."}
+    end
+  end
+
+#kind of still broken. Need to do class specific things (i.e. know whether assignment or event, then proper redirect).
+#Need to continue add events in event of rescue being called.
+  def add_multiple_items(current_user, item_list, item_list_filtered)
+    begin
+      item_list_filtered.each do |item|
+        add(current_user, item)
+      end
+      if item_list.count == item_list_filtered.count
+        return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"}
+      else
+        return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
+      end
+    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
+      return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your Assignment was NOT copied to your Google calendar."}
+    end
+  end
+
+  def add(current_user, item)
+    calendar = refresh_google_calendar_authorization(current_user)
+    result = calendar.insert_event('primary', create_google_event(item))
+  end
+
+  def process_hash(hash)
+    if hash["message_type"] == "alert"
+      redirect_to hash["redirect_to"], alert: hash["message"] and return
+    else
+      redirect_to hash["redirect_to"], notice: hash["message"] and return
+    end
+  end
+
 end
