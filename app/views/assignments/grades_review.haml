@@ -1,21 +1,20 @@
-.pageContent
-  = team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
+= team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
 
-  - presenter.students.each do |student|
-    - grade = student.grade_for_assignment(presenter.assignment)
-    - if grade.present? && grade.instructor_modified?
-      .rubric-grade-container
-        .student-score-details
-          %h3.uppercase= student.name
-          = render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
-        = render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
+- presenter.students.each do |student|
+  - grade = student.grade_for_assignment(presenter.assignment)
+  - if grade.present? && grade.instructor_modified?
+    .rubric-grade-container
+      .student-score-details
+        %h3.uppercase= student.name
+        = render partial: "grades/components/score", locals: { student: student, grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment }
+      = render partial: "grades/components/edit_button", locals: { student: student, grade: grade }
 
-    - if presenter.grade_with_rubric?
-      = render partial: "assignments/rubric_grade_review", locals: { presenter: presenter, student: student, grade: grade }
+  - if presenter.grade_with_rubric?
+    = render partial: "assignments/rubric_grade_review", locals: { presenter: presenter, student: student, grade: grade }
 
-    - if grade.graded_by.present? && grade.feedback.present?
-      = render partial: "grades/components/feedback", locals: { student: student, grade: grade }
-    - if grade.file_uploads.present?
-      = render partial: "grades/components/attachments", locals: { student: student, grade: grade }
+  - if grade.graded_by.present? && grade.feedback.present?
+    = render partial: "grades/components/feedback", locals: { student: student, grade: grade }
+  - if grade.file_uploads.present?
+    = render partial: "grades/components/attachments", locals: { student: student, grade: grade }
 
-    %hr.dotted
+  %hr.dotted

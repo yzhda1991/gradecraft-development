@@ -1,41 +1,40 @@
-.pageContent
-  %table.badge-index-table.second-row-header
-    %thead
-      %tr
-        %th.sort-column
-        %th.badge-name-column Name
-        %th.icon-column Icon
-        %th.points-column Point Value
-        %th.lock-icon-column Locked?
-        %th.earned_column Earned
-        %th.button-column.options Options
+%table.badge-index-table.second-row-header
+  %thead
+    %tr
+      %th.sort-column
+      %th.badge-name-column Name
+      %th.icon-column Icon
+      %th.points-column Point Value
+      %th.lock-icon-column Locked?
+      %th.earned_column Earned
+      %th.button-column.options Options
 
-    %tbody.sort-badges
-      - presenter.badges.each do |badge|
-        - if BadgeProctor.new(badge).viewable?(current_student || current_user)
-          %tr{id: "badge-#{badge.id}"}
-            %td.center.draggable
-              %i.fa.fa-arrows-v
+  %tbody.sort-badges
+    - presenter.badges.each do |badge|
+      - if BadgeProctor.new(badge).viewable?(current_student || current_user)
+        %tr{id: "badge-#{badge.id}"}
+          %td.center.draggable
+            %i.fa.fa-arrows-v
 
-            // Badge Name
-            %td= render partial: "badges/components/name",
-                locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
+          // Badge Name
+          %td= render partial: "badges/components/name",
+              locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
-            // Badge Icon
-            %td
-              .img-cropper.med-crop
-                = render partial: "badges/components/icon", locals: { badge: badge, count: 1 }
+          // Badge Icon
+          %td
+            .img-cropper.med-crop
+              = render partial: "badges/components/icon", locals: { badge: badge, count: 1 }
 
-            // Point Value
-            %td
-              - if current_course.valuable_badges?
-                = render partial: "badges/components/points", locals: { badge: badge }
+          // Point Value
+          %td
+            - if current_course.valuable_badges?
+              = render partial: "badges/components/points", locals: { badge: badge }
 
-            // Lock Condition Icons
-            %td= render partial: "badges/components/hover_icons", locals: { badge: badge }
+          // Lock Condition Icons
+          %td= render partial: "badges/components/hover_icons", locals: { badge: badge }
 
-            // Badge Count
-            %td= render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
+          // Badge Count
+          %td= render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
 
-            // Buttons
-            %td= render partial: "badges/buttons", locals: { badge: badge }
+          // Buttons
+          %td= render partial: "badges/buttons", locals: { badge: badge }

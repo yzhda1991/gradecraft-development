@@ -1,23 +1,22 @@
-.pageContent
-  - unless @result.unsuccessful.empty?
-    %h2.subtitle
-      = "#{@result.unsuccessful.count} #{"Grade".pluralize(@result.unsuccessful.count)} Not Imported"
-    %table.dynatable
-      %thead
-        %tr
-          %th Data
-          %th Error(s)
-      %tbody
-        - @result.unsuccessful.each do |row|
-          %tr
-            %td= row[:data]
-            %td= row[:errors]
-
+- unless @result.unsuccessful.empty?
   %h2.subtitle
-    = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
-  = render partial: "grades/importers/import_results_table", locals: { grades: @result.successful }
+    = "#{@result.unsuccessful.count} #{"Grade".pluralize(@result.unsuccessful.count)} Not Imported"
+  %table.dynatable
+    %thead
+      %tr
+        %th Data
+        %th Error(s)
+    %tbody
+      - @result.unsuccessful.each do |row|
+        %tr
+          %td= row[:data]
+          %td= row[:errors]
 
-  - unless @result.unchanged.empty?
-    %h2.subtitle
-      = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
-    = render partial: "grades/importers/import_results_table", locals: { grades: @result.unchanged }
+%h2.subtitle
+  = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
+= render partial: "grades/importers/import_results_table", locals: { grades: @result.successful }
+
+- unless @result.unchanged.empty?
+  %h2.subtitle
+    = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
+  = render partial: "grades/importers/import_results_table", locals: { grades: @result.unchanged }

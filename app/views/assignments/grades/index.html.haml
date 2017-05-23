@@ -1,21 +1,20 @@
 = render partial: "assignments/buttons", locals: { presenter: presenter }
 
-.pageContent
-  = team_filter(presenter.teams) if presenter.has_teams? && presenter.assignment.is_individual?
+= team_filter(presenter.teams) if presenter.has_teams? && presenter.assignment.is_individual?
 
-  - if presenter.grade_with_rubric?
-    - presenter.students.each do |student|
-      - grade_for_assignment = student.grade_for_assignment(presenter.assignment)
-      - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
-        %h4.uppercase= student.name
-        .left
-          %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.full_points} points "
-        - if current_user_is_admin? || current_course.active?
-          .right= link_to "Edit #{student.first_name}'s Grade", edit_grade_path(presenter.grade_for_assignment), class: "button"
-        %br
-        %br
-        .rubric-container= render partial: "grades/components/criterion_grade_results", locals: { presenter: presenter, current_student: student }
-        %br
-        %b= "Feedback from #{ grade_for_assignment.graded_by.name }:" if grade_for_assignment.graded_by.present?
-        %p.summary-comments= raw grade_for_assignment.try(:feedback)
-        %hr
+- if presenter.grade_with_rubric?
+  - presenter.students.each do |student|
+    - grade_for_assignment = student.grade_for_assignment(presenter.assignment)
+    - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
+      %h4.uppercase= student.name
+      .left
+        %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.full_points} points "
+      - if current_user_is_admin? || current_course.active?
+        .right= link_to "Edit #{student.first_name}'s Grade", edit_grade_path(presenter.grade_for_assignment), class: "button"
+      %br
+      %br
+      .rubric-container= render partial: "grades/components/criterion_grade_results", locals: { presenter: presenter, current_student: student }
+      %br
+      %b= "Feedback from #{ grade_for_assignment.graded_by.name }:" if grade_for_assignment.graded_by.present?
+      %p.summary-comments= raw grade_for_assignment.try(:feedback)
+      %hr

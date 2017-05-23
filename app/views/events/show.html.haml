@@ -9,17 +9,16 @@
             %li= link_to decorative_glyph(:copy) + "Copy Event ", copy_events_path(id: @event.id), method: :post
             %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(@event), method: :post
 
-.pageContent
-  .show-page-wrapper
-    - if @event.media.present?
-      .event-image-show-wrapper
-        %img.event-image-show{src: @event.media}
+.show-page-wrapper
+  - if @event.media.present?
+    .event-image-show-wrapper
+      %img.event-image-show{src: @event.media}
 
-    - if @event.due_at.present?
-      %section
-        %h3 Event Date
-        %p= "#{@event.due_at.in_time_zone(current_user.time_zone)}"
-
+  - if @event.due_at.present?
     %section
-      %h3 Description
-      .event-description-show.clearfix= raw @event.description
+      %h3 Event Date
+      %p= "#{@event.due_at.in_time_zone(current_user.time_zone)}"
+
+  %section
+    %h3 Description
+    .event-description-show.clearfix= raw @event.description

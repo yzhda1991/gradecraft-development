@@ -4,8 +4,7 @@
       %ul
         = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :challenge).titleize}", new_challenge_path, class: "button button-edit"
 
-.pageContent
-  - if current_user_is_staff?
-    = render partial: "challenges/index_staff"
-  - else
-    = render partial: "challenges/index_student"
+- if current_user_is_staff?
+  = render partial: "challenges/index_staff"
+- else
+  = render partial: "challenges/index_student"

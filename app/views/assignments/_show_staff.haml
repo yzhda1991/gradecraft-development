@@ -1,42 +1,41 @@
 // Button bar at the top of the page
 = render partial: "buttons", locals: { presenter: presenter }
 
-.pageContent
-  #tabs.ui-tabs.ui-widget
-    %ul.ui-tabs-nav{role: "tablist"}
+#tabs.ui-tabs.ui-widget
+  %ul.ui-tabs-nav{role: "tablist"}
+    %li
+      %a{"href" => "#tab"} Grades
+    %li
+      %a{"href" => "#tab2"}
+        Description
+        %span &amp; Downloads
+    - if presenter.grade_with_rubric?
       %li
-        %a{"href" => "#tab"} Grades
+        %a{"href" => "#tab3"}
+          %span Grading
+          Rubric
+    - if presenter.has_persisted_grades?
       %li
-        %a{"href" => "#tab2"}
-          Description
-          %span &amp; Downloads
-      - if presenter.grade_with_rubric?
-        %li
-          %a{"href" => "#tab3"}
-            %span Grading
-            Rubric
-      - if presenter.has_persisted_grades?
-        %li
-          %a.class-analytics-tab{"href" => "#tab4"}
-            %span Class
-            Analytics
+        %a.class-analytics-tab{"href" => "#tab4"}
+          %span Class
+          Analytics
 
-    #tabt1.ui-tabs-panel
-      .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
+  #tabt1.ui-tabs-panel
+    .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
+      - if presenter.group_assignment?
+        = render partial: "assignments/group/group_show", locals: { presenter: presenter }
+      - else
+        = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
+    .ui-tabs-panel.assignment-details-container#tab2{role: "tabpanel", "aria-hidden" => false }
+      = render partial: "assignments/description", locals: { presenter: presenter }
+    - if presenter.grade_with_rubric?
+      .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
+        .tab-container
+          = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
+    - if presenter.has_persisted_grades?
+      .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
-          = render partial: "assignments/group/group_show", locals: { presenter: presenter }
+          = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
         - else
-          = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
-      .ui-tabs-panel.assignment-details-container#tab2{role: "tabpanel", "aria-hidden" => false }
-        = render partial: "assignments/description", locals: { presenter: presenter }
-      - if presenter.grade_with_rubric?
-        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
           .tab-container
-            = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
-      - if presenter.has_persisted_grades?
-        .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
-          - if presenter.group_assignment?
             = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
-          - else
-            .tab-container
-              = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }

@@ -1,33 +1,32 @@
-.pageContent
-  .badge-show-page
-    %section.badge-container
-      %h1.badge-title
-        = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
-      .img-cropper.large-crop
-        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
-      .count
-        Times Earned:
-        %span
-          = render partial: "badges/components/count", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
-        = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
-    %section.badge-description
-      %h2 Description
-      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+.badge-show-page
+  %section.badge-container
+    %h1.badge-title
+      = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
+    .img-cropper.large-crop
+      = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+    .count
+      Times Earned:
+      %span
+        = render partial: "badges/components/count", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+      = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
+  %section.badge-description
+    %h2 Description
+    = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
-    - if presenter.badge.student_awardable?
-      %section.student-awardable
-        = link_to glyph(:star) + "Award", new_badge_earned_badge_path(presenter.badge), class: "button"
-        You can award this #{(term_for :badge).downcase} to another #{(term_for :student).downcase}.
+  - if presenter.badge.student_awardable?
+    %section.student-awardable
+      = link_to glyph(:star) + "Award", new_badge_earned_badge_path(presenter.badge), class: "button"
+      You can award this #{(term_for :badge).downcase} to another #{(term_for :student).downcase}.
 
-    - if presenter.badge.badge_files.present?
-      %p
-        %b Attachments:
-        %ul
-          - presenter.badge.badge_files.each do |bf|
-            %li
-              = link_to bf.filename, bf.url
-              - if current_user_is_staff?
-                = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
+  - if presenter.badge.badge_files.present?
+    %p
+      %b Attachments:
+      %ul
+        - presenter.badge.badge_files.each do |bf|
+          %li
+            = link_to bf.filename, bf.url
+            - if current_user_is_staff?
+              = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
 
-    %section.badges-earned
-      = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
+  %section.badges-earned
+    = render partial: "badges/student_earned_badges", locals: { presenter: presenter }

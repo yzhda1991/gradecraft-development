@@ -1,19 +1,18 @@
-.pageContent
-  = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
+= render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
 
-  - if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
-    %hr.grading-divider
+- if @assignment.accepts_submissions? && @submission.present? && SubmissionProctor.new(@submission).viewable?(current_user)
+  %hr.grading-divider
 
-    %section
+  %section
 
-      %h3.uppercase= "#{@group.name}'s Submission"
-      = render partial: "submissions/submission_content",
-        locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
-            assignment_id: @assignment.id, course: current_course, group_id: @group.id) }
+    %h3.uppercase= "#{@group.name}'s Submission"
+    = render partial: "submissions/submission_content",
+      locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
+          assignment_id: @assignment.id, course: current_course, group_id: @group.id) }
 
-  %grade-edit{'assignment-id'=>"#{@assignment.id}",
-    'recipient-type'=>"group",
-    'recipient-id'=>"#{@group.id}",
-    'submit-path'=>"#{assignment_path(@assignment)}",
-    'grade-next-path'=>"#{@grade_next_path}",
-    'is-active-course'=>"#{current_course.active?}"}
+%grade-edit{'assignment-id'=>"#{@assignment.id}",
+  'recipient-type'=>"group",
+  'recipient-id'=>"#{@group.id}",
+  'submit-path'=>"#{assignment_path(@assignment)}",
+  'grade-next-path'=>"#{@grade_next_path}",
+  'is-active-course'=>"#{current_course.active?}"}

@@ -6,11 +6,14 @@
   = render partial: "layouts/course_publication"
   / Page content
   .mainContent
-    .page-header
-      = render partial: "layouts/alerts"
-      = breadcrumbs
-      %h1.pagetitle= title
-      - if current_student.present?
+    - if current_student.present?
+      .page-header
+        = breadcrumbs
+        %h1.pagetitle= current_student.name
+    - else
+      .page-header
+        = breadcrumbs
+        %h1.pagetitle= title
         = yield(:context_menu)
       //= render partial: "info/staff_onboarding"
 

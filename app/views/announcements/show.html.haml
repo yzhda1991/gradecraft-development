@@ -4,15 +4,14 @@
       %ul
         %li= link_to decorative_glyph(:plus) + 'New Announcement', new_announcement_path, class: "button button-edit"
 
-.pageContent
-  %p
-    %strong Sent:
-    = @announcement.created_at.in_time_zone(current_user.time_zone)
+%p
+  %strong Sent:
+  = @announcement.created_at.in_time_zone(current_user.time_zone)
 
-  %p
-    %strong Subject:
-    = @announcement.title
+%p
+  %strong Subject:
+  = @announcement.title
 
-  %p
-    %strong Message:
-    = @announcement.body.html_safe
+%p
+  %strong Message:
+  = @announcement.body.html_safe

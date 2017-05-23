@@ -1,8 +1,7 @@
-.pageContent
-  %h4.bold= @grade_scheme_element.name
-  - if @grade_scheme_element.lowest_points.present?
-    .point-range
-      %span.bold Range:
-      %span #{ points @grade_scheme_element.lowest_points } - #{ points @grade_scheme_element.highest_points }
+%h4.bold= @grade_scheme_element.name
+- if @grade_scheme_element.lowest_points.present?
+  .point-range
+    %span.bold Range:
+    %span #{ points @grade_scheme_element.lowest_points } - #{ points @grade_scheme_element.highest_points }
 
-  %grade-scheme-element-edit-unlocks(grade-scheme-element-id="#{@grade_scheme_element.id}")
+%grade-scheme-element-edit-unlocks(grade-scheme-element-id="#{@grade_scheme_element.id}")

@@ -3,23 +3,22 @@
     %ul
       = active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(id: @earned_badge.id), class: "button button-edit"
 
-.pageContent
-  .img-cropper.large-crop
-    %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name)}
-  %p
-    %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)
-    - if @earned_badge.badge.full_points?
-      = "(#{@earned_badge.points} points)"
+.img-cropper.large-crop
+  %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name)}
+%p
+  %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)
+  - if @earned_badge.badge.full_points?
+    = "(#{@earned_badge.points} points)"
 
-  %p
-    %b= "Earned on:"
-    = @earned_badge.created_at.in_time_zone(current_user.time_zone)
+%p
+  %b= "Earned on:"
+  = @earned_badge.created_at.in_time_zone(current_user.time_zone)
 
-  %p= raw @earned_badge.feedback
+%p= raw @earned_badge.feedback
 
-  %p
-    %b= "Awarded by:"
-    - if @earned_badge.awarded_by.nil?
-      = "-"
-    - else
-      = @earned_badge.awarded_by.name
+%p
+  %b= "Awarded by:"
+  - if @earned_badge.awarded_by.nil?
+    = "-"
+  - else
+    = @earned_badge.awarded_by.name

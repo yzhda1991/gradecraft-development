@@ -4,9 +4,8 @@
       %ul
         = active_course_link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 
-.pageContent
-  - if @grade_scheme_elements.count == 0
-    = render partial: "grade_scheme_elements/components/grade_scheme_elements_setup"
-  - else
-    = render partial: "grade_scheme_elements/components/grade_scheme_elements_table",
-      locals: { grade_scheme_elements: @grade_scheme_elements }
+- if @grade_scheme_elements.count == 0
+  = render partial: "grade_scheme_elements/components/grade_scheme_elements_setup"
+- else
+  = render partial: "grade_scheme_elements/components/grade_scheme_elements_table",
+    locals: { grade_scheme_elements: @grade_scheme_elements }

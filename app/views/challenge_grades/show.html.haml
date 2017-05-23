@@ -1,21 +1,20 @@
-.pageContent
+- if current_user_is_staff?
+  = render partial: "challenge_grades/components/edit_button", locals: { challenge_grade: @challenge_grade }
+
+%p
+  %b #{(term_for :team).titleize}:
   - if current_user_is_staff?
-    = render partial: "challenge_grades/components/edit_button", locals: { challenge_grade: @challenge_grade }
+    = link_to @challenge_grade.team.name, @challenge_grade.team
+  - else
+    = @challenge_grade.team.name
 
-  %p
-    %b #{(term_for :team).titleize}:
-    - if current_user_is_staff?
-      = link_to @challenge_grade.team.name, @challenge_grade.team
-    - else
-      = @challenge_grade.team.name
+= render partial: "challenge_grades/components/score", locals: { challenge_grade: @challenge_grade, challenge: @challenge_grade.challenge }
 
-  = render partial: "challenge_grades/components/score", locals: { challenge_grade: @challenge_grade, challenge: @challenge_grade.challenge }
+- if @challenge_grade.adjustment_points != 0
+  = render partial: "challenge_grades/components/points_adjustment", locals: { challenge_grade: @challenge_grade }
 
-  - if @challenge_grade.adjustment_points != 0
-    = render partial: "challenge_grades/components/points_adjustment", locals: { challenge_grade: @challenge_grade }
+- if current_user_is_staff?
+  = render partial: "challenge_grades/components/status", locals: { challenge_grade: @challenge_grade }
 
-  - if current_user_is_staff?
-    = render partial: "challenge_grades/components/status", locals: { challenge_grade: @challenge_grade }
-
-  - if @challenge_grade.feedback.present?
-    = render partial: "challenge_grades/components/feedback", locals: { challenge_grade: @challenge_grade }
+- if @challenge_grade.feedback.present?
+  = render partial: "challenge_grades/components/feedback", locals: { challenge_grade: @challenge_grade }

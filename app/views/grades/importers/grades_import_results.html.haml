@@ -1,69 +1,68 @@
-.pageContent
-  - unless @result.users_import_result.unsuccessful.empty?
-    .table-header-information
-      %h4.subtitle
-        = "#{@result.users_import_result.unsuccessful.count} #{term_for(:student).pluralize(@result.users_import_result.unsuccessful.count)} Not Imported"
-      %table.dynatable
-        %thead
-          %tr
-            %th Data
-            %th Error(s)
-        %tbody
-          - @result.users_import_result.unsuccessful.each do |row|
-            %tr
-              %td= row[:data]
-              %td= row[:errors]
-
+- unless @result.users_import_result.unsuccessful.empty?
   .table-header-information
     %h4.subtitle
-      = "#{@result.users_import_result.successful.count} #{term_for(:student).pluralize(@result.users_import_result.successful.count)} Imported Successfully"
+      = "#{@result.users_import_result.unsuccessful.count} #{term_for(:student).pluralize(@result.users_import_result.unsuccessful.count)} Not Imported"
     %table.dynatable
       %thead
         %tr
-          %th First Name
-          %th Last Name
-          %th Username
-          %th Email
+          %th Data
+          %th Error(s)
       %tbody
-        - @result.users_import_result.successful.each do |user|
+        - @result.users_import_result.unsuccessful.each do |row|
           %tr
-            %td= link_to user.first_name, student_path(user)
-            %td= link_to user.last_name, student_path(user)
-            %td= link_to user.username, student_path(user)
-            %td= link_to user.email, student_path(user)
+            %td= row[:data]
+            %td= row[:errors]
 
-  - unless @result.grades_import_result.unsuccessful.empty?
-    .table-header-information
-      %h4.subtitle
-        = "#{@result.grades_import_result.unsuccessful.count} #{"Grade".pluralize(@result.grades_import_result.unsuccessful.count)} Not Imported into #{@assignment.name}"
-      %table.dynatable
-        %thead
-          %tr
-            %th User
-            %th Error(s)
-        %tbody
-          - @result.grades_import_result.unsuccessful.each do |row|
-            %tr
-              %td
-                = row[:data]["user"]["name"]
-              %td= row[:errors]
+.table-header-information
+  %h4.subtitle
+    = "#{@result.users_import_result.successful.count} #{term_for(:student).pluralize(@result.users_import_result.successful.count)} Imported Successfully"
+  %table.dynatable
+    %thead
+      %tr
+        %th First Name
+        %th Last Name
+        %th Username
+        %th Email
+    %tbody
+      - @result.users_import_result.successful.each do |user|
+        %tr
+          %td= link_to user.first_name, student_path(user)
+          %td= link_to user.last_name, student_path(user)
+          %td= link_to user.username, student_path(user)
+          %td= link_to user.email, student_path(user)
 
+- unless @result.grades_import_result.unsuccessful.empty?
   .table-header-information
     %h4.subtitle
-      = "#{@result.grades_import_result.successful.count} #{"Grade".pluralize(@result.grades_import_result.successful.count)} Imported Successfully into #{@assignment.name}"
+      = "#{@result.grades_import_result.unsuccessful.count} #{"Grade".pluralize(@result.grades_import_result.unsuccessful.count)} Not Imported into #{@assignment.name}"
     %table.dynatable
       %thead
         %tr
-          %th First Name
-          %th Last Name
-          %th Raw Points
-          %th Score
-          %th Feedback
+          %th User
+          %th Error(s)
       %tbody
-        - @result.grades_import_result.successful.each do |grade|
+        - @result.grades_import_result.unsuccessful.each do |row|
           %tr
-            %td= grade.student.first_name
-            %td= grade.student.last_name
-            %td= points grade.raw_points
-            %td= grade.score
-            %td= grade.feedback
+            %td
+              = row[:data]["user"]["name"]
+            %td= row[:errors]
+
+.table-header-information
+  %h4.subtitle
+    = "#{@result.grades_import_result.successful.count} #{"Grade".pluralize(@result.grades_import_result.successful.count)} Imported Successfully into #{@assignment.name}"
+  %table.dynatable
+    %thead
+      %tr
+        %th First Name
+        %th Last Name
+        %th Raw Points
+        %th Score
+        %th Feedback
+    %tbody
+      - @result.grades_import_result.successful.each do |grade|
+        %tr
+          %td= grade.student.first_name
+          %td= grade.student.last_name
+          %td= points grade.raw_points
+          %td= grade.score
+          %td= grade.feedback

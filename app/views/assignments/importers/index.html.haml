@@ -1,24 +1,23 @@
-.pageContent
-  %section
+%section
+  .card.left{style: "height: 400px;"}
+    .card-cap
+      %img{src: "/images/csv-logo.png", height: "46px"}
+    .card-block
+      %h4.card-title CSV
+      .card-text
+      %p.card-text
+        Upload a .csv file to create an assignment.
+
+      = link_to "Import Assignment from CSV", assignments_importer_path(:csv), class: "card-link button"
+
+  - if current_course.allows_canvas?
     .card.left{style: "height: 400px;"}
       .card-cap
-        %img{src: "/images/csv-logo.png", height: "46px"}
+        %img{src: "/images/canvas-logo.png", height: "46px"}
       .card-block
-        %h4.card-title CSV
+        %h4.card-title Canvas LMS
         .card-text
         %p.card-text
-          Upload a .csv file to create an assignment.
+          An open-source LMS from Instructure. Import any assignment for courses you are enrolled as a teacher.
 
-        = link_to "Import Assignment from CSV", assignments_importer_path(:csv), class: "card-link button"
-
-    - if current_course.allows_canvas?
-      .card.left{style: "height: 400px;"}
-        .card-cap
-          %img{src: "/images/canvas-logo.png", height: "46px"}
-        .card-block
-          %h4.card-title Canvas LMS
-          .card-text
-          %p.card-text
-            An open-source LMS from Instructure. Import any assignment for courses you are enrolled as a teacher.
-
-          = link_to "Import Canvas Assignments", assignments_importer_assignments_path(:canvas), class: "card-link button"
+        = link_to "Import Canvas Assignments", assignments_importer_assignments_path(:canvas), class: "card-link button"

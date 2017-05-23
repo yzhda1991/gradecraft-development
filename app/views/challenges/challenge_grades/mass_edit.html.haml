@@ -1,20 +1,19 @@
-.pageContent
-  #massGrade
-    = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(@challenge) do |f|
-      %table.dynatable
-        - @challenge_grades.each_with_index do |cg, i|
-          %tr
-            %td
-              = link_to cg.team.name, team_path(cg.team)
-            %td
-              = f.simple_fields_for :challenge_grades, cg do |cgf|
-                = cgf.hidden_field :team_id
-                - if @challenge.challenge_score_levels.present?
-                  = cgf.select :raw_points, options_from_collection_for_select(@challenge.challenge_score_levels, :points, :name, cg.try(:raw_points)), include_blank: true
-                - else
-                  = cgf.input :raw_points, label: false, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
+#massGrade
+  = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(@challenge) do |f|
+    %table.dynatable
+      - @challenge_grades.each_with_index do |cg, i|
+        %tr
+          %td
+            = link_to cg.team.name, team_path(cg.team)
+          %td
+            = f.simple_fields_for :challenge_grades, cg do |cgf|
+              = cgf.hidden_field :team_id
+              - if @challenge.challenge_score_levels.present?
+                = cgf.select :raw_points, options_from_collection_for_select(@challenge.challenge_score_levels, :points, :name, cg.try(:raw_points)), include_blank: true
+              - else
+                = cgf.input :raw_points, label: false, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
 
-      .submit-buttons
-        %ul
-          %li= f.button :submit, "Submit"
-          %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"
+  .submit-buttons
+    %ul
+      %li= f.button :submit, "Submit"
+      %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"

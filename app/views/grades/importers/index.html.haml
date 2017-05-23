@@ -1,24 +1,23 @@
-.pageContent
-  %section
+%section
+  .card.left{style: "height: 400px;"}
+    .card-cap
+      %img{src: "/images/csv-logo.png", height: "46px"}
+    .card-block
+      %h4.card-title CSV
+      .card-text
+      %p.card-text
+        Upload a .csv file with grade information for students to import the student grades.
+
+      = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
+
+  - if current_course.allows_canvas?
     .card.left{style: "height: 400px;"}
       .card-cap
-        %img{src: "/images/csv-logo.png", height: "46px"}
+        %img{src: "/images/canvas-logo.png"}
       .card-block
-        %h4.card-title CSV
+        %h4.card-title Canvas LMS
         .card-text
         %p.card-text
-          Upload a .csv file with grade information for students to import the student grades.
+          An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
 
-        = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
-
-    - if current_course.allows_canvas?
-      .card.left{style: "height: 400px;"}
-        .card-cap
-          %img{src: "/images/canvas-logo.png"}
-        .card-block
-          %h4.card-title Canvas LMS
-          .card-text
-          %p.card-text
-            An open-source LMS from Instructure. Import any grade for the courses you are enrolled as a teacher.
-
-          = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas), class: "card-link button"
+        = link_to "Import Canvas Grades", assignment_grades_importer_assignments_path(@assignment, :canvas), class: "card-link button"

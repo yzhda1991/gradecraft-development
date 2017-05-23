@@ -1,4 +1,15 @@
-.pageContent
+- if current_course.assignment_weight_open? || current_user_is_staff?
+  .assignment_weights
+    %h4 RULES OF THE GAME
+    %ul
+      - if current_course.total_weights?
+        %li You have a total of #{current_course.total_weights} #{(term_for :weights).titleize} to spend
+      - if current_course.weights_close_at?
+        %li You have until #{current_course.weights_close_at.strftime("%A, %B %d, %Y, at %H:%M%p")} to make your #{(term_for :weight).titleize} decision
+      - if current_course.max_weights_per_assignment_type?
+        %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
+      - if current_course.max_assignment_types_weighted?
+        %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
 
   - if current_course.assignment_weight_open?
     .assignment_weights
@@ -13,13 +24,11 @@
         - if current_course.max_assignment_types_weighted?
           %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
 
-    %assignment-type-weights
-
-  - else
-    %h3 Your #{term_for :weight} choices:
-    %hr
-    - @assignment_types.each do |at|
-      - if at.student_weightable?
-        %h5
-          = at.name
-          = "- #{current_student.weight_for_assignment_type(at)} #{term_for :weight}"
+- else
+  %h3 Your #{term_for :weight} choices:
+  %hr
+  - @assignment_types.each do |at|
+    - if at.student_weightable?
+      %h5
+        = at.name
+        = "- #{current_student.weight_for_assignment_type(at)} #{term_for :weight}"

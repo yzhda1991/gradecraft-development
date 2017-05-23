@@ -1,11 +1,10 @@
-.pageContent
-  .assignment-details-container
-    %section
-      %h2 Description
-      = render partial: "assignments/description", locals: { presenter: presenter }
+.assignment-details-container
+  %section
+    %h2 Description
+    = render partial: "assignments/description", locals: { presenter: presenter }
 
-    - if presenter.grade_with_rubric?
-      %hr.dotted
-      %section
-        %h2 Grading Rubric
-        = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
+  - if presenter.grade_with_rubric?
+    %hr.dotted
+    %section
+      %h2 Grading Rubric
+      = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }

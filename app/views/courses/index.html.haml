@@ -4,10 +4,24 @@
       %ul
         %li= link_to decorative_glyph(:plus) + "New Course", new_course_path, class: "button button-edit"
 
-.pageContent
-  %table.paginated_dynatable
-    %caption.sr-only My Courses
-    %thead
+%table.paginated_dynatable
+  %caption.sr-only My Courses
+  %thead
+    %tr
+      %th{scope: "col"} Course No
+      %th{scope: "col"} Name
+      %th{scope: "col"} Instructor(s)
+      %th{scope: "col"} Year
+      %th{scope: "col"} Semester
+      %th{scope: "col"} Total Points
+      - if current_user_is_staff?
+        %th{scope: "col"} # of Students
+        %th{scope: "col"} Teams
+        %th{scope: "col"} Badges
+        %th{style: "text-align: right"} Downloads
+        %th Option
+  %tbody
+    - @courses.each do |course|
       %tr
         %th{scope: "col"} Course No
         %th{scope: "col"} Name

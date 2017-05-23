@@ -1,59 +1,58 @@
 = render partial: "assignment_types/buttons"
 
-.pageContent
-  = team_filter(@teams) if @teams.present?
+= team_filter(@teams) if @teams.present?
 
-  %table
-    %tr
-      %th
-        %i.fa.fa-heart.complete
-        Full Points
-      %th
-        %i.fa.fa-heart-o.partial
-        Partial Points
-      %th
-        %i.fa.fa-times.absent
-        Zero Points
-      %th
-        No Grade
-  .italic
-    Numbers reflect streaks - how many times in a row a #{(term_for :student).downcase} has earned the maximum number of points on an #{term_for :assignment}
+%table
+  %tr
+    %th
+      %i.fa.fa-heart.complete
+      Full Points
+    %th
+      %i.fa.fa-heart-o.partial
+      Partial Points
+    %th
+      %i.fa.fa-times.absent
+      Zero Points
+    %th
+      No Grade
+.italic
+  Numbers reflect streaks - how many times in a row a #{(term_for :student).downcase} has earned the maximum number of points on an #{term_for :assignment}
 
-  / Gradebook Pattern Table
-  .scroll-table#gradebook
-    .table-wrapper
-      %table
-        %thead
+/ Gradebook Pattern Table
+.scroll-table#gradebook
+  .table-wrapper
+    %table
+      %thead
+        %tr
+          %th Student
+          - chronological_assignments = @assignment_type.assignments.chronological
+          - for assignment in chronological_assignments.alphabetical
+            %th.sortable{"data-sort" => "int"}= assignment.name
+      %tbody
+        - @students.each do |student|
           %tr
-            %th Student
+            %td= link_to student.name, student_path(student)
+            - i = 0
             - chronological_assignments = @assignment_type.assignments.chronological
             - for assignment in chronological_assignments.alphabetical
-              %th.sortable{"data-sort" => "int"}= assignment.name
-        %tbody
-          - @students.each do |student|
-            %tr
-              %td= link_to student.name, student_path(student)
-              - i = 0
-              - chronological_assignments = @assignment_type.assignments.chronological
-              - for assignment in chronological_assignments.alphabetical
-                - if assignment.full_points > 0
-                  - assignment.grade_for_student(student).tap do |grade|
+              - if assignment.full_points > 0
+                - assignment.grade_for_student(student).tap do |grade|
 
-                    - if grade && grade.score == assignment.full_points
-                      // Displaying td's colored green if the student earned all
-                      // points possible on the assignment
-                      %td
-                        %i.fa.fa-heart.complete
-                    - elsif grade && grade.score == 0
-                      // Displaying td's colored red if the student earned no
-                      // points on the assignment (but HAS a grade)
-                      %td
-                        %i.fa.fa-times.absent
-                    - elsif grade && grade.score < assignment.full_points
-                      // Displaying td's colored yellow if the student earned
-                      // some points on the assignment
-                      %td
-                        %i.fa.fa-heart-o.partial
-                    - else
-                      // Displaying td's colored white if the student has no grade
-                      %td
+                  - if grade && grade.score == assignment.full_points
+                    // Displaying td's colored green if the student earned all
+                    // points possible on the assignment
+                    %td
+                      %i.fa.fa-heart.complete
+                  - elsif grade && grade.score == 0
+                    // Displaying td's colored red if the student earned no
+                    // points on the assignment (but HAS a grade)
+                    %td
+                      %i.fa.fa-times.absent
+                  - elsif grade && grade.score < assignment.full_points
+                    // Displaying td's colored yellow if the student earned
+                    // some points on the assignment
+                    %td
+                      %i.fa.fa-heart-o.partial
+                  - else
+                    // Displaying td's colored white if the student has no grade
+                    %td

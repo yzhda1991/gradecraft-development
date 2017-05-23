@@ -1,19 +1,18 @@
 = render partial: "groups/buttons"
 
-.pageContent
-  - if @pending_groups.present?
-    %h2.subtitle= "Pending #{term_for :groups}"
+- if @pending_groups.present?
+  %h2.subtitle= "Pending #{term_for :groups}"
 
-    = render partial: "groups/groups_table", locals: { course: current_course, :groups => @pending_groups }
+  = render partial: "groups/groups_table", locals: { course: current_course, :groups => @pending_groups }
 
-  - if @rejected_groups.present?
+- if @rejected_groups.present?
 
-    %h2.subtitle.fail= "Rejected #{term_for :groups}"
+  %h2.subtitle.fail= "Rejected #{term_for :groups}"
 
-    = render partial: "groups/groups_table", locals: { course: current_course, :groups => @rejected_groups }
+  = render partial: "groups/groups_table", locals: { course: current_course, :groups => @rejected_groups }
 
-  - if @approved_groups.present?
+- if @approved_groups.present?
 
-    %h2.subtitle.success= "Approved #{term_for :groups}"
+  %h2.subtitle.success= "Approved #{term_for :groups}"
 
-    = render partial: "groups/groups_table", locals: { course: current_course, :groups => @approved_groups }
+  = render partial: "groups/groups_table", locals: { course: current_course, :groups => @approved_groups }

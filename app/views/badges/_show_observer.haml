@@ -1,18 +1,17 @@
-.pageContent
-  .badge-show-page
-    %section.badge-container
-      %h1.badge-title
-        = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
-      .img-cropper.large-crop
-        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: nil }
-    %section.badge-description
-      %h2 Description
-      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+.badge-show-page
+  %section.badge-container
+    %h1.badge-title
+      = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
+    .img-cropper.large-crop
+      = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: nil }
+  %section.badge-description
+    %h2 Description
+    = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
-    - if presenter.badge.badge_files.present?
-      %p
-        %b Attachments:
-        %ul
-          - presenter.badge.badge_files.each do |bf|
-            %li
-              = link_to bf.filename, bf.url
+  - if presenter.badge.badge_files.present?
+    %p
+      %b Attachments:
+      %ul
+        - presenter.badge.badge_files.each do |bf|
+          %li
+            = link_to bf.filename, bf.url
