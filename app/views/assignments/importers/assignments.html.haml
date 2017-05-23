@@ -1,6 +1,6 @@
-.pageContent{"ng-app"=>"gradecraft"}
+.pageContent
   = render partial: "layouts/alerts"
 
-  %canvas_assignment_importer_form{"provider"=>"#{@provider_name}",
-                                   "current_course_name"=>"#{@course.name}",
-                                   "authenticity_token"=>"#{form_authenticity_token}"}
+  %canvas-assignment-importer-form{"provider"=>"#{@provider_name}",
+                                   "current-course-name"=>"#{@course.name}",
+                                   "authenticity-token"=>"#{form_authenticity_token}"}
