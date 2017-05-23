@@ -1,28 +1,46 @@
 describe Assignments::ImportersController do
-  let(:course) { create :course }
-  let(:professor) { professor_membership.user }
-  let(:professor_membership) { create :course_membership, :professor, course: course }
+  let(:course) { build_stubbed :course }
+  let(:professor) { build :user, courses: [course], role: :professor }
+  let(:assignment) { create :assignment, course: course }
   let(:provider) { :canvas }
+  let(:course_id) { "COURSE_ID" }
 
   before { allow(controller).to receive(:current_course).and_return course }
 
-  describe "POST assignments_import" do
-    let(:course_id) { "COURSE_ID" }
+  context "as a professor" do
+    let(:access_token) { "BLAH" }
+    let(:result) { double :result, success?: true, message: "" }
+    let!(:user_authorization) do
+      create :user_authorization, :canvas, user: professor, access_token: access_token,
+        expires_at: 2.days.from_now
+    end
 
-    context "as a professor" do
-      let(:access_token) { "BLAH" }
+    before do
+      login_user professor
+      allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
+    end
+
+    describe "GET assignments" do
+      it "redirects to the assignment importers page if the course cannot be retrieved" do
+        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:course) { |&b| b.call }
+        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
+          id: course_id }
+
+        expect(response).to redirect_to assignments_importers_path
+      end
+
+      it "redirects to the assignment importers page if the assignments cannot be retrieved" do
+        allow_any_instance_of(ActiveLMS::Syllabus).to receive(:assignments) { |&b| b.call }
+        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
+          id: course_id }
+
+        expect(response).to redirect_to assignments_importers_path
+      end
+    end
+
+    describe "POST assignments_import" do
       let(:assignment_ids) { ["123", "456"] }
-      let(:assignment_type) { create :assignment_type }
-      let(:result) { double(:result, success?: true, message: "") }
-      let!(:user_authorization) do
-        create :user_authorization, :canvas, user: professor, access_token: access_token,
-          expires_at: 2.days.from_now
-      end
-
-      before do
-        login_user(professor)
-        allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
-      end
+      let(:assignment_type) { build_stubbed :assignment_type }
 
       it "imports the selected assignments" do
         expect(Services::ImportsLMSAssignments).to \
@@ -56,28 +74,7 @@ describe Assignments::ImportersController do
       end
     end
 
-    context "as a student" do
-      it "redirects to the root url" do
-        post :assignments_import, params: { importer_provider_id: provider, id: course_id }
-
-        expect(response).to redirect_to root_path
-      end
-    end
-  end
-
-  describe "POST #refresh_assignment" do
-    let(:assignment) { create :assignment, course: course }
-
-    context "as a professor" do
-      let(:access_token) { "BLAH" }
-      let(:result) { double(:result, success?: true, message: "") }
-      let!(:user_authorization) do
-        create :user_authorization, :canvas, user: professor, access_token: access_token,
-          expires_at: 2.days.from_now
-      end
-
-      before { login_user(professor) }
-
+    describe "POST #refresh_assignment" do
       it "updates the assignment from the provider details" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:refresh).with(provider.to_s, access_token, assignment).and_return result
@@ -92,7 +89,7 @@ describe Assignments::ImportersController do
         post :refresh_assignment, params: { importer_provider_id: provider,
                                             id: assignment.id }
 
-        expect(response).to redirect_to(assignment_path(assignment))
+        expect(response).to redirect_to assignment_path(assignment)
         expect(flash[:notice]).to \
           eq "You have successfully updated #{assignment.name} from Canvas"
       end
@@ -106,35 +103,13 @@ describe Assignments::ImportersController do
           post :refresh_assignment, params: { importer_provider_id: provider,
                                               id: assignment.id }
 
-          expect(response).to redirect_to(assignment_path(assignment))
+          expect(response).to redirect_to assignment_path(assignment)
           expect(flash[:alert]).to eq "This was not imported"
         end
       end
     end
 
-    context "as a student" do
-      it "redirects to the root url" do
-        post :refresh_assignment, params: { importer_provider_id: provider,
-                                            id: assignment.id }
-
-        expect(response).to redirect_to root_path
-      end
-    end
-  end
-
-  describe "POST #update_assignment" do
-    let(:assignment) { create :assignment, course: course }
-
-    context "as a professor" do
-      let(:access_token) { "BLAH" }
-      let(:result) { double(:result, success?: true, message: "") }
-      let!(:user_authorization) do
-        create :user_authorization, :canvas, user: professor, access_token: access_token,
-          expires_at: 2.days.from_now
-      end
-
-      before { login_user(professor) }
-
+    describe "POST #update_assignment" do
       it "updates the canvas assignment from the assignment details" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:update).with(provider.to_s, access_token, assignment).and_return result
@@ -147,7 +122,7 @@ describe Assignments::ImportersController do
 
         post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
-        expect(response).to redirect_to(assignment_path(assignment))
+        expect(response).to redirect_to assignment_path(assignment)
         expect(flash[:notice]).to \
           eq "You have successfully updated #{assignment.name} on Canvas"
       end
@@ -160,13 +135,36 @@ describe Assignments::ImportersController do
 
           post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
-          expect(response).to redirect_to(assignment_path(assignment))
+          expect(response).to redirect_to assignment_path(assignment)
           expect(flash[:alert]).to eq "This was not updated"
         end
       end
     end
+  end
 
-    context "as a student" do
+  context "as a student" do
+    let(:student) { build :user, courses: [course], role: :student }
+
+    before(:each) { login_user student }
+
+    describe "POST assignments_import" do
+      it "redirects to the root url" do
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id }
+
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "POST #refresh_assignment" do
+      it "redirects to the root url" do
+        post :refresh_assignment, params: { importer_provider_id: provider,
+                                            id: assignment.id }
+
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "POST #update_assignment" do
       it "redirects to the root url" do
         post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 

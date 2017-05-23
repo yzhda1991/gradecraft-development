@@ -19,8 +19,14 @@ class Assignments::ImportersController < ApplicationController
   # GET /assignments/importers/:importer_provider_id/courses/:id/assignments
   def assignments
     @provider_name = params[:importer_provider_id]
-    @lms_course = syllabus.course(params[:id])
-    @assignments = syllabus.assignments(params[:id])
+    @lms_course = syllabus.course(params[:id]) do
+      redirect_to assignments_importers_path,
+        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
+    end
+    @assignments = syllabus.assignments(params[:id]) do
+      redirect_to assignments_importers_path,
+        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
+    end
     @assignment_types = current_course.assignment_types.ordered
   end
 

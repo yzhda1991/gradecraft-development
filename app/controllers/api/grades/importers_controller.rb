@@ -15,8 +15,14 @@ class API::Grades::ImportersController < ApplicationController
   def show
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @grades = syllabus.grades(params[:id], [params[:assignment_ids]].flatten, nil, false, importer_params.to_h)
-    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids])
+    @grades = syllabus.grades(params[:id], [params[:assignment_ids]].flatten, nil, false, importer_params.to_h) do
+      render json: { message: "There was an issue trying to retrieve the grades from #{@provider_name.capitalize}.",
+        success: false }, status: 500 and return
+    end
+    @provider_assignment = syllabus.assignment(params[:id], params[:assignment_ids]) do
+      render json: { message: "There was an issue trying to retrieve the assignment from #{@provider_name.capitalize}.",
+        success: false }, status: 500 and return
+    end
     render template: "api/grades/importers/show"
   end
 
