@@ -27,21 +27,23 @@ class CourseMembership < ActiveRecord::Base
 
   def self.create_or_update_from_lti(student, course, auth_hash)
     return false unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
-    course_membership = student.course_memberships.find_or_create_by(course_id: course.id)
+    course_membership = student.course_memberships.find_or_initialize_by(course_id: course.id)
 
     auth_hash["extra"]["raw_info"].tap do |extra|
       case extra["roles"].downcase
       when /instructor/
-        course_membership.update(role: "professor")
+        course_membership.role = "professor"
       when /teachingassistant/
-        course_membership.update(role: "gsi")
+        course_membership.role = "gsi"
       when /learner/
-        course_membership.update(role: "student")
-        course_membership.update(instructor_of_record: false)
+        course_membership.role = "student"
+        course_membership.instructor_of_record = false
       else
-        course_membership.update(instructor_of_record: false)
+        course_membership.role = "observer"
+        course_membership.instructor_of_record = false
       end
     end
+    course_membership.last_login_at = DateTime.now
     course_membership.save
   end
 
