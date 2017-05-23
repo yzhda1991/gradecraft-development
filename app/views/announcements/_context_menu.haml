@@ -1,0 +1,5 @@
+- if can? :create, Announcement.new(course_id: current_course.id)
+  - content_for :context_menu do
+    .context_menu
+      %ul
+        = active_course_link_to decorative_glyph(:plus) + "New Announcement", new_announcement_path, class: "button button-edit"

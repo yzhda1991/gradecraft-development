@@ -8,10 +8,12 @@
   .mainContent
     - if current_student.present?
       .page-header
+        = render partial: "layouts/alerts"
         = breadcrumbs
         %h1.pagetitle= current_student.name
     - else
       .page-header
+        = render partial: "layouts/alerts"
         = breadcrumbs
         %h1.pagetitle= title
         = yield(:context_menu)

@@ -3,12 +3,12 @@
 = simple_form_for(@announcement) do |f|
   %section.form-section
     .form-item
-      = f.input :title, "aria-required": "true"
+      = f.input :title, "aria-required": "true", label: false
 
     = f.label :body, "Message"
     = f.text_area :body, class: "froala"
 
-  .submit-buttons
+  .submit-buttons 
     %ul
       %li= f.button :submit, "Send Announcement"
       %li= link_to glyph("times-circle") + "Cancel", announcements_path, class: "button"
