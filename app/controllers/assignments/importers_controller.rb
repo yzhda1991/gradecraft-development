@@ -1,5 +1,6 @@
 require_relative "../../services/imports_lms_assignments"
 
+# rubocop:disable AndOr
 class Assignments::ImportersController < ApplicationController
   include OAuthProvider
 

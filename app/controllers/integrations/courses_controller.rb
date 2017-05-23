@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class Integrations::CoursesController < ApplicationController
   include OAuthProvider
 

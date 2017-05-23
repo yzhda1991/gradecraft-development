@@ -1,6 +1,7 @@
 require "active_lms"
 require_relative "../../services/imports_lms_grades"
 
+# rubocop:disable AndOr
 class Grades::ImportersController < ApplicationController
   include OAuthProvider
 

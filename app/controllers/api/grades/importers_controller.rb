@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class API::Grades::ImportersController < ApplicationController
   include OAuthProvider
 
