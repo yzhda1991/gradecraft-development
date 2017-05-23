@@ -141,8 +141,6 @@ Rails.application.routes.draw do
 
   resources :levels, only: [:create, :destroy, :update]
 
-  resources :level_badges, only: [:create, :destroy]
-
   #4. Assignment Types
   resources :assignment_types, except: [:show] do
     get :all_grades, on: :member
