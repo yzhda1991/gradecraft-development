@@ -54,6 +54,7 @@
         $("#criterion-box").sortable(
           start: scope.dragStart
           update: scope.dragEnd
+          handle: ".criterion-drag-handle"
         )
       )
   }
