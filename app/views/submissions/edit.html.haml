@@ -1,13 +1,12 @@
-.pageContent
-  = render partial: "layouts/errors", locals: { model: presenter.submission }
+= render partial: "layouts/errors", locals: { model: presenter.submission }
 
-  - if presenter.assignment.has_groups?
-    - if current_user_is_student?
-      %h4= "You are editing the assignment submission for Group #{current_student.group_for_assignment(presenter.assignment).name }"
-    - else
-      %h4= "You are editing the assignment submission for Group #{presenter.submission.group.name }"
-
+- if presenter.assignment.has_groups?
   - if current_user_is_student?
-    = render partial: "autosave_form", locals: { presenter: presenter }
+    %h4= "You are editing the assignment submission for Group #{current_student.group_for_assignment(presenter.assignment).name }"
   - else
-    = render partial: "form", locals: { presenter: presenter }
+    %h4= "You are editing the assignment submission for Group #{presenter.submission.group.name }"
+
+- if current_user_is_student?
+  = render partial: "autosave_form", locals: { presenter: presenter }
+- else
+  = render partial: "form", locals: { presenter: presenter }

@@ -1,8 +1,7 @@
-.pageContent
-  = render partial: "layouts/errors", locals: { model: presenter.submission }
+= render partial: "layouts/errors", locals: { model: presenter.submission }
 
-  - if presenter.assignment.accepts_submissions?
-    - if current_user_is_student?
-      = render partial: "autosave_form", locals: { presenter: presenter }
-    - else
-      = render partial: "form", locals: { presenter: presenter }
+- if presenter.assignment.accepts_submissions?
+  - if current_user_is_student?
+    = render partial: "autosave_form", locals: { presenter: presenter }
+  - else
+    = render partial: "form", locals: { presenter: presenter }

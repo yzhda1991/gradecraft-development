@@ -1,5 +1,5 @@
 .pageContent
-  = render partial: "layouts/errors", locals: { model: @user, term: "profile" }
+  = render partial: "layouts/alerts", locals: { model: @user, term: "profile" }
 
   = simple_form_for(@user, method: :put, :url => update_profile_users_path) do |f|
     %section

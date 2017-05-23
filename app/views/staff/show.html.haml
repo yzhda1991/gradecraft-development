@@ -1,38 +1,35 @@
-= render "buttons"
+- if !@staff_member.activated?
+  = link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
 
-.pageContent
-  - if !@staff_member.activated?
-    = link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
+- if current_user_is_admin?
+  %h4 Courses
+  %ul
+    - @staff_member.courses.each do |course|
+      %li= link_to course.name, change_course_path(id: course.id)
 
-  - if current_user_is_admin?
-    %h4 Courses
-    %ul
-      - @staff_member.courses.each do |course|
-        %li= link_to course.name, change_course_path(id: course.id)
-
-  %h4 Recently Graded
-  %table.dynatable
-    %thead
+%h4 Recently Graded
+%table.dynatable
+  %thead
+    %tr
+      %th Assignment
+      %th Student
+      %th Score
+      %th Feedback
+      %th Created at
+      %th Last Updated
+      %th{:style => "min-width: 120px"}
+  %tbody
+    - @grades.each do |grade|
       %tr
-        %th Assignment
-        %th Student
-        %th Score
-        %th Feedback
-        %th Created at
-        %th Last Updated
-        %th.options Options
-    %tbody
-      - @grades.each do |grade|
-        %tr
-          %td= link_to grade.assignment.name, assignment_path(grade.assignment)
-          %td= link_to grade.student.name, student_path(grade.student)
-          %td= points grade.score
-          %td= raw grade.feedback
-          %td= grade.created_at.in_time_zone(current_user.time_zone)
-          %td= grade.graded_at.in_time_zone(current_user.time_zone)
-          %td
-            .button-container.dropdown
-              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu.dropdown-content
-                = active_course_link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
-                = active_course_link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure you want to delete #{grade.student.name}'s grade for #{grade.assignment.name}?", method: :delete }
+        %td= link_to grade.assignment.name, assignment_path(grade.assignment)
+        %td= link_to grade.student.name, student_path(grade.student)
+        %td= points grade.score
+        %td= raw grade.feedback
+        %td= grade.created_at.in_time_zone(current_user.time_zone)
+        %td= grade.graded_at.in_time_zone(current_user.time_zone)
+        %td
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu.dropdown-content
+              = active_course_link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
+              = active_course_link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure you want to delete #{grade.student.name}'s grade for #{grade.assignment.name}?", method: :delete }

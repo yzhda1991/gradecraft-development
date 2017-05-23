@@ -1,36 +1,35 @@
 = render "buttons"
 
-.pageContent
-  %table.dynatable.no-table-header
-    %caption.sr-only Staff Members
-    %thead
+%table.dynatable.no-table-header
+  %caption.sr-only Staff Members
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+      %th Avatar
+      %th Role
+      %th #{term_for :team}
+      %th.options Options
+  %tbody
+    - @staff.each do |user|
       %tr
-        %th First Name
-        %th Last Name
-        %th Avatar
-        %th Role
-        %th #{term_for :team}
-        %th.options Options
-    %tbody
-      - @staff.each do |user|
-        %tr
-          %td
-            = link_to user.first_name, staff_path(user)
-          %td= link_to user.last_name, staff_path(user)
-          %td
-            - if user.avatar_file_name.present?
-              %img.img-rounded{:src => user.avatar_file_name, :width => 30}
-          %td= user.role(current_course).capitalize
-          %td
-            - user.team_leaderships_for_course(current_course).each do |leadership|
-              %div= link_to leadership.team.try(:name), leadership.team
-          %td
-            .button-container.dropdown
-              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu.dropdown-content
-                %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user)
-                = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
-                = active_course_link_to decorative_glyph(:trash) + "Delete",  user.course_memberships.where(course: current_course).first, data: { confirm: "Are you sure you want to delete #{user.name}'s course membership in #{current_course.name}?"}, :method => :delete
-                - if !user.activated?
-                  = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(user.id), :method => :put
-                  = active_course_link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(user.id)
+        %td
+          = link_to user.first_name, staff_path(user)
+        %td= link_to user.last_name, staff_path(user)
+        %td
+          - if user.avatar_file_name.present?
+            %img.img-rounded{:src => user.avatar_file_name, :width => 30}
+        %td= user.role(current_course).capitalize
+        %td
+          - user.team_leaderships_for_course(current_course).each do |leadership|
+            %div= link_to leadership.team.try(:name), leadership.team
+        %td
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu.dropdown-content
+              %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user)
+              = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
+              = active_course_link_to decorative_glyph(:trash) + "Delete",  user.course_memberships.where(course: current_course).first, data: { confirm: "Are you sure you want to delete #{user.name}'s course membership in #{current_course.name}?"}, :method => :delete
+              - if !user.activated?
+                = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(user.id), :method => :put
+                = active_course_link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(user.id)

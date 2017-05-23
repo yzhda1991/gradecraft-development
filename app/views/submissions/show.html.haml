@@ -1,16 +1,15 @@
 - if current_user_is_staff?
   = render partial: "submissions/buttons", locals: { presenter: presenter }
 
-.pageContent
-  #tabs.ui-tabs.ui-widget
-    %ul.ui-tabs-nav{role: "tablist"}
-      %li
-        %a{href: "#submission"} Submission
-      %li
-        %a{href: "#history"} Submission History
+#tabs.ui-tabs.ui-widget
+  %ul.ui-tabs-nav{role: "tablist"}
+    %li
+      %a{href: "#submission"} Submission
+    %li
+      %a{href: "#history"} Submission History
 
-    #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
-      .ui-tabs-panel#submission.active{role: "tabpanel", "aria-hidden" => false}
-        = render partial: "submissions/submission_content", locals: { presenter: presenter }
-      .ui-tabs-panel#history{role: "tabpanel", "aria-hidden" => false}
-        = history_timeline presenter.submission_grade_history
+  #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
+    .ui-tabs-panel#submission.active{role: "tabpanel", "aria-hidden" => false}
+      = render partial: "submissions/submission_content", locals: { presenter: presenter }
+    .ui-tabs-panel#history{role: "tabpanel", "aria-hidden" => false}
+      = history_timeline presenter.submission_grade_history

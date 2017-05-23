@@ -1,19 +1,34 @@
-.pageContent
-  %span.label.alert= "You have #{@resubmission_count} resubmissions to grade"
+%span.label.alert= "You have #{@resubmission_count} resubmissions to grade"
 
-  = team_filter(@teams) if current_course.has_teams?
+= team_filter(@teams) if current_course.has_teams?
 
-  - @resubmissions.group_by(&:assignment).each do |assignment, resubmissions|
-    %h5.section-title
-      = link_to assignment.name, assignment
+- @resubmissions.group_by(&:assignment).each do |assignment, resubmissions|
+  %h5.section-title
+    = link_to assignment.name, assignment
 
-    %table.dynatable
-      %caption.sr-only= "Resubmissions for #{assignment.name}"
-      %thead
+  %table.dynatable
+    %caption.sr-only= "Resubmissions for #{assignment.name}"
+    %thead
+      %tr
+        - if assignment.is_individual?
+          %th{scope: "col", :width => "7%"} First Name
+          %th{scope: "col", :width => "7%"} Last Name
+          - if current_course.has_teams?
+            %th{scope: "col", :width => "15%"}= "#{term_for :team}"
+        - elsif assignment.has_groups?
+          %th{scope: "col"} Group
+        %th{scope: "col", :width => "7%"} Current Score
+        %th{scope: "col", :width => "7%"} Graded
+        %th{scope: "col", :width => "7%"} Resubmitted
+        %th{scope: "col", :style => "min-width: 300px" }
+          %span.sr-only Actions
+    %tbody
+      - resubmissions.each do |re|
         %tr
-          - if assignment.is_individual?
-            %th{scope: "col", :width => "7%"} First Name
-            %th{scope: "col", :width => "7%"} Last Name
+          - if re.assignment.is_individual?
+            - grade = re.student.grade_for_assignment(re.assignment)
+            %td= link_to re.student.first_name, student_path(re.student)
+            %td= link_to re.student.last_name, student_path(re.student)
             - if current_course.has_teams?
               %th{scope: "col", :width => "15%"}= "#{term_for :team}"
           - elsif assignment.has_groups?

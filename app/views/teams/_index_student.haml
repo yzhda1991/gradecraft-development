@@ -1,14 +1,13 @@
-.pageContent
-  - if @team.present?
-    %h2.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
-    - if @team.banner.present?
-      %img.clear{:src => @team.banner, :height => 150 }
-  - else
-    %i You haven't been assigned to a #{ (term_for :team).downcase } yet. You might want to talk to your instructor!
+- if @team.present?
+  %h2.subtitle Your #{term_for :team} (#{@team.name}) has earned #{points @team.challenge_grade_score } points
+  - if @team.banner.present?
+    %img.clear{:src => @team.banner, :height => 150 }
+- else
+  %i You haven't been assigned to a #{ (term_for :team).downcase } yet. You might want to talk to your instructor!
 
-  = render partial: "teams/leaderboard" if current_course.teams_visible?
+= render partial: "teams/leaderboard" if current_course.teams_visible?
 
-  - if @team.present? && current_course.has_in_team_leaderboards?
-    = render partial: "teams/in_team_rankings", locals: { team: @team }
+- if @team.present? && current_course.has_in_team_leaderboards?
+  = render partial: "teams/in_team_rankings", locals: { team: @team }
 
-  = render partial: "challenges/index_student" if current_course.challenges.present?
+= render partial: "challenges/index_student" if current_course.challenges.present?

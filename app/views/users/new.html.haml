@@ -1,16 +1,15 @@
-.pageContent
-  = render partial: "layouts/errors", locals: { model: @user, term: "user" }
+= render partial: "layouts/errors", locals: { model: @user, term: "user" }
 
-  #tabs.ui-tabs.ui-widget
-    %ul.ui-tabs-nav{role: "tablist"}
-      %li
-        %a{ "href" => "#tab1" } New GradeCraft User
-      %li
-        %a{ "href" => "#tab2" } New UM User
+#tabs.ui-tabs.ui-widget
+  %ul.ui-tabs-nav{role: "tablist"}
+    %li
+      %a{ "href" => "#tab1" } New GradeCraft User
+    %li
+      %a{ "href" => "#tab2" } New UM User
 
-    #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
-      #tab1{ class: ("active" unless @user.internal?) }
-        = render partial: "gradecraft_user_form"
+  #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
+    #tab1{ class: ("active" unless @user.internal?) }
+      = render partial: "gradecraft_user_form"
 
-      #tab2{ class: ("active" if @user.internal?) }
-        = render partial: "internal_user_form"
+    #tab2{ class: ("active" if @user.internal?) }
+      = render partial: "internal_user_form"

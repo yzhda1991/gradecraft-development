@@ -1,68 +1,67 @@
 = render "buttons"
 
-.pageContent
-  - if @team.banner.present?
-    %img{:src => @team.banner, :height => 150 }
+- if @team.banner.present?
+  %img{:src => @team.banner, :height => 150 }
 
-  %h2.subtitle= "#{term_for :student} Roster"
+%h2.subtitle= "#{term_for :student} Roster"
 
-  %table.dynatable.no-table-header
-    %thead
+%table.dynatable.no-table-header
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+      %th Email
+      - if current_course.has_team_roles?
+        %th Role
+      %th Score
+      %th Level
+      - if current_course.has_badges?
+        %th{scope: "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
+        %th{:style => "display: none"} Badge Count
+      %th{:width => "20%"}
+  %tbody
+    - @team.active_members(current_course).each do |student|
       %tr
-        %th First Name
-        %th Last Name
-        %th Email
+        %td= link_to student.first_name, student_path(student)
+        %td= link_to student.last_name, student_path(student)
+        %td= mail_to student.email, student.email
         - if current_course.has_team_roles?
-          %th Role
-        %th Score
-        %th Level
+          %td= student.team_role(current_course)
+        %td= points student.score_for_course(current_course) if student.respond_to?(:grades)
+        %td= student.grade_for_course(current_course).try(:name)
         - if current_course.has_badges?
-          %th{scope: "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
-          %th{:style => "display: none"} Badge Count
-        %th{:width => "20%"}
-    %tbody
-      - @team.active_members(current_course).each do |student|
-        %tr
-          %td= link_to student.first_name, student_path(student)
-          %td= link_to student.last_name, student_path(student)
-          %td= mail_to student.email, student.email
-          - if current_course.has_team_roles?
-            %td= student.team_role(current_course)
-          %td= points student.score_for_course(current_course) if student.respond_to?(:grades)
-          %td= student.grade_for_course(current_course).try(:name)
-          - if current_course.has_badges?
-            %td
-              - student.earned_badges_for_course(current_course).each do |badge|
-                = tooltip("earned-badge-tip_#{badge.id}", badge.try(:icon), type: "image") do
-                  #{badge.try(:name)}
-
-            %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
           %td
-            .right
-              %ul.button-bar
-                %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
-                = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student), class: "button"
+            - student.earned_badges_for_course(current_course).each do |badge|
+              = tooltip("earned-badge-tip_#{badge.id}", badge.try(:icon), type: "image") do
+                #{badge.try(:name)}
 
-  %h2.subtitle #{term_for :challenge } Grades
+          %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
+        %td
+          .right
+            %ul.button-bar
+              %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
+              = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student), class: "button"
 
-  %table.unfancy_dynatable
-    %thead
+%h2.subtitle #{term_for :challenge } Grades
+
+%table.unfancy_dynatable
+  %thead
+    %tr
+      %th Name
+      %th Score
+      %th{:width => "80px"}
+
+  %tbody
+    - @challenges.each do |challenge|
       %tr
-        %th Name
-        %th Score
-        %th{:width => "80px"}
-
-    %tbody
-      - @challenges.each do |challenge|
-        %tr
-          %td= link_to challenge.name, challenge
-          %td= points challenge.challenge_grade_for_team(@team).try(:score)
-          %td
-            .button-container.dropdown
-              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu.dropdown-content
-                - if challenge.challenge_grade_for_team(@team).present?
-                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
-                  = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), data: { confirm: "Are you sure you want to delete #{@team.name}'s grade for #{challenge.name}?", method: :delete }
-                - else
-                  = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id)
+        %td= link_to challenge.name, challenge
+        %td= points challenge.challenge_grade_for_team(@team).try(:score)
+        %td
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu.dropdown-content
+              - if challenge.challenge_grade_for_team(@team).present?
+                = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
+                = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), data: { confirm: "Are you sure you want to delete #{@team.name}'s grade for #{challenge.name}?", method: :delete }
+              - else
+                = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id)

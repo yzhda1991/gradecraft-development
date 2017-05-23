@@ -1,33 +1,32 @@
 = render "buttons"
 
-.pageContent
-  - unless @result.unsuccessful.empty?
-    %h2.subtitle
-      = "#{@result.unsuccessful.count} #{"Student".pluralize(@result.unsuccessful.count)} Not Imported"
-    %table.dynatable
-      %thead
-        %tr
-          %th Data
-          %th Error(s)
-      %tbody
-        - @result.unsuccessful.each do |row|
-          %tr
-            %td= row[:data]
-            %td= row[:errors]
-
+- unless @result.unsuccessful.empty?
   %h2.subtitle
-    = "#{@result.successful.count} #{"Student".pluralize(@result.successful.count)} Imported Successfully"
+    = "#{@result.unsuccessful.count} #{"Student".pluralize(@result.unsuccessful.count)} Not Imported"
   %table.dynatable
     %thead
       %tr
-        %th First Name
-        %th Last Name
-        %th Username
-        %th Email
+        %th Data
+        %th Error(s)
     %tbody
-      - @result.successful.each do |user|
+      - @result.unsuccessful.each do |row|
         %tr
-          %td= link_to user.first_name, student_path(user)
-          %td= link_to user.last_name, student_path(user)
-          %td= link_to user.username, student_path(user)
-          %td= link_to user.email, student_path(user)
+          %td= row[:data]
+          %td= row[:errors]
+
+%h2.subtitle
+  = "#{@result.successful.count} #{"Student".pluralize(@result.successful.count)} Imported Successfully"
+%table.dynatable
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+      %th Username
+      %th Email
+  %tbody
+    - @result.successful.each do |user|
+      %tr
+        %td= link_to user.first_name, student_path(user)
+        %td= link_to user.last_name, student_path(user)
+        %td= link_to user.username, student_path(user)
+        %td= link_to user.email, student_path(user)

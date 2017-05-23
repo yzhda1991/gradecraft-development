@@ -1,19 +1,18 @@
-.pageContent
-  %table.dynatable.no-table-header
-    %thead
+%table.dynatable.no-table-header
+  %thead
+    %tr
+      %th{scope: "col"} Name
+      %th{scope: "col"} Description
+      %th.button-column{"data-dynatable-no-sort" => "true"}
+  %tbody
+    - @courses.each do |course|
       %tr
-        %th{scope: "col"} Name
-        %th{scope: "col"} Description
-        %th.button-column{"data-dynatable-no-sort" => "true"}
-    %tbody
-      - @courses.each do |course|
-        %tr
-          %td= course["name"]
-          %td= course["syllabus_body"]
-          %td
-            .right
-              %ul.button-bar
-                %li
-                  = form_tag integration_courses_path(@provider_name), method: :post do
-                    = hidden_field_tag :id, course["id"]
-                    = button_tag decorative_glyph("link") + "Link Course", class: "button"
+        %td= course["name"]
+        %td= course["syllabus_body"]
+        %td
+          .right
+            %ul.button-bar
+              %li
+                = form_tag integration_courses_path(@provider_name), method: :post do
+                  = hidden_field_tag :id, course["id"]
+                  = button_tag decorative_glyph("link") + "Link Course", class: "button"

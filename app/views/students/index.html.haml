@@ -1,7 +1,6 @@
 = render "students/buttons"
 
-.pageContent
-  = team_filter(presenter.teams) if presenter.has_teams?
+= team_filter(presenter.teams) if presenter.has_teams?
 
-  / Display the table of course students, their leaderboard display, their team affiliation, their score and their grade
-  = render partial: "students/students_table", locals: { presenter: presenter }
+/ Display the table of course students, their leaderboard display, their team affiliation, their score and their grade
+= render partial: "students/students_table", locals: { presenter: presenter }

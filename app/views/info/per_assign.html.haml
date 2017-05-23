@@ -1,48 +1,47 @@
-.pageContent
-  = render partial: "analytics/in_page_nav"
+= render partial: "analytics/in_page_nav"
 
-  - @assignment_types.each do |assignment_type|
-    - assignments_for_type = assignment_type.assignments
-    - if assignments_for_type.select {|a| a.grades.student_visible.length > 1}.present?
-      %h2.subtitle= assignment_type.name
+- @assignment_types.each do |assignment_type|
+  - assignments_for_type = assignment_type.assignments
+  - if assignments_for_type.select {|a| a.grades.student_visible.length > 1}.present?
+    %h2.subtitle= assignment_type.name
 
-      %table.dynatable
-        %caption.sr-only= assignment_type.name
-        %thead
-          %tr
-            %th{"scope" => "col"} Name
-            %th{"scope" => "col"} Min
-            %th{"scope" => "col"} Max
-            %th{"scope" => "col"} Median
-            %th{"scope" => "col"}
-              Ave
-              = tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
-                The average of all grades including those who earned zero
-            %th{"scope" => "col"}
-              Avg Earned
-              = tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
-                The average of all scores above zero
-            %th{"scope" => "col"} Predicted
-            %th Submissions
-            %th Grades
-            %th{:style => "min-width: 220px"}
-        %tbody
-          - assignments = assignments_for_type
-          - assignments.each do |assignment|
-            - if assignment.grades.student_visible.present?
-              %tr
-                %td= link_to assignment.name, assignment
-                %td= points assignment.low_score
-                %td= points assignment.high_score
-                %td= points assignment.median
-                %td= points assignment.average
-                %td= points assignment.earned_average
-                %td= points assignment.predicted_count
-                %td
-                  - if assignment.accepts_submissions?
-                    = points assignment.submissions.submitted.count
-                %th= points assignment.grade_count
-                %th
-                  %ul.button-bar.right
-                    = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                    %li= link_to decorative_glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"
+    %table.dynatable
+      %caption.sr-only= assignment_type.name
+      %thead
+        %tr
+          %th{"scope" => "col"} Name
+          %th{"scope" => "col"} Min
+          %th{"scope" => "col"} Max
+          %th{"scope" => "col"} Median
+          %th{"scope" => "col"}
+            Ave
+            = tooltip("ave-tip_#{assignment_type.id}", "info-circle") do
+              The average of all grades including those who earned zero
+          %th{"scope" => "col"}
+            Avg Earned
+            = tooltip("ave-earned-tip_#{assignment_type.id}", "info-circle") do
+              The average of all scores above zero
+          %th{"scope" => "col"} Predicted
+          %th Submissions
+          %th Grades
+          %th{:style => "min-width: 220px"}
+      %tbody
+        - assignments = assignments_for_type
+        - assignments.each do |assignment|
+          - if assignment.grades.student_visible.present?
+            %tr
+              %td= link_to assignment.name, assignment
+              %td= points assignment.low_score
+              %td= points assignment.high_score
+              %td= points assignment.median
+              %td= points assignment.average
+              %td= points assignment.earned_average
+              %td= points assignment.predicted_count
+              %td
+                - if assignment.accepts_submissions?
+                  = points assignment.submissions.submitted.count
+              %th= points assignment.grade_count
+              %th
+                %ul.button-bar.right
+                  = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
+                  %li= link_to decorative_glyph("cloud-download") + "Download Grades", export_assignment_grades_path(assignment, format: :csv), class: "button"
