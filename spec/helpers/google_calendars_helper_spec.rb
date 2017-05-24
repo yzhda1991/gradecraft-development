@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 include GoogleCalendarsHelper
 
-describe GoogleCalendarsHelper, focus: true do
+describe GoogleCalendarsHelper do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
@@ -28,6 +28,35 @@ describe GoogleCalendarsHelper, focus: true do
       expect(get_item(course, "assignment", assignment.id).id).to be assignment.id
       expect(get_item(course, "assignment", assignment.id).class).to be Assignment
     end
+  end
+
+  describe "#get_all_items" do
+    let(:user) { create :user }
+    let(:course) { build(:course) }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+    let(:event) {create(:event, course: course)}
+    let(:event2) {create(:event, course: course)}
+    let(:event3) {create(:event, course: course)}
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment2) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment3) { create(:assignment, assignment_type: assignment_type, course: course) }
+    it "returns returns array of events or assignments" do
+      expect(get_all_items_for_current_course(course, "event", user)).to be course.events
+      expect(get_all_items_for_current_course(course, "assignment", professor)).to be course.assignments
+    end
+  end
+
+  describe "#retrieve_visible_assignments" do
+
+  end
+
+  describe "#filter_items_with_no_end_date" do
+
+  end
+
+  describe "#add_multiple_items" do
+
   end
 
   describe "#refresh_if_google_authorization_is_expired" do
