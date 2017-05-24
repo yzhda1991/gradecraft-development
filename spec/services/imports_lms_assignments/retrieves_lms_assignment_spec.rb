@@ -36,15 +36,12 @@ describe Services::Actions::RetrievesLMSAssignment do
   end
 
   it "fails the context if the assignment cannot be found" do
-    allow_any_instance_of(ActiveLMS::Syllabus).to \
-      receive(:assignment).with(imported_assignment.provider_data["course_id"],
-                                imported_assignment.provider_resource_id)
-      .and_raise("Resource not found")
+    allow_any_instance_of(ActiveLMS::Syllabus).to receive(:assignment) { |&b| b.call }
 
     result = described_class.execute access_token: access_token,
       imported_assignment: imported_assignment, provider: provider
 
     expect(result).to_not be_success
-    expect(result.message).to eq "Resource not found"
+    expect(result.message).to eq "An error occurred while attempting to retrieve the #{provider} assignment"
   end
 end

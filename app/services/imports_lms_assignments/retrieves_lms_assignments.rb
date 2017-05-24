@@ -15,7 +15,12 @@ module Services
         course_id = context.course_id
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.assignments = syllabus.assignments course_id, assignment_ids
+        context.assignments = syllabus.assignments(course_id, assignment_ids) do
+          context.fail!("An error occurred while attempting to retrieve #{provider} assignments", error_code: 500)
+          next context
+        end
+
+        next context if context.failure?
       end
     end
   end

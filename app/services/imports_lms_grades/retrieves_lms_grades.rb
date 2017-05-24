@@ -16,7 +16,12 @@ module Services
         grade_ids = context.grade_ids
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.grades = syllabus.grades(course_id, assignment_ids, grade_ids)[:data]
+        context.grades = syllabus.grades(course_id, assignment_ids, grade_ids) do
+          context.fail!("An error occurred while attempting to retrieve #{provider} grades", error_code: 500)
+          next context
+        end[:data]
+
+        next context if context.failure?
         context.user_ids = context.grades.map { |h| h["user_id"] }.compact.uniq
       end
     end

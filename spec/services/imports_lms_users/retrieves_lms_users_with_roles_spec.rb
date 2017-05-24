@@ -1,6 +1,6 @@
 require "./app/services/imports_lms_users/retrieves_lms_users_with_roles"
 
-describe Services::Actions::RetrievesLMSUsersWithRoles do
+describe Services::Actions::RetrievesLMSUsersWithRoles, type: :disable_external_api do
   let(:access_token) { "TOKEN" }
   let(:provider) { "canvas" }
   let(:course_id) { "123" }
@@ -36,5 +36,15 @@ describe Services::Actions::RetrievesLMSUsersWithRoles do
 
     described_class.execute provider: provider, access_token: access_token,
       course_id: course_id, user_ids: user_ids
+  end
+
+  it "fails the context if an error occurs" do
+    allow_any_instance_of(ActiveLMS::Syllabus).to receive(:users) { |&b| b.call }
+
+    result = described_class.execute provider: provider, access_token: access_token,
+      course_id: course_id, user_ids: user_ids
+
+    expect(result).to_not be_success
+    expect(result.message).to eq "An error occurred while attempting to retrieve #{provider} users"
   end
 end

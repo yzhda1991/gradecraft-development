@@ -18,6 +18,9 @@ module ActiveLMS
     # Internal: Retrieves a single course from the Canvas API.
     #
     # id - A String representing the course id from the Canvas API.
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     #
     # Examples
     #
@@ -66,14 +69,20 @@ module ActiveLMS
     #   "access_restricted_by_date": false,
     #   "time_zone": "America/Denver"
     # }
-    def course(id)
-      course = nil
-      client.get_data("/courses/#{id}") { |data| course = data }
-      course
+    def course(id, &exception_handler)
+      handle_exceptions(exception_handler) do
+        course = nil
+        client.get_data("/courses/#{id}") { |data| course = data }
+        course
+      end
     end
 
     # Internal: Retrieves all the courses assigned to as a teacher from
     # the Canvas API.
+    #
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     #
     # Examples
     #
@@ -122,11 +131,13 @@ module ActiveLMS
     #   "access_restricted_by_date": false,
     #   "time_zone": "America/Denver"
     # }]
-    def courses
+    def courses(&exception_handler)
       @courses || begin
         @courses = []
-        client.get_data("/courses", enrollment_type: "teacher") do |data|
-          @courses += data
+        handle_exceptions(exception_handler) do
+          client.get_data("/courses", enrollment_type: "teacher") do |data|
+            @courses += data
+          end
         end
       end
       @courses
@@ -138,6 +149,9 @@ module ActiveLMS
     # id - A String representing the course id from the Canvas API.
     # assignment_ids - An Array of ids that can filter out the assignments
     # there were retrieved.
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     #
     # Examples
     #
@@ -203,13 +217,15 @@ module ActiveLMS
     #  "overrides": null,
     #  "omit_from_final_grade": true
     # }]
-    def assignments(course_id, assignment_ids=nil)
+    def assignments(course_id, assignment_ids=nil, &exception_handler)
       assignments = []
 
       if assignment_ids.nil?
-        client.get_data("/courses/#{course_id}/assignments") do |data|
-          data.select { |assignment| assignment["published"] }.each do |assignment|
-            assignments << assignment
+        handle_exceptions(exception_handler) do
+          client.get_data("/courses/#{course_id}/assignments") do |data|
+            data.select { |assignment| assignment["published"] }.each do |assignment|
+              assignments << assignment
+            end
           end
         end
       else
@@ -226,12 +242,15 @@ module ActiveLMS
     #
     # course_id - A String representing the course id from the Canvas API.
     # assignment_id - A String representing the assignment id from the Canvas API.
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     #
     # Examples
     #
     # GET: http://instructure.com/api/v1/courses/:course_id/assignments/:id
     #
-    # Returns a Hashes representing an assignments.
+    # Returns a Hash representing a single assignment.
     #
     # {
     #   "id": 4,
@@ -291,12 +310,14 @@ module ActiveLMS
     #  "overrides": null,
     #  "omit_from_final_grade": true
     # }
-    def assignment(course_id, assignment_id)
-      assignment = nil
-      client.get_data("/courses/#{course_id}/assignments/#{assignment_id}") do |data|
-        assignment = data
+    def assignment(course_id, assignment_id, &exception_handler)
+      handle_exceptions(exception_handler) do
+        assignment = nil
+        client.get_data("/courses/#{course_id}/assignments/#{assignment_id}") do |data|
+          assignment = data
+        end
+        assignment
       end
-      assignment
     end
 
     # Internal: Retrieves all the grades for a specific course and assignments from
@@ -310,7 +331,9 @@ module ActiveLMS
     # automatically
     # options - A hash representing any additional parameters that should be included
     # in the query
-    #
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     # Examples
     #
     # GET: http://instructure.com/api/v1/courses/:id/students/submission
@@ -339,44 +362,125 @@ module ActiveLMS
     #   "assignment_visible": true,
     #   "excused": true
     # }]
-    def grades(course_id, assignment_ids, grade_ids=nil, fetch_next=false, options={})
-      grades = []
-      params = { assignment_ids: assignment_ids,
-                 student_ids: "all",
-                 include: ["assignment", "course", "user", "submission_comments"],
-                 per_page: options.delete(:per_page) || 25 }.merge(options)
-      result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
-        data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
-        if grade_ids.nil?
-          grades += data
-        else
-          filtered_ids = [grade_ids].flatten.uniq.compact.map(&:to_s)
-          data.select { |grade| filtered_ids.include?(grade["id"].to_s) }.each do |grade|
-            grades << grade
+    def grades(course_id, assignment_ids, grade_ids=nil, fetch_next=false, options={}, &exception_handler)
+      handle_exceptions(exception_handler) do
+        grades = []
+        params = { assignment_ids: assignment_ids,
+                   student_ids: "all",
+                   include: ["assignment", "course", "user", "submission_comments"],
+                   per_page: options.delete(:per_page) || 25 }.merge(options)
+        result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
+          data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
+          if grade_ids.nil?
+            grades += data
+          else
+            filtered_ids = [grade_ids].flatten.uniq.compact.map(&:to_s)
+            data.select { |grade| filtered_ids.include?(grade["id"].to_s) }.each do |grade|
+              grades << grade
+            end
           end
         end
+        { data: grades, has_next_page: result[:has_next_page] }
       end
-      { data: grades, has_next_page: result[:has_next_page] }
     end
 
-    def update_assignment(course_id, assignment_id, params)
+    # Internal: Updates an assignment on Canvas with the specified params on
+    # the Canvas API.
+    #
+    # course_id - A String representing the course id from the Canvas API.
+    # assignment_id - A String representing the assignment id from the Canvas API.
+    # params - A hash representing the changes for the assignment on the Canvas API.
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
+    #
+    # Examples
+    #
+    # PUT: http://instructure.com/api/v1/courses/:id/students/submission
+    #
+    # Returns a Hash representing an updated assignment.
+    #
+    # {
+    #   "id": 4,
+    #   "name": "some assignment",
+    #   "description": "<p>Do the following:</p>...",
+    #   "created_at": "2012-07-01T23:59:00-06:00",
+    #   "updated_at": "2012-07-01T23:59:00-06:00",
+    #   "due_at": "2012-07-01T23:59:00-06:00",
+    #   "lock_at": "2012-07-01T23:59:00-06:00",
+    #   "unlock_at": "2012-07-01T23:59:00-06:00",
+    #   "has_overrides": true,
+    #   "all_dates": null,
+    #   "course_id": 123,
+    #   "html_url": "https://...",
+    #   "submissions_download_url": ".../courses/:course_id/assignments/:id/submissions",
+    #  "assignment_group_id": 2,
+    #  "allowed_extensions": ["docx", "ppt"],
+    #  "turnitin_enabled": true,
+    #  "turnitin_settings": null,
+    #  "grade_group_students_individually": false,
+    #  "external_tool_tag_attributes": null,
+    #  "peer_reviews": false,
+    #  "automatic_peer_reviews": false,
+    #  "peer_review_count": 0,
+    #  "peer_reviews_assign_at": "2012-07-01T23:59:00-06:00",
+    #  "group_category_id": 1,
+    #  "needs_grading_count": 17,
+    #  "needs_grading_count_by_section": [{
+    #     "section_id":"123456",
+    #     "needs_grading_count":5 }],
+    #  "position": 1,
+    #  "post_to_sis": true,
+    #  "integration_id": "12341234",
+    #  "integration_data": "12341234",
+    #  "muted": null,
+    #  "points_possible": 12,
+    #  "submission_types": ["online_text_entry"],
+    #  "grading_type": "points",
+    #  "grading_standard_id": null,
+    #  "published": true,
+    #  "unpublishable": false,
+    #  "only_visible_to_overrides": false,
+    #  "locked_for_user": false,
+    #  "lock_info": null,
+    #  "lock_explanation": "This assignment is locked until September 1 at 12:00am",
+    #  "quiz_id": 620,
+    #  "anonymous_submissions": false,
+    #  "discussion_topic": null,
+    #  "freeze_on_copy": false,
+    #  "frozen": false,
+    #  "frozen_attributes": ["title"],
+    #  "submission": null,
+    #  "use_rubric_for_grading": true,
+    #  "rubric_settings": "{"points_possible"=>12}",
+    #  "rubric": null,
+    #  "assignment_visibility": [137, 381, 572],
+    #  "overrides": null,
+    #  "omit_from_final_grade": true
+    # }
+    def update_assignment(course_id, assignment_id, params, &exception_handler)
       assignment = nil
-      client.set_data(
-        "/courses/#{course_id}/assignments/#{assignment_id}", :put, params) do |data|
-          assignment = data
+      handle_exceptions(exception_handler) do
+        client.set_data(
+          "/courses/#{course_id}/assignments/#{assignment_id}", :put, params) do |data|
+            assignment = data
+        end
       end
-        assignment
+      assignment
     end
 
     # Internal: Retrieves single user from the Canvas API.
     #
     # id - A String representing the user id from the Canvas API.
+    # exception_handler - A block that is called (if provided) when an error occurs
+    # so the calling client can handle an exception gracefully. Currently rescues
+    # `HTTParty::Error`, `Canvas::ResponseError`, and `JSON::ParserError`.
     #
     # Examples
     #
     # GET: http://instructure.com/api/v1/users/:id/profile
     #
-    # Returns an Array of Hashes representing multiple grades.
+    # Returns a Hashe representing a single user.
     #
     # {
     #   "id": 2,
@@ -395,10 +499,12 @@ module ActiveLMS
     #  "time_zone": "America/Denver",
     #  "bio": "I like the Muppets."
     # }
-    def user(id)
-      user = nil
-      client.get_data("/users/#{id}/profile") { |data| user = data }
-      user
+    def user(id, &exception_handler)
+      handle_exceptions(exception_handler) do
+        user = nil
+        client.get_data("/users/#{id}/profile") { |data| user = data }
+        user
+      end
     end
 
     # Internal: Returns the list of users in this course. And optionally the user's enrollments in the course.
@@ -438,19 +544,31 @@ module ActiveLMS
     #   },
     #   has_next_page: true
     # }
-    def users(course_id, fetch_next=false, options={})
-      users = []
-      params = {
-        include: ["enrollments", "email"]
-      }.merge(options)
-      result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
-        users += data
+    def users(course_id, fetch_next=false, options={}, &exception_handler)
+      handle_exceptions(exception_handler) do
+        users = []
+        params = {
+          include: ["enrollments", "email"]
+        }.merge(options)
+        result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
+          users += data
+        end
+        { data: users, has_next_page: result[:has_next_page] }
       end
-      { data: users, has_next_page: result[:has_next_page] }
     end
 
     private
 
     attr_reader :client
+
+    def handle_exceptions(exception_handler, &blk)
+      blk.call
+    rescue Canvas::ResponseError, HTTParty::Error, JSON::ParserError => e
+      if !exception_handler.nil?
+        exception_handler.call(e)
+      else
+        raise e
+      end
+    end
   end
 end

@@ -1,14 +1,49 @@
 describe Grades::ImportersController do
   let(:course) { build :course }
-  let!(:student)  { create(:course_membership, :student, course: course).user }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:assignment) { create :assignment, course: course }
-  let(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
+  let(:grade) { build_stubbed :grade, student: student, assignment: assignment, course: course }
+  let(:student) { build :user, courses: [course], role: :student }
 
   before { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
+    let(:professor) { build :user, courses: [course], role: :professor }
+
     before { login_user professor }
+
+    describe "GET assignments" do
+      let(:provider) { :canvas }
+      let(:course_id) { "COURSE_ID" }
+      let(:access_token) { "BLAH" }
+      let(:syllabus) { double :syllabus, course: {}, assignments: [] }
+      let!(:user_authorization) do
+        create :user_authorization, :canvas, user: professor, access_token: access_token,
+          expires_at: 2.days.from_now
+      end
+
+      before(:each) do
+        allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
+          syllabus
+      end
+
+      it "redirects to the grade import page if the course cannot be retrieved" do
+        allow(syllabus).to receive(:course) { |&b| b.call }
+        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
+          id: course_id }
+
+        expect(response).to redirect_to assignment_grades_importer_grades_path assignment,
+          provider, course_id
+      end
+
+      it "redirects to the grade import page if the assignments cannot be retrieved" do
+        allow(syllabus).to receive(:assignments) { |&b| b.call }
+        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
+          id: course_id }
+
+        expect(response).to redirect_to assignment_grades_importer_grades_path assignment,
+          provider, course_id
+      end
+    end
 
     describe "GET download" do
       it "returns sample csv data" do
@@ -78,7 +113,7 @@ describe Grades::ImportersController do
       let(:assignment_ids) { ["ASSIGNMENT_1"] }
       let(:course_id) { "COURSE_ID" }
       let(:grade_ids) { ["GRADE1", "GRADE2"] }
-      let(:result) { double(:result, success?: true, message: "") }
+      let(:result) { double :result, success?: true, message: "" }
       let!(:user_authorization) do
         create :user_authorization, :canvas, user: professor, access_token: access_token,
           expires_at: 2.days.from_now

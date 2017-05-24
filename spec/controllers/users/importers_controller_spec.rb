@@ -18,29 +18,35 @@ describe Users::ImportersController do
     describe "#users_import" do
       let(:id) { 1 }
       let(:user_ids) { [12, 23] }
-      let(:result) { double(:result, success?: true, message: "") }
 
       before(:each) do
         allow(Services::ImportsLMSUsers).to receive(:import).and_return result
       end
 
-      it "imports the lms users" do
-        expect(Services::ImportsLMSUsers).to receive(:import).and_return result
-        post :users_import, params: { id: id, importer_provider_id: provider,
-          user_ids: user_ids }
+      context "when successful" do
+        let(:result) { double(:result, success?: true, message: "") }
+
+        it "imports the lms users" do
+          expect(Services::ImportsLMSUsers).to receive(:import).and_return result
+          post :users_import, params: { id: id, importer_provider_id: provider,
+            user_ids: user_ids }
+        end
+
+        it "renders the results if successful" do
+          post :users_import, params: { id: id, importer_provider_id: provider,
+            user_ids: user_ids }
+          expect(response).to render_template :user_import_results
+        end
       end
 
-      it "renders the results if successful" do
-        post :users_import, params: { id: id, importer_provider_id: provider,
-          user_ids: user_ids }
-        expect(response).to render_template :user_import_results
-      end
+      context "when unsuccessful" do
+        let(:result) { double(:result, success?: false) }
 
-      it "redirects to the user import page if unsuccessful" do
-        allow(result).to receive(:success?).and_return false
-        post :users_import, params: { id: id, importer_provider_id: provider,
-          user_ids: user_ids }
-        expect(response).to redirect_to users_importer_users_path(provider, id)
+        it "redirects to the user import page" do
+          post :users_import, params: { id: id, importer_provider_id: provider,
+            user_ids: user_ids }
+          expect(response).to redirect_to users_importer_users_path(provider, id)
+        end
       end
     end
   end

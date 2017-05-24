@@ -4,14 +4,14 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
   let(:assignment) { create :assignment, course: course }
 
   before(:each) do
-    login_user(user)
+    login_user user
     allow(controller).to receive(:current_course).and_return course
   end
 
   context "as a professor" do
     let(:user) { build :user, courses: [course], role: :professor }
     let(:access_token) { "topsecret" }
-    let(:syllabus) { double(:syllabus, grades: grades, assignment: provider_assignment ) }
+    let(:syllabus) { double :syllabus, grades: grades, assignment: provider_assignment }
     let(:grades) { [{ id: 1, score: 100 }, { id: 2, score: 120 }] }
     let(:provider_assignment) { { name: "Pass/Fail" } }
     let!(:user_authorization) do
@@ -37,6 +37,24 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
         get :show, params: { assignment_id: assignment.id, id: course.id, importer_provider_id: provider },
           format: :json
         expect(response).to render_template "api/grades/importers/show"
+      end
+
+      it "renders a 500 response if the grades cannot be retrieved" do
+        allow(syllabus).to receive(:grades) { |&b| b.call }
+        get :show, params: { assignment_id: assignment.id, id: course.id, importer_provider_id: provider },
+          format: :json
+        expect(response).to have_http_status 500
+        expect(response.body).to include \
+          "There was an issue trying to retrieve the grades from #{provider.capitalize}."
+      end
+
+      it "renders a 500 response if the assignment cannot be retrieved" do
+        allow(syllabus).to receive(:assignment) { |&b| b.call }
+        get :show, params: { assignment_id: assignment.id, id: course.id, importer_provider_id: provider },
+          format: :json
+        expect(response).to have_http_status 500
+        expect(response.body).to include \
+          "There was an issue trying to retrieve the assignment from #{provider.capitalize}."
       end
     end
   end

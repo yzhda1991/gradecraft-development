@@ -5,13 +5,13 @@ describe API::Users::ImportersController, type: [:disable_external_api, :control
   let(:assignment) { create :assignment, course: course }
 
   before(:each) do
-    login_user(user)
+    login_user user
     allow(controller).to receive(:current_course).and_return course
   end
 
   context "as a professor" do
     let(:user) { build :user, courses: [course], role: :professor }
-    let(:syllabus) { double(:syllabus, users: users ) }
+    let(:syllabus) { double :syllabus, users: users }
     let(:users) do
       {
         data: [{ name: "Robert W" }, { name: "Joe Q" }],
@@ -29,17 +29,30 @@ describe API::Users::ImportersController, type: [:disable_external_api, :control
     end
 
     describe "#index" do
-      it "returns the users" do
-        get :index, params: { id: course.id, importer_provider_id: provider },
-          format: :json
-        expect(assigns :provider_name).to eq "canvas"
-        expect(assigns :users).to eq users
+      context "when successful" do
+        it "returns the users" do
+          get :index, params: { id: course.id, importer_provider_id: provider },
+            format: :json
+          expect(assigns :provider_name).to eq "canvas"
+          expect(assigns :users).to eq users
+        end
+
+        it "renders the template" do
+          get :index, params: { id: course.id, importer_provider_id: provider },
+            format: :json
+          expect(response).to render_template "api/users/importers/index"
+        end
       end
 
-      it "renders the template" do
-        get :index, params: { id: course.id, importer_provider_id: provider },
-          format: :json
-        expect(response).to render_template "api/users/importers/index"
+      context "when unsuccessful" do
+        it "renders a 500 response if the users cannot be retrieved" do
+          allow(syllabus).to receive(:users) { |&b| b.call }
+          get :index, params: { id: course.id, importer_provider_id: provider },
+            format: :json
+          expect(response).to have_http_status 500
+          expect(response.body).to include \
+            "There was an issue trying to retrieve the course from #{provider.capitalize}."
+        end
       end
     end
   end

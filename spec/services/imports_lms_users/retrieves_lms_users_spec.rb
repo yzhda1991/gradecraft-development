@@ -44,4 +44,14 @@ describe Services::Actions::RetrievesLMSUsers do
     described_class.execute provider: provider, access_token: access_token,
       user_ids: user_ids
   end
+
+  it "fails the context if there was an error" do
+    allow_any_instance_of(ActiveLMS::Syllabus).to receive(:user) { |&b| b.call }
+
+    result = described_class.execute provider: provider, access_token: access_token,
+      user_ids: user_ids
+
+    expect(result).to_not be_success
+    expect(result.message).to eq "An error occurred while attempting to retrieve #{provider} users"
+  end
 end

@@ -1,6 +1,7 @@
 require "active_lms"
 require_relative "../../services/imports_lms_grades"
 
+# rubocop:disable AndOr
 class Grades::ImportersController < ApplicationController
   include OAuthProvider
 
@@ -17,8 +18,14 @@ class Grades::ImportersController < ApplicationController
   def assignments
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @lms_course = syllabus.course(params[:id])
-    @assignments = syllabus.assignments(params[:id])
+    @lms_course = syllabus.course(params[:id]) do
+      redirect_to assignment_grades_importer_grades_path(@assignment, @provider_name, params[:id]),
+        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
+    end
+    @assignments = syllabus.assignments(params[:id]) do
+      redirect_to assignment_grades_importer_grades_path(@assignment, @provider_name, params[:id]),
+        alert: "There was an issue trying to retrieve the assignments from #{@provider_name.capitalize}." and return
+    end
   end
 
   # GET /assignments/:assignment_id/grades/download
@@ -34,7 +41,7 @@ class Grades::ImportersController < ApplicationController
     end
   end
 
-  # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
+  # GET /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
@@ -54,7 +61,10 @@ class Grades::ImportersController < ApplicationController
     if @result.success?
       render :grades_import_results
     else
-      @grades = syllabus.grades(params[:id], params[:assignment_ids])[:data]
+      @grades = syllabus.grades(params[:id], params[:assignment_ids]) do
+        redirect_to assignment_grades_importers_path(@assignment),
+          alert: "There was an issue trying to retrieve the grades from #{@provider_name.capitalize}." and return
+      end[:data]
 
       render :grades, alert: @result.message
     end

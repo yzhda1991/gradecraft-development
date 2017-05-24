@@ -15,7 +15,12 @@ module Services
         user_ids = context.user_ids
 
         syllabus = ActiveLMS::Syllabus.new provider, access_token
-        context.users = syllabus.users(course_id, true, user_ids: user_ids)[:data]
+        context.users = syllabus.users(course_id, true, user_ids: user_ids) do
+          context.fail!("An error occurred while attempting to retrieve #{provider} users", error_code: 500)
+          next context
+        end[:data]
+
+        next context if context.failure?
       end
     end
   end

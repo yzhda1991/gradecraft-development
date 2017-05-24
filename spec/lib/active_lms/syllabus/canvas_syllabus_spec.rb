@@ -17,111 +17,176 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   end
 
   describe "#assignment" do
-    subject { described_class.new access_token }
-
-    it "retrieves the assignment for the id from the api" do
-      body = { name: "This is a published assignment" }
+    let(:stub) do
       stub_request(:get,
                    "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
         .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: body.to_json,
-                   headers: {})
+    end
+    subject { described_class.new access_token }
 
-      assignment = subject.assignment(123, 456)
+    context "with a successful API call" do
+      it "retrieves the assignment for the id from the api" do
+        body = { name: "This is a published assignment" }
+        stub.to_return(status: 200, body: body.to_json, headers: {})
 
-      expect(assignment["name"]).to eq "This is a published assignment"
+        assignment = subject.assignment(123, 456)
+
+        expect(assignment["name"]).to eq "This is a published assignment"
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.assignment(123, 456, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.assignment(123, 456) }.to raise_error JSON::ParserError
+      end
     end
   end
 
   describe "#assignments" do
-    subject { described_class.new access_token }
-
-    it "retrieves the published assignments for the course from the api" do
-      body = [{ name: "This is a published assignment", published: true },
-              { name: "This is an unpublished assignment", published: false }]
+    let(:stub) do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/assignments")
         .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: body.to_json,
-                   headers: {})
+    end
+    subject { described_class.new access_token }
 
-      assignments = subject.assignments(123)
+    context "with a successful API call" do
+      it "retrieves the published assignments for the course from the api" do
+        body = [{ name: "This is a published assignment", published: true },
+                { name: "This is an unpublished assignment", published: false }]
+        stub.to_return(status: 200, body: body.to_json, headers: {})
 
-      expect(assignments.count).to eq 1
-      expect(assignments.first["name"]).to eq "This is a published assignment"
+        assignments = subject.assignments(123)
+
+        expect(assignments.count).to eq 1
+        expect(assignments.first["name"]).to eq "This is a published assignment"
+      end
+
+      context "for specific ids" do
+        let!(:stub) do
+          stub_request(:get,
+                       "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
+            .with(query: { "access_token" => access_token })
+            .to_return(status: 200, body: { name: "This is an assignment" }.to_json,
+                       headers: {})
+        end
+
+        it "retrieves the assignment details from the api" do
+          subject.assignments(123, 456)
+
+          expect(stub).to have_been_requested
+        end
+
+        it "handles multiple assignment ids" do
+          stub2 = stub_request(:get,
+            "https://canvas.instructure.com/api/v1/courses/123/assignments/789")
+            .with(query: { "access_token" => access_token })
+            .to_return(status: 200, body: { name: "This is an assignment" }.to_json,
+                       headers: {})
+
+          subject.assignments(123, [456, 789])
+
+          expect(stub2).to have_been_requested
+        end
+
+        it "does not call the api for double assignment ids" do
+          subject.assignments(123, [456, 456])
+
+          expect(stub).to have_been_requested.once
+        end
+
+        it "does not call the api for nil assignment ids" do
+          stub.request_pattern = WebMock::RequestPattern.new(:get,
+            "https://canvas.instructure.com/api/v1/courses/123/assignments/")
+              .with(query: { "access_token" => access_token })
+          subject.assignments(123, [nil])
+
+          expect(stub).to_not have_been_requested
+        end
+      end
     end
 
-    context "for specific ids" do
-      let!(:stub) do
-        stub_request(:get,
-                     "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
-          .with(query: { "access_token" => access_token })
-          .to_return(status: 200, body: { name: "This is an assignment" }.to_json,
-                     headers: {})
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.assignments(123, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
       end
 
-      it "retrieves the assignment details from the api" do
-        subject.assignments(123, 456)
-
-        expect(stub).to have_been_requested
-      end
-
-      it "handles multiple assignment ids" do
-        stub2 = stub_request(:get,
-          "https://canvas.instructure.com/api/v1/courses/123/assignments/789")
-          .with(query: { "access_token" => access_token })
-          .to_return(status: 200, body: { name: "This is an assignment" }.to_json,
-                     headers: {})
-
-        subject.assignments(123, [456, 789])
-
-        expect(stub2).to have_been_requested
-      end
-
-      it "does not call the api for double assignment ids" do
-        subject.assignments(123, [456, 456])
-
-        expect(stub).to have_been_requested.once
-      end
-
-      it "does not call the api for nil assignment ids" do
-        stub.request_pattern = WebMock::RequestPattern.new(:get,
-          "https://canvas.instructure.com/api/v1/courses/123/assignments/")
-            .with(query: { "access_token" => access_token })
-        subject.assignments(123, [nil])
-
-        expect(stub).to_not have_been_requested
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.assignments(123) }.to raise_error JSON::ParserError
       end
     end
   end
 
   describe "#course" do
-    subject { described_class.new access_token }
-
-    it "retrieves the course for the id from the api" do
+    let(:stub) do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123")
         .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: { name: "This is a course" }.to_json,
-                   headers: {})
+    end
+    subject { described_class.new access_token }
 
-      course = subject.course(123)
+    context "with a successful API call" do
+      it "retrieves the course for the id from the api" do
+        stub.to_return(status: 200, body: { name: "This is a course" }.to_json, headers: {})
 
-      expect(course).to_not be_nil
-      expect(course["name"]).to eq "This is a course"
+        course = subject.course(123)
+
+        expect(course).to_not be_nil
+        expect(course["name"]).to eq "This is a course"
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.course(123, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.course(123) }.to raise_error JSON::ParserError
+      end
     end
   end
 
   describe "#courses" do
-    subject { described_class.new access_token }
-
-    it "retrieves the courses from the api" do
+    let(:stub) do
       stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
         .with(query: { "enrollment_type" => "teacher", "access_token" => access_token })
-        .to_return(status: 200, body: [{ name: "This is a course" }].to_json, headers: {})
+    end
+    subject { described_class.new access_token }
 
-      courses = subject.courses
+    context "with a successful API call" do
+      it "retrieves the courses from the api" do
+        stub.to_return(status: 200, body: [{ name: "This is a course" }].to_json, headers: {})
 
-      expect(courses.count).to eq 1
-      expect(courses.first["name"]).to eq "This is a course"
+        courses = subject.courses
+
+        expect(courses.count).to eq 1
+        expect(courses.first["name"]).to eq "This is a course"
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.courses(&b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.courses }.to raise_error JSON::ParserError
+      end
     end
   end
 
@@ -134,123 +199,192 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         { id: 777, score: nil, submission_comments: "good jorb!" }
       ]
     end
-    let!(:stub) do
+    let(:stub) do
       stub_request(:get,
           "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
                        "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 25,
                        "access_token" => access_token })
-        .to_return(status: 200, body: grades.to_json, headers: {})
     end
     subject { described_class.new access_token }
 
-    it "returns a hash containing only grades with scores or feedback" do
-      result = subject.grades(123, assignment_ids)
-
-      expect(result[:data].count).to eq 2
-      expect(result[:data]).to include({ "id" => 456, "score" => 87 },
-        { "id" => 777, "score" => nil, "submission_comments" => "good jorb!" })
-      expect(result[:has_next_page]).to eq false
-    end
-
-    it "merges options if provided" do
-      stub_request(:get,
-          "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
-        .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
-                       "include" => ["assignment", "course", "user", "submission_comments"],
-                       "per_page" => 5, "test" => true,
-                       "access_token" => access_token })
-        .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
-      result = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
-      expect(result[:data].count).to eq 1
-    end
-
-    context "for specific ids" do
-      it "filters out a single id" do
-        result = subject.grades(123, assignment_ids, "456")
-
-        expect(result[:data].first["id"]).to eq 456
+    context "with a successful API call" do
+      let!(:successful_stub) do
+        stub.to_return(status: 200, body: grades.to_json, headers: {})
       end
 
-      it "does not duplicate the grades for double grade ids" do
-        result = subject.grades(123, assignment_ids, [456, 456])
+      it "returns a hash containing only grades with scores or feedback" do
+        result = subject.grades(123, assignment_ids)
 
+        expect(result[:data].count).to eq 2
+        expect(result[:data]).to include({ "id" => 456, "score" => 87 },
+          { "id" => 777, "score" => nil, "submission_comments" => "good jorb!" })
+        expect(result[:has_next_page]).to eq false
+      end
+
+      it "merges options if provided" do
+        stub_request(:get,
+            "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
+          .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
+                         "include" => ["assignment", "course", "user", "submission_comments"],
+                         "per_page" => 5, "test" => true,
+                         "access_token" => access_token })
+          .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
+        result = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
         expect(result[:data].count).to eq 1
       end
 
-      it "filters out the grade ids" do
-        result = subject.grades(123, assignment_ids, [123])
+      context "for specific ids" do
+        it "filters out a single id" do
+          result = subject.grades(123, assignment_ids, "456")
 
-        expect(result[:data]).to be_empty
+          expect(result[:data].first["id"]).to eq 456
+        end
+
+        it "does not duplicate the grades for double grade ids" do
+          result = subject.grades(123, assignment_ids, [456, 456])
+
+          expect(result[:data].count).to eq 1
+        end
+
+        it "filters out the grade ids" do
+          result = subject.grades(123, assignment_ids, [123])
+
+          expect(result[:data]).to be_empty
+        end
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.grades(123, assignment_ids, "456",  &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.grades(123, assignment_ids, "456") }.to raise_error JSON::ParserError
       end
     end
   end
 
   describe "#update_assignment" do
-    subject { described_class.new access_token }
-
-    it "updates the assignment for the id from the api" do
-      request = { assignment: { name: "This is a published assignment" }}
-      body = { id: "123", name: "This is a published assignment" }
+    let(:request) { { assignment: { name: "This is a published assignment" }} }
+    let(:stub) do
       stub_request(:put,
                    "https://canvas.instructure.com/api/v1/courses/123/assignments/456")
         .with(query: { "access_token" => access_token }, body: request.to_json)
-        .to_return(status: 200, body: body.to_json,
-                   headers: {})
+    end
+    subject { described_class.new access_token }
 
-      assignment = subject.update_assignment(123, 456, request)
+    context "with a successful API call" do
+      it "updates the assignment for the id from the api" do
+        body = { id: "123", name: "This is a published assignment" }
+        stub.to_return(status: 200, body: body.to_json, headers: {})
 
-      expect(assignment["name"]).to eq "This is a published assignment"
+        assignment = subject.update_assignment(123, 456, request)
+
+        expect(assignment["name"]).to eq "This is a published assignment"
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.update_assignment(123, 456,  request, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.update_assignment(123, 456, request) }.to raise_error JSON::ParserError
+      end
     end
   end
 
   describe "#user" do
-    subject { described_class.new access_token }
-
-    it "retrieves the user for the id from the api" do
+    let(:stub) do
       stub_request(:get, "https://canvas.instructure.com/api/v1/users/123/profile")
         .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: { name: "Jimmy Page" }.to_json,
-                   headers: {})
+    end
+    subject { described_class.new access_token }
 
-      user = subject.user(123)
+    context "with a successful API call" do
+      it "retrieves the user for the id from the api" do
+        stub.to_return(status: 200, body: { name: "Jimmy Page" }.to_json, headers: {})
 
-      expect(user).to_not be_nil
-      expect(user["name"]).to eq "Jimmy Page"
+        user = subject.user(123)
+
+        expect(user).to_not be_nil
+        expect(user["name"]).to eq "Jimmy Page"
+      end
+    end
+
+    context "with an API error" do
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
+
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.user(123, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
+
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.user(123) }.to raise_error JSON::ParserError
+      end
     end
   end
 
   describe "#users" do
     subject { described_class.new access_token }
 
-    it "retrieves the users for the course id from the api" do
-      body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
-      stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
-        .with(query: { "access_token" => access_token,
-                       "include" => ["enrollments", "email"] })
-        .to_return(status: 200, body: body.to_json, headers: {})
+    context "with a successful API call" do
+      it "retrieves the users for the course id from the api" do
+        body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "include" => ["enrollments", "email"] })
+          .to_return(status: 200, body: body.to_json, headers: {})
 
-      users = subject.users(123)
+        users = subject.users(123)
 
-      expect(users[:data].length).to eq 2
-      expect(users[:has_next_page]).to be_falsey
-      expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
-      expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+        expect(users[:data].length).to eq 2
+        expect(users[:has_next_page]).to be_falsey
+        expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
+        expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+      end
+
+      it "merges options if provided" do
+        body = [{ name: "Jimmy Page", id: 1 }]
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "enrollment_type" => ["student", "teacher"],
+                         "include" => ["enrollments", "email"] })
+          .to_return(status: 200, body: body.to_json, headers: {})
+
+        users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+
+        expect(users[:data].length).to eq 1
+      end
     end
 
-    it "merges options if provided" do
-      body = [{ name: "Jimmy Page", id: 1 }]
-      stub_request(:get,
-          "https://canvas.instructure.com/api/v1/courses/123/users")
-        .with(query: { "access_token" => access_token,
-                       "enrollment_type" => ["student", "teacher"],
-                       "include" => ["enrollments", "email"] })
-        .to_return(status: 200, body: body.to_json, headers: {})
+    context "with an API error" do
+      let(:stub) {
+        stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
+          .with(query: { "access_token" => access_token,
+                         "include" => ["enrollments", "email"] })
+      }
+      let!(:json_error) { stub.to_raise(JSON::ParserError) }
 
-      users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+      it "calls the exception handler if one is provided" do
+        expect { |b| subject.users(123, &b) }.to \
+          yield_with_args(instance_of(JSON::ParserError))
+      end
 
-      expect(users[:data].length).to eq 1
+      it "raises the error if an exception handler is not provided" do
+        expect { subject.users(123) }.to raise_error JSON::ParserError
+      end
     end
   end
 end
