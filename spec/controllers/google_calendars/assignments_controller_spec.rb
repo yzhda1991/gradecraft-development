@@ -4,15 +4,10 @@ require "api_spec_helper"
 describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :controller] do
   let(:provider) { :google_oauth2 }
   let(:course) { build :course }
-  let(:event) { create :event, course: course, open_at: DateTime.new(2017,4,1,16,0,0,-4), due_at: DateTime.new(2017,4,1,17,0,0,-4), name: "animi" }
-  let(:standard_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: Time.now}
-  let(:no_start_event) { create :event, course: course, open_at: nil, due_at: Time.now}
-  let(:no_end_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: nil}
-  let(:no_name_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: Time.now, name: nil}
-  let(:assignment_type) { create(:assignment_type, course: course) }
-  let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
-  let(:no_start_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
-  let(:no_end_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: nil) }
+  let!(:assignment_type) { create(:assignment_type, course: course) }
+  let!(:assignment) { create(:assignment, assignment_type: assignment_type, course: course, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
+  let!(:no_start_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
+  let!(:no_end_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: nil) }
   let(:student) { build :user, courses: [course], role: :student }
 
   before do
@@ -22,9 +17,13 @@ describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :c
 
     stub_const('ENV', ENV.to_hash.merge('GOOGLE_CLIENT_ID' => 'GOOGLE_CLIENT_ID'))
     stub_const('ENV', ENV.to_hash.merge('GOOGLE_SECRET' => 'GOOGLE_SECRET'))
+
+    allow(controller).to receive(:current_course).and_return course
   end
 
-  before(:each) { login_user(student) }
+  before(:each) do
+    login_user(student)
+  end
 
   describe "POST add_assignment" do
     before(:each) do
@@ -79,11 +78,30 @@ describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :c
     # Unauthorized User attempting to add a standard assignment with no end date
     context "without an existing authentication" do
       it "redirects to google authentication page" do
-
-        post :add_assignment, params: { class: "assignment", id: no_end_event.id}
+        post :add_assignment, params: { class: "assignment", id: no_end_assignment.id}
 
         expect(response).to redirect_to "/auth/google_oauth2"
       end
     end
   end
+
+  describe "POST add_assignments" do
+    before(:each) do
+      stub_request(:post, "https://www.googleapis.com/calendar/v3/calendars/primary/events").
+        to_return(:status => 200, :body => "", :headers => {})
+    end
+    context "with an existing authentication" do
+      let! (:user_auth) { create :user_authorization, :google, user: student, access_token: "token", expires_at: 2.days.from_now}
+
+      it "redirects to assignments path with a failure alert when attempting to multiple assignments" do
+        post :add_assignments, params: { class: "assignment"}
+
+        expect(response).to redirect_to assignments_path
+        expect(flash[:notice]).to eq("2 item(s) successfully added to your Google Calendar. 1 item(s) were not added because of missing due date(s).")
+      end
+    end
+  end
+
+
+
 end

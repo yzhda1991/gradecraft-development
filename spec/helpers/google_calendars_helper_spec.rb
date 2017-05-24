@@ -62,7 +62,7 @@ describe GoogleCalendarsHelper do
     it "returns a list of assignments that are visible to the student" do
       assignment_list = [assignment, assignment2, assignment3, invisible_assignment]
       visible_assignment_list = [assignment, assignment2, assignment3]
-      expect(filter_items_with_no_end_date(assignment_list)).equal? visible_assignment_list
+      expect(retrieve_visible_assignments(course, user)).equal? visible_assignment_list
     end
   end
 
@@ -86,10 +86,6 @@ describe GoogleCalendarsHelper do
       filtered_event_list = [event, event2]
       expect(filter_items_with_no_end_date(event_list)).equal? filtered_event_list
     end
-  end
-
-  describe "#add_multiple_items" do
-
   end
 
   describe "#refresh_if_google_authorization_is_expired" do
