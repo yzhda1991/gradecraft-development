@@ -10,15 +10,10 @@ describe RubricsController do
       login_user(professor)
     end
 
-    describe "GET design" do
-      it "shows the design form" do
-        get :design, params: { assignment_id: assignment.id, rubric: rubric}
-        expect(response).to render_template(:design)
-      end
+    describe "GET edit" do
     end
 
     describe "GET export" do
-      it "retrieves the export download" do
         get :export, params: { assignment_id: assignment.id }, format: :csv
         expect(response.body).to include("Criteria ID,Criteria Description")
       end
@@ -62,12 +57,10 @@ describe RubricsController do
 
     describe "protected routes" do
       [
-        :design,
-        :create,
+        :edit,
         :index_for_copy,
         :copy,
         :destroy,
-        :update
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route, params: { assignment_id: 1, id: "1" }).to redirect_to(:root)

@@ -2,6 +2,7 @@ class Rubric < ActiveRecord::Base
   include Copyable
 
   belongs_to :assignment
+  belongs_to :course
   has_many :criteria
 
   validates :assignment, presence: true

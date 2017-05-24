@@ -279,15 +279,15 @@ describe Assignment do
     end
   end
 
-  describe "#fetch_or_create_rubric" do
+  describe "#find_or_create_rubric" do
     it "returns a rubric if one exists" do
       rubric = create(:rubric, assignment: subject)
-      expect(subject.fetch_or_create_rubric).to eq(rubric)
+      expect(subject.find_or_create_rubric).to eq(rubric)
     end
 
     it "creates a rubric if one does not exist" do
       assignment = create(:assignment)
-      new_rubric = assignment.fetch_or_create_rubric
+      new_rubric = assignment.find_or_create_rubric
       expect(new_rubric).to eq assignment.reload.rubric
     end
   end

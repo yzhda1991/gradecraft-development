@@ -212,4 +212,4 @@ Each method returns a CSV string and has an optional argument `optional` that ca
 #### Rubrics
 
   * `grade_with_rubric?` - returns true when rubrics are enabled for the assignment, the rubric is present, and the rubric has at least one criteria
-  * `fetch_or_create_rubric` - returns the rubric, creating it if it does not already exist
+  * `find_or_create_rubric` - returns the rubric, creating it if it does not already exist

@@ -2,19 +2,19 @@ class RubricsController < ApplicationController
   before_action :ensure_staff?, except: [:export]
 
   before_action :find_rubric, only: [:destroy, :update]
-  before_action :use_current_course, only: [:design]
+  before_action :use_current_course, only: [:edit]
 
   respond_to :html, :json
 
-  def design
+  def edit
     @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = @assignment.fetch_or_create_rubric
+    @rubric = @assignment.find_or_create_rubric
     @course_badge_count = @assignment.course.badges.visible.count
     respond_with @rubric
   end
 
-  def create
-    @rubric = Rubric.create params[:rubric]
+  def destroy
+    @rubric.destroy
     respond_with @rubric
   end
 
@@ -26,23 +26,11 @@ class RubricsController < ApplicationController
   def copy
     assignment = Assignment.find(params[:assignment_id])
 
-    # this is necessary until we
-    # remove all calls to: fetch_or_create_rubric
     assignment.rubric.destroy if assignment.rubric.present?
 
     Rubric.find(params[:rubric_id]).copy(assignment_id: assignment.id)
     redirect_to assignment_path(assignment),
       notice: "Added rubric to #{(term_for :assignment).titleize} #{assignment.name}"
-  end
-
-  def destroy
-    @rubric.destroy
-    respond_with @rubric
-  end
-
-  def update
-    @rubric.update_attributes params[:rubric]
-    respond_with @rubric, status: :not_found
   end
 
   def export
