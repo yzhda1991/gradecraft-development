@@ -29,9 +29,6 @@
     controller: WeightsCtrl,
     controllerAs: 'vm',
     restrict: 'EA',
-    scope: {
-      studentId: "="
-    },
     templateUrl: 'weights/assignment_type_weights.html'
   }
 ]
