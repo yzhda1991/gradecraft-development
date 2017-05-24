@@ -43,12 +43,14 @@
     link: (scope, el, attr)->
       $timeout( ()->
         scope.dragStart = (e, ui)->
+          $(".points-overview-container").addClass("hidden")
           ui.item.data "start", ui.item.index()
 
         scope.dragEnd = (e, ui)->
-         start = ui.item.data("start")
-         end = ui.item.index()
-         RubricService.updateCriterionOrder(start, end)
+          $(".points-overview-container").removeClass("hidden")
+          start = ui.item.data("start")
+          end = ui.item.index()
+          RubricService.updateCriterionOrder(start, end)
 
         $("#criterion-box").sortable(
           start: scope.dragStart
