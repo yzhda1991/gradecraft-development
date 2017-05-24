@@ -1,7 +1,5 @@
 class RubricsController < ApplicationController
   before_action :ensure_staff?, except: [:export]
-
-  before_action :find_rubric, only: [:destroy, :update]
   before_action :use_current_course, only: [:edit]
 
   respond_to :html, :json
@@ -14,6 +12,7 @@ class RubricsController < ApplicationController
   end
 
   def destroy
+    @rubric = @assignment.rubric
     @rubric.destroy
     respond_with @rubric
   end
@@ -25,7 +24,7 @@ class RubricsController < ApplicationController
 
   def copy
     assignment = Assignment.find(params[:assignment_id])
-
+    # remove any rubric added via find_or_create_rubric
     assignment.rubric.destroy if assignment.rubric.present?
 
     Rubric.find(params[:rubric_id]).copy(assignment_id: assignment.id)
@@ -39,11 +38,5 @@ class RubricsController < ApplicationController
     respond_to do |format|
       format.csv { send_data RubricExporter.new.export(rubric), filename: "#{assignment.name} Rubric.csv" }
     end
-  end
-
-  private
-
-  def find_rubric
-    @rubric = @assignment.rubric
   end
 end

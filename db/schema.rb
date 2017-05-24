@@ -235,20 +235,6 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.datetime "updated_at",                            null: false
   end
 
-  create_table "course_creations", force: :cascade do |t|
-    t.integer  "course_id"
-    t.boolean  "settings_done",    default: false, null: false
-    t.boolean  "attendance_done",  default: false, null: false
-    t.boolean  "assignments_done", default: false, null: false
-    t.boolean  "calendar_done",    default: false, null: false
-    t.boolean  "instructors_done", default: false, null: false
-    t.boolean  "roster_done",      default: false, null: false
-    t.boolean  "badges_done",      default: false, null: false
-    t.boolean  "teams_done",       default: false, null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
-
   create_table "course_memberships", force: :cascade do |t|
     t.integer  "course_id"
     t.integer  "user_id"
@@ -320,7 +306,6 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.boolean  "has_multipliers",                                         default: false,                        null: false
     t.boolean  "has_paid",                                                default: true,                         null: false
     t.boolean  "allows_canvas",                                           default: true,                         null: false
-    t.boolean  "published",                                               default: false,                        null: false
   end
 
   create_table "criteria", force: :cascade do |t|

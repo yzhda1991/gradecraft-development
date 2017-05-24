@@ -135,7 +135,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def rubric
-    assignment.fetch_or_create_rubric
+    assignment.find_or_create_rubric
   end
 
   def grade_with_rubric?

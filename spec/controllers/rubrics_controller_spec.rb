@@ -11,9 +11,14 @@ describe RubricsController do
     end
 
     describe "GET edit" do
+      it "shows the design form" do
+        get :edit, params: { assignment_id: assignment.id, rubric: rubric}
+        expect(response).to render_template(:edit)
+      end
     end
 
     describe "GET export" do
+      it "retrieves the export download" do
         get :export, params: { assignment_id: assignment.id }, format: :csv
         expect(response.body).to include("Criteria ID,Criteria Description")
       end
