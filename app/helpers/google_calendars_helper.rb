@@ -20,9 +20,18 @@ module GoogleCalendarsHelper
     return current_course.assignments.find(id) if class_name == "assignment"
   end
 
-  def get_all_items_for_current_course(current_course, class_name)
+  def get_all_items_for_current_course(current_course, class_name, current_user)
     return current_course.events if class_name == "event"
-    return current_course.assignments if class_name == "assignment"
+    return current_course.assignments if class_name == "assignment" && current_user.is_staff?(current_course)
+    return retrieve_visible_assignments(current_course, current_user) if class_name == "assignment" && !current_user.is_staff?(current_course)
+  end
+
+  def retrieve_visible_assignments(current_course, current_user)
+    assignments = []
+    current_course.assignments.each do |assignment|
+      assignments.append(assignment) if assignment.visible_for_student?(current_user)
+    end
+    return assignments
   end
 
   def filter_items_with_no_end_date(item_list)
@@ -89,7 +98,7 @@ module GoogleCalendarsHelper
       add(current_user, item)
       return {"redirect_to" => item, "message_type" => "notice", "message" => "Item " + item.name + " successfully added to your Google Calendar"}
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
-      return {"redirect_to" => item, "message_type" => "alert", "message" => "Google Calendar encountered an Error. Your Assignment was NOT copied to your Google calendar."}
+      return {"redirect_to" => item, "message_type" => "alert", "message" => "Google Calendar encountered an Error. Your " + item.class.name + " was NOT copied to your Google calendar."}
     end
   end
 
@@ -106,7 +115,7 @@ module GoogleCalendarsHelper
         return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
       end
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
-      return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your Assignment was NOT copied to your Google calendar."}
+      return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your " + item.class.name + " was NOT copied to your Google calendar."}
     end
   end
 

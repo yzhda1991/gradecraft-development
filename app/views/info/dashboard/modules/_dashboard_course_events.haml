@@ -1,5 +1,6 @@
 .card-header
   %h2 Upcoming Events
+  = active_course_link_to decorative_glyph(:copy) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, class: "button button-edit", method: :post
 .card-body
   %i#events-loading-spinner.fa.fa-spinner.fa-spin.fa-fw
   .slide-container

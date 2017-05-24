@@ -25,7 +25,7 @@ class GoogleCalendars::AssignmentsController < ApplicationController
   end
 
   def add_assignments
-    assignment_list = get_all_items_for_current_course(current_course, "assignment")
+    assignment_list = get_all_items_for_current_course(current_course, "assignment", current_user)
     assignment_list_filtered = filter_items_with_no_end_date(assignment_list)
     items_hash = add_multiple_items(current_user, assignment_list, assignment_list_filtered)
     items_hash.store("redirect_to", assignments_path)
