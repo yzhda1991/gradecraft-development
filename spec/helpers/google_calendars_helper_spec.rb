@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 include GoogleCalendarsHelper
 
-describe GoogleCalendarsHelper do
+describe GoogleCalendarsHelper, focus: true do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
@@ -48,11 +48,44 @@ describe GoogleCalendarsHelper do
   end
 
   describe "#retrieve_visible_assignments" do
-
+    let(:user) { create :user }
+    let(:course) { build(:course) }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+    let(:event) {create(:event, course: course)}
+    let(:event2) {create(:event, course: course)}
+    let(:event3) {create(:event, course: course)}
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment2) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment3) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:invisible_assignment) { create(:assignment, assignment_type: assignment_type, course: course, visible: false) }
+    it "returns a list of assignments that are visible to the student" do
+      assignment_list = [assignment, assignment2, assignment3, invisible_assignment]
+      visible_assignment_list = [assignment, assignment2, assignment3]
+      expect(filter_items_with_no_end_date(assignment_list)).equal? visible_assignment_list
+    end
   end
 
   describe "#filter_items_with_no_end_date" do
+    let(:user) { create :user }
+    let(:course) { build(:course) }
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+    let(:event) {create(:event, course: course)}
+    let(:event2) {create(:event, course: course)}
+    let(:no_end_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: nil}
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment2) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:no_end_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: nil) }
+    it "returns a shortened array of events or assignments without items that do not have an end date" do
+      assignment_list = [assignment, assignment2, no_end_assignment]
+      filtered_assignment_list = [assignment, assignment2]
+      expect(filter_items_with_no_end_date(assignment_list)).equal? filtered_assignment_list
 
+      event_list = [event, event2, no_end_event]
+      filtered_event_list = [event, event2]
+      expect(filter_items_with_no_end_date(event_list)).equal? filtered_event_list
+    end
   end
 
   describe "#add_multiple_items" do
