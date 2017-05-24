@@ -6,6 +6,7 @@ module GoogleCalendarsHelper
   Calendar = Google::Apis::CalendarV3
 
   def redirect_if_auth_not_present
+    # rubocop:disable AndOr
     redirect_to "/auth/google_oauth2" and return unless google_auth_present?(current_user)
   end
 
@@ -76,12 +77,12 @@ module GoogleCalendarsHelper
   end
 
   def refresh_google_calendar_authorization(current_user)
-      calendar = Calendar::CalendarService.new
-      client_id = Google::Auth::ClientId.new(ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_SECRET'])
-      secrets = create_google_secrets(get_google_authorization(current_user))
-      calendar.authorization = secrets.to_authorization
-      calendar.authorization.refresh!
-      return calendar
+    calendar = Calendar::CalendarService.new
+    client_id = Google::Auth::ClientId.new(ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_SECRET'])
+    secrets = create_google_secrets(get_google_authorization(current_user))
+    calendar.authorization = secrets.to_authorization
+    calendar.authorization.refresh!
+    return calendar
   end
 
   def create_google_secrets(google_authorization)
@@ -102,18 +103,14 @@ module GoogleCalendarsHelper
     end
   end
 
-#kind of still broken. Need to do class specific things (i.e. know whether assignment or event, then proper redirect).
-#Need to continue add events in event of rescue being called.
+  # note: if there is a server error during a batch process the items processed before the server error will be copied to the associated google calendar
   def add_multiple_items(current_user, item_list, item_list_filtered)
     begin
       item_list_filtered.each do |item|
         add(current_user, item)
       end
-      if item_list.count == item_list_filtered.count
-        return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"}
-      else
-        return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
-      end
+      return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"} unless item_list.count != item_list_filtered.count
+      return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
       return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your " + item.class.name + " was NOT copied to your Google calendar."}
     end
