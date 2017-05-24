@@ -12,7 +12,6 @@
           - if assignment_type.student_weightable?
             %th= assignment_type.name
         %th Fully Assigned?
-        %th
     %tbody
       - @students.each do |student|
         %tr
@@ -23,7 +22,3 @@
               %td= student.weight_for_assignment_type(assignment_type)
           %td
             = student.weight_spent?(current_course) ? "Yes" : "No"
-          %td
-            .right
-              %ul.button-bar
-                -#%li= link_to decorative_glyph(:edit) + "Edit #{term_for :weights}", assignment_type_weights_path(student_id: student.id), class: "button"
