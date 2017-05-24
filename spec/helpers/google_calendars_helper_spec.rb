@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 include GoogleCalendarsHelper
 
-describe GoogleCalendarsHelper do
+describe GoogleCalendarsHelper, focus: true do
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
@@ -13,20 +13,20 @@ describe GoogleCalendarsHelper do
     end
   end
 
-  describe "#get_event_or_assignment" do
+  describe "#get_item" do
     let(:user) { create :user }
     let(:course) { build(:course) }
     let(:event) {create(:event, course: course)}
     let(:assignment_type) { create(:assignment_type, course: course) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
     it "returns the event of the corresponding event object" do
-      expect(get_event_or_assignment(course, "event", event.id).id).to be event.id
-      expect(get_event_or_assignment(course, "event", event.id).class).to be Event
+      expect(get_item(course, "event", event.id).id).to be event.id
+      expect(get_item(course, "event", event.id).class).to be Event
     end
 
     it "returns the assignment of the corresponding event object" do
-      expect(get_event_or_assignment(course, "assignment", assignment.id).id).to be assignment.id
-      expect(get_event_or_assignment(course, "assignment", assignment.id).class).to be Assignment
+      expect(get_item(course, "assignment", assignment.id).id).to be assignment.id
+      expect(get_item(course, "assignment", assignment.id).class).to be Assignment
     end
   end
 
