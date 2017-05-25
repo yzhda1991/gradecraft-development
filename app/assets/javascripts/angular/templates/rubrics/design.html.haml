@@ -1,10 +1,18 @@
-%rubric-points-overview(ng-if='!vm.loading')
+%rubric-points-overview(ng-if='!vm.loading && !reordering')
 
 %loading-message(loading='vm.loading' message="Loading Rubric...")
+
+%button.rubric-top-button(ng-if="!vm.hasNewCriterion()" ng-click="toggleReordering()")
+  %i.fa.fa-fw.fa-arrows-v.criterion-drag-handle(ng-if="!reordering")
+  {{ orderButtonText() }}
 
 #criterion-box(ui-sortable ng-model="vm.criteria" ng-change="vm.updateOrder()")
 
   .rubric-container.divider(ng-repeat="criterion in vm.criteria")
-    %rubric-criterion(criterion="criterion")
+    %rubric-criterion(criterion="criterion" reordering="reordering")
 
-%button#new-rubric-criterion(ng-if="!vm.hasNewCriterion()" ng-click="vm.openNewCriterion()") + Criterion
+%button(ng-if="!vm.hasNewCriterion()" ng-click="toggleReordering()")
+  %i.fa.fa-fw.fa-arrows-v.criterion-drag-handle(ng-if="!reordering")
+  {{ orderButtonText() }}
+
+%button(ng-if="!vm.hasNewCriterion() && !reordering" ng-click="vm.openNewCriterion()") Add Criterion

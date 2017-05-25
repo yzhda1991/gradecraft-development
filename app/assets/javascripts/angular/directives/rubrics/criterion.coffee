@@ -5,7 +5,8 @@
   return {
     templateUrl: 'rubrics/criterion.html'
     scope: {
-      criterion: "="
+      criterion: "=",
+      reordering: "="
     }
     link: (scope, el, attr)->
 

@@ -43,11 +43,9 @@
     link: (scope, el, attr)->
       $timeout( ()->
         scope.dragStart = (e, ui)->
-          $(".points-overview-container").addClass("hidden")
           ui.item.data "start", ui.item.index()
 
         scope.dragEnd = (e, ui)->
-          $(".points-overview-container").removeClass("hidden")
           start = ui.item.data("start")
           end = ui.item.index()
           RubricService.updateCriterionOrder(start, end)
@@ -58,5 +56,16 @@
           handle: ".criterion-drag-handle"
         )
       )
+
+      scope.reordering = false
+
+      scope.toggleReordering = ()->
+        scope.reordering = !scope.reordering
+
+      scope.orderButtonText = ()->
+        if scope.reordering
+          "End Reordering Criteria"
+        else
+          "Reorder Criteria"
   }
 ]
