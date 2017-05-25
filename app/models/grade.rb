@@ -34,7 +34,6 @@ class Grade < ActiveRecord::Base
   after_save :update_earned_badges
 
   clean_html :feedback
-  releasable_through :assignment
 
   has_many :attachments, dependent: :destroy
   has_many :file_uploads, through: :attachments

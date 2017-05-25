@@ -5,8 +5,8 @@ describe API::GradesController do
   let(:assignment) { create(:assignment, course: course) }
   let!(:grade) { create :grade, student: student, assignment: assignment }
   let(:group) { create(:group) }
-  
-  context "as professor" do
+
+  context "as professor" , focus: true do
     before(:each) { login_user(professor) }
 
     describe "GET show" do
@@ -19,7 +19,6 @@ describe API::GradesController do
       end
 
       it "assigns all options when release necessary" do
-        assignment.update_attributes release_necessary: true
         get :show,
           params: { assignment_id: assignment.id, student_id: student.id },
           format: :json

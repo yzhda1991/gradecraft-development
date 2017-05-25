@@ -35,7 +35,7 @@ class Submission < ActiveRecord::Base
 
   scope :resubmitted, -> {
     includes(:grade, :assignment)
-    .where("grades.status = 'Released' OR (grades.status = 'Graded' AND NOT assignments.release_necessary)")
+    .where("grades.status = 'Released' OR grades.status = 'Graded'")
     .where("grades.graded_at < submitted_at")
     .references(:grade, :assignment)
   }

@@ -35,7 +35,6 @@
     purpose: "Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat side of silver dagger, releases juice better than cutting. Full moon Whomping Willow three turns should do it lemon drops.",
     grade_scope: "Individual",
     hide_analytics: false,
-    release_necessary: false,
     student_logged: false,
     threshold_points: 0,
     visible: true,
@@ -320,7 +319,6 @@ other desirable developments follow of themselves. - Marjorie Spock",
     name: "Standard Edit + Release Required [No Grades]",
     open_at: 3.weeks.from_now,
     due_at: 3.weeks.from_now + 0.05,
-    release_necessary: true
   }
 }
 
@@ -380,7 +378,6 @@ face! - John Keating"
     accepts_attachments: true,
     accepts_links: true,
     accepts_text: true,
-    release_necessary: true,
   },
   rubric: true,
   student_submissions: true
@@ -424,7 +421,6 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
     accepts_attachments: true,
     accepts_links: true,
     accepts_text: true,
-    release_necessary: true,
   },
   grades: true,
   participation: 90,
@@ -869,7 +865,6 @@ on hover",
 should not have a visible grade",
     due_at: 1.week.ago,
     full_points: 15000,
-    release_necessary: true,
   },
   grades: true,
   participation: 90,
@@ -1096,7 +1091,6 @@ Hockney",
     description: "I send out emails when student receives a grade",
     due_at: 4.weeks.from_now,
     full_points: 150000,
-    release_necessary: true,
   }
 }
 

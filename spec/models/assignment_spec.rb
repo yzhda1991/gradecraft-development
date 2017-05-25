@@ -59,12 +59,6 @@ describe Assignment do
       expect(subject.errors[:student_logged]).to include "must be true or false"
     end
 
-    it "is invalid without release_necessary" do
-      subject.release_necessary = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:release_necessary]).to include "must be true or false"
-    end
-
     it "is invalid without visible" do
       subject.visible = nil
       expect(subject).to_not be_valid

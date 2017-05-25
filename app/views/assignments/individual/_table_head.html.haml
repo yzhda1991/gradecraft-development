@@ -27,7 +27,7 @@
 
   %th{:style => "min-width: 180px"}
 
-  - if presenter.assignment.release_necessary?
+  - if true #presenter.assignment.release_necessary?
     %th{"data-dynatable-no-sort" => "true", :width => "120px" }
       %button.button.select-all{role: "button", type: "button"}= "Check"
       %button.button.select-none{role: "button", type: "button"}= "Uncheck"

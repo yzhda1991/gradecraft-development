@@ -40,7 +40,6 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
   * `visible` - boolean switch representing whether students may see the challenge on their teams page. Defaults to true
   * `full_points` - maximum amount of points teams may earn for their challenge grade
   * `due_at` - date that the challenge is due by. Only displayed, never enforced
-  * `release_necessary` - boolean switch representing whether instructors may change challenge grade statuses, which are only used for preventing the predictor from using challenge grade scores that are not visible to the student
 
 ##### Future Use
 

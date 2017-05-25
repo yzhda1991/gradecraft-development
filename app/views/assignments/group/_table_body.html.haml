@@ -24,7 +24,7 @@
               %th Level
             %th
 
-            - if group_presenter.release_necessary?
+            - if true #group_presenter.release_necessary?
               %th Status
               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
                 %button.button.select-all{role: "button", type: "button"}= "Check"
@@ -51,7 +51,7 @@
               - if group_presenter.has_levels?
                 %td= group_presenter.grade_level(grade)
 
-              - if group_presenter.release_necessary?
+              - if true #group_presenter.release_necessary?
                 %td= grade.try(:status)
                 %td.right
                   - if grade && grade.is_graded?

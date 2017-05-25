@@ -14,14 +14,12 @@ json.attributes do
   json.position                   assignment.position
   json.purpose                    assignment.purpose
   json.threshold_points           assignment.threshold_points
-  json.release_necessary          assignment.release_necessary
 
   # boolean attributes
   json.visible                    assignment.visible
   json.required                   assignment.required
   json.accepts_submissions        assignment.accepts_submissions
   json.student_logged             assignment.student_logged
-  json.release_necessary          assignment.release_necessary
 
   # boolean flags (for predictor logic)
 

@@ -1,5 +1,5 @@
 describe GradeProctor::Viewable do
-  let(:assignment) { double(:assignment, release_necessary?: true) }
+  let(:assignment) { double(:assignment) }
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
                        student_id: 123) }

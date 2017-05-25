@@ -55,7 +55,7 @@ class API::AssignmentsController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit(
-      :accepts_submissions, :accepts_submissions_until, :due_at, :full_points, :open_at, :release_necessary, :required, :student_logged, :visible
+      :accepts_submissions, :accepts_submissions_until, :due_at, :full_points, :open_at, :required, :student_logged, :visible
     )
   end
 end

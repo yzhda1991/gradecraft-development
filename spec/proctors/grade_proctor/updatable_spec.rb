@@ -1,6 +1,5 @@
 describe GradeProctor::Updatable do
-  let(:assignment) { double(:assignment, student_logged?: false,
-                            release_necessary?: true) }
+  let(:assignment) { double(:assignment, student_logged?: false) }
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
                        student_id: 123, student: user, is_graded?: true,

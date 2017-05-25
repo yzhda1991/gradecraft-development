@@ -21,7 +21,6 @@
     due_at: nil,
     full_points: 100000,
     accepts_submissions: false,
-    release_necessary: false,
     visible: true,
   },
   grades: false,
@@ -73,7 +72,6 @@
     due_at: 3.weeks.from_now,
     accepts_submissions: true,
     open_at: rand(8).weeks.ago,
-    release_necessary: true
   }
 }
 

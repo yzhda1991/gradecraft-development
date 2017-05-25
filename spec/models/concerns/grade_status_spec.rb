@@ -16,7 +16,7 @@ describe GradeStatus do
     it "returns all grades that were released or were graded but no release was necessary" do
       graded_grade = create :grade, status: "Graded"
       released_grade = create :grade, status: "Released"
-      assignment = create :assignment, release_necessary: true
+      assignment = create :assignment
       create :grade, assignment: assignment, status: "Graded"
 
       expect(Grade.student_visible).to include(released_grade, graded_grade)
@@ -26,7 +26,6 @@ describe GradeStatus do
   describe "student_visible?" do
     it "returns true if the grade is released" do
       grade.status = "Released"
-      assignment.release_necessary = true
       expect(grade.is_student_visible?).to eq true
     end
 
@@ -38,30 +37,17 @@ describe GradeStatus do
 
     it "returns false if the grade is not released" do
       grade.status = "Graded"
-      assignment.release_necessary = true
       expect(grade.is_student_visible?).to eq false
     end
 
     it "returns false if the grade is not marked as graded" do
       grade.status = nil
-      assignment.release_necessary = true
       expect(grade.is_student_visible?).to eq false
     end
 
     it "returns false if the grade is marked as in progress" do
       grade.status = "In Progress"
-      assignment.release_necessary = true
       expect(grade.is_student_visible?).to eq false
-    end
-  end
-
-  describe ".releasable_through" do
-    it "returns challenge" do
-      expect(ChallengeGrade.releasable_relationship).to eq :challenge
-    end
-
-    it "returns assignment" do
-      expect(Grade.releasable_relationship).to eq :assignment
     end
   end
 
@@ -95,7 +81,7 @@ describe GradeStatus do
 
   describe ".not_released" do
     it "returns all grades that are graded but require a release" do
-      assignment = create :assignment, release_necessary: true
+      assignment = create :assignment
       not_released_grade = create :grade, assignment: assignment, status: "Graded"
       create :grade, assignment: assignment, status: "Released"
       create :grade, status: "Graded"

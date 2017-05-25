@@ -36,13 +36,6 @@ describe Assignments::GroupPresenter do
     end
   end
 
-  describe "#release_necessary?" do
-    it "returns the value for the assignment" do
-      allow(assignment).to receive(:release_necessary?).and_return true
-      expect(subject.release_necessary?).to eq(true)
-    end
-  end
-
   describe "#pass_fail?" do
     it "returns the value for the assignment" do
       allow(assignment).to receive(:pass_fail?).and_return true

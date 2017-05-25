@@ -17,7 +17,6 @@ apiTestDoubles.assignment.group ={
       "position": 1,
       "purpose": "Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat side of silver dagger, releases juice better than cutting. Full moon Whomping Willow three turns should do it lemon drops.",
       "threshold_points": 0,
-      "release_necessary": false,
       "has_info": true,
       "has_levels": false,
       "has_threshold": false,

@@ -11,8 +11,6 @@ class ChallengeGrade < ActiveRecord::Base
 
   delegate :name, :description, :due_at, :full_points, to: :challenge
 
-  releasable_through :challenge
-
   before_save :calculate_final_points
   before_save :update_challenge_status_fields
 

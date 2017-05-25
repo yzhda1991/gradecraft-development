@@ -261,7 +261,6 @@ describe User do
     end
 
     it "returns false if the grade is graded and release is required" do
-      assignment.release_necessary = true
       assignment.save
       grade.status = "Graded"
       grade.save!
@@ -269,7 +268,6 @@ describe User do
     end
 
     it "returns true if the grade is released and release is required" do
-      assignment.release_necessary = true
       assignment.save
       grade.status = "Released"
       grade.save!

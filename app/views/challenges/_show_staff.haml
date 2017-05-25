@@ -6,10 +6,10 @@
         %th Score
         - if @challenge.has_levels?
           %th Level
-        - if @challenge.release_necessary?
+        - if true #@challenge.release_necessary?
           %th Status
-        %th.options Options
-        - if @challenge.release_necessary?
+        %th
+        - if true #@challenge.release_necessary?
           %th.center{"data-dynatable-no-sort" => "true" }
             %button.button.select-all{role: "button", type: "button"}= "Check All"
             %button.button.select-none{role: "button", type: "button"}= "Uncheck"
@@ -27,7 +27,7 @@
           %td= points challenge_grade.final_points if challenge_grade
           - if @challenge.has_levels?
             %td= @challenge.challenge_grade_level(challenge_grade) if challenge_grade
-          - if @challenge.release_necessary?
+          - if true #@challenge.release_necessary?
             %td= challenge_grade.status if challenge_grade
           %td
             .table-menu
@@ -41,12 +41,12 @@
                       = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge_grade.id), data: { confirm: 'Are you sure?', method: :delete }
                 - else
                   = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge, team_id: team.id), class: "button"
-          - if @challenge.release_necessary?
+          - if true #@challenge.release_necessary?
             %td
               - if challenge_grade && !challenge_grade.is_released?
                 .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
 
   %br
   .right
-    - if @challenge.release_necessary? && @challenge.challenge_grades.present?
+    - if @challenge.challenge_grades.present?
       = active_course_submit_tag "Update Grade Statuses", class: "button"

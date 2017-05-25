@@ -7,42 +7,12 @@ module GradeStatus
     scope :graded, -> { where status: "Graded" }
     scope :graded_or_released, -> { where(status: ["Graded", "Released"]) }
     scope :in_progress, -> { where status: "In Progress" }
-    scope :not_released, -> { joins(releasable_relationship)
-                              .where("#{releasable_relationship.to_s.tableize}" => { release_necessary: true })
-                              .where(status: "Graded")
-                            }
-    scope :released, -> { joins(releasable_relationship)
-                          .where("status = 'Released' OR "\
-                                "(status = 'Graded' AND NOT #{releasable_relationship.to_s.tableize}.release_necessary)")
-                              }
-    scope :student_visible, -> { joins(releasable_relationship).where(student_visible_sql) }
+    scope :not_released, -> { where status: "In Progress" }
+    scope :released, -> { where status: "Released" }
+    scope :student_visible, ->  { where(status: ["Graded", "Released"]) }
   end
 
-  class_methods do
-    # Used in class definitions to specify which belongs_to relationship responds to a release_necessary flag
-    # This is used in the scopes to determine what relationship to join with
-    # USAGE:
-    # class Grade
-    #   releasable_through :assignment
-    # end
-    def releasable_through(relationship=nil)
-      @releasable_relationship = relationship
-    end
-
-    # returns the relationship symbol set in the class definition
-    def releasable_relationship
-      @releasable_relationship
-    end
-
-    private
-
-    def student_visible_sql
-      ["status = 'Released' OR (status = 'Graded' AND #{releasable_relationship.to_s.tableize}.release_necessary = ?)", false]
-    end
-  end
-
-  STATUSES = ["In Progress", "Graded", "Released"]
-  UNRELEASED_STATUSES = ["In Progress", "Graded"]
+  STATUSES = ["In Progress", "Released"]
 
   def is_graded?
     status == "Graded"
@@ -61,7 +31,7 @@ module GradeStatus
   end
 
   def is_student_visible?
-    if is_released? || (is_graded? && !assignment.release_necessary?)
+    if is_released? || is_graded?
       return true
     else
       return false

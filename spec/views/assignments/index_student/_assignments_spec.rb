@@ -51,8 +51,7 @@ describe "assignments/index_student/_assignments" do
         assert_select "p", text: "#{points @assignment.full_points} points possible", count: 1
       end
 
-      it "renders the points out of points possible when the grade is released for assignment" do
-        @assignment.update(release_necessary: false)
+      it "renders the points out of points possible when the grade is released" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: @assignment.full_points, status: "Graded")
 
         # To verify we have satisfied the released condition:

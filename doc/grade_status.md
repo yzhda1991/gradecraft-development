@@ -1,5 +1,7 @@
 ## Grade status
 
+TODO: document changes before merge!
+
 * Student created grades (i.e. when predicting a grade) have a nil status
 * Professor/GSI created grades status are "In Progress", "Graded", or "Released"
   * "In Progress" -- GSI is in the middle of grading, grade is not visible to student
@@ -23,7 +25,7 @@
   * On the assignment level: "release_necessary" is false, and grade status is "Graded" or "Released"
   * On the assignment level, "release_necessary" is true, and the grade status is "Released"
 
-| Status         | release required | no release required  | 
+| Status         | release required | no release required  |
 | -------------- | ---------------: | -------------------: |
 |  "In Progress" |        NO        |          NO          |
 |  "Graded"      |        NO        |          YES         |
@@ -36,7 +38,7 @@ Faculty can always see grades when they exist (but they can't see [[student grad
 ### Challenge grades
 
 Do not currently have an "In Progress" status, but otherwise work exactly the same as Assignment Grades
-  
+
 ### TODO:
   * remove blank status from selections that are available to instructors updating a grade status
   * Grade method `is_released?` should become `is_student_visible?`

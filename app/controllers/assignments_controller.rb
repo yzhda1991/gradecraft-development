@@ -151,7 +151,7 @@ class AssignmentsController < ApplicationController
       :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
       :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
       :name, :open_at, :pass_fail, :max_submissions,
-      :full_points, :purpose, :release_necessary, :hide_analytics,
+      :full_points, :purpose, :hide_analytics,
       :required, :resubmissions_allowed, :show_description_when_locked,
       :show_purpose_when_locked, :show_name_when_locked, :media, :remove_media,
       :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,

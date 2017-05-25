@@ -14,7 +14,7 @@ class ChallengeGradeProctor
       user = options[:user]
       course = options[:course] || challenge_grade.team.course
 
-      challenge_grade_for_course?(course) && 
+      challenge_grade_for_course?(course) &&
         ((user.present? && user.is_staff?(course)) || challenge_grade_visible_by_students?)
     end
 
@@ -23,9 +23,7 @@ class ChallengeGradeProctor
     # Challenge grades for the course are visible to all students, as long as
     # they're released
     def challenge_grade_visible_by_students?
-      challenge_grade.is_released? ||
-        (challenge_grade.is_graded? &&
-          !challenge_grade.challenge.release_necessary?)
+      challenge_grade.is_released? || challenge_grade.is_graded?
     end
   end
 end

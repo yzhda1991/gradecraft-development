@@ -11,12 +11,6 @@ describe Grade do
         expect(described_class::STATUSES).to eq ["In Progress", "Graded", "Released"]
       end
     end
-
-    describe "UNRELEASED_STATUSES" do
-      it "returns an array of all the status values" do
-        expect(described_class::UNRELEASED_STATUSES).to eq ["In Progress", "Graded"]
-      end
-    end
   end
 
   describe "validations" do

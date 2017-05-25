@@ -280,7 +280,6 @@ describe Submission do
     end
 
     it "does not return submissions that have unreleased grades" do
-      assignment = build(:assignment, release_necessary: true)
       submission = build(:submission, assignment: assignment)
       create(:unreleased_grade, submission: submission, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now

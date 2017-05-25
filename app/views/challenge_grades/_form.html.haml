@@ -10,7 +10,7 @@
       .form-hint out of #{points @challenge.full_points} points
 
     .form-item
-      - if @challenge.release_necessary?
+      - if true #@challenge.release_necessary?
         = f.label :status
         = f.select :status, ChallengeGrade::STATUSES
         .form-hint= "Can the #{term_for :team} see this grade?"

@@ -139,7 +139,7 @@ describe Team do
       team_1 = create(:team, course: course)
       team_2 = create(:team, course: course)
 
-      challenge = create(:challenge, course: course, release_necessary: true)
+      challenge = create(:challenge, course: course)
       challenge_grade = create(:challenge_grade, challenge: challenge, team: team_1, raw_points: 100, status: "Released")
       challenge_grade_2 = create(:challenge_grade, challenge: challenge, team: team_2, raw_points: 10000, status: "Released")
 

@@ -43,7 +43,7 @@ class Assignment < ActiveRecord::Base
   validates_presence_of :name, :course_id, :assignment_type_id, :grade_scope, :threshold_points
 
   validates_inclusion_of :student_logged, :required, :accepts_submissions,
-  :release_necessary, :visible, :resubmissions_allowed, :use_rubric, :accepts_attachments,
+  :visible, :resubmissions_allowed, :use_rubric, :accepts_attachments,
   :accepts_text, :accepts_links, :pass_fail, :hide_analytics, :visible_when_locked,
   :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
   :show_purpose_when_locked, in: [true, false], message: "must be true or false"

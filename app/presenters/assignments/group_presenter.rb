@@ -20,10 +20,6 @@ class Assignments::GroupPresenter < Showtime::Presenter
     assignment.has_levels?
   end
 
-  def release_necessary?
-    assignment.release_necessary?
-  end
-
   def pass_fail?
     assignment.pass_fail?
   end
