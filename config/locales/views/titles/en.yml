@@ -106,6 +106,10 @@ en:
     multiplier_choices:
       title: "#{ term_for :weight } Choices"
   institutions:
+    edit:
+      title: "Edit Institution"
+    index:
+      title: "All Institutions"
     new:
       title: "Create a New institution"
   integrations:

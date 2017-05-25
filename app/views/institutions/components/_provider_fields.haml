@@ -1,0 +1,12 @@
+= f.hidden_field :name, value: "canvas"
+
+.form-item
+  = f.input :consumer_key
+.form-item
+  = f.label :consumer_secret
+  = f.password_field :consumer_secret, as: :consumer_secret
+.form-item
+  = f.label :consumer_secret_confirmation
+  = f.password_field :consumer_secret_confirmation, as: :consumer_secret
+.form-item
+  = f.input :base_url, as: :string, placeholder: "Optional"

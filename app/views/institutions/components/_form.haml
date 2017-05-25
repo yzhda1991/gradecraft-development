@@ -1,0 +1,23 @@
+= simple_form_for @institution do |f|
+  %section.form-section
+    %h2.form-title= "Institution Settings"
+    .form-item
+      = f.input :name, "aria-required": "true"
+    .form-item
+      = f.label :has_site_license
+      = f.check_box :has_site_license
+
+  %section.form-section
+    %h2.form-title= "Canvas Credentials"
+    - if @institution.providers.any?
+      - @institution.providers.each do |provider|
+        = f.simple_fields_for :providers, provider, class: "form-inline" do |pf|
+          = render partial: "institutions/components/provider_fields", locals: { f: pf }
+    - else
+      = f.simple_fields_for :providers, Provider.new, class: "form-inline" do |pf|
+        = render partial: "institutions/components/provider_fields", locals: { f: pf }
+
+  .submit-buttons
+    %ul
+      %li= submit_tag "#{@institution.persisted? ? "Update" : "Create"} Institution", class: "button"
+      %li= link_to glyph("times-circle") + "Cancel", institutions_path, class: "button"

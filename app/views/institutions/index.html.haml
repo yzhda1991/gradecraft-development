@@ -1,0 +1,25 @@
+- content_for :context_menu do
+  .context_menu
+    %ul
+      %li= link_to decorative_glyph(:plus) + "New Institution", new_institution_path, class: "button button-edit"
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  %table.paginated_dynatable
+    %caption.sr-only My Institutions
+    %thead
+      %tr
+        %th{scope: "col"} Name
+        %th{scope: "col"} Has Site License?
+        %th.center{scope: "col"} Options
+    %tbody
+      - @institutions.each do |institution|
+        %tr
+          %td= institution.name
+          %td= institution.has_site_license? ? "Yes" : "No"
+          %td.center
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_institution_path(institution)

@@ -325,7 +325,7 @@ Rails.application.routes.draw do
 
   resources :canvas_session, only: [:index, :new]
 
-  resources :institutions, only: [:new, :create]
+  resources :institutions, only: [:index, :new, :edit, :create, :update]
 
   #18. API Calls
 
