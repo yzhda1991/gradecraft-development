@@ -5,7 +5,7 @@ class Rubric < ActiveRecord::Base
   belongs_to :course
   has_many :criteria
 
-  validates :assignment, presence: true
+  validates :assignment, :course, presence: true
 
   def max_level_count
     criteria.inject([]) do |level_counts, criterion|
