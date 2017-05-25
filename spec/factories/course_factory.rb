@@ -6,8 +6,6 @@ FactoryGirl.define do
     has_badges false
     has_paid false
 
-    association :institution
-
     factory :course_with_weighting do
       total_weights 6
       max_weights_per_assignment_type 4
