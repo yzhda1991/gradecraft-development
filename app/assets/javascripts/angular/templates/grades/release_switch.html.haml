@@ -1,0 +1,17 @@
+%section.grade-release
+  .grade-release-switch-sandwich
+    .grade-release-switch-sandwich-section.long-section
+      .binary-switch-label
+        Release to Student?
+    .grade-release-switch-sandwich-section
+      .binary-switch-socket(ng-click='toggleSwitch()' ng-class='switchState()')
+        .binary-switch-handle
+    .grade-release-switch-sandwich-section
+      .binary-switch-label
+        {{textForSwitch()}}
+
+  .release-status-explanation.italic
+    Grade will
+    %span(ng-if="switchState() == 'off'") NOT
+    be visible to student when you submit
+

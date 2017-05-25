@@ -12,5 +12,12 @@
       scope.grade = GradeService.modelGrade
       scope.submitGrade = (returnURL)->
         GradeService.submitGrade(returnURL)
+
+      scope.textForButton = ()->
+        if GradeService.isSetToRelease() then "Submit Grade" else "Save as Draft"
+
+      scope.textForNextButton = ()->
+        if GradeService.isSetToRelease() then "Submit and Grade Next" else "Save and Grade Next"
+
   }
 ]

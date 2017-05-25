@@ -6,7 +6,7 @@ describe API::GradesController do
   let!(:grade) { create :grade, student: student, assignment: assignment }
   let(:group) { create(:group) }
 
-  context "as professor" , focus: true do
+  context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "GET show" do
@@ -18,18 +18,11 @@ describe API::GradesController do
         expect(response).to render_template(:show)
       end
 
-      it "assigns all options when release necessary" do
+      it "assigns status options" do
         get :show,
           params: { assignment_id: assignment.id, student_id: student.id },
           format: :json
-        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded", "Released"])
-      end
-
-      it "assigns limited options when release not necessary" do
-        get :show,
-          params: { assignment_id: assignment.id, student_id: student.id },
-          format: :json
-        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded"])
+        expect(assigns(:grade_status_options)).to eq(["In Progress", "Released"])
       end
     end
 

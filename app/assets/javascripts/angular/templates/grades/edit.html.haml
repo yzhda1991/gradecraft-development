@@ -25,7 +25,7 @@
 
 .grading-summary
   %grade-points-overview(ng-if='!vm.loading && !vm.isPassFailGraded() && !vm.isGroupGrade' grade-type='{{vm.isRubricGraded() ? "RUBRIC" : "STANDARD_ASSIGNMENT"}}')
-  %grade-status-select
+  %grade-release-switch
   .right
     %grade-submit-buttons(ng-if='vm.isActiveCourse' submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
 

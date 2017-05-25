@@ -12,8 +12,6 @@
   fileUploads = []
   criterionGrades = []
 
-  gradeStatusOptions = []
-
   isRubricGraded = false
   thresholdPoints = 0
 
@@ -50,6 +48,14 @@
     modelGrade.pass_fail_status =
       if modelGrade.pass_fail_status == "Pass" then "Fail" else "Pass"
 
+  isSetToRelease = ()->
+    modelGrade.pending_status == "Released"
+
+  toggeleGradeReleaseStatus = ()->
+    modelGrade.pending_status =
+      if modelGrade.pending_status == ("Released" || "Graded") then "In Progress" else "Released"
+
+
   #------- grade API calls ----------------------------------------------------#
 
   # Adjustment fields and final_points are unique to each grade,
@@ -67,7 +73,6 @@
   _getIncluded = (response)->
     GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
     GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
-    angular.copy(response.data.meta.grade_status_options, gradeStatusOptions)
 
     # - Uncomment this line if we want to force a status on autosave:
     # - If no status has been sent, we set status as "In Progress"
@@ -77,7 +82,7 @@
     #  modelGrade.status = "In Progress" if ! modelGrade.status
 
     # We bind status changes to pending_status and only update on submit
-    modelGrade.pending_status =  modelGrade.status
+    modelGrade.pending_status =  modelGrade.status || "In Progress"
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
 
@@ -335,7 +340,9 @@
     grades: grades
     fileUploads: fileUploads
     criterionGrades: criterionGrades
-    gradeStatusOptions: gradeStatusOptions
+
+    isSetToRelease: isSetToRelease
+    toggeleGradeReleaseStatus: toggeleGradeReleaseStatus
 
     calculateGradePoints: calculateGradePoints
 
