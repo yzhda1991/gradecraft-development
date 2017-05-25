@@ -21,10 +21,9 @@ describe Provider do
       end
 
       context "when there is a linked provider" do
-        let(:provider) { create :provider }
+        let!(:provider) { create :institution_provider, providee: institution }
 
         it "returns the provider" do
-          institution.providers << provider
           expect(Provider.for_course course).to eq provider
         end
       end

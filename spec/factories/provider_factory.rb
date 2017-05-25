@@ -5,7 +5,9 @@ FactoryGirl.define do
     consumer_secret { Faker::Crypto.sha1 }
     consumer_secret_confirmation { consumer_secret }
 
-    association :institution
+    factory :institution_provider, class: "Provider" do
+      association :providee, factory: :institution
+    end
 
     trait :canvas do
       name "canvas"
