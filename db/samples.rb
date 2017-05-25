@@ -586,7 +586,6 @@ PaperTrail.whodunnit = nil
       if config[:attributes][:resubmissions_allowed]
         puts "Generating Resubmissions"
         @students.each do |student|
-          # Only occurs in course GC105 course_id = 5 because it is the only one with assignments open
           if assignment.resubmissions_allowed? && Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).present?
             PaperTrail.whodunnit = student.id
             submission = student.submissions.create! do |s|
@@ -597,6 +596,7 @@ PaperTrail.whodunnit = nil
             end
             submission.update_attributes(link: "http://twitch.tv")
             grade = Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).first
+            # Grade must associate with submission to be read as a resubmission
             grade.update_attributes(submission_id: submission.id)
           end
           print "."
