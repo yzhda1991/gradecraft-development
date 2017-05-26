@@ -29,9 +29,8 @@ describe GradeStatus do
       expect(grade.is_student_visible?).to eq true
     end
 
-    it "returns true if the grade is graded and the assignment does not need release" do
+    it "returns true if the grade is graded" do
       grade.status = "Graded"
-      assignment.release_necessary = false
       expect(grade.is_student_visible?).to eq true
     end
 
@@ -80,9 +79,9 @@ describe GradeStatus do
   end
 
   describe ".not_released" do
-    it "returns all grades that are graded but require a release" do
+    it "returns all grades that are in progress" do
       assignment = create :assignment
-      not_released_grade = create :grade, assignment: assignment, status: "Graded"
+      not_released_grade = create :grade, assignment: assignment, status: "In Progress"
       create :grade, assignment: assignment, status: "Released"
       create :grade, status: "Graded"
 

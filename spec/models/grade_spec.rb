@@ -8,7 +8,7 @@ describe Grade do
   describe "constants" do
     describe "STATUSES" do
       it "returns an array of all the status values" do
-        expect(described_class::STATUSES).to eq ["In Progress", "Graded", "Released"]
+        expect(described_class::STATUSES).to eq ["In Progress", "Released"]
       end
     end
   end

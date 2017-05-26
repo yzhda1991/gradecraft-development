@@ -254,20 +254,13 @@ describe User do
       expect(student.grade_released_for_assignment?(assignment)).to eq(false)
     end
 
-    it "returns true if the grade is graded and does not require release" do
+    it "returns true if the grade is graded" do
       grade.status = "Graded"
       grade.save!
       expect(student.grade_released_for_assignment?(assignment)).to eq(true)
     end
 
-    it "returns false if the grade is graded and release is required" do
-      assignment.save
-      grade.status = "Graded"
-      grade.save!
-      expect(student.grade_released_for_assignment?(assignment)).to eq(false)
-    end
-
-    it "returns true if the grade is released and release is required" do
+    it "returns true if the grade is released" do
       assignment.save
       grade.status = "Released"
       grade.save!

@@ -19,7 +19,7 @@ describe GradesHelper do
 
   describe "#unreleased_grades_count_for" do
     let(:assignment) { create :assignment, course: course }
-    let!(:grade) { create :grade, status: "Graded", assignment: assignment, course: course }
+    let!(:grade) { create :grade, status: "In Progress", assignment: assignment, course: course }
 
     it "returns the number of grades that are unreleased" do
       expect(unreleased_grades_count_for(course)).to eq 1
