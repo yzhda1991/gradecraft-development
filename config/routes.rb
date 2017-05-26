@@ -394,6 +394,7 @@ Rails.application.routes.draw do
           get "courses", action: :index
         end
       end
+      resources :teams, only: :index, module: :courses
     end
 
     get "course_creation", to: "course_creation#show"
