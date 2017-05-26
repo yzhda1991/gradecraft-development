@@ -331,7 +331,7 @@ describe Assignment do
 
     it "copies the rubric" do
       assignment.save
-      assignment.build_rubric
+      assignment.build_rubric(course_id: assignment.course_id)
       expect(subject.rubric.assignment_id).to eq subject.id
       expect(subject.rubric).to_not be_new_record
     end

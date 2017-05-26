@@ -110,7 +110,7 @@ describe CoursesController do
         assignment_type = create(:assignment_type, course: course)
         badge = create(:badge, course: course, name: "First")
         assignment = create(:assignment, assignment_type: assignment_type, course: course)
-        rubric = create(:rubric, assignment: assignment)
+        rubric = create(:rubric, assignment: assignment, course: course)
         criterion = create(:criterion, rubric: rubric)
         level = create(:level, criterion: criterion)
         level_badge = create(:level_badge, level: level, badge: badge)
