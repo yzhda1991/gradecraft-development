@@ -11,6 +11,11 @@ describe Rubric do
       rubric.assignment = nil
       expect(rubric).to be_invalid
     end
+
+    it "is invalid without a course" do
+      rubric.course = nil
+      expect(rubric).to be_invalid
+    end
   end
 
   describe "#copy" do

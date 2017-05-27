@@ -425,6 +425,7 @@ PaperTrail.whodunnit = nil
       if config[:rubric]
         Rubric.create! do |rubric|
           rubric.assignment = assignment
+          rubric.course = assignment.course
           rubric.save
 
           full_points = 0

@@ -93,9 +93,9 @@ class Assignment < ActiveRecord::Base
     use_rubric && rubric.present? && rubric.designed?
   end
 
-  def fetch_or_create_rubric
+  def find_or_create_rubric
     return rubric if rubric
-    Rubric.create assignment_id: self[:id]
+    Rubric.create assignment_id: self.id, course_id: self.course_id
   end
 
   # Checking to see if an assignment is individually graded

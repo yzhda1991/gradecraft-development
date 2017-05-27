@@ -368,7 +368,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     dashboard
   end
 
-  def rubrics_design
+  def rubrics_edit
     assignments_index
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
     breadcrumb('Design Rubric')

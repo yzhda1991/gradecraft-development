@@ -10,10 +10,10 @@ describe RubricsController do
       login_user(professor)
     end
 
-    describe "GET design" do
+    describe "GET edit" do
       it "shows the design form" do
-        get :design, params: { assignment_id: assignment.id, rubric: rubric}
-        expect(response).to render_template(:design)
+        get :edit, params: { assignment_id: assignment.id, rubric: rubric}
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -62,12 +62,10 @@ describe RubricsController do
 
     describe "protected routes" do
       [
-        :design,
-        :create,
+        :edit,
         :index_for_copy,
         :copy,
         :destroy,
-        :update
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route, params: { assignment_id: 1, id: "1" }).to redirect_to(:root)

@@ -35,7 +35,7 @@
             = active_course_link_to decorative_glyph(:download) + "Import Grades", assignment_grades_importers_path(presenter.assignment), nil, "hide-for-small"
 
             %li.hide-for-small
-              %a{:href => design_assignment_rubrics_path(presenter.assignment) }
+              %a{:href => edit_assignment_rubrics_path(presenter.assignment) }
                 = decorative_glyph(:sliders)
                 - if presenter.grade_with_rubric?
                   Edit Rubric

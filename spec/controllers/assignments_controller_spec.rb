@@ -47,7 +47,7 @@ describe AssignmentsController do
       end
 
       it "duplicates rubrics" do
-        assignment.create_rubric
+        assignment.create_rubric(course: assignment.course)
         assignment.rubric.criteria.create name: "Rubric 1", max_points: 10_000, order: 1
         assignment.rubric.criteria.first.levels.first.badges.create! name: "Blah", course: course
         post :copy, params: { id: assignment.id }

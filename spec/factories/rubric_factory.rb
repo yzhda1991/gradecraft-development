@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :rubric do
     association :assignment
+    association :course
 
     factory :rubric_with_criteria do
       after(:create) do |rubric|
