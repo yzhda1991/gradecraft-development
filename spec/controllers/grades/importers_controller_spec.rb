@@ -25,24 +25,6 @@ describe Grades::ImportersController do
         allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
           syllabus
       end
-
-      it "redirects to the grade import page if the course cannot be retrieved" do
-        allow(syllabus).to receive(:course) { |&b| b.call }
-        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
-          id: course_id }
-
-        expect(response).to redirect_to assignment_grades_importer_grades_path assignment,
-          provider, course_id
-      end
-
-      it "redirects to the grade import page if the assignments cannot be retrieved" do
-        allow(syllabus).to receive(:assignments) { |&b| b.call }
-        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
-          id: course_id }
-
-        expect(response).to redirect_to assignment_grades_importer_grades_path assignment,
-          provider, course_id
-      end
     end
 
     describe "GET download" do

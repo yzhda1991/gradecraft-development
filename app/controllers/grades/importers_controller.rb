@@ -16,19 +16,12 @@ class Grades::ImportersController < ApplicationController
   before_action :link_canvas_credentials, except: [:download, :index, :show, :upload],
     if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: [:download, :index, :show, :upload]
-  before_action :use_current_course, only: [:upload, :grades, :grades_import, :index, :show, :upload, :assignments]
+  before_action :use_current_course, except: :download
 
+  # GET # /assignments/:assignment_id/grades/importers/:importer_provider_id/assignments
   def assignments
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @lms_course = syllabus.course(params[:id]) do
-      redirect_to assignment_grades_importer_grades_path(@assignment, @provider_name, params[:id]),
-        alert: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}." and return
-    end
-    @assignments = syllabus.assignments(params[:id]) do
-      redirect_to assignment_grades_importer_grades_path(@assignment, @provider_name, params[:id]),
-        alert: "There was an issue trying to retrieve the assignments from #{@provider_name.capitalize}." and return
-    end
   end
 
   # GET /assignments/:assignment_id/grades/download
@@ -48,8 +41,8 @@ class Grades::ImportersController < ApplicationController
   def grades
     @assignment = Assignment.find params[:assignment_id]
     @provider_name = params[:importer_provider_id]
-    @course_id = params[:id]
     @assignment_ids = params[:assignment_ids]
+    @course_id = params[:id]
   end
 
   # POST /assignments/:assignment_id/grades/importers/:importer_provider_id/courses/:id/grades/import

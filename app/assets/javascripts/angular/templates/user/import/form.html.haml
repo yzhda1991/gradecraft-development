@@ -1,27 +1,30 @@
-%error-message{"visible"=>"vm.hasError()", "message"=>"An unexpected error occurred while loading users."}
+%error-message{"visible"=>"vm.hasError", "message"=>"An unexpected error occurred while loading users."}
 
-%loading-message{"loading"=>"vm.loading", "message"=>"Loading Users from {{vm.provider}}..."}
+%canvas-course-selector{"provider"=>"{{vm.provider}}"}
 
-%loaded{"ng-if"=>"!vm.loading"}
-  %without-users{"ng-if"=>"users.length < 1"}
-    %p There are no users to import for this course
+%without-users{"ng-if"=>"vm.users.length < 1"}
+  %p There are no users to import for this course
 
-  %with_users{"ng-if"=>"users.length > 0"}
-    %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8", "ng-submit"=>"vm.formSubmitted = true"}
-      -# Hidden inputs that Rails would normally generate for a form
-      %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
-      %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+%with_users{"ng-if"=>"vm.users.length > 0"}
 
-      %new-users
-      %users-with-changes
-      %users-without-changes
+  %form{"action"=>"{{vm.formAction()}}",
+        "method"=>"post",
+        "accept-charset"=>"UTF-8",
+        "ng-submit"=>"vm.formSubmitted = true",
+        "name"=>"userImportForm"}
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
 
-      .submit-buttons
-        .right
-          %button{"type"=>"submit",
-                  "class"=>"button",
-                  "ng-click"=>"vm.importUsers()",
-                  'ng-class'=>'{"disabled": !vm.hasSelectedGrades() || vm.formSubmitted}',
-                  "ng-disabled"=>"!vm.hasSelectedGrades() || vm.formSubmitted"}
-            %i.fa.fa-download
-            Import Users
+    %new-users
+    %users-with-changes
+    %users-without-changes
+
+    .submit-buttons
+      .right
+        %button{"type"=>"submit",
+                "class"=>"button",
+                "ng-click"=>"vm.importUsers()",
+                'ng-class'=>'{"disabled": !hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted}',
+                "ng-disabled"=>"!hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted"}
+          %i.fa.fa-download
+          Import Users

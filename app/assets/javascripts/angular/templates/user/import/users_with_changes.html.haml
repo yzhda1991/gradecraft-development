@@ -17,16 +17,16 @@
                                      "type"=>"button",
                                      "ng-click"=>"deselectChangedUsers()"}= "Uncheck"
     %tbody
-      %tr{"ng-if"=>"changedUsers.length < 1"}
+      %tr{"ng-if"=>"changedUsers().length < 1"}
         %td{"colspan"=>"6"} None
 
-      %tr{"ng-if"=>"changedUsers.length > 0", "ng-repeat"=>"user in changedUsers"}
+      %tr{"ng-if"=>"changedUsers().length > 0", "ng-repeat"=>"user in changedUsers()"}
         %td {{user.name}}
         %td {{user.email}}
         %td
           %ul
             %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
-        %td {{vm.termForUserExists(user.user_exists)}}
+        %td {{termForUserExists(user.user_exists)}}
         %td
           %span.capitalize {{user.current_role}} -> {{user.gradecraft_role}}
           %span.has-tooltip{"ng-style"=>"{'visibility': user.role_changed ? 'visible' : 'hidden'}"}
@@ -38,4 +38,5 @@
           %input{"type"=>"checkbox",
                  "name"=>"user_ids[]",
                  "value"=>"{{user.id}}",
-                 "ng-model"=>"user.selected_for_import"}
+                 "ng-model"=>"user.selected_for_import",
+                 "ng-required"=>"!hasSelectedUsers()"}

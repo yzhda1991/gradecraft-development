@@ -6,11 +6,6 @@ class API::Grades::ImportersController < ApplicationController
   oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
-  before_action only: :show do |controller|
-    controller.redirect_path \
-      assignment_grades_importer_grades_path(params[:assignment_id],
-        params[:importer_provider_id], params[:id], assignment_ids: params[:assignment_ids])
-  end
   before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization
 

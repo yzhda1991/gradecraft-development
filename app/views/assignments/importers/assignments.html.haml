@@ -1,27 +1,6 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  = form_tag assignments_importer_assignments_import_path(@provider_name, @lms_course["id"]) do
-    %table.dynatable.no-table-header
-      %thead
-        %tr
-          %th{scope: "col"} Name
-          %th{scope: "col"} Description
-          %th{scope: "col"} Due
-          %th{scope: "col"} Points
-          %th{"data-dynatable-no-sort" => "true"}
-            %button.button.select-all{role: "button", type: "button"}= "Check"
-            %button.button.select-none{role: "button", type: "button"}= "Uncheck"
-      %tbody
-        - @assignments.each do |assignment|
-          %tr
-            %td= assignment["name"]
-            %td= (assignment["description"] || "").html_safe
-            %td= assignment["due_at"]
-            %td= assignment["points_possible"]
-            %td.center= check_box_tag "assignment_ids[]", assignment["id"], false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-assignments-command']" }
-
-    .submit-buttons
-      .right
-        %p= select_tag :assignment_type_id, options_from_collection_for_select(@assignment_types, :id, :name), prompt: "Select an assignment type"
-        %p= submit_tag "Import Selected Assignments into #{current_course.name}", class: "button disabled", disabled: true, data: { behavior: "selected-assignments-command" }
+  %canvas-assignment-importer-form{"provider"=>"#{@provider_name}",
+                                   "current-course-name"=>"#{@course.name}",
+                                   "authenticity-token"=>"#{form_authenticity_token}"}

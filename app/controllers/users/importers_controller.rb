@@ -15,10 +15,9 @@ class Users::ImportersController < ApplicationController
   before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: :index
 
-  # GET /users/importers/:importer_provider_id/course/:id
+  # GET /users/importers/:importer_provider_id/users
   def users
     @provider_name = params[:importer_provider_id]
-    @course_id = params[:id]
   end
 
   # POST /users/importers/:importer_provider_id/course/:id/users/import

@@ -563,7 +563,7 @@ module ActiveLMS
     private
 
     attr_reader :client
-
+    
     def handle_exceptions(exception_handler, &blk)
       blk.call
     rescue Canvas::ResponseError, HTTParty::Error, JSON::ParserError => e

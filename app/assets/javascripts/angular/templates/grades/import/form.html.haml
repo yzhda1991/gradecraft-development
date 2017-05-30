@@ -13,7 +13,7 @@
       %span.lowercase {{termFor("assignment")}}.
     %div
       You can
-      %a{"ng-href"=>"{{vm.detailsLink}}"} modify your assignment selection
+      %a{"ng-href"=>"{{vm.assignmentLink}}"} modify your assignment selection
       to find grades to import.
 
   %with_grades{"ng-if"=>"grades && grades.length > 0"}
@@ -32,7 +32,7 @@
             {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
         %div
           %em Wrong {{termFor("assignment")}}?
-          %a{"ng-href"=>"{{vm.detailsLink}}"}
+          %a{"ng-href"=>"{{vm.assignmentLink}}"}
             Switch {{vm.provider}}
             %span.lowercase {{termFor("assignment")}}
 
@@ -89,4 +89,4 @@
                  "class"=>"button",
                  "ng-disabled"=>"!vm.hasSelectedGrades() || vm.formSubmitted",
                  "ng-class"=>"{'disabled': !vm.hasSelectedGrades() || vm.formSubmitted}",
-                 "value"=>"Import Selected Grades for {{assignment().name}}"}
+                 "value"=>"Import Selected Grades Into {{vm.assignmentName}}"}

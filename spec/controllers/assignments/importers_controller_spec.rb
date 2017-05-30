@@ -27,22 +27,6 @@ describe Assignments::ImportersController do
         allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
           syllabus
       end
-
-      it "redirects to the assignment importers page if the course cannot be retrieved" do
-        allow(syllabus).to receive(:course) { |&b| b.call }
-        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
-          id: course_id }
-
-        expect(response).to redirect_to assignments_importers_path
-      end
-
-      it "redirects to the assignment importers page if the assignments cannot be retrieved" do
-        allow(syllabus).to receive(:assignments) { |&b| b.call }
-        get :assignments, params: { assignment_id: assignment.id, importer_provider_id: provider,
-          id: course_id }
-
-        expect(response).to redirect_to assignments_importers_path
-      end
     end
 
     describe "POST assignments_import" do
@@ -53,6 +37,12 @@ describe Assignments::ImportersController do
       before(:each) do
         allow(ActiveLMS::Syllabus).to receive(:new).with("canvas", access_token).and_return \
           syllabus
+      end
+
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
       end
 
       it "links the provider credentials if the provider is canvas" do

@@ -48,7 +48,7 @@ Rails.application.routes.draw do
   #3. Assignments, Submissions, Grades
   namespace :assignments do
     resources :importers, param: :provider_id, only: :index do
-      get "/courses/:id/assignments", action: :assignments, as: :assignments
+      get :assignments
       post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import
       post "/assignments/:id/refresh", action: :refresh_assignment, as: :refresh_assignment
@@ -96,7 +96,7 @@ Rails.application.routes.draw do
       resources :importers, param: :provider_id, only: [:index, :show] do
         get :download
         post :upload
-        get "/courses/:id/assignments", action: :assignments, as: :assignments
+        get :assignments
         get "/courses/:id/grades", action: :grades, as: :grades
         post "/courses/:id/grades/import", action: :grades_import, as: :grades_import
       end
@@ -182,7 +182,7 @@ Rails.application.routes.draw do
   #8. Integrations
 
   resources :integrations, only: [:create, :index] do
-    resources :courses, only: [:create, :destroy, :index], module: :integrations
+    resources :courses, only: [:create, :destroy], module: :integrations
   end
 
   resource :google_calendar, only: [ ] do
@@ -269,7 +269,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :importers, only: :index, param: :provider_id do
-      get "/course/:id", action: :users, as: :users
+      get :users
       post "/course/:id/users/import", action: :users_import, as: :users_import
     end
   end
@@ -360,6 +360,20 @@ Rails.application.routes.draw do
       namespace :grades do
         resources :importers, only: [], param: :provider_id do
           get "/course/:id", action: :show, as: :grades
+        end
+      end
+
+      collection do
+        resources :importers, only: [], param: :provider_id, module: :assignments do
+          get "/course/:id/assignments", action: :index, as: :assignments
+        end
+      end
+    end
+
+    resources :courses, only: [] do
+      collection do
+        resources :importers, only: [], module: :courses, param: :provider_id do
+          get "courses", action: :index
         end
       end
     end
