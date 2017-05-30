@@ -19,7 +19,7 @@ class Assignments::GradesController < ApplicationController
 
     enqueue_multiple_grade_update_jobs(grade_ids)
 
-    redirect_to assignment, notice: "Grades were successfully released!"
+    redirect_to assignment_path(assignment), notice: "Grades were successfully released!"
   end
 
   # GET /assignments/:assignment_id/grades/export

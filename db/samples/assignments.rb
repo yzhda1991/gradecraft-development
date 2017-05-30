@@ -128,7 +128,7 @@ end
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -161,7 +161,7 @@ uncertainty! - Douglas Adams"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -195,7 +195,7 @@ to bed. ― J.K. Rowling"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -230,7 +230,7 @@ of what it feels about education.― Harold Howe",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -264,7 +264,7 @@ life.― John Holt",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -285,7 +285,7 @@ met. Grades have a raw_points of 15000",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
     raw_points: -> { 15000 },
   }
 }
@@ -307,7 +307,7 @@ One Day",
   assignment_score_levels: true,
 }
 
-@assignments[:standard_edit_release_required] = {
+@assignments[:standard_edit_in_progress] = {
   quotes: {
     assignment_created: "But what are schools for if not to make children \
 fall so deeply in love with the world that they really want to learn about \
@@ -316,9 +316,16 @@ other desirable developments follow of themselves. - Marjorie Spock",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Standard Edit + Release Required [No Grades]",
-    open_at: 3.weeks.from_now,
+    name: "Standard Edit + In Progress Grades",
+    open_at: 3.weeks.ago,
     due_at: 3.weeks.from_now + 0.05,
+    full_points: 20000,
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "In Progress",
+    raw_points: -> { 15000 },
   }
 }
 
@@ -764,7 +771,7 @@ accepts predictions.",
   grades: true,
   participation: 100,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -789,7 +796,7 @@ accepts predictions.",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   },
   prediction: true,
   prediction_attributes: {
@@ -812,7 +819,7 @@ not added to total",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
     excluded_from_course_score: true
   },
   prediction: true,
@@ -931,7 +938,7 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
   participation: 90,
   grade_attributes: {
     raw_points: -> { 15000 },
-    status: "Graded"
+    status: "Released"
   },
   prediction: true,
   prediction_attributes: {
@@ -1323,7 +1330,7 @@ treated like money, to be put away in a bank for the future. ― Seymour Papert"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
     raw_points: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key
       to unlock the golden door of freedom."</strong>'
@@ -1369,7 +1376,7 @@ in the end you’ll fall right into my trap. ― Sophia Nikolaidou",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
     raw_points: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not
       strength or intelligence - is the key to unlocking our potential.
@@ -1640,7 +1647,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -1669,7 +1676,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -1698,7 +1705,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 
@@ -1727,7 +1734,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    status: "Released"
   }
 }
 

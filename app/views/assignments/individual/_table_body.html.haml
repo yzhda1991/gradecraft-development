@@ -76,7 +76,6 @@
                   %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade)
                   = active_course_link_to decorative_glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure?", method: :delete }
 
-    -# TODO: examine and test:
     %td
       .center
         - if grade.in_progress?

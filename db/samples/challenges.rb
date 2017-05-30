@@ -47,7 +47,7 @@
   },
   grades: true,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
   }
 }
 
@@ -58,18 +58,6 @@
   attributes: {
     name: "Challenge in the future that accepts submissions",
     due_at: 2.weeks.from_now,
-    accepts_submissions: true,
-    open_at: rand(8).weeks.ago,
-  }
-}
-
-@challenges[:requires_release] = {
-  quotes: {
-    challenge_created: nil
-  },
-  attributes: {
-    name: "Challenge that Requires Release",
-    due_at: 3.weeks.from_now,
     accepts_submissions: true,
     open_at: rand(8).weeks.ago,
   }
@@ -89,7 +77,7 @@ sure what the game is. - Ashleigh Brilliant"
   },
   grades: true,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
   }
 }
 
