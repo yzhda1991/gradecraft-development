@@ -1,7 +1,7 @@
 .form-item
+  %label.media-image-label{for: "assignment_media"} Upload an Image
+  = f.file_field :media, {class: "media-image-upload"}
   .image-preview
-    %label.media-image-label{for: "assignment_media"}= glyph(:camera) + "Upload an Image"
-    = f.file_field :media, {class: "media-image-upload"}
     - if model.media.present? && model.errors[:media].empty?
       = f.check_box :remove_media
       Remove Image

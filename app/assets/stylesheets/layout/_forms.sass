@@ -92,7 +92,8 @@ ul.accepts_submission_types
   flex-wrap: wrap
   .form-item
     flex: 1
-    input, select
+    input:not([type="checkbox"]),
+    select
       width: 100%
     @media (max-width: $media-small-max)
       margin-right: 0
@@ -129,7 +130,7 @@ error
   font-weight: bold
   padding-left: .5rem
 
-.conditional-options
+.conditional-options.indented
   margin: 0
   padding-left: 1rem
 
@@ -224,7 +225,9 @@ select.dynatable-per-page-select,
   position: inherit
 
 // assignment creation form
-.individual-group-contingent
+.individual-group-contingent,
+.pass-fail-contingent,
+.conditional-options
   visibility: visible
   opacity: 1
   transition: visibility 0s linear 0s, opacity 300ms
