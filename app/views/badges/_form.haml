@@ -3,8 +3,7 @@
 = simple_form_for @badge do |f|
   %section.form-section
 
-    %h2.form-title Basic Settings
-
+    %h2.form-title Basic Info
     .form-item
       = f.label :name, "Name"
       = f.text_field :name
@@ -35,29 +34,44 @@
           %span.yaxis-label 40px
 
     .form-item
+      %label{for: "form-badge-description"} Description
+      .textarea#form-badge-description
+        .form-hint Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
+        = f.text_area :description, class: "froala"
+
+    .form-item
+      = f.label :badge_files, "Attachments"
+      = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|
+        = bf.file_field :file, :multiple => true, :label => false, :id => "badge_badge_files"
+      - if @badge.badge_files.exists?
+        %h5.bold Uploaded files
+        %ul.uploaded-files
+          - @badge.badge_files.each do |bf|
+            - next if bf.new_record?
+            %li
+              = link_to bf.filename, bf.url, :target => "_blank"
+              = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", badge_id: @badge.id, :upload_id => bf.id } )
+
+  %section.form-section
+    %h2.form-title Settings
+    .form-item.no-margin
       = f.check_box :visible
       = f.label :visible
       = tooltip("badges-visible-hint", "info-circle", placement: "right") do
         Can #{term_for :students} see this #{term_for :badge}?
 
-    .form-item
+    .form-item.no-margin
       = f.check_box :can_earn_multiple_times
       = f.label :can_earn_multiple_times,"Multi-award"
       = tooltip("badges-multiple-earn-hint", "info-circle", placement: "right") do
         Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
 
-    .form-item
+    .form-item.no-margin
       = f.check_box :student_awardable
       = f.label :student_awardable,"Student-awardable"
       = tooltip("student-awardable-hint", "info-circle", placement: "right") do
         Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
 
-  %section.form-section
-    %h2.form-title Description
-
-    .textarea
-      .form-hint Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
-      = f.text_area :description, class: "froala"
 
   %section.form-section
     %h2.form-title Unlocks
@@ -92,20 +106,6 @@
             = f.check_box :show_description_when_locked
             = f.label :show_description_when_locked, :label => "Show Description when Locked"
 
-
-  %section.form-section
-    %h2.form-title Attachments
-    .form-item
-      = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|
-        = bf.file_field :file, :multiple => true
-      - if @badge.badge_files.exists?
-        %h5.bold Uploaded files
-        %ul.uploaded-files
-          - @badge.badge_files.each do |bf|
-            - next if bf.new_record?
-            %li
-              = link_to bf.filename, bf.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", badge_id: @badge.id, :upload_id => bf.id } )
   .submit-buttons
     %ul
       %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", class: "button"
