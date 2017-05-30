@@ -163,8 +163,7 @@ Rails.application.routes.draw do
   resources :challenges do
     resources :challenge_grades, only: [:new, :create], module: :challenges do
       collection do
-        post :edit_status
-        put :update_status
+        post :release
         get :mass_edit
         put :mass_update
       end

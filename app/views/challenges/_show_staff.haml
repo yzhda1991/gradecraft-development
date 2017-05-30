@@ -1,4 +1,4 @@
-= form_tag edit_status_challenge_challenge_grades_path @challenge do
+= form_tag release_challenge_challenge_grades_path @challenge do
   %table.dynatable
     %thead
       %tr
@@ -44,4 +44,4 @@
   %br
   .right
     - if @challenge.challenge_grades.present?
-      = active_course_submit_tag "Update Grade Statuses", class: "button"
+      = active_course_submit_tag "Release Selected Grades", class: "button", data: { confirm: "Release Selected Grades to Students?" }

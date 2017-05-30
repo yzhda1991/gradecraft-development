@@ -59,11 +59,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Update Grades")
   end
 
-  def assignments_grades_edit_status
-    assignments_index
-    breadcrumb("Update Grade Statuses")
-  end
-
   def assignments_grades_review
     assignments_index
     breadcrumb(objects[:assignment].name, assignment_path(objects[:assignment]))
