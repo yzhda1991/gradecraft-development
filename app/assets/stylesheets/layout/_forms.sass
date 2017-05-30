@@ -20,6 +20,8 @@ textarea
   transition: border-color 0.2s
   &:focus
     border: 1px solid rgba(42, 43, 43, 0.8)
+  @media (max-width: $media-small-max)
+    width: 100%
 
 input[type="file"]
   display: block
@@ -43,6 +45,8 @@ select,
   font-family: 'Open Sans', sans-serif
   &:hover
     background-color: $color-grey-7
+  @media (max-width: $media-small-max)
+    width: 100%
 
 ul.accepts_submission_types
   list-style-type: none
@@ -233,6 +237,7 @@ select.dynatable-per-page-select,
   transition: visibility 0s linear 0s, opacity 300ms
   &.visually-hidden
     height: 0
+    margin: 0
     visibility: hidden
     opacity: 0
     transition: visibility 0s linear 300ms, opacity 300ms

@@ -15,7 +15,7 @@
 
     .form-item
       = f.label :file_field, "Icon"
-      = f.file_field :icon, {class: "badge-image-upload"}
+      = f.file_field :icon, {class: "media-image-upload"}
       .form-hint Badges appear in different sizes in GradeCraft. Recommended size is 150px x 150px or larger.
       .preview-wrapper{ class: @badge.persisted? ? "" : "hidden"}
         .icon-preview.large-preview
