@@ -306,6 +306,8 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.boolean  "has_multipliers",                                         default: false,                        null: false
     t.boolean  "has_paid",                                                default: true,                         null: false
     t.boolean  "allows_canvas",                                           default: true,                         null: false
+    t.integer  "institution_id"
+    t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|
@@ -503,6 +505,12 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.index ["user_id"], name: "index_imported_users_on_user_id", using: :btree
   end
 
+  create_table "institutions", force: :cascade do |t|
+    t.string  "name",                             null: false
+    t.boolean "has_site_license", default: false, null: false
+    t.index ["name"], name: "index_institutions_on_name", using: :btree
+  end
+
   create_table "level_badges", force: :cascade do |t|
     t.integer  "level_id"
     t.integer  "badge_id"
@@ -579,6 +587,17 @@ ActiveRecord::Schema.define(version: 20170524170059) do
     t.integer  "submitted_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.string  "name",            null: false
+    t.string  "consumer_key",    null: false
+    t.string  "consumer_secret", null: false
+    t.string  "base_url"
+    t.string  "providee_type"
+    t.integer "providee_id"
+    t.index ["name"], name: "index_providers_on_name", using: :btree
+    t.index ["providee_type", "providee_id"], name: "index_providers_on_providee_type_and_providee_id", using: :btree
   end
 
   create_table "rubrics", force: :cascade do |t|
@@ -821,6 +840,7 @@ ActiveRecord::Schema.define(version: 20170524170059) do
   add_foreign_key "announcements", "courses"
   add_foreign_key "announcements", "users", column: "author_id"
   add_foreign_key "announcements", "users", column: "recipient_id"
+  add_foreign_key "courses", "institutions"
   add_foreign_key "earned_badges", "users", column: "awarded_by_id"
   add_foreign_key "flagged_users", "courses"
   add_foreign_key "flagged_users", "users", column: "flagged_id"

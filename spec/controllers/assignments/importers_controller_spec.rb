@@ -55,6 +55,12 @@ describe Assignments::ImportersController do
           syllabus
       end
 
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :assignments_import, params: { importer_provider_id: provider, id: course_id,
+          assignment_ids: assignment_ids, assignment_type_id: assignment_type.id }
+      end
+
       it "imports the selected assignments" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:import).with(provider.to_s, access_token, course_id,
@@ -86,6 +92,12 @@ describe Assignments::ImportersController do
     end
 
     describe "POST #refresh_assignment" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :refresh_assignment, params: { importer_provider_id: provider,
+                                            id: assignment.id }
+      end
+
       it "updates the assignment from the provider details" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:refresh).with(provider.to_s, access_token, assignment).and_return result
@@ -121,6 +133,11 @@ describe Assignments::ImportersController do
     end
 
     describe "POST #update_assignment" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
+      end
+
       it "updates the canvas assignment from the assignment details" do
         expect(Services::ImportsLMSAssignments).to \
           receive(:update).with(provider.to_s, access_token, assignment).and_return result

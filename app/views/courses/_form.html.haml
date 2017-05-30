@@ -34,22 +34,6 @@
           = f.label :tagline, "Course Tagline"
           = f.text_field :tagline
 
-  - if current_user_is_admin?
-    %section.form-section
-      %h2.form-title GradeCraft Settings
-      .form-item
-        = f.label :status, "Active?"
-        = f.check_box :status
-        .form-hint Is this an active course?
-      .form-item
-        = f.label :has_paid, "Has Paid?"
-        = f.check_box :has_paid
-        .form-hint If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users.
-      .form-item
-        = f.label :allows_canvas, "Allows Canvas?"
-        = f.check_box :allows_canvas
-        .form-hint Does this course allow integration with Canvas?
-
   %section.form-section
     %h2.form-title Enable Features
     .form-card-grid

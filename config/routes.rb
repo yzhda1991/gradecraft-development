@@ -292,6 +292,9 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback", to: "authorizations#create"
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
+  # Canvas OmniAuth setup
+  match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
+
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
@@ -318,6 +321,10 @@ Rails.application.routes.draw do
   resources :events do
     post :copy, on: :collection
   end
+
+  resources :canvas_session, only: [:index, :new]
+
+  resources :institutions, only: [:index, :new, :edit, :create, :update]
 
   #18. API Calls
 

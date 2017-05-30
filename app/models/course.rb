@@ -69,9 +69,11 @@ class Course < ActiveRecord::Base
     c.has_many :submissions_exports
     c.has_many :course_analytics_exports
     c.has_many :events
+    c.has_many :providers, as: :providee
   end
 
   has_many :users, through: :course_memberships
+  belongs_to :institution
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :assignments
 

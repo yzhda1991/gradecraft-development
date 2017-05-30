@@ -8,6 +8,11 @@ describe IntegrationsController do
     before { login_user(professor) }
 
     describe "POST create" do
+      it "links the provider credentials if the provider is canvas" do
+        expect_any_instance_of(CanvasAuthorization).to receive(:link_canvas_credentials)
+        post :create, params: { integration_id: provider }
+      end
+
       context "without an existing authentication" do
         it "redirects to authorize the integration" do
           post :create, params: { integration_id: provider }

@@ -76,7 +76,7 @@ RSpec.describe "Assignment #missing_binaries methods" do
         expect(subject).not_to include(student2)
       end
 
-      it "orders the students by name" do
+      it "orders the students by name", :unreliable do
         expect(subject.first.submitter_directory_name <
           subject.last.submitter_directory_name).to be_truthy
       end

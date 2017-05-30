@@ -15,7 +15,5 @@ FactoryGirl.define do
     factory :invalid_course do
       name nil
     end
-
   end
-
 end

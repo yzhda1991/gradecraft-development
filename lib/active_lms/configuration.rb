@@ -20,7 +20,7 @@ module ActiveLMS
 
     class Provider
       attr_reader :provider
-      attr_accessor :client_id, :client_secret, :client_options
+      attr_accessor :client_id, :client_secret, :client_options, :base_uri
 
       def initialize(provider, &block)
         @provider = provider

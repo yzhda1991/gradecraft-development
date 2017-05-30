@@ -2,16 +2,12 @@ require "api_spec_helper"
 
 describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
   let(:access_token) { "BLAH" }
-
-  before do
-    allow(Canvas::API).to \
-      receive(:base_uri).and_return "https://canvas.instructure.com/api/v1"
-  end
+  let(:options) { { base_uri: "https://canvas.instructure.com" } }
 
   describe "#initialize" do
     it "initializes a new canvas API wrapper" do
       expect(Canvas::API).to \
-        receive(:new).with(access_token).and_call_original
+        receive(:new).with(access_token, nil).and_call_original
       described_class.new access_token
     end
   end

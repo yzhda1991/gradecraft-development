@@ -3,6 +3,7 @@ require_relative "../../services/imports_lms_users"
 
 class Users::ImportersController < ApplicationController
   include OAuthProvider
+  include CanvasAuthorization
 
   oauth_provider_param :importer_provider_id
 
@@ -11,6 +12,7 @@ class Users::ImportersController < ApplicationController
     controller.redirect_path \
       users_importer_users_path(params[:importer_provider_id], params[:id])
   end
+  before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: :index
 
   # GET /users/importers/:importer_provider_id/course/:id

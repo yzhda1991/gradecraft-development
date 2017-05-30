@@ -12,7 +12,10 @@ module ActiveLMS
     # access_token - A String that holds the Canvas access token to connect to
     # the Canvas API.
     def initialize(access_token)
-      @client = Canvas::API.new(access_token)
+      @client = Canvas::API.new(
+        access_token,
+        ActiveLMS.configuration.providers[:canvas].base_uri
+      )
     end
 
     # Internal: Retrieves a single course from the Canvas API.

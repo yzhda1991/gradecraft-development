@@ -57,6 +57,19 @@ def create_groups(course_name, assignment)
   @courses[course_name][:groups] = groups
 end
 
+# ---------------------------- Institutions -----------------------------#
+
+puts "Constructing Hogwarts School of Witchcraft and Wizardry..."
+hogwarts = Institution.create! do |i|
+  i.name = "Hogwarts"
+  i.has_site_license = true
+end
+
+puts "Constructing Beauxbatons Academy of Magic..."
+Institution.create! do |i|
+  i.name = "Beauxbatons"
+end
+
 # ---------------------------- Users and Courses -----------------------------#
 
 user_names = ["Ron Weasley","Fred Weasley","Harry Potter","Hermione Granger",
@@ -109,6 +122,9 @@ puts "Children must be taught how to think, not what to think. ― Margaret Mead
       end
       puts_success :course, course_name, :weights_created
     end
+
+    # Assign courses to Hogwarts institution
+    c.institution = hogwarts
   end
 
   config[:course] = course
