@@ -9,31 +9,15 @@ describe Assignments::GradesController do
   context "as professor" do
     before(:each) { login_user(professor) }
 
-    describe "GET edit_status" do
-      it "assigns params" do
-        get :edit_status, params: { assignment_id: assignment.id, grade_ids: [grade.id] }
-        expect(assigns(:assignment)).to eq(assignment)
-        expect(assigns(:grades)).to eq([grade])
-        expect(response).to render_template(:edit_status)
-      end
-    end
-
-    describe "PUT update_status" do
-      it "updates the grade status for grades" do
-        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
-        expect(grade.reload.status).to eq("Graded")
-      end
-
-      it "redirects to session if present"  do
-        session[:return_to] = login_path
-        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id], grade: { status: "Graded" }}
-        expect(response).to redirect_to(login_path)
+    describe "PUT release" do
+      it "updates the grade status to release for grades" do
+        put :release, params: { assignment_id: assignment.id, grade_ids: [grade.id]}
+        expect(grade.reload.status).to eq("Released")
       end
 
       it "updates badges earned on the grade" do
         earned_badge = create :earned_badge, grade: grade, student_visible: false
-        put :update_status, params: { assignment_id: assignment.id, grade_ids: [grade.id],
-                                      grade: { status: "Graded" }}
+        put :release, params: { assignment_id: assignment.id, grade_ids: [grade.id] }
         expect(earned_badge.reload.student_visible).to be true
       end
     end
@@ -260,16 +244,9 @@ describe Assignments::GradesController do
       end
     end
 
-    describe "GET edit_status" do
+    describe "GET release" do
       it "redirects back to the root" do
-        expect(get :edit_status, params: { assignment_id: assignment }).to \
-          redirect_to(:root)
-      end
-    end
-
-    describe "GET update_status" do
-      it "redirects back to the root" do
-        expect(put :update_status, params: { assignment_id: assignment }).to \
+        expect(put :release, params: { assignment_id: assignment }).to \
           redirect_to(:root)
       end
     end
