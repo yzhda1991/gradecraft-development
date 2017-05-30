@@ -23,12 +23,10 @@
             - if group_presenter.has_levels?
               %th Level
             %th
-
-            - if true #group_presenter.release_necessary?
-              %th Status
-              %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-                %button.button.select-all{role: "button", type: "button"}= "Check"
-                %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+            %th Status
+            %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+              %button.button.select-all{role: "button", type: "button"}= "Check"
+              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
         %tbody
           - group_presenter.students.order_by_name.each do |student|
             %tr
@@ -51,8 +49,7 @@
               - if group_presenter.has_levels?
                 %td= group_presenter.grade_level(grade)
 
-              - if true #group_presenter.release_necessary?
-                %td= grade.try(:status)
-                %td.right
-                  - if grade && grade.is_graded?
-                    = check_box_tag "grade_ids[]", grade.id
+              %td= grade.try(:status)
+              %td.right
+                - if grade && grade.in_progress?
+                  = check_box_tag "grade_ids[]", grade.id

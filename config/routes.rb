@@ -77,8 +77,7 @@ Rails.application.routes.draw do
         get :export_earned_levels
         get :mass_edit
         put :mass_update
-        get :edit_status
-        put :update_status
+        put :release
         post :self_log
         delete :delete_all
       end

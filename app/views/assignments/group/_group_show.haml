@@ -1,4 +1,4 @@
-= form_tag edit_status_assignment_grades_path(presenter.assignment), method: :get do
+= form_tag release_assignment_grades_path(presenter.assignment), method: :put do
   - if !presenter.groups.present?
     No #{term_for :groups} have been created! You can either have #{term_for :students} self-create their #{term_for :groups}, or you can create them manually #{link_to "here", new_group_path}.
   - else
@@ -7,4 +7,4 @@
       %tbody= render partial: "assignments/group/table_body", locals: { presenter: presenter }
       .right
         - if presenter.has_grades?
-          = active_course_submit_tag "Update Grade Statuses", class: "button"
+          = active_course_submit_tag "Release Selected Grades", class: "button", data: { confirm: "Release selected grades to students?" }
