@@ -138,13 +138,7 @@ Rails.application.routes.draw do
   end
   resources :unlock_conditions, only: [:create, :destroy, :update]
 
-  resources :criteria, only: [:create, :destroy, :update] do
-    put :update_order, on: :collection
-  end
-
   resources :levels, only: [:create, :destroy, :update]
-
-  resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
   resources :assignment_types, except: [:show] do
@@ -393,6 +387,7 @@ Rails.application.routes.draw do
     resources :criteria, only: [:create, :update, :destroy] do
       put "levels/:level_id/set_expectations", to: "criteria#set_expectations"
       put "remove_expectations"
+      put :update_order, on: :collection
     end
     get "timeline_events", to: "courses#timeline_events"
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"

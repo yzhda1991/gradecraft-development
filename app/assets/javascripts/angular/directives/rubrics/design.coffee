@@ -1,6 +1,6 @@
 # Main entry point for editing rubrics
 
-@gradecraft.directive 'rubricDesign', ['$q', 'RubricService', 'BadgeService', ($q, RubricService, BadgeService) ->
+@gradecraft.directive 'rubricDesign', ['$q', 'RubricService', 'BadgeService', "$timeout", ($q, RubricService, BadgeService, $timeout) ->
   RubricDesignCtrl = [()->
     vm = this
 
@@ -40,5 +40,32 @@
        rubricId: "="
     },
     templateUrl: 'rubrics/design.html'
+    link: (scope, el, attr)->
+      $timeout( ()->
+        scope.dragStart = (e, ui)->
+          ui.item.data "start", ui.item.index()
+
+        scope.dragEnd = (e, ui)->
+          start = ui.item.data("start")
+          end = ui.item.index()
+          RubricService.updateCriterionOrder(start, end)
+
+        $("#criterion-box").sortable(
+          start: scope.dragStart
+          update: scope.dragEnd
+          handle: ".criterion-drag-handle"
+        )
+      )
+
+      scope.reordering = false
+
+      scope.toggleReordering = ()->
+        scope.reordering = !scope.reordering
+
+      scope.orderButtonText = ()->
+        if scope.reordering
+          "End Reordering Criteria"
+        else
+          "Reorder Criteria"
   }
 ]
