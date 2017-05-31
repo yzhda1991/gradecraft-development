@@ -23,9 +23,10 @@
             %h3.bold Uploaded files
             %ul.file-attachments-list
               - presenter.submission.submission_files.each do |sf|
-                %li.file-attachment-list-item
-                  = link_to sf.filename, sf.url, :target => "_blank"
-                  = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id } )
+                - if sf.persisted?
+                  %li.file-attachment-list-item
+                    = link_to "#{sf.filename}", sf.url, target: "_blank"
+                    = link_to "(Remove)", remove_uploads_path(:model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id)
 
       - if presenter.assignment.accepts_links
         .grade-form-subsection
