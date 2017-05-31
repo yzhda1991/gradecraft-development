@@ -4,9 +4,9 @@
 @gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this
-      
+
       initializeGraph = () ->
-        plotGraph(AnalyticsService.assignmentData, vm.studentDistro)
+        plotGraph(AnalyticsService.assignmentData)
         angular.element($window).on 'resize', ->
           DebounceQueue.addEvent(
             "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
@@ -32,7 +32,7 @@
       ]
       return $q.all(promises)
 
-    plotGraph = (data, studentDistro)=>
+    plotGraph = (data)=>
       scores = data.scores
       userScore = data.user_score
 
