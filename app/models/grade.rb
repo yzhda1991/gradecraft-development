@@ -5,7 +5,7 @@ class Grade < ActiveRecord::Base
   include Sanitizable
 
   belongs_to :course, touch: true
-  belongs_to :assignment, touch: true
+  belongs_to :assignment
   belongs_to :assignment_type
   belongs_to :student, class_name: "User"
   belongs_to :team
