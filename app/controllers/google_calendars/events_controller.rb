@@ -19,7 +19,7 @@ class GoogleCalendars::EventsController < ApplicationController
     event = current_course.events.find(params[:id])
     if event.due_at.nil?
       # rubocop:disable AndOr
-      redirect_to event, alert: "Google Calendar requires Event to have at least END time!" and return
+      redirect_to event_path(event), alert: "Google Calendar requires Event to have at least END time!" and return
     end
     event_hash = add_single_item(current_user, event)
     process_hash(event_hash)

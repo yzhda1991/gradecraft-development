@@ -19,7 +19,7 @@ class GoogleCalendars::AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.due_at.nil?
       # rubocop:disable AndOr
-      redirect_to assignment, alert: "Google Calendar requires Assignment to have at least END time!" and return
+      redirect_to assignment_path(assignment), alert: "Google Calendar requires Assignment to have at least END time!" and return
     end
     event_hash = add_single_item(current_user, assignment)
     process_hash(event_hash)
