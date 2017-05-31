@@ -16,11 +16,6 @@ module GoogleCalendarsHelper
     google_authorization
   end
 
-  def get_item(current_course, class_name, id)
-    return current_course.events.find(id) if class_name == "event"
-    return current_course.assignments.find(id) if class_name == "assignment"
-  end
-
   def get_all_items_for_current_course(current_course, class_name, current_user)
     return current_course.events if class_name == "event"
     return current_course.assignments if class_name == "assignment" && current_user.is_staff?(current_course)
@@ -112,13 +107,13 @@ module GoogleCalendarsHelper
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"} unless item_list.count != item_list_filtered.count
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
     rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
-      return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your " + item.class.name + " was NOT copied to your Google calendar."}
+      return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your item was NOT copied to your Google calendar."}
     end
   end
 
   def add(current_user, item)
     calendar = refresh_google_calendar_authorization(current_user)
-    result = calendar.insert_event('primary', create_google_event(item))
+    calendar.insert_event('primary', create_google_event(item))
   end
 
   def process_hash(hash)

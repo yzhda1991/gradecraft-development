@@ -179,12 +179,6 @@ Rails.application.routes.draw do
     resources :courses, only: [:create, :destroy], module: :integrations
   end
 
-  # resource :google_calendar, only: [ ] do
-  #   collection do
-  #     post "/:class/:id", action: :add_to_google_calendar, as: :add_to_google_calendar
-  #   end
-  # end
-
   namespace :google_calendars, only: [] do
     resources :assignments, only: [ ] do
       collection do
