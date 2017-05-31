@@ -3,7 +3,7 @@
     vm = this
 
     vm.loading = true
-    vm.selectedTeam = null
+    vm.selectedTeamId = TeamService.selectedTeamId
     vm.termForTeam = @teamTerm || "Team"
 
     TeamService.getTeams(@courseId).finally(() ->
@@ -17,7 +17,7 @@
       teamTerm: '@'
     bindToController: true
     controller: TeamSelectorCtrl
-    controllerAs: 'teamSelector'
+    controllerAs: 'vm'
     templateUrl: 'common/team_selector.html'
     link: (scope, element, attrs) ->
       scope.teams = TeamService.teams

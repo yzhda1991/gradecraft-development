@@ -1,0 +1,64 @@
+%massGrade
+  %form{"action"=>"{{vm.formAction}}", "method"=>"post"}
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"_method", "value"=>"put"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+
+    %input{"type"=>"hidden", "name"=>"team_id", "value"=>"{{vm.teamId}}", "ng-if"=>"vm.teamId"}
+
+    %table
+      %thead
+        %tr
+          %th.align-right
+            {{vm.termFor("student")}}
+          %th.center{"align"=>"center", "scope"=>"col" }
+            %check-uncheck{"ng-if"=>"vm.assignment.grade_checkboxes === true"}
+              %span.sr-only Check/Uncheck
+              %button.button.select-all{"role"=>"button", "type"=>"button"}= "Check All"
+              %button.button.select-none{"role"=>"button", "type"=>"button"}= "Uncheck All"
+          %th
+      %tbody
+        %tr{"ng-repeat"=>"grade in vm.grades"}
+          %td.align-right
+            %a{"href"=>"/students/{{grade.student_id}}"}
+              {{grade.student_name}}
+          %td.center
+            -# If assignment is pass/fail type
+            %div{"ng-if"=>"vm.assignment.pass_fail"}
+              %label{"class"=>"radio_inline", "for"=>"assignment_grades_attributes_{{$index}}_pass_fail_status_nil"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.pass_fail_status",
+                       "required"=>"",
+                       "value"=>""}
+                No change
+              %label{"class"=>"radio_inline", "for"=>"assignment_grades_attributes_{{$index}}_pass_fail_status_pass"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.pass_fail_status",
+                       "required"=>"",
+                       "value"=>"Pass"}
+                Pass
+              %label{"class"=>"radio_inline", "for"=>"assignment_grades_attributes_{{$index}}_pass_fail_status_fail"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.pass_fail_status",
+                       "required"=>"",
+                       "value"=>"Fail"}
+                Fail
+          %td
+            %span {{grade.pass_fail_status}}
+            %span{"ng-if"=>"!vm.assignment.pass_fail"}= "/ {{vm.assignment.full_points}}"
+          -# End if pass/fail type
+
+          -# If assignment is not pass/fail type
+          %div{"ng-if"=>"!vm.assignment.pass_fail"}
+            
+          -# End if not pass/fail type
+    .submit-buttons
+      %ul
+        %li
+          %input{"type"=>"submit",
+                 "class"=>"button",
+                 "value"=>"Submit Grades"}
+        %li
+          %a{"href"=>"{{vm.formCancelRoute}}", "class"=>"button"}
+            %i.fa.fa-times-circle
+            Cancel

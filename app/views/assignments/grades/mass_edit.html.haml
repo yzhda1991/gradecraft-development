@@ -1,20 +1,28 @@
 .pageContent
   = render "layouts/alerts"
 
-  = team_filter(current_course.teams) if current_course.has_teams? && @assignment.is_individual?
+  -# = team_filter(current_course.teams) if current_course.has_teams? && @assignment.is_individual?
 
-  #massGrade
-    = simple_form_for @assignment, method: :put, :url => mass_update_assignment_grades_path(@assignment) do |f|
-      - if @team.present?
-        = hidden_field_tag :team_id, @team.id
+  %team-selector.right{"course-id"=>"#{current_course.id}",
+                       "team-term"=>"#{term_for :team}"}
 
-      %table
-        %thead
-          %tr
-            = render partial: "assignments/grades/components/individual_table_head", locals: { model: @assignment }
-        = render partial: "assignments/grades/components/individual_table_body", locals: { model: @assignment, f: f }
+  %mass_edit_form{"assignment-id"=>"#{@assignment.id}",
+                  "form-action"=>"#{mass_update_assignment_grades_path(@assignment.id)}",
+                  "form-cancel-route"=>"#{assignments_path}",
+                  "authenticity-token"=>"#{form_authenticity_token}"}
 
-      .submit-buttons
-        %ul
-          %li= f.button :submit, "Submit Grades"
-          %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
+  -# #massGrade
+  -#   = simple_form_for @assignment, method: :put, :url => mass_update_assignment_grades_path(@assignment) do |f|
+  -#     - if @team.present?
+  -#       = hidden_field_tag :team_id, @team.id
+  -#
+  -#     %table
+  -#       %thead
+  -#         %tr
+  -#           = render partial: "assignments/grades/components/individual_table_head", locals: { model: @assignment }
+  -#       = render partial: "assignments/grades/components/individual_table_body", locals: { model: @assignment, f: f }
+  -#
+  -#     .submit-buttons
+  -#       %ul
+  -#         %li= f.button :submit, "Submit Grades"
+  -#         %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
