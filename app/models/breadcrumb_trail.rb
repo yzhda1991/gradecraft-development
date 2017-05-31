@@ -419,11 +419,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:course].student_term.pluralize, students_path)
   end
 
-  def students_grade_index
-    dashboard
-    breadcrumb('Grades')
-  end
-
   def students_show
     students_index
   end

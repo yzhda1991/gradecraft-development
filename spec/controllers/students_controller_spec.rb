@@ -1,5 +1,5 @@
 describe StudentsController do
-  let(:course) { build(:course) }  
+  let(:course) { build(:course) }
   let(:observer) { create(:user, courses: [course], role: :observer) }
   let(:professor) { build_stubbed(:user, courses: [course], role: :professor) }
   let(:student) { create(:user, courses: [course], role: :student) }
@@ -18,15 +18,6 @@ describe StudentsController do
       it "shows the student page" do
         get :show, params: { id: student.id }
         expect(response).to render_template(:show)
-      end
-    end
-
-    describe "GET grade_index" do
-      it "shows the grade index page" do
-        get :grade_index, params: { id: student.id }
-        allow(StudentsController).to \
-          receive(:current_student).and_return(student)
-        expect(response).to render_template(:grade_index)
       end
     end
 
@@ -54,7 +45,6 @@ describe StudentsController do
     describe "protected routes requiring id in params" do
       [
         :show,
-        :grade_index,
         :recalculate
       ].each do |route|
         it "#{route} redirects to root" do

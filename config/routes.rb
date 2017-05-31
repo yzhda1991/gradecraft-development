@@ -273,7 +273,6 @@ Rails.application.routes.draw do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
     member do
-      get :grade_index
       get :recalculate
     end
   end

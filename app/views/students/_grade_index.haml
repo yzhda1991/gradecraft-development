@@ -1,35 +1,32 @@
-.pageContent
-  = render "layouts/alerts"
-
-  %table.dynatable
-    %thead
-      %tr
-        %th ID
-        %th ID | Assignment
-        %th Submission
-        %th Final Score
+%table.dynatable
+  %thead
+    %tr
+      %th Assignment
+      %th Submitted
+      %th Final Score
+      - if current_course.has_multipliers?
         %th Score With Weights
-        %th Predicted Score
-        %th Feedback
-        %th Status
-        %th
-        %th
-        %th
-    %tbody
-      - @grades.each do |g|
-        %tr
-          %td= g.id
-          %td= "#{g.assignment_id} • #{g.assignment.try(:name)}"
-          %td= g.submission.id if g.submission.present?
-          %td= g.final_points
+      %th Feedback
+      %th Status
+      %th Last Updated
+      %th
+  %tbody
+    - presenter.grades_for_course.each do |g|
+      %tr
+        %td= link_to g.assignment.name, g.assignment
+        %td
+          = glyph(:check) if g.submission.present?
+        %td= points g.final_points
+        - if current_course.has_multipliers?
           %td= g.try(:score)
-          %td= g.predicted_points
-          %td= g.feedback
-          %td= g.status
-          %td
-            - if current_user_is_admin? || current_course.active?
-              = link_to "Edit Grade", edit_grade_path(g), class: "button"
-          %td= link_to "See Grade", grade_path(g), class: "button"
-          %td
-            - if current_user_is_admin? || current_course.active?
-              = link_to "Delete Grade", grade_path(g), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+        %td= raw g.feedback
+        %td= g.status
+        %td= g.updated_at
+        %td
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu
+              - if current_user_is_admin? || current_course.active?
+                %li= link_to "Edit Grade", edit_grade_path(g)
+                %li= link_to "See Grade", grade_path(g)
+                %li= link_to "Delete Grade", grade_path(g), data: { confirm: "Are you sure?" }

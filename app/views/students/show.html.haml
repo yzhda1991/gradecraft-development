@@ -21,4 +21,5 @@
     - if current_course.student_weighted?
       .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
-    = render partial: "grade_index"
+.pageContent
+  = render partial: "grade_index", locals: { presenter: presenter }
