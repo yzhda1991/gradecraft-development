@@ -49,7 +49,7 @@
                   %li= link_to "#{term_for :assignment} Structure", export_structure_assignments_path(id: course.id, format: "csv")
                   %li= link_to "#{term_for :assignment} Submissions", submissions_path(id: course.id, format: "csv")
                   %li= link_to "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: course.id, format: "csv")
-                  %li= link_to "Full Gradebook", gradebook_path(id: course.id, format: "csv")
+                  %li= link_to "Full Gradebook", gradebook_file_path(id: course.id, format: "csv")
                   %li= link_to "Multiplied Gradebook", multiplied_gradebook_path(id: course.id, format: "csv") if course.student_weighted?
                   %li= link_to "#{term_for :badges}", export_structure_badges_path(id: course.id, format: "csv")
                   %li= link_to "Grading Scheme", export_structure_grade_scheme_elements_path(id: course.id, format: "csv")

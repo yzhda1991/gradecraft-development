@@ -246,6 +246,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def info_dashboard
   end
 
+  def info_gradebook
+    dashboard
+    breadcrumb('Gradebook')
+  end
+
   def info_earned_badges
     badges_index
     breadcrumb('Awarded ' + objects[:course].badge_term.pluralize, badges_path)

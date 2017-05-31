@@ -7,7 +7,7 @@ class InfoController < ApplicationController
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
     only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
-  before_action :use_current_course, only: [:earned_badges, :per_assign, :multiplier_choices]
+  before_action :use_current_course, only: [:earned_badges, :per_assign, :multiplier_choices, :gradebook]
 
   # Displays student and instructor dashboard
   def dashboard
@@ -66,6 +66,9 @@ class InfoController < ApplicationController
   end
 
   def gradebook
+  end
+
+  def gradebook_file
     course = current_user.courses.find_by(id: params[:id])
     GradebookExporterJob
       .new(

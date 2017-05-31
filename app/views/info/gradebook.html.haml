@@ -4,16 +4,17 @@
 
   / Gradebook Table
   #gradebook
-    %table.dynatable
+    %table.dynatable.scroll-table
       %caption.sr-only Gradebook
       %thead
         %tr
           %th{scope: "col"} First Name
           %th{scope: "col"} Last Name
-          - for assignment in current_course.assignments
-            %th{scope: "col"}= assignment.name
+          - current_course.assignment_types.ordered.each do |assignment_type|
+            - assignment_type.assignments.ordered.each do |assignment|
+              %th{scope: "col"}= assignment.name
           - if current_course.valuable_badges?
-            %th{scope: "col"} Badge Score
+            %th{scope: "col"} #{current_course.badge_term} Score
           %th{scope: "col"} Total Score
           %th{scope: "col"} Final Grade
           %th{scope: "col"} #{current_course.student_term}
@@ -22,16 +23,14 @@
           %tr
             %td= link_to student.first_name, student_path(student)
             %td= link_to student.last_name, student_path(student)
-            - current_course.assignments.each do |assignment|
-              - assignment.grade_for_student(student).tap do |grade|
-                - if grade
-                  %td
-                    - if current_user_is_admin? || current_course.active?
-                      = link_to "#{grade.score}", edit_grade_path(grade)
-                - else
-                  %td
+            - current_course.assignment_types.ordered.each do |assignment_type|
+              - assignment_type.assignments.ordered.each do |assignment|
+                %td
+                  - assignment.grade_for_student(student).tap do |grade|
+                    - if grade
+                      = link_to "#{points grade.score}", edit_grade_path(grade)
             - if current_course.valuable_badges?
-              %td= student.earned_badge_score_for_course(current_course)
-            %td= student.score_for_course(current_course)
+              %td= points student.earned_badge_score_for_course(current_course)
+            %td= points student.score_for_course(current_course)
             %td= student.grade_level_for_course(current_course)
-            %td= link_to student.name, user_path(student)
+            %td= link_to student.name, student_path(student)

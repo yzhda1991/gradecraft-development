@@ -210,6 +210,7 @@ Rails.application.routes.draw do
     get :gradebook
     get :submissions
     get :grading_status
+    get :gradebook_file
     get :multiplied_gradebook
     get :multiplier_choices
     get :per_assign
