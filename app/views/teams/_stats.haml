@@ -11,8 +11,7 @@
       %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
-      %th{:style => "min-width: 260px"} 
-        %span.sr-only Action Buttons
+      %th Options
   %tbody
     - @teams.each_with_index do |team, index|
       %tr
@@ -28,7 +27,8 @@
         - if current_user_is_staff? && current_course.has_badges?
           %td= points team.badge_count
         %td
-          .right
-            %ul.button-bar
-              = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), class: "button"
-              = active_course_link_to decorative_glyph(:trash) + "Delete #{term_for :team}", team_path(team), class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu
+              = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team)
+              = active_course_link_to decorative_glyph(:trash) + "Delete #{term_for :team}", team_path(team), data: { confirm: "Are you sure?" }, :method => :delete

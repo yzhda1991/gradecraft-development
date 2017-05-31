@@ -6,8 +6,7 @@
       %th{:style => "min-width: 200px"}= "#{current_course.student_term}s"
       %th{:width => "10%"} Status
       %th{:style => "min-width: 200px"} #{term_for :assignments}
-      %th{:style => "min-width: 250px"}
-        %span.sr-only Action Buttons
+      %th Options
   %tbody
     - groups.each do |group|
       %tr
@@ -20,10 +19,11 @@
           - group.assignment_groups.each do |ag|
             %li= link_to ag.assignment.try(:name), ag.try(:assignment)
         %td
-          .right
-            %ul.button-bar
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+            %ul.options-menu
               - if group.pending?
-                = active_course_link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group), class: "button"
+                = active_course_link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group)
               - else
-                = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group), class: "button"
-              = active_course_link_to decorative_glyph(:trash) + "Delete", group_path(group), class: "button", data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete
+                = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group)
+              = active_course_link_to decorative_glyph(:trash) + "Delete", group_path(group), data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete
