@@ -219,6 +219,7 @@ class User < ActiveRecord::Base
   end
 
   # Powers the grade distribution box plot
+  # TODO remove once view partial is removed
   def scores_for_course(course)
     user_score = course_memberships.where(course_id: course, auditing: FALSE).pluck("score")
     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score).sort
