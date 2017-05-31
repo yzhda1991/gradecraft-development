@@ -13,7 +13,6 @@ class Submission < ActiveRecord::Base
   after_save :check_unlockables
 
   has_one :grade
-  has_one :assignment_type_weight, through: :assignment_type
 
   accepts_nested_attributes_for :grade
   has_many :submission_files,
