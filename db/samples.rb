@@ -502,6 +502,8 @@ PaperTrail.whodunnit = nil
         end
       end
 
+# -------------------------- Create Submissions! --------------------------#
+
       if config[:student_submissions]
         @students.each do |student|
           PaperTrail.whodunnit = student.id
@@ -517,6 +519,8 @@ PaperTrail.whodunnit = nil
         puts_success :assignment, assignment_name,
           :submissions_created if course_name == @courses.keys[-1]
       end
+
+  # -------------------------- Create Grades! --------------------------#
 
       if config[:grades]
         @students.each do |student|
@@ -593,8 +597,33 @@ PaperTrail.whodunnit = nil
       if config[:unlock_condition]
         add_unlock_conditions(assignment, config, course_config)
       end
+
+# --------------------------- Create Resubmissions! --------------------------#
+
+      if config[:attributes][:resubmissions_allowed]
+        puts "Generating Resubmissions"
+        @students.each do |student|
+          if assignment.resubmissions_allowed? && Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).present?
+            PaperTrail.whodunnit = student.id
+            submission = student.submissions.create! do |s|
+              s.assignment = assignment
+              s.text_comment = "Wingardium Leviosa"
+              s.link = "http://www.facebook.com"
+              s.submitted_at = DateTime.now
+            end
+            submission.update_attributes(link: "http://twitch.tv")
+            grade = Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).first
+            # Grade must associate with submission to be read as a resubmission
+            grade.update_attributes(submission_id: submission.id)
+          end
+          print "."
+        end
+        print "\n"
+        puts_success :assignment, assignment_name,
+          :submissions_created if course_name == @courses.keys[-1]
+      end
     end # tap course
-  end
+  end #@courses
   puts_success :assignment, assignment_name, :assignment_created
 end
 
@@ -666,7 +695,7 @@ end
   puts_success :event, event_name, :event_created
 end
 
-# ---------------------------- Create Announcements! ----------------------------#
+# ---------------------------- Create Announcements! --------------------------#
 
 @announcements.each do |announcement_title,config|
   @courses.each do |course_name,course_config|

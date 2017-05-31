@@ -1710,3 +1710,49 @@ the speed, and the route.― Jay Cross",
     status: "Graded"
   }
 }
+
+@assignments[:pass_fail_with_grades_and_allows_resubmissions] = {
+  quotes: {
+    assignment_created: "Do. Or do not. There is no try. -- Yoda"
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Pass/Fail [Has grades with submissions and allows resubmissions]",
+    open_at: 1.weeks.from_now,
+    due_at: 1.weeks.from_now + 0.05,
+    pass_fail: true,
+    resubmissions_allowed: true,
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "Released"
+  }
+}
+
+@assignments[:standard_edit_quick_grade_text_graded_and_allows_resubmissions] = {
+  quotes: {
+    assignment_created: "We demand rigidly defined areas of doubt and \
+uncertainty! - Douglas Adams"
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Standard Edit + Quick Grade with Text Box [Grades and allows resubmissions]",
+    open_at: 1.weeks.from_now,
+    due_at: 1.weeks.from_now + 0.05,
+    resubmissions_allowed: true,
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "Released"
+  }
+}
