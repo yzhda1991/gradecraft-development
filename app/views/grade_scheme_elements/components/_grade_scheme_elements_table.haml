@@ -7,8 +7,7 @@
       %th{scope: "col"} Level
       %th{scope: "col"} Point Threshold
       %th{scope: "col"} Locked?
-      %th{scope: "col"}
-        %span.sr-only Action Buttons
+      %th Options
   %tbody
     - @grade_scheme_elements.each do |element|
       %tr
@@ -21,6 +20,9 @@
               .condition= glyph(:lock) + uc.requirements_description_sentence
         %td
           - if current_user_is_admin? || current_course.active?
-            = link_to "Set Lock Conditions", edit_grade_scheme_element_path(element), class: "button"
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
+                = active_course_link_to "Set Lock Conditions", edit_grade_scheme_element_path(element)
 
 = render partial: "courses/grading_philosophy", locals: { course: current_course }

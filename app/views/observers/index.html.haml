@@ -10,8 +10,7 @@
         %th First Name
         %th Last Name
         %th Avatar
-        %th{:style => "min-width: 200px"}
-          %span.sr-only Action Buttons
+        %th Options
     %tbody
       - @observers.each do |user|
         %tr
@@ -21,7 +20,8 @@
             - if user.avatar_file_name.present?
               %img.img-rounded{:src => user.avatar_file_name, :width => 30}
           %td
-            .right
-              %ul.button-bar
-                = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user), { class: "button" }
-                = active_course_link_to decorative_glyph(:trash) + "Delete",  user, class: "button", data: { confirm: "Are you sure?" }, :method => :delete
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
+                = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
+                = active_course_link_to decorative_glyph(:trash) + "Delete", user, data: { confirm: "Are you sure?" }, :method => :delete

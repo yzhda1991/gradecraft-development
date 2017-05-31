@@ -28,8 +28,7 @@
                 %th{:style => "display: none"} Due Date
                 %th{scope: "col", :width => "10%"}  Max Points
                 %th Rubric?
-                %th{ :style => "min-width: 200px" }
-                  %span.sr-only Action Buttons
+                %th Options
             %tbody.sort-assignments
               - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
               - assignments.each do |assignment|
@@ -48,14 +47,16 @@
                     %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
                   %td
-                    .right
-                      %ul.button-bar
-                        - if !assignment.grade_with_rubric?
-                          = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-                        = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
-                        = active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), class: "button", :method => :copy
-                        = active_course_link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }, class: "button"
-          - if current_course.active? 
+                    - if current_user_is_staff?
+                      .button-container.dropdown
+                        %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+                        %ul.options-menu
+                          - if !assignment.grade_with_rubric?
+                            = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment)
+                          = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment)
+                          = active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: assignment), :method => :copy
+                          = active_course_link_to decorative_glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete }
+          - if current_course.active?
             .box{ style: "width: 95%; margin: 1em auto;"}
               .center
                 - if current_user_is_admin? || current_course.active?
