@@ -2,7 +2,6 @@
         "ng-model"=>"selectedGradingStyle",
         "ng-model-options"=>"{ getterSetter: true }",
         "name"=>"quick-grade-style-selector"}
-  %option{"value"=>""}= "- Quick Grade Style -"
   %option{"ng-repeat"=>"option in options()",
           "value"=>"{{option.value}}",
           "ng-selected"=>"selectedGradingStyle() === option.value"}
