@@ -78,17 +78,6 @@ class Assignments::GradesController < ApplicationController
     if @assignment.has_groups?
       redirect_to mass_edit_assignment_groups_grades_path and return
     end
-
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
-
-    if params[:team_id].present?
-      @team = @course.teams.find_by(id: params[:team_id])
-      students = @course.students_being_graded_by_team(@team).order_by_name
-    else
-      students = @course.students_being_graded.order_by_name
-    end
-
-    @grades = Gradebook.new(@assignment, students).grades
   end
 
   # PUT /assignments/:assignment_id/grades/mass_update
