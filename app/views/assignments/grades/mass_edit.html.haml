@@ -2,7 +2,7 @@
   = render "layouts/alerts"
 
   %team-selector.right.select-menu{"course-id"=>"#{current_course.id}",
-                       "team-term"=>"#{term_for :team}"}
+                                   "team-term"=>"#{term_for :team}"}
 
   %mass_edit_form{"assignment-id"=>"#{@assignment.id}",
                   "form-action"=>"#{mass_update_assignment_grades_path(@assignment.id)}",
