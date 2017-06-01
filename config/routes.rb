@@ -264,6 +264,7 @@ Rails.application.routes.draw do
   namespace :users do
     resources :importers, only: :index, param: :provider_id do
       get :users
+      get :download
       post "/course/:id/users/import", action: :users_import, as: :users_import
     end
   end
