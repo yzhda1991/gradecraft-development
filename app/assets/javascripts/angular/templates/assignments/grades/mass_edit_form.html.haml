@@ -33,17 +33,11 @@
             %input{"type"=>"hidden",
                    "name"=>"assignment[grades_attributes][{{$index}}][student_id]",
                    "value"=>"{{grade.student_id}}"}
-            -# Grade id, if it exists
-            %input{"type"=>"hidden",
-                   "name"=>"assignment[grades_attributes][{{$index}}][id]",
-                   "value"=>"{{grade.id}}",
-                   "ng-if"=>"grade.id"}
 
             %label{"for"=>"assignment_grades_attributes_{{$index}}_pass_fail_status_nil"}
               %input{"type"=>"radio",
                      "ng-model"=>"grade.pass_fail_status",
-                     "value"=>"",
-                     "ng-value"=>"_.isEmpty(grade.pass_fail_status)",
+                     "value"=>"nil",
                      "name"=>"assignment[grades_attributes][{{$index}}][pass_fail_status]",
                      "id"=>"assignment_grades_attributes_{{$index}}_pass_fail_status_nil",
                      "class"=>"radio_inline"}
