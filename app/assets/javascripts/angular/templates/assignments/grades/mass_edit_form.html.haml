@@ -1,4 +1,4 @@
-%quick-grade-styling-selector.right{"ng-if"=>"vm.grades.length > 0"}
+%quick-grade-styling-selector.right.select-menu{"ng-if"=>"vm.grades.length > 0"}
 
 %massGrade
   %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grades..."}
@@ -132,7 +132,7 @@
                          "name"=>"assignment[grades_attributes][{{$index}}][raw_points]"}
 
           %td{"ng-if"=>"!vm.assignment.pass_fail"}
-            %span= "{{grade.raw_points}} / {{vm.assignment.full_points}}"
+            %span= "{{grade.raw_points || '-'}} / {{vm.assignment.full_points}}"
 
     .submit-buttons
       %ul

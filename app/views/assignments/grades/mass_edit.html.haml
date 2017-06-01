@@ -1,26 +1,10 @@
 .pageContent
   = render "layouts/alerts"
 
-  %team-selector.right{"course-id"=>"#{current_course.id}",
+  %team-selector.right.select-menu{"course-id"=>"#{current_course.id}",
                        "team-term"=>"#{term_for :team}"}
 
   %mass_edit_form{"assignment-id"=>"#{@assignment.id}",
                   "form-action"=>"#{mass_update_assignment_grades_path(@assignment.id)}",
                   "form-cancel-route"=>"#{assignment_path(@assignment)}",
                   "authenticity-token"=>"#{form_authenticity_token}"}
-
-  -# #massGrade
-  -#   = simple_form_for @assignment, method: :put, :url => mass_update_assignment_grades_path(@assignment) do |f|
-  -#     - if @team.present?
-  -#       = hidden_field_tag :team_id, @team.id
-  -#
-  -#     %table
-  -#       %thead
-  -#         %tr
-  -#           = render partial: "assignments/grades/components/individual_table_head", locals: { model: @assignment }
-  -#       = render partial: "assignments/grades/components/individual_table_body", locals: { model: @assignment, f: f }
-  -#
-  -#     .submit-buttons
-  -#       %ul
-  -#         %li= f.button :submit, "Submit Grades"
-  -#         %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
