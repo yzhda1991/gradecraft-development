@@ -1,14 +1,12 @@
 .pageContent
   = render "layouts/alerts"
 
-  -# = team_filter(current_course.teams) if current_course.has_teams? && @assignment.is_individual?
-
   %team-selector.right{"course-id"=>"#{current_course.id}",
                        "team-term"=>"#{term_for :team}"}
 
   %mass_edit_form{"assignment-id"=>"#{@assignment.id}",
                   "form-action"=>"#{mass_update_assignment_grades_path(@assignment.id)}",
-                  "form-cancel-route"=>"#{assignments_path}",
+                  "form-cancel-route"=>"#{assignment_path(@assignment)}",
                   "authenticity-token"=>"#{form_authenticity_token}"}
 
   -# #massGrade
