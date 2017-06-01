@@ -44,23 +44,23 @@ describe InfoController do
       end
     end
 
-    describe "GET gradebook" do
+    describe "GET gradebook_file" do
       it "retrieves the gradebook" do
         expect(GradebookExporterJob).to \
           receive(:new).with(user_id: professor.id, course_id: course.id, filename: "#{ course.name } Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
-        get :gradebook, params: { id: course.id }
+        get :gradebook_file, params: { id: course.id }
       end
 
       it "redirects to the root path if there is no referer" do
-        get :gradebook, params: { id: course.id }
+        get :gradebook_file, params: { id: course.id }
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :gradebook, params: { id: course.id }
+        get :gradebook_file, params: { id: course.id }
         expect(response).to redirect_to dashboard_path
       end
     end
@@ -168,6 +168,7 @@ describe InfoController do
         :earned_badges,
         :grading_status,
         :per_assign,
+        :gradebook_file,
         :gradebook,
         :multiplied_gradebook,
         :final_grades,

@@ -219,6 +219,7 @@ Rails.application.routes.draw do
     get :gradebook
     get :submissions
     get :grading_status
+    get :gradebook_file
     get :multiplied_gradebook
     get :multiplier_choices
     get :per_assign
@@ -281,7 +282,6 @@ Rails.application.routes.draw do
     resources :badges, only: [:index, :show], module: :students
     resources :assignment_type_weights, only: [:index], module: :students
     member do
-      get :grade_index
       get :recalculate
     end
   end

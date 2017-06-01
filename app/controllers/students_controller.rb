@@ -23,12 +23,6 @@ class StudentsController < ApplicationController
     })
   end
 
-  # All Admins to see all of one student's grades at once, proof for duplicates
-  def grade_index
-    student = current_course.students.find_by(id: params[:id])
-    @grades = student.grades.where(course_id: current_course)
-  end
-
   def recalculate
     @student = current_course.students.find_by(id: params[:id])
 
