@@ -2,11 +2,10 @@
   %thead
     %tr
       %th Assignment
-      %th Submitted
+      %th Feedback
       %th Final Score
       - if current_course.has_multipliers?
         %th Score With Weights
-      %th Feedback
       %th Status
       %th Last Updated
       %th
@@ -14,12 +13,15 @@
     - presenter.grades_for_course.each do |g|
       %tr
         %td= link_to g.assignment.name, g.assignment
+        %td= raw g.feedback
         %td
-          = glyph(:check) if g.submission.present?
-        %td= points g.final_points
+          - if g.assignment.pass_fail?
+            .assignment-info.assignment-pass-fail
+              = render partial: "grades/components/pass_fail", locals: { presenter: presenter, assignment: g.assignment }
+          - else
+            = "#{points g.final_points} / #{ points g.assignment.full_points} points earned"
         - if current_course.has_multipliers?
           %td= g.try(:score)
-        %td= raw g.feedback
         %td= g.status
         %td= g.updated_at
         %td
@@ -27,6 +29,6 @@
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
             %ul.options-menu
               - if current_user_is_admin? || current_course.active?
-                %li= link_to "Edit Grade", edit_grade_path(g)
-                %li= link_to "See Grade", grade_path(g)
-                %li= link_to "Delete Grade", grade_path(g), data: { confirm: "Are you sure?" }
+                %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(g)
+                %li= link_to glyph(:eye) + "See Grade", grade_path(g)
+                %li= link_to glyph(:trash) + "Delete Grade", grade_path(g), data: { confirm: "Are you sure?" }
