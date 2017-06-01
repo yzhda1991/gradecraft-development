@@ -8,7 +8,7 @@
   getAssignmentWithGrades = (id, teamId=null) ->
     $http.get("/api/assignments/#{id}/grades", { params: { team_id: teamId } }).then(
       (response) ->
-        _clearGrades()
+        _clearArrays(grades, assignmentScoreLevels)
         GradeCraftAPI.loadItem(assignment, "assignment", response.data)
         GradeCraftAPI.loadFromIncluded(grades, "grade", response.data)
         GradeCraftAPI.loadFromIncluded(assignmentScoreLevels, "assignment_score_level", response.data)
@@ -34,10 +34,10 @@
   termFor = (article) ->
     GradeCraftAPI.termFor(article)
 
-  _clearGrades = () ->
-    grades.length = 0
-
-
+  _clearArrays = (arrays...) ->
+    _.each(arrays, (array) ->
+      array.length = 0
+    )
 
   {
     grades: grades
