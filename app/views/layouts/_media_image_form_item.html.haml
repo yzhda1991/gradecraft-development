@@ -2,11 +2,9 @@
   %label.media-image-label{for: "assignment_media"} Media Image
   = f.file_field :media, {class: "media-image-upload"}
   .preview-wrapper{ class: model.media.present? ? "" : "hidden"}
-    .icon-preview.event-preview
-      .img-cropper.event-crop
+    .event-preview
+      .img-cropper
         %img{:src => model.media}
-      %span.xaxis-label 128px
-      %span.yaxis-label 128px
     - if model.media.present? && model.errors[:media].empty?
       = f.check_box :remove_media
       Remove Image
