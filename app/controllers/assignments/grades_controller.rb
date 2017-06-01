@@ -75,9 +75,7 @@ class Assignments::GradesController < ApplicationController
   # GET /assignments/:assignment_id/grades/mass_edit
   # Quickly grading a single assignment for all students
   def mass_edit
-    if @assignment.has_groups?
-      redirect_to mass_edit_assignment_groups_grades_path and return
-    end
+    redirect_to mass_edit_assignment_groups_grades_path and return if @assignment.has_groups?
   end
 
   # PUT /assignments/:assignment_id/grades/mass_update
