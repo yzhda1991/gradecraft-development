@@ -1,17 +1,16 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      - if actions.include? :new
-        = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :badge).titleize}", new_badge_path, class: "button button-edit"
-
-      - if actions.include? :see
-        %li= link_to decorative_glyph(:eye) + "See", badge_path(badge), class: "button button-edit"
-
       - if actions.include? :edit
         = active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_path(badge), class: "button button-edit"
-
-      - if actions.include? :award
-        = active_course_link_to decorative_glyph(:star) + "Award", new_badge_earned_badge_path(badge_id: badge), class: "button button-edit"
-
-      - if actions.include? :quick_award
-        = active_course_link_to decorative_glyph(:check) + "Quick Award", mass_edit_badge_earned_badges_path(badge), class: "button button-edit"
+      - if actions.include? :new
+        = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :badge).titleize}", new_badge_path, class: "button button-edit"
+      %li.dropdown
+        %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
+        %ul.options-menu
+          - if actions.include? :see
+            %li= link_to decorative_glyph(:eye) + "See", badge_path(badge), class: "button button-edit"
+          - if actions.include? :award
+            = active_course_link_to decorative_glyph(:star) + "Award", new_badge_earned_badge_path(badge_id: badge)
+          - if actions.include? :quick_award
+            = active_course_link_to decorative_glyph(:check) + "Quick Award", mass_edit_badge_earned_badges_path(badge)
