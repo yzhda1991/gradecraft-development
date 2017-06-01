@@ -1,7 +1,5 @@
 - content_for :context_menu do
   .context_menu
     %ul
-      - if current_user_is_admin? || current_course.has_paid?
-        = active_course_link_to decorative_glyph(:plus) + "New User", new_user_path, class: "button button-edit"
       - if @staff_member.present?
         = active_course_link_to glyph(:edit) + "Edit Staff Member", edit_user_path(@staff_member), class: "button button-edit"

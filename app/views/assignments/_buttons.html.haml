@@ -42,5 +42,5 @@
                 - else
                   Create Rubric
 
-        = active_course_link_to decorative_glyph(:copy) + "Add to Google Calendar",
-          add_to_google_calendar_google_calendar_path("assignment", presenter.assignment), class: "button button-edit", method: :post
+            = active_course_link_to decorative_glyph(:calendar) + "Add to Google Calendar",
+          add_to_google_calendar_google_calendar_path("assignment", presenter.assignment), method: :post

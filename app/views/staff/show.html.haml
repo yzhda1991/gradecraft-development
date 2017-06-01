@@ -4,7 +4,7 @@
   = render "layouts/alerts"
 
   - if !@staff_member.activated?
-    =link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
+    = link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
 
   %h4 Courses
   %ul
@@ -21,7 +21,7 @@
         %th Feedback
         %th Created at
         %th Last Updated
-        %th{:style => "min-width: 120px"}
+        %th Options
     %tbody
       - @grades.each do |grade|
         %tr
@@ -32,6 +32,8 @@
           %td= grade.created_at
           %td= grade.graded_at
           %td
-            %ul.button-bar
-              = active_course_link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
-              = active_course_link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
+                = active_course_link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
+                = active_course_link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
