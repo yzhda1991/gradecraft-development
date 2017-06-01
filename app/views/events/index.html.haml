@@ -26,5 +26,6 @@
               .button-container.dropdown
                 %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
                 %ul.options-menu
+                  %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(event), method: :post
                   = active_course_link_to decorative_glyph(:edit) + "Edit", edit_event_path(event)
                   = active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }

@@ -3,6 +3,8 @@ require "rails_spec_helper"
 include GoogleCalendarsHelper
 
 describe GoogleCalendarsHelper do
+  let!(:course) { build :course }
+  let!(:user) { create :user }
 
   describe "#get_google_authorization" do
     let(:user) { create :user }
@@ -13,25 +15,55 @@ describe GoogleCalendarsHelper do
     end
   end
 
-  describe "#get_event_or_assignment" do
-    let(:user) { create :user }
-    let(:course) { build(:course) }
+  describe "#get_all_items" do
+    let(:professor) { create(:course_membership, :professor, course: course).user }
     let(:event) {create(:event, course: course)}
+    let(:event2) {create(:event, course: course)}
     let(:assignment_type) { create(:assignment_type, course: course) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
-    it "returns the event of the corresponding event object" do
-      expect(get_event_or_assignment(course, "event", event.id).id).to be event.id
-      expect(get_event_or_assignment(course, "event", event.id).class).to be Event
+    let(:assignment2) { create(:assignment, assignment_type: assignment_type, course: course) }
+    it "returns array of events or assignments" do
+      expect(get_all_items_for_current_course(course, "event", user)).to be course.events
+      expect(get_all_items_for_current_course(course, "assignment", professor)).to be course.assignments
     end
+  end
 
-    it "returns the assignment of the corresponding event object" do
-      expect(get_event_or_assignment(course, "assignment", assignment.id).id).to be assignment.id
-      expect(get_event_or_assignment(course, "assignment", assignment.id).class).to be Assignment
+  describe "#retrieve_visible_assignments" do
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+    let(:event) {create(:event, course: course)}
+    let(:event2) {create(:event, course: course)}
+    let(:event3) {create(:event, course: course)}
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment2) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:assignment3) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:invisible_assignment) { create(:assignment, assignment_type: assignment_type, course: course, visible: false) }
+    it "returns a list of assignments that are visible to the student" do
+      assignment_list = [assignment, assignment2, assignment3, invisible_assignment]
+      visible_assignment_list = [assignment, assignment2, assignment3]
+      expect(retrieve_visible_assignments(course, user)).equal? visible_assignment_list
+    end
+  end
+
+  describe "#filter_items_with_no_end_date" do
+    let(:professor) { create(:course_membership, :professor, course: course).user }
+    let(:event) {create(:event, course: course)}
+    let(:no_end_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: nil}
+    let(:assignment_type) { create(:assignment_type, course: course) }
+    let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
+    let(:no_end_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: nil) }
+    it "returns a shortened array of events or assignments without items that do not have an end date" do
+      assignment_list = [assignment, no_end_assignment]
+      filtered_assignment_list = [assignment]
+      expect(filter_items_with_no_end_date(assignment_list)).equal? filtered_assignment_list
+
+      event_list = [event, no_end_event]
+      filtered_event_list = [event]
+      expect(filter_items_with_no_end_date(event_list)).equal? filtered_event_list
     end
   end
 
   describe "#refresh_if_google_authorization_is_expired" do
-    let(:user) { create :user }
     let(:google_auth) { create :user_authorization, :google, user: user, access_token: "BLEH", refresh_token: "REFRESH", expires_at: Time.now - (60 * 60) }
     it "calls #refresh! on authorization if the token has expired" do
       expect(google_auth).to receive(:refresh!)
@@ -40,7 +72,6 @@ describe GoogleCalendarsHelper do
   end
 
   describe "#google_auth_present?" do
-    let(:user) {create :user}
     it "returns false if a user_authorization with provider google_oauth2 is not found" do
       expect(google_auth_present?(user)).to be false
     end
@@ -52,7 +83,6 @@ describe GoogleCalendarsHelper do
   end
 
   describe "#create_google_event" do
-    let(:course) { build(:course) }
     let(:event) { create(:event, course: course) }
     let(:assignment_type) { create(:assignment_type, course: course) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type, course: course) }
