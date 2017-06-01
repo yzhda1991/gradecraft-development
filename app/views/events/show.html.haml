@@ -7,8 +7,7 @@
           %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
           %ul.options-menu
             %li= link_to decorative_glyph(:copy) + "Copy Event ", copy_events_path(id: @event.id), method: :post
-            %li= link_to decorative_glyph(:copy) + "Add to Google Calendar ",
-              add_event_google_calendars_events_path(@event), method: :post
+            %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(@event), method: :post
 
 .pageContent
   = render partial: "layouts/alerts"
