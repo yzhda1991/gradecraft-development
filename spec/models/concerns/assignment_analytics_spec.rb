@@ -1,4 +1,4 @@
-describe AssignmentStats do
+describe AssignmentAnalytics do
   subject { build(:assignment) }
 
   describe "#average" do
@@ -106,5 +106,4 @@ describe AssignmentStats do
       expect(subject.graded_or_released_scores).to eq([85])
     end
   end
-
 end

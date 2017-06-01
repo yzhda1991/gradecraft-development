@@ -11,8 +11,6 @@ class API::CoursesController < ApplicationController
   end
 
   def analytics
-    @scores =
-      CourseMembership.where(course: @course, role: "student", auditing: false).pluck(:score).sort
     if current_user_is_student?
       @student = current_user
       @user_score = @student.course_memberships.where(course_id: @course, auditing: false).pluck("score").first

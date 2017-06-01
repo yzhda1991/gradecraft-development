@@ -1,6 +1,6 @@
-describe API::CoursesController , focus: true do
+describe API::CoursesController do
   let!(:course) { build(:course)}
-  let(:student)  { create(:course_membership, :student, course: course).user }
+  let(:student)  { create(:course_membership, :student, course: course, ).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as a professor" do
@@ -19,9 +19,10 @@ describe API::CoursesController , focus: true do
 
     describe "GET analytics" do
       it "returns analytics data for the course" do
-        create :event, course: course, name: "Course-Event", due_at: Date.today
         get :analytics, format: :json
-        expect(assigns(:scores_for_current_course)).to eq("data")
+        expect(assigns(:course)).to eq(course)
+        expect(assigns(:student)).to be_nil
+        expect(assigns(:user_score)).to be_nil
       end
     end
 
@@ -47,7 +48,14 @@ describe API::CoursesController , focus: true do
       end
     end
 
-    describe "GET "
+    describe "GET analytics" do
+      it "returns analytics data for the course" do
+        get :analytics, format: :json
+        expect(assigns(:course)).to eq(course)
+        expect(assigns(:student)).to eq(student)
+        expect(assigns(:user_score)).to eq(student.score_for_course(course))
+      end
+    end
 
     describe "GET timeline_events" do
       it "returns a list of events for the dashboard" do

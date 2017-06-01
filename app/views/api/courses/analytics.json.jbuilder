@@ -1,4 +1,5 @@
-json.course_id @course.id
-json.scores @scores
+json.scores @course.scores
 json.user_score @user_score
-json.is_here current_user.present? && current_student.present?
+json.low_score @course.low_score
+json.average @course.average_score
+json.high_score @course.high_score

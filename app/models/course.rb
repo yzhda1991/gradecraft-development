@@ -3,6 +3,7 @@ require_relative "role"
 class Course < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
+  include CourseAnalytics
 
   after_create :create_admin_memberships
 
