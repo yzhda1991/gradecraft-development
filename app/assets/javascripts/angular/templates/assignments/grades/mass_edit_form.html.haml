@@ -23,6 +23,7 @@
               %button.button.select-none{"role"=>"button", "type"=>"button"}= "Uncheck All"
 
           %th{"ng-if"=>"!vm.assignment.pass_fail"}
+            Earned / Max Points
       %tbody
         %tr{"ng-repeat"=>"grade in vm.grades"}
           %td.align-right
@@ -72,15 +73,15 @@
             %non-pass-fail-assignment{"ng-if"=>"!vm.assignment.pass_fail"}
               -# Assignment has levels
               %with_levels{"ng-if"=>"vm.assignment.has_levels"}
+                %input{"type"=>"hidden",
+                       "name"=>"assignment[grades_attributes][{{$index}}][raw_points]",
+                       "value"=>"{{grade.raw_points}}"}
+
                 -# If select dropdown style
                 %level-select{"ng-show"=>"vm.selectedGradingStyle() === 'select'"}
                   %select{"ng-model"=>"grade.raw_points",
-                          "name"=>"assignment[grades_attributes][{{$index}}][raw_points]"}
+                          "ng-options"=>"level.points as level.formatted_name for level in vm.assignmentScoreLevels"}
                     %option{"value"=>"", "ng-selected"=>"_.isEmpty(grade.raw_points)"}
-                    %option{"ng-repeat"=>"level in vm.assignmentScoreLevels",
-                            "value"=>"{{level.points}}",
-                            "ng-selected"=>"grade.raw_points === level.points"}
-                      {{level.formatted_name}}
 
                 -# If radio button style
                 %level-radio{"ng-if"=>"vm.selectedGradingStyle() === 'radio'"}
@@ -90,6 +91,7 @@
                            "ng-model"=>"grade.raw_points",
                            "value"=>"{{level.points}}",
                            "name"=>"assignment[grades_attributes][{{$index}}][raw_points]",
+                           "id"=>"assignment_grades_attributes_{{$index}}_raw_points",
                            "class"=>"radio_inline"}
                       {{level.formatted_name}}
 
@@ -130,7 +132,7 @@
                          "name"=>"assignment[grades_attributes][{{$index}}][raw_points]"}
 
           %td{"ng-if"=>"!vm.assignment.pass_fail"}
-            %span= "/ {{vm.assignment.full_points}}"
+            %span= "{{grade.raw_points}} / {{vm.assignment.full_points}}"
 
     .submit-buttons
       %ul
