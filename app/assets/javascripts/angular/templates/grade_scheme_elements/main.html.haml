@@ -2,7 +2,6 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
-                        'update_form_validity'=>'vm.updateFormValidity()',
                         'index'=>'{{$index}}',
                         'grade_scheme_element'=>'element'}
 
@@ -16,9 +15,3 @@
         .button.right{'type'=>'button',
                       'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0',
                       'ng-click'=>'vm.deleteGradeSchemeElements()'} Delete All Elements
-      %li
-        .button.right{'type'=>'button',
-                      'ng-click'=>'vm.postGradeSchemeElements()',
-                      'ng-class'=>'{"disabled": gradeSchemeElementsForm.$invalid}',
-                      'ng-disabled'=>'gradeSchemeElementsForm.$invalid',
-                      'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0'} Submit

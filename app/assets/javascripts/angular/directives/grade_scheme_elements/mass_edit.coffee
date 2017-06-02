@@ -12,12 +12,16 @@
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
 
-    vm.postGradeSchemeElements = () ->
-      GradeSchemeElementsService.postGradeSchemeElements('/grade_scheme_elements/')
-
     vm.deleteGradeSchemeElements = () ->
       if confirm "Are you sure you want to delete all grade scheme elements?"
         GradeSchemeElementsService.deleteGradeSchemeElements('/grade_scheme_elements/')
+
+    # For manually triggering form validation by child directives
+    vm.updateFormValidity = () ->
+      _.each(vm.gradeSchemeElements, (element, index) ->
+        if vm.gradeSchemeElementsForm["point_threshold_#{index}"]?
+          vm.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
+      )
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
@@ -31,12 +35,5 @@
     controllerAs: 'vm'
     restrict: 'EA'
     templateUrl: 'grade_scheme_elements/main.html'
-    link: (scope, element, attrs, ctrl) ->
-      # For manually triggering form validation by child directives
-      ctrl.updateFormValidity = () ->
-        _.each(ctrl.gradeSchemeElements, (element, index) ->
-          if scope.gradeSchemeElementsForm["point_threshold_#{index}"]?
-            scope.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
-        )
   }
 ]
