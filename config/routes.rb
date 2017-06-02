@@ -239,10 +239,9 @@ Rails.application.routes.draw do
   end
 
   #12. Grade Schemes
-  resources :grade_scheme_elements, only: [:index, :edit, :show, :update] do
+  resources :grade_scheme_elements, only: [:index, :edit, :update] do
     collection do
       get :mass_edit
-      put :mass_update
       get :export_structure
     end
   end
@@ -421,7 +420,10 @@ Rails.application.routes.draw do
     end
 
     resources :grade_scheme_elements, only: :index do
-      delete :destroy, on: :collection
+      collection do
+        put :update, as: :update
+        delete :destroy_all
+      end
     end
     resources :levels, only: [:create, :update, :destroy]
     resources :level_badges, only: [:create, :destroy]

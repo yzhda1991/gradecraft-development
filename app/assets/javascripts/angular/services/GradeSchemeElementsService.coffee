@@ -53,16 +53,14 @@
   # POST grade scheme element updates
   # Optionally redirects to a specified url
   postGradeSchemeElements = (redirectUrl=null, validate=true, showAlert=false) ->
-    if gradeSchemeElements.length < 1 || (validate && !_hasValidPointThresholds())
-      return
+    return if gradeSchemeElements.length < 1 || (validate && !_hasValidPointThresholds())
 
     data = {
       grade_scheme_elements_attributes: gradeSchemeElements
       deleted_ids: _deletedElementIds
     }
-    $http.put('/grade_scheme_elements/mass_update', data).then(
+    $http.put('/api/grade_scheme_elements', data).then(
       (response) ->
-        # angular.copy(response.grade_scheme_elements, gradeSchemeElements)
         GradeCraftAPI.logResponse(response)
         window.location.href = redirectUrl if redirectUrl?
         alert('Changes were successfully saved') if showAlert is true
@@ -72,7 +70,7 @@
     )
 
   deleteGradeSchemeElements = (redirectUrl=null) ->
-    $http.delete('/api/grade_scheme_elements/').then(
+    $http.delete('/api/grade_scheme_elements/destroy_all').then(
       (response) ->
         GradeCraftAPI.logResponse(response)
         window.location.href = redirectUrl if redirectUrl?

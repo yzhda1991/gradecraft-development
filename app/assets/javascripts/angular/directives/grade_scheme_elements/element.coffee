@@ -34,14 +34,14 @@
 
       scope.removeElement = () ->
         GradeSchemeElementsService.removeElement(@gradeSchemeElement)
-        scope.persistChanges(true) if @gradeSchemeElement.id?
+        scope.persistChanges(true) if not @gradeSchemeElement.validationError?
 
       scope.persistChanges = (isRemoval=false) ->
         _validateElements()
         return if gseForm.gradeSchemeElementsForm.$invalid
 
         DebounceQueue.addEvent(
-          'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 1500
+          'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 3000
         )
   }
 ]
