@@ -218,17 +218,6 @@ class User < ActiveRecord::Base
       course_memberships.where(course_id: course).first.present?
   end
 
-  # Powers the grade distribution box plot
-  # TODO remove once view partial is removed
-  def scores_for_course(course)
-    user_score = course_memberships.where(course_id: course, auditing: FALSE).pluck("score")
-    scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score).sort
-    return {
-      scores: scores,
-      user_score: user_score
-    }
-  end
-
   # Checking to see if a student has any positive predictions for a course
   def predictions_for_course?(course)
     predicted_earned_grades.for_course(course).predicted_to_be_done.present?
