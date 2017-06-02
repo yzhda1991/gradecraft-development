@@ -19,6 +19,7 @@
       %input.low-range{'type'=>'text',
         'name'=>'point_threshold_{{index}}',
         'ng-model'=>'gradeSchemeElement.lowest_points',
+        'ng-model-options'=>"{ updateOn: 'blur' }",
         'ng-blur'=>"persistChanges()",
         'required'=>'',
         'gc-number-input'=>'',

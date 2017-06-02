@@ -1,7 +1,7 @@
 %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grade Scheme Elements..."}
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
-  %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements',
+  %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements | orderBy: "-lowest_points"',
                         'index'=>'{{$index}}',
                         'grade_scheme_element'=>'element'}
 
