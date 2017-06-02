@@ -569,42 +569,6 @@ describe Course do
     end
   end
 
-  describe "#minimum_course_score" do
-    it "returns the lowest student score in the course" do
-      student = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
-      student_2 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
-      student_3 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
-      expect(subject.minimum_course_score).to eq(100)
-    end
-  end
-
-  describe "#maximum_course_score" do
-    it "returns the highest student score in the course" do
-      student = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
-      student_2 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
-      student_3 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
-      expect(subject.maximum_course_score).to eq(2990)
-    end
-  end
-
-  describe "#average_course_score" do
-    it "returns the average student score in the course" do
-      student = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student, score: 100)
-      student_2 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_2, score: 2000)
-      student_3 = create(:user)
-      course_membership = create(:course_membership, :student, course: subject, user: student_3, score: 2990)
-      expect(subject.average_course_score).to eq(1696)
-    end
-  end
-
   describe "#student_count" do
     it "counts the number of students in a course" do
       student = create(:user, courses: [subject], role: :student)

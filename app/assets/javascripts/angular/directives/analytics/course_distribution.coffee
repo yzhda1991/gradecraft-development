@@ -1,6 +1,4 @@
 # box plot for course grade distribution
-# includes an individual's grade if supplied
-
 @gradecraft.directive 'courseDistributionAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this

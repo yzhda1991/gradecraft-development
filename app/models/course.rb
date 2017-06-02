@@ -150,19 +150,6 @@ class Course < ActiveRecord::Base
     assignment_weight_for_student(student) >= total_weights.to_i
   end
 
-  # Descriptive stats of the grades
-  def minimum_course_score
-    course_memberships.where(role: "student", auditing: false).minimum("score")
-  end
-
-  def maximum_course_score
-    course_memberships.where(role: "student", auditing: false).maximum("score")
-  end
-
-  def average_course_score
-    course_memberships.where(role: "student", auditing: false).average("score").to_i
-  end
-
   def student_count
     course_memberships.where(role: "student").count
   end
