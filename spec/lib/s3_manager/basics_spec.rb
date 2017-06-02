@@ -87,133 +87,133 @@ RSpec.describe S3Manager::Manager do
 
     before(:each) { client }
 
-    describe "#delete_object" do
-      subject { s3_manager.delete_object(object_key) }
+    # describe "#delete_object" do
+    #   subject { s3_manager.delete_object(object_key) }
 
-      before(:each) { put_object }
+    #   before(:each) { put_object }
 
-      let(:delete_object_attrs) do
-        { bucket: s3_manager.bucket_name, key: object_key }
-      end
+    #   let(:delete_object_attrs) do
+    #     { bucket: s3_manager.bucket_name, key: object_key }
+    #   end
 
-      it "should call #delete_object on the client" do
-        expect(client).to receive(:delete_object).with(delete_object_attrs)
-        subject
-      end
+    #   it "should call #delete_object on the client" do
+    #     expect(client).to receive(:delete_object).with(delete_object_attrs)
+    #     subject
+    #   end
 
-      it "should get an AWS Seahorse object in response" do
-        expect(subject.class).to eq(Seahorse::Client::Response)
-      end
+    #   it "should get an AWS Seahorse object in response" do
+    #     expect(subject.class).to eq(Seahorse::Client::Response)
+    #   end
 
-      it "should have been successful" do
-        expect(subject.successful?).to be_truthy
-      end
+    #   it "should have been successful" do
+    #     expect(subject.successful?).to be_truthy
+    #   end
 
-      it "should actually remove the object from the server" do
-        subject
-        expect(S3Manager::Manager::ObjectSummary.new(object_key, s3_manager).exists?).to be_falsey
-      end
+    #   it "should actually remove the object from the server" do
+    #     subject
+    #     expect(S3Manager::Manager::ObjectSummary.new(object_key, s3_manager).exists?).to be_falsey
+    #   end
 
-      after(:each) { delete_jerry }
-    end
+    #   after(:each) { delete_jerry }
+    # end
 
-    describe "#get_object" do
-      subject { s3_manager.get_object(object_key) }
+    # describe "#get_object" do
+    #   subject { s3_manager.get_object(object_key) }
 
-      before { put_object }
+    #   before { put_object }
 
-      let(:get_object_attrs) do
-        { bucket: s3_manager.bucket_name, key: object_key }
-      end
+    #   let(:get_object_attrs) do
+    #     { bucket: s3_manager.bucket_name, key: object_key }
+    #   end
 
-      it "should call #get_object on the client" do
-        expect(client).to receive(:get_object)
-        subject
-      end
+    #   it "should call #get_object on the client" do
+    #     expect(client).to receive(:get_object)
+    #     subject
+    #   end
 
-      it "should get an AWS Seahorse object in response" do
-        expect(subject.class).to eq(Seahorse::Client::Response)
-      end
+    #   it "should get an AWS Seahorse object in response" do
+    #     expect(subject.class).to eq(Seahorse::Client::Response)
+    #   end
 
-      it "should have been successful" do
-        expect(subject.successful?).to be_truthy
-      end
+    #   it "should have been successful" do
+    #     expect(subject.successful?).to be_truthy
+    #   end
 
-      it "should have the correct body of the gotten object" do
-        expect(client).to receive(:get_object).with(get_object_attrs)
-        subject
-      end
+    #   it "should have the correct body of the gotten object" do
+    #     expect(client).to receive(:get_object).with(get_object_attrs)
+    #     subject
+    #   end
 
-      it "should suggest that AES256 encryption was used" do
-        expect(subject.server_side_encryption).to eq("AES256")
-      end
+    #   it "should suggest that AES256 encryption was used" do
+    #     expect(subject.server_side_encryption).to eq("AES256")
+    #   end
 
-      after { FileUtils.rm(filename) if File.exist?(filename) }
-    end
+    #   after { FileUtils.rm(filename) if File.exist?(filename) }
+    # end
 
-    describe "#write_s3_object_to_disk" do
-      subject { s3_manager.write_s3_object_to_disk(object_key, target_file_path) }
-      let(:target_file_path) { Tempfile.new("something-new") }
-      let(:target_file_size) { File.stat(target_file_path).size }
+    # describe "#write_s3_object_to_disk" do
+    #   subject { s3_manager.write_s3_object_to_disk(object_key, target_file_path) }
+    #   let(:target_file_path) { Tempfile.new("something-new") }
+    #   let(:target_file_size) { File.stat(target_file_path).size }
 
-      context "file actually exists on s3" do
-        let(:original_file_path) { Tempfile.new("something-old").path }
-        let(:original_file) { RandomFile::TextFile.new(original_file_path) }
-        let(:original_file_size) { original_file.size }
-        let(:read_original_file) { File.open(original_file_path, "rb") }
-        let(:put_object) { s3_manager.put_object(object_key, read_original_file) }
+    #   context "file actually exists on s3" do
+    #     let(:original_file_path) { Tempfile.new("something-old").path }
+    #     let(:original_file) { RandomFile::TextFile.new(original_file_path) }
+    #     let(:original_file_size) { original_file.size }
+    #     let(:read_original_file) { File.open(original_file_path, "rb") }
+    #     let(:put_object) { s3_manager.put_object(object_key, read_original_file) }
 
-        before(:each) { original_file.write; put_object }
+    #     before(:each) { original_file.write; put_object }
 
-        let(:get_object_attrs) do
-          { response_target: target_file_path, bucket: s3_manager.bucket_name, key: object_key }
-        end
+    #     let(:get_object_attrs) do
+    #       { response_target: target_file_path, bucket: s3_manager.bucket_name, key: object_key }
+    #     end
 
-        it "should call #get_object on the client" do
-          expect(client).to receive(:get_object)
-          subject
-        end
+    #     it "should call #get_object on the client" do
+    #       expect(client).to receive(:get_object)
+    #       subject
+    #     end
 
-        it "should get an AWS Seahorse object in response" do
-          expect(subject.class).to eq(Seahorse::Client::Response)
-        end
+    #     it "should get an AWS Seahorse object in response" do
+    #       expect(subject.class).to eq(Seahorse::Client::Response)
+    #     end
 
-        it "should have been successful" do
-          expect(subject.successful?).to be_truthy
-        end
+    #     it "should have been successful" do
+    #       expect(subject.successful?).to be_truthy
+    #     end
 
-        it "should have the correct body of the gotten object" do
-          expect(client).to receive(:get_object).with(get_object_attrs)
-          subject
-        end
+    #     it "should have the correct body of the gotten object" do
+    #       expect(client).to receive(:get_object).with(get_object_attrs)
+    #       subject
+    #     end
 
-        it "should suggest that AES256 encryption was used" do
-          expect(subject.server_side_encryption).to eq("AES256")
-        end
+    #     it "should suggest that AES256 encryption was used" do
+    #       expect(subject.server_side_encryption).to eq("AES256")
+    #     end
 
-        it "should have written a file to the target path" do
-          subject
-          expect(File.exist?(target_file_path)).to be_truthy
-        end
+    #     it "should have written a file to the target path" do
+    #       subject
+    #       expect(File.exist?(target_file_path)).to be_truthy
+    #     end
 
-        it "should have written a file of the same size as the target file" do
-          subject
-          expect(target_file_size).to eq(original_file_size)
-        end
+    #     it "should have written a file of the same size as the target file" do
+    #       subject
+    #       expect(target_file_size).to eq(original_file_size)
+    #     end
 
-        after(:each) do
-          FileUtils.rm(original_file_path) if File.exist?(original_file_path)
-          FileUtils.rm(target_file_path) if File.exist?(target_file_path)
-        end
-      end
+    #     after(:each) do
+    #       FileUtils.rm(original_file_path) if File.exist?(original_file_path)
+    #       FileUtils.rm(target_file_path) if File.exist?(target_file_path)
+    #     end
+    #   end
 
-      context "object key is invalid or object doesn't exist" do
-        let(:object_key) { RandomFile::Content.random_string(100) }
-        it "should raise an error" do
-          expect { subject }.to raise_error(Aws::S3::Errors::NoSuchKey)
-        end
-      end
-    end
+    #   context "object key is invalid or object doesn't exist" do
+    #     let(:object_key) { RandomFile::Content.random_string(100) }
+    #     it "should raise an error" do
+    #       expect { subject }.to raise_error(Aws::S3::Errors::NoSuchKey)
+    #     end
+    #   end
+    # end
 
     describe "#put_object" do
       let(:file_path) { Tempfile.new("something-old").path }
