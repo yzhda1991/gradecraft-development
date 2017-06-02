@@ -9,13 +9,13 @@ describe CourseAnalytics do
 
   describe "#scores" do
     it "returns and array of scores for non-auditing students" do
-      expect(course.scores).to eq([1000,3000])
+      expect(course.scores).to eq [1000,3000]
     end
   end
 
   describe "#average_score" do
     it "returns the average score for course" do
-      expect(course.average_score).to eq(2000)
+      expect(course.average_score).to eq 2000
     end
   end
 
