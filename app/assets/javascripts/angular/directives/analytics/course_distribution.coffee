@@ -13,9 +13,10 @@
           )
 
       services().then(()->
-        vm.course_average = AnalyticsService.assignmentData.assignment_average
-        vm.course_low_score = AnalyticsService.assignmentData.assignment_low_score
-        vm.course_high_score = AnalyticsService.assignmentData.assignment_high_score
+        vm.userScore = AnalyticsService.courseData.user_score
+        vm.courseAverage = AnalyticsService.courseData.course_average
+        vm.courseLowScore = AnalyticsService.courseData.course_low_score
+        vm.courseHighScore = AnalyticsService.courseData.course_high_score
         initializeGraph()
       )
     ]
@@ -84,10 +85,6 @@
       bindToController: true,
       controller: analyticsDistCtrl,
       controllerAs: 'vm',
-      scope: {
-         assignmentId: "=",
-         studentId: "=",
-        }
       templateUrl: 'analytics/course_distribution.html'
     }
 
