@@ -9,14 +9,15 @@
           .points-summary
             %span.assignment-type-points #{points assignment_type.total_points} points
         .assignment-type-container{role: "tabpanel"}
-          .assignment-type-message
-            - if assignment_type.description?
-              %h3 #{assignment_type.name} Guidelines
-              %p.description= raw assignment_type.description
-            - if assignment_type.is_capped?
-              .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
-            -# - if assignment_type.count_only_top_grades?
-            -#   .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
+          - if assignment_type.description? || assignment_type.is_capped? || assignment_type.count_only_top_grades?
+            .assignment-type-message
+              - if assignment_type.description?
+                %h3 #{assignment_type.name} Guidelines
+                %p.description= raw assignment_type.description
+              - if assignment_type.is_capped?
+                .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
+              - if assignment_type.count_only_top_grades?
+                .italic #{ term_for :students} top #{ assignment_type.top_grades_counted } grades in this category count towards their course score
 
           // Display the assignments for each assignment type
           .student-assignment-list
@@ -29,7 +30,7 @@
 
                 .assignment-name
                   = link_to assignment.name, assignment_path(assignment)
-                  //= render partial: "assignments/index_student/components/assignment_icons", locals: { assignment: assignment }
+                  = render partial: "index_icons", locals: { assignment: assignment }
                 .assignment-info.assignment-due-date
                   = render partial: "assignments/index_student/components/due_at", locals: { assignment: assignment }
 
