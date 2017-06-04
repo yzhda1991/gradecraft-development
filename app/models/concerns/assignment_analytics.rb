@@ -1,6 +1,6 @@
 # Analytic responses to do with Scores for Assigment
 
-module AssignmentStats
+module AssignmentAnalytics
   extend ActiveSupport::Concern
 
   def average
@@ -76,7 +76,7 @@ module AssignmentStats
     return graded_or_released_scores.count if self.is_individual?
     return grades.select(:group_id).distinct.count if self.has_groups?
   end
-  
+
   def predicted_count
     predicted_earned_grades.predicted_to_be_done.count
   end

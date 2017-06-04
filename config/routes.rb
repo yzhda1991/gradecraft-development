@@ -374,14 +374,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :courses, only: [] do
-      collection do
-        resources :importers, only: [], module: :courses, param: :provider_id do
-          get "courses", action: :index
-        end
-      end
-    end
-
     resources :assignment_types, only: :index do
       resources :assignment_type_weights, only: :create
       post :sort, on: :collection
@@ -392,7 +384,15 @@ Rails.application.routes.draw do
     end
 
     resources :challenges, only: :index
-    resources :courses, only: [:index]
+
+    resources :courses, only: [:index] do
+      collection do
+        get "analytics"
+        resources :importers, only: [], module: :courses, param: :provider_id do
+          get "courses", action: :index
+        end
+      end
+    end
 
     get "course_creation", to: "course_creation#show"
     put "course_creation", to: "course_creation#update"

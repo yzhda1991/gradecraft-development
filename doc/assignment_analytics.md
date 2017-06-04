@@ -1,4 +1,4 @@
-# Assignment Stats
+# Assignment Analytics
 
   * currently only `include`d in the [Assignments](assignments) model
   * adds grade-related associations and methods

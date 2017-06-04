@@ -3,7 +3,7 @@
   * Is a [customizable term](customizable terms)
 
 ### Concerns
-  * [AssignmentStats](assignment_stats)
+  * [AssignmentAnalytics](assignment_analytics)
   * [Copyable](copyable)
   * [Gradable](gradable)
   * [MultipleFileAttributes](multiple_file_attributes)

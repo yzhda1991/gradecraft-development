@@ -1,4 +1,5 @@
 class API::CoursesController < ApplicationController
+  before_action :use_current_course, only: :analytics
   before_action :ensure_staff?, only: :course_creation
 
   # accessed by the dashboard
@@ -8,6 +9,15 @@ class API::CoursesController < ApplicationController
       { name: c.formatted_long_name, id: c.id, search_string: c.searchable_name }
     end
     render json: MultiJson.dump(@courses)
+  end
+
+  def analytics
+    if current_user_is_student?
+      @student = current_user
+      @user_score = @student.course_memberships.where(course_id: @course, auditing: false).pluck("score").first
+    else
+      @student = nil
+    end
   end
 
   # accessed by the dashboard

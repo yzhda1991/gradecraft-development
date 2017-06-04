@@ -1,0 +1,16 @@
+%box-plot-scores(ng-if="!vm.loading" graph-id="course-distribution-graph" data="vm.data")
+#course-distribution-graph
+
+.small(ng-if="vm.userScore")
+  %b Your Score:
+  {{vm.userScore | number }} points
+.small
+  %b Class Average:
+  {{vm.courseAverage | number }} points
+.small
+  %b Low Score:
+  {{vm.courseLowScore | number }} points
+.small
+  %b High Score:
+  {{vm.courseHighScore | number }} points
+

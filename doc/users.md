@@ -97,9 +97,6 @@ In addition to the methods described below, there are methods of the form `is_<r
   * `character_profile(course)` - returns the character profile for the passed in course
   * `archived_courses` - returns all of the user's finished courses
   * `cached_score_for_course(course)` - sets the instance variable `cached_score` to and returns the student's score in the passed in course. If the score is not present, zero is returned
-  * `scores_for_course(course)` - returns a hash, containing:
-    * `:scores` - scores of all students in the passed in course
-    * `:user_score` - student's score for the passed in course
   * `grade_for_course(course)` - returns the grade scheme element for the student's score in the course
   * `grade_level_for_course(course)` - returns name/level of the grade scheme element for the student's score in the course
   * `grade_letter_for_course(course)` - returns letter of the grade scheme element for the student's score in the course

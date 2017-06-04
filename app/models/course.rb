@@ -3,6 +3,7 @@ require_relative "role"
 class Course < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
+  include CourseAnalytics
 
   after_create :create_admin_memberships
 
@@ -147,19 +148,6 @@ class Course < ActiveRecord::Base
 
   def assignment_weight_spent_for_student(student)
     assignment_weight_for_student(student) >= total_weights.to_i
-  end
-
-  # Descriptive stats of the grades
-  def minimum_course_score
-    course_memberships.where(role: "student", auditing: false).minimum("score")
-  end
-
-  def maximum_course_score
-    course_memberships.where(role: "student", auditing: false).maximum("score")
-  end
-
-  def average_course_score
-    course_memberships.where(role: "student", auditing: false).average("score").to_i
   end
 
   def student_count

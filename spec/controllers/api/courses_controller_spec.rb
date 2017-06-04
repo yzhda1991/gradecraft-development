@@ -17,6 +17,15 @@ describe API::CoursesController do
       end
     end
 
+    describe "GET analytics" do
+      it "returns analytics data for the course" do
+        get :analytics, format: :json
+        expect(assigns(:course)).to eq(course)
+        expect(assigns(:student)).to be_nil
+        expect(assigns(:user_score)).to be_nil
+      end
+    end
+
     describe "GET timeline_events" do
       it "returns a list of events for the dashboard" do
         create :event, course: course, name: "Course-Event", due_at: Date.today
@@ -36,6 +45,15 @@ describe API::CoursesController do
         outside_course = create(:course) #shouldn't appear in index
         get :index, format: :json
         expect(assigns(:courses).length).to eq(1)
+      end
+    end
+
+    describe "GET analytics" do
+      it "returns analytics data for the course" do
+        get :analytics, format: :json
+        expect(assigns(:course)).to eq(course)
+        expect(assigns(:student)).to eq(student)
+        expect(assigns(:user_score)).to eq(student.score_for_course(course))
       end
     end
 
