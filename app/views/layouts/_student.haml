@@ -2,6 +2,9 @@
   / Display errors and notifications
   = render partial: "layouts/navigation/student_profile_tabs", locals: {nav_class: 'sub-nav'}
   %main.mainContent#main-content{role: "main"}
-    .page-header
-      %h1.pagetitle= title
-    = render partial: "layouts/content"
+    - if current_course.published
+      .page-header
+        %h1.pagetitle= title
+      = render partial: "layouts/content"
+    - else
+      = render partial: "layouts/course_unpublished"

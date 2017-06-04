@@ -14,6 +14,11 @@ namespace :courses do
     end
   end
 
+  desc "Sets all existing courses as Published"
+  task publish_all: :environment do
+    Course.update_all(published: true)
+  end
+
   desc "Removes all the orphaned data for course memberships"
   task :remove_orphaned_memberships, [:dry_run] => :environment do |t, args|
     args.with_defaults(dry_run: true)

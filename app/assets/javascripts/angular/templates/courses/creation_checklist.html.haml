@@ -1,0 +1,14 @@
+.course-creation-checklist(ng-if="!vm.loading")
+  .course-creation-checklist-title Course Creation
+
+  %course-creation-progress-bar(items="vm.checklistItems()")
+
+  %ul
+    %li.course-creation-checklist-item(ng-repeat="item in vm.checklistItems()")
+      %input(id="{{vm.inputId(item)}}"
+        type="checkbox"
+        ng-checked="item.done"
+        ng-click="vm.toggleChecklistItem(item)"
+      )
+      .title
+        %a{"ng-href"=>"{{item.url}}"} {{ vm.termFor(item.title) }}

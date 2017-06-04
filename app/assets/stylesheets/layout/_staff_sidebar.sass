@@ -37,7 +37,7 @@
       text-decoration: none
 
     a:hover, a:focus
-      background-color: $color-blue-3 !important
+      background-color: $color-blue-3
       color: $color-white
 
     span.sidebar-nav
@@ -45,7 +45,7 @@
       padding: 2.4px
 
 /* Styling of search fields in sidenav and nav */
-.sidebar, 
+.sidebar,
 ul.nav-pill
   .has-form
     margin-bottom: .75rem
@@ -96,7 +96,7 @@ ul.nav-pill
     li.active,
     li.active a:hover,
     li.active:hover
-      background-color: $color-blue-3 !important
+      background-color: $color-blue-3
       color: $color-white !important
       cursor: pointer
 
@@ -116,3 +116,45 @@ ul.nav-pill
     border: 0
     border-bottom: 1px dashed $color-white
     width: 78%
+
+.course-creation-checklist
+  background-color: $color-white
+  width: 100%
+  padding-bottom: .125rem
+  margin-bottom: .5rem
+  border-radius: $global-radius
+
+.course-creation-checklist-title
+  background-color: $color-red-1
+  color: $color-white
+  text-align: center
+  padding: .5rem 0
+  border-radius: $global-radius
+
+.course-creation-checklist-item
+  padding: .25rem .5rem
+  input[type="checkbox"]
+    float: left
+    margin-top: 0.55rem
+  .title a
+    color: $color-blue-3
+    margin-left: 1.5rem
+    &:hover, &:active
+      color: $color-blue-3
+      background-color: white
+      text-decoration: underline
+
+.progress-bar-container
+  width: 90%
+  height: 1rem
+  overflow: hidden
+  background-color: $color-grey-6
+  border-radius: .5rem
+  margin: .5rem 0 0 5%
+
+.progress-bar-fill
+  height: 1rem
+  background-color: $color-green-3
+
+.progress-bar-title
+  margin-left: 10%
