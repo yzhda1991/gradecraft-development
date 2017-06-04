@@ -1,5 +1,6 @@
 class API::CoursesController < ApplicationController
   before_action :use_current_course, only: :analytics
+  before_action :ensure_staff?, only: :course_creation
 
   # accessed by the dashboard
   # GET api/courses
