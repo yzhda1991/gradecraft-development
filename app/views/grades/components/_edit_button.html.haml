@@ -3,4 +3,5 @@
 - else
   - path = grade_assignment_group_path(grade.assignment, grade.group)
 
-= active_course_link_to "Edit Grade", path, class: "button"
+- if current_course.active? || current_user_is_admin?
+  = link_to glyph(:edit) + "Edit Grade", path, class: "button"
