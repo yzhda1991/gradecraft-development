@@ -68,5 +68,4 @@ end
 json.meta do
   json.term_for_challenges term_for :challenges
   json.allow_updates @allow_updates
-  json.include_in_predictor @include_in_predictor
 end

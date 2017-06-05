@@ -9,7 +9,6 @@ class API::ChallengesController < ApplicationController
       @team = current_student.team_for_course(current_course)
       @student = current_student
       @allow_updates = !impersonating? && current_course.active?
-      @include_in_predictor = true
 
       if !impersonating?
         @challenges.includes(:predicted_earned_challenges)
