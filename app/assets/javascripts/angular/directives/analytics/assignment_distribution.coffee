@@ -6,6 +6,7 @@
 
       initializeGraph = () ->
         vm.loading = false
+        plotGraph(AnalyticsService.assignmentData)
         angular.element($window).on 'resize', ->
           DebounceQueue.addEvent(
             "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
@@ -17,7 +18,7 @@
         vm.assignmentHighScore = AnalyticsService.assignmentData.assignment_high_score
         vm.data = AnalyticsService.assignmentData
         # plot graph when tab is activated for chart usage in jquery ui tabs
-        if angular.element($rootElement).hasClass('analytics-tab-panel')
+        if angular.element('.analytics-tab-panel').length > 0
           angular.element('#tabs').on 'tabsactivate', ->
             if event.currentTarget.classList.contains('class-analytics-tab')
               initializeGraph()
