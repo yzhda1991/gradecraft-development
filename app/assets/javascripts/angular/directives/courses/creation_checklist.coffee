@@ -7,7 +7,7 @@
     vm.loading = true
     vm.CourseService = CourseService
 
-    services(vm.courseId).then(()->
+    services().then(()->
       vm.loading = false
     )
 
@@ -25,9 +25,9 @@
       CourseService.updateCourseCreationItem(item)
   ]
 
-  services = (courseId)->
+  services = ()->
     promises = [
-      CourseService.getCourseCreation(courseId)
+      CourseService.getCourseCreation()
     ]
     return $q.all(promises)
 

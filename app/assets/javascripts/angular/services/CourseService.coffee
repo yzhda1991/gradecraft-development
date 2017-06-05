@@ -14,7 +14,7 @@
 
   #------ API Calls -----------------------------------------------------------#
 
-  getCourseCreation = (courseId)->
+  getCourseCreation = ()->
     $http.get("/api/course_creation").then(
       (response)->
         GradeCraftAPI.loadItem(courseCreation, "course_creation", response.data)
