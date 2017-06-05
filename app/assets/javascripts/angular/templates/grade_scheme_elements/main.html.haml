@@ -2,7 +2,7 @@
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
   %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements | orderBy: "-lowest_points"',
-                        'index'=>'{{$index}}',
+                        'ng-attr-index'=>'element.order = $index',
                         'grade_scheme_element'=>'element'}
 
   %button.button.right{'type'=>'button',

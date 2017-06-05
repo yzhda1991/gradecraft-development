@@ -18,9 +18,9 @@
 
     # For manually triggering form validation by child directives
     vm.updateFormValidity = () ->
-      _.each(vm.gradeSchemeElements, (element, index) ->
-        if vm.gradeSchemeElementsForm["point_threshold_#{index}"]?
-          vm.gradeSchemeElementsForm["point_threshold_#{index}"].$setValidity('validPointThreshold', !element.validationError?)
+      _.each(vm.gradeSchemeElements, (element) ->
+        if vm.gradeSchemeElementsForm["point_threshold_#{element.order}"]?
+          vm.gradeSchemeElementsForm["point_threshold_#{element.order}"].$setValidity('validPointThreshold', !element.validationError?)
       )
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->

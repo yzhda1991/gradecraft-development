@@ -5,7 +5,7 @@
   {
     scope:
       gradeSchemeElement: '='
-      index: '@'
+      index: '='
     require: '^^gradeSchemeElementsMassEditForm'
     templateUrl: 'grade_scheme_elements/element.html'
     restrict: 'E'
@@ -20,6 +20,10 @@
         , 3000)
 
       _save = (scope, showAlert) ->
+        # Ensure that the current state is still valid
+        _validateElements()
+        return if gseForm.gradeSchemeElementsForm.$invalid
+
         scope.status = 'saving'
         GradeSchemeElementsService.postGradeSchemeElements(null, true, showAlert).then(() ->
           scope.status = 'saved'
