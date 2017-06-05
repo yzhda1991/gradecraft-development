@@ -24,11 +24,7 @@ class Users::ImportersController < ApplicationController
   # Sends a CSV file to the user with a sample list of users in the proper format
   def download
     respond_to do |format|
-      format.csv do
-        file = generate_csv
-        send_data file,
-          filename: "Sample Users File - #{ Date.today}.csv"
-      end
+      format.csv { send_data StudentSampleExporter.new.generate_csv, filename: "Sample Users File - #{ Date.today}.csv" }
     end
   end
 
@@ -47,26 +43,5 @@ class Users::ImportersController < ApplicationController
         alert: "Failed to import #{params[:importer_provider_id]} users"
     end
   end
-end
 
-private
-
-def generate_csv(options={})
-  CSV.generate(options) do |csv|
-    csv << user_headers
-    csv << user_a_details
-    csv << user_b_details
-  end
-end
-
-def user_headers
-  ["First Name", "Last Name", "Username", "Email", "Team Name"].freeze
-end
-
-def user_a_details
-  ["John", "Doe", "johnd", "johnd@school.edu", "Team Doe"].freeze
-end
-
-def user_b_details
-  ["Jane", "Doe", "janed", "janed@school.edu", "Team Doe"].freeze
 end
