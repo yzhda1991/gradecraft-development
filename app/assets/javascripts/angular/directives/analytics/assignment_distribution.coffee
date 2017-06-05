@@ -1,12 +1,12 @@
 # box plot for assignment grade distribution
-@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this
       vm.loading = true
 
       initializeGraph = () ->
         vm.loading = false
-        plotGraph(AnalyticsService.assignmentData)
+        # plotGraph(AnalyticsService.assignmentData)
         angular.element($window).on 'resize', ->
           DebounceQueue.addEvent(
             "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
