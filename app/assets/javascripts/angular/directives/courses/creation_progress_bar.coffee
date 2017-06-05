@@ -7,8 +7,6 @@
 
     link: (scope, el, attr)->
 
-
-
       totalItems = ()->
         CourseService.creationChecklist().length
 
