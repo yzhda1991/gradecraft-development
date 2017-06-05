@@ -1,6 +1,4 @@
 - if current_user_is_staff?
   = render partial: "grade_scheme_elements/index_staff"
-- elsif current_user_is_student?
-  = render partial: "grade_scheme_elements/index_student"
 - else
   = render partial: "grade_scheme_elements/index_observer"

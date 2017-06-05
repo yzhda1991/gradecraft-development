@@ -1,12 +1,11 @@
 # The Grade Scheme Elements define the point thresholds earned at which students
 # earn course wide levels and grades
 class GradeSchemeElementsController < ApplicationController
-  before_action :ensure_staff?, except: [:index]
+  before_action :ensure_staff?
   before_action :use_current_course, only: [:mass_edit, :mass_update]
 
   def index
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_points_desc
-    @grade_scheme_elements = @grade_scheme_elements.with_lowest_points if !current_user_is_staff?
   end
 
   def edit
