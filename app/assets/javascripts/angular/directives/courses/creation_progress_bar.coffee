@@ -1,19 +1,19 @@
 # Iterates through levels in a criterion
 
-@gradecraft.directive 'courseCreationProgressBar', [() ->
+@gradecraft.directive 'courseCreationProgressBar', ['CourseService', (CourseService) ->
 
   return {
     templateUrl: 'courses/creation_progress_bar.html'
-    scope: {
-      items: "="
-    }
+
     link: (scope, el, attr)->
 
+
+
       totalItems = ()->
-        scope.items.length
+        CourseService.creationChecklist().length
 
       itemsComplete = ()->
-        _.reject(scope.items, {done: false}).length
+        _.reject(CourseService.creationChecklist(), {done: false}).length
 
       scope.barWidth = ()->
         itemsComplete() / totalItems() * 100 + "%"

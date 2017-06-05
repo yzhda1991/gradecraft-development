@@ -1,7 +1,7 @@
 .course-creation-checklist(ng-if="!vm.loading")
   .course-creation-checklist-title Course Creation
 
-  %course-creation-progress-bar(items="vm.checklistItems()")
+  %course-creation-progress-bar
 
   %ul
     %li.course-creation-checklist-item(ng-repeat="item in vm.checklistItems()")
