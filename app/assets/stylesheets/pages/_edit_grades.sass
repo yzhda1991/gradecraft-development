@@ -25,31 +25,21 @@ article.grade-form-fields
 
 section.grade-pass-fail, section.grade-release
   .binary-switch-socket
-    margin: 1em 1em 0 1em
+    margin: 0 1em
     border: 1px solid $color-blue-3
   .binary-switch-socket.off
     background: $color-red-1
     border: 1px solid $color-red-1
-  .binary-switch-label
-    margin-left: 1em
 
 section.grade-release
+  margin-bottom: 1rem
+  text-align: right
   .grade-release-switch-sandwich
-    width: 100%
-    clear: both
-  .grade-release-switch-sandwich-left
-    width: 42%
-  .grade-release-switch-sandwich-section
-    float: left
-    height: 2rem
-    width: 15%
-    &.long-section
-      width: 50%
-  .release-status-explanation
-    clear: both
+    display: flex
+    align-items: center
+    justify-content: flex-end
   .binary-switch-label
-    margin-top: .5rem;
-    font-size: 1.125rem;
+    font-size: 1.125rem
 
 section.grade-score-levels
   #grade-score-level-selector
@@ -103,7 +93,9 @@ hr.grading-divider
   width: 375px
 
 .lower-points-summary
-  margin: 1rem 0
+  margin: 1rem 0 1rem auto
+  width: 200px
+  text-align: right
   .grading-divider
     margin: 0.5rem 0
   p
