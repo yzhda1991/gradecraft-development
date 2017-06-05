@@ -18,9 +18,10 @@ table
 
   td
     padding: .5rem
-
-  td .center
-    text-align: center !important
+    &.center
+        text-align: center !important
+    .button-container.dropdown
+        text-align: right
 
   thead
     background-color: $color-blue-2
@@ -37,6 +38,9 @@ table
 
       span[tabindex="0"]
         color: $color-white
+
+      &.options
+        text-align: right
 
 .scroll-table
   overflow-x: scroll
