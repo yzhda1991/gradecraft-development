@@ -3,38 +3,38 @@
 
 @gradecraft.directive 'courseCreationChecklist', ['$q', 'CourseService', ($q, CourseService) ->
   CourseCreationController = [()->
-    vm = this
-    vm.loading = true
-    vm.CourseService = CourseService
+    vmChecklist = this
+    vmChecklist.loading = true
+    vmChecklist.CourseService = CourseService
 
-    services(vm.courseId).then(()->
-      vm.loading = false
+    checklistServices().then(()->
+      vmChecklist.loading = false
     )
 
-    vm.inputId = (item)->
-      "course_#{vm.courseId}-#{item.item}"
+    vmChecklist.inputId = (item)->
+      "course_#{vmChecklist.courseId}-#{item.item}"
 
-    vm.termFor = (term)->
-      vm.CourseService.termFor(term)
+    vmChecklist.termFor = (term)->
+      vmChecklist.CourseService.termFor(term)
 
-    vm.checklistItems = ()->
-      vm.CourseService.creationChecklist()
+    vmChecklist.checklistItems = ()->
+      vmChecklist.CourseService.creationChecklist()
 
-    vm.toggleChecklistItem = (item)->
+    vmChecklist.toggleChecklistItem = (item)->
       item.done = !item.done
       CourseService.updateCourseCreationItem(item)
   ]
 
-  services = (courseId)->
+  checklistServices = ()->
     promises = [
-      CourseService.getCourseCreation(courseId)
+      CourseService.getCourseCreation()
     ]
     return $q.all(promises)
 
   return {
     bindToController: true,
     controller: CourseCreationController,
-    controllerAs: 'vm',
+    controllerAs: 'vmChecklist',
     templateUrl: 'courses/creation_checklist.html',
   }
 ]
