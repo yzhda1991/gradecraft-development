@@ -53,7 +53,7 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `submissions_after_due` - fails if the date to no longer accepting submissions and the due date are present, and the due date exceeds the date for no longer accepting submissions
   * `submissions_after_open` - fails if the date to no longer accepting submissions and the open date are present, and the open date exceeds the date for no longer accepting submissions
   * boolean methods that must be set to either true or false: `student_logged`, `required`, `accepts_submissions`,
-  `release_necessary`, `visible`, `resubmissions_allowed`, `include_in_timeline`, `include_in_predictor`, `include_in_to_do`, `use_rubric`, `accepts_attachments`, `accepts_text`, `accepts_links`, `pass_fail`, `hide_analytics`, `visible_when_locked`, `show_name_when_locked`, `show_points_when_locked`, `show_description_when_locked`, `show_purpose_when_locked`
+  `release_necessary`, `visible`, `resubmissions_allowed`, `use_rubric`, `accepts_attachments`, `accepts_text`, `accepts_links`, `pass_fail`, `hide_analytics`, `visible_when_locked`, `show_name_when_locked`, `show_points_when_locked`, `show_description_when_locked`, `show_purpose_when_locked`
 
 ### Callbacks
 
@@ -67,7 +67,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
 ### Scopes
 
   * `group_assignments`
-  * `timelineable`
   * `chronological`
   * `alphabetical`
   * `ordered`
@@ -87,9 +86,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `grade_scope` - kind of assignment being graded. The three values are "Individual", "Group" and "Team". Defaults to "Individual"
   * `grading_due_at`
   * `hide_analytics` - boolean switch controlling whether the assignment's analytics should be hidden from students. The course model's `hide_analytics` attribute must be false for the checkbox to appear in the assignment form view
-  * `include_in_predictor` - boolean switch controlling whether the assignment can be seen by students in the grade predictor. Defaults to true
-  * `include_in_to_do` - boolean switch controlling whether students can see the assignment in the syllabus' todo sidebar ("Due This Week" in the view). Defaults to true
-  * `include_in_timeline` - boolean switch controlling whether the assignment will be included in the class' syllabus. If `open_at` or `due_at` is false, the assignment will not appear in the timeline, regardless of whether this is true. Defaults to true
   * `mass_grade_type` - quick grading type when an instructor is grading all students in the assignment at once. Each student would have the quick grading type next to their name. There are four types:
     * "Checkbox" - a checkbox that, when selected, gives the student the amount of points set by `full_points` multiplied by his/her assignment weight (if he/she has one)
     * "Select List" - a dropdown list, with the items being the grade levels

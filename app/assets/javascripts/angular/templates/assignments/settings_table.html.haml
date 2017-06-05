@@ -27,12 +27,6 @@
             %th(scope="col")
               %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
             %th(scope="col")
-              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="calendar" tip-text="Shown in Timeline")
-            %th(scope="col")
-              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="sliders" tip-text="Shown in Predictor")
-            %th(scope="col")
-              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="list" tip-text="Shown in Due This Week")
-            %th(scope="col")
               %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="pencil" tip-text="Logged By Students")
             %th(scope="col")
               %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="unlock" tip-text="Release Required")
@@ -54,12 +48,6 @@
               %assignment-setting(assignment-id="assignment.id" attribute="required" checked="assignment.required")
             %td
               %assignment-setting(assignment-id="assignment.id" attribute="accepts_submissions" checked="assignment.accepts_submissions")
-            %td
-              %assignment-setting(assignment-id="assignment.id" attribute="include_in_timeline" checked="assignment.include_in_timeline")
-            %td
-              %assignment-setting(assignment-id="assignment.id" attribute="include_in_predictor" checked="assignment.include_in_predictor")
-            %td
-              %assignment-setting(assignment-id="assignment.id" attribute="include_in_to_do" checked="assignment.include_in_to_do")
             %td
               %assignment-setting(assignment-id="assignment.id" attribute="student_logged" checked="assignment.student_logged")
             %td

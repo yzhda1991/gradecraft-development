@@ -242,7 +242,6 @@ def predictor_assignment_attributes
     :due_at,
     :grade_scope,
     :id,
-    :include_in_predictor,
     :name,
     :pass_fail,
     :full_points,

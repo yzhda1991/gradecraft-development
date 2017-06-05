@@ -43,8 +43,7 @@ class Assignment < ActiveRecord::Base
   validates_presence_of :name, :course_id, :assignment_type_id, :grade_scope, :threshold_points
 
   validates_inclusion_of :student_logged, :required, :accepts_submissions,
-  :release_necessary, :visible, :resubmissions_allowed, :include_in_timeline,
-  :include_in_predictor, :include_in_to_do, :use_rubric, :accepts_attachments,
+  :release_necessary, :visible, :resubmissions_allowed, :use_rubric, :accepts_attachments,
   :accepts_text, :accepts_links, :pass_fail, :hide_analytics, :visible_when_locked,
   :show_name_when_locked, :show_points_when_locked, :show_description_when_locked,
   :show_purpose_when_locked, in: [true, false], message: "must be true or false"
@@ -57,9 +56,6 @@ class Assignment < ActiveRecord::Base
   validates_with MaxOverMinValidator
 
   scope :group_assignments, -> { where grade_scope: "Group" }
-
-  # Filtering Assignments by where in the interface they are displayed
-  scope :timelineable, -> { where(include_in_timeline: true) }
 
   # Sorting assignments by different properties
   scope :chronological, -> { order("due_at ASC") }

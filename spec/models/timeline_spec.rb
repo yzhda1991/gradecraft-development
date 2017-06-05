@@ -27,7 +27,7 @@ describe Timeline do
     end
 
     context "with challenges for the course" do
-      let!(:challenge) { create :challenge, course: course, due_at: Date.today, include_in_timeline: true }
+      let!(:challenge) { create :challenge, course: course, due_at: Date.today }
       let!(:challenge_not_due) { create :challenge, course: course, due_at: nil }
 
       context "that accepts team challenges" do

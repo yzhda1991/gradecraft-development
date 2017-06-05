@@ -50,13 +50,6 @@ describe "api/assignments/index" do
     expect(json["data"].length).to eq(0)
   end
 
-  it "not include assignments if include_in_predictor is false" do
-    @assignment.update(include_in_predictor: false)
-    render
-    json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(0)
-  end
-
   describe "passes boolean states for icons" do
     it "adds is_required to model" do
       @assignment.update(required: true)

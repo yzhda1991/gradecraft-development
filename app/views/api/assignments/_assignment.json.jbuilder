@@ -20,9 +20,6 @@ json.attributes do
   json.visible                    assignment.visible
   json.required                   assignment.required
   json.accepts_submissions        assignment.accepts_submissions
-  json.include_in_timeline        assignment.include_in_timeline
-  json.include_in_predictor       assignment.include_in_predictor
-  json.include_in_to_do           assignment.include_in_to_do
   json.student_logged             assignment.student_logged
   json.release_necessary          assignment.release_necessary
 
@@ -130,4 +127,3 @@ json.relationships do
     end
   end
 end
-

@@ -6,7 +6,7 @@ class Timeline
   end
 
   def assignment_events
-    course.assignments.timelineable.with_dates
+    course.assignments.with_dates
   end
 
   def event_events
@@ -14,7 +14,7 @@ class Timeline
   end
 
   def challenge_events
-    course.challenges.timelineable.with_dates if course.has_team_challenges?
+    course.challenges.with_dates if course.has_team_challenges?
   end
 
   def events_by_due_date
