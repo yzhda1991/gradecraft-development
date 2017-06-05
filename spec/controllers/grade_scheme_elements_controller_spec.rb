@@ -80,15 +80,9 @@ describe GradeSchemeElementsController do
       login_user(student)
     end
 
-    describe "GET index" do
-      it "assigns grade scheme elements with point thresholds" do
-        get :index
-        expect(assigns(:grade_scheme_elements)).to eq([grade_scheme_element])
-      end
-    end
-
     describe "protected routes" do
       [
+        :index,
         :mass_edit,
         :mass_update
       ].each do |route|

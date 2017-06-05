@@ -1,0 +1,19 @@
+.pageContent
+  - if current_course.meeting_times.present?
+    %h3.bold Course Details
+    = glyph(:bank) + current_course.meeting_times + ' ' + current_course.location
+    %p
+  - if current_course.gameful_philosophy.present?
+    %h3.bold Grading Philosophy
+    = render partial: "courses/grading_philosophy", locals: {course: current_course}
+
+  - if current_course.grade_scheme_elements.present?
+    %h3.bold Grading Scheme
+    - if current_user_is_student?
+      = render partial: "grade_scheme_elements/index_student", locals: { "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }
+    - elsif current_user_is_observer?
+      = render partial: "grade_scheme_elements/index_observer", locals: { "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }
+
+  - if current_course.course_rules.present?
+    %h3.bold Course Rules
+    = current_course.course_rules

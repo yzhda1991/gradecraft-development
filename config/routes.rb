@@ -225,6 +225,7 @@ Rails.application.routes.draw do
     get :multiplier_choices
     get :per_assign
     get :research_gradebook
+    get :syllabus
   end
 
   controller :pages do

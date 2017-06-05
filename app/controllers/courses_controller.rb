@@ -120,6 +120,10 @@ class CoursesController < ApplicationController
     end
   end
 
+  def syllabus
+    
+  end
+
   private
 
   def course_params
