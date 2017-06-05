@@ -3,29 +3,31 @@
 
   = team_filter(@teams) if current_course.has_teams?
 
-  %table.dynatable.no-table-header.no-button-bar.scroll-table
-    %caption.sr-only All Awarded Achievements
-    %thead
-      %tr
-        %th{scope: "col"} First Name
-        %th{scope: "col"} Last Name
-        %th{:style => "display: none", } Badge Count
-        - @badges.each do |badge|
-          %th{:scope => "col", :id => badge.try(:id), :name => badge.try(:name)}= badge.name
-        - if current_course.valuable_badges?
-          %th{scope: "col"} Total Badge Score
-    %tbody
-      - @students.each do |student|
-        %tr
-          %td= link_to student.first_name, student_path(student)
-          %td= link_to student.last_name, student_path(student)
-          %td{:style => "display: none"}= points student.earned_badges_for_course(current_course).count
-          - @badges.each do |badge|
-            %td
-              -if student.earned_badge_for_badge(badge.id).count > 0
-                .img-cropper.xsmall-crop.earned-badge-table-img
-                  %img{:src => badge.try(:icon), :alt => badge.try(:name), :title => badge.name}
-                %span x#{student.earned_badges_for_badge_count(badge.id)}
+  .scroll-table
+    %div
+      %table.dynatable.no-table-header.no-button-bar
+        %caption.sr-only All Awarded Achievements
+        %thead
+          %tr
+            %th{scope: "col"} First Name
+            %th{scope: "col"} Last Name
+            %th{:style => "display: none", } Badge Count
+            - @badges.each do |badge|
+              %th{:scope => "col", :id => badge.try(:id), :name => badge.try(:name)}= badge.name
+            - if current_course.valuable_badges?
+              %th{scope: "col"} Total Badge Score
+        %tbody
+          - @students.each do |student|
+            %tr
+              %td= link_to student.first_name, student_path(student)
+              %td= link_to student.last_name, student_path(student)
+              %td{:style => "display: none"}= points student.earned_badges_for_course(current_course).count
+              - @badges.each do |badge|
+                %td
+                  -if student.earned_badge_for_badge(badge.id).count > 0
+                    .img-cropper.xsmall-crop.earned-badge-table-img
+                      %img{:src => badge.try(:icon), :alt => badge.try(:name), :title => badge.name}
+                    %span x#{student.earned_badges_for_badge_count(badge.id)}
 
-          - if current_course.valuable_badges?
-            %td= points student.earned_badge_score_for_course(current_course)
+              - if current_course.valuable_badges?
+                %td= points student.earned_badge_score_for_course(current_course)
