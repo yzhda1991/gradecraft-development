@@ -92,6 +92,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignments_grades_mass_edit
     assignments_index
+    breadcrumb('Quick Grading ' + objects[:assignment].name)
   end
 
   def assignment_type_weights_index
