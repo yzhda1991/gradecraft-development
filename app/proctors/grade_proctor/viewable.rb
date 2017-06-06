@@ -17,7 +17,7 @@ class GradeProctor
       course = options[:course] || grade.course
 
       grade_for_course?(course) &&
-        (user.is_staff?(course) || (grade_for_user?(user) && grade.student_visible?))
+        (user.is_staff?(course) || (grade_for_user?(user) && grade.is_student_visible?))
     end
   end
 end
