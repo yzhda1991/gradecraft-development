@@ -1,4 +1,4 @@
-describe StudentSampleExporter, focus: true do
+describe StudentSampleExporter do
 
   subject { StudentSampleExporter.new }
 
