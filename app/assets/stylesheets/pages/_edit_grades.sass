@@ -23,7 +23,7 @@ article.grade-form-fields
   section:not(:last-child)
     margin-bottom: 0.5rem
 
-section.grade-pass-fail, section.grade-release
+section.grade-pass-fail, section.grade-visible, section.grade-complete
   .binary-switch-socket
     margin: 0 1em
     border: 1px solid $color-blue-3
@@ -31,10 +31,10 @@ section.grade-pass-fail, section.grade-release
     background: $color-red-1
     border: 1px solid $color-red-1
 
-section.grade-release
+section.grade-visible, section.grade-complete
   margin-bottom: 1rem
   text-align: right
-  .grade-release-switch-sandwich
+  .grade-switch-sandwich
     display: flex
     align-items: center
     justify-content: flex-end

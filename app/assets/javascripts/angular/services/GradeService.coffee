@@ -44,17 +44,21 @@
   setGradeToPass = ()->
     modelGrade.pass_fail_status = "Pass"
 
-  toggeleGradePassFailStatus = ()->
+  toggleGradePassFailStatus = ()->
     modelGrade.pass_fail_status =
       if modelGrade.pass_fail_status == "Pass" then "Fail" else "Pass"
 
-  isSetToRelease = ()->
-    modelGrade.pending_status == "Released"
+  isSetToComplete = ()->
+    modelGrade.submit_as_complete
 
-  toggeleGradeReleaseStatus = ()->
-    modelGrade.pending_status =
-      if modelGrade.pending_status == ("Released" || "Graded") then "In Progress" else "Released"
+  toggleComplete = ()->
+    modelGrade.submit_as_complete = !modelGrade.submit_as_complete
 
+  isSetToStudentVisible = ()->
+    modelGrade.submit_as_student_visible
+
+  toggleStudentVisible = ()->
+    modelGrade.submit_as_student_visible = !modelGrade.submit_as_student_visible
 
   #------- grade API calls ----------------------------------------------------#
 
@@ -74,15 +78,14 @@
     GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
     GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
 
-    # - Uncomment this line if we want to force a status on autosave:
-    # - If no status has been sent, we set status as "In Progress"
-    # - to be returned on first autosave, in order to avoid faculty seeing
-    # - partial grade information but no status.
-    # - This will make the check for "disabled" on the submit buttons obsolete
-    #  modelGrade.status = "In Progress" if ! modelGrade.status
 
-    # We bind status changes to pending_status and only update on submit
-    modelGrade.pending_status =  modelGrade.status || "In Progress"
+    # We default to complete on submission, but not on autosave
+    modelGrade.submit_as_complete = modelGrade.complete || true
+
+    # we only save changes the student_visible status on submission,
+    # to avoid releasing a grade on autosave
+    modelGrade.submit_as_student_visible = modelGrade.student_visible || false
+
     thresholdPoints = response.data.meta.threshold_points
     isRubricGraded = response.data.meta.is_rubric_graded
 
@@ -173,10 +176,8 @@
 
   # Final "Submit Grade" actions, includes cleanup and redirect
   submitGrade = (returnURL=null)->
-    if ! modelGrade.pending_status
-      return alert "You must select a grade status before you can submit this grade"
-
-    modelGrade.status =  modelGrade.pending_status
+    modelGrade.student_visible =  modelGrade.submit_as_student_visible
+    modelGrade.complete =  modelGrade.submit_as_complete
 
     return false unless confirm _confirmMessage()
 
@@ -206,7 +207,8 @@
             feedback: modelGrade.feedback
             group_id: group_id
             raw_points: modelGrade.raw_points
-            status: modelGrade.status
+            complete: modelGrade.complete
+            student_visible: modelGrade.student_visible
           }
           criterion_grades: criterionGrades
         }
@@ -341,14 +343,16 @@
     fileUploads: fileUploads
     criterionGrades: criterionGrades
 
-    isSetToRelease: isSetToRelease
-    toggeleGradeReleaseStatus: toggeleGradeReleaseStatus
+    isSetToComplete: isSetToComplete
+    toggleComplete: toggleComplete
+    isSetToStudentVisible: isSetToStudentVisible
+    toggleStudentVisible: toggleStudentVisible
 
     calculateGradePoints: calculateGradePoints
 
     gradeIsPassing: gradeIsPassing
     setGradeToPass: setGradeToPass
-    toggeleGradePassFailStatus: toggeleGradePassFailStatus
+    toggleGradePassFailStatus: toggleGradePassFailStatus
 
     getGrade: getGrade
     queueUpdateGrade: queueUpdateGrade
