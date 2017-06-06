@@ -128,12 +128,13 @@
             -# If text style
             %text_points{"ng-if"=>"vm.selectedGradingStyle() === 'text'"}
               %input{"type"=>"text",
+                     "gc-number-input"=>"",
                      "value"=>"grade.raw_points",
                      "ng-model"=>"grade.raw_points",
                      "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]"}
 
           %td{"ng-if"=>"!vm.assignment.pass_fail"}
-            %span= "{{grade.raw_points || '-'}} / {{vm.assignment.full_points}}"
+            %span= "{{(grade.raw_points | number) || '-'}} / {{vm.assignment.full_points | number}}"
 
     .submit-buttons
       %ul

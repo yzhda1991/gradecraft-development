@@ -1,8 +1,8 @@
 # Selector for updating quick grade styling on a mass edit form
 @gradecraft.directive 'quickGradeStylingSelector', ['AssignmentGradesService', (AssignmentGradesService) ->
-  radioButtonOption = { value: 'radio', label: 'Radio Button (Quick Grade Style)' }
-  selectOption = { value: 'select', label: 'Select Menu (Quick Grade Style)' }
-  textOption = { value: 'text', label: 'Text Box (Quick Grade Style)' }
+  radioButtonOption = { value: 'radio', label: 'Radio Button' }
+  selectOption = { value: 'select', label: 'Select Menu' }
+  textOption = { value: 'text', label: 'Text Box' }
 
   {
     templateUrl: 'assignments/grades/quick_grade_styling_selector.html'
