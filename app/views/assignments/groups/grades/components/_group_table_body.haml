@@ -3,6 +3,7 @@
     %td{:style => "text-align: right"}= link_to gbg[:group].name, group_path(gbg[:group])
     %td.center
       = f.simple_fields_for "grades_by_group[#{i}]", i do |gf|
+        -# Do we still need the status and instructor_modified?
         - if !gbg[:grade].status
           = gf.hidden_field :status, value: "Graded"
         = gf.hidden_field :instructor_modified, value: true

@@ -1,6 +1,7 @@
 @gradecraft.factory 'AssignmentGradesService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   grades = []
+  gradesByGroup = []
   assignment = {}
   assignmentScoreLevels = []
   _selectedGradingStyle = ""
@@ -16,6 +17,18 @@
         GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
         GradeCraftAPI.logResponse(response)
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  getGroupAssignmentWithGrades = (id) ->
+    $http.get("/api/assignments/#{id}/groups/grades").then(
+      (response) ->
+        GradeCraftAPI.loadItem(assignment, "assignment", response.data)
+        GradeCraftAPI.loadFromIncluded(gradesByGroup, "group_grade", response.data)
+        GradeCraftAPI.loadFromIncluded(assignmentScoreLevels, "assignment_score_level", response.data)
+        GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
+        GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
       (response) ->
         GradeCraftAPI.logResponse(response)
     )
@@ -41,12 +54,14 @@
 
   {
     grades: grades
+    gradesByGroup: gradesByGroup
     assignment: assignment
     assignmentScoreLevels: assignmentScoreLevels
     selectedGradingStyle: selectedGradingStyle
     setDefaultGradingStyle: setDefaultGradingStyle
     assignmentScoreLevels: assignmentScoreLevels
     getAssignmentWithGrades: getAssignmentWithGrades
+    getGroupAssignmentWithGrades: getGroupAssignmentWithGrades
     termFor: termFor
   }
 ]

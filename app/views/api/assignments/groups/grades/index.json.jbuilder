@@ -23,6 +23,7 @@ json.included do
       json.group_name                       gbg[:group].name
       json.raw_points                       gbg[:grade].raw_points
       json.pass_fail_status                 gbg[:grade].pass_fail_status
+      json.graded                           gbg[:grade].persisted?
     end
   end
 
@@ -36,4 +37,9 @@ json.included do
       json.formatted_name                   level.formatted_name
     end
   end if @assignment.has_levels?
+end
+
+json.meta do
+  json.term_for_pass                        term_for :pass
+  json.term_for_fail                        term_for :fail
 end
