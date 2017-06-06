@@ -49,5 +49,15 @@ describe Users::ImportersController do
         end
       end
     end
+
+    describe "GET #download" do
+      it "returns sample csv data" do
+        get :download, params: { importer_provider_id: "csv", format: "csv" }
+
+        expect(response.body).to \
+          include("First Name","Last Name","Username","Email","Team Name")
+      end
+    end
+
   end
 end
