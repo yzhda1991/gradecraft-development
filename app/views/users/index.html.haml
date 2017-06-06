@@ -26,10 +26,10 @@
             - if user.avatar_file_name.present?
               %img.img-rounded{:src => user.avatar_file_name, :width => 30}
             = link_to user.first_name, student_path(user) if user_is_student
-            = link_to user.first_name, staff_path(user) if user_is_staff
+            = link_to user.first_name, staff_path(user) if !user_is_student
           %td
             = link_to user.last_name, student_path(user) if user_is_student
-            = link_to user.last_name, staff_path(user) if user_is_staff
+            = link_to user.last_name, staff_path(user) if !user_is_student
           %td= course_membership.role.capitalize
           %td
             - user.courses.each do |course|
