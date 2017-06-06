@@ -19,11 +19,11 @@
       %input.low-range{'type'=>'text',
         'name'=>'point_threshold_{{index}}',
         'ng-model'=>'gradeSchemeElement.lowest_points',
-        'ng-model-options'=>"{ updateOn: 'blur' }",
         'ng-change'=>"persistChanges()",
         'required'=>'',
         'gc-number-input'=>'',
-        'allow-negatives'=>'false'}
+        'allow-negatives'=>'false',
+        'maintain-focus'=>''}
 
     %span{'ng-show'=>'status === "saving"'}
       %i.fa.fa-spinner.fa-spin.fa-fw
