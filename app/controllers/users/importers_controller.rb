@@ -12,7 +12,8 @@ class Users::ImportersController < ApplicationController
     controller.redirect_path \
       users_importer_users_path(params[:importer_provider_id], params[:id])
   end
-  before_action :link_canvas_credentials, if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
+  before_action :link_canvas_credentials, except: :index,
+    if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
   before_action :require_authorization, except: [:index, :download]
 
   # GET /users/importers/:importer_provider_id/users
@@ -24,7 +25,8 @@ class Users::ImportersController < ApplicationController
   # Sends a CSV file to the user with a sample list of users in the proper format
   def download
     respond_to do |format|
-      format.csv { send_data StudentSampleExporter.new.generate_csv, filename: "Sample Users File - #{ Date.today}.csv" }
+      format.csv { send_data StudentSampleExporter.new.generate_csv,
+        filename: "Sample Users File - #{ Date.today}.csv" }
     end
   end
 
