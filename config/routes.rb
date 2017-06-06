@@ -119,7 +119,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :grades, only: [:show, :destroy, :edit, :update] do
+  resources :grades, only: [:show, :destroy, :edit] do
     member do
       post :exclude
       post :feedback_read

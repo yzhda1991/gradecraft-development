@@ -37,33 +37,6 @@ class GradesController < ApplicationController
     @grade_next_path = path_for_next_grade @grade, @team
   end
 
-  # To avoid duplicate grades, we don't supply a create method. Update will
-  # create a new grade if none exists, and otherwise update the existing grade
-  # PUT /grades/:id
-  def update
-    grade = Grade.find params[:id]
-
-    if grade.update_attributes grade_params.merge(graded_at: DateTime.now, instructor_modified: true)
-      if GradeProctor.new(grade).viewable?
-        GradeUpdaterJob.new(grade_id: grade.id).enqueue
-      end
-      if params[:redirect_to_next_grade].present?
-        path = path_for_next_grade grade
-      elsif params[:redirect_to_next_team_grade].present?
-        team = grade.student.team_for_course current_course
-        path = path_for_next_grade grade, team
-      else
-        path = assignment_path(grade.assignment)
-      end
-      redirect_to path,
-        notice: "#{grade.student.name}'s #{grade.assignment.name} was successfully updated"
-    else # failure
-      redirect_to edit_grade_path(grade),
-        alert: "#{grade.student.name}'s #{grade.assignment.name} was not successfully "\
-          "submitted! #{grade.errors.full_messages.first}"
-    end
-  end
-
   # POST /grades/:id/exclude
   def exclude
     grade = Grade.find(params[:id])
