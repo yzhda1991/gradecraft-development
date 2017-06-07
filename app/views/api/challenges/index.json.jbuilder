@@ -1,5 +1,5 @@
 json.data @challenges do |challenge|
-  next unless !@student.present? || challenge.visible?
+  next unless !current_student.present? || challenge.visible?(current_student.team_for_course(current_course))
   json.type "challenges"
   json.id challenge.id.to_s
   json.attributes do
