@@ -1,28 +1,24 @@
 # box plot for assignment grade distribution
-@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentDistributionAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this
       vm.loading = true
-
-      initializeGraph = () ->
-        vm.loading = false
-        angular.element($window).on 'resize', ->
-          DebounceQueue.addEvent(
-            "graphs", 'assignmentDistributionAnalytics', refreshGraph, [], 250
-          )
 
       services(vm.assignmentId, vm.studentId).then(()->
         vm.assignmentAverage = AnalyticsService.assignmentData.assignment_average
         vm.assignmentLowScore = AnalyticsService.assignmentData.assignment_low_score
         vm.assignmentHighScore = AnalyticsService.assignmentData.assignment_high_score
         vm.data = AnalyticsService.assignmentData
+        vm.loading = false
+
+        angular.element($window).on 'resize', ->
+          refreshGraph()
+
         # plot graph when tab is activated for chart usage in jquery ui tabs
-        if angular.element($rootElement).hasClass('analytics-tab-panel')
+        if angular.element('.analytics-tab-panel').length > 0
           angular.element('#tabs').on 'tabsactivate', ->
             if event.currentTarget.classList.contains('class-analytics-tab')
-              initializeGraph()
-        else
-          initializeGraph()
+              refreshGraph()
       )
     ]
 

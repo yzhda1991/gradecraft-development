@@ -1,7 +1,7 @@
 # bar graph for assignment grades earned
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsScoresEarnedCtrl = [()->
       vm = this
 
@@ -14,7 +14,7 @@
 
       services(vm.assignmentId, vm.studentId).then(()->
         # plot graph when tab is activated for chart usage in jquery ui tabs
-        if angular.element($rootElement).hasClass('analytics-tab-panel')
+        if angular.element('.analytics-tab-panel').length > 0
           angular.element('#tabs').on 'tabsactivate', ->
             if event.currentTarget.classList.contains('class-analytics-tab')
               initializeGraph()
