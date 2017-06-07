@@ -8,7 +8,6 @@ json.data do
     json.has_levels                         @assignment.has_levels?
     json.assignment_score_level_count       @assignment.assignment_score_levels.count if @assignment.has_levels?
     json.full_points                        @assignment.full_points
-    json.grade_checkboxes                   @assignment.grade_checkboxes?
   end
 end
 

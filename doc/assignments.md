@@ -90,11 +90,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `include_in_predictor` - boolean switch controlling whether the assignment can be seen by students in the grade predictor. Defaults to true
   * `include_in_to_do` - boolean switch controlling whether students can see the assignment in the syllabus' todo sidebar ("Due This Week" in the view). Defaults to true
   * `include_in_timeline` - boolean switch controlling whether the assignment will be included in the class' syllabus. If `open_at` or `due_at` is false, the assignment will not appear in the timeline, regardless of whether this is true. Defaults to true
-  * `mass_grade_type` - quick grading type when an instructor is grading all students in the assignment at once. Each student would have the quick grading type next to their name. There are four types:
-    * "Checkbox" - a checkbox that, when selected, gives the student the amount of points set by `full_points` multiplied by his/her assignment weight (if he/she has one)
-    * "Select List" - a dropdown list, with the items being the grade levels
-    * "Radio Buttons" - each radio button is a grade level
-    * "Text" - text field that accepts an integer between 0 and `full_points`
   * `max_submissions`
   * `name` - name of assignment, required attribute
   * `notify_released` - whether a student should be notified by email when a grade is awarded. Defaults to true
@@ -162,11 +157,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
 
   * `is_individual?` - returns true if the grade scope is set to "Individual"
   * `has_groups?` - returns true if the grade scope is set to "Group"
-  * there are four methods returning true depending on what the mass grading type, also known as the quick grading type, is set to (*see `mass_grade_type` in attributes section under Grades below*):
-    * `grade_checkboxes?` - "Checkbox"
-    * `grade_select?` - "Select List". Assignment score levels must be present for this to return true
-    * `grade_radio?` - "Radio Buttons". Assignment score levels must be present for this to return true
-    * `grade_text?` - "Text"
 
 #### Unlocks
 

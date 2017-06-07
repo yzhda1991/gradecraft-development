@@ -30,12 +30,11 @@ Grading without using a rubric means that you can do one of two things:
 
   * used in both Assignment and Challenge Grades
   * allows instructors to grade all students or teams in an assignment or challenge at once
-  * input type is determined by the `mass_grade_type` attribute in the assignment model for assignments, and is always a text box for challenges
   * mass grading is done in the `mass_edit` views in both the [Grades](https://github.com/UM-USElab/gradecraft-development/blob/master/app/views/challenge_grades/mass_edit.html.haml) and [Challenge Grades](https://github.com/UM-USElab/gradecraft-development/blob/master/app/views/grades/mass_edit.html.haml) folders
 
 #### Groups
 
-Setting grades for group assignments is currently limited to professors. `mass_edit` and `mass_update` methods account for both individual and group grading in the `Assignments::GradesController` in order to allow reuse of the existing route. `mass_update` for groups calls the `CreatesManyGroupGrades` service. 
+Setting grades for group assignments is currently limited to professors. `mass_edit` and `mass_update` methods account for both individual and group grading in the `Assignments::GradesController` in order to allow reuse of the existing route. `mass_update` for groups calls the `CreatesManyGroupGrades` service.
 
 The actions that describe the `CreatesManyGroupGrades` service are as follows:
 

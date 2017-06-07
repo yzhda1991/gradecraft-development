@@ -354,13 +354,6 @@ describe Assignment do
     end
   end
 
-  describe "#grade_checkboxes?" do
-    it "should render checkboxes if the mass grade type is checkbox" do
-      subject.mass_grade_type = "Checkbox"
-      expect(subject).to be_grade_checkboxes
-    end
-  end
-
   describe "#grade_for_student" do
     let(:student) { create :user }
     before { subject.save }
@@ -382,39 +375,6 @@ describe Assignment do
       grade = build(:grade, final_points: 123)
       subject.assignment_score_levels.build name: "First level", points: 456
       expect(subject.grade_level(grade)).to be_nil
-    end
-  end
-
-  describe "#grade_radio?" do
-    it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
-      subject.mass_grade_type = "Radio Buttons"
-      subject.assignment_score_levels.build
-      expect(subject).to be_grade_radio
-    end
-
-    it "should not render a radio list if there are no assignment score levels" do
-      subject.mass_grade_type = "Radio List"
-      expect(subject).to_not be_grade_radio
-    end
-  end
-
-  describe "#grade_select?" do
-    it "should render a select if the mass grade type is select and there are assignment score levels" do
-      subject.mass_grade_type = "Select List"
-      subject.assignment_score_levels.build
-      expect(subject).to be_grade_select
-    end
-
-    it "should not render a select if there are no assignment score levels" do
-      subject.mass_grade_type = "Select List"
-      expect(subject).to_not be_grade_select
-    end
-  end
-
-  describe "#grade_text?" do
-    it "should render a text box if the mass grade type is text" do
-      subject.mass_grade_type = "Text"
-      expect(subject).to be_grade_text
     end
   end
 

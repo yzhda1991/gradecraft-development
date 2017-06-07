@@ -49,7 +49,6 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
 
 ##### Unused
 
-  * `mass_grade_type`
   * `levels`
 
 #### Validation Methods
