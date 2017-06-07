@@ -49,96 +49,6 @@ describe GradesController do
       end
     end
 
-    describe "PUT update" do
-      it "updates the grade" do
-        put :update, params: { id: grade.id, grade: { raw_points: 12345 }}
-        expect(grade.reload.score).to eq(12345)
-        expect(response).to redirect_to(assignment_path(grade.assignment))
-      end
-
-      it "timestamps the grade" do
-        current_time = DateTime.now
-        put :update, params: { id: grade.id, grade: { raw_points: 12345 }}
-        expect(grade.reload.graded_at).to be > current_time
-      end
-
-      it "attaches the student submission" do
-        submission = create :submission, assignment: assignment, student: student
-        grade_params = { raw_points: 12345, submission_id: submission.id }
-        put :update, params: { id: grade.id, grade: grade_params }
-        grade = Grade.last
-        expect(grade.submission).to eq submission
-      end
-
-      it "handles commas in raw score params" do
-        put :update, params: { id: grade.id, grade: { raw_points: "12,345" }}
-        expect(grade.reload.score).to eq(12345)
-      end
-
-      it "handles reverting nil raw score" do
-        put :update, params: { id: grade.id, grade: { raw_points: nil }}
-        expect(grade.reload.score).to eq(nil)
-      end
-
-      it "reverts empty raw score to nil, not zero" do
-        put :update, params: { id: grade.id, grade: { raw_points: "" }}
-        expect(grade.reload.score).to eq(nil)
-      end
-
-      it "updates badges earned on the grade" do
-        earned_badge = create :earned_badge, grade: grade, student_visible: false
-        put :update, params: { id: grade.id, grade: { status: "Graded" }}
-        expect(earned_badge.reload.student_visible).to be_truthy
-      end
-
-      context "when grading a series of students" do
-        let!(:next_student) do
-          create(:course_membership, :student, course: course,
-            user: create(:user, last_name: "Zzz")).user
-        end
-
-        it "creates and redirects to grade the next ungraded student when not accepting submissions" do
-          assignment.update(accepts_submissions: false)
-          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "In Progress"}, redirect_to_next_grade: true}
-          expect(response).to redirect_to(edit_grade_path(
-            Grade.where(
-              student: next_student,
-              assignment: assignment).first)
-          )
-        end
-
-        it "creates and redirects to grade the next student with submission" do
-          create :submission, assignment: assignment, student: student
-          create :submission, assignment: assignment, student: next_student
-          put :update, params: { id: grade.id, grade: { raw_points: 12345 }, redirect_to_next_grade: true}
-          expect(response).to redirect_to(edit_grade_path(
-            Grade.where(
-              student: next_student,
-              assignment: assignment).first)
-          )
-        end
-
-        it "redirects by team when team in params" do
-          assignment.update(accepts_submissions: false)
-          team = create :team, course: course
-          create :team_membership, team: team, student: student
-          create :team_membership, team: team, student: next_student
-          put :update, params: { id: grade.id, grade: { raw_points: 12345, status: "In Progress"},
-                                 redirect_to_next_team_grade: true}
-          expect(response).to redirect_to(
-            edit_grade_path(
-              Grade.where(student: next_student, assignment: assignment).first, team_id: team.id )
-          )
-        end
-      end
-
-      it "redirects on failure" do
-        allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
-        put :update, params: { id: grade.id, grade: { full_points: 100 }}
-        expect(response).to redirect_to(edit_grade_path(grade))
-      end
-    end
-
     describe "POST exclude" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \
@@ -262,7 +172,6 @@ describe GradesController do
       it "all redirect to root" do
         assignment.groups << group
         [ Proc.new { get :edit, params: { id: grade.id }},
-          Proc.new { get :update, params: { id: grade.id }},
           Proc.new { delete :destroy, params: { id: grade.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
