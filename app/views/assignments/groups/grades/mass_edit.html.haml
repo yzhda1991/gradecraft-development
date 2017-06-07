@@ -6,17 +6,3 @@
                   "data-form-cancel-route"=>"#{assignment_path(@assignment)}",
                   "data-authenticity-token"=>"#{form_authenticity_token}",
                   "data-term-for-groups"=>"#{term_for :groups}"}
-
-  -# #massGrade
-  -#   = simple_form_for presenter.assignment, method: :put, :url => mass_update_assignment_groups_grades_path(presenter.assignment) do |f|
-  -#
-  -#     %table
-  -#       %thead
-  -#         %tr
-  -#           = render partial: "assignments/groups/grades/components/group_table_head", locals: { presenter: presenter }
-  -#       = render partial: "assignments/groups/grades/components/group_table_body", locals: { presenter: presenter, f: f }
-  -#
-  -#     .submit-buttons
-  -#       %ul
-  -#         %li= f.button :submit, "Submit Grades"
-  -#         %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
