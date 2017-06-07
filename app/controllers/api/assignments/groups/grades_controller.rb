@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class API::Assignments::Groups::GradesController < ApplicationController
   before_action :ensure_staff?
 
