@@ -6,7 +6,7 @@
 
 module Services
   module Actions
-    class UpdatesNewFields
+    class UpdatesGradeStatusFields
       extend LightService::Action
 
       # expects a grade with a current status

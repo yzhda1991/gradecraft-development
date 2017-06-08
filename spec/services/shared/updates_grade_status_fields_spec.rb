@@ -1,4 +1,4 @@
-describe Services::Actions::UpdatesNewFields do
+describe Services::Actions::UpdatesGradeStatusFields do
   let(:grade) { create :grade }
 
   it "expect grade to be added to the context" do
