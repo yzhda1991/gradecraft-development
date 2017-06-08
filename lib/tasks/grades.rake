@@ -33,12 +33,28 @@ namespace :grades do
 
   desc "Update complete and student_visible fields on existing grades"
   task update_status_fields: :environment do
-    Grade.each(batch_size: 500) do |grade|
+    Grade.find_each(batch_size: 500) do |grade|
       complete = false
       student_visible = false
 
-      g.update_attribute(:complete, complete) if complete
-      g.update_attribute(:student_visible, student_visible) if student_visible
+      if grade.status == "In Progress"
+        complete = false
+        student_visible = false
+      elsif grade.status == "Graded"
+        if grade.assignment.release_necessary
+          complete = true
+          student_visible = false
+        else
+          complete = true
+          student_visible = true
+        end
+      elsif grade.status == "Released"
+        complete = true
+        student_visible = true
+      end
+      grade.update_attribute(:complete, complete) if complete
+      grade.update_attribute(:student_visible, student_visible) if student_visible
+      puts "#{grade.id}: status: #{grade.status}, complete: #{grade.complete}, student_visible: #{grade.student_visible}"
     end
   end
 end

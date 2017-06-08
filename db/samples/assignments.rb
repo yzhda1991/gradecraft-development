@@ -324,6 +324,40 @@ other desirable developments follow of themselves. - Marjorie Spock",
   }
 }
 
+@assignments[:unreleased] = {
+  quotes: {
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Release Required, In Progress Grades",
+    open_at: 3.weeks.from_now,
+    due_at: 3.weeks.from_now + 0.05,
+    release_necessary: true
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "Graded"
+  }
+}
+
+@assignments[:grading_in_progress] = {
+  quotes: {
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "In Progress Grades",
+    open_at: 3.weeks.from_now,
+    due_at: 3.weeks.from_now + 0.05,
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    status: "In Progress"
+  }
+}
+
+
 @assignments[:rubric_assignment] = {
   quotes: {
     assignment_created: "We spend the first year of a child's life teaching \
@@ -334,10 +368,7 @@ to teach children to learn how to read... if they can't even fit inside the \
 building? --Derek Zoolander",
     submissions_created: "I was the intellectual equivalent of a 98-pound \
 weakling! I would go to the beach and people would kick copies of Byron in my \
-face! - John Keating",
-    grade_created: "Volumetric flask is for general mixing and titration. You \
-wouldn't apply heat to a volumetric flask. That's what a boiling flask is \
-for. Did you learn nothing from my chemistry class? - Walter H. White",
+face! - John Keating"
   },
   assignment_type: :grading,
   attributes: {
@@ -398,7 +429,7 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    status: "Released",
     feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>',
   },
   rubric: true,
@@ -844,7 +875,7 @@ should not have a visible grade",
   participation: 90,
   grade_attributes: {
     raw_points: -> { qd_curve(15000) },
-    status: "Graded"
+    status: "Released"
   },
   prediction: true,
   prediction_attributes: {
@@ -1721,6 +1752,7 @@ the speed, and the route.― Jay Cross",
     accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
+    release_necessary: true,
   },
   grades: true,
   participation: 90,
@@ -1744,6 +1776,7 @@ uncertainty! - Douglas Adams"
     accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
+    release_necessary: true,
   },
   grades: true,
   participation: 90,

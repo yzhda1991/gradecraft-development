@@ -6,7 +6,6 @@ require_relative "creates_grade/runs_grade_updater_job"
 require_relative "creates_grade/saves_grade"
 require_relative "creates_grade/squish_grade_history"
 
-
 # This grade service is called from GradesController#update
 # It's possible this service could be combined with CreatesGrade
 # when grading routes are cleaned up and params are standardized
