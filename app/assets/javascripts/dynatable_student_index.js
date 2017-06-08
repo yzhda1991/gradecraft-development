@@ -30,6 +30,9 @@ if($('#student-index-table').length > 0 ) {
       dynatable.queries.functions['deactivated'] = function(record) {
         return record.active == "false";
       };
+      dynatable.queries.functions['deactivated'] = function(record) {
+        return record.active == "false"
+      };
     })
     .dynatable({
       features: {
