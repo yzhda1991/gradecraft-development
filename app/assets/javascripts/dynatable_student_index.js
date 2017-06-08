@@ -31,7 +31,7 @@ if($('#student-index-table').length > 0 ) {
         return record.active == "false";
       };
       dynatable.queries.functions['deactivated'] = function(record) {
-        return record.active == "false"
+        return record.active == "false";
       };
     })
     .dynatable({
