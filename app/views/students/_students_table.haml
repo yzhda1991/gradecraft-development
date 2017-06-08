@@ -19,6 +19,7 @@
         %th #{ term_for :badges }
         %th{style: "display: none"} Badge Count
       %th Last Activity
+      %th{style: "display: none"} Active
       %th.options Options
   %tbody
     - index = 0
@@ -47,6 +48,7 @@
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
           %td{ style: "display: none" }= student.earned_badges.count
         %td= student.last_activity_at || '(never)'
+        %td= student.activated?
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
@@ -54,6 +56,7 @@
               %li= link_to decorative_glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
               = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student)
+              = active_course_link_to decorative_glyph(:trash) + "Deactivate", deactivate_course_memberships_path(student.course_membership), data: { confirm: "This will deactivate #{student.name} from your course - are you sure?" }, :method => :put
               = active_course_link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
               - if !student.activated?
                 = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(student.id), :method => :put

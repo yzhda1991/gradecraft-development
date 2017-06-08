@@ -210,7 +210,12 @@ Rails.application.routes.draw do
     put :update_dashboard_message, on: :collection
   end
 
-  resources :course_memberships, only: [:create, :delete, :destroy]
+  resources :course_memberships, only: [:create, :delete, :destroy] do
+    collection do
+      put "deactivate/:id", action: :deactivate, as: :deactivate
+    end
+  end
+  get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups
   resources :groups

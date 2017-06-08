@@ -24,6 +24,9 @@ if($('#student-index-table').length > 0 ) {
       dynatable.queries.functions['auditors'] = function(record) {
         return !record.rank.length;
       };
+      dynatable.queries.functions['deactivated'] = function(record) {
+        return record.active == "false"
+      };
     })
     .dynatable({
       features: {
@@ -50,6 +53,7 @@ if($('#student-index-table').length > 0 ) {
     dynatable.queries.remove('bottom10');
     dynatable.queries.remove('flagged-students');
     dynatable.queries.remove('auditors');
+    dynatable.queries.remove('deactivated');
   }
 
   $('.button-table-action').click( function() {
@@ -64,6 +68,3 @@ if($('#student-index-table').length > 0 ) {
   dynatable.queries.add('leaderboard');
   dynatable.process();
 }
-
-
-
