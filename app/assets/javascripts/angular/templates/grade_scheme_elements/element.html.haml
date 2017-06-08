@@ -5,14 +5,14 @@
       %input.letter{'type'=>'text',
                     'name'=>'letter',
                     'ng-model'=>'gradeSchemeElement.letter',
-                    'ng-blur'=>"persistChanges()"}
+                    'ng-change'=>"persistChanges()"}
 
     %label.gse-label.form-hint
       Level name
       %input.level{'type'=>'text',
                    'name'=>'level',
                    'ng-model'=>'gradeSchemeElement.level',
-                   'ng-blur'=>"persistChanges()"}
+                   'ng-change'=>"persistChanges()"}
 
     %label.gse-label.form-hint
       Point Threshold
@@ -23,7 +23,8 @@
         'required'=>'',
         'gc-number-input'=>'',
         'allow-negatives'=>'false',
-        'maintain-focus'=>''}
+        'maintain-focus'=>'',
+        'maxLength'=>'11'}
 
     %span{'ng-show'=>'status === "saving"'}
       %i.fa.fa-spinner.fa-spin.fa-fw

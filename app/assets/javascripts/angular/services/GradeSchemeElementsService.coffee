@@ -61,6 +61,8 @@
     }
     $http.put('/api/grade_scheme_elements', data).then(
       (response) ->
+        _clearArray(gradeSchemeElements)
+        GradeCraftAPI.loadMany(gradeSchemeElements, response.data)
         GradeCraftAPI.logResponse(response)
         window.location.href = redirectUrl if redirectUrl?
         alert('Changes were successfully saved') if showAlert is true
@@ -122,6 +124,9 @@
       element[key] = value
     ) if attributes?
     element
+
+  _clearArray = (array) ->
+    array.length = 0
 
   {
     gradeSchemeElements: gradeSchemeElements

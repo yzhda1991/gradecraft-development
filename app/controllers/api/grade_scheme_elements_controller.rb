@@ -6,13 +6,7 @@ class API::GradeSchemeElementsController < ApplicationController
 
   # GET /api/grade_scheme_elements
   def index
-    @grade_scheme_elements = grade_scheme_elements_for current_course
-
-    if @grade_scheme_elements.present?
-      @total_points = (@grade_scheme_elements.first.lowest_points).to_i
-    else
-      @total_points = current_course.total_points
-    end
+    assign_for_index
   end
 
   # POST /api/grade_scheme_elements
@@ -26,8 +20,9 @@ class API::GradeSchemeElementsController < ApplicationController
       @course.students.pluck(:id).each do |id|
         ScoreRecalculatorJob.new(user_id: id, course_id: @course.id).enqueue
       end
-      render json: { message: "Successfully saved grade scheme elements", success: true },
-        status: :ok
+
+      assign_for_index
+      render "api/grade_scheme_elements/index", status: 200
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
       render json: { message: "Failed to update grade scheme elements", success: false },
         status: :internal_server_error
@@ -54,13 +49,19 @@ class API::GradeSchemeElementsController < ApplicationController
       :level, :description, :course_id]
   end
 
-  def grade_scheme_elements_for(course)
-    course
+  def assign_for_index
+    @grade_scheme_elements = current_course
       .grade_scheme_elements
       .order_by_points_desc.select(
         :id,
         :lowest_points,
         :letter,
         :level)
+
+    if @grade_scheme_elements.present?
+      @total_points = (@grade_scheme_elements.first.lowest_points).to_i
+    else
+      @total_points = current_course.total_points
+    end
   end
 end

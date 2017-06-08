@@ -6,7 +6,8 @@ class GradeSchemeElement < ActiveRecord::Base
   belongs_to :course
 
   validates_presence_of :course
-  validates :lowest_points, length: { maximum: 9 }, numericality: { only_integer: true }, allow_nil: true
+  validates :lowest_points, length: { maximum: 9 },
+    numericality: { only_integer: true }, allow_nil: true
 
   scope :with_lowest_points, -> { where.not(lowest_points: nil) }
   scope :for_course, -> (course_id) { where(course_id: course_id) }
