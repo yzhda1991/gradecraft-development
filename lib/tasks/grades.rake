@@ -30,4 +30,15 @@ namespace :grades do
       prediction.save
     end
   end
+
+  desc "Update complete and student_visible fields on existing grades"
+  task update_status_fields: :environment do
+    Grade.each(batch_size: 500) do |grade|
+      complete = false
+      student_visible = false
+
+      g.update_attribute(:complete, complete) if complete
+      g.update_attribute(:student_visible, student_visible) if student_visible
+    end
+  end
 end

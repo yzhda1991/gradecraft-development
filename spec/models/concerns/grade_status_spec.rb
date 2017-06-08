@@ -8,7 +8,6 @@ describe GradeStatus do
     it "returns all the grades that are released" do
       released_grade = create :grade, status: "Released"
       create :grade, status: "In Progress"
-
       expect(Grade.released).to eq [released_grade]
     end
   end

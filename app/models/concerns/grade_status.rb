@@ -86,5 +86,6 @@ module GradeStatus
       self.complete = true
       self.student_visible = true
     end
+    return true
   end
 end
