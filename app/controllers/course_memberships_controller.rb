@@ -17,7 +17,14 @@ class CourseMembershipsController < ApplicationController
   def deactivate
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update_attribute(:active, false)
-      redirect_to students_path, notice: "Some student successfully deleted"
+      redirect_to students_path, notice: "#{course_membership.user.name} successfully deleted"
+    end
+  end
+
+  def reactivate
+    course_membership = current_course.course_memberships.find(params[:id])
+    if course_membership.update_attribute(:active, true)
+      redirect_to students_path, notice: "#{course_membership.user.name} successfully reactivated"
     end
   end
 

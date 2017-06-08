@@ -213,6 +213,7 @@ Rails.application.routes.draw do
   resources :course_memberships, only: [:create, :delete, :destroy] do
     collection do
       put "deactivate/:id", action: :deactivate, as: :deactivate
+      put "reactivate/:id", action: :reactivate, as: :reactivate
     end
   end
   get :course_creation_wizard, to: "courses#course_creation_wizard"
