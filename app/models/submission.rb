@@ -28,6 +28,14 @@ class Submission < ActiveRecord::Base
       "grades.student_id = submissions.student_id)")
   end
 
+  scope :submitted_by_active_students, -> do
+    joins("INNER JOIN course_memberships ON "\
+      "course_memberships.course_id = submissions.course_id AND "\
+      "course_memberships.user_id = submissions.student_id")
+      .where("course_memberships.active = true AND submitted_at is not null")
+      .references(:course_membership, :submission)
+  end
+
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
     .where.not(id: with_grade.where(grades: { status: ["In Progress", "Graded", "Released"] }))
@@ -60,7 +68,7 @@ class Submission < ActiveRecord::Base
   multiple_files :submission_files
 
   def self.submitted_this_week(assignment_type)
-    assignment_type.submissions.submitted.where("submissions.submitted_at > ? ", 7.days.ago)
+    assignment_type.submissions.submitted_by_active_students.where("submissions.submitted_at > ? ", 7.days.ago)
   end
 
   def graded_at

@@ -156,6 +156,22 @@ class Course < ActiveRecord::Base
     assignment_weight_for_student(student) >= total_weights.to_i
   end
 
+  def student_count
+    course_memberships.where(role: "student", active: true).count
+  end
+
+  def graded_student_count
+    course_memberships.where(role: "student", auditing: false, active: true).count
+  end
+
+  def groups_to_review_count
+    groups.pending.count
+  end
+
+  def point_total_for_challenges
+    challenges.pluck("full_points").compact.sum
+  end
+
   def recalculate_student_scores
     ordered_student_ids.each do |student_id|
       ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
