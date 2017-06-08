@@ -67,4 +67,24 @@ module GradeStatus
       return false
     end
   end
+
+  # temporary method to manage new boolean fields: complete, and student_visibile
+  # this will be removed once these fields are used for grade status logic
+  def update_status_fields
+    if self.status == "In Progress"
+      self.complete = false
+      self.student_visible = false
+    elsif self.status == "Graded"
+      if assignment.release_necessary
+        self.complete = true
+        self.student_visible = false
+      else
+        self.complete = true
+        self.student_visible = true
+      end
+    elsif self.status == "Released"
+      self.complete = true
+      self.student_visible = true
+    end
+  end
 end

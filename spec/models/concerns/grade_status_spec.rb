@@ -104,4 +104,49 @@ describe GradeStatus do
       expect(Grade.not_released).to eq [not_released_grade]
     end
   end
+
+  describe "#update_status_fields" do
+    context "when release is not required" do
+      it "updates the fields on 'In Progress' grades" do
+        grade.status = "In Progress"
+        grade.update_status_fields
+        expect(grade.complete).to be_falsey
+        expect(grade.student_visible).to be_falsey
+      end
+
+      it "updates the fields on 'Graded' grades" do
+        grade.status = "Graded"
+        grade.update_status_fields
+        expect(grade.complete).to be_truthy
+        expect(grade.student_visible).to be_truthy
+      end
+    end
+
+    context "when release is necessary" do
+      before do
+        grade.assignment.update(release_necessary: true)
+      end
+
+      it "updates the fields on 'In Progress' grades" do
+        grade.status = "In Progress"
+        grade.update_status_fields
+        expect(grade.complete).to be_falsey
+        expect(grade.student_visible).to be_falsey
+      end
+
+      it "updates the fields on 'Graded' grades" do
+        grade.status = "Graded"
+        grade.update_status_fields
+        expect(grade.complete).to be_truthy
+        expect(grade.student_visible).to be_falsey
+      end
+
+      it "updates the fields on 'Released' grades" do
+        grade.status = "Released"
+        grade.update_status_fields
+        expect(grade.complete).to be_truthy
+        expect(grade.student_visible).to be_truthy
+      end
+    end
+  end
 end

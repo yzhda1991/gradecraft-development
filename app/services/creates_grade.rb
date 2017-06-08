@@ -4,7 +4,6 @@ require_relative "creates_grade/builds_grade"
 require_relative "creates_grade/marks_as_graded"
 require_relative "creates_grade/runs_grade_updater_job"
 require_relative "creates_grade/saves_grade"
-require_relative "shared/updates_grade_status_fields"
 require_relative "creates_grade/verifies_assignment_student"
 
 module Services
@@ -21,7 +20,6 @@ module Services
           Actions::AssociatesSubmissionWithGrade,
           Actions::MarksAsGraded,
           Actions::SavesGrade,
-          Actions::UpdatesGradeStatusFields,
           Actions::RunsGradeUpdaterJob
         )
     end
