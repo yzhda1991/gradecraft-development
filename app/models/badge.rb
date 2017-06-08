@@ -40,4 +40,12 @@ class Badge < ActiveRecord::Base
     can_earn_multiple_times ||
     earned_badges.where(student_id: student.id).count < 1
   end
+
+  def earned_badge_total_points_for_student(student)
+    earned_badge_count_for_student(student) * self.full_points
+  end
+
+  def earned_badges_this_week_count
+    earned_badges.submitted_by_active_students.where("earned_badges.updated_at > ? ", 7.days.ago).count
+  end
 end
