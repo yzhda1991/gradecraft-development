@@ -29,7 +29,7 @@
           = div_for student do
             = link_to flagged_users_icon(presenter.flagged_users, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
           %span{ class: student.auditing? ? "auditor" : "graded" }
-        %td= index += 1 if !student.auditing?
+        %td= index += 1 if !student.auditing? && student.course_membership.active?
         %td
           - if student.avatar_file_name.present?
             %img.img-rounded{ :src => student.avatar_file_name, :width => 30 }
@@ -57,7 +57,7 @@
               %li= mail_to student.email, glyph(:envelope) + "Email"
               = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student)
               - if student.course_membership.active?
-                = active_course_link_to decorative_glyph(:trash) + "Deactivate", deactivate_course_memberships_path(student.course_membership), data: { confirm: "This will deactivate #{student.name} from your course - are you sure?" }, :method => :put
+                = active_course_link_to decorative_glyph("user-times") + "Deactivate", deactivate_course_memberships_path(student.course_membership), data: { confirm: "This will deactivate #{student.name} from your course - are you sure?" }, :method => :put
               - if !student.course_membership.active?
                 = active_course_link_to decorative_glyph(:trash) + "Reactivate", reactivate_course_memberships_path(student.course_membership), :method => :put
               = active_course_link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
