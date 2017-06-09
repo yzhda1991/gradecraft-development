@@ -32,7 +32,7 @@ class CriterionGradesExporter
     rubric.criteria.ordered.inject(level_data) do |memo, criterion|
       earned_level = criterion.criterion_grades.where(student: student).first
       return memo << "" unless earned_level.present?
-      memo << "#{earned_level.level.name}: #{earned_level.comments}"
+      memo << "#{earned_level.level.try(:name)}: #{earned_level.comments}"
     end
   end
 end
