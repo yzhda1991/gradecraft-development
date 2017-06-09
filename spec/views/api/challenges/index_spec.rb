@@ -1,12 +1,15 @@
 describe "api/challenges/index" do
   before(:all) do
     @course = create(:course, challenge_term: "tsallenze")
+    @team = create(:team, course: @course)
     @student = create(:user)
   end
   before(:each) do
     @challenge = create(:challenge, description: "...")
     @challenges = [@challenge]
+    @team.students << @student
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   it "responds with an array of challenges" do

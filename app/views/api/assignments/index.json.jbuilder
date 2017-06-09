@@ -1,7 +1,6 @@
 json.data @assignments do |assignment|
   next unless assignment.full_points > 0 || assignment.pass_fail?
   next unless !@student.present? || assignment.visible_for_student?(@student)
-  next unless assignment.include_in_predictor?
 
   json.partial! 'api/assignments/assignment', assignment: assignment
 end

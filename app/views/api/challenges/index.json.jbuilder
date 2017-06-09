@@ -1,5 +1,5 @@
 json.data @challenges do |challenge|
-  next unless !@student.present? || challenge.visible?
+  next unless !current_student.present? || ChallengeProctor.new(challenge).viewable?(current_student.team_for_course(current_course))
   json.type "challenges"
   json.id challenge.id.to_s
   json.attributes do
@@ -68,5 +68,4 @@ end
 json.meta do
   json.term_for_challenges term_for :challenges
   json.allow_updates @allow_updates
-  json.include_in_predictor @include_in_predictor
 end

@@ -77,13 +77,13 @@
   }
 }
 
-@challenges[:invisible] = {
+@challenges[:invisible_graded] = {
   quotes: {
     challenge_created: "Please don't ask me what the score is, I'm not even \
 sure what the game is. - Ashleigh Brilliant"
   },
   attributes: {
-    name: "Invisible Challenge",
+    name: "Invisible Challenge [Grades]",
     due_at: 4.weeks.from_now,
     accepts_submissions: true,
     open_at: rand(8).weeks.ago,
@@ -92,5 +92,19 @@ sure what the game is. - Ashleigh Brilliant"
   grades: true,
   grade_attributes: {
     status: "Graded",
+  }
+}
+
+@challenges[:invisible] = {
+  quotes: {
+    challenge_created: "Please don't ask me what the score is, I'm not even \
+sure what the game is. - Ashleigh Brilliant"
+  },
+  attributes: {
+    name: "Invisible Challenge [No Grades]",
+    due_at: 4.weeks.from_now,
+    accepts_submissions: true,
+    open_at: rand(8).weeks.ago,
+    visible: false,
   }
 }

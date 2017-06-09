@@ -77,24 +77,6 @@ describe Assignment do
       expect(subject.errors[:resubmissions_allowed]).to include "must be true or false"
     end
 
-    it "is invalid without include_in_timeline" do
-      subject.include_in_timeline = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:include_in_timeline]).to include "must be true or false"
-    end
-
-    it "is invalid without include_in_predictor" do
-      subject.include_in_predictor = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:include_in_predictor]).to include "must be true or false"
-    end
-
-    it "is invalid without include_in_to_do" do
-      subject.include_in_to_do = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:include_in_to_do]).to include "must be true or false"
-    end
-
     it "is invalid without use_rubric" do
       subject.use_rubric = nil
       expect(subject).to_not be_valid

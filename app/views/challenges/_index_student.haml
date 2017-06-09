@@ -8,7 +8,7 @@
 
   %tbody
     - current_course.challenges.chronological.alphabetical.includes(:challenge_files, :challenge_grades).each do |challenge|
-      - if challenge.visible? || (@team.present? &&  (ChallengeGradeProctor.new(challenge.challenge_grade_for_team(@team)).viewable? user: current_student))
+      - if ChallengeProctor.new(challenge).viewable?(@team)
         %tr
           %td= link_to challenge.name, challenge
           %td
