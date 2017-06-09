@@ -32,11 +32,6 @@
       = f.check_box :visible
 
     .form-item
-      = f.label :include_in_timeline, "Timeline"
-      = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
-      .form-hint{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :challenge} in the course timeline? Note that #{term_for :challenges} without open or due dates will be excluded automatically.
-
-    .form-item
       = f.label :release_necessary, "Release necessary?"
       = f.check_box :release_necessary
       .form-hint Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
@@ -57,7 +52,7 @@
     %button.add-challenge-score-level Add a Level
 
   = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
-  
+
   %section.form-section
     %h2.form-title Attachments
     = f.simple_fields_for :challenge_files, @challenge.challenge_files.new do |cf|

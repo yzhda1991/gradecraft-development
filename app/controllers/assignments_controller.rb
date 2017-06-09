@@ -145,7 +145,6 @@ class AssignmentsController < ApplicationController
     params.require(:assignment).permit :accepts_attachments, :accepts_links,
       :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
       :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
-      :include_in_predictor, :include_in_timeline, :include_in_to_do,
       :name, :open_at, :pass_fail, :max_submissions,
       :full_points, :purpose, :release_necessary, :hide_analytics,
       :required, :resubmissions_allowed, :show_description_when_locked,

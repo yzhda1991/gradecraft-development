@@ -13,9 +13,6 @@ FactoryGirl.define do
     grade_scope "Individual"
     accepts_submissions true
     visible true
-    include_in_timeline true
-    include_in_predictor true
-    include_in_to_do true
     use_rubric true
     accepts_attachments true
     accepts_text true

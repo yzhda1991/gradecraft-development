@@ -108,21 +108,6 @@
       = f.check_box :release_necessary
       .form-hint Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
-    .form-item
-      = f.label :include_in_timeline, "Timeline"
-      = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
-      .form-hint{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
-
-    .form-item
-      = f.label :include_in_predictor, "Predictor"
-      = f.check_box :include_in_predictor
-      .form-hint Can #{term_for :students} see this #{term_for :assignment} in the grade predictor?
-
-    .form-item
-      = f.label :include_in_to_do, "Due this Week"
-      = f.check_box :include_in_to_do
-      .form-hint Can #{term_for :students} see this #{term_for :assignment} in the "Course Events" panel?
-
     - if current_course.show_analytics?
       .form-item
         = f.label :hide_analytics, "Hide Analytics?"

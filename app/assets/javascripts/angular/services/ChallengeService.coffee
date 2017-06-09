@@ -34,7 +34,6 @@
   # GET index list of challenges including a student's grades and predictions
   getChallenges = ()->
     $http.get('/api/challenges').success( (response)->
-      return unless response.meta.include_in_predictor
       GradeCraftAPI.loadMany(challenges,response, {"include" : ['prediction','grade']})
       _.each(challenges, (challenge)->
         # add null prediction and grades when JSON contains none

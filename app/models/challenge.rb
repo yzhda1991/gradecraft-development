@@ -29,7 +29,6 @@ class Challenge < ActiveRecord::Base
   scope :visible, -> { where visible: TRUE }
   scope :chronological, -> { order("due_at ASC") }
   scope :alphabetical, -> { order("name ASC") }
-  scope :timelineable, -> { where include_in_timeline: true }
 
   validates_presence_of :course, :name
   validates_numericality_of :full_points, allow_nil: true, length: { maximum: 9 }

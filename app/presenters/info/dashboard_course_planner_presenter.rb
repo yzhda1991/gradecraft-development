@@ -30,9 +30,9 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
 
   def to_do?(assignment)
     if student
-      assignment.include_in_to_do? && assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
+      assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
     else
-      assignment.include_in_to_do?
+      assignment
     end
   end
 

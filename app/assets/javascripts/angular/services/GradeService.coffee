@@ -275,7 +275,7 @@
   # attachments to individual grades
   _postGradeFileUploads = (fd)->
     $http.post(
-      "/api/grades/#{grade.id}/file_uploads",
+      "/api/grades/#{modelGrade.id}/file_uploads",
       fd,
       transformRequest: angular.identity,
       headers: { 'Content-Type': undefined }
@@ -293,7 +293,7 @@
   # attachments to group grades
   _postGroupFileUploads = (fd)->
     $http.post(
-      "/api/assignments/#{grade.assignment_id}/groups/#{_recipientId}/file_uploads",
+      "/api/assignments/#{modelGrade.assignment_id}/groups/#{_recipientId}/file_uploads",
       fd,
       transformRequest: angular.identity,
       headers: { 'Content-Type': undefined }

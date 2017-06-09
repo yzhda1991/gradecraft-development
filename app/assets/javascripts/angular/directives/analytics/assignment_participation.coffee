@@ -1,7 +1,7 @@
 # box plot for assignment grade distribution
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', '$window', '$rootElement', 'AnalyticsService', 'DebounceQueue', ($q, $window, $rootElement, AnalyticsService, DebounceQueue) ->
+@gradecraft.directive 'assignmentParticipationAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsParticipationCtrl = [()->
       vm = this
 
@@ -18,7 +18,7 @@
         vm.assignment_high_score = AnalyticsService.assignmentData.assignment_high_score
 
         # plot graph when tab is activated for chart usage in jquery ui tabs
-        if angular.element($rootElement).hasClass('analytics-tab-panel')
+        if angular.element('.analytics-tab-panel').length > 0
           angular.element('#tabs').on 'tabsactivate', ->
             if event.currentTarget.classList.contains('class-analytics-tab')
               initializeGraph()

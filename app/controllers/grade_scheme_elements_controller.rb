@@ -2,7 +2,7 @@
 # earn course wide levels and grades
 class GradeSchemeElementsController < ApplicationController
   before_action :ensure_staff?
-  before_action :use_current_course, only: [:mass_edit, :mass_update]
+  before_action :use_current_course, only: :mass_edit
 
   def index
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_points_desc
@@ -24,40 +24,6 @@ class GradeSchemeElementsController < ApplicationController
 
   # Edit all the grade scheme items for a course
   def mass_edit
-    @total_points = current_course.total_points
-    @grade_scheme_elements =  current_course
-                              .grade_scheme_elements.order_by_points_desc.select(
-                                :id,
-                                :level,
-                                :lowest_points,
-                                :letter,
-                                :course_id)
-  end
-
-  def mass_update
-    GradeSchemeElement.transaction do
-      begin
-        @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
-        @course.update_attributes(grade_scheme_elements_attributes_params)
-      rescue Exception => e
-        raise "HandleThis"
-      end
-    end
-    respond_to do |format|
-      if @course.save
-        @course.students.pluck(:id).each { |id| ScoreRecalculatorJob.new(user_id: id, course_id: @course.id).enqueue }
-        format.json do
-          render json: current_course.grade_scheme_elements.select(
-            :id,
-            :level,
-            :lowest_points,
-            :letter,
-            :course_id)
-        end
-      else
-        format.json { render json: false, status: :internal_server_error }
-      end
-    end
   end
 
   def export_structure
@@ -72,10 +38,5 @@ class GradeSchemeElementsController < ApplicationController
   def grade_scheme_element_params
     params.require(:grade_scheme_element).permit :id, :letter, :lowest_points,
       :level, :description, :course_id, unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state, :condition_value, :condition_date, :_destroy]
-  end
-
-  def grade_scheme_elements_attributes_params
-    params.permit grade_scheme_elements_attributes: [:id, :letter, :lowest_points,
-      :level, :description, :course_id]
   end
 end
