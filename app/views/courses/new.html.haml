@@ -1,4 +1,5 @@
 .pageContent
+  = render partial: "layouts/alerts"
   = simple_form_for(@course, :validate => false)  do |f|
     #tabs.ui-tabs.ui-widget
       %ul.ui-tabs-nav{role: "tablist"}
@@ -24,7 +25,7 @@
           = render partial: "courses/student_onboarding_setup", locals: { f: f }
         .ui-tabs-panel#tab5{role: "tabpanel", "aria-hidden" => false }
           = render partial: "courses/advanced_settings", locals: { f: f }
-  
+
       .submit-buttons
         %ul
           %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
