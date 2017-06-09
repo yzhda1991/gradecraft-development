@@ -361,6 +361,9 @@ Rails.application.routes.draw do
       resources :submissions, only: [:create, :update], module: :assignments do
         get :show, on: :collection
       end
+      resources :grades, only: [], module: :assignments do
+        get :show, on: :collection
+      end
 
       namespace :grades do
         resources :importers, only: [], param: :provider_id do
@@ -393,6 +396,7 @@ Rails.application.routes.draw do
           get "courses", action: :index
         end
       end
+      resources :teams, only: :index, module: :courses
     end
 
     get "course_creation", to: "course_creation#show"

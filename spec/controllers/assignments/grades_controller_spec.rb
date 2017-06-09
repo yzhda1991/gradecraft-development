@@ -72,35 +72,11 @@ describe Assignments::GradesController do
     end
 
     describe "GET mass_edit" do
-      it "assigns params" do
+      it "assigns the assignment" do
         get :mass_edit, params: { assignment_id: assignment.id }
+
         expect(assigns(:assignment)).to eq(assignment)
-        expect(assigns(:assignment_score_levels)).to eq(assignment.assignment_score_levels)
-        expect(assigns(:grades)).to eq([grade])
-        expect(response).to render_template(:mass_edit)
-      end
-
-      it "orders grades by student name" do
-        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron", courses: [course], role: :student)
-        create :grade, assignment: assignment, student: student_2
-        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron", courses: [course], role: :student)
-        create :grade, assignment: assignment, student: student_3
-
-        get :mass_edit, params: { assignment_id: assignment.id }
-
-        expect(assigns(:grades)[1].student).to eq(student_2)
-        expect(assigns(:grades)[2].student).to eq(student_3)
-      end
-
-      context "with teams" do
-        it "assigns params" do
-          team = create(:team, course: course)
-          team.students << student
-
-          get :mass_edit, params: { assignment_id: assignment.id, team_id: team.id }
-
-          expect(assigns(:team)).to eq(team)
-        end
+        expect(response).to render_template :mass_edit
       end
     end
 
