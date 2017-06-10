@@ -7,5 +7,3 @@
     %p.bold= "#{points grade.final_points} / #{points grade.full_points} points earned"
 - else
   %p.italic= "#{points assignment.full_points} points possible"
-
-= "Graded: #{ grade.graded_at}" if grade.graded_at?
