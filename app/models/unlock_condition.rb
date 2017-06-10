@@ -173,7 +173,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_grade_earned_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
-    return false unless grade.final_points > 0
+    return false unless grade && grade.final_points > 0
     if condition_value? && condition_date?
       if check_if_grade_earned_meets_condition_value(grade) &&
       check_if_grade_earned_met_condition_date(grade)
