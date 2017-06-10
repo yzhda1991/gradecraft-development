@@ -1,5 +1,5 @@
-// display badge preview after image upload
-$('.badge-image-upload').change(function () {
+// display media preview after image upload
+$('.media-image-upload').change(function () {
   var file = this.files[0];
   var imageType = /^image\//;
 

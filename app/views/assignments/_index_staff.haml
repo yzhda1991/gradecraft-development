@@ -51,7 +51,7 @@
                     %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
                   %td
-                    - if current_user_is_staff?
+                    - if current_user_is_admin? || current_course.active?
                       .button-container.dropdown
                         %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
                         %ul.options-menu

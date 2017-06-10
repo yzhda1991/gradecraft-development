@@ -3,187 +3,219 @@
 = simple_form_for(presenter.assignment, :html => { :novalidate => true }) do |f|
   %section.form-section
     %h2.form-title Basic Info
-    .form-item
-      = f.association :assignment_type, collection: current_course.assignment_types.ordered, value_method: :id, include_blank: true, selected: params[:assignment_type_id] || presenter.assignment.assignment_type_id, "aria-required": "true"
-
-    .form-item
-      = f.label :name
-      = f.text_field :name, "aria-required": "true"
-
-    .form-item
-      .pass-fail-toggle
-        = f.label :pass_fail, "Pass/Fail"
-        = f.check_box :pass_fail
-
-    .form-item.pass-fail-contingent{"class"=>("hidden" if f.object.pass_fail?)}
-      = f.label :full_points, "Total Points Possible"
-      = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
-
-    .form-item.pass-fail-contingent{"class"=>("hidden" if f.object.pass_fail?)}
-      = f.label :threshold_points, "Points Threshold"
-      = f.text_field :threshold_points, data: {autonumeric: true, "m-dec" => "0"}
-      .form-hint If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
-
-    .form-item
-      = f.input :open_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }
-
-    .form-item
-      = f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }
-
-    .form-item
-      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Accept until"
-      .form-hint If you set a due date but no accept-until date, submissions and self-logged grades will be marked as late but always accepted.
-
-    .form-item
-      .individual-group-select
-        = f.label :grade_scope, "Individual or Group?"
-        -if presenter.assignment.grades.instructor_modified.any? || presenter.assignment.has_submitted_submissions?
-          = tooltip("required-hint", "exclamation-triangle") do
-            You have already graded or received submissions for this assignment and cannot change the grading scope. If you would like to change the grading scope, please copy the assignment and change it on the copy.
-          = f.select :grade_scope, [["Individual"], ["Group"]], :disabled => ["Individual", "Group"]
-        -else
-          = f.select :grade_scope, [["Individual"], ["Group"]]
-        .form-hint Do students do this individually or as a group?
-
-    .form-item.individual-group-contingent{"class"=>("hidden" if f.object.grade_scope == 'Individual')}
-      = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @assignment.try(:min_group_size) || 2 ] }
-
-    .form-item.individual-group-contingent{"class"=>("hidden" if f.object.grade_scope == 'Individual')}
-      = f.input :max_group_size, as: :numeric, :input_html => { :value => [ @assignment.try(:max_group_size) || 5 ] }
-
-  %section.form-section
-    %h2.form-title Assignment Description
-    .textarea
-      .form-hint This will be shown to students on their dashboard, and when they submit their assignment.
-      = f.text_area :description, class: "froala"
-
-  %section.form-section
-    %h2.form-title Assignment Purpose
-    .textarea
-      .form-hint This will be shown to students on their dashboard, and when they submit their assignment.
-      = f.text_area :purpose, class: "froala"
-
-  %section.form-section
-    %h2.form-title Advanced Settings
-
-    = render partial: "layouts/media_image_form_item", locals: { f: f, model: presenter.assignment }
-
-    .form-item
-      = f.label :visible, "Visible to students"
-      = f.check_box :visible
-      .form-hint Can #{term_for :students} see this #{term_for :assignment} in their dashboard?
-
-    .form-item
-      = f.label :required
-      = f.check_box :required
-      .form-hint Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
-
-    .form-item
-      .assignment_options.form-item-with-options
-        = f.label :accepts_submissions #{term_for :assignment} Submissions
-        = f.check_box :accepts_submissions, {class: "has-conditional-options"}
-        .form-hint Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
-
-      %ul.submit.accepts_submission_types.conditional-options.indented
-        %li.submit
-          .checkbox
-            = f.label :accepts_links, :label => "Accept Links"
-            = f.check_box :accepts_links
-        %li.submit
-          .checkbox
-            = f.label :accepts_attachments, :label => "Accept Uploads/Attachments"
-            = f.check_box :accepts_attachments
-        %li.submit
-          .checkbox
-            = f.label :accepts_text, :label => "Accept raw text"
-            = f.check_box :accepts_text
-
-    .form-item
-      = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
-      = f.check_box :resubmissions_allowed
-      .form-hint Can #{term_for :students} resubmit this #{term_for :assignment}?
-
-    .form-item
-      = f.label :release_necessary
-      = f.check_box :release_necessary
-      .form-hint Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
-
-    - if current_course.show_analytics?
+    .form-subsection
       .form-item
-        = f.label :hide_analytics, "Hide Analytics?"
-        = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-        .form-hint{id: "hideAnalytics"}  Do you want to hide comparative assignment analytics from students for this assignment?
+        = f.association :assignment_type, collection: current_course.assignment_types.ordered, value_method: :id, include_blank: true, selected: params[:assignment_type_id] || presenter.assignment.assignment_type_id, "aria-required": "true"
 
-    .form-item
-      = f.label :student_logged
-      = f.check_box :student_logged
-      .form-hint Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
+      .form-item
+        = f.input :name, "aria-required": "true", label: "Assignment Name"
 
-  %section.form-section
-    %h2.form-title Unlocks
+      .form-item
+        = f.check_box :required
+        = f.label :required
+        = tooltip("required-hint", "info-circle", placement: "right") do
+          Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
 
-    .unlock-conditions
-      %p.hint Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :assignment }?
-      %script(id="unlock-condition-template" type="text/x-template")
-        %fieldset.unlock-condition
-          = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
-            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
-      - presenter.assignment.unlock_conditions.each do |condition|
-        %fieldset.unlock-condition
-          = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
-            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
-    %button.add-unlock-condition Add a Condition
+      .form-flex-row
+        .form-item
+          .individual-group-select
+            = f.label :grade_scope, "Individual or Group?"
+            - if presenter.assignment.grades.instructor_modified.any? || presenter.assignment.has_submitted_submissions?
+              = tooltip("required-hint", "exclamation-triangle") do
+                You have already graded or received submissions for this assignment and cannot change the grading scope. If you would like to change the grading scope, please copy the assignment and change it on the copy.
+              = f.select :grade_scope, [["Individual"], ["Group"]], :disabled => ["Individual", "Group"]
+            - else
+              = f.select :grade_scope, [["Individual"], ["Group"]]
+            .form-hint Do students do this individually or as a group?
 
-    .unlock-visibility-settings
-      %h3 Unlock Visibility Settings
-      .locked-visibility-options.form-item-with-options
-        = f.label :visible_when_locked, :label => "Visible when Locked"
-        = f.check_box :visible_when_locked, {class: "has-conditional-options"}
+        .form-item.individual-group-contingent{"class"=>("visually-hidden" if f.object.grade_scope == 'Individual')}
+          = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @assignment.try(:min_group_size) || 2 ] }
 
-      %ul.locked-display.visible_elements.conditional-options.indented
-        %li.locked-display
-          .checkbox
-            = f.label :show_name_when_locked, :label => "Show Name when Locked"
-            = f.check_box :show_name_when_locked
-        %li.locked-display
-          .checkbox
-            = f.label :show_points_when_locked, :label => "Show Points when Locked"
-            = f.check_box :show_points_when_locked
-        %li.locked-display
-          .checkbox
-            = f.label :show_description_when_locked, :label => "Show Description when Locked"
-            = f.check_box :show_description_when_locked
-        %li.locked-display
-          .checkbox
-            = f.label :show_purpose_when_locked, :label => "Show Purpose when Locked"
-            = f.check_box :show_purpose_when_locked
+        .form-item.individual-group-contingent{"class"=>("visually-hidden" if f.object.grade_scope == 'Individual')}
+          = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @assignment.try(:max_group_size) || 5 ] }
 
-  %section.form-section
-    %h2.form-title Grade Levels
-    .assignment-score-levels
-      %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :assignment} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
-      %script(id="assignment-score-level-template" type="text/x-template")
-        %fieldset.assignment-score-level
-          = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
-            = render partial: "assignment_score_level_fields", locals: { f: slf }
-      - presenter.assignment.assignment_score_levels.order_by_points.each do |assignment_score_level|
-        %fieldset.assignment-score-level
-          = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: "form-inline" do |slf|
-            = render partial: "assignment_score_level_fields", locals: { f: slf }
-    %button.add-assignment-score-level Add a Level
+      .form-item
+        %label{for: "assignment-description"} Assignment Description
+        = tooltip("description-hint", "info-circle", placement: "right") do
+          This will be shown to students on their dashboard, and when they submit their assignment.
+        .textarea{id: "assignment-description"}
+          = f.text_area :description, class: "froala"
 
-  %section.form-section
-    %h2.form-title Attachments
-    = f.simple_fields_for :assignment_files, presenter.assignment.assignment_files.new do |af|
-      = af.file_field :file, :multiple => true
-    - if presenter.assignment.assignment_files.exists?
-      %h5.bold Uploaded files
-      %ul.uploaded-files
-        - presenter.assignment.assignment_files.each do |af|
-          - next if af.new_record?
+
+      .form-item{for: "assignment-purpose"}
+        %label{for: "assignment-purpose"} Assignment Purpose
+        = tooltip("purpose-hint", "info-circle", placement: "right") do
+          This will be shown to students on their dashboard, and when they submit their assignment.
+        .textarea
+          = f.text_area :purpose, class: "froala"
+
+      .form-item
+        = render partial: "layouts/media_image_form_item", locals: { f: f, model: presenter.assignment }
+
+      .form-item
+        = f.label :assignment_files, "Attachments"
+        = f.simple_fields_for :assignment_files, presenter.assignment.assignment_files.new do |af|
+          = af.file_field :file, :multiple => true, :label => false, :id => "assignment_assignment_files"
+        - if presenter.assignment.assignment_files.exists?
+          %h5.bold Uploaded files
+          %ul.uploaded-files
+            - presenter.assignment.assignment_files.each do |af|
+              - next if af.new_record?
+              %li
+                = link_to af.filename, af.url, :target => "_blank"
+                = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )
+
+    %h2.form-title Assignment Dates
+    .form-subsection
+      .form-flex-row
+        .form-item
+          = f.input :open_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => glyph(:calendar) + "Open Date"
+
+        .form-item
+          = f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => glyph(:calendar) + "Due Date"
+
+        .form-item
+          = f.label :accepts_submissions_until, glyph(:calendar) + "Accept Until Date"
+          = tooltip("accept-until-hint", "info-circle", placement: "right") do
+            If you set a due date but no accept-until date, submissions and self-logged grades will be marked as late but always accepted.
+          = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => false
+
+    %h2.form-title Grading & Submission
+    .form-subsection
+      %h3.form-subtitle Grading Style
+      .form-flex-row
+        .form-item
+          .pass-fail-toggle
+            = f.check_box :pass_fail
+            = f.label :pass_fail, "Pass/Fail"
+
+      .form-flex-row.pass-fail-contingent{"class"=>("visually-hidden" if f.object.pass_fail?)}
+        .form-item
+          = f.label :full_points, "Total Points Possible"
+          = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
+
+        .form-item
+          = f.label :threshold_points, "Points Threshold"
+          = tooltip("point-threshold-hint", "info-circle", placement: "right") do
+            If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
+          = f.text_field :threshold_points, data: {autonumeric: true, "m-dec" => "0"}
+
+        .form-item
+          = f.label :mass_grade_type, "Quick Grade Style"
+          = tooltip("quick-grade-hint", "info-circle", placement: "right") do
+            How should this assignment appear in Quick Grade?
+          = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
+      .assignment-score-level-wrapper.pass-fail-contingent{"class"=>("visually-hidden" if f.object.pass_fail?)}
+        .assignment-score-levels
+          %h4.form-subtitle Grade Levels
+          %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :assignment} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
+          %script(id="assignment-score-level-template" type="text/x-template")
+            %fieldset.assignment-score-level
+              = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
+                = render partial: "assignment_score_level_fields", locals: { f: slf }
+          - presenter.assignment.assignment_score_levels.order_by_points.each do |assignment_score_level|
+            %fieldset.assignment-score-level
+              = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: "form-inline" do |slf|
+                = render partial: "assignment_score_level_fields", locals: { f: slf }
+        .box.box-padded
+          %button.button-link.add-assignment-score-level= decorative_glyph(:plus) + 'Add level'
+
+      %h3.form-subtitle Grading Settings
+      .form-item.no-margin
+        = f.check_box :student_logged
+        = f.label :student_logged
+        = tooltip("student-logged-hint", "info-circle", placement: "right") do
+          Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
+
+      .form-item.no-margin
+        = f.check_box :release_necessary
+        = f.label :release_necessary
+        = tooltip("release-necessary-hint", "info-circle", placement: "right") do
+          Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
+
+      .form-item.no-margin
+        .assignment_options.form-item-with-options
+          = f.check_box :accepts_submissions, {class: "has-conditional-options"}
+          = f.label :accepts_submissions #{term_for :assignment} Submissions
+          = tooltip("accepts-submissions-hint", "info-circle", placement: "right") do
+            Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
+
+        %ul.submit.accepts_submission_types.conditional-options.indented{"class"=>("visually-hidden" if !f.object.accepts_submissions?)}
           %li
-            = link_to af.filename, af.url, :target => "_blank"
-            = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )
+            = f.check_box :accepts_links
+            = f.label :accepts_links, :label => "Accept Links"
+          %li
+            = f.check_box :accepts_attachments
+            = f.label :accepts_attachments, :label => "Accept Uploads/Attachments"
+          %li
+            = f.check_box :accepts_text
+            = f.label :accepts_text, :label => "Accept raw text"
+
+      .form-item.no-margin
+        = f.check_box :resubmissions_allowed
+        = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
+        = tooltip("resubmissions-hint", "info-circle", placement: "right") do
+          Can #{term_for :students} resubmit this #{term_for :assignment}?
+
+
+    %h2.form-title Visibility Settings
+    .form-subsection
+      .form-item.no-margin
+        = f.check_box :visible
+        = f.label :visible, "Visible to students"
+        = tooltip("visible-hint", "info-circle", placement: "right") do
+          Can #{term_for :students} see this #{term_for :assignment} in their dashboard?
+
+      - if current_course.show_analytics?
+        .form-item.no-margin
+          = f.check_box :hide_analytics
+          = f.label :hide_analytics, "Hide Analytics?"
+          = tooltip("analytics-visible-hint", "info-circle", placement: "right") do
+            Do you want to hide comparative assignment analytics from students for this assignment?
+
+    %h2.form-title Unlocks
+    .form-subsection
+      %h3.form-subtitle
+        Requirements
+        = tooltip("unlock-hint", "info-circle", placement: "right") do
+          Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :assignment }?
+      .unlock-conditions
+        %script(id="unlock-condition-template" type="text/x-template")
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
+              = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
+        - presenter.assignment.unlock_conditions.each do |condition|
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
+              = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
+      .box.box-padded.add-unlock-condition-wrapper
+        %button.button-link.add-unlock-condition=glyph(:plus) + "Add a Condition"
+
+      .unlock-visibility-settings
+        %h3.form-subtitle Visibility Settings
+        .locked-visibility-options.form-item-with-options
+          = f.check_box :visible_when_locked, {class: "has-conditional-options"}
+          = f.label :visible_when_locked, :label => "#{ term_for :assignment } Visible when Locked"
+
+        %ul.locked-display.visible_elements.conditional-options.indented{"class"=>("visually-hidden" if !f.object.visible_when_locked?)}
+          %li.locked-display
+            .checkbox
+              = f.check_box :show_name_when_locked
+              = f.label :show_name_when_locked, :label => "Show Name when Locked"
+          %li.locked-display
+            .checkbox
+              = f.check_box :show_points_when_locked
+              = f.label :show_points_when_locked, :label => "Show Points when Locked"
+          %li.locked-display
+            .checkbox
+              = f.check_box :show_description_when_locked
+              = f.label :show_description_when_locked, :label => "Show Description when Locked"
+          %li.locked-display
+            .checkbox
+              = f.check_box :show_purpose_when_locked
+              = f.label :show_purpose_when_locked, :label => "Show Purpose when Locked"
+
+
   .submit-buttons
     %ul
       %li= f.button :submit, "#{presenter.assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"

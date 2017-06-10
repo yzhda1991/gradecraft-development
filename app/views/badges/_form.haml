@@ -3,8 +3,7 @@
 = simple_form_for @badge do |f|
   %section.form-section
 
-    %h2.form-title Basic Settings
-
+    %h2.form-title Basic Info
     .form-item
       = f.label :name, "Name"
       = f.text_field :name
@@ -15,7 +14,7 @@
 
     .form-item
       = f.label :file_field, "Icon"
-      = f.file_field :icon, {class: "badge-image-upload"}
+      = f.file_field :icon, {class: "media-image-upload"}
       .form-hint Badges appear in different sizes in GradeCraft. Recommended size is 150px x 150px or larger.
       .preview-wrapper{ class: @badge.persisted? ? "" : "hidden"}
         .icon-preview.large-preview
@@ -35,69 +34,15 @@
           %span.yaxis-label 40px
 
     .form-item
-      = f.label :visible
-      = f.check_box :visible
-      .form-hint Can #{term_for :students} see this #{term_for :badge}?
+      %label{for: "form-badge-description"} Description
+      .textarea#form-badge-description
+        .form-hint Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
+        = f.text_area :description, class: "froala"
 
     .form-item
-      = f.label :can_earn_multiple_times,"Multi-award"
-      = f.check_box :can_earn_multiple_times
-      .form-hint Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
-
-    .form-item
-      = f.label :student_awardable,"Student-awardable"
-      = f.check_box :student_awardable
-      .form-hint Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
-
-  %section.form-section
-    %h2.form-title Description
-
-    .textarea
-      .form-hint Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
-      = f.text_area :description, class: "froala"
-
-  %section.form-section
-    %h2.form-title Unlocks
-    .unlock-conditions
-      %p.hint Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :badge }?
-      %script(id="unlock-condition-template" type="text/x-template")
-        %fieldset.unlock-condition
-          = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
-            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
-      - @badge.unlock_conditions.each do |condition|
-        %fieldset.unlock-condition
-          = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
-            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
-    %button.add-unlock-condition Add a Condition
-
-    .unlock-visibility-settings
-      %h2.form-title Unlock Visibility Settings
-      .form-item
-        .locked-visibility-options.form-item-with-options
-          = f.label :visible_when_locked, :label => "Visible when Locked"
-          = f.check_box :visible_when_locked, {class: "has-conditional-options"}
-
-        %ul.locked-display.visible_elements.conditional-options.indented
-          %li.locked-display
-            .checkbox
-              = f.label :show_name_when_locked, :label => "Show Name when Locked"
-              = f.check_box :show_name_when_locked
-          %li.locked-display
-            .checkbox
-              = f.label :show_points_when_locked, :label => "Show Points when Locked"
-              = f.check_box :show_points_when_locked
-          %li.locked-display
-            .checkbox
-              = f.label :show_description_when_locked, :label => "Show Description when Locked"
-              = f.check_box :show_description_when_locked
-
-
-
-  %section.form-section
-    %h2.form-title Attachments
-    .form-item
+      = f.label :badge_files, "Attachments"
       = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|
-        = bf.file_field :file, :multiple => true
+        = bf.file_field :file, :multiple => true, :label => false, :id => "badge_badge_files"
       - if @badge.badge_files.exists?
         %h5.bold Uploaded files
         %ul.uploaded-files
@@ -106,6 +51,61 @@
             %li
               = link_to bf.filename, bf.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", badge_id: @badge.id, :upload_id => bf.id } )
+
+  %section.form-section
+    %h2.form-title Settings
+    .form-item.no-margin
+      = f.check_box :visible
+      = f.label :visible
+      = tooltip("badges-visible-hint", "info-circle", placement: "right") do
+        Can #{term_for :students} see this #{term_for :badge}?
+
+    .form-item.no-margin
+      = f.check_box :can_earn_multiple_times
+      = f.label :can_earn_multiple_times,"Multi-award"
+      = tooltip("badges-multiple-earn-hint", "info-circle", placement: "right") do
+        Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
+
+    .form-item.no-margin
+      = f.check_box :student_awardable
+      = f.label :student_awardable,"Student-awardable"
+      = tooltip("student-awardable-hint", "info-circle", placement: "right") do
+        Can this #{term_for :badge} be given by one #{term_for :student} to another #{term_for :student}?
+
+
+  %section.form-section
+    %h2.form-title Unlocks
+    %p.hint Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :badge }?
+    .unlock-conditions
+      %script(id="unlock-condition-template" type="text/x-template")
+        %fieldset.unlock-condition
+          = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
+            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
+      - @badge.unlock_conditions.each do |condition|
+        %fieldset.unlock-condition
+          = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
+            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
+    .box.box-padded.add-unlock-condition-wrapper
+      %button.button-link.add-unlock-condition=glyph(:plus) + "Add a Condition"
+
+    .unlock-visibility-settings
+      %h2.form-title Unlock Visibility Settings
+      .form-item
+        .locked-visibility-options.form-item-with-options
+          = f.check_box :visible_when_locked, {class: "has-conditional-options"}
+          = f.label :visible_when_locked, :label => "Visible when Locked"
+
+        %ul.locked-display.visible_elements.conditional-options.indented{"class"=>("visually-hidden" if !f.object.visible_when_locked?)}
+          %li.locked-display
+            = f.check_box :show_name_when_locked
+            = f.label :show_name_when_locked, :label => "Show Name when Locked"
+          %li.locked-display
+            = f.check_box :show_points_when_locked
+            = f.label :show_points_when_locked, :label => "Show Points when Locked"
+          %li.locked-display
+            = f.check_box :show_description_when_locked
+            = f.label :show_description_when_locked, :label => "Show Description when Locked"
+
   .submit-buttons
     %ul
       %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", class: "button"

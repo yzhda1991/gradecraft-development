@@ -24,25 +24,6 @@ function checkDropdown(select) {
   $($thisSelectedList).find('select, input').attr('disabled', false);
 }
 
-//Show and hide conditional form items (used on assignment and badge edit)
-function showConditionalOptions($thisInput) {
-  var $thisConditionalOptionsList = $thisInput.closest('.form-item-with-options').next('.conditional-options');
-  
-  if ($thisInput.is(':checked')) {
-    $thisConditionalOptionsList.show();
-  } else {
-    $thisConditionalOptionsList.hide();
-  }
-}
-
-$('input.has-conditional-options').change(function() {
-  showConditionalOptions($(this));
-});
-
-$('input.has-conditional-options').each(function() {
-  showConditionalOptions($(this));
-});
-
 
 // add and delete buttons for unlock conditions
 var $form = $('form');

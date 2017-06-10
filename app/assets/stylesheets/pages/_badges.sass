@@ -185,6 +185,9 @@ ul.earned-badge-list
   &.large-preview
     width: 150px
     height: 150px
+  &.event-preview
+    width: 250px
+    height: 150px
   &.medium-preview
     width: 80px
     height: 80px
@@ -208,10 +211,13 @@ ul.earned-badge-list
   left: 50%
   transform: translateX(-50%)
 
-// image cropper for badges 
+// image cropper for badges
 .img-cropper
   position: relative
   overflow: hidden
+  &.event-crop
+    width: 250px
+    height: 150px
   &.large-crop
     width: 150px
     height: 150px
