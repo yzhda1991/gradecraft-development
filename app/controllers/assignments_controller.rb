@@ -6,15 +6,15 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
-  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :grades_review]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :update, :grades_review]
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
     if current_user_is_student? || current_user_is_observer?
       render :index, Assignments::StudentPresenter.build({
         student: current_student,
-        assignment_types: current_course.assignment_types.ordered.includes(:assignments),
-        course: current_course,
+        assignment_types: @course.assignment_types.ordered.includes(:assignments),
+        course: @course,
         view_context: view_context
       })
     end
@@ -80,32 +80,32 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    assignment = current_course.assignments.find(params[:id])
-    if assignment.update_attributes assignment_params
-      if assignment.grades.present?
-        assignment.grades.each do |g|
+    @assignment = current_course.assignments.find(params[:id])
+    if @assignment.update_attributes assignment_params
+      if @assignment.grades.present?
+        @assignment.grades.each do |g|
           g.save
         end
       end
       respond_to do |format|
         format.html do
           redirect_to assignments_path,
-            notice: "#{(term_for :assignment).titleize} #{assignment.name } "\
+            notice: "#{(term_for :assignment).titleize} #{@assignment.name } "\
             "successfully updated" and return
         end
-        format.json { render json: assignment and return }
+        format.json { render json: @assignment and return }
       end
     end
 
     respond_to do |format|
       format.html do
         render :edit, Assignments::Presenter.build({
-          assignment: assignment,
+          assignment: @assignment,
           course: current_course,
           view_context: view_context
           })
       end
-      format.json { render json: { errors: assignment.errors }, status: 400 }
+      format.json { render json: { errors: @assignment.errors }, status: 400 }
     end
   end
 
