@@ -111,7 +111,7 @@ class Submission < ActiveRecord::Base
   # Set while skipping validations and callbacks
   def check_and_set_late_status!
     return false if self.assignment.due_at.nil?
-    self.update_column(:late, submitted_at > self.assignment.due_at)
+    self.update_column(:late, submitted_at.strftime('%d-%m-%Y %I:%M') > self.assignment.due_at.strftime('%d-%m-%Y %I:%M'))
   end
 
   # build a sensible base filename for all files that are attached to this submission
