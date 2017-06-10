@@ -1,4 +1,5 @@
 .flex-col.col-40
+  .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_message", locals: { presenter: presenter }
   - if presenter.due_dates?
     .panel.todo.dashboard-module= render partial: "info/dashboard/modules/dashboard_to_do_list", locals: { presenter: presenter }
 

@@ -1,0 +1,8 @@
+.card-header
+  %h2
+    Course Message
+    - if current_user_is_staff?
+      .right= link_to glyph(:edit) + "Edit", edit_dashboard_message_courses_path
+.card-body
+  - if current_course.dashboard_message.present?
+    %p= raw current_course.dashboard_message

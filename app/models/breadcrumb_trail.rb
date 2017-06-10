@@ -198,6 +198,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Course Settings')
   end
 
+  def courses_edit_dashboard_message
+    dashboard
+    breadcrumb('Edit Dashboard Message')
+  end
+
   def courses_show
     courses_index
     breadcrumb(objects[:course].name)
