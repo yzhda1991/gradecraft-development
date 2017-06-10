@@ -129,7 +129,6 @@ class CoursesController < ApplicationController
   end
 
   def syllabus
-
   end
 
   private
