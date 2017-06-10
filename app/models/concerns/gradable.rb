@@ -2,7 +2,7 @@ module Gradable
   extend ActiveSupport::Concern
 
   included do
-    has_many :grades, dependent: :destroy
+    has_many :grades, dependent: :destroy, autosave: true
     has_many :predicted_earned_grades, dependent: :destroy
 
     accepts_nested_attributes_for :grades, reject_if: :no_grade

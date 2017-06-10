@@ -82,6 +82,11 @@ class AssignmentsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes assignment_params
+      if assignment.grades.present?
+        assignment.grades.each do |g|
+          g.save
+        end
+      end
       respond_to do |format|
         format.html do
           redirect_to assignments_path,
