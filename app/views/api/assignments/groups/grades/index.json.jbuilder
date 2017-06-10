@@ -11,19 +11,18 @@ json.data do
   end
 end
 
-# Grades for the assignment
+# Grades for the assignment by group
 json.included do
-  json.array! @grades do |grade|
-    json.type                               "grade"
-    json.id                                 grade.id
+  json.array! @grades_by_group do |gbg|
+    json.type                               "group_grade"
+    json.id                                 gbg[:group].id
 
     json.attributes do
-      json.id                               grade.id
-      json.student_id                       grade.student.id
-      json.student_name                     grade.student.name
-      json.raw_points                       grade.raw_points
-      json.pass_fail_status                 grade.pass_fail_status
-      json.student_id                       grade.student_id
+      json.group_id                         gbg[:group].id
+      json.group_name                       gbg[:group].name
+      json.raw_points                       gbg[:grade].raw_points
+      json.pass_fail_status                 gbg[:grade].pass_fail_status
+      json.graded                           gbg[:grade].persisted?
     end
   end
 
@@ -40,7 +39,6 @@ json.included do
 end
 
 json.meta do
-  json.term_for_student                     term_for :student
   json.term_for_pass                        term_for :pass
   json.term_for_fail                        term_for :fail
 end

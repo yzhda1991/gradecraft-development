@@ -223,24 +223,6 @@ class Assignment < ActiveRecord::Base
       .where("submission_id in (select id from submissions where student_id in (select distinct(student_id) from team_memberships where team_id = ?))", team.id)
   end
 
-  # The below four are the Quick Grading Types, can be set at either the
-  # assignment or assignment type level
-  def grade_checkboxes?
-    mass_grade_type == "Checkbox"
-  end
-
-  def grade_select?
-    mass_grade_type == "Select List" && has_levels?
-  end
-
-  def grade_radio?
-    mass_grade_type == "Radio Buttons" && has_levels?
-  end
-
-  def grade_text?
-    mass_grade_type == "Text"
-  end
-
   def has_levels?
     assignment_score_levels.present?
   end

@@ -86,11 +86,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `grade_scope` - kind of assignment being graded. The three values are "Individual", "Group" and "Team". Defaults to "Individual"
   * `grading_due_at`
   * `hide_analytics` - boolean switch controlling whether the assignment's analytics should be hidden from students. The course model's `hide_analytics` attribute must be false for the checkbox to appear in the assignment form view
-  * `mass_grade_type` - quick grading type when an instructor is grading all students in the assignment at once. Each student would have the quick grading type next to their name. There are four types:
-    * "Checkbox" - a checkbox that, when selected, gives the student the amount of points set by `full_points` multiplied by his/her assignment weight (if he/she has one)
-    * "Select List" - a dropdown list, with the items being the grade levels
-    * "Radio Buttons" - each radio button is a grade level
-    * "Text" - text field that accepts an integer between 0 and `full_points`
   * `max_submissions`
   * `name` - name of assignment, required attribute
   * `notify_released` - whether a student should be notified by email when a grade is awarded. Defaults to true
@@ -158,11 +153,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
 
   * `is_individual?` - returns true if the grade scope is set to "Individual"
   * `has_groups?` - returns true if the grade scope is set to "Group"
-  * there are four methods returning true depending on what the mass grading type, also known as the quick grading type, is set to (*see `mass_grade_type` in attributes section under Grades below*):
-    * `grade_checkboxes?` - "Checkbox"
-    * `grade_select?` - "Select List". Assignment score levels must be present for this to return true
-    * `grade_radio?` - "Radio Buttons". Assignment score levels must be present for this to return true
-    * `grade_text?` - "Text"
 
 #### Unlocks
 

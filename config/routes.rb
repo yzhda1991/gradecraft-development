@@ -350,6 +350,9 @@ Rails.application.routes.draw do
         get "grade", to: 'grades#show'
         put "criterion_grades", to: "criterion_grades#update"
       end
+      resource :groups, only: [], module: :assignments do
+        resources :grades, only: :index, module: :groups
+      end
       resources :groups, only: [] do
         resources :criteria, only: [] do
           member do

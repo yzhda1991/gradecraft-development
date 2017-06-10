@@ -35,7 +35,6 @@
     purpose: "Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat side of silver dagger, releases juice better than cutting. Full moon Whomping Willow three turns should do it lemon drops.",
     grade_scope: "Individual",
     hide_analytics: false,
-    mass_grade_type: nil,
     release_necessary: false,
     student_logged: false,
     threshold_points: 0,
@@ -167,7 +166,7 @@ uncertainty! - Douglas Adams"
   }
 }
 
-@assignments[:standard_edit_quick_grade_checkbox] = {
+@assignments[:standard_edit] = {
   quotes: {
     assignment_created: "For me, I am driven by two main philosophies: know \
 more today about the world than I knew yesterday and lessen the \
@@ -179,11 +178,10 @@ deGrasse Tyson"
     name: "Standard Edit + Quick Grade with Checkbox [No Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
-    mass_grade_type: "Checkbox",
   }
 }
 
-@assignments[:standard_edit_quick_grade_checkbox_graded] = {
+@assignments[:standard_edit_graded] = {
   quotes: {
     assignment_created: "I hope you're pleased with yourselves. We could all \
 have been killed - or worse, expelled. Now if you don't mind, I'm going \
@@ -194,7 +192,6 @@ to bed. ― J.K. Rowling"
     name: "Standard Edit + Quick Grade with Checkbox [Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
-    mass_grade_type: "Checkbox",
   },
   grades: true,
   participation: 90,
@@ -213,7 +210,6 @@ of what it feels about education.― Harold Howe",
     name: "Assignment with Score Levels [No Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
-    mass_grade_type: "Select List",
     full_points: 20000,
   },
   assignment_score_levels: true,
@@ -229,7 +225,6 @@ of what it feels about education.― Harold Howe",
     name: "Assignment with Score Levels [Grades]",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
-    mass_grade_type: "Select List",
     full_points: 20000,
   },
   assignment_score_levels: true,
