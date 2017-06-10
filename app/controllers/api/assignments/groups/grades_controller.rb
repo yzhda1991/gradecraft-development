@@ -10,7 +10,7 @@ class API::Assignments::Groups::GradesController < ApplicationController
     render json: "Assignment is not group graded", status: :bad_request \
       and return if !@assignment.has_groups?
 
-    @grades_by_group = @assignment.groups.map do |group|
+    @grades_by_group = @assignment.groups.order_by_name.map do |group|
       GradeByGroup.new(group, Gradebook.new(@assignment, group.students).grades.first)
     end
   end
