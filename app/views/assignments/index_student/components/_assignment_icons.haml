@@ -11,7 +11,7 @@
         %ol
           - assignment.unlock_conditions.each do |condition|
             %li= condition.requirements_description_sentence
-        
+
     - else
       = tooltip("unlocked-assignment-tip_#{assignment.id}", :unlock) do
         %p You have unlocked this #{term_for :assignment}
@@ -26,6 +26,16 @@
       %ol
         - assignment.unlock_keys.each do |key|
           %li= key.key_description_sentence
+
+  - if presenter.submission_for(assignment).present?
+    - if presenter.submission_for(assignment).unsubmitted?
+      %span.flag
+        = tooltip("submitted-assignment-tip_#{assignment.id}", "file-text-o") do
+          You have a draft of this #{term_for :assignment} submission. Be sure to submit it before the due date!
+    - else
+      %span.checkmark
+        = tooltip("submitted-assignment-tip_#{assignment.id}", :paperclip) do
+          You have successfully submitted this #{term_for :assignment}
 
   - if ! assignment.name_visible_for_student?(presenter.student) && current_user_is_staff?
     = glyph("eye-slash")
