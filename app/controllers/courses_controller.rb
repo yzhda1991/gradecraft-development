@@ -109,7 +109,15 @@ class CoursesController < ApplicationController
     redirect_to root_path, notice: "Recalculated student scores for #{@course.name}"
   end
 
-  def course_creation_wizard
+  def edit_dashboard_message
+  end
+
+  def update_dashboard_message
+    if current_course.update_attributes(course_params)
+      redirect_to dashboard_path, notice: "Course Message successfully updated"
+    else
+      render action: "edit_dashboard_message"
+    end
   end
 
   def badges
@@ -121,7 +129,7 @@ class CoursesController < ApplicationController
   end
 
   def syllabus
-    
+
   end
 
   private
@@ -130,7 +138,7 @@ class CoursesController < ApplicationController
     params.require(:course).permit :course_number, :name,
       :semester, :year, :has_badges, :has_teams,
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
-      :user_id, :course_id, :course_rules, :syllabus, :has_multipliers,
+      :user_id, :course_id, :course_rules, :dashboard_message, :syllabus, :has_multipliers,
       :has_character_names, :has_team_roles, :has_character_profiles, :show_analytics,
       :total_weights, :weights_close_at, :has_public_badges,
       :assignment_weight_type, :has_submissions, :teams_visible,

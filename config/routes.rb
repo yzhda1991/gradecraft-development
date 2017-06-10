@@ -202,10 +202,11 @@ Rails.application.routes.draw do
     put :publish, on: :member
     get :badges, on: :member
     get :change, on: :member
+    get :edit_dashboard_message, on: :collection
+    put :update_dashboard_message, on: :collection
   end
 
   resources :course_memberships, only: [:create, :delete, :destroy]
-  get :course_creation_wizard, to: "courses#course_creation_wizard"
 
   #10. Groups
   resources :groups
