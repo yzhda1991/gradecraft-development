@@ -44,6 +44,9 @@ en:
     groups:
       grade:
         title: "Editing #{ @group.name }'s Grade for #{ @assignment.name }"
+    importers:
+      index:
+        title: "Import #{ term_for :assignments} "
   importers:
     importers:
       index:

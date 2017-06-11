@@ -3,12 +3,23 @@
 
   = simple_form_for(@user, method: :put, :url => update_profile_users_path) do |f|
     %section
-
       .form-item
-        %label.bold Your Avatar
-        - if @user.avatar_file_name.present?
-          %img{:src => @user.avatar_file_name, :width => 200, :height => 200 }
-        = f.file_field :avatar_file_name
+        %label.user-avatar-label{for: "user_avatar"} Your Avatar
+        = f.file_field :avatar_file_name, {class: "media-image-upload"}
+        .preview-wrapper{ class: @user.avatar_file_name.present? ? "" : "hidden"}
+          .icon-preview.avatar-preview
+            .img-cropper.avatar-crop
+              %img{:src => @user.avatar_file_name}
+            %span.xaxis-label 150px
+            %span.yaxis-label 150px
+          .icon-preview.tiny-preview
+            .img-cropper.xsmall-crop
+              %img{:src => @user.avatar_file_name}
+            %span.xaxis-label 20px
+            %span.yaxis-label 20px
+          - if @user.avatar_file_name.present? && @user.errors[:avatar_file_name].empty?
+            = f.check_box :remove_avatar_file_name
+            Remove Image
 
       - if ! @user.kerberos_uid.present?
         .form-item
