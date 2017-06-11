@@ -13,7 +13,6 @@ class UserPage
     fill_in "First name", with: fields[:first_name] || user.first_name
     fill_in "Last name", with: fields[:last_name] || user.last_name
     fill_in "Email", with: fields[:email] || user.email
-    fill_in "Pseudonym", with: fields[:display_name] || user.display_name
 
     courses = fields[:courses]
     courses.each_with_index do |course, index|

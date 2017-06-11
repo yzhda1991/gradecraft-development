@@ -192,7 +192,7 @@ class UsersController < ApplicationController
       earned_badges_attributes: [:points, :feedback, :student_id, :badge_id,
         :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
         :student_visible, :id, :_destroy],
-      course_memberships_attributes: [:auditing, :character_profile, :course_id,
-        :instructor_of_record, :user_id, :role, :last_login_at, :id, :_destroy]
+      course_memberships_attributes: [:auditing, :pseudonym, :character_profile, :course_id,
+        :instructor_of_record, :user_id, :role, :last_login_at, :id, :team_role, :_destroy]
   end
 end

@@ -12,7 +12,7 @@ feature "logging in" do
 
       expect(current_path).to eq dashboard_path
       within("header") do
-        expect(page).to have_content user.display_name
+        expect(page).to have_content user.first_name
       end
     end
 

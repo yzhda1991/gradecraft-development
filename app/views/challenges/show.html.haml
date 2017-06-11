@@ -12,6 +12,10 @@
 .pageContent
   = render partial: "layouts/alerts"
 
+  - if @challenge.media.present?
+    .event-image-show-wrapper
+      %img.event-image-show{src: @challenge.media}
+
   - if @challenge.challenge_files.present?
     %p
       %b Documents:

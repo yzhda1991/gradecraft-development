@@ -1,6 +1,6 @@
 %h2.subtitle= "In-#{ term_for :team } Rankings"
 - if team.present?
-  - if current_user_is_student? && ! current_student.display_name?
+  - if current_user_is_student? && ! current_student.display_name(current_course).present?
     %h6.small.right
       %span= "Want to participate in the #{term_for :team} leaderboard?"
       %span.bold= link_to "Set your screen name!", edit_profile_users_path
@@ -16,12 +16,12 @@
         %th Score
     %tbody
       - team.students.sort_by { |s| s.score_for_course(current_course) }.reverse.each_with_index do |student, index|
-        - if student.display_name?
+        - if student.display_name(current_course).present?
           %tr{class: ("complete" if student == current_student) }
             %td{"data-title" => "Rank"}= index + 1
-            %td= student.display_name
+            %td= student.display_name(current_course)
             - if current_course.has_character_profiles?
               %td= student.character_profile(current_course)
             - if current_course.has_team_roles?
-              %td= student.team_role
+              %td= student.team_role(current_course)
             %td{"data-title" => "Score"}= points student.score_for_course(current_course) if student.respond_to?(:grades)

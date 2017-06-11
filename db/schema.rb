@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610024328) do
+ActiveRecord::Schema.define(version: 20170611172829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,6 +260,8 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
     t.boolean  "has_seen_course_onboarding",     default: false
+    t.string   "pseudonym"
+    t.string   "team_role"
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
@@ -423,27 +425,16 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.text     "feedback"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "complete"
-    t.boolean  "semis"
-    t.boolean  "finals"
-    t.string   "type"
     t.string   "status"
-    t.boolean  "attempted"
-    t.boolean  "substantial"
     t.integer  "final_points"
     t.integer  "submission_id"
     t.integer  "course_id"
-    t.boolean  "shared"
     t.integer  "student_id"
-    t.integer  "task_id"
     t.integer  "group_id"
-    t.string   "group_type"
     t.integer  "score"
     t.integer  "assignment_type_id"
     t.integer  "full_points"
-    t.text     "admin_notes"
     t.integer  "graded_by_id"
-    t.integer  "team_id"
     t.integer  "predicted_score",            default: 0,     null: false
     t.boolean  "instructor_modified",        default: false
     t.string   "pass_fail_status"
@@ -459,13 +450,10 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.datetime "excluded_at"
     t.integer  "excluded_by_id"
     t.index ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-    t.index ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
     t.index ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
     t.index ["course_id"], name: "index_grades_on_course_id", using: :btree
-    t.index ["group_id", "group_type"], name: "index_grades_on_group_id_and_group_type", using: :btree
     t.index ["score"], name: "index_grades_on_score", using: :btree
-    t.index ["task_id"], name: "index_grades_on_task_id", using: :btree
   end
 
   create_table "group_memberships", force: :cascade do |t|
@@ -475,9 +463,7 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "course_id"
-    t.string   "group_type"
     t.index ["course_id"], name: "index_group_memberships_on_course_id", using: :btree
-    t.index ["group_id", "group_type"], name: "index_group_memberships_on_group_id_and_group_type", using: :btree
     t.index ["student_id"], name: "index_group_memberships_on_student_id", using: :btree
   end
 
@@ -647,21 +633,6 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
   end
 
-  create_table "student_academic_histories", force: :cascade do |t|
-    t.integer "student_id"
-    t.string  "major"
-    t.decimal "gpa"
-    t.integer "current_term_credits"
-    t.integer "accumulated_credits"
-    t.string  "year_in_school"
-    t.string  "state_of_residence"
-    t.string  "high_school"
-    t.boolean "athlete"
-    t.integer "act_score"
-    t.integer "sat_score"
-    t.integer "course_id"
-  end
-
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",                          null: false
     t.integer  "submission_id",                     null: false
@@ -685,19 +656,13 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.text     "text_comment"
     t.integer  "creator_id"
     t.integer  "group_id"
-    t.datetime "released_at"
-    t.integer  "task_id"
     t.integer  "course_id"
-    t.integer  "assignment_type_id"
-    t.string   "assignment_type"
     t.datetime "submitted_at"
     t.boolean  "late",               default: false, null: false
     t.text     "text_comment_draft"
     t.index ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", unique: true, using: :btree
     t.index ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
-    t.index ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
-    t.index ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
     t.index ["course_id"], name: "index_submissions_on_course_id", using: :btree
   end
 
@@ -721,27 +686,26 @@ ActiveRecord::Schema.define(version: 20170610024328) do
   end
 
   create_table "team_leaderships", force: :cascade do |t|
-    t.integer  "team_id"
-    t.integer  "leader_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "team_id",    null: false
+    t.integer  "leader_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_memberships", force: :cascade do |t|
-    t.integer  "team_id"
-    t.integer  "student_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "team_id",    null: false
+    t.integer  "student_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "course_id"
+    t.string   "name",                                  null: false
+    t.integer  "course_id",                             null: false
     t.integer  "rank"
     t.integer  "challenge_grade_score"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "teams_leaderboard",     default: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
@@ -803,12 +767,7 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.string   "last_name"
     t.integer  "rank"
     t.string   "display_name"
-    t.boolean  "private_display",                 default: false
     t.integer  "current_course_id"
-    t.string   "final_grade"
-    t.integer  "visit_count"
-    t.integer  "predictor_views"
-    t.integer  "page_views"
     t.string   "team_role"
     t.datetime "last_login_at"
     t.datetime "last_logout_at"

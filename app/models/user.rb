@@ -159,6 +159,14 @@ class User < ActiveRecord::Base
     @name = [first_name,last_name].reject(&:blank?).join(" ").presence || "User #{id}"
   end
 
+  def display_name(course)
+    course_memberships.where(course: course).first.try(:pseudonym) || display_name
+  end
+
+  def team_role(course)
+    course_memberships.where(course: course).first.team_role
+  end
+
   def submitter_directory_name
     "#{last_name.camelize}, #{first_name.camelize}"
   end

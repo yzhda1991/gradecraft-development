@@ -2,7 +2,7 @@
   = render partial: "layouts/alerts"
 
   %section
-    .card{style: "height: 400px;"}
+    .card.left{style: "height: 400px;"}
       .card-cap
         %img{src: "/images/csv-logo.png", height: "46px"}
       .card-block
@@ -14,7 +14,7 @@
         = link_to "Import Grades from CSV", assignment_grades_importer_path(@assignment, :csv), class: "card-link button"
 
     - if current_course.allows_canvas?
-      .card{style: "height: 400px;"}
+      .card.left{style: "height: 400px;"}
         .card-cap
           %img{src: "/images/canvas-logo.png"}
         .card-block

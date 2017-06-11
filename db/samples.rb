@@ -170,16 +170,17 @@ end
 
 puts "Generating observers..."
 
-User.create! do |u|
+observer = User.create! do |u|
   u.username = "moaning.myrtle"
   u.first_name = "Myrtle"
   u.last_name = "Warren"
   u.email = "moaning.myrtle@hogwarts.edu"
   u.password = "basilisk"
   u.courses << @courses.map {|course_name,config| config[:course]}
-  u.display_name = "Moaning Myrtle"
   u.save!
-end.activate!
+end
+observer.activate!
+observer.course_memberships.each { |cm| cm.update_attributes(pseudonym: "Moaning Myrtle", role: "observer") }
 
 # ---------------------------- Create Auditors! ------------------------------#
 #Delphini Diggory
@@ -193,11 +194,10 @@ auditor = User.create! do |u|
   u.email = "delphini.diggory@hogwarts.edu"
   u.password = "keepthesecrets"
   u.courses << @courses.map {|course_name,config| config[:course]}
-  u.display_name = "Delphini Diggory"
   u.save!
 end
 auditor.activate!
-auditor.course_memberships.each { |cm| cm.update_attributes(role: "student", auditing: true) }
+auditor.course_memberships.each { |cm| cm.update_attributes(pseudonym: "Delphini Diggory", role: "student", auditing: true) }
 
 # ---------------------------- Create Students! ------------------------------#
 puts "Generating students..."
@@ -215,9 +215,8 @@ puts "Generating students..."
     u.email = "#{username}@hogwarts.edu"
     u.password = "uptonogood"
     u.courses << courses
-    u.display_name = pseuydonyms.sample
   end
-  user.course_memberships.each { |cm| cm.update_attributes(role: "student") }
+  user.course_memberships.each { |cm| cm.update_attributes(role: "student", pseudonym: pseuydonyms.sample) }
   user.teams << teams
   user.activate!
   print "."
@@ -560,7 +559,7 @@ PaperTrail.whodunnit = nil
               raw_points += criterion.levels.first.points
               criterion.criterion_grades.create! do |cg|
                 cg.assignment_id = assignment.id
-                cg.comments = "good work #{student.display_name}!"
+                cg.comments = "good work #{student.first_name}!"
                 cg.criterion_id = criterion.id
                 cg.level_id = criterion.levels.first.id
                 cg.points = criterion.levels.first.points

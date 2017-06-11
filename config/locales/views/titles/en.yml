@@ -214,7 +214,7 @@ en:
     edit:
       title: "Editing #{ @user.name }"
     edit_profile:
-      title: "Edit My Profile"
+      title: "Edit My GradeCraft Profile"
     import:
       title: "Import Users"
     importers:

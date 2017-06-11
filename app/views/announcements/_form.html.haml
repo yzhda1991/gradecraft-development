@@ -2,12 +2,10 @@
 
 = simple_form_for(@announcement) do |f|
   %section.form-section
-    %h2.form-title Basics
     .form-item
       = f.input :title, "aria-required": "true"
 
-  %section.form-section
-    %h2.form-title Body
+    = f.label :body, "Message"
     = f.text_area :body, class: "froala"
 
   .submit-buttons

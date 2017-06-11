@@ -13,6 +13,10 @@
   = render partial: "layouts/alerts"
 
   .show-page-wrapper
+    - if @event.media.present?
+      .event-image-show-wrapper
+        %img.event-image-show{src: @event.media}
+
     %section
       %h3 Event Date
       %p= " - #{@event.due_at}"
@@ -20,8 +24,3 @@
     %section
       %h3 Description
       .event-description-show.clearfix= raw @event.description
-
-    %section
-      - if @event.media.present?
-        .event-image-show-wrapper
-          %img.event-image-show{src: @event.media}
