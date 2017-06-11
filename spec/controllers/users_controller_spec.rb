@@ -304,7 +304,7 @@ describe UsersController do
 
     describe "POST update_profile" do
       it "successfully updates the users profile" do
-        params = { display_name: "frodo", password: "", password_confirmation: "", time_zone: "Chihuahua" }
+        params = { password: "", password_confirmation: "", time_zone: "Chihuahua" }
         post :update_profile, params: { id: student.id, user: params }
         expect(response).to redirect_to(dashboard_path)
         expect(student.reload.display_name).to eq("frodo")
