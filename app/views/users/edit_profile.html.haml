@@ -9,12 +9,12 @@
         .preview-wrapper{ class: @user.avatar_file_name.present? ? "" : "hidden"}
           .icon-preview.avatar-preview
             .img-cropper.avatar-crop
-              %img{:src => @user.avatar_file_name}
-            %span.xaxis-label 150px
-            %span.yaxis-label 150px
+              %img.img-rounded{:src => @user.avatar_file_name}
+            %span.xaxis-label 100px
+            %span.yaxis-label 100px
           .icon-preview.tiny-preview
             .img-cropper.xsmall-crop
-              %img{:src => @user.avatar_file_name}
+              %img.img-rounded{:src => @user.avatar_file_name}
             %span.xaxis-label 20px
             %span.yaxis-label 20px
           - if @user.avatar_file_name.present? && @user.errors[:avatar_file_name].empty?
