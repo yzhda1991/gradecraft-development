@@ -47,7 +47,7 @@
 
   %h2.subtitle #{term_for :challenge } Grades
 
-  %table.dynatable
+  %table.unfancy_dynatable
     %thead
       %tr
         %th Name
@@ -57,17 +57,14 @@
     %tbody
       - @challenges.each do |challenge|
         %tr
-          %td
-            - if challenge.challenge_grades.present?
-              = link_to challenge.name, challenge
-            - else
-              = challenge.name
+          %td= link_to challenge.name, challenge
           %td= points challenge.challenge_grade_for_team(@team).try(:score)
           %td
-            .right
-              %ul.button-bar
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu
                 - if challenge.challenge_grade_for_team(@team).present?
                   = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
-                  = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), class: "button", data: { confirm: "Are you sure?", method: :delete }
+                  = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), data: { confirm: "Are you sure?", method: :delete }
                 - else
-                  = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id), class: "button"
+                  = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id)
