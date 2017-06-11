@@ -46,27 +46,21 @@
           %td= link_to glyph("file-excel-o") + "Course Analytics", course_analytics_exports_path, method: :post
           %td Event data including pageviews, predictions, and logins
 
-  .download_type
-    %h2= "#{term_for :assignment_type} Downloads"
-    %table.dynatable
-      %caption.sr-only= "#{term_for :assignment_type} Downloads"
-      %thead
-        %tr
-          %th File Type
-      %tbody
-        - current_course.assignment_types.each do |assignment_type|
+  - if current_course.assignment_types.present?
+    .download_type
+      %h2= "#{term_for :assignment_type} Downloads"
+      %table.dynatable
+        %caption.sr-only= "#{term_for :assignment_type} Downloads"
+        %thead
           %tr
-            %td= link_to glyph("file-excel-o") + "#{assignment_type.name}", export_scores_assignment_type_path(assignment_type.id, course_id: current_course.id, format: "csv")
+            %th File Type
+        %tbody
+          - current_course.assignment_types.each do |assignment_type|
+            %tr
+              %td= link_to glyph("file-excel-o") + "#{assignment_type.name}", export_scores_assignment_type_path(assignment_type.id, course_id: current_course.id, format: "csv")
 
 
-  .download_type#submissions_exports
-    %h2 Submissions Exports
-
-    = render partial: "downloads/submissions_exports/table",
+  = render partial: "downloads/submissions_exports/table",
       locals: { presenter: presenter }
 
-  .download_type#course_analytics_exports
-    %h2 Course Analytics Exports
-
-    = render partial: "downloads/course_analytics_exports/table",
-      locals: { presenter: presenter }
+  = render partial: "downloads/course_analytics_exports/table", locals: { presenter: presenter }
