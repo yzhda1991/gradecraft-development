@@ -42,7 +42,7 @@ class UnlockCondition < ActiveRecord::Base
 
   # Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
-    "#{ condition_state_doing } unlocks the #{ unlockable.name } #{ unlockable_type }" 
+    "#{ condition_state_doing } unlocks the #{ unlockable.name } #{ unlockable_type }"
   end
 
   # Counting how many students in a group have done the work to unlock an
@@ -173,6 +173,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_grade_earned_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
+    return false unless grade && grade.final_points > 0
     if condition_value? && condition_date?
       if check_if_grade_earned_meets_condition_value(grade) &&
       check_if_grade_earned_met_condition_date(grade)
