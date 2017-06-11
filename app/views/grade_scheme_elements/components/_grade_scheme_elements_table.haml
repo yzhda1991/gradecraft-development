@@ -23,6 +23,6 @@
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
               %ul.options-menu
-                = active_course_link_to "Set Lock Conditions", edit_grade_scheme_element_path(element)
+                = active_course_link_to glyph(:lock) + "Set Lock Conditions", edit_grade_scheme_element_path(element)
 
 = render partial: "courses/grading_philosophy", locals: { course: current_course }

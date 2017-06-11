@@ -1,17 +1,20 @@
-%table.dynatable
-  %caption.sr-only Submissions Exports
-  %thead
-    %tr
-      %th Assignment
-      %th Generated&nbsp;By
-      %th #{term_for :team}
-      %th #&nbsp;Submitters
-      %th Filename
-      %th Completed&nbsp;At
-      %th Status
-      %th
-        %span.sr-only Action buttons
-  %tbody
-    - presenter.submissions_exports.each do |export|
-      = render partial: "downloads/submissions_exports/table_row",
-        locals: { export: export }
+- if presenter.submissions_exports.present?
+  .download_type#submissions_exports
+    %h2 Submissions Exports
+    %table.dynatable
+      %caption.sr-only Submissions Exports
+      %thead
+        %tr
+          %th Assignment
+          %th Generated&nbsp;By
+          %th #{term_for :team}
+          %th #&nbsp;Submitters
+          %th Filename
+          %th Completed&nbsp;At
+          %th Status
+          %th
+            %span.sr-only Action buttons
+      %tbody
+        - presenter.submissions_exports.each do |export|
+          = render partial: "downloads/submissions_exports/table_row",
+            locals: { export: export }

@@ -13,7 +13,7 @@ class Team < ActiveRecord::Base
   has_many :leaders, through: :team_leaderships
 
   # Teams design banners that they display on the leadboard
-  mount_uploader :banner, ImageUploader
+  mount_uploader :banner, BannerUploader
 
   # Teams don't currently earn badges directly - but they are recognized for
   # the badges their students earn

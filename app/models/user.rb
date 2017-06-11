@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
 
   scope :order_by_name, -> { order("last_name, first_name ASC") }
 
-  mount_uploader :avatar_file_name, ImageUploader
+  mount_uploader :avatar_file_name, AvatarUploader
 
   has_many :authorizations, class_name: "UserAuthorization", dependent: :destroy
   has_many :course_memberships, dependent: :destroy, inverse_of: :user

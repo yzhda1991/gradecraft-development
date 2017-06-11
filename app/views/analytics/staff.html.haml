@@ -5,14 +5,14 @@
 
   / Login counts
   #role-logins-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/login_role_events.json", :url_data => "role_group=staff", :title => "Logins", :subtitle => "{{granularity}}", :y_axis_label => "Logins {{granularity}}"}}
-  
+
   / Pageviews Total
   #all-pageviews-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/all_role_pageview_events.json?role_group=staff", :title => "Pageviews", :subtitle => "{{granularity}}"}}
 
   / Pageviews per page
-  %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=staff", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
-    %caption.sr-only Staff page views per page
-    %thead
-      %th{:"data-dynatable-column" => "name"} Page
-      %th{:"data-dynatable-column" => "total"} Pageviews
-    %tbody
+  -# %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=staff", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
+  -#   %caption.sr-only Staff page views per page
+  -#   %thead
+  -#     %th{:"data-dynatable-column" => "name"} Page
+  -#     %th{:"data-dynatable-column" => "total"} Pageviews
+  -#   %tbody

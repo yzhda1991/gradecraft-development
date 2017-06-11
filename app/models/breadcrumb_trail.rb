@@ -112,7 +112,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignment_types_edit
     dashboard
-    breadcrumb(objects[:assignment_type].course.assignment_term + " Types", assignment_types_path)
+    breadcrumb(objects[:course].assignment_term.pluralize, assignments_path)
     breadcrumb('Editing ' + objects[:assignment_type].name)
   end
 

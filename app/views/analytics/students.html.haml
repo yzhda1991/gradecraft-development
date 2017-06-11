@@ -10,13 +10,13 @@
   #all-pageviews-chart.analytics-chart{data: {:chart => "timeseries", :url => "/analytics/all_role_pageview_events.json?role_group=student", :title => "Pageviews", :subtitle => "{{granularity}}"}}
 
   / Pageviews per page
-  %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=student", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
-    %caption.sr-only= "#{term_for :student} page views per page"
-    %thead
-      %tr
-        %th{:"data-dynatable-column" => "name"} Page
-        %th{:"data-dynatable-column" => "total"} Pageviews
-    %tbody
+  -# %table#pageviews-chart.analytics-table{data: {:chart => "timeseries-table", :url => "/analytics/role_pageview_events.json?role_group=student", :title => "Pageviews per Page", :subtitle => "{{granularity}}"}}
+  -#   %caption.sr-only= "#{term_for :student} page views per page"
+  -#   %thead
+  -#     %tr
+  -#       %th{:"data-dynatable-column" => "name"} Page
+  -#       %th{:"data-dynatable-column" => "total"} Pageviews
+  -#   %tbody
 
   / Students who have not predicted any grades for this course
   %h3.bold Non-predictors

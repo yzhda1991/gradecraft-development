@@ -32,6 +32,8 @@
                 %th{:style => "display: none"} Due Date
                 %th{scope: "col", :width => "10%"}  Max Points
                 %th Rubric?
+                %th Submissions
+                %th Grades
                 %th.options Options
             %tbody.sort-assignments
               - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
@@ -50,6 +52,8 @@
                   - else
                     %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
+                  %td= assignment.submissions.count if assignment.accepts_submissions? && assignment.submissions.present?
+                  %td= assignment.grades.graded_or_released.count if assignment.grades.instructor_modified.any?
                   %td
                     - if current_user_is_admin? || current_course.active?
                       .button-container.dropdown
