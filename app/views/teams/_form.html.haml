@@ -9,10 +9,10 @@
       = f.file_field :banner, {class: "media-image-upload"}
       .form-hint= "Upload a banner for this #{term_for :team}"
       .preview-wrapper{ class: @team.banner.present? ? "" : "hidden"}
-        .icon-preview.event-preview
-          .img-cropper.event-crop
+        .icon-preview.banner-preview
+          .img-cropper.banner-crop
             %img{src: @team.banner, width: 40, alt: "Team Banner" }
-          %span.xaxis-label 250px
+          %span.xaxis-label 600px
           %span.yaxis-label 150px
         = f.check_box :remove_banner
         Remove Image
