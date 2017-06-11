@@ -34,11 +34,11 @@
             %img.img-rounded{ :src => student.avatar_file_name, :width => 30 }
         %td= link_to student.first_name, student_path(student)
         %td= link_to student.last_name, student_path(student)
-        %td= student.display_name if presenter.display_pseudonyms?
+        %td= student.display_name(current_course) if presenter.display_pseudonyms?
         - if presenter.has_teams?
           %td
             = link_to student.team.name, team_path(id: student.team.id) if student.team
-          %td= student.try(:team_role) if presenter.has_team_roles?
+          %td= student.team_role(current_course) if presenter.has_team_roles?
         %td= points student.score
         %td= student.grade_scheme.try(:name)
         - if presenter.has_badges?

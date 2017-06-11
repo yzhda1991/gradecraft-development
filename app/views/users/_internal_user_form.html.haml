@@ -10,9 +10,6 @@
     .form-item
       = f.label :email
       = f.text_field :email, "aria-required": "true"
-    .form-item
-      = f.label :display_name, "Pseudonym"
-      = f.text_field :display_name
     = f.hidden_field :internal, value: true
     - if @user.new_record?
       .form-item

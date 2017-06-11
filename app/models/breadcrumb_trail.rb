@@ -473,7 +473,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_edit_profile
     dashboard
-    breadcrumb('Edit My Profile')
+    breadcrumb('Edit My GradeCraft Profile')
   end
 
   def users_import

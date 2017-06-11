@@ -45,9 +45,9 @@ When a User is destroyed, all of its Course Memberships, Student Academic Histor
   * `avatar_file_name` - file name of the avatar picture
   * `first_name` - must be present
   * `last_name` - must be present. Used to order all student display pages except for the leaderboard and top/bottom 10
-  * `display_name` - used as the public name for the user when present
+  * `display_name` - used as the public name for the user when present. Currently being phased out in favor of moving this to the course membership to allow for multiple settings per user.
   * `last_activity_at` - last datetime that the user logged in. Set by sorcery
-  * `team_role` - role that student will have in a team
+  * `team_role` - role that student will have in a team. Currently being phased out in favor of moving this to the course membership to allow for multiple settings per user. 
   * `internal` - boolean representing whether user has an internal University of Michigan email address
 
 #### Unused

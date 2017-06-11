@@ -34,23 +34,22 @@
         = f.time_zone_select :time_zone
 
       %hr.dotted
-      - if @user.is_student?(current_course)
-        - if current_course.teams_visible? && (current_course.has_in_team_leaderboards? || current_course.has_character_names?)
+      %h2 My Profile in #{ current_course.name }
+      = f.simple_fields_for :course_memberships, @course_membership do |p|
+        - if current_course.has_character_profiles?
           .form-item
-            = f.label :display_name, "Pseudonym"
-            = f.text_field :display_name
-            .form-item What would you like your name to be on the leaderboards?
+            = p.input :character_profile
+            .form-hint What's the background of your character in this class? What skills do you have and what are you motivated by?
+        - if @user.is_student?(current_course)
+          - if current_course.teams_visible? && (current_course.has_in_team_leaderboards? || current_course.has_character_names?)
+            .form-item
+              = p.input :pseudonym
+              .form-hint What would you like your name to be on the leaderboards?
 
         - if current_course.has_team_roles?
           .form-item
-            = f.input :team_role, :input_html => { :maxlength => 255 }, :label => "#{term_for :team} Role"
+            = p.input :team_role, :input_html => { :maxlength => 255 }, :label => "#{term_for :team} Role"
             .form-hint What will you contribute to your #{term_for :team}?
-
-        - if current_course.has_character_profiles?
-          = f.simple_fields_for :course_memberships, @course_membership do |p|
-            .form-item
-              = p.input :character_profile
-              .form-hint What's the background of your character in this class? What skills do you have and what are you motivated by?
 
       - if impersonating?
         You cannot update this information in preview mode

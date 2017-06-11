@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170610024328) do
+ActiveRecord::Schema.define(version: 20170611172829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -260,6 +260,8 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.boolean  "instructor_of_record",           default: false
     t.integer  "earned_grade_scheme_element_id"
     t.boolean  "has_seen_course_onboarding",     default: false
+    t.string   "pseudonym"
+    t.string   "team_role"
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
@@ -323,7 +325,7 @@ ActiveRecord::Schema.define(version: 20170610024328) do
     t.boolean  "published",                                               default: false,                        null: false
     t.integer  "institution_id"
     t.text     "dashboard_message"
-    t.index ["institution_id"], name: "index_courses_on_institution_id",  using: :btree
+    t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
   end
 
   create_table "criteria", force: :cascade do |t|
@@ -684,26 +686,26 @@ ActiveRecord::Schema.define(version: 20170610024328) do
   end
 
   create_table "team_leaderships", force: :cascade do |t|
-    t.integer  "team_id", null: false
-    t.integer  "leader_id", null: false
+    t.integer  "team_id",    null: false
+    t.integer  "leader_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "team_memberships", force: :cascade do |t|
-    t.integer  "team_id", null: false
+    t.integer  "team_id",    null: false
     t.integer  "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string   "name", null: false
-    t.integer  "course_id", null: false
+    t.string   "name",                                  null: false
+    t.integer  "course_id",                             null: false
     t.integer  "rank"
     t.integer  "challenge_grade_score"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.boolean  "in_team_leaderboard",   default: false
     t.string   "banner"
     t.integer  "average_score",         default: 0,     null: false
