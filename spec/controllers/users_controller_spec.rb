@@ -307,7 +307,6 @@ describe UsersController do
         params = { password: "", password_confirmation: "", time_zone: "Chihuahua" }
         post :update_profile, params: { id: student.id, user: params }
         expect(response).to redirect_to(dashboard_path)
-        expect(student.reload.display_name).to eq("frodo")
         expect(student.reload.time_zone).to eq("Chihuahua")
       end
 
