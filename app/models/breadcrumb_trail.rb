@@ -436,7 +436,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def submissions_edit
     dashboard
-    breadcrumb("Edit Submission")
+    breadcrumb("Edit " + objects[:assignment].name.titleize + " Submission")
   end
 
   def submissions_new

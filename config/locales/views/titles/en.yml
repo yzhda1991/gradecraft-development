@@ -191,7 +191,9 @@ en:
     show:
       title: "#{ @submission.assignment.name } Submission"
     new:
-      title: "New Submission"
+      title: "Submit #{ @assignment.name}"
+    edit:
+      title: "Edit #{ @assignment.name } Submission"
   teams:
     index:
       title: "#{ term_for :teams }"
