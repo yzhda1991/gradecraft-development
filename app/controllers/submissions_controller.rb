@@ -13,6 +13,7 @@ class SubmissionsController < ApplicationController
   end
 
   def new
+    @assignment = current_course.assignments.find(params[:assignment_id])
     presenter = Submissions::NewPresenter.new(base_presenter_attrs)
     render :new, presenter.render_options
   end
@@ -40,8 +41,9 @@ class SubmissionsController < ApplicationController
   end
 
   def edit
+    @assignment = current_course.assignments.find(params[:assignment_id])
     presenter = Submissions::EditPresenter.new(presenter_attrs_with_id)
-    ensure_editable presenter.submission, current_course.assignments.find(params[:assignment_id]) or return
+    ensure_editable presenter.submission, @assignment or return
     authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end
