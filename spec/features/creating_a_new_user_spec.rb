@@ -1,4 +1,4 @@
-feature "creating a new user" do
+feature "creating a new user", focus: true do
   context "as an administrator" do
     let!(:course_membership) { create :course_membership, :admin, user: admin }
     let(:admin) { create :user }

@@ -101,10 +101,9 @@ describe UsersController do
 
     describe "POST update_profile" do
       it "successfully updates the users profile" do
-        params = { display_name: "gandalf", time_zone: "Chihuahua" }
+        params = { time_zone: "Chihuahua" }
         post :update_profile, params: { id: professor.id, user: params }
         expect(response).to redirect_to(dashboard_path)
-        expect(professor.reload.display_name).to eq("gandalf")
         expect(professor.reload.time_zone).to eq("Chihuahua")
       end
     end
