@@ -27,12 +27,12 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    CourseMembershipBuilder.new(current_user).build_for(@user)
+    @course_membership = @user.course_memberships.new
   end
 
   def edit
     @user = User.find(params[:id])
-    CourseMembershipBuilder.new(current_user).build_for(@user)
+    @course_membership = @user.course_memberships.where(course: current_course).first
   end
 
   def create

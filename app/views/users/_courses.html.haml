@@ -1,28 +1,23 @@
-- if current_user_is_staff?
-  = form.simple_fields_for :course_memberships do |cmf|
-    - unless current_user.role(cmf.object.course).nil?
-      .form-item.course-selection
-        %h4.uppercase
-          = "#{cmf.object.course.course_number} #{cmf.object.course.name} #{cmf.object.course.try(:semester)} #{cmf.object.course.try(:year)} Settings"
-          .right
-            %button{role: "button", type: "button", class: "button #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }}= glyph(:plus) + "Add user to this course"
-            %button{role: "button", type: "button", class: "button danger #{"hidden" if @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }}= glyph(:times) + "Remove user from this course"
-        .course-setting{ class: ("hidden" if @user.role(cmf.object.course).nil?) }
-          = hidden_field_tag :child_index, cmf.options[:child_index]
-          = cmf.hidden_field :_destroy, value: @user.role(cmf.object.course).nil?
-          = cmf.hidden_field :course_id
-          .form-item
-            = cmf.label :role, "Select Role"
-            = cmf.select :role, available_roles(cmf.object.course)
-          - if cmf.object.course.has_character_profiles?
-            .form-item
-              = cmf.input :character_profile, class: "froala"
-          - if cmf.object.course.has_in_team_leaderboards?
-            .form-item
-              = cmf.label :pseudonym, "Pseudonym"
-              = cmf.text_field :pseudonym
+= form.simple_fields_for :course_memberships, @course_membership do |cm|
+  %h2.form-title= "#{current_course.name} Profile"
+  .form-item.course-selection
+    = cm.hidden_field :course_id, value: current_course.id
+    .form-item
+      = cm.label :role, "Select Role"
+      = cm.select :role, available_roles(current_course), selected: @course_membership.try(:role)
+    - if current_course.has_in_team_leaderboards?
+      .form-item
+        = cm.label :pseudonym, "Pseudonym"
+        = cm.text_field :pseudonym
+    - if current_course.has_team_roles?
+      .form-item
+        = cm.label :team_role, "Team Role"
+        = cm.text_field :team_role
+    - if current_course.has_character_profiles?
+      .form-item
+        = cm.input :character_profile
 
-          .form-item
-            = cmf.label :auditing
-            = cmf.check_box :auditing
-            .form-hint This #{term_for(:student).downcase}'s grades will be excluded from course analysis
+    .form-item
+      = cm.label :auditing
+      = cm.check_box :auditing
+      .form-hint This #{term_for(:student).downcase}'s grades will be excluded from course analysis
