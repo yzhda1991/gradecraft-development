@@ -71,3 +71,23 @@ $('table.paginated_dynatable').bind('dynatable:init', function(e, dynatable) {
       }
     }
 });
+
+$('table.unfancy_dynatable').bind('dynatable:init', function(e, dynatable) {
+      dynatable.sorts.functions["numeric"] = numeric;
+      dynatable.sorts.functions["date"] = date;
+      dynatable.sorts.functions["alphanum"] = alphanum;
+    }).dynatable({
+  features: {
+      paginate: false,
+      search: false,
+      recordCount: false
+    },
+    dataset: {
+      sortTypes: {
+        score: 'numeric',
+        rank: 'numeric',
+        date: 'date',
+        blog: 'alphanum'
+      }
+    }
+});
