@@ -9,7 +9,9 @@ module Services
         earned_badge = context.earned_badge
         if earned_badge.student_visible?
           EarnedBadgeAnnouncement.create earned_badge
-          NotificationMailer.earned_badge_awarded(earned_badge).deliver_now
+          if earned_badge.student.email_badge_awards?(earned_badge.course)
+            NotificationMailer.earned_badge_awarded(earned_badge).deliver_now
+          end
         end
       end
     end

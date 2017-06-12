@@ -51,6 +51,16 @@
             = p.input :team_role, :input_html => { :maxlength => 255 }, :label => "#{term_for :team} Role"
             .form-hint What will you contribute to your #{term_for :team}?
 
+        %h3 Email Settings
+        .form-hint You will always see your notifications in announcement center above. If there's a type of email you'd rather not get from GradeCraft, just uncheck the box below.
+        .form-item
+          = p.input :email_announcements
+          - if current_course.has_badges?
+            = p.input :email_badge_awards
+          = p.input :email_grade_notifications
+          - if current_course.has_team_challenges?
+            = p.input :email_challenge_grade_notifications
+
       - if impersonating?
         You cannot update this information in preview mode
       - else

@@ -167,6 +167,22 @@ class User < ActiveRecord::Base
     course_memberships.where(course: course).first.team_role
   end
 
+  def email_badge_awards?(course)
+    return true if course_memberships.where(course: course).first.email_badge_awards?
+  end
+
+  def email_grade_notifications?(course)
+    return true if course_memberships.where(course: course).first.email_grade_notifications?
+  end
+
+  def email_announcements?(course)
+    return true if course_memberships.where(course: course).first.email_announcements?
+  end
+
+  def email_challenge_grade_notifications?(course)
+    return true if course_memberships.where(course: course).first.email_challenge_grade_notifications?
+  end
+
   def submitter_directory_name
     "#{last_name.camelize}, #{first_name.camelize}"
   end

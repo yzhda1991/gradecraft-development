@@ -8,9 +8,9 @@ class AnnouncementsController < ApplicationController
 
   def show
     @announcement = Announcement.find params[:id]
-    if @announcement.course == current_course 
+    if @announcement.course == current_course
       authorize! :show, @announcement
-    else 
+    else
       redirect_to dashboard_path, notice: "It looks like that announcement isn't for this course. Try switching courses to #{view_context.link_to(@announcement.course.name, change_course_path(@announcement.course))}."
     end
     @announcement.mark_as_read! current_user
