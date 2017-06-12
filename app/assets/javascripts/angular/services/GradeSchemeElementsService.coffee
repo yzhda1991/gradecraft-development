@@ -22,7 +22,6 @@
       currentElement.validationError = "Lowest level threshold must be 0"
     else
       _deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
-      validateElements() if gradeSchemeElements.length > 0
 
   # Add a new element after the selected element, if one was given
   addElement = (currentElement, attributes=null) ->
