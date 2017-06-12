@@ -71,15 +71,13 @@ class CoursesController < ApplicationController
 
   def update
     authorize! :update, @course
-    respond_to do |format|
-      if @course.update_attributes(course_params)
-        @course.recalculate_student_scores if add_team_score_to_student_changed?
-        bust_course_list_cache current_user
-        redirect_to edit_course_path(@course),
-        notice: "Course #{@course.name} successfully updated"
-      else
-        render action: "edit"
-      end
+    if @course.update_attributes(course_params)
+      @course.recalculate_student_scores if add_team_score_to_student_changed?
+      bust_course_list_cache current_user
+      redirect_to edit_course_path(@course),
+      notice: "Course #{@course.name} successfully updated"
+    else
+      render action: "edit"
     end
   end
 
