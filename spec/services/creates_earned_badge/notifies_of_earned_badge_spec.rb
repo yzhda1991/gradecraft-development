@@ -1,7 +1,8 @@
 describe Services::Actions::NotifiesOfEarnedBadge do
-  let(:course) { earned_badge.course }
+  let(:course) { create :course }
   let(:delivery) { double(:email, deliver_now: nil) }
-  let(:earned_badge) { create :earned_badge, awarded_by: user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
+  let!(:earned_badge) { create :earned_badge, student: student, awarded_by: user, course: course }
   let(:user) { create :user }
 
   it "expects an earned badge to send the notification about" do
@@ -19,11 +20,10 @@ describe Services::Actions::NotifiesOfEarnedBadge do
     end
 
     it "creates an announcement for the student" do
-      skip "pending fine grain controls"
-      # allow(NotificationMailer).to receive(:earned_badge_awarded).and_return delivery
-      # 
-      # expect { described_class.execute earned_badge: earned_badge }.to \
-      #   change { Announcement.count }.by 1
+      allow(NotificationMailer).to receive(:earned_badge_awarded).and_return delivery
+
+      expect { described_class.execute earned_badge: earned_badge }.to \
+        change { Announcement.count }.by 1
     end
   end
 

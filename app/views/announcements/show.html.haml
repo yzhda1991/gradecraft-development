@@ -8,10 +8,6 @@
   = render partial: "layouts/alerts"
 
   %p
-    %strong Course:
-    = @announcement.course.name
-
-  %p
     %strong Sent:
     = @announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
 
@@ -19,6 +15,6 @@
     %strong Subject:
     = @announcement.title
 
-  %hr
-
-  %p= @announcement.body.html_safe
+  %p
+    %strong Message:
+    = @announcement.body.html_safe

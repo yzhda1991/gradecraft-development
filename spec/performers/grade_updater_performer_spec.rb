@@ -1,7 +1,9 @@
 RSpec.describe GradeUpdatePerformer, type: :background_job do
-  let(:assignment) { create(:assignment) }
+  let(:course) { build :course }
+  let(:assignment) { create(:assignment, course: course) }
+  let!(:student) { create(:course_membership, :student, course: course).user }
   let(:instructor) { create :user }
-  let(:grade) { create(:grade, assignment_id: assignment.id, graded_by_id: instructor.id) }
+  let(:grade) { create(:grade, assignment_id: assignment.id, student: student, graded_by_id: instructor.id) }
   let(:attrs) {{ grade_id: grade[:id] }}
   let(:performer) { GradeUpdatePerformer.new(attrs) }
   subject { performer }
@@ -187,8 +189,7 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     end
 
     it "creates a new announcement for the student" do
-      skip "pending fine grain control"
-      #expect { notify }.to change { Announcement.count }.by(1)
+      expect { notify }.to change { Announcement.count }.by(1)
     end
   end
 

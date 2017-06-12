@@ -193,6 +193,6 @@ class UsersController < ApplicationController
         :submission_id, :course_id, :assignment_id, :level_id, :criterion_id, :grade_id,
         :student_visible, :id, :_destroy],
       course_memberships_attributes: [:auditing, :pseudonym, :character_profile, :course_id,
-        :instructor_of_record, :user_id, :role, :last_login_at, :id, :team_role, :_destroy]
+        :instructor_of_record, :user_id, :role, :last_login_at, :id, :team_role, :email_announcements, :email_badge_awards, :email_grade_notifications, :email_challenge_grade_notifications, :_destroy]
   end
 end

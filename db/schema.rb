@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170611172829) do
+ActiveRecord::Schema.define(version: 20170612023643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,16 +252,20 @@ ActiveRecord::Schema.define(version: 20170611172829) do
   create_table "course_memberships", force: :cascade do |t|
     t.integer  "course_id"
     t.integer  "user_id"
-    t.integer  "score",                          default: 0,          null: false
+    t.integer  "score",                               default: 0,          null: false
     t.text     "character_profile"
     t.datetime "last_login_at"
-    t.boolean  "auditing",                       default: false,      null: false
-    t.string   "role",                           default: "observer", null: false
-    t.boolean  "instructor_of_record",           default: false
+    t.boolean  "auditing",                            default: false,      null: false
+    t.string   "role",                                default: "observer", null: false
+    t.boolean  "instructor_of_record",                default: false
     t.integer  "earned_grade_scheme_element_id"
-    t.boolean  "has_seen_course_onboarding",     default: false
+    t.boolean  "has_seen_course_onboarding",          default: false
     t.string   "pseudonym"
     t.string   "team_role"
+    t.boolean  "email_announcements",                 default: true
+    t.boolean  "email_badge_awards",                  default: true
+    t.boolean  "email_grade_notifications",           default: true
+    t.boolean  "email_challenge_grade_notifications", default: true
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end

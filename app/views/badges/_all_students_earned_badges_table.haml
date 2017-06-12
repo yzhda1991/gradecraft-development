@@ -12,7 +12,7 @@
         %th{ :width => 70}
       %th{ :width => 230}
   %tbody
-    - presenter.students.each do |student|
+    - presenter.students.order_by_name.each do |student|
       %tr
         - if presenter.badge.is_unlockable?
           %td
