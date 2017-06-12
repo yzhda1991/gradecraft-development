@@ -1,4 +1,4 @@
-describe CourseMembershipsController do, focus: true
+describe CourseMembershipsController do
   let(:course) { create :course }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
