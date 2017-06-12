@@ -72,6 +72,7 @@ describe Announcement do
 
     it "sends an email only to the recipient if it is set" do
       another_student = create :user
+      create(:course_membership, :student, course_id: course.id, user_id: another_student.id)
       subject.update_attributes recipient: another_student
 
       expect(AnnouncementMailer).to \
