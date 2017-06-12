@@ -18,6 +18,8 @@ class CourseMembershipsController < ApplicationController
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update_attribute(:active, false)
       redirect_to students_path, notice: "#{course_membership.user.name} successfully deleted"
+    else
+      redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
     end
   end
 
@@ -25,6 +27,8 @@ class CourseMembershipsController < ApplicationController
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update_attribute(:active, true)
       redirect_to students_path, notice: "#{course_membership.user.name} successfully reactivated"
+    else
+      redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
     end
   end
 
