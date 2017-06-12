@@ -36,11 +36,15 @@ function filterAssignmentConditions(select) {
   assignment = _.find(data,{id: parseInt(id)});
   if (assignment.pass_fail) {
     $("#assignment-state-achieved option[value='Grade Earned']").remove();
-    $('select').append($('<option>', {value:'Passed', text:'Passed'}));
+    if (!$("#assignment-state-achieved option[value='Passed']").length) {
+      $('select').append($('<option>', {value:'Passed', text:'Passed'}));
+    }
   }
   else {
     $("#assignment-state-achieved option[value='Passed']").remove();
-    $('select').append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
+    if (!$("#assignment-state-achieved option[value='Grade Earned']").length) {
+      $('select').append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
+    }
   }
 }
 
