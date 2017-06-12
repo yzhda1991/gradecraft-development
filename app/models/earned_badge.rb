@@ -29,10 +29,8 @@ class EarnedBadge < ActiveRecord::Base
       "course_memberships.course_id = earned_badges.course_id AND "\
       "course_memberships.user_id = earned_badges.student_id")
       .where("course_memberships.active = true")
-      .references(:course_membership, :submission)
+      .references(:course_membership, :earned_badge)
   end
-
-  scope :for_active_students, -> { }
 
   def check_unlockables
     if self.badge.is_a_condition?

@@ -1,7 +1,7 @@
 describe Submission do
   let(:course) { build_stubbed(:course) }
   let(:assignment) { create(:assignment) }
-  let(:student) { create(:user) }
+  let(:student) { create(:course_membership, :student, course: course, active: true).user }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }
   let(:ungraded_submission) { create(:submission, course: course) }
 
@@ -172,7 +172,7 @@ describe Submission do
   describe "#submitted_this_week" do
     let(:assignment_type) { create(:assignment_type) }
     let(:assignment) { create(:assignment, assignment_type: assignment_type) }
-    let!(:submission) { create(:submission, assignment: assignment, submitted_at: DateTime.now - 1.day) }
+    let!(:submission) { create(:submission, assignment: assignment, student_id: student.id, submitted_at: DateTime.now - 1.day, course: course) }
 
     it "returns non-draft submissions for the past week" do
       create(:draft_submission, assignment: assignment)
