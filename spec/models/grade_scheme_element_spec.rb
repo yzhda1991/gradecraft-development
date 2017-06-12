@@ -5,7 +5,8 @@ describe GradeSchemeElement do
   subject { create :grade_scheme_element, lowest_points: 1000, course: course }
 
   before do
-    create :course_membership, :student, user: student, course: course, score: 82, earned_grade_scheme_element_id: subject.id
+    create :course_membership, :student, user: student, course: course,
+      score: 82, earned_grade_scheme_element_id: subject.id
   end
 
   describe "validations" do
@@ -37,13 +38,15 @@ describe GradeSchemeElement do
   describe ".next_highest_element_for" do
     context "when there is a grade scheme element with a higher point threshold" do
       it "returns the next highest element with lowest points by default" do
-        grade_scheme_element = create :grade_scheme_element, lowest_points: 5000, course: course
+        grade_scheme_element = create :grade_scheme_element, lowest_points: 5000,
+          course: course
         expect(GradeSchemeElement.next_highest_element_for(subject)).to \
           eq grade_scheme_element
       end
 
       it "returns the next highest element with or without lowest points if requested" do
-        grade_scheme_element = create :grade_scheme_element, lowest_points: nil, course: course
+        grade_scheme_element = create :grade_scheme_element, lowest_points: nil,
+          course: course
         expect(GradeSchemeElement.next_highest_element_for(subject, false)).to \
           eq grade_scheme_element
       end
@@ -59,14 +62,16 @@ describe GradeSchemeElement do
   describe ".next_lowest_element_for" do
     context "when there is a grade scheme element with a lower point threshold" do
       it "returns the next lowest element with lowest points by default" do
-        grade_scheme_element = create :grade_scheme_element, lowest_points: 500, course: course
+        grade_scheme_element = create :grade_scheme_element, lowest_points: 500,
+          course: course
         expect(GradeSchemeElement.next_lowest_element_for(subject)).to \
           eq grade_scheme_element
       end
 
       it "returns the next lowest element with or without lowest points if requested" do
         subject.lowest_points = nil
-        grade_scheme_element = create :grade_scheme_element, lowest_points: nil, course: course
+        grade_scheme_element = create :grade_scheme_element, lowest_points: nil,
+          course: course
         expect(GradeSchemeElement.next_lowest_element_for(grade_scheme_element, false)).to \
           eq subject
       end

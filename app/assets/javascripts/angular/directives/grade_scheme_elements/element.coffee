@@ -38,6 +38,7 @@
 
       scope.removeElement = () ->
         GradeSchemeElementsService.removeElement(@gradeSchemeElement)
+        _validateElements()
         scope.persistChanges(true) if not @gradeSchemeElement.validationError?
 
       scope.persistChanges = (isRemoval=false) ->

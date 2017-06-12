@@ -22,7 +22,6 @@
       currentElement.validationError = "Lowest level threshold must be 0"
     else
       _deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
-      validateElements() if gradeSchemeElements.length > 0
 
   # Add a new element after the selected element, if one was given
   addElement = (currentElement, attributes=null) ->
@@ -61,6 +60,8 @@
     }
     $http.put('/api/grade_scheme_elements', data).then(
       (response) ->
+        _clearArray(gradeSchemeElements)
+        GradeCraftAPI.loadMany(gradeSchemeElements, response.data)
         GradeCraftAPI.logResponse(response)
         window.location.href = redirectUrl if redirectUrl?
         alert('Changes were successfully saved') if showAlert is true
@@ -122,6 +123,9 @@
       element[key] = value
     ) if attributes?
     element
+
+  _clearArray = (array) ->
+    array.length = 0
 
   {
     gradeSchemeElements: gradeSchemeElements
