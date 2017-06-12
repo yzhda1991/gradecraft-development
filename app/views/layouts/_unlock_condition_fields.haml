@@ -19,12 +19,12 @@
       = f.input :condition_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", id: "at_completed_date" }, :label => false
 
   #assignments-list{:style => "display: none", class: "unlock-conditions-list"}
-    .form-item
+    #assignment-select.form-item{"data-assignment-type" => current_course.assignments.map { |a| {"id" => a.id, "pass_fail" => a.pass_fail} }.to_json}
       = f.label :condition_id, "#{term_for :assignment}", :for => "assignment_selection"
       = f.input :condition_id, :collection => current_course.assignments.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => false, input_html: { :id => "assignment_selection" }
-    .form-item
+    #assignment-state-achieved.form-item
       = f.label :condition_state, "State Achieved", :for => "assignment_state_achieved"
-      = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read", "Passed"], :label => false, input_html: { :id => "assignment_state_achieved" }
+      = f.input :condition_state, :collection => ["Submitted", "Feedback Read"], :label => false, input_html: { :id => "assignment_state_achieved" }
     .form-item
       = f.label :condition_value, "Minimum Points Earned", :for => "assignment_min_points"
       = f.input :condition_value, :label => false, input_html: { :id => "assignment_min_points" }

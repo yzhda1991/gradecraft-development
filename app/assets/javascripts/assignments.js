@@ -3,6 +3,12 @@ $(document).on('change', '.conditions .assignment-or-badge select', function () 
   checkDropdown(this);
 });
 
+// Depending on the if the assignment is grades or pass/fail,
+// include either "Passed" of "Grade Earned" option in the select list
+$(document).on('change', '#assignments-list #assignment-select.form-item', function () {
+  filterAssignmentConditions(this);
+});
+
 // run checkDropdown on page load to make previously selected conditions are correct
 $('.conditions .assignment-or-badge select').each(function (index, element) {
   checkDropdown(element);
@@ -24,6 +30,19 @@ function checkDropdown(select) {
   $($thisSelectedList).find('select, input').attr('disabled', false);
 }
 
+function filterAssignmentConditions(select) {
+  var data = $(select).data("assignment-type");
+  var id = $(select).find('option:selected').val();
+  assignment = _.find(data,{id: parseInt(id)});
+  if (assignment.pass_fail) {
+    $("#assignment-state-achieved option[value='Grade Earned']").remove();
+    $('select').append($('<option>', {value:'Passed', text:'Passed'}));
+  }
+  else {
+    $("#assignment-state-achieved option[value='Passed']").remove();
+    $('select').append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
+  }
+}
 
 // add and delete buttons for unlock conditions
 var $form = $('form');
@@ -95,7 +114,7 @@ $('ul.level-tabs li').keydown(function(e) {
       $selectedTab = $tab.next();
     }
   }
-  
+
   $selectedTab.focus();
   showSelectedTab($selectedTab);
 });
@@ -136,3 +155,5 @@ function rubricScreenSize() {
 }
 rubricScreenSize();
 $(window).resize(rubricScreenSize);
+
+
