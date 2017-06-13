@@ -34,11 +34,6 @@ describe GradeStatus do
       expect(grade.is_student_visible?).to eq true
     end
 
-    it "returns false if the grade is not released" do
-      grade.status = "Graded"
-      expect(grade.is_student_visible?).to eq false
-    end
-
     it "returns false if the grade is not marked as graded" do
       grade.status = nil
       expect(grade.is_student_visible?).to eq false
@@ -90,47 +85,25 @@ describe GradeStatus do
   end
 
   describe "#update_status_fields" do
-    context "when release is not required" do
-      it "updates the fields on 'In Progress' grades" do
-        grade.status = "In Progress"
-        grade.update_status_fields
-        expect(grade.complete).to be_falsey
-        expect(grade.student_visible).to be_falsey
-      end
-
-      it "updates the fields on 'Graded' grades" do
-        grade.status = "Graded"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_truthy
-      end
+    it "updates the fields on 'In Progress' grades" do
+      grade.status = "In Progress"
+      grade.update_status_fields
+      expect(grade.complete).to be_falsey
+      expect(grade.student_visible).to be_falsey
     end
 
-    context "when release is necessary" do
-      before do
-        grade.assignment.update(release_necessary: true)
-      end
+    it "updates the fields on 'Graded' grades" do
+      grade.status = "Graded"
+      grade.update_status_fields
+      expect(grade.complete).to be_truthy
+      expect(grade.student_visible).to be_falsey
+    end
 
-      it "updates the fields on 'In Progress' grades" do
-        grade.status = "In Progress"
-        grade.update_status_fields
-        expect(grade.complete).to be_falsey
-        expect(grade.student_visible).to be_falsey
-      end
-
-      it "updates the fields on 'Graded' grades" do
-        grade.status = "Graded"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_falsey
-      end
-
-      it "updates the fields on 'Released' grades" do
-        grade.status = "Released"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_truthy
-      end
+    it "updates the fields on 'Released' grades" do
+      grade.status = "Released"
+      grade.update_status_fields
+      expect(grade.complete).to be_truthy
+      expect(grade.student_visible).to be_truthy
     end
   end
 end
