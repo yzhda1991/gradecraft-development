@@ -12,7 +12,6 @@ json.included do
         json.grade_id file_upload.grade_id
         json.filename file_upload.filename
         json.filepath file_upload.filepath
-        json.file_processing file_upload.file_processing
       end
     end
   end

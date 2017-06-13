@@ -40,8 +40,7 @@ apiTestDoubles.grade.withAttachment =
         "id": 555,
         "grade_id": 1235,
         "filename": "image.jpg",
-        "filepath": null,
-        "file_processing": false
+        "filepath": null
       }
     }
   ],
