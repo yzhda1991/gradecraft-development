@@ -17,7 +17,7 @@ class CourseMembershipsController < ApplicationController
 
   # Deactivating a student is not the same as destroy. Deactivate will flip the
   # active flag in the record of course membership for the associated user.
-  # All the user's records will remain in tact.
+  # All the user's records will remain in tact. 
   def deactivate
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update_attribute(:active, false)
