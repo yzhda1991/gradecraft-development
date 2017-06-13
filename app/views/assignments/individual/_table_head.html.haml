@@ -17,9 +17,9 @@
   - if presenter.assignment.has_levels?
     %th Level Earned
 
+  %th{scope: "col"} Complete
+  %th{scope: "col"} Visible to Student
   %th{scope: "col"} Read?
-
-  %th{scope: "col"} Status
 
   - if presenter.assignment.accepts_submissions?
     %th{"data-dynatable-sorts" => "submittedAt"} Submitted
