@@ -3,6 +3,7 @@ require_relative "../services/cancels_course_membership"
 class CourseMembershipsController < ApplicationController
 
   before_action :ensure_staff?
+  before_action :ensure_admin?, only: [:destroy]
   before_action :save_referer, only: [:destroy]
 
   def create
