@@ -127,7 +127,7 @@ class Students::IndexPresenter < Showtime::Presenter
     end
 
     def activated?
-      course_membership.try(:active)
+      course_membership.active
     end
 
     def course_membership
