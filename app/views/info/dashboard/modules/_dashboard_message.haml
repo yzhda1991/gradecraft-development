@@ -6,3 +6,5 @@
 .card-body
   - if current_course.dashboard_message.present?
     %p= raw current_course.dashboard_message
+  - elsif current_user_is_staff?
+    %p.italic Use this space to write a message to all students that will appear on their dashboard
