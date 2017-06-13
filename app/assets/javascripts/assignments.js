@@ -5,7 +5,7 @@ $(document).on('change', '.conditions .assignment-or-badge select', function () 
 
 // Depending on the if the assignment is grades or pass/fail,
 // include either "Passed" of "Grade Earned" option in the select list
-$(document).on('change', '#assignments-list #assignment-select.form-item', function () {
+$(document).on('change', '.assignments-list .assignment-select.form-item', function () {
   filterAssignmentConditions(this);
 });
 
@@ -18,7 +18,7 @@ function checkDropdown(select) {
   var $conditions = $(select).closest('.conditions');
   var $unlockConditionsLists = $conditions.find('.unlock-conditions-list');
   var selectedList = $(select).find('option:selected').text();
-  var selectedListId = '#' + selectedList.toLowerCase().replace(/\s/g, '-') + 's-list';
+  var selectedListId = '.' + selectedList.toLowerCase().replace(/\s/g, '-') + 's-list';
   var $thisSelectedList = $conditions.find(selectedListId);
 
   //hide and disable all inputs in all conditions lists
@@ -33,17 +33,19 @@ function checkDropdown(select) {
 function filterAssignmentConditions(select) {
   var data = $(select).data("assignment-type");
   var id = $(select).find('option:selected').val();
-  assignment = _.find(data,{id: parseInt(id)});
+  var assignment = _.find(data,{id: parseInt(id)});
+  var stateSelector = $(select).next(".assignment-state-achieved")
+
   if (assignment.pass_fail) {
-    $("#assignment-state-achieved option[value='Grade Earned']").remove();
-    if (!$("#assignment-state-achieved option[value='Passed']").length) {
-      $('select').append($('<option>', {value:'Passed', text:'Passed'}));
+    $(stateSelector).children().find("select option[value='Grade Earned']").remove();
+    if (!$(stateSelector).children().find("select option[value='Passed']").length) {
+      $(stateSelector).children().find("select").append($('<option>', {value:'Passed', text:'Passed'}));
     }
   }
   else {
-    $("#assignment-state-achieved option[value='Passed']").remove();
-    if (!$("#assignment-state-achieved option[value='Grade Earned']").length) {
-      $('select').append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
+    $(stateSelector).children().find("select option[value='Passed']").remove();
+    if (!$(stateSelector).children().find("select option[value='Grade Earned']").length) {
+      $(stateSelector).children().find("select").append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
     }
   }
 }
