@@ -77,6 +77,7 @@ class CoursesController < ApplicationController
       redirect_to edit_course_path(@course),
       notice: "Course #{@course.name} successfully updated"
     else
+      @institutions = Institution.where(has_site_license: true)
       render action: "edit"
     end
   end

@@ -11,7 +11,7 @@ feature "editing a course's basic settings" do
 
     scenario "successfully" do
       within(".pageContent") do
-        fill_in "Course Title", with: "New Course Name"
+        fill_in "Course Name", with: "New Course Name"
         click_button "Save Settings"
       end
 
