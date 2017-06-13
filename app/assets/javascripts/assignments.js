@@ -9,9 +9,12 @@ $(document).on('change', '.assignments-list .assignment-select.form-item', funct
   filterAssignmentConditions(this);
 });
 
-// run checkDropdown on page load to make previously selected conditions are correct
+// Initialize dropdowns for existing conditions
 $('.conditions .assignment-or-badge select').each(function (index, element) {
   checkDropdown(element);
+});
+$('.assignments-list .assignment-select').each(function (index, element) {
+  filterAssignmentConditions(element);
 });
 
 function checkDropdown(select) {
@@ -35,7 +38,6 @@ function filterAssignmentConditions(select) {
   var id = $(select).find('option:selected').val();
   var assignment = _.find(data,{id: parseInt(id)});
   var stateSelector = $(select).next(".assignment-state-achieved")
-
   if (assignment.pass_fail) {
     $(stateSelector).children().find("select option[value='Grade Earned']").remove();
     if (!$(stateSelector).children().find("select option[value='Passed']").length) {

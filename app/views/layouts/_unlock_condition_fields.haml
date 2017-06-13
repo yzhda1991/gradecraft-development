@@ -24,7 +24,7 @@
       = f.input :condition_id, :collection => current_course.assignments.order(:name).map { |l| [l.name,l.id] }, :include_blank => true, :label => false, input_html: { :id => "assignment_selection" }
     .assignment-state-achieved.form-item
       = f.label :condition_state, "State Achieved", :for => "assignment_state_achieved"
-      = f.input :condition_state, :collection => ["Submitted", "Feedback Read"], :label => false, input_html: { :id => "assignment_state_achieved" }
+      = f.input :condition_state, :collection => ["Submitted", "Feedback Read", "Grade Earned", "Passed"], :label => false, input_html: { :id => "assignment_state_achieved" }
     .form-item
       = f.label :condition_value, "Minimum Points Earned", :for => "assignment_min_points"
       = f.input :condition_value, :label => false, input_html: { :id => "assignment_min_points" }
