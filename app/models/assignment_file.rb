@@ -12,13 +12,19 @@ class AssignmentFile < ActiveRecord::Base
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes,
                                options: { overrides: [-> (copy) {
-                                          copy.file_processing = false
-                                          copy.copy_s3_object_from(self.s3_object_file_key,
-                                            "#{copy.file.store_dir}/#{self.mounted_filename}")
+                                          overrides_for copy
                                         }]})
   end
 
   def course
     assignment.course
+  end
+
+  private
+
+  def overrides_for(copy)
+    copy.file_processing = false
+    copy.copy_s3_object_from(self.s3_object_file_key,
+      "#{copy.file.store_dir}/#{self.mounted_filename}")
   end
 end
