@@ -9,6 +9,8 @@ json.attributes do
   json.group_id                   grade.group_id
   json.feedback                   grade.feedback
   json.status                     grade.status
+  json.complete                   grade.complete
+  json.student_visible            grade.student_visible
   json.raw_points                 grade.raw_points
   json.pass_fail_status           grade.pass_fail_status
   json.adjustment_points          grade.adjustment_points

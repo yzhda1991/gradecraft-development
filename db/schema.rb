@@ -453,6 +453,8 @@ ActiveRecord::Schema.define(version: 20170612023643) do
     t.boolean  "excluded_from_course_score", default: false
     t.datetime "excluded_at"
     t.integer  "excluded_by_id"
+    t.boolean  "complete",                   default: false, null: false
+    t.boolean  "student_visible",            default: false, null: false
     t.index ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
     t.index ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
     t.index ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree

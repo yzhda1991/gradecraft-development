@@ -16,41 +16,6 @@ RSpec.describe GradesController, type: :controller, background_job: true do
   describe "triggering jobs as a professor" do
     before(:each) { enroll_and_login_professor }
 
-    describe "#update" do
-      let(:request_attrs) {{ id: grade.id, grade: { raw_points: 50 } }}
-      subject { put :update, params: request_attrs }
-
-      before do
-        allow(Grade).to receive(:find_or_create).and_return grade
-      end
-
-      context "grade attributes are successfully updated" do
-        before { allow(grade).to receive(:update_attributes) { true } }
-
-        context "grade is released" do
-          let(:grade) { create(:released_grade, grade_attributes) }
-
-          before do
-            allow(grade).to receive(:is_released?) { true }
-          end
-
-          it_behaves_like "a successful resque job", GradeUpdaterJob
-        end
-
-        context "grade has not been released" do
-          before { allow(grade).to receive(:is_released?) { false } }
-
-          it_behaves_like "a failed resque job", GradeUpdaterJob
-        end
-      end
-
-      context "grade attributes fail to update" do
-        before { allow(grade).to receive(:update_attributes) { false } }
-
-        it_behaves_like "a failed resque job", GradeUpdaterJob
-      end
-    end
-
     describe "actions that trigger multiple GradeUpdaterJob instances" do
       let(:student2) { create(:user) }
       let(:students) { [student, student2] }
