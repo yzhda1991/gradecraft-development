@@ -33,21 +33,20 @@ class CoursesController < ApplicationController
 
   def create
     @course = Course.new(course_params)
-    respond_to do |format|
-      if @course.save
-        if !current_user_is_admin?
-          @course.course_memberships.create(user_id: current_user.id,
-                                            role: current_user.role(current_course))
-        end
-        session[:course_id] = @course.id
-        bust_course_list_cache current_user
-        format.html do
-          redirect_to edit_course_path(@course),
-          notice: "Course #{@course.name} successfully created"
-        end
-      else
-        format.html { render action: "new" }
+    if @course.save
+      if !current_user_is_admin?
+        @course.course_memberships.create(user_id: current_user.id,
+                                          role: current_user.role(current_course))
       end
+      session[:course_id] = @course.id
+      bust_course_list_cache current_user
+      redirect_to edit_course_path(@course), flash: {
+        notice: "Course #{@course.name} successfully created"
+      }
+    else
+      redirect_to new_course_path, flash: {
+        alert: @course.errors.full_messages.to_sentence
+      }
     end
   end
 
@@ -60,27 +59,26 @@ class CoursesController < ApplicationController
       end
       duplicated.recalculate_student_scores unless duplicated.student_count.zero?
       session[:course_id] = duplicated.id
-      redirect_to edit_course_path(duplicated.id),
-        notice: "#{@course.name} successfully copied" and return
+      redirect_to edit_course_path(duplicated.id), flash: {
+        notice: "#{@course.name} successfully copied"
+      }
     else
-      redirect_to courses_path,
-        alert: "#{@course.name} was not successfully copied" and return
+      redirect_to courses_path, flash: {
+        alert: "#{@course.name} was not successfully copied"
+      }
     end
   end
 
   def update
     authorize! :update, @course
-    respond_to do |format|
-      if @course.update_attributes(course_params)
-        @course.recalculate_student_scores if add_team_score_to_student_changed?
-        bust_course_list_cache current_user
-        format.html do
-          redirect_to edit_course_path(@course),
-          notice: "Course #{@course.name} successfully updated"
-        end
-      else
-        format.html { render action: "edit" }
-      end
+    if @course.update_attributes(course_params)
+      @course.recalculate_student_scores if add_team_score_to_student_changed?
+      bust_course_list_cache current_user
+      redirect_to edit_course_path(@course),
+      notice: "Course #{@course.name} successfully updated"
+    else
+      @institutions = Institution.where(has_site_license: true)
+      render action: "edit"
     end
   end
 
