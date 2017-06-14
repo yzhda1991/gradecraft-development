@@ -78,9 +78,8 @@
     GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
     GradeCraftAPI.loadFromIncluded(criterionGrades,"criterion_grades", response.data)
 
-
-    # We default to complete on submission, but not on autosave
-    modelGrade.submit_as_complete = modelGrade.complete || true
+    # We default to complete on submit, but not on autosave
+    modelGrade.submit_as_complete = true
 
     # we only save changes the student_visible status on submission,
     # to avoid releasing a grade on autosave
