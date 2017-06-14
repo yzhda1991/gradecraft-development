@@ -339,7 +339,7 @@ describe Submission do
     end
 
     it "returns true if grade was graded before it was submitted" do
-      create :grade, instructor_modified: true, student: student, submission: submission,
+      create :grade, student_visible: true, student: student, submission: submission,
         assignment: assignment, graded_at: DateTime.now
       submission.update_attributes submitted_at: DateTime.now
       expect(submission).to be_resubmitted
@@ -348,13 +348,13 @@ describe Submission do
     it "returns false if the grade was graded after it was submitted" do
       submission.submitted_at = DateTime.now
       submission.save
-      create :grade, instructor_modified: true, submission: submission,
+      create :grade, student_visible: true, submission: submission,
         assignment: submission.assignment, graded_at: DateTime.now
       expect(submission).to_not be_resubmitted
     end
 
     it "returns false if it was not graded" do
-      create :grade, instructor_modified: true, submission: submission,
+      create :grade, student_visible: true, submission: submission,
         assignment: submission.assignment
       expect(submission).to_not be_resubmitted
     end

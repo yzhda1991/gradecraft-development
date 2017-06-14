@@ -33,8 +33,6 @@ class Submission < ActiveRecord::Base
     .where.not(id: with_grade.where(grades: { instructor_modified: true }))
   end
 
-  # resubmitted? aligns with ungraded logic (ie any status),
-  # shouldn't we do the same here?
   scope :resubmitted, -> {
     includes(:grade, :assignment)
     .where("grades.student_visible = true")
@@ -96,7 +94,8 @@ class Submission < ActiveRecord::Base
   # this is transitive so that once it is graded again, then
   # it will no longer be resubmitted
   def resubmitted?
-    graded? && !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
+    submission_grade && submission_grade.student_visible? &&
+    !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
   end
 
   # Getting the name of the student who submitted the work
