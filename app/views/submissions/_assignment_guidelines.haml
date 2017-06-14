@@ -35,9 +35,9 @@
 - if current_user_is_staff?
   %section.grade-form-section
     - if assignment.has_groups?
-      %h2.grade-form-header= "Grade for #{@group.name}:"
+      %h2.grade-form-header= "Grade for #{(@group || group).try(:name)}:"
       %ul
-        - @group.students.each do |s|
+        - (@group || group).students.each do |s|
           %li= link_to s.name, student_path(s)
     - else
       - if @grade.present?
