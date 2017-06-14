@@ -65,6 +65,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Review Grades")
   end
 
+  def assignments_importers_csv
+    assignments_importers_index
+    breadcrumb('CSV')
+  end
+
   def assignments_settings
     assignments_index
     breadcrumb('Settings')

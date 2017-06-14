@@ -8,16 +8,22 @@ class Assignments::ImportersController < ApplicationController
   oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
-  before_action except: :index do |controller|
+  before_action except: [:index, :show] do |controller|
     controller.redirect_path assignments_importers_path
   end
-  before_action :link_canvas_credentials, except: :index,
+  before_action :link_canvas_credentials, except: [:index, :show],
     if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
-  before_action :require_authorization, except: :index
-  before_action :use_current_course, only: [:index, :assignments, :assignments_import]
+  before_action :require_authorization, except: [:index, :show]
+  before_action :use_current_course, except: [:refresh_assignment, :update_assignment]
 
   # GET /assignments/importers
   def index
+  end
+
+  # GET /assignments/importers/:id
+  def show
+    provider = params[:provider_id]
+    render "#{provider}" if %w(csv).include? provider
   end
 
   # Entry point for importing assignments from a provider
