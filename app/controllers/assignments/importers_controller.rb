@@ -8,13 +8,13 @@ class Assignments::ImportersController < ApplicationController
   oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
-  before_action except: [:index, :show] do |controller|
+  before_action except: [:index, :show, :download] do |controller|
     controller.redirect_path assignments_importers_path
   end
-  before_action :link_canvas_credentials, except: [:index, :show],
+  before_action :link_canvas_credentials, except: [:index, :show, :download],
     if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
-  before_action :require_authorization, except: [:index, :show]
-  before_action :use_current_course, except: [:refresh_assignment, :update_assignment]
+  before_action :require_authorization, except: [:index, :show, :download]
+  before_action :use_current_course, except: [:refresh_assignment, :update_assignment, :download]
 
   # GET /assignments/importers
   def index
@@ -24,6 +24,15 @@ class Assignments::ImportersController < ApplicationController
   def show
     provider = params[:provider_id]
     render "#{provider}" if %w(csv).include? provider
+  end
+
+  # Download a sample CSV pre-populated with the correct headers
+  # GET /assignments/importers/:id/download
+  def download
+    respond_to do |format|
+      format.csv { send_data CSV.generate { |csv| csv << csv_headers },
+        filename: "Sample Users File - #{ Date.today}.csv" }
+    end
   end
 
   # Entry point for importing assignments from a provider
@@ -95,5 +104,10 @@ class Assignments::ImportersController < ApplicationController
     @syllabus ||= ActiveLMS::Syllabus.new \
       @provider_name,
       authorization(@provider_name).access_token
+  end
+
+  def csv_headers
+    ["Assignment Name", "Assignment Type Name", "Point Total", "Description",
+      "Due Date (mm/dd/yyyy hh:mm:ss)"].freeze
   end
 end

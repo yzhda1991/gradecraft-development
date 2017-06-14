@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   namespace :assignments do
     resources :importers, param: :provider_id, only: [:index, :show] do
       get :assignments
+      get :download
       post :upload
       post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import

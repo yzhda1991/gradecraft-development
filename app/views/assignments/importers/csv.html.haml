@@ -16,8 +16,7 @@
     %p
       Columns should be in the following order:
       %br Assignment Name, Assignment Type Name, Point Total, Description, Due Date
-      .bold= link_to "Download Sample File", "#"
-      -# %br.bold= link_to "Download Sample File", assignment_grades_importer_download_path(@assignment, :csv, format: "csv")
+      .bold= link_to "Download Sample File", assignments_importer_download_path(:csv, format: "csv")
 
     = form_tag(action: :upload, importer_provider_id: :csv, multipart: true) do
       = file_field_tag "file"
