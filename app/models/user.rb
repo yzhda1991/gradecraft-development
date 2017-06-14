@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
   end
 
   def display_name(course)
-    course_memberships.where(course: course).first.try(:pseudonym) || display_name
+    course_memberships.where(course: course).first.try(:pseudonym)
   end
 
   def team_role(course)
