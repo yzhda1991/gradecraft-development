@@ -3,7 +3,7 @@ describe "api/grades/group_index" do
   let(:assignment) { create(:assignment, course: course) }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:grade) { create(:grade, assignment: assignment, student: student) }
-  
+
   before(:all) do
     # Expected instance variables on render:
     @grades = [create(:grade)]
@@ -28,11 +28,5 @@ describe "api/grades/group_index" do
     expect(json["data"][0]["attributes"]["status"]).to eq(@grades[0].status)
     expect(json["data"][0]["attributes"]["adjustment_points"]).to eq(@grades[0].adjustment_points)
     expect(json["data"][0]["attributes"]["adjustment_points_feedback"]).to eq(@grades[0].adjustment_points_feedback)
-  end
-
-  it "adds grading status options to meta data" do
-    render
-    json = JSON.parse(response.body)
-    expect(json["meta"]["grade_status_options"]).to eq(@grade_status_options)
   end
 end

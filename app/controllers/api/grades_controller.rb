@@ -8,7 +8,6 @@ class API::GradesController < ApplicationController
   def show
     if Assignment.exists?(params[:assignment_id].to_i) && User.exists?(params[:student_id].to_i)
       @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
-      @grade_status_options = Grade::STATUSES
     else
       render json: {
         message: "not a valid student or assignment", success: false
@@ -46,7 +45,6 @@ class API::GradesController < ApplicationController
       @grades =
         Grade.find_or_create_grades(params[:assignment_id], @student_ids).order_by_student
       @criterion_grades = CriterionGrade.where(grade_id: @grades.pluck(:id))
-      @grade_status_options = Grade::STATUSES
     end
   end
 

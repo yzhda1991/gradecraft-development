@@ -18,14 +18,6 @@ describe API::GradesController do
         expect(response).to render_template(:show)
       end
 
-      it "assigns status options" do
-        get :show,
-          params: { assignment_id: assignment.id, student_id: student.id },
-          format: :json
-        expect(assigns(:grade_status_options)).to eq(["In Progress", "Released"])
-      end
-    end
-
     describe "update" do
       it "updates feedback, status and raw score from params" do
         post :update, params: { id: grade.id,
