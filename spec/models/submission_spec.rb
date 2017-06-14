@@ -3,7 +3,6 @@ describe Submission do
   let(:assignment) { create(:assignment) }
   let(:student) { create(:user) }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }
-  let(:ungraded_submission) { create(:submission, course: course) }
 
   describe "validations" do
     it "is valid" do
@@ -185,7 +184,7 @@ describe Submission do
 
   describe "#graded_at" do
     it "returns when the grade was graded if it was graded" do
-      grade = create(:grade, assignment: assignment, student: student, submission: submission, status: "Graded")
+      grade = create(:grade, assignment: assignment, student: student, submission: submission, student_visible: true)
       grade.graded_at = grade.created_at
       grade.save
       expect(submission.graded_at).to be_present
@@ -206,30 +205,29 @@ describe Submission do
       expect(submission).to_not be_graded
     end
 
-    it "returns false for a submission that has grade that is not student visible" do
-      grade = create(:grade, submission: submission)
+    it "returns false for a submission that has grade that has not been touched" do
+      grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: false)
       expect(submission).to_not be_graded
     end
 
-    it "returns true for a submission that has grade that is student visible" do
-      # because of the way that the submission_grades query is written, we need to create both the assignment and the student for the test to pass
-      grade = create(:grade, assignment: assignment, student: student, submission: submission, status: "Graded")
+    it "returns true for a submission that has grade touched by the instructor" do
+      grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: true)
       expect(submission).to be_graded
     end
   end
 
   describe "#ungraded?" do
-    it "returns false for a submission that has a grade" do
+    it "returns false for a submission that has no grade" do
       expect(submission).to be_ungraded
     end
 
-    it "returns true for a submission that has grade but no status" do
-      grade = create(:grade, submission: submission)
+    it "returns true for a submission that has grade not touched by instructor" do
+      grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: false)
       expect(submission).to be_ungraded
     end
 
-    it "returns false for a submission that has grade that is student visible" do
-      grade = create(:grade, assignment: assignment, student: student, submission: submission, status: "Graded")
+    it "returns false for a submission that has grade touched by the instructor" do
+      grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: true)
       expect(submission).to_not be_ungraded
     end
   end
@@ -237,28 +235,26 @@ describe Submission do
   describe ".ungraded" do
     before { Submission.destroy_all }
 
-    let(:in_progress_submission) { create(:submission, course: course) }
-
     it "returns the submissions that do not have any grades" do
-      expect(Submission.ungraded).to eq [ungraded_submission]
+      expect(Submission.ungraded).to eq [submission]
     end
 
-    it "does not return the submissions that have in progress grades" do
-      create :grade, course: course, assignment: in_progress_submission.assignment,
-        student: submission.student, submission: in_progress_submission, status: "In Progress"
-      expect(Submission.ungraded).to_not include [in_progress_submission]
+    it "does return the submissions if a grade exists but is untouched by faculty" do
+      create :grade, course: course, assignment: assignment,
+        student: submission.student, submission: submission, instructor_modified: false
+      expect(Submission.ungraded).to eq [submission]
     end
 
-    it "does not return submissions that have been graded or released" do
+    it "does not return submissions that have been touched" do
       create :grade, course: course, assignment: submission.assignment,
-        student: submission.student, submission: submission, status: "Graded"
+        student: submission.student, submission: submission, instructor_modified: true
       expect(Submission.ungraded).to be_empty
     end
 
     it "returns the group submissions that do not have a grade" do
       group = create :group
       create :grade, course: course, group: group, submission: submission,
-        status: "Graded"
+        student_visible: true
       submission.update_attributes group_id: group.id, student_id: nil
       expect(Submission.ungraded).to eq [submission]
     end
@@ -266,7 +262,7 @@ describe Submission do
 
   describe ".resubmitted" do
     it "returns the submissions that have been submitted after they were graded" do
-      grade = create(:grade, submission: submission, status: "Graded", graded_at: 1.day.ago)
+      grade = create(:grade, submission: submission, student_visible: true, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.save
       expect(Submission.resubmitted).to eq [submission]
@@ -288,7 +284,7 @@ describe Submission do
     end
 
     it "does not return resubmissions that have been graded" do
-      grade = create(:grade, submission: submission, status: "Graded", graded_at: 1.day.ago)
+      grade = create(:grade, submission: submission, student_visible: true, graded_at: 1.day.ago)
       submission.submitted_at = 2.days.ago
       submission.save
       expect(Submission.resubmitted).to be_empty
@@ -301,9 +297,9 @@ describe Submission do
       group = create(:group, assignments: [submission.assignment])
       group.students << [student1, student2]
       grade1 = create(:grade, submission: submission, student: student1,
-                      status: "Graded", graded_at: 1.day.ago)
+                      student_visible: true, graded_at: 1.day.ago)
       grade2 = create(:grade, submission: submission, student: student2,
-                      status: "Graded", graded_at: 1.day.ago)
+                      student_visible: true, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.group_id = group.id
       submission.save
@@ -332,7 +328,7 @@ describe Submission do
     end
 
     it "returns true if there is a grade that is visible to the student" do
-      create :grade, student: student, status: "Released", submission: submission, assignment: assignment
+      create :grade, student: student, student_visible: true, submission: submission, assignment: assignment
       expect(submission).to be_will_be_resubmitted
     end
   end
@@ -343,7 +339,7 @@ describe Submission do
     end
 
     it "returns true if grade was graded before it was submitted" do
-      create :grade, status: "Graded", student: student, submission: submission,
+      create :grade, instructor_modified: true, student: student, submission: submission,
         assignment: assignment, graded_at: DateTime.now
       submission.update_attributes submitted_at: DateTime.now
       expect(submission).to be_resubmitted
@@ -352,13 +348,13 @@ describe Submission do
     it "returns false if the grade was graded after it was submitted" do
       submission.submitted_at = DateTime.now
       submission.save
-      create :grade, status: "Graded", submission: submission,
+      create :grade, instructor_modified: true, submission: submission,
         assignment: submission.assignment, graded_at: DateTime.now
       expect(submission).to_not be_resubmitted
     end
 
     it "returns false if it was not graded" do
-      create :grade, status: "Graded", submission: submission,
+      create :grade, instructor_modified: true, submission: submission,
         assignment: submission.assignment
       expect(submission).to_not be_resubmitted
     end

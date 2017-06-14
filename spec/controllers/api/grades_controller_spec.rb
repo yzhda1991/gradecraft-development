@@ -17,15 +17,17 @@ describe API::GradesController do
         expect(assigns(:grade).id).to eq(grade.id)
         expect(response).to render_template(:show)
       end
+    end
 
     describe "update" do
       it "updates feedback, status and raw score from params" do
         post :update, params: { id: grade.id,
                                 grade: { raw_points: 20000, feedback: "good jorb!",
-                                         status: "Graded" }}, format: :json
+                                         complete: true, student_visible: true }}, format: :json
         grade.reload
         expect(grade.feedback).to eq("good jorb!")
-        expect(grade.status).to eq("Graded")
+        expect(grade.complete).to be_truthy
+        expect(grade.student_visible).to be_truthy
         expect(grade.raw_points).to eq(20000)
       end
 

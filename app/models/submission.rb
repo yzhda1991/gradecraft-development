@@ -30,12 +30,14 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-    .where.not(id: with_grade.where(grades: { status: ["In Progress", "Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { instructor_modified: true }))
   end
 
+  # resubmitted? aligns with ungraded logic (ie any status),
+  # shouldn't we do the same here?
   scope :resubmitted, -> {
     includes(:grade, :assignment)
-    .where("grades.status = 'Released' OR grades.status = 'Graded'")
+    .where("grades.student_visible = true")
     .where("grades.graded_at < submitted_at")
     .references(:grade, :assignment)
   }
@@ -64,7 +66,7 @@ class Submission < ActiveRecord::Base
   end
 
   def graded_at
-    submission_grade.graded_at if graded?
+    submission_grade.graded_at if submission_grade
   end
 
   def graded?
@@ -81,13 +83,13 @@ class Submission < ActiveRecord::Base
 
   # Grabbing any submission that has NO instructor-defined grade
   def ungraded?
-    !submission_grade || submission_grade.status.nil?
+    !submission_grade || !submission_grade.instructor_modified?
   end
 
   # Reports to the user that a change will be a resubmission because this
   # submission is already graded and visible to them.
   def will_be_resubmitted?
-    return false unless submission_grade.present? && submission_grade.is_student_visible?
+    return false unless submission_grade.present? && submission_grade.student_visible?
     return true
   end
 
