@@ -4,12 +4,12 @@ module GradeStatus
   extend ActiveSupport::Concern
 
   included do
-    scope :graded, -> { where status: "Graded" }
-    scope :graded_or_released, -> { where(status: ["Graded", "Released"]) }
-    scope :in_progress, -> { where status: "In Progress" }
-    scope :not_released, -> { where status: "In Progress" }
-    scope :released, -> { where status: "Released" }
-    scope :student_visible, ->  { where(status: ["Graded", "Released"]) }
+    scope :graded, -> { where status: "Graded" } # student_visible: true
+    scope :in_progress, -> { where status: "In Progress" } # completed: false
+    scope :not_released, -> { where status: "In Progress" } # completed: true, student_visible: false
+    scope :released, -> { where status: "Released" } # student_visible: true
+
+    scope :student_visible, ->  { where(student_visible: true) }
   end
 
   STATUSES = ["In Progress", "Released"]
@@ -24,10 +24,6 @@ module GradeStatus
 
   def is_released?
     status == "Released"
-  end
-
-  def graded_or_released?
-    is_graded? || is_released?
   end
 
   def is_student_visible?

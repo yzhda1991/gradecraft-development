@@ -36,6 +36,7 @@ Note that for all of these models, their `updated_at` attribute will be set to t
 
   * `graded_by_id` - id of instructor who graded the student
   * `pass_fail_status` - boolean representing whether the student has passed or failed their assignment. The two possible values are "Pass" and "Fail". See [[pass fail assignments | pass fail]] for more information
+  *  `student_visible?` - returns true when the grade is released and visible to the student
 
 #### Excluded Grades
 
@@ -84,8 +85,6 @@ Scores and point values are saved in several states on the model. See [[Points]]
   * `is_graded?` - returns true when the grade status is set to 'Graded'
   * `assignment_weight` - returns the student's weight for the assignment
   * `is_released?` - returns true when the grade status is set to 'Released'
-  * `is_student_visible?` - returns true when either the grade is released, or it is graded and a release is not necessary
-  * `status_is_graded_or_released?` - returns true when the grade status is set to 'Graded' or 'Released'. This method can also be called with `graded_or_released?`
 
 #### Unused
 

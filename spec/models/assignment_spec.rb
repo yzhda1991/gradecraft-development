@@ -335,7 +335,7 @@ describe Assignment do
     before { subject.save }
 
     it "returns the first visible grade for the student" do
-      grade = subject.grades.create student_id: student.id, raw_points: 85, status: "Graded"
+      grade = subject.grades.create student_id: student.id, raw_points: 85, student_visible: true
       expect(subject.grade_for_student(student)).to eq grade
     end
   end

@@ -1,6 +1,6 @@
 describe Services::Actions::EnqueuesGradeUpdaterJobs do
-  let(:first_grade) { create :grade, status: "Graded" }
-  let(:second_grade) { create :grade, status: "Graded" }
+  let(:first_grade) { create :grade, student_visible: true }
+  let(:second_grade) { create :grade, student_visible: true }
   let(:grades_import_result) { double(:result, successful: [first_grade, second_grade ]) }
 
   before { allow_any_instance_of(GradeUpdaterJob).to receive(:enqueue) }
@@ -27,7 +27,7 @@ describe Services::Actions::EnqueuesGradeUpdaterJobs do
   end
 
   it "does not enqueue grades that are not visible to the student" do
-    allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
+    allow_any_instance_of(Grade).to receive(:student_visible?).and_return false
 
     expect(GradeUpdaterJob).to_not receive(:new)
 

@@ -18,11 +18,6 @@ describe Services::Actions::SavesGrade do
     expect(result).to have_key :update_grade
   end
 
-  it "promises student visible status" do
-    result = described_class.execute grade: grade
-    expect(result).to have_key :student_visible_status
-  end
-
   it "halts if a record is invalid" do
     grade.student_id = nil
     expect { described_class.execute grade: grade }.to \
@@ -30,7 +25,7 @@ describe Services::Actions::SavesGrade do
   end
 
   context "when the grade has not been graded or released" do
-    before(:each) { allow_any_instance_of(GradeStatus).to receive(:graded_or_released?).and_return false }
+    before(:each) { allow_any_instance_of(GradeStatus).to receive(:student_visible?).and_return false }
 
     context "with previous changes to raw points" do
       it "sets update grade to false" do
@@ -50,7 +45,7 @@ describe Services::Actions::SavesGrade do
   end
 
   context "when the grade has been graded or released" do
-    before(:each) { allow_any_instance_of(GradeStatus).to receive(:graded_or_released?).and_return true }
+    before(:each) { allow_any_instance_of(GradeStatus).to receive(:student_visible?).and_return true }
 
     context "with previous changes to raw points" do
       it "sets update grade to true" do

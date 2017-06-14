@@ -327,8 +327,7 @@ class User < ActiveRecord::Base
 
   # this should be all earned badges that either:
   # 1) have no associated grade and have been awarded to the student, or...
-  # 2) have an associated grade that has been marked graded_or_released?
-  # (indicated through the student_visible boolean)
+  # 2) have an associated grade that is student visible
   def student_visible_earned_badges(course)
     @student_visible_earned_badges ||= EarnedBadge
       .includes(:badge)

@@ -45,7 +45,6 @@ Note that in this section the term "grade" refers to both Grades and Challenge G
 ### Scopes
 
   * `graded` - grades that have a `status` of "Graded"
-  * `graded_or_released` - grades that have a `status` of "Graded" or "Released"
   * `in_progress` - grades that have a `status` of "In Progress"
   * `not_released` - grades that have a status of "Graded," joined with `releasable_relationship` (ie., the assignment or challenge). No grades will be returned when `release_necessary` from `releasable_relationship` is false
   * `released` - grades, joined with the assignment/challenge, that meet one of two requirements:
@@ -58,7 +57,6 @@ Note that in this section the term "grade" refers to both Grades and Challenge G
   * `is_graded?` - returns true if the status is set to "Graded"
   * `in_progress?` - returns true if the status is set to "In Progress"
   * `is_released?` - returns true if the status is set to "Released"
-  * `graded_or_released?` - returns true if the status is set to either "Graded" or "Released"
 
 ## Historical
 
