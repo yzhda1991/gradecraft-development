@@ -13,8 +13,9 @@ class ChallengeGrade < ActiveRecord::Base
   delegate :name, :description, :due_at, :full_points, to: :challenge
 
   releasable_through :challenge
-  
+
   before_save :calculate_final_points
+  before_save :update_challenge_status_fields
 
   validates :challenge_id, uniqueness: { scope: :team_id }
   validates_presence_of :team_id
@@ -27,7 +28,7 @@ class ChallengeGrade < ActiveRecord::Base
   def raw_points
     super.presence || nil
   end
-  
+
   # totaled points (adds adjustment, without weighting)
   def calculate_final_points
     return nil unless raw_points.present?
