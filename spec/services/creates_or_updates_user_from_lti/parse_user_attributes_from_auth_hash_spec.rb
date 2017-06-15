@@ -7,7 +7,7 @@ describe Services::Actions::ParseUserAttributesFromAuthHash do
         lis_person_contact_email_primary: "john.doe@umich.edu",
         lis_person_sourcedid: "johndoe",
         lis_person_name_given: "john",
-        lis_person_name_family: "doe",
+        lis_person_name_family: "doe"
       }
     }})
   }
