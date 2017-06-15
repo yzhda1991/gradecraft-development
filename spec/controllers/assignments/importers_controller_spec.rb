@@ -20,6 +20,43 @@ describe Assignments::ImportersController do
       allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
     end
 
+    describe "GET show" do
+      it "renders the correct template if the importer provider id is allowed" do
+        get :show, params: { provider_id: :csv }
+        expect(response).to render_template :csv
+      end
+
+      it "redirects to index if the importer provider id is not allowed" do
+        get :show, params: { provider_id: :app }
+        expect(response).to redirect_to action: :index
+      end
+    end
+
+    describe "GET download" do
+      it "returns sample csv data" do
+        get :download, params: { importer_provider_id: :csv }, format: :csv
+        expect(response.body).to \
+          include("Assignment Name", "Assignment Type", "Point Total", "Description",
+            "Due Date (mm/dd/yyyy hh:mm:ss)")
+      end
+    end
+
+    describe "POST upload", focus: true do
+      let(:unpermitted_file) { fixture_file "Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg" }
+
+      it "redirects to the show page if no file was provided" do
+        get :upload, params: { importer_provider_id: :csv }
+        expect(response).to redirect_to action: :show, provider_id: :csv
+      end
+
+      it "redirects to the show page if the file extension is not allowed" do
+        get :upload, params: { importer_provider_id: :csv, params: { csv_file: unpermitted_file } }
+        expect(response).to redirect_to action: :show, provider_id: :csv
+      end
+
+      xit "it renders the csv upload results for user review"
+    end
+
     describe "GET assignments" do
       let(:syllabus) { double :syllabus, course: {}, assignments: [] }
 

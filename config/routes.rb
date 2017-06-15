@@ -51,6 +51,7 @@ Rails.application.routes.draw do
       get :assignments
       get :download
       post :upload
+      post :import
       post "/courses/:id/assignments/import", action: :assignments_import,
         as: :assignments_import
       post "/assignments/:id/refresh", action: :refresh_assignment, as: :refresh_assignment

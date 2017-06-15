@@ -8,19 +8,19 @@
       %li If the Assignment Type does not match one that is currently in the course, you will be allowed to select or create a new one.
       %li
         The Due Date must be in the following format:
-        %span.italic= "mm/dd/yyyy hh:mm:ss (e.g. 01/01/2017 15:10:11)"
+        %span.italic= "mm/dd/yyyy hh:mm:ss (e.g. 01/01/2017 10:10:11 PM)"
         %br If the format of the due date cannot be parsed, you will be allowed to change it.
 
   %hr
 
     %p
       Columns should be in the following order:
-      %br Assignment Name, Assignment Type Name, Point Total, Description, Due Date
+      %br Assignment Name, Assignment Type, Point Total, Description, Due Date
       .bold= link_to "Download Sample File", assignments_importer_download_path(:csv, format: "csv")
 
-    = form_tag(action: :upload, importer_provider_id: :csv, multipart: true) do
-      = file_field_tag "file"
+    = form_tag({action: :upload, importer_provider_id: :csv}, multipart: true) do
+      = file_field_tag :csv_file, accept: "text/csv"
 
       .submit-buttons
         .right
-          = active_course_submit_tag "Import", class: "button"
+          = active_course_submit_tag "Upload", class: "button"

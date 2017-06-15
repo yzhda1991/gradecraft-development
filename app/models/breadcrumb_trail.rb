@@ -36,7 +36,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def assignments_importers_index
     assignments_index
-    breadcrumb("Import " + objects[:course].assignment_term.pluralize)
+    breadcrumb("Import " + objects[:course].assignment_term.pluralize, assignments_importers_path)
   end
 
   def assignments_importers_assignments
@@ -47,6 +47,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def assignments_importers_assignments_import_results
     assignments_importers_index
     breadcrumb(objects[:provider_name].capitalize + " " + objects[:course].assignment_term.pluralize, assignments_importer_assignments_path(objects[:provider_name], objects[:course_id]))
+  end
+
+  def assignments_importers_csv_import_review
+    assignments_importers_csv
+    breadcrumb("Review Assignments")
   end
 
   def assignments_groups_grades_mass_edit
