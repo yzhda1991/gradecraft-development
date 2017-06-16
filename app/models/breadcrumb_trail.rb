@@ -289,7 +289,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def institutions_index
     dashboard
-    breadcrumb("Institutions")
+    breadcrumb("Institutions", institutions_path)
   end
 
   def institutions_new
