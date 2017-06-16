@@ -32,7 +32,7 @@ describe Analytics::AssignmentAnalytics do
   describe "#earned_score_count" do
     before { subject.save }
 
-    it "returns only graded or released grades" do
+    it "returns only student_visible grades" do
       subject.grades.create student_id: create(:user).id
       expect(subject.earned_score_count).to be_empty
     end
@@ -90,7 +90,7 @@ describe Analytics::AssignmentAnalytics do
   describe "#grade_count" do
     before { subject.save }
 
-    it "counts the number of grades that were graded or released" do
+    it "counts the number of grades that are student_visible" do
       subject.grades.create student_id: create(:user).id, raw_points: 85, student_visible: true
       subject.grades.create student_id: create(:user).id, raw_points: 85, student_visible: true
       subject.grades.create student_id: create(:user).id, raw_points: 105

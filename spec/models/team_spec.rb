@@ -117,16 +117,16 @@ describe Team do
   describe "challenge_grade_score" do
     it "sums all earned challenge grades together" do
       team = create(:team)
-      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, status: "Released")
-      challenge_grade_2 = create(:challenge_grade, raw_points: 100, team: team, status: "Released")
-      challenge_grade_3 = create(:challenge_grade, raw_points: 100, team: team, status: "Released")
+      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, student_visible: true)
+      challenge_grade_2 = create(:challenge_grade, raw_points: 100, team: team, student_visible: true)
+      challenge_grade_3 = create(:challenge_grade, raw_points: 100, team: team, student_visible: true)
       team.update_challenge_grade_score!
       expect(team.challenge_grade_score).to eq(300)
     end
 
     it "should not include grades that are not student visible" do
       team = create(:team)
-      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, status: "Released")
+      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, student_visible: true)
       challenge_grade_2 = create(:challenge_grade, raw_points: 100, team: team, status: nil)
       expect(team.challenge_grade_score).to eq(100)
     end
@@ -140,8 +140,8 @@ describe Team do
       team_2 = create(:team, course: course)
 
       challenge = create(:challenge, course: course)
-      challenge_grade = create(:challenge_grade, challenge: challenge, team: team_1, raw_points: 100, status: "Released")
-      challenge_grade_2 = create(:challenge_grade, challenge: challenge, team: team_2, raw_points: 10000, status: "Released")
+      challenge_grade = create(:challenge_grade, challenge: challenge, team: team_1, raw_points: 100, student_visible: true)
+      challenge_grade_2 = create(:challenge_grade, challenge: challenge, team: team_2, raw_points: 10000, student_visible: true)
 
       team_2.update_ranks!
       team_2.reload
@@ -167,8 +167,8 @@ describe Team do
 
     it "sets the challenge grade score for the team" do
       team.challenge_grade_score = nil
-      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, status: "Released")
-      challenge_grade_2 = create(:challenge_grade, raw_points: 2000, team: team, status: "Released")
+      challenge_grade = create(:challenge_grade, raw_points: 100, team: team, student_visible: true)
+      challenge_grade_2 = create(:challenge_grade, raw_points: 2000, team: team, student_visible: true)
       team.update_challenge_grade_score!
       expect( team.instance_eval { challenge_grade_score } ).to eq(2100)
     end

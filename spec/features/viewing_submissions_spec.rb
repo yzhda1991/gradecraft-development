@@ -18,7 +18,7 @@ feature "viewing submissions" do
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
       create :grade, submission: submission, assignment: assignment,
-        student: student, raw_points: 10000, status: "Released",
+        student: student, raw_points: 10000, student_visible: true,
         graded_at: DateTime.now
       submission.update_attributes link: "http://example.org",
         submitted_at: DateTime.now
@@ -37,7 +37,7 @@ feature "viewing submissions" do
     before do
       login_as professor
       grade = create :grade, submission: submission, assignment: assignment,
-        student: student, raw_points: 10000, status: "Released",
+        student: student, raw_points: 10000, student_visible: true,
         graded_at: DateTime.now
       submission.update_attributes link: "http://example.org",
         submitted_at: DateTime.now

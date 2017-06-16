@@ -55,7 +55,7 @@ describe "assignments/index_student/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: @assignment.full_points, student_visible: true)
 
         # To verify we have satisfied the released condition:
-        expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
+        expect(@student.grade_visible_for_assignment?(@assignment)).to be_truthy
         render
         assert_select "p", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
       end
@@ -76,7 +76,7 @@ describe "assignments/index_student/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass", student_visible: true)
 
         # To verify we have satisfied the released condition:
-        expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
+        expect(@student.grade_visible_for_assignment?(@assignment)).to be_truthy
 
         render
         assert_select "div" do

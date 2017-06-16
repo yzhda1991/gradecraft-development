@@ -16,7 +16,7 @@ class Assignments::GroupsController < ApplicationController
   private
 
   def path_for_next_group_grade(assignment, group)
-    # we don't supply grade next buttons when editing a released grade
+    # we don't supply grade next buttons when editing a student visible grade
     return nil if group.grade_for_assignment(assignment).student_visible?
     next_group = assignment.next_ungraded_group(group)
     return assignment_path(assignment) unless next_group.present?

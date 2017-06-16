@@ -251,27 +251,27 @@ describe User do
 
   describe "#grade_released_for_assignment?(assignment)" do
     it "returns false if the grade is not student visible" do
-      expect(student.grade_released_for_assignment?(assignment)).to eq(false)
+      expect(student.grade_visible_for_assignment?(assignment)).to eq(false)
     end
 
     it "returns true if the grade is graded" do
       grade.status = "Graded"
       grade.save!
-      expect(student.grade_released_for_assignment?(assignment)).to eq(true)
+      expect(student.grade_visible_for_assignment?(assignment)).to eq(true)
     end
 
     it "returns true if the grade is released" do
       assignment.save
-      grade.status = "Released"
+      grade.student_visible = true
       grade.save!
-      expect(student.grade_released_for_assignment?(assignment)).to eq(true)
+      expect(student.grade_visible_for_assignment?(assignment)).to eq(true)
     end
   end
 
   describe "#grades_for_course(course)" do
     it "returns the student's grades for a course" do
-      grade_1 = create(:grade, raw_points: 100, student: student, course: course, status: "Released")
-      grade_2 = create(:grade, raw_points: 300, student: student, course: course, status: "Released")
+      grade_1 = create(:grade, raw_points: 100, student: student, course: course, student_visible: true)
+      grade_2 = create(:grade, raw_points: 300, student: student, course: course, student_visible: true)
       expect(student.grades_for_course(course)).to include(grade_1, grade_2)
     end
   end
@@ -538,7 +538,7 @@ describe User do
     end
 
     it "should not select non-visible student badges" do
-      earned_badges = create_list(:earned_badge, 3, course: course, student: student, grade: (create :unreleased_grade))
+      earned_badges = create_list(:earned_badge, 3, course: course, student: student, grade: (create :in_progress_grade))
       expect(student.student_visible_earned_badges(course)).to be_empty
     end
 

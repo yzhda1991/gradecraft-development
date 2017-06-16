@@ -277,7 +277,7 @@ describe Submission do
 
     it "does not return submissions that have unreleased grades" do
       submission = build(:submission, assignment: assignment)
-      create(:unreleased_grade, submission: submission, graded_at: 1.day.ago)
+      create(:in_progress_grade, submission: submission, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.save
       expect(Submission.resubmitted).to be_empty

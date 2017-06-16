@@ -87,7 +87,7 @@ describe EarnedBadge do
     end
 
     it "is visible if the grade is visible" do
-      grade = create(:grade, status: "Released")
+      grade = create(:grade, student_visible: true)
       subject = create(:earned_badge, grade: grade)
       expect(subject).to be_student_visible
     end

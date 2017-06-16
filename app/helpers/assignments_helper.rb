@@ -1,7 +1,7 @@
 module AssignmentsHelper
   def mark_assignment_reviewed!(assignment, user)
     if user.is_student?(assignment.course)
-      if user.grade_released_for_assignment?(assignment)
+      if user.grade_visible_for_assignment?(assignment)
         grade = user.grade_for_assignment(assignment)
         grade.feedback_reviewed! if grade && !grade.new_record?
       end

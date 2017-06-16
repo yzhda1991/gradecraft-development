@@ -3,23 +3,18 @@ FactoryGirl.define do
     association :challenge
     association :team
 
-    factory :released_challenge_grade do
+    factory :in_progress_challenge_grade do
       association :team
+      raw_points { rand(challenge.full_points) }
+      instuctor_modified true
+      complete false
+    end
+
+    factory :student_visible_challenge_grade do
       raw_points { Faker::Number.number(5) }
-      status "Released"
-    end
-
-    factory :graded_challenge_grade do
-      association :challenge
-      association :team
-      raw_points { rand(challenge.full_points) }
-      status "Graded"
-    end
-
-    factory :grades_not_released_challenge_grade do
-      association :team
-      raw_points { rand(challenge.full_points) }
-      status "In Progress"
+      instuctor_modified true
+      complete true
+      student_visible true
     end
   end
 end

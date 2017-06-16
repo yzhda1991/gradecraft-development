@@ -13,7 +13,7 @@ describe AssignmentsHelper do
 
     it "it marks the grade feedback as reviewed for the current user" do
       allow(user).to receive(:is_student?).with(course).and_return true
-      allow(user).to receive(:grade_released_for_assignment?).with(assignment)
+      allow(user).to receive(:grade_visible_for_assignment?).with(assignment)
         .and_return true
       allow(user).to receive(:grade_for_assignment).with(assignment).and_return grade
       expect(grade).to receive(:feedback_reviewed!)

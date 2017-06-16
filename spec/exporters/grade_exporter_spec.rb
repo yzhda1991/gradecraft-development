@@ -196,7 +196,7 @@ describe GradeExporter do
       expect(csv[1][3]).to eq ""
     end
 
-    it "does not include the grade if it has not been graded or released" do
+    it "does not include the grade if it is not student visible" do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
           .and_return double(:grade, instructor_modified?: false, student_visible?: false)

@@ -247,10 +247,10 @@ class User < ActiveRecord::Base
 
   ### GRADES
 
-  # Checking specifically if there is a released grade for an assignment
-  def grade_released_for_assignment?(assignment)
+  # Checking specifically if there is a student visible grade for an assignment
+  def grade_visible_for_assignment?(assignment)
     grade = grade_for_assignment(assignment)
-    GradeProctor.new(grade).viewable?
+    grade.student_visible?
   end
 
   def grades_for_course(course)

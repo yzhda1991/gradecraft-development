@@ -46,7 +46,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def grades_available_for?(user)
-    user.grade_released_for_assignment?(assignment)
+    user.grade_visible_for_assignment?(assignment)
   end
 
   def groups

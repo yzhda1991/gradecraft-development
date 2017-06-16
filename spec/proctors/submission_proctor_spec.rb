@@ -49,8 +49,8 @@ describe SubmissionProctor do
     before(:each) { allow(submission).to receive(:submission_grade).and_return grade }
 
     it "returns false if the submission is graded but not yet released" do
-      allow(submission).to receive(:graded?).and_return true
-      allow(grade).to receive(:is_released?).and_return false
+      allow(submission).to receive(:in_progress?).and_return true
+      allow(grade).to receive(:student_visible?).and_return false
       expect(subject.open_for_editing?(assignment, student)).to be_falsey
     end
   end

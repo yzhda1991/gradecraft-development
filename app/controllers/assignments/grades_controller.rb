@@ -13,7 +13,7 @@ class Assignments::GradesController < ApplicationController
     grades = assignment.grades.find(params[:grade_ids])
 
     grade_ids = grades.collect do |grade|
-      grade.update(status: "Released")
+      grade.update(student_visible: true)
       grade.id
     end
 

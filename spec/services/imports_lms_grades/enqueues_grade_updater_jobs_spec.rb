@@ -18,8 +18,8 @@ describe Services::Actions::EnqueuesGradeUpdaterJobs do
   end
 
   it "does not enqueue in progress grades" do
-    unreleased_grade = create :grade, status: "In Progress"
-    allow(grades_import_result).to receive(:successful).and_return [unreleased_grade]
+    in_progress_grade = create :grade, status: "In Progress"
+    allow(grades_import_result).to receive(:successful).and_return [in_progress_grade]
 
     expect(GradeUpdaterJob).to_not receive(:new).with(grade_id: second_grade.id)
 

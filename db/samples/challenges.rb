@@ -26,7 +26,7 @@
   grades: false,
   grade_attributes: {
     raw_points: Proc.new { rand(10000)},
-    status: nil,
+    student_visible: false,
   }
 }
 
@@ -47,7 +47,7 @@
   },
   grades: true,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
   }
 }
 
@@ -77,7 +77,7 @@ sure what the game is. - Ashleigh Brilliant"
   },
   grades: true,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
   }
 }
 

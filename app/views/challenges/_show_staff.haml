@@ -39,7 +39,7 @@
                 - else
                   = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge, team_id: team.id), class: "button"
           %td
-            - if challenge_grade && !challenge_grade.is_released?
+            - if challenge_grade && !challenge_grade.student_visible?
               .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
   %br
   .right

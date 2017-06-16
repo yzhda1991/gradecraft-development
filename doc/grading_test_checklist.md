@@ -1,5 +1,7 @@
 Here is a rundown of Human Testing for the Grading Form, using standard sample data:
 
+TODO: update with new status procedures
+
 ## Test Pass/Fail Grades
 
 - Grade Hannah Abbott's Grade For Pass/Fail  [No Grades]
@@ -102,7 +104,7 @@ Here is a rundown of Human Testing for the Grading Form, using standard sample d
 
 - Grade Hannah Abbott's " Rubric Graded Assignment [No Grades]"
 	- select a levels for the first criteria
-		- verify final points is equal to the level points 
+		- verify final points is equal to the level points
 	- add feedback to the criteria level
 	- pause for 3 seconds and refresh page (don't submit)
 		- verify that the level and feedback are still present, and the final points haven't changed

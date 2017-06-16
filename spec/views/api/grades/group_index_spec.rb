@@ -8,11 +8,10 @@ describe "api/grades/group_index" do
     # Expected instance variables on render:
     @grades = [create(:grade)]
     @student_ids = [1,2,3,4,5]
-    @grades_status_options = ["In Progress","Graded", "Released"]
     @assignment = @grades[0].assignment
   end
 
-  it "responds with an array of gradew" do
+  it "responds with an array of grades" do
     render
     json = JSON.parse(response.body)
     expect(json["data"][0]["type"]).to eq("grades")

@@ -20,8 +20,8 @@ describe GradebookExporter do
       @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type_1)
       @student = create(:user, last_name: "Aad", courses: [course], role: :student)
       @student_2 = create(:user, last_name: "Zep", courses: [course], role: :student)
-      create(:grade, assignment: @assignment, student: @student, raw_points: 100, status: "Released" )
-      create(:grade, assignment: @assignment_2, student: @student, raw_points: 200, status: "Released")
+      create(:grade, assignment: @assignment, student: @student, raw_points: 100, student_visible: true)
+      create(:grade, assignment: @assignment_2, student: @student, raw_points: 200, student_visible: true)
 
       csv = CSV.new(subject.gradebook(course)).read
       expect(csv.length).to eq 3

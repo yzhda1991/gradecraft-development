@@ -231,7 +231,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Released"
+                  raw_points: 100, student_visible: true
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -257,7 +257,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Released")
+                  raw_points: 100, student_visible: true)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100
@@ -269,7 +269,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_points: 99, status: "Released")
+                  raw_points: 99, student_visible: true)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100)
@@ -280,7 +280,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_points: 0, status: "Released")
+                  raw_points: 0, student_visible: true)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned")
@@ -476,8 +476,8 @@ describe UnlockCondition do
       end
 
       it "return true if student has done enough assignments" do
-        g1 = create(:grade, raw_points: 100, student: student, assignment: assignment_at, status: "Released")
-        g2 = create(:grade, raw_points: 100, student: student, assignment: assignment_at2, status: "Released")
+        g1 = create(:grade, raw_points: 100, student: student, assignment: assignment_at, student_visible: true)
+        g2 = create(:grade, raw_points: 100, student: student, assignment: assignment_at2, student_visible: true)
         expect(unlock_condition.is_complete?(student)).to eq(true)
       end
     end
@@ -502,8 +502,8 @@ describe UnlockCondition do
       end
 
       it "return true if student has met the minimum number of points" do
-        create(:grade, student: student, assignment: assignment_2, raw_points: 5000, status: "Released")
-        create(:grade, student: student, assignment: assignment_3, raw_points: 5000, status: "Released")
+        create(:grade, student: student, assignment: assignment_2, raw_points: 5000, student_visible: true)
+        create(:grade, student: student, assignment: assignment_3, raw_points: 5000, student_visible: true)
         expect(unlock_condition.is_complete?(student)).to eq(true)
       end
     end
@@ -514,7 +514,7 @@ describe UnlockCondition do
       student = create(:user)
       create(
         :grade, assignment: assignment, student: student,
-                pass_fail_status: "Pass", status: "Released"
+                pass_fail_status: "Pass", student_visible: true
       )
       unlock_condition = UnlockCondition.new(
         condition_id: assignment.id, condition_type: "Assignment",
@@ -527,7 +527,7 @@ describe UnlockCondition do
       student = create(:user)
       create(
         :grade, assignment: assignment, student: student,
-                pass_fail_status: "Fail", status: "Released"
+                pass_fail_status: "Fail", student_visible: true
       )
       unlock_condition = UnlockCondition.new(
         condition_id: assignment.id, condition_type: "Assignment",

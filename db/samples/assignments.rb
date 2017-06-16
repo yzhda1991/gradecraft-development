@@ -46,7 +46,8 @@
   grade_attributes: {
     raw_points: -> { qd_curve(5000) },
     instructor_modified: true,
-    status: nil,
+    complete: true,
+    student_visible: false,
     feedback: nil,
     excluded_from_course_score: false,
   },
@@ -128,7 +129,7 @@ end
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -161,7 +162,7 @@ uncertainty! - Douglas Adams"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -195,7 +196,7 @@ to bed. ― J.K. Rowling"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -230,7 +231,7 @@ of what it feels about education.― Harold Howe",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -264,7 +265,7 @@ life.― John Holt",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -285,7 +286,7 @@ met. Grades have a raw_points of 15000",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     raw_points: -> { 15000 },
   }
 }
@@ -324,7 +325,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "In Progress",
+    complete: false,
     raw_points: -> { 15000 },
   }
 }
@@ -342,7 +343,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -358,7 +359,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "In Progress"
+    complete: false
   }
 }
 
@@ -432,7 +433,7 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>',
   },
   rubric: true,
@@ -771,7 +772,7 @@ accepts predictions.",
   grades: true,
   participation: 100,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -796,7 +797,7 @@ accepts predictions.",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -819,7 +820,7 @@ not added to total",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     excluded_from_course_score: true
   },
   prediction: true,
@@ -877,7 +878,7 @@ should not have a visible grade",
   participation: 90,
   grade_attributes: {
     raw_points: -> { qd_curve(15000) },
-    status: "Released"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -938,7 +939,7 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
   participation: 90,
   grade_attributes: {
     raw_points: -> { 15000 },
-    status: "Released"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -1330,7 +1331,7 @@ treated like money, to be put away in a bank for the future. ― Seymour Papert"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     raw_points: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key
       to unlock the golden door of freedom."</strong>'
@@ -1376,7 +1377,7 @@ in the end you’ll fall right into my trap. ― Sophia Nikolaidou",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     raw_points: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not
       strength or intelligence - is the key to unlocking our potential.
@@ -1647,7 +1648,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1676,7 +1677,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1705,7 +1706,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1734,7 +1735,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1758,7 +1759,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1782,6 +1783,6 @@ uncertainty! - Douglas Adams"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }

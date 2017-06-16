@@ -102,7 +102,7 @@ In addition to the methods described below, there are methods of the form `is_<r
   * `grade_letter_for_course(course)` - returns letter of the grade scheme element for the student's score in the course
   * `next_element_level(course)` - needs to be fixed
   * `points_to_next_level(course)` - returns the amount of points that the student is away from the next grade scheme element
-  * `grade_released_for_assignment?(assignment)` - returns true when the student's grade for the assignment is either graded and does not need to be released, or is released
+  * `grade_visible_for_assignment?(assignment)` - returns true when the student's grade for the assignment is either graded and does not need to be released, or is released
   * `grade_for_assignment(assignment)` - returns the student's grade for the assignment if it exists. If not, creates and returns a new one
   * `grade_for_assignment_id(assignment_id)` - returns the student's grade for the assignment using the passed in assignment id
   * `cache_course_score(course_id)` - recalculates the student's score for the course. Powers the worker

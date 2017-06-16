@@ -10,9 +10,9 @@ describe Assignments::GradesController do
     before(:each) { login_user(professor) }
 
     describe "PUT release" do
-      it "updates the grade status to release for grades" do
+      it "updates the grade to student visible" do
         put :release, params: { assignment_id: assignment.id, grade_ids: [grade.id]}
-        expect(grade.reload.status).to eq("Released")
+        expect(grade.reload.student_visible).to be_truthy
       end
 
       it "updates badges earned on the grade" do

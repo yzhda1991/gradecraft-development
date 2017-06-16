@@ -5,14 +5,6 @@ describe Grade do
 
   subject { build(:grade) }
 
-  describe "constants" do
-    describe "STATUSES" do
-      it "returns an array of all the status values" do
-        expect(described_class::STATUSES).to eq ["In Progress", "Released"]
-      end
-    end
-  end
-
   describe "validations" do
     it "is valid with an assignment, student, assignment_type, and course" do
       expect(subject).to be_valid

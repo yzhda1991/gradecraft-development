@@ -12,11 +12,11 @@ describe Gradable do
       before do
         subject.save
         subject.grades.create student_id: student_1.id, raw_points: 8, status: "Graded"
-        subject.grades.create student_id: student_2.id, raw_points: 8, status: "Released"
+        subject.grades.create student_id: student_2.id, raw_points: 8, student_visible: true
         subject.grades.create student_id: student_3.id, raw_points: 5, status: "In Progress"
       end
 
-      it "returns all students without a 'Graded' or 'Released' grade for the assignment" do
+      it "returns all students without a released grade for the assignment" do
         expect(subject.ungraded_students.count).to eq(2)
       end
 
@@ -34,7 +34,7 @@ describe Gradable do
         create :submission, assignment: subject, student: student_4
       end
 
-      it "returns all students without a 'Graded' or 'Released' grade for the assignment" do
+      it "returns all students without a visible grade for the assignment" do
         expect(subject.ungraded_students_with_submissions.count).to eq(2)
       end
 
@@ -116,7 +116,7 @@ describe Gradable do
 
     describe "#ungraded_groups" do
       before do
-        group_1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
+        group_1.students.each {|s| create(:student_visible, assignment: subject, student: s)}
       end
 
       it "returns all ungraded groups" do
@@ -130,7 +130,7 @@ describe Gradable do
 
     describe "ungraded_groups_with_submissions" do
       before do
-        group_1.students.each {|s| create(:released_grade, assignment: subject, student: s)}
+        group_1.students.each {|s| create(:student_visible, assignment: subject, student: s)}
         create :submission, assignment: subject, student: nil, group: group_1
         create :submission, assignment: subject, student: nil, group: group_2
       end
