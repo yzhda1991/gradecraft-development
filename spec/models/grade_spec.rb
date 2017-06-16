@@ -251,10 +251,5 @@ describe Grade do
       grade.save
       expect(earned_badge.reload.student_visible).to be_truthy
     end
-
-    it "(temporary) updates status booleans from status state" do
-      expect(subject).to receive(:update_status_fields)
-      subject.save
-    end
   end
 end

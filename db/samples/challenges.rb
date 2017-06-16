@@ -26,6 +26,7 @@
   grades: false,
   grade_attributes: {
     raw_points: Proc.new { rand(10000)},
+    complete: true,
     student_visible: false,
   }
 }
@@ -47,6 +48,7 @@
   },
   grades: true,
   grade_attributes: {
+    complete: true,
     student_visible: true,
   }
 }
@@ -77,6 +79,7 @@ sure what the game is. - Ashleigh Brilliant"
   },
   grades: true,
   grade_attributes: {
+    complete: true,
     student_visible: true,
   }
 }

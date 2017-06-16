@@ -12,7 +12,6 @@ class ChallengeGrade < ActiveRecord::Base
   delegate :name, :description, :due_at, :full_points, to: :challenge
 
   before_save :calculate_final_points
-  before_save :update_challenge_status_fields
 
   validates :challenge_id, uniqueness: { scope: :team_id }
   validates_presence_of :team_id
