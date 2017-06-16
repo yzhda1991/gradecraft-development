@@ -102,7 +102,6 @@ Scores and point values are saved in several states on the model. See [[Points]]
 
   * `feedback_read!` - sets `feedback_read` to true and `feedback_read_at` to the current time
   * `feedback_reviewed!` - sets `feedback_reviewed` to true and `feedback_reviewed_at` to the current time
-  * `is_graded?` - returns true when the grade status is set to 'Graded'
   * `assignment_weight` - returns the student's weight for the assignment
 
 #### Unused

@@ -2,8 +2,7 @@ describe GradeProctor::Updatable do
   let(:assignment) { double(:assignment, student_logged?: false) }
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
-                       student_id: 123, student: user, is_graded?: true,
-                       is_released?: false) }
+                       student_id: 123, student: user, student_visible?: true) }
   let(:user) { double(:user, id: 123, is_staff?: false) }
 
   describe "#updatable?" do

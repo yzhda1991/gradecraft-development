@@ -13,17 +13,6 @@ describe GradeStatus  , focus: true do
     end
   end
 
-  describe "#is_graded?" do
-    it "returns true if the challenge grade is graded" do
-      challenge_grade = create(:challenge_grade, status: "Graded")
-      expect(challenge_grade.is_graded?).to eq(true)
-    end
-    it "returns false if the challenge grade is not graded" do
-      challenge_grade = create(:challenge_grade, status: nil)
-      expect(challenge_grade.is_graded?).to eq(false)
-    end
-  end
-
   describe "#update_status_fields" do
     it "updates the fields on 'In Progress' grades" do
       grade.status = "In Progress"

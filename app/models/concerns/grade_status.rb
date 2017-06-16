@@ -12,10 +12,6 @@ module GradeStatus
     scope :student_visible, ->  { where(student_visible: true) }
   end
 
-  def is_graded?
-    status == "Graded"
-  end
-
   def in_progress?
     status == "In Progress"
   end
