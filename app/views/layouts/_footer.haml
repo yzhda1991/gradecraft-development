@@ -5,7 +5,7 @@
     %li= link_to_unless_current "Research", research_path
     %li= link_to_unless_current "Press", press_path
     %li= link_to_unless_current "Team", our_team_path
-    %li= link_to "Blog", "http://blog.gradecraft.com", :target => "_blank"
+    %li= link_to_unless_current  "Pricing", sign_up_path
   .uppercase.small.michigan= "© 2012-#{Date.today.year} Regents of the University of Michigan"
 .footer-column.footer-column-2
   %ul.social
@@ -13,4 +13,3 @@
     %li= link_to glyph(:twitter), "https://twitter.com/gradecraft", target: "_blank", title: "GradeCraft on Twitter", 'aria-label': "GradeCraft on Twitter"
     %li= link_to glyph(:facebook), "https://facebook.com/gradecraft", target: "_blank", title: "GradeCraft on Facebook", 'aria-label': "GradeCraft on Facebook"
   = render partial: "layouts/status"
-  
