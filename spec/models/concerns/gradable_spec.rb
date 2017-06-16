@@ -11,9 +11,9 @@ describe Gradable do
 
       before do
         subject.save
-        subject.grades.create student_id: student_1.id, raw_points: 8, status: "Graded"
+        subject.grades.create student_id: student_1.id, raw_points: 8, student_visible: true
         subject.grades.create student_id: student_2.id, raw_points: 8, student_visible: true
-        subject.grades.create student_id: student_3.id, raw_points: 5, status: "In Progress"
+        subject.grades.create student_id: student_3.id, raw_points: 5, complete: false, instructor_modified: true
       end
 
       it "returns all students without a released grade for the assignment" do

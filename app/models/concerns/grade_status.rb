@@ -4,15 +4,12 @@ module GradeStatus
   extend ActiveSupport::Concern
 
   included do
-    scope :graded, -> { where status: "Graded" } # student_visible: true
-
-
-    scope :in_progress, -> { where status: "In Progress" } # completed: false
-
+    scope :in_progress, -> { where(instructor_modified: true, complete: false) }
+    scope :complete, ->  { where(complete: true) }
     scope :student_visible, ->  { where(student_visible: true) }
   end
 
   def in_progress?
-    status == "In Progress"
+    instructor_modified == true && complete == false
   end
 end

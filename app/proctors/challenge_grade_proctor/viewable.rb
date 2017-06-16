@@ -15,7 +15,7 @@ class ChallengeGradeProctor
       course = options[:course] || challenge_grade.team.course
 
       challenge_grade_for_course?(course) &&
-        ((user.present? && user.is_staff?(course)) || challenge_grade.student_visible?
+        ((user.present? && user.is_staff?(course)) || challenge_grade.student_visible?)
     end
   end
 end

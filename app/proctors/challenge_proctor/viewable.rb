@@ -22,7 +22,7 @@ class ChallengeProctor
     end
 
     def challenge_grades_visible_by_team?(team, challenge)
-      ChallengeGrade.where(team_id: team.id, challenge_id: challenge.id, status: "Graded").present?
+      ChallengeGrade.where(team_id: team.id, challenge_id: challenge.id, student_visible: true).present?
     end
   end
 end
