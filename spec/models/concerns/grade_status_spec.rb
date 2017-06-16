@@ -1,4 +1,4 @@
-describe GradeStatus do
+describe GradeStatus  , focus: true do
   let(:course) { build(:course) }
   let(:assignment) { create(:assignment) }
   let(:grade) { create(:grade, assignment: assignment) }
@@ -13,35 +13,11 @@ describe GradeStatus do
   end
 
   describe ".student_visible" do
-    it "returns all grades that were released or were graded but no release was necessary" do
-      graded_grade = create :grade, status: "Graded"
-      released_grade = create :grade, status: "Released"
+    it "returns all grades that are student visible" do
+      graded_grade = create :grade, complete: true, student_visible: false
+      released_grade = create :grade, complete: true, student_visible: true
       assignment = create :assignment
-      create :grade, assignment: assignment, status: "Graded"
-
-      expect(Grade.student_visible).to include(released_grade, graded_grade)
-    end
-  end
-
-  describe "student_visible?" do
-    it "returns true if the grade is released" do
-      grade.status = "Released"
-      expect(grade.is_student_visible?).to eq true
-    end
-
-    it "returns true if the grade is graded" do
-      grade.status = "Graded"
-      expect(grade.is_student_visible?).to eq true
-    end
-
-    it "returns false if the grade is not marked as graded" do
-      grade.status = nil
-      expect(grade.is_student_visible?).to eq false
-    end
-
-    it "returns false if the grade is marked as in progress" do
-      grade.status = "In Progress"
-      expect(grade.is_student_visible?).to eq false
+      expect(Grade.student_visible).to eq([released_grade])
     end
   end
 

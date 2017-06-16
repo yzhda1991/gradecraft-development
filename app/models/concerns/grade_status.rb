@@ -26,14 +26,6 @@ module GradeStatus
     status == "Released"
   end
 
-  def is_student_visible?
-    if is_released? || is_graded?
-      return true
-    else
-      return false
-    end
-  end
-
   # temporary method to manage new boolean fields: complete, and student_visibile
   # this will be removed once these fields are used for grade status logic
   def update_status_fields
