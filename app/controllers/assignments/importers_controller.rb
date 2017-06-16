@@ -10,14 +10,14 @@ class Assignments::ImportersController < ApplicationController
   oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
-  before_action except: [:index, :show, :download, :upload] do |controller|
+  before_action except: [:index, :show, :download] do |controller|
     controller.redirect_path assignments_importers_path
   end
-  before_action :link_canvas_credentials, except: [:index, :show, :download, :upload],
+  before_action :link_canvas_credentials, except: [:index, :show, :download],
     if: Proc.new { |c| c.params[:importer_provider_id] == "canvas" }
-  before_action :require_authorization, except: [:index, :show, :download, :upload]
+  before_action :require_authorization, except: [:index, :show, :download]
   before_action :use_current_course, except: [:refresh_assignment, :update_assignment, :download]
-  before_action :ensure_allows_file_imports, only: [:show, :download, :upload]
+  before_action :ensure_allows_file_imports, only: [:show, :download]
 
   # GET /assignments/importers
   def index
@@ -25,37 +25,19 @@ class Assignments::ImportersController < ApplicationController
 
   # GET /assignments/importers/:provider_id
   def show
-    render params[:provider_id]
+    @provider_id = params[:provider_id]
+    render @provider_id
   end
 
   # Download a sample CSV pre-populated with the correct headers
   # GET /assignments/importers/:importer_provider_id/download
   def download
     respond_to do |format|
-      format.csv { send_data CSV.generate { |csv| csv << csv_headers },
-        filename: "Sample Assignment File - #{ Date.today }.csv" }
+      format.csv do
+        send_data CSV.generate { |csv| csv << csv_headers },
+        filename: "Sample Assignment File - #{ Date.today }.csv"
+      end
     end
-  end
-
-  # GET /assignments/importers/:importer_provider_id/upload
-  def upload
-    provider = params[:importer_provider_id]
-
-    redirect_to({ action: :show, provider_id: provider },
-      notice: "File is missing") and return if params[:csv_file].blank?
-
-    redirect_to({ action: :show, provider_id: provider },
-      notice: "File format must be CSV") and return if File.extname(params[:csv_file].original_filename) != ".csv"
-
-    @assignment_types = current_course.assignment_types.ordered.select(:name, :id)
-    @data = CSVAssignmentImporter.new(params[:csv_file].tempfile).as_assignment_rows
-
-    render "#{provider}_import_review"
-  end
-
-  # POST /assignments/importers/:importer_provider_id/import
-  def import
-
   end
 
   # Entry point for importing assignments from a provider

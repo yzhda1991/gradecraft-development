@@ -1,0 +1,38 @@
+%assignments-review{"ng-if"=>"assignmentRows.length > 0"}
+  %h2 Review Assignments
+
+  %form{"name"=>"assignmentReviewForm", "ng-submit"=>"vm.postImportAssignments()"}
+    %table
+      %thead
+        %tr
+          %th Assignment Name
+          %th Assignment Type
+          %th Point Total
+          %th Description
+          %th Due Date
+      %tbody
+        %tr{"ng-repeat"=>"row in assignmentRows"}
+          %td {{row.assignment_name}}
+          %td
+            %select{"ng-model"=>"row.assignment_type",
+                    "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
+                    "ng-disabled"=>"vm.loading"}
+              %option{"value"=>""}
+            ({{row.assignment_type}})
+          %td {{row.point_total}}
+          %td {{row.description}}
+          %td
+            %input{"ng-model"=>"row.due_date",
+                   "type"=>"text",
+                   "gc-date-time-input"=>""}
+
+    .submit-buttons
+      %ul
+        %li
+          %input{"type"=>"submit",
+                 "class"=>"button",
+                 "value"=>"Import"}
+        %li
+          %a{"href"=>"{{vm.cancelPath}}", "class"=>"button"}
+            %i.fa.fa-times-circle
+            Cancel

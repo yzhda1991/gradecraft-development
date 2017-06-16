@@ -3,35 +3,42 @@
 
   %h2.subtitle= "Assignments"
 
-  = form_tag assignments_importer_import_path(:csv) do
-  
-    %table.dynatable
-      %thead
-        %tr
-          %th Assignment Name
-          %th Assignment Type
-          %th Point Total
-          %th Description
-          %th Due Date
-      %tbody
-        - @data.each do |row|
-          %tr
-            %td= row.assignment_name
-            %td
-              = collection_select(:assignment_type,
-                :id,
-                @assignment_types,
-                :id,
-                :name,
-                include_blank: true,
-                selected: @assignment_types.find { |t| t[:name].casecmp(row.assignment_type) == 0 }.try(:id))
-              = "(#{row.assignment_type})"
-            %td= row.point_total
-            %td= row.description
-            %td= row.due_date
+  %assignments-import-csv-review{"data-assignment-rows"=>"#{@data.to_json}"}
 
-    .submit-buttons
-      .right
-        %ul
-          %li= active_course_submit_tag "Import", class: "button"
-          %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
+  -# = simple_form_for :assignment, url: assignments_importer_import_path(:csv) do |f|
+  -#
+  -#   %table.dynatable
+  -#     %thead
+  -#       %tr
+  -#         %th Assignment Name
+  -#         %th Assignment Type
+  -#         %th Point Total
+  -#         %th Description
+  -#         %th Due Date
+  -#     %tbody
+  -#       - @data.each do |row|
+  -#         %tr
+  -#           %td= row.assignment_name
+  -#           %td
+  -#             = f.input :assignment_type do
+  -#               = collection_select :assignment_type,
+  -#                   :id,
+  -#                   @assignment_types,
+  -#                   :id,
+  -#                   :name,
+  -#                   include_blank: true,
+  -#                   selected: @assignment_types.find { |t| t[:name].casecmp(row.assignment_type) == 0 }.try(:id)
+  -#             = "(#{row.assignment_type})"
+  -#           %td= row.point_total
+  -#           %td= row.description
+  -#           %td= f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => glyph(:calendar) + "Due Date"
+  -#
+  -#           -# = datetime_field_tag :due_date, nil,
+  -#           -#   { input_html: { class: "datetimepicker" }, label: glyph(:calendar) + "Due Date",
+  -#           -#   include_seconds: true }
+  -#
+  -#   .submit-buttons
+  -#     .right
+  -#       %ul
+  -#         %li= active_course_submit_tag "Import", class: "button"
+  -#         %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"

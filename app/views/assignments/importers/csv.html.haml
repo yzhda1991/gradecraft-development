@@ -15,12 +15,14 @@
 
     %p
       Columns should be in the following order:
-      %br Assignment Name, Assignment Type, Point Total, Description, Due Date
+      .italic Assignment Name, Assignment Type, Point Total, Description, Due Date
       .bold= link_to "Download Sample File", assignments_importer_download_path(:csv, format: "csv")
 
-    = form_tag({action: :upload, importer_provider_id: :csv}, multipart: true) do
-      = file_field_tag :csv_file, accept: "text/csv"
+    %input.file-upload-button{"type"=>"file",
+                              "accept"=>"text/csv",
+                              "assignment-import-upload"=>"",
+                              "data-provider"=>"#{@provider_id}"}
 
-      .submit-buttons
-        .right
-          = active_course_submit_tag "Upload", class: "button"
+    %p
+      %assignments-import-csv-review{"data-provider"=>"#{@provider_id}",
+                                     "data-cancel-path"=>"#{assignments_path}"}
