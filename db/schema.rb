@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612023643) do
+ActiveRecord::Schema.define(version: 20170615150351) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -181,16 +181,18 @@ ActiveRecord::Schema.define(version: 20170612023643) do
   end
 
   create_table "challenge_grades", force: :cascade do |t|
-    t.integer  "challenge_id",                           null: false
+    t.integer  "challenge_id",                               null: false
     t.integer  "raw_points"
     t.string   "status"
-    t.integer  "team_id",                                null: false
+    t.integer  "team_id",                                    null: false
     t.integer  "final_points"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.text     "feedback"
     t.integer  "adjustment_points",          default: 0
     t.text     "adjustment_points_feedback"
+    t.boolean  "complete",                   default: false, null: false
+    t.boolean  "student_visible",            default: false, null: false
   end
 
   create_table "challenge_score_levels", force: :cascade do |t|
