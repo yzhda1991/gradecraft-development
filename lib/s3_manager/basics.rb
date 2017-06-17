@@ -32,6 +32,10 @@ module S3Manager
       })
     end
 
+    def copy_object(copy_source, target_key)
+      bucket.object(copy_source).copy_to(bucket.object(target_key))
+    end
+
     def write_s3_object_to_disk(object_key, target_file_path)
       client.get_object({
         response_target: target_file_path,
