@@ -3,16 +3,25 @@ $(document).on('change', '.conditions .assignment-or-badge select', function () 
   checkDropdown(this);
 });
 
-// run checkDropdown on page load to make previously selected conditions are correct
+// Depending on the if the assignment is grades or pass/fail,
+// include either "Passed" of "Grade Earned" option in the select list
+$(document).on('change', '.assignments-list .assignment-select.form-item', function () {
+  filterAssignmentConditions(this);
+});
+
+// Initialize dropdowns for existing conditions
 $('.conditions .assignment-or-badge select').each(function (index, element) {
   checkDropdown(element);
+});
+$('.assignments-list .assignment-select').each(function (index, element) {
+  filterAssignmentConditions(element);
 });
 
 function checkDropdown(select) {
   var $conditions = $(select).closest('.conditions');
   var $unlockConditionsLists = $conditions.find('.unlock-conditions-list');
   var selectedList = $(select).find('option:selected').text();
-  var selectedListId = '#' + selectedList.toLowerCase().replace(/\s/g, '-') + 's-list';
+  var selectedListId = '.' + selectedList.toLowerCase().replace(/\s/g, '-') + 's-list';
   var $thisSelectedList = $conditions.find(selectedListId);
 
   //hide and disable all inputs in all conditions lists
@@ -24,6 +33,24 @@ function checkDropdown(select) {
   $($thisSelectedList).find('select, input').attr('disabled', false);
 }
 
+function filterAssignmentConditions(select) {
+  var data = $(select).data("assignment-type");
+  var id = $(select).find('option:selected').val();
+  var assignment = _.find(data,{id: parseInt(id)});
+  var stateSelector = $(select).next(".assignment-state-achieved")
+  if (assignment.pass_fail) {
+    $(stateSelector).children().find("select option[value='Grade Earned']").remove();
+    if (!$(stateSelector).children().find("select option[value='Passed']").length) {
+      $(stateSelector).children().find("select").append($('<option>', {value:'Passed', text:'Passed'}));
+    }
+  }
+  else {
+    $(stateSelector).children().find("select option[value='Passed']").remove();
+    if (!$(stateSelector).children().find("select option[value='Grade Earned']").length) {
+      $(stateSelector).children().find("select").append($('<option>', {value:'Grade Earned', text:'Grade Earned'}));
+    }
+  }
+}
 
 // add and delete buttons for unlock conditions
 var $form = $('form');
@@ -95,7 +122,7 @@ $('ul.level-tabs li').keydown(function(e) {
       $selectedTab = $tab.next();
     }
   }
-  
+
   $selectedTab.focus();
   showSelectedTab($selectedTab);
 });
@@ -136,3 +163,5 @@ function rubricScreenSize() {
 }
 rubricScreenSize();
 $(window).resize(rubricScreenSize);
+
+
