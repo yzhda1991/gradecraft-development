@@ -310,7 +310,7 @@ Rails.application.routes.draw do
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  resources :user_sessions, only: [:new, :create, :destroy]
+  resources :user_sessions, only: [:new, :create, :destroy, :instructors, :students]
   resources :passwords, except: [:new, :destroy, :index, :show]
 
   get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
