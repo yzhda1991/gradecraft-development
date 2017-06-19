@@ -32,7 +32,7 @@ describe Services::Actions::ParseUserAttributesFromAuthHash do
   it "passes if the context of the auth hash is valid given the full name has one word" do
     auth_hash.extra.raw_info.lis_person_name_given = nil
     auth_hash.extra.raw_info.lis_person_name_family = nil
-  auth_hash.extra.raw_info.lis_person_name_full = "Shakira"
+    auth_hash.extra.raw_info.lis_person_name_full = "Shakira"
     result = described_class.execute auth_hash: auth_hash
     expect(result.success?).to be_truthy
     expect(result.user_attributes[:first_name]).to eq "Shakira"
