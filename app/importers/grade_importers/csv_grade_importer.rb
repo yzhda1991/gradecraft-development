@@ -54,7 +54,7 @@ class CSVGradeImporter
 
   def assign_grade(row, grade)
     grade.feedback = row.feedback
-    grade.student_visible = true if grade.student_visible.nil?
+    grade.student_visible = true
     grade.complete = true
     grade.instructor_modified = true
     grade.graded_at = DateTime.now
