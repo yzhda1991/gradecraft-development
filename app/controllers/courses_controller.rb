@@ -39,7 +39,7 @@ class CoursesController < ApplicationController
                                         role: "professor")
       session[:course_id] = @course.id
       auto_login @user
-      redirect_to edit_course_path(@course), flash: {
+      redirect_to dashboard_path(@course), flash: {
         notice: "Course #{@course.name} successfully created"
       }
     else
