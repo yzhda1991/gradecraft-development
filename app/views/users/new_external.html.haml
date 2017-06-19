@@ -1,0 +1,17 @@
+= render partial: "layouts/alerts"
+
+%section.pilot
+  .student-pilot
+    .pilot-text
+      %h1.bold First, let's create your account:
+
+      = simple_form_for @user, url: create_external_users_path, :method => :post do |f|
+        = f.input :first_name, "aria-required": "true"
+        = f.input :last_name, "aria-required": "true"
+        = f.input :email, "aria-required": "true"
+        = f.input :password, "aria-required": "true", label: "* Password"
+        = f.input :password_confirmation, "aria-required": "true", label: "* Password Confirmation"
+
+        .submit-buttons
+          %ul
+            %li= submit_tag "Create account", class: "button"

@@ -20,7 +20,8 @@ class SamlController < ApplicationController
         session[:course_id] = CourseRouter.current_course_for @user
         redirect_back_or_to dashboard_path
       else
-        redirect_to um_pilot_path
+        # This needs to be updated to create a new course and log the user in to it
+        redirect_to um_info_path
       end
     else
       redirect_to root_url, notice: "authentication error"

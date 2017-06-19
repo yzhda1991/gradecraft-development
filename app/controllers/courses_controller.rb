@@ -2,9 +2,9 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  skip_before_action :require_login, only: [:badges]
-  skip_before_action :require_course_membership, only: :badges
-  before_action :ensure_staff?, except: [:index, :badges, :change]
+  skip_before_action :require_login, only: [:badges, :new_external, :create_external]
+  skip_before_action :require_course_membership, only: [:badges, :new_external, :create_external]
+  before_action :ensure_staff?, except: [:index, :badges, :change, :new_external, :create_external]
   before_action :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:recalculate_student_scores]
 
@@ -24,6 +24,29 @@ class CoursesController < ApplicationController
 
   def new
     @course = Course.new
+  end
+
+  def new_external
+    @course = Course.new
+    @user = User.find(params[:user_id])
+  end
+
+  def create_external
+    @course = Course.new(course_params)
+    @user = User.find(params[:user_id])
+    if @course.save
+      @course.course_memberships.create(user_id: @user.id,
+                                        role: "professor")
+      session[:course_id] = @course.id
+      auto_login @user
+      redirect_to edit_course_path(@course), flash: {
+        notice: "Course #{@course.name} successfully created"
+      }
+    else
+      redirect_to new_external_courses_path, flash: {
+        alert: @course.errors.full_messages.to_sentence
+      }
+    end
   end
 
   def edit

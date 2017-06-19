@@ -3,19 +3,18 @@
   .alert-bkg= render "layouts/alerts"
   .login-form-container
     .login-form
-      .login-block
-        %a.um-login.button{"aria-label": "University of Michigan Login", href: saml_init_path }
-          = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
-          Log in with U-M
+      - if Rails.env.production?
+        .login-block
+          %a.um-login.button{"aria-label": "University of Michigan Login", href: saml_init_path }
+            = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
+            Log in with U-M
 
-      .divider
-        %p.divider-message OR
-
-      .login-block
-        = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
-        %h1 Log in with GradeCraft
-        = render partial: "user_sessions/form"
-        %button.button-link.small#forgot-password Forgot your password?
+      - if Rails.env.development? || Rails.env.beta?
+        .login-block
+          = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
+          %h1 Log in
+          = render partial: "user_sessions/form"
+          %button.button-link.small#forgot-password Forgot your password?
 
     .password-forgot-form{"aria-hidden": "true"}
       %h1 Forgot Your Password?

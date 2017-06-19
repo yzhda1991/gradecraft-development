@@ -202,6 +202,8 @@ Rails.application.routes.draw do
     put :publish, on: :member
     get :badges, on: :member
     get :change, on: :member
+    get :new_external, on: :collection
+    post :create_external, on: :collection
     get :edit_dashboard_message, on: :collection
     put :update_dashboard_message, on: :collection
   end
@@ -235,7 +237,7 @@ Rails.application.routes.draw do
     get :our_team, to: "pages#team"
     get :press
     get :research
-    get :um_pilot
+    get :um_info
     get :sign_up
   end
 
@@ -259,9 +261,11 @@ Rails.application.routes.draw do
   resources :users, except: :show do
     member do
       get :activate
+      get :activate_set_password
       get :resend_invite_email
       put :manually_activate
-      post :activate, action: :activated
+      post :activate_set_password, action: :activated
+      post :activate, action: :activated_external
       post :flag
     end
     collection do
@@ -270,6 +274,8 @@ Rails.application.routes.draw do
       get :import
       get :search
       post :upload
+      get :new_external
+      post :create_external
     end
   end
 
