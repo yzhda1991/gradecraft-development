@@ -20,6 +20,7 @@ class API::Assignments::ImportersController < ApplicationController
   end
 
   # Takes the uploaded file and returns transformed json
+  # POST /api/assignments/importers/:importer_provider_id/upload
   def upload
     provider = params[:importer_provider_id]
 

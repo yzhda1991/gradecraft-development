@@ -121,6 +121,6 @@ class Assignments::ImportersController < ApplicationController
 
   def csv_headers
     ["Assignment Name", "Assignment Type", "Point Total", "Description",
-      "Due Date (mm/dd/yyyy hh:mm:ss AM/PM)"].freeze
+      "Due Date (mm/dd/yyyy hh:mm:ss am/pm)"].freeze
   end
 end

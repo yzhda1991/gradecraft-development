@@ -14,17 +14,18 @@
         %tr{"ng-repeat"=>"row in assignmentRows"}
           %td {{row.assignment_name}}
           %td
-            %select{"ng-model"=>"row.assignment_type",
+            %select{"ng-model"=>"row.selectedAssignmentType",
                     "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
                     "ng-disabled"=>"vm.loading"}
               %option{"value"=>""}
             ({{row.assignment_type}})
-          %td {{row.point_total}}
+          %td {{row.point_total | number}}
           %td {{row.description}}
           %td
-            %input{"ng-model"=>"row.due_date",
+            %input{"ng-model"=>"row.selectedDueDate",
                    "type"=>"text",
                    "gc-date-time-input"=>""}
+            ({{row.due_date}})
 
     .submit-buttons
       %ul
