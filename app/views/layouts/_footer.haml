@@ -7,6 +7,8 @@
     %li= link_to_unless_current "Team", our_team_path
     %li= link_to_unless_current  "Pricing", sign_up_path
   .uppercase.small.michigan= "© 2012-#{Date.today.year} Regents of the University of Michigan"
+
+  .uppercase.small.admin= link_to_unless_current  "Admin", new_user_session_path
 .footer-column.footer-column-2
   %ul.social
     %li= link_to glyph(:envelope), "mailto:help@gradecraft.com", title: "Email help@gradecraft.com", 'aria-label': "help@gradecraft.com"

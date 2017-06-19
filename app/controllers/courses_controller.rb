@@ -2,9 +2,9 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  skip_before_action :require_login, only: [:badges]
-  skip_before_action :require_course_membership, only: :badges
-  before_action :ensure_staff?, except: [:index, :badges, :change]
+  skip_before_action :require_login, only: [:badges, :new_external, :create_external]
+  skip_before_action :require_course_membership, only: [:badges, :new_external, :create_external]
+  before_action :ensure_staff?, except: [:index, :badges, :change, :new_external, :create_external]
   before_action :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:recalculate_student_scores]
 
@@ -24,6 +24,34 @@ class CoursesController < ApplicationController
 
   def new
     @course = Course.new
+  end
+
+  # Page for users without current access to the app to create new courses
+  # The is step #3 in the process, where step #1 is that they create their own
+  # account and #2 is that they activate it
+  def new_external
+    @course = Course.new
+    @user = User.find(params[:user_id])
+  end
+
+  # It should automatically assign this user as a professor, as they will then
+  # be creating a course that they can manage
+  def create_external
+    @course = Course.new(course_params)
+    @user = User.find(params[:user_id])
+    if @course.save
+      @course.course_memberships.create(user_id: @user.id,
+                                        role: "professor")
+      session[:course_id] = @course.id
+      auto_login @user
+      redirect_to dashboard_path(@course), flash: {
+        notice: "Course #{@course.name} successfully created"
+      }
+    else
+      redirect_to new_external_courses_path, flash: {
+        alert: @course.errors.full_messages.to_sentence
+      }
+    end
   end
 
   def edit

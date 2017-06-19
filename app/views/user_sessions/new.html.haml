@@ -8,12 +8,9 @@
           = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
           Log in with U-M
 
-      .divider
-        %p.divider-message OR
-
       .login-block
         = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
-        %h1 Log in with GradeCraft
+        %h1 Log in
         = render partial: "user_sessions/form"
         %button.button-link.small#forgot-password Forgot your password?
 

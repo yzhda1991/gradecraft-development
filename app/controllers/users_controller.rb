@@ -8,10 +8,10 @@ class UsersController < ApplicationController
   respond_to :html, :json
 
   before_action :ensure_staff?,
-    except: [:activate, :activated, :edit_profile, :update_profile]
+    except: [:activate, :activated, :activated_external, :activate_set_password, :edit_profile, :update_profile, :new_external, :create_external]
   before_action :save_referer, only: [:manually_activate, :resend_invite_email]
-  skip_before_action :require_login, only: [:activate, :activated]
-  skip_before_action :require_course_membership, only: [:activate, :activated]
+  skip_before_action :require_login, only: [:activate, :activated, :activate_set_password, :new_external, :create_external, :activated_external]
+  skip_before_action :require_course_membership, only: [:activate, :activate_set_password, :activated, :new_external, :create_external, :activated_external]
   before_action :use_current_course, only: [:import, :upload]
 
   def index
@@ -28,6 +28,26 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     @course_membership = @user.course_memberships.new
+  end
+
+  # set up the form for users to create their own accounts without being logged
+  # into the app
+  def new_external
+    @user = User.new
+  end
+
+  # they've already set their passwords on the page, so they're just sent an
+  # email prompting them to activate, and leading them to the next step in the process
+  # creating a course
+  def create_external
+    @user = User.create(user_params)
+    @user.username = user_params[:email]
+    if @user.save
+      UserMailer.activation_needed_course_creation_email(@user).deliver_now
+      redirect_to root_path, notice: "Your account has been created! Please check your email to activate your account."
+    else
+      redirect_to new_external_users_path
+    end
   end
 
   def edit
@@ -95,7 +115,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # There are now two forms of activate - the first one just has the activate button
   def activate
+    @user = User.load_from_activation_token(params[:id])
+    @token = params[:id]
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+  end
+
+  # ...and the second form actually has them set a new password. This is where
+  # students who are imported/but not at UM are sent to set their info
+  def activate_set_password
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
@@ -117,6 +146,22 @@ class UsersController < ApplicationController
       @user.activate!
       auto_login @user
       redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
+    end
+    render :activate, alert: @user.errors.full_messages.first
+  end
+
+  # This is step #2 in the process of external users creating course shells - they
+  # activate their account and then are sent on to a very basic Create a Course
+  # form.
+  def activated_external
+    @token = params[:token]
+    @user = User.load_from_activation_token(@token)
+
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+
+    if @user.save
+      @user.activate!
+      redirect_to new_external_courses_path(user_id: @user.id), notice: "Welcome to GradeCraft!" and return
     end
     render :activate, alert: @user.errors.full_messages.first
   end

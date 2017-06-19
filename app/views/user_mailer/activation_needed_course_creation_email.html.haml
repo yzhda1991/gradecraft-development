@@ -1,0 +1,8 @@
+%h2{ :align => "center" }
+  %strong Hello, #{@user.first_name}
+
+%h3{ :align => "center" } Welcome to GradeCraft!
+
+%p{ :align => "center" } In order to complete your new account, please follow the link below to validate your email address and get started creating your new course.
+
+%p{ :align => "center" }= link_to "Activate Your Account", activate_user_url(@user.activation_token).html_safe
