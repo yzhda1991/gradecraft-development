@@ -5,10 +5,12 @@
     vm = this
     vm.loading = true
     vm.submission = StudentSubmissionService.submission
+
     vm.queueSaveDraftSubmission = () ->
       StudentSubmissionService.queueSaveDraftSubmission(vm.assignmentId)
 
     StudentSubmissionService.getDraftSubmission(vm.assignmentId).then(() ->
+      vm.submission.text_comment_draft = vm.submission.text_comment if !vm.submission.text_comment_draft?
       vm.loading = false
     )
   ]
