@@ -638,31 +638,26 @@ describe User do
   end
 
   context "unique_student_earned_badges" do
-    before(:each) do
-      create_list(:earned_badge, 3, course: course, student: student)
+    it "should return a unique list of badges earned" do
+      create_list(:earned_badge, 2, course: course, badge: badge, student: student)
+      expect(student.unique_student_earned_badges(course)).to eq([badge])
     end
 
-    # Intermittent failure?
-    it "should know which badges are unique to those student earned badges" do
-      sorted_badges = student.earned_badges.collect(&:badge).sort_by(&:id).flatten
-      expect(student.unique_student_earned_badges(course)).to eq(sorted_badges)
-    end
-
-    it "should not return badges associated with student-unearned badges" do
-      badges_unearned = create_list(:badge, 2, course: course)
-      expect(student.unique_student_earned_badges(course)).not_to include(*badges_unearned)
+    it "should not return unearned badges" do
+      badge_unearned = create(:badge, course: course)
+      expect(student.unique_student_earned_badges(course)).not_to include(badge_unearned)
     end
   end
 
   context "student_visible_unearned_badges" do
     it "should know which badges a student has yet to earn" do
-      badges = create_list(:badge, 2, course: course, visible: true)
-      expect(student.student_visible_unearned_badges(course)).to eq(badges)
+      badge = create(:badge, course: course, visible: true)
+      expect(student.student_visible_unearned_badges(course)).to include(badge)
     end
 
     it "should not return earned badges as unearned ones" do
-      earned_badges = create_list(:earned_badge, 2, course: course, student: student)
-      expect(student.student_visible_unearned_badges(course)).not_to include(*earned_badges)
+      earned_badge = create(:earned_badge, course: course, student: student)
+      expect(student.student_visible_unearned_badges(course)).not_to include(earned_badge)
     end
   end
 
