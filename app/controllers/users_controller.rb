@@ -30,10 +30,15 @@ class UsersController < ApplicationController
     @course_membership = @user.course_memberships.new
   end
 
+  # set up the form for users to create their own accounts without being logged
+  # into the app
   def new_external
     @user = User.new
   end
 
+  # they've already set their passwords on the page, so they're just sent an
+  # email prompting them to activate, and leading them to the next step in the process
+  # creating a course
   def create_external
     @user = User.create(user_params)
     @user.username = user_params[:email]
@@ -110,12 +115,15 @@ class UsersController < ApplicationController
     end
   end
 
+  # There are now two forms of activate - the first one just has the activate button
   def activate
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
   end
 
+  # ...and the second form actually has them set a new password. This is where
+  # students who are imported/but not at UM are sent to set their info
   def activate_set_password
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
@@ -142,6 +150,9 @@ class UsersController < ApplicationController
     render :activate, alert: @user.errors.full_messages.first
   end
 
+  # This is step #2 in the process of external users creating course shells - they
+  # activate their account and then are sent on to a very basic Create a Course
+  # form.
   def activated_external
     @token = params[:token]
     @user = User.load_from_activation_token(@token)

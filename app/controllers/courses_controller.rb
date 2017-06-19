@@ -26,11 +26,16 @@ class CoursesController < ApplicationController
     @course = Course.new
   end
 
+  # Page for users without current access to the app to create new courses
+  # The is step #3 in the process, where step #1 is that they create their own
+  # account and #2 is that they activate it
   def new_external
     @course = Course.new
     @user = User.find(params[:user_id])
   end
 
+  # It should automatically assign this user as a professor, as they will then
+  # be creating a course that they can manage
   def create_external
     @course = Course.new(course_params)
     @user = User.find(params[:user_id])
