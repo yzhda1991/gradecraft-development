@@ -6,7 +6,7 @@
 
         %li.dropdown
           %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
-          %ul.options-menu
+          %ul.options-menu.dropdown-content
             - if presenter.assignment.grades.present?
               %li= link_to decorative_glyph(:"check-square") + "Review Grades", grades_review_assignment_path(id: presenter.assignment)
             = active_course_link_to decorative_glyph(:copy) + "Copy", copy_assignments_path(id: presenter.assignment), method: :copy

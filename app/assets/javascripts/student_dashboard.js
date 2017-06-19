@@ -68,7 +68,7 @@ function initSlickSlider(startIndex) {
 
 
 
-// Open class info card and submenu in top nav on click and hide on body click
+// Open dropdown menus on click and hide on body click
 $(document).on('click', function(event) {
   var $this = $(event.target);
   var $dropdownContent = $('.dropdown-content');

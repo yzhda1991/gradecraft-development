@@ -42,7 +42,7 @@
             %td
               .button-container.dropdown
                 %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Downloads"}= decorative_glyph("cloud-download") + decorative_glyph("caret-down")
-                %ul.options-menu
+                %ul.options-menu.dropdown-content
                   %li= link_to "Awarded Badges", export_earned_badges_path(id: course.id, format: "csv") if course.earned_badges.present?
                   %li= link_to "Research Grades", research_gradebook_path(id: course.id, format: "csv"), :class=>"data-clearing"
                   %li= link_to "Final Grades", final_grades_path(id: course.id, format: "csv"), :class=>"data-clearing"
@@ -56,7 +56,7 @@
             %td
               .button-container.dropdown
                 %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-                %ul.options-menu
+                %ul.options-menu.dropdown-content
                   %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course)
                   %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), :method => :copy
                   %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), :method => :copy

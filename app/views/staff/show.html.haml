@@ -34,6 +34,6 @@
           %td
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu
+              %ul.options-menu.dropdown-content
                 = active_course_link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
                 = active_course_link_to decorative_glyph(:trash) + "Delete", grade_path(grade), class: "button", data: { confirm: "Are you sure?", method: :delete }
