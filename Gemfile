@@ -52,6 +52,8 @@ gem 'logglier', '~> 0.3.0'
 gem 'multi_json'
 gem 'mini_magick'
 gem 'mongoid', '~> 6.0.0'
+# proper name parser
+gem 'namae'
 gem 'ng-rails-csrf'
 gem 'nokogiri'
 gem 'oauth', '~> 0.5'
