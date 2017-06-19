@@ -70,7 +70,8 @@ describe Assignments::GradesController do
           let(:grades_attributes) do
             { "#{assignment.reload.grades.to_a.index(grade)}" =>
               { graded_by_id: professor.id, id: grade.id,
-                student_id: grade.student_id, raw_points: 1000
+                student_id: grade.student_id, raw_points: 1000,
+                student_visible: true, complete: true
               }
             }
           end
@@ -80,7 +81,7 @@ describe Assignments::GradesController do
               assignment: { grades_attributes: grades_attributes }}
             expect(grade.reload.raw_points).to eq 1000
             expect(grade.reload.instructor_modified).to be true
-            expect(grade.reload.status).to eq "Graded"
+            expect(grade.reload.student_visible).to be_truthy
           end
 
           it "timestamps the grades" do
@@ -158,7 +159,7 @@ describe Assignments::GradesController do
             put :mass_update, params: { assignment_id: assignment.id,
               assignment: { grades_attributes: grades_attributes }}
             expect(grade.reload.instructor_modified).to be true
-            expect(grade.reload.status).to eq "Graded"
+            expect(grade.reload.student_visible).to be_truthy
             expect(grade.reload.pass_fail_status).to eq "Pass"
           end
         end

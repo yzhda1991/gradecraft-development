@@ -33,7 +33,7 @@ private
 
 def assignment_group_grades_params
   params.require(:assignment).permit grades_by_group: [:graded_by_id, :graded_at,
-    :instructor_modified, :raw_points, :status, :pass_fail_status, :group_id]
+    :instructor_modified, :raw_points, :pass_fail_status, :group_id, :complete, :student_visible]
 end
 
 def find_assignment

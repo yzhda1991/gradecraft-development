@@ -26,8 +26,9 @@ class CanvasGradeImporter
 
         grade.raw_points = canvas_grade["score"]
         grade.feedback = concat_submission_comments canvas_grade["submission_comments"]
-        grade.status = "Graded" if grade.status.nil?
+        grade.student_visible = true if grade.student_visible.nil?
         grade.instructor_modified = true
+        grade.complete = true
 
         if grade.save
           link_imported canvas_grade["id"], grade

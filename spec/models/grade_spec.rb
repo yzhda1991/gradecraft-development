@@ -247,7 +247,7 @@ describe Grade do
 
     it "updates earned badge visibility" do
       earned_badge = create(:earned_badge, student: grade.student, grade: grade, student_visible: false)
-      grade.status = "Graded"
+      grade.student_visible = true
       grade.save
       expect(earned_badge.reload.student_visible).to be_truthy
     end

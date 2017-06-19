@@ -46,12 +46,42 @@ describe SubmissionProctor do
     let(:assignment) { build(:assignment) }
     let!(:student) { create(:course_membership, :student, course: course).user }
 
-    before(:each) { allow(submission).to receive(:submission_grade).and_return grade }
+    before(:each) do
+       allow(submission).to receive(:submission_grade).and_return grade
+       allow(user).to receive(:is_student?).with(course).and_return false
+       allow(student).to receive(:is_student?).with(course).and_return true
+    end
 
-    it "returns false if the submission is graded but not yet released" do
-      allow(submission).to receive(:in_progress?).and_return true
+    it "returns true for faculty" do
+      expect(subject.open_for_editing?(assignment, user)).to be_truthy
+    end
+
+    it "returns false if the sumbission has a grade that is not student visible" do
+      allow(submission).to receive(:graded?).and_return true
       allow(grade).to receive(:student_visible?).and_return false
       expect(subject.open_for_editing?(assignment, student)).to be_falsey
+    end
+
+    context "graded submissions" do
+      let(:grade) {build(:grade, student_visible: true, instructor_modified: true)}
+
+      it "returns true for open resubmission allowed assignments" do
+        allow(assignment).to receive(:open?).and_return true
+        allow(assignment).to receive(:resubmissions_allowed?).and_return true
+        expect(subject.open_for_editing?(assignment, student)).to be_truthy
+      end
+
+      it "returns false for closed assignments" do
+        allow(assignment).to receive(:open?).and_return false
+        allow(assignment).to receive(:resubmissions_allowed?).and_return true
+        expect(subject.open_for_editing?(assignment, student)).to be_falsey
+      end
+
+      it "returns false for when resubmissions are not allowed" do
+        allow(assignment).to receive(:open?).and_return true
+        allow(assignment).to receive(:resubmissions_allowed?).and_return false
+        expect(subject.open_for_editing?(assignment, student)).to be_falsey
+      end
     end
   end
 end

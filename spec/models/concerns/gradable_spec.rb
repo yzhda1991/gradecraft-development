@@ -116,7 +116,7 @@ describe Gradable do
 
     describe "#ungraded_groups" do
       before do
-        group_1.students.each {|s| create(:student_visible, assignment: subject, student: s)}
+        group_1.students.each {|s| create(:student_visible_grade, assignment: subject, student: s)}
       end
 
       it "returns all ungraded groups" do
@@ -130,7 +130,7 @@ describe Gradable do
 
     describe "ungraded_groups_with_submissions" do
       before do
-        group_1.students.each {|s| create(:student_visible, assignment: subject, student: s)}
+        group_1.students.each {|s| create(:student_visible_grade, assignment: subject, student: s)}
         create :submission, assignment: subject, student: nil, group: group_1
         create :submission, assignment: subject, student: nil, group: group_2
       end

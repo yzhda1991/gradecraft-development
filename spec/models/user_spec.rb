@@ -175,7 +175,7 @@ describe User do
     end
 
     it "is self reported if there is at least one graded grade" do
-      grade.update_attribute :status, "Graded"
+      grade.update_attribute :student_visible, true
       expect(student).to be_self_reported_done(assignment)
     end
   end
@@ -255,7 +255,7 @@ describe User do
     end
 
     it "returns true if the grade is graded" do
-      grade.status = "Graded"
+      grade.student_visible = true
       grade.save!
       expect(student.grade_visible_for_assignment?(assignment)).to eq(true)
     end

@@ -122,7 +122,8 @@ class Assignments::GradesController < ApplicationController
       end
 
       @grade.instructor_modified = true
-      @grade.status = "Graded"
+      @grade.complete = true
+      @grade.student_visible = true
 
       if @grade.save
         # @mz TODO: add specs
@@ -146,7 +147,7 @@ class Assignments::GradesController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit grades_attributes: [:graded_by_id, :graded_at,
-      :instructor_modified, :student_id, :raw_points, :status, :pass_fail_status, :id]
+      :instructor_modified, :student_id, :raw_points, :pass_fail_status, :id, :complete, :student_visible]
   end
 
   # Delete params that have no raw_points or pass_fail_status

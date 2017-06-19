@@ -67,6 +67,8 @@ class Submission < ActiveRecord::Base
     submission_grade.graded_at if submission_grade
   end
 
+  # true for any submission that has an instructor modified grade
+  # TODO should this be has_grade? ?
   def graded?
     !ungraded?
   end
@@ -79,7 +81,7 @@ class Submission < ActiveRecord::Base
     end
   end
 
-  # Grabbing any submission that has NO instructor-defined grade
+  # true for any submission that has NO instructor modified grade
   def ungraded?
     !submission_grade || !submission_grade.instructor_modified?
   end
