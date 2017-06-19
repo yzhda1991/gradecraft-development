@@ -7,12 +7,12 @@ describe Submissions::ShowPresenter do
     { course: course }
   end
 
-  let(:submission) { create(:submission, student: student, assignment: assignment, id: 200, submitted_at: Time.now) }
-  let(:assignment) { create(:assignment, course: course, threshold_points: 13200, grade_scope: "Group", id: 300) }
-  let(:course) { build(:course, name: "Some Course") }
-  let(:student) { create(:user, first_name: "Jimmy", id: 500)}
-  let(:group) { create(:group, name: "My group", course: course, id: 400) }
-  let(:grade) { create(:grade) }
+  let(:submission) { double(:submission, student: student, assignment: assignment, id: 200, submitted_at: Time.now, will_be_resubmitted?: false) }
+  let(:assignment) { double(:assignment, course: course, threshold_points: 13200, grade_scope: "Group", id: 300, is_individual?: true) }
+  let(:course) { double(:course, name: "Some Course") }
+  let(:student) { double(:user, first_name: "Jimmy", id: 500)}
+  let(:group) { double(:group, name: "My group", course: course, id: 400) }
+  let(:grade) { double(:grade) }
 
   before(:each) do
     allow(subject).to receive_messages(
