@@ -1,5 +1,5 @@
-%li= link_to "Instructors", new_user_session_path
-%li= link_to "Learners", new_user_session_path
+%li= link_to "Instructors", instructors_user_sessions_path
+%li= link_to "Learners", students_user_sessions_path
 
 %li
   = link_to_unless_current "Features", features_path do |name|

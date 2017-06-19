@@ -21,7 +21,7 @@ class SamlController < ApplicationController
         redirect_back_or_to dashboard_path
       else
         # This needs to be updated to create a new course and log the user in to it
-        redirect_to um_info_path
+        redirect_to instructors_user_sessions_path
       end
     else
       redirect_to root_url, notice: "authentication error"

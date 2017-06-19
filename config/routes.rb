@@ -237,7 +237,6 @@ Rails.application.routes.draw do
     get :our_team, to: "pages#team"
     get :press
     get :research
-    get :um_info
     get :sign_up
   end
 
@@ -310,7 +309,12 @@ Rails.application.routes.draw do
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  resources :user_sessions, only: [:new, :create, :destroy, :instructors, :students]
+  resources :user_sessions, only: [:new, :create, :destroy] do
+    collection do
+      get :instructors
+      get :students
+    end
+  end
   resources :passwords, except: [:new, :destroy, :index, :show]
 
   get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
