@@ -40,7 +40,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
       challenge_grade_ids = []
       @challenge.challenge_grades.each do |challenge_grade|
-        if challenge_grade.previous_changes[:score].present?
+        if challenge_grade.previous_changes[:raw_points].present?
           challenge_grade_ids << challenge_grade.id
         end
       end

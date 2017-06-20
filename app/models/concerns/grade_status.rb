@@ -92,9 +92,11 @@ module GradeStatus
   # temporary method for challenge grades, same as above
   def update_challenge_status_fields
     if self.status == "In Progress"
+      self.instructor_modified = true
       self.complete = false
       self.student_visible = false
     elsif self.status == "Graded"
+      self.instructor_modified = true
       if challenge.release_necessary
         self.complete = true
         self.student_visible = false
@@ -103,6 +105,7 @@ module GradeStatus
         self.student_visible = true
       end
     elsif self.status == "Released"
+      self.instructor_modified = true
       self.complete = true
       self.student_visible = true
     end

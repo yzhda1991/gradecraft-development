@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615150351) do
+ActiveRecord::Schema.define(version: 20170619190644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -190,6 +190,7 @@ ActiveRecord::Schema.define(version: 20170615150351) do
     t.text     "adjustment_points_feedback"
     t.boolean  "complete",                   default: false, null: false
     t.boolean  "student_visible",            default: false, null: false
+    t.boolean  "instructor_modified",        default: false, null: false
   end
 
   create_table "challenge_score_levels", force: :cascade do |t|
