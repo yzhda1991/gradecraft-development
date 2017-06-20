@@ -54,6 +54,7 @@ class CSVGradeImporter
 
   def assign_grade(row, grade)
     grade.feedback = row.feedback
+    # TODO: when do we need to preserve previous visiblilty?
     grade.student_visible = true
     grade.complete = true
     grade.instructor_modified = true
