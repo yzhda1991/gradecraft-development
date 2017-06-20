@@ -20,3 +20,18 @@ $('#show-login-form').click(function() {
   $('.login-form').show().attr('aria-hidden', 'false');
   $('.password-forgot-form').hide().attr('aria-hidden', 'true');
 });
+
+
+//toggle change password form on account settings page
+$('#update-password').click(function(event) {
+  event.preventDefault();
+  $('.update-password-form').show().attr('aria-hidden', 'false');
+  $(this).hide().attr('aria-hidden', 'true');
+});
+
+$('#cancel-password-change').click(function(event) {
+  event.preventDefault();
+  $('#user_password, #user_password_confirmation').val('');
+  $('.update-password-form').hide().attr('aria-hidden', 'true');
+  $('#update-password').show().attr('aria-hidden', 'false');
+});
