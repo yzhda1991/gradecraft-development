@@ -21,6 +21,9 @@
       else
         "width: #{(assignmentType.total_points / vm.totalPoints * 100) }%"
 
+    vm.pointsCapped = (assignmentType) ->
+      assignmentType.is_capped?
+
     vm.pointsGraphPercentOfTotal = (gradeSchemeElement)->
       (gradeSchemeElement.lowest_points / vm.totalPoints * 100) + "%"
 

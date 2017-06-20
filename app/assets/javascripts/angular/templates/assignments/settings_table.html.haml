@@ -13,7 +13,10 @@
             .points-bar-graph-fill.assignment-settings(style="{{vm.pointsGraphStyle(assignmentType)}}")
             %span.hint(ng-if="pointsOver()") Total for this assignment type exceeds threshold for highest level
             .grade-level-marker(ng-repeat="gse in vm.GradeSchemeElements" style="width: {{vm.pointsGraphPercentOfTotal(gse)}}")
-          .assignment-type-points.assignment-settings {{ assignmentType.total_points | number }} / {{ vm.totalPoints | number }}
+          .assignment-type-points.assignment-settings 
+            %span {{ assignmentType.total_points | number }}
+            %span(ng-if="pointsCapped(assignmentType)") max
+            %span / {{ vm.totalPoints | number }}
     .assignment-type-container.collapsable{role: "tabpanel"}
       %table(ng-if="!vm.loading")
         %caption.sr-only {{vm.termFor("assignments")}} for {{assignmentType.name}}
