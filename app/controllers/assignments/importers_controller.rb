@@ -1,5 +1,4 @@
 require_relative "../../services/imports_lms_assignments"
-require_relative "../../importers/assignment_importers/csv_assignment_importer"
 
 # rubocop:disable AndOr
 class Assignments::ImportersController < ApplicationController

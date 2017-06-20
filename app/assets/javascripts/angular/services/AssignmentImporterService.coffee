@@ -1,6 +1,8 @@
 @gradecraft.factory 'AssignmentImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   assignmentRows = []
+  successful = []
+  unsuccessful = []
 
   postUpload = (importer_provider_id, formData) ->
     $http.post("/api/assignments/importers/#{importer_provider_id}/upload",
@@ -18,13 +20,27 @@
     )
 
   postImportAssignments = (importer_provider_id) ->
-    debugger
-    console.log "We're debugging"
+    _clearArrays(successful, unsuccessful)
+    params = { assignment_attributes: assignmentRows }
+
+    $http.post("/api/assignments/importers/#{importer_provider_id}/import", assignments: params).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response.data)
+        console.log "Successfully created some things"
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+        console.error "An error occurred"
+    )
 
   # Converts a Ruby time as number of floating point seconds to a Javascript Time
   _parseDatesAsJavascript = () ->
     _.each(assignmentRows, (row) ->
-      row.selectedDueDate = new Date(row.formatted_due_date)
+      row.selected_due_date = new Date(row.formatted_due_date)
+    )
+
+  _clearArrays = (arrays...) ->
+    _.each(arrays, (array) ->
+      array.length = 0
     )
 
   {

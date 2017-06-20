@@ -11,6 +11,6 @@ json.data @assignment_rows do |row|
     json.due_date                         row.due_date
 
     json.formatted_due_date               date_to_floating_point_seconds(row.due_date)
-    json.selectedAssignmentType           parsed_assignment_type_id(assignment_types, row.assignment_type)
+    json.selected_assignment_type         parsed_assignment_type_id(assignment_types, row.assignment_type)
   end
 end

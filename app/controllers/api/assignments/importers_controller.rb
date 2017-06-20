@@ -1,3 +1,5 @@
+require_relative "../../../importers/assignment_importers/csv_assignment_importer"
+
 class API::Assignments::ImportersController < ApplicationController
   include OAuthProvider
   include CanvasAuthorization
@@ -30,17 +32,23 @@ class API::Assignments::ImportersController < ApplicationController
     render json: { message: "File format must be CSV", success: false },
       status: 404 and return if File.extname(params[:file].original_filename) != ".csv"
 
-    @assignment_rows = CSVAssignmentImporter.new(params[:file].tempfile).as_assignment_rows
+    @assignment_rows = CSVAssignmentImporter.new.as_assignment_rows(params[:file].tempfile)
 
     render "api/assignments/import/upload", status: 200
   end
 
   # Creates the assignments from the imported data
   def import
-
+    result = CSVAssignmentImporter.new.import assignment_import_params[:assignment_attributes],
+      current_course
   end
 
   private
+
+  def assignment_import_params
+    params.require(:assignments).permit assignment_attributes: [:assignment_name, :assignment_type,
+      :selected_assignment_type, :selected_due_date, :point_total, :description]
+  end
 
   # Ensure that the provided importer provider id allows uploads, downloads and
   # has a show template
