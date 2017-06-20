@@ -1,4 +1,4 @@
-describe Services::Actions::BuildsGrade , focus: true do
+describe Services::Actions::BuildsGrade do
   let(:professor) { build_stubbed :user }
   let(:student) { build_stubbed :user }
   let(:assignment) { create :assignment }

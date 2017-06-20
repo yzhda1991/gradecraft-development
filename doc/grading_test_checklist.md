@@ -1,7 +1,5 @@
 Here is a rundown of Human Testing for the Grading Form, using standard sample data:
 
-TODO: update with new status procedures
-
 ## Test Pass/Fail Grades
 
 - Grade Hannah Abbott's Grade For Pass/Fail  [No Grades]
@@ -9,27 +7,25 @@ TODO: update with new status procedures
 	- upload a feedback file
 	- add text feedback
 	- add an earned badge
-	- select "Graded" status
+	- Set "Visible to Student" true
 	- pause for 3 seconds and refresh page (don't submit)
 		- Feedback text and file should be saved
 		- Earned Badge should be saved
 		- Pass/Fail should still show "Pass"
-		- Status should revert to blank
-		- submit buttons should be disabled
-	- choose "Graded" Status again
-		- submit buttons should be enabled
+		- Student Visible should revert to false
+	- Set Visible to Student true again
 	- click "Submit and Grade Next"
 		- you should be redirected to Euan Abercrombie's Grade For Pass/Fail [No Grades]
 - Grade Euan Abercrombie's Grade For Pass/Fail  [No Grades]
 	- choose Pass/Fail as "Fail"
 	- pause for 3 seconds and refresh page (don't submit)
 		- Pass/Fail should still show "Fail"
-	- choose "In Progress" Status
+	- Keep "Mark as Complete" true, "Visible to Student" false
 	- click "Submit"
 		- you should be redirected to the Assignment Index Page
 - Validate Grades as Instructor
-	- Hannah should show as "Pass", "Graded"
-	- Euan should show as "Fail", "In Progress"
+	- Hannah should show as "Pass", with a checkmark for "Complete" and "Student Visible"
+	- Euan should show as "Fail", "Complete"
 - Click "See Grade" for Hannah
 	- All fields should be shown as submitted
 - Click "Edit Grade" for Hannah's grade
@@ -48,7 +44,7 @@ TODO: update with new status procedures
 	- upload a feedback file
 	- add feedback text
 	- add an earned badge
-	- change status from blank to "Graded"
+	- Set "Visible to Student" true
 	- pause for 3 seconds and refresh page (don't submit)
 		- verify raw points selector shows the level you selected
 		- adjustment, and final points should not have changed
@@ -56,7 +52,7 @@ TODO: update with new status procedures
 		- Earned Badge should be saved
 		- Status should revert to blank
 		- submit buttons should be disabled
-	- choose "Graded" Status again
+	- Set "Visible to Student" true again
 		- submit buttons should be enabled
 	- click "Submit and Grade Next"
 		- you should be redirected to Euan Abercrombie's "Standard Edit + Quick Grade With Text Box [No Grades]"
@@ -76,7 +72,7 @@ TODO: update with new status procedures
 	- upload a feedback file
 	- add feedback text
 	- add an earned badge
-	- change status from blank to "Graded"
+	- Set "Visible to Student" true
 	- pause for 3 seconds and refresh page (don't submit)
 		- verify raw points selector shows the level you selected
 		- adjustment, and final points should not have changed
@@ -84,7 +80,7 @@ TODO: update with new status procedures
 		- Earned Badge should be saved
 		- Status should revert to blank
 		- submit buttons should be disabled
-	- choose "Graded" Status again
+	- Set "Visible to Student" true again
 		- submit buttons should be enabled
 	- click "Submit and Grade Next"
 		- you should be redirected to Euan Abercrombie's "Standard Edit + Quick Grade With Text Box [No Grades]"
@@ -117,7 +113,7 @@ TODO: update with new status procedures
 	- upload a feedback file
 	- add feedback text
 	- add an earned badge
-	- change status from blank to "Released"
+	- Set "Visible to Student" true
 	- pause for 3 seconds and refresh page (don't submit)
 		- verify criteria all show the levels you selected
 		- adjustment, and final points should not have changed
@@ -125,12 +121,12 @@ TODO: update with new status procedures
 		- Earned Badge should be saved
 		- Status should revert to blank
 		- submit buttons should be disabled
-	- choose "Released" Status again
+	- Set "Visible to Student" true again
 		- submit buttons should be enabled
 	- click "Submit and Grade Next"
 		- you should be redirected to Euan Abercrombie's "Rubric Graded Assignment [No Grades]"
 	- return to Assignment Index Page
-		- You should see the final points haven't changed and the status is "Released"
+		- You should see the final points haven't changed
 		- click "See Grade"
 			- verify that all grade information is correct
 

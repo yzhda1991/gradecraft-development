@@ -13,6 +13,7 @@ class Assignments::GradesController < ApplicationController
     grades = assignment.grades.find(params[:grade_ids])
 
     grade_ids = grades.collect do |grade|
+      grade.update(complete: true)
       grade.update(student_visible: true)
       grade.id
     end
@@ -126,7 +127,6 @@ class Assignments::GradesController < ApplicationController
       @grade.student_visible = true
 
       if @grade.save
-        # @mz TODO: add specs
         grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
         grade_updater_job.enqueue
 

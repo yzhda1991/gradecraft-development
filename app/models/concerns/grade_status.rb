@@ -13,4 +13,8 @@ module GradeStatus
   def in_progress?
     instructor_modified == true && complete == false
   end
+
+  def not_released?
+    instructor_modified == true && student_visible == false
+  end
 end

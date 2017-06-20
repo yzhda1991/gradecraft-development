@@ -60,6 +60,7 @@ class Challenges::ChallengeGradesController < ApplicationController
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
+      challenge_grade.update(complete: true)
       challenge_grade.update(student_visible: true)
     end
     flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"

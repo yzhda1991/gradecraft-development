@@ -26,10 +26,9 @@ class CanvasGradeImporter
 
         grade.raw_points = canvas_grade["score"]
         grade.feedback = concat_submission_comments canvas_grade["submission_comments"]
-        # TODO: when do we need to preserve previous visiblilty?
-        grade.student_visible = true
         grade.instructor_modified = true
         grade.complete = true
+        grade.student_visible = false
 
         if grade.save
           link_imported canvas_grade["id"], grade

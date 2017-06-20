@@ -87,7 +87,7 @@
 
     %td
       .center
-        - if grade.in_progress?
+        - if grade.not_released?
           %label
             %span.sr-only Select Assignment to Update Grade Status
             = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"
