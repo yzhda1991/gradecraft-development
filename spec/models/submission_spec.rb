@@ -202,17 +202,17 @@ describe Submission do
 
   describe "#graded?" do
     it "returns false for a submission that has no grade" do
-      expect(submission).to_not be_graded
+      expect(submission.has_grade?).to be false
     end
 
     it "returns false for a submission that has grade that has not been touched" do
       grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: false)
-      expect(submission).to_not be_graded
+      expect(submission.has_grade?).to be false
     end
 
     it "returns true for a submission that has grade touched by the instructor" do
       grade = create(:grade, student: student, assignment: assignment, submission: submission, instructor_modified: true)
-      expect(submission).to be_graded
+      expect(submission.has_grade?).to be true
     end
   end
 

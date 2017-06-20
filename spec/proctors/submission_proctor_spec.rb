@@ -57,7 +57,7 @@ describe SubmissionProctor do
     end
 
     it "returns false if the sumbission has a grade that is not student visible" do
-      allow(submission).to receive(:graded?).and_return true
+      allow(submission).to receive(:has_grade?).and_return true
       allow(grade).to receive(:student_visible?).and_return false
       expect(subject.open_for_editing?(assignment, student)).to be_falsey
     end
