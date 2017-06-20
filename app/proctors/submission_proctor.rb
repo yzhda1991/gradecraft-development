@@ -15,13 +15,11 @@ class SubmissionProctor
     @submission
   end
 
-  # TODO: This needs to be simpler, or better explanation:
   def open_for_editing?(assignment, user)
     return true if !user.is_student? @submission.course
-    return false if @submission.graded? && !@submission.submission_grade.student_visible?
+    return false if @submission.has_grade? && !@submission.submission_grade.student_visible?
     if @submission.will_be_resubmitted?
       assignment.open? && assignment.resubmissions_allowed?
-    # TODO: what condition is this?
     else
       assignment.open?
     end
