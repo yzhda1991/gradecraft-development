@@ -4,25 +4,25 @@ module Analytics
     extend ActiveSupport::Concern
 
     def average
-      grades.graded_or_released.average(:raw_points).to_i \
+      grades.graded_or_released.for_active_students.average(:raw_points).to_i \
         if grades.graded_or_released.present?
     end
 
     # Average of above-zero grades for an assignment
     def earned_average
-      grades.graded_or_released.where("score > 0").average(:score).to_i
+      grades.graded_or_released.for_active_students.where("score > 0").average(:score).to_i
     end
 
     def high_score
-      grades.graded_or_released.maximum(:raw_points)
+      grades.graded_or_released.for_active_students.maximum(:raw_points)
     end
 
     def low_score
-      grades.graded_or_released.minimum(:raw_points)
+      grades.graded_or_released.for_active_students.minimum(:raw_points)
     end
 
     def median
-      sorted = grades.graded_or_released.not_nil.pluck(:score).sort
+      sorted = grades.graded_or_released.for_active_students.not_nil.pluck(:score).sort
       return 0 if sorted.empty?
       (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
     end
@@ -65,9 +65,9 @@ module Analytics
     def graded_or_released_scores
       if pass_fail?
         # no use case currently
-        grades.graded_or_released.pluck(:pass_fail_status)
+        grades.graded_or_released.for_active_students.pluck(:pass_fail_status)
       else
-        grades.graded_or_released.pluck(:final_points)
+        grades.graded_or_released.for_active_students.pluck(:final_points)
       end
     end
 
