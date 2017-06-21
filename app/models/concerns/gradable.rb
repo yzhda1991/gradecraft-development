@@ -13,7 +13,6 @@ module Gradable
   end
 
   # Getting a student's grade object for an assignment
-  # TODO: What happens if there is no grade?
   def grade_for_student(student)
     grades.student_visible.where(student_id: student.id).first
   end

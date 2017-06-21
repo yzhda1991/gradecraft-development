@@ -5,7 +5,6 @@ module GradeStatus
 
   included do
     scope :in_progress, -> { where(instructor_modified: true, complete: false) }
-    # TODO: verify we need this scope:
     scope :not_released, -> { where(instructor_modified: true, student_visible: false)}
     scope :student_visible, ->  { where(student_visible: true) }
   end
