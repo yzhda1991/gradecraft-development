@@ -40,6 +40,7 @@ describe ChallengeGradesController do
         post :update, params: { id: challenge_grade.id, challenge_grade: params }
         expect(response).to redirect_to(challenge_path(challenge))
         expect(challenge_grade.reload.score).to eq(100000)
+        expect(challenge_grade.instructor_modified).to be_truthy
         expect(team.reload.challenge_grade_score).to eq(100000)
       end
 

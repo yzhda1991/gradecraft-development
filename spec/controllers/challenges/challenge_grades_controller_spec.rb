@@ -30,7 +30,9 @@ describe Challenges::ChallengeGradesController do
         params[:complete] = true
         params[:student_visible] = true
         post :create, params: { challenge_id: challenge.id, challenge_grade: params }
-        expect(challenge.challenge_grades.where(:team_id => team2.id).first.score).to eq(101)
+        grade = challenge.challenge_grades.where(:team_id => team2.id).first
+        expect(grade.score).to eq 101
+        expect(grade.instructor_modified).to be_truthy
         expect(response).to redirect_to(challenge)
       end
 
@@ -60,6 +62,7 @@ describe Challenges::ChallengeGradesController do
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}
         expect(challenge_grade.reload.score).to eq 1000
+        expect(challenge_grade.instructor_modified).to be_truthy
       end
 
       it "redirects to the mass_edit form if attributes are invalid" do
@@ -77,7 +80,9 @@ describe Challenges::ChallengeGradesController do
     describe "POST release" do
       it "updates the status of multiple challenge grades" do
         post :release, params: { challenge_id: challenge.id, challenge_grade_ids: [ challenge_grade.id ] }
-        expect(challenge_grade.reload.student_visible).to be_truthy
+        expect(challenge_grade.reload.instructor_modified).to be_truthy
+        expect(challenge_grade.complete).to be_truthy
+        expect(challenge_grade.student_visible).to be_truthy
         expect(response).to redirect_to challenge_path(challenge)
       end
     end

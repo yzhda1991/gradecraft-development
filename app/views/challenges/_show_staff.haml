@@ -6,7 +6,7 @@
         %th Score
         - if @challenge.has_levels?
           %th Level
-        %th Status
+        %th Student Visible
         %th
         %th.center{"data-dynatable-no-sort" => "true" }
           %button.button.select-all{role: "button", type: "button"}= "Check All"
@@ -25,7 +25,7 @@
           %td= points challenge_grade.final_points if challenge_grade
           - if @challenge.has_levels?
             %td= @challenge.challenge_grade_level(challenge_grade) if challenge_grade
-          %td= challenge_grade.status if challenge_grade
+          %td= decorative_glyph(:check) if challenge_grade && challenge_grade.student_visible
           %td
             .table-menu
               %ul

@@ -19,7 +19,7 @@ class ChallengeGradesController < ApplicationController
   def update
     @team = @challenge_grade.team
     if @challenge_grade.update_attributes(challenge_grade_params)
-
+      @challenge_grade.update(instructor_modified: true)
       if @challenge_grade.student_visible?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end

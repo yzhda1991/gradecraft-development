@@ -90,7 +90,9 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
   * `name` - name of the challenge
   * `score` - number of points that the team receives
   * `text_feedback` - instructor's feedback for the team regarding the challenge
-  * `status` - similar to a grade's status. Identical `status` ruby symbols appear twice in the attr_accessible section of the challenge grade model
+  * `complete` - same as grade
+  * `instructor_modified` - same as grade
+  * `student_visible` - same as grade
 
 ##### Future Use
 
@@ -107,3 +109,16 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
   * Challenge Score Levels provide an easy way for instructors to grade challenges as opposed to entering scores manually
   * belongs to the Challenge model
   * much of the code was factored out into the Score Level model (*see [[Model Concerns]]*)
+
+## Challenge Grade Routes
+
+            release_challenge_challenge_grades POST /challenges/:challenge /challenge_grades/release     challenges/challenge_grades#release
+          mass_edit_challenge_challenge_grades GET  /challenges/:challenge_id/challenge_grades/mass_edit   challenges/challenge_grades#mass_edit
+        mass_update_challenge_challenge_grades PUT  /challenges/:challenge_id/challenge_grades/mass_update challenges/challenge_grades#mass_update
+                    challenge_challenge_grades POST /challenges/:challenge_id/challenge_grades             challenges/challenge_grades#create
+                 new_challenge_challenge_grade GET  /challenges/:challenge_id/challenge_grades/new         challenges/challenge_grades#new
+                          edit_challenge_grade GET    /challenge_grades/:id/edit                             challenge_grades#edit
+                               challenge_grade GET    /challenge_grades/:id                                  challenge_grades#show
+                                               PATCH  /challenge_grades/:id                                  challenge_grades#update
+                                               PUT    /challenge_grades/:id                                  challenge_grades#update
+                                               DELETE /challenge_grades/:id                                  challenge_grades#destroy

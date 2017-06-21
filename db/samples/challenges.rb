@@ -26,6 +26,7 @@
   grades: false,
   grade_attributes: {
     raw_points: Proc.new { rand(10000)},
+    instructor_modified: true,
     complete: true,
     student_visible: false,
   }
