@@ -7,6 +7,13 @@
 
       vm.assignmentTypes = AssignmentTypeService.assignmentTypes
 
+      vm.newAssignmentTypes = () ->
+        hasNewAssignmentTypes = _.filter(AssignmentImporterService.assignmentRows, (row) ->
+          !row.has_matching_assignment_id is true and !row.selected_assignment_type?
+        )
+        return null if hasNewAssignmentTypes.length < 1
+        _.uniq(_.pluck(hasNewAssignmentTypes, 'assignment_type'))
+
       vm.postImportAssignments = () ->
         vm.submitted = true
         AssignmentImporterService.postImportAssignments(@provider)
