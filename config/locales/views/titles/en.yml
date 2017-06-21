@@ -48,7 +48,7 @@ en:
       index:
         title: "Import #{ term_for :assignments }"
       show:
-        title: "Import #{ term_for :assignment }"
+        title: "Import #{ term_for :assignments }"
       upload:
         title: "Review Assignments for Import"
   importers:

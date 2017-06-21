@@ -4,6 +4,8 @@
   results = []
 
   postUpload = (importer_provider_id, formData) ->
+    _clearArrays(assignmentRows, results)
+
     $http.post("/api/assignments/importers/#{importer_provider_id}/upload",
       formData, {
         transformRequest: angular.identity,
@@ -14,7 +16,7 @@
         GradeCraftAPI.loadMany(assignmentRows, response.data)
         _parseDatesAsJavascript()
         GradeCraftAPI.logResponse(response.data)
-      ,(response) ->
+      , (response) ->
         GradeCraftAPI.logResponse(response)
     )
 
@@ -26,10 +28,8 @@
       (response) ->
         angular.copy(response.data, results)
         GradeCraftAPI.logResponse(response.data)
-        console.log "Successfully created some things"
-      ,(response) ->
+      , (response) ->
         GradeCraftAPI.logResponse(response)
-        console.error "An error occurred"
     )
 
   # Converts a Ruby time as number of floating point seconds to a Javascript Time

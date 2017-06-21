@@ -1,19 +1,4 @@
 # Handles uploading assignment import files
-
-@gradecraft.directive 'assignmentImportUploader', [() ->
-  AssignmentImportUploaderCtrl = [() ->
-    vm = this
-    # vm.fileUploads = GradeService.fileUploads
-  ]
-
-  {
-    bindToController: true,
-    controller: AssignmentImportUploaderCtrl,
-    controllerAs: 'vm',
-    templateUrl: 'assignments/import/uploader.html'
-  }
-]
-
 @gradecraft.directive('assignmentImportUpload', ['$parse', 'AssignmentImporterService',
   ($parse, AssignmentImporterService) ->
     {

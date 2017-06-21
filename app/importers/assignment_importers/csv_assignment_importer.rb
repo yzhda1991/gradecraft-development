@@ -23,11 +23,7 @@ class CSVAssignmentImporter
   def import(assignment_rows, course)
     assignment_rows.each do |row|
       assignment_type_id = find_or_create_assignment_type row, course
-
-      if assignment_type_id.nil?
-        append_unsuccessful row, "Failed to create assignment type"
-        next
-      end
+      next if assignment_type_id.nil?
 
       assignment = Assignment.create! do |a|
         a.name = row[:assignment_name]
@@ -47,7 +43,7 @@ class CSVAssignmentImporter
           due_at: assignment.due_at,
         }
       else
-        append_unsuccessful row, "Failed to create assignment"
+        append_unsuccessful row.to_h, "Failed to create assignment"
       end
     end
 
@@ -64,6 +60,7 @@ class CSVAssignmentImporter
     if row[:selected_assignment_type].nil?
       # If assignment type exists but one was not selected, the record is invalid
       if assignment_type_exists? course.assignment_types, row[:assignment_type]
+        append_unsuccessful row.to_h, "Assignment type exists, but no selection was made"
         return nil
       else
         type = course.assignment_types.create name: row[:assignment_type]
@@ -73,6 +70,7 @@ class CSVAssignmentImporter
       if course.assignment_types.pluck(:id).include? row[:selected_assignment_type]
         row[:selected_assignment_type]
       else
+        append_unsuccessful row.to_h, "Invalid assignment type selected"
         return nil
       end
     end
@@ -108,10 +106,6 @@ class CSVAssignmentImporter
 
     def due_date
       remove_smart_quotes data[4]
-    end
-
-    def to_s
-      data.to_s
     end
   end
 end
