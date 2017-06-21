@@ -80,7 +80,8 @@ describe Assignments::GradesController do
             put :mass_update, params: { assignment_id: assignment.id,
               assignment: { grades_attributes: grades_attributes }}
             expect(grade.reload.raw_points).to eq 1000
-            expect(grade.reload.instructor_modified).to be true
+            expect(grade.reload.instructor_modified).to be_truthy
+            expect(grade.reload.complete).to be_truthy
             expect(grade.reload.student_visible).to be_truthy
           end
 
