@@ -2,16 +2,20 @@ module Services
   module Actions
     class AssociatesSubmissionWithGrade
       extend LightService::Action
-      
+
       expects :student, :assignment, :grade
 
       executed do |context|
-        if context[:group]
-          s = Submission.where({ assignment_id: context[:assignment].id,
-                               group_id: context[:group].id }).first
+        assignment = context.assignment
+        student = context.student
+
+        if assignment.has_groups?
+          group = student.group_for_assignment(assignment)
+          s = Submission.find_by(assignment_id: assignment.id,
+                                 group_id: group.id)
         else
-          s = Submission.where({ assignment_id: context[:assignment].id,
-                               student_id: context[:student].id }).first
+          s = Submission.find_by(assignment_id: assignment.id,
+                                 student_id: student.id)
         end
         context[:grade].submission_id = s.nil? ? nil : s.id
       end
