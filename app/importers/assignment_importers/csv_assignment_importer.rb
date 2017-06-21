@@ -25,7 +25,7 @@ class CSVAssignmentImporter
       assignment_type_id = find_or_create_assignment_type row, course
       next if assignment_type_id.nil?
 
-      assignment = Assignment.create! do |a|
+      assignment = Assignment.create do |a|
         a.name = row[:assignment_name]
         a.assignment_type_id = assignment_type_id
         a.description = row[:description]
@@ -43,7 +43,7 @@ class CSVAssignmentImporter
           due_at: assignment.due_at,
         }
       else
-        append_unsuccessful row.to_h, "Failed to create assignment"
+        append_unsuccessful row.to_h, "Assignment is invalid"
       end
     end
 
@@ -64,7 +64,12 @@ class CSVAssignmentImporter
         return nil
       else
         type = course.assignment_types.create name: row[:assignment_type]
-        type.persisted? ? type.id : nil
+        if type.persisted?
+          type.id
+        else
+          append_unsuccessful row.to_h, "Assignment type is invalid"
+          return nil
+        end
       end
     else
       if course.assignment_types.pluck(:id).include? row[:selected_assignment_type]
