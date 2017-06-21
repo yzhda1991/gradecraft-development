@@ -13,7 +13,7 @@ class Assignments::Groups::GradesController < ApplicationController
   def mass_update
     filter_params_with_no_grades!
     params[:assignment][:grades_by_group] = assignment_group_grades_params[:grades_by_group].each do |key, value|
-      value.merge!(instructor_modified: true, student_visible: true)
+      value.merge!(instructor_modified: true, complete: true, student_visible: true)
     end
 
     result = Services::CreatesManyGroupGrades.create @assignment.id,

@@ -25,7 +25,7 @@
           %td= points challenge_grade.final_points if challenge_grade
           - if @challenge.has_levels?
             %td= @challenge.challenge_grade_level(challenge_grade) if challenge_grade
-          %td= decorative_glyph(:check) if challenge_grade && challenge_grade.student_visible
+          %td= decorative_glyph(:check) if challenge_grade && challenge_grade.student_visible?
           %td
             .table-menu
               %ul

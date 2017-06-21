@@ -7,4 +7,4 @@
       %tbody= render partial: "assignments/group/table_body", locals: { presenter: presenter }
       .right
         - if presenter.has_grades?
-          = active_course_submit_tag "Release Selected Grades", class: "button", data: { confirm: "Release selected grades to students?" }
+          = active_course_submit_tag "Release Selected Grades", class: "button", data: { confirm: "Make selected grades visible to students?" }
