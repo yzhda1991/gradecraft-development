@@ -1,7 +1,51 @@
 %assignments-review{"ng-if"=>"assignmentRows.length > 0"}
-  %h2 Review Assignments
 
-  %form{"name"=>"assignmentReviewForm", "ng-submit"=>"vm.postImportAssignments()"}
+  %unsubmitted{"ng-if"=>"!vm.submitted"}
+    %h2.subtitle Review Assignments
+
+    -# Import form
+    %form{"name"=>"assignmentReviewForm", "ng-submit"=>"vm.postImportAssignments()", "ng-if"=>"!vm.submitted"}
+      %table
+        %thead
+          %tr
+            %th Assignment Name
+            %th Assignment Type
+            %th Point Total
+            %th Description
+            %th Due Date
+        %tbody
+          %tr{"ng-repeat"=>"row in assignmentRows"}
+            %td {{row.assignment_name}}
+            %td
+              %select{"ng-model"=>"row.selected_assignment_type",
+                      "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
+                      "ng-disabled"=>"vm.loading"}
+                %option{"value"=>""}
+              ({{row.assignment_type}})
+            %td {{row.point_total | number}}
+            %td {{row.description}}
+            %td
+              %input{"ng-model"=>"row.selected_due_date",
+                     "type"=>"text",
+                     "gc-date-time-input"=>""}
+              ({{row.due_date}})
+
+      .submit-buttons
+        %ul
+          %li
+            %input{"type"=>"submit",
+                   "class"=>"button",
+                   "value"=>"Import"}
+          %li
+            %a{"href"=>"{{vm.cancelPath}}", "class"=>"button"}
+              %i.fa.fa-times-circle
+              Cancel
+
+  -# Results from import
+  %submitted{"ng-if"=>"vm.submitted"}
+    %h2.subtitle Results
+
+    %h2 Successfully Imported
     %table
       %thead
         %tr
@@ -11,29 +55,28 @@
           %th Description
           %th Due Date
       %tbody
-        %tr{"ng-repeat"=>"row in assignmentRows"}
-          %td {{row.assignment_name}}
-          %td
-            %select{"ng-model"=>"row.selected_assignment_type",
-                    "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
-                    "ng-disabled"=>"vm.loading"}
-              %option{"value"=>""}
-            ({{row.assignment_type}})
-          %td {{row.point_total | number}}
-          %td {{row.description}}
-          %td
-            %input{"ng-model"=>"row.selected_due_date",
-                   "type"=>"text",
-                   "gc-date-time-input"=>""}
-            ({{row.due_date}})
+        %tr{"ng-if"=>"successful.length < 1"}
+          %td{"colspan"=>"2"} None
 
-    .submit-buttons
-      %ul
-        %li
-          %input{"type"=>"submit",
-                 "class"=>"button",
-                 "value"=>"Import"}
-        %li
-          %a{"href"=>"{{vm.cancelPath}}", "class"=>"button"}
-            %i.fa.fa-times-circle
-            Cancel
+        %tr{"ng-repeat"=>"successRow in results.successful"}
+          %td {{successRow.name}}
+          %td {{successRow.assignment_type_name}}
+          %td {{successRow.full_points}}
+          %td {{successRow.description}}
+          %td {{successRow.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+
+    %br
+
+    %h2 Not Imported
+    %table
+      %thead
+        %tr
+          %th Data
+          %th Error
+      %tbody
+        %tr{"ng-if"=>"results.unsuccessful.length < 1"}
+          %td{"colspan"=>"2"} None
+
+        %tr{"ng-repeat"=>"errorRow in results.unsuccessful"}
+          %td {{errorRow.data}}
+          %td {{errorRow.error}}

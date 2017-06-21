@@ -22,7 +22,7 @@ describe CSVAssignmentImporter do
           assignment_type: row.assignment_type,
           point_total: row.point_total,
           description: row.description,
-          due_date: row.due_date
+          selected_due_date: row.due_date
         }
       end
     end
@@ -47,6 +47,17 @@ describe CSVAssignmentImporter do
 
       expect(subject.successful.count).to eq 3
       expect(subject.unsuccessful.count).to eq 1
+    end
+
+    it "sets the assignment attributes" do
+      subject.import assignment_rows, course
+
+      assignment = Assignment.unscoped.last
+      expect(assignment.name).to eq assignment_rows.last[:assignment_name]
+      expect(assignment.description).to eq assignment_rows.last[:description]
+      expect(assignment.full_points).to eq assignment_rows.last[:point_total].to_i
+      expect(assignment.due_at).to_not be_nil
+      expect(assignment.course).to eq course
     end
   end
 end

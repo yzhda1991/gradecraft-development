@@ -34,13 +34,15 @@ class API::Assignments::ImportersController < ApplicationController
 
     @assignment_rows = CSVAssignmentImporter.new.as_assignment_rows(params[:file].tempfile)
 
-    render "api/assignments/import/upload", status: 200
+    render "api/assignments/importers/upload", status: 200
   end
 
   # Creates the assignments from the imported data
   def import
     result = CSVAssignmentImporter.new.import assignment_import_params[:assignment_attributes],
       current_course
+
+    render json: MultiJson.dump(result), status: 200
   end
 
   private

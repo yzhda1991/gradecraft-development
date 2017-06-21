@@ -1,8 +1,7 @@
 @gradecraft.factory 'AssignmentImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   assignmentRows = []
-  successful = []
-  unsuccessful = []
+  results = []
 
   postUpload = (importer_provider_id, formData) ->
     $http.post("/api/assignments/importers/#{importer_provider_id}/upload",
@@ -20,11 +19,12 @@
     )
 
   postImportAssignments = (importer_provider_id) ->
-    _clearArrays(successful, unsuccessful)
+    _clearArrays(results)
     params = { assignment_attributes: assignmentRows }
 
     $http.post("/api/assignments/importers/#{importer_provider_id}/import", assignments: params).then(
       (response) ->
+        angular.copy(response.data, results)
         GradeCraftAPI.logResponse(response.data)
         console.log "Successfully created some things"
       ,(response) ->
@@ -45,6 +45,7 @@
 
   {
     assignmentRows: assignmentRows
+    results: results
     postUpload: postUpload
     postImportAssignments: postImportAssignments
   }

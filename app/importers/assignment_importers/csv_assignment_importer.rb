@@ -34,12 +34,18 @@ class CSVAssignmentImporter
         a.assignment_type_id = assignment_type_id
         a.description = row[:description]
         a.full_points = row[:point_total]
-        a.due_at = row[:due_date]
+        a.due_at = row[:selected_due_date]
         a.course = course
       end
 
       if assignment.persisted?
-        successful << assignment
+        successful << {
+          name: assignment.name,
+          assignment_type_name: assignment.assignment_type.name,
+          description: assignment.description,
+          full_points: assignment.full_points,
+          due_at: assignment.due_at,
+        }
       else
         append_unsuccessful row, "Failed to create assignment"
       end
@@ -50,8 +56,8 @@ class CSVAssignmentImporter
 
   private
 
-  def append_unsuccessful(row, errors)
-    unsuccessful << { data: row.to_s, errors: errors }
+  def append_unsuccessful(row, error)
+    unsuccessful << { data: row.to_s, error: error }
   end
 
   def find_or_create_assignment_type(row, course)
