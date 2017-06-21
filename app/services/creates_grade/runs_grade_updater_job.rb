@@ -3,12 +3,12 @@ module Services
     class RunsGradeUpdaterJob
       extend LightService::Action
 
-      expects :grade, :update_grade
+      expects :grade
 
       executed do |context|
         grade = context[:grade]
 
-        if context[:update_grade]
+        if grade.student_visible?
           grade_updater_job = GradeUpdaterJob.new(grade_id: grade.id)
           grade_updater_job.enqueue
         end
