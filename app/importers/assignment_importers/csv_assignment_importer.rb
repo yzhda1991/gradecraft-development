@@ -94,23 +94,23 @@ class CSVAssignmentImporter
     end
 
     def assignment_name
-      remove_smart_quotes data[0]
+      remove_smart_quotes(data[0]).strip
     end
 
     def assignment_type
-      remove_smart_quotes data[1]
+      remove_smart_quotes(data[1]).strip
     end
 
     def point_total
-      remove_smart_quotes data[2]
+      remove_smart_quotes(data[2]).strip
     end
 
     def description
-      remove_smart_quotes data[3]
+      remove_smart_quotes(data[3]).strip
     end
 
     def due_date
-      remove_smart_quotes data[4]
+      remove_smart_quotes(data[4]).strip
     end
   end
 end
