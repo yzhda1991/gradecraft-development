@@ -536,4 +536,41 @@ describe Submission do
       end
     end
   end
+
+  describe "#term_for_edit" do
+    let(:student) { build_stubbed :user }
+    let(:assignment) { build_stubbed :assignment, course: course }
+    let(:submission) { build_stubbed :submission, assignment: assignment, student: student }
+    let(:draft_submission) { build_stubbed :draft_submission, assignment: assignment, student: student }
+
+    context "when the current user is a student" do
+      let(:current_user_is_staff) { false }
+
+      it "returns 'Edit Draft' if the submission has a text comment draft" do
+        expect(draft_submission.term_for_edit current_user_is_staff).to eq "Edit Draft"
+      end
+
+      it "returns 'Edit Submission' if the submission has no text comment draft" do
+        expect(submission.term_for_edit current_user_is_staff).to eq "Edit Submission"
+      end
+
+      it "returns 'Resubmit' if the submission does not have a draft and will be resubmitted" do
+        create :released_grade, course: course, submission: submission, assignment: assignment, student: student
+        expect(submission.term_for_edit current_user_is_staff).to eq "Resubmit"
+      end
+    end
+
+    context "when the current user is not a student" do
+      let(:current_user_is_staff) { true }
+
+      it "returns 'Edit Submission' if the submission is not a resubmission" do
+        expect(submission.term_for_edit current_user_is_staff).to eq "Edit Submission"
+      end
+
+      it "returns 'Resubmit' if the submission will be resubmitted" do
+        create :released_grade, course: course, submission: submission, assignment: assignment, student: student
+        expect(submission.term_for_edit current_user_is_staff).to eq "Resubmit"
+      end
+    end
+  end
 end

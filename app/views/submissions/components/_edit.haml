@@ -1,2 +1,2 @@
 - if current_user_is_admin? || current_course.active?
-  = link_to glyph(:pencil) + "#{presenter.term_for_edit(current_user)}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"
+  = link_to glyph(:pencil) + "#{presenter.submission.term_for_edit(current_user_is_staff?)}", edit_assignment_submission_path(presenter.assignment, presenter.submission, group_id: presenter.group), class: "button"

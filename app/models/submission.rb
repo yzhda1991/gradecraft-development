@@ -174,6 +174,16 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def term_for_edit(user_is_staff)
+    if !user_is_staff && text_comment_draft.present?
+      "Edit Draft"
+    elsif will_be_resubmitted?
+      "Resubmit"
+    else
+      "Edit Submission"
+    end
+  end
+
   private
 
   def cache_associations
