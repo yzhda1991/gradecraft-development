@@ -89,5 +89,5 @@
       .center
         - if grade.not_released?
           %label
-            %span.sr-only Select Assignment to Update Grade Status
+            %span.sr-only Select Grades to Make Student Visible
             = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"

@@ -142,7 +142,6 @@
     params.adjustment_points = g.adjustment_points
     params.adjustment_points_feedback = g.adjustment_points_feedback
     params.final_points = g.final_points
-    debugger
     params
 
   _updateGrade = (returnURL=null)->

@@ -1,3 +1,5 @@
 %p
-  %b Status:
-  = @challenge_grade.status
+  %h4.uppercase Complete:
+  %span.bold= @challenge_grade.complete? ? "Yes" : "No"
+  %h4.uppercase Visible To Students:
+  %span.bold= @challenge_grade.student_visible? ? "Yes" : "No"

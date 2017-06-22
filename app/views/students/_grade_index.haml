@@ -6,29 +6,29 @@
       %th Final Score
       - if current_course.has_multipliers?
         %th Score With Weights
-      %th Status
+      %th Student Visible
       %th Last Updated
       %th.options
   %tbody
-    - presenter.grades_for_course.each do |g|
+    - presenter.grades_for_course.each do |grade|
       %tr
-        %td= link_to g.assignment.name, g.assignment
-        %td= raw g.feedback
+        %td= link_to grade.assignment.name, grade.assignment
+        %td= raw grade.feedback
         %td
-          - if g.assignment.pass_fail?
+          - if grade.assignment.pass_fail?
             .assignment-info.assignment-pass-fail
-              = render partial: "grades/components/pass_fail", locals: { presenter: presenter, assignment: g.assignment }
+              = render partial: "grades/components/pass_fail", locals: { presenter: presenter, assignment: grade.assignment }
           - else
-            = "#{points g.final_points} / #{ points g.assignment.full_points} points earned"
+            = "#{points grade.final_points} / #{ points grade.assignment.full_points} points earned"
         - if current_course.has_multipliers?
-          %td= g.try(:score)
-        %td= g.status
-        %td= g.updated_at
+          %td= grade.try(:score)
+        %td= decorative_glyph(:check) if grade.student_visible?
+        %td= grade.updated_at
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
             %ul.options-menu.dropdown-content
               - if current_user_is_admin? || current_course.active?
-                %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(g)
-                %li= link_to glyph(:eye) + "See Grade", grade_path(g)
-                %li= link_to glyph(:trash) + "Delete Grade", grade_path(g), data: { confirm: "Are you sure?" }
+                %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade)
+                %li= link_to glyph(:eye) + "See Grade", grade_path(grade)
+                %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure?" }
