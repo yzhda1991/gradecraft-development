@@ -28,6 +28,7 @@
       scope:
         provider: '@'
         cancelPath: '@'
+        assignmentsTerm: '@'
       bindToController: true
       controllerAs: 'vm'
       controller: AssignmentsImportCsvReviewCtrl
