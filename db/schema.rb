@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615150351) do
+ActiveRecord::Schema.define(version: 20170622131838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -323,7 +323,7 @@ ActiveRecord::Schema.define(version: 20170615150351) do
     t.boolean  "has_character_names",                                     default: false,                        null: false
     t.string   "time_zone",                                               default: "Eastern Time (US & Canada)"
     t.boolean  "has_multipliers",                                         default: false,                        null: false
-    t.boolean  "has_paid",                                                default: true,                         null: false
+    t.boolean  "has_paid",                                                default: false,                        null: false
     t.boolean  "allows_canvas",                                           default: true,                         null: false
     t.boolean  "published",                                               default: false,                        null: false
     t.integer  "institution_id"
