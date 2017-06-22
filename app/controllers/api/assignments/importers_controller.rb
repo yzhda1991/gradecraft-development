@@ -1,5 +1,6 @@
 require_relative "../../../importers/assignment_importers/csv_assignment_importer"
 
+# rubocop:disable AndOr
 class API::Assignments::ImportersController < ApplicationController
   include OAuthProvider
   include CanvasAuthorization
