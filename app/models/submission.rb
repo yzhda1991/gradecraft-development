@@ -72,8 +72,11 @@ class Submission < ActiveRecord::Base
   end
 
   def submission_grade
-    return nil if student.nil?
-    student.grades.where(assignment_id: self.assignment_id).first
+    if assignment.has_groups?
+      group.grade_for_assignment assignment
+    else
+      student.grade_for_assignment assignment
+    end
   end
 
   # Grabbing any submission that has NO instructor-defined grade
