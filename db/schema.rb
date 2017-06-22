@@ -265,7 +265,6 @@ ActiveRecord::Schema.define(version: 20170622131838) do
     t.boolean  "email_badge_awards",                  default: true
     t.boolean  "email_grade_notifications",           default: true
     t.boolean  "email_challenge_grade_notifications", default: true
-    t.boolean  "active",                              default: true,       null: false
     t.index ["course_id", "user_id"], name: "index_courses_users_on_course_id_and_user_id", using: :btree
     t.index ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
   end
