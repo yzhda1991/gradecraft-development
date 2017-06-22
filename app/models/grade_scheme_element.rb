@@ -26,14 +26,14 @@ class GradeSchemeElement < ActiveRecord::Base
   def self.next_highest_element_for(element, with_lowest_points_only=true)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
     ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
-    ordered_course_elements[ordered_course_elements.to_a.find_index(element) + 1]
+    ordered_course_elements[ordered_course_elements.find_index(element) + 1] unless ordered_course_elements.empty?
   end
 
   # By default, return only valid elements with lowest_points not equal to nil
   def self.next_lowest_element_for(element, with_lowest_points_only=true)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
     ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
-    current_index = ordered_course_elements.to_a.find_index(element)
+    current_index = ordered_course_elements.find_index(element)
     return nil if current_index == 0
     ordered_course_elements[current_index - 1]
   end
