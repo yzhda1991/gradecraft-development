@@ -46,7 +46,7 @@
         return if gseForm.gradeSchemeElementsForm.$invalid
 
         DebounceQueue.addEvent(
-          'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 3000
+          'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 4000
         )
 
       # If lowest_points changes, reorder the elements accordingly
