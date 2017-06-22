@@ -6,7 +6,7 @@
     vm = this
 
     vm.loading = true
-    vm.gradeSchemeElements = null
+    vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
 
     # Add first element
     vm.addElement = () ->
@@ -25,7 +25,6 @@
 
     GradeSchemeElementsService.getGradeSchemeElements().then(() ->
       vm.loading = false
-      vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
     )
   ]
 

@@ -48,5 +48,10 @@
         DebounceQueue.addEvent(
           'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 3000
         )
+
+      # If lowest_points changes, reorder the elements accordingly
+      scope.$watch('lowest_points', (newValue, oldValue) ->
+        GradeSchemeElementsService.sortElementsByPoints() if newValue != oldValue
+      )
   }
 ]
