@@ -6,7 +6,7 @@ describe Assignments::GroupPresenter do
 
   describe "#assignment_graded?" do
     it "has been graded if it has been graded for any user in the group" do
-      student = double(:user, grade_for_assignment: double(:grade, student_visible?: true))
+      student = double(:user, grade_for_assignment: double(:grade, instructor_modified?: true, student_visible?: true))
       allow(group).to receive(:students).and_return [student]
       expect(subject.assignment_graded?).to eq true
     end

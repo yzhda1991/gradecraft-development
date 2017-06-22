@@ -1,4 +1,4 @@
-# switch for setting grade to visible to student
+# switch for setting grade to student_visible
 
 @gradecraft.directive 'gradeVisibleSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
 

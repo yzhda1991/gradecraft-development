@@ -184,7 +184,7 @@ describe Submission do
 
   describe "#graded_at" do
     it "returns when the grade was graded if it was graded" do
-      grade = create(:grade, assignment: assignment, student: student, submission: submission, student_visible: true)
+      grade = create(:student_visible_grade, assignment: assignment, student: student, submission: submission)
       grade.graded_at = grade.created_at
       grade.save
       expect(submission.graded_at).to be_present
@@ -262,7 +262,7 @@ describe Submission do
 
   describe ".resubmitted" do
     it "returns the submissions that have been submitted after they were graded" do
-      grade = create(:grade, submission: submission, student_visible: true, graded_at: 1.day.ago)
+      grade = create(:student_visible_grade, submission: submission, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.save
       expect(Submission.resubmitted).to eq [submission]
@@ -284,7 +284,7 @@ describe Submission do
     end
 
     it "does not return resubmissions that have been graded" do
-      grade = create(:grade, submission: submission, student_visible: true, graded_at: 1.day.ago)
+      grade = create(:student_visible_grade, submission: submission, graded_at: 1.day.ago)
       submission.submitted_at = 2.days.ago
       submission.save
       expect(Submission.resubmitted).to be_empty
@@ -296,10 +296,8 @@ describe Submission do
       student2 = create(:user)
       group = create(:group, assignments: [submission.assignment])
       group.students << [student1, student2]
-      grade1 = create(:grade, submission: submission, student: student1,
-                      student_visible: true, graded_at: 1.day.ago)
-      grade2 = create(:grade, submission: submission, student: student2,
-                      student_visible: true, graded_at: 1.day.ago)
+      grade1 = create(:student_visible_grade, submission: submission, student: student1, graded_at: 1.day.ago)
+      grade2 = create(:student_visible_grade, submission: submission, student: student2, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.group_id = group.id
       submission.save

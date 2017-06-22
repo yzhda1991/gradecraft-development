@@ -44,7 +44,7 @@ describe ChallengeGrade do
   describe "#cache_team_score" do
     it "saves the team scores" do
       team = create(:team, challenge_grade_score: 0, average_score: 0)
-      challenge_grade = create(:challenge_grade, team: team, raw_points: 100, student_visible: true)
+      challenge_grade = create(:student_visible_challenge_grade, team: team, raw_points: 100)
       challenge_grade.cache_team_scores
       expect(team.challenge_grade_score).to eq(100)
     end

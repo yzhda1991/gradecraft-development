@@ -77,9 +77,9 @@ describe Challenges::ChallengeGradesController do
       end
     end
 
-    describe "POST release" do
+    describe "PUT release" do
       it "updates the status of multiple challenge grades" do
-        post :release, params: { challenge_id: challenge.id, challenge_grade_ids: [ challenge_grade.id ] }
+        put :release, params: { challenge_id: challenge.id, challenge_grade_ids: [ challenge_grade.id ] }
         expect(challenge_grade.reload.instructor_modified).to be_truthy
         expect(challenge_grade.complete).to be_truthy
         expect(challenge_grade.student_visible).to be_truthy

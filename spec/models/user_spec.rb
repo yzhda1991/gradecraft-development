@@ -270,8 +270,8 @@ describe User do
 
   describe "#grades_for_course(course)" do
     it "returns the student's grades for a course" do
-      grade_1 = create(:grade, raw_points: 100, student: student, course: course, student_visible: true)
-      grade_2 = create(:grade, raw_points: 300, student: student, course: course, student_visible: true)
+      grade_1 = create(:student_visible_grade, raw_points: 100, student: student, course: course)
+      grade_2 = create(:student_visible_grade, raw_points: 300, student: student, course: course)
       expect(student.grades_for_course(course)).to include(grade_1, grade_2)
     end
   end

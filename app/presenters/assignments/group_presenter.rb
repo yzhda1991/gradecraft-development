@@ -9,7 +9,7 @@ class Assignments::GroupPresenter < Showtime::Presenter
 
   def assignment_graded?
     grade = group.students.first.grade_for_assignment(assignment)
-    grade.instructor_modified?
+    grade && grade.instructor_modified?
   end
 
   def student_weightable?

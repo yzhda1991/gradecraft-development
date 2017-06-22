@@ -81,13 +81,13 @@ describe EarnedBadge do
 
   describe "#student_visible" do
     it "is not visible if the grade is not visible" do
-      grade = create(:grade, status: "In Progress")
+      grade = create(:in_progress_grade)
       subject = create(:earned_badge, grade: grade)
       expect(subject).to_not be_student_visible
     end
 
     it "is visible if the grade is visible" do
-      grade = create(:grade, student_visible: true)
+      grade = create(:student_visible_grade)
       subject = create(:earned_badge, grade: grade)
       expect(subject).to be_student_visible
     end

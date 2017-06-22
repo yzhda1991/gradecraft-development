@@ -52,7 +52,7 @@ describe "assignments/index_student/_assignments" do
       end
 
       it "renders the points out of points possible when the grade is released" do
-        @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: @assignment.full_points, student_visible: true)
+        @grade = create(:student_visible_grade, course: @course, assignment: @assignment, student: @student, raw_points: @assignment.full_points)
 
         # To verify we have satisfied the released condition:
         expect(@student.grade_visible_for_assignment?(@assignment)).to be_truthy
@@ -73,7 +73,7 @@ describe "assignments/index_student/_assignments" do
       end
 
       it "renders Pass or Fail in the points possible field when a grade is released for assignment" do
-        @grade = create(:grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass", student_visible: true)
+        @grade = create(:student_visible_grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass")
 
         # To verify we have satisfied the released condition:
         expect(@student.grade_visible_for_assignment?(@assignment)).to be_truthy

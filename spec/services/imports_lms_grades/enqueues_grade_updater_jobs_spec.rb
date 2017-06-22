@@ -1,6 +1,6 @@
 describe Services::Actions::EnqueuesGradeUpdaterJobs do
-  let(:first_grade) { create :grade, student_visible: true }
-  let(:second_grade) { create :grade, student_visible: true }
+  let(:first_grade) { create :student_visible_grade }
+  let(:second_grade) { create :student_visible_grade }
   let(:grades_import_result) { double(:result, successful: [first_grade, second_grade ]) }
 
   before { allow_any_instance_of(GradeUpdaterJob).to receive(:enqueue) }
