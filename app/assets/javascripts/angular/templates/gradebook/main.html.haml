@@ -1,0 +1,17 @@
+.scroll-table
+  %table
+    %caption.sr-only Gradebook
+    %thead
+      %tr
+        %th{"scope"=>"col"} First name
+        %th{"scope"=>"col"} Last name
+        %th{"scope"=>"col"}
+          -# TODO: Assignments, ordered by assignment type and then assignment
+        %th{"scope"=>"col"}
+          -# TODO: Valuable badges?
+        %th{"scope"=>"col"} Total Score
+        %th{"scope"=>"col"} Final Grade
+        %th{"scope"=>"col"}
+          -# TODO: Term for student
+    %tbody
+      %tr{"ng-repeat"=>"student in vm.students"}

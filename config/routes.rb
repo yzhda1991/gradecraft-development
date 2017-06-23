@@ -458,12 +458,19 @@ Rails.application.routes.draw do
     resources :students, only: [], module: :students do
       resources :badges, only: :index
     end
+
     resources :users, only: [] do
       collection do
         get :search
         resources :importers, only: [], module: :users, param: :provider_id do
           get "/course/:id/users", action: :index, as: :users
         end
+      end
+    end
+
+    resources :gradebook, only: [] do
+      collection do
+        get :assignment_names
       end
     end
   end
