@@ -4,11 +4,11 @@ module Analytics
     extend ActiveSupport::Concern
 
     def student_count
-      course_memberships.where(role: "student", active: true).count
+      course_memberships.being_graded.count
     end
 
     def graded_student_count
-      course_memberships.where(role: "student", auditing: false, active: true).count
+      course_memberships.being_graded.count
     end
 
     def groups_to_review_count
@@ -16,15 +16,15 @@ module Analytics
     end
 
     def scores
-      scorable_memberships.pluck(:score).sort
+      course_memberships.being_graded.pluck(:score).sort
     end
 
     def average_score
-      scorable_memberships.average(:score)
+      course_memberships.being_graded.average(:score)
     end
 
     def high_score
-      scorable_memberships.maximum(:score)
+      course_memberships.being_graded.maximum(:score)
     end
 
     def low_score
@@ -40,6 +40,7 @@ module Analytics
 
     def scorable_memberships
       @scorable_memberships ||= course_memberships.where(role: "student", auditing: false, active: true)
+
     end
   end
 end
