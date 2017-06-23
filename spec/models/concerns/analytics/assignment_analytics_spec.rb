@@ -1,12 +1,20 @@
-describe Analytics::AssignmentAnalytics do
-  subject { build(:assignment) }
+
+# describe Analytics::AssignmentAnalytics do
+  # subject { build(:assignment) }
+
+describe AssignmentAnalytics do
+  subject { build(:assignment, course: course) }
+  let(:course) { create(:course) }
+  let(:student1) { create(:course_membership, :student, course: course, active: true).user }
+  let(:student2) { create(:course_membership, :student, course: course, active: true).user }
+  let(:student3) { create(:course_membership, :student, course: course, active: true).user }
 
   describe "#average" do
     before { subject.save }
 
     it "returns the average raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 5, status: "Graded"
       expect(subject.average).to eq 6
     end
 
@@ -19,8 +27,8 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "returns the average score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, score: 8, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 5, score: 8, status: "Graded"
       expect(subject.earned_average).to eq 6
     end
 
@@ -38,9 +46,9 @@ describe Analytics::AssignmentAnalytics do
     end
 
     it "returns the number of unique scores for each grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 105, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: student3.id, raw_points: 105, status: "Graded"
       expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
     end
   end
@@ -49,8 +57,8 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "returns the median score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, score: 8, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 5, score: 8, status: "Graded"
       expect(subject.median).to eq 6
     end
 
@@ -63,8 +71,8 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "returns the maximum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 5, status: "Graded"
       expect(subject.high_score).to eq 8
     end
   end
@@ -73,8 +81,8 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "returns the minimum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 5, status: "Graded"
       expect(subject.low_score).to eq 5
     end
   end
@@ -91,9 +99,9 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "counts the number of grades that were graded or released" do
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_points: 105
+      subject.grades.create student_id: student1.id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: student2.id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: student3.id, raw_points: 105
       expect(subject.grade_count).to eq 2
     end
   end
@@ -102,7 +110,7 @@ describe Analytics::AssignmentAnalytics do
     before { subject.save }
 
     it "returns an array raw graded scores" do
-      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: student1.id, raw_points: 85, status: "Graded"
       expect(subject.graded_or_released_scores).to eq([85])
     end
   end
