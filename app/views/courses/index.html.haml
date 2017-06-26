@@ -14,9 +14,11 @@
         %th{scope: "col"} Course No
         %th{scope: "col"} Name
         %th{scope: "col"} Instructor(s)
-        %th{scope: "col"} Year
         %th{scope: "col"} Semester
+        %th{scope: "col"} Year
         %th{scope: "col"} Total Points
+        - if current_user_is_admin?
+          %th{scope: "col"} Created
         - if current_user_is_staff?
           %th{scope: "col"} # of Students
           %th{scope: "col"} Teams
@@ -32,9 +34,11 @@
             %ul
               - course.staff.each do |staff_member|
                 %li= "#{staff_member.name}"
-          %td= course.year
           %td= course.semester
+          %td= course.year
           %td= points course.total_points
+          - if current_user_is_admin?
+            %td= course.created_at
           - if current_user_is_staff?
             %td= course.student_count
             %td= course.teams ? "Yes" : "No"
