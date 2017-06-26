@@ -72,8 +72,11 @@ class Submission < ActiveRecord::Base
   end
 
   def submission_grade
-    return nil if student.nil?
-    student.grades.where(assignment_id: self.assignment_id).first
+    if assignment.has_groups?
+      group.grade_for_assignment assignment
+    else
+      student.grade_for_assignment assignment
+    end
   end
 
   # Grabbing any submission that has NO instructor-defined grade
@@ -171,6 +174,16 @@ class Submission < ActiveRecord::Base
       student_id == user.id
     else
       user.group_memberships.pluck(:group_id).include? group_id
+    end
+  end
+
+  def term_for_edit(user_is_staff)
+    if !user_is_staff && text_comment_draft.present?
+      "Edit Draft"
+    elsif will_be_resubmitted?
+      "Resubmit"
+    else
+      "Edit Submission"
     end
   end
 

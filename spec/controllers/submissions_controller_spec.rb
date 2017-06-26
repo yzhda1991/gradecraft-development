@@ -254,7 +254,7 @@ describe SubmissionsController do
 
       context "with a group assignment" do
         let(:group_assignment) { create(:group_assignment, course: course) }
-        let(:group_submission) { create(:submission, assignment: group_assignment) }
+        let(:group_submission) { create(:group_submission, assignment: group_assignment) }
 
         it "does not send any emails" do
           params = attributes_for(:submission).merge({ assignment_id: group_assignment.id })

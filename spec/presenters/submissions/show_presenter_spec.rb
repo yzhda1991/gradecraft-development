@@ -170,7 +170,6 @@ describe Submissions::ShowPresenter do
   end
 
   describe "#present_submission_files" do
-    # @present_submission_files ||= submission.submission_files.present
     let(:result) { subject.present_submission_files }
 
     context "presenter has a submission" do
@@ -210,7 +209,6 @@ describe Submissions::ShowPresenter do
   end
 
   describe "#missing_submission_files" do
-    # @missing_submission_files ||= submission.submission_files.missing
     let(:result) { subject.missing_submission_files }
 
     context "presenter has a submission" do
@@ -245,34 +243,6 @@ describe Submissions::ShowPresenter do
 
       it "returns an empty array" do
         expect(result).to eq []
-      end
-    end
-  end
-
-  describe "#term_for_edit" do
-    let(:user) { double(:user) }
-
-    before(:each) { allow(subject).to receive(:submission).and_return submission }
-
-    context "when the current user is a student" do
-      before(:each) { allow(user).to receive(:is_staff?).with(course).and_return false }
-
-      it "returns 'Edit Draft' if the submission has a text comment draft" do
-        allow(submission).to receive(:text_comment_draft).and_return "Dear professor,"
-        expect(subject.term_for_edit(user)).to eq "Edit Draft"
-      end
-
-      it "returns 'Edit Submission' if the submission has no text comment draft" do
-        allow(submission).to receive(:text_comment_draft).and_return nil
-        expect(subject.term_for_edit(user)).to eq "Edit Submission"
-      end
-    end
-
-    context "when the current user is not a student" do
-      before(:each) { allow(user).to receive(:is_staff?).with(course).and_return true }
-
-      it "returns 'Edit Submission'" do
-        expect(subject.term_for_edit(user)).to eq "Edit Submission"
       end
     end
   end
