@@ -17,12 +17,15 @@
 
     vm.pointsGraphStyle = (assignmentType)->
       if vm.pointsOver(assignmentType)
-        "width: 100%; background-color: #D1495B"
+        "width: 100%; background: #D1495B"
       else
         "width: #{(assignmentType.total_points / vm.totalPoints * 100) }%"
 
-    vm.pointsCapped = (assignmentType) ->
-      assignmentType.is_capped
+    vm.pointsGraphStyleCapped = (assignmentType)->
+      "width: #{(assignmentType.summed_assignment_points / vm.totalPoints * 100) }%; background: repeating-linear-gradient(-45deg, transparent, transparent 4px, #2E70BE 4px, #2E70BE 10px);"
+
+    vm.pointsBeingCapped = (assignmentType) ->
+      assignmentType.is_capped && (assignmentType.max_points < assignmentType.summed_assignment_points)
 
     vm.pointsGraphPercentOfTotal = (gradeSchemeElement)->
       (gradeSchemeElement.lowest_points / vm.totalPoints * 100) + "%"

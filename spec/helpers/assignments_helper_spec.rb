@@ -35,9 +35,9 @@ describe AssignmentsHelper do
     end
 
     describe "#total_available_points" do
-       it "returns 10% higher than total number if grading scheme exists" do
+       it "returns total number if grading scheme exists" do
          total_available_points = helper.total_available_points
-         expect(total_available_points).to eq(2201)
+         expect(total_available_points).to eq(2001)
        end
      end
 

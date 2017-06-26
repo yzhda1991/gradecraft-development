@@ -288,9 +288,10 @@
       right: -8px
     .hover-style
       width: auto
-      top: -40px
-      left: 50%
-      transform: translateX(-50%)
+      &:last-child
+        left: -60%
+        &::after
+          left: 80%
 
 span.hint
   position: absolute
@@ -302,11 +303,7 @@ span.hint
     display: none
 
 .max-point-label
-  background: $color-red-1
-  color: $color-white
-  padding: 0 0.2rem
-  border-radius: 2px
-  font-size: 0.7rem
+  font-style: italic
 
 .assignment-settings--date-inputs
   &.invalid

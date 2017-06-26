@@ -17,7 +17,7 @@ module AssignmentsHelper
     if current_course.grade_scheme_elements.empty?
       current_course.total_points
     else
-      (current_course.grade_scheme_elements.order_by_points_desc[0].lowest_points * 110) / 100
+      (current_course.grade_scheme_elements.order_by_points_desc[0].lowest_points)
     end
   end
 
