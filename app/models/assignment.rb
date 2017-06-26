@@ -1,12 +1,12 @@
 class Assignment < ActiveRecord::Base
   include Copyable
   include Gradable
-  include AssignmentAnalytics
   include MultipleFileAttributes
   include Sanitizable
   include ScoreLevelable
   include UploadsMedia
   include UnlockableCondition
+  include Analytics::AssignmentAnalytics
 
   belongs_to :course
   belongs_to :assignment_type, -> { order("position ASC") }
