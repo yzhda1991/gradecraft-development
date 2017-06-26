@@ -499,14 +499,19 @@ h4.notice
   &.adjustment.positive-adjustment
     color: $color-green-2
 
-.class-analytics-toggle, .download-link
+.download-link
   @media (max-width: $media-small-max)
     display: none
 
-// label for class analytics toggle
+// class analytics toggle
+.class-analytics-toggle
+  display: flex
+  align-items: center
+  @media (max-width: $media-small-max)
+    display: none
+
 .class-analytics-label
-  display: inline
-  vertical-align: top
+  margin: 0.5rem 0.5rem 0.5rem 0
 
 // styles for the rubric grade review page
 .rubric.rubric-results-table

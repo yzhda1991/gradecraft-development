@@ -29,7 +29,7 @@
           %td
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu
+              %ul.options-menu.dropdown-content
                 %li= link_to decorative_glyph(:dashboard) + "Dashboard",  staff_path(user)
                 = active_course_link_to decorative_glyph(:edit) + "Edit",  edit_user_path(user)
                 = active_course_link_to decorative_glyph(:trash) + "Delete",  user.course_memberships.where(course: current_course).first, data: { confirm: "Are you sure?"}, :method => :delete

@@ -1,50 +1,45 @@
 @import "../utilities/variables"
 
-// Switch-slider used on rubric grade pages to toggle class analytics
-// Box around switch-slider
-.switch-socket
-  position: relative
-  display: inline-block
+.binary-switch-socket
   width: 40px
-  height: 24px
+  height: 14px
+  position: relative
+  background: $color-grey-5
+  border-radius: 1rem
+  margin: auto
+  &.on, input:checked
+    background: $color-blue-3
+    border: 1px solid $color-blue-3
+    .binary-switch-handle
+      transform: translateX(22px)
+  &.off
+    background: $color-red-1
+    border: 1px solid $color-red-1
+  &.rubric-switch-socket
+    margin-left: 0
+  &.inline-switch-socket
+    display: inline-block
+    vertical-align: middle
+    margin-right: 0.5rem
+
+.binary-switch-handle
+  width: 20px
+  height: 20px
+  position: absolute
+  top: -3px
+  left: -1px
+  background: $color-blue-1
+  border-radius: 1rem
+  transition: all 0.2s ease
+
+.inline-switch-label
+  display: inline-block
+  width: 
 
 // Hides default HTML checkbox
-.switch-socket input
-  display: none
+.rubric-switch-socket input
+  opacity: 0
 
-// The slider
-.switch-handle
-  position: absolute
-  cursor: pointer
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
-  background-color: $color-grey-6
-  transition: .4s
-
-.switch-handle:before
-  position: absolute
-  content: ""
-  height: 20px
-  width: 20px
-  left: 2px
-  bottom: 2px
-  background-color: $color-white
-  transition: .4s
-
-
-input:checked + .switch-handle
-  background-color: $color-green-1
-
-input:focus + .switch-handle
-  box-shadow: 0 0 1px #2196F3
-
-input:checked + .switch-handle:before
-  transform: translateX(16px)
-
-.switch-handle.round
-  border-radius: 34px
-
-.switch-handle.round:before
-  border-radius: 50%
+input:focus + .binary-switch-handle
+  outline-width: 3px
+  box-shadow: 0px 0px 5px  #4D90FE

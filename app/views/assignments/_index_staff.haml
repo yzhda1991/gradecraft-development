@@ -4,7 +4,7 @@
       = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
       %li.dropdown
         %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
-        %ul.options-menu
+        %ul.options-menu.dropdown-content
           - if current_course.allows_canvas?
             = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path
           = active_course_link_to decorative_glyph(:calendar) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post
@@ -58,7 +58,7 @@
                     - if current_user_is_admin? || current_course.active?
                       .button-container.dropdown
                         %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-                        %ul.options-menu
+                        %ul.options-menu.dropdown-content
                           - if !assignment.grade_with_rubric?
                             = active_course_link_to decorative_glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment)
                           = active_course_link_to decorative_glyph(:edit) + "Edit", edit_assignment_path(assignment)

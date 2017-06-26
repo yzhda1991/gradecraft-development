@@ -131,8 +131,10 @@ $('ul.level-tabs li').keydown(function(e) {
 $('#class-analytics-toggle').change(function(){
   if ($(this).prop("checked")) {
     $('.graded-students').show();
+    $('.binary-switch-socket').addClass('on').removeClass('off');
   } else {
     $('.graded-students').hide();
+    $('.binary-switch-socket').removeClass('on').addClass('off');
   }
 });
 
@@ -163,5 +165,3 @@ function rubricScreenSize() {
 }
 rubricScreenSize();
 $(window).resize(rubricScreenSize);
-
-

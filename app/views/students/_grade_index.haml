@@ -27,7 +27,7 @@
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-            %ul.options-menu
+            %ul.options-menu.dropdown-content
               - if current_user_is_admin? || current_course.active?
                 %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(g)
                 %li= link_to glyph(:eye) + "See Grade", grade_path(g)

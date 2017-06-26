@@ -21,7 +21,7 @@
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-            %ul.options-menu
+            %ul.options-menu.dropdown-content
               - if group.pending?
                 = active_course_link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group)
               - else

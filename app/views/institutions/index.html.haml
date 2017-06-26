@@ -21,5 +21,5 @@
           %td.center
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu
+              %ul.options-menu.dropdown-content
                 %li= link_to decorative_glyph(:edit) + "Edit", edit_institution_path(institution)
