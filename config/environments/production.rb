@@ -1,18 +1,18 @@
 Rails.application.configure do
-  config.action_controller.default_url_options = { :host => "www.gradecraft.com" }
+  config.action_controller.default_url_options = { :host => "umich.gradecraft.com" }
   config.action_controller.perform_caching = true
   config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.action_dispatch.default_headers = { "X-Frame-Options" => "ALLOWALL" }
   config.asset_host = "https://www.gradecraft.com"
-  config.action_mailer.default_url_options = { :host => "www.gradecraft.com" }
+  config.action_mailer.default_url_options = { :host => "umich.gradecraft.com" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.delivery_method = :sparkpost
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = false
   config.action_cable.mount_path = nil
-  config.action_cable.url = 'wss://gradecraft.com/cable'
-  config.action_cable.allowed_request_origins = [ 'http://gradecraft.com',
-                                                  /http:\/\/gradecraft.*/ ]
+  config.action_cable.url = 'wss://umich.gradecraft.com/cable'
+  config.action_cable.allowed_request_origins = [ 'http://umich.gradecraft.com',
+                                                  /http:\/\/umich.gradecraft.*/ ]
   config.active_support.deprecation = :notify
   config.assets.compile = false
   config.assets.compress = true
