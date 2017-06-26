@@ -1,21 +1,58 @@
 @gradecraft.factory 'GradebookService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
-  students = []
+  grades = []
+  assignments = []
+  _gradeIds = []
 
   # Get assignment names sorted by assignment type order, assignment order
-  getOrderedAssignments = ()->
-    $http.get("/api/course_creation").then(
-      (response)->
-        GradeCraftAPI.loadItem(courseCreation, "course_creation", response.data)
-        GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignments)
-        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
-        GradeCraftAPI.setTermFor("teams", response.data.meta.term_for_teams)
+  getAssignments = () ->
+    $http.get("/api/gradebook/assignments").then(
+      (response) ->
+        GradeCraftAPI.loadMany(assignments, response.data)
         GradeCraftAPI.logResponse(response)
-      ,(response)->
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  # Get grades, optionally in batches
+  getGrades = (batchGrades=true, batchSize=50) ->
+    if batchGrades is true
+      _getStudentIds().then(
+        (success) ->
+          _.each(_.chunk(_gradeIds, batchSize), (idBatch) ->
+            _getGrades(idBatch)
+          )
+        , (failure) ->
+          console.error "An error occurred while attempting to fetch grades"
+          # TODO: Raise error?
+      )
+    else
+      _getGrades()
+
+
+  _getGrades = (gradeIds=null) ->
+    params = { "grade_ids[]": gradeIds }
+
+    $http.get("/api/gradebook/grades", params: params).then(
+      (response) ->
+        GradeCraftAPI.loadMany(grades, response.data)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  _getStudentIds = () ->
+    $http.get("/api/gradebook/grade_ids").then(
+      (response) ->
+        angular.copy(response.data, _gradeIds)
+      , (response) ->
         GradeCraftAPI.logResponse(response)
     )
 
   {
-    students: students
+    grades: grades
+    assignments: assignments
+    getAssignments: getAssignments
+    getGrades: getGrades
   }
 ]

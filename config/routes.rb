@@ -470,7 +470,9 @@ Rails.application.routes.draw do
 
     resources :gradebook, only: [] do
       collection do
-        get :assignment_names
+        get :assignments
+        get :grade_ids
+        get :grades
       end
     end
   end
