@@ -130,6 +130,10 @@ class Course < ActiveRecord::Base
     assignments.sum("full_points")
   end
 
+  def point_total_for_challenges
+    challenges.pluck("full_points").compact.sum
+  end
+
   def active?
     status == true
   end
@@ -148,22 +152,6 @@ class Course < ActiveRecord::Base
 
   def assignment_weight_spent_for_student(student)
     assignment_weight_for_student(student) >= total_weights.to_i
-  end
-
-  def student_count
-    course_memberships.where(role: "student").count
-  end
-
-  def graded_student_count
-    course_memberships.where(role: "student", auditing: false).count
-  end
-
-  def groups_to_review_count
-    groups.pending.count
-  end
-
-  def point_total_for_challenges
-    challenges.pluck("full_points").compact.sum
   end
 
   def recalculate_student_scores
