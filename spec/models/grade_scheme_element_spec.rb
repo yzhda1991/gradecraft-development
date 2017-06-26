@@ -53,6 +53,13 @@ describe GradeSchemeElement do
     end
 
     context "when there is not a grade scheme element with a higher point threshold" do
+      it "returns nil if all elements have a nil point threshold" do
+        GradeSchemeElement.destroy_all
+        elements = create_list(:grade_scheme_element, 2, course: course, lowest_points: nil)
+        subject = elements.first
+        expect(GradeSchemeElement.next_highest_element_for(subject)).to be_nil
+      end
+
       it "returns nil" do
         expect(GradeSchemeElement.next_highest_element_for(subject)).to be_nil
       end

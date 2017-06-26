@@ -2,9 +2,10 @@
   = render partial: "layouts/alerts"
 
   %h4.bold= @grade_scheme_element.name
-  .point-range
-    %span.bold Range:
-    %span #{ points @grade_scheme_element.lowest_points } - #{ points @grade_scheme_element.highest_points }
+  - if @grade_scheme_element.lowest_points.present?
+    .point-range
+      %span.bold Range:
+      %span #{ points @grade_scheme_element.lowest_points } - #{ points @grade_scheme_element.highest_points }
 
   %hr.dotted
   = simple_form_for(@grade_scheme_element, :html => { :novalidate => true }) do |f|
