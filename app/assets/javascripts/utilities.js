@@ -142,3 +142,19 @@ jQuery(function(){
       $(this).parent().hide().prev().show().prev().show();
   });
 });
+
+//toggle change password form on account settings page
+$('#update-password').click(function(event) {
+  event.preventDefault();
+  $('.update-password-form').show().attr('aria-hidden', 'false');
+  $(this).hide().attr('aria-hidden', 'true');
+  $('.update-password-wrapper').addClass('form-showing');
+});
+
+$('#cancel-password-change').click(function(event) {
+  event.preventDefault();
+  $('#user_password, #user_password_confirmation').val('');
+  $('.update-password-form').hide().attr('aria-hidden', 'true');
+  $('#update-password').show().attr('aria-hidden', 'false');
+  $('.update-password-wrapper').removeClass('form-showing');
+});
