@@ -32,7 +32,7 @@
           %td
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-              %ul.options-menu
+              %ul.options-menu.dropdown-content
                 - if challenge_grade
                   %li= link_to decorative_glyph(:eye) + "See Grade", challenge_grade_path(challenge_grade.id)
                   = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge_grade.id)

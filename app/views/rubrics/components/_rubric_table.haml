@@ -4,9 +4,9 @@
   - if presenter.has_viewable_analytics?(student)
     .class-analytics-toggle
       %h4.class-analytics-label Show class analytics
-      %label.switch-socket
+      %label.rubric-switch-socket.binary-switch-socket.on
         %input#class-analytics-toggle{:type => "checkbox", :checked => true}
-        .switch-handle.round
+        .binary-switch-handle
   #rubric-graded.rubric
     = render partial: "rubrics/components/criteria_graded", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }
 - else
