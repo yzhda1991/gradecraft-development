@@ -569,27 +569,6 @@ describe Course do
     end
   end
 
-  describe "#student_count" do
-    it "counts the number of students in a course" do
-      student = create(:user, courses: [subject], role: :student)
-      student2 = create(:user, courses: [subject], role: :student)
-      student3 = create(:user, courses: [subject], role: :student)
-      student4 = create(:user)
-      expect(subject.student_count).to eq(3)
-    end
-  end
-
-  describe "#graded_student_count" do
-    it "returns the number of student who are being graded in the course" do
-      student = create(:user, last_name: "Zed")
-      student2 = create(:user, last_name: "Alpha")
-      student3 = create(:user, courses: [subject], role: :student)
-      create(:course_membership, :auditing, :student, user: student, course: subject)
-      create(:course_membership, :auditing, :student, user: student2, course: subject)
-      expect(subject.graded_student_count).to eq(1)
-    end
-  end
-
   describe "#point_total_for_challenges" do
     it "sums up the total number of points in the challenges" do
       challenge = create(:challenge, course: subject, full_points: 101)

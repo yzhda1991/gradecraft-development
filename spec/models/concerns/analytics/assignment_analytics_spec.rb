@@ -1,4 +1,4 @@
-describe AssignmentAnalytics do
+describe Analytics::AssignmentAnalytics do
   subject { build(:assignment) }
 
   describe "#average" do

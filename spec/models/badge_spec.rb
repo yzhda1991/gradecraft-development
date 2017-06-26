@@ -68,22 +68,6 @@ describe Badge do
     end
   end
 
-  describe "#earned_count" do
-    it "returns the count of earned badges that have been awarded" do
-      earned_badge = create(:earned_badge, badge: subject)
-      second_earned_badge = create(:earned_badge, badge: subject)
-      third_earned_badge = create(:earned_badge, badge: subject)
-      expect(subject.earned_count).to eq(3)
-    end
-
-    it "does not include earned badges that are not student visible in the count" do
-      earned_badge_not_visible = create(:earned_badge, badge: subject, grade: create(:unreleased_grade))
-      second_earned_badge = create(:earned_badge, badge: subject)
-      third_earned_badge = create(:earned_badge, badge: subject)
-      expect(subject.earned_count).to eq(2)
-    end
-  end
-
   describe "#copy" do
     let(:badge) { build :badge }
     subject { badge.copy }
@@ -100,25 +84,6 @@ describe Badge do
       second_earned_badge = create(:earned_badge, badge: subject, student: student)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student)
       expect(subject.earned_badge_count_for_student(student)).to eq(2)
-    end
-  end
-
-  describe "#earned_badge_total_points_for_student(student)" do
-    it "sums up the total points earned for a specific badge" do
-      subject.full_points = 1000
-      second_badge = create(:badge, full_points: 200)
-      earned_badge = create(:earned_badge, badge: subject, student: student)
-      second_earned_badge = create(:earned_badge, badge: second_badge, student: student)
-      expect(subject.earned_badge_total_points_for_student(student)).to eq(1000)
-    end
-  end
-
-  describe "#earned_badges_this_week_count" do
-    it "returns the count of submissions for this assignment type this week" do
-      earlier_earned_badge = create(:earned_badge, badge: subject, updated_at: 8.days.ago)
-      earned_badge = create(:earned_badge, badge: subject)
-      earned_badge_2 = create(:earned_badge, badge: subject)
-      expect(subject.earned_badges_this_week_count).to eq(2)
     end
   end
 end
