@@ -548,7 +548,7 @@ describe Submission do
       end
 
       it "returns 'Resubmit' if the submission does not have a draft and will be resubmitted" do
-        create :released_grade, course: course, submission: submission, assignment: assignment, student: student
+        create :student_visible_grade, course: course, submission: submission, assignment: assignment, student: student
         expect(submission.term_for_edit current_user_is_staff).to eq "Resubmit"
       end
     end
@@ -561,7 +561,7 @@ describe Submission do
       end
 
       it "returns 'Resubmit' if the submission will be resubmitted" do
-        create :released_grade, course: course, submission: submission, assignment: assignment, student: student
+        create :student_visible_grade, course: course, submission: submission, assignment: assignment, student: student
         expect(submission.term_for_edit current_user_is_staff).to eq "Resubmit"
       end
     end
