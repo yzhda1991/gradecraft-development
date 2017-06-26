@@ -190,6 +190,7 @@ ActiveRecord::Schema.define(version: 20170622131838) do
     t.text     "adjustment_points_feedback"
     t.boolean  "complete",                   default: false, null: false
     t.boolean  "student_visible",            default: false, null: false
+    t.boolean  "instructor_modified",        default: false, null: false
   end
 
   create_table "challenge_score_levels", force: :cascade do |t|
