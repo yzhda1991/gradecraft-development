@@ -53,7 +53,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
 
-  # Getting the assignment types max value if it's present and less than summed total, else
+  # Getting the assignment types max value if it's present and less than summed total, else 
   # returning the summed total of assignment points
   def total_points_for_settings
     if is_capped?
