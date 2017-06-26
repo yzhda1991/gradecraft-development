@@ -1,49 +1,44 @@
 @import "../utilities/variables"
-  
-/* Create two columns of equal width */
-.pricing-columns
-  float: left
-  width: 32%
-  padding: 8px
 
-/* Style the list */
-.pricing-columns ul
-  list-style-type: none
-  background-color: white
-  margin: 0
-  padding: 0
-  -webkit-transition: 0.3s
-  transition: 0.3s
-  
-.disclaimer
-  clear: both
-  margin: 8px
-  background-color: $color-white
-  padding: 16px
-  width: 96% 
+.pricing-column-wrapper
+  display: flex
+  flex-wrap: wrap
+  padding: 0 0.5rem
+  max-width: 1200px
+  margin: 0 auto
 
-/* Add shadows on hover */
-.pricing-columns ul:hover
-  box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+.pricing-column
+  min-width: 300px
+  flex: 1
+  margin: 0.5rem
+  ul
+    list-style-type: none
+    background-color: $color-white
+    margin: 0
+    padding: 0
+    -webkit-transition: 0.3s
+    transition: 0.3s
+    &:hover
+      box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+  li
+    border-bottom: 1px solid $color-grey-7
+    padding: 0.5rem
+    text-align: center
+    &.grey
+      background-color: $color-grey-7
+      font-size: 20px
+  .package
+    padding: 1.2rem 0
+    background-color: $color-blue-3
+    color: $color-white
+    text-transform: uppercase
+    font-size: 1.5rem
 
-/* Pricing header */
-.pricing-columns ul .package
-  background-color: $color-blue-3
-  color: white
-  text-transform: uppercase
-  font-size: 25px
-
-/* List items */
-.pricing-columns ul li
-  border-bottom: 1px solid $color-grey-7
-  padding: 20px
-  text-align: center
-
-/* Grey list item */
-.pricing-columns ul .grey 
-  background-color: $color-grey-7
-  font-size: 20px
-  height: 160px
+.disclaimer-wrapper
+  margin: 1rem 0.5rem
+  .disclaimer
+    background-color: $color-white
+    padding: 1rem
 
 /* The "Sign Up" button */
 .signup.button 
@@ -59,10 +54,3 @@
   font-size: 18px
   &:hover
     background-color: darken($color-blue-3, 2%)
-
-/* Change the width of the three columns to 100% (to stack horizontally on small screens) */
-@media only screen and (max-width: 600px) 
-  .pricing-columns
-      width: 96%
-  .disclaimer
-      width: 88%
