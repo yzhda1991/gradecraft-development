@@ -139,7 +139,6 @@
     border-bottom: 1px solid $color-grey-6
   &.open
     border-bottom: 3px solid $color-blue-2
-
   a
     padding: 0.75rem
     display: block
@@ -148,6 +147,8 @@
     &:hover
       text-decoration: none
       color: $color-blue-2
+  &.assignment-settings a
+    padding: 1rem
 
   .assignment-type-name
     @include truncate-text(40%)
@@ -299,6 +300,13 @@ span.hint
   width: 400px
   @media (max-width: $media-medium-max)
     display: none
+
+.max-point-label
+  background: $color-red-1
+  color: $color-white
+  padding: 0 0.2rem
+  border-radius: 2px
+  font-size: 0.7rem
 
 .assignment-settings--date-inputs
   &.invalid
