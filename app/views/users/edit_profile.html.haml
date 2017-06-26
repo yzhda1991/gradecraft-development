@@ -24,7 +24,7 @@
 
       - if ! @user.kerberos_uid.present?
         .update-password-wrapper
-          %button.button-link#update-password Change Password
+          %button.button-link.update-button#update-password Change Password
           .update-password-form{"aria-hidden": "true"}
             %button#cancel-password-change.button-link.cancel-button Cancel
             .form-item
