@@ -44,7 +44,7 @@ describe AssignmentsHelper do
     describe "#percent_of_total_points" do
       it "returns grade scheme element's ratio of total points" do
        percent_of_total_points = helper.percent_of_total_points(level_index)
-       expect(percent_of_total_points).to eq(45.48)
+       expect(percent_of_total_points).to eq(50.02)
       end
     end
 

@@ -12,7 +12,7 @@ module AssignmentsHelper
     criterion.levels.ordered.sorted.to_a.index{|level| level.earned_for?(student_id)}
   end
 
-  # Ten percent higher than threshold for highest level
+  # Threshold for highest level
   def total_available_points
     if current_course.grade_scheme_elements.empty?
       current_course.total_points
