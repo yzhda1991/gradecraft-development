@@ -10,7 +10,7 @@ module Analytics
 
     # Average of above-zero grades for an assignment
     def earned_average
-      grades.graded_or_released.for_active_students.where("score > 0").average(:score).to_i
+      grades.for_active_students.graded_or_released.where("grades.score > 0").average(:score).to_i
     end
 
     def high_score
