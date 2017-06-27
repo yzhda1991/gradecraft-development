@@ -2,6 +2,7 @@ class Badge < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
   include MultipleFileAttributes
+  include Analytics::BadgeAnalytics
 
   acts_as_list scope: :course
 
@@ -25,14 +26,8 @@ class Badge < ActiveRecord::Base
     in: [true, false], message: "must be true or false"
 
   scope :visible, -> { where(visible: true) }
-  scope :earned_this_week, -> { includes(:earned_badges).where("earned_badges.updated_at > ?", 7.days.ago).references(:earned_badges) }
-
   scope :ordered, -> { order("position ASC") }
-
-  # indexed badges
-  def earned_count
-    earned_badges.student_visible.count
-  end
+  scope :earned_this_week, -> { includes(:earned_badges).where("earned_badges.updated_at > ?", 7.days.ago).references(:earned_badges) }
 
   # Counting how many times a particular student has earned this badge
   def earned_badge_count_for_student(student)
@@ -44,13 +39,5 @@ class Badge < ActiveRecord::Base
   def available_for_student?(student)
     can_earn_multiple_times ||
     earned_badges.where(student_id: student.id).count < 1
-  end
-
-  def earned_badge_total_points_for_student(student)
-    earned_badge_count_for_student(student) * self.full_points
-  end
-
-  def earned_badges_this_week_count
-    earned_badges.where("earned_badges.updated_at > ? ", 7.days.ago).count
   end
 end
