@@ -27,9 +27,6 @@ class API::GradebookController < ApplicationController
   # GET api/gradebook/students
   def students
     @students = current_course.students
-
-    if params[:student_ids].present?
-      @students = @students.where(id: params[:student_ids])
-    end
+    @students = @students.where(id: params[:student_ids]) if params[:student_ids].present?
   end
 end
