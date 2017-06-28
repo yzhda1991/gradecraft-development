@@ -4,7 +4,7 @@
     vm = this
     vm.loading = true
 
-    vm.students = []
+    vm.students = GradebookService.students
     vm.assignments = GradebookService.assignments
 
     _initialize().then(() ->
@@ -16,7 +16,7 @@
   _initialize = () ->
     promises = [
       GradebookService.getAssignments(),
-      GradebookService.getGrades()
+      GradebookService.getStudents()
     ]
     $q.all(promises)
 

@@ -16,20 +16,20 @@ class API::GradebookController < ApplicationController
     end
   end
 
-  # Returns all grade ids for the current course; for fetching by batch
-  # GET api/gradebook/grade_ids
-  def grade_ids
-    render json: MultiJson.dump(current_course.grades.pluck(:id))
+  # Returns all student ids for the current course; for fetching by batch
+  # GET api/gradebook/student_ids
+  def student_ids
+    render json: MultiJson.dump(current_course.students.pluck(:id))
   end
 
-  # Returns gradebook data for the grades in the current course
-  # Optionally returns a subset of grades if provided an array of grade ids
-  # GET api/gradebook/grades
-  def grades
-    @grades = current_course.grades
+  # Returns gradebook data for the students in the current course
+  # Optionally returns a subset of students if provided an array of student ids
+  # GET api/gradebook/students
+  def students
+    @students = current_course.students
 
-    if params[:grade_ids].present?
-      @grades = @grades.where(id: params[:grade_ids])
+    if params[:student_ids].present?
+      @students = @students.where(id: params[:student_ids])
     end
   end
 end

@@ -1,10 +1,10 @@
-@gradecraft.factory 'GradebookService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+@gradecraft.factory 'GradebookService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
 
-  grades = []
+  students = []
   assignments = []
-  _gradeIds = []
+  _studentIds = []
 
-  # Get assignment names sorted by assignment type order, assignment order
+  # GET assignment names sorted by assignment type order, assignment order
   getAssignments = () ->
     $http.get("/api/gradebook/assignments").then(
       (response) ->
@@ -14,45 +14,51 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  # Get grades, optionally in batches
-  getGrades = (batchGrades=true, batchSize=50) ->
-    if batchGrades is true
+  # GET students, optionally in batches
+  # If the ids for all students in the current course cannot be retrieved first
+  # for a batched request, it will fall back to fetching all students at once
+  getStudents = (batchStudents=true, batchSize=5) ->
+    if batchStudents is true
       _getStudentIds().then(
         (success) ->
-          _.each(_.chunk(_gradeIds, batchSize), (idBatch) ->
-            _getGrades(idBatch)
+          promises = []
+          _.each(_.chunk(_studentIds, batchSize), (idBatch) ->
+            promises.push(_getStudents(idBatch))
           )
+          $q.all(promises)
         , (failure) ->
-          console.error "An error occurred while attempting to fetch grades"
-          # TODO: Raise error?
+          console.error "An error occurred while attempting to fetch students by batch"
+          _getStudents()  # fall back to fetching all of them
       )
     else
-      _getGrades()
+      _getStudents()
 
 
-  _getGrades = (gradeIds=null) ->
-    params = { "grade_ids[]": gradeIds }
+  # GET the gradebook data for the students, optionally for a specific subset
+  _getStudents = (studentIds=null) ->
+    params = { "student_ids[]": studentIds }
 
-    $http.get("/api/gradebook/grades", params: params).then(
+    $http.get("/api/gradebook/students", params: params).then(
       (response) ->
-        GradeCraftAPI.loadMany(grades, response.data)
+        GradeCraftAPI.loadMany(students, response.data)
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
     )
 
+  # GET all the ids for the students in the course for querying by batch
   _getStudentIds = () ->
-    $http.get("/api/gradebook/grade_ids").then(
+    $http.get("/api/gradebook/student_ids").then(
       (response) ->
-        angular.copy(response.data, _gradeIds)
+        angular.copy(response.data, _studentIds)
       , (response) ->
         GradeCraftAPI.logResponse(response)
     )
 
   {
-    grades: grades
+    students: students
     assignments: assignments
     getAssignments: getAssignments
-    getGrades: getGrades
+    getStudents: getStudents
   }
 ]

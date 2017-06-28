@@ -1,6 +1,4 @@
-%loading-message{'loading'=>'vm.loading', 'message'=>"Loading Gradebook..."}
-
-.scroll-table{"ng-if"=>"!vm.loading"}
+.scroll-table
   %div
     %table
       %caption.sr-only Gradebook
@@ -16,3 +14,20 @@
           %th{"scope"=>"col"} {{vm.termForStudent}}
       %tbody
         %tr{"ng-repeat"=>"student in vm.students"}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.first_name}}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.last_name}}
+          %td{"ng-repeat"=>"score in student.scores"}
+            %a{"href"=>"{{score.grade_link}}", "ng-if"=>"score.grade_link"} {{score.value}}
+            %span{"ng-if"=>"!score.grade_link"} {{score.value}}
+          %td {{student.badge_score}}
+          %td {{student.total_score}}
+          %td {{student.final_grade}}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.full_name}}
+
+        %tr{"ng-if"=>"vm.loading"}
+          %td{"colspan"=>"{{6 + vm.assignments.length}}"}
+            %i.fa.fa-spinner.fa-spin.fa-fw
+            Loading grades..
