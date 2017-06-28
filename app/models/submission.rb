@@ -73,9 +73,9 @@ class Submission < ActiveRecord::Base
 
   def submission_grade
     if assignment.has_groups?
-      group.grade_for_assignment assignment
+      group.grade_for_assignment assignment if group.present? 
     else
-      student.grade_for_assignment assignment
+      student.grade_for_assignment assignment if student.present?
     end
   end
 
