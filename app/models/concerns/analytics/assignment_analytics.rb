@@ -37,7 +37,7 @@ module Analytics
     # Calculating how many of each score exists
     # {1236=>1, 4935=>5, 3293=>10, 3566=>15, 2255=>10...}
     def earned_score_count
-      grades.graded_or_released
+      grades.graded_or_released.for_active_students
         .group_by { |g| g.raw_points }
         .map { |score, grade| [score, grade.size ] }.to_h
     end
