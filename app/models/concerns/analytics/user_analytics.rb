@@ -2,8 +2,6 @@ module Analytics
   module UserAnalytics
     extend ActiveSupport::Concern
 
-    ### EARNED LEVELS AND GRADE LETTERS
-
     def score_for_course(course)
       @score ||= course_memberships.where(course_id: course).first.score || 0 if
         course_memberships.where(course_id: course).first.present?
@@ -44,7 +42,7 @@ module Analytics
 
     # returns all badges a student has earned for a particular course this week
     def earned_badges_for_course_this_week(course)
-      earned_badges.student_visible.where("course = ? AND created_at > ? ", course, 7.days.ago)
+      earned_badges.student_visible.where(course: course).where("created_at > ? ", 7.days.ago)
     end
   end
 end
