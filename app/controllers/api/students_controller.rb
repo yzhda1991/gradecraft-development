@@ -29,7 +29,7 @@ class API::StudentsController < ApplicationController
   def analytics_params(student)
     @student = student
     @assignment_types = current_course.assignment_types
-    @earned_badge_points = @student.earned_badges.where(course: current_course).sum(&:points)
+    @earned_badge_points = @student.earned_badge_score_for_course current_course
     @course_potential_points_for_student = current_course.total_points + @earned_badge_points
   end
 end
