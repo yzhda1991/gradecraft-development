@@ -7,9 +7,14 @@
 
       vm.assignmentTypes = AssignmentTypeService.assignmentTypes
 
+      vm.hasInvalidDueDates = () ->
+        _.any(AssignmentImporterService.assignmentRows, (row) ->
+          row.hasInvalidDueDate is true
+        )?
+
       vm.newAssignmentTypes = () ->
         hasNewAssignmentTypes = _.filter(AssignmentImporterService.assignmentRows, (row) ->
-          !row.has_matching_assignment_id is true and !row.selected_assignment_type? and
+          row.has_matching_assignment_type_id is false and !row.selected_assignment_type? and
             row.assignment_type
         )
         return null if hasNewAssignmentTypes.length < 1

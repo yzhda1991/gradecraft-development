@@ -14,6 +14,6 @@ json.data @assignment_rows do |row|
 
     json.formatted_due_date date_to_floating_point_seconds(row.due_date)
     json.selected_assignment_type assignment_type_id
-    json.has_matching_assignment_id assignment_type_id.present?
+    json.has_matching_assignment_type_id assignment_type_id.present?
   end
 end

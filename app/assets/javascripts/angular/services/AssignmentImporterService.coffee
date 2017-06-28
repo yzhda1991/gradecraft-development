@@ -36,6 +36,7 @@
   _parseDatesAsJavascript = () ->
     _.each(assignmentRows, (row) ->
       row.selected_due_date = new Date(row.formatted_due_date) if row.formatted_due_date?
+      row.hasInvalidDueDate = !row.selected_due_date?
     )
 
   _clearArrays = (arrays...) ->

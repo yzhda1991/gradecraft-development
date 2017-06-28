@@ -27,18 +27,21 @@
                 %select{"ng-model"=>"row.selected_assignment_type",
                         "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
                         "ng-disabled"=>"vm.loading",
-                        "ng-required"=>"row.has_matching_assignment_id == true && row.selected_assignment_type == null",
+                        "ng-required"=>"row.has_matching_assignment_type_id == true && row.selected_assignment_type == null",
                         "ng-if"=>"vm.assignmentTypes.length > 0"}
-                  %option{"value"=>""}
-                %withAssignmentTypes{"ng-if"=>"vm.assignmentTypes.length > 0"} ({{row.assignment_type}})
+                  %option{"value"=>"", "ng-if"=>"!row.has_matching_assignment_type_id"} Create new assignment type: {{row.assignment_type}}*
                 %withoutAssignmentTypes{"ng-if"=>"!vm.assignmentTypes.length > 0"} {{row.assignment_type}}
               %td {{row.point_total | number}}
               %td {{row.description}}
               %td
                 %input{"ng-model"=>"row.selected_due_date",
                        "type"=>"text",
-                       "gc-date-time-input"=>""}
-                ({{row.due_date}})
+                       "gc-date-time-input"=>"",
+                       "ng-if"=>"row.selected_due_date || row.showDateTimePicker",
+                       "placeholder"=>"No due date selected"}
+                %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                  %i.fa.fa-exclamation
+                  Invalid Due Date**
 
         .submit-buttons
           %ul
@@ -53,8 +56,11 @@
                 %i.fa.fa-times-circle
                 Cancel
 
-    %p.right{"ng-if"=>"vm.newAssignmentTypes().length > 0"}
-      * The following assignment types are new and will be created: {{vm.newAssignmentTypes().join(', ')}}
+    .right
+      %p{"ng-if"=>"vm.newAssignmentTypes().length > 0"}
+        * The following assignment types are new and will be created: {{vm.newAssignmentTypes().join(', ')}}
+      %p{"ng-if"=>"vm.hasInvalidDueDates()"}
+        ** Due date was invalid and will be blank unless one is selected
 
     -# Results from import
     %submitted{"ng-if"=>"vm.submitted"}
