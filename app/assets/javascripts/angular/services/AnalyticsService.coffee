@@ -39,6 +39,20 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  getWeeklyAnalytics = (studentId)->
+    if studentId
+      url = "/api/students/#{studentId}/week_analytics"
+    else
+      url = "/api/students/week_analytics"
+
+    $http.get(url).then(
+      (response) ->
+        angular.copy(response.data, studentData)
+        GradeCraftAPI.logResponse(response.data)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
 
   return {
       getAssignmentAnalytics: getAssignmentAnalytics

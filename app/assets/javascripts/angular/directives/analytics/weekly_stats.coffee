@@ -4,14 +4,14 @@
       vmWeeklyStats = this
       vmWeeklyStats.loading = true
 
-      services().then(()->
+      services(vmWeeklyStats.studentId).then(()->
         vmWeeklyStats.loading = false
       )
     ]
 
-    services = ()->
+    services = (studentId)->
       promises = [
-        #AnalyticsService.getCourseAnalytics()
+        AnalyticsService.getWeeklyAnalytics(studentId)
       ]
       return $q.all(promises)
 
@@ -19,7 +19,9 @@
       bindToController: true,
       controller: weeklyStatsCtrl,
       controllerAs: 'vmWeeklyStats',
+      scope: {
+        studentId: "="
+      }
       templateUrl: 'analytics/weekly_stats.html'
     }
-
 ]
