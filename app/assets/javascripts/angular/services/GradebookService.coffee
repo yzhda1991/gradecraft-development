@@ -17,7 +17,7 @@
   # GET students, optionally in batches
   # If the ids for all students in the current course cannot be retrieved first
   # for a batched request, it will fall back to fetching all students at once
-  getStudents = (batchStudents=true, batchSize=5) ->
+  getStudents = (batchStudents=true, batchSize=25) ->
     if batchStudents is true
       _getStudentIds().then(
         (success) ->
