@@ -48,4 +48,14 @@ describe Analytics::CourseAnalytics do
       expect(course.low_score).to eq 1000
     end
   end
+
+  describe "#submitted_assignment_types_this_week" do
+    it "returns only the submitted non-draft submissions in the past week" do
+      assignment = create :assignment, course: course
+      submission = create :submission, course: course, assignment: assignment
+      create :draft_submission, course: course
+      expect(course.submitted_assignment_types_this_week.count).to eq 1
+      expect(course.submitted_assignment_types_this_week).to eq [assignment.assignment_type]
+    end
+  end
 end

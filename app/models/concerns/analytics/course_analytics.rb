@@ -31,6 +31,11 @@ module Analytics
       scorable_memberships.minimum(:score)
     end
 
+    def submitted_assignment_types_this_week
+      assignment_types_this_week = assignment_types.with_submissions_this_week
+      assignment_types_this_week.reject { |type| type.submissions.all?(&:unsubmitted?) }
+    end
+
     private
 
     def scorable_memberships
