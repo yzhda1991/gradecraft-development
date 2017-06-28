@@ -16,3 +16,6 @@
         %course-distribution-analytics
 
       .panel.dashboard-module.stacked-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course) }
+
+      .panel.dashboard-module.stacked-module
+        %weekly-stats-analytics
