@@ -16,9 +16,9 @@ describe API::GradebookController do
       it "returns the id and name for all assignments in the course" do
         get :assignments, format: :json
 
-        expect(assigns(:assignments).length).to eq Assignment.count
+        expect(assigns(:assignments).length).to eq 4
         expect(assigns(:assignments)).to \
-          match_array Assignment.all.map { |a| { id: a.id, name: a.name } }
+          match_array [assignments, group_assignments].flatten.map { |a| { id: a.id, name: a.name } }
       end
     end
   end
