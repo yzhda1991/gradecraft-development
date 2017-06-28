@@ -2,7 +2,7 @@
   .assignment-or-badge
     .form-item
       = f.label :condition_type, "Requirement"
-      = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", "Earned Point Value"], :label => "Type", include_blank: true
+      = f.select :condition_type, [["Assignment Type", "AssignmentType"], "Assignment", "Badge", ["Earned Point Value", "Course"]], :label => "Type", include_blank: true
 
   .assignment-types-list{:style => "display: none", class: "unlock-conditions-list"}
     .form-item
