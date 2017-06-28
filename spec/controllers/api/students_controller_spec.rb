@@ -55,7 +55,8 @@ describe API::StudentsController do
 
       it "assigns information for charting course progress" do
         assignment_type = create(:assignment_type, course: course)
-        allow(student).to receive(:earned_badges).and_return double(where: double(sum: 600))
+        badge = create(:badge, full_points: 600)
+        create :earned_badge, badge: badge, course: course, student: student
         allow(course).to receive(:total_points).and_return 1000
         get :analytics, format: :json
 
