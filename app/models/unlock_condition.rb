@@ -128,7 +128,7 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_badge_condition(student)
-    badge = student.earned_badge_for_badge(condition)
+    badge = student.earned_badges_for_badge(condition)
     return false unless badge.present?
     if condition_value? && condition_date?
       check_if_badge_earned_enough_times_by_date(student)

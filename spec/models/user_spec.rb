@@ -466,7 +466,7 @@ describe User do
     end
   end
 
-  describe "#earned_badge_for_badge(badge)" do
+  describe "#earned_badges_for_badge(badge)" do
     it "returns the students' earned_badges for a particular badge" do
       earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: course)
       expect(student.earned_badge_for_badge(badge)).to eq([earned_badge_1])
