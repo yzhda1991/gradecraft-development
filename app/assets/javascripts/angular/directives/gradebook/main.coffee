@@ -1,6 +1,6 @@
 # Main entry point for loading gradebook
 @gradecraft.directive 'gradebook', ['GradebookService', '$q', (GradebookService, $q) ->
-  GradebookCtrl = [() ->
+  GradebookCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true
 
@@ -11,6 +11,14 @@
       vm.loading = false
     )
 
+    # For sortable headers
+    $scope.propertyName = 'first_name'
+    $scope.reverse = false
+
+    $scope.sortBy = (propertyName, index=null) ->
+      newPropertyName = if index? then "#{propertyName}[#{index}].value" else propertyName
+      $scope.reverse = if $scope.propertyName == newPropertyName then !$scope.reverse else false
+      $scope.propertyName = newPropertyName
   ]
 
   _initialize = () ->
