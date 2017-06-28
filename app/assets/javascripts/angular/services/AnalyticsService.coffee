@@ -25,8 +25,13 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  getStudentAnalytics = ()->
-    $http.get("/api/students/analytics").then(
+  getStudentAnalytics = (studentId)->
+    if studentId
+      url = "/api/students/#{studentId}/analytics"
+    else
+      url = "/api/students/analytics"
+
+    $http.get(url).then(
       (response) ->
         angular.copy(response.data, studentData)
         GradeCraftAPI.logResponse(response.data)

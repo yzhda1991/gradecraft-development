@@ -3,9 +3,8 @@
 
 @gradecraft.directive 'pointsBreakdownAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     pointsBreakdownCtrl = [()->
-      vm = this
-
-      services(vm.assignmentId, vm.studentId).then(()->
+      vmPtsBreakdown = this
+      services(vmPtsBreakdown.studentId).then(()->
         plotGraph(AnalyticsService.studentData)
       )
 
@@ -15,9 +14,9 @@
         )
     ]
 
-    services = (assignmentId, studentId)->
+    services = (studentId)->
       promises = [
-        AnalyticsService.getStudentAnalytics(assignmentId, studentId)
+        AnalyticsService.getStudentAnalytics(studentId)
       ]
       return $q.all(promises)
 
@@ -108,8 +107,10 @@
     {
       bindToController: true,
       controller: pointsBreakdownCtrl,
-      controllerAs: 'vm',
-      scope: {}
+      controllerAs: 'vmPtsBreakdown',
+      scope: {
+        studentId: "="
+      }
       templateUrl: 'analytics/points_breakdown.html'
     }
 ]
