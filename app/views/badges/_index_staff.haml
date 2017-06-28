@@ -8,7 +8,7 @@
         %th.badge-name-column Name
         %th.icon-column Icon
         %th.points-column Point Value
-        %th.lock-icon-column Locked?
+        -# %th.lock-icon-column Locked?
         %th.earned_column Earned
         %th.button-column.options Options
 
@@ -36,8 +36,8 @@
                 = render partial: "badges/components/points", locals: { badge: badge }
 
             // Lock Condition Icons
-            %td
-              = render partial: "badges/components/hover_icons", locals: { badge: badge }
+            -# %td
+            -#   = render partial: "badges/components/hover_icons", locals: { badge: badge }
 
             // Badge Count
             %td
