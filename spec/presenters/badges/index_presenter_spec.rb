@@ -7,7 +7,7 @@ describe Badges::IndexPresenter do
 
   let(:student) do
     double(:student,
-      visible_earned_badges_for_badge_count: "student count")
+      visible_earned_badges_for_badge: "student count")
   end
 
   let(:teams) { double(:teams, find_by: "Team A") }
