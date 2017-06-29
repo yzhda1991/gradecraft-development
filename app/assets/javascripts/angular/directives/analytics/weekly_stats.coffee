@@ -22,6 +22,15 @@
       scope: {
         studentId: "="
       }
+      link: (scope, el, attr)->
+        scope.data = AnalyticsService.weeklyData
+        scope.termFor = AnalyticsService.termFor
+
+        scope.hasStudentData = ()->
+          AnalyticsService.weeklyData.student_data
+        scope.hasFacultyData = ()->
+          AnalyticsService.weeklyData.faculty_data
+
       templateUrl: 'analytics/weekly_stats.html'
     }
 ]

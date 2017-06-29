@@ -1,24 +1,34 @@
 .card-header
   %h2 Weekly Stats
-.card-body.weekly-stats-module
-  .module-section
-    %p Total points earned this week:
-    %p.week-points one billions
+.card-body.weekly-stats-module(ng-if="!vmWeeklyStats.loading")
 
-  .module-section
+  .module-section(ng-if="hasStudentData()")
+    %p Total points earned this week:
+    %p.week-points this student earned points...
+
+  .module-section(ng-if="hasStudentData()")
     %p Grades received this week:
     %ul
-      %li Big Grade!
+      %li This student got a Big Grade!
 
-  .module-section
-    %p "Assignments" submitted this week:
+  -# don't we want to show a student that they submitted something?
+  .module-section(ng-if="hasFacultyData() && hasStudentData()")
+    %p {{termFor("assignments")}} submitted this week:
     %ul
       %li Assignment 1 submitted
 
-  .module-section
-    %p "Badges" earned this week:
+  .module-section(ng-if="hasStudentData()")
+    %p {{termFor("badges")}} earned this week:
     %ul
       %li
         .img-cropper.xsmall-crop
           %img(src="/images/badge.png" alt="icon")
-        %span Super badge earned
+        %span Student earned Super badge
+
+  .module-section(ng-if="hasFacultyData() && !hasStudentData()")
+    %p {{termFor("badges")}} earned this week:
+    %ul
+      %li
+        .img-cropper.xsmall-crop
+          %img(src="/images/badge.png" alt="icon")
+        %span Students earned the following badges...

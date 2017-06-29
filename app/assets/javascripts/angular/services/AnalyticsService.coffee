@@ -6,6 +6,10 @@
   assignmentData = {}
   courseData = {}
   studentData = {}
+  weeklyData = {}
+
+  termFor = (article)->
+    GradeCraftAPI.termFor(article)
 
   getAssignmentAnalytics = (assignmentId, studentId)->
     $http.get("/api/assignments/#{assignmentId}/analytics?student_id=#{studentId}").then(
@@ -41,13 +45,13 @@
 
   getWeeklyAnalytics = (studentId)->
     if studentId
-      url = "/api/students/#{studentId}/week_analytics"
+      url = "/api/courses/one_week_analytics?student_id=#{studentId}"
     else
-      url = "/api/students/week_analytics"
+      url = "/api/courses/one_week_analytics"
 
     $http.get(url).then(
       (response) ->
-        angular.copy(response.data, studentData)
+        angular.copy(response.data, weeklyData)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
@@ -55,11 +59,14 @@
 
 
   return {
-      getAssignmentAnalytics: getAssignmentAnalytics
-      getStudentAnalytics: getStudentAnalytics
-      getCourseAnalytics: getCourseAnalytics
-      assignmentData: assignmentData
-      courseData: courseData
-      studentData: studentData
+    termFor: termFor
+    getAssignmentAnalytics: getAssignmentAnalytics
+    getStudentAnalytics: getStudentAnalytics
+    getCourseAnalytics: getCourseAnalytics
+    getWeeklyAnalytics: getWeeklyAnalytics
+    assignmentData: assignmentData
+    courseData: courseData
+    studentData: studentData
+    weeklyData: weeklyData
   }
 ]
