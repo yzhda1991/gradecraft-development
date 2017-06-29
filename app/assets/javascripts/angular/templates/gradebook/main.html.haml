@@ -11,13 +11,13 @@
           %th{"scope"=>"col", "ng-repeat"=>"assignment in vm.assignments"}
             %a{"href"=>"#!", "ng-click"=>"sortBy('scores', $index)"} {{assignment.name}}
           %th{"scope"=>"col", "ng-if"=>"vm.hasBadges"}
-            %a{"href"=>"#!", "ng-click"=>"sortBy('badge_score')"} {{vm.termForBadge}}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('badge_score')"} {{vm.termFor("badge")}}
           %th{"scope"=>"col"}
             %a{"href"=>"#!", "ng-click"=>"sortBy('total_score')"} Total Score
           %th{"scope"=>"col"}
             %a{"href"=>"#!", "ng-click"=>"sortBy('final_grade')"} Final Grade
           %th{"scope"=>"col"}
-            %a{"href"=>"#!", "ng-click"=>"sortBy('full_name')"} {{vm.termForStudent}}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('full_name')"} {{vm.termFor("student")}}
       %tbody
         %tr{"ng-repeat"=>"student in vm.students | orderBy:propertyName:reverse"}
           %td

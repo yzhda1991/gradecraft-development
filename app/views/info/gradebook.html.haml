@@ -1,6 +1,4 @@
 .pageContent
   = render "layouts/alerts"
 
-  %gradebook{"data-term-for-badge"=>"#{current_course.badge_term}",
-             "data-term-for-student"=>"#{current_course.student_term}",
-             "data-has-badges"=>"#{current_course.valuable_badges?}"}
+  %gradebook{"data-has-badges"=>"#{current_course.valuable_badges?}"}

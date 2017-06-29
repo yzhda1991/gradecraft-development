@@ -7,6 +7,9 @@
     vm.students = GradebookService.students
     vm.assignments = GradebookService.assignments
 
+    vm.termFor = (article) ->
+      GradebookService.termFor(article)
+
     _initialize().then(() ->
       vm.loading = false
     )
@@ -30,8 +33,6 @@
 
   {
     scope:
-      termForBadge: '@'
-      termForStudent: '@'
       hasBadges: '@'
     bindToController: true
     controller: GradebookCtrl

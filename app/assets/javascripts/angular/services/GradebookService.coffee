@@ -12,6 +12,8 @@
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
+        GradeCraftAPI.setTermFor("badge", response.data.meta.term_for_badge)
+        GradeCraftAPI.setTermFor("student", response.data.meta.term_for_student)
     )
 
   # GET students, optionally in batches
@@ -33,6 +35,8 @@
     else
       _getStudents()
 
+  termFor = (article) ->
+    GradeCraftAPI.termFor(article)
 
   # GET the gradebook data for the students, optionally for a specific subset
   _getStudents = (studentIds=null) ->
@@ -60,5 +64,6 @@
     assignments: assignments
     getAssignments: getAssignments
     getStudents: getStudents
+    termFor: termFor
   }
 ]
