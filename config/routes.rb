@@ -9,20 +9,20 @@ Rails.application.routes.draw do
   #2. Announcements
   #3. Assignments, Submissions, Grades
   #4. Assignment Types
-  #5. Assignment Type Weights
-  #6. Badges
-  #7. Challenges
-  #8. Integrations
-  #9. Courses
-  #10. Groups
-  #11. Informational Pages
-  #12. Grade Schemes
-  #13. Teams
-  #14. Users
-  #15. User Auth
-  #16. Uploads
-  #17. Events
-  #18. Predictor
+  #5. Badges
+  #6. Challenges
+  #7. Integrations
+  #8. Courses
+  #9. Groups
+  #10. Informational Pages
+  #11. Grade Schemes
+  #12. Teams
+  #13. Users
+  #14. User Auth
+  #15. Uploads
+  #16. Events
+  #17. Attendance
+  #18. API Calls
   #19. Exports
   #20. Learning Objectives
   #21. Errors
@@ -183,7 +183,6 @@ Rails.application.routes.draw do
   resources :challenge_grades, except: [:index, :new, :create]
 
   #7. Integrations
-
   resources :integrations, only: [:create, :index] do
     resources :courses, only: [:create, :destroy], module: :integrations
   end
@@ -204,7 +203,6 @@ Rails.application.routes.draw do
   end
 
   #8. Courses
-
   resources :courses, except: [:show] do
     post :copy, on: :collection
     post :recalculate_student_scores, on: :member
@@ -336,7 +334,7 @@ Rails.application.routes.draw do
   get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
   get "exit_student_impersonation", to: "user_sessions#exit_student_impersonation"
 
-  #SAML
+  # SAML
   get "saml/init"
   post "saml/consume"
   get "saml/metadata"
@@ -358,8 +356,10 @@ Rails.application.routes.draw do
 
   resources :institutions, only: [:index, :new, :edit, :create, :update]
 
-  #17. API Calls
+  #17. Attendance
+  resources :attendance, only: [:index]
 
+  #18. API Calls
   namespace :api, defaults: { format: :json } do
 
     resources :assignments, only: [:index, :show, :update, :create] do
@@ -526,7 +526,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #18. Exports
+  #19. Exports
   resources :downloads, only: :index
 
   resources :submissions_exports, only: [:create, :destroy] do
