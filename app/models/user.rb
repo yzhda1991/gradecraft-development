@@ -313,7 +313,7 @@ class User < ActiveRecord::Base
   end
 
   # Student visible earned badges for a particular badge
-  def visible_earned_badges_for_badge(badge)
+  def earned_badges_for_badge(badge)
     EarnedBadge
       .where(badge: badge)
       .where(student_id: self.id)
@@ -321,8 +321,8 @@ class User < ActiveRecord::Base
   end
 
   # Number of times a student has earned a particular badge
-  def visible_earned_badges_for_badge_count(badge)
-    self.visible_earned_badges_for_badge(badge).count
+  def earned_badges_for_badge_count(badge)
+    self.earned_badges_for_badge(badge).count
   end
 
   # this should be all earned badges that either:
