@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20180215211948) do
     t.integer  "position",                           null: false
     t.integer  "top_grades_counted"
     t.boolean  "has_max_points",     default: false, null: false
+    t.boolean  "attendance",         default: false, null: false
     t.index ["course_id"], name: "index_assignment_types_on_course_id", using: :btree
   end
 
