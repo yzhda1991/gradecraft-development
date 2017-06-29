@@ -454,6 +454,7 @@ Rails.application.routes.draw do
     resources :rubrics, only: [:show]
     resources :students, only: [:index]
     get "students/analytics", to: "students#analytics"
+    get "students/:id/analytics", to: "students#student_analytics"
 
     resources :students, only: [], module: :students do
       resources :badges, only: :index

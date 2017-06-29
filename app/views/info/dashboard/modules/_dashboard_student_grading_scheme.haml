@@ -2,7 +2,10 @@ You have earned
 %span.bold #{points presenter.score_for_course } points
 - cache multi_cache_key :student_dashboard_total_score, current_student, current_course do
 
-  %points-breakdown-analytics
+  - if current_user_is_student?
+    %points-breakdown-analytics
+  - else
+    %points-breakdown-analytics(student-id="#{current_student.id}")
 
 - if presenter.next_element.present?
   .progress.bar_magic.center

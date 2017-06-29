@@ -14,9 +14,22 @@ class API::StudentsController < ApplicationController
   # accessed on the student dashboard
   # GET api/students/analytics
   def analytics
-    @student = current_user
+    analytics_params current_user
+  end
+
+  # accessed by faculty on the student show page
+  # GET api/students/:id/analytics
+  def student_analytics
+    analytics_params User.find(params[:id])
+    render "api/students/analytics"
+  end
+
+  private
+
+  def analytics_params(student)
+    @student = student
     @assignment_types = current_course.assignment_types
-    @earned_badge_points = @student.earned_badges.sum(&:points)
+    @earned_badge_points = @student.earned_badge_score_for_course current_course
     @course_potential_points_for_student = current_course.total_points + @earned_badge_points
   end
 end
