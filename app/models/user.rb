@@ -287,12 +287,18 @@ class User < ActiveRecord::Base
 
   ### BADGES
 
-  def earned_badges_for_course(course)
-    earned_badges.where(course: course).student_visible
+  # includes badges not yet visible to students
+  def awarded_badges_for_badge(badge)
+    earned_badges.where(badge: badge)
   end
 
-  def earned_badges_for_badge(badge)
-    earned_badges.where(badge: badge)
+  # includes badges not yet visible to students
+  def awarded_badges_for_badge_count(badge)
+    earned_badges.where(badge: badge).count
+  end
+
+  def earned_badges_for_course(course)
+    earned_badges.where(course: course).student_visible
   end
 
   # Unique badges associated with all of the earned badges for a given

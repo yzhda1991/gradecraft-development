@@ -128,7 +128,7 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_badge_condition(student)
-    badge = student.earned_badges_for_badge(condition)
+    badge = student.awarded_badges_for_badge(condition)
     return false unless badge.present?
     if condition_value? && condition_date?
       check_if_badge_earned_enough_times_by_date(student)
@@ -140,12 +140,12 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_if_badge_earned_enough_times(student)
-    badge_count = student.earned_badges_for_badge_count(condition_id)
+    badge_count = student.awarded_badges_for_badge_count(condition_id)
     badge_count >= condition_value
   end
 
   def check_if_badge_earned_enough_times_by_date(student)
-    badge_count = student.earned_badges_for_badge_count(condition_id)
+    badge_count = student.awarded_badges_for_badge_count(condition_id)
     badge_count >= condition_value && student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date
   end
 
