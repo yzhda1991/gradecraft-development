@@ -37,7 +37,7 @@ module Analytics
     end
 
     def earned_badge_score_for_course(course)
-       earned_badges.where(course: course).student_visible.sum(&:points)
+      earned_badges.where(course: course).student_visible.sum(&:points)
     end
 
     # returns all badges a student has earned for a particular course this week
