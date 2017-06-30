@@ -30,6 +30,8 @@
           AnalyticsService.weeklyData.student_data
         scope.hasFacultyData = ()->
           AnalyticsService.weeklyData.faculty_data
+        scope.hasOnlyFacultyData = ()->
+          scope.hasFacultyData() && !scope.hasStudentData()
 
       templateUrl: 'analytics/weekly_stats.html'
     }

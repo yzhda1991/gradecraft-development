@@ -2,21 +2,16 @@
   %h2 Weekly Stats
 .card-body.weekly-stats-module(ng-if="!vmWeeklyStats.loading")
 
+
+  -# Individual Student Data, for student or faculty view
+
   .module-section(ng-if="hasStudentData()")
     %p Total points earned this week:
     %p.week-points this student earned points...
-
   .module-section(ng-if="hasStudentData()")
     %p Grades received this week:
     %ul
       %li This student got a Big Grade!
-
-  -# don't we want to show a student that they submitted something?
-  .module-section(ng-if="hasFacultyData() && hasStudentData()")
-    %p {{termFor("assignments")}} submitted this week:
-    %ul
-      %li Assignment 1 submitted
-
   .module-section(ng-if="hasStudentData()")
     %p {{termFor("badges")}} earned this week:
     %ul
@@ -25,10 +20,20 @@
           %img(src="/images/badge.png" alt="icon")
         %span Student earned Super badge
 
-  .module-section(ng-if="hasFacultyData() && !hasStudentData()")
+
+  -# Faculty View of all course work for the week
+
+  .module-section(ng-if="hasOnlyFacultyData()")
+    %p {{termFor("assignments")}} submitted this week:
+    %ul
+      %li(ng-repeat='submission in data.faculty_data.submissions_this_week')
+        {{submission.assignment_type}}: {{submission.count}}
+
+
+  .module-section(ng-if="hasOnlyFacultyData()")
     %p {{termFor("badges")}} earned this week:
     %ul
-      %li
+      %li(ng-repeat='badge in data.faculty_data.badges_this_week')
         .img-cropper.xsmall-crop
-          %img(src="/images/badge.png" alt="icon")
-        %span Students earned the following badges...
+          %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
+        %span {{badge.name}}: {{badge.count}}
