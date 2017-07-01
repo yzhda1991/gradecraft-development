@@ -1,1 +1,2 @@
 require_relative "assignment_importers/canvas_assignment_importer"
+require_relative "assignment_importers/csv_assignment_importer"

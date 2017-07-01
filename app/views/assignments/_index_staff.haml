@@ -5,8 +5,7 @@
       %li.dropdown
         %button.button-edit.button-options{role: "button", type: "button"}= decorative_glyph(:cog) + "Options" + decorative_glyph("caret-down")
         %ul.options-menu.dropdown-content
-          - if current_course.allows_canvas?
-            = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path
+          = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path
           = active_course_link_to decorative_glyph(:calendar) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post
 .pageContent
   = render partial: "layouts/alerts"

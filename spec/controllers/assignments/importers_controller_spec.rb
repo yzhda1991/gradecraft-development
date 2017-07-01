@@ -20,6 +20,27 @@ describe Assignments::ImportersController do
       allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
     end
 
+    describe "GET show" do
+      it "renders the correct template if the importer provider id is allowed" do
+        get :show, params: { provider_id: :csv }
+        expect(response).to render_template :csv
+      end
+
+      it "redirects to index if the importer provider id is not allowed" do
+        get :show, params: { provider_id: :app }
+        expect(response).to redirect_to action: :index
+      end
+    end
+
+    describe "GET download" do
+      it "returns sample csv data" do
+        get :download, params: { importer_provider_id: :csv }, format: :csv
+        expect(response.body).to \
+          include("Assignment Name", "Assignment Type", "Point Total", "Description",
+            "Due Date (mm/dd/yyyy hh:mm:ss am/pm)")
+      end
+    end
+
     describe "GET assignments" do
       let(:syllabus) { double :syllabus, course: {}, assignments: [] }
 
