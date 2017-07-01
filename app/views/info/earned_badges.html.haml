@@ -24,10 +24,10 @@
               %td{:style => "display: none"}= points student.earned_badges_for_course(current_course).count
               - @badges.each do |badge|
                 %td
-                  -if student.earned_badge_for_badge(badge.id).count > 0
+                  -if student.awarded_badges_for_badge(badge.id).count > 0
                     .img-cropper.xsmall-crop.earned-badge-table-img
                       %img{:src => badge.try(:icon), :alt => badge.try(:name), :title => badge.name}
-                    %span x#{student.earned_badges_for_badge_count(badge.id)}
+                    %span x#{student.visible_earned_badges_for_badge_count(badge.id)}
 
               - if current_course.valuable_badges?
                 %td= points student.earned_badge_score_for_course(current_course)

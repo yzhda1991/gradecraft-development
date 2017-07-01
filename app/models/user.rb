@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Analytics::UserAnalytics
+
   authenticates_with_sorcery!
 
   class << self
@@ -236,31 +238,11 @@ class User < ActiveRecord::Base
     courses.where(status: false)
   end
 
-  ### SCORE
-  def score_for_course(course)
-    @score ||= course_memberships.where(course_id: course).first.score || 0 if
-      course_memberships.where(course_id: course).first.present?
-  end
+  # PREDICTIONS
 
   # Checking to see if a student has any positive predictions for a course
   def predictions_for_course?(course)
     predicted_earned_grades.for_course(course).predicted_to_be_done.present?
-  end
-
-  ### EARNED LEVELS AND GRADE LETTERS
-
-  def grade_for_course(course)
-    cm = course_memberships.where(course_id: course.id).first
-    return cm.grade_scheme_element if cm.grade_scheme_element.present?
-    return cm.earned_grade_scheme_element
-  end
-
-  def grade_level_for_course(course)
-    @grade_level ||= grade_for_course(course).try(:level)
-  end
-
-  def grade_letter_for_course(course)
-    @grade_letter_for_course ||= grade_for_course(course).try(:letter)
   end
 
   ### GRADES
@@ -273,21 +255,6 @@ class User < ActiveRecord::Base
 
   def grades_for_course(course)
     grades.where(course: course)
-  end
-
-  # Returning all of the grades a student has received this week
-  def grades_released_for_course_this_week(course)
-    grades = grades_for_course(course).where("graded_at > ? ", 7.days.ago)
-    viewable_grades = []
-    grades.each do |grade|
-      viewable_grades << grade if GradeProctor.new(grade).viewable? && !grade.excluded_from_course_score
-    end
-    return viewable_grades
-  end
-
-  # Returning the total number of points for all grades released this week
-  def points_earned_for_course_this_week(course)
-    grades_released_for_course_this_week(course).map(&:final_points).compact.sum
   end
 
   # Grabbing the grade for an assignment
@@ -324,20 +291,13 @@ class User < ActiveRecord::Base
     earned_badges.where(course: course).student_visible
   end
 
-  def earned_badge_score_for_course(course)
-    earned_badges_for_course(course).sum(&:points)
-  end
-
-  # returns all badges a student has earned for a particular course this week
-  def earned_badges_for_course_this_week(course)
-    earned_badges_for_course(course).where("created_at > ? ", 7.days.ago)
-  end
-
-  def earned_badge_for_badge(badge)
+  # includes badges not yet visible to students
+  def awarded_badges_for_badge(badge)
     earned_badges.where(badge: badge)
   end
 
-  def earned_badges_for_badge_count(badge)
+  # includes badges not yet visible to students
+  def awarded_badges_for_badge_count(badge)
     earned_badges.where(badge: badge).count
   end
 
@@ -400,6 +360,8 @@ class User < ActiveRecord::Base
       .where(visible: true)
       .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
   end
+
+  # WEIGHTS
 
   # Returns the student's assigned weight for an assignment type category
   def weight_for_assignment_type(assignment_type)

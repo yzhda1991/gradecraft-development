@@ -47,7 +47,7 @@ When a User is destroyed, all of its Course Memberships, Student Academic Histor
   * `last_name` - must be present. Used to order all student display pages except for the leaderboard and top/bottom 10
   * `display_name` - used as the public name for the user when present. Currently being phased out in favor of moving this to the course membership to allow for multiple settings per user.
   * `last_activity_at` - last datetime that the user logged in. Set by sorcery
-  * `team_role` - role that student will have in a team. Currently being phased out in favor of moving this to the course membership to allow for multiple settings per user. 
+  * `team_role` - role that student will have in a team. Currently being phased out in favor of moving this to the course membership to allow for multiple settings per user.
   * `internal` - boolean representing whether user has an internal University of Michigan email address
 
 #### Unused
@@ -111,8 +111,8 @@ In addition to the methods described below, there are methods of the form `is_<r
   * `submission_for_assignment(assignment)` - returns the student's submission for the assignment
   * `earned_badge_score_for_course(course)` - returns the amount of points the student has earned through badges in the course
   * `earned_badges_for_course(course)` - returns the student's earned badges for the course
-  * `earned_badge_for_badge(badge)` - returns all of the student's earned badges for the passed in badge. Used in the unlock condition model
-  * `earned_badges_for_badge_count(badge)` - returns the number of badges the student has earned of the type passed in. Used in the unlock condition model
+  * `awarded_badges_for_badge(badge)` - returns all of the student's earned badges for the passed in badge. Used in the unlock condition model
+  * `awarded_badges_for_badge_count(badge)` - returns the number of badges the student has earned of the type passed in. Used in the unlock condition model
   * `unique_student_earned_badges(course)` - returns all badges combined with their earned badges in the course for the student
   * `student_visible_earned_badges(course)` - returns all of the student's badges that either have been released and are not associated with a grade, or have a grade that is visible
   * `earnable_course_badges_for_grade(grade)` - returns badges that are in the same course as the grade, and in which one of the following conditions are met:
