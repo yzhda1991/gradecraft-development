@@ -52,6 +52,16 @@ class AssignmentType < ActiveRecord::Base
     end
   end
 
+  # Getting the assignment types max value if it's present and less than summed total, else
+  # returning the summed total of assignment points
+  def total_points_for_settings
+    if is_capped?
+      max_points > summed_assignment_points ? summed_assignment_points : max_points
+    else
+      summed_assignment_points
+    end
+  end
+
   # Calculating the total number of assignment points in the type
   def summed_assignment_points
     assignments.map{ |a| a.full_points || 0 }.sum

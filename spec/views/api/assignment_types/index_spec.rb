@@ -26,7 +26,7 @@ describe "api/assignment_types/index" do
   end
 
   it "includes the assignment_type total points" do
-    expect(@json["data"].first["attributes"]["total_points"]).to eq(1234)
+    expect(@json["data"].first["attributes"]["total_points"]).to eq(0)
   end
 
   it "includes the assignment_type final points summed for student" do

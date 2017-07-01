@@ -35,16 +35,16 @@ describe AssignmentsHelper do
     end
 
     describe "#total_available_points" do
-       it "returns 10% higher than total number if grading scheme exists" do
+       it "returns total number if grading scheme exists" do
          total_available_points = helper.total_available_points
-         expect(total_available_points).to eq(2201)
+         expect(total_available_points).to eq(2001)
        end
      end
 
     describe "#percent_of_total_points" do
       it "returns grade scheme element's ratio of total points" do
        percent_of_total_points = helper.percent_of_total_points(level_index)
-       expect(percent_of_total_points).to eq(45.48)
+       expect(percent_of_total_points).to eq(50.02)
       end
     end
 
