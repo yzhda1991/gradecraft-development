@@ -1,5 +1,5 @@
 describe Submission do
-  let(:course) { create(:course) }
+  let(:course) { build_stubbed(:course) }
   let(:assignment) { create(:assignment) }
   let(:student) { create(:user) }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }
@@ -39,7 +39,7 @@ describe Submission do
     end
 
     it "allows multiple group submissions to be created" do
-      group = create(:group, course_id: course.id)
+      group = create(:group, course: course)
       expect{create_list(:group_submission, 3, group: group)}.not_to raise_error
     end
 
@@ -419,10 +419,10 @@ describe Submission do
     context "when the assignment has a due_at date" do
       context "with a submission that is late" do
         it "sets the late attribute as true" do
-          assignment = create(:assignment, due_at: DateTime.now - 1)
-          submission = create(:submission, assignment: assignment, submitted_at: DateTime.now)
-          expect(submission.check_and_set_late_status!).to eq true
-          expect(submission.late?).to eq(true)
+          late_assignment = create(:assignment, due_at: DateTime.now - 1.day)
+          late_submission = create(:submission, assignment: late_assignment, submitted_at: DateTime.now)
+          late_submission.check_and_set_late_status!
+          expect(late_submission.late?).to eq(true)
         end
       end
 
@@ -430,7 +430,7 @@ describe Submission do
         it "sets the late attribute as false" do
           assignment = create(:assignment, due_at: DateTime.now)
           submission = create(:submission, assignment: assignment, submitted_at: DateTime.now - 1)
-          expect(submission.check_and_set_late_status!).to eq true
+          submission.check_and_set_late_status!
           expect(submission.late?).to eq(false)
         end
       end

@@ -73,7 +73,7 @@ class Submission < ActiveRecord::Base
 
   def submission_grade
     if assignment.has_groups?
-      group.grade_for_assignment assignment if group.present? 
+      group.grade_for_assignment assignment if group.present?
     else
       student.grade_for_assignment assignment if student.present?
     end
@@ -114,7 +114,7 @@ class Submission < ActiveRecord::Base
   # Set while skipping validations and callbacks
   def check_and_set_late_status!
     return false if self.assignment.due_at.nil?
-    self.update_column(:late, submitted_at.strftime('%d-%m-%Y %I:%M') > self.assignment.due_at.strftime('%d-%m-%Y %I:%M'))
+    self.update_column(:late, submitted_at.strftime("%Y-%m-%d %H:%I") > self.assignment.due_at.strftime("%Y-%m-%d %H:%I"))
   end
 
   # build a sensible base filename for all files that are attached to this submission
