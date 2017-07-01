@@ -71,4 +71,12 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   def secure_token_name
     :"@#{mounted_as}_secure_token"
   end
+
+  def extension_black_list
+    %w(action apk app application bat bin cmd com command cpl csh dmg exe
+    gadget hta inf ins inx ipa isu jar job jse lnk msc msh msh1 msh2 mshxml
+    msh1xml msh2xml msi msp mst osx out paf pif prg psc1 psc2 ps1 ps1xml ps2
+    ps2xml reg rgs run scf scr sct shb shs u3p vb vbe vbs vbscript workflow ws
+    wsc wsf wsh)
+  end
 end
