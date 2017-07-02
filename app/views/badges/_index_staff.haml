@@ -19,10 +19,8 @@
             %td.center.draggable
               %i.fa.fa-arrows-v
 
-
             // Badge Name
-            %td
-              = render partial: "badges/components/name",
+            %td= render partial: "badges/components/name",
                 locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
             // Badge Icon
@@ -36,13 +34,10 @@
                 = render partial: "badges/components/points", locals: { badge: badge }
 
             // Lock Condition Icons
-            %td
-              = render partial: "badges/components/hover_icons", locals: { badge: badge }
+            %td= render partial: "badges/components/hover_icons", locals: { badge: badge }
 
             // Badge Count
-            %td
-              = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
+            %td= render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
 
             // Buttons
-            %td
-              = render partial: "badges/buttons", locals: { badge: badge }
+            %td= render partial: "badges/buttons", locals: { badge: badge }

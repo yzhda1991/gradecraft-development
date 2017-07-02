@@ -8,6 +8,7 @@ class UnlockCondition < ActiveRecord::Base
   # Returning the name of whatever badge or assignment has been identified as
   # the condition
   def name
+    return "Points earned" unless condition.present?
     condition.name
   end
 
