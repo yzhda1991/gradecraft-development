@@ -2,8 +2,7 @@
   %section.form-section
     %h2.form-title Basic Info
     .form-item
-      = f.label :name, "#{current_course.team_term} Name"
-      = f.text_field :name
+      = f.input :name, label: "#{current_course.team_term} Name"
     .form-item
       %label Banner
       = f.file_field :banner, {class: "media-image-upload"}
