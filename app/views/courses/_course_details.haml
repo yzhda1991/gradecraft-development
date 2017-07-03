@@ -1,45 +1,33 @@
-= render partial: "layouts/alerts", locals: { model: @course }
-
 .form-wrapper
   %section.form-section
     %h2.form-title Class Details
     .form-flex-row
       .form-item
-        = f.label :location, "Location"
-        = f.text_field :location
+        = f.input :location, label: "Location"
 
       .form-item
-        = f.label :meeting_times, "Class Meeting Times"
-        = f.text_field :meeting_times
+        = f.input :meeting_times, as: :string, label: "Class Meeting Times"
 
     .form-flex-row
       .form-item
-        = f.label :office, "Professor's Office"
-        = f.text_field :office
+        = f.input :office, label: "Professor's Office"
 
       .form-item
-        = f.label :office_hours, "Office Hours"
-        = f.text_field :office_hours
+        = f.input :office_hours, label: "Office Hours"
 
     .form-flex-row
       .form-item
-        = f.label :phone, "Contact Phone #"
-        = f.text_field :phone
+        = f.input :phone, label: "Contact Phone #"
 
       .form-item
-        = f.label :class_email, "Class Email"
-        = f.text_field :class_email
+        = f.input :class_email, label: "Class Email"
 
     .form-flex-row
       .form-item
-        = f.label :twitter_handle, "Twitter Handle"
-        = f.text_field :twitter_handle
-        .form-hint Don't include the @ sign
+        = f.input :twitter_handle, hint: "Don't include the @ sign", label: "Twitter Handle"
 
       .form-item
-        = f.label :twitter_hashtag, "Hashtag"
-        = f.text_field :twitter_hashtag
-        .form-hint Don't include the hash sign
+        = f.input :twitter_hashtag, hint: "Don't include the hash sign"
 
     .form-flex-row
       .form-item
@@ -52,7 +40,6 @@
     %section.form-section
       %h2.form-title Professors
       .form-item
-        = f.label :professors
         = f.input :instructors_of_record_ids, collection: f.object.staff,
-          label: false, wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
+          label: "Professors", wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
         .form-hint Enter a professor's name to add them to this course

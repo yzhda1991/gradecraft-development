@@ -55,7 +55,6 @@ class CoursesController < ApplicationController
   end
 
   def edit
-    @institutions = Institution.where(has_site_license: true)
     authorize! :update, @course
   end
 

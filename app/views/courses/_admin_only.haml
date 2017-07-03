@@ -1,20 +1,11 @@
-= render partial: "layouts/alerts", locals: { model: @course }
-
 .form-wrapper
   %section.form-section
     %h2.form-title Admin Only
     .form-item
-      = f.label :status, "Active?"
-      = f.check_box :status
-      .form-hint Is this an active course?
+      = f.input :status, label: "Active?", hint: "Is this an active course?"
     .form-item
-      = f.label :has_paid, "Has Paid?"
-      = f.check_box :has_paid
-      .form-hint If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users.
+      = f.input :has_paid, label: "Has Paid?", hint: "If this course is not at Michigan, has it been paid for? This affects whether or not instructors can add users."
     .form-item
-      = f.label :allows_canvas, "Allows Canvas?"
-      = f.check_box :allows_canvas
-      .form-hint Does this course allow integration with Canvas?
+      = f.input :allows_canvas, label: "Allows Canvas?", hint: "Does this course allow integration with Canvas?"
     .form-item
-      = f.label :institution_id
-      = f.select :institution_id, options_from_collection_for_select(@institutions, "id", "name", @course.institution_id), prompt: "Select an institution"
+      = f.association :institution, collection: Institution.all, prompt: "Select an institution"

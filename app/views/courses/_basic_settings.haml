@@ -10,12 +10,10 @@
 
     .form-flex-row
       .form-item
-        = f.label :semester
-        = f.select :semester, [["Winter", "winter"], ["Spring", "spring"], ["Summer", "summer"], ["Fall", "fall"]]
+        = f.input :semester, collection: [["Winter", "winter"], ["Spring", "spring"], ["Summer", "summer"], ["Fall", "fall"]]
 
       .form-item
-        = f.label :year
-        = f.select :year, (Date.today.year - 3)..(Date.today.year + 2), :selected => "#{@course.year || Date.today.year}"
+        = f.input :year, collection: (Date.today.year - 3)..(Date.today.year + 2), selected: "#{@course.year || Date.today.year}"
 
     .form-flex-row
       .form-item
@@ -26,8 +24,7 @@
 
     .form-flex-row
       .form-item
-        = f.label :tagline, "Course Tagline"
-        = f.text_field :tagline
+        = f.input :tagline, label: "Course Tagline"
 
   %section.form-section
     %h2.form-title Enable Features

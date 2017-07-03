@@ -82,9 +82,11 @@ class Course < ActiveRecord::Base
 
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
-  validates_presence_of :name, :course_number
+  validates_presence_of :name, :course_number, :student_term, :team_term, :group_term,
+    :team_leader_term, :group_term, :weight_term, :badge_term, :assignment_term, :challenge_term
 
-  validates_numericality_of :total_weights, :max_weights_per_assignment_type, :max_assignment_types_weighted, :full_points, allow_blank: true, length: { maximum: 9 }
+  validates_numericality_of :total_weights, :max_weights_per_assignment_type,
+    :max_assignment_types_weighted, :full_points, allow_blank: true, length: { maximum: 9 }
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
 
