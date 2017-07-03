@@ -29,7 +29,7 @@
           %td= link_to student.last_name, student_path(student)
           %td= mail_to student.email, student.email
           - if current_course.has_team_roles?
-            %td= student.team_role
+            %td= student.team_role(current_course)
           %td= points student.score_for_course(current_course) if student.respond_to?(:grades)
           %td= student.grade_for_course(current_course).try(:name)
           - if current_course.has_badges?
