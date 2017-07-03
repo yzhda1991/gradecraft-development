@@ -72,7 +72,7 @@ class CoursesController < ApplicationController
         notice: "Course #{@course.name} successfully created"
       }
     else
-      redirect_to new_course_path, flash: {
+      render action: "new", flash: {
         alert: @course.errors.full_messages.to_sentence
       }
     end
