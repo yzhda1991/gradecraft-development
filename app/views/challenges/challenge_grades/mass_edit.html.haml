@@ -13,7 +13,7 @@
                 = cgf.hidden_field :team_id
                 = cgf.input :status, as: :hidden, :input_html => { :value => "Graded" }
                 - if @challenge.challenge_score_levels.present?
-                  = cgf.select :raw_points, options_from_collection_for_select(@challenge.challenge_score_levels, :value, :name, cg.try(:raw_points)), include_blank: true
+                  = cgf.select :raw_points, options_from_collection_for_select(@challenge.challenge_score_levels, :points, :name, cg.try(:raw_points)), include_blank: true
                 - else
                   - if cg.persisted?
                     = cgf.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}

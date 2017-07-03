@@ -36,6 +36,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   # PUT /challenges/:id/challenge_grades/mass_update
   def mass_update
+    filter_params_with_no_challenge_grades!
     if @challenge.update_attributes(challenge_params)
 
       challenge_grade_ids = []
@@ -86,5 +87,11 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   def find_challenge
     @challenge = current_course.challenges.find(params[:challenge_id])
+  end
+
+  def filter_params_with_no_challenge_grades!
+    params[:challenge][:challenge_grades_attributes] = params[:challenge][:challenge_grades_attributes].delete_if do |key, value|
+      value[:raw_points].blank?
+    end
   end
 end

@@ -80,6 +80,8 @@ en:
     challenge_grades:
       new:
         title: "Grade #{ @team.name }'s #{ @challenge.name }"
+      mass_edit:
+        title: "Quick Grade #{ @challenge.name }"
   courses:
     index:
       title: "My Courses"
@@ -96,8 +98,6 @@ en:
       title: "#{ @team.name }'s #{@challenge_grade.name} Grade"
     edit:
       title: "Editing #{ @team.name }'s #{ @challenge.name } Grade"
-    mass_edit:
-      title: "Quick Grade #{ @challenge.name }"
   downloads:
     index:
       title: "Course Data Exports"

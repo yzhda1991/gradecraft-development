@@ -6,8 +6,7 @@
     = f.hidden_field :challenge_id, value: @challenge.id
 
     .form-item
-      = f.label :raw_points
-      = f.text_field :raw_points, data: {autonumeric: true, "m-dec" => "0"}
+      = f.input :raw_points, data: {autonumeric: true, "m-dec" => "0"}
       .form-hint out of #{points @challenge.full_points} points
 
     .form-item

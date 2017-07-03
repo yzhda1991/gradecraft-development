@@ -49,4 +49,9 @@ class Challenge < ActiveRecord::Base
   def future?
     !due_at.nil? && due_at >= Date.today
   end
+
+  # Finding what challenge grade level was earned for a particular challenge
+  def challenge_grade_level(challenge_grade)
+    challenge_score_levels.find { |csl| challenge_grade.final_points == csl.points }.try(:name)
+  end
 end
