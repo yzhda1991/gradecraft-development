@@ -122,7 +122,7 @@ class UnlockCondition < ActiveRecord::Base
     assignment_completed_count >= condition_value
   end
 
-  def check_min_points_condition(student)
+  def check_minimum_points_earned_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_type_score = assignment_type.score_for_student(student)
     assignment_type_score >= condition_value

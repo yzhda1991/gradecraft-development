@@ -489,7 +489,7 @@ describe UnlockCondition do
         UnlockCondition.create(
           condition_id: assignment_type.id,
           condition_type: "AssignmentType",
-          condition_state: "Min Points",
+          condition_state: "Minimum Points Earned",
           condition_value: 10000
         )
       end
@@ -575,7 +575,7 @@ describe UnlockCondition do
     it "returns a sentence summarizing a course unlock condition" do
       unlock_condition = UnlockCondition.new(
         condition_id: course.id, condition_type: "Course",
-        condition_state: "Min Points", condition_value: 21,
+        condition_state: "Minimum Points Earned", condition_value: 21,
         unlockable_id: assignment.id, unlockable_type: "Assignment"
       )
       expect(unlock_condition.requirements_description_sentence).to \
@@ -659,7 +659,7 @@ describe UnlockCondition do
     end
 
     it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
-      subject.condition_state = "Min Points"
+      subject.condition_state = "Minimum Points Earned"
       subject.condition_value = 1000
       expect(subject.key_description_sentence).to \
         eq("Earning 1000 points unlocks the #{unlockable_assignment.name} Assignment")
@@ -704,7 +704,7 @@ describe UnlockCondition do
     end
 
     it "returns a summary of a minimum number of points earned on an Assignment as an unlock condition" do
-      subject = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Min Points",
+      subject = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Minimum Points Earned",
         unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 1000)
       expect(subject.requirements_completed_sentence).to \
         eq("Earned 1000 points in the #{subject.name} #{ subject.condition_type }")
