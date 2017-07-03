@@ -5,7 +5,7 @@ describe Challenges::ChallengeGradesController do
   let(:team) { create(:team, course: course) }
   let(:challenge) { create(:challenge, course: course) }
   let(:challenge_grade) { create(:challenge_grade, team: team, challenge: challenge) }
-    
+
   context "as professor" do
     before(:each) do
       login_user(professor)
@@ -49,7 +49,7 @@ describe Challenges::ChallengeGradesController do
       end
     end
 
-    describe "POST mass_update" do
+    describe "POST mass_update", focus: true do
       it "updates the challenge grades for the specific challenge" do
         challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
           { team_id: team.id, raw_points: 1000, status: "Released",

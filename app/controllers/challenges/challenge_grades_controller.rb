@@ -89,6 +89,8 @@ class Challenges::ChallengeGradesController < ApplicationController
     @challenge = current_course.challenges.find(params[:challenge_id])
   end
 
+  # This is used to check whether or not the challenge grades being created have any associated data
+  # No data? Don't create empty grades for teams
   def filter_params_with_no_challenge_grades!
     params[:challenge][:challenge_grades_attributes] = params[:challenge][:challenge_grades_attributes].delete_if do |key, value|
       value[:raw_points].blank?
