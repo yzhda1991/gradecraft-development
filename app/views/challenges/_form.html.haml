@@ -9,8 +9,7 @@
       = f.text_field :name, "aria-required": "true"
 
     .form-item
-      = f.label :full_points
-      = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
+      = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}
 
     .form-item
       = f.input :open_at, as: :string, :input_html => { class: "datetimepicker", :value => @challenge.try(:open_at) }

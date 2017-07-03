@@ -1,10 +1,10 @@
 describe Assignments::GradesController do
   let(:course) { build(:course) }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
   let(:assignment_with_groups) { create(:group_assignment, course: course) }
-  let!(:student) { create(:course_membership, :student, course: course).user }
   let!(:grade) { create(:grade, student: student, assignment: assignment, course: course) }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as professor" do
     before(:each) { login_user(professor) }

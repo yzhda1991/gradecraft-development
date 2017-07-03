@@ -1,11 +1,11 @@
 describe Challenges::ChallengeGradesController do
-  let(:course) { build :course }
+  let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:team) { create(:team, course: course) }
   let(:challenge) { create(:challenge, course: course) }
   let(:challenge_grade) { create(:challenge_grade, team: team, challenge: challenge) }
-    
+
   context "as professor" do
     before(:each) do
       login_user(professor)
@@ -51,10 +51,8 @@ describe Challenges::ChallengeGradesController do
 
     describe "POST mass_update" do
       it "updates the challenge grades for the specific challenge" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
-          { team_id: team.id, raw_points: 1000, status: "Released",
-            id: challenge_grade.id
-          }
+        challenge_grades_attributes = { "0" =>
+          { team_id: team.id, status: "Graded", raw_points: 1000, id: challenge_grade.id }
         }
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}
@@ -62,10 +60,8 @@ describe Challenges::ChallengeGradesController do
       end
 
       it "redirects to the mass_edit form if attributes are invalid" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
-          { team_id: nil, raw_points: 1000, status: "Released",
-            id: challenge_grade.id
-          }
+        challenge_grades_attributes = { "0" =>
+          { team_id: nil, raw_points: 1000, status: "Released", id: challenge_grade.id }
         }
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}

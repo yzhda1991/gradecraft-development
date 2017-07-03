@@ -1,7 +1,6 @@
 class ChallengeGrade < ActiveRecord::Base
   include GradeStatus
 
-  belongs_to :course
   belongs_to :challenge
   belongs_to :team, autosave: true
 
@@ -23,10 +22,6 @@ class ChallengeGrade < ActiveRecord::Base
 
   def score
     final_points
-  end
-
-  def raw_points
-    super.presence || nil
   end
 
   # totaled points (adds adjustment, without weighting)

@@ -91,8 +91,7 @@
 
       .form-flex-row.pass-fail-contingent{"class"=>("visually-hidden" if f.object.pass_fail?)}
         .form-item
-          = f.label :full_points, "Total Points Possible"
-          = f.text_field :full_points, data: {autonumeric: true, "m-dec" => "0"}
+          = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}, label: "Total Points Possible"
 
         .form-item
           = f.label :threshold_points, "Points Threshold"
