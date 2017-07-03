@@ -30,11 +30,11 @@ class Challenges::ChallengeGradesController < ApplicationController
   # Grade many teams on a particular challenge at once
   # GET /challenges/:challenge_id/challenge_grades/mass_edit
   def mass_edit
-    @teams = current_course.teams
+    @teams = current_course.teams.alpha
     @challenge_grades = @teams.map { |t| @challenge.challenge_grades.find_or_initialize_for_team(t) }
   end
 
-  # PUT /challenges/:id/challenge_grades/mass_update
+  # PUT /challenges/:challenge_id/challenge_grades/mass_update
   def mass_update
     filter_params_with_no_challenge_grades!
     if @challenge.update_attributes(challenge_params)
