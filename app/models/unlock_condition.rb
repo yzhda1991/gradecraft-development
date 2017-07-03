@@ -66,7 +66,7 @@ class UnlockCondition < ActiveRecord::Base
       "Earn a grade for"
     elsif condition_state == "Feedback Read"
       "Read the feedback for"
-    elsif condition_state == "Earned" || condition_state == "Min Points"
+    elsif condition_state == "Earned" || condition_state == "Minimum Points Earned"
       "Earn"
     elsif condition_state == "Passed"
       "Pass"
@@ -86,7 +86,7 @@ class UnlockCondition < ActiveRecord::Base
       "Earning it"
     elsif condition_state == "Passed"
       "Passing it"
-    elsif condition_state == "Min Points"
+    elsif condition_state == "Minimum Points Earned"
       "Earning #{condition_value} points"
     elsif condition_state == "Assignments Completed"
       "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
@@ -104,7 +104,7 @@ class UnlockCondition < ActiveRecord::Base
       "Earned"
     elsif condition_state == "Passed"
       "Passed"
-    elsif condition_state == "Min Points"
+    elsif condition_state == "Minimum Points Earned"
       "Earned #{condition_value} points in"
     elsif condition_state == "Assignments Completed"
       "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
@@ -122,7 +122,7 @@ class UnlockCondition < ActiveRecord::Base
     assignment_completed_count >= condition_value
   end
 
-  def check_min_points_condition(student)
+  def check_minimum_points_earned_condition(student)
     assignment_type = AssignmentType.find(condition_id)
     assignment_type_score = assignment_type.score_for_student(student)
     assignment_type_score >= condition_value
