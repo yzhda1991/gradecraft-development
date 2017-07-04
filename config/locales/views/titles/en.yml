@@ -93,6 +93,8 @@ en:
       title: "Course Settings"
     multiplier_settings:
       title: "Multiplier Settings"
+    overview:
+      title: "Manage Courses"
   challenge_grades:
     show:
       title: "#{ @team.name }'s #{@challenge_grade.name} Grade"

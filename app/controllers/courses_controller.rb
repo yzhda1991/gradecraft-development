@@ -6,7 +6,7 @@ class CoursesController < ApplicationController
   skip_before_action :require_course_membership, only: [:badges, :new_external, :create_external]
   before_action :ensure_staff?, except: [:index, :badges, :change, :new_external, :create_external]
   before_action :ensure_not_impersonating?, only: [:index]
-  before_action :ensure_admin?, only: [:recalculate_student_scores]
+  before_action :ensure_admin?, only: [:recalculate_student_scores, :overview]
 
   before_action :find_course, only: [:edit,
                                      :copy,
@@ -20,6 +20,10 @@ class CoursesController < ApplicationController
 
   def index
     @courses = current_user.courses
+  end
+
+  def overview
+    @courses = Course.all
   end
 
   def new
