@@ -15,8 +15,8 @@
       %th{scope: "col"} Total Points
       %th{scope: "col"} # of Students
       %th{scope: "col"} Created
-      %th{style: "text-align: right"} Downloads
-      %th.options Options
+      %th{style: "text-align: right", "data-dynatable-no-sort": 'true'} Downloads
+      %th.options{"data-dynatable-no-sort": 'true'} Options
   %tbody
     - @courses.each do |course|
       %tr
