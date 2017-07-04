@@ -198,6 +198,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Courses', courses_path)
   end
 
+  def courses_overview
+    courses_index
+    breadcrumb('Overview')
+  end
+
   def courses_new
     courses_index
     breadcrumb('New Course')

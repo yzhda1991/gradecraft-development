@@ -1,0 +1,59 @@
+%table#course-index-table.no-table-header
+  %caption.sr-only Course Overview
+  %thead
+    %tr
+      %th{style: "display: none"} Active
+      %th{style: "display: none"} Published
+      %th{style: "display: none"} Badges
+      %th{style: "display: none"} Sections
+      %th{style: "display: none"} Paid
+      %th{scope: "col"} Course No
+      %th{scope: "col"} Name
+      %th{scope: "col"} Instructor(s)
+      %th{scope: "col"} Semester
+      %th{scope: "col"} Year
+      %th{scope: "col"} Total Points
+      %th{scope: "col"} # of Students
+      %th{scope: "col"} Created
+      %th{style: "text-align: right"} Downloads
+      %th.options Options
+  %tbody
+    - @courses.each do |course|
+      %tr
+        %td{style: "display: none"}= course.active? ? 1 : 0
+        %td{style: "display: none"}= course.published? ? 1 : 0
+        %td{style: "display: none"}= course.has_badges? ? 1 : 0
+        %td{style: "display: none"}= course.has_teams? ? 1 : 0
+        %td{style: "display: none"}= course.has_paid? ? 1 : 0
+        %td= course.course_number
+        %td= link_to course.name, change_course_path(id: course.id)
+        %td
+          %ul
+            - course.staff.each do |staff_member|
+              %li= "#{staff_member.name}"
+        %td= course.semester
+        %td= course.year
+        %td= points course.total_points
+        %td= course.student_count
+        %td= course.created_at
+        %td
+          .button-container.dropdown
+            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Downloads"}= decorative_glyph("cloud-download") + decorative_glyph("caret-down")
+            %ul.options-menu.dropdown-content
+              %li= link_to "Awarded Badges", export_earned_badges_path(id: course.id, format: "csv") if course.earned_badges.present?
+              %li= link_to "Research Grades", research_gradebook_path(id: course.id, format: "csv"), :class=>"data-clearing"
+              %li= link_to "Final Grades", final_grades_path(id: course.id, format: "csv"), :class=>"data-clearing"
+              %li= link_to "#{term_for :assignment} Structure", export_structure_assignments_path(id: course.id, format: "csv")
+              %li= link_to "#{term_for :assignment} Submissions", submissions_path(id: course.id, format: "csv")
+              %li= link_to "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: course.id, format: "csv")
+              %li= link_to "Full Gradebook", gradebook_file_path(id: course.id, format: "csv")
+              %li= link_to "Multiplied Gradebook", multiplied_gradebook_path(id: course.id, format: "csv") if course.student_weighted?
+              %li= link_to "#{term_for :badges}", export_structure_badges_path(id: course.id, format: "csv")
+              %li= link_to "Grading Scheme", export_structure_grade_scheme_elements_path(id: course.id, format: "csv")
+          %td
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu.dropdown-content
+                %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course)
+                %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), :method => :copy
+                %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), :method => :copy

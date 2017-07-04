@@ -205,6 +205,7 @@ Rails.application.routes.draw do
     get :change, on: :member
     get :new_external, on: :collection
     post :create_external, on: :collection
+    get :overview, on: :collection
     get :edit_dashboard_message, on: :collection
     put :update_dashboard_message, on: :collection
   end
