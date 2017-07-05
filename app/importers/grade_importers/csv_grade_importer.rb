@@ -107,7 +107,7 @@ class CSVGradeImporter
     end
 
     if row.grade.include? "."
-      append_unsuccessful row, "Grade must not be a decimal value"
+      append_unsuccessful row, "Grade cannot be a decimal value"
       return false
     end
 

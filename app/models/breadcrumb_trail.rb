@@ -402,7 +402,8 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def grades_importers_import_results
-    assignments_index
+    grades_importers_index
+    breadcrumb('Import Results')
   end
 
   def rubrics_index_for_copy

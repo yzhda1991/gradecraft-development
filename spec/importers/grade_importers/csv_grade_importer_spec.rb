@@ -127,7 +127,7 @@ describe CSVGradeImporter do
         result = subject.import(course, assignment)
         expect(result.unsuccessful).to_not be_empty
         expect(result.unsuccessful).to include({ data: "Kurt,Cobain,kurt.cobain@nirvana.com,10.1,\n",
-          errors: "Grade must not be a decimal value" })
+          errors: "Grade cannot be a decimal value" })
       end
 
       it "contains an unsuccessful row if the grade is a string" do
