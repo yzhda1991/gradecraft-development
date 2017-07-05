@@ -17,8 +17,6 @@
       .panel.dashboard-module
         %course-distribution-analytics
 
-    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
-
     .panel.dashboard-module.stacked-module
       %weekly-stats-analytics(student-id="#{current_student.id}")
 
