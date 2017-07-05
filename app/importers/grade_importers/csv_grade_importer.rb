@@ -18,23 +18,16 @@ class CSVGradeImporter
   def import(course=nil, assignment=nil)
     if file
       if course && assignment
-        students = course.students
         CSV.foreach(file, headers: true) do |csv|
           row = GradeRow.new csv
 
-          student = find_student(row, students)
+          student = find_student row, course.students
+
           if student.nil?
             append_unsuccessful row, "Student not found in course"
             next
           end
-          if !row.has_grade?
-            append_unsuccessful row, "Grade not specified"
-            next
-          end
-          if !is_valid_grade? assignment, row.grade
-            append_unsuccessful row, "Grade is invalid"
-            next
-          end
+          next if !is_valid_grade? assignment, row
 
           grade = assignment.grades.where(student_id: student.id).first
           if update_grade? row, grade, assignment
@@ -105,16 +98,32 @@ class CSVGradeImporter
     end
   end
 
-  # Ensures that the input is valid and integer-like
-  def is_valid_grade?(assignment, grade)
-    begin
-      return false if grade.nil?
-      # Integer() vs to_i to prevent unwanted coercion
-      return PASS_FAIL_GRADE_VALUES.include?(Integer(grade)) if assignment.pass_fail?
-      true
-    rescue ArgumentError
-      false
+  # Ensures that the grade is valid and integer-like
+  # Integer() vs to_i to prevent unwanted coercion
+  def is_valid_grade?(assignment, row)
+    if !row.has_grade?
+      append_unsuccessful row, "Grade not specified"
+      return false
     end
+
+    if row.grade.include? "."
+      append_unsuccessful row, "Grade must not be a decimal value"
+      return false
+    end
+
+    begin
+      grade = Integer(row.grade)
+
+      if assignment.pass_fail? && !PASS_FAIL_GRADE_VALUES.include?(grade)
+        append_unsuccessful row, "Grade must be 0 (false) or 1 (true)"
+        return false
+      end
+    rescue ArgumentError
+      append_unsuccessful row, "Grade is invalid"
+      return false
+    end
+
+    true
   end
 
   # If the assignment is pass/fail type, update the grade if the status or feedback changes
