@@ -28,7 +28,13 @@
                     %div.notification-badge.announcement-notification-badge= unread_count
                 .nav-dropdown-card-wrapper.dropdown-content
                   = render partial: "announcements/announcements_dropdown"
-            - if presenter.has_info?
+            - if !current_course.has_paid?
+              %li.course-info-btn.dropdown
+                %button.icon-button.nav-button{type: "button"}= decorative_glyph('magic hidden-sm') + "Trial Account"
+                .nav-dropdown-card-wrapper.dropdown-content
+                  %ul.nav-dropdown-card
+                    = render partial: "layouts/navigation/payment_options"
+            - elsif presenter.has_info?
               %li.course-info-btn.dropdown
                 %button.icon-button.nav-button{type: "button"}= decorative_glyph('info-circle hidden-sm') + "Class Info"
                 .nav-dropdown-card-wrapper.dropdown-content
