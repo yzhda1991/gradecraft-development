@@ -7,18 +7,23 @@
 
   .module-section(ng-if="hasStudentData()")
     %p Total points earned this week:
-    %p.week-points this student earned points...
+    %p.week-points {{ data.student_data.points_this_week | number }}
+
   .module-section(ng-if="hasStudentData()")
     %p Grades received this week:
     %ul
-      %li This student got a Big Grade!
+      %li(ng-repeat='grade in data.student_data.grades_this_week')
+        %a(href="{{grade.url}}") {{grade.assignment}}
+        %span(ng-if="passFailGrade(grade)")  {{termFor(grade.pass_fail_status)}}
+        %span(ng-if="!passFailGrade(grade)") {{grade.final_points | number}} points earned
+
   .module-section(ng-if="hasStudentData()")
     %p {{termFor("badges")}} earned this week:
     %ul
-      %li
+      %li(ng-repeat='badge in data.student_data.badges_this_week')
         .img-cropper.xsmall-crop
-          %img(src="/images/badge.png" alt="icon")
-        %span Student earned Super badge
+          %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
+        %span {{badge.name}} earned
 
 
   -# Faculty View of all course work for the week

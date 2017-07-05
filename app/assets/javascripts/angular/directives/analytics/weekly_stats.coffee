@@ -33,6 +33,9 @@
         scope.hasOnlyFacultyData = ()->
           scope.hasFacultyData() && !scope.hasStudentData()
 
+        scope.passFailGrade = (grade)->
+          grade.pass_fail_status
+
       templateUrl: 'analytics/weekly_stats.html'
     }
 ]
