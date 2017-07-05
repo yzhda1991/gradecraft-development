@@ -41,12 +41,8 @@ describe CoursesController do
     end
 
     describe "GET edit" do
-      let(:active_institution) { create :institution }
-      let(:inactive_institution) { create :institution, :without_site_license }
-
       it "edit title" do
         get :edit, params: { id: course.id }
-        expect(assigns(:institutions)).to eq([active_institution])
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:edit)
       end

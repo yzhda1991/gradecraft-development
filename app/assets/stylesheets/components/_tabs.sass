@@ -21,10 +21,19 @@
 
 
 .ui-tabs .ui-tabs-nav
+  box-sizing: border-box
   background: $color-white
   padding: 0 1rem
   border-bottom: 1px solid $color-grey-6
   margin: 0 -19px
+  overflow-x: auto
+  white-space: nowrap
+  -webkit-overflow-scrolling: touch
+  -ms-overflow-style: -ms-autohiding-scrollbar
+  &::-webkit-scrollbar
+    display: none
+  @media (max-width: $media-small-max)
+    margin: 0 -0.7rem
   span
     @media (max-width: $media-small-max)
       display: none
@@ -35,13 +44,15 @@
       padding: 0
 
   li.ui-state-default
-    margin: 0 1rem 0 0
     background: $color-white
     border: 0
+    float: none
+    display: inline-block
     font-weight: 300
     padding-bottom: 0.5rem
+    margin: 0 1rem -0.25rem 0
     @media (max-width: $media-small-max)
-      margin: 0 0.75rem 0 0
+      margin: 0 0.75rem -0.25rem 0
     a
       color: $color-black
 
