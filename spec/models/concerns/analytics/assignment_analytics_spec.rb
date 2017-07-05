@@ -4,7 +4,7 @@ describe Analytics::AssignmentAnalytics do
   describe "#average" do
     before { subject.save }
 
-    it "returns the average raw score for a graded grade" do
+    it "returns the average raw score for a graded grade" , focus: true do
       subject.grades.create student_id: create(:user).id, raw_points: 8, student_visible: true
       subject.grades.create student_id: create(:user).id, raw_points: 5, student_visible: true
       expect(subject.average).to eq 6

@@ -54,22 +54,17 @@ describe Challenges::ChallengeGradesController do
 
     describe "POST mass_update" do
       it "updates the challenge grades for the specific challenge" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
-          { team_id: team.id, raw_points: 1000, student_visible: true,
-            id: challenge_grade.id
-          }
+        challenge_grades_attributes = { "0" =>
+          { team_id: team.id, student_visible: true, raw_points: 1000, id: challenge_grade.id }
         }
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}
         expect(challenge_grade.reload.score).to eq 1000
-        expect(challenge_grade.instructor_modified).to be_truthy
       end
 
       it "redirects to the mass_edit form if attributes are invalid" do
-        challenge_grades_attributes = { "#{challenge.challenge_grades.to_a.index(challenge_grade)}" =>
-          { team_id: nil, raw_points: 1000, student_visible: true,
-            id: challenge_grade.id
-          }
+        challenge_grades_attributes = { "0" =>
+          { team_id: nil, raw_points: 1000, student_visible: true, id: challenge_grade.id }
         }
         put :mass_update, params: { challenge_id: challenge.id,
           challenge: { challenge_grades_attributes: challenge_grades_attributes }}

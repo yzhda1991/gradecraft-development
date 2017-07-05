@@ -44,8 +44,8 @@ describe Analytics::UserAnalytics do
     let(:assignment_2) { create :assignment, course: course }
 
     it "returns the student's earned grades for a course this week" do
-      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", graded_at: Date.today - 10)
-      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released", graded_at: Date.today)
+      grade_1 = create(:student_visible_grade, assignment: assignment, raw_points: 100, student: student, course: course, graded_at: Date.today - 10)
+      grade_2 = create(:student_visible_grade, assignment: assignment_2, raw_points: 300, student: student, course: course, graded_at: Date.today)
       expect(student.grades_released_for_course_this_week(course)).to eq([grade_2])
     end
   end
@@ -54,8 +54,8 @@ describe Analytics::UserAnalytics do
     let(:assignment_2) { create :assignment, course: course }
 
     it "returns the student's earned points for the course this week" do
-      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", graded_at: Date.today - 10)
-      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released", graded_at: Date.today)
+      grade_1 = create(:student_visible_grade, assignment: assignment, raw_points: 100, student: student, course: course, graded_at: Date.today - 10)
+      grade_2 = create(:student_visible_grade, assignment: assignment_2, raw_points: 300, student: student, course: course, graded_at: Date.today)
       expect(student.points_earned_for_course_this_week(course)).to eq(300)
     end
   end
@@ -71,7 +71,7 @@ describe Analytics::UserAnalytics do
     end
 
     it "does not include earned badges that have not yet been made student visible" do
-      create(:earned_badge, student: student, course: course, grade: (create :unreleased_grade))
+      create(:earned_badge, student: student, course: course, grade: (create :in_progress_grade))
       expect(student.earned_badge_score_for_course(course)).to eq(500)
     end
   end
