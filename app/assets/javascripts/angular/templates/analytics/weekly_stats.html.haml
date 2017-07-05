@@ -46,4 +46,4 @@
         %span {{badge.name}}: {{badge.count}}
 
   .dashboard-message(ng-if="hasNoClassEarnings()")
-    %p No assignments have been submitted this week.
+    %p No {{termFor("assignments")}} have been submitted this week.
