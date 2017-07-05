@@ -1,15 +1,14 @@
 .card-header
   %h2 Weekly Stats
-.card-body.weekly-stats-module(ng-if="!vmWeeklyStats.loading")
 
+-# Individual Student Data, for student or faculty view
+.card-body.weekly-stats-module(ng-if="!vmWeeklyStats.loading && hasStudentData()")
 
-  -# Individual Student Data, for student or faculty view
-
-  .module-section(ng-if="hasStudentData()")
+  .module-section(ng-if="hasStudentEarnedPoints()")
     %p Total points earned this week:
     %p.week-points {{ data.student_data.points_this_week | number }}
 
-  .module-section(ng-if="hasStudentData()")
+  .module-section(ng-if="hasStudentEarnedGrades()")
     %p Grades received this week:
     %ul
       %li(ng-repeat='grade in data.student_data.grades_this_week')
@@ -17,7 +16,7 @@
         %span(ng-if="passFailGrade(grade)")  {{termFor(grade.pass_fail_status)}}
         %span(ng-if="!passFailGrade(grade)") {{grade.final_points | number}} points earned
 
-  .module-section(ng-if="hasStudentData()")
+  .module-section(ng-if="hasStudentEarnedBadges()")
     %p {{termFor("badges")}} earned this week:
     %ul
       %li(ng-repeat='badge in data.student_data.badges_this_week')
@@ -25,20 +24,26 @@
           %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
         %span {{badge.name}} earned
 
+  .dashboard-message(ng-if="hasNoStudentEarnings()")
+    %p You have not earned anything in the last week.
 
-  -# Faculty View of all course work for the week
 
-  .module-section(ng-if="hasOnlyFacultyData()")
+-# Faculty View of all course work for the week
+.card-body.weekly-stats-module(ng-if="!vmWeeklyStats.loading && hasOnlyFacultyData()")
+
+  .module-section(ng-if="hasClassSubmissions()")
     %p {{termFor("assignments")}} submitted this week:
     %ul
       %li(ng-repeat='submission in data.faculty_data.submissions_this_week')
         {{submission.assignment_type}}: {{submission.count}}
 
-
-  .module-section(ng-if="hasOnlyFacultyData()")
+  .module-section(ng-if="hasClassEarnedBadges()")
     %p {{termFor("badges")}} earned this week:
     %ul
       %li(ng-repeat='badge in data.faculty_data.badges_this_week')
         .img-cropper.xsmall-crop
           %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
         %span {{badge.name}}: {{badge.count}}
+
+  .dashboard-message(ng-if="hasNoClassEarnings()")
+    %p No assignments have been submitted this week.
