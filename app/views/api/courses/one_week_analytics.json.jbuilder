@@ -3,7 +3,7 @@ if @student.present?
     json.student_name @student.name
     json.points_this_week @student.points_earned_for_course_this_week(current_course)
     json.grades_this_week @student.grades_released_for_course_this_week(current_course) do |grade|
-      json.assignment  grade.assignment.name
+      json.assignment       grade.assignment.name
       json.url              assignment_path grade.assignment
       json.pass_fail_status grade.pass_fail_status
       json.final_points     grade.final_points
