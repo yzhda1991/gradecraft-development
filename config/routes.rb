@@ -368,6 +368,9 @@ Rails.application.routes.draw do
         get "grade", to: 'grades#show'
         put "criterion_grades", to: "criterion_grades#update"
       end
+      resources :grades, only: [], module: :assignments do
+        get :show, on: :collection
+      end
       resource :groups, only: [], module: :assignments do
         resources :grades, only: :index, module: :groups
       end
@@ -383,9 +386,7 @@ Rails.application.routes.draw do
       resources :submissions, only: [:create, :update], module: :assignments do
         get :show, on: :collection
       end
-      resources :grades, only: [], module: :assignments do
-        get :show, on: :collection
-      end
+      resources :unlock_conditions, only: :index
 
       namespace :grades do
         resources :importers, only: [], param: :provider_id do
@@ -409,6 +410,7 @@ Rails.application.routes.draw do
 
     resources :badges, only: :index do
       post :sort, on: :collection
+      resources :unlock_conditions, only: :index
     end
 
     resources :challenges, only: :index
@@ -450,6 +452,7 @@ Rails.application.routes.draw do
     end
 
     resources :grade_scheme_elements, only: :index do
+      resources :unlock_conditions, only: :index
       collection do
         put :update, as: :update
         delete :destroy_all
