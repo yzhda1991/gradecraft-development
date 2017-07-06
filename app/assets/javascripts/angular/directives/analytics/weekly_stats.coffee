@@ -1,19 +1,13 @@
 # box plot for course grade distribution
-@gradecraft.directive 'weeklyStatsAnalytics', ['$q', 'AnalyticsService', ($q, AnalyticsService) ->
+@gradecraft.directive 'weeklyStatsAnalytics', ['AnalyticsService', (AnalyticsService) ->
     weeklyStatsCtrl = [()->
       vmWeeklyStats = this
       vmWeeklyStats.loading = true
 
-      services(vmWeeklyStats.studentId).then(()->
+      AnalyticsService.getWeeklyAnalytics(vmWeeklyStats.studentId).then(()->
         vmWeeklyStats.loading = false
       )
     ]
-
-    services = (studentId)->
-      promises = [
-        AnalyticsService.getWeeklyAnalytics(studentId)
-      ]
-      return $q.all(promises)
 
     {
       bindToController: true,
