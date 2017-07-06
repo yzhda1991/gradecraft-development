@@ -1,5 +1,6 @@
 class API::UnlockConditionsController < ApplicationController
   before_action :ensure_staff?
+  before_action :use_current_course
 
   # GET /api/assignments/:assignment_id/unlock_conditions
   # GET /api/badges/:badge_id/unlock_conditions
