@@ -165,6 +165,15 @@
           = tooltip("analytics-visible-hint", "info-circle", placement: "right") do
             Do you want to hide comparative assignment analytics from students for this assignment?
 
+    - if presenter.assignment.persisted?
+      %h2.form-title Unlocks (with Angular!)
+      .form-subsection
+        %h3.form-subtitle
+          Requirements
+          = tooltip("unlock-hint", "info-circle", placement: "right") do
+            Unlocks allow you to direct the sequence of content in your course. What do students need to do in order to unlock this #{ term_for :assignment }?
+        %unlock-conditions{ "condition-id": presenter.assignment.id, "condition-type": "Assignment" }
+
     %h2.form-title Unlocks
     .form-subsection
       %h3.form-subtitle
