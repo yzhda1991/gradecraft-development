@@ -1,0 +1,1 @@
+require_relative "badge_importers/csv_badge_importer"

@@ -15,3 +15,4 @@
               = active_course_link_to decorative_glyph(:star) + "Award", new_badge_earned_badge_path(badge_id: badge)
             - if actions.include? :quick_award
               = active_course_link_to decorative_glyph(:check) + "Quick Award", mass_edit_badge_earned_badges_path(badge)
+              = active_course_link_to decorative_glyph(:download) + "Import", badges_path
