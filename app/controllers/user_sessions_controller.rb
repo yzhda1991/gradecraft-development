@@ -20,7 +20,7 @@ class UserSessionsController < ApplicationController
   # sorcery login - users have passwords stored in our db
   def create
     respond_to do |format|
-      if @user = login(params[:user][:email], params[:user][:password])
+      if @user = login(params[:user][:email].downcase, params[:user][:password])
         record_course_login_event user: @user
         format.html { redirect_back_or_to current_user_is_observer? ? assignments_path : dashboard_path }
         format.xml { render xml: @user, status: :created, location: @user }
