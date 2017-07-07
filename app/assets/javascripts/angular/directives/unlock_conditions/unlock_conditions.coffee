@@ -8,7 +8,13 @@
     vmUnlocks.termFor = (item)->
       UnlockConditionService.termFor(item)
 
-    vmUnlocks.condition_types = ["Assignment Type", "Assignment", "Badge", "Earned Point Value"]
+    vmUnlocks.conditionTypes = ["Assignment Type", "Assignment", "Badge", "Earned Point Value"]
+
+    vmUnlocks.conditionsTypeTranslation = (type)->
+      switch type
+        when  "Earned Point Value" then "Course"
+        when "Assignment Type" then "AssignmentType"
+        else type
 
     vmUnlocks.assignments = UnlockConditionService.assignments
     vmUnlocks.assignmentStates = (assignmentId)->
@@ -18,8 +24,12 @@
       else
         ["Submitted", "Feedback Read", "Grade Earned"]
 
-    vmUnlocks.inspector = (condition)->
-      debugger
+    vmUnlocks.badges = UnlockConditionService.badges
+    #TODO: If condition of Badge, Course, condition.condition_state == "Earned"
+
+    vmUnlocks.assignmentTypes = UnlockConditionService.assignmentTypes
+    vmUnlocks.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
+
 
     services(@conditionId, @conditionType).then(()->
       vmUnlocks.loading = false

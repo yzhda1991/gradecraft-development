@@ -14,7 +14,7 @@ json.meta do
     json.pass_fail assignment.pass_fail
   end
 
-  json.assignment_type current_course.assignment_types.each do |assignment_type|
+  json.assignment_types current_course.assignment_types.each do |assignment_type|
     json.id assignment_type.id
     json.name assignment_type.name
   end
