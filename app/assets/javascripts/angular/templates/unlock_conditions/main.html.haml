@@ -14,4 +14,9 @@
       %select(ng-model="condition.condition_state")
         %option(ng-repeat="state in vmUnlocks.assignmentStates(condition.condition_id)"  ng-selected="state == condition.condition_state" value="{{state}}")
           {{state}}
+      %label Minimum Points Earned
+      %input(ng-model="condition.condition_value" gc-number-input)
+      %label Completed By Date
+      %input(id="{{assignment.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input)
+
 
