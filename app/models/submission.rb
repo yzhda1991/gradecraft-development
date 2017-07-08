@@ -16,7 +16,7 @@ class Submission < ActiveRecord::Base
 
   accepts_nested_attributes_for :grade
   has_many :submission_files,
-    dependent: :destroy,
+    #dependent: :destroy,
     autosave: true,
     inverse_of: :submission
   accepts_nested_attributes_for :submission_files
