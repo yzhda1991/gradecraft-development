@@ -15,7 +15,7 @@ feature "creating a new group" do
     end
 
     scenario "unsuccessfully without group members" do
-      within(".context_menu") do
+      within(".context-menu") do
         click_link "New Group"
       end
 
@@ -31,7 +31,7 @@ feature "creating a new group" do
     end
 
     scenario "unsuccessfully without an assignment" do
-      within(".context_menu") do
+      within(".context-menu") do
         click_link "New Group"
       end
 

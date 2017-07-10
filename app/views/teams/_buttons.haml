@@ -1,5 +1,5 @@
 - content_for :context_menu do
-  .context_menu
+  .context-menu
     %ul
       = active_course_link_to decorative_glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path, class: "button button-edit"
 
