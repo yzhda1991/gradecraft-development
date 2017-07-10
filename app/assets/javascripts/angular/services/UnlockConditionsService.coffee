@@ -19,6 +19,10 @@
       GradeCraftAPI.logResponse(error)
     )
 
+  removeCondition = (index)->
+    # TODO: delete from server if it has an id
+    unlockConditions.splice(index,1)
+
   {
     termFor: termFor
     assignments: assignments
@@ -26,5 +30,6 @@
     badges: badges
     unlockConditions: unlockConditions
     getUnlockConditions: getUnlockConditions
+    removeCondition: removeCondition
   }
 ]

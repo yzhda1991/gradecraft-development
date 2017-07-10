@@ -49,3 +49,5 @@
       %input(ng-model="condition.condition_value" gc-number-input)
       %label Completed By Date
       %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input)
+    %button.remove-unlock-condition(ng-click="vmUnlocks.removeCondition($index)")
+      %i.fa.fa-fw.fa-times

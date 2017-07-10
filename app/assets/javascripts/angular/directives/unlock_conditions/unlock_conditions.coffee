@@ -30,6 +30,8 @@
     vmUnlocks.assignmentTypes = UnlockConditionService.assignmentTypes
     vmUnlocks.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
 
+    vmUnlocks.removeCondition = (index)->
+      UnlockConditionService.removeCondition(index)
 
     services(@conditionId, @conditionType).then(()->
       vmUnlocks.loading = false
