@@ -1,8 +1,8 @@
 .unlock-conditions
   .unlock-condition(ng-repeat="condition in vmUnlocks.conditions")
-    .unlock-condition-requirement
+    .unlock-condition-requirement(ng-class='{"valid" : vmUnlocks.conditionIsValid(condition)}')
       %label Requirement
-      %select(ng-model="condition.condition_type" name="condition_type")
+      %select(ng-model="condition.condition_type" name="condition_type" ng-change="vmUnlocks.changeConditionType(condition)")
         %option(ng-repeat="type in vmUnlocks.conditionTypes" ng-selected="vmUnlocks.conditionsTypeTranslation(type) == condition.condition_type" value="{{vmUnlocks.conditionsTypeTranslation(type)}}")
           {{type}}
 

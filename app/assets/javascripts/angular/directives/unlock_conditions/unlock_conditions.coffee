@@ -1,12 +1,20 @@
 @gradecraft.directive 'unlockConditions', ['$q', 'UnlockConditionService', ($q, UnlockConditionService) ->
   unlockConditionsCtrl = [()->
     vmUnlocks = this
-
     vmUnlocks.loading = true
 
     vmUnlocks.conditions = UnlockConditionService.unlockConditions
     vmUnlocks.termFor = (item)->
       UnlockConditionService.termFor(item)
+    vmUnlocks.removeCondition = (index)->
+      UnlockConditionService.removeCondition(index)
+    vmUnlocks.addCondition = ()->
+      UnlockConditionService.addCondition()
+    vmUnlocks.conditionIsValid = (condition)->
+      UnlockConditionService.conditionIsValid(condition)
+
+    vmUnlocks.changeConditionType = (condition)->
+      UnlockConditionService.changeConditionType(condition)
 
     vmUnlocks.conditionTypes = ["Assignment Type", "Assignment", "Badge", "Earned Point Value"]
 
@@ -29,11 +37,6 @@
 
     vmUnlocks.assignmentTypes = UnlockConditionService.assignmentTypes
     vmUnlocks.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
-
-    vmUnlocks.removeCondition = (index)->
-      UnlockConditionService.removeCondition(index)
-    vmUnlocks.addCondition = ()->
-      UnlockConditionService.addCondition()
 
     services(@conditionId, @conditionType).then(()->
       vmUnlocks.loading = false
