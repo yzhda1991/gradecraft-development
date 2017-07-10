@@ -62,12 +62,12 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def check_and_update_student_earned_level
-    course.grade_scheme_elements.order_by_points_asc.map { |gse| gse.unlock!(user) }
+    course.grade_scheme_elements.with_lowest_points.order_by_points_asc.map { |gse| gse.unlock!(user) }
     update_attributes earned_grade_scheme_element_id: earned_grade_scheme_element.try(:id)
   end
 
   def earned_grade_scheme_element(grade_scheme_elements=nil)
-    elements = grade_scheme_elements || course.grade_scheme_elements.order_by_points_asc
+    elements = grade_scheme_elements || course.grade_scheme_elements.with_lowest_points.order_by_points_asc
     element_earned = nil
 
     elements.sort_by{ |element| element.lowest_points }.each_with_index do |gse, index|

@@ -83,8 +83,19 @@ function showVisibilityOptions() {
   } else {
     $('.unlock-visibility-settings').hide();
   }
+  setSubmitButtonVisibility();
+}
+// Toggle disabled state on submit button if there are no unlock conditions
+// being added or deleted
+function setSubmitButtonVisibility() {
+  if ($('fieldset.unlock-condition').length) {
+    $('#edit-grade-scheme-element-button').attr('disabled', false).removeClass('disabled');
+  } else {
+    $('#edit-grade-scheme-element-button').attr('disabled', true).addClass('disabled');
+  }
 }
 showVisibilityOptions();
+setSubmitButtonVisibility();
 
 // for student rubric feedback tab panels
 function showSelectedTab($tab) {
