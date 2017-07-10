@@ -184,7 +184,8 @@
           predictedGrade = gse
     )
     if predictedGrade
-      return predictedGrade.level + " (" + predictedGrade.letter + ")"
+      letterGrade = if predictedGrade.letter then " (" + predictedGrade.letter + ")" else ""
+      return predictedGrade.level + letterGrade
     else
       return ""
 
