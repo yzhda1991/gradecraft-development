@@ -40,9 +40,13 @@
   # condition configuration
   changeConditionType = (condition)->
     condition.condition_id = null
-    condition.condition_state = null
     condition.condition_value = null
     condition.condition_date = null
+    if condition.condition_type == "Badge" || condition.condition_type == "Course"
+      condition.condition_state = "Earned"
+    else
+      condition.condition_state = null
+
 
   conditionIsValid = (condition)->
     return true if condition.condition_id && condition.condition_type && condition.condition_state

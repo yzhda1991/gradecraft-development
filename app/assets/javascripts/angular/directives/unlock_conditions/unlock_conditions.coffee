@@ -1,51 +1,16 @@
-@gradecraft.directive 'unlockConditions', ['$q', 'UnlockConditionService', ($q, UnlockConditionService) ->
+@gradecraft.directive 'unlockConditions', ['UnlockConditionService', (UnlockConditionService) ->
   unlockConditionsCtrl = [()->
-    vmUnlocks = this
-    vmUnlocks.loading = true
+    @loading = true
 
-    vmUnlocks.conditions = UnlockConditionService.unlockConditions
-    vmUnlocks.termFor = (item)->
-      UnlockConditionService.termFor(item)
-    vmUnlocks.removeCondition = (index)->
-      UnlockConditionService.removeCondition(index)
-    vmUnlocks.addCondition = ()->
+    @conditions = UnlockConditionService.unlockConditions
+
+    @addCondition = ()->
       UnlockConditionService.addCondition()
-    vmUnlocks.conditionIsValid = (condition)->
-      UnlockConditionService.conditionIsValid(condition)
 
-    vmUnlocks.changeConditionType = (condition)->
-      UnlockConditionService.changeConditionType(condition)
-
-    vmUnlocks.conditionTypes = ["Assignment Type", "Assignment", "Badge", "Earned Point Value"]
-
-    vmUnlocks.conditionsTypeTranslation = (type)->
-      switch type
-        when  "Earned Point Value" then "Course"
-        when "Assignment Type" then "AssignmentType"
-        else type
-
-    vmUnlocks.assignments = UnlockConditionService.assignments
-    vmUnlocks.assignmentStates = (assignmentId)->
-      assignment = _.find(UnlockConditionService.assignments, {id: assignmentId})
-      if assignment && assignment.pass_fail
-        ["Submitted", "Feedback Read", "Passed"]
-      else
-        ["Submitted", "Feedback Read", "Grade Earned"]
-
-    vmUnlocks.badges = UnlockConditionService.badges
-    #TODO: If condition of Badge, Course, condition.condition_state == "Earned"
-
-    vmUnlocks.assignmentTypes = UnlockConditionService.assignmentTypes
-    vmUnlocks.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
-
-    services(@conditionId, @conditionType).then(()->
-      vmUnlocks.loading = false
+    UnlockConditionService.getUnlockConditions(@conditionId, @conditionType).then(()->
+      @loading = false
     )
   ]
-
-  services = (conditionId, conditionType)->
-    promises = [UnlockConditionService.getUnlockConditions(conditionId, conditionType)]
-    return $q.all(promises)
 
   {
     bindToController: true,
