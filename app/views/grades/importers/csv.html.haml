@@ -15,4 +15,7 @@
 
     = form_tag({action: :upload, importer_provider_id: params[:provider_id]}, :multipart => true) do
       = file_field_tag "file"
-      = submit_tag("Import", class: "button")
+
+      .submit-buttons
+        %ul
+          %li= submit_tag("Import", class: "button")
