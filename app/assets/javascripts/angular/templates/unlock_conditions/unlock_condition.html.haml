@@ -1,5 +1,5 @@
 .unlock-condition-requirement(ng-class='{"valid" : conditionIsValid(condition)}')
-  %label Requirement
+  %label Requirement {{ condition.id }}
   %select(ng-model="condition.condition_type" name="condition_type" ng-change="changeConditionType(condition)")
     %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == condition.condition_type" value="{{conditionsTypeTranslation(type)}}")
       {{type}}
@@ -48,5 +48,5 @@
   %label Completed By Date
   %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
-%button.remove-unlock-condition(ng-click="removeCondition($index)")
+%button.remove-unlock-condition(ng-click="removeCondition(condition)")
   %i.fa.fa-fw.fa-times

@@ -12,16 +12,16 @@
         UnlockConditionService.termFor(item)
 
       scope.updateCondition = ()->
-        UnlockConditionService.queueUpdateCondition(scope.condition)
+        UnlockConditionService.queueUpdateCondition(@condition)
 
       scope.removeCondition = (index)->
         UnlockConditionService.removeCondition(index, scope.condition)
 
       scope.conditionIsValid = ()->
-        UnlockConditionService.conditionIsValid(scope.condition)
+        UnlockConditionService.conditionIsValid(@condition)
 
       scope.changeConditionType = ()->
-        UnlockConditionService.changeConditionType(scope.condition)
+        UnlockConditionService.changeConditionType(@condition)
 
       scope.conditionTypes = ["Assignment Type", "Assignment", "Badge", "Earned Point Value"]
 
