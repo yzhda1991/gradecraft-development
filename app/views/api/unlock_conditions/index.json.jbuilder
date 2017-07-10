@@ -1,10 +1,5 @@
-json.data @unlock_conditions do |uc|
-  json.type "unlock_condition"
-  json.id uc.id.to_s
-
-  json.attributes do
-    json.merge! uc.attributes
-  end
+json.data @unlock_conditions do |unlock_condition|
+  json.partial! 'api/unlock_conditions/unlock_condition', unlock_condition: unlock_condition
 end
 
 json.meta do

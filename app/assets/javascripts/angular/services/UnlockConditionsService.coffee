@@ -1,5 +1,7 @@
 @gradecraft.factory 'UnlockConditionService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
+  unlockableId = null
+  unlockableType = null
   unlockConditions = []
   assignments = []
   assignmentTypes = []
@@ -8,8 +10,10 @@
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
-  getUnlockConditions = (conditionId, conditionType) ->
-    $http.get("/api/#{conditionType.toLowerCase()}s/#{conditionId}/unlock_conditions").then((response) ->
+  getUnlockConditions = (id, type) ->
+    unlockableId = id
+    unlockableType = type
+    $http.get("/api/#{unlockableType.toLowerCase()}s/#{unlockableId}/unlock_conditions").then((response) ->
       GradeCraftAPI.loadMany(unlockConditions, response.data)
       angular.copy(response.data.meta.assignments, assignments)
       angular.copy(response.data.meta.assignment_types, assignmentTypes)
@@ -21,9 +25,10 @@
 
   addCondition = ()->
     unlockConditions.push(
+
       "id": null,
-      "unlockable_id": null,
-      "unlockable_type": null,
+      "unlockable_id": unlockableId,
+      "unlockable_type": unlockableType,
       "condition_id": null,
       "condition_type": null,
       "condition_state": null,

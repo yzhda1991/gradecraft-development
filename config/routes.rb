@@ -441,9 +441,18 @@ Rails.application.routes.draw do
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
       as: :earned_badge_confirm
 
+    # api file uploads
     post "grades/:grade_id/file_uploads", to: "file_uploads#create"
     post "assignments/:assignment_id/groups/:group_id/file_uploads", to: "file_uploads#group_create"
     delete "file_uploads/:id", to: "file_uploads#destroy"
+
+    resources :gradebook, only: [] do
+      collection do
+        get :assignments
+        get :student_ids
+        get :students
+      end
+    end
 
     resources :grades, only: :update do
       resources :earned_badges, only: :create, module: :grades do
@@ -458,6 +467,7 @@ Rails.application.routes.draw do
         delete :destroy_all
       end
     end
+
     resources :levels, only: [:create, :update, :destroy]
     resources :level_badges, only: [:create, :destroy]
 
@@ -476,20 +486,14 @@ Rails.application.routes.draw do
       resources :badges, only: :index
     end
 
+    resources :unlock_conditions, only: [:create, :update, :destroy]
+
     resources :users, only: [] do
       collection do
         get :search
         resources :importers, only: [], module: :users, param: :provider_id do
           get "/course/:id/users", action: :index, as: :users
         end
-      end
-    end
-
-    resources :gradebook, only: [] do
-      collection do
-        get :assignments
-        get :student_ids
-        get :students
       end
     end
   end
