@@ -18,4 +18,6 @@ json.meta do
     json.id badge.id
     json.name badge.name
   end
+
+  json.course_id current_course.id
 end
