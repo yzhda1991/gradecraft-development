@@ -11,6 +11,9 @@
       scope.termFor = (item)->
         UnlockConditionService.termFor(item)
 
+      scope.updateCondition = ()->
+        UnlockConditionService.queueUpdateCondition(scope.condition)
+
       scope.removeCondition = (index)->
         UnlockConditionService.removeCondition(index)
 

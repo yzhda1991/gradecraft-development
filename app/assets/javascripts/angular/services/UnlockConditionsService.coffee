@@ -40,6 +40,13 @@
     # TODO: delete from server if it has an id
     unlockConditions.splice(index,1)
 
+  queueUpdateCondition = (condition)->
+    if conditionIsValid(condition)
+      console.log("queuing for update...")
+    else
+      console.log("still invalid...")
+
+
   # We need to remove all other fields when the
   # condition type is changed, to avoid invalid
   # condition configuration
@@ -47,6 +54,7 @@
     condition.condition_id = null
     condition.condition_value = null
     condition.condition_date = null
+    debugger
     if condition.condition_type == "Badge" || condition.condition_type == "Course"
       condition.condition_state = "Earned"
     else
@@ -66,6 +74,7 @@
     getUnlockConditions: getUnlockConditions
     addCondition: addCondition
     removeCondition: removeCondition
+    queueUpdateCondition: queueUpdateCondition
     changeConditionType: changeConditionType
     conditionIsValid: conditionIsValid
   }
