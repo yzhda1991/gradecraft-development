@@ -51,3 +51,7 @@
       %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input)
     %button.remove-unlock-condition(ng-click="vmUnlocks.removeCondition($index)")
       %i.fa.fa-fw.fa-times
+.box.box-padded.add-unlock-condition-wrapper
+  %button.button-link(ng-click="vmUnlocks.addCondition()")
+    %i.fa.fa-fw.fa-plus
+    Add a Condition

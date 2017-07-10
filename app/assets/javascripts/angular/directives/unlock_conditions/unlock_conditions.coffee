@@ -32,6 +32,8 @@
 
     vmUnlocks.removeCondition = (index)->
       UnlockConditionService.removeCondition(index)
+    vmUnlocks.addCondition = ()->
+      UnlockConditionService.addCondition()
 
     services(@conditionId, @conditionType).then(()->
       vmUnlocks.loading = false
