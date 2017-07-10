@@ -14,9 +14,11 @@
 
   .flex-col.col-50
     - if AnalyticsProctor.new.viewable? current_student, current_course
-      .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_grade_distribution", locals: { current_student: current_student }
+      .panel.dashboard-module
+        %course-distribution-analytics
 
-    .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_weekly_stats", locals:  { presenter: Info::DashboardWeeklyStatsPresenter.new(course: current_course, student: current_student) }
+    .panel.dashboard-module
+      %weekly-stats-analytics(student-id="#{current_student.id}")
 
     - if current_course.student_weighted?
       .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"

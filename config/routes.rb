@@ -410,6 +410,7 @@ Rails.application.routes.draw do
     resources :courses, only: [:index] do
       collection do
         get "analytics"
+        get "one_week_analytics", to: "courses#one_week_analytics"
         resources :importers, only: [], module: :courses, param: :provider_id do
           get "courses", action: :index
         end
@@ -457,8 +458,10 @@ Rails.application.routes.draw do
 
     resources :rubrics, only: [:show]
     resources :students, only: [:index]
+
     get "students/analytics", to: "students#analytics"
     get "students/:id/analytics", to: "students#student_analytics"
+
 
     resources :students, only: [], module: :students do
       resources :badges, only: :index

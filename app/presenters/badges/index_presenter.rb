@@ -13,7 +13,7 @@ class Badges::IndexPresenter < Showtime::Presenter
 
   def earned_badges_count(badge)
     if student
-      student.visible_earned_badges_for_badge_count(badge)
+      student.earned_badges_for_badge(badge)
     else
       badge.earned_count
     end

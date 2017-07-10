@@ -37,7 +37,7 @@ class Badges::ShowPresenter < Showtime::Presenter
 
   def earned_badges
     if student
-      student.visible_earned_badges_for_badge(badge)
+      student.earned_badges_for_badge(badge)
     else
       badge.earned_badges
     end

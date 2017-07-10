@@ -1,6 +1,5 @@
 class API::CoursesController < ApplicationController
-  before_action :use_current_course, only: :analytics
-  before_action :ensure_staff?, only: :course_creation
+  before_action :use_current_course, only: [:analytics, :one_week_analytics]
 
   # accessed by the dashboard
   # GET api/courses
@@ -11,12 +10,20 @@ class API::CoursesController < ApplicationController
     render json: MultiJson.dump(@courses)
   end
 
+  # GET api/courses/analytics
   def analytics
     if current_user_is_student?
       @student = current_user
       @user_score = @student.course_memberships.where(course_id: @course, auditing: false).pluck("score").first
+    end
+  end
+
+  # GET api/courses/one_week_analytics
+  def one_week_analytics
+    if current_user_is_student?
+      @student = current_user
     else
-      @student = nil
+      @student = User.find(params[:student_id]) if params[:student_id]
     end
   end
 
