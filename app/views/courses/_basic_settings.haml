@@ -60,7 +60,7 @@
           %button.button-advanced-settings= glyph(:cog) + "Settings"
         .advanced-settings-card
           %a.button-close= glyph(:times)
-          = f.input :total_weights, {"aria-describedby" => "txtMultiplierCount", :label => "How many multipliers do #{term_for :students} have to allocate?" }
+          = f.input :total_weights, :label => "How many multipliers do #{term_for :students} have to allocate?", input_html: { min: 1, max: 100000000 }
           = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
           = f.input :max_weights_per_assignment_type, {input_html: { min: 1 } }
           = f.input :max_assignment_types_weighted, {input_html: { min: 1 }, :label => "Is there a maximum number of assignment types they can weight?" }

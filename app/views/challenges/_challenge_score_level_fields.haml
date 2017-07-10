@@ -3,7 +3,7 @@
     .level-name-form.score-level-form
       = f.input :name, :label => "Level Name"
     .points-awarded-form.score-level-form
-      = f.input :points, data: {autonumeric: true, "m-dec" => "0"}, label: "Points Awarded"
+      = f.input :points, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: "Points Awarded"
   .btn-container
     = f.hidden_field :_destroy, class: "destroy"
     %button.button.remove-challenge-score-level{role: "button", type: "button"} Remove Level
