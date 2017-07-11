@@ -50,7 +50,15 @@
     )
 
   _updateCondition = (condition)->
-    console.log("now updating...")
+    requestParams = {
+      "unlock_condition": condition
+    }
+    $http.put("/api/unlock_conditions/#{condition.id}", requestParams).then((response) ->
+      angular.copy(response.data.data.attributes, condition)
+      GradeCraftAPI.logResponse(response)
+    , (error)->
+       GradeCraftAPI.logResponse(error)
+    )
 
   removeCondition = (condition)->
     return unlockConditions.splice(-1, 1) if !condition.id
