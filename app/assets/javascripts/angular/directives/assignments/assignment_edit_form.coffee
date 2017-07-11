@@ -3,14 +3,10 @@
   AssignmentEditCtrl = [()->
     vmAssignmentEdit = this
     vmAssignmentEdit.loading = true
-    vmAssignmentEdit.assignmentTypes = AssignmentTypeService.assignmentTypes
 
-    vmAssignmentEdit.assignment = ()->
-      AssignmentService.assignment()
+    vmAssignmentEdit.assignments = AssignmentService.assignments
 
-    vmAssignmentEdit.termFor = (term)->
-      AssignmentService.termFor(term)
-    services(@assignmentId).then(()->
+    services(vmAssignmentEdit.assignmentId).then(()->
       vmAssignmentEdit.loading = false
     )
   ]

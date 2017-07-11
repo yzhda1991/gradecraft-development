@@ -1,2 +1,4 @@
-.assignment-edit-form(ng-if="!vmAssignmentEdit.loading")
+%loading-message(loading='vmAssignmentEdit.loading' message="Loading Assignment Info...")
+%article.assignment-form-fields.simple-form(ng-if="!vmAssignmentEdit.loading")
+  %assignment-form-basics(assignment="vmAssignmentEdit.assignments[0]")
 

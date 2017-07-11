@@ -1,0 +1,22 @@
+%section.form-section
+  %h2.form-title Basic Info
+  .form-subsection
+    .form-item
+      %label
+        {{termFor('assignment')}} Type
+        %select(ng-model="assignment.assignment_type_id" ng-change="updateAssignment()")
+          %option(ng-repeat="assignmentType in assignmentTypes" ng-selected="assignment.assignment_type_id == assignmentType.id" value="{{assignmentType.id}}") {{assignmentType.name}}
+
+    .form-item
+      %label
+        {{termFor('assignment')}} Name
+        %input(aria-required=true type='text' ng-model='assignment.name' ng-change='updateAssignment()')
+
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.required" ng-click="updateAssignment()") Required
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Are ALL {{ termFor("students") }} expected to complete this {{ termFor("assignment") }} to pass the course?
+

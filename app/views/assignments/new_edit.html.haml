@@ -1,4 +1,6 @@
 .pageContent
+  = render partial: "layouts/alerts", locals: { model: presenter.assignment, term: term_for(:assignment) }
+
   %assignment-edit-form(assignment-id="#{presenter.assignment.id}")
 
 
