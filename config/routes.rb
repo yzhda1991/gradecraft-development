@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   end
 
   resources :assignments do
+    get "new_edit" => "assignments#new_edit"
     collection do
       get :feed
       get :settings

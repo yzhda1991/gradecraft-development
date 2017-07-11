@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
-  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :create, :update, :grades_review]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :new_edit, :create, :update, :grades_review]
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
@@ -43,6 +43,16 @@ class AssignmentsController < ApplicationController
   def new
     render :new, Assignments::Presenter.build({
       assignment: @course.assignments.new,
+      course: @course,
+      view_context: view_context
+      })
+  end
+
+  def new_edit
+    params[:id] = params[:assignment_id]
+    @assignment = @course.assignments.find(params[:id])
+    render :new_edit, Assignments::Presenter.build({
+      assignment: @assignment,
       course: @course,
       view_context: view_context
       })
