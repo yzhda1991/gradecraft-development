@@ -43,7 +43,7 @@
     }
     $http.post("/api/unlock_conditions", requestParams).then((response) ->
       condition.isUpdating = false
-      angular.copy(condition, response.data.data.attributes)
+      angular.copy(response.data.data.attributes, condition)
       GradeCraftAPI.logResponse(response)
     , (error)->
        GradeCraftAPI.logResponse(error)
@@ -52,13 +52,12 @@
   _updateCondition = (condition)->
     console.log("now updating...")
 
-  removeCondition = (index, condition)->
-    debugger
-    unlockConditions.splice(index, 1) if !condition.id
+  removeCondition = (condition)->
+    return unlockConditions.splice(-1, 1) if !condition.id
     if confirm("Are you sure you want to delete this condition?")
       $http.delete("/api/unlock_conditions/#{condition.id}").then(
         (response)-> # success
-          unlockConditions.splice(index,1)
+          angular.copy(_.reject(unlockConditions, {id: condition.id}), unlockConditions)
           GradeCraftAPI.logResponse(response)
         ,(response)-> # error
           GradeCraftAPI.logResponse(response)

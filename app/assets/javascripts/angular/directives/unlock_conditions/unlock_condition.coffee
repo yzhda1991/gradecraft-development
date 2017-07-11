@@ -14,8 +14,8 @@
       scope.updateCondition = ()->
         UnlockConditionService.queueUpdateCondition(@condition)
 
-      scope.removeCondition = (index)->
-        UnlockConditionService.removeCondition(index, scope.condition)
+      scope.removeCondition = ()->
+        UnlockConditionService.removeCondition(@condition)
 
       scope.conditionIsValid = ()->
         UnlockConditionService.conditionIsValid(@condition)
