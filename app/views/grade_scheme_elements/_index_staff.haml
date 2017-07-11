@@ -1,6 +1,6 @@
 - if @grade_scheme_elements.count > 0
   - content_for :context_menu do
-    .context_menu
+    .context-menu
       %ul
         = active_course_link_to decorative_glyph(:edit) + "Edit", mass_edit_grade_scheme_elements_path, class: "button button-edit"
 

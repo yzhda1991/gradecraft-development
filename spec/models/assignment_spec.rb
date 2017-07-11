@@ -153,7 +153,7 @@ describe Assignment do
       subject.due_at = 2.days.from_now
       subject.open_at = 3.days.from_now
       expect(subject).to_not be_valid
-      expect(subject.errors[:base]).to include "Due date must be after open date."
+      expect(subject.errors[:base]).to include "Close date must be after open date."
     end
 
     it "is invalid if accepting submissions before it is open" do

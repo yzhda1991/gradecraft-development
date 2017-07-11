@@ -9,7 +9,7 @@ feature "creating a new announcement" do
     end
 
     scenario "unsuccessfully with just a title" do
-      within(".context_menu") do
+      within(".context-menu") do
         click_link "New Announcement"
       end
 

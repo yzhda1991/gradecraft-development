@@ -1,6 +1,8 @@
 class Event < ActiveRecord::Base
   include Copyable
   include UploadsMedia
+  
+  validates_with OpenBeforeCloseValidator
 
   belongs_to :course
 

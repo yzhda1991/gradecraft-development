@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
-  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :update, :grades_review]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :create, :update, :grades_review]
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
