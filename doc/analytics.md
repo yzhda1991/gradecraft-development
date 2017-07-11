@@ -51,13 +51,13 @@ following data:
 ```
 class MyNewAggregate
   include Analytics::Aggregate
- 
+
   # One or more fields specific to this aggregate,
   # should at minimum include the field being scoped by.
-  field :course_id, type: Integer 
+  field :course_id, type: Integer
   field :events, type: Hash
-  
-  scope_by :course_id             
+
+  scope_by :course_id
 
   increment_keys "events.%{event_type}.%{granular_key}" => 1,
                  "events._all.%{granular_key}" => 1
@@ -130,7 +130,7 @@ increment_keys "%{granular_key}.rate" => lambda { |event, granularity, interval|
 *Don't pass the granularity and interval to the lambda unless needed, as
  it's less efficient, since it must be calculated in each time the
  increment method loops through the granularities, whereas a lambda that
- only needs the event is calculated and cached once for all 
+ only needs the event is calculated and cached once for all
  granularities.*
 
 ## Displaying Aggregate Data
@@ -143,3 +143,7 @@ The `data` method takes 4 arguments:
 
 More documentation to come. See
 `/app/controllers/analytics_controller.rb` for examples.
+
+## Maintenance
+
+You can find out how to perform maintenance on the Analaytics jobs on the [maintenance section](maintenance.md)
