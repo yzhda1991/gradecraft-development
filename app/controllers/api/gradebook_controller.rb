@@ -26,7 +26,7 @@ class API::GradebookController < ApplicationController
   # Optionally returns a subset of students if provided an array of student ids
   # GET api/gradebook/students
   def students
-    @students = current_course.students
+    @students = current_course.students_being_graded
     @students = @students.where(id: params[:student_ids]) if params[:student_ids].present?
   end
 end

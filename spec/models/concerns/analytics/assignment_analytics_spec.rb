@@ -1,8 +1,5 @@
 
-# describe Analytics::AssignmentAnalytics do
-  # subject { build(:assignment) }
-
-describe AssignmentAnalytics do
+describe Analytics::AssignmentAnalytics do
   subject { build(:assignment, course: course) }
   let(:course) { create(:course) }
   let(:student1) { create(:course_membership, :student, course: course, active: true).user }

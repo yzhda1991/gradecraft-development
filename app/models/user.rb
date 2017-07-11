@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     end
 
     def students_being_graded_for_course(course, team=nil)
-      user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
+      user_ids = CourseMembership.where(course: course, role: "student", auditing: false, active: true).pluck(:user_id)
       query = User.where(id: user_ids)
       query = query.students_in_team(team.id, user_ids) if team
       query
