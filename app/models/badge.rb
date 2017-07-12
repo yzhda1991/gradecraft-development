@@ -46,6 +46,6 @@ class Badge < ActiveRecord::Base
   end
 
   def earned_badges_this_week_count
-    earned_badges.submitted_by_active_students.where("earned_badges.updated_at > ? ", 7.days.ago).count
+    earned_badges.earned_by_active_students.where("earned_badges.updated_at > ? ", 7.days.ago).count
   end
 end

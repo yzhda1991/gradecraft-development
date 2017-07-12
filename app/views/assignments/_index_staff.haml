@@ -55,7 +55,7 @@
                     %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
                   %td= assignment.submissions.submitted.count if assignment.accepts_submissions? && assignment.submissions.present?
-                  %td= assignment.grades.graded_or_released.count if assignment.grades.instructor_modified.any?
+                  %td= assignment.grades.graded_or_released.for_active_students.count if assignment.grades.instructor_modified.any?
                   %td
                     - if current_user_is_admin? || current_course.active?
                       .button-container.dropdown

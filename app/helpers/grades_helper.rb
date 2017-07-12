@@ -10,7 +10,7 @@ module GradesHelper
 
   def in_progress_grades_count_for(course)
     Rails.cache.fetch(in_progress_grades_count_cache_key(course)) do
-      course.grades.in_progress.count
+      course.grades.for_active_students.in_progress.count
     end
   end
 
@@ -21,7 +21,7 @@ module GradesHelper
 
   def unreleased_grades_count_for(course)
     Rails.cache.fetch(unreleased_grades_count_cache_key(course)) do
-      course.grades.not_released.count
+      course.grades.for_active_students.not_released.count
     end
   end
 

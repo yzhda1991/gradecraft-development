@@ -5,7 +5,7 @@ module Analytics
 
     # indexed badges
     def earned_count
-      earned_badges.student_visible.count
+      earned_badges.earned_by_active_students.student_visible.count
     end
 
     def earned_badge_total_points_for_student(student)
@@ -13,7 +13,7 @@ module Analytics
     end
 
     def earned_badges_this_week_count
-      earned_badges.submitted_by_active_students.where("earned_badges.updated_at > ? ", 7.days.ago).count
+      earned_badges.earned_by_active_students.where("earned_badges.updated_at > ? ", 7.days.ago).count
     end
   end
 end

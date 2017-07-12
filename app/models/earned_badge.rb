@@ -24,7 +24,7 @@ class EarnedBadge < ActiveRecord::Base
   scope :student_visible, -> { where(student_visible: true) }
   scope :order_by_created_at, -> { order("created_at ASC") }
 
-  scope :submitted_by_active_students, -> do
+  scope :earned_by_active_students, -> do
     joins("INNER JOIN course_memberships ON "\
       "course_memberships.course_id = earned_badges.course_id AND "\
       "course_memberships.user_id = earned_badges.student_id")

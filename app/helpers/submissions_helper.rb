@@ -14,7 +14,7 @@ module SubmissionsHelper
       if include_drafts
         course.submissions.ungraded.count
       else
-        course.submissions.submitted.ungraded.count
+        course.submissions.submitted_by_active_students.ungraded.count
       end
     end
   end
