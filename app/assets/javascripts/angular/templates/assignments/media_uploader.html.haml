@@ -1,0 +1,12 @@
+.form-item
+  %label Media Image
+  %input.media-upload-button(ng-if="!assignment.media" type="file" media-upload="mediaFile" assignment-id="assignment.id")
+
+  .preview-wrapper(ng-if="assignment.media")
+    .icon-preview.event-preview
+      .img-cropper.event-crop
+        %img(ng-src="{{assignment.media}}")
+      %span.xaxis-label 250px
+      %span.yaxis-label 150px
+      %button.remove-unlock-condition(ng-click="removeMedia()")
+        %i.fa.fa-fw.fa-times

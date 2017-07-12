@@ -11,7 +11,9 @@
       scope.assignmentTypes = AssignmentTypeService.assignmentTypes
 
       scope.updateAssignment = ()->
-        AssignmentTypeService.assignmentTypes
         AssignmentService.queueUpdateAssignment(@assignment.id)
+
+      scope.removeMedia = ()->
+        AssignmentService.removeMedia(@assignment.id)
   }
 ]

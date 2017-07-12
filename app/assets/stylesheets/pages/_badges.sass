@@ -169,6 +169,24 @@ ul.earned-badge-list
 .badge-award-name
   font-size: .7rem
 
+input.media-upload-button
+  color: transparent
+  &::-webkit-file-upload-button
+    visibility: hidden
+  &::before
+    content: 'Choose file'
+    color: $color-white
+    display: inline-block
+    background-color: $color-blue-3
+    border-radius: 3px
+    padding: 5px 8px
+    white-space: nowrap
+    -webkit-user-select: none
+    cursor: pointer
+  &:hover::before
+    background-color: darken($color-blue-3, 10%)
+
+
 // preview of image uploaded in create badge page
 .preview-wrapper
   display: flex
@@ -219,6 +237,19 @@ ul.earned-badge-list
   bottom: -24px
   left: 50%
   transform: translateX(-50%)
+
+.remove-media
+  position: absolute
+  top: -8px
+  right: -8px
+  border-radius: 50%
+  width: 1.5rem
+  background-color: $color-red-1
+  &:hover
+    background-color: darken($color-red-1, 10%)
+  .fa-times
+    width: 100%
+    padding-right: 0
 
 // image cropper for badges
 .img-cropper

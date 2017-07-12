@@ -9,6 +9,7 @@ json.attributes do
   json.full_points                assignment.full_points
   json.id                         assignment.id
   json.name                       assignment.name
+  json.media                      assignment.media.url
   json.open_at                    assignment.open_at
   json.pass_fail                  assignment.pass_fail
   json.grade_scope                assignment.grade_scope
@@ -105,6 +106,15 @@ json.attributes do
 end
 
 json.relationships do
+  if assignment.assignment_files.present?
+    json.assignment_files do
+      json.data assignment.assignment_files do |assignment_file|
+        json.type "assignment_files"
+        json.id assignment_upload.id.to_s
+      end
+    end
+  end
+
   if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
     json.prediction data: {
       type: "predicted_earned_grades",

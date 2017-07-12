@@ -45,3 +45,4 @@
             This will be shown to students on their dashboard, and when they submit their {{ termFor("assignment") }}.
         %textarea(ng-model="assignment.purpose" ng-change="updateAssignment()" froala="froalaOptions")
 
+    %assignment-media-uploader(assignment="assignment")

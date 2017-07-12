@@ -117,11 +117,13 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  # Handles incremental updates from the Assignment form
   _updateAssignment = (id)->
     assignment = _.find(assignments, {id: id})
     if assignment && ValidateDates(assignment).valid
       $http.put("/api/assignments/#{id}", assignment: assignment).then(
         (response) ->
+          angular.copy(response.data.data.attributes, assignment)
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
@@ -146,6 +148,31 @@
       else
         GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
+  #------- Media and File Methods ---------------------------------------------#
+
+  removeMedia = (id)->
+    assignment = _.find(assignments, {id: id})
+    assignment.media = null
+    assignment.remove_media = true
+    _updateAssignment(id)
+
+  postMediaUpload = (id, files)->
+    mediaParams = new FormData()
+    mediaParams.append('assignment[media]', files[0])
+    $http.put("/api/assignments/#{id}", mediaParams,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response) ->
+        assignment = _.find(assignments, {id: id})
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+#------- Public Methods -------------------------------------------------------#
+
   return {
       assignment: assignment
       assignments: assignments
@@ -158,5 +185,7 @@
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
       ValidateDates: ValidateDates
+      removeMedia: removeMedia
+      postMediaUpload: postMediaUpload
   }
 ]
