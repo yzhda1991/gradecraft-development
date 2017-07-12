@@ -50,10 +50,11 @@ class SubmissionFile < ActiveRecord::Base
     "#{submission.base_filename} - Submission File#{file_number}#{extension}"
   end
 
+  # returns nil if group or student has been deleted but file still exists
   def owner_name
-    if submission.assignment.grade_scope == "Group"
+    if submission.assignment.grade_scope == "Group"  && submission.group.present?
       submission.group.name.gsub(/\s/, "-")
-    else
+    elsif submission.assignment.grade_scope == "Individual" && submission.student.present?
       "#{submission.student.last_name}-#{submission.student.first_name}"
     end
   end
