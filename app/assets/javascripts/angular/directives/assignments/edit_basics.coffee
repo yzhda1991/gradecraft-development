@@ -1,10 +1,10 @@
-@gradecraft.directive 'assignmentFormBasics', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
+@gradecraft.directive 'assignmentEditBasics', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
 
   return {
     scope: {
       assignment: "="
     }
-    templateUrl: 'assignments/form_basics.html',
+    templateUrl: 'assignments/edit_basics.html',
     link: (scope, el, attr, ngModelCtrl)->
       scope.termFor = AssignmentService.termFor
 

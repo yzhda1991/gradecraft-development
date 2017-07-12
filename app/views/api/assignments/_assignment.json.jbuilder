@@ -11,6 +11,7 @@ json.attributes do
   json.name                       assignment.name
   json.open_at                    assignment.open_at
   json.pass_fail                  assignment.pass_fail
+  json.grade_scope                assignment.grade_scope
   json.position                   assignment.position
   json.purpose                    assignment.purpose
   json.threshold_points           assignment.threshold_points
