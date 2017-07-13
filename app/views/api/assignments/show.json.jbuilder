@@ -11,9 +11,8 @@ json.included do
       json.id assignment_file.id.to_s
       json.attributes do
         json.id assignment_file.id
-        json.grade_id assignment_file.assignment_id
+        json.assignment_id assignment_file.assignment_id
         json.filename assignment_file.filename
-        json.url assignment_file.url
       end
     end
   end

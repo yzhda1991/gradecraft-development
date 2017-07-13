@@ -46,7 +46,7 @@
       element.bind('change', ()->
         scope.$apply(()->
           model.assign(scope, element[0].files)
-          AssignmentService.postFileUploads(element[0].files)
+          AssignmentService.postFileUploads(scope.assignmentId, element[0].files)
         )
       )
     }

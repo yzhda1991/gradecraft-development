@@ -172,22 +172,39 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  postFileUploads = (files)->
-    console.log("posting files...");
+  postFileUploads = (id, files)->
+    fd = new FormData()
+    angular.forEach(files, (file, index)->
+      fd.append("file_uploads[]", file)
+    )
+    $http.post(
+      "/api/assignments/#{id}/file_uploads",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response)-> # success
+        if response.status == 201
+          GradeCraftAPI.addItems(fileUploads, "file_uploads", response.data)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
 
   deleteFileUpload = (file)->
     file.deleting = true
     GradeCraftAPI.deleteItem(fileUploads, file)
-    # $http.delete("/api/file_uploads/#{file.id}").then(
-    #   (response)-> # success
-    #     if response.status == 200
-    #       GradeCraftAPI.deleteItem(fileUploads, file)
-    #     GradeCraftAPI.logResponse(response)
+    $http.delete("/api/assignment_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(fileUploads, file)
+        GradeCraftAPI.logResponse(response)
 
-    #   ,(response)-> # error
-    #     file.deleting = false
-    #     GradeCraftAPI.logResponse(response)
-    # )
+      ,(response)-> # error
+        file.deleting = false
+        GradeCraftAPI.logResponse(response)
+    )
 
 
 #------- Public Methods -------------------------------------------------------#
