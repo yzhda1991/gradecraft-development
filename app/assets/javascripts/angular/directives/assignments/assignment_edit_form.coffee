@@ -27,6 +27,7 @@
       assignmentId: "="
     }
     link: (scope, el, attr, ngModelCtrl)->
+      scope.termFor = AssignmentService.termFor
       scope.tabInFocus = "basics"
       scope.focusTab = (focus)->
         scope.tabInFocus = focus
