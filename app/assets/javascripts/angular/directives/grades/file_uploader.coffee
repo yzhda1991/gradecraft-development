@@ -1,6 +1,6 @@
 # Handles uploading files attached to grades
 
-@gradecraft.directive 'gradeFileUploader', ['$parse', 'GradeService', ($parse, GradeService) ->
+@gradecraft.directive 'gradeFileUploader', ['GradeService', (GradeService) ->
   UploadCtrl = [()->
     vm = this
     vm.fileUploads = GradeService.fileUploads

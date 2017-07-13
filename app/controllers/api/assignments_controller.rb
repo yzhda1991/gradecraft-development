@@ -59,7 +59,8 @@ class API::AssignmentsController < ApplicationController
       :description, :grade_scope,
       :due_at, :full_points, :name, :open_at,
       :media, :purpose, :release_necessary, :remove_media, :required,
-      :student_logged, :visible
+      :student_logged, :visible,
+      assignment_files_attributes: [:id, file: []],
     )
   end
 end

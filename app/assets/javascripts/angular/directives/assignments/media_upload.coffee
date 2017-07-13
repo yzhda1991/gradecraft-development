@@ -5,13 +5,14 @@
       assignment: "="
     }
     templateUrl: 'assignments/media_uploader.html',
-    link: (scope, el, attr, ngModelCtrl)->
-
-      scope.updateAssignment = ()->
-        AssignmentService.queueUpdateAssignment(@assignment.id)
+    link: (scope, element, attrs)->
+      scope.fileUploads = AssignmentService.fileUploads
 
       scope.removeMedia = ()->
         AssignmentService.removeMedia(@assignment.id)
+
+      scope.deleteFile = (file)->
+        AssignmentService.deleteFileUpload(file)
   }
 ]
 
@@ -28,6 +29,24 @@
         scope.$apply(()->
           model.assign(scope, element[0].files)
           AssignmentService.postMediaUpload(scope.assignmentId, element[0].files)
+        )
+      )
+    }
+])
+
+@gradecraft.directive('assignmentFileUpload', ['$parse', 'AssignmentService', ($parse, AssignmentService)->
+  return {
+    restrict: 'A',
+    scope: {
+      assignmentId : "="
+    }
+    link: (scope, element, attrs)->
+      model = $parse(attrs.assignmentFileUpload)
+
+      element.bind('change', ()->
+        scope.$apply(()->
+          model.assign(scope, element[0].files)
+          AssignmentService.postFileUploads(element[0].files)
         )
       )
     }

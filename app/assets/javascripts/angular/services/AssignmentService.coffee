@@ -5,6 +5,7 @@
 
   assignments = []
   update = {}
+  fileUploads = []
 
   # managing a single assignment resource,
   # must be a function for Angular two-way binding to work
@@ -59,7 +60,7 @@
         GradeCraftAPI.addItem(assignments, "assignments", response.data)
         if response.data.data.relationships && response.data.data.relationships.rubric
           RubricService.getRubric(response.data.data.relationships.rubric.data.id)
-
+        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
@@ -171,6 +172,24 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  postFileUploads = (files)->
+    console.log("posting files...");
+
+  deleteFileUpload = (file)->
+    file.deleting = true
+    GradeCraftAPI.deleteItem(fileUploads, file)
+    # $http.delete("/api/file_uploads/#{file.id}").then(
+    #   (response)-> # success
+    #     if response.status == 200
+    #       GradeCraftAPI.deleteItem(fileUploads, file)
+    #     GradeCraftAPI.logResponse(response)
+
+    #   ,(response)-> # error
+    #     file.deleting = false
+    #     GradeCraftAPI.logResponse(response)
+    # )
+
+
 #------- Public Methods -------------------------------------------------------#
 
   return {
@@ -187,5 +206,8 @@
       ValidateDates: ValidateDates
       removeMedia: removeMedia
       postMediaUpload: postMediaUpload
+      fileUploads: fileUploads
+      postFileUploads: postFileUploads
+      deleteFileUpload: deleteFileUpload
   }
 ]

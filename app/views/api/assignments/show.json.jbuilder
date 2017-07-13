@@ -7,13 +7,13 @@ end
 json.included do
   if @assignment.assignment_files.present?
     json.array! @assignment.assignment_files do |assignment_file|
-      json.type "assignment_files"
+      json.type "file_uploads"
       json.id assignment_file.id.to_s
       json.attributes do
         json.id assignment_file.id
-        json.grade_id assignment_file.grade_id
+        json.grade_id assignment_file.assignment_id
         json.filename assignment_file.filename
-        json.filepath assignment_file.filepath
+        json.url assignment_file.url
       end
     end
   end

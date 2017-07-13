@@ -107,10 +107,10 @@ end
 
 json.relationships do
   if assignment.assignment_files.present?
-    json.assignment_files do
+    json.file_uploads do
       json.data assignment.assignment_files do |assignment_file|
-        json.type "assignment_files"
-        json.id assignment_upload.id.to_s
+        json.type "file_uploads"
+        json.id assignment_file.id.to_s
       end
     end
   end

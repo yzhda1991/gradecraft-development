@@ -1,6 +1,7 @@
 .form-item
-  %label Media Image
-  %input.media-upload-button(ng-if="!assignment.media" type="file" media-upload="mediaFile" assignment-id="assignment.id")
+  %label
+    Media Image
+    %input.media-upload-button(ng-if="!assignment.media" type="file" media-upload="mediaFile" assignment-id="assignment.id")
 
   .preview-wrapper(ng-if="assignment.media")
     .icon-preview.event-preview
@@ -10,3 +11,22 @@
       %span.yaxis-label 150px
       %button.remove-unlock-condition(ng-click="removeMedia()")
         %i.fa.fa-fw.fa-times
+
+.form-item
+  %label
+    Attachments
+    %input.file-upload-button(type="file" multiple="true" assignment-file-upload="assignmentFiles" assignment-id="assignment.id")
+
+%ul.file-attachments-list(ng-if='fileUploads.length > 0')
+  %li(ng-repeat='file in fileUploads')
+    .file-attachment-list-item
+      .file-attachment-delete-button(ng-if='!file.deleting')
+        .no-hover-state
+          %i.fa.fa-check.fa-fw
+        .hover-state
+          %i.fa.fa-times.fa-fw(ng-click="deleteFile(file)")
+        {{ file.filename }}
+      .file-attachment-delete-button(ng-if='file.deleting')
+        %i.fa.fa-spinner.fa-fw
+        {{ file.filename }}
+
