@@ -41,11 +41,11 @@ class Course < ActiveRecord::Base
   end
 
   def students_being_graded_by_team(team)
-    User.students_being_graded_for_course(self,team)
+    User.students_being_graded_for_course(self, team)
   end
 
   def students_by_team(team)
-    User.students_being_graded.students_for_course(self, team)
+    User.students_for_course(self, team)
   end
 
   with_options dependent: :destroy do |c|
