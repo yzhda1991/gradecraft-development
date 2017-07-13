@@ -48,18 +48,6 @@ class Submission < ActiveRecord::Base
     .references(:grade, :assignment)
   }
 
-  # New
-  # scope :resubmitted, -> do
-  #   includes(:grade, :assignment, :course_membership)
-  #   joins("INNER JOIN course_memberships ON course_memberships.course_id = submissions.course_id AND course_memberships.user_id = submissions.student_id "\
-  #     "LEFT OUTER JOIN grades ON grades.submission_id = submissions.id "\
-  #     "LEFT OUTER JOIN assignments ON assignments.id = submissions.assignment_id")
-  #     .where("course_memberships.active = true")
-  #     .where("grades.status = 'Released' OR (grades.status = 'Graded' AND NOT assignments.release_necessary)")
-  #     .where("grades.graded_at < submitted_at")
-  #     .references(:grade, :assignment, :course_membership)
-  # end
-
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }

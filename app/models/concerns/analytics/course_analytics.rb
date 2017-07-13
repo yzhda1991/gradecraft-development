@@ -40,7 +40,6 @@ module Analytics
 
     def scorable_memberships
       @scorable_memberships ||= course_memberships.where(role: "student", auditing: false, active: true)
-
     end
   end
 end

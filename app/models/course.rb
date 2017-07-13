@@ -168,10 +168,6 @@ class Course < ActiveRecord::Base
     groups.pending.count
   end
 
-  def point_total_for_challenges
-    challenges.pluck("full_points").compact.sum
-  end
-
   def recalculate_student_scores
     ordered_student_ids.each do |student_id|
       ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
