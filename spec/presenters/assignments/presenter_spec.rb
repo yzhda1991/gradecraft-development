@@ -1,12 +1,13 @@
 describe Assignments::Presenter do
   let(:course) { build(:course) }
-  let(:assignment) { create(:assignment, id: 1, name: "Crazy Wizardry", pass_fail: false, full_points: 5000)}
+  let(:assignment) { create(:assignment, name: "Crazy Wizardry", pass_fail: false, full_points: 5000)}
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
   let(:student) { create(:user) }
   subject { Assignments::Presenter.new({ assignment: assignment, course: course, view_context: view_context }) }
 
   describe "#assignment" do
+
     it "is the assignment that is passed in as a property" do
       expect(subject.assignment).to eq assignment
     end
