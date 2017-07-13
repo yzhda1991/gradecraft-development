@@ -5,6 +5,7 @@ module ImpersonationHelper
   end
 
   def unimpersonate!
+    return unless impersonating_agent
     auto_login impersonating_agent
     delete_impersonating_agent
   end
