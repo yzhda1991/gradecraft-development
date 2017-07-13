@@ -1,0 +1,98 @@
+@import "../utilities/variables"
+
+ul.edit-form-tabs-nav
+  margin: 0 0 2rem 0
+  padding: 0
+  border-bottom: 1px solid $color-grey-6
+  position: relative
+  li
+    list-style-type: none
+    margin: 0 1rem
+    display: inline-block
+    font-weight: 300
+    line-height: 0
+    &.active
+      border-bottom: 3px solid $color-blue-2
+      a:after
+        border-bottom 0px
+    a
+      color: $color-blue-1
+      font-size: 1rem
+      &:hover
+        text-decoration: none
+      &:after
+        content: ''
+        display: block
+        width: 0;
+        height: 1rem
+        transition: width .3s ease
+    &:hover
+      a:after
+        border-bottom: 3px solid $color-blue-2
+        width: 100%
+    &.active:hover
+      a:after
+        border: 0px
+
+.preview-wrapper
+  display: flex
+  align-items: flex-end
+  &.hidden
+    display: none
+
+.icon-preview
+  border-bottom: 1px dashed $color-grey-5
+  border-left: 1px dashed $color-grey-5
+  padding: 0.5rem
+  margin: 1rem 1rem 2rem 2rem
+  position: relative
+  &.banner-preview
+    width: 600px
+    height: 150px
+  &.large-preview
+    width: 150px
+    height: 150px
+  &.event-preview
+    width: 250px
+    height: 150px
+  &.avatar-preview
+    width: 100px
+    height: 100px
+  &.medium-preview
+    width: 80px
+    height: 80px
+  &.small-preview
+    width: 40px
+    height: 40px
+  &.tiny-preview
+    width: 20px
+    height: 20px
+
+.xaxis-label,
+.yaxis-label
+  position: absolute
+  color: $color-grey-3
+  font-size: 0.8rem
+
+.xaxis-label
+  top: 50%
+  left: -40px
+  transform: translateY(-50%)
+
+.yaxis-label
+  bottom: -24px
+  left: 50%
+  transform: translateX(-50%)
+
+.remove-media
+  position: absolute
+  top: -8px
+  right: -8px
+  border-radius: 50%
+  width: 1.5rem
+  background-color: $color-red-1
+  &:hover
+    background-color: darken($color-red-1, 10%)
+  .fa-times
+    width: 100%
+    padding-right: 0

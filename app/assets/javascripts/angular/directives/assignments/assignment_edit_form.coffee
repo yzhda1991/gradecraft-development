@@ -26,5 +26,12 @@
     scope: {
       assignmentId: "="
     }
+    link: (scope, el, attr, ngModelCtrl)->
+      scope.tabInFocus = "basics"
+      scope.focusTab = (focus)->
+        scope.tabInFocus = focus
+      scope.isFocusTab = (focus)->
+        return true if focus == scope.tabInFocus
+        return false
   }
 ]

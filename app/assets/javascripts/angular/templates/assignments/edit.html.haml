@@ -1,4 +1,13 @@
 %loading-message(loading='vmAssignmentEdit.loading' message="Loading Assignment Info...")
 %article.assignment-form-fields.simple-form(ng-if="!vmAssignmentEdit.loading")
-  %assignment-edit-basics(assignment="vmAssignmentEdit.assignments[0]")
 
+  %ul.edit-form-tabs-nav
+    %li(ng-click="focusTab('basics')" ng-class="{'active': isFocusTab('basics')}")
+      %a Basic Settings
+    %li(ng-click="focusTab('details')" ng-class="{'active': isFocusTab('details')}")
+      %a Assignment Details
+
+  #tab1(ng-if="isFocusTab('basics')")
+    %assignment-edit-basics(assignment="vmAssignmentEdit.assignments[0]")
+  #tab1(ng-if="isFocusTab('details')")
+    %h2 Second Tab here!
