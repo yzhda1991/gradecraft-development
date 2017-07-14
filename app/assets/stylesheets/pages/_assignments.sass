@@ -96,7 +96,7 @@
       color: $color-blue-2
   &.assignment-settings a
     padding: 1rem
-  &.instructor a 
+  &.instructor a
     display: flex
     justify-content: space-between
     align-items: center
@@ -264,6 +264,15 @@ span.settings_hint
 .assignment-settings--date-inputs
   &.invalid
     border: 1px solid red
+  // stack dates in assignments design page
+  ul.form-flex-row
+    flex-direction: column
+    padding: 0
+    li.form-item
+      list-style-type: none
+      margin: 0
+      input
+        padding: .25rem
 
 .assignment-settings--messages
   color: red

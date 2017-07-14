@@ -58,6 +58,7 @@
     $http.get('/api/assignments/' + assignmentId).then(
       (response)->
         GradeCraftAPI.addItem(assignments, "assignments", response.data)
+        GradeCraftAPI.formatDates(assignments[0],["open_at", "due_at", "accepts_submissions_until"])
         if response.data.data.relationships && response.data.data.relationships.rubric
           RubricService.getRubric(response.data.data.relationships.rubric.data.id)
         GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
@@ -125,6 +126,7 @@
       $http.put("/api/assignments/#{id}", assignment: assignment).then(
         (response) ->
           angular.copy(response.data.data.attributes, assignment)
+          GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
