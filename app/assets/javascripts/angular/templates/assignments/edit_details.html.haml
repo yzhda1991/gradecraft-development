@@ -5,6 +5,21 @@
 
   %h2.form-title {{termFor("assignment")}} Grading And Submission
   .form-subsection
+    %h3.form-subtitle Grading Style
+    .form-flex-row
+      .form-item
+        %label
+          %input(type="checkbox" ng-model="assignment.pass_fail" ng-click="updateAssignment()") Pass Fail
+    .form-flex-row(ng-if="!assignment.pass_fail")
+      .form-item
+        %label
+          Total Points Possible
+          %input(ng-model="assignment.full_points" gc-number-input ng-change="updateAssignment()")
+      .form-item
+        %label
+          Points Threshold
+          %input(ng-model="assignment.threshold_points" gc-number-input ng-change="updateAssignment()")
+
 
   %h2.form-title {{termFor("assignment")}} Visibility Settings
   .form-subsection

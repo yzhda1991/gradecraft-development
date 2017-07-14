@@ -57,10 +57,9 @@ class API::AssignmentsController < ApplicationController
     params.require(:assignment).permit(
       :accepts_submissions, :accepts_submissions_until, :assignment_type_id,
       :description, :grade_scope,
-      :due_at, :full_points, :name, :open_at,
+      :due_at, :full_points, :name, :open_at, :pass_fail,
       :media, :purpose, :release_necessary, :remove_media, :required,
-      :student_logged, :visible,
-      assignment_files_attributes: [:id, file: []],
+      :student_logged, :threshold_points, :visible
     )
   end
 end

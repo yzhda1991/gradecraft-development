@@ -264,15 +264,21 @@ span.settings_hint
 .assignment-settings--date-inputs
   &.invalid
     border: 1px solid red
-  // stack dates in assignments design page
   ul.form-flex-row
+    // Assignment dates across on form, but down on design page
     flex-direction: column
     padding: 0
     li.form-item
       list-style-type: none
       margin: 0
-      input
-        padding: .25rem
+
+.form-subsection
+  .assignment-settings--date-inputs ul.form-flex-row
+    // Assignment dates across on form, but down on design page
+    flex-direction: row
+    .form-item:not(:last-child)
+      margin-right: 1rem
+
 
 .assignment-settings--messages
   color: red
