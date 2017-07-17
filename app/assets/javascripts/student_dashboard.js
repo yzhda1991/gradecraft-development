@@ -30,6 +30,7 @@ function setInitialEventSlide(eventJson){
   var events = eventJson.timeline.date;
   var todaysDate = new Date();
   var startIndex = null;
+  var noUpcomingEventsSlide = '<div class="event-slide last-slide"><div class="empty-state-wrapper large"><img src="/images/no-upcoming-events.png" class="empty-state-graphic" alt="No upcoming events"></div></div>'
 
   for (var i = 0; i < events.length; i++) {
     var eventEndDate = new Date(events[i].endDate);
@@ -40,7 +41,7 @@ function setInitialEventSlide(eventJson){
   }
 
   if (startIndex === null) {
-    $('.slide-container').append('<div class="event-slide last-slide"><p>This class has no upcoming events!</p></div>');
+    $('.slide-container').append(noUpcomingEventsSlide);
     startIndex = events.length;
   }
 
