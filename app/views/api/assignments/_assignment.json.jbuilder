@@ -2,19 +2,24 @@ json.type "assignments"
 json.id assignment.id.to_s
 json.attributes do
 
+  json.accepts_attachments        assignment.accepts_attachments
+  json.accepts_links              assignment.accepts_links
   json.accepts_submissions_until  assignment.accepts_submissions_until
+  json.accepts_text               assignment.accepts_text
   json.assignment_type_id         assignment.assignment_type_id
   json.description                assignment.description
   json.due_at                     assignment.due_at
   json.full_points                assignment.full_points
+  json.grade_scope                assignment.grade_scope
   json.id                         assignment.id
-  json.name                       assignment.name
   json.media                      assignment.media.url
+  json.name                       assignment.name
   json.open_at                    assignment.open_at
   json.pass_fail                  assignment.pass_fail
-  json.grade_scope                assignment.grade_scope
   json.position                   assignment.position
   json.purpose                    assignment.purpose
+  json.release_necessary          assignment.release_necessary
+  json.resubmissions_allowed      assignment.resubmissions_allowed
   json.threshold_points           assignment.threshold_points
 
   # boolean attributes

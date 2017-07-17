@@ -55,11 +55,14 @@ class API::AssignmentsController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit(
-      :accepts_submissions, :accepts_submissions_until, :assignment_type_id,
+      :accepts_attachments, :accepts_links, :accepts_submissions, :accepts_submissions_until, :accepts_text,
+      :assignment_type_id,
       :description, :grade_scope,
       :due_at, :full_points, :name, :open_at, :pass_fail,
       :media, :purpose, :release_necessary, :remove_media, :required,
+      :resubmissions_allowed,
       :student_logged, :threshold_points, :visible,
+
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric
       assignment_score_levels_attributes: [:id, :name, :points, :_destroy]
