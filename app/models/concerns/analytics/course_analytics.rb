@@ -16,15 +16,15 @@ module Analytics
     end
 
     def scores
-      course_memberships.being_graded.pluck(:score).sort
+      scorable_memberships.pluck(:score).sort
     end
 
     def average_score
-      course_memberships.being_graded.average(:score)
+      scorable_memberships.average(:score)
     end
 
     def high_score
-      course_memberships.being_graded.maximum(:score)
+      scorable_memberships.maximum(:score)
     end
 
     def low_score
