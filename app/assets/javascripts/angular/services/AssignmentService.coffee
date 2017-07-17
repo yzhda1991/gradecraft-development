@@ -153,10 +153,42 @@
     )
 
   queueUpdateScoreLevel = (assignmentId, scoreLevel)->
+    return false if !scoreLevel.points || !scoreLevel.name
+    # use "creating" to avoid creating more than one with params
+    return if scoreLevel.creating
+    scoreLevel.creating = true if !scoreLevel.id
+
+    id = scoreLevel.id || 0
     DebounceQueue.addEvent(
-      "scoreLevels", scoreLevel.id, _updateScoreLevel, [assignmentId, scoreLevel]
+      "scoreLevels", id, _updateScoreLevel, [assignmentId, scoreLevel]
     )
 
+  deleteScoreLevel = (assignmentId, scoreLevel)->
+    assignment = _.find(assignments, {id: assignmentId})
+    DebounceQueue.cancelEvent("scoreLevels", scoreLevel.id)
+    if ! scoreLevel.id
+      scoreLevels = _.reject(assignment.score_levels, scoreLevel)
+      return angular.copy(scoreLevels, assignment.score_levels)
+
+    params = { "assignment_score_levels_attributes" :
+      [{ "id" : scoreLevel.id, "_destroy" : true }]
+    }
+    $http.put("/api/assignments/#{assignmentId}", assignment: params).then(
+      (response) ->
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  addNewScoreLevel = (assignmentId)->
+    assignment = _.find(assignments, {id: assignmentId})
+    level = { id: null, name: null, points: null }
+    if assignment.score_levels
+      assignment.score_levels.push(level)
+    else
+      assignment.score_levels = [level]
 
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
@@ -241,6 +273,8 @@
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
       queueUpdateScoreLevel: queueUpdateScoreLevel
+      deleteScoreLevel: deleteScoreLevel
+      addNewScoreLevel: addNewScoreLevel
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
       ValidateDates: ValidateDates

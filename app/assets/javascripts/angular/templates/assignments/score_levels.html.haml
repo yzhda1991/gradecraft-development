@@ -11,3 +11,11 @@
       %label
         Points Awarded
         %input(ng-model="scoreLevel.points" gc-number-input ng-change="updateScoreLevel(scoreLevel)")
+
+    .remove-line-item(ng-click="deleteScoreLevel(scoreLevel)")
+      %i.fa.fa-fw.fa-times
+
+  .box.box-padded(ng-if="!hasNewScoreLevel()")
+    %button.button-link.add-assignment-score-level(ng-click="addNewScoreLevel()")
+      %i.fa.fa-fw.fa-plus(aria-hidden="true")
+      Add level

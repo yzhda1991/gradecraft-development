@@ -12,5 +12,14 @@
 
       scope.updateScoreLevel = (scoreLevel)->
         AssignmentService.queueUpdateScoreLevel(@assignment.id, scoreLevel)
+
+      scope.deleteScoreLevel = (scoreLevel)->
+        AssignmentService.deleteScoreLevel(@assignment.id, scoreLevel)
+
+      scope.hasNewScoreLevel = ()->
+        _.filter(@assignment.score_levels, { id: null }).length > 0
+
+      scope.addNewScoreLevel = ()->
+        AssignmentService.addNewScoreLevel(@assignment.id)
   }
 ]

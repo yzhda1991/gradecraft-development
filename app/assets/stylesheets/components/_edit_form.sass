@@ -84,6 +84,19 @@ ul.edit-form-tabs-nav
   left: 50%
   transform: translateX(-50%)
 
+.remove-line-item
+  width: 1.5rem
+  height: 1.5rem
+  color: white
+  background-color: $color-red-1
+  border-radius: 50%
+  margin-top: 25px
+  &:hover
+    background-color: darken($color-red-1, 10%)
+  .fa-times
+    width: 100%
+    padding-top: 4px
+
 .remove-media
   position: absolute
   top: -8px
@@ -95,4 +108,3 @@ ul.edit-form-tabs-nav
     background-color: darken($color-red-1, 10%)
   .fa-times
     width: 100%
-    padding-right: 0
