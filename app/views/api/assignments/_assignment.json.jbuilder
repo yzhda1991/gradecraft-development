@@ -19,8 +19,13 @@ json.attributes do
   json.position                   assignment.position
   json.purpose                    assignment.purpose
   json.release_necessary          assignment.release_necessary
+  json.show_name_when_locked      assignment.show_name_when_locked
+  json.show_points_when_locked    assignment.show_points_when_locked
+  json.show_description_when_locked  assignment.show_description_when_locked
+  json.show_purpose_when_locked   assignment.show_purpose_when_locked
   json.resubmissions_allowed      assignment.resubmissions_allowed
   json.threshold_points           assignment.threshold_points
+  json.visible_when_locked        assignment.visible_when_locked
 
   # boolean attributes
   json.visible                    assignment.visible

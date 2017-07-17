@@ -57,11 +57,16 @@ class API::AssignmentsController < ApplicationController
     params.require(:assignment).permit(
       :accepts_attachments, :accepts_links, :accepts_submissions, :accepts_submissions_until, :accepts_text,
       :assignment_type_id,
-      :description, :grade_scope,
+      :description, :grade_scope, :hide_analytics,
       :due_at, :full_points, :name, :open_at, :pass_fail,
       :media, :purpose, :release_necessary, :remove_media, :required,
       :resubmissions_allowed,
-      :student_logged, :threshold_points, :visible,
+      :student_logged,
+      :show_name_when_locked,
+      :show_points_when_locked,
+      :show_description_when_locked,
+      :show_purpose_when_locked,
+      :threshold_points, :visible,
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric
