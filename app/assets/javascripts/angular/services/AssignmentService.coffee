@@ -138,6 +138,26 @@
       "assignments", id, _updateAssignment, [id]
     )
 
+  _updateScoreLevel = (assignmentId, scoreLevel)->
+    params = { "assignment_score_levels_attributes" :
+      [{ "id" : scoreLevel.id, "points" : scoreLevel.points, "name" : scoreLevel.name }]
+    }
+    $http.put("/api/assignments/#{assignmentId}", assignment: params).then(
+      (response) ->
+        assignment = _.find(assignments, {id: assignmentId})
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateScoreLevel = (assignmentId, scoreLevel)->
+    DebounceQueue.addEvent(
+      "scoreLevels", scoreLevel.id, _updateScoreLevel, [assignmentId, scoreLevel]
+    )
+
+
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
     if update.predicted_earned_grades
@@ -220,6 +240,7 @@
       getAssignments: getAssignments
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
+      queueUpdateScoreLevel: queueUpdateScoreLevel
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
       ValidateDates: ValidateDates

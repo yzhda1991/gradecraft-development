@@ -20,6 +20,8 @@
           Points Threshold
           %input(ng-model="assignment.threshold_points" gc-number-input ng-change="updateAssignment()")
 
+  .form-subsection(ng-if="!assignment.pass_fail")
+    %assignment-score-levels(assignment="assignment")
 
   %h2.form-title {{termFor("assignment")}} Visibility Settings
   .form-subsection

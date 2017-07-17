@@ -74,6 +74,7 @@ json.attributes do
 
   if assignment.assignment_score_levels.present?
     json.score_levels assignment.assignment_score_levels do |asl|
+      json.id asl.id
       json.name asl.name
       json.points asl.points
     end

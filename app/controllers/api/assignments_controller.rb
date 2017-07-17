@@ -59,7 +59,10 @@ class API::AssignmentsController < ApplicationController
       :description, :grade_scope,
       :due_at, :full_points, :name, :open_at, :pass_fail,
       :media, :purpose, :release_necessary, :remove_media, :required,
-      :student_logged, :threshold_points, :visible
+      :student_logged, :threshold_points, :visible,
+      # We pass score levels through assignment update for now,
+      # planning on replacing them with a single criterion rubric
+      assignment_score_levels_attributes: [:id, :name, :points, :_destroy]
     )
   end
 end
