@@ -10,7 +10,7 @@
       .form-hint out of #{points @challenge.full_points} points
 
     .form-item
-      = f.label :student_visible
+      = f.label :student_visible, "Visible To Students"
       = f.select :student_visible, ["false", "true"]
       .form-hint= "Can the #{term_for :team} see this grade?"
 
