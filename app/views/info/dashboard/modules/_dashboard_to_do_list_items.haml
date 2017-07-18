@@ -27,13 +27,13 @@
       - if list_class == "course-planner-list"
         - if presenter.due_dates?
           .empty-state-wrapper
-            %img{src: "/images/no-assignments-due.png", alt:"", class:"empty-state-graphic"}
+            %img{src: "/images/no-assignments-due.svg", alt:"", class:"empty-state-graphic"}
           %p.empty-state-text You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
         - else
           %p.dashboard-message This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
       - elsif list_class == "my-planner-list"
         .empty-state-wrapper
-          %img{src: "/images/no-predicted-assignments.png", alt:"", class:"empty-state-graphic"}
+          %img{src: "/images/no-predicted-assignments.svg", alt:"", class:"empty-state-graphic"}
         %p.empty-state-text 
           You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the
           = link_to "grade predictor", predictor_path
