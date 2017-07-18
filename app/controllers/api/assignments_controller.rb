@@ -25,6 +25,19 @@ class API::AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
   end
 
+  def create
+    @assignment = current_course.assignments.new(assignment_params)
+    if @assignment.save
+      render "api/assignments/show", success: true, status: 201
+    else
+      render json: {
+        message: "failed to save assignment",
+        errors: @assignment.errors.messages,
+        success: false
+        }, status: 400
+    end
+  end
+
   # POST api/assignments/:id
   def update
     @assignment = Assignment.find(params[:id])

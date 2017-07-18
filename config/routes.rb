@@ -355,7 +355,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
 
-    resources :assignments, only: [:index, :show, :update] do
+    resources :assignments, only: [:index, :show, :update, :create] do
       get "analytics"
       post :sort, on: :collection
       resources :criteria, only: :index

@@ -51,11 +51,6 @@ class AssignmentsController < ApplicationController
   def new_edit
     params[:id] = params[:assignment_id]
     @assignment = @course.assignments.find(params[:id])
-    render :new_edit, Assignments::Presenter.build({
-      assignment: @assignment,
-      course: @course,
-      view_context: view_context
-      })
   end
 
   def edit

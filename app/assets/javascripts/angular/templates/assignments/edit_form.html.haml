@@ -1,5 +1,4 @@
-%loading-message(loading='vmAssignmentEdit.loading' message="Loading Assignment Info...")
-%article.assignment-form-fields.simple-form(ng-if="!vmAssignmentEdit.loading")
+%article.assignment-form-fields.simple-form
 
   %ul.edit-form-tabs-nav
     %li(ng-click="focusTab('basics')" ng-class="{'active': isFocusTab('basics')}")
@@ -10,13 +9,13 @@
       %a Unlock Conditions
 
   #tab1(ng-if="isFocusTab('basics')")
-    %assignment-edit-basics(assignment="vmAssignmentEdit.assignments[0]")
+    %assignment-edit-basics(assignment="assignment")
 
   #tab2(ng-if="isFocusTab('details')")
-    %assignment-edit-details(assignment="vmAssignmentEdit.assignments[0]")
+    %assignment-edit-details(assignment="assignment")
 
   #tab3(ng-if="isFocusTab('unlocks')")
-    %assignment-edit-unlocks(assignment="vmAssignmentEdit.assignments[0]")
+    %assignment-edit-unlocks(assignment="assignment")
 
 
 

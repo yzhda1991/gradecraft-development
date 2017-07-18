@@ -102,6 +102,15 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  createAssignment = (params)->
+    $http.post("/api/assignments/", assignment: params).then(
+      (response) ->
+        GradeCraftAPI.addItem(assignments, "assignments", response.data)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
   # Assignment Attributes are updated individually from directives on the
   # settings page. Note that the updated attribute might be different from
   # the one passed in by json and optimised for the predictor:
@@ -270,6 +279,7 @@
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       getAssignment: getAssignment
       getAssignments: getAssignments
+      createAssignment: createAssignment
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
       queueUpdateScoreLevel: queueUpdateScoreLevel

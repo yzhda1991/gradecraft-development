@@ -1,5 +1,5 @@
-# edit form for one assignment
-@gradecraft.directive 'assignmentEditForm', ['$q', 'AssignmentTypeService', 'AssignmentService', ($q, AssignmentTypeService, AssignmentService) ->
+# Entry point for editing an assignment
+@gradecraft.directive 'assignmentEdit', ['$q', 'AssignmentTypeService', 'AssignmentService', ($q, AssignmentTypeService, AssignmentService) ->
   AssignmentEditCtrl = [()->
     vmAssignmentEdit = this
     vmAssignmentEdit.loading = true
@@ -22,17 +22,9 @@
     bindToController: true,
     controller: AssignmentEditCtrl,
     controllerAs: 'vmAssignmentEdit',
-    templateUrl: 'assignments/edit.html',
+    templateUrl: 'assignments/assignment_edit.html',
     scope: {
       assignmentId: "="
     }
-    link: (scope, el, attr, ngModelCtrl)->
-      scope.termFor = AssignmentService.termFor
-      scope.tabInFocus = "basics"
-      scope.focusTab = (focus)->
-        scope.tabInFocus = focus
-      scope.isFocusTab = (focus)->
-        return true if focus == scope.tabInFocus
-        return false
   }
 ]
