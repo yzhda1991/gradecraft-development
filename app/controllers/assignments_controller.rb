@@ -48,18 +48,8 @@ class AssignmentsController < ApplicationController
       })
   end
 
-  def new_edit
-    params[:id] = params[:assignment_id]
-    @assignment = @course.assignments.find(params[:id])
-  end
-
   def edit
-    @assignment = @course.assignments.find(params[:id])
-    render :edit, Assignments::Presenter.build({
-      assignment: @assignment,
-      course: @course,
-      view_context: view_context
-      })
+    @assignment = current_course.assignments.find(params[:id])
   end
 
   # Duplicate an assignment - important for super repetitive items like
