@@ -19,9 +19,8 @@ class ChallengeGradesController < ApplicationController
   def update
     @team = @challenge_grade.team
     if @challenge_grade.update_attributes(challenge_grade_params)
-
-      # if challenge grades are released, they're visible to _all_ students
-      if ChallengeGradeProctor.new(@challenge_grade).viewable?
+      @challenge_grade.update(instructor_modified: true)
+      if @challenge_grade.student_visible?
         ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
       end
 
@@ -51,8 +50,11 @@ class ChallengeGradesController < ApplicationController
   private
 
   def challenge_grade_params
-    params.require(:challenge_grade).permit :name, :raw_points, :status, :challenge_id, :feedback,
-      :team_id, :final_points, :adjustment_points, :adjustment_points_feedback
+    params.require(:challenge_grade).permit(
+      :adjustment_points, :adjustment_points_feedback, :challenge_id, :complete,
+      :feedback, :final_points, :instructor_modified, :name, :raw_points,
+      :status, :student_visible, :team_id
+    )
   end
 
   def find_challenge

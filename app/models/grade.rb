@@ -25,16 +25,10 @@ class Grade < ActiveRecord::Base
   before_save :zero_points_for_pass_fail
   before_save :calculate_points
 
-  # temporary to maintain new fields
-  # until status is determined from
-  # complete and student_visible
-  before_save :update_status_fields
-
   after_save :check_unlockables
   after_save :update_earned_badges
 
   clean_html :feedback
-  releasable_through :assignment
 
   has_many :attachments, dependent: :destroy
   has_many :file_uploads, through: :attachments

@@ -121,11 +121,6 @@ apiTestDoubles.grade.withRubric =
     }
   ],
   "meta": {
-    "grade_status_options": [
-      "In Progress",
-      "Graded",
-      "Released"
-    ],
     "threshold_points": 0,
     "is_rubric_graded": true
   }

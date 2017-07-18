@@ -38,35 +38,11 @@ See [[Gradable]].
 
 Note that in this section the term "grade" refers to both Grades and Challenge Grades.
 
-### Attributes
-
-  * `status` - status of the grade. Set to either "In Progress," "Graded," or "Released"
-
 ### Scopes
 
-  * `graded` - grades that have a `status` of "Graded"
-  * `graded_or_released` - grades that have a `status` of "Graded" or "Released"
-  * `in_progress` - grades that have a `status` of "In Progress"
-  * `not_released` - grades that have a status of "Graded," joined with `releasable_relationship` (ie., the assignment or challenge). No grades will be returned when `release_necessary` from `releasable_relationship` is false
-  * `released` - grades, joined with the assignment/challenge, that meet one of two requirements:
-    * status that is set to "Released"
-    * status that is set to "Graded", with the assignment/challenge's `release_necessary` being false
-  * `student_visible` - appears to produce the exact same SQL query as `released`, though the where clause of `student_visible` comes from the private instance method `student_visible_sql`
-
-### Class Methods
-
-  * `releasable_through(relationship=nil)` - sets the instance variable `@releasable_relationship` to the model passed in. Meant for models that have
-    1. a belongs_to relationship with the model that `include`s `GradeStatus`
-    2. a `release_necessary` attribute
-  Method is called as a class definition in the model that `include`s `GradeStatus`
-  * `releasable_relationship`  - returns the model set by `releasable_through`. Used in the `not_released`, `released` and `student_visible` scopes in order to get the model's `release_necessary`
-
-### Instance Methods
-
-  * `is_graded?` - returns true if the status is set to "Graded"
-  * `in_progress?` - returns true if the status is set to "In Progress"
-  * `is_released?` - returns true if the status is set to "Released"
-  * `graded_or_released?` - returns true if the status is set to either "Graded" or "Released"
+  * `in_progress` - grades that are false for `complete`
+  * `complete` - grades that are true for `complete`
+  * `student_visible` - grades that are true for `student_visible`
 
 ## Historical
 

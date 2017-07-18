@@ -7,7 +7,6 @@ FactoryGirl.define do
     full_points { Faker::Number.number(5) }
     required false
     student_logged false
-    release_necessary false
     resubmissions_allowed false
     hide_analytics false
     grade_scope "Individual"

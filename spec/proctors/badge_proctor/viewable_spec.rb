@@ -29,7 +29,7 @@ describe BadgeProctor::Viewable do
       end
 
       it "can view the badge if earned and the EarnedBadge is visible" do
-        grade = create :released_grade
+        grade = create :student_visible_grade
         eb = create(:earned_badge,
           course: course,
           badge: badge,
@@ -40,7 +40,7 @@ describe BadgeProctor::Viewable do
       end
 
       it "cannnot view the badge if earned but the EarnedBadge is invisible" do
-        grade = create :unreleased_grade
+        grade = create :in_progress_grade
         eb = create(:earned_badge,
           course: course,
           badge: badge,

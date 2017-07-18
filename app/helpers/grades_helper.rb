@@ -15,8 +15,19 @@ module GradesHelper
   end
 
   def in_progress_grades_count_cache_key(course)
-    # This cache key is busted when a grade is updated
+    # This cache key should be expired when a grade is updated
     "#{course.cache_key}/in_progress_grades_count"
+  end
+
+  def ready_for_release_grades_count_for(course)
+    Rails.cache.fetch(ready_for_release_count_cache_key(course)) do
+      course.grades.ready_for_release.count
+    end
+  end
+
+  def ready_for_release_count_cache_key(course)
+    # This cache key should be expired when a grade is updated
+    "#{course.cache_key}/ready_for_release_grades_count"
   end
 
   def unreleased_grades_count_for(course)
@@ -26,7 +37,7 @@ module GradesHelper
   end
 
   def unreleased_grades_count_cache_key(course)
-    # This cache key is busted when a grade is updated
+    # This cache key should be expired when a grade is updated
     "#{course.cache_key}/unreleased_grades_count"
   end
 

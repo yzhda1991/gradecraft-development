@@ -3,7 +3,7 @@
     %h4.assignment_name
       = link_to assignment.name, assignment
 
-    = form_tag edit_status_assignment_grades_path(assignment), method: :get do
+    = form_tag release_assignment_grades_path(assignment), method: :put do
 
       %table.dynatable.no-table-header
         %thead
@@ -19,7 +19,7 @@
             %th{scope: "col"} Feedback
             %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
               %span.sr-only Actions
-            - if current_course.active? 
+            - if current_course.active?
               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
                 %button.button.table-select-all{role: "button", type: "button"}= "Check"
                 %button.button.table-select-none{role: "button", type: "button"}= "Uncheck"
@@ -56,6 +56,7 @@
 
       .submit-buttons
         .right
-          = active_course_submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-#{grade_type}-#{assignment.name}-grades-command" }
+          = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
+            data: { behavior: "selected-#{grade_type}-#{assignment.name}-grades-command", confirm: "Release Selected Grades to Students?" }
 
   %hr.dotted

@@ -20,7 +20,7 @@ describe "assignments/individual/_table_body" do
 
   describe "with a graded grade" do
     before(:each) do
-      @grade.update(status: "Graded", instructor_modified: true)
+      @grade.update(student_visible: true, instructor_modified: true)
     end
 
     describe "with a score" do

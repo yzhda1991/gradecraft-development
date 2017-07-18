@@ -35,7 +35,7 @@ class GradeExporter
       csv << headers + detail_headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
-        grade = Grade.new if !(grade.instructor_modified? || grade.graded_or_released?)
+        grade = Grade.new if !grade.instructor_modified?
         submission = student.submission_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
                 student.email,

@@ -8,14 +8,15 @@
         = active_course_submit_tag "Delete All Grades", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
 
 .progress
-= form_tag edit_status_assignment_grades_path(presenter.assignment), method: :get do
+= form_tag release_assignment_grades_path(presenter.assignment), method: :put do
   %table.dynatable.no-table-header
     %thead= render partial: "assignments/individual/table_head", locals: { presenter: presenter }
     %tbody= render partial: "assignments/individual/table_body", locals: { presenter: presenter }
 
-  - if presenter.assignment.release_necessary? && presenter.has_grades?
+  - if presenter.has_grades?
     .right
       %br
-      = active_course_submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-individual-grades-command" }
+      = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
+        data: { behavior: "selected-individual-grades-command", confirm: "Release Selected Grades to Students?" }
 
   .clear

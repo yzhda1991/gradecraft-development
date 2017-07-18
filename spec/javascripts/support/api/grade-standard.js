@@ -22,10 +22,6 @@ apiTestDoubles.grade.standard =
     },
   },
   "meta": {
-    "grade_status_options": [
-      "In Progress",
-      "Graded"
-    ],
     "threshold_points": 0,
     "is_rubric_graded": false
   }

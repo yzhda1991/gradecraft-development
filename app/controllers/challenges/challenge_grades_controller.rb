@@ -13,6 +13,7 @@ class Challenges::ChallengeGradesController < ApplicationController
   # POST /challenge_grades
   def create
     @challenge_grade = current_course.challenge_grades.new(challenge_grade_params)
+    @challenge_grade.instructor_modified = true
     @team = @challenge_grade.team
     if @challenge_grade.save
 
@@ -42,6 +43,7 @@ class Challenges::ChallengeGradesController < ApplicationController
       challenge_grade_ids = []
       @challenge.challenge_grades.each do |challenge_grade|
         if challenge_grade.previous_changes[:raw_points].present?
+          challenge_grade.update(instructor_modified: true)
           challenge_grade_ids << challenge_grade.id
         end
       end
@@ -55,22 +57,17 @@ class Challenges::ChallengeGradesController < ApplicationController
     end
   end
 
-  # Changing the status of a grade - allows instructors to review "Graded"
-  # grades, before they are "Released" to students
-  # GET /challenges/:challenge_id/challenge_grades/edit_status
-  def edit_status
-    @challenge_grades =
-      @challenge.challenge_grades.find(params[:challenge_grade_ids])
-  end
-
-  # PUT /challenges/:challenge_id/challenge_grades/update_status
-  def update_status
+  # PUT /challenges/:challenge_id/challenge_grades/release
+  def release
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
-      challenge_grade.update_attributes!(challenge_grade_params.reject { |k, v| v.blank? })
+      challenge_grade.instructor_modified = true
+      challenge_grade.complete = true
+      challenge_grade.student_visible = true
+      challenge_grade.save
     end
-    flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"
+    flash[:notice] = "#{(term_for :challenge).titleize} grades released to students"
     redirect_to challenge_path(@challenge)
   end
 
@@ -81,8 +78,11 @@ class Challenges::ChallengeGradesController < ApplicationController
   end
 
   def challenge_grade_params
-    params.require(:challenge_grade).permit :name, :raw_points, :status, :challenge_id, :feedback,
-      :team_id, :final_points, :adjustment_points, :adjustment_points_feedback
+    params.require(:challenge_grade).permit(
+      :adjustment_points, :adjustment_points_feedback, :challenge_id, :complete,
+      :feedback, :final_points, :instructor_modified, :name, :raw_points,
+      :status, :student_visible, :team_id
+    )
   end
 
   def find_challenge

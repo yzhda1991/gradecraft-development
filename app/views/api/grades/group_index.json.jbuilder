@@ -36,7 +36,6 @@ end
 
 json.meta do
   json.student_ids @student_ids
-  json.grade_status_options @grade_status_options
   json.threshold_points     @assignment.threshold_points
   json.is_rubric_graded     @assignment.grade_with_rubric?
 end

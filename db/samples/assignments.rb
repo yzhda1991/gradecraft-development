@@ -35,7 +35,6 @@
     purpose: "Squashy armchairs dirt on your nose brass scales crush the Sopophorous bean with flat side of silver dagger, releases juice better than cutting. Full moon Whomping Willow three turns should do it lemon drops.",
     grade_scope: "Individual",
     hide_analytics: false,
-    release_necessary: false,
     student_logged: false,
     threshold_points: 0,
     visible: true,
@@ -47,7 +46,8 @@
   grade_attributes: {
     raw_points: -> { qd_curve(5000) },
     instructor_modified: true,
-    status: nil,
+    complete: true,
+    student_visible: false,
     feedback: nil,
     excluded_from_course_score: false,
   },
@@ -129,7 +129,7 @@ end
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -162,7 +162,7 @@ uncertainty! - Douglas Adams"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -196,7 +196,7 @@ to bed. ― J.K. Rowling"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -231,7 +231,7 @@ of what it feels about education.― Harold Howe",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -265,7 +265,7 @@ life.― John Holt",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -286,7 +286,7 @@ met. Grades have a raw_points of 15000",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    student_visible: true,
     raw_points: -> { 15000 },
   }
 }
@@ -308,7 +308,7 @@ One Day",
   assignment_score_levels: true,
 }
 
-@assignments[:standard_edit_release_required] = {
+@assignments[:standard_edit_in_progress] = {
   quotes: {
     assignment_created: "But what are schools for if not to make children \
 fall so deeply in love with the world that they really want to learn about \
@@ -317,10 +317,16 @@ other desirable developments follow of themselves. - Marjorie Spock",
   },
   assignment_type: :grading,
   attributes: {
-    name: "Standard Edit + Release Required [No Grades]",
-    open_at: 3.weeks.from_now,
+    name: "Standard Edit + In Progress Grades",
+    open_at: 3.weeks.ago,
     due_at: 3.weeks.from_now + 0.05,
-    release_necessary: true
+    full_points: 20000,
+  },
+  grades: true,
+  participation: 90,
+  grade_attributes: {
+    complete: false,
+    raw_points: -> { 15000 },
   }
 }
 
@@ -337,7 +343,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -353,7 +359,7 @@ other desirable developments follow of themselves. - Marjorie Spock",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "In Progress"
+    complete: false
   }
 }
 
@@ -380,7 +386,6 @@ face! - John Keating"
     accepts_attachments: true,
     accepts_links: true,
     accepts_text: true,
-    release_necessary: true,
   },
   rubric: true,
   student_submissions: true
@@ -424,12 +429,11 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
     accepts_attachments: true,
     accepts_links: true,
     accepts_text: true,
-    release_necessary: true,
   },
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released",
+    student_visible: true,
     feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>',
   },
   rubric: true,
@@ -768,7 +772,7 @@ accepts predictions.",
   grades: true,
   participation: 100,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -793,7 +797,7 @@ accepts predictions.",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -816,7 +820,7 @@ not added to total",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    student_visible: true,
     excluded_from_course_score: true
   },
   prediction: true,
@@ -869,13 +873,12 @@ on hover",
 should not have a visible grade",
     due_at: 1.week.ago,
     full_points: 15000,
-    release_necessary: true,
   },
   grades: true,
   participation: 90,
   grade_attributes: {
     raw_points: -> { qd_curve(15000) },
-    status: "Released"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -936,7 +939,7 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
   participation: 90,
   grade_attributes: {
     raw_points: -> { 15000 },
-    status: "Graded"
+    student_visible: true
   },
   prediction: true,
   prediction_attributes: {
@@ -1096,7 +1099,6 @@ Hockney",
     description: "I send out emails when student receives a grade",
     due_at: 4.weeks.from_now,
     full_points: 150000,
-    release_necessary: true,
   }
 }
 
@@ -1329,7 +1331,7 @@ treated like money, to be put away in a bank for the future. ― Seymour Papert"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    student_visible: true,
     raw_points: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key
       to unlock the golden door of freedom."</strong>'
@@ -1375,7 +1377,7 @@ in the end you’ll fall right into my trap. ― Sophia Nikolaidou",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded",
+    student_visible: true,
     raw_points: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not
       strength or intelligence - is the key to unlocking our potential.
@@ -1646,7 +1648,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -1675,7 +1677,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -1704,7 +1706,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -1733,7 +1735,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Graded"
+    student_visible: true
   }
 }
 
@@ -1757,7 +1759,7 @@ the speed, and the route.― Jay Cross",
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }
 
@@ -1781,6 +1783,6 @@ uncertainty! - Douglas Adams"
   grades: true,
   participation: 90,
   grade_attributes: {
-    status: "Released"
+    student_visible: true
   }
 }

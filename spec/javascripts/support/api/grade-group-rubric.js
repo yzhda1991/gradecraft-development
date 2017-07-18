@@ -355,10 +355,6 @@ apiTestDoubles.grade.groupRubric =
       13,
       7
     ],
-    "grade_status_options": [
-      "In Progress",
-      "Graded"
-    ],
     "threshold_points": 0,
     "is_rubric_graded": true
   }

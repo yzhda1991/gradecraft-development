@@ -247,10 +247,10 @@ class User < ActiveRecord::Base
 
   ### GRADES
 
-  # Checking specifically if there is a released grade for an assignment
-  def grade_released_for_assignment?(assignment)
+  # Checking specifically if there is a student visible grade for an assignment
+  def grade_visible_for_assignment?(assignment)
     grade = grade_for_assignment(assignment)
-    GradeProctor.new(grade).viewable?
+    grade.student_visible?
   end
 
   def grades_for_course(course)
@@ -327,8 +327,7 @@ class User < ActiveRecord::Base
 
   # this should be all earned badges that either:
   # 1) have no associated grade and have been awarded to the student, or...
-  # 2) have an associated grade that has been marked graded_or_released?
-  # (indicated through the student_visible boolean)
+  # 2) have an associated grade that is student visible
   def student_visible_earned_badges(course)
     @student_visible_earned_badges ||= EarnedBadge
       .includes(:badge)

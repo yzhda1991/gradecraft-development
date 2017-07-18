@@ -1,151 +1,54 @@
 describe GradeStatus do
-  let(:course) { build(:course) }
-  let(:assignment) { create(:assignment) }
-  let(:grade) { create(:grade, assignment: assignment) }
-  let(:challenge_grade) { create(:challenge_grade) }
+  let(:unmodified_grade) { create :grade }
+  let(:in_progress_grade) { create :in_progress_grade }
+  let(:complete_grade) { create :complete_grade }
+  let(:student_visible_grade) { create :student_visible_grade}
 
-  describe ".released" do
-    it "returns all the grades that are released" do
-      released_grade = create :grade, status: "Released"
-      create :grade, status: "In Progress"
-      expect(Grade.released).to eq [released_grade]
-    end
-  end
 
-  describe ".student_visible" do
-    it "returns all grades that were released or were graded but no release was necessary" do
-      graded_grade = create :grade, status: "Graded"
-      released_grade = create :grade, status: "Released"
-      assignment = create :assignment, release_necessary: true
-      create :grade, assignment: assignment, status: "Graded"
-
-      expect(Grade.student_visible).to include(released_grade, graded_grade)
-    end
-  end
-
-  describe "student_visible?" do
-    it "returns true if the grade is released" do
-      grade.status = "Released"
-      assignment.release_necessary = true
-      expect(grade.is_student_visible?).to eq true
+  describe "status scopes" do
+    before do
+      unmodified_grade
+      in_progress_grade
+      complete_grade
+      student_visible_grade
     end
 
-    it "returns true if the grade is graded and the assignment does not need release" do
-      grade.status = "Graded"
-      assignment.release_necessary = false
-      expect(grade.is_student_visible?).to eq true
-    end
-
-    it "returns false if the grade is not released" do
-      grade.status = "Graded"
-      assignment.release_necessary = true
-      expect(grade.is_student_visible?).to eq false
-    end
-
-    it "returns false if the grade is not marked as graded" do
-      grade.status = nil
-      assignment.release_necessary = true
-      expect(grade.is_student_visible?).to eq false
-    end
-
-    it "returns false if the grade is marked as in progress" do
-      grade.status = "In Progress"
-      assignment.release_necessary = true
-      expect(grade.is_student_visible?).to eq false
-    end
-  end
-
-  describe ".releasable_through" do
-    it "returns challenge" do
-      expect(ChallengeGrade.releasable_relationship).to eq :challenge
-    end
-
-    it "returns assignment" do
-      expect(Grade.releasable_relationship).to eq :assignment
-    end
-  end
-
-  describe "#is_graded?" do
-    it "returns true if the challenge grade is graded" do
-      challenge_grade = create(:challenge_grade, status: "Graded")
-      expect(challenge_grade.is_graded?).to eq(true)
-    end
-    it "returns false if the challenge grade is not graded" do
-      challenge_grade = create(:challenge_grade, status: nil)
-      expect(challenge_grade.is_graded?).to eq(false)
-    end
-  end
-
-  describe "#is_released?" do
-    it "returns true if the challenge grade is released" do
-      challenge_grade = create(:challenge_grade, status: "Released")
-      expect(challenge_grade.is_released?).to eq(true)
-    end
-
-    it "returns false if the challenge grade is not graded" do
-      challenge_grade = create(:challenge_grade, status: nil)
-      expect(challenge_grade.is_released?).to eq(false)
-    end
-
-    it "returns false if the challenge grade is graded but not released" do
-      challenge_grade = create(:challenge_grade, status: "Graded")
-      expect(challenge_grade.is_released?).to eq(false)
-    end
-  end
-
-  describe ".not_released" do
-    it "returns all grades that are graded but require a release" do
-      assignment = create :assignment, release_necessary: true
-      not_released_grade = create :grade, assignment: assignment, status: "Graded"
-      create :grade, assignment: assignment, status: "Released"
-      create :grade, status: "Graded"
-
-      expect(Grade.not_released).to eq [not_released_grade]
-    end
-  end
-
-  describe "#update_status_fields" do
-    context "when release is not required" do
-      it "updates the fields on 'In Progress' grades" do
-        grade.status = "In Progress"
-        grade.update_status_fields
-        expect(grade.complete).to be_falsey
-        expect(grade.student_visible).to be_falsey
-      end
-
-      it "updates the fields on 'Graded' grades" do
-        grade.status = "Graded"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_truthy
+    describe ".in_progress" do
+      it "returns all grades that are incomplete but modified" do
+        expect(Grade.in_progress).to eq([in_progress_grade])
       end
     end
 
-    context "when release is necessary" do
-      before do
-        grade.assignment.update(release_necessary: true)
-      end
+    describe ".not_released" do
+      it "returns all grades that are not student visible but modified" do
+        scope = Grade.not_released
+        expect(scope).to include(in_progress_grade)
+        expect(scope).to include(complete_grade)
+        expect(scope).not_to include(unmodified_grade)
+        expect(scope).not_to include(student_visible_grade)
 
-      it "updates the fields on 'In Progress' grades" do
-        grade.status = "In Progress"
-        grade.update_status_fields
-        expect(grade.complete).to be_falsey
-        expect(grade.student_visible).to be_falsey
       end
+    end
 
-      it "updates the fields on 'Graded' grades" do
-        grade.status = "Graded"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_falsey
+    describe ".student_visible" do
+      it "returns all grades that are student visible" do
+        expect(Grade.student_visible).to eq([student_visible_grade])
       end
+    end
+  end
 
-      it "updates the fields on 'Released' grades" do
-        grade.status = "Released"
-        grade.update_status_fields
-        expect(grade.complete).to be_truthy
-        expect(grade.student_visible).to be_truthy
-      end
+  describe "#in_progress?" do
+    it "returns true for grades that are incomplete but modified" do
+      expect(in_progress_grade.in_progress?).to be_truthy
+      expect(student_visible_grade.in_progress?).to be_falsey
+    end
+  end
+
+  describe "#not_released?" do
+    it "returns true for grades that are modified but not student visible" do
+      expect(in_progress_grade.not_released?).to be_truthy
+      expect(student_visible_grade.in_progress?).to be_falsey
+      expect(complete_grade.not_released?).to be_truthy
     end
   end
 end

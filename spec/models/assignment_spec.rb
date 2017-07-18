@@ -59,12 +59,6 @@ describe Assignment do
       expect(subject.errors[:student_logged]).to include "must be true or false"
     end
 
-    it "is invalid without release_necessary" do
-      subject.release_necessary = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:release_necessary]).to include "must be true or false"
-    end
-
     it "is invalid without visible" do
       subject.visible = nil
       expect(subject).to_not be_valid
@@ -341,7 +335,7 @@ describe Assignment do
     before { subject.save }
 
     it "returns the first visible grade for the student" do
-      grade = subject.grades.create student_id: student.id, raw_points: 85, status: "Graded"
+      grade = subject.grades.create student_id: student.id, raw_points: 85, student_visible: true
       expect(subject.grade_for_student(student)).to eq grade
     end
   end

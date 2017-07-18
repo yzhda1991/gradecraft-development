@@ -14,7 +14,7 @@ module Gradable
 
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
-    grades.graded_or_released.where(student_id: student.id).first
+    grades.student_visible.where(student_id: student.id).first
   end
 
   def is_predicted_by_student?(student)
@@ -28,7 +28,7 @@ module Gradable
     else
       students = course.students.order_by_name
     end
-    students - (User.find(grades.graded_or_released.pluck(:student_id)) - User.find(ids_to_include))
+    students - (User.find(grades.student_visible.pluck(:student_id)) - User.find(ids_to_include))
   end
 
   def ungraded_students_with_submissions(ids_to_include=[], team=nil)

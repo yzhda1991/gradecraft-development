@@ -11,7 +11,7 @@ module Services
         result = context.grades_import_result
 
         result.successful.each do |grade|
-          if grade.graded_or_released? && GradeProctor.new(grade).viewable?
+          if grade.student_visible?
             GradeUpdaterJob.new(grade_id: grade.id).enqueue
           end
         end unless result.nil?

@@ -39,12 +39,6 @@ describe Challenge do
       expect(subject).to_not be_valid
       expect(subject.errors[:accepts_submissions]).to include "must be true or false"
     end
-
-    it "is invalid without a release setting" do
-      subject.release_necessary = nil
-      expect(subject).to_not be_valid
-      expect(subject.errors[:release_necessary]).to include "must be true or false"
-    end
   end
 
   describe "#copy" do

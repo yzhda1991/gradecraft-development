@@ -7,8 +7,7 @@
       %th{:style => "display: none"} Due Date
       %th Visible
       %th Submissions?
-      %th Release necessary
-      %th.options Options
+      %th{ :style => "min-width: 220px" }
 
   %tbody
     - @challenges.chronological.alphabetical.each do |challenge|
@@ -20,7 +19,6 @@
           = challenge.try(:due_at).to_formatted_s(:db) if challenge.due_at.present?
         %td= challenge.visible? ? "Visible" : "Hidden"
         %td= challenge.accepts_submissions? ? "Yes" : "No"
-        %td= challenge.release_necessary? ? "Yes" : "No"
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")

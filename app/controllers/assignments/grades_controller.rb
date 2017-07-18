@@ -3,35 +3,26 @@ require_relative "../../services/creates_many_grades"
 class Assignments::GradesController < ApplicationController
   before_action :ensure_staff?, except: :self_log
   before_action :ensure_student?, only: :self_log
-  before_action :save_referer, only: :edit_status
-  before_action :find_assignment, only: [:edit_status, :mass_edit, :mass_update, :self_log, :delete_all]
-  before_action :use_current_course, only: [:edit_status, :update_status, :mass_edit, :mass_update]
+  before_action :find_assignment, only: [:mass_edit, :mass_update, :self_log, :delete_all]
+  before_action :use_current_course, only: [:release, :mass_edit, :mass_update]
 
-  # GET /assignments/:assignment_id/grades/edit_status
-  # For changing the status of a group of grades passed in grade_ids
-  # ("In Progress" => "Graded", or "Graded" => "Released")
-  def edit_status
-    @grades = @assignment.grades.find(params[:grade_ids])
-  end
-
-  # PUT /assignments/:assignment_id/grades/update_status
-  def update_status
+  # PUT /assignments/:assignment_id/grades/release
+  # Releases grades for assignment in grade_ids params
+  def release
     assignment = @course.assignments.find(params[:assignment_id])
     grades = assignment.grades.find(params[:grade_ids])
-    status = params[:grade][:status]
 
     grade_ids = grades.collect do |grade|
-      grade.update(status: status)
+      grade.instructor_modified = true
+      grade.complete = true
+      grade.student_visible = true
+      grade.save
       grade.id
     end
 
     enqueue_multiple_grade_update_jobs(grade_ids)
 
-    if session[:return_to].present?
-      redirect_to session[:return_to], notice: "Grades were successfully updated!"
-    else
-      redirect_to assignment, notice: "Grades were successfully updated!"
-    end
+    redirect_to assignment_path(assignment), notice: "Grades were successfully released!"
   end
 
   # GET /assignments/:assignment_id/grades/export
@@ -83,7 +74,7 @@ class Assignments::GradesController < ApplicationController
   def mass_update
     filter_params_with_no_grades!
     params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].each do |key, value|
-      value.merge!(instructor_modified: true, status: "Graded")
+      value.merge!(instructor_modified: true, complete: true, student_visible: true)
     end
     result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
@@ -134,10 +125,10 @@ class Assignments::GradesController < ApplicationController
       end
 
       @grade.instructor_modified = true
-      @grade.status = "Graded"
+      @grade.complete = true
+      @grade.student_visible = true
 
       if @grade.save
-        # @mz TODO: add specs
         grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
         grade_updater_job.enqueue
 
@@ -158,7 +149,7 @@ class Assignments::GradesController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit grades_attributes: [:graded_by_id, :graded_at,
-      :instructor_modified, :student_id, :raw_points, :status, :pass_fail_status, :id]
+      :instructor_modified, :student_id, :raw_points, :pass_fail_status, :id, :complete, :student_visible]
   end
 
   # Delete params that have no raw_points or pass_fail_status

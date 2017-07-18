@@ -1,0 +1,16 @@
+%section.grade-complete
+  .grade-switch-sandwich
+    .grade-switch-sandwich-section.long-section
+      .binary-switch-label
+        Mark As Graded?
+    .grade-switch-sandwich-section
+      .binary-switch-socket(ng-click='toggleComplete()' ng-class='switchState()')
+        .binary-switch-handle
+    .grade-switch-sandwich-section
+      .binary-switch-label
+        {{textForSwitch()}}
+
+  .release-status-explanation.italic(ng-if="switchState() == 'off'")
+    Grade will be marked as in progress
+  .release-status-explanation.italic(ng-if="switchState() == 'on'")
+    Grade will be marked as graded

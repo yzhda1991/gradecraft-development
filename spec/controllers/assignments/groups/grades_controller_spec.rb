@@ -68,7 +68,8 @@ describe Assignments::Groups::GradesController do
           expect(grade.graded_by_id).to eq(professor.id)
           expect(grade.instructor_modified).to be true
           expect(grade.raw_points).to eq(1000)
-          expect(grade.status).to eq("Graded")
+          expect(grade.complete).to be true
+          expect(grade.student_visible).to be true
         end
 
         it "redirects on failure" do

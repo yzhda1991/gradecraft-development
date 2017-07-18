@@ -65,7 +65,7 @@ describe GradesController do
           feedback_reviewed_at: Time.now,
           instructor_modified: true,
           graded_at: DateTime.now,
-          status: "Graded"
+          student_visible: true
         )
         post :exclude, params: { id: grade }
 
@@ -100,7 +100,7 @@ describe GradesController do
       it "marks the Grade as included, and clears the excluded details" do
         grade.update(
           raw_points: 500,
-          status: "Graded",
+          student_visible: true,
           excluded_from_course_score: true,
           excluded_by_id: 2,
           excluded_at: Time.now
