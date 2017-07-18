@@ -9,9 +9,9 @@
 
   .flex-column
     - if current_course.grade_scheme_elements.present? && GradeSchemeElement.has_valid_elements_for(current_course)
-      .panel.dashboard-module.grading-scheme-module.flex-row.col-50= render partial: "info/dashboard/modules/dashboard_grading_scheme"
+      .panel.dashboard-module.grading-scheme-module.flex-row= render partial: "info/dashboard/modules/dashboard_grading_scheme"
 
-    .stacked-column.col-50
+    .stacked-column
       .panel.dashboard-module.stacked-module
         %course-distribution-analytics
 
