@@ -14,6 +14,11 @@
 
     .card.quarter
       .card-text
+        .center.bold.inverse.large= ready_for_release_grades_count_for(current_course)
+        %h2.grading-status-name.center.inverse Ready For Release Grades
+
+    .card.quarter
+      .card-text
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h2.grading-status-name.center.inverse Resubmissions
 
@@ -34,6 +39,15 @@
           In Progress Grades
       .collapse-hidden{role: "tabpanel"}
         = render partial: "grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
+
+  - if @ready_for_release_grades_by_assignment.present?
+    .collapseSection{id: "unreleased", role: "tablist"}
+      .collapse{role: "tab"}
+        %h3
+          %i.fa.fa-chevron-circle-right.fa-fw
+          Ready For Release Grades
+      .collapse-hidden{role: "tabpanel"}
+        = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @ready_for_release_grades_by_assignment, course: current_course }
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions", role: "tablist"}

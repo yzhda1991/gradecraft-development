@@ -39,6 +39,7 @@ class InfoController < ApplicationController
     @ungraded_submissions_by_assignment = submissions.ungraded.group_by(&:assignment)
     @resubmissions_by_assignment = submissions.resubmitted.group_by(&:assignment)
     @in_progress_grades_by_assignment = grades.in_progress.group_by(&:assignment)
+    @ready_for_release_grades_by_assignment = grades.ready_for_release.group_by(&:assignment)
   end
 
   # Displaying per assignment summary outcome statistics
