@@ -10,7 +10,7 @@ feature "creating a new team" do
     end
 
     scenario "successfully" do
-      within(".context_menu") do
+      within(".context-menu") do
         click_link "New Section"
       end
 

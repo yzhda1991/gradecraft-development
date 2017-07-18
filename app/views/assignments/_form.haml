@@ -91,7 +91,7 @@
 
       .form-flex-row.pass-fail-contingent{"class"=>("visually-hidden" if f.object.pass_fail?)}
         .form-item
-          = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}, label: "Total Points Possible"
+          = f.input :full_points, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: "Total Points Possible"
 
         .form-item
           = f.label :threshold_points, "Points Threshold"
@@ -127,12 +127,6 @@
           Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
 
       .form-item.no-margin
-        = f.check_box :release_necessary
-        = f.label :release_necessary
-        = tooltip("release-necessary-hint", "info-circle", placement: "right") do
-          Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
-
-      .form-item.no-margin
         .assignment_options.form-item-with-options
           = f.check_box :accepts_submissions, {class: "has-conditional-options"}
           = f.label :accepts_submissions #{term_for :assignment} Submissions
@@ -155,7 +149,6 @@
         = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
         = tooltip("resubmissions-hint", "info-circle", placement: "right") do
           Can #{term_for :students} resubmit this #{term_for :assignment}?
-
 
     %h2.form-title Visibility Settings
     .form-subsection
@@ -213,7 +206,6 @@
             .checkbox
               = f.check_box :show_purpose_when_locked
               = f.label :show_purpose_when_locked, :label => "Show Purpose when Locked"
-
 
   .submit-buttons
     %ul

@@ -22,7 +22,8 @@ class RubricGradePUT
         "adjustment_points_feedback" => "reduced by 10 points",
         "feedback" => "good jorb!",
         "raw_points" => @assignment.full_points - 10,
-        "status" => "Released",
+        "complete" => true,
+        "student_visible" => true
       }
     }
   end

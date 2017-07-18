@@ -86,9 +86,11 @@ class Course < ActiveRecord::Base
     :team_leader_term, :group_term, :weight_term, :badge_term, :assignment_term, :challenge_term
 
   validates_numericality_of :total_weights, :max_weights_per_assignment_type,
-    :max_assignment_types_weighted, :full_points, allow_blank: true, length: { maximum: 9 }
+    :max_assignment_types_weighted, less_than_or_equal_to: 999999999, greater_than: 0, if: lambda { self.has_multipliers? }, message: "must be set to greater than 0 for the Multipliers feature to work properly."
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
+  validates_format_of :twitter_handle, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
+  validates_format_of :phone, with:  /\A^[0-9\+\(]{1,}[0-9\-\.\(\)]{3,15}$\z/, allow_blank: true, message: "must be a valid phone number."
 
   scope :alphabetical, -> { order("course_number ASC") }
   scope :active, -> { where(status: true) }

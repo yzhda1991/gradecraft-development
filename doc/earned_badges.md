@@ -51,7 +51,7 @@ Any badge can only be awarded once per level. More than one kind of badge can be
 
 #### Attributes
 
-  * `student_visible` - reflects the grade model's `is_student_visible?` value, or true if no associated grade
+  * `student_visible` - reflects the grade model's `student_visible?` value, or true if no associated grade
   * `feedback` - feedback for the student
 
 #### Methods

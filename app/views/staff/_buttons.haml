@@ -1,5 +1,5 @@
 - content_for :context_menu do
-  .context_menu
+  .context-menu
     %ul
       - if @staff_member.present?
         = active_course_link_to glyph(:edit) + "Edit Staff Member", edit_user_path(@staff_member), class: "button button-edit"

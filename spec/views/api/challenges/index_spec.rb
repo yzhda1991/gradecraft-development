@@ -74,7 +74,7 @@ describe "api/challenges/index" do
 
     it "contains the current team grade" do
       team = create :team, course: @course
-      grade = create :challenge_grade, challenge: @challenge, team: team, status: "Released"
+      grade = create :challenge_grade, challenge: @challenge, team: team, student_visible: true
       @grades = ChallengeGrade.where(challenge_id: @challenge.id)
       render
       json = JSON.parse(response.body)

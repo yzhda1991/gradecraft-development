@@ -40,7 +40,8 @@ describe Services::Actions::BuildsGrade do
     expect(result[:grade].student_id).to eq student.id
     expect(result[:grade].full_points).to eq assignment.full_points
     expect(result[:grade].raw_points).to eq assignment.full_points - 10
-    expect(result[:grade].status).to eq "Released"
+    expect(result[:grade].complete).to eq true
+    expect(result[:grade].student_visible).to eq true
     expect(result[:grade].feedback).to eq "good jorb!"
     expect(result[:grade].adjustment_points).to eq -10
     expect(result[:grade].adjustment_points_feedback).to eq "reduced by 10 points"

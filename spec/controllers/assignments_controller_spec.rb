@@ -149,7 +149,7 @@ describe AssignmentsController do
 
     describe "GET show" do
       it "marks the grade as reviewed" do
-        grade = create(:grade, assignment: assignment, student: student, status: "Graded")
+        grade = create(:grade, assignment: assignment, student: student, student_visible: true)
         get :show, params: { id: assignment.id }
         expect(grade.reload).to be_feedback_reviewed
       end

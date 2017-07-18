@@ -15,7 +15,7 @@ When an instance of a model that `include`s Gradable is destroyed, its grades an
 
 ## Instance Methods
 
-*Note that when discussing grades in an assignment, we are always referring to grades that have either been graded or released*
+*Note that when discussing grades in an assignment, we are always referring to grades that are student visible*
 
   * `no_grade(attrs)` - used for rejecting the nested attributes of a grade. When the model's `pass_fail` attribute is true, the method returns true if the grade's pass fail status is empty. When `pass_fail` is false, the method returns true if the grade's `raw_points` attribute has not been set yet
   * `grade_for_student(student)` - returns the passed in student's grade for the assignment. Returns nil if the grade has neither been graded nor released, or if the grade does not yet exist

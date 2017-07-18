@@ -1,6 +1,6 @@
 json.participation_rate @assignment.participation_rate
 json.assignment_score_frequency @assignment.score_frequency
-json.scores @assignment.graded_or_released_scores
+json.scores @assignment.student_visible_scores
 json.user_score @user_score
 json.assignment_average @assignment.average
 json.assignment_median @assignment.median

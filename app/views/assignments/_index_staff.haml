@@ -1,5 +1,5 @@
 - content_for :context_menu do
-  .context_menu
+  .context-menu
     %ul
       - if current_course.assignment_types.present?
         = active_course_link_to decorative_glyph(:plus) + "New #{term_for :assignment}", new_assignment_path, class: "button button-edit"
@@ -13,7 +13,7 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .assignment-index-container.sort-assignments{role: "tablist"}
+  .assignment-index-container.assignments{role: "tablist"}
     - @assignment_types.each do |assignment_type|
       .assignment_type{id: "assignment-type-#{assignment_type.id}" }
         .assignment-type-bar.instructor.collapse{role: "tab"}
@@ -55,7 +55,7 @@
                     %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
                   %td= assignment.submissions.submitted.count if assignment.accepts_submissions? && assignment.submissions.present?
-                  %td= assignment.grades.graded_or_released.for_active_students.count if assignment.grades.for_active_students.instructor_modified.any?
+                  %td= assignment.grades.for_active_students.student_visible.count if assignment.grades.for_active_students.instructor_modified.any?
                   %td
                     - if current_user_is_admin? || current_course.active?
                       .button-container.dropdown

@@ -35,10 +35,12 @@ describe ChallengeGradesController do
         params[:raw_points] = "100000"
         params[:challenge_id] = challenge.id
         params[:team_id] = team.id
-        params[:status] = "Released"
+        params[:complete] = true
+        params[:student_visible] = true
         post :update, params: { id: challenge_grade.id, challenge_grade: params }
         expect(response).to redirect_to(challenge_path(challenge))
         expect(challenge_grade.reload.score).to eq(100000)
+        expect(challenge_grade.instructor_modified).to be_truthy
         expect(team.reload.challenge_grade_score).to eq(100000)
       end
 
@@ -60,7 +62,7 @@ describe ChallengeGradesController do
 
       it "recalculates the team score" do
         challenge = create(:challenge, course: course)
-        challenge_grade = create(:challenge_grade, challenge: challenge, team: team, raw_points: 100, status: "Released")
+        challenge_grade = create(:challenge_grade, challenge: challenge, team: team, raw_points: 100, student_visible: true)
         expect(team.challenge_grade_score).to eq(100)
         post :destroy, params: { id: challenge_grade, challenge_id: challenge.id }
         expect(team.reload.challenge_grade_score).to eq(0)

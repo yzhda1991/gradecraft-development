@@ -160,6 +160,13 @@ class CoursesController < ApplicationController
   def syllabus
   end
 
+  def destroy
+    authorize! :destroy, @course
+    @name = @course.name
+    @course.destroy
+    redirect_to overview_courses_url, notice: "Course #{@name} successfully deleted"
+  end
+
   private
 
   def course_params

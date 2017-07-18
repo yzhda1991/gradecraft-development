@@ -28,7 +28,7 @@ describe Services::Actions::NotifiesOfEarnedBadge do
   end
 
   context "with a badge that is not student visible" do
-    before { earned_badge.update_attributes(grade: (create :unreleased_grade)) }
+    before { earned_badge.update_attributes(grade: (create :in_progress_grade)) }
 
     it "does not send the notification" do
       expect(NotificationMailer).to_not receive(:earned_badge_awarded)

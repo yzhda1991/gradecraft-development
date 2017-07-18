@@ -229,10 +229,7 @@ describe UnlockCondition do
     describe "with a condition state of 'Grade Earned'" do
       it "returns true if the grade earned is present and student visible" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Released"
-        )
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned"
@@ -242,10 +239,7 @@ describe UnlockCondition do
 
       it "returns false if the grade earned is not student visible" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: nil
-        )
+        create(:grade, assignment: assignment, student: student, raw_points: 100, status: nil)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned"
@@ -255,9 +249,7 @@ describe UnlockCondition do
 
       it "returns true if the grade earned meets the condition value" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Released")
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100
@@ -267,9 +259,7 @@ describe UnlockCondition do
 
       it "returns false if the grade earned is less than the condition value" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 99, status: "Released")
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 99)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100)
@@ -278,9 +268,7 @@ describe UnlockCondition do
 
       it "returns false if the grade earned is a zero score" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 0, status: "Released")
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 0)
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned")
@@ -289,9 +277,7 @@ describe UnlockCondition do
 
       it "returns false if condition is met but not student visible" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: nil, instructor_modified: false,
+        create(:grade, assignment: assignment, student: student, raw_points: 100, status: nil, instructor_modified: false,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -302,9 +288,7 @@ describe UnlockCondition do
 
       it "returns true if the grade earned meets the condition date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Graded", instructor_modified:
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100, instructor_modified:
                   true, graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -316,9 +300,7 @@ describe UnlockCondition do
 
       it "returns false if the grade earned did not meet the condition date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 100, status: "Graded", instructor_modified: true,
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100, instructor_modified: true,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -330,9 +312,7 @@ describe UnlockCondition do
 
       it "returns true if the grade earned meets condition value and date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, raw_points: 100,
-                  status: "Graded", instructor_modified: true,
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100, instructor_modified: true,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -345,9 +325,7 @@ describe UnlockCondition do
 
       it "returns false if grade earned meets condition date but not value" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student,
-                  raw_points: 90, status: "Graded", instructor_modified: true
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 90, instructor_modified: true
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -359,9 +337,7 @@ describe UnlockCondition do
 
       it "returns false if grade earned meets condition value but not date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, raw_points: 100,
-                  status: "Graded", instructor_modified: true,
+        create(:student_visible_grade, assignment: assignment, student: student, raw_points: 100, instructor_modified: true,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -376,9 +352,8 @@ describe UnlockCondition do
     describe "with a condition state of 'Feedback Read'" do
       it "returns true if the grade feedback is read" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, status: "Graded",
-                  instructor_modified: true, feedback_read: true
+        create(:student_visible_grade, assignment: assignment, student: student,
+          instructor_modified: true, feedback_read: true
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -389,9 +364,8 @@ describe UnlockCondition do
 
       it "returns false if the grade feedback is not read" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, status: "Graded",
-                  instructor_modified: true, feedback_read: false
+        create(:student_visible_grade, assignment: assignment, student: student,
+          instructor_modified: true, feedback_read: false
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -402,10 +376,8 @@ describe UnlockCondition do
 
       it "returns true if the grade feedback is read by specified date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, status: "Graded",
-                  instructor_modified: true, feedback_read: true,
-                  feedback_read_at: Date.today
+        create(:student_visible_grade, assignment: assignment, student: student,
+          instructor_modified: true, feedback_read: true, feedback_read_at: Date.today
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -416,10 +388,8 @@ describe UnlockCondition do
 
       it "returns false if feedback read but not by the date" do
         student = create(:user)
-        create(
-          :grade, assignment: assignment, student: student, status: "Graded",
-                  instructor_modified: true, feedback_read: true,
-                  feedback_read_at: Date.today
+        create(:student_visible_grade, assignment: assignment, student: student,
+          instructor_modified: true, feedback_read: true, feedback_read_at: Date.today
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -476,8 +446,8 @@ describe UnlockCondition do
       end
 
       it "return true if student has done enough assignments" do
-        g1 = create(:grade, raw_points: 100, student: student, assignment: assignment_at, status: "Released")
-        g2 = create(:grade, raw_points: 100, student: student, assignment: assignment_at2, status: "Released")
+        g1 = create(:student_visible_grade, raw_points: 100, student: student, assignment: assignment_at)
+        g2 = create(:student_visible_grade, raw_points: 100, student: student, assignment: assignment_at2)
         expect(unlock_condition.is_complete?(student)).to eq(true)
       end
     end
@@ -502,8 +472,8 @@ describe UnlockCondition do
       end
 
       it "return true if student has met the minimum number of points" do
-        create(:grade, student: student, assignment: assignment_2, raw_points: 5000, status: "Released")
-        create(:grade, student: student, assignment: assignment_3, raw_points: 5000, status: "Released")
+        create(:student_visible_grade, student: student, assignment: assignment_2, raw_points: 5000)
+        create(:student_visible_grade, student: student, assignment: assignment_3, raw_points: 5000)
         expect(unlock_condition.is_complete?(student)).to eq(true)
       end
     end
@@ -512,10 +482,7 @@ describe UnlockCondition do
   describe "with a condition state of 'Passed'" do
     it "returns true if the grade is passed and student visible" do
       student = create(:user)
-      create(
-        :grade, assignment: assignment, student: student,
-                pass_fail_status: "Pass", status: "Released"
-      )
+      create(:student_visible_grade, assignment: assignment, student: student, pass_fail_status: "Pass")
       unlock_condition = UnlockCondition.new(
         condition_id: assignment.id, condition_type: "Assignment",
         condition_state: "Passed"
@@ -525,10 +492,7 @@ describe UnlockCondition do
 
     it "returns false if the grade is failed and student visible" do
       student = create(:user)
-      create(
-        :grade, assignment: assignment, student: student,
-                pass_fail_status: "Fail", status: "Released"
-      )
+      create(:student_visible_grade, assignment: assignment, student: student, pass_fail_status: "Fail")
       unlock_condition = UnlockCondition.new(
         condition_id: assignment.id, condition_type: "Assignment",
         condition_state: "Passed"
@@ -549,7 +513,7 @@ describe UnlockCondition do
     end
 
     it "returns false if one student in the group has not earned the badge" do
-      create(:earned_badge, badge: new_badge, student: student, student_visible: true)
+      create(:earned_badge, badge: new_badge, student: student, )
       expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
     end
 

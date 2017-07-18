@@ -5,8 +5,8 @@ describe Services::Actions::IteratesGradeAttributes do
   let!(:course_membership_2) { create :course_membership, :student, course: course }
   let(:course) { create(:course) }
   let(:grade_attributes) { { "0" => { graded_by_id: professor.id, instructor_modified: true, student_id: assignment.course.students.first,
-    raw_points: 1000, status: "Graded" }, "1" => { graded_by_id: professor.id, instructor_modified: true, student_id: assignment.course.students.second,
-      raw_points: 1000, status: "Graded" } } }
+    raw_points: 1000, student_visible: true }, "1" => { graded_by_id: professor.id, instructor_modified: true, student_id: assignment.course.students.second,
+      raw_points: 1000, student_visible: true } } }
 
   it "expects assignment_id" do
     expect { described_class.execute({ graded_by_id: professor.id, grade_attributes: grade_attributes })}.to \

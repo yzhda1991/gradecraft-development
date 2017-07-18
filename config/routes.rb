@@ -77,8 +77,7 @@ Rails.application.routes.draw do
         get :export_earned_levels
         get :mass_edit
         put :mass_update
-        get :edit_status
-        put :update_status
+        put :release
         post :self_log
         delete :delete_all
       end
@@ -164,8 +163,7 @@ Rails.application.routes.draw do
   resources :challenges do
     resources :challenge_grades, only: [:new, :create], module: :challenges do
       collection do
-        post :edit_status
-        put :update_status
+        put :release
         get :mass_edit
         put :mass_update
       end
@@ -197,7 +195,7 @@ Rails.application.routes.draw do
 
   #9. Courses
 
-  resources :courses, except: [:show, :destroy] do
+  resources :courses, except: [:show] do
     post :copy, on: :collection
     post :recalculate_student_scores, on: :member
     put :publish, on: :member

@@ -29,6 +29,17 @@
 
     - if presenter.assignment.has_levels?
       %td= presenter.assignment.grade_level(grade) if grade
+
+    %td
+      - if grade.complete?
+        = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+          This grade has been marked as complete
+
+    %td
+      - if grade.student_visible?
+        = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+          This grade has been released and is visible by the student
+
     %td
       %span
       - if grade.feedback_read?
@@ -38,8 +49,6 @@
       - elsif grade.feedback_reviewed?
         = tooltip("feedback-viewed-tip_#{presenter.assignment.id}", :eye) do
           This feedback has been viewed by the #{term_for :student}
-
-    %td= grade.status
 
     - if presenter.assignment.accepts_submissions?
       %td
@@ -76,10 +85,9 @@
                   %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade)
                   = active_course_link_to decorative_glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure?", method: :delete }
 
-    - if presenter.assignment.release_necessary?
-      %td
-        .center
-          - if grade.is_graded?
-            %label
-              %span.sr-only Select Assignment to Update Grade Status
-              = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"
+    %td
+      .center
+        - if grade.not_released?
+          %label
+            %span.sr-only Select Grades to Make Student Visible
+            = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"

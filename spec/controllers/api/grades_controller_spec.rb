@@ -5,7 +5,7 @@ describe API::GradesController do
   let(:assignment) { create(:assignment, course: course) }
   let!(:grade) { create :grade, student: student, assignment: assignment }
   let(:group) { create(:group) }
-  
+
   context "as professor" do
     before(:each) { login_user(professor) }
 
@@ -17,31 +17,17 @@ describe API::GradesController do
         expect(assigns(:grade).id).to eq(grade.id)
         expect(response).to render_template(:show)
       end
-
-      it "assigns all options when release necessary" do
-        assignment.update_attributes release_necessary: true
-        get :show,
-          params: { assignment_id: assignment.id, student_id: student.id },
-          format: :json
-        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded", "Released"])
-      end
-
-      it "assigns limited options when release not necessary" do
-        get :show,
-          params: { assignment_id: assignment.id, student_id: student.id },
-          format: :json
-        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded"])
-      end
     end
 
     describe "update" do
       it "updates feedback, status and raw score from params" do
         post :update, params: { id: grade.id,
                                 grade: { raw_points: 20000, feedback: "good jorb!",
-                                         status: "Graded" }}, format: :json
+                                         complete: true, student_visible: true }}, format: :json
         grade.reload
         expect(grade.feedback).to eq("good jorb!")
-        expect(grade.status).to eq("Graded")
+        expect(grade.complete).to be_truthy
+        expect(grade.student_visible).to be_truthy
         expect(grade.raw_points).to eq(20000)
       end
 

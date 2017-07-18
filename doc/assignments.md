@@ -53,7 +53,7 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `submissions_after_due` - fails if the date to no longer accepting submissions and the due date are present, and the due date exceeds the date for no longer accepting submissions
   * `submissions_after_open` - fails if the date to no longer accepting submissions and the open date are present, and the open date exceeds the date for no longer accepting submissions
   * boolean methods that must be set to either true or false: `student_logged`, `required`, `accepts_submissions`,
-  `release_necessary`, `visible`, `resubmissions_allowed`, `use_rubric`, `accepts_attachments`, `accepts_text`, `accepts_links`, `pass_fail`, `hide_analytics`, `visible_when_locked`, `show_name_when_locked`, `show_points_when_locked`, `show_description_when_locked`, `show_purpose_when_locked`
+  `visible`, `resubmissions_allowed`, `use_rubric`, `accepts_attachments`, `accepts_text`, `accepts_links`, `pass_fail`, `hide_analytics`, `visible_when_locked`, `show_name_when_locked`, `show_points_when_locked`, `show_description_when_locked`, `show_purpose_when_locked`
 
 ### Callbacks
 
@@ -92,7 +92,6 @@ When an Assignment is destroyed, all of the following models that belong to it w
   * `open_at` - time when students can begin submitting their assignments
   * `pass_fail` - boolean switch controlling whether the assignment is simply pass or fail
   * `purpose` - purpose of the assignment. Found under the "Description & Downloads" tab in the assignment page
-  * `release_necessary` - boolean switch controlling whether a grade's status must be "Released" for a student to see their grade. Defaults to false. See [[grade status]] for more information
   * `required` - boolean switch controlling whether the assignment is required for students to complete the course
   * `resubmissions_allowed` - boolean switch controlling whether students can resubmit their Assignment
   * `show_name_when_locked` - when both this and `visible_when_locked` are true, students will see the locked assignment's name in the syllabus

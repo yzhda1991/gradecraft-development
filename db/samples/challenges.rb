@@ -21,13 +21,14 @@
     due_at: nil,
     full_points: 100000,
     accepts_submissions: false,
-    release_necessary: false,
     visible: true,
   },
   grades: false,
   grade_attributes: {
     raw_points: Proc.new { rand(10000)},
-    status: nil,
+    instructor_modified: true,
+    complete: true,
+    student_visible: false,
   }
 }
 
@@ -48,7 +49,8 @@
   },
   grades: true,
   grade_attributes: {
-    status: "Graded",
+    complete: true,
+    student_visible: true,
   }
 }
 
@@ -61,19 +63,6 @@
     due_at: 2.weeks.from_now,
     accepts_submissions: true,
     open_at: rand(8).weeks.ago,
-  }
-}
-
-@challenges[:requires_release] = {
-  quotes: {
-    challenge_created: nil
-  },
-  attributes: {
-    name: "Challenge that Requires Release",
-    due_at: 3.weeks.from_now,
-    accepts_submissions: true,
-    open_at: rand(8).weeks.ago,
-    release_necessary: true
   }
 }
 
@@ -91,7 +80,8 @@ sure what the game is. - Ashleigh Brilliant"
   },
   grades: true,
   grade_attributes: {
-    status: "Graded",
+    complete: true,
+    student_visible: true,
   }
 }
 

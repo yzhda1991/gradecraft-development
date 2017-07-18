@@ -3,7 +3,7 @@ describe Services::CreatesManyGrades do
   let(:assignment) { create(:assignment) }
   let(:graded_by_id) { 1 }
   let(:grade_attributes) { { "0" => { instructor_modified: true, student_id: student.id,
-      raw_points: 1000, status: "Graded" } } }
+      raw_points: 1000, student_visible: true } } }
 
   describe ".create" do
     it "iterates grade attributes" do

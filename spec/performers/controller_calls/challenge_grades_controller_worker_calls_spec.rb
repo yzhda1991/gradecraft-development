@@ -8,7 +8,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
   let(:team) { create(:team, course: course) }
   let(:challenge) { create(:challenge, course: course) }
   let(:challenge_grade) { create(:challenge_grade, team: team, challenge: challenge) }
-  
+
   let(:job_attributes) {{ challenge_grade_id: challenge_grade.id }} # for ChallengeGradeUpdaterJob calls
   let(:challenge_grade_attributes) {{ team_id: team.id, challenge_id: challenge.id }}
 
@@ -30,8 +30,8 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
       context "challenge grade attributes are successfully updated" do
         before { allow_any_instance_of(ChallengeGrade).to receive(:update_attributes) { true } }
 
-        context "challenge grade is released" do
-          let(:challenge_grade) { create(:released_challenge_grade, challenge_grade_attributes) }
+        context "challenge grade is student visible" do
+          let(:challenge_grade) { create(:student_visible_challenge_grade, challenge_grade_attributes) }
 
           before do
             allow(challenge_grade).to receive(:is_released?) { true }
@@ -41,7 +41,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
         end
 
         context "challenge grade has not been released" do
-          let(:challenge_grade) { create(:grades_not_released_challenge_grade, challenge_grade_attributes) }
+          let(:challenge_grade) { create(:in_progress_challenge_grade, challenge_grade_attributes) }
           let(:job_class) { ChallengeGradeUpdaterJob }
 
           it "shouldn't build a new job" do

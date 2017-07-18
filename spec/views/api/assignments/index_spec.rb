@@ -19,9 +19,9 @@ describe "api/assignments/index" do
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
     create :course_membership, :student, user: @student, course: @assignment.course
-    grade = create :grade, assignment: @assignment, student: @student,
+    grade = create :student_visible_grade, assignment: @assignment, student: @student,
       course: @assignment.course, pass_fail_status: "passed", raw_points: 1000,
-      score: 1000, status: "Released"
+      score: 1000
     @grades = Grade.where(assignment_id: @assignment.id)
     @assignment.update(pass_fail: true)
     render
@@ -132,9 +132,9 @@ describe "api/assignments/index" do
   describe "included" do
     it "contains the grade" do
       create :course_membership, :student, user: @student, course: @assignment.course
-      grade = create :grade, assignment: @assignment, student: @student,
+      grade = create :student_visible_grade, assignment: @assignment, student: @student,
         course: @assignment.course, pass_fail_status: nil,
-        raw_points: 1000, score: 1000, status: "Released"
+        raw_points: 1000, score: 1000
       @grades = Grade.where(assignment_id: @assignment.id)
       render
       json = JSON.parse(response.body)

@@ -23,8 +23,23 @@ article.grade-form-fields
   section:not(:last-child)
     margin-bottom: 0.5rem
 
-section.grade-pass-fail
-  margin-bottom: 0.5rem
+section.grade-pass-fail, section.grade-visible, section.grade-complete
+  .binary-switch-socket
+    margin: 0 1em
+    border: 1px solid $color-blue-3
+  .binary-switch-socket.off
+    background: $color-red-1
+    border: 1px solid $color-red-1
+
+section.grade-visible, section.grade-complete
+  margin-bottom: 1rem
+  text-align: right
+  .grade-switch-sandwich
+    display: flex
+    align-items: center
+    justify-content: flex-end
+  .binary-switch-label
+    font-size: 1.125rem
 
 section.grade-score-levels
   #grade-score-level-selector
@@ -75,9 +90,12 @@ hr.grading-divider
 
 .grading-summary
   float: right
+  width: 375px
 
 .lower-points-summary
-  margin: 1rem 0
+  margin: 1rem 0 1rem auto
+  width: 200px
+  text-align: right
   .grading-divider
     margin: 0.5rem 0
   p

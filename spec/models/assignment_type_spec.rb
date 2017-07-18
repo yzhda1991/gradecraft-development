@@ -1,10 +1,10 @@
 describe AssignmentType do
-  let(:course) { build(:course) }
-  let(:assignment) { build(:assignment, course: course) }
-  let(:student) { create(:course_membership, course: course, role: :student).user}
+  let(:course) { build :course }
+  let(:assignment) { build :assignment, course: course }
+  let(:student) { create(:course_membership, course: course, role: :student).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:grade) { create(:grade, assignment: assignment, student: student) }
-  let(:assignment_type) {create :assignment_type, course: course}
+  let(:grade) { create :grade, assignment: assignment }
+  let(:assignment_type) { create :assignment_type, course: course }
 
   describe "validations" do
     subject { build(:assignment_type) }
@@ -149,77 +149,77 @@ describe AssignmentType do
 
   describe "#visible_score_for_student(student)" do
     it "returns the student score if there is are no caps" do
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 1000, assignment: assignment, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 1000, assignment: assignment)
       expect(assignment_type.visible_score_for_student(student)).to eq(1000)
     end
 
     it "returns the max points if present" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 100
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true, full_points: 99)
-      grade = create(:grade, student: student, raw_points: 1000, assignment: assignment, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99)
+      grade = create(:student_visible_grade, student: student, raw_points: 1000, assignment: assignment)
       expect(assignment_type.visible_score_for_student(student)).to eq(100)
     end
 
     it "returns the top X score if present" do
       assignment_type.top_grades_counted = 2
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_3 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 75, assignment: assignment_2, status: "Released")
-      grade_3 = create(:grade, student: student, raw_points: 25, assignment: assignment_3, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_3 = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 75, assignment: assignment_2)
+      grade_3 = create(:student_visible_grade, student: student, raw_points: 25, assignment: assignment_3)
       expect(assignment_type.visible_score_for_student(student)).to eq(175)
     end
   end
 
   describe "#score_for_student(student)" do
     it "returns the total score a student has earned for an assignment type" do
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment_2, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment_2)
       expect(assignment_type.score_for_student(student)).to eq(200)
     end
 
     it "returns the total score a student has earned for an assignment type and has a reduced final score" do
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 100, adjustment_points: -25, assignment: assignment, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, adjustment_points: -25, assignment: assignment)
       expect(assignment_type.score_for_student(student)).to eq(75)
     end
 
     it "does return a weighted score if present"   do
       assignment_type.student_weightable = true
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
       create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type, weight: 3)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
       expect(assignment_type.score_for_student(student)).to eq(300)
     end
   end
 
   describe "#grades_for(student)" do
     it "returns the student visible grades for the assignment type" do
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 100, assignment: assignment_2, status: nil)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
+      grade_2 = create(:grade, student: student, raw_points: 100, assignment: assignment_2)
       expect(assignment_type.grades_for(student)).to eq([grade])
     end
 
     it "returns grades with a score" do
       assignment = create(:assignment, course: course, assignment_type: assignment_type)
       assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
-      grade = create(:grade, student: student, raw_points: nil, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 100, assignment: assignment_2, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: nil, assignment: assignment)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment_2)
       expect(assignment_type.grades_for(student)).to eq([grade_2])
     end
 
     it "returns grades that are not excluded" do
       assignment = create(:assignment, course: course, assignment_type: assignment_type)
       assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
-      grade = create(:grade, student: student, raw_points: 100, excluded_from_course_score: false, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 100, excluded_from_course_score: true, assignment: assignment_2, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: 100, excluded_from_course_score: false, assignment: assignment)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 100, excluded_from_course_score: true, assignment: assignment_2)
       expect(assignment_type.grades_for(student)).to eq([grade])
     end
 
@@ -227,8 +227,8 @@ describe AssignmentType do
       assignment_type_2 = create(:assignment_type, course: course)
       assignment = create(:assignment, course: course, assignment_type: assignment_type)
       assignment_2 = create(:assignment, course: course, assignment_type: assignment_type_2)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 100, assignment: assignment_2, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment_2)
       expect(assignment_type.grades_for(student)).to eq([grade])
     end
   end
@@ -236,9 +236,9 @@ describe AssignmentType do
   describe "#raw_points_for_student(student)" do
     it "returns the raw score if present" do
       assignment_type.student_weightable = true
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
       create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type, weight: 3)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
       expect(assignment_type.raw_points_for_student(student)).to eq(100)
     end
   end
@@ -246,9 +246,9 @@ describe AssignmentType do
   describe "#final_points_for_student(student)" do
     it "returns the final score if present" do
       assignment_type.student_weightable = true
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
       create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type, weight: 3)
-      grade = create(:grade, student: student, raw_points: 100, adjustment_points: -42, assignment: assignment, status: "Released")
+      grade = create(:student_visible_grade, student: student, raw_points: 100, adjustment_points: -42, assignment: assignment)
       expect(assignment_type.final_points_for_student(student)).to eq(58)
     end
   end
@@ -256,12 +256,12 @@ describe AssignmentType do
   describe "#summed_highest_scores_for(student)" do
     it "returns the highest X number of grades" do
       assignment_type.top_grades_counted = 2
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      assignment_3 = create(:assignment, course: course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      grade_2 = create(:grade, student: student, raw_points: 75, assignment: assignment_2, status: "Released")
-      grade_3 = create(:grade, student: student, raw_points: 25, assignment: assignment_3, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
+      assignment_3 = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 75, assignment: assignment_2)
+      grade_3 = create(:student_visible_grade, student: student, raw_points: 25, assignment: assignment_3)
       expect(assignment_type.summed_highest_scores_for(student)).to eq(175)
     end
   end
@@ -270,16 +270,16 @@ describe AssignmentType do
     it "returns the max point value for the type if present and the student has earned MORE than that cap" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 100
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 200, assignment: assignment, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99)
+      grade = create(:student_visible_grade, student: student, raw_points: 200, assignment: assignment)
       expect(assignment_type.max_points_for_student(student)).to eq(100)
     end
 
     it "returns the student score if the max point total is present but they have earned less than that value" do
       assignment_type.has_max_points = true
       assignment_type.max_points = 500
-      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99, release_necessary: true)
-      grade = create(:grade, student: student, raw_points: 200, assignment: assignment, status: "Released")
+      assignment = create(:assignment, course: course, assignment_type: assignment_type, full_points: 99)
+      grade = create(:student_visible_grade, student: student, raw_points: 200, assignment: assignment)
       expect(assignment_type.max_points_for_student(student)).to eq(200)
     end
   end

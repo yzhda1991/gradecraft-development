@@ -1,6 +1,6 @@
 feature "editing a course's basic settings" do
   context "as a professor" do
-    let(:course) { build :course, name: "Course Name"}
+    let(:course) { create :course, name: "Course Name", course_number: "101" }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
 

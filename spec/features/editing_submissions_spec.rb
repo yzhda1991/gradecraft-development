@@ -11,7 +11,7 @@ feature "editing submissions" do
     before { login_as student }
 
     scenario "notification of a resubmission" do
-      create :grade, status: "Released", student: student, submission: submission,
+      create :grade, student_visible: true, student: student, submission: submission,
         assignment: assignment
       visit edit_assignment_submission_path assignment, submission
 

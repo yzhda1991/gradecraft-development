@@ -40,7 +40,6 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
   * `visible` - boolean switch representing whether students may see the challenge on their teams page. Defaults to true
   * `full_points` - maximum amount of points teams may earn for their challenge grade
   * `due_at` - date that the challenge is due by. Only displayed, never enforced
-  * `release_necessary` - boolean switch representing whether instructors may change challenge grade statuses, which are only used for preventing the predictor from using challenge grade scores that are not visible to the student
 
 ##### Future Use
 
@@ -91,7 +90,9 @@ When a Challenge is destroyed, all of its Challenge Grades, Predicted Earned Cha
   * `name` - name of the challenge
   * `score` - number of points that the team receives
   * `text_feedback` - instructor's feedback for the team regarding the challenge
-  * `status` - similar to a grade's status. Identical `status` ruby symbols appear twice in the attr_accessible section of the challenge grade model
+  * `complete` - same as grade
+  * `instructor_modified` - same as grade
+  * `student_visible` - same as grade
 
 ##### Future Use
 

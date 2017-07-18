@@ -9,13 +9,13 @@
 
     .card.quarter
       .card-text
-        .center.bold.inverse.large= unreleased_grades_count_for(current_course)
-        %h2.grading-status-name.center.inverse Unreleased Grades
+        .center.bold.inverse.large= in_progress_grades_count_for(current_course)
+        %h2.grading-status-name.center.inverse In Progress Grades
 
     .card.quarter
       .card-text
-        .center.bold.inverse.large= in_progress_grades_count_for(current_course)
-        %h2.grading-status-name.center.inverse In Progress Grades
+        .center.bold.inverse.large= ready_for_release_grades_count_for(current_course)
+        %h2.grading-status-name.center.inverse Ready For Release Grades
 
     .card.quarter
       .card-text
@@ -31,15 +31,6 @@
       .collapse-hidden{role: "tabpanel"}
         = render partial: "submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
 
-  - if @unreleased_grades_by_assignment.present?
-    .collapseSection{id: "unreleased", role: "tablist"}
-      .collapse{role: "tab"}
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Unreleased Grades
-      .collapse-hidden{role: "tabpanel"}
-        = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @unreleased_grades_by_assignment, course: current_course }
-
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress", role: "tablist"}
       .collapse{role: "tab"}
@@ -48,6 +39,15 @@
           In Progress Grades
       .collapse-hidden{role: "tabpanel"}
         = render partial: "grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
+
+  - if @ready_for_release_grades_by_assignment.present?
+    .collapseSection{id: "unreleased", role: "tablist"}
+      .collapse{role: "tab"}
+        %h3
+          %i.fa.fa-chevron-circle-right.fa-fw
+          Ready For Release Grades
+      .collapse-hidden{role: "tabpanel"}
+        = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @ready_for_release_grades_by_assignment, course: current_course }
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions", role: "tablist"}

@@ -32,7 +32,7 @@ class Challenge < ActiveRecord::Base
 
   validates_presence_of :course, :name
   validates_numericality_of :full_points, allow_nil: true, length: { maximum: 9 }
-  validates_inclusion_of :visible, :accepts_submissions, :release_necessary,
+  validates_inclusion_of :visible, :accepts_submissions,
   in: [true, false], message: "must be true or false"
 
   validates_with PositivePointsValidator, attributes: [:full_points], allow_nil: true

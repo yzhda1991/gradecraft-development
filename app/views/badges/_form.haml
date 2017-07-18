@@ -8,7 +8,7 @@
       = f.input :name
 
     .form-item
-      = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}, label: "Points Awarded"
+      = f.input :full_points, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: "Points Awarded"
 
     .form-item
       = f.label :file_field, "Icon"

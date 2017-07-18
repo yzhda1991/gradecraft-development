@@ -3,7 +3,7 @@ describe SubmissionsHelper do
 
   describe "#resubmission_count_for" do
     let!(:student) { create(:course_membership, :student, course: course, active: true).user }
-    let!(:grade) { create :grade, course: course, student_id: student.id, status: "Released", submission: submission,
+    let!(:grade) { create :student_visible_grade, course: course, student_id: student.id, submission: submission,
                    graded_at: 1.day.ago
                  }
     let!(:submission) { create :submission, student_id: student.id, course: course, submitted_at: DateTime.now }

@@ -1,5 +1,5 @@
 - content_for :context_menu do
-  .context_menu
+  .context-menu
     %ul
       - if actions.include? :edit
         = active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_path(badge), class: "button button-edit"

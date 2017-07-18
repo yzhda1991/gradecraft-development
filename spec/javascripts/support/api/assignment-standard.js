@@ -18,7 +18,6 @@ apiTestDoubles.assignment.standard =
       "position": 2,
       "purpose": "For testing api/assignments/1",
       "threshold_points": 0,
-      "release_necessary": false,
       "has_info": true,
       "has_levels": false,
       "has_threshold": false,

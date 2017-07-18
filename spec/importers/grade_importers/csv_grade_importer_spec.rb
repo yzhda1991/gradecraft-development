@@ -37,8 +37,9 @@ describe CSVGradeImporter do
           expect(grade.raw_points).to eq 0
           expect(grade.pass_fail_status).to eq "Pass"
           expect(grade.feedback).to eq "Rock on!"
-          expect(grade.status).to eq "Graded"
-          expect(grade.instructor_modified).to eq true
+          expect(grade).to be_instructor_modified
+          expect(grade).to be_complete
+          expect(grade.student_visible).to be false
           expect(result.successful.count).to eq 1
           expect(result.successful.last).to eq grade
         end
@@ -74,8 +75,9 @@ describe CSVGradeImporter do
           grade = Grade.unscoped.last
           expect(grade.raw_points).to eq 4000
           expect(grade.feedback).to eq "You did great!"
-          expect(grade.status).to eq "Graded"
-          expect(grade.instructor_modified).to eq true
+          expect(grade).to be_instructor_modified
+          expect(grade).to be_complete
+          expect(grade.student_visible).to be false
           expect(result.successful.count).to eq 1
           expect(result.successful.last).to eq grade
         end

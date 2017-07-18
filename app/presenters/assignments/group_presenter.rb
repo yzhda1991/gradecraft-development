@@ -9,7 +9,7 @@ class Assignments::GroupPresenter < Showtime::Presenter
 
   def assignment_graded?
     grade = group.students.first.grade_for_assignment(assignment)
-    !grade.nil? && grade.is_graded?
+    grade && grade.instructor_modified?
   end
 
   def student_weightable?
@@ -18,10 +18,6 @@ class Assignments::GroupPresenter < Showtime::Presenter
 
   def has_levels?
     assignment.has_levels?
-  end
-
-  def release_necessary?
-    assignment.release_necessary?
   end
 
   def pass_fail?

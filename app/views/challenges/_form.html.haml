@@ -9,7 +9,7 @@
       = f.text_field :name, "aria-required": "true"
 
     .form-item
-      = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}
+      = f.input :full_points, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
 
     .form-item
       = f.input :open_at, as: :string, :input_html => { class: "datetimepicker", :value => @challenge.try(:open_at) }
@@ -29,12 +29,6 @@
     .form-item
       = f.label :visible, "Visible to students?"
       = f.check_box :visible
-
-    .form-item
-      = f.label :release_necessary, "Release necessary?"
-      = f.check_box :release_necessary
-      .form-hint Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
-
 
   %section.form-section
     %h2.form-title Grade Levels

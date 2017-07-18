@@ -52,12 +52,6 @@ describe 'GradeService', ()->
         expect(@GradeService.grades.length).toEqual(3)
 
     describe 'for group with included models', ()->
-      it 'should load the options for grade status', ()->
-        @http.whenGET("/api/assignments/2/groups/101/grades/").respond(apiTestDoubles.grade.group)
-        @GradeService.getGrade(2, "group", 101)
-        @http.flush()
-        expect(@GradeService.gradeStatusOptions).toEqual(["In Progress", "Graded", "Released"])
-
       it 'should load criterion grades, filtered to the first student', ()->
         @http.whenGET("/api/assignments/96/groups/3/grades/").respond(apiTestDoubles.grade.groupRubric)
         @GradeService.getGrade(96, "group", 3)

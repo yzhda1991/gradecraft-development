@@ -35,8 +35,9 @@ describe CanvasGradeImporter do
         expect(grade.student).to eq user
         expect(grade.raw_points).to eq 98
         expect(grade.feedback).to eq "Comment 1: This is great!"
-        expect(grade.status).to eq "Graded"
         expect(grade).to be_instructor_modified
+        expect(grade).to be_complete
+        expect(grade.student_visible).to be false
       end
 
       it "creates a link to the grade id in canvas" do

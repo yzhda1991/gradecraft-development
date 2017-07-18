@@ -3,24 +3,25 @@ FactoryGirl.define do
     association :assignment
     association :student, factory: :user
 
-    factory :released_grade do
-      raw_points { Faker::Number.number(5) }
-      status "Released"
-    end
-
-    # minimal conditions when a grade has been graded but not visible to students
-    factory :unreleased_grade do
-      raw_points { Faker::Number.number(5) }
-      status "Graded"
-      after(:create) do |grade|
-        grade.assignment.update(release_necessary: true)
-      end
-    end
-
     factory :in_progress_grade do
       raw_points { Faker::Number.number(5) }
       score { raw_points }
-      status "In Progress"
+      instructor_modified true
+      complete false
+    end
+
+    factory :complete_grade do
+      raw_points { Faker::Number.number(5) }
+      score { raw_points }
+      instructor_modified true
+      complete true
+    end
+
+    factory :student_visible_grade do
+      raw_points { Faker::Number.number(5) }
+      instructor_modified true
+      complete true
+      student_visible true
     end
   end
 end

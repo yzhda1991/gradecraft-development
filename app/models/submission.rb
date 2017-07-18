@@ -38,12 +38,12 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
-    .where.not(id: with_grade.where(grades: { status: ["In Progress", "Graded", "Released"] }))
+    .where.not(id: with_grade.where(grades: { instructor_modified: true }))
   end
 
   scope :resubmitted, -> {
     includes(:grade, :assignment)
-    .where("grades.status = 'Released' OR (grades.status = 'Graded' AND NOT assignments.release_necessary)")
+    .where("grades.student_visible = true")
     .where("grades.graded_at < submitted_at")
     .references(:grade, :assignment)
   }
@@ -73,10 +73,11 @@ class Submission < ActiveRecord::Base
   end
 
   def graded_at
-    submission_grade.graded_at if graded?
+    submission_grade.graded_at if submission_grade
   end
 
-  def graded?
+  # true for any submission that has an instructor modified grade
+  def has_grade?
     !ungraded?
   end
 
@@ -88,22 +89,23 @@ class Submission < ActiveRecord::Base
     end
   end
 
-  # Grabbing any submission that has NO instructor-defined grade
+  # true for any submission that has NO instructor modified grade
   def ungraded?
-    !submission_grade || submission_grade.status.nil?
+    !submission_grade || !submission_grade.instructor_modified?
   end
 
   # Reports to the user that a change will be a resubmission because this
   # submission is already graded and visible to them.
   def will_be_resubmitted?
-    return false unless submission_grade.present? && submission_grade.is_student_visible?
+    return false unless submission_grade.present? && submission_grade.student_visible?
     return true
   end
 
   # this is transitive so that once it is graded again, then
   # it will no longer be resubmitted
   def resubmitted?
-    graded? && !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
+    submission_grade && submission_grade.student_visible? &&
+    !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
   end
 
   # Getting the name of the student who submitted the work

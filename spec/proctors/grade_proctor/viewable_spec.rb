@@ -1,5 +1,5 @@
 describe GradeProctor::Viewable do
-  let(:assignment) { double(:assignment, release_necessary?: true) }
+  let(:assignment) { double(:assignment) }
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
                        student_id: 123) }
@@ -25,12 +25,12 @@ describe GradeProctor::Viewable do
       end
 
       it "can view the grade if it's graded and viewable to a student" do
-        allow(grade).to receive(:is_student_visible?).and_return true
+        allow(grade).to receive(:student_visible?).and_return true
         expect(subject).to be_viewable user: user, course: course
       end
 
       it "cannot view the grade if it's been graded and a release is necessary" do
-        allow(grade).to receive(:is_student_visible?).and_return false
+        allow(grade).to receive(:student_visible?).and_return false
         expect(subject).to_not be_viewable user: user, course: course
       end
     end

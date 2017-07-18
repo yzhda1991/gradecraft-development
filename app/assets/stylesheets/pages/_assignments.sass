@@ -290,16 +290,17 @@
     height: 30px
     background-color: $color-blue-3
     border-right: 1px solid $color-white
+    &:first-of-type
+      .hover-style
+        left: -60%
+        &::after
+          left: 80%
     .has-tooltip
       position: absolute
       top: -20px
       right: -8px
     .hover-style
       width: auto
-      &:last-child
-        left: -60%
-        &::after
-          left: 80%
 
 span.settings_hint
   position: absolute

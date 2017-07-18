@@ -11,11 +11,10 @@
             %td
               = f.simple_fields_for :challenge_grades, cg do |cgf|
                 = cgf.hidden_field :team_id
-                = cgf.input :status, as: :hidden, :input_html => { :value => "Graded" }
                 - if @challenge.challenge_score_levels.present?
                   = cgf.select :raw_points, options_from_collection_for_select(@challenge.challenge_score_levels, :points, :name, cg.try(:raw_points)), include_blank: true
                 - else
-                  = cgf.input :raw_points, label: false, data: {autonumeric: true, "m-dec" => "0"}
+                  = cgf.input :raw_points, label: false, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
 
       .submit-buttons
         %ul

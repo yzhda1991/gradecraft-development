@@ -6,7 +6,7 @@ class AssignmentsController < ApplicationController
 
   before_action :ensure_staff?, except: [:show, :index]
   before_action :sanitize_params, only: [:create, :update]
-  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :update, :grades_review]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :create, :update, :grades_review]
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
@@ -151,7 +151,7 @@ class AssignmentsController < ApplicationController
       :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
       :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
       :name, :open_at, :pass_fail, :max_submissions,
-      :full_points, :purpose, :release_necessary, :hide_analytics,
+      :full_points, :purpose, :hide_analytics,
       :required, :resubmissions_allowed, :show_description_when_locked,
       :show_purpose_when_locked, :show_name_when_locked, :media, :remove_media,
       :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,

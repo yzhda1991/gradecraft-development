@@ -14,7 +14,7 @@ describe Analytics::BadgeAnalytics do
     end
 
     it "does not include earned badges that are not student visible in the count" do
-      earned_badge_not_visible = create(:earned_badge, badge: badge, grade: create(:unreleased_grade))
+      earned_badge_not_visible = create(:earned_badge, badge: badge, grade: create(:in_progress_grade))
       expect(badge.earned_count).to eq(3)
     end
 

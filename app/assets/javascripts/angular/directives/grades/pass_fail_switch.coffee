@@ -16,7 +16,7 @@
         if GradeService.gradeIsPassing() then GradeCraftAPI.termFor("pass") else GradeCraftAPI.termFor("fail")
 
       scope.toggleSwitch = ()->
-        GradeService.toggeleGradePassFailStatus()
+        GradeService.toggleGradePassFailStatus()
         GradeService.queueUpdateGrade()
   }
 ]

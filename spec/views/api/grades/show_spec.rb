@@ -1,9 +1,9 @@
 describe "api/grades/show" do
   let(:assignment) { create :assignment }
-  let(:student) { create(:course_membership, :student).user } 
+  let(:student) { create(:course_membership, :student).user }
   let(:grade) { create(:grade, student: student, assignment: assignment) }
 
-  before(:each) do 
+  before(:each) do
     @grade = grade
   end
 
@@ -23,13 +23,6 @@ describe "api/grades/show" do
     expect(json["data"]["attributes"]["status"]).to eq(@grade.status)
     expect(json["data"]["attributes"]["adjustment_points"]).to eq(@grade.adjustment_points)
     expect(json["data"]["attributes"]["adjustment_points_feedback"]).to eq(@grade.adjustment_points_feedback)
-  end
-
-  it "adds grading status options to meta data" do
-    @grade_status_options = ["In Progress","Graded", "Released"]
-    render
-    json = JSON.parse(response.body)
-    expect(json["meta"]["grade_status_options"]).to eq(@grade_status_options)
   end
 
   it "adds the threshold_points to meta data" do

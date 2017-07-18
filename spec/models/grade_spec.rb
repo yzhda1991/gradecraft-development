@@ -5,20 +5,6 @@ describe Grade do
 
   subject { build(:grade) }
 
-  describe "constants" do
-    describe "STATUSES" do
-      it "returns an array of all the status values" do
-        expect(described_class::STATUSES).to eq ["In Progress", "Graded", "Released"]
-      end
-    end
-
-    describe "UNRELEASED_STATUSES" do
-      it "returns an array of all the status values" do
-        expect(described_class::UNRELEASED_STATUSES).to eq ["In Progress", "Graded"]
-      end
-    end
-  end
-
   describe "validations" do
     it "is valid with an assignment, student, assignment_type, and course" do
       expect(subject).to be_valid
@@ -261,14 +247,9 @@ describe Grade do
 
     it "updates earned badge visibility" do
       earned_badge = create(:earned_badge, student: grade.student, grade: grade, student_visible: false)
-      grade.status = "Graded"
+      grade.student_visible = true
       grade.save
       expect(earned_badge.reload.student_visible).to be_truthy
-    end
-
-    it "(temporary) updates status booleans from status state" do
-      expect(subject).to receive(:update_status_fields)
-      subject.save
     end
   end
 end

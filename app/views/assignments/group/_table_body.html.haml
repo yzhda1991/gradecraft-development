@@ -22,27 +22,24 @@
               %th Multiplied Scores
             - if group_presenter.has_levels?
               %th Level
+            %th Graded
+            %th Student Visible
+            %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+              %button.button.select-all{role: "button", type: "button"}= "Check"
+              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
             %th
-
-            - if group_presenter.release_necessary?
-              %th Status
-              %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-                %button.button.select-all{role: "button", type: "button"}= "Check"
-                %button.button.select-none{role: "button", type: "button"}= "Uncheck"
         %tbody
           - group_presenter.students.order_by_name.each do |student|
             %tr
               %td= link_to student.name, student_path(student)
               - grade = group_presenter.grade_for_student(student)
+
               %td
                 - if grade.present? && grade.instructor_modified?
                   - if group_presenter.pass_fail? && grade.pass_fail_status.present?
                     = term_for grade.pass_fail_status
                   - else
                     = points grade.final_points
-              %td
-                - if group_presenter.assignment_graded?
-                  = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
 
               - if group_presenter.student_weightable?
                 %td
@@ -51,8 +48,11 @@
               - if group_presenter.has_levels?
                 %td= group_presenter.grade_level(grade)
 
-              - if group_presenter.release_necessary?
-                %td= grade.try(:status)
-                %td.right
-                  - if grade && grade.is_graded?
-                    = check_box_tag "grade_ids[]", grade.id
+              %td= decorative_glyph(:check) if grade.complete?
+              %td= decorative_glyph(:check) if grade.student_visible?
+              %td
+                - if grade && grade.not_released?
+                  = check_box_tag "grade_ids[]", grade.id
+              %td
+                - if group_presenter.assignment_graded?
+                  = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"

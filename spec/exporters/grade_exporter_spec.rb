@@ -148,11 +148,11 @@ describe GradeExporter do
       updated_at = DateTime.now
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return double(:grade, instructor_modified?: true, graded_or_released?: false,
+          .and_return double(:grade, instructor_modified?: true, student_visible?: false,
                               score: 123, raw_points: 789, feedback: nil, graded_at: updated_at)
       allow(students[1]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return double(:grade, instructor_modified?: false, graded_or_released?: true,
+          .and_return double(:grade, instructor_modified?: true, student_visible?: true,
                               score: 456, raw_points: 456, feedback: "Grrrrreat!", graded_at: updated_at)
       allow(students[1]).to \
         receive(:submission_for_assignment).with(assignment)
@@ -182,7 +182,7 @@ describe GradeExporter do
       assignment.pass_fail = true
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return double(:grade, instructor_modified?: true, graded_or_released?: true,
+          .and_return double(:grade, instructor_modified?: true, student_visible?: true,
                               score: 0, raw_points: 0, pass_fail_status: "Pass", feedback: nil, graded_at: DateTime.now)
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
       expect(csv[1][3]).to eq "Pass"
@@ -196,10 +196,10 @@ describe GradeExporter do
       expect(csv[1][3]).to eq ""
     end
 
-    it "does not include the grade if it has not been graded or released" do
+    it "does not include the grade if it is not student visible" do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
-          .and_return double(:grade, instructor_modified?: false, graded_or_released?: false)
+          .and_return double(:grade, instructor_modified?: false, student_visible?: false)
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
       expect(csv[1][3]).to eq ""
     end

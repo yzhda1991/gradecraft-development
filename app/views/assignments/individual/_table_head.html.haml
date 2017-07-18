@@ -17,9 +17,9 @@
   - if presenter.assignment.has_levels?
     %th Level Earned
 
+  %th{scope: "col"} Graded
+  %th{scope: "col"} Visible to Student
   %th{scope: "col"} Read?
-
-  %th{scope: "col"} Status
 
   - if presenter.assignment.accepts_submissions?
     %th{"data-dynatable-sorts" => "submittedAt"} Submitted
@@ -27,7 +27,6 @@
 
   %th{:style => "min-width: 180px"}
 
-  - if presenter.assignment.release_necessary?
-    %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-      %button.button.select-all{role: "button", type: "button"}= "Check"
-      %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+  %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+    %button.button.select-all{role: "button", type: "button"}= "Check"
+    %button.button.select-none{role: "button", type: "button"}= "Uncheck"

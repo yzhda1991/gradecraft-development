@@ -36,6 +36,7 @@ Note that for all of these models, their `updated_at` attribute will be set to t
 
   * `graded_by_id` - id of instructor who graded the student
   * `pass_fail_status` - boolean representing whether the student has passed or failed their assignment. The two possible values are "Pass" and "Fail". See [[pass fail assignments | pass fail]] for more information
+  *  `student_visible?` - returns true when the grade is released and visible to the student
 
 #### Excluded Grades
 
@@ -43,10 +44,30 @@ Note that for all of these models, their `updated_at` attribute will be set to t
   * `excluded_date` - time that the grade was excluded from the student's course score. Used in the grade show page. Set to nil in the `include` action
   * `excluded_by` - instructor that excluded the grade. Used in the grade show page. Set to nil in the `include` action
 
-#### Grade Status
+#### Grade State
 
-  * `instructor_modified` - boolean representing whether the grade once had a status. See [[grade status]] for more information
-  * `status` - grade's status, which determines the grade's visibility to students. See [[grade status]] for more information
+* Grade status is maintained with the `complete` and `student_visible` booleans
+* `instructor_modified?` is a separate field that keeps track of a grade that once had a status, even if it has been reset to nil (*see TODO below*)
+
+##### Releasing grades
+
+The term "release" is used to refer to the act of switching a grade to `student_visible` true. This initiates the grade release process (notifications sent, course scores updated, etc.).
+
+When naming methods, this term is used in background processes involved in the release such as `notify_grade_released`, and in temporal stats such as ` grades_released_for_course_this_week` that are concerned with when a grade became student visible.
+
+We prefer the term "student visible" to "released" when naming methods that concern grade status in general as this maps better to the model.
+
+##### In Progress
+
+A grade is considered "In Progress" when `complete` is false. A grade cannot be `complete` false but `student_visible` true
+
+###### Faculty visible:
+
+Faculty can always see grades when they exist (but they can't see [[student grade predictions | predictor]])
+
+###### Challenge grades
+
+Work exactly the same as Assignment Grades
 
 #### Feedback
 
@@ -81,11 +102,7 @@ Scores and point values are saved in several states on the model. See [[Points]]
 
   * `feedback_read!` - sets `feedback_read` to true and `feedback_read_at` to the current time
   * `feedback_reviewed!` - sets `feedback_reviewed` to true and `feedback_reviewed_at` to the current time
-  * `is_graded?` - returns true when the grade status is set to 'Graded'
   * `assignment_weight` - returns the student's weight for the assignment
-  * `is_released?` - returns true when the grade status is set to 'Released'
-  * `is_student_visible?` - returns true when either the grade is released, or it is graded and a release is not necessary
-  * `status_is_graded_or_released?` - returns true when the grade status is set to 'Graded' or 'Released'. This method can also be called with `graded_or_released?`
 
 #### Unused
 

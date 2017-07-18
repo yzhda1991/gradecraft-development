@@ -124,16 +124,33 @@ describe SubmissionFile do
   end
 
   describe "#owner_name" do
-    it "returns the formatted student name associated with the submission" do
-      expect(subject.owner_name).to eq("#{student.last_name}-#{student.first_name}")
+
+    context "student submission" do
+      it "returns the formatted student name associated with the submission" do
+        expect(subject.owner_name).to eq("#{student.last_name}-#{student.first_name}")
+      end
+
+      it "returns nil if the student has been deleted" do
+        allow(submission).to receive(:student).and_return nil
+        expect(subject.owner_name).to be_nil
+      end
     end
 
-    it "returns the group name associated with a group submission" do
-      group = build(:group, name: "Group Name")
-      group_assignment = build(:assignment, grade_scope: "Group")
-      group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
-      group_file = group_submission.submission_files.new image_file_attrs
-      expect(group_file.owner_name).to eq("Group-Name")
+    context "group submission" do
+      let(:group) { build :group }
+      let(:group_assignment) { build(:assignment, grade_scope: "Group") }
+      let(:group_submission) { build(:submission, course: course, assignment: group_assignment, group: group) }
+
+      it "returns the group name associated with a group submission" do
+        group_file = group_submission.submission_files.new image_file_attrs
+        expect(group_file.owner_name).to eq(group.name)
+      end
+
+      it "returns nil if the group has been deleted" do
+        group_file = group_submission.submission_files.new image_file_attrs
+        allow(group_submission).to receive(:group).and_return nil
+        expect(group_file.owner_name).to be_nil
+      end
     end
   end
 

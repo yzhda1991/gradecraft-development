@@ -65,11 +65,6 @@ apiTestDoubles.grade.group =
       16,
       10
     ],
-    "grade_status_options": [
-      "In Progress",
-      "Graded",
-      "Released"
-    ],
     "threshold_points": 0,
     "is_rubric_graded": false
   }
