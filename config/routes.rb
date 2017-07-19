@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :assignments do
+  resources :assignments, except: [:create, :update]  do
     collection do
       get :feed
       get :settings

@@ -66,60 +66,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "POST create" do
-      it "creates the assignment with valid attributes" do
-        params = attributes_for(:assignment)
-        params[:assignment_type_id] = assignment_type.id
-        expect{ post :create, params: { assignment: params }}.to \
-          change(Assignment,:count).by(1)
-      end
-
-      it "manages file uploads" do
-        Assignment.delete_all
-        params = attributes_for(:assignment)
-        params[:assignment_type_id] = assignment_type
-        params.merge! assignment_files_attributes: {"0" => {
-          "file" => [fixture_file("test_file.txt", "txt")] }}
-        post :create, params: { assignment: params }
-        assignment = Assignment.where(name: params[:name]).last
-        expect expect(assignment.assignment_files.count).to eq(1)
-        expect expect(assignment.assignment_files[0].filename).to eq("test_file.txt")
-      end
-
-      it "redirects to new from with invalid attributes" do
-        expect{ post :create,
-                params: { assignment: attributes_for(:assignment, name: nil) }}.to_not \
-        change(Assignment,:count)
-      end
-    end
-
-    describe "POST update" do
-      it "updates the assignment" do
-        params = { name: "new name" }
-        post :update, params: { id: assignment.id, assignment: params }
-        expect(response).to redirect_to(assignments_path)
-        expect(assignment.reload.name).to eq("new name")
-      end
-
-      it "updates the usage of rubrics" do
-        assignment.update(use_rubric: false)
-        post :update, params: { id: assignment.id, assignment: { use_rubric: true }},
-          format: :json
-        expect(assignment.reload.use_rubric).to eq true
-      end
-
-      it "renders the template again if there are validation errors" do
-        post :update, params: { id: assignment.id, assignment: { name: "" }}
-        expect(response).to render_template(:edit)
-      end
-
-      it "manages file uploads" do
-        params = {assignment_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, params: { id: assignment.id, assignment: params }
-        expect expect(assignment.assignment_files.count).to eq(1)
-      end
-    end
-
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
         get :export_structure, params: { id: course.id }, format: :csv
@@ -164,8 +110,7 @@ describe AssignmentsController do
     describe "protected routes" do
       [
         :new,
-        :copy,
-        :create
+        :copy
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)
@@ -176,7 +121,6 @@ describe AssignmentsController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :update,
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
@@ -206,7 +150,6 @@ describe AssignmentsController do
     describe "protected routes not requiring id in params" do
       routes = [
         { action: :new, request_method: :get },
-        { action: :create, request_method: :post },
         { action: :settings, request_method: :get }
       ]
       routes.each do |route|
@@ -220,7 +163,6 @@ describe AssignmentsController do
       params = { id: "1" }
       routes = [
         { action: :edit, request_method: :get },
-        { action: :update, request_method: :post },
         { action: :destroy, request_method: :get }
       ]
       routes.each do |route|
