@@ -13,6 +13,9 @@
       scope.updateAssignment = ()->
         AssignmentService.queueUpdateAssignment(@assignment.id)
 
+      scope.submitAssignment = ()->
+        AssignmentService.submitAssignment(@assignment.id)
+
       scope.tabInFocus = "basics"
       scope.focusTab = (focus)->
         scope.tabInFocus = focus

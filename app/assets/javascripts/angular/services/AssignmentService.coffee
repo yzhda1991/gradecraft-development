@@ -142,10 +142,23 @@
       )
 
 
-  queueUpdateAssignment = (id, attribute, state) ->
+  queueUpdateAssignment = (id)->
     DebounceQueue.addEvent(
       "assignments", id, _updateAssignment, [id]
     )
+
+  submitAssignment = (id)->
+    assignment = _.find(assignments, {id: id})
+    DebounceQueue.cancelEvent("assignments", id)
+    if assignment && ValidateDates(assignment).valid
+      $http.put("/api/assignments/#{id}", assignment: assignment).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          window.location = "/assignments"
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
 
   _updateScoreLevel = (assignmentId, scoreLevel)->
     params = { "assignment_score_levels_attributes" :
@@ -282,6 +295,7 @@
       createAssignment: createAssignment
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
+      submitAssignment: submitAssignment
       queueUpdateScoreLevel: queueUpdateScoreLevel
       deleteScoreLevel: deleteScoreLevel
       addNewScoreLevel: addNewScoreLevel
