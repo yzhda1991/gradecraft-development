@@ -23,13 +23,18 @@
         - else
           .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
   - if assignment_list.empty?
-    %li.dashboard-message
+    %li.empty-todo-list
       - if list_class == "course-planner-list"
         - if presenter.due_dates?
-          You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
+          .empty-state-wrapper
+            %img{src: "/images/no-assignments-due.svg", alt:"", class:"empty-state-graphic"}
+          %p.empty-state-text You don't have any #{(term_for :assignment).downcase.pluralize} due in the next week!
         - else
-          This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
+          %p.dashboard-message This class has flexible #{(term_for :assignment).downcase} due dates. Check your course rules to learn when to turn in certain #{(term_for :assignment).downcase.pluralize}.
       - elsif list_class == "my-planner-list"
-        You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the
-        = link_to "grade predictor", predictor_path
-        to add #{(term_for :assignment).downcase.pluralize} to this planner.
+        .empty-state-wrapper
+          %img{src: "/images/no-predicted-assignments.svg", alt:"", class:"empty-state-graphic"}
+        %p.empty-state-text 
+          You have not predicted any #{(term_for :assignment).downcase.pluralize}! Check out the
+          = link_to "grade predictor", predictor_path
+          to add #{(term_for :assignment).downcase.pluralize} to this planner.
