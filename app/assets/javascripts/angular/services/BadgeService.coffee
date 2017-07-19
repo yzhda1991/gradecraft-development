@@ -24,7 +24,7 @@
     badge = _.find(badges, {id: badgeId})
     badge.isUpdating = isUpdating
 
-  #------ API Calls -----------------------------------------------------------#
+  #------ Badge Methods -------------------------------------------------------#
 
   # GET index list of badges
   # for students includes predictions
@@ -48,6 +48,19 @@
       update.predictions = response.meta.allow_updates
     )
 
+  getBadge = (badgeId)->
+    $http.get('api/badge/' + badgeId).then(
+      (response)->
+        GradeCraftAPI.addItem(badges, "badges", response.data)
+        GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
+        GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
+        GradeCraftAPI.logResponse(response)
+      ,(response)->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  #------ Badge Prediction Methods --------------------------------------------#
+
   # PUT a badge prediction
   postPredictedBadge = (badge)->
     if update.predictions
@@ -60,6 +73,8 @@
         GradeCraftPredictionAPI.updatePrediction(badge, '/api/predicted_earned_badges/' + badge.prediction.id, requestParams)
       else
         GradeCraftPredictionAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
+
+  #------ Earned Badge Methods ------------------------------------------------#
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->
@@ -98,12 +113,14 @@
   return {
       termFor: termFor
       getBadges: getBadges
+      badges: badges
+
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge
+
+      earnedBadges: earnedBadges
       createEarnedBadge: createEarnedBadge
       deleteEarnedBadge: deleteEarnedBadge
       studentEarnedBadgeForGrade: studentEarnedBadgeForGrade
-      badges: badges
-      earnedBadges: earnedBadges
   }
 ]

@@ -66,7 +66,7 @@
         GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
         GradeCraftAPI.logResponse(response)
-      (response)->
+      ,(response)->
         GradeCraftAPI.logResponse(response)
     )
 
@@ -98,7 +98,7 @@
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
         update.predicted_earned_grades = response.data.meta.allow_updates
         GradeCraftAPI.logResponse(response)
-      (response)->
+      ,(response)->
         GradeCraftAPI.logResponse(response)
     )
 

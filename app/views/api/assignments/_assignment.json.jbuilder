@@ -25,7 +25,7 @@ json.attributes do
   json.show_purpose_when_locked     assignment.show_purpose_when_locked
   json.resubmissions_allowed        assignment.resubmissions_allowed
   json.threshold_points             assignment.threshold_points
-  json.updated_at                 assignment.updated_at
+  json.updated_at                   assignment.updated_at
   json.visible_when_locked          assignment.visible_when_locked
 
   # boolean attributes

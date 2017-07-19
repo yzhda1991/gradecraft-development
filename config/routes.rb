@@ -155,6 +155,7 @@ Rails.application.routes.draw do
 
   #6. Badges
   resources :badges do
+    get "new_edit"
     get "export_structure", on: :collection
     resources :earned_badges do
       get :mass_edit, on: :collection
@@ -408,7 +409,7 @@ Rails.application.routes.draw do
       post :sort, on: :collection
     end
 
-    resources :badges, only: :index do
+    resources :badges, only: [:index, :show, :update, :create] do
       post :sort, on: :collection
       resources :unlock_conditions, only: :index
     end

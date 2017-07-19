@@ -32,6 +32,10 @@ class BadgesController < ApplicationController
   def edit
   end
 
+  def new_edit
+    @badge = Badge.find(params[:badge_id])
+  end
+
   def create
     @badge = current_course.badges.new(badge_params)
 

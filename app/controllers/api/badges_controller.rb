@@ -1,7 +1,7 @@
 class API::BadgesController < ApplicationController
   include SortsPosition
 
-  before_action :ensure_staff?, only: [:sort]
+  before_action :ensure_staff?, except: [:index]
 
   # GET api/badges
   def index
@@ -27,6 +27,18 @@ class API::BadgesController < ApplicationController
           PredictedEarnedBadge.for_course(current_course).for_student(current_student)
       end
     end
+  end
+
+  def show
+    @badge = Badge.find(params[:id])
+  end
+
+  def update
+    #TODO
+  end
+
+  def create
+    #TODO
   end
 
   def sort
