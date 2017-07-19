@@ -16,7 +16,7 @@ class API::UnlockConditionsController < ApplicationController
       id = params[:grade_scheme_element_id]
       type = "GradeSchemeElement"
     end
-      @unlock_conditions = UnlockCondition.where(unlockable_id: id, unlockable_type: type)
+    @unlock_conditions = UnlockCondition.where(unlockable_id: id, unlockable_type: type)
   end
 
   # POST /api/unlock_conditions
