@@ -125,6 +125,9 @@ Rails.application.routes.draw do
       post :feedback_read
       post :include
     end
+    collection do
+      put :release
+    end
   end
 
   resources :submission_files, only: [] do
