@@ -24,6 +24,14 @@ class EarnedBadge < ActiveRecord::Base
   scope :student_visible, -> { where(student_visible: true) }
   scope :order_by_created_at, -> { order("created_at ASC") }
 
+  scope :earned_by_active_students, -> do
+    joins("INNER JOIN course_memberships ON "\
+      "course_memberships.course_id = earned_badges.course_id AND "\
+      "course_memberships.user_id = earned_badges.student_id")
+      .where("course_memberships.active = true")
+      .references(:course_membership, :earned_badge)
+  end
+
   def check_unlockables
     if self.badge.is_a_condition?
       self.badge.unlock_keys.map(&:unlockable).each do |unlockable|

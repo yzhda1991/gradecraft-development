@@ -126,6 +126,10 @@ class Students::IndexPresenter < Showtime::Presenter
       course_membership.try(:auditing)
     end
 
+    def activated?
+      course_membership.active
+    end
+
     def course_membership
       @course_membership ||= self.course_memberships.find { |cm| cm.course_id == presenter.course.id }
     end

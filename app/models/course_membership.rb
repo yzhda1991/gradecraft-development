@@ -15,8 +15,8 @@ class CourseMembership < ActiveRecord::Base
     end
   end
 
-  scope :auditing, -> { where( role: "student", auditing: true ) }
-  scope :being_graded, -> { where( role: "student", auditing: false) }
+  scope :auditing, -> { where( role: "student", auditing: true, active: true ) }
+  scope :being_graded, -> { where( role: "student", auditing: false, active: true) }
   scope :instructors_of_record, -> { where(instructor_of_record: true) }
 
   validates_presence_of :course, :user, :role

@@ -1,9 +1,11 @@
 describe Analytics::BadgeAnalytics do
+  let(:course) { create :course}
   let(:badge) { create :badge, full_points: 100 }
-  let(:student) { create :user }
-  let!(:earned_badge) { create(:earned_badge, badge: badge, student: student, updated_at: 8.days.ago) }
-  let!(:second_earned_badge) { create(:earned_badge, badge: badge, student: student) }
-  let!(:third_earned_badge) { create(:earned_badge, badge: badge) }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:other_student) { create(:course_membership, :student, course: course).user }
+  let!(:earned_badge) { create(:earned_badge, course: course, badge: badge, student: student, updated_at: 8.days.ago) }
+  let!(:second_earned_badge) { create(:earned_badge, course: course, badge: badge, student: student) }
+  let!(:third_earned_badge) { create(:earned_badge, course: course, badge: badge, student: other_student) }
 
 
   describe "#earned_count" do

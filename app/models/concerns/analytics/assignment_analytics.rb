@@ -4,32 +4,32 @@ module Analytics
     extend ActiveSupport::Concern
 
     def average
-      grades.student_visible.average(:raw_points).to_i \
+      grades.for_active_students.student_visible.average(:raw_points).to_i \
         if grades.student_visible.present?
     end
 
     # Average of above-zero grades for an assignment
     def earned_average
-      grades.student_visible.where("score > 0").average(:score).to_i
+      grades.for_active_students.student_visible.where("grades.score > 0").average(:score).to_i
     end
 
     def high_score
-      grades.student_visible.maximum(:raw_points)
+      grades.for_active_students.student_visible.maximum(:raw_points)
     end
 
     def low_score
-      grades.student_visible.minimum(:raw_points)
+      grades.for_active_students.student_visible.minimum(:raw_points)
     end
 
     def median
-      sorted = grades.student_visible.not_nil.pluck(:score).sort
+      sorted = grades.for_active_students.student_visible.not_nil.pluck(:score).sort
       return 0 if sorted.empty?
       (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
     end
 
     # Calculating how many of each pass/fail exists
     def earned_status_count
-      grades.student_visible
+      grades.for_active_students.student_visible
         .group_by { |g| g.pass_fail_status }
         .map { |score, grade| [score, grade.size ] }.to_h
     end
@@ -37,7 +37,7 @@ module Analytics
     # Calculating how many of each score exists
     # {1236=>1, 4935=>5, 3293=>10, 3566=>15, 2255=>10...}
     def earned_score_count
-      grades.student_visible
+      grades.for_active_students.student_visible
         .group_by { |g| g.raw_points }
         .map { |score, grade| [score, grade.size ] }.to_h
     end
@@ -65,9 +65,9 @@ module Analytics
     def student_visible_scores
       if pass_fail?
         # no use case currently
-        grades.student_visible.pluck(:pass_fail_status)
+        grades.for_active_students.student_visible.pluck(:pass_fail_status)
       else
-        grades.student_visible.pluck(:final_points)
+        grades.for_active_students.student_visible.pluck(:final_points)
       end
     end
 

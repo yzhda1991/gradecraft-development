@@ -2,10 +2,11 @@ describe SubmissionsHelper do
   let(:course) { create :course }
 
   describe "#resubmission_count_for" do
-    let!(:grade) { create :student_visible_grade, course: course, submission: submission,
+    let!(:student) { create(:course_membership, :student, course: course, active: true).user }
+    let!(:grade) { create :student_visible_grade, course: course, student_id: student.id, submission: submission,
                    graded_at: 1.day.ago
                  }
-    let(:submission) { create :submission, course: course, submitted_at: DateTime.now }
+    let!(:submission) { create :submission, student_id: student.id, course: course, submitted_at: DateTime.now }
 
     it "returns the number of resubmitted submissions" do
       expect(resubmission_count_for(course)).to eq 1
@@ -21,8 +22,9 @@ describe SubmissionsHelper do
   end
 
   describe "#ungraded_submissions_count_for" do
-    let!(:submission) { create :submission, course: course }
-    let!(:draft_submission) { create :draft_submission, course: course }
+    let!(:student) { create(:course_membership, :student, course: course, active: true).user }
+    let!(:submission) { create :submission, course: course, student_id: student.id }
+    let!(:draft_submission) { create :draft_submission, course: course, student_id: student.id }
 
     context "when not including draft submissions" do
       it "returns the number of ungraded draft submissions" do

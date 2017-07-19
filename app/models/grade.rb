@@ -55,6 +55,14 @@ class Grade < ActiveRecord::Base
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(score: nil)}
 
+  scope :for_active_students, -> do
+    joins("INNER JOIN course_memberships ON "\
+      "course_memberships.course_id = grades.course_id AND "\
+      "course_memberships.user_id = grades.student_id")
+      .where("course_memberships.active = true")
+      .references(:course_membership, :grade)
+  end
+
   def self.find_or_create(assignment_id,student_id)
     Grade.find_or_create_by(student_id: student_id, assignment_id: assignment_id)
   end

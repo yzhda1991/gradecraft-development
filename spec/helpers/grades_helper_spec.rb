@@ -2,7 +2,8 @@ describe GradesHelper do
   let(:course) { create :course }
 
   describe "#in_progress_grades_count_for" do
-    let!(:grade) { create :in_progress_grade, course: course }
+    let!(:student) { create(:course_membership, :student, course: course, active: true).user }
+    let!(:grade) { create :in_progress_grade, course: course, student_id: student.id }
 
     it "returns the number of grades that are in progress" do
       expect(in_progress_grades_count_for(course)).to eq 1
@@ -19,7 +20,8 @@ describe GradesHelper do
 
   describe "#unreleased_grades_count_for" do
     let(:assignment) { create :assignment, course: course }
-    let!(:grade) { create :complete_grade, assignment: assignment, course: course }
+    let!(:student) { create(:course_membership, :student, course: course, active: true).user }
+    let!(:grade) { create :complete_grade, assignment: assignment, course: course, student_id: student.id }
 
     it "returns the number of grades that are unreleased" do
       expect(unreleased_grades_count_for(course)).to eq 1

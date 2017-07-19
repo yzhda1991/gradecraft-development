@@ -1,6 +1,7 @@
 describe Badge do
   subject { create(:badge) }
-  let(:student) { build_stubbed(:user) }
+  let(:course) { create(:course) }
+  let(:student) { create(:course_membership, :student, course: course, active: true).user }
   let(:assignment) { create(:assignment) }
 
   context "validations" do
@@ -84,6 +85,25 @@ describe Badge do
       second_earned_badge = create(:earned_badge, badge: subject, student: student)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student)
       expect(subject.earned_badge_count_for_student(student)).to eq(2)
+    end
+  end
+
+  describe "#earned_badge_total_points_for_student(student)" do
+    it "sums up the total points earned for a specific badge" do
+      subject.full_points = 1000
+      second_badge = create(:badge, full_points: 200)
+      earned_badge = create(:earned_badge, badge: subject, student: student)
+      second_earned_badge = create(:earned_badge, badge: second_badge, student: student)
+      expect(subject.earned_badge_total_points_for_student(student)).to eq(1000)
+    end
+  end
+
+  describe "#earned_badges_this_week_count" do
+    it "returns the count of submissions for this assignment type this week" do
+      earlier_earned_badge = create(:earned_badge, student: student, badge: subject, course: course, updated_at: 8.days.ago)
+      earned_badge = create(:earned_badge, student: student, badge: subject, course: course, updated_at: 4.days.ago)
+      earned_badge_2 = create(:earned_badge, student: student, badge: subject, course: course, updated_at: 3.days.ago)
+      expect(subject.earned_badges_this_week_count).to eq(2)
     end
   end
 end

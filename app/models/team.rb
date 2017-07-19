@@ -46,6 +46,14 @@ class Team < ActiveRecord::Base
     students.count
   end
 
+  def active_members(course)
+    students.students_being_graded_for_course(course, self)
+  end
+
+  def active_member_count(course)
+    students.students_being_graded_for_course(course, self).count
+  end
+
   # How many badges the students on the team have earned total
   def badge_count
     earned_badges.where(course_id: self.course_id).student_visible.count

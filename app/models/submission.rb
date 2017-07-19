@@ -28,6 +28,14 @@ class Submission < ActiveRecord::Base
       "grades.student_id = submissions.student_id)")
   end
 
+  scope :by_active_students, -> do
+    joins("INNER JOIN course_memberships ON "\
+      "course_memberships.course_id = submissions.course_id AND "\
+      "course_memberships.user_id = submissions.student_id")
+      .where("course_memberships.active = true")
+      .references(:course_membership, :submission)
+  end
+
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
     .where.not(id: with_grade.where(grades: { instructor_modified: true }))
@@ -39,6 +47,7 @@ class Submission < ActiveRecord::Base
     .where("grades.graded_at < submitted_at")
     .references(:grade, :assignment)
   }
+
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
@@ -60,7 +69,7 @@ class Submission < ActiveRecord::Base
   multiple_files :submission_files
 
   def self.submitted_this_week(assignment_type)
-    assignment_type.submissions.submitted.where("submissions.submitted_at > ? ", 7.days.ago)
+    assignment_type.submissions.submitted.by_active_students.where("submissions.submitted_at > ? ", 7.days.ago)
   end
 
   def graded_at

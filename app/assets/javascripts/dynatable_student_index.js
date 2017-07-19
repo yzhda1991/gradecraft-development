@@ -8,21 +8,27 @@ if($('#student-index-table').length > 0 ) {
       dynatable.queries.functions['all-students'] = function(record) {
         return true;
       };
+      dynatable.queries.functions['active-students'] = function(record) {
+        return record.active == "true";
+      };
       dynatable.queries.functions['leaderboard'] = function(record) {
-        return record.rank.length;
+        return record.rank.length && record.active == "true";
       };
       dynatable.queries.functions['top10'] = function(record) {
-        return record.rank.length && parseInt(record.rank) <= 10
+        return record.rank.length && record.active == "true" && parseInt(record.rank) <= 10;
       };
       dynatable.queries.functions['bottom10'] = function(record) {
-        return record.rank.length && parseInt(record.rank) >
+        return record.rank.length && record.active == "true" && parseInt(record.rank) >
         $('#student-index-table').data()['bottom10Cutoff']
       };
       dynatable.queries.functions['flagged-students'] = function(record) {
-        return $(record.flag).find("i").hasClass("flagged");
+        return $(record.flag).find("i").hasClass("flagged") && record.active == "true";
       };
       dynatable.queries.functions['auditors'] = function(record) {
-        return !record.rank.length;
+        return !record.rank.length && record.active == "true";
+      };
+      dynatable.queries.functions['deactivated'] = function(record) {
+        return record.active == "false";
       };
     })
     .dynatable({
@@ -46,10 +52,12 @@ if($('#student-index-table').length > 0 ) {
 
   var removeStudentIndexFilters = function() {
     dynatable.queries.remove('leaderboard');
+    dynatable.queries.remove('active-students');
     dynatable.queries.remove('top10');
     dynatable.queries.remove('bottom10');
     dynatable.queries.remove('flagged-students');
     dynatable.queries.remove('auditors');
+    dynatable.queries.remove('deactivated');
   }
 
   $('.button-table-action').click( function() {
@@ -64,6 +72,3 @@ if($('#student-index-table').length > 0 ) {
   dynatable.queries.add('leaderboard');
   dynatable.process();
 }
-
-
-

@@ -208,7 +208,12 @@ Rails.application.routes.draw do
     put :update_dashboard_message, on: :collection
   end
 
-  resources :course_memberships, only: [:create, :delete, :destroy]
+  resources :course_memberships, only: [:create, :delete, :destroy] do
+    member do
+      put :deactivate
+      put :reactivate
+    end
+  end
 
   #10. Groups
   resources :groups
