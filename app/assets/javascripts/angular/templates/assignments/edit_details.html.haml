@@ -1,9 +1,8 @@
 %section.form-section
-  %h2.form-title {{termFor("assignment")}} Dates
   .form-subsection
+    %h3.form-subtitle Dates
     %assignment-date-picker(assignment="assignment")
 
-  %h2.form-title {{termFor("assignment")}} Grading And Submission
   .form-subsection
     %h3.form-subtitle Grading Style
     .form-flex-row
@@ -19,12 +18,6 @@
         %label
           Points Threshold
           %input(ng-model="assignment.threshold_points" gc-number-input ng-change="updateAssignment()")
-
-  .form-subsection(ng-if="!assignment.pass_fail")
-    %assignment-score-levels(assignment="assignment")
-
-  %h2.form-title Grading Settings
-  .form-subsection
     .form-item
       %label
         %input(type="checkbox" ng-model="assignment.student_logged" ng-click="updateAssignment()")
@@ -34,16 +27,11 @@
             .display-on-hover.hover-style
               Do {{ termFor("students")}} self-report their grade for this {{ termFor("assignment")}}?  If you add grade levels, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
 
-    -# release_necessary is not used with the new Grade Release process!
-    .form-item
-      %label
-        %input(type="checkbox" ng-model="assignment.release_necessary" ng-click="updateAssignment()")
-          Release Necessary
-          %span.has-tooltip
-            %i.fa.fa-info-circle
-            .display-on-hover.hover-style
-              Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
+  .form-subsection(ng-if="!assignment.pass_fail")
+    %assignment-score-levels(assignment="assignment")
 
+  .form-subsection
+    %h3.form-subtitle Submissions
     .form-item
       %label
         %input(type="checkbox" ng-model="assignment.accepts_submissions" ng-click="updateAssignment()")
@@ -74,8 +62,9 @@
               Can {{ termFor("students")}} resubmit this {{ termFor("assignment")}}?
 
 
-  %h2.form-title Assignment Visibility Settings
+
   .form-subsection
+    %h3.form-subtitle Basic Visibility Settings
     .form-item
       %label
         %input(type="checkbox" ng-model="assignment.visible" ng-click="updateAssignment()")
@@ -92,4 +81,3 @@
             %i.fa.fa-info-circle
             .display-on-hover.hover-style
               Do you want to hide comparative analytics from {{ termFor("students")}} for this {{ termFor("assignment")}}?
-
