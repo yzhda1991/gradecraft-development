@@ -446,10 +446,10 @@ Rails.application.routes.draw do
     post "grades/:grade_id/file_uploads", to: "file_uploads#create"
     post "assignments/:assignment_id/groups/:group_id/file_uploads", to: "file_uploads#group_create"
     delete "file_uploads/:id", to: "file_uploads#destroy"
-
-    # api assignment file uploads
     post "assignments/:assignment_id/file_uploads", to: "assignment_files#create"
     delete "assignment_files/:id", to: "assignment_files#destroy"
+    post "badges/:badge_id/file_uploads", to: "badge_files#create"
+    delete "badge_files/:id", to: "badge_files#destroy"
 
     resources :gradebook, only: [] do
       collection do

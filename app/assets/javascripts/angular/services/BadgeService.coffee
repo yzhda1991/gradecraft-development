@@ -5,6 +5,7 @@
 
   badges = []
   earnedBadges = []
+  fileUploads = []
   update = {}
 
   termFor = (article)->
@@ -52,6 +53,7 @@
     $http.get('/api/badges/' + badgeId).then(
       (response)->
         GradeCraftAPI.addItem(badges, "badges", response.data)
+        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
         GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
         GradeCraftAPI.setTermFor("badge", response.data.meta.term_for_badge)
         GradeCraftAPI.logResponse(response)
@@ -207,6 +209,7 @@
       queueUpdateBadge: queueUpdateBadge
       submitBadge: submitBadge
 
+      fileUploads: fileUploads
       removeIcon: removeIcon
       postIconUpload: postIconUpload
       postFileUploads: postFileUploads

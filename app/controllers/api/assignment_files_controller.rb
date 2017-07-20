@@ -1,6 +1,6 @@
 # Note: this file has been formatted as similarly to FileUploadsController as
 # possible, to facilitate eventually moving AssignmentFiles into this
-# polymorphic model, and combining the two controllers.
+# polymorphic model.
 
 class API::AssignmentFilesController < ApplicationController
 
