@@ -27,6 +27,12 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.log_level = :debug
   config.log_tags = [:request_id]
+  config.logger = ActiveSupport::TaggedLogging.new(
+                    RemoteSyslogLogger.new(
+                      "logs6.papertrailapp.com",
+                      20258,
+                      program: "rails-#{ENV["RAILS_ENV"]}")
+                  )
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
   config.session_store :active_record_store, :expire_after => 60.minutes
 end
