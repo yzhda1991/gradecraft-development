@@ -81,14 +81,13 @@
   submitBadge = (id)->
     badge = _.find(badges, {id: id})
     DebounceQueue.cancelEvent("badges", id)
-    if badge && ValidateDates(badge).valid
-      $http.put("/api/badges/#{id}", badge: badge).then(
-        (response) ->
-          GradeCraftAPI.logResponse(response)
-          window.location = "/badges"
-        ,(response) ->
-          GradeCraftAPI.logResponse(response)
-      )
+    $http.put("/api/badges/#{id}", badge: badge).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+        window.location = "/badges"
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
 
 #------- Icon and File Methods ---------------------------------------------#
 
