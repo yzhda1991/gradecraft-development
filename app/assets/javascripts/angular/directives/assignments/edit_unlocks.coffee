@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentEditUnlocks', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
+@gradecraft.directive 'assignmentEditUnlocks', ['AssignmentTypeService', 'AssignmentService', 'UnlockConditionService', (AssignmentTypeService, AssignmentService, UnlockConditionService) ->
 
   return {
     scope: {
@@ -10,5 +10,8 @@
 
       scope.updateAssignment = ()->
         AssignmentService.queueUpdateAssignment(@assignment.id)
+
+      scope.hasUnlocks = ()->
+        UnlockConditionService.unlockConditions.length
   }
 ]
