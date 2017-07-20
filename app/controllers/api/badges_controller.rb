@@ -33,8 +33,18 @@ class API::BadgesController < ApplicationController
     @badge = Badge.find(params[:id])
   end
 
+  # PUT api/badges/:id
   def update
-    #TODO
+    @badge = Badge.find(params[:id])
+    if @badge.update_attributes badge_params
+      render "api/badges/show", success: true, status: 200
+    else
+      render json: {
+        message: "failed to save badge",
+        errors: @badge.errors.messages,
+        success: false
+        }, status: 400
+    end
   end
 
   def create
@@ -43,5 +53,15 @@ class API::BadgesController < ApplicationController
 
   def sort
     sort_position_for :badge
+  end
+
+  private
+
+  def badge_params
+    params.require(:badge).permit(:name, :description, :icon, :visible, :full_points,
+      :can_earn_multiple_times,
+      :position, :visible_when_locked, :course_id, :course, :show_name_when_locked,
+      :show_points_when_locked, :show_description_when_locked, :student_awardable
+    )
   end
 end

@@ -1,7 +1,7 @@
 # Manages state of Badges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
+@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, DebounceQueue) ->
 
   badges = []
   earnedBadges = []
@@ -59,6 +59,36 @@
         GradeCraftAPI.logResponse(response)
     )
 
+# Handles incremental updates from the Badge form
+  _updateBadge = (id)->
+    badge = _.find(badges, {id: id})
+    $http.put("/api/badges/#{id}", badge: badge).then(
+      (response) ->
+        angular.copy(response.data.data.attributes, badge)
+        GradeCraftAPI.formatDates(badge, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateBadge = (id)->
+    DebounceQueue.addEvent(
+      "badges", id, _updateBadge, [id]
+    )
+
+  submitBadge = (id)->
+    badge = _.find(badges, {id: id})
+    DebounceQueue.cancelEvent("badges", id)
+    if badge && ValidateDates(badge).valid
+      $http.put("/api/badges/#{id}", badge: badge).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          window.location = "/badges"
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+
   #------ Badge Prediction Methods --------------------------------------------#
 
   # PUT a badge prediction
@@ -115,6 +145,10 @@
       getBadges: getBadges
       getBadge: getBadge
       badges: badges
+
+
+      queueUpdateBadge: queueUpdateBadge
+      submitBadge: submitBadge
 
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge

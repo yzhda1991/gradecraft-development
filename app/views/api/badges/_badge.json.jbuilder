@@ -31,6 +31,16 @@ json.attributes do
 end
 
 json.relationships do
+  if badge.badge_files.present?
+    json.file_uploads do
+      json.data badge.badge_files do |badge_file|
+        json.type "file_uploads"
+        json.id badge_file.id.to_s
+      end
+    end
+  end
+
+
   if @predicted_earned_badges.present? &&  @predicted_earned_badges.where(badge_id: badge.id).present?
     json.prediction data: {
       type: "predicted_earned_badges",
