@@ -1,9 +1,9 @@
 .form-item
   %label
     Icon
-    %input.icon-upload-button(ng-if="!badge.icon" type="file" badge-icon-upload="iconFile" badge-id="badge.id")
+    %input.icon-upload-button(ng-if="badge.default_url"  type="file" badge-icon-upload="iconFile" badge-id="badge.id")
   .form-hint Badges appear in different sizes in GradeCraft. Recommended size is 150px x 150px or larger.
-  .preview-wrapper(ng-if="badge.icon")
+  .preview-wrapper
     .icon-preview.large-preview
       .img-cropper.large-crop
         %img(ng-src="{{badge.icon}}")
@@ -19,7 +19,7 @@
         %img(ng-src="{{badge.icon}}")
       %span.xaxis-label 40px
       %span.yaxis-label 40px
-      %button.remove-unlock-condition(ng-click="removeIcon()")
+      %button.remove-unlock-condition(ng-if="!badge.default_url" ng-click="removeIcon()")
         %i.fa.fa-fw.fa-times
 
 .form-item

@@ -88,6 +88,64 @@
           GradeCraftAPI.logResponse(response)
       )
 
+#------- Icon and File Methods ---------------------------------------------#
+
+  removeIcon = (id)->
+    badge = _.find(badges, {id: id})
+    badge.icon = null
+    badge.remove_icon = true
+    _updateBadge(id)
+
+  postIconUpload = (id, files)->
+    iconParams = new FormData()
+    iconParams.append('badge[icon]', files[0])
+    $http.put("/api/badges/#{id}", iconParams,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response) ->
+        badge = _.find(badges, {id: id})
+        angular.copy(response.data.data.attributes, badge)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  postFileUploads = (id, files)->
+    fd = new FormData()
+    angular.forEach(files, (file, index)->
+      fd.append("file_uploads[]", file)
+    )
+    $http.post(
+      "/api/badges/#{id}/file_uploads",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response)-> # success
+        if response.status == 201
+          GradeCraftAPI.addItems(fileUploads, "file_uploads", response.data)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  deleteFileUpload = (file)->
+    file.deleting = true
+    GradeCraftAPI.deleteItem(fileUploads, file)
+    $http.delete("/api/badge_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(fileUploads, file)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        file.deleting = false
+        GradeCraftAPI.logResponse(response)
+    )
+
+
 
   #------ Badge Prediction Methods --------------------------------------------#
 
@@ -146,9 +204,13 @@
       getBadge: getBadge
       badges: badges
 
-
       queueUpdateBadge: queueUpdateBadge
       submitBadge: submitBadge
+
+      removeIcon: removeIcon
+      postIconUpload: postIconUpload
+      postFileUploads: postFileUploads
+      deleteFileUpload: deleteFileUpload
 
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge

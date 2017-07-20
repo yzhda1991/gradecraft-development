@@ -58,10 +58,22 @@ class API::BadgesController < ApplicationController
   private
 
   def badge_params
-    params.require(:badge).permit(:name, :description, :icon, :visible, :full_points,
+    params.require(:badge).permit(
       :can_earn_multiple_times,
-      :position, :visible_when_locked, :course_id, :course, :show_name_when_locked,
-      :show_points_when_locked, :show_description_when_locked, :student_awardable
+      :course,
+      :course_id,
+      :description,
+      :full_points,
+      :icon,
+      :name,
+      :position,
+      :remove_icon,
+      :show_description_when_locked,
+      :show_name_when_locked,
+      :show_points_when_locked,
+      :student_awardable,
+      :visible,
+      :visible_when_locked,
     )
   end
 end
