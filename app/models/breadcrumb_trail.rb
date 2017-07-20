@@ -148,6 +148,17 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('New ' + objects[:course].badge_term)
   end
 
+  def badges_importers_index
+    badges_index
+    breadcrumb(objects[:badge].name, badge_path(objects[:badge]))
+    breadcrumb('Badge Import', badge_badges_importers_path(objects[:badge]))
+  end
+
+  def badges_importers_csv
+    badges_importers_index
+    breadcrumb('CSV')
+  end
+
   def challenges_index
     dashboard
     breadcrumb(objects[:course].challenge_term.pluralize, challenges_path)

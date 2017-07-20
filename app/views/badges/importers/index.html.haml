@@ -1,0 +1,14 @@
+.pageContent
+  = render partial: "layouts/alerts"
+
+  %section
+    .card.left{style: "height: 400px;"}
+      .card-cap
+        %img{src: "/images/csv-logo.png", height: "46px"}
+      .card-block
+        %h4.card-title CSV
+        .card-text
+        %p.card-text
+          Upload a .csv file with badge information for students to import the student badges.
+
+          = link_to "Import Badges from CSV", badge_badges_importer_path(@badge, :csv), class: "card-link button"
