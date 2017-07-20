@@ -1,0 +1,24 @@
+%article.badge-form-fields.simple-form
+
+  %ul.edit-form-tabs-nav
+    %li(ng-click="focusTab('basics')" ng-class="{'active': isFocusTab('basics')}")
+      %a Description & Purpose
+    %li(ng-click="focusTab('details')" ng-class="{'active': isFocusTab('details')}")
+      %a Workflow & Grading
+    %li(ng-click="focusTab('unlocks')" ng-class="{'active': isFocusTab('unlocks')}")
+      %a Unlock Conditions
+
+  #tab1(ng-if="isFocusTab('basics')")
+    %badge-edit-basics(badge="badge")
+
+  #tab2(ng-if="isFocusTab('details')")
+    %badge-edit-details(badge="badge")
+
+  #tab3(ng-if="isFocusTab('unlocks')")
+    %badge-edit-unlocks(badge="badge")
+
+  %button.button.right(ng-click="submitBadge()") Submit {{ termFor('badge')}}
+
+.last-updated(ng-if='badge.updated_at')
+  Last Updated:
+  %span {{badge.updated_at | date:"MM/dd/yyyy 'at' h:mma"}}

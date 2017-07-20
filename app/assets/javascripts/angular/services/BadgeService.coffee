@@ -49,11 +49,11 @@
     )
 
   getBadge = (badgeId)->
-    $http.get('api/badge/' + badgeId).then(
+    $http.get('/api/badges/' + badgeId).then(
       (response)->
         GradeCraftAPI.addItem(badges, "badges", response.data)
-        GradeCraftAPI.setTermFor("badges", response.meta.term_for_badges)
-        GradeCraftAPI.setTermFor("badge", response.meta.term_for_badge)
+        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+        GradeCraftAPI.setTermFor("badge", response.data.meta.term_for_badge)
         GradeCraftAPI.logResponse(response)
       ,(response)->
         GradeCraftAPI.logResponse(response)
@@ -113,6 +113,7 @@
   return {
       termFor: termFor
       getBadges: getBadges
+      getBadge: getBadge
       badges: badges
 
       badgesPredictedPoints: badgesPredictedPoints
