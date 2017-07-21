@@ -41,7 +41,6 @@ json.relationships do
     end
   end
 
-
   if @predicted_earned_badges.present? &&  @predicted_earned_badges.where(badge_id: badge.id).present?
     json.prediction data: {
       type: "predicted_earned_badges",

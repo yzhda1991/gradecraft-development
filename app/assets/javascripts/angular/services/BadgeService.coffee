@@ -61,7 +61,15 @@
         GradeCraftAPI.logResponse(response)
     )
 
-# Handles incremental updates from the Badge form
+  createBadge = (params)->
+    $http.post("/api/badges/", badge: params).then(
+      (response) ->
+        GradeCraftAPI.addItem(badges, "badges", response.data)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
   _updateBadge = (id)->
     badge = _.find(badges, {id: id})
     $http.put("/api/badges/#{id}", badge: badge).then(
@@ -205,6 +213,7 @@
       getBadge: getBadge
       badges: badges
 
+      createBadge: createBadge
       queueUpdateBadge: queueUpdateBadge
       submitBadge: submitBadge
 

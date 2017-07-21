@@ -2,7 +2,7 @@ class BadgesController < ApplicationController
 
   before_action :ensure_not_observer?, except: [:index, :show]
   before_action :ensure_staff?, except: [:index, :show]
-  before_action :find_badge, only: [:show, :edit, :update, :destroy]
+  before_action :find_badge, only: [:show, :edit, :destroy]
   before_action :use_current_course, only: [:index, :show, :new, :edit, :new_edit]
 
   # GET /badges
@@ -30,30 +30,7 @@ class BadgesController < ApplicationController
   end
 
   def edit
-  end
-
-  def new_edit
-    @badge = Badge.find(params[:badge_id])
-  end
-
-  def create
-    @badge = current_course.badges.new(badge_params)
-
-    if @badge.save
-      redirect_to @badge,
-        notice: "#{@badge.name} #{term_for :badge} successfully created"
-    else
-      render action: "new"
-    end
-  end
-
-  def update
-    if @badge.update_attributes(badge_params)
-      redirect_to badges_path,
-        notice: "#{@badge.name} #{term_for :badge} successfully updated"
-    else
-      render action: "edit"
-    end
+    @badge = Badge.find(params[:id])
   end
 
   def destroy
@@ -71,16 +48,6 @@ class BadgesController < ApplicationController
   end
 
   private
-
-  def badge_params
-    params.require(:badge).permit(:name, :description, :icon, :visible, :full_points,
-      :can_earn_multiple_times, :earned_badges, :earned_badges_attributes,
-      :position, :visible_when_locked, :course_id, :course, :show_name_when_locked,
-      :show_points_when_locked, :show_description_when_locked, :student_awardable,
-      unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
-        :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
-      badge_files_attributes: [:id, file: []])
-  end
 
   def find_badge
     @badge = current_course.badges.find(params[:id])

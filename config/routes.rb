@@ -154,8 +154,7 @@ Rails.application.routes.draw do
   resources :assignment_type_weights, only: [:index]
 
   #6. Badges
-  resources :badges do
-    get "new_edit"
+  resources :badges, except: [:update, :create] do
     get "export_structure", on: :collection
     resources :earned_badges do
       get :mass_edit, on: :collection

@@ -17,6 +17,6 @@
           %i.fa.fa-info-circle
           .display-on-hover.hover-style
             This will be shown to students on their dashboard, and when they submit their {{ termFor("badge") }}.
-        %textarea(ng-model="badge.description" ng-change="updateBadge()" froala="froalaOptions")
+        %textarea(ng-model="badge.description" ng-blur="updateBadge()" froala)
 
     %badge-icon-uploader(badge="badge")

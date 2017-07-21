@@ -48,7 +48,16 @@ class API::BadgesController < ApplicationController
   end
 
   def create
-    #TODO
+    @badge = current_course.badges.new(badge_params)
+    if @badge.save
+      render "api/badges/show", success: true, status: 201
+    else
+      render json: {
+        message: "failed to save badge",
+        errors: @badge.errors.messages,
+        success: false
+        }, status: 400
+    end
   end
 
   def sort
@@ -60,8 +69,6 @@ class API::BadgesController < ApplicationController
   def badge_params
     params.require(:badge).permit(
       :can_earn_multiple_times,
-      :course,
-      :course_id,
       :description,
       :full_points,
       :icon,
@@ -73,7 +80,7 @@ class API::BadgesController < ApplicationController
       :show_points_when_locked,
       :student_awardable,
       :visible,
-      :visible_when_locked,
+      :visible_when_locked
     )
   end
 end
