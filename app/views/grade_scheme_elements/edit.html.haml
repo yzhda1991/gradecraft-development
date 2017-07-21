@@ -26,3 +26,5 @@
       %ul
         %li= f.button :submit, "Update Level", id: "edit-grade-scheme-element-button", class: "disabled"
         %li= link_to glyph("times-circle") + "Cancel", grade_scheme_elements_path, class: "button"
+
+  %grade-scheme-element-edit-unlocks(grade-scheme-element-id="#{@grade_scheme_element.id}")
