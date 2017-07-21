@@ -397,8 +397,6 @@ GEM
     logging (2.1.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
-    logglier (0.3.0)
-      multi_json (~> 1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.4)
@@ -738,7 +736,6 @@ DEPENDENCIES
   jquery-rails
   launchy
   light-service
-  logglier (~> 0.3.0)
   mini_magick
   mongoid (~> 6.0.0)
   multi_json

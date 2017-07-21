@@ -46,10 +46,6 @@ gem 'jquery-rails'
 
 gem 'light-service'
 
-# TODO: Remove this once connection to loggly is removed
-# interface for connecting to remote logging system Loggly
-gem 'logglier', '~> 0.3.0'
-
 gem 'multi_json'
 gem 'mini_magick'
 gem 'mongoid', '~> 6.0.0'
