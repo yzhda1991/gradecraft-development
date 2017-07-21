@@ -59,8 +59,7 @@ describe BadgesController do
 
     describe "protected routes" do
       [
-        :new,
-        :create
+        :new
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
@@ -71,7 +70,6 @@ describe BadgesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :update,
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
@@ -92,8 +90,7 @@ describe BadgesController do
 
     describe "protected routes not requiring id in params" do
       routes = [
-        { action: :new, request_method: :get },
-        { action: :create, request_method: :post }
+        { action: :new, request_method: :get }
       ]
       routes.each do |route|
         it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
@@ -107,7 +104,6 @@ describe BadgesController do
       params = { id: "1" }
       routes = [
         { action: :edit, request_method: :get },
-        { action: :update, request_method: :post },
         { action: :destroy, request_method: :get }
       ]
       routes.each do |route|

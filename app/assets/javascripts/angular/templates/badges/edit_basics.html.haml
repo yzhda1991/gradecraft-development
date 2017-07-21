@@ -11,12 +11,12 @@
         %input(ng-model="badge.full_points" gc-number-input ng-change="updateBadge()")
 
     .form-item
-      %label
+      %label(for="badge-description")
         {{termFor("badge")}} Description
         %span.has-tooltip
           %i.fa.fa-info-circle
           .display-on-hover.hover-style
             This will be shown to students on their dashboard, and when they submit their {{ termFor("badge") }}.
-        %textarea(ng-model="badge.description" ng-blur="updateBadge()" froala)
+      %textarea#badge-description(ng-model="badge.description" ng-blur="updateBadge()" froala)
 
     %badge-icon-uploader(badge="badge")
