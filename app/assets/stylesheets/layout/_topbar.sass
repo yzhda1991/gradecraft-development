@@ -333,3 +333,40 @@ ul.subnav.logged-out
     line-height: 14px
     top: 0.3rem
     font-size: 0.6rem
+
+/* Styles the trial dropdown */
+
+.trial
+  color: $color-grey-2
+  ul.not-available li
+    list-style-type: disc
+  ul.pricing
+    padding: 0
+    .button
+      color: $color-black
+      text-transform: none
+      font-size: 1.0rem
+      padding: .25rem 1rem
+      margin: .25rem 0
+      font-weight: 300
+      &.k-12
+        background-color: $color-grey-7
+        border-left: 10px solid $color-blue-2
+        &:hover
+          background-color: $color-blue-2
+          color: $color-white
+          border-left: 10px solid $color-grey-5
+      &.higher-ed
+        background-color: $color-grey-7
+        border-left: 10px solid $color-green-3
+        &:hover
+          background-color: $color-green-2
+          color: $color-white
+          border-left: 10px solid $color-grey-5
+      &.special-pricing
+        background-color: $color-grey-7
+        border-left: 10px solid $color-purple-1
+        &:hover
+          background-color: $color-purple-1
+          color: $color-white
+          border-left: 10px solid $color-grey-5
