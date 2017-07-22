@@ -1,40 +1,33 @@
-- submissions_by_assignment.each do |assignment, submissions|
-  %h4.assignment_name
-    = link_to assignment.name, assignment
-  %table.dynatable.no-table-header
-    %caption.sr-only= "Ungraded Submissions for #{assignment.name}"
-    %thead
+%table.dynatable.no-table-header
+  %thead
+    %tr
+      %th{scope: "col"} #{ term_for :assignment }
+      %th{scope: "col", :width => "7%"} Name
+      - if course.has_teams?
+        %th{scope: "col", :width => "15%"}= "#{term_for :team}"
+      %th{scope: "col"} Date Submitted
+      %th{scope: "col", :style => "min-width: 200px"}
+        %span.sr-only Actions
+  %tbody
+    - submissions_by_assignment.each do |submission|
+      - assignment = submission.assignment
+      - student = submission.student
+      - team = student.team_for_course(course) if student
+      - group = submission.group
       %tr
+        %td= link_to assignment.name, assignment
         - if assignment.is_individual?
-          %th{scope: "col", :width => "7%"} First Name
-          %th{scope: "col", :width => "7%"} Last Name
+          %td= link_to student.name, student_path(student)
           - if course.has_teams?
-            %th{scope: "col", :width => "15%"}= "#{term_for :team}"
+            %td
+              = link_to team.name, team if student.present? && team.present?
         - elsif assignment.has_groups?
-          %th{scope: "col"} Group
-        %th{scope: "col"} Date Submitted
-        %th{scope: "col", :style => "min-width: 200px"}
-          %span.sr-only Actions
-    %tbody
-      - submissions.each do |submission|
-        - student = submission.student
-        - team = student.team_for_course(course) if student
-        - group = submission.group
-        %tr
-          - if assignment.is_individual?
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
-            - if course.has_teams?
-              %td
-                = link_to team.name, team if student.present? && team.present?
-          - elsif assignment.has_groups?
-            %td= link_to group.try(:name), group_path(group)
-          %td= submission.submitted_at
-          %td
-            .right
-              %ul.button-bar
-                - if assignment.is_individual?
-                  = active_course_link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(assignment, student), method: :post, class: "button"
-                - elsif assignment.has_groups?
-                  = active_course_link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(assignment, group), class: "button"
-  %hr.dotted
+          %td= link_to group.try(:name), group_path(group)
+        %td= submission.submitted_at
+        %td
+          .right
+            %ul.button-bar
+              - if assignment.is_individual?
+                = active_course_link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(assignment, student), method: :post, class: "button"
+              - elsif assignment.has_groups?
+                = active_course_link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(assignment, group), class: "button"

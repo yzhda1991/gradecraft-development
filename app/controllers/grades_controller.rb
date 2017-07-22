@@ -97,6 +97,24 @@ class GradesController < ApplicationController
       notice: "Thank you for letting us know!"
   end
 
+  # PUT /grades/release
+  # Releases grades for assignment in grade_ids params
+  def release
+    grades = Grade.find(params[:grade_ids])
+
+    grade_ids = grades.collect do |grade|
+      grade.instructor_modified = true
+      grade.complete = true
+      grade.student_visible = true
+      grade.save
+      grade.id
+    end
+
+    grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
+
+    redirect_to grading_status_path, notice: "Grades were successfully released!"
+  end
+
   private
 
   def grade_params

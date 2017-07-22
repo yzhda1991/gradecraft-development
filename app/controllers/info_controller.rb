@@ -36,10 +36,10 @@ class InfoController < ApplicationController
   def grading_status
     grades = current_course.grades.for_active_students.instructor_modified
     submissions = current_course.submissions.submitted.by_active_students.includes(:assignment, :grade, :student, :group, :submission_files)
-    @ungraded_submissions_by_assignment = submissions.ungraded.group_by(&:assignment)
-    @resubmissions_by_assignment = submissions.resubmitted.group_by(&:assignment)
-    @in_progress_grades_by_assignment = grades.in_progress.group_by(&:assignment)
-    @ready_for_release_grades_by_assignment = grades.ready_for_release.group_by(&:assignment)
+    @ungraded_submissions_by_assignment = submissions.ungraded
+    @resubmissions_by_assignment = submissions.resubmitted
+    @in_progress_grades_by_assignment = grades.in_progress
+    @ready_for_release_grades_by_assignment = grades.ready_for_release
   end
 
   # Displaying per assignment summary outcome statistics

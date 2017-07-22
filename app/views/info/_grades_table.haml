@@ -1,62 +1,52 @@
-- grades_by_assignment.each do |assignment, grades|
-  %div{ class: "assignment-#{grade_type}"}
-    %h4.assignment_name
-      = link_to assignment.name, assignment
-
-    = form_tag release_assignment_grades_path(assignment), method: :put do
-
-      %table.dynatable.no-table-header
-        %thead
-          %tr
-            - if assignment.is_individual?
-              %th{scope: "col", :width => "8%"} First Name
-              %th{scope: "col", :width => "8%"} Last Name
-              - if course.has_teams?
-                %th{scope: "col", :width => "15%"}= "#{term_for :team}"
-            - elsif assignment.has_groups?
-              %th{scope: "col"} Group
-            %th{scope: "col", :width => "8%"} Score
-            %th{scope: "col"} Feedback
-            %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
-              %span.sr-only Actions
-            - if current_course.active?
-              %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-                %button.button.table-select-all{role: "button", type: "button"}= "Check"
-                %button.button.table-select-none{role: "button", type: "button"}= "Uncheck"
-        %tbody
-          - grades.each do |grade|
-            - student = grade.student
-            - team = student.team_for_course(course) if student
-            - group = grade.group
-            %tr
-              - if assignment.is_individual?
-                %td= link_to student.first_name, student_path(student)
-                %td= link_to student.last_name, student_path(student)
-                - if course.has_teams?
-                  %td
-                    - if student.present? && team.present?
-                      = link_to team.name, team
-              - elsif assignment.has_groups?
-                %td= link_to group.try(:name), group_path(group)
-              %td= points grade.score
-              %td= raw grade.feedback
+= form_tag release_grades_path, method: :put do
+  %table.dynatable.no-table-header
+    %thead
+      %tr
+        %th= "#{ term_for :assignment }"
+        %th{scope: "col", :width => "8%"} Name
+        - if course.has_teams?
+          %th{scope: "col", :width => "15%"}= "#{term_for :team}"
+        %th{scope: "col", :width => "8%"} Score
+        %th{scope: "col"} Feedback
+        %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
+          %span.sr-only Actions
+        - if current_course.active?
+          %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+            %button.button.table-select-all{role: "button", type: "button"}= "Check"
+            %button.button.table-select-none{role: "button", type: "button"}= "Uncheck"
+    %tbody
+      - grades_by_assignment.each do |grade|
+        - assignment = grade.assignment
+        - student = grade.student
+        - team = student.team_for_course(course) if student
+        - group = grade.group
+        %tr
+          %td= link_to assignment.name, assignment
+          - if assignment.is_individual?
+            %td= link_to student.name, student_path(student)
+            - if course.has_teams?
               %td
-                .right
-                  %ul.button-bar
-                    - if assignment.is_individual?
-                      = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
-                    - elsif assignment.has_groups?
-                      = active_course_link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
-              - if current_course.active?
-                %td
-                  .center
-                    %label
-                      %span.sr-only Select grade to update status
-                      = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-#{assignment.name}-grades-command']" }, id: "grade_id_#{assignment.id}-#{grade.id}"
+                - if student.present? && team.present?
+                  = link_to team.name, team
+          - elsif assignment.has_groups?
+            %td= link_to group.try(:name), group_path(group)
+          %td= points grade.score
+          %td= raw grade.feedback
+          %td
+            .right
+              %ul.button-bar
+                - if assignment.is_individual?
+                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
+                - elsif assignment.has_groups?
+                  = active_course_link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
+          - if current_course.active?
+            %td
+              .center
+                %label
+                  %span.sr-only Select grade to update status
+                  = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"
 
-      .submit-buttons
-        .right
-          = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
-            data: { behavior: "selected-#{grade_type}-#{assignment.name}-grades-command", confirm: "Release Selected Grades to Students?" }
-
-  %hr.dotted
+  .submit-buttons
+    .right
+      = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
+        data: { behavior: "selected-individual-grades-command", confirm: "Release Selected Grades to Students?" }
