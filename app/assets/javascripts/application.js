@@ -73,7 +73,7 @@
 //= require assignment_form
 //= require image_upload
 //= require student_dashboard
-//= require student_onboarding
+//= require onboarding
 //= require dynatable_course_index
 //= require dynatable_student_index
 //= require public_pages

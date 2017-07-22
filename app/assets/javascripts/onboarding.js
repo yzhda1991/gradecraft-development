@@ -1,6 +1,6 @@
-//initiate slick slider for student onboarding slides
+//initiate slick slider for onboarding slides
 function initializeOnboardingSlider() {
-  $('.student-onboarding-slides').slick({
+  $('.onboarding-slides').slick({
     prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button" aria-label="View previous slide"></a>',
     nextArrow: '<a class="fa fa-chevron-right next slider-direction-button" aria-label="View next course event"></a>',
     adaptiveHeight: true,
@@ -23,11 +23,11 @@ function initializeOnboardingSlider() {
 
 initializeOnboardingSlider();
 
-//modal for student onboarding from Scott O'Hara (https://www.smashingmagazine.com/2014/09/making-modal-windows-better-for-everyone/)
+//modal for onboarding from Scott O'Hara (https://www.smashingmagazine.com/2014/09/making-modal-windows-better-for-everyone/)
 // helper function to place modal window as the first child
 // of the #dashboard-timeline node
 var m = document.getElementById('modal-window');
-var p = document.querySelector('.student .offscreen-sidebar');
+var p = document.querySelector('.offscreen-sidebar');
 
 function swap() {
   p.parentNode.insertBefore(m, p);

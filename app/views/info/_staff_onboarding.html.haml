@@ -1,0 +1,11 @@
+.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-label': 'Staff Onboarding', 'data-first-load': current_user.course_memberships.where(course: current_course).first.has_seen_course_onboarding? ? 'false' : 'true' }
+  .modal-wrapper.modal-content#modal-holder{role: "document"}
+    .modal-slider.onboarding-slides
+      = render partial: "info/staff_onboarding/staff_onboarding_slide1"
+      = render partial: "info/staff_onboarding/staff_onboarding_slide2"
+      = render partial: "info/staff_onboarding/staff_onboarding_slide3"
+      = render partial: "info/staff_onboarding/staff_onboarding_slide4"
+      = render partial: "info/staff_onboarding/staff_onboarding_slide5"
+      = render partial: "info/staff_onboarding/staff_onboarding_slide6"
+
+    %button.btn-close#modal-close{type: 'submit', 'aria-label': 'close'}= glyph(:times)
