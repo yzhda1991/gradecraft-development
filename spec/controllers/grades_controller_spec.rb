@@ -122,6 +122,13 @@ describe GradesController do
       end
     end
 
+    describe "PUT release" do
+      it "updates the grade to student visible" do
+        put :release, params: { grade_ids: [grade.id]}
+        expect(grade.reload.student_visible).to be_truthy
+      end
+    end
+
     describe "DELETE destroy" do
       it "removes the grade entirely" do
         grade

@@ -97,7 +97,7 @@ class GradesController < ApplicationController
       notice: "Thank you for letting us know!"
   end
 
-  # PUT /grades/:ids/release
+  # PUT /grades/release
   # Releases grades for assignment in grade_ids params
   def release
     grades = Grade.find(params[:grade_ids])
