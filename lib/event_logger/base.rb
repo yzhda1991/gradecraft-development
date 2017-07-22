@@ -13,7 +13,8 @@ module EventLogger
   class Base
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
-    extend LogglyResque # pulls in logger class method for logging to Loggly
+    # pulls in logger class method for logging to Papertrail
+    extend PapertrailResque
 
     # pass designated ivars from #inheritable_ivars down to subclasses
     extend InheritableIvars

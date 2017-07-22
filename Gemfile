@@ -46,9 +46,6 @@ gem 'jquery-rails'
 
 gem 'light-service'
 
-# interface for connecting to remote logging system Loggly
-gem 'logglier', '~> 0.3.0'
-
 gem 'multi_json'
 gem 'mini_magick'
 gem 'mongoid', '~> 6.0.0'
@@ -74,6 +71,8 @@ gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rdiscount'
 gem 'record_tag_helper'
+# interface for connecting to remote logging system Papertrail
+gem 'remote_syslog_logger'
 
 # retry dsl for resque
 gem 'resque-retry'

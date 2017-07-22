@@ -21,10 +21,6 @@ describe EventLogger::Base, type: :vendor_library do
       expect(described_class).to respond_to :retry_delay_multiplicand_max
     end
 
-    it "includes LogglyResque" do
-      expect(described_class).to respond_to :logger_base_url
-    end
-
     it "includes InheritableIvars" do
       expect(described_class).to respond_to :inheritable_instance_variable_names
     end
