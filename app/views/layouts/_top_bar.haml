@@ -34,7 +34,7 @@
                 .nav-dropdown-card-wrapper.dropdown-content
                   %ul.nav-dropdown-card
                     = render partial: "layouts/navigation/payment_options"
-            - elsif presenter.has_info?
+            - if presenter.has_info?
               %li.course-info-btn.dropdown
                 %button.icon-button.nav-button{type: "button"}= decorative_glyph('info-circle hidden-sm') + "Class Info"
                 .nav-dropdown-card-wrapper.dropdown-content
