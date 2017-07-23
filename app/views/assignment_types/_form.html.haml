@@ -35,11 +35,12 @@
         Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here (Set to 0 if not).
       = f.text_field :top_grades_counted, data: { autonumeric: true, "m-dec" => "0" }
 
-    .form-item
-      = f.check_box :student_weightable
-      = f.label :student_weightable, "Student Weighted"
-      = tooltip("student-weighted-hint", "info-circle", placement: "right") do
-        Do students decide how much this #{term_for :assignment} type will count towards their grade?
+    - if current_course.has_multipliers?
+      .form-item
+        = f.check_box :student_weightable
+        = f.label :student_weightable, "Student Weighted"
+        = tooltip("student-weighted-hint", "info-circle", placement: "right") do
+          Do students decide how much this #{term_for :assignment} type will count towards their grade?
 
   %section.form-section
     %h2.form-title Description
