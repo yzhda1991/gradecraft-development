@@ -30,7 +30,11 @@ class UnlockCondition < ActiveRecord::Base
     if condition_type == "Course"
       "#{ condition_state_do } #{ condition_value } points in this course"
     elsif condition_type == "AssignmentType"
-      "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
+      if condition_state == "Minimum Points Earned"
+        "#{ condition_state_do } #{ condition_value } points in the #{ condition.name } #{unlockable.course.assignment_term} Type"
+      elsif condition_state == "Assignments Completed"
+        "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
+      end
     else
       "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
@@ -76,6 +80,8 @@ class UnlockCondition < ActiveRecord::Base
       "Earn"
     elsif condition_state == "Passed"
       "Pass"
+    elsif condition_state == "Minimum Points Earned"
+      "Earn"
     elsif condition_state == "Assignments Completed"
       "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
     end
