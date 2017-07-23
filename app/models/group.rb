@@ -16,11 +16,11 @@ class Group < ActiveRecord::Base
   has_many :students, through: :group_memberships
   accepts_nested_attributes_for :group_memberships
 
-  has_many :grades
-  has_many :proposals
+  has_many :grades, dependent: :destroy
+  has_many :proposals, dependent: :destroy
   accepts_nested_attributes_for :proposals, allow_destroy: true, reject_if: proc { |a| a["proposal"].blank? }
 
-  has_many :submissions
+  has_many :submissions, dependent: :destroy
   has_many :submissions_exports
 
   has_many :earned_badges, as: :group
