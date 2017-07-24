@@ -14,7 +14,7 @@ class CourseGradeExporter
 
   def baseline_headers
     ["First Name", "Last Name", "Email", "Username", "Score", "Grade", "Level",
-      "Earned Badge #", "GradeCraft ID", "Last Logged In At", "Auditing" ]
+      "Earned Badge #", "GradeCraft ID", "GradeCraft Account Created", "Last Logged In At", "Auditing" ]
   end
 
   def student_data(student, course)
@@ -27,6 +27,7 @@ class CourseGradeExporter
       student.grade_level_for_course(course),
       student.earned_badges.count,
       student.id,
+      student.created_at,
       student.last_course_login(course),
       student.course_memberships.where(course: course).first.auditing ? "Yes" : "No"]
   end

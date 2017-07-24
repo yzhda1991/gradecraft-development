@@ -4,25 +4,25 @@ module Analytics
     extend ActiveSupport::Concern
 
     def average
-      grades.for_active_students.student_visible.average(:raw_points).to_i \
+      grades.for_active_students.student_visible.average(:final_points).to_i \
         if grades.student_visible.present?
     end
 
     # Average of above-zero grades for an assignment
     def earned_average
-      grades.for_active_students.student_visible.where("grades.score > 0").average(:score).to_i
+      grades.for_active_students.student_visible.where("grades.final_points > 0").average(:final_points).to_i
     end
 
     def high_score
-      grades.for_active_students.student_visible.maximum(:raw_points)
+      grades.for_active_students.student_visible.maximum(:final_points)
     end
 
     def low_score
-      grades.for_active_students.student_visible.minimum(:raw_points)
+      grades.for_active_students.student_visible.minimum(:final_points)
     end
 
     def median
-      sorted = grades.for_active_students.student_visible.not_nil.pluck(:score).sort
+      sorted = grades.for_active_students.student_visible.not_nil.pluck(:final_points).sort
       return 0 if sorted.empty?
       (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
     end
@@ -52,15 +52,16 @@ module Analytics
       end
     end
 
-    def score_for(student_id, viewer)
-      student_grade = grades.where(student_id: student_id).first
-      if GradeProctor.new(student_grade).viewable? user: viewer, course: course
-        return student_grade.pass_fail_status if pass_fail?
-        # should this be unweighted full points? (inc. adjustment points)
-        return student_grade.raw_points
-      end
-      nil
-    end
+    # I think this may now be unused?
+    # def score_for(student_id, viewer)
+    #   student_grade = grades.where(student_id: student_id).first
+    #   if GradeProctor.new(student_grade).viewable? user: viewer, course: course
+    #     return student_grade.pass_fail_status if pass_fail?
+    #     # should this be unweighted full points? (inc. adjustment points)
+    #     return student_grade.raw_points
+    #   end
+    #   nil
+    # end
 
     def student_visible_scores
       if pass_fail?
