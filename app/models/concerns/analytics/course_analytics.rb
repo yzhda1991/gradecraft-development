@@ -4,11 +4,11 @@ module Analytics
     extend ActiveSupport::Concern
 
     def student_count
-      course_memberships.where(role: "student", active: true).count
+      students_for_course.count
     end
 
     def graded_student_count
-      course_memberships.being_graded.count
+      students_being_graded.count
     end
 
     def groups_to_review_count
