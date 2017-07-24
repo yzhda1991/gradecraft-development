@@ -14,7 +14,10 @@
   getUnlockConditions = (id, type) ->
     unlockableId = id
     unlockableType = type
-    $http.get("/api/#{unlockableType.toLowerCase()}s/#{unlockableId}/unlock_conditions").then((response) ->
+    routeType = if type == "GradeSchemeElement" then "grade_scheme_element" else type.toLowerCase()
+    route = "/api/#{routeType}s/#{id}/unlock_conditions"
+
+    $http.get(route).then((response) ->
       GradeCraftAPI.loadMany(unlockConditions, response.data)
       angular.copy(response.data.meta.assignments, assignments)
       angular.copy(response.data.meta.assignment_types, assignmentTypes)

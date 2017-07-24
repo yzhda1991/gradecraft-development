@@ -25,7 +25,11 @@ class API::UnlockConditionsController < ApplicationController
     if @unlock_condition.save
       render "api/unlock_conditions/show", status: 201
     else
-      render json: { message: "unlock condition failed to create", success: false }, status: 400
+      render json: {
+        message: "failed to create condition",
+        errors: @unlock_condition.errors.messages,
+        success: false
+        }, status: 400
     end
   end
 
@@ -37,8 +41,10 @@ class API::UnlockConditionsController < ApplicationController
       render "api/unlock_conditions/show", status: 200
     else
       render json: {
-        errors: [{ detail: "failed to update unlock condition" }], success: false
-        }, status: 500
+        message: "failed to update condition",
+        errors: @unlock_condition.errors.messages,
+        success: false
+        }, status: 400
     end
   end
 
