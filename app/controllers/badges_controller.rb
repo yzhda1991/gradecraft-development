@@ -3,7 +3,7 @@ class BadgesController < ApplicationController
   before_action :ensure_not_observer?, except: [:index, :show]
   before_action :ensure_staff?, except: [:index, :show]
   before_action :find_badge, only: [:show, :edit, :destroy]
-  before_action :use_current_course, only: [:index, :show, :new, :edit, :new_edit]
+  before_action :use_current_course, only: [:index, :show, :new, :edit]
 
   # GET /badges
   def index

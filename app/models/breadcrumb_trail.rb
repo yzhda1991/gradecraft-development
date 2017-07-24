@@ -90,11 +90,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Editing ' + objects[:assignment].name)
   end
 
-  def assignments_new_edit
-    assignments_index
-    breadcrumb('Editing ' + objects[:assignment].name)
-  end
-
   def assignments_new
     assignments_index
     breadcrumb('New ' +  objects[:course].assignment_term)
@@ -146,11 +141,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def badges_new_edit
     badges_index
     breadcrumb('Editing ' + objects[:badge].name)
-  end
-
-  def badges_show
-    badges_index
-    breadcrumb(objects[:badge].name)
   end
 
   def badges_new

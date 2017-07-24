@@ -42,6 +42,7 @@ class API::AssignmentsController < ApplicationController
   def update
     @assignment = Assignment.find(params[:id])
     if @assignment.update_attributes assignment_params
+      updated_grades
       render "api/assignments/show", success: true, status: 200
     else
       render json: {
@@ -65,6 +66,23 @@ class API::AssignmentsController < ApplicationController
   end
 
   private
+
+  # Check for changes in all fields that could affect current grades
+  def need_grades_updated
+    return false if @assignment.grades.empty?
+    if (@assignment.previous_changes.keys | ["full_points", "pass_fail"])
+      return true
+    end
+    return false
+  end
+
+  def updated_grades
+    if need_grades_updated
+      @assignment.grades.all do |grade|
+        grade.save
+      end
+    end
+  end
 
   def assignment_params
     params.require(:assignment).permit(
