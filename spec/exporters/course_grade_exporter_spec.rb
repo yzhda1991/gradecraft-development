@@ -6,7 +6,7 @@ describe CourseGradeExporter do
 
     it "generates an empty CSV if there are no students" do
       csv = subject.final_grades_for_course(course)
-      expect(csv).to include "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID,Last Logged In At,Auditing"
+      expect(csv).to include "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID,GradeCraft Account Created,Last Logged In At,Auditing"
     end
 
     it "generates a CSV with student grades for the course" do
@@ -38,8 +38,8 @@ describe CourseGradeExporter do
       expect(csv[2][7]).to eq "0"
       expect(csv[1][8]).to eq "#{@student.id}"
       expect(csv[2][8]).to eq "#{@student_2.id}"
-      expect(csv[1][10]).to eq "Yes"
-      expect(csv[2][10]).to eq "No"
+      expect(csv[1][11]).to eq "Yes"
+      expect(csv[2][11]).to eq "No"
     end
   end
 end
