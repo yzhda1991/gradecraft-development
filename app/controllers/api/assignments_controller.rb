@@ -70,7 +70,7 @@ class API::AssignmentsController < ApplicationController
   # Check for changes in all fields that could affect current grades
   def need_grades_updated
     return false if @assignment.grades.empty?
-    if (@assignment.previous_changes.keys | ["full_points", "pass_fail"])
+    if @assignment.previous_changes.keys | ["full_points", "pass_fail"]
       return true
     end
     return false
