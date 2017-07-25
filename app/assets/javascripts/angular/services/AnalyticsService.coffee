@@ -15,6 +15,7 @@
     $http.get("/api/assignments/#{assignmentId}/analytics?student_id=#{studentId}").then(
       (response) ->
         angular.copy(response.data, assignmentData)
+        _setTermsFor(response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
@@ -24,6 +25,7 @@
     $http.get("/api/courses/analytics").then(
       (response) ->
         angular.copy(response.data, courseData)
+        _setTermsFor(response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
@@ -38,6 +40,7 @@
     $http.get(url).then(
       (response) ->
         angular.copy(response.data, studentData)
+        _setTermsFor(response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
@@ -52,9 +55,17 @@
     $http.get(url).then(
       (response) ->
         angular.copy(response.data, weeklyData)
+        _setTermsFor(response.data)
         GradeCraftAPI.logResponse(response.data)
       ,(response) ->
         GradeCraftAPI.logResponse(response)
+    )
+
+  _setTermsFor = (response)->
+    return if !response.meta
+    _.each(["assignments", "assignment", "badges", "badge"], (term)->
+      if response.meta["term_for_#{term}"]
+        GradeCraftAPI.setTermFor(term, response.meta["term_for_#{term}"])
     )
 
 
