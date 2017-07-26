@@ -9,3 +9,12 @@ json.earned_badge_points do
 end
 
 json.course_potential_points_for_student @course_potential_points_for_student
+
+json.meta do
+  json.term_for_assignment term_for :assignment
+  json.term_for_assignments term_for :assignments
+  json.term_for_badge term_for :badge
+  json.term_for_badges term_for :badges
+  json.term_for_pass term_for :pass
+  json.term_for_fail term_for :fail
+end
