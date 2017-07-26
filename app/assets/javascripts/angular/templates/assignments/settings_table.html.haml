@@ -46,7 +46,8 @@
         %tbody
           %tr(ng-repeat="assignment in vm.assignments | filter:{assignment_type_id: assignmentType.id}:true")
             %td
-              %a(href="/assignments/{{assignment.id}}") {{assignment.name}}
+              %label
+                %input(aria-required=true type="text" ng-model="assignment.name" ng-change="vm.updateAssignment(assignment.id)")
 
             %td
               %assignment-setting(assignment-id="assignment.id" attribute="visible" checked="assignment.visible")
