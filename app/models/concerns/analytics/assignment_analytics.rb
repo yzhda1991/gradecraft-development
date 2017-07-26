@@ -53,15 +53,15 @@ module Analytics
     end
 
     # I think this may now be unused?
-    # def score_for(student_id, viewer)
-    #   student_grade = grades.where(student_id: student_id).first
-    #   if GradeProctor.new(student_grade).viewable? user: viewer, course: course
-    #     return student_grade.pass_fail_status if pass_fail?
-    #     # should this be unweighted full points? (inc. adjustment points)
-    #     return student_grade.raw_points
-    #   end
-    #   nil
-    # end
+    def score_for(student_id, viewer)
+      student_grade = grades.where(student_id: student_id).first
+      if GradeProctor.new(student_grade).viewable? user: viewer, course: course
+        return student_grade.pass_fail_status if pass_fail?
+        # should this be unweighted full points? (inc. adjustment points)
+        return student_grade.raw_points
+      end
+      nil
+    end
 
     def student_visible_scores
       if pass_fail?
