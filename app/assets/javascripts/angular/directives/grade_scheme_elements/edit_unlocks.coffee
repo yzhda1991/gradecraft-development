@@ -5,6 +5,5 @@
       gradeSchemeElementId: "="
     }
     templateUrl: 'grade_scheme_elements/edit_unlocks.html',
-    link: (scope, el, attr, ngModelCtrl)->
   }
 ]

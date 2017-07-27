@@ -19,5 +19,14 @@ json.meta do
     json.name badge.name
   end
 
+  json.term_for_assignment_types term_for :assignment_types
+  json.term_for_assignment_type term_for :assignment_type
+  json.term_for_assignments term_for :assignments
+  json.term_for_assignment term_for :assignment
+  json.term_for_badges term_for :badges
+  json.term_for_badge term_for :badge
+  json.term_for_pass term_for :pass
+  json.term_for_fail term_for :fail
+
   json.course_id current_course.id
 end

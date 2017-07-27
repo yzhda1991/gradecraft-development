@@ -3,7 +3,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # stores custom terms, default to GC defaults
   _termFor = {
-      assignmentType: "Assignment Type"
+      assignment_type: "Assignment Type"
       assignment: "Assignment"
       pass: "Pass"
       fail: "Fail"
@@ -13,6 +13,8 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   }
 
   termFor = (article)->
+    return if !article
+    article = "assignment_type" if article.toLowerCase() == "assignmenttype" || article.toLowerCase() == "assignment type"
     _termFor[article.toLowerCase()] || article
 
   setTermFor = (article,term)->

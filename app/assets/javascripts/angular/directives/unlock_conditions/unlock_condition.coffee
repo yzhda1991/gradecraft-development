@@ -32,8 +32,9 @@
           else type
 
       scope.assignments = UnlockConditionService.assignments
+
       scope.assignmentStates = (assignmentId)->
-        assignment = _.find(UnlockConditionService.assignments, {id: assignmentId})
+        assignment = _.find(UnlockConditionService.assignments, {id: assignmentId.toString()})
         if assignment && assignment.pass_fail
           ["Submitted", "Feedback Read", "Passed"]
         else

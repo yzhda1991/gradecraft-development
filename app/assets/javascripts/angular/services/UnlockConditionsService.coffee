@@ -11,6 +11,14 @@
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
+  _setTermsFor = (response)->
+      return if !response.meta
+      _.each(["assignment_types", "assignment_type", "assignments", "assignment", "badges", "badge", "pass", "fail"], (term)->
+        if response.meta["term_for_#{term}"]
+          GradeCraftAPI.setTermFor(term, response.meta["term_for_#{term}"])
+      )
+
+
   getUnlockConditions = (id, type) ->
     unlockableId = id
     unlockableType = type
@@ -22,6 +30,7 @@
       angular.copy(response.data.meta.assignments, assignments)
       angular.copy(response.data.meta.assignment_types, assignmentTypes)
       angular.copy(response.data.meta.badges, badges)
+      _setTermsFor(response.data)
       courseId = response.data.meta.course_id
       GradeCraftAPI.logResponse(response)
     , (error) ->
