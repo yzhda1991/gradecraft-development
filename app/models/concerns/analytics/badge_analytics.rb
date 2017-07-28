@@ -9,6 +9,7 @@ module Analytics
     end
 
     def earned_badge_total_points_for_student(student)
+      return nil if self.full_points.nil?
       earned_badge_count_for_student(student) * self.full_points
     end
 
