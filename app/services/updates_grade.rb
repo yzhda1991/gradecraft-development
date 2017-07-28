@@ -15,12 +15,13 @@ module Services
 
     aliases attributes: :raw_params
 
-    def self.update(grade, grade_params, graded_by_id)
+    def self.update(grade, grade_params, graded_by_id, run_jobs)
       with(grade: grade,
            student: grade.student,
            assignment: grade.assignment,
            attributes: {"grade" => grade_params},
-           graded_by_id: graded_by_id)
+           graded_by_id: graded_by_id,
+           run_jobs: run_jobs)
         .reduce(
           Actions::BuildsGrade,
           Actions::AssociatesSubmissionWithGrade,
