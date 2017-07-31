@@ -50,7 +50,10 @@
 %li= link_to_unless_current decorative_glyph(:check) + "#{ term_for :assignment } Settings", settings_assignments_path
 %li= link_to_unless_current decorative_glyph(:tasks) + "Grade Predictor Preview", predictor_path
 %li= link_to_unless_current decorative_glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
-%li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
+- if current_user_is_admin?
+  %li= link_to_unless_current decorative_glyph(:university) + "Manage Courses", overview_courses_path
+- else
+  %li= link_to_unless_current decorative_glyph(:university) + "My Courses", courses_path
 
 - if current_user_is_admin?
   .hide-for-small
