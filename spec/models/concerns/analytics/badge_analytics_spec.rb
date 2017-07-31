@@ -22,6 +22,11 @@ describe Analytics::BadgeAnalytics do
       it "sums up the total points earned for a specific badge" do
         expect(badge.earned_badge_total_points_for_student(student)).to eq(200)
       end
+
+      it "returns nil if the full points on the badge is null" do
+        badge.full_points = nil
+        expect(badge.earned_badge_total_points_for_student(student)).to be_nil
+      end
     end
 
     describe "#earned_badges_this_week_count" do
