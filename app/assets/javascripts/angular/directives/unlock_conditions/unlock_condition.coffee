@@ -34,6 +34,7 @@
       scope.assignments = UnlockConditionService.assignments
 
       scope.assignmentStates = (assignmentId)->
+        return ["Submitted", "Feedback Read"] if !assignmentId
         assignment = _.find(UnlockConditionService.assignments, {id: assignmentId.toString()})
         if assignment && assignment.pass_fail
           ["Submitted", "Feedback Read", "Passed"]

@@ -8,13 +8,13 @@
     %li(ng-click="focusTab('unlocks')" ng-class="{'active': isFocusTab('unlocks')}")
       %a Unlock Conditions
 
-  #tab1(ng-if="isFocusTab('basics')")
+  #tab1(ng-show="isFocusTab('basics')")
     %assignment-edit-basics(assignment="assignment")
 
-  #tab2(ng-if="isFocusTab('details')")
+  #tab2(ng-show="isFocusTab('details')")
     %assignment-edit-details(assignment="assignment")
 
-  #tab3(ng-if="isFocusTab('unlocks')")
+  #tab3(ng-show="isFocusTab('unlocks')")
     %assignment-edit-unlocks(assignment="assignment")
 
   %button.button.right(ng-click="submitAssignment()") Submit {{ termFor('assignment')}}

@@ -8,13 +8,13 @@
     %li(ng-click="focusTab('unlocks')" ng-class="{'active': isFocusTab('unlocks')}")
       %a Unlock Conditions
 
-  #tab1(ng-if="isFocusTab('basics')")
+  #tab1(ng-show="isFocusTab('basics')")
     %badge-edit-basics(badge="badge")
 
-  #tab2(ng-if="isFocusTab('details')")
+  #tab2(ng-show="isFocusTab('details')")
     %badge-edit-details(badge="badge")
 
-  #tab3(ng-if="isFocusTab('unlocks')")
+  #tab3(ng-show="isFocusTab('unlocks')")
     %badge-edit-unlocks(badge="badge")
 
   %button.button.right(ng-click="submitBadge()") Submit {{ termFor('badge')}}
