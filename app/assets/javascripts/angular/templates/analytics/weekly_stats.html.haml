@@ -21,7 +21,7 @@
     %ul
       %li(ng-repeat='badge in data.student_data.badges_this_week')
         .img-cropper.xsmall-crop
-          %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
+          %img(ng-src="{{badge.icon}}" alt="{{badge.name}} icon")
         %span {{badge.name}} earned
 
   .dashboard-message(ng-if="hasNoStudentEarnings()")
@@ -42,7 +42,7 @@
     %ul
       %li(ng-repeat='badge in data.faculty_data.badges_this_week')
         .img-cropper.xsmall-crop
-          %img(src="{{badge.icon}}" alt="{{badge.name}} icon")
+          %img(ng-src="{{badge.icon}}" alt="{{badge.name}} icon")
         %span {{badge.name}}: {{badge.count}}
 
   .dashboard-message(ng-if="hasNoClassEarnings()")
