@@ -14,9 +14,11 @@ json.meta do
     json.name assignment_type.name
   end
 
-  json.badges current_course.badges.each do |badge|
-    json.id badge.id
-    json.name badge.name
+  if current_course.has_badges?
+    json.badges current_course.badges.each do |badge|
+      json.id badge.id
+      json.name badge.name
+    end
   end
 
   json.term_for_assignment_types term_for :assignment_types

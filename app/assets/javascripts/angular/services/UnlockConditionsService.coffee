@@ -29,7 +29,7 @@
       GradeCraftAPI.loadMany(unlockConditions, response.data)
       angular.copy(response.data.meta.assignments, assignments)
       angular.copy(response.data.meta.assignment_types, assignmentTypes)
-      angular.copy(response.data.meta.badges, badges)
+      angular.copy(response.data.meta.badges, badges) if response.data.meta.badges
       _setTermsFor(response.data)
       courseId = response.data.meta.course_id
       GradeCraftAPI.logResponse(response)
