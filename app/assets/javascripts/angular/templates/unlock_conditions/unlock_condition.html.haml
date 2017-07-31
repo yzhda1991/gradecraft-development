@@ -43,7 +43,8 @@
   %select(ng-model="condition.condition_state" ng-change="updateCondition()")
     %option(ng-repeat="state in assignmentTypeStates"  ng-selected="state == condition.condition_state" value="{{state}}")
       {{state}}
-  %label Number (Points or termFor(""))
+  %label(ng-if="condition.condition_state == 'Assignments Completed'") Number of {{termFor("assignments")}}
+  %label(ng-if="condition.condition_state != 'Assignments Completed'") Amount
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
   %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
