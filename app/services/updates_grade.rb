@@ -2,7 +2,6 @@ require "light-service"
 require_relative "creates_grade/associates_submission_with_grade"
 require_relative "creates_grade/builds_grade"
 require_relative "creates_grade/marks_as_graded"
-require_relative "creates_grade/runs_grade_updater_job"
 require_relative "creates_grade/saves_grade"
 require_relative "creates_grade/squish_grade_history"
 
@@ -15,20 +14,18 @@ module Services
 
     aliases attributes: :raw_params
 
-    def self.update(grade, grade_params, graded_by_id, run_jobs)
+    def self.update(grade, grade_params, graded_by_id)
       with(grade: grade,
            student: grade.student,
            assignment: grade.assignment,
            attributes: {"grade" => grade_params},
-           graded_by_id: graded_by_id,
-           run_jobs: run_jobs)
+           graded_by_id: graded_by_id)
         .reduce(
           Actions::BuildsGrade,
           Actions::AssociatesSubmissionWithGrade,
           Actions::MarksAsGraded,
           Actions::SavesGrade,
-          Actions::SquishGradeHistory,
-          Actions::RunsGradeUpdaterJob
+          Actions::SquishGradeHistory
         )
     end
   end

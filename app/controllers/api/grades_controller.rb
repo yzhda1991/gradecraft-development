@@ -19,11 +19,12 @@ class API::GradesController < ApplicationController
   # POST api/grades/:grade_id
   def update
     grade = Grade.find(params[:id])
-
-    # Only send notifications etc. when handling the form submission
-    run_jobs = params[:submit]
-    result = Services::UpdatesGrade.update grade, grade_params, current_user.id, run_jobs
+    result = Services::UpdatesGrade.update grade, grade_params, current_user.id
     if result
+      # Only send notifications etc. when handling the form submission
+      if params[:submit] && grade.student_visible?
+        GradeUpdaterJob.new(grade_id: grade.id).enqueue
+      end
       @grade = result.grade
       render "api/grades/show", success: true, status: 200
     else
