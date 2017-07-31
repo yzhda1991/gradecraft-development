@@ -22,7 +22,6 @@
         %hr.dotted
 
     %section
-      %h2 Description
       = render partial: "assignments/description", locals: { presenter: presenter }
 
     - if presenter.grades_available_for?(@grade.student) && presenter.show_rubric_preview?(@grade.student)
