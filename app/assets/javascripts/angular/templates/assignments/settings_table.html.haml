@@ -24,8 +24,6 @@
               %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
             %th(scope="col")
               %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="pencil" tip-text="Logged By Students")
-            %th(scope="col")
-              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="unlock" tip-text="Release Required")
 
             %th(scope="col") Points
 
@@ -47,10 +45,8 @@
               %assignment-setting(assignment-id="assignment.id" attribute="accepts_submissions" checked="assignment.accepts_submissions")
             %td
               %assignment-setting(assignment-id="assignment.id" attribute="student_logged" checked="assignment.student_logged")
-
             %td
               %assignment-full-points(assignment="assignment")
-
             %td
               %assignment-date-picker(assignment="assignment")
 
