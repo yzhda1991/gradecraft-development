@@ -7,6 +7,9 @@
     vm.GradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
     vm.assignments = AssignmentService.assignments
 
+    vm.updateAssignment = (id)->
+      AssignmentService.queueUpdateAssignment(id)
+
     vm.termFor = (term)->
       AssignmentService.termFor(term)
 
