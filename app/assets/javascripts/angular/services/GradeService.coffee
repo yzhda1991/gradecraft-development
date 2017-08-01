@@ -125,8 +125,8 @@
           GradeCraftAPI.logResponse(response)
       )
 
-  _updateGradeById = (id, params, returnURL=null)->
-    $http.put("/api/grades/#{id}", grade: params).then(
+  _updateGradeById = (id, params, returnURL=null, submit=false)->
+    $http.put("/api/grades/#{id}", grade: params, submit: submit).then(
       (response) ->
         modelGrade.updated_at = new Date()
         GradeCraftAPI.logResponse(response)
@@ -144,24 +144,24 @@
     params.final_points = g.final_points
     params
 
-  _updateGrade = (returnURL=null)->
+  _updateGrade = (returnURL=null, submit=false)->
     if _recipientType == "student"
       params = _params(modelGrade.id)
-      _updateGradeById(modelGrade.id, params, returnURL)
+      _updateGradeById(modelGrade.id, params, returnURL, submit)
     else if _recipientType == "group"
       _.each(grades, (g)->
         params = _params(g.id)
         if returnURL && g == _.last(grades)
-          _updateGradeById(g.id, params, returnURL)
+          _updateGradeById(g.id, params, returnURL, submit)
         else
-          _updateGradeById(g.id, params)
+          _updateGradeById(g.id, params, null, submit)
       )
 
-  queueUpdateGrade = (immediate=false, returnURL=null) ->
+  queueUpdateGrade = (immediate=false, returnURL=null, submit=false) ->
     delay = if immediate then 0 else null
     calculateGradePoints()
     DebounceQueue.addEvent(
-      "grades", modelGrade.id, _updateGrade, [returnURL], delay
+      "grades", modelGrade.id, _updateGrade, [returnURL, submit], delay
     )
 
   _confirmMessage = ()->
@@ -173,14 +173,14 @@
     else
       message + " You still have criteria without a selected level."
 
-  # Final "Submit Grade" actions, includes cleanup and redirect
+  # Final "Submit Grade" actions, includes cleanup and redirect, background jobs
   submitGrade = (returnURL=null)->
     modelGrade.student_visible =  modelGrade.submit_as_student_visible
     modelGrade.complete =  modelGrade.submit_as_complete
 
     return false unless confirm _confirmMessage()
 
-    return queueUpdateGrade(true, returnURL) unless isRubricGraded
+    return queueUpdateGrade(true, returnURL, true) unless isRubricGraded
 
     # Rubric Grade Submission:
 

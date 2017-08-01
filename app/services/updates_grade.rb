@@ -2,7 +2,6 @@ require "light-service"
 require_relative "creates_grade/associates_submission_with_grade"
 require_relative "creates_grade/builds_grade"
 require_relative "creates_grade/marks_as_graded"
-require_relative "creates_grade/runs_grade_updater_job"
 require_relative "creates_grade/saves_grade"
 require_relative "creates_grade/squish_grade_history"
 
@@ -26,8 +25,7 @@ module Services
           Actions::AssociatesSubmissionWithGrade,
           Actions::MarksAsGraded,
           Actions::SavesGrade,
-          Actions::SquishGradeHistory,
-          Actions::RunsGradeUpdaterJob
+          Actions::SquishGradeHistory
         )
     end
   end
