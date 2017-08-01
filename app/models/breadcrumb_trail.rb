@@ -128,6 +128,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Editing ' + objects[:course].group_term + ' Grade')
   end
 
+  def auth_failure
+    dashboard
+  end
+
   def badges_index
     dashboard
     breadcrumb(objects[:course].badge_term.pluralize, badges_path)
