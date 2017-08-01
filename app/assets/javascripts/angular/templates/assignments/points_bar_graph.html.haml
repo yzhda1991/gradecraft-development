@@ -1,0 +1,8 @@
+.points-bar-graph.assignment-settings
+  .points-bar-graph-fill.assignment-settings(style="{{pointsGraphStyle()}}")
+  %span.settings_hint(ng-if="pointsOver()") Total for this assignment type exceeds threshold for highest level
+  .grade-level-marker(ng-repeat="gse in GradeSchemeElements" style="width: {{pointsGraphPercentOfTotal(gse)}}")
+.assignment-type-points.assignment-settings
+  %span {{ sumForAssignmentType() | number }}
+  %span.max-point-label(ng-if="pointsBeingCapped()") (max {{assignmentType.max_points | number}})
+  %span / {{ totalPoints() | number }}

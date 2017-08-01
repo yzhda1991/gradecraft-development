@@ -15,6 +15,11 @@
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
+  # total points for assignment type, updated with assignments
+  sumForAssignmentType = (typeId)->
+     subset = _.filter(assignments, {assignment_type_id : typeId})
+     _.sum(_.map(subset, 'full_points'))
+
   # Total points earned and predicted for a collection of assignments
   # Used to total by Assignment Type
   assignmentsSubsetPredictedPoints = (subset)->
@@ -288,6 +293,7 @@
   return {
       assignment: assignment
       assignments: assignments
+      sumForAssignmentType: sumForAssignmentType
       assignmentsPredictedPoints: assignmentsPredictedPoints
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       getAssignment: getAssignment
