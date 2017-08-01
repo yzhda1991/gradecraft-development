@@ -1,4 +1,2 @@
-= render partial: "badges/context_menu", locals: { badge: @badge, actions: []}
-
 .pageContent
-  = render partial: "badges/form"
+  %badge-edit(badge-id="#{@badge.id}")

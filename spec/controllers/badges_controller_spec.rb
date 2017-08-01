@@ -39,48 +39,6 @@ describe BadgesController do
       end
     end
 
-    describe "POST create" do
-      it "creates the badge with valid attributes"  do
-        params = attributes_for(:badge)
-        expect{ post :create, params: { badge: params }}.to change(Badge,:count).by(1)
-      end
-
-      it "manages file uploads" do
-        Badge.delete_all
-        params = attributes_for(:badge)
-        params.merge! badge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
-        post :create, params: { badge: params }
-        badge = Badge.where(name: params[:name]).last
-        expect expect(badge.badge_files.count).to eq(1)
-      end
-
-      it "redirects to new form with invalid attributes" do
-        expect{ post :create, params: { badge: attributes_for(:badge, name: nil) }}
-          .to_not change(Badge,:count)
-      end
-    end
-
-    describe "POST update" do
-      it "updates the badge" do
-        params = { name: "new name" }
-        post :update, params: { id: badge_2.id, badge: params }
-        expect(response).to redirect_to(badges_path)
-        expect(badge_2.reload.name).to eq("new name")
-      end
-
-      it "manages file uploads" do
-        params = {badge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, params: { id: badge_2.id, badge: params }
-        expect expect(badge_2.badge_files.count).to eq(1)
-      end
-
-      it "redirects to edit form with invalid attributes" do
-        params = { name: nil }
-        post :update, params: { id: badge.id, badge: params }
-        expect(response).to render_template(:edit)
-      end
-    end
-
     describe "GET destroy" do
       it "destroys the badge" do
         another_badge = create :badge, course: course
@@ -101,8 +59,7 @@ describe BadgesController do
 
     describe "protected routes" do
       [
-        :new,
-        :create
+        :new
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
@@ -113,7 +70,6 @@ describe BadgesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :update,
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
@@ -134,8 +90,7 @@ describe BadgesController do
 
     describe "protected routes not requiring id in params" do
       routes = [
-        { action: :new, request_method: :get },
-        { action: :create, request_method: :post }
+        { action: :new, request_method: :get }
       ]
       routes.each do |route|
         it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
@@ -149,7 +104,6 @@ describe BadgesController do
       params = { id: "1" }
       routes = [
         { action: :edit, request_method: :get },
-        { action: :update, request_method: :post },
         { action: :destroy, request_method: :get }
       ]
       routes.each do |route|

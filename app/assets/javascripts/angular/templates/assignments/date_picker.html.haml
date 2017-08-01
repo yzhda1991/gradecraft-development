@@ -2,16 +2,19 @@
   .assignment-settings--messages(ng-repeat='message in dateValidator.messages')
     %ul
       %li {{ message }}
-  %ul(ng-if="!AssignmentService.isLoading")
-    %li
-      Open At:
+  %ul.form-flex-row
+    %li.form-item
+      %i.fa.fa-fw.fa-calendar
+      Open Date:
       %label(for="{{assignment.id}}-open-at")
         %input(id="{{assignment.id}}-open-at" ng-model="assignment.open_at" gc-date-time-input ng-change="updateAssignmentDates()")
-    %li
-      Due At:
+    %li.form-item
+      %i.fa.fa-fw.fa-calendar
+      Due Date:
       %label(for="{{assignment.id}}-due-at")
         %input(id="{{assignment.id}}-due-at" ng-model="assignment.due_at" gc-date-time-input ng-change="updateAssignmentDates()")
-    %li
-      Accepted Until:
+    %li.form-item
+      %i.fa.fa-fw.fa-calendar
+      Accepted Until Date:
       %label(for="{{assignment.id}}-accepts-until")
         %input(id="{{assignment.id}}-accepts-until" ng-model="assignment.accepts_submissions_until" gc-date-time-input ng-change="updateAssignmentDates()")

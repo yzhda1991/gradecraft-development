@@ -1,25 +1,25 @@
 include SessionHelper
 
 describe API::BadgesController do
-  let(:course) { build_stubbed(:course, status: true) }
-  let(:student) { build_stubbed(:user, courses: [course], role: :student) }
+  let(:course) { create(:course, status: true) }
+  let(:student) { build(:user, courses: [course], role: :student) }
   let(:professor) { build(:user, courses: [course], role: :professor) }
   let(:badge) { create(:badge, course: course) }
 
   context "as professor" do
-    before(:each) { login_user(professor) }
+    before do
+      login_user(professor)
+      allow(controller).to receive(:current_course).and_return(course)
+      allow(controller).to receive(:current_user).and_return(professor)
+    end
+
 
     describe "GET index" do
-      before do
-        allow(controller).to receive(:current_course).and_return(course)
-        allow(controller).to receive(:current_user).and_return(professor)
-        @badge = badge
-      end
-
       it "assigns badges, no student, and no call to update" do
+        badge
         get :index, format: :json
         predictor_badge_attributes.each do |attr|
-          expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
+          expect(assigns(:badges)[0][attr]).to eq(badge[attr])
         end
         expect(assigns(:student)).to be_nil
         expect(assigns(:allow_updates)).to be_falsey
@@ -31,10 +31,30 @@ describe API::BadgesController do
         second_badge = create(:badge)
         course.badges << second_badge
         params = [second_badge.id, badge.id]
-        post :sort, params: { badge: params }
+        post :sort, params: { badge: params }, format: :json
 
         expect(badge.reload.position).to eq(2)
         expect(second_badge.reload.position).to eq(1)
+      end
+    end
+
+    describe "POST create" do
+      it "creates the badge with valid attributes"  do
+        params = attributes_for(:badge)
+        expect{ post :create, params: { badge: { name: "New Badge" }}, format: :json }.to change(Badge,:count).by(1)
+      end
+
+      it "does not create new badge with invalid attributes" do
+        expect{ post :create, params: { badge: { name: nil }}, format: :json }
+          .to_not change(Badge,:count)
+      end
+    end
+
+    describe "PUT update" do
+      it "updates the badge" do
+        badge
+        put :update, params: { id: badge.id, badge: { name: "new name" }}, format: :json
+        expect(badge.reload.name).to eq("new name")
       end
     end
   end

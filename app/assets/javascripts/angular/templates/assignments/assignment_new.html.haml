@@ -1,0 +1,20 @@
+%loading-message(loading='vmAssignmentNew.loading' message="Loading Assignment Info...")
+
+%article.assignment-form-fields.simple-form(ng-if="!vmAssignmentNew.assignmentCreated && !vmAssignmentNew.loading")
+  .form-subsection
+    .form-item
+      %label
+        {{vmAssignmentNew.termFor("assignment")}} Type
+        %select(ng-model="vmAssignmentNew.newAssignment.assignment_type_id")
+          %option(ng-repeat="assignmentType in vmAssignmentNew.assignmentTypes" ng-selected="vmAssignmentNew.newAssignment.assignment_type_id == assignmentType.id" value="{{assignmentType.id}}") {{assignmentType.name}}
+    .form-item
+      %label
+        {{vmAssignmentNew.termFor("assignment")}} Name
+        %input(aria-required=true type="text" ng-model="vmAssignmentNew.newAssignment.name")
+
+    .form-item
+
+      %label
+        %button.create-button(ng-click="vmAssignmentNew.createAssignment()") Create {{vmAssignmentNew.termFor("assignment")}}
+
+%assignment-edit-form(ng-if="vmAssignmentNew.assignmentCreated" assignment="vmAssignmentNew.assignments[0]")

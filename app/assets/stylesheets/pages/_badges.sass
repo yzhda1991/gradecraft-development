@@ -169,56 +169,22 @@ ul.earned-badge-list
 .badge-award-name
   font-size: .7rem
 
-// preview of image uploaded in create badge page
-.preview-wrapper
-  display: flex
-  align-items: flex-end
-  &.hidden
-    display: none
-
-.icon-preview
-  border-bottom: 1px dashed $color-grey-5
-  border-left: 1px dashed $color-grey-5
-  padding: 0.5rem
-  margin: 1rem 1rem 2rem 2rem
-  position: relative
-  &.banner-preview
-    width: 600px
-    height: 150px
-  &.large-preview
-    width: 150px
-    height: 150px
-  &.event-preview
-    width: 250px
-    height: 150px
-  &.avatar-preview
-    width: 100px
-    height: 100px
-  &.medium-preview
-    width: 80px
-    height: 80px
-  &.small-preview
-    width: 40px
-    height: 40px
-  &.tiny-preview
-    width: 20px
-    height: 20px
-
-.xaxis-label,
-.yaxis-label
-  position: absolute
-  color: $color-grey-3
-  font-size: 0.8rem
-
-.xaxis-label
-  top: 50%
-  left: -40px
-  transform: translateY(-50%)
-
-.yaxis-label
-  bottom: -24px
-  left: 50%
-  transform: translateX(-50%)
+input.media-upload-button, input.icon-upload-button
+  color: transparent
+  &::-webkit-file-upload-button
+    visibility: hidden
+  &::before
+    content: 'Choose file'
+    color: $color-white
+    display: inline-block
+    background-color: $color-blue-3
+    border-radius: 3px
+    padding: 5px 8px
+    white-space: nowrap
+    -webkit-user-select: none
+    cursor: pointer
+  &:hover::before
+    background-color: darken($color-blue-3, 10%)
 
 // image cropper for badges
 .img-cropper

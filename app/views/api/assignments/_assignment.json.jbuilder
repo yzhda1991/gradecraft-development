@@ -2,18 +2,31 @@ json.type "assignments"
 json.id assignment.id.to_s
 json.attributes do
 
-  json.accepts_submissions_until  assignment.accepts_submissions_until
-  json.assignment_type_id         assignment.assignment_type_id
-  json.description                assignment.description
-  json.due_at                     assignment.due_at
-  json.full_points                assignment.full_points
-  json.id                         assignment.id
-  json.name                       assignment.name
-  json.open_at                    assignment.open_at
-  json.pass_fail                  assignment.pass_fail
-  json.position                   assignment.position
-  json.purpose                    assignment.purpose
-  json.threshold_points           assignment.threshold_points
+  json.accepts_attachments          assignment.accepts_attachments
+  json.accepts_links                assignment.accepts_links
+  json.accepts_submissions_until    assignment.accepts_submissions_until
+  json.accepts_text                 assignment.accepts_text
+  json.assignment_type_id           assignment.assignment_type_id
+  json.description                  assignment.description
+  json.due_at                       assignment.due_at
+  json.full_points                  assignment.full_points
+  json.grade_scope                  assignment.grade_scope
+  json.id                           assignment.id
+  json.media                        assignment.media.url
+  json.name                         assignment.name
+  json.open_at                      assignment.open_at
+  json.pass_fail                    assignment.pass_fail
+  json.position                     assignment.position
+  json.purpose                      assignment.purpose
+  json.release_necessary            assignment.release_necessary
+  json.show_name_when_locked        assignment.show_name_when_locked
+  json.show_points_when_locked      assignment.show_points_when_locked
+  json.show_description_when_locked assignment.show_description_when_locked
+  json.show_purpose_when_locked     assignment.show_purpose_when_locked
+  json.resubmissions_allowed        assignment.resubmissions_allowed
+  json.threshold_points             assignment.threshold_points
+  json.updated_at                   assignment.updated_at
+  json.visible_when_locked          assignment.visible_when_locked
 
   # boolean attributes
   json.visible                    assignment.visible
@@ -72,6 +85,7 @@ json.attributes do
 
   if assignment.assignment_score_levels.present?
     json.score_levels assignment.assignment_score_levels do |asl|
+      json.id asl.id
       json.name asl.name
       json.points asl.points
     end
@@ -104,6 +118,15 @@ json.attributes do
 end
 
 json.relationships do
+  if assignment.assignment_files.present?
+    json.file_uploads do
+      json.data assignment.assignment_files do |assignment_file|
+        json.type "file_uploads"
+        json.id assignment_file.id.to_s
+      end
+    end
+  end
+
   if @predicted_earned_grades.present? && @predicted_earned_grades.where(assignment_id: assignment.id).present?
     json.prediction data: {
       type: "predicted_earned_grades",

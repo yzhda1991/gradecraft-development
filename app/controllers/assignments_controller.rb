@@ -5,8 +5,7 @@ class AssignmentsController < ApplicationController
   include AssignmentsHelper
 
   before_action :ensure_staff?, except: [:show, :index]
-  before_action :sanitize_params, only: [:create, :update]
-  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :create, :update, :grades_review]
+  before_action :use_current_course, only: [:index, :settings, :show, :new, :edit, :grades_review]
 
   def index
     @assignment_types = @course.assignment_types.ordered.includes(:assignments)
@@ -49,12 +48,7 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    @assignment = @course.assignments.find(params[:id])
-    render :edit, Assignments::Presenter.build({
-      assignment: @assignment,
-      course: @course,
-      view_context: view_context
-      })
+    @assignment = current_course.assignments.find(params[:id])
   end
 
   # Duplicate an assignment - important for super repetitive items like
@@ -63,50 +57,6 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     duplicated = assignment.copy
     redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
-  end
-
-  def create
-    assignment = current_course.assignments.new(assignment_params)
-    if assignment.save
-      redirect_to assignments_path,
-        notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" \
-        and return
-    end
-    render :new, Assignments::Presenter.build({
-      assignment: assignment,
-      course: current_course,
-      view_context: view_context
-      })
-  end
-
-  def update
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.update_attributes assignment_params
-      if @assignment.grades.present?
-        @assignment.grades.each do |g|
-          g.save
-        end
-      end
-      respond_to do |format|
-        format.html do
-          redirect_to assignments_path,
-            notice: "#{(term_for :assignment).titleize} #{@assignment.name } "\
-            "successfully updated" and return
-        end
-        format.json { render json: @assignment and return }
-      end
-    end
-
-    respond_to do |format|
-      format.html do
-        render :edit, Assignments::Presenter.build({
-          assignment: @assignment,
-          course: current_course,
-          view_context: view_context
-          })
-      end
-      format.json { render json: { errors: @assignment.errors }, status: 400 }
-    end
   end
 
   def destroy
@@ -134,32 +84,5 @@ class AssignmentsController < ApplicationController
       team_id: params[:team_id],
       view_context: view_context
       })
-  end
-
-  private
-
-  def sanitize_params
-    [:full_points, :threshold_points].each do |points|
-      if params[:assignment][points].class == String
-        params[:assignment][points].delete!(",").to_i
-      end
-    end
-  end
-
-  def assignment_params
-    params.require(:assignment).permit :accepts_attachments, :accepts_links,
-      :accepts_submissions, :accepts_submissions_until, :accepts_resubmissions_until,
-      :accepts_text, :assignment_type_id, :course_id, :description, :due_at, :grade_scope,
-      :name, :open_at, :pass_fail, :max_submissions,
-      :full_points, :purpose, :hide_analytics,
-      :required, :resubmissions_allowed, :show_description_when_locked,
-      :show_purpose_when_locked, :show_name_when_locked, :media, :remove_media,
-      :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
-      :visible, :visible_when_locked, :min_group_size, :max_group_size,
-      unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
-        :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
-      assignment_files_attributes: [:id, file: []],
-      assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
-      assignment_groups_attributes: [:group_id]
   end
 end

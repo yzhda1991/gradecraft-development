@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :assignments do
+  resources :assignments, except: [:create, :update]  do
     collection do
       get :feed
       get :settings
@@ -154,7 +154,7 @@ Rails.application.routes.draw do
   resources :assignment_type_weights, only: [:index]
 
   #6. Badges
-  resources :badges do
+  resources :badges, except: [:update, :create] do
     get "export_structure", on: :collection
     resources :earned_badges do
       get :mass_edit, on: :collection
@@ -354,7 +354,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
 
-    resources :assignments, only: [:index, :show, :update] do
+    resources :assignments, only: [:index, :show, :update, :create] do
       get "analytics"
       post :sort, on: :collection
       resources :criteria, only: :index
@@ -367,6 +367,9 @@ Rails.application.routes.draw do
         resources :criterion_grades, only: :index
         get "grade", to: 'grades#show'
         put "criterion_grades", to: "criterion_grades#update"
+      end
+      resources :grades, only: [], module: :assignments do
+        get :show, on: :collection
       end
       resource :groups, only: [], module: :assignments do
         resources :grades, only: :index, module: :groups
@@ -383,9 +386,7 @@ Rails.application.routes.draw do
       resources :submissions, only: [:create, :update], module: :assignments do
         get :show, on: :collection
       end
-      resources :grades, only: [], module: :assignments do
-        get :show, on: :collection
-      end
+      resources :unlock_conditions, only: :index
 
       namespace :grades do
         resources :importers, only: [], param: :provider_id do
@@ -407,8 +408,9 @@ Rails.application.routes.draw do
       post :sort, on: :collection
     end
 
-    resources :badges, only: :index do
+    resources :badges, only: [:index, :show, :update, :create] do
       post :sort, on: :collection
+      resources :unlock_conditions, only: :index
     end
 
     resources :challenges, only: :index
@@ -439,9 +441,22 @@ Rails.application.routes.draw do
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
       as: :earned_badge_confirm
 
+    # api file uploads
     post "grades/:grade_id/file_uploads", to: "file_uploads#create"
     post "assignments/:assignment_id/groups/:group_id/file_uploads", to: "file_uploads#group_create"
     delete "file_uploads/:id", to: "file_uploads#destroy"
+    post "assignments/:assignment_id/file_uploads", to: "assignment_files#create"
+    delete "assignment_files/:id", to: "assignment_files#destroy"
+    post "badges/:badge_id/file_uploads", to: "badge_files#create"
+    delete "badge_files/:id", to: "badge_files#destroy"
+
+    resources :gradebook, only: [] do
+      collection do
+        get :assignments
+        get :student_ids
+        get :students
+      end
+    end
 
     resources :grades, only: :update do
       resources :earned_badges, only: :create, module: :grades do
@@ -450,11 +465,13 @@ Rails.application.routes.draw do
     end
 
     resources :grade_scheme_elements, only: :index do
+      resources :unlock_conditions, only: :index
       collection do
         put :update, as: :update
         delete :destroy_all
       end
     end
+
     resources :levels, only: [:create, :update, :destroy]
     resources :level_badges, only: [:create, :destroy]
 
@@ -473,20 +490,14 @@ Rails.application.routes.draw do
       resources :badges, only: :index
     end
 
+    resources :unlock_conditions, only: [:create, :update, :destroy]
+
     resources :users, only: [] do
       collection do
         get :search
         resources :importers, only: [], module: :users, param: :provider_id do
           get "/course/:id/users", action: :index, as: :users
         end
-      end
-    end
-
-    resources :gradebook, only: [] do
-      collection do
-        get :assignments
-        get :student_ids
-        get :students
       end
     end
   end

@@ -4,12 +4,8 @@
 label, input
   padding-bottom: 0
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="search"],
-textarea
+textarea,
+input:not([type="checkbox"])
   display: block
   padding: .5rem
   width: 15rem
@@ -24,7 +20,8 @@ textarea
     width: 100%
 
 input[type="file"]
-  display: block
+  border: none
+  padding: 0
 
 .radio label,
 .checkbox label
@@ -48,8 +45,10 @@ select,
   @media (max-width: $media-small-max)
     width: 100%
 
-ul.accepts_submission_types
+ul.conditional-options
   list-style-type: none
+  margin: 0;
+  padding-left: 1rem
 
 .add-element
   display: none
@@ -63,6 +62,7 @@ ul.accepts_submission_types
   padding-bottom: 1rem
   border: 0
   border-bottom: 1px dashed $color-green-2
+  text-transform: capitalize
 
 .form-subsection
   background-color: $color-grey-7

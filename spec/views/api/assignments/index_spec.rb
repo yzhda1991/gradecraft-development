@@ -126,7 +126,7 @@ describe "api/assignments/index" do
     asl = create(:assignment_score_level, assignment: @assignment)
     render
     json = JSON.parse(response.body)
-    expect(json["data"][0]["attributes"]["score_levels"]).to eq([{"name" => asl.name, "points" => asl.points}])
+    expect(json["data"][0]["attributes"]["score_levels"]).to eq([{"id"=> asl.id, "name" => asl.name, "points" => asl.points}])
   end
 
   describe "included" do

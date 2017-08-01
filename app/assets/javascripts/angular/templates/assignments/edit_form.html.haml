@@ -1,0 +1,24 @@
+%article.assignment-form-fields
+
+  %ul.edit-form-tabs-nav
+    %li(ng-click="focusTab('basics')" ng-class="{'active': isFocusTab('basics')}")
+      %a Description & Purpose
+    %li(ng-click="focusTab('details')" ng-class="{'active': isFocusTab('details')}")
+      %a Workflow & Grading
+    %li(ng-click="focusTab('unlocks')" ng-class="{'active': isFocusTab('unlocks')}")
+      %a Unlock Conditions
+
+  #tab1(ng-show="isFocusTab('basics')")
+    %assignment-edit-basics(assignment="assignment")
+
+  #tab2(ng-show="isFocusTab('details')")
+    %assignment-edit-details(assignment="assignment")
+
+  #tab3(ng-show="isFocusTab('unlocks')")
+    %assignment-edit-unlocks(assignment="assignment")
+
+  %button.button.right(ng-click="submitAssignment()") Submit {{ termFor('assignment')}}
+
+.last-updated(ng-if='assignment.updated_at')
+  Last Updated:
+  %span {{assignment.updated_at | date:"MM/dd/yyyy 'at' h:mma"}}

@@ -1,10 +1,11 @@
 # Manages state of Badges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
+@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, DebounceQueue) ->
 
   badges = []
   earnedBadges = []
+  fileUploads = []
   update = {}
 
   termFor = (article)->
@@ -24,7 +25,7 @@
     badge = _.find(badges, {id: badgeId})
     badge.isUpdating = isUpdating
 
-  #------ API Calls -----------------------------------------------------------#
+  #------ Badge Methods -------------------------------------------------------#
 
   # GET index list of badges
   # for students includes predictions
@@ -48,6 +49,115 @@
       update.predictions = response.meta.allow_updates
     )
 
+  getBadge = (badgeId)->
+    $http.get('/api/badges/' + badgeId).then(
+      (response)->
+        GradeCraftAPI.addItem(badges, "badges", response.data)
+        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
+        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+        GradeCraftAPI.setTermFor("badge", response.data.meta.term_for_badge)
+        GradeCraftAPI.logResponse(response)
+      ,(response)->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  createBadge = (params)->
+    $http.post("/api/badges/", badge: params).then(
+      (response) ->
+        GradeCraftAPI.addItem(badges, "badges", response.data)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  _updateBadge = (id)->
+    badge = _.find(badges, {id: id})
+    $http.put("/api/badges/#{id}", badge: badge).then(
+      (response) ->
+        angular.copy(response.data.data.attributes, badge)
+        GradeCraftAPI.formatDates(badge, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateBadge = (id)->
+    DebounceQueue.addEvent(
+      "badges", id, _updateBadge, [id]
+    )
+
+  submitBadge = (id)->
+    badge = _.find(badges, {id: id})
+    DebounceQueue.cancelEvent("badges", id)
+    $http.put("/api/badges/#{id}", badge: badge).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+        window.location = "/badges"
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+#------- Icon and File Methods ---------------------------------------------#
+
+  removeIcon = (id)->
+    badge = _.find(badges, {id: id})
+    badge.icon = null
+    badge.remove_icon = true
+    _updateBadge(id)
+
+  postIconUpload = (id, files)->
+    iconParams = new FormData()
+    iconParams.append('badge[icon]', files[0])
+    $http.put("/api/badges/#{id}", iconParams,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response) ->
+        badge = _.find(badges, {id: id})
+        angular.copy(response.data.data.attributes, badge)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  postFileUploads = (id, files)->
+    fd = new FormData()
+    angular.forEach(files, (file, index)->
+      fd.append("file_uploads[]", file)
+    )
+    $http.post(
+      "/api/badges/#{id}/file_uploads",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response)-> # success
+        if response.status == 201
+          GradeCraftAPI.addItems(fileUploads, "file_uploads", response.data)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  deleteFileUpload = (file)->
+    file.deleting = true
+    GradeCraftAPI.deleteItem(fileUploads, file)
+    $http.delete("/api/badge_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(fileUploads, file)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        file.deleting = false
+        GradeCraftAPI.logResponse(response)
+    )
+
+
+
+  #------ Badge Prediction Methods --------------------------------------------#
+
   # PUT a badge prediction
   postPredictedBadge = (badge)->
     if update.predictions
@@ -60,6 +170,8 @@
         GradeCraftPredictionAPI.updatePrediction(badge, '/api/predicted_earned_badges/' + badge.prediction.id, requestParams)
       else
         GradeCraftPredictionAPI.createPrediction(badge, '/api/predicted_earned_badges/', requestParams)
+
+  #------ Earned Badge Methods ------------------------------------------------#
 
   # currently creates explictly for a student and a grade
   createEarnedBadge = (badgeId, studentId, gradeId)->
@@ -98,12 +210,25 @@
   return {
       termFor: termFor
       getBadges: getBadges
+      getBadge: getBadge
+      badges: badges
+
+      createBadge: createBadge
+      queueUpdateBadge: queueUpdateBadge
+      submitBadge: submitBadge
+
+      fileUploads: fileUploads
+      removeIcon: removeIcon
+      postIconUpload: postIconUpload
+      postFileUploads: postFileUploads
+      deleteFileUpload: deleteFileUpload
+
       badgesPredictedPoints: badgesPredictedPoints
       postPredictedBadge: postPredictedBadge
+
+      earnedBadges: earnedBadges
       createEarnedBadge: createEarnedBadge
       deleteEarnedBadge: deleteEarnedBadge
       studentEarnedBadgeForGrade: studentEarnedBadgeForGrade
-      badges: badges
-      earnedBadges: earnedBadges
   }
 ]

@@ -1,7 +1,7 @@
 class API::BadgesController < ApplicationController
   include SortsPosition
 
-  before_action :ensure_staff?, only: [:sort]
+  before_action :ensure_staff?, except: [:index]
 
   # GET api/badges
   def index
@@ -29,7 +29,58 @@ class API::BadgesController < ApplicationController
     end
   end
 
+  def show
+    @badge = Badge.find(params[:id])
+  end
+
+  # PUT api/badges/:id
+  def update
+    @badge = Badge.find(params[:id])
+    if @badge.update_attributes badge_params
+      render "api/badges/show", success: true, status: 200
+    else
+      render json: {
+        message: "failed to save badge",
+        errors: @badge.errors.messages,
+        success: false
+        }, status: 400
+    end
+  end
+
+  def create
+    @badge = current_course.badges.new(badge_params)
+    if @badge.save
+      render "api/badges/show", success: true, status: 201
+    else
+      render json: {
+        message: "failed to save badge",
+        errors: @badge.errors.messages,
+        success: false
+        }, status: 400
+    end
+  end
+
   def sort
     sort_position_for :badge
+  end
+
+  private
+
+  def badge_params
+    params.require(:badge).permit(
+      :can_earn_multiple_times,
+      :description,
+      :full_points,
+      :icon,
+      :name,
+      :position,
+      :remove_icon,
+      :show_description_when_locked,
+      :show_name_when_locked,
+      :show_points_when_locked,
+      :student_awardable,
+      :visible,
+      :visible_when_locked
+    )
   end
 end

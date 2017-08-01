@@ -1,0 +1,95 @@
+@import "../utilities/variables"
+@import "../utilities/mixins"
+
+// vv Legacy:
+.unlock-condition
+  margin: 1rem 0
+  position: relative
+  width: 25%
+  display: inline-block
+  vertical-align: top
+  &:not(:last-child)
+    margin-right: 0.5rem
+  .form-item
+    margin-bottom: 0.5rem
+
+  input,
+  select
+    width: 100%
+    min-width: inherit
+    text-transform: capitalize
+
+  label
+    font-size: 0.8rem
+
+  .assignment-or-badge
+    padding: 0.5rem
+    background: $color-blue-2
+    color: $color-white
+
+  .unlock-conditions-list
+    padding: 0.5rem
+    border: 1px solid $color-grey-5
+    border-top: 0
+
+.add-unlock-condition-wrapper
+  display: inline-block
+  margin: 0 0.5rem
+  button
+    padding: 2rem
+    width: 240px
+
+.remove-unlock-condition
+  position: absolute
+  top: -8px
+  right: -8px
+  border-radius: 50%
+  width: 1.5rem
+  background-color: $color-red-1
+  &:hover
+    background-color: darken($color-red-1, 10%)
+  .fa-times
+    width: 100%
+    padding-right: 0
+
+// ^^ Legacy
+
+.unlock-conditions
+  display: inline
+  vertical-align: top
+
+  input
+    padding: .5rem
+
+.unlock-condition-requirement
+  padding: 0.5rem
+  background: $color-yellow-1
+  color: $color-white
+  &.valid
+    background-color: $color-blue-2
+
+.unlock-condition-parameters
+  padding: 0.5rem
+  border: 1px solid $color-grey-5
+  border-top: 0
+  text-transform: capitalize
+
+.add-unlock-condition
+  display: inline-block
+  margin: 0 0.5rem
+  .add-unlock-button
+    padding: 2rem
+    width: 240px
+    box-sizing: border-box;
+    display: block;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px dashed $color-blue-2
+    background: none;
+    color: $color-blue-2
+    cursor: hand
+
+
+
+

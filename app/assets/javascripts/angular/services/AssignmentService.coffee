@@ -5,6 +5,7 @@
 
   assignments = []
   update = {}
+  fileUploads = []
 
   # managing a single assignment resource,
   # must be a function for Angular two-way binding to work
@@ -57,14 +58,15 @@
     $http.get('/api/assignments/' + assignmentId).then(
       (response)->
         GradeCraftAPI.addItem(assignments, "assignments", response.data)
+        GradeCraftAPI.formatDates(assignments[0],["open_at", "due_at", "accepts_submissions_until"])
         if response.data.data.relationships && response.data.data.relationships.rubric
           RubricService.getRubric(response.data.data.relationships.rubric.data.id)
-
+        GradeCraftAPI.loadFromIncluded(fileUploads,"file_uploads", response.data)
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("pass", response.data.meta.term_for_pass)
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
         GradeCraftAPI.logResponse(response)
-      (response)->
+      ,(response)->
         GradeCraftAPI.logResponse(response)
     )
 
@@ -96,7 +98,16 @@
         GradeCraftAPI.setTermFor("fail", response.data.meta.term_for_fail)
         update.predicted_earned_grades = response.data.meta.allow_updates
         GradeCraftAPI.logResponse(response)
-      (response)->
+      ,(response)->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  createAssignment = (params)->
+    $http.post("/api/assignments/", assignment: params).then(
+      (response) ->
+        GradeCraftAPI.addItem(assignments, "assignments", response.data)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
         GradeCraftAPI.logResponse(response)
     )
 
@@ -117,21 +128,89 @@
         GradeCraftAPI.logResponse(response)
     )
 
+  # Handles incremental updates from the Assignment form
   _updateAssignment = (id)->
     assignment = _.find(assignments, {id: id})
     if assignment && ValidateDates(assignment).valid
       $http.put("/api/assignments/#{id}", assignment: assignment).then(
         (response) ->
+          angular.copy(response.data.data.attributes, assignment)
+          GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
           GradeCraftAPI.logResponse(response)
         ,(response) ->
           GradeCraftAPI.logResponse(response)
       )
 
 
-  queueUpdateAssignment = (id, attribute, state) ->
+  queueUpdateAssignment = (id)->
     DebounceQueue.addEvent(
       "assignments", id, _updateAssignment, [id]
     )
+
+  submitAssignment = (id)->
+    assignment = _.find(assignments, {id: id})
+    DebounceQueue.cancelEvent("assignments", id)
+    if assignment && ValidateDates(assignment).valid
+      $http.put("/api/assignments/#{id}", assignment: assignment).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+          window.location = "/assignments"
+        ,(response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+
+  _updateScoreLevel = (assignmentId, scoreLevel)->
+    params = { "assignment_score_levels_attributes" :
+      [{ "id" : scoreLevel.id, "points" : scoreLevel.points, "name" : scoreLevel.name }]
+    }
+    $http.put("/api/assignments/#{assignmentId}", assignment: params).then(
+      (response) ->
+        assignment = _.find(assignments, {id: assignmentId})
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  queueUpdateScoreLevel = (assignmentId, scoreLevel)->
+    return false if !scoreLevel.points || !scoreLevel.name
+    # use "creating" to avoid creating more than one with params
+    return if scoreLevel.creating
+    scoreLevel.creating = true if !scoreLevel.id
+
+    id = scoreLevel.id || 0
+    DebounceQueue.addEvent(
+      "scoreLevels", id, _updateScoreLevel, [assignmentId, scoreLevel]
+    )
+
+  deleteScoreLevel = (assignmentId, scoreLevel)->
+    assignment = _.find(assignments, {id: assignmentId})
+    DebounceQueue.cancelEvent("scoreLevels", scoreLevel.id)
+    if ! scoreLevel.id
+      scoreLevels = _.reject(assignment.score_levels, scoreLevel)
+      return angular.copy(scoreLevels, assignment.score_levels)
+
+    params = { "assignment_score_levels_attributes" :
+      [{ "id" : scoreLevel.id, "_destroy" : true }]
+    }
+    $http.put("/api/assignments/#{assignmentId}", assignment: params).then(
+      (response) ->
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  addNewScoreLevel = (assignmentId)->
+    assignment = _.find(assignments, {id: assignmentId})
+    level = { id: null, name: null, points: null }
+    if assignment.score_levels
+      assignment.score_levels.push(level)
+    else
+      assignment.score_levels = [level]
 
   # PUT a predicted earned grade for assignment
   postPredictedAssignment = (assignment)->
@@ -146,6 +225,66 @@
       else
         GradeCraftPredictionAPI.createPrediction(assignment, '/api/predicted_earned_grades/', requestParams)
 
+  #------- Media and File Methods ---------------------------------------------#
+
+  removeMedia = (id)->
+    assignment = _.find(assignments, {id: id})
+    assignment.media = null
+    assignment.remove_media = true
+    _updateAssignment(id)
+
+  postMediaUpload = (id, files)->
+    mediaParams = new FormData()
+    mediaParams.append('assignment[media]', files[0])
+    $http.put("/api/assignments/#{id}", mediaParams,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response) ->
+        assignment = _.find(assignments, {id: id})
+        angular.copy(response.data.data.attributes, assignment)
+        GradeCraftAPI.logResponse(response)
+      ,(response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  postFileUploads = (id, files)->
+    fd = new FormData()
+    angular.forEach(files, (file, index)->
+      fd.append("file_uploads[]", file)
+    )
+    $http.post(
+      "/api/assignments/#{id}/file_uploads",
+      fd,
+      transformRequest: angular.identity,
+      headers: { 'Content-Type': undefined }
+    ).then(
+      (response)-> # success
+        if response.status == 201
+          GradeCraftAPI.addItems(fileUploads, "file_uploads", response.data)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        GradeCraftAPI.logResponse(response)
+    )
+
+  deleteFileUpload = (file)->
+    file.deleting = true
+    GradeCraftAPI.deleteItem(fileUploads, file)
+    $http.delete("/api/assignment_files/#{file.id}").then(
+      (response)-> # success
+        if response.status == 200
+          GradeCraftAPI.deleteItem(fileUploads, file)
+        GradeCraftAPI.logResponse(response)
+
+      ,(response)-> # error
+        file.deleting = false
+        GradeCraftAPI.logResponse(response)
+    )
+
+
+#------- Public Methods -------------------------------------------------------#
+
   return {
       assignment: assignment
       assignments: assignments
@@ -153,10 +292,20 @@
       assignmentsSubsetPredictedPoints: assignmentsSubsetPredictedPoints
       getAssignment: getAssignment
       getAssignments: getAssignments
+      createAssignment: createAssignment
       postPredictedAssignment: postPredictedAssignment
       queueUpdateAssignment: queueUpdateAssignment
+      submitAssignment: submitAssignment
+      queueUpdateScoreLevel: queueUpdateScoreLevel
+      deleteScoreLevel: deleteScoreLevel
+      addNewScoreLevel: addNewScoreLevel
       termFor: termFor
       updateAssignmentAttribute: updateAssignmentAttribute
       ValidateDates: ValidateDates
+      removeMedia: removeMedia
+      postMediaUpload: postMediaUpload
+      fileUploads: fileUploads
+      postFileUploads: postFileUploads
+      deleteFileUpload: deleteFileUpload
   }
 ]

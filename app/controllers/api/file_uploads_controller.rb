@@ -2,7 +2,7 @@ class API::FileUploadsController < ApplicationController
 
   before_action :ensure_staff?
 
-  # POST /api/grades/:grade_id/attachments
+  # POST /api/grades/:grade_id/file_uploads
   def create
     grade = Grade.find(params[:grade_id])
 
@@ -19,7 +19,7 @@ class API::FileUploadsController < ApplicationController
     render "api/file_uploads/index", status: 201
   end
 
-  # POST /api/assignments/:assignment_id/groups/:group_id/attachments
+  # POST /api/assignments/:assignment_id/groups/:group_id/file_uploads
   def group_create
     group = Group.find(params[:group_id])
     assignment = Assignment.find(params[:assignment_id])

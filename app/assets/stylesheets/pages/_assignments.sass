@@ -30,59 +30,6 @@
   li
     display: inline-block
 
-.unlock-conditions
-  display: inline
-  vertical-align: top
-
-.unlock-condition
-  margin: 1rem 0
-  position: relative
-  width: 25%
-  display: inline-block
-  vertical-align: top
-  &:not(:last-child)
-    margin-right: 0.5rem
-
-  .form-item
-    margin-bottom: 0.5rem
-
-  input,
-  select
-    width: 100%
-
-  label
-    font-size: 0.8rem
-
-  .assignment-or-badge
-    padding: 0.5rem
-    background: $color-blue-2
-    color: $color-white
-
-  .unlock-conditions-list
-    padding: 0.5rem
-    border: 1px solid $color-grey-5
-    border-top: 0
-
-.add-unlock-condition-wrapper
-  display: inline-block
-  margin: 0 0.5rem
-  button
-    padding: 2rem
-    width: 240px
-
-.remove-unlock-condition
-  position: absolute
-  top: -8px
-  right: -8px
-  border-radius: 50%
-  width: 1.5rem
-  background-color: $color-red-1
-  &:hover
-    background-color: darken($color-red-1, 10%)
-  .fa-times
-    width: 100%
-    padding-right: 0
-
 .class-analytics-wrapper
   display: flex
   @media (max-width: $media-small-max)
@@ -149,7 +96,7 @@
       color: $color-blue-2
   &.assignment-settings a
     padding: 1rem
-  &.instructor a 
+  &.instructor a
     display: flex
     justify-content: space-between
     align-items: center
@@ -317,6 +264,21 @@ span.settings_hint
 .assignment-settings--date-inputs
   &.invalid
     border: 1px solid red
+  ul.form-flex-row
+    // Assignment dates across on form, but down on design page
+    flex-direction: column
+    padding: 0
+    li.form-item
+      list-style-type: none
+      margin: 0
+
+.form-subsection
+  .assignment-settings--date-inputs ul.form-flex-row
+    // Assignment dates across on form, but down on design page
+    flex-direction: row
+    .form-item:not(:last-child)
+      margin-right: 1rem
+
 
 .assignment-settings--messages
   color: red

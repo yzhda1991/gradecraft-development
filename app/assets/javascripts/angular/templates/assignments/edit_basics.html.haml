@@ -1,0 +1,47 @@
+%section.form-section
+  .form-subsection
+    .form-item
+      %label
+        {{termFor("assignment")}} Type
+        %select(ng-model="assignment.assignment_type_id" ng-change="updateAssignment()")
+          %option(ng-repeat="assignmentType in assignmentTypes" ng-selected="assignment.assignment_type_id == assignmentType.id" value="{{assignmentType.id}}") {{assignmentType.name}}
+
+    .form-item
+      %label
+        {{termFor("assignment")}} Name
+        %input(aria-required=true type="text" ng-model="assignment.name" ng-change="updateAssignment()")
+
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.required" ng-click="updateAssignment()") Required
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Are ALL {{ termFor("students") }} expected to complete this {{ termFor("assignment") }} to pass the course?
+
+    .form-item
+      %label
+        Individual or Group?
+        %select(ng-model="assignment.grade_scope" ng-change="updateAssignment()")
+          %option(ng-repeat="scope in ['Individual', 'Group']" ng-selected="assignment.grade_scope == scope" value="{{scope}}") {{ scope }}
+        .form-hint Do students do this individually or as a group?
+
+    .form-item
+      %label(for="description-textarea")
+        Assignment Description
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            This will be shown to students on their dashboard, and when they submit their {{ termFor("assignment") }}.
+      %textarea#description-textarea(ng-model="assignment.description" ng-change="updateAssignment()" froala="froalaOptions")
+
+    .form-item
+      %label(for="purpose-textarea")
+        Assignment Purpose
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            This will be shown to students on their dashboard, and when they submit their {{ termFor("assignment") }}.
+      %textarea#purpose-textarea(ng-model="assignment.purpose" ng-change="updateAssignment()" froala="froalaOptions")
+
+    %assignment-media-uploader(assignment="assignment")
