@@ -1,0 +1,25 @@
+.pageContent
+  = render "layouts/alerts"
+
+  - unless @result.unsuccessful.empty?
+    %h2.subtitle
+      = "#{@result.unsuccessful.count} #{"Badge".pluralize(@result.unsuccessful.count)} Not Imported"
+    %table.dynatable
+      %thead
+        %tr
+          %th Data
+          %th Error(s)
+      %tbody
+        - @result.unsuccessful.each do |row|
+          %tr
+            %td= row[:data]
+            %td= row[:errors]
+
+  %h2.subtitle
+    = "#{@result.successful.count} #{"Badge".pluralize(@result.successful.count)} Imported Successfully"
+  = render partial: "badges/importers/import_results_table", locals: { earned_badges: @result.successful }
+
+  - unless @result.unchanged.empty?
+    %h2.subtitle
+      = "#{@result.unchanged.count} #{"Badge".pluralize(@result.unchanged.count)} Not Imported (already existed)"
+    = render partial: "badges/importers/import_results_table", locals: { earned_badges: @result.unchanged }

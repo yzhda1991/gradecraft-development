@@ -158,6 +158,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     badges_importers_index
     breadcrumb('CSV')
   end
+  
+  def badges_importers_import_results
+    badges_importers_index
+    breadcrumb('Import Results')
+  end
 
   def challenges_index
     dashboard
