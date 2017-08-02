@@ -2,7 +2,7 @@ module GradesHelper
   extend SubmissionsHelper
 
   def grading_status_count_for(course)
-    unreleased_grades_count_for(course) +
+    ready_for_release_grades_count_for(course) +
       in_progress_grades_count_for(course) +
       ungraded_submissions_count_for(course) +
       resubmission_count_for(course)
@@ -28,17 +28,6 @@ module GradesHelper
   def ready_for_release_count_cache_key(course)
     # This cache key should be expired when a grade is updated
     "#{course.cache_key}/ready_for_release_grades_count"
-  end
-
-  def unreleased_grades_count_for(course)
-    Rails.cache.fetch(unreleased_grades_count_cache_key(course)) do
-      course.grades.for_active_students.not_released.count
-    end
-  end
-
-  def unreleased_grades_count_cache_key(course)
-    # This cache key should be expired when a grade is updated
-    "#{course.cache_key}/unreleased_grades_count"
   end
 
   # Returns the corresponding pass/fail status for a score
