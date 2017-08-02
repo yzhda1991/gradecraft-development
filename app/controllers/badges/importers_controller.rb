@@ -34,7 +34,7 @@ class Badges::ImportersController < ApplicationController
     badge = current_course.badges.find(params[:badge_id])
     respond_to do |format|
       format.csv do
-        send_data BadgeExporter.new.export_badges(badge, current_course.students),
+        send_data BadgeExporter.new.export_badges(badge, current_course),
           filename: "#{ badge.name } Import Badges - #{ Date.today}.csv"
       end
     end

@@ -9,13 +9,14 @@ class BadgeExporter
     end
   end
 
-  def export_badges(badge, students, options={})
+  def export_badges(badge, current_course, options={})
     CSV.generate(options) do |csv|
       csv << export_badge_headers
+      students = current_course.students_being_graded
       students.each do |student|
         csv << [student.first_name, student.last_name,
-                student.email,
-                1]
+                student.email, current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count,
+                1, "Awesome Job!"]
       end
     end
   end
@@ -27,6 +28,6 @@ class BadgeExporter
   end
 
   def export_badge_headers
-    ["First Name", "Last Name", "Email", "Earned"]
+    ["First Name", "Last Name", "Email", "Has", "Earned", "Feedback (optional)"]
   end
 end
