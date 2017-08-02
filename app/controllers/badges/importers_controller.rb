@@ -6,10 +6,12 @@ class Badges::ImportersController < ApplicationController
   include OAuthProvider
   include CanvasAuthorization
 
+  oauth_provider_param :importer_provider_id
+
   before_action :ensure_staff?
   before_action except: [:download, :index, :show, :upload] do |controller|
     controller.redirect_path \
-      badges_importers_path(params[:badge_id])
+      badge_badges_importers_path(params[:badge_id])
   end
   before_action :require_authorization, except: [:download, :index, :show, :upload]
   before_action :use_current_course, except: :download
@@ -46,12 +48,12 @@ class Badges::ImportersController < ApplicationController
     @badge = @course.badges.find(params[:badge_id])
 
     if params[:file].blank?
-      redirect_to badges_path,
+      redirect_to badge_badges_importer_path(@badge, params[:importer_provider_id]),
         notice: "File is missing" and return
     end
 
     if (File.extname params[:file].original_filename) != ".csv"
-      redirect_to badges_path,
+      redirect_to badge_badges_importer_path(@badge, params[:importer_provider_id]),
         notice: "We're sorry, the badge import utility only supports .csv files. Please try again using a .csv file." and return
     end
 
