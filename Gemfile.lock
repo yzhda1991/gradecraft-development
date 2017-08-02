@@ -419,7 +419,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     namae (0.11.3)
-    newrelic_rpm (3.16.2.321)
+    newrelic_rpm (4.3.0.335)
     ng-rails-csrf (0.1.0)
     nio4r (1.2.1)
     nokogiri (1.6.8.1)
