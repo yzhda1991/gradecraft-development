@@ -1,5 +1,5 @@
 class CanvasSessionController < ApplicationController
-  before_action :ensure_admin?
+  before_action :ensure_staff?
 
   def new
     canvas_provider = Provider.for_course current_course
