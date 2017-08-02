@@ -1,4 +1,4 @@
-describe Badges::ImportersController, focus: true do
+describe Badges::ImportersController do
   let(:course) { build :course }
   let(:badge) { create :badge, name: "Fancy Badge", course: course }
   # let(:student) { build :user, courses: [course], role: :student }
