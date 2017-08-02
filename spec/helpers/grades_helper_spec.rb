@@ -45,7 +45,7 @@ describe GradesHelper do
 
     it "returns the sum of unreleased grades, in progress grades, and ungraded submissions" do
       allow(helper).to receive(:ungraded_submissions_count_for).with(course).and_return 10
-      allow(helper).to receive(:unreleased_grades_count_for).with(course).and_return 20
+      allow(helper).to receive(:ready_for_release_grades_count_for).with(course).and_return 20
       allow(helper).to receive(:in_progress_grades_count_for).with(course).and_return 30
       allow(helper).to receive(:resubmission_count_for).with(course).and_return 2
       expect(helper.grading_status_count_for(course)).to eq 62
