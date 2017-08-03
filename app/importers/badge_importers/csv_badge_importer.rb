@@ -16,8 +16,7 @@ class CSVBadgeImporter
   end
 
   def import(badge=nil)
-    if file
-      if @current_course
+    if file && @current_course
         students = @current_course.students_being_graded
         CSV.foreach(file, headers: true) do |csv|
           row = BadgeRow.new csv
@@ -53,8 +52,6 @@ class CSVBadgeImporter
 
         end
       end
-    end
-
     self
   end
 
