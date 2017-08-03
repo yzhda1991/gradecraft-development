@@ -17,41 +17,41 @@ class CSVBadgeImporter
 
   def import(badge=nil)
     if file && @current_course
-        students = @current_course.students_being_graded
-        CSV.foreach(file, headers: true) do |csv|
-          row = BadgeRow.new csv
+      students = @current_course.students_being_graded
+      CSV.foreach(file, headers: true) do |csv|
+        row = BadgeRow.new csv
 
-          student = find_student(row, students)
-          if student.nil?
-            append_unsuccessful row, "Active student not found in course"
-            next
-          end
-
-          if !row.has_earned? # check earned column, should be an integer, if blank it should skip
-            append_unsuccessful row, "Earned unspecified"
-            next
-          end
-
-          if !is_valid_badge? row.has, row.earned
-            append_unsuccessful row, "Badge row is invalid"
-            next
-          end
-
-          earned_badge = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).first
-          earned_badge_count = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count
-
-          if Integer(row.earned) == earned_badge_count
-            unchanged << earned_badge
-          end
-
-          while earned_badge_count < Integer(row.earned)
-            earned_badge = create_badge row, badge, student
-            report row, earned_badge
-            earned_badge_count +=1
-          end
-
+        student = find_student(row, students)
+        if student.nil?
+          append_unsuccessful row, "Active student not found in course"
+          next
         end
+
+        if !row.has_earned? # check earned column, should be an integer, if blank it should skip
+          append_unsuccessful row, "Earned unspecified"
+          next
+        end
+
+        if !is_valid_badge? row.has, row.earned
+          append_unsuccessful row, "Badge row is invalid"
+          next
+        end
+
+        earned_badge = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).first
+        earned_badge_count = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count
+
+        if Integer(row.earned) == earned_badge_count
+          unchanged << earned_badge
+        end
+
+        while earned_badge_count < Integer(row.earned)
+          earned_badge = create_badge row, badge, student
+          report row, earned_badge
+          earned_badge_count +=1
+        end
+
       end
+    end
     self
   end
 
