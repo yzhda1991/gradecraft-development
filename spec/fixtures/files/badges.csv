@@ -4,3 +4,5 @@ Ron,Weasley,ron.weasley@hogwarts.edu,1,2,Awesome Job!
 Fred,Weasley,fred.weasley@hogwarts.edu,1,3,Awesome Job!
 Harry,Potter,harry.potter@hogwarts.edu,1,1,Awesome Job!
 Kyle,Dove,dovek@umich.edu,1,1,Awesome Job!
+Johnny,Wrong,jwrong@badexample.edu,1,-1,Bad Job!
+Johnny,Wrong,jwrong@badexample.edu,,,Bad Job!

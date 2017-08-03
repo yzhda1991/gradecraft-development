@@ -42,10 +42,24 @@ describe CSVBadgeImporter do
           expect(result.successful.last).to eq earned_badge
         end
 
-        it "contains an unsuccessful row if the grade is a string" do
+        it "contains an unsuccessful row if the student is not found" do
           result = subject.import(badge)
           expect(result.unsuccessful).to include({ data: "Kyle,Dove,dovek@umich.edu,1,1,Awesome Job!\n",
             errors: "Active student not found in course" })
+        end
+
+        it "contains an unsuccessful row if the earned column is less than in the database" do
+          student.reload.update_attribute :email, "jwrong@badexample.edu"
+          result = subject.import(badge)
+          expect(result.unsuccessful).to include({ data: "Johnny,Wrong,jwrong@badexample.edu,1,-1,Bad Job!\n",
+            errors: "Badge row is invalid" })
+        end
+
+        it "contains an unsuccessful row if the earned column empty" do
+          student.reload.update_attribute :email, "jwrong@badexample.edu"
+          result = subject.import(badge)
+          expect(result.unsuccessful).to include({ data: "Johnny,Wrong,jwrong@badexample.edu,,,Bad Job!\n",
+            errors: "Earned unspecified" })
         end
 
         it "timestamps the grade" do
