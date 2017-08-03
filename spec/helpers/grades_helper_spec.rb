@@ -18,21 +18,21 @@ describe GradesHelper do
     end
   end
 
-  describe "#unreleased_grades_count_for" do
+  describe "#ready_for_release_grades_count_for" do
     let(:assignment) { create :assignment, course: course }
     let!(:student) { create(:course_membership, :student, course: course, active: true).user }
     let!(:grade) { create :complete_grade, assignment: assignment, course: course, student_id: student.id }
 
     it "returns the number of grades that are unreleased" do
-      expect(unreleased_grades_count_for(course)).to eq 1
+      expect(ready_for_release_grades_count_for(course)).to eq 1
     end
 
     it "caches the result" do
       expect(course).to receive(:grades).and_call_original.at_most(:twice)
-      unreleased_grades_count_for(course)
-      unreleased_grades_count_for(course)
-      Rails.cache.delete unreleased_grades_count_cache_key(course)
-      unreleased_grades_count_for(course)
+      ready_for_release_grades_count_for(course)
+      ready_for_release_grades_count_for(course)
+      Rails.cache.delete ready_for_release_count_cache_key(course)
+      ready_for_release_grades_count_for(course)
     end
   end
 
@@ -45,7 +45,7 @@ describe GradesHelper do
 
     it "returns the sum of unreleased grades, in progress grades, and ungraded submissions" do
       allow(helper).to receive(:ungraded_submissions_count_for).with(course).and_return 10
-      allow(helper).to receive(:unreleased_grades_count_for).with(course).and_return 20
+      allow(helper).to receive(:ready_for_release_grades_count_for).with(course).and_return 20
       allow(helper).to receive(:in_progress_grades_count_for).with(course).and_return 30
       allow(helper).to receive(:resubmission_count_for).with(course).and_return 2
       expect(helper.grading_status_count_for(course)).to eq 62
