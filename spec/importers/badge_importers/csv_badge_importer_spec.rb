@@ -1,5 +1,5 @@
+describe CSVBadgeImporter do
 # describe CSVBadgeImporter, focus: true do
-describe CSVBadgeImporter, focus: true do
   subject { described_class.new(file.tempfile, professor, course) }
 
   describe "#import" do
@@ -28,7 +28,6 @@ describe CSVBadgeImporter, focus: true do
     end
 
     context "when the students exist in the course" do
-      # let!(:student) { create :user, email: "robert@example.com", courses: [course], role: :student }
 
       context "with a pass/fail type assignment" do
 
@@ -49,14 +48,15 @@ describe CSVBadgeImporter, focus: true do
             errors: "Active student not found in course" })
         end
 
+        it "timestamps the grade" do
+          student.reload.update_attribute :email, "seamus.finnigan@hogwarts.edu"
+          result = subject.import(badge)
+          expect(EarnedBadge.unscoped.last.updated_at).to be_within(1.second).of(DateTime.now)
+        end
+
 end # context
 end # context
 
-#
-#       it "timestamps the grade" do
-#         result = subject.import(course, assignment)
-#         expect(Grade.unscoped.last.graded_at).to be_within(1.second).of(DateTime.now)
-#       end
 #
 #       it "does not update the grade if the grade and the feedback are the same as the one being imported" do
 #         grade = create :grade, assignment: assignment, student: student, raw_points: 4000, feedback: "You did great!"
