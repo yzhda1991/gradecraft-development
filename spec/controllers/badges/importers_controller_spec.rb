@@ -1,7 +1,6 @@
 describe Badges::ImportersController do
   let(:course) { build :course }
   let(:badge) { create :badge, name: "Fancy Badge", course: course }
-  # let(:student) { build :user, courses: [course], role: :student }
   let!(:student) { create(:course_membership, :student, course: course, active: true).user }
 
   before { allow(controller).to receive(:current_course).and_return course }
