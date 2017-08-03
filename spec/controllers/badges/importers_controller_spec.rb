@@ -39,7 +39,7 @@ describe Badges::ImportersController do
         it "renders any errors that have occured" do
           post :upload, params: { badge_id: badge.id, importer_provider_id: :csv, file: file }
 
-          expect(response.body).to include "5 Badges Not Imported"
+          expect(response.body).to include "7 Badges Not Imported"
           expect(response.body).to include "Active student not found in course"
         end
       end
