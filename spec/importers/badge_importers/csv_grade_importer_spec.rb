@@ -1,3 +1,4 @@
+# describe CSVBadgeImporter, focus: true do
 describe CSVBadgeImporter, focus: true do
   subject { described_class.new(file.tempfile, professor, course) }
 
