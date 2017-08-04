@@ -9,7 +9,7 @@
 
   %p
     %strong Sent:
-    = @announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+    = @announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p").in_time_zone(current_user.time_zone)
 
   %p
     %strong Subject:

@@ -5,7 +5,7 @@ json.data @challenges do |challenge|
   json.attributes do
 
     json.description    challenge.description
-    json.due_at         challenge.due_at
+    json.due_at         challenge.due_at.in_time_zone(current_user.time_zone)
     json.full_points    challenge.full_points
     json.id             challenge.id
     json.name           challenge.name
@@ -14,7 +14,7 @@ json.data @challenges do |challenge|
     # boolean states for icons
     json.has_info !challenge.description.blank?
     json.has_levels challenge.challenge_score_levels.present?
-    json.is_due_in_future challenge.due_at.present? && challenge.due_at >= Time.now
+    json.is_due_in_future challenge.due_at.present? && challenge.due_at.in_time_zone(current_user.time_zone) >= Time.in_time_zone(current_user.time_zone).now
 
     json.score_levels challenge.challenge_score_levels.map {
       |csl| {name: csl.name, points: csl.points}

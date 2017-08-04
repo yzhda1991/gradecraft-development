@@ -16,6 +16,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :null_session
 
+  around_action :set_time_zone, if: :current_user
+
   Rails.env.production? do
     before_action :check_url
   end
@@ -148,5 +150,9 @@ class ApplicationController < ActionController::Base
     return unless current_user && request.format.html?
     PageviewEventLogger.new(event_session)
                        .enqueue_in_with_fallback Lull.time_until_next_lull
+  end
+
+  def set_time_zone(&block)
+    Time.use_zone(current_user.time_zone, &block)
   end
 end

@@ -2,15 +2,15 @@ json.set! :timeline do
 
   json.set! :date do
     json.array! @events do |event|
-      if event.open_at && event.due_at
-        json.startDate event.open_at
-        json.endDate event.due_at
-      elsif event.open_at
-        json.startDate event.open_at
-        json.endDate event.open_at
-      elsif event.due_at
-        json.startDate event.due_at
-        json.endDate event.due_at
+      if event.open_at.in_time_zone(current_user.time_zone) && event.due_at.in_time_zone(current_user.time_zone)
+        json.startDate event.open_at.in_time_zone(current_user.time_zone)
+        json.endDate event.due_at.in_time_zone(current_user.time_zone)
+      elsif event.open_at.in_time_zone(current_user.time_zone)
+        json.startDate event.open_at.in_time_zone(current_user.time_zone)
+        json.endDate event.open_at.in_time_zone(current_user.time_zone)
+      elsif event.due_at.in_time_zone(current_user.time_zone)
+        json.startDate event.due_at.in_time_zone(current_user.time_zone)
+        json.endDate event.due_at.in_time_zone(current_user.time_zone)
       end
       json.headline event.name
       json.text timeline_content(event)
