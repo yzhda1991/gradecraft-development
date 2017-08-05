@@ -39,7 +39,7 @@ class AssignmentType < ActiveRecord::Base
   # Checking to see if the instructor has set a maximum number of grades that
   # should count towards the assignment type score - always the highest ones
   def count_only_top_grades?
-    top_grades_counted > 0
+    top_grades_counted.present? && top_grades_counted > 0
   end
 
   # Getting the assignment types max value if it's present, else returning the

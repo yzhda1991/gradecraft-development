@@ -33,7 +33,7 @@
       -# .form-hint{id: "assignment_type_top_grades_counted"}
       = tooltip("count-highest-hint", "info-circle", placement: "right") do
         Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here (Set to 0 if not).
-      = f.text_field :top_grades_counted, data: { autonumeric: true, "m-dec" => "0" }
+      = f.input :top_grades_counted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
 
     - if current_course.has_multipliers?
       .form-item

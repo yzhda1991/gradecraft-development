@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170622131838) do
+ActiveRecord::Schema.define(version: 20170805193014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20170622131838) do
     t.integer  "course_id",                          null: false
     t.boolean  "student_weightable", default: false, null: false
     t.integer  "position",                           null: false
-    t.integer  "top_grades_counted", default: 0,     null: false
+    t.integer  "top_grades_counted"
     t.boolean  "has_max_points",     default: false, null: false
   end
 
