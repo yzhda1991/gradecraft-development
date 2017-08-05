@@ -72,8 +72,9 @@ module LinkHelper
       uri = URI(self.uri)
       uri.scheme == "mailto" ||
         (!uri.relative? &&
+         (uri.host.present? &&
          !uri.host.end_with?("gradecraft.com") &&
-         !uri.host.end_with?("localhost"))
+         !uri.host.end_with?("localhost")))
     rescue URI::InvalidURIError
       false
     end
