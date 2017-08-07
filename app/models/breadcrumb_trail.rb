@@ -100,11 +100,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Quick Grading ' + objects[:assignment].name)
   end
 
-  def assignment_type_weights_index
-    assignments_index
-    breadcrumb('Edit My ' + objects[:course].weight_term + ' Choices')
-  end
-
   def assignment_types_index
     dashboard
     breadcrumb(objects[:course].assignment_term + ' Type Analytics')
