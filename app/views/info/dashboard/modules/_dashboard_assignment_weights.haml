@@ -10,7 +10,7 @@
       - if current_course.max_weights_per_assignment_type.present?
         %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
       - if current_course.max_assignment_types_weighted.present?
-        %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
+        %li You may weight up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
       - if current_course.weights_close_at.present?
         %li You must make your decision by <b>#{current_course.weights_close_at}</b>
 

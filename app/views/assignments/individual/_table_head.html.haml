@@ -11,7 +11,7 @@
     %th{scope: "col"} Score
   - elsif presenter.assignment_type.student_weightable?
     %th{scope: "col"} Raw Score
-    %th{scope: "col"} Multiplied Score
+    %th{scope: "col"} #{ term_for :weight}-weighted Score
   - elsif presenter.assignment.pass_fail?
     %th{scope: "col"} Grade
   - if presenter.assignment.has_levels?
