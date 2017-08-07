@@ -2,22 +2,34 @@
   %h2 #{term_for :weights}
 
 .card-body
-  - current_course.assignment_types.ordered.each do |at|
-    - if at.student_weightable?
-      %div
-        %span.bold= at.name
-        = "- #{current_student.weight_for_assignment_type(at)} #{(term_for :weight).capitalize}"
-  - if current_course.assignment_weight_open? && current_user_is_student?
-    %p= link_to "Edit My Choices", assignment_type_weights_path, class: "button"
-  - else
-    %p= link_to "Edit #{(term_for :weight).capitalize} Choices", assignment_type_weights_path(student_id: current_student.id), class: "button"
+  .module-section
+    %p Rules of The Game:
+    %ul.small
+      - if current_course.weights_close_at.present?
+        %li You have until #{current_course.try(:weights_close_at).strftime("%A, %B %d, %Y, at %H:%M%p")} to make your #{(term_for :weight).titleize} decision
+      - if current_course.max_weights_per_assignment_type.present?
+        %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
+      - if current_course.max_assignment_types_weighted.present?
+        %li You may weight up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
+      - if current_course.weights_close_at.present?
+        %li You must make your decision by <b>#{current_course.weights_close_at}</b>
 
-  %h5 Rules of The Game
-  %ul.small
-    //%li You have until #{current_course.try(:weights_close_at).strftime("%A, %B %d, %Y, at %H:%M%p")} to make your #{(term_for :weight).titleize} decision
-    - if current_course.max_weights_per_assignment_type.present?
-      %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
-    - if current_course.max_assignment_types_weighted.present?
-      %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
-    - if current_course.weights_close_at.present?
-      %li You must make your decision by <b>#{current_course.weights_close_at}</b>
+  .module-section
+    %p Your Choices:
+    .predicted-weights
+      - current_course.assignment_types.ordered.each do |at|
+        - if at.student_weightable?
+          %li.predicted-assignment-summary
+            .name= at.name
+            .italic
+              - if current_student.weight_for_assignment_type(at) > 0
+                = "#{current_student.weight_for_assignment_type(at)} #{(term_for :weights).capitalize}"
+                - (1..current_student.weight_for_assignment_type(at)).each do |n|
+                  .coin.coin-non-interactive
+              - else
+                Not weighted
+
+    .clear
+    - if current_course.assignment_weight_open? && current_user_is_student?
+      %p= link_to "Edit My Choices", predictor_path, class: "button"
+      %i Set your #{term_for :weight} choices in the grade predictor to have them automatically update your grade
