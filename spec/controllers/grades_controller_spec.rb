@@ -43,9 +43,32 @@ describe GradesController do
 
       it "assigns existing submissions" do
         submission = create(:submission, student: student, assignment: assignment)
-
         get :edit, params: { id: grade.id }
         expect(assigns(:submission)).to eq(submission)
+      end
+
+      describe "on submit" do
+        it "redirects to the assignment show page by default" do
+          get :edit, params: { id: grade.id }
+          expect(assigns(:submit_path)).to eq(assignment_path(grade.assignment))
+        end
+
+        describe "from the grading status page" do
+          before do
+            request.env["HTTP_REFERER"] = grading_status_path
+          end
+
+          it "redirects back to the grading status page" do
+            get :edit, params: { id: grade.id }
+            expect(assigns(:submit_path)).to eq(grading_status_path)
+          end
+        end
+
+        it "includes the team filter if team is in the params" do
+          team = create :team, course: course
+          get :edit, params: { id: grade.id, team_id: team.id }
+          expect(assigns(:submit_path)).to eq(assignment_path(grade.assignment) + "?team_id=#{team.id}")
+        end
       end
     end
 
@@ -91,7 +114,7 @@ describe GradesController do
       end
     end
 
-    describe "POST inlude" do
+    describe "POST include" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \
           receive(:enqueue).and_return true

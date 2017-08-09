@@ -4,7 +4,6 @@ class GradesController < ApplicationController
   before_action :ensure_staff?,
     except: [:feedback_read, :show, :async_update]
   before_action :ensure_student?, only: :feedback_read
-  before_action :save_referer, only: :edit
   before_action :use_current_course, only: [:show, :edit]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
@@ -29,7 +28,9 @@ class GradesController < ApplicationController
     @grade = Grade.find params[:id]
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
-    if @team.present?
+    if request.referer && request.referer.match(grading_status_path)
+      @submit_path = request.referer
+    elsif @team.present?
       @submit_path =  assignment_path(@grade.assignment, team_id: @team.id)
     else
       @submit_path = assignment_path(@grade.assignment)
