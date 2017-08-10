@@ -26,6 +26,11 @@ describe Level do
     end
   end
 
+  it "is invalid with negative points" do
+    subject.points = -100
+    expect(subject).to_not be_valid
+  end
+
   describe "#above_expectations?" do
     it "is false if points are equal to or below expectations" do
       subject.criterion.update(meets_expectations_points: subject.points)

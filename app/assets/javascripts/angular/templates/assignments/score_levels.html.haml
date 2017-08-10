@@ -10,7 +10,7 @@
     .form-item
       %label
         Points Awarded
-        %input(ng-model="scoreLevel.points" gc-number-input ng-change="updateScoreLevel(scoreLevel)")
+        %input(ng-model="scoreLevel.points" gc-number-input allow-negatives="true" ng-change="updateScoreLevel(scoreLevel)")
 
     .remove-line-item(ng-click="deleteScoreLevel(scoreLevel)")
       %i.fa.fa-fw.fa-times
