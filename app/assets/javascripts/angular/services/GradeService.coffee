@@ -27,6 +27,7 @@
     g.raw_points = modelGrade.raw_points
     g.adjustment_points = parseInt(g.adjustment_points) || 0
     g.final_points = g.raw_points + g.adjustment_points
+    return unless g.final_points > 0
     g.final_points = 0 if g.final_points < thresholdPoints
 
   # This must be triggered whenever there is a
