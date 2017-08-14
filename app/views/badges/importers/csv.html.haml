@@ -5,13 +5,13 @@
     To import badges, upload a .csv file with the following format. These fields <b> MUST </b> be in the specified order. Two important keys:
     %ul
       %li You may include additional information in the extra columns, but that content will be ignored.
-      %li If a student already has a badge for this particular badge in GradeCraft, and there is a new grade present in the upload, <b> the old grade will be replaced. </b>
+      %li If a student has already been awarded this badge and the badge in not multi-awardable in GradeCraft then <b> no change will occur. </b>
 
   %hr
 
     %p
       Columns should be in the following order:
-      %br #{term_for :student}'s first name, #{term_for :student}'s last name, #{term_for :student}'s email or username, score, and any text feedback you'd like to include. #{link_to "Download Sample File", badge_badges_importer_download_path(@badge, :csv, format: "csv"), class: "bold"}
+      %br #{term_for :student}'s first name, #{term_for :student}'s last name, #{term_for :student}'s email or username, current earned count, new awarded count, and any text feedback you'd like to include. #{link_to "Download Sample File", badge_badges_importer_download_path(@badge, :csv, format: "csv"), class: "bold"}
 
     = form_tag({action: :upload, importer_provider_id: params[:provider_id]}, :multipart => true) do
       = file_field_tag "file"

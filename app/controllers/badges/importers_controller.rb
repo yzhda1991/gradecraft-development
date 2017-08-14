@@ -1,19 +1,9 @@
-require "active_lms"
 require_relative "../../importers/badge_importers"
 
 # rubocop:disable AndOr
 class Badges::ImportersController < ApplicationController
-  include OAuthProvider
-  include CanvasAuthorization
-
-  oauth_provider_param :importer_provider_id
 
   before_action :ensure_staff?
-  before_action except: [:download, :index, :show, :upload] do |controller|
-    controller.redirect_path \
-      badge_badges_importers_path(params[:badge_id])
-  end
-  before_action :require_authorization, except: [:download, :index, :show, :upload]
   before_action :use_current_course, except: :download
 
   # GET /badges/:badge_id/badges/importers
@@ -25,8 +15,7 @@ class Badges::ImportersController < ApplicationController
   def show
     @badge = Badge.find params[:badge_id]
     provider = params[:provider_id]
-
-    render "#{provider}" if %w(canvas csv).include? provider
+    render "#{provider}" if %w(csv).include? provider
   end
 
   # GET /badges/:badge_id/badges/download
@@ -36,14 +25,13 @@ class Badges::ImportersController < ApplicationController
     badge = current_course.badges.find(params[:badge_id])
     respond_to do |format|
       format.csv do
-        send_data BadgeExporter.new.export_badges(badge, current_course),
+        send_data BadgeExporter.new.export_sample_badge_file(badge, current_course),
           filename: "#{ badge.name } Import Badges - #{ Date.today}.csv"
       end
     end
   end
 
   # POST /badges/:badge_id/badges/importers/:importer_provider_id/upload
-  # rubocop:disable AndOr
   def upload
     @badge = @course.badges.find(params[:badge_id])
 

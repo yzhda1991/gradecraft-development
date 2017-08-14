@@ -139,9 +139,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def badges_show
-    badges_index
-    breadcrumb(objects[:badge].name)
-  end
+  badges_index
+  breadcrumb(objects[:badge].name, badge_path(objects[:badge]))
+end
 
   def badges_new
     badges_index
@@ -149,16 +149,15 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def badges_importers_index
-    badges_index
-    breadcrumb(objects[:badge].name, badge_path(objects[:badge]))
-    breadcrumb('Badge Import', badge_badges_importers_path(objects[:badge]))
-  end
+  badges_show
+  breadcrumb('Badge Import', badge_badges_importers_path(objects[:badge]))
+end
 
   def badges_importers_csv
     badges_importers_index
     breadcrumb('CSV')
   end
-  
+
   def badges_importers_import_results
     badges_importers_index
     breadcrumb('Import Results')
