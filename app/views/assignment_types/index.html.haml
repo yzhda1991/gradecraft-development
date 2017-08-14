@@ -6,43 +6,45 @@
   %h2.subtitle= "#{term_for :student} Scores"
 
   .scroll-table
-    %table.dynatable.no-table-header.no-button-bar
-      %thead
-        %tr
-          %th First Name
-          %th Last Name
-          - @assignment_types.each do |at|
-            %th= "#{at.name} Points"
-            - if at.student_weightable?
-              %th= "#{at.name} Weighted Points"
-      %tbody
-        - @students.each do |student|
+    .table-wrapper
+      %table.dynatable.no-table-header.no-button-bar
+        %thead
           %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
+            %th First Name
+            %th Last Name
             - @assignment_types.each do |at|
-              %td= points at.visible_score_for_student(student)
+              %th= "#{at.name} Points"
               - if at.student_weightable?
-                %td= points at.raw_points_for_student(student)
-                %span.sr-only= at.name
+                %th= "#{at.name} Weighted Points"
+        %tbody
+          - @students.each do |student|
+            %tr
+              %td= link_to student.first_name, student_path(student)
+              %td= link_to student.last_name, student_path(student)
+              - @assignment_types.each do |at|
+                %td= points at.visible_score_for_student(student)
+                - if at.student_weightable?
+                  %td= points at.raw_points_for_student(student)
+                  %span.sr-only= at.name
 
   %h2.subtitle= "#{term_for :student} Grade Counts"
 
   .scroll-table
-    %table.dynatable.no-table-header.no-button-bar
-      %thead
-        %tr
-          %th First Name
-          %th Last Name
-          - @assignment_types.each do |at|
-            %th= "#{at.name} Grade Count"
-            %th= "#{at.name} Grades > 0 Count"
-
-      %tbody
-        - @students.each do |student|
+    .table-wrapper
+      %table.dynatable.no-table-header.no-button-bar
+        %thead
           %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
+            %th First Name
+            %th Last Name
             - @assignment_types.each do |at|
-              %td= points at.grades.where(student_id: student.id).student_visible.count
-              %td= points "#{at.grades.where(student_id: student.id).student_visible.positive.count }"
+              %th= "#{at.name} Grade Count"
+              %th= "#{at.name} Grades > 0 Count"
+
+        %tbody
+          - @students.each do |student|
+            %tr
+              %td= link_to student.first_name, student_path(student)
+              %td= link_to student.last_name, student_path(student)
+              - @assignment_types.each do |at|
+                %td= points at.grades.where(student_id: student.id).student_visible.count
+                %td= points "#{at.grades.where(student_id: student.id).student_visible.positive.count }"
