@@ -1,11 +1,11 @@
-feature "logging in", focus: true do
+feature "logging in" do
   let(:password) { "p@ssword" }
 
   context "as a student" do
     let!(:course_membership) { create :course_membership, :student, user: user }
     let(:user) { create :user, password: password }
 
-    before { visit index_path }
+    before { visit root_path }
 
     scenario "with a password successfully" do
       LoginPage.new(user).submit({ password: password })
