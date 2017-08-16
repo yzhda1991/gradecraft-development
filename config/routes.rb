@@ -522,5 +522,5 @@ Rails.application.routes.draw do
   resource :errors, only: :show
 
   # root, bro
-  root to: "pages#home"
+  root to: "pages#index"
 end
