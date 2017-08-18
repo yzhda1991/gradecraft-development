@@ -26,7 +26,9 @@ class API::AssignmentsController < ApplicationController
   end
 
   def create
-    @assignment = current_course.assignments.new(assignment_params)
+    @assignment = current_course.assignments.new(assignment_params.except(:learning_objective_link_attributes))
+    create_or_update_learning_objective_link
+
     if @assignment.save
       @assignment.find_or_create_rubric if params[:use_rubric]
       render "api/assignments/show", success: true, status: 201
@@ -42,7 +44,9 @@ class API::AssignmentsController < ApplicationController
   # POST api/assignments/:id
   def update
     @assignment = Assignment.find(params[:id])
-    if @assignment.update_attributes assignment_params
+    create_or_update_learning_objective_link
+
+    if @assignment.update_attributes assignment_params.except(:learning_objective_link_attributes)
       updated_grades
       render "api/assignments/show", success: true, status: 200
     else
@@ -85,6 +89,12 @@ class API::AssignmentsController < ApplicationController
     end
   end
 
+  # Manually create the polymorphic association
+  def create_or_update_learning_objective_link
+    @assignment.build_learning_objective_link \
+      assignment_params.delete(:learning_objective_link_attributes)
+  end
+
   def assignment_params
     params.require(:assignment).permit(
       :accepts_attachments,
@@ -98,7 +108,6 @@ class API::AssignmentsController < ApplicationController
       :full_points,
       :grade_scope,
       :hide_analytics,
-      :learning_objective_id,
       :media,
       :min_group_size,
       :max_group_size,
@@ -121,7 +130,8 @@ class API::AssignmentsController < ApplicationController
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric
-      assignment_score_levels_attributes: [:id, :name, :points, :_destroy]
+      assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
+      learning_objective_link_attributes: [:objective_id]
     )
   end
 end
