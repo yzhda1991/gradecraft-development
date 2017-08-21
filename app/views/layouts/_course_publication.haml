@@ -3,3 +3,7 @@
   .unpublished-course-notification
     This Course is Currently Unpublished
     %span.publish-button= link_to glyph(:rocket) + "Publish", publish_course_path(current_course), method: :put
+- else
+  .unpublished-course-notification
+    This Course is Currently Published
+    %span.unpublish-button= link_to glyph(:rocket) + "Unpublish", unpublish_course_path(current_course), method: :put
