@@ -523,6 +523,12 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Editing ' + objects[:user].name)
   end
 
+  def passwords_edit
+  end
+
+  def pages_index
+  end
+
   def pages_auth_failure
     dashboard
   end
