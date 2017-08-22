@@ -8,7 +8,8 @@ json.attributes do
   json.accepts_text                 assignment.accepts_text
   json.assignment_type_id           assignment.assignment_type_id
   json.description                  assignment.description
-  json.due_at                       assignment.due_at.in_time_zone(current_user.time_zone)
+  json.due_at                       assignment.due_at
+  #.in_time_zone(current_user.time_zone)
   json.full_points                  assignment.full_points
   json.grade_scope                  assignment.grade_scope
   json.id                           assignment.id
@@ -16,7 +17,8 @@ json.attributes do
   json.min_group_size               assignment.min_group_size
   json.max_group_size               assignment.max_group_size
   json.name                         assignment.name
-  json.open_at                      assignment.open_at.in_time_zone(current_user.time_zone)
+  json.open_at                      assignment.open_at
+  #.in_time_zone(current_user.time_zone)
   json.pass_fail                    assignment.pass_fail
   json.position                     assignment.position
   json.purpose                      assignment.purpose

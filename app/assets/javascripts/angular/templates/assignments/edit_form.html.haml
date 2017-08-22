@@ -17,7 +17,7 @@
   #tab3(ng-show="isFocusTab('unlocks')")
     %assignment-edit-unlocks(assignment="assignment")
 
-  %button.button.right(ng-click="submitAssignment()") Submit {{ termFor('assignment')}}
+  %button.button.right(ng-click="submitAssignment()") Update {{ termFor('assignment')}}
 
 .last-updated(ng-if='assignment.updated_at')
   Last Updated:
