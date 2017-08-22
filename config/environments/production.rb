@@ -6,7 +6,14 @@ Rails.application.configure do
   config.asset_host = "https://www.gradecraft.com"
   config.action_mailer.default_url_options = { :host => "umich.gradecraft.com" }
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.delivery_method = :sparkpost
+  config.action_mailer.smtp_settings = {
+    :authentication => :plain,
+    :address => "smtp.mandrillapp.com",
+    :port => 587,
+    :domain => "umich.gradecraft.com",
+    :user_name => ENV["MANDRILL_USERNAME"],
+    :password => ENV["MANDRILL_PASSWORD"]
+  }
   config.action_mailer.perform_caching = false
   config.action_mailer.raise_delivery_errors = false
   config.action_cable.mount_path = nil
