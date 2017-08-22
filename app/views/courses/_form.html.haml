@@ -36,3 +36,5 @@
       %ul
         %li= f.button :submit, "#{@course.persisted? ? 'Save Settings' : 'Create Course'}", class: "button"
         %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"
+        - if @course.published == true
+          %li= link_to glyph(:rocket) + "Unpublish", unpublish_course_path(@course), method: :put, class: "button"
