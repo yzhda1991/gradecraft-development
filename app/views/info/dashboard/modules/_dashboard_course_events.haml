@@ -7,7 +7,7 @@
       .event-slide
         .slide-header
           %h2.event-name= link_to event.name, event
-        %p.event-date= glyph(:calendar) + presenter.dates_for(event)
+        %p.event-date= glyph(:calendar) + presenter.dates_for(event, current_user)
         .slide-body
           .event-information
             - if event.media.present?
