@@ -56,12 +56,12 @@
               %li= link_to decorative_glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
               = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student)
-              - if student.course_membership.active?
+              - if !student.activation_state=="pending" && student.course_membership.active?
                 = active_course_link_to decorative_glyph("user-times") + "Deactivate", deactivate_course_membership_path(student.course_membership), data: { confirm: "This will deactivate #{student.name} from your course - are you sure?" }, :method => :put
               - if !student.course_membership.active?
                 = active_course_link_to decorative_glyph(:trash) + "Reactivate", reactivate_course_membership_path(student.course_membership), :method => :put
               - if current_user_is_admin?
                 = active_course_link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
-              - if !student.activated?
+              - if student.activation_state == "pending" || student.activation_state == nil
                 = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(student.id), :method => :put
                 = active_course_link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(student.id)
