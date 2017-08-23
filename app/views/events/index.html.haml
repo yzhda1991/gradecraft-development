@@ -28,4 +28,4 @@
                 %ul.options-menu.dropdown-content
                   %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(event), method: :post
                   = active_course_link_to decorative_glyph(:edit) + "Edit", edit_event_path(event)
-                  = active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }
+                  = active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure you want to delete #{event.name}?" }
