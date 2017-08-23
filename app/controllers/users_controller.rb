@@ -27,16 +27,20 @@ class UsersController < ApplicationController
   end
 
   def new
-    @selected_role = 'observer'
-    referer_path = URI(request.referer).path
-    case referer_path
-    when students_path
-      @selected_role = 'student'
-    when staff_index_path
-       @selected_role = 'gsi'
-    end
     @user = User.new
     @course_membership = @user.course_memberships.new
+    if request.referer.nil?
+      @selected_role = 'observer'
+    else
+      case URI(request.referer).path
+      when students_path
+        @selected_role = 'student'
+      when staff_index_path
+        @selected_role = 'gsi'
+      else
+        @selected_role = 'observer'
+      end
+    end
   end
 
   # set up the form for users to create their own accounts without being logged
