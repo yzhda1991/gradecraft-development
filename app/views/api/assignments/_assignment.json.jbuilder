@@ -13,6 +13,8 @@ json.attributes do
   json.grade_scope                  assignment.grade_scope
   json.id                           assignment.id
   json.media                        assignment.media.url
+  json.min_group_size               assignment.min_group_size
+  json.max_group_size               assignment.max_group_size
   json.name                         assignment.name
   json.open_at                      assignment.open_at
   json.pass_fail                    assignment.pass_fail
