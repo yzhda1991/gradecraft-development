@@ -1,6 +1,7 @@
 require_relative "../importers/user_importers/csv_student_importer"
 require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_or_updates_user"
+require 'uri'
 
 class UsersController < ApplicationController
   include UsersHelper
@@ -26,6 +27,14 @@ class UsersController < ApplicationController
   end
 
   def new
+    @selected_role = 'observer'
+    referer_path = URI(request.referer).path
+    case referer_path
+    when students_path
+      @selected_role = 'student'
+    when staff_index_path
+       @selected_role = 'gsi'
+    end
     @user = User.new
     @course_membership = @user.course_memberships.new
   end
