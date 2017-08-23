@@ -98,6 +98,8 @@ class API::AssignmentsController < ApplicationController
       :grade_scope,
       :hide_analytics,
       :media,
+      :min_group_size,
+      :max_group_sie,
       :name,
       :open_at,
       :pass_fail,
