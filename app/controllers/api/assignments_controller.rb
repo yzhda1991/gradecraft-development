@@ -26,7 +26,7 @@ class API::AssignmentsController < ApplicationController
   end
 
   def create
-    @assignment = current_course.assignments.new assignment_params.except(:learning_objective_links_attributes)
+    @assignment = current_course.assignments.new assignment_params
 
     if @assignment.save
       @assignment.find_or_create_rubric if params[:use_rubric]
