@@ -1,118 +1,28 @@
-%main.homepage{role: "main"}
+- content_for :public_class, 'public-with-background'
+.login
   .alert-bkg= render "layouts/alerts"
-  %section.hero-section
-    .hide-for-medium.hide-for-large.center= image_tag "gradecraft_logo.png", :width => "180"
-    %h1.center A learning management system that supports gameful courses
-    %p.center.hero-tagline
-      %span.sr-only Subtitle:
-      Encourage students to focus on the craft of learning
-
-  %section.feature-section.white.gameful
-    %h2.center What is Gameful?
-    .section-container
-      .flex-container
-        .flex-row
-          .quarter.flex-item
-            = image_tag "rocket.png", :width => "125", alt: "Rocket"
-            %h3 Earn Up
-            %p Flip the frame so that everyone starts at zero and earns their way up to success as they complete course milestones.
-          .quarter.flex-item
-            = image_tag "pointer.png", :width => "125", alt: "Multi-directional sign"
-            %h3 Increased Autonomy
-            %p Students make choices about when and what type of work they want to do to demonstrate their learning.
-        .flex-row
-          .quarter.flex-item
-            = image_tag "help.png", :width => "125", alt: "Life preserver"
-            %h3 Freedom to Fail
-            %p Design learning opportunities for students to take risks and explore without the fear that their grade will suffer.
-          .quarter.flex-item
-            = image_tag "graph.png", :width => "125", alt: "Upward trending graph"
-            %h3 Tangible Progress
-            %p Students can see their progress at any time. Levels, unlocks, and badges provide feedback and support motivation to keep working.
+  .login-form-container
+    .login-form
+      - if Rails.env.production?
+        .login-block
+          %img{src: "/images/University_of_Michigan_seal.svg.png", width: "200px"}
+          %a.um-login.button{"aria-label": "University of Michigan Login", href: saml_init_path }
+            = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
+            Log in with U-M
+      - if Rails.env.beta? || Rails.env.development?
+        .login-block
+          = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
+          %h1 Log in
+          = render partial: "user_sessions/form"
+          %button.button-link.small#forgot-password Forgot your password?
+          .clear
+          %a.small.left.uppercase{"aria-label": "University of Michigan Login", href: saml_init_path } Admin
 
 
-  %section.feature-section.alternate-white.feature-overview
-    %h2.center Features to Support Gameful Design
-    .section-container
-      .flex-container
-        .half.flex-item
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-star{'aria-hidden': "true"}
-            .feature-information
-              %h3 Grade Predictor
-              %p The Grade Predictor enables students to set clear goals for their work. They decide which assignments they want to work on, set a goal for how they expect to do, and ensure that they are building towards success in the course as a whole.
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-lock{'aria-hidden': "true"}
-            .feature-information
-              %h3 Unlocks
-              %p Instructors can declare that assignments and badges must be earned in combination, at specific achievement levels, or by specific dates in order for students to unlock additional opportunities.
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-level-up{'aria-hidden': "true"}
-            .feature-information
-              %h3 Leveling System
-              %p Customize the leveling scheme to match your course design - declare what point thresholds equate to earning grade levels, and match the level names to a hierarchy relevant to the coursework itself.
-        .half.flex-item
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-area-chart{'aria-hidden': "true"}
-            .feature-information
-              %h3 Learning Analytics
-              %p Our learning analytics displays help students stay informed about their own work, and help instructors keep track of who is making progress and who may be in need of more support.
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-certificate{'aria-hidden': "true"}
-            .feature-information
-              %h3 Badges
-              %p Badges can be used to recognize achievement on a specific assignment, or excellence more broadly throughout the course. Badges can be awarded automatically through rubrics, and used as unlocks required to progress through pathways in the course.
-          .feature
-            .feature-icon
-              %i.fa.fa-fw.fa-trophy{'aria-hidden': "true"}
-            .feature-information
-              %h3 Leaderboards
-              %p Students can choose to participate in anonymous, team-based leaderboards if they enjoy competition, and opt-out if they don't. Instructors control if leaderboards appear at all.
-      .center.button-container
-        = link_to "See More Features", features_path, class: "outline-button"
+    .password-forgot-form{"aria-hidden": "true"}
+      %h1 Forgot Your Password?
+      %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
+      = render partial: "passwords/reset_form"
 
-  %section.feature-section.white.gameful.pedagogy
-    %h2.center Learn More About Gameful Pedagogy
-    .section-container
-      .flex-container
-        .flex-row
-          .quarter.flex-item
-            .homepage-circle.what-is-gameful
-              = image_tag "book.png", width: "75", alt: "Guide to Gameful book"
-            %h3 What is Gameful?
-            %p Learn more about the core elements of gameful learning
-            = link_to "http://gamefulpedagogy.com/what-is-gameful", target: "_blank" do
-              Read more
-              = glyph("long-arrow-right")
-          .quarter.flex-item
-            .homepage-circle.getting-started
-              = image_tag "getting-started.png", width: "100", alt: "Cogs"
-            %h3 Getting Started
-            %p Learn how to implement gameful design in your course
-            = link_to "http://gamefulpedagogy.com/getting-started", target: "_blank" do
-              Get Started
-              = glyph("long-arrow-right")
-        .flex-row
-          .quarter.flex-item
-            .homepage-circle.faq
-              = image_tag "faq.png", width: "100", alt: "Question bubble"
-            %h3 FAQs
-            %p Frequently asked questions about gameful pedagogy
-            = link_to "http://gamefulpedagogy.com/faqs", target: "_blank" do
-              Find your question
-              = glyph("long-arrow-right")
-          .quarter.flex-item
-            .homepage-circle.example-syllabi
-              = image_tag "example-syllabi.png", width: "100", alt: "Documents"
-            %h3 Example Syllabi
-            %p Example syllabi from courses using gameful pedagogy
-            = link_to "http://gamefulpedagogy.com/example-syllabi", target: "_blank" do
-              View examples
-              = glyph("long-arrow-right")
-
-= render partial: "pages/newsletter_signup"
+      %p.small * This will not work if you use a @umich email address to log in. You must reset your password through the UM system.
+      %button.button-link.small#show-login-form Back to log in
