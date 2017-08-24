@@ -1,7 +1,5 @@
 # Points, Scores, Values
 
-*note many of these changes are in progress, I will update this file once they have been merged into Production -jg*
-
 Points, Score, and Value nomenclature in Gradecraft has been standardized around the following rules:
 
 ## Points

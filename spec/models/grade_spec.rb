@@ -121,6 +121,26 @@ describe Grade do
       expect(subject.score).to eq(1000)
     end
 
+    context "for negative points" do
+      it "will calculate a negative score for the grade" do
+        subject.update(raw_points: "-766", adjustment_points: -234)
+        expect(subject.score).to eq(-1000)
+      end
+
+      it "will remain below zero with a threshold" do
+        subject.assignment.update(threshold_points: 2000)
+        subject.update(raw_points: "-766", adjustment_points: -234)
+        expect(subject.score).to eq(-1000)
+      end
+
+      it "will treat weights as a multiplication of negative points" do
+        subject.assignment.assignment_type.update(student_weightable: true)
+        create(:assignment_type_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )
+        subject.update(raw_points: "-766", adjustment_points: -234)
+        expect(subject.score).to eq(-3000)
+      end
+    end
+
     it "is the final score weighted by the students weight for the assignment" do
       subject.assignment.assignment_type.update(student_weightable: true)
       create(:assignment_type_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )

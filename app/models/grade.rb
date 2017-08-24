@@ -146,7 +146,7 @@ class Grade < ActiveRecord::Base
 
   private
 
-  # full points (with student's weighting)
+  # full points for assignment, including student's weighting
   def calculate_full_points
     assignment.full_points_for_student(student)
   end
@@ -155,6 +155,7 @@ class Grade < ActiveRecord::Base
   def calculate_final_points
     return nil unless raw_points.present?
     final_points = raw_points + adjustment_points
+    return final_points if final_points < 0
     final_points >= assignment.threshold_points ? final_points : 0
   end
 

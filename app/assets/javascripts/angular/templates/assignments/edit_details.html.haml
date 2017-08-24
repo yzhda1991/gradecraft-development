@@ -13,7 +13,7 @@
       .form-item
         %label
           Total Points Possible
-          %input(ng-model="assignment.full_points" gc-number-input ng-change="updateAssignment()")
+          %input(ng-model="assignment.full_points" gc-number-input allow-negatives="true" ng-change="updateAssignment()")
       .form-item
         %label
           Points Threshold
