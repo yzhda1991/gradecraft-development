@@ -102,7 +102,7 @@ class Course < ActiveRecord::Base
     else
       begin
         Course.skip_callback(:create, :after, :create_admin_memberships)
-        copy_with_associations(attributes.merge(lti_uid: nil), [:course_memberships, :teams])
+        copy_with_associations(attributes.merge(lti_uid: nil, status: true), [:course_memberships, :teams])
       ensure
         Course.set_callback(:create, :after, :create_admin_memberships)
       end
