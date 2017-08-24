@@ -98,7 +98,7 @@ class Course < ActiveRecord::Base
 
   def copy(copy_type, attributes={})
     if copy_type != "with_students"
-      copy_with_associations(attributes.merge(lti_uid: nil), [])
+      copy_with_associations(attributes.merge(lti_uid: nil, status: true), [])
     else
       begin
         Course.skip_callback(:create, :after, :create_admin_memberships)
