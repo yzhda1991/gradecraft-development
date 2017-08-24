@@ -13,10 +13,6 @@ class UserSessionsController < ApplicationController
     @user = User.new
   end
 
-  def students
-    @user = User.new
-  end
-
   # sorcery login - users have passwords stored in our db
   def create
     respond_to do |format|

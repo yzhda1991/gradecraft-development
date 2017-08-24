@@ -317,7 +317,6 @@ Rails.application.routes.draw do
   resources :user_sessions, only: [:new, :create, :destroy] do
     collection do
       get :instructors
-      get :students
     end
   end
   resources :passwords, except: [:new, :destroy, :index, :show]
