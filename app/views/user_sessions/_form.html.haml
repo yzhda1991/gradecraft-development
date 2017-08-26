@@ -1,7 +1,9 @@
-#gradecraft-auth
-  = form_for User.new, :url => user_sessions_path do |f|
-    = label_tag :user_email, "Email", class:"sr-only"
-    = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
-    = label_tag :user_password, "Password", class:"sr-only"
-    = f.password_field :password, placeholder: "Password"
-    = f.submit "Log in", class: "button login-button", alt: "Log in"
+.login
+  .alert-bkg= render "layouts/alerts"
+  .login-form-container
+    .login-form
+      - if Rails.env.production?
+        = render partial: "user_sessions/umich"
+      - else
+        = render partial: "user_sessions/gradecraft"
+    = render partial: "passwords/reset_form" if !Rails.env.production?
