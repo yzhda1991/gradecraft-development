@@ -1,14 +1,12 @@
-.login-block
-  = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
-  %h1 Log in
+= image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
+%h1 Log in
 
-  #gradecraft-auth
-    = form_for User.new, :url => user_sessions_path do |f|
-      = label_tag :user_email, "Email", class:"sr-only"
-      = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
-      = label_tag :user_password, "Password", class:"sr-only"
-      = f.password_field :password, placeholder: "Password"
-      = f.submit "Log in", class: "button login-button", alt: "Log in"
-  %button.button-link.small#forgot-password Forgot your password?
-  .clear
-  %a.small.left.uppercase{"aria-label": "University of Michigan Login", href: saml_init_path } Admin
+#gradecraft-auth
+  = form_for User.new, :url => user_sessions_path do |f|
+    = label_tag :user_email, "Email", class:"sr-only"
+    = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
+    = label_tag :user_password, "Password", class:"sr-only"
+    = f.password_field :password, placeholder: "Password"
+    = f.submit "Log in", class: "button login-button", alt: "Log in"
+%button.button-link.small#forgot-password Forgot your password?
+.clear
