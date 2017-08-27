@@ -15,7 +15,7 @@ json.attributes do
   json.adjustment_points          grade.adjustment_points
   json.final_points               grade.final_points
   json.adjustment_points_feedback grade.adjustment_points_feedback
-  json.updated_at                 grade.updated_at.in_time_zone(current_user.time_zone)
+  json.updated_at                 grade.updated_at
 end
 
 json.relationships do
