@@ -16,4 +16,4 @@
               = "#{ points challenge.challenge_grade_for_team(@team).try(:final_points) } / #{ points challenge.full_points }"
             - else
               %span.italic= " #{ points challenge.full_points } points possible"
-          %td= challenge.due_at
+          %td= challenge.due_at.in_time_zone(current_user.time_zone)

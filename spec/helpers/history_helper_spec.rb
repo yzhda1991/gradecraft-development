@@ -93,7 +93,7 @@ describe HistoryHelper do
     it "renders the appropriate date for the timeline" do
       history = helper.history_timeline single_changeset
       expect(history).to have_tag("div.timeline-content") do
-        with_tag "span", text: "April 15, 2015 - 1:21am"
+        with_tag "span", text: "Wednesday, April 15, 2015,  1:21AM +00:00"
       end
     end
 

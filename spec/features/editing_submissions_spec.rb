@@ -1,4 +1,4 @@
-feature "editing submissions" do
+feature "editing submissions", focus: true do
   context "as a student" do
     let!(:submission) do
       create :submission, course: membership.course, assignment: assignment, student: student

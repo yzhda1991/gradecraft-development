@@ -1,5 +1,4 @@
 %section.last-updated(ng-if='grade.updated_at')
   .grade-section-label
     Last Updated:
-    %span {{grade.updated_at | date:"MM/dd/yyyy 'at' h:mma"}}
-
+    %span {{grade.updated_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}

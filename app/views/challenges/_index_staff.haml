@@ -16,7 +16,7 @@
         %td= points challenge.full_points
         %td= challenge.due_at
         %td{:style => "display: none"}
-          = challenge.try(:due_at).to_formatted_s(:db) if challenge.due_at.present?
+          = challenge.due_at.in_time_zone(current_user.time_zone) if challenge.due_at.present?
         %td= challenge.visible? ? "Visible" : "Hidden"
         %td= challenge.accepts_submissions? ? "Yes" : "No"
         %td

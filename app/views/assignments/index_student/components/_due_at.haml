@@ -1,2 +1,2 @@
 %span
-  = "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" if assignment.future?
+  = "#{assignment.due_at.in_time_zone(current_user.time_zone)}" if assignment.future?

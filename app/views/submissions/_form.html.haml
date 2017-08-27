@@ -10,7 +10,7 @@
 
   - if presenter.submission.will_be_resubmitted?
     %section.form-section
-      .italic.not_bold= "Graded: #{presenter.submission.graded_at}"
+      .italic.not_bold= "Graded: #{presenter.submission.graded_at.in_time_zone(current_user.time_zone)}"
       %span.label.alert Resubmission!
 
   %section.form-section

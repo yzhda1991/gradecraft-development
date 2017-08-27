@@ -21,7 +21,7 @@
             - presenter.assignments_due_on(event).ordered.each do |assignment|
               - if assignment != event
                 - if ((current_student && assignment.visible_for_student?(current_student)) || current_user_is_staff?)
-                  %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.strftime("%l:%M%p") }
+                  %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.in_time_zone(current_user.time_zone) }
 
   .calendar-access
     = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post

@@ -6,10 +6,11 @@
   - if !@staff_member.activated?
     = link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(@staff_member.id), :method => :put, class: "button"
 
-  %h4 Courses
-  %ul
-    - @staff_member.courses.each do |course|
-      %li= link_to course.name, course
+  - if current_user_is_admin?
+    %h4 Courses
+    %ul
+      - @staff_member.courses.each do |course|
+        %li= link_to course.name, change_course_path(id: course.id)
 
   %h4 Recently Graded
   %table.dynatable
@@ -29,8 +30,8 @@
           %td= link_to grade.student.name, student_path(grade.student)
           %td= points grade.score
           %td= raw grade.feedback
-          %td= grade.created_at
-          %td= grade.graded_at
+          %td= grade.created_at.in_time_zone(current_user.time_zone)
+          %td= grade.graded_at.in_time_zone(current_user.time_zone)
           %td
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
