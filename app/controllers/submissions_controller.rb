@@ -27,7 +27,7 @@ class SubmissionsController < ApplicationController
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
         NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
-        redirect_to = assignment_path(assignment, anchor: "tab3")
+        redirect_to = assignment_path(assignment, anchor: "tabt1")
       end
       # rubocop:disable AndOr
       redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
@@ -55,15 +55,15 @@ class SubmissionsController < ApplicationController
 
     submission_was_draft = submission.unsubmitted?
     respond_to do |format|
-      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) &&
-        Services::DeletesSubmissionDraftContent.for(submission).success?
+      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now))
+        #&& Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status! unless submission.will_be_resubmitted?
         path = assignment.has_groups? ? { group_id: submission.group_id } :
           { student_id: submission.student_id }
         redirect_to = assignment_submission_path(assignment, submission, path)
         if current_user_is_student?
           send_notification(submission.id, submission_was_draft) if assignment.is_individual?
-          redirect_to = assignment_path(assignment, anchor: "tab3")
+          redirect_to = assignment_path(assignment, anchor: "tabt1")
         end
         format.html { redirect_to redirect_to, notice: "Your changes for #{assignment.name} were successfully submitted." }
         format.json { render json: assignment, status: :created, location: assignment }
