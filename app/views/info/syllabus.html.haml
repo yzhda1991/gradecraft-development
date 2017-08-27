@@ -6,6 +6,11 @@
   - if current_course.gameful_philosophy.present?
     %h3.bold Grading Philosophy
     = render partial: "courses/grading_philosophy", locals: {course: current_course}
+    %p
+  - if current_course.syllabus.present?
+    %h3.bold Course Syllabus
+    = external_link_to "Download the Current Syllabus", current_course.syllabus_url
+    %p
 
   - if current_course.grade_scheme_elements.with_lowest_points.present?
     %h3.bold Grading Scheme
