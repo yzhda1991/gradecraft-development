@@ -9,7 +9,7 @@
     %p
   - if current_course.syllabus.present?
     %h3.bold Course Syllabus
-    = link_to "Download the Current Syllabus", current_course.syllabus_url
+    = external_link_to "Download the Current Syllabus", current_course.syllabus_url
     %p
 
   - if current_course.grade_scheme_elements.with_lowest_points.present?
