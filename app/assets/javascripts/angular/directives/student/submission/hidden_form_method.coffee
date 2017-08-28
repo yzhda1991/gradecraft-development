@@ -15,7 +15,6 @@
   ]
 
   {
-    replace: true
     restrict: 'EA'
     bindToController: true
     controller: HiddenFormMethodCtrl
