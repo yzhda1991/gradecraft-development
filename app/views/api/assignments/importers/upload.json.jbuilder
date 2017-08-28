@@ -10,7 +10,7 @@ json.data @assignment_rows do |row|
     json.assignment_type row.assignment_type
     json.point_total row.point_total
     json.description row.description
-    json.due_date row.due_date.in_time_zone(current_user.time_zone)
+    json.due_date row.due_date
 
     json.formatted_due_date date_to_floating_point_seconds(row.due_date)
     json.selected_assignment_type assignment_type_id

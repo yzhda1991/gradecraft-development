@@ -24,7 +24,6 @@ json.meta do
 
   json.total_weights current_course.try(:total_weights)
   json.weights_close_at current_course.try(:weights_close_at)
-  #.in_time_zone(current_user.time_zone)
   json.max_weights_per_assignment_type current_course.max_weights_per_assignment_type
   json.max_assignment_types_weighted current_course.max_assignment_types_weighted
 end
