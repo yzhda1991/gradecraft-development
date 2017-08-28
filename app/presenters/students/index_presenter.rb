@@ -126,8 +126,12 @@ class Students::IndexPresenter < Showtime::Presenter
       course_membership.try(:auditing)
     end
 
-    def activated?
+    def course_activated?
       course_membership.active
+    end
+
+    def deleteable?
+      !grades.where(course_id: course_membership.course_id).present? && !submissions.where(course_id: course_membership.course_id).present?
     end
 
     def course_membership
