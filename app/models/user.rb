@@ -36,6 +36,10 @@ class User < ActiveRecord::Base
     def internal_email_regex
       /(\.|@)umich\.edu$/
     end
+
+    def participants(course)
+
+    end
   end
 
   attr_accessor :password, :password_confirmation, :score, :team
