@@ -1,9 +1,9 @@
 - i = 1
-- @group.proposals.order_by_creation_date.each do |proposal| 
+- @group.proposals.order_by_creation_date.each do |proposal|
   %fieldset.proposal.panel
     %span.columns
       %h4.bold= "Proposal ##{i}: #{proposal.title}"
-      %h6= "Created: #{proposal.created_at}"
+      %h6= "Created: #{proposal.created_at.in_time_zone(current_user.time_zone)}"
       %p= raw proposal.proposal
       - i += 1
   %hr.dotted

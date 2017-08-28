@@ -48,7 +48,7 @@
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}
                     - if assignment.due_at.present?
-                      = assignment.try(:due_at).to_formatted_s(:db)
+                      = assignment.try(:due_at).in_time_zone(current_user.time_zone)
                   - if assignment.pass_fail?
                     %td.foobers= "#{term_for :pass}/#{term_for :fail}"
                   - else

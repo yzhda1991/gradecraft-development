@@ -18,7 +18,10 @@
           #{current_student.team_for_course(current_course).name}
       .small
         %b Last activity:
-        #{ current_student.try(:last_activity_at) || '(never)' }
+        -  if current_student.last_activity_at.present?
+          = current_student.try(:last_activity_at).in_time_zone(current_user.time_zone)
+        - else
+          (no activity yet)
 
     .module-section
       %ul.button-bar

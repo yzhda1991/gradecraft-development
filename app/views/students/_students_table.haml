@@ -47,7 +47,11 @@
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
           %td{ style: "display: none" }= student.earned_badges.count
-        %td= student.last_activity_at || '(never)'
+        %td
+          - if student.last_activity_at.present?
+            = student.last_activity_at.in_time_zone(current_user.time_zone)
+          - else
+            (never)
         %td= student.activated?
         %td
           .button-container.dropdown

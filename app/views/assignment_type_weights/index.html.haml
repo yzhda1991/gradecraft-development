@@ -7,7 +7,7 @@
         - if current_course.total_weights?
           %li You have a total of #{current_course.total_weights} #{(term_for :weights).titleize} to spend
         - if current_course.weights_close_at?
-          %li You have until #{current_course.weights_close_at.strftime("%A, %B %d, %Y, at %H:%M%p")} to make your #{(term_for :weight).titleize} decision
+          %li You have until #{current_course.weights_close_at.in_time_zone(current_user.time_zone)} to make your #{(term_for :weight).titleize} decision
         - if current_course.max_weights_per_assignment_type?
           %li You may place up to #{current_course.max_weights_per_assignment_type} #{ ( term_for :weights).titleize } on a single #{ (term_for :assignment_type).downcase}
         - if current_course.max_assignment_types_weighted?

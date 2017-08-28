@@ -1,5 +1,5 @@
 .alert-box.error.bold
   This grade was excluded from your total score on
-  = "#{ grade.excluded_at } by #{ grade.excluded_by.name }."
+  = "#{ grade.excluded_at.in_time_zone(current_user.time_zone) } by #{ grade.excluded_by.name }."
   If you have any questions, please
   = mail_to grade.excluded_by.email, "email them."
