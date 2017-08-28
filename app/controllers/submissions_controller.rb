@@ -97,7 +97,7 @@ class SubmissionsController < ApplicationController
   end
 
   def ensure_editable(submission, assignment)
-    redirect_to assignment_path(assignment, anchor: "tab3"),
+    redirect_to assignment_path(assignment, anchor: "tabt1"),
       notice: "We're sorry, this assignment is currently being graded. You cannot change your submission again until your grade has been released." \
       and return if !SubmissionProctor.new(submission).open_for_editing? assignment, current_user
     return true

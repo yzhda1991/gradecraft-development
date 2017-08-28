@@ -64,7 +64,7 @@ describe SubmissionsController do
       it "redirects to the assignment path if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
-        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tabt1"))
       end
     end
 
@@ -117,7 +117,7 @@ describe SubmissionsController do
       it "redirects to the assignments page if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
-        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tabt1"))
       end
 
       it "checks if the submission is late if the submission is not a resubmission" do
@@ -157,7 +157,7 @@ describe SubmissionsController do
       it "redirects to the assignment path if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
-        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tabt1"))
       end
     end
 
@@ -201,7 +201,7 @@ describe SubmissionsController do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
         params[:text_comment] = "Ausgezeichnet"
         put :update, params: { assignment_id: assignment.id, id: submission, submission: params }
-        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tabt1"))
         expect(submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
@@ -216,7 +216,7 @@ describe SubmissionsController do
       it "redirects to the assignments page if the submission is not open for editing" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return false
         post :update, params: { assignment_id: assignment.id, id: submission, submission: attributes_for(:submission) }
-        expect(response).to redirect_to(assignment_path(assignment, anchor: "tab3"))
+        expect(response).to redirect_to(assignment_path(assignment, anchor: "tabt1"))
       end
 
       it "checks if the submission is late if the submission is not a resubmission" do
