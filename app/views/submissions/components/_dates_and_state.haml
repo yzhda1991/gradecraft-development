@@ -1,6 +1,7 @@
 %p
-  %span.smallcaps Submitted:
-  %span.submission-date= presenter.submission.submitted_at.in_time_zone(current_user.time_zone)
+  - if presenter.submission.present? && presenter.submission.submitted_at?
+    %span.smallcaps Submitted:
+    %span.submission-date= presenter.submission.submitted_at.in_time_zone(current_user.time_zone) 
 
   // Late alert if submitted after due date
   - if presenter.submission.late?
