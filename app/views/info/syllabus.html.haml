@@ -18,6 +18,8 @@
       = render partial: "grade_scheme_elements/index_student", locals: { "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }
     - elsif current_user_is_observer?
       = render partial: "grade_scheme_elements/index_observer", locals: { "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }
+    - elsif current_user_is_staff?
+      = render partial: "grade_scheme_elements/index_staff", locals: {  "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }
 
   - if current_course.course_rules.present?
     %h3.bold Course Rules

@@ -257,6 +257,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def info_dashboard
   end
 
+  def info_syllabus
+  end
+
   def info_gradebook
     dashboard
     breadcrumb('Gradebook')
