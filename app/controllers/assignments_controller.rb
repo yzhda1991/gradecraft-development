@@ -86,8 +86,6 @@ class AssignmentsController < ApplicationController
       view_context: view_context
       })
   end
-<<<<<<< HEAD
-=======
 
   private
 
@@ -120,5 +118,4 @@ class AssignmentsController < ApplicationController
   def flash_interpolation_options
     { resource_name: @assignment.name }
   end
->>>>>>> Refactored assignments alerts
 end
