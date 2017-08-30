@@ -8,6 +8,9 @@
     vmUnlocks.addCondition = ()->
       UnlockConditionService.addCondition()
 
+    vmUnlocks.canAddNewCondition = ()->
+      _.filter(UnlockConditionService.unlockConditions, {id: null}).length == 0
+
     UnlockConditionService.getUnlockConditions(@conditionId, @conditionType).then(()->
       vmUnlocks.loading = false
     )

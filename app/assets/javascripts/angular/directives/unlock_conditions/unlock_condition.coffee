@@ -3,6 +3,7 @@
   return {
     scope: {
       condition: "=",
+      uuid: "@"
     },
     templateUrl: 'unlock_conditions/unlock_condition.html',
 
@@ -31,9 +32,11 @@
           when "Assignment Type" then "AssignmentType"
           else type
 
+      # a datepickerId is assigned to each criterion on load, or create
+      # and does not change unless Angular is reloaded. This assured that
+      # jQuery will not loose the unique id assigned to the datepicker field
       scope.datePickerId = (condition)->
-        index = _.findIndex(UnlockConditionService.unlockConditions, condition)
-        "condition-#{index}-date-picker"
+        "condition-#{condition.datepickerId}-date-picker"
 
       scope.assignments = UnlockConditionService.assignments
 
