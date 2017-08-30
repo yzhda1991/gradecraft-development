@@ -97,6 +97,7 @@ class EarnedBadgesController < ApplicationController
     @name = "#{@badge.name}"
     @student_name = "#{@earned_badge.student.name}"
     @earned_badge.destroy
+    ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: @earned_badge.course_id).enqueue
     expire_fragment "earned_badges"
     redirect_to @badge,
       notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
