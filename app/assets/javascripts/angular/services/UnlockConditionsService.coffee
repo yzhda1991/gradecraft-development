@@ -114,8 +114,10 @@
 
 
   conditionIsValid = (condition)->
-    return true if condition.condition_id && condition.condition_type && condition.condition_state
-    return false
+    return false if !(condition.condition_id && condition.condition_type && condition.condition_state)
+    if condition.condition_type == "Badge" || condition.condition_type == "Course" || condition.condition_type == "AssignmentType"
+      return false if !condition.condition_value
+    return true
 
   {
     termFor: termFor
