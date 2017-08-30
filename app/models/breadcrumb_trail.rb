@@ -488,7 +488,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def users_import
     users_importers_index
-    breadcrumb('Import users')
+    breadcrumb('Import Users')
   end
 
   def users_import_results
@@ -522,7 +522,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def users_edit
-    users_index
+    dashboard
     breadcrumb('Editing ' + objects[:user].name)
   end
 
