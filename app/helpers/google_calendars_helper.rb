@@ -102,9 +102,9 @@ module GoogleCalendarsHelper
   def add_batch_items(current_user, item_list, item_list_filtered)
     calendar = refresh_google_calendar_authorization(current_user)
     begin
-      calendar.batch do |calendar|
+      calendar.batch do |batch|
         item_list_filtered.each do |item|
-          calendar.insert_event('primary', create_google_event(item))
+          batch.insert_event('primary', create_google_event(item))
         end
       end
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"} unless item_list.count != item_list_filtered.count
