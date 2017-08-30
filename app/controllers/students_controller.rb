@@ -13,6 +13,8 @@ class StudentsController < ApplicationController
 
   # Displaying student profile to instructors
   def show
+    redirect_to students_path,
+      alert: "That #{(term_for :student).downcase } doesn't seem to be registered for this course" and return unless current_student.present?
     @events = Timeline.new(@course).events_by_due_date
     self.current_student = @course.students.where(id: params[:id]).first
     render "show", Info::DashboardCoursePlannerPresenter.build({
