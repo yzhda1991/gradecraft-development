@@ -47,8 +47,12 @@
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
           %td{ style: "display: none" }= student.earned_badges.count
-        %td= student.last_activity_at || '(never)'
-        %td= student.activated?
+        %td
+          - if student.last_activity_at.present?
+            = student.last_activity_at.in_time_zone(current_user.time_zone)
+          - else
+            (never)
+        %td= student.course_activated?
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
@@ -56,12 +60,12 @@
               %li= link_to decorative_glyph(:eye) + "Preview as this student", student_preview_path(student)
               %li= mail_to student.email, glyph(:envelope) + "Email"
               = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student)
-              - if student.course_membership.active?
+              - if student.course_activated?
                 = active_course_link_to decorative_glyph("user-times") + "Deactivate", deactivate_course_membership_path(student.course_membership), data: { confirm: "This will deactivate #{student.name} from your course - are you sure?" }, :method => :put
-              - if !student.course_membership.active?
-                = active_course_link_to decorative_glyph(:trash) + "Reactivate", reactivate_course_membership_path(student.course_membership), :method => :put
-              - if current_user_is_admin?
+              - else
+                = active_course_link_to decorative_glyph(:flash) + "Reactivate", reactivate_course_membership_path(student.course_membership), :method => :put
+              - if student.deleteable?
                 = active_course_link_to decorative_glyph(:trash) + "Delete", student.course_membership, data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
-              - if !student.activated?
-                = active_course_link_to decorative_glyph(:check) + "Activate", manually_activate_user_path(student.id), :method => :put
+              - if current_user_is_admin? && !student.activated?
+                = active_course_link_to decorative_glyph(:check) + "Activate Account", manually_activate_user_path(student.id), :method => :put
                 = active_course_link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(student.id)

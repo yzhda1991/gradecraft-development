@@ -32,13 +32,13 @@
       = f.label :top_grades_counted, :label => "Count Highest Grades"
       -# .form-hint{id: "assignment_type_top_grades_counted"}
       = tooltip("count-highest-hint", "info-circle", placement: "right") do
-        Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here (Set to 0 if not).
-      = f.text_field :top_grades_counted, data: { autonumeric: true, "m-dec" => "0" }
+        Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here.
+      = f.input :top_grades_counted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: false
 
     - if current_course.has_multipliers?
       .form-item
         = f.check_box :student_weightable
-        = f.label :student_weightable, "Student Weighted"
+        = f.label :student_weightable, "#{term_for :weight} Weighted"
         = tooltip("student-weighted-hint", "info-circle", placement: "right") do
           Do students decide how much this #{term_for :assignment} type will count towards their grade?
 

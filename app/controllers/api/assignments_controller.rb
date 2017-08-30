@@ -98,6 +98,8 @@ class API::AssignmentsController < ApplicationController
       :grade_scope,
       :hide_analytics,
       :media,
+      :min_group_size,
+      :max_group_sie,
       :name,
       :open_at,
       :pass_fail,
@@ -113,6 +115,7 @@ class API::AssignmentsController < ApplicationController
       :student_logged,
       :threshold_points,
       :visible,
+      :visible_when_locked,
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric

@@ -20,3 +20,13 @@ $('#show-login-form').click(function() {
   $('.login-form').show().attr('aria-hidden', 'false');
   $('.password-forgot-form').hide().attr('aria-hidden', 'true');
 });
+
+$('#show-gradecraft-login').click(function() {
+  $('.gradecraft-login').show().attr('aria-hidden', 'false');
+  $('.login-form').hide().attr('aria-hidden', 'true');
+});
+
+$('#show-umich-login').click(function() {
+  $('.login-form').show().attr('aria-hidden', 'false');
+  $('.gradecraft-login').hide().attr('aria-hidden', 'true');
+});

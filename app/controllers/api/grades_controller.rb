@@ -22,7 +22,7 @@ class API::GradesController < ApplicationController
     result = Services::UpdatesGrade.update grade, grade_params, current_user.id
     if result
       # Only send notifications etc. when handling the form submission
-      if params[:submit] && grade.student_visible?
+      if params[:submit] && grade.reload.student_visible?
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
       @grade = result.grade

@@ -65,11 +65,6 @@ describe LinkHelper do
       expect(helper.external_link?(link)).to eq false
     end
 
-    it "is not external if it's part of the gradecraft domain with a www subdomain" do
-      link = "http://www.gradecraft.com"
-      expect(helper.external_link?(link)).to eq false
-    end
-
     it "is not external if it's part of the gradecraft domain with a subdomain" do
       link = "http://blah.gradecraft.com"
       expect(helper.external_link?(link)).to eq false

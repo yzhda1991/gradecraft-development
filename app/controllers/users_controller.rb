@@ -1,6 +1,7 @@
 require_relative "../importers/user_importers/csv_student_importer"
 require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_or_updates_user"
+require 'uri'
 
 class UsersController < ApplicationController
   include UsersHelper
@@ -28,6 +29,18 @@ class UsersController < ApplicationController
   def new
     @user = User.new
     @course_membership = @user.course_memberships.new
+    if request.referer.nil?
+      @selected_role = 'observer'
+    else
+      case URI(request.referer).path
+      when students_path
+        @selected_role = 'student'
+      when staff_index_path
+        @selected_role = 'gsi'
+      else
+        @selected_role = 'observer'
+      end
+    end
   end
 
   # set up the form for users to create their own accounts without being logged

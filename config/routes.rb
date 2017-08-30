@@ -7,21 +7,21 @@ Rails.application.routes.draw do
   #2. Announcements
   #3. Assignments, Submissions, Grades
   #4. Assignment Types
-  #5. Assignment Type Weights
-  #6. Badges
-  #7. Challenges
-  #8. Integrations
-  #9. Courses
-  #10. Groups
-  #11. Informational Pages
-  #12. Grade Schemes
-  #13. Teams
-  #14. Users
-  #15. User Auth
-  #16. Uploads
-  #17. Events
-  #18. Predictor
-  #19. Exports
+  #5. Badges
+  #6. Challenges
+  #7. Integrations
+  #8. Courses
+  #9. Groups
+  #10. Informational Pages
+  #11. Grade Schemes
+  #12. Teams
+  #13. Users
+  #14. User Auth
+  #15. Uploads
+  #16. Events
+  #17. Predictor
+  #18. Exports
+  #19. Errors
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -150,10 +150,7 @@ Rails.application.routes.draw do
     get :export_all_scores, on: :collection
   end
 
-  #5. Assignment Type Weights
-  resources :assignment_type_weights, only: [:index]
-
-  #6. Badges
+  #5. Badges
   resources :badges, except: [:update, :create] do
     get "export_structure", on: :collection
     resources :earned_badges do
@@ -162,7 +159,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #7. Challenges
+  #6. Challenges
   resources :challenges do
     resources :challenge_grades, only: [:new, :create], module: :challenges do
       collection do
@@ -175,7 +172,7 @@ Rails.application.routes.draw do
 
   resources :challenge_grades, except: [:index, :new, :create]
 
-  #8. Integrations
+  #7. Integrations
 
   resources :integrations, only: [:create, :index] do
     resources :courses, only: [:create, :destroy], module: :integrations
@@ -196,12 +193,13 @@ Rails.application.routes.draw do
     end
   end
 
-  #9. Courses
+  #8. Courses
 
   resources :courses, except: [:show] do
     post :copy, on: :collection
     post :recalculate_student_scores, on: :member
     put :publish, on: :member
+    put :unpublish, on: :member
     get :badges, on: :member
     get :change, on: :member
     get :new_external, on: :collection
@@ -218,10 +216,10 @@ Rails.application.routes.draw do
     end
   end
 
-  #10. Groups
+  #9. Groups
   resources :groups
 
-  #11. Informational Pages
+  #10. Informational Pages
   controller :info do
     get :dashboard
     get :predictor
@@ -248,7 +246,7 @@ Rails.application.routes.draw do
     get :sign_up
   end
 
-  #12. Grade Schemes
+  #11. Grade Schemes
   resources :grade_scheme_elements, only: [:index, :edit, :update] do
     collection do
       get :mass_edit
@@ -256,10 +254,10 @@ Rails.application.routes.draw do
     end
   end
 
-  #13. Teams
+  #12. Teams
   resources :teams
 
-  #14. Users
+  #13. Users
   %w{students gsis professors admins}.each do |role|
     get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
       role: role.singularize
@@ -306,7 +304,7 @@ Rails.application.routes.draw do
 
   resources :observers, only: :index
 
-  #15. User Auth
+  #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "/auth/:provider/callback", to: "authorizations#create"
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
@@ -320,7 +318,6 @@ Rails.application.routes.draw do
   resources :user_sessions, only: [:new, :create, :destroy] do
     collection do
       get :instructors
-      get :students
     end
   end
   resources :passwords, except: [:new, :destroy, :index, :show]
@@ -336,12 +333,12 @@ Rails.application.routes.draw do
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
-  #16. Uploads
+  #15. Uploads
   resource :uploads, only: [] do
     get :remove
   end
 
-  #17. Events
+  #16. Events
   resources :events do
     post :copy, on: :collection
   end
@@ -350,7 +347,7 @@ Rails.application.routes.draw do
 
   resources :institutions, only: [:index, :new, :edit, :create, :update]
 
-  #18. API Calls
+  #17. API Calls
 
   namespace :api, defaults: { format: :json } do
 
@@ -502,7 +499,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #19. Exports
+  #18. Exports
   resources :downloads, only: :index
 
   resources :submissions_exports, only: [:create, :destroy] do
@@ -521,7 +518,7 @@ Rails.application.routes.draw do
     end
   end
 
-  #20. Errors
+  #19. Errors
   resource :errors, only: :show
 
   # root, bro

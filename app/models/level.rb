@@ -6,7 +6,7 @@ class Level < ActiveRecord::Base
   has_many :badges, through: :level_badges
   has_many :criterion_grades
 
-  validates :points, presence: true, numericality: {greater_than_or_equal_to: 0}
+  validates :points, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :name, presence: true, length: { maximum: 30 }
 
   scope :ordered, -> { order("points ASC") }

@@ -98,11 +98,5 @@ describe "assignments/index_student/_assignments" do
       render
       assert_select "i.fa-asterisk", count: 1
     end
-
-    it "shows the due date if it's in the future" do
-      @assignment.update(due_at: 2.days.from_now)
-      render
-      assert_select "span", text: "#{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
-    end
   end
 end

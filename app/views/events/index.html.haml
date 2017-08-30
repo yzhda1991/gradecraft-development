@@ -19,8 +19,8 @@
       - @events.each do |event|
         %tr
           %td= link_to event.name, event
-          %td= event.open_at
-          %td= event.due_at
+          %td= event.open_at.in_time_zone(current_user.time_zone) if event.open_at?
+          %td= event.due_at.in_time_zone(current_user.time_zone) if event.due_at?
           %td
             - if current_user_is_staff?
               .button-container.dropdown
@@ -28,4 +28,4 @@
                 %ul.options-menu.dropdown-content
                   %li= link_to decorative_glyph(:calendar) + "Add to Google Calendar ", add_event_google_calendars_events_path(event), method: :post
                   = active_course_link_to decorative_glyph(:edit) + "Edit", edit_event_path(event)
-                  = active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }
+                  = active_course_link_to decorative_glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure you want to delete #{event.name}?" }

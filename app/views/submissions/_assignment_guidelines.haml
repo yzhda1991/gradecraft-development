@@ -9,10 +9,10 @@
     %p= "#{points assignment.threshold_points} points threshold"
 
   - if assignment.open_at?
-    %p= "Opens: #{assignment.open_at}"
+    %p= "Opens: #{assignment.open_at.in_time_zone(current_user.time_zone)}"
 
   - if assignment.due_at?
-    %p= "Due: #{assignment.due_at}"
+    %p= "Due: #{assignment.due_at.in_time_zone(current_user.time_zone)}"
 
 - if assignment.description.present?
   %section.grade-form-section

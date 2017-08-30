@@ -17,9 +17,10 @@
       .event-image-show-wrapper
         %img.event-image-show{src: @event.media}
 
-    %section
-      %h3 Event Date
-      %p= " - #{@event.due_at}"
+    - if @event.due_at.present?
+      %section
+        %h3 Event Date
+        %p= "#{@event.due_at.in_time_zone(current_user.time_zone)}"
 
     %section
       %h3 Description

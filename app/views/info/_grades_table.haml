@@ -22,23 +22,23 @@
         - group = grade.group
         %tr
           %td= link_to assignment.name, assignment
-          - if assignment.is_individual?
-            %td= link_to student.name, student_path(student)
-            - if course.has_teams?
-              %td
-                - if student.present? && team.present?
-                  = link_to team.name, team
-          - elsif assignment.has_groups?
-            %td= link_to group.try(:name), group_path(group)
+          %td
+            = link_to student.name, student_path(student)
+            = link_to "(#{group.try(:name)})", group_path(group) if assignment.has_groups?
+          - if course.has_teams?
+            %td
+              - if student.present? && team.present?
+                = link_to team.name, team
           %td= points grade.score
           %td= raw grade.feedback
           %td
             .right
               %ul.button-bar
-                - if assignment.is_individual?
-                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
-                - elsif assignment.has_groups?
-                  = active_course_link_to decorative_glyph(:check) + "Edit Grade", grade_assignment_group_path(assignment, group), class: "button"
+                %li
+                  - if grade.group_id.present?
+                    = active_course_link_to decorative_glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group), class: "button"
+                  - else
+                    = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
           - if current_course.active?
             %td
               .center
