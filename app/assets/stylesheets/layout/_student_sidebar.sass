@@ -2,6 +2,12 @@
 
 .student-panel-wrap
   height: auto
+  display: flex
+  *
+    box-sizing: border-box
+
+.student-flex-col
+  flex: 1
 
 #student-main-column
   width: auto
@@ -13,9 +19,8 @@
   margin-top: -2.75rem
 
 .student-panel
-  width: 400px
+  max-width: 400px
   margin-top: -1rem
-  float: right
   height: 100%
   position: relative
   font-weight: 300
@@ -50,11 +55,14 @@
     max-width: 120px
     margin: 1rem auto
 
+  .student-panel-content
+    overflow-x: auto
+    max-height: 100vh
+    padding-bottom: 200px
+
   .student-panel-text-block
     margin: 0.5rem 1rem
     font-size: 0.8rem
-    max-height: 264px
-    overflow: hidden
 
   .info-hint-pulse
     border: 3px solid $color-blue-4

@@ -1,7 +1,5 @@
 .student-panel-wrap
-  %student-panel.student-panel.predictor-panel{'context'=>'"predictor"'}
-
-  #student-main-column
+  #student-main-column.student-flex-col
 
     %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Predictions..."}
 
@@ -25,3 +23,5 @@
     %predictor-section-badges
 
     %predictor-section-challenges
+
+  %student-panel.student-panel.predictor-panel.student-flex-col{'context'=>'"predictor"'}

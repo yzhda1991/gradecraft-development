@@ -1,7 +1,5 @@
 .student-panel-wrap
-  %student-panel.student-panel.badge-panel{'context'=>'"badges"'}
-
-  #student-main-column
+  #student-main-column.student-flex-col
 
     %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Badges..."}
 
@@ -14,3 +12,5 @@
         .gold-stars{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'unearned' : 'earned')"}
           %i.fa.fa-fw.fa-star
             .earned-count {{badge.earned_badge_count}}
+
+  %student-panel.student-panel.badge-panel.student-flex-col{'context'=>'"badges"'}
