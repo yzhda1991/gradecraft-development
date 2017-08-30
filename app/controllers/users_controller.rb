@@ -8,6 +8,7 @@ class UsersController < ApplicationController
 
   respond_to :html, :json
 
+  before_action :ensure_admin?, only: [:index, :destroy]
   before_action :ensure_staff?,
     except: [:activate, :activated, :activated_external, :activate_set_password, :edit_profile, :update_profile, :new_external, :create_external]
   before_action :save_referer, only: [:manually_activate, :resend_invite_email]
