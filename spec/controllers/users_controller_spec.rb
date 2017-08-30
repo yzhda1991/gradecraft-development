@@ -8,7 +8,7 @@ describe UsersController do
     before(:each) { login_user(professor) }
 
     describe "GET index" do
-      it "returns the users for the current course", focus: true do
+      it "returns the users for the current course" do
         expect(get :index).to redirect_to(:root)
       end
     end
