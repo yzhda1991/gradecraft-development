@@ -2,7 +2,7 @@
 
   return {
     scope: {
-      condition: "=",
+      condition: "="
     },
     templateUrl: 'unlock_conditions/unlock_condition.html',
 
@@ -30,6 +30,13 @@
           when  "Earned Point Value" then "Course"
           when "Assignment Type" then "AssignmentType"
           else type
+
+      # in the UnlockConditionService
+      # a datepickerId is assigned to each criterion on load or when created,
+      # and does not change unless Angular is reloaded. This assures that
+      # jQuery will not loose the unique id assigned to the datepicker field
+      scope.datePickerId = (condition)->
+        "condition-#{condition.datepickerId}-date-picker"
 
       scope.assignments = UnlockConditionService.assignments
 

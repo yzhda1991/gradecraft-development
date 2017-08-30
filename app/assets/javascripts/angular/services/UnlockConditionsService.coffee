@@ -8,6 +8,16 @@
   assignmentTypes = []
   badges = []
 
+  # generate a unique id to avoid collision on date-pickers
+  _uid = 0
+  datepickerId = ()->
+    return ++_uid
+
+  setDatepickerIds = ()->
+    _.each(unlockConditions, (uc)->
+      uc.datepickerId = datepickerId()
+    )
+
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
@@ -32,6 +42,7 @@
       angular.copy(response.data.meta.badges, badges) if response.data.meta.badges
       _setTermsFor(response.data)
       courseId = response.data.meta.course_id
+      setDatepickerIds()
       GradeCraftAPI.logResponse(response)
     , (error) ->
       GradeCraftAPI.logResponse(error)
@@ -40,6 +51,7 @@
   addCondition = ()->
     unlockConditions.push(
       "id": null,
+      "datepickerId": datepickerId(),
       "unlockable_id": unlockableId,
       "unlockable_type": unlockableType,
       "condition_id": null,
@@ -50,11 +62,13 @@
     )
 
   _createCondition = (condition)->
+    dateId = condition.datepickerId
     requestParams = {
       "unlock_condition": condition
     }
     $http.post("/api/unlock_conditions", requestParams).then((response) ->
       condition.isUpdating = false
+      response.data.data.attributes.datepickerId = dateId
       angular.copy(response.data.data.attributes, condition)
       GradeCraftAPI.logResponse(response)
     , (error)->
@@ -62,10 +76,12 @@
     )
 
   _updateCondition = (condition)->
+    dateId = condition.datepickerId
     requestParams = {
       "unlock_condition": condition
     }
     $http.put("/api/unlock_conditions/#{condition.id}", requestParams).then((response) ->
+      response.data.data.attributes.datepickerId = dateId
       angular.copy(response.data.data.attributes, condition)
       GradeCraftAPI.logResponse(response)
     , (error)->
