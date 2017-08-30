@@ -29,4 +29,3 @@
       templateUrl: 'predictor/main.html'
     }
 ]
-

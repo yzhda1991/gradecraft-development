@@ -107,6 +107,9 @@
 
   challenges = ChallengeService.challenges
 
+  includeChallenges = ()->
+    ChallengeService.includeInPredictor()
+
   getChallenges= ()->
     ChallengeService.getChallenges()
 
@@ -237,5 +240,6 @@
       getChallenges: getChallenges
       challengesFullPoints: challengesFullPoints
       challengesPredictedPoints: challengesPredictedPoints
+      includeChallenges: includeChallenges
   }
 ]

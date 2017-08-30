@@ -67,5 +67,6 @@ end
 
 json.meta do
   json.term_for_challenges term_for :challenges
+  json.add_team_score_to_student current_course.add_team_score_to_student
   json.allow_updates @allow_updates
 end
