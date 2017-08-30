@@ -15,6 +15,8 @@ class StudentsController < ApplicationController
   def show
     @events = Timeline.new(@course).events_by_due_date
     self.current_student = @course.students.where(id: params[:id]).first
+    redirect_to students_path,
+      alert: "That #{(term_for :student).downcase } doesn't seem to be registered for this course" and return unless current_student.present?
     render "show", Info::DashboardCoursePlannerPresenter.build({
       student: current_student,
       assignments: @course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
