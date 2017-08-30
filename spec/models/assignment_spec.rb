@@ -311,6 +311,18 @@ describe Assignment do
       expect(subject.rubric.assignment_id).to eq subject.id
       expect(subject.rubric).to_not be_new_record
     end
+
+    describe "copies on a new course" do
+      let(:assignment) {create :assignment}
+
+      it "copies the course id onto copied assignments" do
+        assignment.create_rubric(course_id: assignment.course_id)
+        course_copy = assignment.course.copy(nil)
+        assignment_copy = course_copy.assignments.first
+        expect(assignment.course_id).to_not eq(assignment_copy.course_id)
+        expect(course_copy.assignments.first.rubric.course_id).to eq(course_copy.assignments.first.course_id)
+      end
+    end
   end
 
   describe "#future?" do
