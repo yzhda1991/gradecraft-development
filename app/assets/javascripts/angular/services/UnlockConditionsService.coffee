@@ -68,7 +68,7 @@
     }
     $http.post("/api/unlock_conditions", requestParams).then((response) ->
       condition.isUpdating = false
-      response.data.data.datepickerId = dateId
+      response.data.data.attributes.datepickerId = dateId
       angular.copy(response.data.data.attributes, condition)
       GradeCraftAPI.logResponse(response)
     , (error)->
@@ -81,7 +81,7 @@
       "unlock_condition": condition
     }
     $http.put("/api/unlock_conditions/#{condition.id}", requestParams).then((response) ->
-      response.data.data.datepickerId = dateId
+      response.data.data.attributes.datepickerId = dateId
       angular.copy(response.data.data.attributes, condition)
       GradeCraftAPI.logResponse(response)
     , (error)->
