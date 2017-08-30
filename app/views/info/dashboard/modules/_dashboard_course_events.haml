@@ -16,7 +16,8 @@
             - if event.description.present?
               .event-description
                 = sanitize(event.description, tags: %w(p), attributes: %w()).truncate(250, :separator => " ").gsub(/<\/?p>/, " ")
-                = link_to "See the Details", event
+                %br
+                .right= link_to "See the Details", event
           %ul.assignments-due
             - presenter.assignments_due_on(event).ordered.each do |assignment|
               - if assignment != event
