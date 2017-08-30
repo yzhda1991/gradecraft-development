@@ -47,7 +47,11 @@ class UsersController < ApplicationController
   # set up the form for users to create their own accounts without being logged
   # into the app
   def new_external
-    @user = User.new
+    if current_user.present?
+      redirect_to new_user_path
+    else
+      @user = User.new
+    end
   end
 
   # they've already set their passwords on the page, so they're just sent an
