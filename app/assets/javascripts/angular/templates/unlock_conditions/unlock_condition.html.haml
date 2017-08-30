@@ -20,7 +20,7 @@
   %label Minimum Points Earned
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
-  %input(id="{{assignment.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
 .unlock-condition-parameters(ng-if="condition.condition_type=='Badge'")
   %label
@@ -34,7 +34,7 @@
     %span.required-label(ng-if="!condition.condition_value") *required
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
-  %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
 .unlock-condition-parameters(ng-if="condition.condition_type=='Course'")
   %label
@@ -42,7 +42,7 @@
     %span.required-label(ng-if="!condition.condition_value") *required
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
-  %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
 .unlock-condition-parameters(ng-if="condition.condition_type=='AssignmentType'")
   %label
@@ -61,7 +61,7 @@
   %label(ng-if="condition.condition_state != 'Assignments Completed'") Amount
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
-  %input(id="{{condition.id}}-completed-by" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
 %button.remove-unlock-condition(ng-click="removeCondition()")
   %i.fa.fa-fw.fa-times

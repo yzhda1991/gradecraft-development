@@ -31,6 +31,10 @@
           when "Assignment Type" then "AssignmentType"
           else type
 
+      scope.datePickerId = (condition)->
+        index = _.findIndex(UnlockConditionService.unlockConditions, condition)
+        "condition-#{index}-date-picker"
+
       scope.assignments = UnlockConditionService.assignments
 
       scope.assignmentStates = (assignmentId)->
