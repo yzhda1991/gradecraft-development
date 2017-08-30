@@ -9,6 +9,7 @@ input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="search"],
+input.hasDatepicker,
 textarea,
   display: block
   padding: .5rem
@@ -22,6 +23,9 @@ textarea,
     border: 1px solid rgba(42, 43, 43, 0.8)
   @media (max-width: $media-small-max)
     width: 100%
+
+input.hasDatepicker
+  margin-right: 1rem
 
 input[type="file"]
   border: none
@@ -134,10 +138,10 @@ span.checkbox
 .textarea ul.wysihtml5-toolbar
   background-color: $color-grey-4
 
-.required
+.required-label
   color: $color-red-1
-  text-transform: lowercase;
-  font-style: italic;
+  text-transform: lowercase
+  font-style: italic
 
 error
   color: $color-red-1
