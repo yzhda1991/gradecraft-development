@@ -1,7 +1,7 @@
 = render partial: "assignment_guidelines", locals: { assignment: presenter.assignment }
 
 %student-submission{class: "ng-cloak"}
-  = simple_form_for [presenter.assignment, presenter.submission], :html => { class: "student-submission-form", "assignment_id"=>"#{presenter.assignment.id}" } do |f|
+  = simple_form_for([presenter.assignment, presenter.submission]) do |f|
     %hidden-form-method
     - if presenter.assignment.has_groups?
       = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(presenter.assignment).id }, as: :hidden
