@@ -100,8 +100,8 @@ module GoogleCalendarsHelper
 
   # note: if there is a server error during a batch process the items processed before the server error will be copied to the associated google calendar
   def add_batch_items(current_user, item_list, item_list_filtered)
-    calendar = refresh_google_calendar_authorization(current_user)
     begin
+      calendar = refresh_google_calendar_authorization(current_user)
       calendar.batch do |batch|
         item_list_filtered.each do |item|
           batch.insert_event('primary', create_google_event(item))
