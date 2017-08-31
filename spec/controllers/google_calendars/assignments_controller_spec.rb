@@ -87,7 +87,7 @@ describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :c
 
   describe "POST add_assignments" do
     before(:each) do
-      stub_request(:post, "https://www.googleapis.com/calendar/v3/calendars/primary/events").
+      stub_request(:post, "https://www.googleapis.com/batch").
         to_return(:status => 200, :body => "", :headers => {})
     end
     context "with an existing authentication" do
