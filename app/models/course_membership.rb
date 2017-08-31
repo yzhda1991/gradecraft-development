@@ -18,6 +18,8 @@ class CourseMembership < ActiveRecord::Base
   scope :auditing, -> { where( role: "student", auditing: true, active: true ) }
   scope :being_graded, -> { where( role: "student", auditing: false, active: true) }
   scope :instructors_of_record, -> { where(instructor_of_record: true) }
+  # scope to help guide emails to people (both students and staff) who are participating in the class, but not admins
+  scope :participants, -> { where.not(role: "admin") }
 
   validates_presence_of :course, :user, :role
 
