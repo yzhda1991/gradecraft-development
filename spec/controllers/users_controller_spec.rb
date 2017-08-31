@@ -66,10 +66,11 @@ describe UsersController do
 
     end
 
+    # We used to allow instructors to delete users, but no longer (admins only)
     describe "GET destroy" do
       it "destroys the user" do
         student
-        expect{ get :destroy, params: { id: student } }.to change(User,:count).by(-1)
+        expect(get :destroy, params: { id: student }).to redirect_to(:root)
       end
     end
 
