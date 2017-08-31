@@ -172,8 +172,9 @@
         if badge.total_earned_points
           total += badge.total_earned_points
       )
-    _.each(challenges,(challenge)->
-        total += challenge.grade.score
+    if includeChallenges()
+      _.each(challenges,(challenge)->
+          total += challenge.grade.score
       )
     total
 
