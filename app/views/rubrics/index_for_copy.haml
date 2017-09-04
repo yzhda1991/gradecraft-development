@@ -24,7 +24,11 @@
               = radio_button_tag "rubric_id", rubric.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-rubric-command']" }
             %td= link_to assignment.name, assignment
             %td= render partial: "assignments/index_icons", locals: { assignment: assignment }
-            %td= assignment.try(:due_at).in_time_zone(current_user.time_zone) || "Ongoing"
+            %td
+              - if assignment.due_at.present?
+                = assignment.due_at.in_time_zone(current_user.time_zone)
+              - else
+                Ongoing
             %td{:style => "display: none"}
               - if assignment.due_at.present?
                 = assignment.due_at.to_formatted_s(:db)
