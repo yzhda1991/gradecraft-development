@@ -5,9 +5,13 @@
 
   challenges = []
   update = {}
+  addScoreToStudent = false
 
   termFor = (article)->
     GradeCraftAPI.termFor(article)
+
+  includeInPredictor = ()->
+    challenges.length > 1 && addScoreToStudent
 
   # Total points possible to earn from challenges
   challengesFullPoints = ()->
@@ -33,17 +37,22 @@
 
   # GET index list of challenges including a student's grades and predictions
   getChallenges = ()->
-    $http.get('/api/challenges').success( (response)->
-      GradeCraftAPI.loadMany(challenges,response, {"include" : ['prediction','grade']})
-      _.each(challenges, (challenge)->
-        # add null prediction and grades when JSON contains none
-        challenge.prediction = { predicted_points: 0 } if !challenge.prediction
-        challenge.grade = { score: null, final_points: null } if !challenge.grade
-      )
+    $http.get('/api/challenges').then(
+      (response)->
+        GradeCraftAPI.loadMany(challenges,response.data, {"include" : ['prediction','grade']})
+        _.each(challenges, (challenge)->
+          # add null prediction and grades when JSON contains none
+          challenge.prediction = { predicted_points: 0 } if !challenge.prediction
+          challenge.grade = { score: null, final_points: null } if !challenge.grade
+        )
 
-      GradeCraftAPI.setTermFor("challenges", response.meta.term_for_challenges)
-      update.challenges = response.meta.allow_updates
-    )
+        GradeCraftAPI.setTermFor("challenges", response.data.meta.term_for_challenges)
+        update.challenges = response.data.meta.allow_updates
+        addScoreToStudent = response.data.meta.add_team_score_to_student
+        GradeCraftAPI.logResponse(response)
+      ,(response)->
+        GradeCraftAPI.logResponse(response)
+      )
 
   # PUT a challenge prediction
   postPredictedChallenge = (challenge)->
@@ -65,5 +74,6 @@
       getChallenges: getChallenges
       postPredictedChallenge: postPredictedChallenge
       challenges: challenges
+      includeInPredictor: includeInPredictor
   }
 ]

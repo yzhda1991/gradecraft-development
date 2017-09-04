@@ -107,6 +107,9 @@
 
   challenges = ChallengeService.challenges
 
+  includeChallenges = ()->
+    ChallengeService.includeInPredictor()
+
   getChallenges= ()->
     ChallengeService.getChallenges()
 
@@ -169,8 +172,9 @@
         if badge.total_earned_points
           total += badge.total_earned_points
       )
-    _.each(challenges,(challenge)->
-        total += challenge.grade.score
+    if includeChallenges()
+      _.each(challenges,(challenge)->
+          total += challenge.grade.score
       )
     total
 
@@ -237,5 +241,6 @@
       getChallenges: getChallenges
       challengesFullPoints: challengesFullPoints
       challengesPredictedPoints: challengesPredictedPoints
+      includeChallenges: includeChallenges
   }
 ]
