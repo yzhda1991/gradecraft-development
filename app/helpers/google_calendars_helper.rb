@@ -99,10 +99,13 @@ module GoogleCalendarsHelper
   end
 
   # note: if there is a server error during a batch process the items processed before the server error will be copied to the associated google calendar
-  def add_multiple_items(current_user, item_list, item_list_filtered)
+  def add_batch_items(current_user, item_list, item_list_filtered)
     begin
-      item_list_filtered.each do |item|
-        add(current_user, item)
+      calendar = refresh_google_calendar_authorization(current_user)
+      calendar.batch do |batch|
+        item_list_filtered.each do |item|
+          batch.insert_event('primary', create_google_event(item))
+        end
       end
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"} unless item_list.count != item_list_filtered.count
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}

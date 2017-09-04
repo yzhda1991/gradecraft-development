@@ -28,7 +28,7 @@ class GoogleCalendars::EventsController < ApplicationController
   def add_events
     event_list = get_all_items_for_current_course(current_course, "event", current_user)
     event_list_filtered = filter_items_with_no_end_date(event_list)
-    events_hash = add_multiple_items(current_user, event_list, event_list_filtered)
+    events_hash = add_batch_items(current_user, event_list, event_list_filtered)
     events_hash.store("redirect_to", events_path)
     process_hash(events_hash)
   end
