@@ -8,7 +8,7 @@ class EarnedBadgesController < ApplicationController
   before_action :ensure_staff?, except: [:new, :create]
   before_action :find_badge
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
-  before_action :use_current_course, only: [:show, :new, :edit, :mass_edit ]
+  before_action :use_current_course, only: [:show, :new, :edit, :mass_edit, :create, :update ]
 
   def index
     redirect_to badge_path(@badge)
