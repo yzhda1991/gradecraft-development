@@ -40,7 +40,7 @@
   - if presenter.group_assignment?
     - if @group.present?
       = render partial: "groups/status_display", locals: { group: @group }
-      Your #{term_for :group} for this #{term_for :assignment}:
+      %h3.uppercase Your #{term_for :group} for this #{term_for :assignment}:
       %ul
         - @group.students.each do |student|
           %li= student.name
