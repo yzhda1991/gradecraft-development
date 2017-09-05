@@ -547,7 +547,7 @@ module ActiveLMS
     #   },
     #   has_next_page: true
     # }
-    def users(course_id, fetch_next=false, options={}, &exception_handler)
+    def users(course_id, fetch_next=true, options={}, &exception_handler)
       handle_exceptions(exception_handler) do
         users = []
         params = {
@@ -563,7 +563,7 @@ module ActiveLMS
     private
 
     attr_reader :client
-    
+
     def handle_exceptions(exception_handler, &blk)
       blk.call
     rescue Canvas::ResponseError, HTTParty::Error, JSON::ParserError => e
