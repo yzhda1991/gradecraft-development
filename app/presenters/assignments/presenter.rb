@@ -93,7 +93,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def assignment_has_viewable_description?(user)
-    assignment.description.present? &&
+    (assignment.description.present? || assignment.assignment_files.present?) &&
     ( user.is_staff?(course) ||
       assignment.description_visible_for_student?(user)
     )
