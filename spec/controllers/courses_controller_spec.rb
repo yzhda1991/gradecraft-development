@@ -184,6 +184,25 @@ describe CoursesController do
       end
     end
 
+    describe "POST activate_all_students" do
+      let(:unactivated_user) { create(:user)}
+      it "activates the user" do
+        post :activate_all_students, params:{id: course.id}
+        expect(unactivated_user.activated?).to eq true
+      end
+
+      it "redirects to referer url if present" do
+        request.env["HTTP_REFERER"] = "http://some-referer.com"
+        post :activate_all_students, params:{id: course.id}
+        expect(response).to redirect_to("http://some-referer.com")
+      end
+
+      it "redirects to dashboard if referer url is not present" do
+        post :activate_all_students, params:{id: course.id}
+        expect(response).to redirect_to(dashboard_path)
+      end
+    end
+
     describe "POST recalculate_student_scores" do
       it "is a protected route" do
         expect(post :recalculate_student_scores, params: { id: course.id.to_s }).to \
@@ -258,7 +277,8 @@ describe CoursesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :update
+        :update,
+        :activate_all_students
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, params: { id: "1" }).to redirect_to(:root)
