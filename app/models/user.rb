@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
 
   scope :order_by_name, -> { order("last_name, first_name ASC") }
 
+  scope :accounts_not_activated, ->(course_id) { includes(:course_memberships).where(course_memberships: { course_id: course_id }, activation_state: 'pending')}
+
   mount_uploader :avatar_file_name, AvatarUploader
 
   has_many :authorizations, class_name: "UserAuthorization", dependent: :destroy
