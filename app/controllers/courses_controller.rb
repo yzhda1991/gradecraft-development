@@ -132,17 +132,16 @@ class CoursesController < ApplicationController
   end
 
   def activate_all_students
-    if course = current_user.courses.where(id: params[:id]).first
-      students = User.accounts_not_activated(course)
-      total = students.count
-      students.each do |student|
-        student.activate!
-      end
-      if total != 1
-        redirect_to session[:return_to] || dashboard_path, notice: "#{total} students have been activated!" and return
-      else
-        redirect_to session[:return_to] || dashboard_path, notice: "#{total} student has been activated!" and return
-      end
+    course = current_user.courses.where(id: params[:id]).first
+    students = User.accounts_not_activated(course)
+    total = students.count
+    students.each do |student|
+      student.activate!
+    end
+    if total != 1
+      redirect_to session[:return_to] || dashboard_path, notice: "#{total} students have been activated!" and return
+    else
+      redirect_to session[:return_to] || dashboard_path, notice: "#{total} student has been activated!" and return
     end
   end
 
