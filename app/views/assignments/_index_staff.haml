@@ -9,7 +9,7 @@
           - if current_course.allows_canvas?
             = active_course_link_to decorative_glyph(:download) + "Import #{term_for :assignments}", assignments_importers_path
           - if current_course.assignments.present?
-            = active_course_link_to decorative_glyph(:calendar) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post
+            = active_course_link_to decorative_glyph(:calendar) + "Add All to Google Calendar", add_assignments_google_calendars_assignments_path, :target => "_parent", method: :post
 .pageContent
   = render partial: "layouts/alerts"
 
