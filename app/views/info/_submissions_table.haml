@@ -6,6 +6,7 @@
       - if course.has_teams?
         %th{scope: "col", :width => "15%"}= "#{term_for :team}"
       %th{scope: "col"} Date Submitted
+      %th{scope: "col"} Calendar Date
       %th{scope: "col", :style => "min-width: 200px"}
         %span.sr-only Actions
   %tbody
@@ -24,6 +25,7 @@
         - elsif assignment.has_groups?
           %td= link_to group.try(:name), group_path(group)
         %td= submission.submitted_at.in_time_zone(current_user.time_zone)
+        %td= submission.submitted_at.to_s(:sort_format)
         %td
           .right
             %ul.button-bar

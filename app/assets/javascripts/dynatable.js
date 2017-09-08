@@ -27,7 +27,8 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         finalScore: 'numeric',
         predictedScore: 'numeric',
         id: 'numeric',
-        lastLogin: 'date'
+        lastLogin: 'date',
+        calendarDate: 'date'
       }
     }
 });
