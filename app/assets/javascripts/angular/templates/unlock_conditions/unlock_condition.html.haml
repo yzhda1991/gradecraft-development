@@ -1,7 +1,7 @@
 .unlock-condition-requirement(ng-class='{"valid" : conditionIsValid(condition)}')
   %label Requirement
   %select(ng-model="condition.condition_type" name="condition_type" ng-change="changeConditionType(condition)")
-    %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == termFor(condition.condition_type)" value="{{conditionsTypeTranslation(type)}}")
+    %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == condition.condition_type" value="{{conditionsTypeTranslation(type)}}")
       {{termFor(type)}}
 
 .unlock-condition-parameters(ng-if="condition.condition_type=='Assignment'")
