@@ -150,21 +150,23 @@ ActiveRecord::Schema.define(version: 20171012154015) do
   end
 
   create_table "badges", force: :cascade do |t|
-    t.string   "name",                                         null: false
+    t.string   "name",                                              null: false
     t.text     "description"
     t.integer  "full_points",                  default: 0
-    t.integer  "course_id",                                    null: false
+    t.integer  "course_id",                                         null: false
     t.string   "icon"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.boolean  "visible",                      default: true,  null: false
-    t.boolean  "can_earn_multiple_times",      default: true,  null: false
-    t.integer  "position",                                     null: false
-    t.boolean  "visible_when_locked",          default: true,  null: false
-    t.boolean  "show_name_when_locked",        default: true,  null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.boolean  "visible",                      default: true,       null: false
+    t.boolean  "can_earn_multiple_times",      default: true,       null: false
+    t.integer  "position",                                          null: false
+    t.boolean  "visible_when_locked",          default: true,       null: false
+    t.boolean  "show_name_when_locked",        default: true,       null: false
     t.boolean  "show_points_when_locked",      default: true
-    t.boolean  "show_description_when_locked", default: true,  null: false
-    t.boolean  "student_awardable",            default: false, null: false
+    t.boolean  "show_description_when_locked", default: true,       null: false
+    t.boolean  "student_awardable",            default: false,      null: false
+    t.string   "state",                        default: "Proposed", null: false
+    t.integer  "user_id",                                           null: false
   end
 
   create_table "challenge_files", force: :cascade do |t|
