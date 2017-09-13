@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   before_action :ensure_admin?, only: [:index, :destroy]
   before_action :ensure_staff?,
     except: [:activate, :activated, :activated_external, :activate_set_password, :edit_profile, :update_profile, :new_external, :create_external]
-  before_action :save_referer, only: [:manually_activate, :resend_invite_email]
+  before_action :save_referer, only: [:manually_activate]
   skip_before_action :require_login, only: [:activate, :activated, :activate_set_password, :new_external, :create_external, :activated_external]
   skip_before_action :require_course_membership, only: [:activate, :activate_set_password, :activated, :new_external, :create_external, :activated_external]
   before_action :use_current_course, only: [:import, :upload]
@@ -238,10 +238,11 @@ class UsersController < ApplicationController
   end
 
   # resend invite email
-  def resend_invite_email
+  def resend_activation_email
     @user = User.find(params[:id])
-    UserMailer.welcome_email(@user).deliver
-    redirect_to session[:return_to] || dashboard_path, notice: "An Invite Email has been sent to #{@user.name}!"
+    Services::CreatesNewUser.create_or_update user_params, current_course
+    UserMailer.activation_needed_email(@user).deliver_now
+    redirect_to session[:return_to] || redirect_to dashboard_path, notice: "An Activation Email has been sent to #{@user.name}!"
   end
 
   private

@@ -267,7 +267,7 @@ Rails.application.routes.draw do
     member do
       get :activate
       get :activate_set_password
-      get :resend_invite_email
+      get :resend_activation_email
       put :manually_activate
       post :activate_set_password, action: :activated
       post :activate, action: :activated_external

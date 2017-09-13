@@ -69,4 +69,4 @@
               - if current_user_is_admin? && !student.activated?
                 = active_course_link_to decorative_glyph(:check) + "Activate Account", manually_activate_user_path(student.id), :method => :put
               - if current_user_is_staff? && !student.activated? && (Rails.env.beta? || Rails.env.development?)
-                = active_course_link_to glyph(:envelope) + "Resend Invite Email", resend_invite_email_user_path(student.id)
+                = active_course_link_to glyph(:envelope) + "Resend Activation Email", resend_activation_email_user_path(id: student.id)
