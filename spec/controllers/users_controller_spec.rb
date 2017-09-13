@@ -174,22 +174,22 @@ describe UsersController do
       end
     end
 
-    describe "GET resend_invite_email" do
+    describe "GET resend_activation_email" do
       let(:unactivated_user) { create(:user)}
-      it "resend invitation to user" do
+      it "resend activation email to user" do
         expect {
-            get :resend_invite_email, params:{id:unactivated_user.id}
+            get :resend_activation_email, params:{ id: unactivated_user.id }
         }.to change  { ActionMailer::Base.deliveries.count }.by 1
       end
 
       it "redirects to referer url if present" do
         request.env["HTTP_REFERER"] = "http://some-referer.com"
-        get :resend_invite_email, params:{id:unactivated_user.id}
+        get :resend_activation_email, params:{ id:unactivated_user.id }
         expect(response).to redirect_to("http://some-referer.com")
       end
 
       it "redirects to dashboard if referer url is not present" do
-        get :resend_invite_email, params:{id:unactivated_user.id}
+        get :resend_activation_email, params:{ id: unactivated_user.id }
         expect(response).to redirect_to(dashboard_path)
       end
     end

@@ -6,11 +6,13 @@ class UserMailerPreview < ActionMailer::Preview
 
   def activation_needed_course_creation_email
     user = User.last
+    user.activation_token = "blah"
     UserMailer.activation_needed_course_creation_email user
   end
 
   def activation_needed_email
     user = User.last
+    user.activation_token = "blah"
     UserMailer.activation_needed_email user
   end
 
