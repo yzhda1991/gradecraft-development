@@ -25,4 +25,4 @@
                   %li #{ link_to assignment.name, assignment } due at #{ assignment.due_at.in_time_zone(current_user.time_zone) }
 
   .calendar-access
-    = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, method: :post, data: { disable_with: "Adding Your Assignments..." }
+    = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, :target => "_parent", method: :post, data: { disable_with: "Adding Your Assignments..." }
