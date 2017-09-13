@@ -174,7 +174,7 @@ describe UsersController do
       end
     end
 
-    describe "GET resend_activation_email", focus: true do
+    describe "GET resend_activation_email" do
       let(:unactivated_user) { create(:user)}
       it "resend activation email to user" do
         expect {
