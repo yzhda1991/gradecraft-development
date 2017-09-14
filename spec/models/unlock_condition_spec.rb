@@ -685,7 +685,7 @@ describe UnlockCondition do
       subject = create(:unlock_condition, condition_id: course.id, condition_type: "Course", condition_state: "Earned",
         unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment", condition_value: 10)
       expect(subject.requirements_completed_sentence).to \
-        eq("Earned #{ subject.condition_value } points in this course")
+        eq("Earned 10 points in this course")
     end
   end
 end

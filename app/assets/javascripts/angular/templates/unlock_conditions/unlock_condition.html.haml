@@ -1,7 +1,7 @@
 .unlock-condition-requirement(ng-class='{"valid" : conditionIsValid(condition)}')
   %label Requirement
   %select(ng-model="condition.condition_type" name="condition_type" ng-change="changeConditionType(condition)")
-    %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == termFor(condition.condition_type)" value="{{conditionsTypeTranslation(type)}}")
+    %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == condition.condition_type" value="{{conditionsTypeTranslation(type)}}")
       {{termFor(type)}}
 
 .unlock-condition-parameters(ng-if="condition.condition_type=='Assignment'")
@@ -57,8 +57,12 @@
   %select(ng-model="condition.condition_state" ng-change="updateCondition()")
     %option(ng-repeat="state in assignmentTypeStates"  ng-selected="state == condition.condition_state" value="{{state}}")
       {{state}}
-  %label(ng-if="condition.condition_state == 'Assignments Completed'") Number of {{termFor("assignments")}}
-  %label(ng-if="condition.condition_state != 'Assignments Completed'") Amount
+  %label(ng-if="condition.condition_state == 'Assignments Completed'")
+    Number of {{termFor("assignments")}}
+    %span.required-label(ng-if="condition.condition_value == null") *required
+  %label(ng-if="condition.condition_state != 'Assignments Completed'")
+    Amount
+    %span.required-label(ng-if="condition.condition_value == null") *required
   %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
   %label Completed By Date
   %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")

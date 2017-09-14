@@ -57,6 +57,12 @@ class UnlockCondition < ActiveRecord::Base
     return unlocked_count
   end
 
+  protected
+
+  def condition_value
+    self[:condition_value] || 0
+  end
+
   private
 
   def condition_state_do
