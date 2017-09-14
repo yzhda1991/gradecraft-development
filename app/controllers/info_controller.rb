@@ -111,9 +111,11 @@ class InfoController < ApplicationController
 
   def submissions
     course = current_user.courses.find_by(id: params[:id])
-    respond_to do |format|
-      format.csv { send_data SubmissionExporter.new.export(course), filename: "#{ course.name } Submissions - #{ Date.today }.csv" }
-    end
+    @submission_export_job = SubmissionExportJob.new(user_id: current_user.id, course_id: course.id, filename: "#{ course.name } Submissions Export - #{ Date.today }.csv")
+    @submission_export_job.enqueue
+
+    flash[:notice]="Your request to export submissions from course \"#{ course.name }\" is currently being processed. We will email you the data shortly."
+    redirect_back_or_default
   end
 
   private
