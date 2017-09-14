@@ -29,7 +29,7 @@
               = link_to submission.student.try(:name), student_path(submission.student)
             - elsif submission.assignment.has_groups?
               = link_to submission.group.try(:name), group_path(submission.group)
-          %td= submission.submitted_at.in_time_zone(current_user.time_zone)
+          %td= l submission.submitted_at.in_time_zone(current_user.time_zone)
           %td{:style => "display: none"}= submission.submitted_at.to_formatted_s(:db) if submission.submitted_at.present?
           %td= raw sanitize_external_links submission.text_comment
           - if current_course.has_teams?

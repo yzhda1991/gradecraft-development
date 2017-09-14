@@ -14,7 +14,8 @@
       %th{scope: "col"} Year
       %th{scope: "col"} Total Points
       %th{scope: "col"} # of Students
-      %th{scope: "col"} Created
+      %th Calendar Date
+      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Created
       %th{style: "text-align: right", "data-dynatable-no-sort": 'true'} Downloads
       %th.options{"data-dynatable-no-sort": 'true'} Options
   %tbody
@@ -35,7 +36,8 @@
         %td= course.year
         %td= points course.total_points
         %td= course.student_count
-        %td= course.created_at.in_time_zone(current_user.time_zone)
+        %td= l course.created_at, format: :sortable
+        %td= l course.created_at.in_time_zone(current_user.time_zone)
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Downloads"}= decorative_glyph("cloud-download") + decorative_glyph("caret-down")

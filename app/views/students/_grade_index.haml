@@ -23,7 +23,7 @@
         - if current_course.has_multipliers?
           %td= grade.try(:score)
         %td= decorative_glyph(:check) if grade.student_visible?
-        %td= grade.updated_at.in_time_zone(current_user.time_zone)
+        %td= l grade.updated_at.in_time_zone(current_user.time_zone)
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")

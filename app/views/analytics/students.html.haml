@@ -31,5 +31,5 @@
       - @nonpredictors.each do |student|
         %tr
           %td= link_to student.name, student_path(student)
-          %td.hidden= student.last_course_login(current_course).strftime("%H%M%m%Y") if student.last_course_login(current_course).present?
-          %td= student.last_course_login(current_course)
+          %td.hidden= l student.last_course_login(current_course) if student.last_course_login(current_course).present?
+          %td= l student.last_course_login(current_course).in_time_zone(current_user.time_zone) if student.last_course_login(current_course).present?

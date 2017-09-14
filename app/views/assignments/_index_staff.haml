@@ -45,10 +45,14 @@
                     %i.fa.fa-arrows-v
                   %td= link_to assignment.name, assignment
                   %td= render partial: "index_icons", locals: { assignment: assignment }
-                  %td= assignment.try(:due_at) || "Ongoing"
+                  %td
+                    - if assignment.due_at.present?
+                      = l assignment.due_at.in_time_zone(current_user.time_zone)
+                    - else
+                      "Ongoing"
                   %td{:style => "display: none"}
                     - if assignment.due_at.present?
-                      = assignment.try(:due_at).in_time_zone(current_user.time_zone)
+                      = l assignment.try(:due_at).in_time_zone(current_user.time_zone)
                   - if assignment.pass_fail?
                     %td.foobers= "#{term_for :pass}/#{term_for :fail}"
                   - else

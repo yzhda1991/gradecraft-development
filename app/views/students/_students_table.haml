@@ -49,7 +49,7 @@
           %td{ style: "display: none" }= student.earned_badges.count
         %td
           - if student.last_activity_at.present?
-            = student.last_activity_at.in_time_zone(current_user.time_zone)
+            = l student.last_activity_at.in_time_zone(current_user.time_zone)
           - else
             (never)
         %td= student.course_activated?

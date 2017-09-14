@@ -15,7 +15,7 @@
 
   %p
     %b= "Earned on:"
-    = @earned_badge.created_at.in_time_zone(current_user.time_zone)
+    = l @earned_badge.created_at.in_time_zone(current_user.time_zone)
 
   %p= raw @earned_badge.feedback
 

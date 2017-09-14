@@ -18,7 +18,7 @@ class Info::DashboardCourseEventsPresenter < Showtime::Presenter
   # figure out what dates need to be shown
   def dates_for(event, user)
     if event.open_at && event.due_at?
-      "#{event.open_at.in_time_zone(user.time_zone)} - #{event.due_at.in_time_zone(user.time_zone)}"
+      "#{event.open_at.in_time_zone(user.time_zone)} - #{ event.due_at.in_time_zone(user.time_zone)}"
     elsif event.due_at?
       "Due: #{event.due_at.in_time_zone(user.time_zone)}"
     end

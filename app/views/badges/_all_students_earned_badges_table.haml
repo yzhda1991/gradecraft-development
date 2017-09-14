@@ -35,7 +35,7 @@
           .right
             - presenter.badge.earned_badges.where(student_id: student.id).each do |badge|
               %ul.button-bar
-                %li= link_to decorative_glyph(:star) + "Awarded #{badge.created_at.in_time_zone(current_user.time_zone)}", badge_earned_badge_path(presenter.badge, badge.id), class: "button"
+                %li= link_to decorative_glyph(:star) + "Awarded #{l badge.created_at.in_time_zone(current_user.time_zone)}", badge_earned_badge_path(presenter.badge, badge.id), class: "button"
                 = active_course_link_to decorative_glyph(:edit) + "Edit", edit_badge_earned_badge_path(presenter.badge, badge), class: "button"
                 = active_course_link_to decorative_glyph(:trash) + "Delete", badge_earned_badge_path(presenter.badge, badge), class: "button", :method => :delete, data: { confirm: "Are you sure you want to delete this award?" }
               .clear

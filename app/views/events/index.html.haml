@@ -19,8 +19,8 @@
       - @events.each do |event|
         %tr
           %td= link_to event.name, event
-          %td= event.open_at.in_time_zone(current_user.time_zone) if event.open_at?
-          %td= event.due_at.in_time_zone(current_user.time_zone) if event.due_at?
+          %td= l event.open_at.in_time_zone(current_user.time_zone) if event.open_at?
+          %td= l event.due_at.in_time_zone(current_user.time_zone) if event.due_at?
           %td
             - if current_user_is_staff?
               .button-container.dropdown

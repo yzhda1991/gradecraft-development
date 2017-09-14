@@ -10,7 +10,7 @@
       - if current_course.max_assignment_types_weighted.present?
         %li You may weight up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
       - if current_course.weights_close_at.present?
-        %li You have until  <b>#{current_course.weights_close_at.in_time_zone(current_user.time_zone)}</b> to make your decision
+        %li You have until  <b>#{l current_course.weights_close_at.in_time_zone(current_user.time_zone)}</b> to make your decision
 
   .module-section
     %p Your Choices:
