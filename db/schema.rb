@@ -165,8 +165,9 @@ ActiveRecord::Schema.define(version: 20171012154015) do
     t.boolean  "show_points_when_locked",      default: true
     t.boolean  "show_description_when_locked", default: true,       null: false
     t.boolean  "student_awardable",            default: false,      null: false
-    t.string   "state",                        default: "Proposed", null: false
-    t.integer  "user_id",                                           null: false
+    t.string   "state",                        default: "proposed", null: false
+    t.integer  "created_by",                   default: 0
+    t.index ["created_by"], name: "index_badges_on_created_by", using: :btree
   end
 
   create_table "challenge_files", force: :cascade do |t|
