@@ -138,10 +138,24 @@ describe InfoController do
       end
     end
 
-    describe "GET submissions export" do
-      it "retrieves the submissions export download" do
-        get :submissions, params: { id: course.id }, format: :csv
-        expect(response.body).to include("Submission ID,Assignment ID,Assignment Name,Student Email,Student ID,Group ID,Student Comment,Created At,Updated At,Score,Grader Feedback,Grade Last Updated")
+    describe "GET submission export" do
+      it "retrieves the submission export" do
+        expect(SubmissionExportJob).to \
+          receive(:new).with(user_id: professor.id, course_id: course.id, filename: "#{ course.name } Submissions Export - #{ Date.today }.csv")
+            .and_call_original
+        expect_any_instance_of(SubmissionExportJob).to receive(:enqueue)
+        get :submissions, params: { id: course.id }
+      end
+
+      it "redirects to the root path if there is no referer" do
+        get :submissions, params: { id: course.id }
+        expect(response).to redirect_to root_path
+      end
+
+      it "redirects to the referer if there is one" do
+        request.env["HTTP_REFERER"] = dashboard_path
+        get :submissions, params: { id: course.id }
+        expect(response).to redirect_to dashboard_path
       end
     end
   end
