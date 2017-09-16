@@ -11,7 +11,7 @@
       %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
-      %th.options Options
+      %th.options{"data-dynatable-no-sort": "true"} Options
   %tbody
     - @teams.each_with_index do |team, index|
       %tr

@@ -13,6 +13,7 @@ en:
       default: "%A, %b %d, %Y, %l:%M%p %Z"
       long: "%d %B, %Y %H:%M"
       sortable: "%d%m%H%M%S"
+      short: "%D"
     pm: pm
   simple_form:
     placeholders:

@@ -20,7 +20,7 @@
         %th{style: "display: none"} Badge Count
       %th Last Activity
       %th{style: "display: none"} Active
-      %th.options Options
+      %th.options{"data-dynatable-no-sort": "true"} Options
   %tbody
     - index = 0
     - presenter.students.each_with_index do |student|
