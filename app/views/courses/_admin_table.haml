@@ -2,11 +2,11 @@
   %caption.sr-only Course Overview
   %thead
     %tr
-      %th{style: "display: none"} Active
-      %th{style: "display: none"} Published
-      %th{style: "display: none"} Badges
-      %th{style: "display: none"} Sections
-      %th{style: "display: none"} Paid
+      %th.hidden Active
+      %th.hidden Published
+      %th.hidden Badges
+      %th.hidden Sections
+      %th.hidden Paid
       %th{scope: "col"} Course No
       %th{scope: "col"} Name
       %th{scope: "col"} Instructor(s)
@@ -21,11 +21,11 @@
   %tbody
     - @courses.each do |course|
       %tr
-        %td{style: "display: none"}= course.active? ? 1 : 0
-        %td{style: "display: none"}= course.published? ? 1 : 0
-        %td{style: "display: none"}= course.has_badges? ? 1 : 0
-        %td{style: "display: none"}= course.has_teams? ? 1 : 0
-        %td{style: "display: none"}= course.has_paid? ? 1 : 0
+        %td.hidden= course.active? ? 1 : 0
+        %td.hidden= course.published? ? 1 : 0
+        %td.hidden= course.has_badges? ? 1 : 0
+        %td.hidden= course.has_teams? ? 1 : 0
+        %td.hidden= course.has_paid? ? 1 : 0
         %td= course.course_number
         %td= link_to course.name, change_course_path(id: course.id)
         %td

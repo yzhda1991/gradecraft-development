@@ -4,7 +4,7 @@
       %th Name
       %th Max Points
       %th{"data-dynatable-sorts" => "dueDate"} Due
-      %th{:style => "display: none"} Due Date
+      %th.hidden Due Date
       %th Visible
       %th Submissions?
       %th{ :style => "min-width: 220px" }
@@ -15,7 +15,7 @@
         %td= link_to challenge.name, challenge
         %td= points challenge.full_points
         %td= l challenge.due_at.in_time_zone(current_user.time_zone) if challenge.due_at.present?
-        %td{:style => "display: none"}
+        %td.hidden
           = l challenge.due_at.in_time_zone(current_user.time_zone) if challenge.due_at.present?
         %td= challenge.visible? ? "Visible" : "Hidden"
         %td= challenge.accepts_submissions? ? "Yes" : "No"
