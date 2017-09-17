@@ -7,7 +7,12 @@
       .event-slide
         .slide-header
           %h2.event-name= link_to event.name, event
-        %p.event-date= glyph(:calendar) + presenter.dates_for(event, current_user)
+        %p.event-date
+          = glyph(:calendar)
+          - if event.open_at && event.due_at?
+            = "#{l event.open_at.in_time_zone(current_user.time_zone)} - #{ l event.due_at.in_time_zone(current_user.time_zone)}"
+          - elsif event.due_at?
+            = "Due: #{l event.due_at.in_time_zone(current_user.time_zone)}"
         .slide-body
           .event-information
             - if event.media.present?
