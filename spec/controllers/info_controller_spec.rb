@@ -1,4 +1,4 @@
-describe InfoController, focus: true do
+describe InfoController do
   let(:course) { create(:course) }
   let(:course_2) { create(:course) }
   let(:professor) { create(:user, courses: [course], role: :professor) }
