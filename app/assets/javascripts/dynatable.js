@@ -19,6 +19,7 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         min: 'numeric',
         max: 'numeric',
         median: 'numeric',
+        maxPoints: 'numeric',
         aveTheAverageOfAllGradesIncludingThoseWhoEarnedZero: 'numeric',
         avgEarnedTheAverageOfAllScoresAboveZero: 'numeric',
         date: 'date',
@@ -28,7 +29,9 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         predictedScore: 'numeric',
         id: 'numeric',
         lastLogin: 'date',
-        calendarDate: 'numeric'
+        calendarDate: 'numeric',
+        openDateSort: 'numeric',
+        closeDateSort: 'numeric'
       }
     }
 });
