@@ -4,7 +4,8 @@
     %tr
       %th= term_for :challenge
       %th Points
-      %th Due
+      %th{"data-dynatable-sorts" => "dueDate"} Due
+      %th.hidden Due Date
 
   %tbody
     - current_course.challenges.chronological.alphabetical.includes(:challenge_files, :challenge_grades).each do |challenge|
@@ -16,4 +17,6 @@
               = "#{ points challenge.challenge_grade_for_team(@team).try(:final_points) } / #{ points challenge.full_points }"
             - else
               %span.italic= " #{ points challenge.full_points } points possible"
-          %td= challenge.due_at.in_time_zone(current_user.time_zone) if challenge.due_at.present?
+          %td= l challenge.due_at.in_time_zone(current_user.time_zone) if challenge.due_at.present?
+          %td.hidden
+            = l challenge.due_at.in_time_zone(current_user.time_zone), format: :sortable if challenge.due_at.present?

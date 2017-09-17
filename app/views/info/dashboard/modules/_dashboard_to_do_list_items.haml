@@ -16,7 +16,7 @@
           %span.italic= "You must unlock this #{(term_for :assignment).downcase} to learn more about it"
         .small.uppercase= "#{assignment.assignment_type.name}"
       - if assignment.due_at?.present?
-        .due-date= "Due: #{assignment.due_at.in_time_zone(current_user.time_zone)}"
+        .due-date= "Due: #{l assignment.due_at.in_time_zone(current_user.time_zone)}"
       - if presenter.submittable?(assignment)
         - if assignment.is_individual?
           .right= render "students/submissions", assignment: assignment

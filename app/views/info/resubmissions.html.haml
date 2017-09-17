@@ -38,8 +38,8 @@
                   - if team.present?
                     = link_to team.name, team
               %td= points grade.score
-              %td= grade.graded_at.in_time_zone(current_user.time_zone)
-              %td= re.submitted_at.in_time_zone(current_user.time_zone)
+              %td= l grade.graded_at.in_time_zone(current_user.time_zone)
+              %td= l re.submitted_at.in_time_zone(current_user.time_zone)
               %td
                 .right
                   %ul.button-bar
@@ -49,7 +49,7 @@
               %td= link_to re.group.name, group_path(id: re.group.id)
               %td
               %td
-              %td= re.submitted_at.in_time_zone(current_user.time_zone)
+              %td= l re.submitted_at.in_time_zone(current_user.time_zone)
               %td
                 .right
                   %ul.button-bar

@@ -17,10 +17,11 @@
       %th Level
       - if presenter.has_badges?
         %th #{ term_for :badges }
-        %th{style: "display: none"} Badge Count
-      %th Last Activity
-      %th{style: "display: none"} Active
-      %th.options Options
+        %th.hidden Badge Count
+      %th.hidden Calendar Date
+      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Last Activity
+      %th.hidden Active
+      %th.options{"data-dynatable-no-sort": "true"} Options
   %tbody
     - index = 0
     - presenter.students.each_with_index do |student|
@@ -46,13 +47,12 @@
           %td#earned_badges{"data-title" => "Badges"}
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
-          %td{ style: "display: none" }= student.earned_badges.count
-        %td
+          %td.hidden= student.earned_badges.count
+        %td.hidden
           - if student.last_activity_at.present?
-            = student.last_activity_at.in_time_zone(current_user.time_zone)
-          - else
-            (never)
-        %td= student.course_activated?
+            = l student.last_activity_at.in_time_zone(current_user.time_zone), format: :sortable
+        %td= l student.last_activity_at.in_time_zone(current_user.time_zone) if student.last_activity_at.present?
+        %td.hidden= student.course_activated?
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")

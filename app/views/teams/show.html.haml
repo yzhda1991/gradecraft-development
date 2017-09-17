@@ -20,7 +20,7 @@
         %th Level
         - if current_course.has_badges?
           %th{scope: "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
-          %th{:style => "display: none"} Badge Count
+          %th.hidden Badge Count
         %th{:width => "20%"}
     %tbody
       - @team.active_members(current_course).each do |student|
@@ -38,7 +38,7 @@
                 = tooltip("earned-badge-tip_#{badge.id}", badge.try(:icon), type: "image") do
                   #{badge.try(:name)}
 
-            %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
+            %th.hidden= student.earned_badges_for_course(current_course).count
           %td
             .right
               %ul.button-bar

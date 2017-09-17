@@ -2,6 +2,19 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  dates:
+    formats:
+      default: "%d-%m-%Y"
+      long: "%d %B, %Y"
+      short: "%d %b"
+  time:
+    am: am
+    formats:
+      default: "%A, %b %d, %Y, %l:%M%p %Z"
+      long: "%d %B, %Y %H:%M"
+      sortable: "%m%d%H%M%S"
+      short: "%D"
+    pm: pm
   simple_form:
     placeholders:
       user:

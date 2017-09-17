@@ -19,8 +19,8 @@
         %th{scope: "col"} Total Points
         - if current_user_is_staff?
           %th{scope: "col"} # of Students
-          %th{style: "text-align: right"} Downloads
-          %th.options Options
+          %th{style: "text-align: right", "data-dynatable-no-sort": "true"} Downloads
+          %th.options{"data-dynatable-no-sort": "true"} Options
     %tbody
       - @courses.each do |course|
         %tr

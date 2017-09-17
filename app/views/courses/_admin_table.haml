@@ -2,11 +2,11 @@
   %caption.sr-only Course Overview
   %thead
     %tr
-      %th{style: "display: none"} Active
-      %th{style: "display: none"} Published
-      %th{style: "display: none"} Badges
-      %th{style: "display: none"} Sections
-      %th{style: "display: none"} Paid
+      %th.hidden Active
+      %th.hidden Published
+      %th.hidden Badges
+      %th.hidden Sections
+      %th.hidden Paid
       %th{scope: "col"} Course No
       %th{scope: "col"} Name
       %th{scope: "col"} Instructor(s)
@@ -14,17 +14,18 @@
       %th{scope: "col"} Year
       %th{scope: "col"} Total Points
       %th{scope: "col"} # of Students
-      %th{scope: "col"} Created
+      %th Calendar Date
+      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Created
       %th{style: "text-align: right", "data-dynatable-no-sort": 'true'} Downloads
       %th.options{"data-dynatable-no-sort": 'true'} Options
   %tbody
     - @courses.each do |course|
       %tr
-        %td{style: "display: none"}= course.active? ? 1 : 0
-        %td{style: "display: none"}= course.published? ? 1 : 0
-        %td{style: "display: none"}= course.has_badges? ? 1 : 0
-        %td{style: "display: none"}= course.has_teams? ? 1 : 0
-        %td{style: "display: none"}= course.has_paid? ? 1 : 0
+        %td.hidden= course.active? ? 1 : 0
+        %td.hidden= course.published? ? 1 : 0
+        %td.hidden= course.has_badges? ? 1 : 0
+        %td.hidden= course.has_teams? ? 1 : 0
+        %td.hidden= course.has_paid? ? 1 : 0
         %td= course.course_number
         %td= link_to course.name, change_course_path(id: course.id)
         %td
@@ -35,7 +36,8 @@
         %td= course.year
         %td= points course.total_points
         %td= course.student_count
-        %td= course.created_at.in_time_zone(current_user.time_zone)
+        %td= l course.created_at, format: :sortable
+        %td= l course.created_at.in_time_zone(current_user.time_zone)
         %td
           .button-container.dropdown
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Downloads"}= decorative_glyph("cloud-download") + decorative_glyph("caret-down")

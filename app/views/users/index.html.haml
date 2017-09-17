@@ -15,7 +15,7 @@
         %th Courses
         %th #{term_for :team}
         %th Score
-        %th.options Options
+        %th.options{"data-dynatable-no-sort": "true"} Options
     %tbody
       - @users.each do |user|
         %tr

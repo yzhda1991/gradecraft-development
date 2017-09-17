@@ -9,7 +9,7 @@
 
   %p
     %strong Sent:
-    = @announcement.created_at.in_time_zone(current_user.time_zone)
+    = l @announcement.created_at.in_time_zone(current_user.time_zone)
 
   %p
     %strong Subject:

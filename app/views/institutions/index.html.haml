@@ -12,7 +12,7 @@
       %tr
         %th{scope: "col"} Name
         %th{scope: "col"} Has Site License?
-        %th.options{scope: "col"} Options
+        %th.options{scope: "col", "data-dynatable-no-sort": "true"} Options
     %tbody
       - @institutions.each do |institution|
         %tr

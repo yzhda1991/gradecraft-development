@@ -3,7 +3,7 @@
   %fieldset.proposal.panel
     %span.columns
       %h4.bold= "Proposal ##{i}: #{proposal.title}"
-      %h6= "Created: #{proposal.created_at.in_time_zone(current_user.time_zone)}"
+      %h6= "Created: #{l proposal.created_at.in_time_zone(current_user.time_zone)}"
       %p= raw proposal.proposal
       - i += 1
   %hr.dotted

@@ -5,7 +5,8 @@
       %th{scope: "col", :width => "7%"} Name
       - if course.has_teams?
         %th{scope: "col", :width => "15%"}= "#{term_for :team}"
-      %th{scope: "col"} Date Submitted
+      %th.hidden Calendar Date
+      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Date Submitted
       %th{scope: "col", :style => "min-width: 200px"}
         %span.sr-only Actions
   %tbody
@@ -23,7 +24,8 @@
               = link_to team.name, team if student.present? && team.present?
         - elsif assignment.has_groups?
           %td= link_to group.try(:name), group_path(group)
-        %td= submission.submitted_at.in_time_zone(current_user.time_zone)
+        %td.hidden= l submission.submitted_at, format: :sortable
+        %td= l submission.submitted_at.in_time_zone(current_user.time_zone)
         %td
           .right
             %ul.button-bar

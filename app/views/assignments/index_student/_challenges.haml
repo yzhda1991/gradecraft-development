@@ -18,7 +18,7 @@
             = link_to challenge.name, challenge
           .assignment-info.assignment-due-date
             - if challenge.future?
-              = "#{challenge.due_at.in_time_zone(current_user.time_zone)}"
+              = "#{l challenge.due_at.in_time_zone(current_user.time_zone)}"
           .assignment-info.assignment-pass-fail
             - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
               .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).score} / #{points challenge.full_points} points earned"

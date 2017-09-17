@@ -54,7 +54,7 @@
       %td
         - unless student_submission.nil?
           = presenter.submission_submitted_date_for(student_submission)
-      %td{:style => "display: none"}
+      %td.hidden
         = presenter.submission_submitted_date_for(student_submission).to_formatted_s(:db) if presenter.submission_submitted_date_for(student_submission).present?
 
     %td

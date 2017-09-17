@@ -4,6 +4,6 @@
   - @announcements.first(3).each do |announcement|
     %li.announcement-item{class: ("announcement-unread" if !announcement.read?(current_user))}
       = link_to announcement.title, announcement_path(announcement)
-      %p.announcement-date= announcement.created_at.in_time_zone(current_user.time_zone)
+      %p.announcement-date= l announcement.created_at.in_time_zone(current_user.time_zone)
       %p= sanitize(announcement.body, tags: %w(p), attributes: %w()).truncate(70, :separator => "...").gsub(/<\/?p>/, " ")
   %li.small= link_to "View all announcements", announcements_path
