@@ -17,7 +17,7 @@
         %h2 The Submission
         = render partial: "submissions/submission_content",
             locals: { presenter: Submissions::ShowPresenter.new(id: presenter.submission_for_assignment(@grade.student).id,
-              assignment_id: @grade.assignment_id, course: current_course) }
+              assignment_id: @grade.assignment_id, course: current_course, group_id: @grade.group_id) }
         = history_timeline presenter.submission_grade_history(@grade.student)
         %hr.dotted
 
