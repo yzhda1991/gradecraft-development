@@ -20,7 +20,7 @@
               return '<li><a href="#">' + label + '</a></li>';
             },
             filter: function(item, query) {
-              return item.name.match(new RegExp(query, 'i'));
+              return item.search_string.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
             window.location = '/students/' + id;

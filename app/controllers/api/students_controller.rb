@@ -6,7 +6,7 @@ class API::StudentsController < ApplicationController
   # PUT api/students
   def index
     students = current_course.students.map do |u|
-      { name: u.name, id: u.id }
+      { name: u.formatted_long_name, id: u.id, search_string: u.searchable_name }
     end
     render json: MultiJson.dump(students)
   end
@@ -33,5 +33,3 @@ class API::StudentsController < ApplicationController
     @course_potential_points_for_student = current_course.total_points + @earned_badge_points
   end
 end
-
-

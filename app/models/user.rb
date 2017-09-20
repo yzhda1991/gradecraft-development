@@ -404,6 +404,18 @@ class User < ActiveRecord::Base
     course_memberships.where(course: course).first.last_login_at
   end
 
+  def formatted_long_name
+    if email.present?
+      "#{self.name} #{self.email}"
+    else
+      "#{self.name}"
+    end
+  end
+
+  def searchable_name
+    "#{ formatted_long_name}"
+  end
+
   private
 
   def earnable_course_badges(grade)
