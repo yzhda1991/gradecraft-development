@@ -99,7 +99,7 @@ class API::AssignmentsController < ApplicationController
       :hide_analytics,
       :media,
       :min_group_size,
-      :max_group_sie,
+      :max_group_size,
       :name,
       :open_at,
       :pass_fail,
