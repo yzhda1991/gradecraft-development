@@ -12,7 +12,11 @@ describe API::StudentsController do
     describe "GET index" do
       it "returns students and ids" do
         get :index, format: :json
-        expect(JSON.parse(response.body)).to eq([{"name"=>"#{student.name}", "id"=>student.id}])
+        expect(JSON.parse(response.body)).to eq([{
+          "name"=>"#{student.name}",
+          "id"=>student.id,
+          "search_string"=>"#{student.name } #{student.email}"
+          }])
         expect(response.status).to eq(200)
       end
     end

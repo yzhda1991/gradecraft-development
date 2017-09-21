@@ -6,7 +6,7 @@ class API::StudentsController < ApplicationController
   # PUT api/students
   def index
     students = current_course.students.map do |u|
-      { name: u.formatted_long_name, id: u.id, search_string: u.searchable_name }
+      { name: u.name, id: u.id, search_string: u.searchable_name }
     end
     render json: MultiJson.dump(students)
   end
