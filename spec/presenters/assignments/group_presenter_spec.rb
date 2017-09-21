@@ -4,14 +4,6 @@ describe Assignments::GroupPresenter do
   let(:submission) { double(:submission) }
   subject { Assignments::GroupPresenter.new({ assignment: assignment, group: group })}
 
-  describe "#assignment_graded?" do
-    it "has been graded if it has been graded for any user in the group" do
-      student = double(:user, grade_for_assignment: double(:grade, instructor_modified?: true, student_visible?: true))
-      allow(group).to receive(:students).and_return [student]
-      expect(subject.assignment_graded?).to eq true
-    end
-  end
-
   describe "#grade_for_student" do
     it "returns the grade for the specified student" do
       grade = double(:grade)
