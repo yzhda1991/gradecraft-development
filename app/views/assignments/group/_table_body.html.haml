@@ -1,58 +1,63 @@
-- presenter.groups.each do |group_presenter|
+- @assignment.groups.each do |group|
   %tr
-    %td= link_to group_presenter.group.name, group_presenter.group
-    %td= group_presenter.group.approved
+    %td= link_to group.name, group
+    %td= group.approved
     %td
       .right
         %ul.button-bar
-          %li= link_to "Review #{term_for :group}", edit_group_path(id: group_presenter.group), class: "button"
-          - if presenter.assignment.accepts_submissions? && !group_presenter.submission
-            = active_course_link_to "Submit", group_presenter.path_for_new_submission, class: "button"
-          - if group_presenter.assignment_graded?
-            = active_course_link_to decorative_glyph(:edit) + "Edit Grade", group_presenter.path_for_grading_assignment, class: "button"
+          // Instructors can edit the group - change the assignments they work on,
+          // Update their membership, alter their name
+          %li= link_to "Review #{term_for :group}", edit_group_path(group), class: "button"
+          // If the assignment allows submissions and the group doesn't have one
+          // then the instructor can add one
+          - if @assignment.accepts_submissions? && !group.submission_for_assignment(@assignment)
+            = active_course_link_to "Submit", new_assignment_submission_path(@assignment, group_id: group.id), class: "button"
+          - grade = group.students.first.grade_for_assignment(@assignment)
+          - if grade.present? && grade.instructor_modified?
+            = active_course_link_to decorative_glyph(:edit) + "Edit Grade", grade_assignment_group_path(@assignment, group), class: "button"
           - else
-            = active_course_link_to decorative_glyph(:edit) + "Grade", group_presenter.path_for_grading_assignment, class: "button"
+            = active_course_link_to decorative_glyph(:edit) + "Grade", grade_assignment_group_path(@assignment, group), class: "button"
     %td
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
           %tr
             %th= "#{current_course.student_term}s"
             %th Score
-            - if group_presenter.student_weightable?
+            - if @assignment.assignment_type.student_weightable?
               %th Multiplied Scores
-            - if group_presenter.has_levels?
+            - if @assignment.has_levels?
               %th Level
             %th Graded
             %th Student Visible
-            %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-              %button.button.select-all{role: "button", type: "button"}= "Check"
-              %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+            - if group.grades.not_released.any?
+              %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+                %button.button.select-all{role: "button", type: "button"}= "Check"
+                %button.button.select-none{role: "button", type: "button"}= "Uncheck"
             %th
         %tbody
-          - group_presenter.students.order_by_name.each do |student|
+          - group.students.order_by_name.each do |student|
             %tr
               %td= link_to student.name, student_path(student)
-              - grade = group_presenter.grade_for_student(student)
+              - grade = @assignment.grades.find_by(student_id: student.id)
 
               %td
                 - if grade.present? && grade.instructor_modified?
-                  - if group_presenter.pass_fail? && grade.pass_fail_status.present?
+                  - if @assignment.pass_fail? && grade.pass_fail_status.present?
                     = term_for grade.pass_fail_status
                   - else
                     = points grade.final_points
 
-              - if group_presenter.student_weightable?
+              - if @assignment.student_weightable?
                 %td
                   - if grade.present?
                     = points grade.score
-              - if group_presenter.has_levels?
-                %td= group_presenter.grade_level(grade)
-
-              %td= decorative_glyph(:check) if grade.complete?
-              %td= decorative_glyph(:check) if grade.student_visible?
+              - if @assignment.has_levels?
+                %td= @assignment.grade_level(grade)
+              %td= decorative_glyph(:check) if grade && grade.complete?
+              %td= decorative_glyph(:check) if grade && grade.student_visible?
               %td
                 - if grade && grade.not_released?
                   = check_box_tag "grade_ids[]", grade.id
               %td
-                - if group_presenter.assignment_graded?
+                - if grade && grade.instructor_modified?
                   = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
