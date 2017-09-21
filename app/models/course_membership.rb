@@ -20,6 +20,7 @@ class CourseMembership < ActiveRecord::Base
   scope :instructors_of_record, -> { where(instructor_of_record: true) }
   # scope to help guide emails to people (both students and staff) who are participating in the class, but not admins
   scope :participants, -> { where.not(role: "admin") }
+  scope :active, -> { where(active: true) }
 
   validates_presence_of :course, :user, :role
 

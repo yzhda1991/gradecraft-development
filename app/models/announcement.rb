@@ -28,7 +28,7 @@ class Announcement < ActiveRecord::Base
     if !recipient.nil? && recipient.email_announcements?(course)
       AnnouncementMailer.announcement_email(self, recipient).deliver_now
     elsif !course.nil?
-      course.course_memberships.participants.each do |p|
+      course.course_memberships.active.participants.each do |p|
         if p.email_announcements?
           AnnouncementMailer.announcement_email(self, p.user).deliver_now
         end
