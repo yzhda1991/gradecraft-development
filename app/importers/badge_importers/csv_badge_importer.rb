@@ -102,7 +102,7 @@ class CSVBadgeImporter
   end
 
   def append_unsuccessful(row, errors)
-    unsuccessful << { data: row.to_s, errors: errors }
+    unsuccessful << { data: row.to_s.split(","), errors: errors }
   end
 
   class BadgeRow

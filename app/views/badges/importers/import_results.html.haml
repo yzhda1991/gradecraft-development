@@ -7,12 +7,22 @@
     %table.dynatable
       %thead
         %tr
-          %th Data
-          %th Error(s)
+          %th First Name
+          %th Last Name
+          %th Email
+          %th Current Earned Count
+          %th New Awarded Count
+          %th Feedback
+          %th Error
       %tbody
         - @result.unsuccessful.each do |row|
           %tr
-            %td= row[:data]
+            %td= row[:data][0]
+            %td= row[:data][1]
+            %td= row[:data][2]
+            %td= row[:data][3]
+            %td= row[:data][4]
+            %td= row[:data][5]
             %td= row[:errors]
 
   %h2.subtitle
