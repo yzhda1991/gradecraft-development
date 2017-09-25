@@ -44,11 +44,6 @@ class CSVBadgeImporter
           unchanged << earned_badge
         end
 
-        if !row.has_earned? # check earned column, should be an integer, if blank it should skip
-          append_unsuccessful row, "Earned unspecified"
-          next
-        end
-
         if Integer(row.current_badges_total) > Integer(row.new_badges_total)
           append_unsuccessful row, "New Count cannot be fewer than current count"
         end
