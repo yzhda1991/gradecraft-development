@@ -35,12 +35,12 @@ class CSVBadgeImporter
         earned_badge = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).first
         earned_badge_count = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count
 
-        if row.new_badges_total.empty? || row.new_badges_total.nil?
+        if row.new_badges_total.empty?
           # Record in sample file wasn't changed so we assume Instructor didn't intend to see any changes
           next
         end
 
-        if Integer(row.new_badges_total) == earned_badge_count || row.new_badges_total.nil?
+        if Integer(row.new_badges_total) == earned_badge_count
           unchanged << earned_badge
         end
 
@@ -53,7 +53,7 @@ class CSVBadgeImporter
           report row, earned_badge
           earned_badge_count +=1
         end
-
+        
       end
     end
     self
