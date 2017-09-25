@@ -28,8 +28,3 @@
   %h2.subtitle
     = "#{@result.successful.count} #{"Badge".pluralize(@result.successful.count)} Imported Successfully"
   = render partial: "badges/importers/import_results_table", locals: { earned_badges: @result.successful }
-
-  - unless @result.unchanged.empty?
-    %h2.subtitle
-      = "#{@result.unchanged.count} #{"Badge".pluralize(@result.unchanged.count)} Not Imported (already existed)"
-    = render partial: "badges/importers/import_results_table", locals: { earned_badges: @result.unchanged }

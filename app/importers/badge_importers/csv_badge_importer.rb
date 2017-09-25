@@ -80,7 +80,6 @@ class CSVBadgeImporter
       # Using custom method to check if integer because Integer() will return 0 for words like "ten"
       return false if !is_an_intiger?(current_badges_total)
       return false if !is_an_intiger?(new_badges_total)
-      # Integer() vs to_i to prevent unwanted coercion
       true
     rescue ArgumentError
       false

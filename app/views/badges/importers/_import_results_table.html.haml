@@ -3,10 +3,10 @@
     %tr
       %th First Name
       %th Last Name
-      %th Email
+      %th Feedback
   %tbody
     - earned_badges.each do |earned_badge|
       %tr
         %td= link_to earned_badge.student.first_name, student_path(earned_badge.student)
         %td= link_to earned_badge.student.last_name, student_path(earned_badge.student)
-        %td= link_to earned_badge.student.email, student_path(earned_badge.student)
+        %td= earned_badge.feedback
