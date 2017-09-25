@@ -27,12 +27,7 @@ class CSVBadgeImporter
           next
         end
 
-        if !row.has_earned? # check earned column, should be an integer, if blank it should skip
-          append_unsuccessful row, "Earned unspecified"
-          next
-        end
-
-        if !is_valid_badge? row.has, row.earned
+        if !is_valid_badge? row.current_badges_total, row.new_badges_total
           append_unsuccessful row, "Badge row is invalid"
           next
         end
@@ -40,11 +35,25 @@ class CSVBadgeImporter
         earned_badge = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).first
         earned_badge_count = @current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count
 
-        if Integer(row.earned) == earned_badge_count
+        if row.new_badges_total.empty? || row.new_badges_total.nil?
+          # Record in sample file wasn't changed so we assume Instructor didn't intend to see any changes
+          next
+        end
+
+        if Integer(row.new_badges_total) == earned_badge_count || row.new_badges_total.nil?
           unchanged << earned_badge
         end
 
-        while earned_badge_count < Integer(row.earned)
+        if !row.has_earned? # check earned column, should be an integer, if blank it should skip
+          append_unsuccessful row, "Earned unspecified"
+          next
+        end
+
+        if Integer(row.current_badges_total) > Integer(row.new_badges_total)
+          append_unsuccessful row, "New Count cannot be fewer than current count"
+        end
+
+        while earned_badge_count < Integer(row.new_badges_total)
           earned_badge = create_badge row, badge, student
           report row, earned_badge
           earned_badge_count +=1
@@ -65,12 +74,13 @@ class CSVBadgeImporter
   end
 
   # Ensures that the input is valid and integer-like
-  def is_valid_badge?(has, earned)
+  def is_valid_badge?(current_badges_total, new_badges_total)
     begin
-      return false if has.nil?
-      return false if earned.nil?
+      return false if current_badges_total.nil?
+      # Using custom method to check if integer because Integer() will return 0 for words like "ten"
+      return false if !is_an_intiger?(current_badges_total)
+      return false if !is_an_intiger?(new_badges_total)
       # Integer() vs to_i to prevent unwanted coercion
-      return false if Integer(has) > Integer(earned)
       true
     rescue ArgumentError
       false
@@ -105,6 +115,11 @@ class CSVBadgeImporter
     unsuccessful << { data: row.to_s.split(","), errors: errors }
   end
 
+  def is_an_intiger?(value_to_check)
+    return true if value_to_check.nil? || value_to_check.empty?
+    !!(value_to_check =~ /\A[-+]?[0-9]+\z/)
+  end
+
   class BadgeRow
     include QuoteHelper
     attr_reader :data
@@ -113,11 +128,11 @@ class CSVBadgeImporter
       remove_smart_quotes(data[2]).downcase if data[2].present?
     end
 
-    def has
+    def current_badges_total
       remove_smart_quotes(data[3])
     end
 
-    def earned
+    def new_badges_total
       remove_smart_quotes(data[4])
     end
 
@@ -126,7 +141,7 @@ class CSVBadgeImporter
     end
 
     def has_earned?
-      earned.present?
+      new_badges_total.present?
     end
 
     def initialize(data)
