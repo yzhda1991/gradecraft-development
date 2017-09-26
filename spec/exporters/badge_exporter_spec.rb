@@ -14,8 +14,8 @@ describe BadgeExporter do
       expect(csv[1][1]).to eq student1.last_name
       expect(csv[1][2]).to eq student1.email
       expect(csv[1][3]).to eq course.earned_badges.where(student_id: student1.id, badge_id: badge.id).count.to_s
-      expect(csv[1][4]).to eq "1"
-      expect(csv[1][5]).to eq "Awesome Job!"
+      expect(csv[1][4]).to eq nil
+      expect(csv[1][5]).to eq nil
     end
   end
 end

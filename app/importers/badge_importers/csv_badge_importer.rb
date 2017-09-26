@@ -53,7 +53,6 @@ class CSVBadgeImporter
           report row, earned_badge
           earned_badge_count +=1
         end
-        
       end
     end
     self
