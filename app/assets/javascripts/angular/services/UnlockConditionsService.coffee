@@ -110,7 +110,7 @@
       )
     else
       DebounceQueue.addEvent(
-        "unlocks", condition.id, _updateCondition, [condition]
+        "unlocks", condition.id, _updateCondition, [condition], 750
       )
 
   # We need to remove all other fields when the
