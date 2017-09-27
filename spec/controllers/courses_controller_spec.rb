@@ -197,9 +197,9 @@ describe CoursesController do
         expect(response).to redirect_to("http://some-referer.com")
       end
 
-      it "redirects to dashboard if referer url is not present" do
+      it "redirects to students_path if referer url is not present" do
         post :activate_all_students, params:{id: course.id}
-        expect(response).to redirect_to(dashboard_path)
+        expect(response).to redirect_to(students_path)
       end
     end
 

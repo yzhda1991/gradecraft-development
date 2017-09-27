@@ -139,9 +139,9 @@ class CoursesController < ApplicationController
       student.activate!
     end
     if total != 1
-      redirect_to session[:return_to] || dashboard_path, notice: "#{total} students have been activated!" and return
+      redirect_to session[:return_to] || students_path, notice: "#{total} #{(term_for :student).downcase}(s) have been activated!" and return
     else
-      redirect_to session[:return_to] || dashboard_path, notice: "#{total} student has been activated!" and return
+      redirect_to session[:return_to] || students_path, notice: "#{total} #{t(term_for :student).downcase}(s) has been activated!" and return
     end
   end
 
