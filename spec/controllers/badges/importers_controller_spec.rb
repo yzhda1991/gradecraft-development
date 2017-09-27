@@ -10,6 +10,13 @@ describe Badges::ImportersController do
 
     before { login_user professor }
 
+    describe "GET show" do
+      it "renders the correct template if the importer provider id is allowed" do
+        get :show, params: { badge_id: badge, provider_id: :csv }
+        expect(response).to render_template :csv
+      end
+    end
+
     describe "GET download" do
       it "returns sample csv data" do
         get :download, params: { badge_id: badge.id, importer_provider_id: :csv }, format: :csv
