@@ -7,6 +7,7 @@ json.data do
       json.id                         user.id.to_s
       json.first_name                 user.first_name
       json.last_name                  user.last_name
+      json.email                      user.email
       json.course_memberships user.course_memberships.map {
         |cm| { course_id: cm.course.id,
                course_name: cm.course.formatted_long_name,
