@@ -45,7 +45,7 @@
                   - if @assignment.pass_fail? && grade.pass_fail_status.present?
                     = term_for grade.pass_fail_status
                   - else
-                    = points grade.final_points
+                    = points grade.try(:final_points)
 
               - if @assignment.student_weightable?
                 %td
