@@ -517,6 +517,7 @@ ActiveRecord::Schema.define(version: 20171002182206) do
     t.string  "name",                             null: false
     t.boolean "has_site_license", default: false, null: false
     t.string  "institution_type"
+    t.boolean "has_google_access", default: false, null: false
     t.index ["name"], name: "index_institutions_on_name", using: :btree
   end
 

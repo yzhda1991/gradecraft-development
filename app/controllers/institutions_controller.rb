@@ -38,7 +38,7 @@ class InstitutionsController < ApplicationController
   private
 
   def institution_params
-    params.require(:institution).permit :name, :has_site_license, :institution_type,
+    params.require(:institution).permit :name, :has_site_license, :institution_type, :has_google_access,
       providers_attributes: [:id, :name, :base_url, :providee_id, :consumer_key,
         :consumer_secret, :consumer_secret_confirmation]
   end

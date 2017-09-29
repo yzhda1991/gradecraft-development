@@ -41,6 +41,6 @@
                   Edit Rubric
                 - else
                   Create Rubric
-
-            = active_course_link_to decorative_glyph(:calendar) + "Add to Google Calendar",
-          add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent",  method: :post
+                - if presenter.course.institution.has_google_access?
+                  = active_course_link_to decorative_glyph(:calendar) + "Add to Google Calendar",
+                add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent",  method: :post
