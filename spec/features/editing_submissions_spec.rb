@@ -1,5 +1,7 @@
 feature "editing submissions" do
   context "as a student" do
+    let!(:institution) { create :institution }
+    let(:course) { build :course, institution: institution }
     let(:assignment) { build :assignment, accepts_submissions: true, resubmissions_allowed: true, course: membership.course }
     let(:membership) { create :course_membership, :student, user: student }
     let!(:student) { create :user }

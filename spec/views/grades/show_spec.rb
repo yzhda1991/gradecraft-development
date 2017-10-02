@@ -2,7 +2,8 @@ describe "grades/show" do
   let(:presenter) { Assignments::Presenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
-    @course = create(:course)
+    @institution = create(:institution)
+    @course = create(:course, institution: @institution)
     @assignment = create(:assignment)
     @course.assignments << @assignment
     student = create(:user, courses: [@course], role: :student)

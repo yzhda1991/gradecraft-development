@@ -1,13 +1,13 @@
-feature "viewing submissions" do
-  let(:assignment) { build :assignment, accepts_submissions: true, course: membership.course }
+feature "viewing submissions", focus: true do
+  let!(:institution) { create :institution }
+  let(:course) { create :course, institution: institution }
+  let(:assignment) { create :assignment, accepts_submissions: true, course: course }
   let!(:submission) do
-    create :submission, course: membership.course, assignment: assignment, student: student
+    create :submission, course: course, assignment: assignment, student: student
   end
-  let(:student) { create :user }
+  let(:student) { create :user, courses: [course], role: :student }
 
   context "as a student" do
-    let(:membership) { create :course_membership, :student, user: student }
-
     before { login_as student }
 
     scenario "allows an editable submission if it's before the due date" do
@@ -31,8 +31,7 @@ feature "viewing submissions" do
   end
 
   context "as a professor" do
-    let(:membership) { create :course_membership, :professor, user: professor }
-    let(:professor) { create :user }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before do
       login_as professor
