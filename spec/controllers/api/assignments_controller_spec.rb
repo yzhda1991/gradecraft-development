@@ -24,6 +24,21 @@ describe API::AssignmentsController do
         expect(assigns :grades).to be_nil
         expect(response).to render_template(:index)
       end
+
+      describe "ordered by position" do
+        it "orders primarily by postions and secondarily by assignment type position" do
+          assignment.assignment_type.update(position: 2)
+          at2 = create :assignment_type, position: 1, course: course
+
+          a2 = create :assignment, position: 1, assignment_type: at2, course: course
+          a3 = create :assignment, position: 1, assignment_type: assignment.assignment_type, course: course
+          a4 = create :assignment, position: 2, assignment_type: at2, course: course
+          assignment.update(position: 5)
+          get :index, format: :json
+          expect(assigns(:assignments).pluck(:position)).to eq([1,1,2,5])
+          expect(assigns(:assignments).pluck(:id)).to eq([a2.id, a3.id, a4.id, assignment.id])
+        end
+      end
     end
 
     describe "GET show" do

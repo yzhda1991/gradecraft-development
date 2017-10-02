@@ -1,5 +1,4 @@
-# Manages state for the student side panel. Only in place on the Predictor Page
-# for now, but built to accomodate side panels on other pages.
+# Manages state for the student side panel.
 
 @gradecraft.factory 'StudentPanelService', [ 'GradeCraftAPI', (GradeCraftAPI)->
 
