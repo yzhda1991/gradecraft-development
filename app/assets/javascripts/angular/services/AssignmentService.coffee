@@ -154,7 +154,7 @@
 
   submitAssignment = (id)->
     assignment = _.find(assignments, {id: id})
-    DebounceQueue.cancelEvent("assignments", id)
+    DebounceQueue.runAllEvents()
     if assignment && ValidateDates(assignment).valid
       $http.put("/api/assignments/#{id}", assignment: assignment).then(
         (response) ->

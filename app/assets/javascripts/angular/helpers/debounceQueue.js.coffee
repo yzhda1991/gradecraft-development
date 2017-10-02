@@ -22,18 +22,29 @@ angular.module('helpers').factory('DebounceQueue', ['$timeout', ($timeout)->
       event.apply(null, args)
     else
       cancelEvent(type, id)
-      queueStore[type + id] = $timeout(() ->
-        event.apply(null, args)
-      , delay)
+      queueStore[type + id] = {
+        promise: $timeout(() ->
+          event.apply(null, args)
+        , delay),
+        event: event,
+        args: args
+      }
 
   cancelEvent = (type, id)->
     storeId = type + id
     return false if !queueStore[storeId]
-    $timeout.cancel(queueStore[storeId])
+    $timeout.cancel(queueStore[storeId].promise)
+
+  runAllEvents = ()->
+    _.each(queueStore, (queueItem) ->
+      $timeout.cancel(queueItem.promise)
+      queueItem.event.apply(null, queueItem.args)
+    )
 
   return {
     addEvent: addEvent
     cancelEvent: cancelEvent
+    runAllEvents: runAllEvents
   }
 ])
 
