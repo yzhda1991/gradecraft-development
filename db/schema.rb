@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170805193014) do
+ActiveRecord::Schema.define(version: 20171002182206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 20170805193014) do
   create_table "institutions", force: :cascade do |t|
     t.string  "name",                             null: false
     t.boolean "has_site_license", default: false, null: false
+    t.string  "institution_type"
     t.index ["name"], name: "index_institutions_on_name", using: :btree
   end
 
