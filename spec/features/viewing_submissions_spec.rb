@@ -1,4 +1,4 @@
-feature "viewing submissions", focus: true do
+feature "viewing submissions" do
   let!(:institution) { create :institution }
   let(:course) { create :course, institution: institution }
   let(:assignment) { create :assignment, accepts_submissions: true, course: course }
