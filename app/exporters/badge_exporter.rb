@@ -16,7 +16,9 @@ class BadgeExporter
         csv << [student.first_name,
           student.last_name,
           student.email,
-          current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count,nil,nil]
+          nil,
+          nil,
+          current_course.earned_badges.where(student_id: student.id, badge_id: badge.id).count]
       end
     end
   end
@@ -28,6 +30,6 @@ class BadgeExporter
   end
 
   def export_badge_headers
-    ["First Name", "Last Name", "Email", "Current Earned Count", "New Awarded Count", "Feedback (optional)"].freeze
+    ["First Name", "Last Name", "Email", "New Awarded Count", "Feedback (optional)", "Current Earned Count"].freeze
   end
 end

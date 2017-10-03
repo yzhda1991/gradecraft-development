@@ -40,18 +40,9 @@ class CSVBadgeImporter
           next
         end
 
-        if Integer(row.new_badges_total) == earned_badge_count
-          unchanged << earned_badge
-        end
-
-        if Integer(row.current_badges_total) > Integer(row.new_badges_total)
-          append_unsuccessful row, "New Count cannot be fewer than current count"
-        end
-
-        while earned_badge_count < Integer(row.new_badges_total)
+        (1..Integer(row.new_badges_total)).each do |i|
           earned_badge = create_badge row, badge, student
           report row, earned_badge
-          earned_badge_count +=1
         end
       end
     end
@@ -121,15 +112,15 @@ class CSVBadgeImporter
       remove_smart_quotes(data[2]).downcase if data[2].present?
     end
 
-    def current_badges_total
+    def new_badges_total
       remove_smart_quotes(data[3])
     end
 
-    def new_badges_total
+    def feedback
       remove_smart_quotes(data[4])
     end
 
-    def feedback
+    def current_badges_total
       remove_smart_quotes(data[5])
     end
 
