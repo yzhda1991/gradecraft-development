@@ -12,12 +12,14 @@
       %tr
         %th{scope: "col"} Name
         %th{scope: "col"} Has Site License?
+        %th{scope: "col"} Type
         %th.options{scope: "col", "data-dynatable-no-sort": "true"} Options
     %tbody
       - @institutions.each do |institution|
         %tr
           %td= institution.name
           %td= institution.has_site_license? ? "Yes" : "No"
+          %td= institution.institution_type
           %td.center
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")

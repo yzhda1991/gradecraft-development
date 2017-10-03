@@ -6,6 +6,9 @@
     .form-item
       = f.label :has_site_license
       = f.check_box :has_site_license
+    .form-item
+      = f.label :institution_type, "Institution Type"
+      = f.select :institution_type, [["K-12"], ["Higher Education"], ["Other"]]
 
   %section.form-section
     %h2.form-title= "Canvas Credentials"
