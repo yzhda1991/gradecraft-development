@@ -22,7 +22,7 @@ describe Badges::ImportersController do
         get :download, params: { badge_id: badge.id, importer_provider_id: :csv }, format: :csv
 
         expect(response.body).to \
-          include("First Name,Last Name,Email,Current Earned Count,New Awarded Count,Feedback (optional)")
+          include("First Name,Last Name,Email,New Awarded Count,Feedback (optional),Current Earned Count")
       end
     end
 

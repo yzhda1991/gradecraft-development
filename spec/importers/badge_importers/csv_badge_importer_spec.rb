@@ -42,18 +42,11 @@ describe CSVBadgeImporter do
 
         it "contains an unsuccessful row if the student is not found" do
           result = subject.import(badge)
-          expect(result.unsuccessful).to include({ data: ["Kyle", "Dove", "dovek@umich.edu", "1", "1", "Awesome Job!\n"],
+          expect(result.unsuccessful).to include({ data: ["Kyle", "Dove", "dovek@umich.edu", "1", "Awesome Job!", "1\n"],
             errors: "Active student not found in course" })
         end
 
-        it "contains an unsuccessful row if the earned column is less than in the database" do
-          student.reload.update_attribute :email, "jwrong@badexample.edu"
-          result = subject.import(badge)
-          expect(result.unsuccessful).to include({ data: ["Johnny", "Wrong", "jwrong@badexample.edu", "1", "-1", "Bad Job!\n"],
-            errors: "New Count cannot be fewer than current count" })
-        end
-
-        it "timestamps the grade" do
+        it "timestamps the updated badge" do
           student.reload.update_attribute :email, "seamus.finnigan@hogwarts.edu"
           result = subject.import(badge)
           expect(EarnedBadge.unscoped.last.updated_at).to be_within(1.second).of(DateTime.now)
