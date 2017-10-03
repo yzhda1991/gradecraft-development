@@ -200,6 +200,7 @@ Rails.application.routes.draw do
     post :recalculate_student_scores, on: :member
     put :publish, on: :member
     put :unpublish, on: :member
+    post :activate_all_students, on: :collection
     get :badges, on: :member
     get :change, on: :member
     get :new_external, on: :collection
