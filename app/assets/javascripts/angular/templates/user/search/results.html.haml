@@ -4,6 +4,7 @@
       %th Id
       %th First Name
       %th Last Name
+      %th Email
       %th Courses
       %th Role
       %th Score
@@ -15,6 +16,7 @@
       %td {{ user.id }}
       %td {{ user.first_name }}
       %td {{ user.last_name }}
+      %td {{ user.email }}
       %td{"ng-bind-html"=>"course_name_with_link(user)"}
       %td{"ng-bind-html"=>"course_membership_attribute_for(user, 'role')"}
       %td{"ng-bind-html"=>"course_membership_attribute_for(user, 'score')"}
