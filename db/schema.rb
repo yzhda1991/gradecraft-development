@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< 83dcbc9a16d1961cae5001e2f6091256ee219494
 ActiveRecord::Schema.define(version: 20171002182206) do
+=======
+ActiveRecord::Schema.define(version: 20171005150420) do
+>>>>>>> Made has_google_access default to true
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -514,10 +518,10 @@ ActiveRecord::Schema.define(version: 20171002182206) do
   end
 
   create_table "institutions", force: :cascade do |t|
-    t.string  "name",                             null: false
-    t.boolean "has_site_license", default: false, null: false
+    t.string  "name",                              null: false
+    t.boolean "has_site_license",  default: false, null: false
     t.string  "institution_type"
-    t.boolean "has_google_access", default: false, null: false
+    t.boolean "has_google_access", default: true,  null: false
     t.index ["name"], name: "index_institutions_on_name", using: :btree
   end
 
