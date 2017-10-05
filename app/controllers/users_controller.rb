@@ -74,26 +74,35 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
-      params[:send_welcome] == "1"
-    @user = result[:user]
+    if User.find_by_insensitive_email(params["user"]["email"]).nil?
+      result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
+        params[:send_welcome] == "1"
+      @user = result[:user]
 
-    if result.success?
-      if @user.is_student?(current_course)
-        redirect_to students_path,
-          # rubocop:disable AndOr
-          notice: "#{term_for :student} #{@user.name} was successfully created!" and return
-      elsif @user.is_staff?(current_course)
-        redirect_to staff_index_path,
-          notice: "Staff Member #{@user.name} was successfully created!" and return
-      elsif @user.is_observer?(current_course)
-        redirect_to observers_path,
-          notice: "Observer #{@user.name} was successfully created!" and return
+      if result.success?
+        if @user.is_student?(current_course)
+          redirect_to students_path,
+            # rubocop:disable AndOr
+            notice: "#{term_for :student} #{@user.name} was successfully created!" and return
+        elsif @user.is_staff?(current_course)
+          redirect_to staff_index_path,
+            notice: "Staff Member #{@user.name} was successfully created!" and return
+        elsif @user.is_observer?(current_course)
+          redirect_to observers_path,
+            notice: "Observer #{@user.name} was successfully created!" and return
+        end
       end
+    else
+      @user = User.find_by_insensitive_email(params["user"]["email"])
     end
 
-    CourseMembershipBuilder.new(current_user).build_for(@user)
-    render :new
+    if User.find_by_insensitive_email(params["user"]["email"]).course_memberships.where(course_id: current_course.id).first.nil?
+      CourseMembershipBuilder.new(current_user).build_for(@user)
+      render :new
+    else
+      redirect_to students_path, alert: "#{term_for :student} #{params["user"]["first_name"]}
+        #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!"
+    end
   end
 
   def update
