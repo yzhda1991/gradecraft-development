@@ -74,7 +74,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    if User.find_by_insensitive_email(params["user"]["email"]).nil?
+    if check_params
       result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
         params[:send_welcome] == "1"
       @user = result[:user]
@@ -96,7 +96,7 @@ class UsersController < ApplicationController
       @user = User.find_by_insensitive_email(params["user"]["email"])
     end
 
-    if User.find_by_insensitive_email(params["user"]["email"]).course_memberships.where(course_id: current_course.id).first.nil?
+    if @user.course_memberships.where(course_id: current_course.id).first.nil?
       CourseMembershipBuilder.new(current_user).build_for(@user)
       render :new
     else
@@ -256,6 +256,20 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def check_params
+    if User.find_by_insensitive_email(params["user"]["email"]).nil?
+      return true
+    end
+
+    user = User.find_by_insensitive_email(params["user"]["email"])
+
+    if user.course_memberships.where(course_id: params["user"]["course_memberships_attributes"]["0"]["course_id"]).empty?
+      return true
+    end
+
+    return false
+  end
 
   def user_params
     params.require(:user).permit :username, :email, :admin, :password, :time_zone, :password_confirmation, :activation_token_expires_at, :activation_token,
