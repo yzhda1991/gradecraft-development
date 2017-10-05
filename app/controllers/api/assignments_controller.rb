@@ -5,7 +5,7 @@ class API::AssignmentsController < ApplicationController
 
   # GET api/assignments
   def index
-    @assignments = current_course.assignments.ordered
+    @assignments = current_course.assignments.joins(:assignment_type).order("assignments.position").order("assignment_types.position")
 
     if current_user_is_student?
       @student = current_student
