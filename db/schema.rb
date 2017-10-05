@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< 83dcbc9a16d1961cae5001e2f6091256ee219494
-ActiveRecord::Schema.define(version: 20171002182206) do
-=======
 ActiveRecord::Schema.define(version: 20171005150420) do
->>>>>>> Made has_google_access default to true
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
