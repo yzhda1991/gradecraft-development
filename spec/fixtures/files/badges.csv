@@ -1,0 +1,8 @@
+First Name,Last Name,Email,New Awarded Count,Feedback (optional),Current Earned Count
+Seamus,Finnigan,seamus.finnigan@hogwarts.edu,2,Great Job!,1
+Ron,Weasley,ron.weasley@hogwarts.edu,2,Awesome Job!,1
+Fred,Weasley,fred.weasley@hogwarts.edu,3,Awesome Job!,1
+Harry,Potter,harry.potter@hogwarts.edu,1,Awesome Job!,1
+Kyle,Dove,dovek@umich.edu,1,Awesome Job!,1
+Johnny,Wrong,jwrong@badexample.edu,-1,Bad Job!,1
+Johnny,Wrong,jwrong@badexample.edu,,Bad Job!,

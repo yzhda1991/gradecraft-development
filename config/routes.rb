@@ -157,6 +157,12 @@ Rails.application.routes.draw do
       get :mass_edit, on: :collection
       post :mass_earn, on: :collection
     end
+    namespace :badges do
+      resources :importers, param: :provider_id, only: [:index, :show] do
+        get :download
+        post :upload
+      end
+    end
   end
 
   #6. Challenges
