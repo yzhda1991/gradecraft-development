@@ -3,7 +3,8 @@ include CourseTerms
 describe "assignments/_index_staff" do
 
   before(:all) do
-    @course = create(:course)
+    @institution = create(:institution)
+    @course = create(:course, institution: @institution)
     @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
     @assignment_type_2 = create(:assignment_type, course: @course, max_points: 2000)
     @assignment_1 = create(:assignment, assignment_type: @assignment_type_1, full_points: 500)

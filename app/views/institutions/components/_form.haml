@@ -9,6 +9,10 @@
     .form-item
       = f.label :institution_type, "Institution Type"
       = f.select :institution_type, [["K-12"], ["Higher Education"], ["Other"]]
+    .form-item
+      = f.label :has_google_access
+      = f.check_box :has_google_access
+
 
   %section.form-section
     %h2.form-title= "Canvas Credentials"

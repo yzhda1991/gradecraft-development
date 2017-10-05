@@ -1,6 +1,7 @@
 feature "editing an event" do
   context "as a professor" do
-    let(:course) { build :course}
+    let!(:institution) { create :institution }
+    let(:course) { build :course, institution: institution }
     let!(:course_membership) { create :course_membership, :professor, user: professor, course: course }
     let(:professor) { create :user }
     let!(:event) { create :event, course: course, name: "Event Name", due_at: Date.today }
