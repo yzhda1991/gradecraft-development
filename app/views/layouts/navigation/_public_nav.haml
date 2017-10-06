@@ -1,4 +1,5 @@
-%li= link_to "Free Trial", instructors_user_sessions_path
+- if !Rails.env.production?
+  %li= link_to "Free Trial", instructors_user_sessions_path
 
 %li
   = link_to_unless_current "Features", features_path do |name|

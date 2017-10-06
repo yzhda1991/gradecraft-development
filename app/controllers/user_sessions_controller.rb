@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class UserSessionsController < ApplicationController
 
   before_action :ensure_staff?, only: [:impersonate_student]
@@ -10,6 +11,7 @@ class UserSessionsController < ApplicationController
   end
 
   def instructors
+    redirect_back_or_default and return if Rails.env.production?
     @user = User.new
   end
 
