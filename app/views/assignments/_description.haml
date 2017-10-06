@@ -19,7 +19,7 @@
 %p.assignment-description.italic= "Opens: #{l presenter.assignment.open_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.open_at?
 %p.assignment-description.italic= "Due: #{l presenter.assignment.due_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.due_at?
 
-- if presenter.course.institution.has_google_access?
+- if presenter.course.institution.try(:has_google_access)
   %p.assignment-description= link_to decorative_glyph(:calendar) + "Add to Google Calendar",
     add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent",  method: :post
 
