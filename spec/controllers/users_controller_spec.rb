@@ -67,7 +67,7 @@ describe UsersController do
 
     context "calling create" do
 
-      it "creates a new staff member", focus: true do
+      it "creates a new staff member" do
         post :create, params: { user: { first_name: "Bob",
                   last_name: "Ross",
                   email: "bob.ross@mailinator.com",
@@ -80,7 +80,7 @@ describe UsersController do
         expect(response).to redirect_to(staff_index_path)
       end
 
-      it "creates a new observer", focus: true do
+      it "creates a new observer" do
         post :create, params: { user: { first_name: "Bob",
                   last_name: "Ross",
                   email: "bob.ross@mailinator.com",
