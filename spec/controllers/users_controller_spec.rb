@@ -63,8 +63,42 @@ describe UsersController do
         post :update, params: { id: user.id, user: params }
         expect(user.reload.first_name).to eq "Jonathan"
       end
-
     end
+
+    context "calling create" do
+
+      it "creates a new staff member", focus: true do
+        post :create, params: { user: { first_name: "Bob",
+                  last_name: "Ross",
+                  email: "bob.ross@mailinator.com",
+                  course_memberships_attributes: { "0": {course_id: course.id,
+                                                       role: "professor",
+                                                       auditing: "0"}
+                                                  }
+                                        }
+                                }
+        expect(response).to redirect_to(staff_index_path)
+      end
+
+      it "creates a new observer", focus: true do
+        post :create, params: { user: { first_name: "Bob",
+                  last_name: "Ross",
+                  email: "bob.ross@mailinator.com",
+                  course_memberships_attributes: { "0": {course_id: course.id,
+                                                       role: "observer",
+                                                       auditing: "0"}
+                                                  }
+                                        }
+                                }
+        expect(response).to redirect_to(observers_path)
+      end
+
+      # it "returns an error for duplication if the user already exists" do
+      #
+      # end
+    end
+
+
 
     # We used to allow instructors to delete users, but no longer (admins only)
     describe "GET destroy" do
