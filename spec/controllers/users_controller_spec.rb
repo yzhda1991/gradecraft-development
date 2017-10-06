@@ -93,12 +93,30 @@ describe UsersController do
         expect(response).to redirect_to(observers_path)
       end
 
-      # it "returns an error for duplication if the user already exists" do
-      #
-      # end
+      let(:user) { create(:user, first_name: "Bob", last_name: "Ross", email: "bob.ross@mailinator.com", courses: [course]) }
+
+      it "returns an error for duplication if the user already exists" do
+        post :create, params: { user: { first_name: "Bob",
+                  last_name: "Ross",
+                  email: "bob.ross@mailinator.com",
+                  course_memberships_attributes: { "0": {course_id: course.id,
+                                                       role: "student",
+                                                       auditing: "0"}
+                                                  }
+                                        }
+                                }
+        post :create, params: { user: { first_name: "Bob",
+                  last_name: "Ross",
+                  email: "bob.ross@mailinator.com",
+                  course_memberships_attributes: { "0": {course_id: course.id,
+                                                       role: "student",
+                                                       auditing: "0"}
+                                                  }
+                                        }
+                                }
+        expect(flash[:alert]).to include "already exists for"
+      end
     end
-
-
 
     # We used to allow instructors to delete users, but no longer (admins only)
     describe "GET destroy" do
