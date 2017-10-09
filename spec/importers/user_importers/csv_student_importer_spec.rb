@@ -58,6 +58,14 @@ describe CSVStudentImporter do
           expect(team.students.first.email).to eq "csv_jimmy@example.com"
         end
 
+        it "appends unsuccessful if a course membership already exists for user and there is no change to team" do
+          create :user, first_name: "Bob", last_name: "Ross", email: "bob_ross@example.com",
+            username: "bob_ross", password: "blah", courses: [course], role: :student
+          result = subject.import course
+          expect(result.unsuccessful).to include({data: "Bob,Ross,bob_ross,bob_ross@example.com,\n",
+            errors: "Unable to create course membership for student, course membership already exists"})
+        end
+
         it "creates the team and adds the student if the team does not exist" do
           Team.unscoped.last.destroy
           subject.import course
