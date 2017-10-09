@@ -34,7 +34,7 @@ class CSVStudentImporter
           next
         end
 
-        if !user.course_memberships.where(course_id: course.id).first.nil?
+        if !user.course_memberships.where(course_id: course.id).first.nil? && user.course_memberships.where(course_id: course.id).first.try(:team).try(:name) == team
           append_unsuccessful row, "Unable to create course membership for student, course membership already exists"
           next
         end
