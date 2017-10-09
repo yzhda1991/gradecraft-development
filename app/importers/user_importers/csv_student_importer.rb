@@ -34,6 +34,11 @@ class CSVStudentImporter
           next
         end
 
+        if !user.course_memberships.where(course_id: course.id).first.nil?
+          append_unsuccessful row, "Unable to create course membership for student, course membership already exists"
+          next
+        end
+
         unless Services::CreatesCourseMembership.create(user, course).success?
           append_unsuccessful row, "Unable to create course membership for student"
           next
