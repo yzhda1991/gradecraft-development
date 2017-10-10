@@ -34,7 +34,7 @@ class CSVStudentImporter
           next
         end
 
-        if !user.course_memberships.where(course_id: course.id).first.nil? && user.course_memberships.where(course_id: course.id).first.try(:team).try(:name) == team
+        if check_user(user, team, course)
           append_unsuccessful row, "Unable to create course membership for student, course membership already exists"
           next
         end
@@ -62,6 +62,22 @@ class CSVStudentImporter
     return if row.team_name.blank?
     team = Team.find_by_course_and_name course.id, row.team_name
     team ||= Team.create course_id: course.id, name: row.team_name
+  end
+
+  def check_user(user, team, course)
+    if team.nil?
+      if !user.course_memberships.where(course_id: course.id).first.nil?
+        return true
+      else
+        return false
+      end
+    else
+      if !user.course_memberships.where(course_id: course.id).first.nil? && !user.team_memberships.where(team_id: team.id).empty?
+        return true
+      else
+        return false
+      end
+    end
   end
 
   def strip_whitespace(row)

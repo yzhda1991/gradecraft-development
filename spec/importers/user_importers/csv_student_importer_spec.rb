@@ -1,4 +1,4 @@
-describe CSVStudentImporter do
+describe CSVStudentImporter, focus: true do
   before(:all) { User.destroy_all }
 
   describe "#import" do
@@ -59,10 +59,11 @@ describe CSVStudentImporter do
         end
 
         it "appends unsuccessful if a course membership already exists for user and there is no change to team" do
-          create :user, first_name: "Bob", last_name: "Ross", email: "bob_ross@example.com",
-            username: "bob_ross", password: "blah", courses: [course], role: :student
+          # create :user, first_name: "Jimmy", last_name: "Page", email: "csv_jimmy@example.com",
+          #   username: "jimmy", password: "blah", courses: [course], role: :student, team: team
+          subject.import course
           result = subject.import course
-          expect(result.unsuccessful).to include({data: "Bob,Ross,bob_ross,bob_ross@example.com,\n",
+          expect(result.unsuccessful).to include({data: "Jimmy,Page,csv_jimmy,csv_jimmy@example.com,Zeppelin\n",
             errors: "Unable to create course membership for student, course membership already exists"})
         end
 
