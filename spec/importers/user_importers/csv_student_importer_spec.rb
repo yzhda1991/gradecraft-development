@@ -1,4 +1,4 @@
-describe CSVStudentImporter, focus: true do
+describe CSVStudentImporter do
   before(:all) { User.destroy_all }
 
   describe "#import" do
