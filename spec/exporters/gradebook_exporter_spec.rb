@@ -3,42 +3,33 @@ describe GradebookExporter do
   subject { GradebookExporter.new }
 
   describe "#export" do
+    let(:assignment_type) { create :assignment_type, course: course, name: "Charms" }
+    let(:assignments) { create_list :assignment, 2, course: course, assignment_type: assignment_type }
+
     it "generates an empty CSV if there are no students or assignments" do
-      csv = subject.gradebook(course)
+      csv = subject.gradebook course
       expect(csv).to eq "First Name,Last Name,Email,Username,Team\n"
     end
 
     it "generates an empty CSV if there are no students" do
-      @assignment = create(:assignment, course: course, name: "The Flash!")
-      csv = subject.gradebook(course)
-      expect(csv).to eq "First Name,Last Name,Email,Username,Team,The Flash!\n"
+      assignments
+      csv = subject.gradebook course
+      expect(csv).to eq "First Name,Last Name,Email,Username,Team,#{assignments.first.name},#{assignments.second.name}\n"
     end
 
     it "generates an gradebook CSV if there are students and assignments present" do
-      @assignment_type_1 = create(:assignment_type, course: course, name: "Charms")
-      @assignment = create(:assignment, course: course, assignment_type: @assignment_type_1)
-      @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type_1)
-      @student = create(:user, last_name: "Aad", courses: [course], role: :student)
-      @student_2 = create(:user, last_name: "Zep", courses: [course], role: :student)
-      create(:grade, assignment: @assignment, student: @student, raw_points: 100, student_visible: true)
-      create(:grade, assignment: @assignment_2, student: @student, raw_points: 200, student_visible: true)
+      student = create :user, courses: [course], role: :student, last_name: "Aad"
+      another_student = create :user, courses: [course], role: :student, last_name: "Zep"
+      create :grade, assignment: assignments.first, student: student, raw_points: 100, student_visible: true
+      create :grade, assignment: assignments.second, student: student, raw_points: 200, adjustment_points: -100, student_visible: true
 
       csv = CSV.new(subject.gradebook(course)).read
+
       expect(csv.length).to eq 3
-      expect(csv[1][0]).to eq @student.first_name
-      expect(csv[2][0]).to eq @student_2.first_name
-      expect(csv[1][1]).to eq @student.last_name
-      expect(csv[2][1]).to eq @student_2.last_name
-      expect(csv[1][2]).to eq @student.email
-      expect(csv[2][2]).to eq @student_2.email
-      expect(csv[1][3]).to eq @student.username
-      expect(csv[2][3]).to eq @student_2.username
-      expect(csv[1][4]).to eq @student.team_for_course(course)
-      expect(csv[2][4]).to eq @student_2.team_for_course(course)
-      expect(csv[1][5]).to eq "100"
-      expect(csv[2][5]).to eq ""
-      expect(csv[1][6]).to eq "200"
-      expect(csv[2][6]).to eq ""
+      expect(csv[1]).to eq [student.first_name, student.last_name, student.email,
+        student.username, student.team_for_course(course), "100", "100"]
+      expect(csv[2]).to eq [another_student.first_name, another_student.last_name,
+        another_student.email, another_student.username, another_student.team_for_course(course), "", ""]
     end
   end
 end

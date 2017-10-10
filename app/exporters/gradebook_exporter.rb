@@ -40,7 +40,7 @@ class GradebookExporter
     # TODO: improve the performance here
     course.assignments.ordered.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
-      score = GradeProctor.new(grade).viewable? ? grade.raw_points : ""
+      score = GradeProctor.new(grade).viewable? ? grade.final_points : ""
       memo << score
       memo
     end
