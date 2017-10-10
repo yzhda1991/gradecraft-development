@@ -214,15 +214,6 @@ describe Assignment do
     end
   end
 
-  describe "ordered by position" do
-    it "sets the order by the position" do
-      a1 = create :assignment, position: 2
-      a2 = create :assignment, position: 1
-      expect(Assignment.all.ordered.first).to eq(a2)
-      expect(Assignment.all.ordered.last).to eq(a1)
-    end
-  end
-
   describe "#min_group_size" do
     it "sets the default min group size at 2" do
       expect(subject.min_group_size).to eq(1)
