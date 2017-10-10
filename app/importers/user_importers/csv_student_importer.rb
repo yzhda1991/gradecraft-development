@@ -66,17 +66,11 @@ class CSVStudentImporter
 
   def check_user(user, team, course)
     if team.nil?
-      if !user.course_memberships.where(course_id: course.id).first.nil?
-        return true
-      else
-        return false
-      end
+      return false unless !user.course_memberships.where(course_id: course.id).first.nil?
+      return true
     else
-      if !user.course_memberships.where(course_id: course.id).first.nil? && !user.team_memberships.where(team_id: team.id).empty?
-        return true
-      else
-        return false
-      end
+      return false unless !user.course_memberships.where(course_id: course.id).first.nil? && !user.team_memberships.where(team_id: team.id).empty?
+      return true
     end
   end
 
