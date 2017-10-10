@@ -16,5 +16,9 @@ FactoryGirl.define do
     factory :invalid_course do
       name nil
     end
+
+    trait :with_institution do
+      association :institution
+    end
   end
 end
