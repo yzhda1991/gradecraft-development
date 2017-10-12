@@ -35,6 +35,13 @@ class AnnouncementsController < ApplicationController
     render :new
   end
 
+  # DELETE /announcements/:id
+  def destroy
+    announcement = current_course.announcements.find(params[:id])
+    announcement.destroy
+    redirect_to announcements_url, notice: "Announcement #{announcement.title} successfully deleted"
+  end
+
   private
 
   def announcement_params
