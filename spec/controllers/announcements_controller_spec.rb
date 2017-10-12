@@ -3,7 +3,7 @@ describe AnnouncementsController do
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:announcement) { create :announcement, course: course }
-  
+
   context "as a student" do
     before(:each) do
       login_user(student)
@@ -26,6 +26,13 @@ describe AnnouncementsController do
       it "should not allow a student to create an announcement" do
         expect { post :create, params: { announcement:
                                          { title: "New Tour", body: "Test" }}}.to \
+          raise_error CanCan::AccessDenied
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "should not allow a student to destroy an announcement" do
+        expect{ delete :destroy, params: { id: announcement.id }}.to \
           raise_error CanCan::AccessDenied
       end
     end
@@ -76,6 +83,21 @@ describe AnnouncementsController do
           expect {
             post :create, params: { announcement: { title: "New Tour", body: body }}
           }.to change  { ActionMailer::Base.deliveries.count }.by 2
+        end
+      end
+
+      describe "DELETE destroy" do
+        it "removes the announcement and announcement states entirely" do
+          announcement
+          expect{
+            delete :destroy, params: { id: announcement.id }
+          }.to change{Announcement.count}.by(-1)
+        end
+
+        it "redirects to the announcements page" do
+          announcement
+          expect(delete :destroy, params: { id: announcement.id }).to \
+            redirect_to(announcements_path)
         end
       end
 

@@ -7,12 +7,12 @@ module AnnouncementAbility
           announcement.course.users.include?(user)))
     end
 
-    can :create, Announcement do |announcement|
+    can [:create, :destroy], Announcement do |announcement|
       announcement.course.nil? || (announcement.course == course &&
         user.is_staff?(announcement.course))
     end
 
-    can [:destroy, :update], Announcement, course_id: course.id,
+    can :update, Announcement, course_id: course.id,
       author_id: user.id
   end
 end

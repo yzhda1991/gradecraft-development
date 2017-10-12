@@ -37,9 +37,11 @@ class AnnouncementsController < ApplicationController
 
   # DELETE /announcements/:id
   def destroy
-    announcement = current_course.announcements.find(params[:id])
-    announcement.destroy
-    redirect_to announcements_url, notice: "Announcement #{announcement.title} successfully deleted"
+    @announcement = Announcement.find params[:id]
+    authorize! :destroy, @announcement
+    @title = @announcement.title
+    @announcement.destroy
+    redirect_to announcements_url, notice: "Announcement #{@title} successfully deleted"
   end
 
   private
