@@ -21,7 +21,7 @@ module GradesHelper
 
   def ready_for_release_grades_count_for(course)
     Rails.cache.fetch(ready_for_release_count_cache_key(course)) do
-      course.grades.ready_for_release.count
+      course.grades.for_active_students.ready_for_release.count
     end
   end
 
