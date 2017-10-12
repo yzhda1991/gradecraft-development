@@ -13,7 +13,8 @@
   'froala',
   'templates',
   'helpers',
-  'ngAria'
+  'ngAria',
+  'tandibar/ng-rollbar'
 ])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
@@ -27,6 +28,15 @@
     ariaRequired: false
   })
 ]);
+
+@gradecraft.config(['RollbarProvider', (RollbarProvider) ->
+  RollbarProvider.init({
+    accessToken: "9d4d1ff5420b4c9a82eef7d0f9b8f3dd"
+    captureUncaught: true
+    payload:
+      environment: 'production'
+  })
+])
 
 @gradecraft.directive "modalDialog", ->
   restrict: "E"
