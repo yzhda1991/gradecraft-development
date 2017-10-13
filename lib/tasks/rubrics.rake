@@ -33,9 +33,11 @@ namespace :rubrics do
     new_badge_id = args[:new_badge_id]
 
     grade_ids_for_assignment = Grade.where(assignment_id: assignment.id).pluck(:id)
+    STDOUT.puts "Grade IDs for assignment: #{grade_ids_for_assignment}(#{grade_ids_for_assignment.count})"
 
     # all the earned badge ids for this assignment
     earned_badge_ids = EarnedBadge.where(grade_id: grade_ids_for_assignment).pluck(:id)
+    STDOUT.puts "EarnedBadge IDs for all grades in the assignment: #{earned_badge_ids}(#{earned_badge_ids.count})"
 
     # the student ids from the EarnedBadges in this assignment that have the errant badge id
     bad_ebs = EarnedBadge.where(id: earned_badge_ids, badge_id: errant_badge_id).pluck(:student_id)
@@ -46,16 +48,32 @@ namespace :rubrics do
     sida_1 = bad_ebs - good_ebs # Students that have earned the errant badge but not the valid one
     sida_2 = bad_ebs & good_ebs # Students that have earned both the errant badge and the valid one; the intersection of the two arrays
 
+    STDOUT.puts "Student IDs who have earned the errant badge, but not the valid one: #{sida_1}(#{sida_1.count})"
+    STDOUT.puts "Student IDs who have earned the errant badge and the valid one: #{sida_2}(#{sida_2.count})"
+
     # Perform the necessary updates/deletions
+    STDOUT.puts "Fixing earned badges..."
     EarnedBadge.where(student_id: sida_1, badge_id: errant_badge_id).update(badge_id: new_badge_id, course_id: course.id)
     EarnedBadge.where(student_id: sida_2, badge_id: errant_badge_id).destroy_all
 
-    # target and destroy the errant level badges associated with the rubric on the assignment
+    # unique constraint on LevelBadge prevents multiple LevelBadges from having
+    # same level_id and badge_id
+    # for all corrupt_level_badges, try to update the badge_id from the errant id
+    # to the new id
+    # if the update fails, the LevelBadge already exists; destroy it
+    STDOUT.puts "Fixing level badges..."
+    STDOUT.puts "-> badge_id will be set to provided new_badge_id, unless it already exists"
     badge_ids_for_course = course.badges.pluck(:id)
+
     corrupt_level_badges = LevelBadge
       .where(level_id: Level.where(criterion_id: Criterion.where(rubric_id: assignment.rubric.id)))
-      .where.not(badge_id: badge_ids_for_course)
-    corrupt_level_badges.destroy_all
+      .where(badge_id: errant_badge_id)
+
+    corrupt_level_badges.each do |clb|
+      if !clb.update(badge_id: new_badge_id)
+        clb.destroy
+      end
+    end
 
     # recalculate scores
     course.recalculate_student_scores
