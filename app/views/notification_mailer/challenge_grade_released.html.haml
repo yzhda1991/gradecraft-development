@@ -5,9 +5,10 @@
   #{ @course.challenge_term.downcase } "#{ @challenge.name }"
   in #{ @course.name }.
 %p
-%hr/
-%p{:align => "center"}
-  Don't forget to update your plan for the semester by checking your
-  = succeed "." do
-    = link_to "#{term_for :grade_predictor}", predictor_url
-%hr/
+- if @course.show_grade_predictor?
+  %hr/
+  %p{:align => "center"}
+    Don't forget to update your plan for the semester by checking your
+    = succeed "." do
+      = link_to "#{term_for :grade_predictor}", predictor_url
+  %hr/

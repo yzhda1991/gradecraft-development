@@ -2,9 +2,11 @@
   %strong Congratulations #{ @user.first_name }!
 %h3{:align => "center"} You successfully updated your submission for #{ @assignment.name } on #{ @submission.submitted_at }.
 %p
-%hr/
-%p{:align => "center"}
-  Don't forget to update your plan for the semester by checking your
-  = succeed "." do
-    = link_to "#{ @course.grade_predictor_term }", predictor_url
-%hr/
+
+- if @course.show_grade_predictor?
+  %hr/
+  %p{:align => "center"}
+    Don't forget to update your plan for the semester by checking your
+    = succeed "." do
+      = link_to "#{ @course.grade_predictor_term }", predictor_url
+  %hr/

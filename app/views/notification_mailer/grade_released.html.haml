@@ -9,9 +9,11 @@
   Click
   =link_to "here", assignment_url(@assignment)
   to view your results.
-%hr/
-%p{:align => "center"}
-  Don't forget to update your plan for the semester by checking your
-  = succeed "." do
-    = link_to "#{term_for :grade_predictor}", predictor_url
-%hr/
+
+- if @course.show_grade_predictor?
+  %hr/
+  %p{:align => "center"}
+    Don't forget to update your plan for the semester by checking your
+    = succeed "." do
+      = link_to "#{term_for :grade_predictor}", predictor_url
+  %hr/
