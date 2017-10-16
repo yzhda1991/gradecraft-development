@@ -180,7 +180,7 @@
     )
 
   queueUpdateScoreLevel = (assignmentId, scoreLevel)->
-    return false if !scoreLevel.points || !scoreLevel.name
+    return false if scoreLevel.points == null || !scoreLevel.name
     # use "creating" to avoid creating more than one with params
     return if scoreLevel.creating
     scoreLevel.creating = true if !scoreLevel.id
