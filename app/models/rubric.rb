@@ -3,7 +3,10 @@ class Rubric < ActiveRecord::Base
 
   belongs_to :assignment
   belongs_to :course
-  has_many :criteria
+  has_many :criteria, dependent: :destroy
+  has_many :levels, through: :criteria
+  has_many :level_badges, through: :criteria
+  has_many :criterion_grades, through: :criteria
 
   validates :assignment, :course, presence: true
 

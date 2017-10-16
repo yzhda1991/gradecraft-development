@@ -3,6 +3,7 @@ class Criterion < ActiveRecord::Base
 
   belongs_to :rubric
   has_many :levels, dependent: :destroy
+  has_many :level_badges, through: :levels
 
   has_many :criterion_grades
   belongs_to :full_credit_level,
