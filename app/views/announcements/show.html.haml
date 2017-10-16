@@ -3,7 +3,6 @@
     .context-menu
       %ul
         %li= link_to decorative_glyph(:plus) + 'New Announcement', new_announcement_path, class: "button button-edit"
-        %li= link_to decorative_glyph(:minus) + 'Delete Announcement', announcement_path(@announcement), class: "button button-edit", data: {confirm: "Are you sure you want to delete Announement #{@announcement.title}?", method: :delete }
 
 .pageContent
   = render partial: "layouts/alerts"
