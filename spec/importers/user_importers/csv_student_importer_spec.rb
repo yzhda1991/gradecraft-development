@@ -59,8 +59,6 @@ describe CSVStudentImporter do
         end
 
         it "appends unsuccessful if a course membership already exists for user and there is no change to team" do
-          # create :user, first_name: "Jimmy", last_name: "Page", email: "csv_jimmy@example.com",
-          #   username: "jimmy", password: "blah", courses: [course], role: :student, team: team
           subject.import course
           result = subject.import course
           expect(result.unsuccessful).to include({data: "Jimmy,Page,csv_jimmy,csv_jimmy@example.com,Zeppelin\n",
