@@ -100,8 +100,20 @@ class UsersController < ApplicationController
       CourseMembershipBuilder.new(current_user).build_for(@user)
       render :new
     else
-      redirect_to students_path, alert: "#{term_for :student} #{params["user"]["first_name"]}
-        #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!"
+      if @user.is_student?(current_course)
+        redirect_to students_path,
+          # rubocop:disable AndOr
+          alert: "#{term_for :student} #{params["user"]["first_name"]}
+            #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
+      elsif @user.is_staff?(current_course)
+        redirect_to staff_index_path,
+          alert: "Staff Member #{params["user"]["first_name"]}
+          #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
+      elsif @user.is_observer?(current_course)
+        redirect_to observers_path,
+          alert: "Observer #{params["user"]["first_name"]}
+          #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
+      end
     end
   end
 

@@ -62,7 +62,7 @@ describe CSVStudentImporter do
           subject.import course
           result = subject.import course
           expect(result.unsuccessful).to include({data: "Jimmy,Page,csv_jimmy,csv_jimmy@example.com,Zeppelin\n",
-            errors: "Unable to create course membership for student, course membership already exists"})
+            errors: "Unable to import this user, they have already been added to the course"})
         end
 
         it "creates the team and adds the student if the team does not exist" do
