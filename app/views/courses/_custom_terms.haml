@@ -7,11 +7,16 @@
       = f.input :student_term, label: "Student", hint: "What will you call your user? Student, Learner, Player..."
 
     .form-item.col-50
-      = f.input :assignment_term, label: "Assignment", hint: "Would you like to call assignments something else?"
+      = f.input :group_term, label: "Group", hint: "What will these groups be called?"
 
   .form-flex-row
+    .form-item
+      = f.input :grade_predictor_term, label: "Grade Predictor", hint: "What would you like to call the Grade Predictor? Crystal Ball, Weather Forecast, Ouija Board..."
+
+%section.form-section
+  .form-flex-row
     .form-item.col-50
-      = f.input :group_term, label: "Group", hint: "What will these groups be called?"
+      = f.input :assignment_term, label: "Assignment", hint: "Would you like to call assignments something else?"
 
     .form-item.col-50
       = f.input :badge_term, label: "Badge", hint: "Would you like to call badges something else?"
@@ -23,6 +28,7 @@
     .form-item.col-50
       = f.input :fail_term, label: "Fail", hint: "What would you like to call failure for a pass/fail assignment?"
 
+%section.form-section
   .form-flex-row
     .form-item.col-50
       = f.input :team_term, label: "Section", hint: "What will you call these? Team, House, Section..."
