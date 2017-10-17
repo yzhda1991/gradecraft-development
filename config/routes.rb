@@ -43,7 +43,7 @@ Rails.application.routes.draw do
   post "analytics_events/tab_select_event"
 
   #2. Announcements
-  resources :announcements, except: [:destroy, :edit, :update]
+  resources :announcements, except: [:edit, :update]
 
   #3. Assignments, Submissions, Grades
   namespace :assignments do

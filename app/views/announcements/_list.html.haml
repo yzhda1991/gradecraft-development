@@ -7,6 +7,7 @@
       %th Sent
       - if current_user.is_staff?(current_course)
         %th Read
+      %th.button-column.options Options
   %tbody
     - cache multi_cache_key :announcements, current_course do
       - @announcements.each do |announcement|
@@ -16,3 +17,8 @@
           %td= l announcement.created_at.in_time_zone(current_user.time_zone)
           - if current_user.is_staff?(current_course)
             %td= "#{announcement.read_count} / #{announcement.course.students.count}"
+          %td
+            .button-container.dropdown
+              %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+              %ul.options-menu.dropdown-content
+                = link_to decorative_glyph(:trash) + 'Delete Announcement', announcement_path(announcement), data: {confirm: "Are you sure you want to delete Announement #{announcement.title}?", method: :delete }
