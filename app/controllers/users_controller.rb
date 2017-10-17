@@ -74,7 +74,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    if check_params
+    if user_exists
       result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
         params[:send_welcome] == "1"
       @user = result[:user]
@@ -257,7 +257,7 @@ class UsersController < ApplicationController
 
   private
 
-  def check_params
+  def user_exists
     if User.find_by_insensitive_email(params["user"]["email"]).nil?
       return true
     end

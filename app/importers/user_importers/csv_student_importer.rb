@@ -35,12 +35,12 @@ class CSVStudentImporter
         end
 
         if check_user(user, team, course)
-          append_unsuccessful row, "Unable to create course membership for student, course membership already exists"
+          append_unsuccessful row, "Unable to import this #{term_for :student}, they have already been added to the course"
           next
         end
 
         unless Services::CreatesCourseMembership.create(user, course).success?
-          append_unsuccessful row, "Unable to create course membership for student"
+          append_unsuccessful row, "Unable to add this #{term_for :student} to the course"
           next
         end
 
