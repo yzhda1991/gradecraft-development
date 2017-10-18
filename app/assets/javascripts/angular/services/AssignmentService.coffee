@@ -164,8 +164,10 @@
           GradeCraftAPI.logResponse(response)
       )
 
-
   _updateScoreLevel = (assignmentId, scoreLevel)->
+    # delete associated event, so it is not retriggered on submit
+    DebounceQueue.cancelEvent("scoreLevels", scoreLevel.id || 0)
+
     params = { "assignment_score_levels_attributes" :
       [{ "id" : scoreLevel.id, "points" : scoreLevel.points, "name" : scoreLevel.name }]
     }
