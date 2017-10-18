@@ -38,10 +38,11 @@ angular.module('helpers').factory('DebounceQueue', ['$timeout', ($timeout)->
 
   # Use this on Submit to run all remaining events,
   # to assure that no delayed updates are missed.
-  # NOTE: any create events will have to be canceled manually
-  # on call, or they will sit in the queue and trigger
-  # a second call on submit, resulting in duplicate models.
-  # see AssignmentService._updateScoreLevel for an example
+  # NOTE: Events should be canceled by the functions that
+  # they trigger on call, or they will sit in the queue and trigger
+  # a second call on submit, possibly resulting in duplicate models.
+  # see AssignmentService for an example of using runAllEvents, and
+  # cancelling events from the _update* methods
   runAllEvents = ()->
     _.each(queueStore, (queueItem) ->
       if queueItem != null

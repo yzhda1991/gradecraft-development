@@ -137,6 +137,8 @@
   _updateAssignment = (id)->
     assignment = _.find(assignments, {id: id})
     if assignment && ValidateDates(assignment).valid
+      # delete associated event, so it is not retriggered on submit
+      DebounceQueue.cancelEvent("assignments", id)
       $http.put("/api/assignments/#{id}", assignment: assignment).then(
         (response) ->
           angular.copy(response.data.data.attributes, assignment)
