@@ -331,7 +331,7 @@ ActiveRecord::Schema.define(version: 20171012154015) do
     t.integer  "institution_id"
     t.text     "dashboard_message"
     t.string   "grade_predictor_term",                                    default: "Grade Predictor",            null: false
-    t.boolean  "shows_grade_predictor",                                   default: true
+    t.boolean  "show_grade_predictor",                                    default: true
     t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
   end
 
