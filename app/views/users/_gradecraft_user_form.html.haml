@@ -10,7 +10,7 @@
     .form-item
       = f.label :email
       = f.text_field :email, "aria-required": "true"
-    - if ! @user.kerberos_uid.present? && @user.persisted? && current_user_is_admin?
+    - if UserProctor.new(@user).can_update_password? current_user, current_course
       .form-item
         = f.label :password
         = f.password_field :password, as: :password
