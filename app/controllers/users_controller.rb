@@ -120,7 +120,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     up = user_params
-    if up[:password].blank? && up[:password_confirmation].blank?
+    if (up[:password].blank? && up[:password_confirmation].blank?) || !UserProctor.new(@user).can_update_password?(current_user, current_course)
       up.delete(:password)
       up.delete(:password_confirmation)
     end

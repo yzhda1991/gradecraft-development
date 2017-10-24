@@ -56,11 +56,13 @@ describe UsersController do
           expect(user.activation_state).to eq "pending"
         end
       end
+    end
 
+    describe "PUT update" do
       it "updates an existing user" do
         user
         params = { first_name: "Jonathan" }
-        post :update, params: { id: user.id, user: params }
+        put :update, params: { id: user.id, user: params }
         expect(user.reload.first_name).to eq "Jonathan"
       end
     end
@@ -115,6 +117,12 @@ describe UsersController do
                                         }
                                 }
         expect(flash[:alert]).to include "already exists for"
+      end
+
+      it "deletes the password params if the user is not permitted to change it" do
+        user_params = { password: "password", password_confirmation: "password" }
+        allow(UserProctor).to receive(:new).with(user).and_return instance_double("UserProctor", can_update_password?: false)
+        expect{ put :update, params: { id: user.id, user: user_params } }.to_not change { user.reload.crypted_password }
       end
     end
 
