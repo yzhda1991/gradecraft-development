@@ -4,56 +4,51 @@
 # It can be cancelled and updated before fire,
 # or fired immediately, cancelling the standing delayed event.
 
-angular.module('helpers').factory('DebounceQueue', ['$timeout', ($timeout)->
+angular.module('helpers').factory('DebounceQueue', ['$timeout', '$q', ($timeout, $q) ->
 
   queueStore = {}
 
   # Standard delay for making model updates via api
   API_REQUEST_DELAY = 2500
 
-  # type and id are used to create a unique timout
+  # type and id are used to create a unique timeout
   # event will be called with args
   # add custom delay, or 0 to cancel existing timeout and fire immediately
-  addEvent = (type, id, event, args=[], delay=API_REQUEST_DELAY)->
+  addEvent = (type, id, event, args=[], delay=API_REQUEST_DELAY) ->
     return console.warn("Unable to add event:", type, "for:", id) if not type? || not id?
+    cancelEvent(type, id)
 
     if delay == 0
-      cancelEvent(type, id)
       event.apply(null, args)
     else
-      cancelEvent(type, id)
       queueStore[type + id] = {
         promise: $timeout(() ->
-          event.apply(null, args)
+          $q.when(event.apply(null, args)).then(() -> cancelEvent(type, id))
         , delay),
         event: event,
         args: args
       }
 
-  cancelEvent = (type, id)->
+  cancelEvent = (type, id) ->
     storeId = type + id
     return false if !queueStore[storeId]
     $timeout.cancel(queueStore[storeId].promise)
-    queueStore[storeId] = null
+    queueStore[storeId] = undefined
 
-  # Use this on Submit to run all remaining events,
-  # to assure that no delayed updates are missed.
-  # NOTE: Events should be canceled by the functions that
-  # they trigger on call, or they will sit in the queue and trigger
-  # a second call on submit, possibly resulting in duplicate models.
-  # see AssignmentService for an example of using runAllEvents, and
-  # cancelling events from the _update* methods
-  runAllEvents = ()->
+  runAllEvents = (redirectUrl=null) ->
+    events = []
     _.each(queueStore, (queueItem) ->
-      if queueItem != null
+      if queueItem?
         $timeout.cancel(queueItem.promise)
-        queueItem.event.apply(null, queueItem.args)
+        events.push(queueItem.event.apply(null, queueItem.args))
+    )
+    $q.all(events).then(() ->
+      window.location.href = redirectUrl if redirectUrl?
     )
 
-  return {
+  {
     addEvent: addEvent
     cancelEvent: cancelEvent
     runAllEvents: runAllEvents
   }
 ])
-
