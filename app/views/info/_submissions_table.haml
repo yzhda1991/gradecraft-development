@@ -6,7 +6,7 @@
       - if course.has_teams?
         %th{scope: "col", :width => "15%"}= "#{term_for :team}"
       %th.hidden Calendar Date
-      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Date Submitted
+      %th{scope: "col", :"data-dynatable-column" => "calendarDate"} Date Submitted
       %th{scope: "col", :style => "min-width: 200px"}
         %span.sr-only Actions
   %tbody

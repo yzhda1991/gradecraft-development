@@ -14,8 +14,8 @@
       %th{scope: "col"} Year
       %th{scope: "col"} Total Points
       %th{scope: "col"} # of Students
-      %th Calendar Date
-      %th{scope: "col", :"data-dynatable-column-sorts" => "calendarDate"} Created
+      %th.hidden Calendar Date
+      %th{scope: "col", :"data-dynatable-column" => "calendarDate"} Created
       %th{style: "text-align: right", "data-dynatable-no-sort": 'true'} Downloads
       %th.options{"data-dynatable-no-sort": 'true'} Options
   %tbody
@@ -36,7 +36,7 @@
         %td= course.year
         %td= points course.total_points
         %td= course.student_count
-        %td= l course.created_at, format: :sortable
+        %td.hidden= l course.created_at, format: :sortable
         %td= l course.created_at.in_time_zone(current_user.time_zone)
         %td
           .button-container.dropdown
