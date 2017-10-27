@@ -164,7 +164,6 @@
           GradeCraftAPI.logResponse(response)
       )
 
-
   _updateScoreLevel = (assignmentId, scoreLevel)->
     params = { "assignment_score_levels_attributes" :
       [{ "id" : scoreLevel.id, "points" : scoreLevel.points, "name" : scoreLevel.name }]
