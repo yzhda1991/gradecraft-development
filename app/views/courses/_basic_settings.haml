@@ -42,7 +42,6 @@
           = f.check_box :has_public_badges
           = f.label :has_public_badges, "Allow students to export badges earned in your course"
 
-
       .form-card
         .form-card-header
           = f.label :show_analytics, "Analytics"
@@ -56,23 +55,6 @@
           = f.check_box :show_grade_predictor, {class: "feature-checkbox"}
         .form-card-body
           .feature-description{id: "showGradePredictor"}  Show Grade Predictor.
-
-      .form-card
-        .form-card-header
-          = f.label :has_multipliers, "Multipliers"
-          = f.check_box :has_multipliers, {class: "feature-checkbox has-settings-menu"}
-        .form-card-body
-          .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
-        .form-card-advanced-settings
-          %button.button-advanced-settings= glyph(:cog) + "Settings"
-        .advanced-settings-card
-          %a.button-close= glyph(:times)
-          = f.input :total_weights, :label => "How many multipliers do #{term_for :students} have to allocate?", input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
-          = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
-          = f.input :max_weights_per_assignment_type, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
-          = f.input :max_assignment_types_weighted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, :label => "Is there a maximum number of assignment types they can weight?"
-          = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}
-
 
       .form-card
         .form-card-header
@@ -113,3 +95,19 @@
           %a.button-close= glyph(:times)
           = f.check_box :has_in_team_leaderboards
           = f.label :has_in_team_leaderboards, "Allow students to opt in to see in-section rankings and points (using pseudonyms to protect their privacy)"
+
+      .form-card
+        .form-card-header
+          = f.label :has_multipliers, "Multipliers"
+          = f.check_box :has_multipliers, {class: "feature-checkbox has-settings-menu"}
+        .form-card-body
+          .feature-description{id: "hideMultipliers"}  Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will have multiplied points.
+        .form-card-advanced-settings
+          %button.button-advanced-settings= glyph(:cog) + "Settings"
+        .advanced-settings-card
+          %a.button-close= glyph(:times)
+          = f.input :total_weights, :label => "How many multipliers do #{term_for :students} have to allocate?", input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
+          = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
+          = f.input :max_weights_per_assignment_type, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
+          = f.input :max_assignment_types_weighted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, :label => "Is there a maximum number of assignment types they can weight?"
+          = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}
