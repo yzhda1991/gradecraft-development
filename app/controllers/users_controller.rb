@@ -74,26 +74,47 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
-      params[:send_welcome] == "1"
-    @user = result[:user]
+    if user_exists
+      result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
+        params[:send_welcome] == "1"
+      @user = result[:user]
 
-    if result.success?
+      if result.success?
+        if @user.is_student?(current_course)
+          redirect_to students_path,
+            # rubocop:disable AndOr
+            notice: "#{term_for :student} #{@user.name} was successfully created!" and return
+        elsif @user.is_staff?(current_course)
+          redirect_to staff_index_path,
+            notice: "Staff Member #{@user.name} was successfully created!" and return
+        elsif @user.is_observer?(current_course)
+          redirect_to observers_path,
+            notice: "Observer #{@user.name} was successfully created!" and return
+        end
+      end
+    else
+      @user = User.find_by_insensitive_email(params["user"]["email"])
+    end
+
+    if @user.course_memberships.where(course_id: current_course.id).first.nil?
+      CourseMembershipBuilder.new(current_user).build_for(@user)
+      render :new
+    else
       if @user.is_student?(current_course)
         redirect_to students_path,
           # rubocop:disable AndOr
-          notice: "#{term_for :student} #{@user.name} was successfully created!" and return
+          alert: "#{term_for :student} #{params["user"]["first_name"]}
+            #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path,
-          notice: "Staff Member #{@user.name} was successfully created!" and return
+          alert: "Staff Member #{params["user"]["first_name"]}
+          #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
       elsif @user.is_observer?(current_course)
         redirect_to observers_path,
-          notice: "Observer #{@user.name} was successfully created!" and return
+          alert: "Observer #{params["user"]["first_name"]}
+          #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
       end
     end
-
-    CourseMembershipBuilder.new(current_user).build_for(@user)
-    render :new
   end
 
   def update
@@ -247,6 +268,20 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def user_exists
+    if User.find_by_insensitive_email(params["user"]["email"]).nil?
+      return true
+    end
+
+    user = User.find_by_insensitive_email(params["user"]["email"])
+
+    if user.course_memberships.where(course_id: params["user"]["course_memberships_attributes"]["0"]["course_id"]).empty?
+      return true
+    end
+
+    return false
+  end
 
   def user_params
     params.require(:user).permit :username, :email, :admin, :password, :time_zone, :password_confirmation, :activation_token_expires_at, :activation_token,
