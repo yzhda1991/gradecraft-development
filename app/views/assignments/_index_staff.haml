@@ -31,7 +31,6 @@
                 %th{scope: "col", :width => "20%"} Name
                 %th.sr-only Icon
                 %th Due
-                %th.hidden Due Date
                 %th{scope: "col", :width => "10%"}  Max Points
                 %th Rubric?
                 %th Submissions
@@ -50,9 +49,6 @@
                       = l assignment.due_at.in_time_zone(current_user.time_zone)
                     - else
                       "Ongoing"
-                  %td.hidden
-                    - if assignment.due_at.present?
-                      = l assignment.try(:due_at).in_time_zone(current_user.time_zone)
                   - if assignment.pass_fail?
                     %td.foobers= "#{term_for :pass}/#{term_for :fail}"
                   - else
