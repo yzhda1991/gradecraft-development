@@ -1,10 +1,11 @@
-%table.announcements
+%table.announcements.dynatable
   %caption.sr-only Announcements
   %thead
     %tr
       %th Author
       %th Title
-      %th Sent
+      %th{scope: "col", :"data-dynatable-sorts" => "sentDate"} Sent
+      %th.hidden Sent Date
       - if current_user.is_staff?(current_course)
         %th Read
       %th.button-column.options Options
@@ -15,6 +16,7 @@
           %td= announcement.author.name
           %td= link_to announcement.title, announcement_path(announcement)
           %td= l announcement.created_at.in_time_zone(current_user.time_zone)
+          %td= l announcement.created_at, format: :sortable
           - if current_user.is_staff?(current_course)
             %td= "#{announcement.read_count} / #{announcement.course.students.count}"
           %td
