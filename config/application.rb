@@ -16,7 +16,9 @@ module GradeCraft
     config.active_job.queue_adapter = :resque
 
     config.i18n.enforce_available_locales = true
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}').to_s]
+
+    config.i18n.default_locale = :en
     config.angular_templates.ignore_prefix  = %w(angular/templates/)
     config.generators do |g|
       g.orm :active_record

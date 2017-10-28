@@ -1,7 +1,6 @@
 // Leaderboard Page
 $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
       dynatable.sorts.functions["numeric"] = numeric;
-      dynatable.sorts.functions["date"] = date;
       dynatable.sorts.functions["alphanum"] = alphanum;
     }).dynatable({
   features: {
@@ -22,13 +21,12 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         maxPoints: 'numeric',
         aveTheAverageOfAllGradesIncludingThoseWhoEarnedZero: 'numeric',
         avgEarnedTheAverageOfAllScoresAboveZero: 'numeric',
-        date: 'date',
         blog: 'alphanum',
         scoreWithWeights: 'numeric',
         finalScore: 'numeric',
         predictedScore: 'numeric',
         id: 'numeric',
-        lastLogin: 'date',
+        lastLogin: 'numeric',
         calendarDate: 'numeric',
         openDateSort: 'numeric',
         closeDateSort: 'numeric'
@@ -39,12 +37,6 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
 function numeric(a, b, attr, direction) {
   var aa = a[attr].replace(/[^0-9]/g, "");
   var bb = b[attr].replace(/[^0-9]/g, "");
-  return aa === bb ? 0 : (direction > 0 ? aa - bb : bb - aa);
-}
-
-function date(a, b, attr, direction) {
-  var aa = moment(a[attr], "MMMM D, YYYY").valueOf();
-  var bb = moment(b[attr], "MMMM D, YYYY").valueOf();
   return aa === bb ? 0 : (direction > 0 ? aa - bb : bb - aa);
 }
 
@@ -66,7 +58,6 @@ function pad(n, width, z) {
 
 $('table.paginated_dynatable').bind('dynatable:init', function(e, dynatable) {
       dynatable.sorts.functions["numeric"] = numeric;
-      dynatable.sorts.functions["date"] = date;
       dynatable.sorts.functions["alphanum"] = alphanum;
     }).dynatable({
   features: {
@@ -78,7 +69,7 @@ $('table.paginated_dynatable').bind('dynatable:init', function(e, dynatable) {
       sortTypes: {
         score: 'numeric',
         rank: 'numeric',
-        date: 'date',
+        date: 'numeric',
         blog: 'alphanum'
       }
     }
@@ -86,7 +77,6 @@ $('table.paginated_dynatable').bind('dynatable:init', function(e, dynatable) {
 
 $('table.unfancy_dynatable').bind('dynatable:init', function(e, dynatable) {
       dynatable.sorts.functions["numeric"] = numeric;
-      dynatable.sorts.functions["date"] = date;
       dynatable.sorts.functions["alphanum"] = alphanum;
     }).dynatable({
   features: {
@@ -98,7 +88,7 @@ $('table.unfancy_dynatable').bind('dynatable:init', function(e, dynatable) {
       sortTypes: {
         score: 'numeric',
         rank: 'numeric',
-        date: 'date',
+        date: 'numeric',
         blog: 'alphanum'
       }
     }

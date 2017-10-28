@@ -11,7 +11,6 @@
           %tr
             %th{scope: "col"} First Name
             %th{scope: "col"} Last Name
-            %th.hidden Badge Count
             - @badges.each do |badge|
               %th{:scope => "col", :id => badge.try(:id), :name => badge.try(:name)}= badge.name
             - if current_course.valuable_badges?
@@ -21,7 +20,6 @@
             %tr
               %td= link_to student.first_name, student_path(student)
               %td= link_to student.last_name, student_path(student)
-              %td.hidden= points student.earned_badges_for_course(current_course).count
               - @badges.each do |badge|
                 %td
                   -if student.awarded_badges_for_badge(badge.id).count > 0
