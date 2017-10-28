@@ -54,6 +54,7 @@
 
   toggleComplete = ()->
     modelGrade.submit_as_complete = !modelGrade.submit_as_complete
+    modelGrade.submit_as_student_visible = false if !modelGrade.submit_as_complete
 
   isSetToStudentVisible = ()->
     modelGrade.submit_as_student_visible
