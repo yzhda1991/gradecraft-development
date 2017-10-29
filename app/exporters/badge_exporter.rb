@@ -12,7 +12,7 @@ class BadgeExporter
   def export_sample_badge_file(badge, current_course, options={})
     CSV.generate(options) do |csv|
       csv << export_badge_headers
-      current_course.students_being_graded.each do |student|
+      current_course.students_being_graded.order_by_name.each do |student|
         csv << [student.first_name,
           student.last_name,
           student.email,
