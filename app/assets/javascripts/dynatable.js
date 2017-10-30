@@ -29,7 +29,8 @@ $('table.dynatable').bind('dynatable:init', function(e, dynatable) {
         lastLogin: 'numeric',
         calendarDate: 'numeric',
         openDateSort: 'numeric',
-        closeDateSort: 'numeric'
+        closeDateSort: 'numeric',
+        calendarDate: 'numeric'
       }
     }
 });
