@@ -13,7 +13,7 @@ en:
     formats:
       default: "%A, %b %d, %Y, %l:%M%p %Z"
       long: "%d %B, %Y %H:%M"
-      sortable: "%m%d%H%M%S"
+      sortable: "%y%m%d%H%M%S"
       short: "%D"
     pm: pm
   simple_form:
