@@ -106,11 +106,13 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  # The instance variables available to grade_released mailer
   def grade_ivars(grade_id)
     @grade = Grade.find grade_id
     @student = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
+    @grade_predictor_term = @course.grade_predictor_term
   end
 
   def submission_ivars_with_student(submission_id)
