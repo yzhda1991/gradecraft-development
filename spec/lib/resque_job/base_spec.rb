@@ -1,11 +1,9 @@
 require "./lib/resque_job/base"
 require "./spec/toolkits/lib/inheritable_ivars/shared_examples"
-require "./spec/toolkits/lib/papertrail_resque/shared_examples"
 require "./spec/toolkits/lib/resque_retry/shared_examples"
 
 describe ResqueJob::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
-  include Toolkits::Lib::PapertrailResqueToolkit::SharedExamples
   include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
 
   let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
@@ -191,19 +189,10 @@ describe ResqueJob::Base, type: :vendor_library do
   it_behaves_like "some @ivars are inheritable by subclasses", ResqueJob::Base
 
   describe "self.inheritable_ivars" do
-    let(:expected_attrs) {[
-      :queue,
-      :performer_class,
-    ]
-  }
+    let(:expected_attrs) { [:queue, :performer_class] }
 
     it "should have a list of inheritable attributes" do
       expect(described_class.inheritable_ivars).to eq(expected_attrs)
     end
   end
-
-  describe "the logger implementation" do
-    it_behaves_like "the #logger is implemented through Papertrail with PapertrailResque", described_class
-  end
-
 end

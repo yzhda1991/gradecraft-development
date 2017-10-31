@@ -1,6 +1,5 @@
 require "resque-retry"
 require "resque/errors"
-require "papertrail_resque"
 require "inheritable_ivars"
 
 require_relative "performer"
@@ -10,8 +9,6 @@ module ResqueJob
     # add resque-retry for all jobs
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
-    # pulls in logger class method for logging to Papertrail, defines #logger
-    extend PapertrailResque
     extend InheritableIvars # pass designated ivars from #inheritable_ivars down to descendent subclasses
 
     # defaults
@@ -95,6 +92,10 @@ module ResqueJob
         :queue,
         :performer_class
       ]
+    end
+
+    def self.logger
+      Rails.logger
     end
   end
 end
