@@ -112,7 +112,6 @@ class NotificationMailer < ApplicationMailer
     @student = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
-    @grade_predictor_term = @course.grade_predictor_term
   end
 
   def submission_ivars_with_student(submission_id)
