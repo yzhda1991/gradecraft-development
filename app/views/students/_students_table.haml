@@ -18,8 +18,8 @@
       - if presenter.has_badges?
         %th #{ term_for :badges }
         %th.hidden Badge Count
+      %th{scope: "col", :"data-dynatable-sorts" => "calendarDate"} Last Activity
       %th.hidden Calendar Date
-      %th{scope: "col", :"data-dynatable-column" => "calendarDate"} Last Activity
       %th.hidden Active
       %th.options{"data-dynatable-no-sort": "true"} Options
   %tbody
@@ -48,10 +48,10 @@
             - student.earned_badges.each do |badge|
               %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
           %td.hidden= student.earned_badges.count
+        %td= l student.last_activity_at.in_time_zone(current_user.time_zone) if student.last_activity_at.present?
         %td.hidden
           - if student.last_activity_at.present?
             = l student.last_activity_at.in_time_zone(current_user.time_zone), format: :sortable
-        %td= l student.last_activity_at.in_time_zone(current_user.time_zone) if student.last_activity_at.present?
         %td.hidden= student.course_activated?
         %td
           .button-container.dropdown
