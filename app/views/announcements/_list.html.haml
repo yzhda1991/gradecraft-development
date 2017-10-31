@@ -23,4 +23,5 @@
             .button-container.dropdown
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
               %ul.options-menu.dropdown-content
-                = link_to decorative_glyph(:trash) + 'Delete Announcement', announcement_path(announcement), data: {confirm: "Are you sure you want to delete Announement #{announcement.title}?", method: :delete }
+                %li
+                  = link_to decorative_glyph(:trash) + 'Delete Announcement', announcement_path(announcement), data: {confirm: "Are you sure you want to delete Announcement #{announcement.title}?", method: :delete }
