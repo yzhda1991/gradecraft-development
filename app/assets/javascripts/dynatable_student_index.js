@@ -42,6 +42,7 @@ if($('#student-index-table').length > 0 ) {
         sortTypes: {
           score: 'numeric',
           rank: 'numeric',
+          calendarDate: 'numeric'
         }
       }
     }).data('dynatable');
