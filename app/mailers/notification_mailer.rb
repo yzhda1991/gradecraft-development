@@ -106,6 +106,7 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  # The instance variables available to grade_released mailer
   def grade_ivars(grade_id)
     @grade = Grade.find grade_id
     @student = @grade.student

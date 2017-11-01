@@ -13,11 +13,7 @@ module EventLogger
   class Base
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
-    # pulls in logger class method for logging to Papertrail
-    extend PapertrailResque
-
-    # pass designated ivars from #inheritable_ivars down to subclasses
-    extend InheritableIvars
+    extend InheritableIvars # pass designated ivars from #inheritable_ivars down to subclasses
 
     # this is the Resque queue in which jobs created from this class will
     # be enqueued to
@@ -72,6 +68,10 @@ module EventLogger
 
       def inheritable_ivars
         [ :queue ].freeze
+      end
+
+      def logger
+        Rails.logger
       end
     end
   end

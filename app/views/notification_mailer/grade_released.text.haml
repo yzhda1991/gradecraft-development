@@ -5,7 +5,7 @@ You can now view the grade for your #{ @course.assignment_term.downcase } "#{ @a
 Visit #{ assignment_url(@assignment) } to view your results.
 
 - if @course.show_grade_predictor?
-  Don't forget to update your plan for the semester by checking your #{term_for :grade_predictor} here:
+  Don't forget to update your plan for the semester by checking your #{ @course.grade_predictor_term } here:
 
   = predictor_url
 

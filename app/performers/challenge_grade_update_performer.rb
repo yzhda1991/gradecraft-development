@@ -40,8 +40,10 @@ class ChallengeGradeUpdatePerformer < ResqueJob::Performer
   end
 
   def notify_challenge_grade_released
-    if @challenge_grade.student.email_challenge_grade_notifications?(@challenge_grade.course)
-      NotificationMailer.challenge_grade_released(@challenge_grade).deliver_now
+    @challenge_grade.team.students.each do |student|
+      if student.email_challenge_grade_notifications? @challenge_grade.challenge.course
+        NotificationMailer.challenge_grade_released(@challenge_grade).deliver_now
+      end
     end
   end
 end
