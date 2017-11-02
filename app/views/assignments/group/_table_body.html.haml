@@ -36,10 +36,10 @@
             %th
         %tbody
           - group.students.order_by_name.each do |student|
+            - grade = @assignment.grades.find_by(student_id: student.id)
+            
             %tr
               %td= link_to student.name, student_path(student)
-              - grade = @assignment.grades.find_by(student_id: student.id)
-
               %td
                 - if grade.present? && grade.instructor_modified?
                   - if @assignment.pass_fail? && grade.pass_fail_status.present?
