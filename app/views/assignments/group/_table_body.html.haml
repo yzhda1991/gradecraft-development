@@ -52,7 +52,7 @@
                   - if grade.present?
                     = points grade.score
               - if @assignment.has_levels?
-                %td= @assignment.grade_level(grade)
+                %td= @assignment.grade_level(grade) unless grade.nil?
               %td= decorative_glyph(:check) if grade && grade.complete?
               %td= decorative_glyph(:check) if grade && grade.student_visible?
               %td
