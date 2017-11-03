@@ -1,0 +1,11 @@
+%table.announcement-states.dynatable
+  %thead
+    %tr
+      %th Student
+      %th State
+      - @announcement
+  %tbody
+  - @announcement.course.students.each do |student|
+    %tr
+      %td= link_to student.name, student_path(student)
+      %td= @announcement.read?(student) ? "Read" : "Unread"
