@@ -28,12 +28,16 @@ class Submission < ActiveRecord::Base
       "grades.student_id = submissions.student_id)")
   end
 
-  scope :by_active_students, -> do
-    joins("INNER JOIN course_memberships ON "\
-      "course_memberships.course_id = submissions.course_id AND "\
-      "course_memberships.user_id = submissions.student_id")
-      .where("course_memberships.active = true")
-      .references(:course_membership, :submission)
+  scope :by_active_individual_students, -> do
+    individual
+      .joins(student: :course_memberships)
+      .where(student: { course_memberships: { active: true }})
+  end
+
+  scope :by_active_grouped_students, -> do
+    where.not(group_id: nil)
+      .joins(group: { students: :course_memberships })
+      .where(group: { students: { course_memberships: { active: true }}})
   end
 
   scope :ungraded, -> do
@@ -55,6 +59,7 @@ class Submission < ActiveRecord::Base
   scope :for_assignment_and_group, ->(assignment_id, group_id) { where(assignment_id: assignment_id, group_id: group_id) }
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :with_group, -> { where "group_id is not null" }
+  scope :individual, -> { where(group_id: nil) }
 
   before_validation :cache_associations
 
@@ -69,7 +74,7 @@ class Submission < ActiveRecord::Base
   multiple_files :submission_files
 
   def self.submitted_this_week(assignment_type)
-    assignment_type.submissions.submitted.by_active_students.where("submissions.submitted_at > ? ", 7.days.ago)
+    assignment_type.submissions.submitted.where("submissions.submitted_at > ? ", 7.days.ago)
   end
 
   def graded_at
