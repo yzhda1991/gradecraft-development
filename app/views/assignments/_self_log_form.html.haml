@@ -1,7 +1,11 @@
 = simple_form_for student.grade_for_assignment(assignment), :url => self_log_assignment_grades_path(assignment), :method => :post do |f|
   - if ! student.self_reported_done?(assignment)
+    %h3.uppercase Self Log your outcome:
     - if assignment.has_levels?
-      = f.select :raw_points, assignment.assignment_score_levels.map { |l| [l.formatted_name,l.points] }, :prompt => "Select your grade"
+      = f.select :raw_points, assignment.assignment_score_levels.map { |l| [l.formatted_name,l.points] }, :prompt => "Select your outcome"
+      = f.submit "Submit", class: "button success"
+    - elsif assignment.pass_fail?
+      = f.select :pass_fail_status, [current_course.pass_term, current_course.fail_term], prompt: "Select your outcome"
       = f.submit "Submit", class: "button success"
     - else
       = f.submit "I have completed this #{term_for :assignment}", class: "button success"

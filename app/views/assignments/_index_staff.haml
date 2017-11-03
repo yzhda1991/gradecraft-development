@@ -48,7 +48,7 @@
                     - if assignment.due_at.present?
                       = l assignment.due_at.in_time_zone(current_user.time_zone)
                     - else
-                      "Ongoing"
+                      Ongoing
                   - if assignment.pass_fail?
                     %td.foobers= "#{term_for :pass}/#{term_for :fail}"
                   - else
