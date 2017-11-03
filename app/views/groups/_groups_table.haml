@@ -26,4 +26,4 @@
                 = active_course_link_to decorative_glyph(:eye) + "Review #{term_for :group}", edit_group_path(id: group)
               - else
                 = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :group}", edit_group_path(id: group)
-              = active_course_link_to decorative_glyph(:trash) + "Delete", group_path(group), data: { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete
+              = active_course_link_to decorative_glyph(:trash) + "Delete", group_path(group), data: { confirm: "This will delete the #{group.name} #{term_for :group}, along with their submissions and grades if they have any - are you sure?" }, :method => :delete
