@@ -34,12 +34,6 @@ class Submission < ActiveRecord::Base
       .where(student: { course_memberships: { active: true }})
   end
 
-  scope :by_active_grouped_students, -> do
-    where.not(group_id: nil)
-      .joins(group: { students: :course_memberships })
-      .where(group: { students: { course_memberships: { active: true }}})
-  end
-
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
     .where.not(id: with_grade.where(grades: { instructor_modified: true }))
@@ -72,6 +66,12 @@ class Submission < ActiveRecord::Base
 
   clean_html :text_comment
   multiple_files :submission_files
+
+  def self.by_active_grouped_students(submissions)
+    submissions
+      .where.not(group_id: nil)
+      .select { |s| s.group.students.flat_map(&:course_memberships).any? { |cm| cm.active? && cm.course_id == s.course_id } }
+  end
 
   def self.submitted_this_week(assignment_type)
     assignment_type.submissions.submitted.where("submissions.submitted_at > ? ", 7.days.ago)

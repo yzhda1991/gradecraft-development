@@ -24,6 +24,6 @@ module SubmissionsHelper
   end
 
   def active_individual_and_group_submissions(submissions)
-    submissions.by_active_individual_students + submissions.by_active_grouped_students
+    submissions.by_active_individual_students + Submission.by_active_grouped_students(submissions)
   end
 end
