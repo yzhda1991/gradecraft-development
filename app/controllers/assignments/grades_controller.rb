@@ -120,6 +120,8 @@ class Assignments::GradesController < ApplicationController
 
       if params[:grade].present? && params[:grade][:raw_points].present?
         @grade.raw_points = params[:grade][:raw_points]
+      elsif params[:grade].present? && params[:grade][:pass_fail_status].present?
+        @grade.pass_fail_status = params[:grade][:pass_fail_status]
       else
         @grade.raw_points = @assignment.full_points
       end
