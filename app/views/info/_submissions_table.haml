@@ -24,6 +24,8 @@
               = link_to team.name, team if student.present? && team.present?
         - elsif assignment.has_groups?
           %td= link_to group.try(:name), group_path(group)
+          - if course.has_teams?
+            %td
         %td= l submission.submitted_at.in_time_zone(current_user.time_zone)
         %td.hidden= l submission.submitted_at, format: :sortable
         %td
