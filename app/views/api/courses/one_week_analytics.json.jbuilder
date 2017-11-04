@@ -20,7 +20,7 @@ if current_user_is_staff?
   json.faculty_data do
     json.submissions_this_week current_course.submitted_assignment_types_this_week do |at|
       json.assignment_type at.name
-      json.count Submission.submitted_this_week(at).count
+      json.count active_individual_and_group_submissions(Submission.submitted_this_week(at)).count
     end
 
     json.badges_this_week current_course.badges.earned_this_week do |badge|

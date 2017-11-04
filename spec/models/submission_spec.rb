@@ -111,6 +111,18 @@ describe Submission do
     expect expect(submission.errors.size).to eq(0)
   end
 
+  describe ".by_active_grouped_students" do
+    let(:group) { create :group }
+    let(:group_submission) { create :group_submission, group: group, course: group.course }
+    let(:submissions) { Submission.where(id: group_submission) }
+
+    it "returns the submission as long as there is at least one active student in the group" do
+      group.students.first.course_memberships.each { |cm| cm.update(active: false) }
+      expect(Submission.by_active_grouped_students(submissions)).to eq \
+        [group_submission]
+    end
+  end
+
   describe ".for_course" do
     it "returns all submissions for a specific course" do
       course = create(:course)
