@@ -12,9 +12,9 @@ class Assignment < ActiveRecord::Base
   belongs_to :assignment_type, -> { order("position ASC") }
 
   has_one :rubric, dependent: :destroy
-  has_many :criteria, through: :rubric
-  has_many :levels, through: :criteria
-  has_many :level_badges, through: :criteria
+  # has_many :criteria, through: :rubric
+  # has_many :levels, through: :criteria
+  # has_many :level_badges, through: :criteria
   has_many :criterion_grades, dependent: :destroy
 
   multiple_files :assignment_files
