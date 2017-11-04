@@ -13,7 +13,7 @@ class GradebookExporter
   private
 
   def base_student_columns
-    ["First Name", "Last Name", "Email", "Username", "Team"]
+    ["First Name", "Last Name", "Email", "Username", "Team", "Earned Badge Score"]
   end
 
   def assignment_name_columns(course)
@@ -35,6 +35,10 @@ class GradebookExporter
     end
     # TODO: we need to pre-fetch the course teams for this
     student_data << student.team_for_course(course).try(:name)
+
+    if course.valuable_badges?
+      memo << student.earned_badge_score_for_course(course)
+    end
 
     # add the grades for the necessary assignments
     # TODO: improve the performance here

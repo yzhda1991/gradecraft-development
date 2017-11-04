@@ -11,7 +11,7 @@
           %th{"scope"=>"col", "ng-repeat"=>"assignment in vm.assignments"}
             %a{"href"=>"#!", "ng-click"=>"sortBy('scores', $index)"} {{assignment.name}}
           %th{"scope"=>"col", "ng-if"=>"vm.hasBadges"}
-            %a{"href"=>"#!", "ng-click"=>"sortBy('badge_score')"} {{vm.termFor("badge")}}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('badge_score')"} {{vm.termFor("badge")}} Score
           %th{"scope"=>"col"}
             %a{"href"=>"#!", "ng-click"=>"sortBy('total_score')"} Total Score
           %th{"scope"=>"col"}

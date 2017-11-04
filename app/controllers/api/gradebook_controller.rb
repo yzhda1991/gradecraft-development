@@ -7,7 +7,7 @@ class API::GradebookController < ApplicationController
     @assignments = []
 
     current_course.assignment_types.ordered.each do |type|
-      type.assignments.ordered.find_each(batch_size: 50) do |assignment|
+      type.assignments.ordered.each do |assignment|
         @assignments << {
           id: assignment.id,
           name: assignment.name

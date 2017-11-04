@@ -20,8 +20,8 @@ json.data @students do |student|
         grade = assignment.grade_for_student(student)
 
         json.id grade.try(:id)
-        json.value grade.try(:score)
-        json.grade_link edit_grade_path(grade) unless grade.nil?
+        json.value grade.try(:final_points)
+        json.grade_link grade_path(grade) unless grade.nil?
       end
     end
 
