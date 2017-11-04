@@ -33,15 +33,13 @@ class GradebookExporter
     student_data = base_student_methods.inject([]) do |memo, method|
       memo << student.send(method)
     end
-    # TODO: we need to pre-fetch the course teams for this
+
     student_data << student.team_for_course(course).try(:name)
 
-    if course.valuable_badges?
-      memo << student.earned_badge_score_for_course(course)
-    end
+    # If a course doesn't have badges, this will return 0
+    student_data << student.earned_badge_score_for_course(course)
 
     # add the grades for the necessary assignments
-    # TODO: improve the performance here
     course.assignments.ordered.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       score = GradeProctor.new(grade).viewable? ? grade.final_points : ""

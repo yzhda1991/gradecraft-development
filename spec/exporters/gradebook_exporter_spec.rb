@@ -8,13 +8,13 @@ describe GradebookExporter do
 
     it "generates an empty CSV if there are no students or assignments" do
       csv = subject.gradebook course
-      expect(csv).to eq "First Name,Last Name,Email,Username,Team\n"
+      expect(csv).to eq "First Name,Last Name,Email,Username,Team,Earned Badge Score\n"
     end
 
     it "generates an empty CSV if there are no students" do
       assignments
       csv = subject.gradebook course
-      expect(csv).to eq "First Name,Last Name,Email,Username,Team,#{assignments.first.name},#{assignments.second.name}\n"
+      expect(csv).to eq "First Name,Last Name,Email,Username,Team,Earned Badge Score,#{assignments.first.name},#{assignments.second.name}\n"
     end
 
     it "generates an gradebook CSV if there are students and assignments present" do
@@ -27,9 +27,9 @@ describe GradebookExporter do
 
       expect(csv.length).to eq 3
       expect(csv[1]).to eq [student.first_name, student.last_name, student.email,
-        student.username, student.team_for_course(course), "100", "100"]
+        student.username, student.team_for_course(course), "0", "100", "100"]
       expect(csv[2]).to eq [another_student.first_name, another_student.last_name,
-        another_student.email, another_student.username, another_student.team_for_course(course), "", ""]
+        another_student.email, another_student.username, another_student.team_for_course(course), "0", "", ""]
     end
   end
 end
