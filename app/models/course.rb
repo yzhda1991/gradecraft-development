@@ -55,8 +55,8 @@ class Course < ActiveRecord::Base
     c.has_many :badges
     c.has_many :challenges
     c.has_many :challenge_grades, through: :challenges
-    c.has_many :criteria, through: :rubrics
-    c.has_many :criterion_grades, through: :rubrics
+    #c.has_many :criteria, through: :rubrics
+    #c.has_many :criterion_grades, through: :rubrics
     c.has_many :earned_badges
     c.has_many :flagged_users
     c.has_many :file_uploads
@@ -64,8 +64,8 @@ class Course < ActiveRecord::Base
     c.has_many :grades
     c.has_many :groups
     c.has_many :group_memberships
-    c.has_many :levels, through: :assignments
-    c.has_many :level_badges, through: :assignments
+    #c.has_many :levels, through: :assignments
+    #c.has_many :level_badges, through: :assignments
     c.has_many :linked_courses, dependent: :destroy
     c.has_many :rubrics
     c.has_many :submissions
