@@ -1,0 +1,4 @@
+%rollbar-js{"data-environment"=>"#{ENV['ROLLBAR_ENV']}",
+            "data-client-token"=>"#{ENV['ROLLBAR_CLIENT_TOKEN']}",
+            "data-person"=>"#{current_user.to_json(only: [:id, :username, :email])}",
+            "id"=>"rollbar-js"}

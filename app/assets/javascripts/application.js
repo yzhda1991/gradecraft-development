@@ -24,6 +24,7 @@
 //= require lodash.min
 //= require plotly-latest.min
 //= require date
+//= require rollbar
 
 //= require angular/angular
 //= require angular-resource
