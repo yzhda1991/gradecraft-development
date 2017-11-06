@@ -12,7 +12,7 @@
       .predictor-section-title
         .predictor-section-title-predicted-points{'ng-if'=>'vm.predictorService.weightsAvailable()'}
           .predictor-title-right-span
-            Unused {{termFor("vm.predictorService.weights")}} :
+            Unused {{vm.predictorService.termFor("weights")}} :
           .predictor-section-title-weights
             .coin-stack
               .coin{'ng-repeat' => 'coin in vm.predictorService.unusedWeightsRange()'}
