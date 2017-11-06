@@ -13,8 +13,7 @@
   font-family: 'Open Sans', sans-serif
   font-weight: normal
   width: 1rem
-  margin-top: -1.35rem
-  margin-left: .8rem
+  margin: -1.35rem auto 0
   text-align: center
   color: $color-black
 
@@ -36,20 +35,41 @@
   position: relative
   vertical-align: top
 
-  .img-cropper
-    margin: 0 auto
-
   .badge-icon
-    cursor: pointer
+    border-radius: 100px
+    border: 1px solid $color-yellow-1
+    width: 146px
+    height: 146px
+
     &.unearned, &.unavailable
-      opacity: .2 !important
+      filter: grayscale(100%)
+      border: 1px solid $color-grey-4
+      background: $color-grey-6
+      box-shadow: inset 2px 2px 4px $color-grey-4
+
     &.earned
       opacity: 1
 
-  &.focus-article
-    background-color: transparentize($color-blue-3, .8)
-    @media (max-width: $media-medium-max)
-      background-color: initial
+
+  .img-cropper
+    background: white
+    border-radius: 100px
+    box-sizing: content-box
+    overflow: hidden
+    margin: .5rem auto
+    position: relative
+    top: 15px
+
+    img
+      display: block
+      object-fit: cover
+      transition: all .3s
+
+  .badge-name
+    color: $color-black
+    padding-top: .5rem
+    margin: 2.5rem auto 0
+
 
 .mobile-click
   display: none
@@ -217,8 +237,8 @@ input.media-upload-button, input.icon-upload-button
     width: 150px
     height: 150px
   &.med-crop
-    width: 80px
-    height: 80px
+    width: 100px
+    height: 100px
   &.small-crop
     width: 40px
     height: 40px
