@@ -3,7 +3,6 @@ if($('#course-index-table').length > 0 ) {
   var dynatable = $('#course-index-table')
     .bind('dynatable:init', function(e, dynatable) {
       dynatable.sorts.functions["numeric"] = numeric;
-      dynatable.sorts.functions["date"] = date;
 
       // Custom filter logic is defined here:
       dynatable.queries.functions['all-courses'] = function(record) {
