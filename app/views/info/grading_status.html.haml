@@ -29,7 +29,7 @@
           %i.fa.fa-chevron-circle-right.fa-fw
           Ungraded Submissions
       .collapse-hidden{role: "tabpanel"}
-        = render partial: "submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
+        = render partial: "info/submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
 
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress", role: "tablist"}
@@ -38,7 +38,7 @@
           %i.fa.fa-chevron-circle-right.fa-fw
           In Progress Grades
       .collapse-hidden{role: "tabpanel"}
-        = render partial: "grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
+        = render partial: "info/grades_table", locals: { grade_type: "in_progress", grades_by_assignment: @in_progress_grades_by_assignment, course: current_course }
 
   - if @ready_for_release_grades_by_assignment.present?
     .collapseSection{id: "unreleased", role: "tablist"}
@@ -47,7 +47,7 @@
           %i.fa.fa-chevron-circle-right.fa-fw
           Ready For Release Grades
       .collapse-hidden{role: "tabpanel"}
-        = render partial: "grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @ready_for_release_grades_by_assignment, course: current_course }
+        = render partial: "info/grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @ready_for_release_grades_by_assignment, course: current_course }
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions", role: "tablist"}
@@ -56,4 +56,4 @@
           %i.fa.fa-chevron-circle-right.fa-fw
           Resubmissions
       .collapse-hidden{role: "tabpanel"}
-        = render partial: "submissions_table", locals: { submission_type: "resubmissions", submissions_by_assignment: @resubmissions_by_assignment, course: current_course }
+        = render partial: "info/submissions_table", locals: { submission_type: "resubmissions", submissions_by_assignment: @resubmissions_by_assignment, course: current_course }

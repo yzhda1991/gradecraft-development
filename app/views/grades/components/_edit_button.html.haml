@@ -1,7 +1,7 @@
-- if grade.group.nil?
-  - path = edit_grade_path(grade)
-- else
-  - path = grade_assignment_group_path(grade.assignment, grade.group)
-
 - if current_course.active? || current_user_is_admin?
-  = link_to glyph(:edit) + "Edit Grade", path, class: "button"
+  %div
+    - if grade.group.nil?
+      = edit_grade_link_to grade, class: "button"
+    - else
+      = link_to glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group), class: "button"
+

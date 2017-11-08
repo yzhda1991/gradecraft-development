@@ -26,6 +26,8 @@ class GradesController < ApplicationController
   # GET /grades/:id/edit
   def edit
     @grade = Grade.find params[:id]
+    @grade.update(complete: false, student_visible: false) if
+      @grade.complete? || @grade.student_visible?
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
     @team = Team.find(params[:team_id]) if params[:team_id]
     if request.referer && request.referer.match(grading_status_path)

@@ -32,6 +32,6 @@
                 - if grade.group_id.present?
                   %li= link_to glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group)
                 - else
-                  %li= link_to glyph(:edit) + "Edit Grade", edit_grade_path(grade)
+                  %li= edit_grade_link_to grade
                 %li= link_to glyph(:eye) + "See Grade", grade_path(grade)
                 %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure you want to delete #{grade.student.name}'s grade for #{grade.assignment.name}?" }

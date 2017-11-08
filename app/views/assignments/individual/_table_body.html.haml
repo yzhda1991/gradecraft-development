@@ -61,12 +61,7 @@
       .table-menu
         %ul
           - if grade.instructor_modified?
-            - if presenter.assignment.accepts_submissions? && presenter.submission_resubmitted?(student_submission)
-              %li
-                = link_to decorative_glyph(:edit) + "Re-grade", edit_grade_path(grade), class: "button danger"
-            - else
-              %li
-                = link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), class: "button"
+            %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
           - else
             - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
               = active_course_link_to decorative_glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
@@ -82,7 +77,9 @@
                     /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. */
                     %li= link_to decorative_glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, student_submission.id)
                 - if grade.instructor_modified?
-                  %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade)
+                  %li
+                    = edit_grade_link_to grade
+
                   = active_course_link_to decorative_glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure you want to delete #{student.name}'s grade for #{presenter.assignment.name}?", method: :delete }
 
     %td

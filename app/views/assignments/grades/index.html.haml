@@ -13,6 +13,9 @@
         .left
           %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.full_points} points "
         - if current_user_is_admin? || current_course.active?
+          -# delete this route entirely and all associated partials,
+          -# or fix and change to edit_grade_link_to presenter.grade_for_assignment
+          -# see Github issue #3751
           .right= link_to "Edit #{student.first_name}'s Grade", edit_grade_path(presenter.grade_for_assignment), class: "button"
         %br
         %br

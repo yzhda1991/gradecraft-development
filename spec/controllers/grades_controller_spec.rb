@@ -47,6 +47,13 @@ describe GradesController do
         expect(assigns(:submission)).to eq(submission)
       end
 
+      it "sets the grade to incomplete and not student visible before load" do
+        grade.update(complete: true, student_visible: true)
+        get :edit, params: { id: grade.id }
+        expect(assigns(:grade).complete).to be_falsey
+        expect(assigns(:grade).student_visible).to be_falsey
+      end
+
       describe "on submit" do
         it "redirects to the assignment show page by default" do
           get :edit, params: { id: grade.id }

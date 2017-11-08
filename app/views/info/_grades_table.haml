@@ -38,7 +38,7 @@
                   - if grade.group_id.present?
                     = active_course_link_to decorative_glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group), class: "button"
                   - else
-                    = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_grade_path(grade), class: "button"
+                    = edit_grade_link_to grade, class: "button"
           - if current_course.active?
             %td
               .center
