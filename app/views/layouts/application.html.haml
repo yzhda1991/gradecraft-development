@@ -8,7 +8,6 @@
     = stylesheet_link_tag "https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600"
     = stylesheet_link_tag "application", :media => "all"
     = render partial: "layouts/favicon"
-    = render partial: "layouts/help/rollbar"
     = csrf_meta_tags
     = javascript_include_tag "https://cdn.statuspage.io/se-v2.js"
     = yield(:head)
@@ -26,6 +25,7 @@
           = render partial: "layouts/observer"
     - else
       = render partial: "layouts/public"
+    = render partial: "layouts/rollbar"
   = render partial: "layouts/help/zendesk"
   .footer
     = render partial: "layouts/footer"

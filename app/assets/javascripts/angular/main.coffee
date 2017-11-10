@@ -30,11 +30,18 @@
 ]);
 
 @gradecraft.config(['RollbarProvider', (RollbarProvider) ->
+  _config = angular.element("rollbar-js")[0]
+  _token = if _config? then _config.getAttribute("data-client-token") else "POST_CLIENT_ITEM_ACCESS_TOKEN"
+  _environment = if _config? then _config.getAttribute("data-environment") else "unknown"
+  _person = if _config? then angular.fromJson(_config.getAttribute("data-person"))
+  Rollbar.error "Failed to fetch Rollbar configuration during config phase" if not _config?
+
   RollbarProvider.init({
-    accessToken: "POST_CLIENT_ITEM_ACCESS_TOKEN"
+    accessToken: _token
     captureUncaught: true
     payload:
-      environment: 'local'
+      environment: _environment
+      person: _person
   })
 ])
 
