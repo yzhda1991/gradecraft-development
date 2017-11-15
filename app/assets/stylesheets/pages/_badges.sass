@@ -29,9 +29,14 @@
     display: none
 
 // used on the badge index for students
+.badge-index-section
+  width: 100%
+  text-align: center
+  margin-bottom: 3rem
+
 .badge-icon-container
   display: inline-block
-  margin: 1rem
+  margin: 3.5rem 1rem 1rem
   position: relative
   vertical-align: top
 
@@ -40,12 +45,19 @@
     border: 1px solid $color-yellow-1
     width: 146px
     height: 146px
+    transition: all .3s
+    &:hover
+        box-shadow: 0 0 10px $color-yellow-1
 
     &.unearned, &.unavailable
-      filter: grayscale(100%)
       border: 1px solid $color-grey-4
       background: $color-grey-6
       box-shadow: inset 2px 2px 4px $color-grey-4
+      &:hover
+        box-shadow: inset 2px 2px 4px $color-grey-4, 0 0 10px $color-yellow-1
+
+      img
+        filter: grayscale(100%)
 
     &.earned
       opacity: 1
@@ -69,6 +81,9 @@
     color: $color-black
     padding-top: .5rem
     margin: 2.5rem auto 0
+    transition: all .3s
+    &:hover
+      color: $color-blue-3
 
 
 .mobile-click
@@ -86,30 +101,60 @@
 
 // Student Badge Show Page
 .student
+  .page-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+
   .badge-show-page
 
     section
       max-width: 990px
-      margin: 1rem auto
+      margin: 0
 
     .pg-header
       display: flex
       justify-content: flex-start
       align-items: center
+      @media (max-width: $media-small-max)
+        flex-direction: column
+        justify-content: center
 
-    .img-cropper
-      margin-right: 2rem
+    .badge-icon
+      &:hover
+          box-shadow: none
+      &.unearned, &.unavailable
+        box-shadow: none
+
+    .badge-icon-container
+      margin: 1rem 2rem 1rem 0
+      @media (max-width: $media-small-max)
+        margin: 1rem auto
 
     .badge-container
       display: flex
       justify-content: flex-start
+      @media (max-width: $media-small-max)
+        display: block
+
 
       .badge-stats
-        padding-right: 5rem
+        min-width: 180px
+        margin-right: 0
+        @media (max-width: $media-small-max)
+          width: 100%
+
+        .badge-stat
+          margin: 1rem 0
+
+      .badge-info
         margin: 0
 
-      .badge-description
-        margin: 0
+      .badge-info-piece
+        margin: 1rem 0
+
+    .earned-badge
+      margin: 1rem 0
 
 // staff badge show page
 .staff

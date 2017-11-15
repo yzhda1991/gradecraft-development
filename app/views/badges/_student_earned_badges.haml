@@ -1,7 +1,7 @@
+%h3 Awarded
 - presenter.earned_badges.each do |badge|
   .earned-badge
     .earned-badge-date
-      %h2 Awarded
       = glyph(:calendar) + "#{l badge.created_at.in_time_zone(current_user.time_zone) }"
     .earned-badge-feedback
       = raw badge.feedback

@@ -2,9 +2,13 @@
   = render partial: "layouts/alerts"
 
   .badge-show-page
+    %a{:href => "/badges"}
+      Back to Badges
     %section.pg-header
-      .img-cropper.large-crop
-        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
+      .badge-icon-container
+        .badge-icon{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'badge-icon unearned' : 'badge-icon')"}
+          .img-cropper.med-crop
+            = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
       %h1.badge-title
         = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
     %section.badge-container
@@ -18,7 +22,7 @@
           - else
             0
         .badge-stat
-          %h3.status
+          %h3.badge-status
             Status
           %span
             = render partial: "badges/components/state", locals: {badge: presenter.badge, state: presenter.badge.state }
@@ -28,19 +32,24 @@
           %span
             = render partial: "badges/components/count", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
           = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
-      %section.badge-description
-        %h2 Description
-        = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+      %section.badge-info
+        .badge-info-piece
+          %h3 Description
+          = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
-        %h2
-          Unlock Conditions
-        %ul
-          %li
-            %p
-              This is an unlock condition
-          %li
-            %p
-              This is another unlock condition
+        .badge-info-piece
+          %h3
+            Unlock Conditions
+          %ul
+            %li
+              %p
+                This is an unlock condition
+            %li
+              %p
+                This is another unlock condition
+
+        .badge-info-piece
+          = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
 
       - if presenter.badge.student_awardable?
         %section.student-awardable
@@ -56,6 +65,3 @@
                 = link_to bf.filename, bf.url
                 - if current_user_is_staff?
                   = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
-
-      %section.badges-earned
-        = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
