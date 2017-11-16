@@ -71,22 +71,27 @@ class Assignment < ActiveRecord::Base
 
   delegate :student_weightable?, to: :assignment_type
 
+  # Default method triggered by ModelCopier + ModelAssociationCopier
+  # Primarily used when copying on a higher level; i.e. copying an entire course
   def copy(attributes={})
-    ModelCopier.new(self).copy(
-      attributes: attributes,
-      associations: [
-        :assignment_score_levels,
-        { assignment_files: { assignment_id: :id }}
-      ],
-      options: {
-        prepend: { name: "Copy of "},
-        overrides: [
-          ->(copy) { copy.rubric = self.rubric.copy if self.rubric.present? },
-          ->(copy) { copy.rubric.course_id = copy.course_id if self.rubric.present? },
-        ]
-      }
-    )
-end
+    copy_with_associations attributes, {
+      overrides: [
+        -> (copy) { copy.rubric = self.rubric.copy if self.rubric.present? },
+        -> (copy) { copy.rubric.course_id = copy.course_id if self.rubric.present? },
+      ]
+    }
+  end
+
+  # Copy a specific assignment while prepending 'Copy of' to the name
+  def copy_with_prepended_name(attributes={})
+    copy_with_associations attributes, {
+      prepend: { name: "Copy of " },
+      overrides: [
+        -> (copy) { copy.rubric = self.rubric.copy if self.rubric.present? },
+        -> (copy) { copy.rubric.course_id = copy.course_id if self.rubric.present? },
+      ]
+    }
+  end
 
   def to_json(options = {})
     super(options.merge(only: [:id]))
@@ -290,5 +295,16 @@ end
 
   def reset_default_for_nil_values
     self.threshold_points = 0 if self.threshold_points.nil?
+  end
+
+  def copy_with_associations(attributes, options)
+    ModelCopier.new(self).copy(
+      options: options,
+      attributes: attributes,
+      associations: [
+        :assignment_score_levels,
+        { assignment_files: { assignment_id: :id }}
+      ]
+    )
   end
 end

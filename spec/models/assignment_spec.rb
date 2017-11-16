@@ -280,8 +280,18 @@ describe Assignment do
   end
 
   describe "#copy" do
-    let(:assignment) { build :assignment }
+    let(:assignment) { build_stubbed :assignment }
     subject { assignment.copy }
+
+    it "preserves the original assignment name" do
+      assignment.name = "Table of elements"
+      expect(subject.name).to eq "Table of elements"
+    end
+  end
+
+  describe "#copy_with_prepended_name" do
+    let(:assignment) { build :assignment }
+    subject { assignment.copy_with_prepended_name }
 
     it "prepends the name with 'Copy of'" do
       assignment.name = "Table of elements"
