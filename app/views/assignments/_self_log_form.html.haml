@@ -5,7 +5,7 @@
       = f.select :raw_points, assignment.assignment_score_levels.map { |l| [l.formatted_name,l.points] }, :prompt => "Select your outcome"
       = f.submit "Submit", class: "button success"
     - elsif assignment.pass_fail?
-      = f.select :pass_fail_status, [current_course.pass_term, current_course.fail_term], prompt: "Select your outcome"
+      = f.select :pass_fail_status, [[term_for(:pass), "Pass"], [term_for(:fail), "Fail"]], prompt: "Select your outcome"
       = f.submit "Submit", class: "button success"
     - else
       = f.submit "I have completed this #{term_for :assignment}", class: "button success"
