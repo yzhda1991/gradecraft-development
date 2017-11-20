@@ -2,7 +2,12 @@
   - if @users.empty?
     .alert-box.error
       = decorative_glyph("exclamation-circle")
-      No users were found
+      No users were found!
+
+  - if @users.count != @result_size
+    .alert-box.alert
+      = decorative_glyph("exclamation-circle")
+      = "Showing #{@users.count} of #{@result_size} matching results. Please narrow your search criteria."
 
   %section.form-section
     .form-subsection
@@ -47,7 +52,7 @@
               %td
                 %ul.marker-type-none
                   - course_memberships.each do |cm|
-                    %li= link_to "#{cm.course.name} (#{cm.role.capitalize})", change_course_path(cm.course)
+                    %li= link_to "#{cm.course.name} (#{cm.role.try(:capitalize)})", change_course_path(cm.course)
               %td
                 %ul.marker-type-none
                   - course_memberships.each do |cm|

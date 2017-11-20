@@ -269,7 +269,8 @@ class UsersController < ApplicationController
 
   def search
     @q = User.ransack params[:q]
-    @users = @q.result.includes :course_memberships
+    @result_size = @q.result.count
+    @users = @q.result.includes(:course_memberships).limit 30
   end
 
   private
