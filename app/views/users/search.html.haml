@@ -1,2 +1,54 @@
 .pageContent
-  %user-search-utility
+  - if @users.empty?
+    .alert-box.error
+      = decorative_glyph("exclamation-circle")
+      No users were found
+
+  %section.form-section
+    .form-subsection
+      %h3.form-subtitle Search Users
+      = search_form_for @q, url: search_users_path, class: :simple_form do |f|
+        .form-item
+          = f.label :first_name_or_last_name_cont
+          = f.search_field :first_name_or_last_name_cont
+
+        .form-item
+          = f.label :username_cont
+          = f.search_field :username_cont
+
+        .form-item
+          = f.label :email_cont
+          = f.search_field :email_cont
+
+        .submit-buttons
+          %ul
+            %li= f.submit "Submit", class: :button
+
+  - if @users.present?
+    .form-subsection
+      %h3.form-subtitle Results
+      %table.unfancy_dynatable
+        %thead
+          %tr
+            %th Id
+            %th First Name
+            %th Last Name
+            %th Email
+            %th Courses
+            %th Score
+        %tbody
+          - @users.each do |u|
+            - course_memberships = u.course_memberships.includes(:course).order("courses.name")
+            %tr
+              %td= u.id
+              %td= u.first_name
+              %td= u.last_name
+              %td= u.email
+              %td
+                %ul.marker-type-none
+                  - course_memberships.each do |cm|
+                    %li= link_to "#{cm.course.name} (#{cm.role.capitalize})", change_course_path(cm.course)
+              %td
+                %ul.marker-type-none
+                  - course_memberships.each do |cm|
+                    %li= cm.score

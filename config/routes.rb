@@ -498,7 +498,6 @@ Rails.application.routes.draw do
 
     resources :users, only: [] do
       collection do
-        get :search
         resources :importers, only: [], module: :users, param: :provider_id do
           get "/course/:id/users", action: :index, as: :users
         end
