@@ -14,6 +14,8 @@
     .form-subsection
       %h3.form-subtitle Search Users
       = search_form_for @q, url: search_users_path, class: :simple_form do |f|
+        = hidden_field_tag :max_results, 50
+
         .form-item
           = f.label :name_cont
           = f.search_field :name_cont
@@ -28,7 +30,7 @@
 
         .submit-buttons
           %ul
-            %li= f.submit "Submit", class: :button
+            %li= f.submit "Search", class: :button
 
   - if @users.present?
     .form-subsection
