@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :score, :team
 
+  ransack_alias :name, :first_name_or_last_name
+
   scope :order_by_high_score, -> (course_id) { includes(:course_memberships).where(course_memberships: { course_id: course_id }).order "course_memberships.score DESC" }
   scope :order_by_low_score, -> (course_id) { includes(:course_memberships).where(course_memberships: { course_id: course_id }).order "course_memberships.score ASC" }
   scope :students_in_team, -> (team_id, student_ids) \

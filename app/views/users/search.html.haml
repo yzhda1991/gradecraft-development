@@ -1,21 +1,22 @@
 .pageContent
-  - if @users.empty?
-    .alert-box.error
-      = decorative_glyph("exclamation-circle")
-      No users were found!
+  - unless @users.nil?
+    - if @users.empty?
+      .alert-box.error
+        = decorative_glyph("exclamation-circle")
+        No users were found!
 
-  - if @users.count != @result_size
-    .alert-box.alert
-      = decorative_glyph("exclamation-circle")
-      = "Showing #{@users.count} of #{@result_size} matching results. Please narrow your search criteria."
+    - if @users.count != @result_size
+      .alert-box.alert
+        = decorative_glyph("exclamation-circle")
+        = "Showing #{@users.count} of #{@result_size} matching results. Please narrow your search criteria."
 
   %section.form-section
     .form-subsection
       %h3.form-subtitle Search Users
       = search_form_for @q, url: search_users_path, class: :simple_form do |f|
         .form-item
-          = f.label :first_name_or_last_name_cont
-          = f.search_field :first_name_or_last_name_cont
+          = f.label :name_cont
+          = f.search_field :name_cont
 
         .form-item
           = f.label :username_cont
