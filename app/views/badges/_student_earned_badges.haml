@@ -2,6 +2,6 @@
 - presenter.earned_badges.each do |badge|
   .earned-badge
     .earned-badge-date
-      = glyph(:calendar) + "#{l badge.created_at.in_time_zone(current_user.time_zone) }"
+      = glyph(:calendar) + "#{ badge.created_at.in_time_zone(current_user.time_zone).strftime("%B %d, %Y") }"
     .earned-badge-feedback
       = raw badge.feedback
