@@ -15,6 +15,7 @@ en:
       long: "%d %B, %Y %H:%M"
       sortable: "%m%d%H%M%S"
       short: "%D"
+      medium: "%B %d, %Y"
     pm: pm
   simple_form:
     placeholders:
