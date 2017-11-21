@@ -38,9 +38,10 @@ describe Services::Actions::AssociatesSubmissionWithGrade do
       expect(result[:grade].submission_id).to eq submission.id
     end
 
-    it "adds nil as submission_id if no submission is found" do
+    it "does not reset the submission_id if no submission is found" do
+      grade.submission_id = 1234
       result = described_class.execute context
-      expect(result[:grade].submission_id).to be_nil
+      expect(result[:grade].submission_id).to eq 1234
     end
   end
 

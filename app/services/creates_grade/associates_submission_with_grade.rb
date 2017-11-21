@@ -17,7 +17,7 @@ module Services
           s = Submission.find_by(assignment_id: assignment.id,
                                  student_id: student.id)
         end
-        context[:grade].submission_id = s.nil? ? nil : s.id
+        context[:grade].submission_id = s.id unless s.nil?
       end
     end
   end
