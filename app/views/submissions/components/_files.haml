@@ -6,6 +6,8 @@
       %li
         = external_link_to submission_file.instructor_filename(index),
           submission_file_download_path(submission_file, index: index)
+        .span
+          = "Updated at: #{submission_file.updated_at}"
 
 
   %span.smallcaps Missing Attachments:
