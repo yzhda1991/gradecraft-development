@@ -127,6 +127,7 @@ class UsersController < ApplicationController
     @user.assign_attributes up
     cancel_course_memberships @user
     if @user.save
+      @user.activate! if up[:password].present? && !@user.activated?
       if @user.is_student?(current_course)
         redirect_to students_path, notice: "#{term_for :student} #{@user.name} was successfully updated!" and return
       elsif @user.is_staff?(current_course)
