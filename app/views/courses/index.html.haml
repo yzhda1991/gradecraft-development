@@ -53,6 +53,7 @@
                 %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
                 %ul.options-menu.dropdown-content
                   %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course)
-                  %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), :method => :copy
-                  %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), :method => :copy
-                  %li= link_to decorative_glyph(:copy) + "Activate All Students", activate_all_students_courses_path(id: course.id), :method => :post
+                  - if current_user_is_admin?
+                    %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), :method => :copy
+                    %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), :method => :copy
+                    %li= link_to decorative_glyph(:copy) + "Activate All Students", activate_all_students_courses_path(id: course.id), :method => :post
