@@ -228,3 +228,5 @@ en:
         title: "User Import"
       users:
         title: "Import Users from #{ @provider_name.capitalize }"
+    search:
+      title: "Search Users"

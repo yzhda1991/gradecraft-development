@@ -267,6 +267,15 @@ class UsersController < ApplicationController
     redirect_to session[:return_to] || dashboard_path, notice: "An Activation Email has been sent to #{@user.name}!"
   end
 
+  def search
+    @q = User.ransack params[:q]
+
+    unless params[:q].nil?
+      @result_size = @q.result.count
+      @users = @q.result.includes(:course_memberships).limit(params[:max_results] || 50)
+    end
+  end
+
   private
 
   def user_exists

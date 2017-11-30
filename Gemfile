@@ -62,6 +62,7 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-kerberos'
 gem 'omniauth-lti', '~> 0.0.2'
 
+gem 'ransack'
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'

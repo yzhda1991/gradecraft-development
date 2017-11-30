@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171012154015) do
+ActiveRecord::Schema.define(version: 20171120163326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -791,8 +791,10 @@ ActiveRecord::Schema.define(version: 20171012154015) do
     t.string   "time_zone",                       default: "Eastern Time (US & Canada)"
     t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["first_name"], name: "index_users_on_first_name", using: :btree
     t.index ["kerberos_uid"], name: "index_users_on_kerberos_uid", using: :btree
     t.index ["last_logout_at", "last_activity_at"], name: "index_users_on_last_logout_at_and_last_activity_at", using: :btree
+    t.index ["last_name"], name: "index_users_on_last_name", using: :btree
     t.index ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
