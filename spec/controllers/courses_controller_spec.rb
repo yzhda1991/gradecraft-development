@@ -1,4 +1,6 @@
 describe CoursesController do
+  include UniMock::StubRails
+
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:admin) { create(:course_membership, :admin, course: course).user }
@@ -6,6 +8,35 @@ describe CoursesController do
 
   context "as admin" do
     before(:each) { login_user(admin) }
+
+    describe "GET index" do
+      it "assigns the variables" do
+        get :index
+        expect(assigns(:courses)).to eq [course]
+        expect(assigns(:can_create_courses)).to be_truthy
+      end
+    end
+
+    describe "GET new" do
+      it "assigns title" do
+        get :new
+        expect(assigns(:course)).to be_a_new(Course)
+        expect(response).to render_template(:new)
+      end
+    end
+
+    describe "POST create" do
+      it "creates the course with valid attributes"  do
+        params = attributes_for(:course)
+        params[:id] = course
+        expect{ post :create, params: { course: params }}.to change(Course,:count).by(1)
+      end
+
+      it "redirects to new from with invalid attributes" do
+        expect{ post :create, params: { course: attributes_for(:course, name: nil) }}
+          .to_not change(Course,:count)
+      end
+    end
 
     describe "POST recalculate_student_scores" do
       it "recalculates student scores" do
@@ -137,13 +168,27 @@ describe CoursesController do
         expect(assigns(:courses)).to eq([course])
         expect(response).to render_template(:index)
       end
+
+      it "assigns false for can_create_courses if the environment is beta" do
+        stub_env "beta"
+        get :index
+        expect(assigns(:can_create_courses)).to be_falsey
+      end
     end
 
     describe "GET new" do
-      it "assigns title" do
+      it "redirects to index if the environment is beta" do
+        stub_env "beta"
         get :new
-        expect(assigns(:course)).to be_a_new(Course)
-        expect(response).to render_template(:new)
+        expect(response).to redirect_to action: :index
+      end
+    end
+
+    describe "POST create" do
+      it "redirects to index if the environment is beta" do
+        stub_env "beta"
+        post :create
+        expect(response).to redirect_to action: :index
       end
     end
 
@@ -152,19 +197,6 @@ describe CoursesController do
         get :edit, params: { id: course.id }
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:edit)
-      end
-    end
-
-    describe "POST create" do
-      it "creates the course with valid attributes"  do
-        params = attributes_for(:course)
-        params[:id] = course
-        expect{ post :create, params: { course: params }}.to change(Course,:count).by(1)
-      end
-
-      it "redirects to new from with invalid attributes" do
-        expect{ post :create, params: { course: attributes_for(:course, name: nil) }}
-          .to_not change(Course,:count)
       end
     end
 

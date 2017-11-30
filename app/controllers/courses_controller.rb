@@ -7,7 +7,7 @@ class CoursesController < ApplicationController
   before_action :ensure_staff?, except: [:index, :badges, :change, :new_external, :create_external]
   before_action :ensure_not_impersonating?, only: [:index]
   before_action :ensure_admin?, only: [:copy, :activate_all_students, :recalculate_student_scores, :overview]
-
+  before_action :ensure_can_create_courses?, only: [:new, :create]
   before_action :find_course, only: [:edit,
                                      :copy,
                                      :update,
@@ -22,6 +22,7 @@ class CoursesController < ApplicationController
 
   def index
     @courses = current_user.courses
+    @can_create_courses = current_user_is_admin? || (!Rails.env.beta? && current_user_is_staff?)
   end
 
   def overview
@@ -222,5 +223,10 @@ class CoursesController < ApplicationController
   def add_team_score_to_student_changed?
     course_params[:add_team_score_to_student].present? &&
       (@course.add_team_score_to_student != course_params[:add_team_score_to_student])
+  end
+
+  def ensure_can_create_courses?
+    can_create_courses = current_user_is_admin? || (!Rails.env.beta? && current_user_is_staff?)
+    redirect_to action: :index and return unless can_create_courses
   end
 end
