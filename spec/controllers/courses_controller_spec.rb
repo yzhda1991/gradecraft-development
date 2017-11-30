@@ -1,4 +1,6 @@
 describe CoursesController do
+  include UniMock::StubRails
+
   let(:course) { create :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:admin) { create(:course_membership, :admin, course: course).user }
@@ -7,28 +9,11 @@ describe CoursesController do
   context "as admin" do
     before(:each) { login_user(admin) }
 
-    describe "POST recalculate_student_scores" do
-      it "recalculates student scores" do
-        expect_any_instance_of(Course).to receive(:recalculate_student_scores)
-        post :recalculate_student_scores, params: { id: course.id.to_s }
-      end
-
-      it "redirects to root on success with a notice" do
-        post :recalculate_student_scores, params: { id: course.id.to_s }
-        expect(response).to redirect_to root_path
-        expect(flash[:notice]).to_not be_nil
-      end
-    end
-  end
-
-  context "as professor" do
-    before { login_user(professor) }
-
     describe "GET index" do
-      it "returns all courses the professor has an association with" do
+      it "assigns the variables" do
         get :index
-        expect(assigns(:courses)).to eq([course])
-        expect(response).to render_template(:index)
+        expect(assigns(:courses)).to eq [course]
+        expect(assigns(:can_create_courses)).to be_truthy
       end
     end
 
@@ -37,14 +22,6 @@ describe CoursesController do
         get :new
         expect(assigns(:course)).to be_a_new(Course)
         expect(response).to render_template(:new)
-      end
-    end
-
-    describe "GET edit" do
-      it "edit title" do
-        get :edit, params: { id: course.id }
-        expect(assigns(:course)).to eq(course)
-        expect(response).to render_template(:edit)
       end
     end
 
@@ -58,6 +35,38 @@ describe CoursesController do
       it "redirects to new from with invalid attributes" do
         expect{ post :create, params: { course: attributes_for(:course, name: nil) }}
           .to_not change(Course,:count)
+      end
+    end
+
+    describe "POST recalculate_student_scores" do
+      it "recalculates student scores" do
+        expect_any_instance_of(Course).to receive(:recalculate_student_scores)
+        post :recalculate_student_scores, params: { id: course.id.to_s }
+      end
+
+      it "redirects to root on success with a notice" do
+        post :recalculate_student_scores, params: { id: course.id.to_s }
+        expect(response).to redirect_to root_path
+        expect(flash[:notice]).to_not be_nil
+      end
+    end
+
+    describe "POST activate_all_students" do
+      let(:unactivated_user) { create(:user)}
+      it "activates the user" do
+        post :activate_all_students, params:{id: course.id}
+        expect(unactivated_user.activated?).to eq true
+      end
+
+      it "redirects to referer url if present" do
+        request.env["HTTP_REFERER"] = "http://some-referer.com"
+        post :activate_all_students, params:{id: course.id}
+        expect(response).to redirect_to("http://some-referer.com")
+      end
+
+      it "redirects to students_path if referer url is not present" do
+        post :activate_all_students, params:{id: course.id}
+        expect(response).to redirect_to(students_path)
       end
     end
 
@@ -126,14 +135,6 @@ describe CoursesController do
         expect(level_2.level_badges.present?).to eq(true)
       end
 
-      it "assigns the professor to the duplicated course" do
-        post :copy, params: { id: course.id }
-        duplicated = Course.unscoped.last
-        expect(duplicated.course_memberships.count).to eq 1
-        expect(duplicated.course_memberships[0].role).to eq "professor"
-        expect(duplicated.course_memberships[0].user).to eq professor
-      end
-
       it "redirects to the course edit path if the copy fails" do
         course.update_attribute :full_points, "a"
         post :copy, params: { id: course.id }
@@ -154,6 +155,48 @@ describe CoursesController do
         post :copy, params: { id: course_with_students.id, copy_type: "with_students" }
         duplicated = Course.last
         expect(duplicated.students.map(&:id)).to eq course_with_students.students.map(&:id)
+      end
+    end
+  end
+
+  context "as professor" do
+    before { login_user(professor) }
+
+    describe "GET index" do
+      it "returns all courses the professor has an association with" do
+        get :index
+        expect(assigns(:courses)).to eq([course])
+        expect(response).to render_template(:index)
+      end
+
+      it "assigns false for can_create_courses if the environment is beta" do
+        stub_env "beta"
+        get :index
+        expect(assigns(:can_create_courses)).to be_falsey
+      end
+    end
+
+    describe "GET new" do
+      it "redirects to index if the environment is beta" do
+        stub_env "beta"
+        get :new
+        expect(response).to redirect_to action: :index
+      end
+    end
+
+    describe "POST create" do
+      it "redirects to index if the environment is beta" do
+        stub_env "beta"
+        post :create
+        expect(response).to redirect_to action: :index
+      end
+    end
+
+    describe "GET edit" do
+      it "edit title" do
+        get :edit, params: { id: course.id }
+        expect(assigns(:course)).to eq(course)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -184,29 +227,16 @@ describe CoursesController do
       end
     end
 
-    describe "POST activate_all_students" do
-      let(:unactivated_user) { create(:user)}
-      it "activates the user" do
-        post :activate_all_students, params:{id: course.id}
-        expect(unactivated_user.activated?).to eq true
-      end
-
-      it "redirects to referer url if present" do
-        request.env["HTTP_REFERER"] = "http://some-referer.com"
-        post :activate_all_students, params:{id: course.id}
-        expect(response).to redirect_to("http://some-referer.com")
-      end
-
-      it "redirects to students_path if referer url is not present" do
-        post :activate_all_students, params:{id: course.id}
-        expect(response).to redirect_to(students_path)
-      end
-    end
-
-    describe "POST recalculate_student_scores" do
-      it "is a protected route" do
-        expect(post :recalculate_student_scores, params: { id: course.id.to_s }).to \
-          redirect_to(:root)
+    describe "protected routes" do
+      it "redirect to root" do
+        [
+          -> { post :copy },
+          -> { post :activate_all_students },
+          -> { post :recalculate_student_scores, params: { id: course.id } },
+          -> { get :overview }
+        ].each do |protected_route|
+          expect(protected_route.call).to redirect_to :root
+        end
       end
     end
   end
@@ -223,7 +253,6 @@ describe CoursesController do
     end
 
     describe "GET change" do
-
       let(:another_course) { create :course }
 
       before do
