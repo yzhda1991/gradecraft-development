@@ -369,6 +369,8 @@ module ActiveLMS
       handle_exceptions(exception_handler) do
         grades = []
         params = { assignment_ids: assignment_ids,
+                   enrollment_state: "active",
+                   workflow_state: "graded",
                    student_ids: "all",
                    include: ["assignment", "course", "user", "submission_comments"],
                    per_page: options.delete(:per_page) || 25 }.merge(options)

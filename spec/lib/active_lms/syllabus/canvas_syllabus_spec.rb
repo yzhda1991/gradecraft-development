@@ -205,6 +205,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
                        "include" => ["assignment", "course", "user", "submission_comments"],
                        "per_page" => 25,
+                       "enrollment_state" => "active",
+                       "workflow_state" => "graded",
                        "access_token" => access_token })
     end
     subject { described_class.new access_token }
@@ -228,7 +230,10 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
             "https://canvas.instructure.com/api/v1/courses/123/students/submissions")
           .with(query: { "assignment_ids" => assignment_ids, "student_ids" => "all",
                          "include" => ["assignment", "course", "user", "submission_comments"],
-                         "per_page" => 5, "test" => true,
+                         "per_page" => 5,
+                         "enrollment_state" => "active",
+                         "workflow_state" => "graded",
+                         "test" => true,
                          "access_token" => access_token })
           .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
         result = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
