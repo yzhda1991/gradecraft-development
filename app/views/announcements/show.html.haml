@@ -18,3 +18,6 @@
   %p
     %strong Message:
     = @announcement.body.html_safe
+
+  - if current_user_is_staff?
+    = render partial: "state_table"
