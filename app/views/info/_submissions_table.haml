@@ -32,6 +32,10 @@
           .right
             %ul.button-bar
               - if assignment.is_individual?
-                = active_course_link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(assignment, student), method: :post, class: "button"
+                - grade = assignment.grade_for_student student
+                - if grade.present?
+                  = edit_grade_link_to grade, class: "button"
+                - else
+                  = active_course_link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(assignment, student), method: :post, class: "button"
               - elsif assignment.has_groups?
                 = active_course_link_to decorative_glyph(:check) + "Grade", grade_assignment_group_path(assignment, group), class: "button"

@@ -177,10 +177,10 @@
 
   # Final "Submit Grade" actions, includes cleanup and redirect, background jobs
   submitGrade = (returnURL=null)->
+    return false unless confirm _confirmMessage()
+
     modelGrade.student_visible =  modelGrade.submit_as_student_visible
     modelGrade.complete =  modelGrade.submit_as_complete
-
-    return false unless confirm _confirmMessage()
 
     return queueUpdateGrade(true, returnURL, true) unless isRubricGraded
 

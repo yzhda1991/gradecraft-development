@@ -48,6 +48,20 @@ module LinkHelper
     end
   end
 
+  def edit_grade_link_to(grade, options = {})
+    return unless current_user_is_admin? || current_course.active?
+    confirm_message = 'This grade is about to be marked as ungraded and unavailable to the student - it won\'t be visible again until you click "Submit" - are you sure?'
+    if grade.assignment.accepts_submissions? && grade.submission && grade.submission.resubmitted?
+      options.merge! data: { confirm:  confirm_message }
+      link_to decorative_glyph(:edit) + "Re-grade", edit_grade_path(grade), options
+    elsif grade.student_visible?
+      options.merge! data: { confirm:  confirm_message }
+      link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), options
+    else
+      link_to decorative_glyph(:edit) + "Edit", edit_grade_path(grade), options
+    end
+  end
+
   def active_course_link_to_unless_current(name, options = {}, html_options = {}, &block)
     link_to_unless_current name, options, html_options, &block if current_user_is_admin? || current_course.active?
   end

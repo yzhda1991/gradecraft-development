@@ -8,8 +8,11 @@
         = active_course_link_to decorative_glyph(:trash) + "Delete Submission",
           assignment_submission_path(assignment: presenter.assignment, submission: presenter.submission ), class: "button button-edit",
           data: { confirm: "Are you sure you want to delete #{presenter.student.name}'s submission for #{presenter.assignment.name}?", method: :delete }
-        = active_course_link_to decorative_glyph(:check) + "Grade",
-          assignment_student_grade_path(presenter.assignment, presenter.student), class: "button button-edit", method: :post
+        - if presenter.grade
+          = edit_grade_link_to presenter.grade, class: "button"
+        - else
+          = active_course_link_to decorative_glyph(:check) + "Grade",
+            assignment_student_grade_path(presenter.assignment, presenter.student), class: "button button-edit", method: :post
 - elsif presenter.assignment.has_groups?
   - content_for :context_menu do
     .context-menu
