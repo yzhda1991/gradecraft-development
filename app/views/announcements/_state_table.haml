@@ -2,10 +2,11 @@
   %thead
     %tr
       %th Student
-      %th State
-      - @announcement
+      %th{scope: "col", :"data-dynatable-sorts" => "date"} Read?
+      %th.hidden Date
   %tbody
   - @announcement.course.students.each do |student|
     %tr
       %td= link_to student.name, student_path(student)
-      %td= @announcement.read?(student) ? "Read" : "Unread"
+      %td= l @announcement.states.for_user(student).first.try(:created_at).in_time_zone(current_user.time_zone) if @announcement.read?(student)
+      %td= l @announcement.states.for_user(student).first.try(:created_at), format: :sortable if @announcement.read?(student)
