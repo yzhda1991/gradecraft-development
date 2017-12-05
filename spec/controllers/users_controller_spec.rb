@@ -65,6 +65,14 @@ describe UsersController do
         put :update, params: { id: user.id, user: params }
         expect(user.reload.first_name).to eq "Jonathan"
       end
+
+      it "activates the user if the user is not activated and the password changed" do
+        allow(UserProctor).to receive(:new).and_return instance_double("UserProctor", can_update_password?: true)
+        user = create :user, activated: false
+        params = { password: "password", password_confirmation: "password" }
+        put :update, params: { id: user.id, user: params }
+        expect(user.reload.activated?).to be_truthy
+      end
     end
 
     context "calling create" do
