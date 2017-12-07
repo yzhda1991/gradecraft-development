@@ -31,7 +31,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])
+    ModelCopier.new(self, lookup_store).copy(attributes: attributes, associations: [:assignments])
   end
 
   # weights default to 0 if weightable but not weighted by the student
