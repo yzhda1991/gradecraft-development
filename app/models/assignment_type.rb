@@ -30,7 +30,7 @@ class AssignmentType < ActiveRecord::Base
     course.assignment_types.find_by attendance: true
   end
 
-  def copy(attributes={})
+  def copy(attributes={}, lookup_store=nil)
     ModelCopier.new(self, lookup_store).copy(attributes: attributes, associations: [:assignments])
   end
 
