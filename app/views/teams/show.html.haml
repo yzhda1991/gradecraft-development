@@ -23,7 +23,7 @@
           %th.hidden Badge Count
         %th{:width => "20%"}
     %tbody
-      - @team.active_members(current_course).each do |student|
+      - @team.active_members.each do |student|
         %tr
           %td= link_to student.first_name, student_path(student)
           %td= link_to student.last_name, student_path(student)

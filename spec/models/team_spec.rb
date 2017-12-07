@@ -1,5 +1,4 @@
 describe Team do
-
   describe "validations" do
     let(:course) { create(:course) }
 
@@ -51,16 +50,6 @@ describe Team do
     it "returns the team for the specific course id and name" do
       result = Team.find_by_course_and_name team.course_id, team.name.upcase
       expect(result).to eq team
-    end
-  end
-
-  describe "#member_count" do
-    it "returns the number of students on the team" do
-      team = create(:team)
-      student = create(:user)
-      student_2 = create(:user)
-      team.students << [student, student_2]
-      expect(team.member_count).to eq(2)
     end
   end
 

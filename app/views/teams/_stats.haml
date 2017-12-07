@@ -20,7 +20,7 @@
         %td= points team.average_score
         - if current_course.has_team_challenges?
           %td= points team.challenge_grade_score
-        %td= team.active_member_count(current_course)
+        %td= team.active_members.count
         %td
           - team.leaders.each do |leader|
             = leader.try(:name)
