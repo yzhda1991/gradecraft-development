@@ -41,17 +41,8 @@ class Team < ActiveRecord::Base
       associations: [{ team_memberships: { team_id: :id }}])
   end
 
-  # How many students are on the team
-  def member_count
-    students.count
-  end
-
-  def active_members(course)
+  def active_members
     students.students_being_graded_for_course(course, self)
-  end
-
-  def active_member_count(course)
-    students.students_being_graded_for_course(course, self).count
   end
 
   # How many badges the students on the team have earned total
@@ -62,7 +53,7 @@ class Team < ActiveRecord::Base
   # The number of points all students have earned total
   def total_earned_points
     total_score = 0
-    students.each do |student|
+    active_members.each do |student|
       total_score += (student.score_for_course(course) || 0 )
     end
     return total_score
@@ -70,8 +61,8 @@ class Team < ActiveRecord::Base
 
   # The average points amongst all students on the team
   def calculate_average_score
-    return 0 unless member_count > 0
-    average_score = total_earned_points / member_count
+    return 0 unless active_members.count > 0
+    average_score = total_earned_points / active_members.count
   end
 
   def sorted_team_scores

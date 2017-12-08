@@ -1,5 +1,4 @@
 describe Team do
-
   describe "validations" do
     let(:course) { create(:course) }
 
@@ -54,16 +53,6 @@ describe Team do
     end
   end
 
-  describe "#member_count" do
-    it "returns the number of students on the team" do
-      team = create(:team)
-      student = create(:user)
-      student_2 = create(:user)
-      team.students << [student, student_2]
-      expect(team.member_count).to eq(2)
-    end
-  end
-
   describe "#badge_count" do
     it "returns the number of earned badges for the team" do
       course = create(:course)
@@ -81,17 +70,14 @@ describe Team do
   end
 
   describe "#total_earned_points" do
-    it "returns the total points earned by students for the team" do
-      course = create(:course)
-      team = create(:team, course: course)
-      student = create(:user)
-      course_membership = create(:course_membership, :student, user: student, course: course, score: 100)
-      student_2 = create(:user)
-      course_membership = create(:course_membership, :student, user: student_2, course: course, score: 100)
-      student_3 = create(:user)
-      course_membership = create(:course_membership, :student, user: student_3, course: course, score: 100)
-      team.students << [student, student_2]
-      expect(team.total_earned_points).to eq(200)
+    let(:course) { create :course }
+    let(:team) { create :team, course: course }
+    let(:course_memberships) { create_list :course_membership, 3, :student, course: course, score: 100 }
+
+    it "returns the total points earned by active students for the team" do
+      course_memberships.last.update(active: false)
+      team.students << [course_memberships.map(&:user)]
+      expect(team.total_earned_points).to eq 200
     end
   end
 
