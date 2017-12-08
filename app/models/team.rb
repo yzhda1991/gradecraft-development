@@ -53,7 +53,7 @@ class Team < ActiveRecord::Base
   # The number of points all students have earned total
   def total_earned_points
     total_score = 0
-    students.each do |student|
+    active_members.each do |student|
       total_score += (student.score_for_course(course) || 0 )
     end
     return total_score
