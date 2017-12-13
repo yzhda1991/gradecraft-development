@@ -21,6 +21,7 @@ class API::AssignmentTypesController < ApplicationController
         :description,
         :student_weightable,
         :position,
+        :top_grades_counted,
         :updated_at
       )
   end

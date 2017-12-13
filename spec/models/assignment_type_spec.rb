@@ -251,6 +251,15 @@ describe AssignmentType do
       grade = create(:student_visible_grade, student: student, raw_points: 100, adjustment_points: -42, assignment: assignment)
       expect(assignment_type.final_points_for_student(student)).to eq(58)
     end
+
+    it "accounts for presence of top_grades_counted" do
+      assignment_type.top_grades_counted = 1
+      assignment = create(:assignment, course: course, assignment_type: assignment_type)
+      grade = create(:student_visible_grade, student: student, raw_points: 200, assignment: assignment)
+      assignment_2 = create(:assignment, course: course, assignment_type: assignment_type)
+      grade_2 = create(:student_visible_grade, student: student, raw_points: 100, assignment: assignment_2)
+      expect(assignment_type.final_points_for_student(student)).to eq(200)
+    end
   end
 
   describe "#summed_highest_scores_for(student)" do

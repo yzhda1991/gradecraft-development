@@ -114,7 +114,13 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def final_points_for_student(student)
-    grades_for(student).pluck("final_points").sum || 0
+    if self.count_only_top_grades?
+      grades_for(student)
+        .order_by_highest_score
+        .first(top_grades_counted).sum(&:final_points) || 0
+    else
+      grades_for(student).sum(&:final_points) || 0
+    end
   end
 
   # Calculating what the total highest points for the type is for a student

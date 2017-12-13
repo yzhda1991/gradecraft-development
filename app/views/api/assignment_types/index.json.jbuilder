@@ -2,10 +2,11 @@ json.data @assignment_types do |assignment_type|
   json.type "assignment types"
   json.id assignment_type.id.to_s
   json.attributes do
-    json.merge! assignment_type.attributes
-    json.total_points assignment_type.total_points_for_settings
-    json.is_capped assignment_type.is_capped?
-    json.max_points assignment_type.max_points
+    json.merge!                   assignment_type.attributes
+    json.total_points             assignment_type.total_points_for_settings
+    json.is_capped                assignment_type.is_capped?
+    json.max_points               assignment_type.max_points
+    json.count_only_top_grades    assignment_type.count_only_top_grades?
     json.summed_assignment_points assignment_type.summed_assignment_points
 
     if @student.present?
