@@ -14,7 +14,7 @@
             = active_course_link_to "Submit", new_assignment_submission_path(@assignment, group_id: group.id), class: "button"
           - grade = group.students.first.grade_for_assignment(@assignment)
           - if grade.present? && grade.instructor_modified?
-            = active_course_link_to decorative_glyph(:edit) + "Edit Grade", grade_assignment_group_path(@assignment, group), class: "button"
+            = edit_group_grade_link_to @assignment, group, class: "button"
           - else
             = active_course_link_to decorative_glyph(:edit) + "Grade", grade_assignment_group_path(@assignment, group), class: "button"
     %td
@@ -37,7 +37,7 @@
         %tbody
           - group.students.order_by_name.each do |student|
             - grade = @assignment.grades.find_by(student_id: student.id)
-            
+
             %tr
               %td= link_to student.name, student_path(student)
               %td
