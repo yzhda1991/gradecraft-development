@@ -15,8 +15,7 @@
     )
 
     vm.editGrade = (grade_link) ->
-      if confirm 'This grade is about to be marked as ungraded and unavailable to the student - it won\'t be visible again until you click "Submit" - are you sure?'
-        window.location = grade_link
+      window.location = grade_link
 
     # For sortable headers
     $scope.propertyName = 'first_name'
