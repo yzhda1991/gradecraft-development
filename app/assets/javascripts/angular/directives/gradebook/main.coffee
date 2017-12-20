@@ -14,7 +14,7 @@
       vm.loading = false
     )
 
-    vm.editGrade = (grade_link) ->
+    vm.showGrade = (grade_link) ->
       window.location = grade_link
 
     # For sortable headers
