@@ -4,16 +4,21 @@ describe Assignments::GroupsController do
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, student: student, assignment: assignment) }
-  
+
   context "as a professor" do
     before(:each) { login_user(professor) }
 
     describe "GET grade" do
-      it "assigns params" do
-        group = create(:group)
-        submission = create(:group_submission, assignment: assignment, group: group)
+
+      let(:group) { create :group }
+      let!(:submission) { create(:group_submission, assignment: assignment, group: group) }
+
+      before do
         assignment.groups << group
         group.students << student
+      end
+
+      it "assigns params" do
         get :grade, params: { assignment_id: assignment.id, id: group.id }
         expect(assigns(:assignment)).to eq(assignment)
         expect(assigns(:assignment_score_levels)).to \
@@ -21,6 +26,13 @@ describe Assignments::GroupsController do
         expect(assigns(:group)).to eq(group)
         expect(assigns(:submission)).to eq(submission)
         expect(response).to render_template(:grade)
+      end
+
+      it "sets the grade to incomplete and not student visible before load" do
+        grade.update(complete: true, student_visible: true)
+        get :grade, params: { assignment_id: assignment.id, id: group.id }
+        expect(grade.reload.complete).to be_falsey
+        expect(grade.reload.student_visible).to be_falsey
       end
     end
   end
