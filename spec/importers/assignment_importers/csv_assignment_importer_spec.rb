@@ -14,7 +14,6 @@ describe CSVAssignmentImporter do
 
   describe "#import" do
     let(:course) { create :course }
-    let!(:assignment_type) { create :assignment_type, name: "Grading Settings", course: course }
     let(:assignment_rows) do
       subject.as_assignment_rows(file).map do |row|
         {
@@ -29,24 +28,23 @@ describe CSVAssignmentImporter do
 
     before(:each) do
       allow(subject).to receive(:current_course).and_return course
-      assignment_rows.last.merge! selected_assignment_type: assignment_type.id
     end
 
     it "creates the assignment type if it does not exist" do
       expect{ subject.import assignment_rows, course }.to \
-        change{ AssignmentType.count }.by 2
+        change{ AssignmentType.count }.by 3
     end
 
     it "creates the assignments" do
       expect{ subject.import assignment_rows, course }.to \
-        change{ Assignment.count }.by 3
+        change{ Assignment.count }.by 4
     end
 
     it "logs the successful and the unsuccessful rows" do
       subject.import assignment_rows, course
 
-      expect(subject.successful.count).to eq 3
-      expect(subject.unsuccessful.count).to eq 1
+      expect(subject.successful.count).to eq 4
+      expect(subject.unsuccessful.count).to be_zero
     end
 
     it "sets the assignment attributes" do

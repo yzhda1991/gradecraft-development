@@ -58,10 +58,11 @@ class CSVAssignmentImporter
 
   def find_or_create_assignment_type(row, course)
     if row[:selected_assignment_type].nil?
+      assignment_type_id = matching_assignment_type_id course.assignment_types, row[:assignment_type]
       # If assignment type exists but one was not selected, the record is invalid
-      if assignment_type_exists? course.assignment_types, row[:assignment_type]
-        append_unsuccessful row.to_h, "Assignment type exists, but no selection was made"
-        return nil
+      if assignment_type_id.present?
+        # Automatically resolve type id if the name matches
+        assignment_type_id
       else
         type = course.assignment_types.create name: row[:assignment_type]
         if type.persisted?
@@ -81,8 +82,8 @@ class CSVAssignmentImporter
     end
   end
 
-  def assignment_type_exists?(assignment_types, imported_type)
-    !parsed_assignment_type_id(assignment_types, imported_type).nil?
+  def matching_assignment_type_id(assignment_types, imported_type)
+    parsed_assignment_type_id assignment_types, imported_type
   end
 
   class AssignmentRow
