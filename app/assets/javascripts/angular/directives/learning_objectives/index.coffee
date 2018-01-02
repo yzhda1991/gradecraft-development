@@ -23,6 +23,17 @@
 
     services().then(() ->
       vm.loading = false
+      # let the digest cycle apply so the DOM elements are rendered
+      _.defer(() ->
+        categories = document.getElementsByClassName("learning-objective-category")
+        return unless categories.length > 0
+        
+        # initialize the jQuery-Collapse plugin
+        angular.element(categories).collapse(
+          persist: true
+          accordion: true
+        )
+      )
     )
   ]
 

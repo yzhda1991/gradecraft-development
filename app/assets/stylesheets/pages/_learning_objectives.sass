@@ -47,7 +47,7 @@
           margin-left: -7px
 
 // Index
-.learning-objective-category
+.learning-objective-category-title
   margin: 0 0 -1px 0
   border: 1px solid $color-grey-6
 
@@ -55,14 +55,13 @@
     background-color: $color-grey-7
   a
     cursor: pointer
-    &.collapse-toggler
-      padding: 0.75rem
-      display: block
-      @media (max-width: $media-medium-max)
-        padding: 0.75rem 0.5rem
-      &:hover
-        text-decoration: none
-        color: $color-blue-2
+    padding: 0.75rem
+    display: block
+    @media (max-width: $media-medium-max)
+      padding: 0.75rem 0.5rem
+    &:hover
+      text-decoration: none
+      color: $color-blue-2
 
   .learning-objective-category-name
     @include truncate-text(40%)
@@ -72,11 +71,17 @@
       width: 100%
       font-size: 1rem
 
-  .objective-panel
-    padding: 1rem
-
-  .collapsed
+.learning-objective-category-container
+  padding: 1rem
+  border: 1px solid $color-grey-6
+  margin-bottom: -1px
+  background-color: $color-grey-7
+  @media (max-width: $media-medium-max)
+    padding: 0.5rem
+  &.collapsed
     display: none
+  .button
+    display: inline
 
 .learning-objective-category-action-buttons
   margin: 0
