@@ -44,11 +44,11 @@ describe RubricsController do
           match_array(full_rubric.criteria.pluck(:max_points))
       end
 
-      it "copies earned badges on rubric" do
-        create :level_badge, level: full_rubric.criteria.first.levels.first
-        expect{ post :copy, params: { assignment_id: new_assignment.id, rubric_id: full_rubric.id }}
-          .to change(LevelBadge, :count).by(1)
-      end
+      # it "copies earned badges on rubric" do
+      #   create :level_badge, level: full_rubric.criteria.first.levels.first
+      #   expect{ post :copy, params: { assignment_id: new_assignment.id, rubric_id: full_rubric.id }}
+      #     .to change(LevelBadge, :count).by(1)
+      # end
 
       it "doesn't duplicate badges" do
         create :level_badge, level: full_rubric.criteria.first.levels.first

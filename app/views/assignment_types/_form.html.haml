@@ -27,13 +27,13 @@
         If you fill this in, students will not be able to earn more than this amount.
       = f.text_field :max_points, data: {autonumeric: true, "m-dec" => "0"}
 
-    .form-item
-      / Do only X number of highest grades count?
-      = f.label :top_grades_counted, :label => "Count Highest Grades"
-      -# .form-hint{id: "assignment_type_top_grades_counted"}
-      = tooltip("count-highest-hint", "info-circle", placement: "right") do
-        Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here.
-      = f.input :top_grades_counted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: false
+    -# .form-item
+    -#   / Do only X number of highest grades count?
+    -#   = f.label :top_grades_counted, :label => "Count Highest Grades"
+    -#   -# .form-hint{id: "assignment_type_top_grades_counted"}
+    -#   = tooltip("count-highest-hint", "info-circle", placement: "right") do
+    -#     Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here.
+    -#   = f.input :top_grades_counted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, label: false
 
     - if current_course.has_multipliers?
       .form-item
