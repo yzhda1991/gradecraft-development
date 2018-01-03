@@ -3,6 +3,13 @@ describe Course do
   let(:staff_membership) { create :course_membership, :staff, course: subject,
                                   instructor_of_record: true }
 
+  describe "callbacks" do
+    it "sets has paid to true if the env is umich" do
+      allow(Rails).to receive(:env) { "production".inquiry }
+      expect { subject.save }.to change(subject, :has_paid)
+    end
+  end
+
   describe "validations" do
     it "requires a name" do
       subject.name = nil

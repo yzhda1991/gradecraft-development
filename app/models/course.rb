@@ -5,6 +5,7 @@ class Course < ActiveRecord::Base
   include UnlockableCondition
   include Analytics::CourseAnalytics
 
+  before_create :mark_umich_as_paid
   after_create :create_admin_memberships
 
   # Note: we are setting the role scopes as instance methods,
@@ -211,6 +212,10 @@ class Course < ActiveRecord::Base
     User.where(admin: true).each do |admin|
       CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
     end
+  end
+
+  def mark_umich_as_paid
+    self.has_paid = true if Rails.env.production?
   end
 
   def copy_with_associations(attributes, associations)
