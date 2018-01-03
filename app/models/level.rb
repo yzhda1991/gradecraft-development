@@ -20,8 +20,9 @@ class Level < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(attributes: attributes,
-      associations: [{ level_badges: { level_id: :id }}])
+    # ModelCopier.new(self).copy(attributes: attributes,
+    #   associations: [{ level_badges: { level_id: :id }}])
+    ModelCopier.new(self).copy(attributes: attributes)
   end
 
   # Determines if the specified student has earned this level.

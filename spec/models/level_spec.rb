@@ -47,18 +47,18 @@ describe Level do
     end
   end
 
-  describe "#copy" do
-    subject { level.copy }
-
-    it "duplicates the level badges for the level" do
-      level.save
-      create :level_badge, level: level
-      expect(subject.level_badges.size).to eq 1
-      expect(subject.level_badges.pluck(:badge_id)).to eq \
-        level.level_badges.pluck(:badge_id)
-      expect(LevelBadge.count).to eq(2)
-    end
-  end
+  # describe "#copy" do
+  #   subject { level.copy }
+  #
+  #   it "duplicates the level badges for the level" do
+  #     level.save
+  #     create :level_badge, level: level
+  #     expect(subject.level_badges.size).to eq 1
+  #     expect(subject.level_badges.pluck(:badge_id)).to eq \
+  #       level.level_badges.pluck(:badge_id)
+  #     expect(LevelBadge.count).to eq(2)
+  #   end
+  # end
 
   describe "updating points" do
     it "updates the meets exectations points on criterion" do
