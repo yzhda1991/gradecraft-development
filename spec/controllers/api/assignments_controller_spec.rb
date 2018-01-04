@@ -50,6 +50,8 @@ describe API::AssignmentsController do
     end
 
     describe "PUT update" do
+      let(:objective) { create :learning_objective }
+
       it "updates boolean attributes from params" do
         expect(assignment.visible).to be_truthy
         post :update, params: {
@@ -59,9 +61,7 @@ describe API::AssignmentsController do
       end
 
       it "creates learning objective links" do
-        objective = create :learning_objective
-        assignment_params = attributes_for(:assignment)
-          .merge(learning_objective_links_attributes: [{ objective_id: objective.id }])
+        assignment_params = attributes_for(:assignment).merge linked_objective_ids: [objective.id]
 
         expect{ post :update, params: { assignment: assignment_params, id: assignment.id }, format: :json }.to \
           change(LearningObjectiveLink, :count).by 1

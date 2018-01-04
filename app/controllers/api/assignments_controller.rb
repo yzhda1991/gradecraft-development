@@ -45,7 +45,7 @@ class API::AssignmentsController < ApplicationController
     @assignment = Assignment.find(params[:id])
     create_or_update_learning_objective_links
 
-    if @assignment.update_attributes assignment_params.except(:learning_objective_links_attributes)
+    if @assignment.update_attributes assignment_params.except(:linked_objective_ids)
       updated_grades
       render "api/assignments/show", success: true, status: 200
     else
@@ -91,13 +91,13 @@ class API::AssignmentsController < ApplicationController
   # Manually create the polymorphic associations and
   # destroy those that are no longer selected
   def create_or_update_learning_objective_links
-    links = assignment_params.delete(:learning_objective_links_attributes).map do |link_attr|
+    links = assignment_params.delete(:linked_objective_ids).map do |objective_id|
       @assignment.learning_objective_links.find_or_initialize_by \
         learning_objective_linkable_type: Assignment.name,
         learning_objective_linkable_id: @assignment.id,
-        objective_id: link_attr[:objective_id],
+        objective_id: objective_id,
         course_id: @assignment.course_id
-    end unless assignment_params[:learning_objective_links_attributes].nil?
+    end unless assignment_params[:linked_objective_ids].nil?
 
     @assignment.learning_objective_links.where.not(id: links.pluck(:id)).destroy_all if @assignment.learning_objective_links.any?
   end
@@ -134,11 +134,11 @@ class API::AssignmentsController < ApplicationController
       :threshold_points,
       :visible,
       :visible_when_locked,
+      linked_objective_ids: [],
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric
       assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
-      learning_objective_links_attributes: [:objective_id]
     )
   end
 end

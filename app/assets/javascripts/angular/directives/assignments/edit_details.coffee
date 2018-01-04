@@ -12,6 +12,10 @@
       scope.categoryLabel = (category) ->
         "-- #{category} --" if category?
 
+      scope.toggleObjectiveSelection = (objectiveId) ->
+        index = @assignment.linked_objective_ids.indexOf(objectiveId)
+        if index > -1 then @assignment.linked_objective_ids.splice(index, 1) else @assignment.linked_objective_ids.push(objectiveId)
+
       scope.updateAssignment = ()->
         AssignmentService.queueUpdateAssignment(@assignment.id)
   }

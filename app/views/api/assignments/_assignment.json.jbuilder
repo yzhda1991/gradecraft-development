@@ -31,11 +31,7 @@ json.attributes do
   json.visible_when_locked          assignment.visible_when_locked
   json.has_submitted_submissions    assignment.has_submitted_submissions?
 
-  json.learning_objective_links_attributes do
-    json.array! assignment.learning_objective_links.pluck(:objective_id) do |id|
-      json.objective_id id
-    end
-  end if assignment.learning_objective_links.any?
+  json.linked_objective_ids assignment.learning_objective_links.map(&:objective_id)
 
   # boolean attributes
   json.visible                    assignment.visible
