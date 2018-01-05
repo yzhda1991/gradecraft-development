@@ -6,7 +6,13 @@ FactoryGirl.define do
     comments { Faker::Hipster.sentence }
 
     factory :learning_objective_observed_outcome_grade do
-      association :learning_objective_assessable, factory: :grade
+      transient do
+        student_visible_grade true
+      end
+
+      grade do
+        create :grade, student_visible: student_visible_grade
+      end
     end
   end
 end
