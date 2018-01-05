@@ -138,7 +138,7 @@ class API::AssignmentsController < ApplicationController
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric
-      assignment_score_levels_attributes: [:id, :name, :points, :_destroy],
+      assignment_score_levels_attributes: [:id, :name, :points, :_destroy]
     )
   end
 end

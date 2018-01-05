@@ -23,18 +23,19 @@
       return unless oo?
       _.map(oo, (o) -> "/grades/#{o.id}")
 
-    services(vm.objectiveId).then(() -> vm.loading = false)
+    services(@objectiveId, @studentId).then(() -> vm.loading = false)
   ]
 
-  services = (objectiveId)->
+  services = (objectiveId, studentId)->
     promises = [
       LearningObjectivesService.getObjective(objectiveId, true),
-      LearningObjectivesService.getOutcomesForObjective(objectiveId)
+      LearningObjectivesService.getOutcomesForObjective(objectiveId, studentId)
     ]
-    return $q.all(promises)
+    $q.all(promises)
 
   {
     scope:
+      studentId: "@"
       objectiveId: "@"
     bindToController: true
     controller: LearningObjectivesShowCtrl

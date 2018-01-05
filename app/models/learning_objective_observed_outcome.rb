@@ -8,7 +8,7 @@ class LearningObjectiveObservedOutcome < ActiveRecord::Base
 
   validates_presence_of :assessed_at, :learning_objective_level
 
-  scope :for_grades, -> { where learning_objective_assessable_type: Grade.name }
+  scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true }) }
   scope :for_flagged_value, -> (flagged_value) { includes(:learning_objective_level).where(learning_objective_levels: { flagged_value: flagged_value }) }
   scope :not_flagged_red, -> do
     includes(:learning_objective_level)
@@ -16,11 +16,12 @@ class LearningObjectiveObservedOutcome < ActiveRecord::Base
       .not(learning_objective_levels: { flagged_value: LearningObjectiveLevel.flagged_values[:red]})
   end
 
-  def self.observed_outcomes_for(student, objective)
+  def self.observed_grade_outcomes_for(student, objective)
     cumulative_outcome = objective.cumulative_outcomes.for_user(student.id).first
     return nil if cumulative_outcome.nil?
     cumulative_outcome
       .observed_outcomes
+      .for_student_visible_grades
       .includes(:learning_objective_level)
       .order("learning_objective_levels.flagged_value")
   end

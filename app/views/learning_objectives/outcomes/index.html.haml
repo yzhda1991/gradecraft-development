@@ -16,7 +16,7 @@
         %th{"scope"=>"col"} Assessment
     %tbody
       - unless @cumulative_outcome.blank?
-        - @cumulative_outcome.observed_outcomes.for_grades.each do |outcome|
+        - @cumulative_outcome.observed_outcomes.for_student_visible_grades.each do |outcome|
           %tr
             %td= link_to outcome.grade.assignment.name, assignment_path(outcome.grade.assignment)
             %td= link_to "View grade", grade_path(outcome.grade)

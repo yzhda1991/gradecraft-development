@@ -1,10 +1,11 @@
 class LearningObjectives::ObjectivesController < ApplicationController
-  before_action :ensure_staff?
+  before_action :ensure_staff?, except: :show
   before_action :ensure_course_has_objectives?
   before_action :use_current_course
 
   # GET /learning_objectives/objectives
   def index
+    # rubocop:disable AndOr
     redirect_to new_learning_objectives_objective_path and return \
       unless @course.learning_objectives.any?
   end
@@ -12,6 +13,7 @@ class LearningObjectives::ObjectivesController < ApplicationController
   # GET /learning_objectives/objectives/:id
   def show
     @objective = @course.learning_objectives.find params[:id]
+    @student_id = current_student.id if current_user_is_student?
   end
 
   # GET /learning_objectives/objectives/new

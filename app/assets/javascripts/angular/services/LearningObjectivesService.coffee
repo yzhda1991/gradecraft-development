@@ -88,8 +88,8 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  getOutcomesForObjective = (objectiveId) ->
-    $http.get("/api/learning_objectives/objectives/#{objectiveId}/outcomes").then(
+  getOutcomesForObjective = (objectiveId, studentIds...) ->
+    $http.get("/api/learning_objectives/objectives/#{objectiveId}/outcomes", { params: { student_ids: studentIds } }).then(
       (response) ->
         GradeCraftAPI.loadMany(cumulativeOutcomes, response.data)
         GradeCraftAPI.loadFromIncluded(_observed_outcomes, "learning_objective_observed_outcome", response.data)

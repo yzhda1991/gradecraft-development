@@ -1,5 +1,5 @@
 class API::LearningObjectives::OutcomesController < ApplicationController
-  before_action :ensure_staff?, except: :index
+  before_action :ensure_staff?, except: [:index, :outcomes_for_objective]
 
   # GET /api/learning_objectives/outcomes
   def index
@@ -26,6 +26,9 @@ class API::LearningObjectives::OutcomesController < ApplicationController
       .find(params[:objective_id])
       .cumulative_outcomes
       .includes(:observed_outcomes)
+
+    @cumulative_outcomes = @cumulative_outcomes
+      .where(user_id: params[:student_ids]) unless params[:student_ids].blank?
 
     render "api/learning_objectives/outcomes/index", status: 200
   end

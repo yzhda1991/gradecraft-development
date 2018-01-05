@@ -22,7 +22,7 @@ class LearningObjective < ActiveRecord::Base
     if course.objectives_award_points?
       point_progress_for student
     else
-      outcome_progress_for student
+      grade_outcome_progress_for student
     end
   end
 
@@ -41,11 +41,15 @@ class LearningObjective < ActiveRecord::Base
     earned < points_to_completion ? "In Progress" : "Completed"
   end
 
-  def outcome_progress_for(student)
+  def grade_outcome_progress_for(student)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
     return "Not Started" if cumulative_outcome.nil?
     return "Failed" if failed? cumulative_outcome
-    cumulative_outcome.observed_outcomes.not_flagged_red.count < count_to_achieve ? "In Progress" : "Completed"
+
+    cumulative_outcome
+      .observed_outcomes
+      .for_student_visible_grades
+      .not_flagged_red.count < count_to_achieve ? "In Progress" : "Completed"
   end
 
   private
