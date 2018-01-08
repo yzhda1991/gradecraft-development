@@ -1,5 +1,5 @@
 class LevelBadge < ActiveRecord::Base
-  # include Copyable
+  include Copyable
 
   belongs_to :level
   belongs_to :badge
