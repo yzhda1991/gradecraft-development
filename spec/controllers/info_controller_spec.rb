@@ -10,9 +10,27 @@ describe InfoController do
     before { login_user(professor) }
 
     describe "GET dashboard" do
-      it "retrieves the dashboard" do
-        get :dashboard
-        expect(response).to render_template(:dashboard)
+      context "when a role is present in the current course" do
+        it "retrieves the dashboard" do
+          get :dashboard
+          expect(response).to render_template :dashboard
+        end
+      end
+
+      context "when no role is present for the current course" do
+        let(:professor) { create :user }
+        before(:each) { allow(controller).to receive(:current_course).and_return course }
+
+        it "changes to the first available course if it exists" do
+          create :course_membership, :professor, course: course_2, user: professor
+          get :dashboard
+          expect(response).to redirect_to change_course_path(course_2)
+        end
+
+        it "redirects to an error page if they don't belong to any other courses" do
+          get :dashboard
+          expect(response).to redirect_to errors_path(status_code: 401, error_type: "without_course_membership")
+        end
       end
     end
 
@@ -167,6 +185,11 @@ describe InfoController do
       it "retrieves the dashboard if turned on" do
         get :dashboard
         expect(response).to render_template(:dashboard)
+      end
+
+      it "ensures access to the current course" do
+        expect(controller).to receive(:ensure_current_course_role?)
+        get :dashboard
       end
     end
 

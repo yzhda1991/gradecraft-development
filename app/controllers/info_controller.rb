@@ -10,6 +10,7 @@ class InfoController < ApplicationController
   before_action :find_students,
     only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
   before_action :use_current_course, only: [:earned_badges, :per_assign, :multiplier_choices, :gradebook]
+  before_action :ensure_current_course_role?, only: :dashboard
 
   # Displays student and instructor dashboard
   def dashboard
@@ -131,6 +132,14 @@ class InfoController < ApplicationController
       @students = current_course.students_being_graded_by_team(@team).order_by_name
     else
       @students = current_course.students_being_graded.order_by_name
+    end
+  end
+
+  def ensure_current_course_role?
+    if current_user.role(current_course).nil?
+      next_course = current_user.course_memberships.first.try(:course)
+      return redirect_to change_course_path(next_course) unless next_course.nil?
+      redirect_to errors_path status_code: 401, error_type: "without_course_membership"
     end
   end
 end
