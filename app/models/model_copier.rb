@@ -164,9 +164,18 @@ class ModelCopierLookups
 
       # :courses => :course_id
       id_key = "#{class_type.to_s.singularize}_id".to_sym
+      id_type = "#{class_type.to_s.singularize}_type".to_sym
 
       if original.respond_to?(id_key) && lookup_has_key?(class_type, original.send(id_key))
         h[id_key] = lookup(class_type, original.send(id_key))
+
+      # handle polymorphic relationships
+      # In order for this to work for unlock conditions, they have to be run after all other
+      # models have been copied -- If badges can be conditions for assigment and assignment for badges,
+      # we have to copy all the models first, then go back and lookup the associations.
+      # TODO: add course_id to conditions, and then copy them last from the course copy.
+      elsif original.respond_to?(id_type) && lookup_has_type?(original.send(id_type), original.send(id_key))
+        h[id_key] = lookup(original.send(id_type), original.send(id_key))
       end
       h
     end
