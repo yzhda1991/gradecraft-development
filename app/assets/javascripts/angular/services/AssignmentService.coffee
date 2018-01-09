@@ -105,8 +105,8 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  createAssignment = (params)->
-    $http.post("/api/assignments/", assignment: params).then(
+  createAssignment = (params, useRubric)->
+    $http.post("/api/assignments/", assignment: params, use_rubric: useRubric).then(
       (response) ->
         GradeCraftAPI.addItem(assignments, "assignments", response.data)
         GradeCraftAPI.logResponse(response)

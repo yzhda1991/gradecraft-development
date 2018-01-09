@@ -47,6 +47,7 @@ json.attributes do
   json.is_earned_by_group   assignment.grade_scope == "Group"
   json.is_required          assignment.required
   json.is_rubric_graded     assignment.grade_with_rubric?
+  json.rubric_id assignment.rubric.id if assignment.use_rubric? && assignment.rubric.present?
   json.is_visible           assignment.visible?
 
   if @student.present?

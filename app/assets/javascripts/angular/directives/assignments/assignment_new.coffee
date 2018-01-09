@@ -4,6 +4,8 @@
   AssignmentNewCtrl = [()->
     vmAssignmentNew = this
     vmAssignmentNew.loading = true
+
+    vmAssignmentNew.useRubric = false
     vmAssignmentNew.assignmentCreated = false
     vmAssignmentNew.assignments = AssignmentService.assignments
     vmAssignmentNew.assignmentTypes = AssignmentTypeService.assignmentTypes
@@ -19,7 +21,7 @@
     }
 
     vmAssignmentNew.createAssignment = ()->
-      AssignmentService.createAssignment(vmAssignmentNew.newAssignment).then(()->
+      AssignmentService.createAssignment(vmAssignmentNew.newAssignment, vmAssignmentNew.useRubric).then(()->
         if AssignmentService.assignments.length
           vmAssignmentNew.assignmentCreated = true
       )
