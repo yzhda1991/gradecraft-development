@@ -1,7 +1,9 @@
-@gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", ($http, GradeCraftAPI, DebounceQueue) ->
+@gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", "AssignmentService",
+($http, GradeCraftAPI, DebounceQueue, AssignmentService) ->
 
   _lastUpdated = undefined
-  events = []
+  # use same collection as assignments to simplify shared logic such as media uploading
+  events = AssignmentService.assignments
   eventAttributes = {}
 
   _saveStates =

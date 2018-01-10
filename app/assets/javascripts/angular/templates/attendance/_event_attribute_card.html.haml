@@ -7,20 +7,14 @@
     %a.right{"ng-click"=>"deleteEvent()"}
       %i.fa.fa-times
 
-  .form-flex-row
-    .form-item.slim-margin
-      %label
-        Name
-        %input{"type"=>"text",
-               "required"=>"",
-               "placeholder"=>"Title (Required)",
-               "ng-model"=>"event.name",
-               "ng-change"=>"queuePostAttendanceEvent()"}
-
-    %assignment-media-uploader{"assignment"=>"event",
-                               "ng-if"=>"event.id",
-                               "hide-attachments"=>"true",
-                               "ng-cloak"=>""}
+  .form-item.slim-margin
+    %label
+      Name
+      %input{"type"=>"text",
+             "required"=>"",
+             "placeholder"=>"Title (Required)",
+             "ng-model"=>"event.name",
+             "ng-change"=>"queuePostAttendanceEvent()"}
 
   Time
   %span.form-error{"ng-show"=>"formErrors.length > 0"} ({{formErrors[0]}})
@@ -57,7 +51,7 @@
 
   .form-item.slim-margin
     %label{"ng-if"=>"event.full_points != null"}
-      Total Points Possible:
+      Total Points Possible
       %input{"type"=>"text",
              "required"=>"",
              "ng-model"=>"event.full_points",
@@ -65,6 +59,11 @@
              "allow-negatives"=>"false",
              "placeholder"=>"Points",
              "ng-change"=>"queuePostAttendanceEvent()"}
+
+  %assignment-media-uploader{"assignment"=>"event",
+                             "ng-if"=>"event.id",
+                             "hide-attachments"=>"true",
+                             "ng-cloak"=>""}
 
   %status-message{"ng-if"=>"event.status",
                   "ng-class"=>"saveStatusClass()"} {{event.status.message}}

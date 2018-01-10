@@ -6,7 +6,10 @@ class AttendanceController < ApplicationController
 
   # GET /attendance
   def index
-    @assignments = current_course.assignments.with_attendance_type
+    @assignments = current_course
+      .assignments
+      .order(:open_at)
+      .with_attendance_type
 
     render "assignments/index", Assignments::StudentPresenter.build({
       student: current_student,
