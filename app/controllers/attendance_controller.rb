@@ -49,7 +49,7 @@ class AttendanceController < ApplicationController
 
   def attendance_assignment_params
     params.require(:assignment).permit :assignment_type_id, :name, :description,
-      :open_at, :due_at, :pass_fail, :full_points
+      :open_at, :due_at, :pass_fail, :full_points, :media
   end
 
   def find_or_create_assignment_type

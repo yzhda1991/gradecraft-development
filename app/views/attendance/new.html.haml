@@ -8,16 +8,18 @@
         = f.hidden_field :assignment_type_id, value: @assignment_type.id
 
         .form-item
-          = f.input :name, required: true, label: "Assignment Name", placeholder: "Name (Required)"
+          = f.input :name, required: true, label: "Name", placeholder: "Name (Required)"
 
         .form-item
-          %label{for: "assignment-description"} Assignment Description
+          %label{for: "assignment-description"} Description
           = tooltip("description-hint", "info-circle", placement: "right") do
             This will be shown to students on their dashboard, and when they submit their assignment.
           .textarea{id: "assignment-description"}
             = f.text_area :description, class: "froala"
 
-      %h2.form-title Assignment Dates
+        = render partial: "layouts/media_image_form_item", locals: { f: f, model: @assignment }
+
+      %h2.form-title Dates
       .form-subsection
         .form-flex-row
           .form-item
