@@ -11,7 +11,7 @@
     %h3.form-subtitle No attendance events present
 
   %event{"ng-repeat"=>"event in events"}
-    %attendance-event-attribute-card{"data-event"=>"event"}
+    %attendance-event-attribute-card{"data-event"=>"event", "data-event-index"=>"$index"}
 
 %span{"ng-if"=>"lastUpdated() != null"}
   Last updated at: {{lastUpdated() | date:"MM/dd/yyyy 'at' h:mma"}}

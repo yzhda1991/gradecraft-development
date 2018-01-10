@@ -2,14 +2,23 @@
   {
     scope:
       event: '='
+      eventIndex: '='
     restrict: 'EA'
     templateUrl: 'attendance/_event_attribute_card.html'
     link: (scope, el, attr) ->
+      scope.formErrors = []
+
       scope.queuePostAttendanceEvent = () ->
         AttendanceService.queuePostAttendanceEvent(@event)
         $timeout(
           () -> scope.event.status = null
         , 6000)
+
+      scope.validateDates = () ->
+        scope.formErrors.length = 0
+        openAtBeforeDueAt = moment(@event.open_at).isBefore(moment(@event.due_at))
+        scope["event_#{@eventIndex}"].$setValidity("invalidDates", openAtBeforeDueAt)
+        scope.formErrors.push("Open at date must be before due at date") if !openAtBeforeDueAt
 
       scope.saveStatusClass = () ->
         switch @event.status.state

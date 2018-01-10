@@ -1,4 +1,4 @@
-.event-card{"ng-class"=>"{'saved': saved()}"}
+.event-card{"ng-class"=>"{'saved': saved(), 'invalid': event_{{eventIndex}}.$invalid}", "ng-form"=>"event_{{eventIndex}}"}
   .attendance-header
     %i.fa.fa-calendar
     %a{"ng-click"=>"editAssignment()"}
@@ -10,7 +10,7 @@
   .form-flex-row
     .form-item.slim-margin
       %label
-        %span.sr-only Title
+        Name
         %input{"type"=>"text",
                "required"=>"",
                "placeholder"=>"Title (Required)",
@@ -22,9 +22,33 @@
                                "hide-attachments"=>"true",
                                "ng-cloak"=>""}
 
+  Time
+  %span.form-error{"ng-show"=>"formErrors.length > 0"} ({{formErrors[0]}})
+
+  .form-flex-row
+    .form-item.slim-margin
+      %label
+        %span.sr-only Open At
+        %input{"gc-date-time-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"event.open_at",
+               "required"=>"",
+               "ng-change"=>"validateDates()",
+               "name"=>"open_at"}
+    %span.time-label to
+    .form-item.slim-margin
+      %label
+        %span.sr-only Due At
+        %input{"gc-date-time-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"event.due_at",
+               "required"=>"",
+               "ng-change"=>"validateDates()",
+               "name"=>"due_at"}
+
   .form-item.slim-margin
     %label
-      %span.sr-only Class Description
+      Class Description
       %textarea.event-description{"type"=>"text",
                                   "placeholder"=>"Class Description",
                                   "rows"=>"2",
