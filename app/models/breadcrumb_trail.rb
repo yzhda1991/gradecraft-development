@@ -430,6 +430,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Observers', observers_path)
   end
 
+  def users_activate_set_password
+    dashboard
+    breadcrumb('Set Password', activate_set_password_user_path(objects[:token]))
+  end
+
   def users_search
     dashboard
     breadcrumb('Search Users', search_users_path)
