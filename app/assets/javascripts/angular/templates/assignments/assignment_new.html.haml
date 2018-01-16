@@ -7,14 +7,23 @@
         {{vmAssignmentNew.termFor("assignment")}} Type
         %select(ng-model="vmAssignmentNew.newAssignment.assignment_type_id")
           %option(ng-repeat="assignmentType in vmAssignmentNew.assignmentTypes" ng-selected="vmAssignmentNew.newAssignment.assignment_type_id == assignmentType.id" value="{{assignmentType.id}}") {{assignmentType.name}}
+
     .form-item
       %label
         {{vmAssignmentNew.termFor("assignment")}} Name
         %input(aria-required=true type="text" ng-model="vmAssignmentNew.newAssignment.name")
 
     .form-item
+      %label
+        %input(type="checkbox" ng-model="vmAssignmentNew.useRubric")
+        Use rubric?
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Is this {{vmAssignmentNew.termFor("assignment")}} rubric-graded?
 
+    .form-item
       %label
         %button.create-button(ng-click="vmAssignmentNew.createAssignment()") Create {{vmAssignmentNew.termFor("assignment")}}
 
-%assignment-edit-form(ng-if="vmAssignmentNew.assignmentCreated" assignment="vmAssignmentNew.assignments[0]")
+%assignment-edit-form(ng-if="vmAssignmentNew.assignmentCreated" data-assignment="vmAssignmentNew.assignments[0]" data-rubric-id="vmAssignmentNew.assignments[0].rubric_id")

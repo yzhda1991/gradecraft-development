@@ -47,6 +47,7 @@ json.attributes do
   json.is_earned_by_group   assignment.grade_scope == "Group"
   json.is_required          assignment.required
   json.is_rubric_graded     assignment.grade_with_rubric?
+  json.rubric_id assignment.rubric.id if assignment.use_rubric? && assignment.rubric.present?
   json.is_visible           assignment.visible?
 
   if @student.present?
@@ -141,13 +142,6 @@ json.relationships do
     grade =  @grades.where(assignment_id: assignment.id).first
     if GradeProctor.new(grade).viewable?(@student)
       json.grade data: { type: "grades", id: grade.id.to_s }
-    end
-  end
-
-  if assignment.grade_with_rubric?
-    json.rubric do
-      json.data type: "rubrics", id: assignment.rubric.id.to_s
-      json.links related: api_rubric_path(assignment.rubric.id)
     end
   end
 end

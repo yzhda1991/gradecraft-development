@@ -1,5 +1,5 @@
 json.data do
-  return if @assignment.course != current_course
+  return if @assignment.reload.course != current_course
 
   json.partial! 'api/assignments/assignment', assignment: @assignment
 end

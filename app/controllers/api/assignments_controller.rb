@@ -28,6 +28,7 @@ class API::AssignmentsController < ApplicationController
   def create
     @assignment = current_course.assignments.new(assignment_params)
     if @assignment.save
+      @assignment.find_or_create_rubric if params[:use_rubric]
       render "api/assignments/show", success: true, status: 201
     else
       render json: {
