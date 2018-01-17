@@ -9,6 +9,11 @@ module Services
       executed do |context|
         grade = Grade.find_or_create(context[:assignment].id, context[:student].id)
         update_grade_attributes grade, context[:attributes]["grade"]
+        unless grade.changed?
+          context.skip_all!("Grade did not change")
+          context[:grade] = nil
+          next context  # don't update the grade
+        end
         grade.graded_at = DateTime.now
         grade.graded_by_id = context[:graded_by_id]
         grade.full_points = context[:assignment].full_points
