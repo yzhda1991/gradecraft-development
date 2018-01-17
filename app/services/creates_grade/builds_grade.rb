@@ -10,8 +10,7 @@ module Services
         grade = Grade.find_or_create(context[:assignment].id, context[:student].id)
         update_grade_attributes grade, context[:attributes]["grade"]
         unless grade.changed?
-          context.skip_all!("Grade did not change")
-          context[:grade] = nil
+          context.fail!("Grade did not change", error_code: 400)
           next context  # don't update the grade
         end
         grade.graded_at = DateTime.now
