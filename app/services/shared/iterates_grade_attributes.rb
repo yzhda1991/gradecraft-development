@@ -20,7 +20,7 @@ module Services
           if result.success?
             context.successful << result[:grade]
           else
-            context.unsuccessful << { grade: result[:grade], error: result[:message] }
+            context.unsuccessful << { grade: result[:grade], error: result[:message] } unless result.error_code == 400
           end
         end
       end

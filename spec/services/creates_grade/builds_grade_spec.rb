@@ -54,4 +54,11 @@ describe Services::Actions::BuildsGrade do
     result = described_class.execute context
     expect(result[:grade].group_id).to eq 777
   end
+
+  it "halts the context if the grade attributes did not change" do
+    grade = create :grade, assignment: assignment, student: student
+    context[:attributes] = { "grade" => { "raw_points" => grade.raw_points } }
+    result = described_class.execute context
+    expect(result[:grade]).to be_nil
+  end
 end
