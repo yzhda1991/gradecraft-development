@@ -11,7 +11,7 @@
   - if presenter.assignment.threshold_points?
     %p.assignment-description.italic= "#{points presenter.assignment.threshold_points} points threshold"
 
-- if current_user_is_student? && presenter.positive_prediction_for?(presenter.assignment, current_student)
+- if current_user_is_student? && !impersonating? && presenter.positive_prediction_for?(presenter.assignment, current_student)
   %p.assignment-description.italic
     My Goal:
     = render partial: "grades/components/prediction", locals: { grade: presenter.prediction(presenter.assignment, current_student)  }
