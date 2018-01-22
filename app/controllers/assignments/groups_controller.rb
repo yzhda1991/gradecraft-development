@@ -11,6 +11,9 @@ class Assignments::GroupsController < ApplicationController
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
     @grade_next_path = path_for_next_group_grade @assignment, @group
     @rubric = @assignment.rubric if @assignment.grade_with_rubric?
+
+    grades = Grade.find_or_create_grades(@assignment.id, @group.students.pluck(:id))
+    grades.update_all(complete: false, student_visible: false)
   end
 
   private

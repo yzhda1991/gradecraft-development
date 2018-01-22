@@ -30,7 +30,7 @@
             %ul.options-menu.dropdown-content
               - if current_user_is_admin? || current_course.active?
                 - if grade.group_id.present?
-                  %li= link_to glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group)
+                  %li= edit_group_grade_link_to grade.assignment, grade.group
                 - else
                   %li= edit_grade_link_to grade
                 %li= link_to glyph(:eye) + "See Grade", grade_path(grade)

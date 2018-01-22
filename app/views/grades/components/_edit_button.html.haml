@@ -3,5 +3,5 @@
     - if grade.group.nil?
       = edit_grade_link_to grade, class: "button"
     - else
-      = link_to glyph(:edit) + "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group), class: "button"
+      = edit_group_grade_link_to grade.assignment, grade.group, class: "button"
 
