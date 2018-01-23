@@ -2,7 +2,7 @@ require "admin_constraint"
 
 Rails.application.routes.draw do
 
-  mount Resque::Server, at: "/resque", constraints: AdminConstraint.new
+  mount Resque::Server, at: "/jobs", constraints: AdminConstraint.new
   mount JasmineRails::Engine, at: '/specs', constraints: AdminConstraint.new if defined?(JasmineRails)
 
   #1. Analytics & Charts
