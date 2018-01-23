@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.2'
 
 gem 'rails'
-gem 'resque', '1.26'
+gem 'resque'
 gem 'activerecord-import'
 gem 'active_model_serializers'
 gem 'activerecord-session_store'
@@ -72,6 +72,7 @@ gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rdiscount'
 gem 'record_tag_helper'
+gem 'redis', '~> 3.0'
 
 # retry dsl for resque
 gem 'resque-retry'
