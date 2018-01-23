@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
+  mount Resque::Server.new, at: "/resque", constraints: AdminConstraint.new
+  mount JasmineRails::Engine, at: '/specs', constraints: AdminConstraint.new if defined?(JasmineRails)
   require "admin_constraint"
 
   #1. Analytics & Charts
