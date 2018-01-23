@@ -2,4 +2,5 @@ queue_score_recalculator_job:
   cron: "0 2 * * *"
   class: "QueueScoreRecalculatorJob"
   queue: nightly_score_recalculator
-  description: "This job runs a nightly score recalculator job"
+  description: "This job triggers a score recalculation job for every student \
+    belonging to an active course."
