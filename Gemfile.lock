@@ -415,7 +415,7 @@ GEM
       activemodel (~> 5.0)
       mongo (~> 2.3)
     mono_logger (1.1.0)
-    multi_json (1.12.1)
+    multi_json (1.13.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     namae (0.11.3)
@@ -569,7 +569,7 @@ GEM
     resque-throttler (0.1.5)
       resque (~> 1.25)
     retriable (3.0.1)
-    rollbar (2.15.0)
+    rollbar (2.15.5)
       multi_json
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
