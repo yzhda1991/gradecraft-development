@@ -23,6 +23,3 @@ Resque.rate_limit(:login_event_logger, at: 2, :per => 1)
 
 # process 20 jobs/second max
 Resque.rate_limit(:predictor_event_logger, at: 20, :per => 1)
-
-# scheduled jobs
-Resque.schedule = YAML.load_file(Rails.root.join("config", "resque_schedule.yml"))
