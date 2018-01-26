@@ -8,7 +8,11 @@ module Services
       executed do |context|
         user = context[:user]
         if !user.received_resources
-          UserMailer.umich_resources_email(user).deliver_now
+          if Rails.env.production?
+            UserMailer.umich_resources_email(user).deliver_now
+          else
+            UserMailer.app_resources_email(user).deliver_now
+          end
           user.received_resources = true
           user.save
         end
