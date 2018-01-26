@@ -1,6 +1,7 @@
 require_relative "../importers/user_importers/csv_student_importer"
 require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_or_updates_user"
+require_relative "../services/sends_resource_email"
 require 'uri'
 
 class UsersController < ApplicationController
@@ -62,7 +63,6 @@ class UsersController < ApplicationController
     @user.username = user_params[:email]
     if @user.save
       UserMailer.activation_needed_course_creation_email(@user).deliver_now
-      UserMailer.resources_email(@user).deliver_now
       redirect_to root_path, notice: "Your account has been created! Please check your email to activate your account."
     else
       redirect_to new_external_users_path
@@ -79,13 +79,13 @@ class UsersController < ApplicationController
       result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
         params[:send_welcome] == "1"
       @user = result[:user]
-
       if result.success?
         if @user.is_student?(current_course)
           redirect_to students_path,
             # rubocop:disable AndOr
             notice: "#{term_for :student} #{@user.name} was successfully created!" and return
         elsif @user.is_staff?(current_course)
+          Services::SendsResourceEmail.send_resource_email @user
           redirect_to staff_index_path,
             notice: "Staff Member #{@user.name} was successfully created!" and return
         elsif @user.is_observer?(current_course)
