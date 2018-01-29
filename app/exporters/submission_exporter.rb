@@ -4,7 +4,7 @@ class SubmissionExporter
       csv << baseline_headers
       course.submissions.submitted.each do |submission|
         csv << [ submission.id, submission.assignment_id, submission.assignment.name,
-          submission.student.email, submission.student_id, submission.group_id, submission.text_comment, submission.created_at, submission.updated_at, submission.grade.try(:score), submission.grade.try(:feedback), submission.grade.try(:updated_at) ]
+          submission.student.email, submission.student_id, submission.group_id, submission.text_comment, submission.created_at, submission.updated_at, submission.grade.try(:score), submission.grade.try(:feedback), submission.grade.try(:graded_at) ]
       end
     end
   end
