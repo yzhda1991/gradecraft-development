@@ -74,11 +74,31 @@ describe UserMailer do
     end
   end
 
-  describe "#resources_email" do
+  describe "#umich_resources_email(user)" do
     let(:user) { create :user }
 
     before(:each) do
-      UserMailer.resources_email(user).deliver_now
+      UserMailer.umich_resources_email(user).deliver_now
+    end
+
+    it "is sent from the a notifications email" do
+      expect(email.from).to eq ["mailer@gradecraft.com"]
+    end
+
+    it "is sent to the user's email" do
+      expect(email.to).to eq [user.email]
+    end
+
+    it "has an appropriate subject" do
+      expect(email.subject).to eq "GradeCraft Resources!"
+    end
+  end
+
+  describe "#app_resources_email(user)" do
+    let(:user) { create :user }
+
+    before(:each) do
+      UserMailer.app_resources_email(user).deliver_now
     end
 
     it "is sent from the a notifications email" do
