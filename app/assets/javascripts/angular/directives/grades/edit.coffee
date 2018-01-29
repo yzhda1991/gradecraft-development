@@ -69,7 +69,6 @@
          isActiveCourse: "="
          hasAwardableBadges: "="
          courseHasLearningObjectives: "="
-        },
       templateUrl: 'grades/edit.html'
     }
 ]
