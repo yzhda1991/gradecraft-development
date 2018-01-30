@@ -3,9 +3,6 @@
 
 %learning-objectives{"ng-if"=>"!loObjectivesDesignCtrl.loading"}
   .italic
-    %h2.form-title{"ng-if"=>"!loObjectivesDesignCtrl.hasSavedObjectives()"}
-      No {{loObjectivesDesignCtrl.termFor("learning_objectives")}} currently exist - start creating one!
-
     %return-link{"ng-if"=>"loObjectivesDesignCtrl.hasSavedObjectives()"}
       %a{"ng-href"=>"{{loObjectivesDesignCtrl.indexRoute}}", "class"=>"return-link"}
         %i.fa.fa-angle-double-left

@@ -5,9 +5,6 @@ class LearningObjectives::ObjectivesController < ApplicationController
 
   # GET /learning_objectives/objectives
   def index
-    # rubocop:disable AndOr
-    redirect_to new_learning_objectives_objective_path and return \
-      unless @course.learning_objectives.any?
   end
 
   # GET /learning_objectives/objectives/:id
