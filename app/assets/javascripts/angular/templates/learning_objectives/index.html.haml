@@ -1,7 +1,7 @@
 %loading-message{"loading"=>"loIndexCtrl.loading", "data-message"=>"Loading..."}
 
 .learning-objective-index-container{"role"=>"tablist", "ng-if"=>"!loIndexCtrl.loading"}
-  .learning-objective-category{"id"=>"assignment-type-0"}
+  .learning-objective-category{"id"=>"assignment-type-0", "ng-if"=>"_.some(loIndexCtrl.objectives('uncategorized'))"}
     .learning-objective-category-title.collapse{"role"=>"tab"}
       %h2.learning-objective-category-name
         %i.fa.fa-fw.fa-chevron-circle-right

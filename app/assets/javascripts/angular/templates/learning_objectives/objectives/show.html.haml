@@ -11,10 +11,10 @@
       %tr{"ng-if"=>"loShowCtrl.objective().count_to_achieve"}
         %th Count to Achieve:
         %td {{loShowCtrl.objective().count_to_achieve}}
-      %tr
+      %tr{"ng-if"=>"loShowCtrl.objective().description"}
         %th Description:
         %td {{loShowCtrl.objective().description}}
-      %tr
+      %tr{"ng-if"=>"_.some(loShowCtrl.objective().linkedAssignments)"}
         %th Linked Assignments:
         %td
           %ul.no-style
@@ -27,17 +27,14 @@
       %thead
         %tr
           %th Student
-          %th Assignment
-          %th Grade
-          %th Assessment
+          %th Progress
       %tbody
-        %tr{"ng-repeat"=>"co in loShowCtrl.cumulativeOutcomes"}
-          %td {{co.user_full_name}}
+        %tr{"ng-repeat"=>"student in loShowCtrl.students"}
+          %td {{student.name}}
           %td
             %ul
-              %li{"ng-repeat"=>"name in loShowCtrl.assignmentNames(co.id)"} {{name}}
-          %td
-            %ul
-              %li{"ng-repeat"=>"path in loShowCtrl.gradePaths(co.id)"}
-                %a{"ng-href"=>"{{path}}"} View Grade
-          %td {{loShowCtrl.status()}} (Attempts: {{loGradeOverviewCtrl.overallProgress().totalOutcomeCount || 0}})
+              %li{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes(student.id)", "ng-if"=>"_.some(loShowCtrl.observedOutcomes(student.id))"}
+                {{oo.assignment_name}}
+                %a{"ng-href"=>"loShowCtrl.gradePath(oo.id)"} (View Grade)
+              %li{"ng-if"=>"!_.some(loShowCtrl.observedOutcomes(student.id))"}
+                Not yet started

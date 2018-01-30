@@ -1,27 +1,24 @@
-@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "AssignmentService", "$q", (LearningObjectivesService, AssignmentService, $q) ->
+@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "$q", (LearningObjectivesService, CourseService, $q) ->
   LearningObjectivesShowCtrl = [() ->
     vm = this
     vm.loading = true
+    vm.students = CourseService.students
     vm.objective = LearningObjectivesService.objective
     vm.linkedAssignments = LearningObjectivesService.linkedAssignments
-    vm.cumulativeOutcomes = LearningObjectivesService.cumulativeOutcomes
 
-    vm.overallProgress = () ->
-      LearningObjectivesService.overallProgress(parseInt(vm.objectiveId))
-
-    vm.status = () ->
-      LearningObjectivesService.statusFor(vm.objectiveId)
+    vm.observedOutcomes = (studentId) ->
+      co = vm.cumulativeOutcomeFor(studentId)
+      return unless co?
+      oo = vm.observedOutcomesFor(co.id)
 
     vm.observedOutcomesFor = (cumulativeId) ->
       LearningObjectivesService.observedOutcomesFor(cumulativeId)
 
-    vm.assignmentNames = (cumulativeId) ->
-      _.pluck(vm.observedOutcomesFor(cumulativeId), 'assignment_name')
+    vm.cumulativeOutcomeFor = (studentId) ->
+      _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: studentId })
 
-    vm.gradePaths = (cumulativeId) ->
-      oo = vm.observedOutcomesFor(cumulativeId)
-      return unless oo?
-      _.map(oo, (o) -> "/grades/#{o.id}")
+    vm.gradePath = (observedOutcomeId) ->
+      "/grades/#{observedOutcomeId}"
 
     services(@objectiveId, @studentId).then(() -> vm.loading = false)
   ]
@@ -29,7 +26,8 @@
   services = (objectiveId, studentId)->
     promises = [
       LearningObjectivesService.getObjective(objectiveId, true),
-      LearningObjectivesService.getOutcomesForObjective(objectiveId, studentId)
+      LearningObjectivesService.getOutcomesForObjective(objectiveId, studentId),
+      CourseService.getStudents()
     ]
     $q.all(promises)
 
