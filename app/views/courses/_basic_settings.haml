@@ -111,7 +111,7 @@
           = f.input :max_assignment_types_weighted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, :label => "Is there a maximum number of assignment types they can weight?"
           = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}
 
-      - if current_course.allows_learning_objectives?
+      - if @course.allows_learning_objectives?
         .form-card
           .form-card-header
             = f.label :has_learning_objectives, "Learning Objectives"

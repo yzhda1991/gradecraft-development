@@ -15,11 +15,6 @@ describe LearningObjectives::ObjectivesController do
         get :index
         expect(response).to redirect_to dashboard_path
       end
-
-      it "redirects to the mass edit page if there are no learning objectives in the course" do
-        get :index
-        expect(response).to redirect_to new_learning_objectives_objective_path
-      end
     end
 
     describe "GET edit" do

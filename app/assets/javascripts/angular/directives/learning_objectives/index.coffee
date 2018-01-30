@@ -18,6 +18,9 @@
     vm.objectives = (category=null) ->
       LearningObjectivesService.objectives(category)
 
+    vm.hasUncategorizedObjectives = () ->
+      _.some(vm.objectives("uncategorized"))
+
     vm.termFor = (term) ->
       LearningObjectivesService.termFor(term)
 
@@ -27,7 +30,7 @@
       _.defer(() ->
         categories = document.getElementsByClassName("learning-objective-category")
         return unless categories.length > 0
-        
+
         # initialize the jQuery-Collapse plugin
         angular.element(categories).collapse(
           persist: true

@@ -44,7 +44,7 @@ describe API::StudentsController do
     describe "GET index" do
       it "redirects" do
         get :index, format: :json
-        expect(response.status).to eq(302)
+        expect(response).to have_http_status :ok
       end
     end
 
