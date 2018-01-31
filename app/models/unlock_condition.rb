@@ -1,9 +1,12 @@
 class UnlockCondition < ActiveRecord::Base
+  belongs_to :course
   belongs_to :unlockable, polymorphic: true
   belongs_to :condition, polymorphic: true
 
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
+  # TODO: add course validation once rake task is run
+  # validates_presence_of :course
 
   # Returning the name of whatever badge or assignment has been identified as
   # the condition

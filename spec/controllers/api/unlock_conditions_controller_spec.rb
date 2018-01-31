@@ -1,8 +1,9 @@
 describe API::UnlockConditionsController do
-  let!(:student)  { create(:course_membership, :student).user }
-  let(:professor) { create(:course_membership, :professor).user }
-  let(:assignment) { create :assignment }
-  let(:badge) { create :badge }
+  let(:course) { create :course }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:assignment) { create :assignment, course: course }
+  let(:badge) { create :badge, course: course }
 
   context "as a professor" do
     before do
@@ -30,7 +31,7 @@ describe API::UnlockConditionsController do
     end
 
     describe "POST create" do
-      it "creates a new unlock_condition" do
+      it "creates a new unlock condition" do
         expect{ post :create,
                 params: { unlock_condition:
                   { unlockable_id: assignment.id,
@@ -40,6 +41,19 @@ describe API::UnlockConditionsController do
                     condition_state: "Earned"
                   }
                 }, format: :json }.to change(UnlockCondition, :count).by(1)
+      end
+
+      it "assigns the unlock condition to the current course" do
+        post :create,
+          params: { unlock_condition:
+            { unlockable_id: assignment.id,
+              unlockable_type: "Assignment",
+              condition_id: badge.id,
+              condition_type: "Badge",
+              condition_state: "Earned"
+            }
+          }, format: :json
+        expect(UnlockCondition.first.course_id).to eq(course.id)
       end
     end
 

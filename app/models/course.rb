@@ -79,6 +79,8 @@ class Course < ActiveRecord::Base
     c.has_many :providers, as: :providee
     c.has_many :learning_objective_categories
     c.has_many :learning_objectives
+    c.has_many :unlock_conditions
+    c.has_one  :copy_log
   end
 
   has_many :users, through: :course_memberships
