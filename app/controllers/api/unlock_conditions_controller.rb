@@ -22,6 +22,7 @@ class API::UnlockConditionsController < ApplicationController
   # POST /api/unlock_conditions
   def create
     @unlock_condition = UnlockCondition.new(unlock_condition_params)
+    @unlock_condition.course = @course
     if @unlock_condition.save
       render "api/unlock_conditions/show", status: 201
     else

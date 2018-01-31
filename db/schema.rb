@@ -221,6 +221,11 @@ ActiveRecord::Schema.define(version: 20180202191149) do
     t.boolean  "include_in_timeline", default: false, null: false
   end
 
+  create_table "copy_logs", force: :cascade do |t|
+    t.text    "log"
+    t.integer "course_id"
+  end
+
   create_table "course_analytics_exports", force: :cascade do |t|
     t.integer  "course_id",                             null: false
     t.integer  "owner_id",                              null: false
@@ -798,6 +803,8 @@ ActiveRecord::Schema.define(version: 20180202191149) do
     t.datetime "condition_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "course_id"
+    t.index ["course_id"], name: "index_unlock_conditions_on_course_id", using: :btree
   end
 
   create_table "unlock_states", force: :cascade do |t|
