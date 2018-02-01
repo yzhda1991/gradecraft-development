@@ -19,9 +19,8 @@
       return false if !_.some(@objectives())
       _.some(@objectives(), (o) -> o.id?)
 
-    services(@objectiveId, @loadExisting).then(() ->
-      vm.loading = false
-    )
+    services(@objectiveId, @loadExisting).then(() -> vm.loading = false)
+    
     LearningObjectivesService.addObjective(@categoryId) if !@objectiveId && !@loadExisting
   ]
 

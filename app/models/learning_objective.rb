@@ -11,6 +11,8 @@ class LearningObjective < ActiveRecord::Base
   has_many :assignments, source: :learning_objective_linkable,
     source_type: Assignment.name, through: :learning_objective_links
 
+  accepts_nested_attributes_for :learning_objective_links
+
   validates_presence_of :course, :name
   validate :count_to_achieve_or_points
   validates :count_to_achieve, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true

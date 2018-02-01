@@ -35,9 +35,13 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
 
   # PUT /api/learning_objectives/objectives/:id
   def update
-    if @objective.update_attributes learning_objective_params
+    params = learning_objective_params[:learning_objective_links_attributes].present? ? learning_objective_params_with_links : learning_objective_params
+
+    begin
+      @objective.learning_objective_links.destroy_all # not the most performant method but easiest for now
+      @objective.update params
       render "api/learning_objectives/objectives/show", status: 200
-    else
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
       render json: {
         message: "Failed to update learning objective",
         errors: @objective.errors.messages,
@@ -63,7 +67,17 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
 
   def learning_objective_params
     params.require(:learning_objective).permit :id, :name, :description,
-      :count_to_achieve, :category_id, :points_to_completion
+      :count_to_achieve, :category_id, :points_to_completion, learning_objective_links_attributes: []
+  end
+
+  def learning_objective_params_with_links
+    learning_objective_params.merge(learning_objective_links_attributes: learning_objective_params[:learning_objective_links_attributes].map { |assignment_id|
+      {
+        learning_objective_linkable_type: "Assignment",
+        learning_objective_linkable_id: assignment_id,
+        course_id: current_course.id
+      }
+    })
   end
 
   def find_objective

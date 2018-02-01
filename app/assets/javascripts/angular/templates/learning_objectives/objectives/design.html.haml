@@ -19,6 +19,9 @@
                                             "data-delete-route"=>"loObjectivesDesignCtrl.indexRoute",
                                             "data-allow-deletion"=>"loObjectivesDesignCtrl.objectiveId || loObjectivesDesignCtrl.loadExisting",
                                             "ng-form"=>"objective_form_{{$index}}"}
+
+      %learning-objectives-linked-assignments-input{"data-objective"=>"objective", "ng-if"=>"objective.id"}
+
   .submit-buttons
     %ul
       %li{"ng-if"=>"loObjectivesDesignCtrl.loadExisting && !loObjectivesDesignCtrl.objectiveId"}
