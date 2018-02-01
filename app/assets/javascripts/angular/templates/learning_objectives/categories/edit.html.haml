@@ -10,7 +10,7 @@
           %label
             Name
             %input{"ng-model"=>"loCategoriesEditCtrl.category().name",
-                   "ng-change"=>"loCategoriesEditCtrl.persistArticle()",
+                   "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
                    "required"=>"",
                    "type"=>"text",
                    "placeholder"=>"Name (Required)"}
@@ -24,7 +24,7 @@
                 How many yellow warnings can the student have without failing the objective?
 
             %input{"ng-model"=>"loCategoriesEditCtrl.category().allowable_yellow_warnings",
-                   "ng-change"=>"loCategoriesEditCtrl.persistArticle()",
+                   "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
                    "type"=>"number",
                    "min"=>"0",
                    "placeholder"=>"Allowable Yellow Warnings"}
@@ -32,7 +32,7 @@
         .form-item
           %label{"for"=>"description"} Description
           %textarea#description{"ng-model"=>"loCategoriesEditCtrl.category().description",
-                                "ng-change"=>"loCategoriesEditCtrl.persistArticle()",
+                                "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
                                 "froala"=>"loCategoriesEditCtrl.froalaOptions"}
 
   .right

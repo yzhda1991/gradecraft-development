@@ -6,14 +6,14 @@
            "name"=>"name",
            "placeholder"=>"Name (Required)",
            "required"=>"",
-           "ng-change"=>"persist()"}
+           "ng-blur"=>"persist()"}
 
   %label{"ng-if"=>"!loRubricObjectivesCtrl.objectivesAwardPoints"}
     %span.sr-only Count to Achieve
     %input.points{"type"=>"number",
                   "ng-model"=>"loRubricObjectivesCtrl.objective.count_to_achieve",
                   "placeholder"=>"Count to Achieve (Required)",
-                  "ng-change"=>"persist()",
+                  "ng-blur"=>"persist()",
                   "required"=>""}
 
   %label{"ng-if"=>"loRubricObjectivesCtrl.objectivesAwardPoints"}
@@ -21,7 +21,7 @@
     %input.points{"type"=>"number",
                   "min"=>"0",
                   "ng-model"=>"loRubricObjectivesCtrl.objective.points_to_completion",
-                  "ng-change"=>"persist()",
+                  "ng-blur"=>"persist()",
                   "placeholder"=>"Points to Completion (Required)",
                   "required"=>""}
 
@@ -30,12 +30,12 @@
     %textarea.criterion-description.slim{"ng-model"=>"loRubricObjectivesCtrl.objective.description",
                                          "name"=>"description",
                                          "placeholder"=>"Description",
-                                         "ng-change"=>"persist()"}
+                                         "ng-blur"=>"persist()"}
 
   %label{"ng-if"=>"loRubricObjectivesCtrl.hasCategories()"}
     %span.sr-only Category
     %select.objective-category{"ng-model"=>"loRubricObjectivesCtrl.objective.category_id",
-                               "ng-change"=>"persist()",
+                               "ng-blur"=>"persist()",
                                "ng-options"=>"category.id as category.name for category in loRubricObjectivesCtrl.categories()"}
       %option{"value"=>""} Select a category
 
