@@ -14,7 +14,7 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
 
   # GET /api/learning_objectives/objectives/:id
   def show
-    @include_assignments = params[:include_assignments]
+    @include_outcomes = params[:include_outcomes]
     render "api/learning_objectives/objectives/show", status: 201
   end
 

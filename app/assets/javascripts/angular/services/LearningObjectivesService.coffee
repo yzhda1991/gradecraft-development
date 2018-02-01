@@ -98,13 +98,12 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  getObjective = (id, includeAssignments=false) ->
-    params = if includeAssignments then { include_assignments: true } else {}
-    $http.get("/api/learning_objectives/objectives/#{id}", { params: params }).then(
+  getObjective = (id) ->
+    $http.get("/api/learning_objectives/objectives/#{id}").then(
       (response) ->
         GradeCraftAPI.addItem(_objectives, "learning_objective", response.data)
         GradeCraftAPI.loadFromIncluded(_levels, "levels", response.data)
-        GradeCraftAPI.loadFromIncluded(linkedAssignments, "assignments", response.data) if includeAssignments
+        GradeCraftAPI.loadFromIncluded(linkedAssignments, "assignments", response.data)
         angular.copy(response.data.meta.level_flagged_values, levelFlaggedValues)
         GradeCraftAPI.logResponse(response)
       , (response) ->

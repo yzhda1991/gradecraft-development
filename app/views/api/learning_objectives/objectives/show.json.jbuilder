@@ -19,7 +19,18 @@ json.included do
 
   json.array! @objective.assignments do |assignment|
     json.partial! 'api/assignments/assignment', assignment: assignment
-  end if @include_assignments
+  end
+
+  json.array! @objective.cumulative_outcomes do |cumulative_outcome|
+    json.type "learning_objective_cumulative_outcome"
+    json.id cumulative_outcome.id.to_s
+
+    json.attributes do
+      json.merge! cumulative_outcome.attributes
+      json.user_full_name cumulative_outcome.user.name
+      json.status cumulative_outcome.learning_objective.progress current_user
+    end
+  end if @include_outcomes
 end
 
 json.meta do

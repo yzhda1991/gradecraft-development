@@ -4,7 +4,7 @@
   %section
     %h2.subtitle {{loShowCtrl.objective().name}}
 
-    %table.stacktable.large-only
+    %table.stacktable.info-table
       %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
         %th Number of Points to Completion:
         %td {{loShowCtrl.objective().points_to_completion}}
@@ -23,18 +23,29 @@
   %section
     %h3.subtitle Student Progress
 
-    %table.stacktable.large-only
+    %table.stacktable
       %thead
         %tr
           %th Student
           %th Progress
+          %th Linked Assignments
       %tbody
-        %tr{"ng-repeat"=>"student in loShowCtrl.students"}
-          %td {{student.name}}
+        %tr{"ng-repeat"=>"co in loShowCtrl.cumulativeOutcomes", "ng-if"=>"loShowCtrl.studentId"}
+          %td {{co.user_full_name}}
+          %td {{co.status}}
           %td
             %ul
-              %li{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes(student.id)", "ng-if"=>"_.some(loShowCtrl.observedOutcomes(student.id))"}
-                {{oo.assignment_name}}
-                %a{"ng-href"=>"loShowCtrl.gradePath(oo.id)"} (View Grade)
-              %li{"ng-if"=>"!_.some(loShowCtrl.observedOutcomes(student.id))"}
-                Not yet started
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+                {{assignment.name}}
+                %a{"ng-href"=>"{{loShowCtrl.gradePath(co.user_id, assignment.id)}}",
+                   "ng-if"=>"loShowCtrl.gradeExists(co.user_id, assignment.id)"} (View Grade)
+
+        %tr{"ng-repeat"=>"student in loShowCtrl.students", "ng-if"=>"!loShowCtrl.studentId"}
+          %td {{student.name}}
+          %td {{loShowCtrl.progress(student.id)}}
+          %td
+            %ul
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+                {{assignment.name}}
+                %a{"ng-href"=>"{{loShowCtrl.gradePath(student.id, assignment.id)}}",
+                   "ng-if"=>"loShowCtrl.gradeExists(student.id, assignment.id)"} (View Grade)
