@@ -26,7 +26,7 @@
 
     vm.gradePath = (studentId, assignmentId) ->
       oo = vm.observedOutcomeFor(studentId, assignmentId)
-      "/grades/#{oo.id}"
+      "/grades/#{oo.grade_id}"
 
     vm.observedOutcomeFor = (studentId, assignmentId) ->
       oo = vm.observedOutcomes(studentId)

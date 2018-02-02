@@ -32,6 +32,7 @@ json.included do
 
       unless observed_outcome.grade.nil?
         json.outcome_visible GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
+        json.grade_id observed_outcome.grade.id
 
         observed_outcome.grade.assignment.tap do |assignment|
           json.assignment_id assignment.id
