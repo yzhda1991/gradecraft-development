@@ -128,6 +128,7 @@
         arr.length = 0
         GradeCraftAPI.loadMany(arr, response.data)
         if type == "objectives"
+          GradeCraftAPI.loadFromIncluded(linkedAssignments, "linked_assignments", response.data)
           GradeCraftAPI.loadFromIncluded(_levels, "levels", response.data)
         else
           angular.copy(response.data.meta.level_flagged_values, levelFlaggedValues)

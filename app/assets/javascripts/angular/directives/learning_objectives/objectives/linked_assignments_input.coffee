@@ -5,26 +5,26 @@
     controllerAs: "loAssignmentsInputCtrl"
     templateUrl: "learning_objectives/objectives/linked_assignments_input.html"
     link: (scope, elem, attr) ->
-      scope.loading = true
-      scope.assignments = []
       scope.selectedAssignments = []
+      scope.assignments = AssignmentService.assignments
+
+      scope.termFor = (term) ->
+        AssignmentService.termFor(term)
 
       scope.persist = () ->
         scope.objective.learning_objective_links_attributes = scope.selectedAssignments
         LearningObjectivesService.persistArticle(scope.objective, "objectives")
 
-      AssignmentService.getAssignments().then(() ->
-        scope.loading = false
-        scope.assignments = AssignmentService.assignments
-        scope.selectedAssignments = _.pluck(LearningObjectivesService.linkedAssignments, "id")
+      do () ->
+        assignments = _.filter(LearningObjectivesService.linkedAssignments, { objective_id: scope.objective.id })
+        angular.copy(_.pluck(assignments, "assignment_id"), scope.selectedAssignments)
 
-        $timeout(() ->
-          angular.element(elem[0].getElementsByClassName("select2")[0]).select2({
-            placeholder: "Linked Assignments"
-            allowClear: true
-            multiple: true
-          })
-        )
+      $timeout(() ->
+        angular.element(elem[0].getElementsByClassName("select2")[0]).select2({
+          placeholder: "Linked #{scope.termFor("assignments")}"
+          allowClear: true
+          multiple: true
+        })
       )
   }
 ]

@@ -4,18 +4,22 @@ FactoryGirl.define do
 
     name { Faker::Hacker.noun }
     description { Faker::Hacker::say_something_smart }
-    flagged_value :green
+    flagged_value :proficient
 
-    trait :flagged_green do
-      flagged_value :green
+    trait :exceeds_proficiency do
+      flagged_value :exceeds_proficiency
     end
 
-    trait :flagged_yellow do
-      flagged_value :yellow
+    trait :proficient do
+      flagged_value :proficient
     end
 
-    trait :flagged_red do
-      flagged_value :red
+    trait :nearing_proficiency do
+      flagged_value :nearing_proficiency
+    end
+
+    trait :not_proficient do
+      flagged_value :not_proficient
     end
   end
 end

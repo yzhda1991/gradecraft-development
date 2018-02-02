@@ -1,6 +1,6 @@
 # Main entry point for configuring the learning objectives and learning objective
 # categories for the current course
-@gradecraft.directive 'learningObjectivesObjectivesDesign', ['LearningObjectivesService', '$q', (LearningObjectivesService, $q) ->
+@gradecraft.directive 'learningObjectivesObjectivesDesign', ['LearningObjectivesService', "AssignmentService", '$q', (LearningObjectivesService, AssignmentService, $q) ->
   LearningObjectivesObjectivesDesignCtrl = [() ->
     vm = this
 
@@ -20,13 +20,14 @@
       _.some(@objectives(), (o) -> o.id?)
 
     services(@objectiveId, @loadExisting).then(() -> vm.loading = false)
-    
+
     LearningObjectivesService.addObjective(@categoryId) if !@objectiveId && !@loadExisting
   ]
 
   services = (objectiveId, loadExisting) ->
     promises = [
-      LearningObjectivesService.getArticles("categories")
+      LearningObjectivesService.getArticles("categories"),
+      AssignmentService.getAssignments()
     ]
     promises.push(LearningObjectivesService.getObjective(objectiveId)) if objectiveId?
     promises.push(LearningObjectivesService.getArticles("objectives")) if loadExisting?

@@ -43,7 +43,6 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   # Format a single model from JSONAPI response.data section.
   # response is needed in options only if including from "relationships"
   dataItem = (item, response={}, options={"include":[]})->
-
     # attach JSON API type to attributes ("badges", "assignments", etc.)
     item.attributes.type = item.type
 

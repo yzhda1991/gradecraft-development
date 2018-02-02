@@ -1,7 +1,5 @@
-%p.italic{"ng-show"=>"loading"} Loading linked assignments...
-
-%label{"ng-show"=>"!loading"}
-  Linked Assignments:
+%label{"ng-show"=>"assignments"}
+  Linked {{termFor("assignments")}}:
   %select.select2{"ng-options"=>"assignment.id as assignment.name for assignment in assignments",
                   "ng-model"=>"selectedAssignments",
                   "multiple"=>"true",

@@ -7,15 +7,36 @@ json.data @objectives do |objective|
 
     json.category_name objective.category.name unless objective.category.nil?
   end
+
+  json.relationships do
+    json.linked_assignments do
+      json.data objective.assignments do |assignment|
+        json.type "linked_assignments"
+        json.id assignment.id
+      end
+    end
+  end
 end
 
 json.included do
-  json.array! @objectives.map(&:levels).flatten do |level|
-    json.type "levels"
-    json.id level.id.to_s
+  @objectives.each do |o|
+    json.array! o.levels do |level|
+      json.type "levels"
+      json.id level.id.to_s
 
-    json.attributes do
-      json.merge! level.attributes
+      json.attributes do
+        json.merge! level.attributes
+      end
+    end
+
+    json.array! o.assignments do |assignment|
+      json.type "linked_assignments"
+      json.id assignment.id
+
+      json.attributes do
+        json.assignment_id assignment.id
+        json.objective_id o.id
+      end
     end
   end
 end

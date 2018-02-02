@@ -18,7 +18,15 @@ json.included do
   end
 
   json.array! @objective.assignments do |assignment|
-    json.partial! 'api/assignments/assignment', assignment: assignment
+    json.type "assignments"
+    json.id assignment.id.to_s
+
+    json.attributes do
+      json.id assignment.id
+      json.name assignment.name
+      json.assignment_id assignment.id
+      json.objective_id @objective.id
+    end
   end
 
   json.array! @objective.cumulative_outcomes do |cumulative_outcome|
