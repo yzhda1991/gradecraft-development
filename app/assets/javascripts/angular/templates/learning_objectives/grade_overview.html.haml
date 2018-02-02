@@ -14,8 +14,7 @@
               Overall Progress:
               .italic
                 {{loGradeOverviewCtrl.statusFor(objective.id)}}
-                %a.inherit-color{"ng-href"=>"{{loGradeOverviewCtrl.outcomesPath(objective.id)}}",
-                                 "ng-if"=>"loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount > 0"}
+                %span{"ng-if"=>"loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount > 0"}
                   (Attempts: {{loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount || 0}})
                 %span{"ng-if"=>"!loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount > 0"}
                   (Attempts: {{loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount || 0}})
