@@ -42,5 +42,5 @@ json.included do
 end
 
 json.meta do
-  json.level_flagged_values LearningObjectiveLevel.flagged_values
+  json.level_flagged_values LearningObjectiveLevel.readable_flagged_values
 end

@@ -63,7 +63,6 @@
   addCategory = () ->
     _categories.push(
       name: undefined
-      allowable_yellow_warnings: undefined
     )
 
   addLevel = (objectiveId) ->

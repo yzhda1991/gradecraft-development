@@ -51,19 +51,15 @@ class LearningObjective < ActiveRecord::Base
     cumulative_outcome
       .observed_outcomes
       .for_student_visible_grades
-      .not_flagged_red.count < count_to_achieve ? "In Progress" : "Completed"
+      .shows_proficiency
+      .count < count_to_achieve ? "In Progress" : "Completed"
   end
 
   private
 
   def failed?(cumulative_outcome)
-    failed_category = category.present? && category.failed?
-
-    if course.objectives_award_points?
-      failed_category
-    else  # assessment is based on a count to achieve
-      cumulative_outcome.flagged_red_outcomes.any? || failed_category
-    end
+    return false if course.objectives_award_points?
+    cumulative_outcome.failed?
   end
 
   # Ensure that objectives have either a count to achieve or a points to completion value

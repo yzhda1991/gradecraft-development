@@ -16,9 +16,9 @@
   %flagged-value-selector{"ng-if"=>"loRubricLevelCtrl.levelIsSaved()"}
     %span.sr-only Flagged Value
     %select.flagged_values{"ng-model"=>"loRubricLevelCtrl.level.flagged_value",
-                           "ng-options"=>"name as name for (name, value) in loRubricLevelCtrl.flaggedValues",
+                           "ng-options"=>"value as displayString for (value, displayString) in loRubricLevelCtrl.flaggedValues",
                            "ng-blur"=>"loRubricLevelCtrl.persist()",
                            "required"=>""}
-      %option{"value"=>""} Select a flagged value
+      %option{"value"=>""} Select a competency level
 
   %button.delete{"type"=>"button", "ng-click"=>"loRubricLevelCtrl.delete()"} X

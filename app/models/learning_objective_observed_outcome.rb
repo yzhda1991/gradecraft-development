@@ -8,12 +8,11 @@ class LearningObjectiveObservedOutcome < ActiveRecord::Base
 
   validates_presence_of :assessed_at, :learning_objective_level
 
-  scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true }) }
-  scope :for_flagged_value, -> (flagged_value) { includes(:learning_objective_level).where(learning_objective_levels: { flagged_value: flagged_value }) }
-  scope :not_flagged_red, -> do
+  scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true, complete: true }) }
+  scope :shows_proficiency, -> do
     includes(:learning_objective_level)
-      .where
-      .not(learning_objective_levels: { flagged_value: LearningObjectiveLevel.flagged_values[:red]})
+    .where
+    .not(learning_objective_levels: { flagged_value: LearningObjectiveLevel.flagged_values[:not_proficient] })
   end
 
   def self.observed_grade_outcomes_for(student, objective)

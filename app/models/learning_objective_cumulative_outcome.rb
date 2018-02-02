@@ -11,15 +11,7 @@ class LearningObjectiveCumulativeOutcome < ActiveRecord::Base
 
   scope :for_user, -> (user_id) { where user_id: user_id }
 
-  def flagged_red_outcomes
-    @flagged_red_outcomes ||= observed_outcomes
-      .for_student_visible_grades
-      .for_flagged_value LearningObjectiveLevel.flagged_values[:red]
-  end
-
-  def flagged_yellow_outcomes
-    @flagged_red_outcomes ||= observed_outcomes
-      .for_student_visible_grades
-      .for_flagged_value LearningObjectiveLevel.flagged_values[:yellow]
+  def failed?
+    observed_outcomes.any? { |o| o.learning_objective_level.failed? }
   end
 end

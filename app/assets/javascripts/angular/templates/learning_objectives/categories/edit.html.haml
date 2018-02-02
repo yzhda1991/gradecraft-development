@@ -16,20 +16,6 @@
                    "placeholder"=>"Name (Required)"}
 
         .form-item
-          %label
-            Allowable Yellow Warnings
-            %span.has-tooltip
-              %i.fa.fa-info-circle
-              .display-on-hover.hover-style
-                How many yellow warnings can the student have without failing the objective?
-
-            %input{"ng-model"=>"loCategoriesEditCtrl.category().allowable_yellow_warnings",
-                   "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
-                   "type"=>"number",
-                   "min"=>"0",
-                   "placeholder"=>"Allowable Yellow Warnings"}
-
-        .form-item
           %label{"for"=>"description"} Description
           %textarea#description{"ng-model"=>"loCategoriesEditCtrl.category().description",
                                 "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
