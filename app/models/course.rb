@@ -130,6 +130,12 @@ class Course < ActiveRecord::Base
     allows_learning_objectives? && has_learning_objectives?
   end
 
+  def log_copy(lookups)
+    copy_log = CopyLog.new(course: self)
+    copy_log.parse_log(lookups.lookup_hash)
+    copy_log.save
+  end
+
   def linked?(provider)
     self.linked_courses.where(provider: provider).exists?
   end
@@ -243,6 +249,9 @@ class Course < ActiveRecord::Base
                                  :challenges,
                                  :grade_scheme_elements
                                ] + associations,
+                               cross_references: [
+                                 :unlock_conditions
+                               ],
                                options: {
                                  prepend: { name: "Copy of " },
                                  overrides: [-> (copy) { copy_syllabus copy }]
