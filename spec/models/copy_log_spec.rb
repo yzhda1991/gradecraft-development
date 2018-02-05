@@ -16,14 +16,14 @@ describe CopyLog do
 
   describe "to_hash" do
     it "converts the log back to a hash" do
-      expect(subject.to_hash).to eq({courses: {"1"=>"2"}})
+      expect(subject.to_hash).to eq({courses: {1=>2}})
     end
   end
 
   describe "parse_log" do
     it "stores the log hash as a string" do
-      subject.parse_log({courses: {"2"=>"3"}})
-      expect(subject.log).to eq("{:courses=>{\"2\"=>\"3\"}}")
+      subject.parse_log({courses: {2=>3}})
+      expect(subject.log).to eq("{:courses=>{2=>3}}")
     end
   end
 end

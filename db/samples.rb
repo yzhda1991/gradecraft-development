@@ -21,6 +21,7 @@ def add_unlock_conditions(model, config, course_config)
     config[:unlock_attributes][:condition_type] == "Badge"
 
     model.unlock_conditions.create! do |uc|
+      uc.course = model.course
       if config[:unlock_attributes][:condition_type] == "Assignment"
         uc.condition =
           course_config[:assignments][config[:unlock_attributes][:condition]]

@@ -25,6 +25,10 @@ describe ModelCopier do
       it "saves the duplicated model" do
         expect(subject).to be_persisted
       end
+
+      it "saves a copy log if the model is a course" do
+        expect(subject.copy_log).to be_an_instance_of(CopyLog)
+      end
     end
 
     it "does not save the duplicated model if the model is not saved" do

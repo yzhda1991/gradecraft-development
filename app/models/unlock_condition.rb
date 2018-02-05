@@ -1,4 +1,6 @@
 class UnlockCondition < ActiveRecord::Base
+  include Copyable
+
   belongs_to :course
   belongs_to :unlockable, polymorphic: true
   belongs_to :condition, polymorphic: true
@@ -62,6 +64,13 @@ class UnlockCondition < ActiveRecord::Base
       unlocked_count += 1 if self.is_complete?(student)
     end
     return unlocked_count
+  end
+
+  def copy(attributes={}, lookup_store=nil)
+    ModelCopier.new(self, lookup_store).copy(
+      attributes: attributes,
+      options: { lookups: [:courses, :unlockables, :conditions] }
+    )
   end
 
   protected
