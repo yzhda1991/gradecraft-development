@@ -62,7 +62,7 @@
     if includeWeights
       total = weightedPoints(assignmentType, total)
     if assignmentType.is_capped and includeCaps
-      total = if total > assignmentType.total_points then assignmentType.total_points else total
+      total = if total > assignmentType.max_points then assignmentType.max_points else total
     total
 
   assignmentsWeightedPredictedPoints = ()->
@@ -75,7 +75,7 @@
   # Total predicted points above and beyond the assignment type max points
   assignmentTypePointExcess = (assignmentType)->
     if assignmentType.is_capped
-      assignmentTypePointTotal(assignmentType, true, false, true) - assignmentType.total_points
+      assignmentTypePointTotal(assignmentType, true, false, true) - assignmentType.max_points
     else
       0
 
