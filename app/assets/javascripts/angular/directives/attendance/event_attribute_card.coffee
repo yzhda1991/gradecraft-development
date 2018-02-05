@@ -10,6 +10,7 @@
 
       scope.queuePostAttendanceEvent = () ->
         AttendanceService.queuePostAttendanceEvent(@event)
+        # clear out the error messages on the UI after 6 seconds
         $timeout(
           () -> scope.event.status = null
         , 6000)

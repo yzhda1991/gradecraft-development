@@ -46,7 +46,7 @@
     window.location.href = "/assignments/#{attendanceEvent.id}/edit"
 
   deleteAttendanceEvent = (attendanceEvent) ->
-    return GradeCraftAPI.deleteItem(events, attendanceEvent) if !attendanceEvent.id?
+    events.splice(events.indexOf(attendanceEvent) , 1) if !attendanceEvent.id?
 
     if confirm "Are you sure you want to delete this attendance event?"
       $http.delete("/api/attendance/#{attendanceEvent.id}").then(
