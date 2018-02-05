@@ -71,13 +71,13 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
   end
 
   def learning_objective_params_with_links
-    learning_objective_params.merge(learning_objective_links_attributes: learning_objective_params[:learning_objective_links_attributes].map { |assignment_id|
+    learning_objective_params.merge learning_objective_links_attributes: learning_objective_params[:learning_objective_links_attributes].map do |assignment_id|
       {
         learning_objective_linkable_type: "Assignment",
         learning_objective_linkable_id: assignment_id,
         course_id: current_course.id
       }
-    })
+    end
   end
 
   def find_objective
