@@ -19,7 +19,7 @@ class ModelCopier
     # copy associations that cross-reference other models, and need to
     # be run after all associations have already been copied.
     copy_associations options.delete(:cross_references) {[]}, attributes
-    copied.log_copy(lookup_store) if copied.respond_to?(:log_copy)
+    copied.save_copy_logs(lookup_store) if copied.respond_to?(:save_copy_logs)
     copied
   end
 
@@ -174,10 +174,6 @@ class ModelCopierLookups
         h[id_key] = lookup(class_type, original.send(id_key))
 
       # handle polymorphic relationships
-      # In order for this to work for unlock conditions, they have to be run after all other
-      # models have been copied -- If badges can be conditions for assigment and assignment for badges,
-      # we have to copy all the models first, then go back and lookup the associations.
-      # TODO: add course_id to conditions, and then copy them last from the course copy.
       elsif original.respond_to?(id_type) && lookup_has_key?(original.send(id_type).underscore.pluralize.to_sym, original.send(id_key))
         h[id_key] = lookup(original.send(id_type).underscore.pluralize.to_sym, original.send(id_key))
       end

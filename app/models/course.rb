@@ -130,7 +130,7 @@ class Course < ActiveRecord::Base
     allows_learning_objectives? && has_learning_objectives?
   end
 
-  def log_copy(lookups)
+  def save_copy_logs(lookups)
     copy_log = CopyLog.new(course: self)
     copy_log.parse_log(lookups.lookup_hash)
     copy_log.save
