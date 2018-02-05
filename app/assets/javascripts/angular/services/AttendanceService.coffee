@@ -1,5 +1,5 @@
-@gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", "AssignmentService",
-($http, GradeCraftAPI, DebounceQueue, AssignmentService) ->
+@gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", "AssignmentService", "$q",
+($http, GradeCraftAPI, DebounceQueue, AssignmentService, $q) ->
 
   _lastUpdated = undefined
   # use same collection as assignments to simplify shared logic such as media uploading
@@ -68,11 +68,12 @@
         "attendance_event", attendanceEvent.id, _updateAttendanceEvent, [attendanceEvent]
       )
 
+  # Trigger a save for all unsaved events and run all remaining queue events
+  # prior to redirecting back to the index page
   saveChanges = () ->
-    DebounceQueue.runAllEvents()
     unsaved = _.reject(events, "id")
-    _.each(unsaved, (e) -> queuePostAttendanceEvent(e)) if unsaved.length > 0
-    window.location.href = "/attendance"
+    promises = if unsaved.length > 0 then _.map(unsaved, (e) -> queuePostAttendanceEvent(e)) else []
+    $q.all(promises).then(() -> DebounceQueue.runAllEvents("/attendance"))
 
   # Find all applicable dates based on the selected days of the week that are
   # between the specified start and end date and merge with the given times

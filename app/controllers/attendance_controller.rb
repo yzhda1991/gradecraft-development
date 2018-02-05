@@ -26,11 +26,11 @@ class AttendanceController < ApplicationController
 
   # POST /attendance
   def create
-    assignment = current_course.assignments.new attendance_assignment_params
+    @assignment = current_course.assignments.new attendance_assignment_params
 
-    if assignment.save
+    if @assignment.save
       redirect_to attendance_index_path,
-        notice: "#{assignment.name} successfully created" and return
+        notice: "#{@assignment.name} successfully created" and return
     else
       render :new
     end
