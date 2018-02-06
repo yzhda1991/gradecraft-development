@@ -12,13 +12,11 @@ class UserMailerPreview < ActionMailer::Preview
 
   def umich_resources_email
     user = User.last
-    # user.activation_token = "blah"
     UserMailer.umich_resources_email user
   end
 
   def app_resources_email
     user = User.last
-    # user.activation_token = "blah"
     UserMailer.app_resources_email user
   end
 

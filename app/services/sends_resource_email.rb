@@ -1,5 +1,6 @@
 require "light-service"
 require_relative "sends_resource_email/send_email"
+require_relative "sends_resource_email/mark_user_as_received_resources"
 
 module Services
   class SendsResourceEmail
@@ -8,7 +9,8 @@ module Services
     def self.send_resource_email(user)
       with(user: user)
         .reduce(
-          Actions::SendEmail
+          Actions::SendEmail,
+          Actions::MarkUserAsReceivedResources
         )
     end
   end

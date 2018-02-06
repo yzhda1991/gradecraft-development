@@ -1,6 +1,6 @@
 module Services
   module Actions
-    class SendEmail
+    class MarkUserAsReceivedResources
       extend LightService::Action
 
       expects :user
@@ -8,8 +8,8 @@ module Services
       executed do |context|
         user = context[:user]
         if !user.received_resources
-          UserMailer.umich_resources_email(user).deliver_now if Rails.env.production?
-          UserMailer.app_resources_email(user).deliver_now if Rails.env.beta?
+          user.received_resources = true
+          user.save
         end
       end
     end
