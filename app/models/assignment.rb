@@ -309,9 +309,6 @@ class Assignment < ActiveRecord::Base
     self.threshold_points = 0 if self.threshold_points.nil?
   end
 
-  # This is called when copying a specific assignment
-  # NOTE: may not copy level badges correctly due to absence of lookup logic
-  # TODO: ensure that assignment files are actually being copied on S3
   def copy_with_associations(attributes, options)
     ModelCopier.new(self).copy(
       options: options,
