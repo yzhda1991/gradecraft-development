@@ -14,13 +14,18 @@
       %tr{"ng-if"=>"loShowCtrl.objective().description"}
         %th Description:
         %td {{loShowCtrl.objective().description}}
-      %tr{"ng-if"=>"_.some(loShowCtrl.objective().linkedAssignments)"}
+      %tr{"ng-if"=>"loShowCtrl.hasLinkedAssignments()"}
         %th Linked Assignments:
         %td
           %ul.no-style
-            %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"} {{assignment.name}}
+            %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+              %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+      %tr{"ng-if"=>"loShowCtrl.studentId"}
+        %th Progress:
+        %td {{loShowCtrl.progress(loShowCtrl.studentId)}}
 
-  %section
+  -# Table for all students in the course
+  %section{"ng-if"=>"!loShowCtrl.studentId"}
     %h3.subtitle Student Progress
 
     %table.stacktable
@@ -30,22 +35,12 @@
           %th Progress
           %th Linked Assignments
       %tbody
-        %tr{"ng-repeat"=>"co in loShowCtrl.cumulativeOutcomes", "ng-if"=>"loShowCtrl.studentId"}
-          %td {{co.user_full_name}}
-          %td {{co.status}}
-          %td
-            %ul
-              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
-                {{assignment.name}}
-                %a{"ng-href"=>"{{loShowCtrl.gradePath(co.user_id, assignment.id)}}",
-                   "ng-if"=>"loShowCtrl.gradeExists(co.user_id, assignment.id)"} (View Grade)
-
         %tr{"ng-repeat"=>"student in loShowCtrl.students", "ng-if"=>"!loShowCtrl.studentId"}
-          %td {{student.name}}
+          %td
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"} {{student.name}}
           %td {{loShowCtrl.progress(student.id)}}
           %td
             %ul
-              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
-                {{assignment.name}}
-                %a{"ng-href"=>"{{loShowCtrl.gradePath(student.id, assignment.id)}}",
-                   "ng-if"=>"loShowCtrl.gradeExists(student.id, assignment.id)"} (View Grade)
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments",
+                  "ng-if"=>"loShowCtrl.gradeExists(student.id, assignment.id)"}
+                %a{"ng-href"=>"{{loShowCtrl.gradePath(student.id, assignment.id)}}"} {{assignment.name}} (View Grade)

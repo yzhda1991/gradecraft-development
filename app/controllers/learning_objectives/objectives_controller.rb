@@ -10,7 +10,7 @@ class LearningObjectives::ObjectivesController < ApplicationController
   # GET /learning_objectives/objectives/:id
   def show
     @objective = @course.learning_objectives.find params[:id]
-    @student_id = current_student.id if current_user_is_student?
+    @student_id = params[:student_id] || (current_student.id if current_user_is_student?)
   end
 
   # GET /learning_objectives/objectives/new

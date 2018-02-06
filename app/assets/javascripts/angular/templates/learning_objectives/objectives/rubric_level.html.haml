@@ -16,7 +16,7 @@
   %flagged-value-selector{"ng-if"=>"loRubricLevelCtrl.levelIsSaved()"}
     %span.sr-only Flagged Value
     %select.flagged_values{"ng-model"=>"loRubricLevelCtrl.level.flagged_value",
-                           "ng-options"=>"value as displayString for (value, displayString) in loRubricLevelCtrl.flaggedValues",
+                           "ng-options"=>"fv.original_key as fv.display_string for fv in loRubricLevelCtrl.flaggedValues",
                            "ng-blur"=>"loRubricLevelCtrl.persist()",
                            "required"=>""}
       %option{"value"=>""} Select a competency level

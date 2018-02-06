@@ -7,6 +7,8 @@
     vm.linkedAssignments = LearningObjectivesService.linkedAssignments
     vm.cumulativeOutcomes = LearningObjectivesService.cumulativeOutcomes
 
+    vm.hasLinkedAssignments = () -> _.some(vm.linkedAssignments)
+
     vm.cumulativeOutcome = (studentId) ->
       _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: studentId })
 
@@ -27,6 +29,9 @@
     vm.gradePath = (studentId, assignmentId) ->
       oo = vm.observedOutcomeFor(studentId, assignmentId)
       "/grades/#{oo.grade_id}"
+
+    vm.showPath = (studentId) ->
+      "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
 
     vm.observedOutcomeFor = (studentId, assignmentId) ->
       oo = vm.observedOutcomes(studentId)

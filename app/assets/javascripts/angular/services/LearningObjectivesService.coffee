@@ -10,7 +10,7 @@
   cumulativeOutcomes = []
   _observed_outcomes = []
   linkedAssignments = []
-  levelFlaggedValues = {}
+  levelFlaggedValues = []
 
   runAllEvents = (redirectUrl=null) ->
     DebounceQueue.runAllEvents()  # should this return a $q.all promise to ensure success prior to redirect?

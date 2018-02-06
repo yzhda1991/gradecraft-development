@@ -8,10 +8,10 @@ class LearningObjectiveLevel < ActiveRecord::Base
   scope :ordered, -> { order :order }
 
   class << self
-    # Returns hash with flagged_value and its display string
-    # { exceeds_proficiency => "Exceeds Proficiency", ... }
-    def readable_flagged_values
-      flagged_values.map { |k, v| [k, to_readable_flagged_value(k)] }.to_h
+    def flagged_values_to_h
+      flagged_values.map do |k, v|
+        { value: v, display_string: to_readable_flagged_value(k), original_key: k }
+      end
     end
 
     def to_readable_flagged_value(value)
