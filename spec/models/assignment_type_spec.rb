@@ -30,6 +30,15 @@ describe AssignmentType do
     end
   end
 
+  describe "callbacks" do
+    let(:subject) { build :assignment_type, max_points: 1337, has_max_points: false }
+
+    it "clears out the max points value if they aren't being used" do
+      subject.save
+      expect(subject.reload.max_points).to be_nil
+    end
+  end
+
   describe "#copy" do
     subject { assignment_type.copy }
 
