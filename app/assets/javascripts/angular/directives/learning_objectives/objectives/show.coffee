@@ -13,7 +13,7 @@
       _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: studentId })
 
     vm.progress = (studentId) ->
-      co = vm.cumulativeOutcome(studentId)
+      co = vm.cumulativeOutcome(parseInt(studentId))
       return "Not started" unless co?
       co.status
 
