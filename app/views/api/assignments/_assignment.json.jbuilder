@@ -7,6 +7,7 @@ json.attributes do
   json.accepts_submissions_until    assignment.accepts_submissions_until
   json.accepts_text                 assignment.accepts_text
   json.assignment_type_id           assignment.assignment_type_id
+  json.assignment_type_name         assignment.assignment_type.name
   json.description                  assignment.description
   json.due_at                       assignment.due_at
   json.full_points                  assignment.full_points

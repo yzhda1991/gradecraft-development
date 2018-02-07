@@ -8,6 +8,7 @@
     vm.cumulativeOutcomes = LearningObjectivesService.cumulativeOutcomes
 
     vm.hasLinkedAssignments = () -> _.some(vm.linkedAssignments)
+    vm.termFor = (term) -> LearningObjectivesService.termFor(term)
 
     vm.cumulativeOutcome = (studentId) ->
       _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: studentId })

@@ -73,7 +73,7 @@
       objective_id: objectiveId
       name: undefined
       description: undefined
-      flagged_value: 0
+      flagged_value: 1
       order: order
     }
 

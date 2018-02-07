@@ -15,7 +15,7 @@
         %th Description:
         %td {{loShowCtrl.objective().description}}
       %tr{"ng-if"=>"loShowCtrl.hasLinkedAssignments()"}
-        %th Linked Assignments:
+        %th.capitalize Linked {{loShowCtrl.termFor("assignments")}}:
         %td
           %ul.no-style
             %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
@@ -33,7 +33,7 @@
         %tr
           %th Student
           %th Progress
-          %th Linked Assignments
+          %th Grades
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students", "ng-if"=>"!loShowCtrl.studentId"}
           %td

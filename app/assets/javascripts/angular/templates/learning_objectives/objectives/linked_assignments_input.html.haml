@@ -1,6 +1,6 @@
 %label{"ng-show"=>"assignments"}
-  Linked {{termFor("assignments")}}:
-  %select.select2{"ng-options"=>"assignment.id as assignment.name for assignment in assignments",
+  %span.capitalize Linked {{termFor("assignments")}}:
+  %select.select2{"ng-options"=>"assignment.id as assignment.name group by assignment.assignment_type_name for assignment in assignments",
                   "ng-model"=>"selectedAssignments",
                   "multiple"=>"true",
                   "ng-change"=>"persist()"}

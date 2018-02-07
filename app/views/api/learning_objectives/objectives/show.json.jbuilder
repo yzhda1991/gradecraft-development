@@ -42,5 +42,6 @@ json.included do
 end
 
 json.meta do
+  json.term_for_assignment term_for :assignments
   json.level_flagged_values LearningObjectiveLevel.flagged_values_to_h
 end
