@@ -19,11 +19,6 @@ class LearningObjectives::ObjectivesController < ApplicationController
       unless params[:category_id].nil?
   end
 
-  # GET /learning_objectives/objectives/:objective_id/linked_assignments
-  def linked_assignments
-    @objective = @course.learning_objectives.find params[:objective_id]
-  end
-
   # GET /learning_objectives/objectives/:id/edit
   def edit
     @objective = @course.learning_objectives.find params[:id]

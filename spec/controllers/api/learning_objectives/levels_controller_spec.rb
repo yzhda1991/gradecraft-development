@@ -1,5 +1,5 @@
 describe API::LearningObjectives::LevelsController do
-  let(:course) { build :course }
+  let(:course) { build :course, :uses_learning_objectives }
   let!(:objective) { create :learning_objective, course: course }
   let(:level) { create :learning_objective_level, objective: objective }
   let(:attributes) { attributes_for :learning_objective_level }

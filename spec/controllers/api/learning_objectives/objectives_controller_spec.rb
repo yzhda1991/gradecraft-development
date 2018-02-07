@@ -1,5 +1,5 @@
 describe API::LearningObjectives::ObjectivesController do
-  let(:course) { create :course }
+  let(:course) { create :course, :uses_learning_objectives }
   let(:learning_objective) { build_stubbed :learning_objective, course: course }
 
   before(:each) do
@@ -46,8 +46,8 @@ describe API::LearningObjectives::ObjectivesController do
       it "redirect with a status 302" do
         [
           -> { post :create, format: :json },
-          -> { put :update, id: learning_objective.id, format: :json },
-          -> { delete :destroy, id: learning_objective.id, format: :json }
+          -> { put :update, params: { id: learning_objective.id }, format: :json },
+          -> { delete :destroy, params: { id: learning_objective.id }, format: :json }
         ].each do |protected_route|
           expect(protected_route.call).to have_http_status :redirect
         end
