@@ -4,6 +4,8 @@ class AssignmentType < ActiveRecord::Base
 
   acts_as_list scope: :course
 
+  before_save :zero_max_points_if_unused
+
   belongs_to :course
   has_many :assignments, -> { order("position ASC") }, dependent: :destroy
   has_many :submissions, through: :assignments
@@ -138,5 +140,11 @@ class AssignmentType < ActiveRecord::Base
     score = score_for_student(student)
     return max_points if is_capped? && score > max_points
     score
+  end
+
+  private
+
+  def zero_max_points_if_unused
+    self.max_points = nil unless self.has_max_points?
   end
 end
