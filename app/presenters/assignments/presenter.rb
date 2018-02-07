@@ -172,7 +172,7 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def has_viewable_learning_objectives?(current_student)
-    course.has_learning_objectives? && (course.always_show_objectives? ||
+    course.uses_learning_objectives? && (course.always_show_objectives? ||
       grade_for_student(current_student).assignment.learning_objectives.any?)
   end
 

@@ -123,6 +123,10 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def uses_learning_objectives?
+    allows_learning_objectives? && has_learning_objectives?
+  end
+
   def linked?(provider)
     self.linked_courses.where(provider: provider).exists?
   end

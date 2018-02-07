@@ -1,4 +1,5 @@
 class API::LearningObjectives::OutcomesController < ApplicationController
+  before_action :ensure_course_uses_objectives?
   before_action :ensure_staff?, except: [:index, :outcomes_for_objective]
 
   # GET /api/learning_objectives/outcomes

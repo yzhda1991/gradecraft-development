@@ -1,5 +1,5 @@
 describe LearningObjectives::ObjectivesController do
-  let(:course) { create :course, :has_learning_objectives }
+  let(:course) { create :course, :uses_learning_objectives }
 
   before(:each) do
     login_user user
@@ -11,7 +11,7 @@ describe LearningObjectives::ObjectivesController do
 
     describe "GET index" do
       it "redirects to dashboard if learning objectives are not enabled for the course" do
-        course.has_learning_objectives = false
+        course.update(has_learning_objectives: false)
         get :index
         expect(response).to redirect_to dashboard_path
       end

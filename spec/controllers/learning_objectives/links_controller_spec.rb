@@ -1,5 +1,5 @@
 describe LearningObjectives::LinksController do
-  let(:course) { build :course }
+  let(:course) { build :course, :uses_learning_objectives }
   let(:user) { build_stubbed :user, courses: [course], role: :student }
 
   before(:each) do
@@ -10,6 +10,7 @@ describe LearningObjectives::LinksController do
   describe "GET index" do
     context "when the current course does not have learning objectives enabled" do
       it "redirects to dashboard" do
+        course.update(allows_learning_objectives: false)
         get :index
         expect(response).to redirect_to dashboard_path
       end
@@ -19,7 +20,6 @@ describe LearningObjectives::LinksController do
       let!(:learning_objective) { create :learning_objective, course: course }
 
       it "returns the objectives" do
-        course.has_learning_objectives = true
         get :index
         expect(assigns :objectives).to eq [learning_objective]
       end

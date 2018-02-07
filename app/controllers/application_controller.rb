@@ -110,6 +110,10 @@ class ApplicationController < ActionController::Base
       if current_user_is_observer?
   end
 
+  def ensure_course_uses_objectives?
+    redirect_to dashboard_path unless current_course.uses_learning_objectives?
+  end
+
   def require_course_membership
     redirect_to errors_path(status_code: 401, error_type: "without_course_membership") \
       unless current_user.course_memberships.any?

@@ -1,4 +1,5 @@
 class API::LearningObjectives::CategoriesController < ApplicationController
+  before_action :ensure_course_uses_objectives?
   before_action :ensure_staff?
   before_action :find_category, only: [:show, :update, :destroy]
 

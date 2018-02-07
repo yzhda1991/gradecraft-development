@@ -1,5 +1,5 @@
 describe API::LearningObjectives::CategoriesController do
-  let(:course) { build :course }
+  let(:course) { build :course, :uses_learning_objectives }
   let(:category) { create :learning_objective_category, course: course }
   let(:attributes) { attributes_for :learning_objective_category }
 

@@ -1,5 +1,5 @@
 describe LearningObjectives::CategoriesController do
-  let(:course) { build :course, :has_learning_objectives }
+  let(:course) { build :course, :uses_learning_objectives }
   let(:category) { create :learning_objective_category, course: course }
 
   before(:each) do

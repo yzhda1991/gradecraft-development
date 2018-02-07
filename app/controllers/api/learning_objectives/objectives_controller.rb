@@ -1,4 +1,5 @@
 class API::LearningObjectives::ObjectivesController < ApplicationController
+  before_action :ensure_course_uses_objectives?
   before_action :ensure_staff?, except: [:index, :show]
   before_action :find_objective, only: [:show, :update, :destroy]
 
