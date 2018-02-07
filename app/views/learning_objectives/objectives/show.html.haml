@@ -1,3 +1,8 @@
+- content_for :context_menu do
+  .context-menu
+    %ul
+      %li= active_course_link_to decorative_glyph(:edit) + "Edit", edit_learning_objectives_objective_path(@objective.id), class: "button button-edit"
+
 .pageContent
   %learning-objectives-show{"data-objective-id"=>"#{@objective.id}",
                             "data-student-id"=>"#{@student_id}"}
