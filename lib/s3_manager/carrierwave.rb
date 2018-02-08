@@ -39,10 +39,6 @@ module S3Manager
       s3_object.exists?
     end
 
-    def copy_s3_object_from(copy_source, target_key)
-      copy_object copy_source, target_key
-    end
-
     def s3_object_file_key
       if read_attribute(:store_dir) && mounted_filename
         cached_file_path # build a full file path from cached #store_dir and #filename attributes on the FooFile record
