@@ -9,6 +9,8 @@
       scope.termFor = AssignmentService.termFor
       scope.learningObjectives = LearningObjectivesService.objectives
 
+      scope.hasLearningObjectives = () -> _.some(scope.learningObjectives())
+
       scope.categoryLabel = (category) ->
         "-- #{category} --" if category?
 
