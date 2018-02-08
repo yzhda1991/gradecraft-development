@@ -21,6 +21,19 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.log_level = :debug
   config.session_store :cookie_store, key: "_gradecraft_session"
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = false
+    Bullet.bullet_logger = true # log to the Bullet log file (Rails.root/log/bullet.log)
+    Bullet.console = true
+    # Bullet.rails_logger = false
+    # Bullet.rollbar = false
+    # Bullet.add_footer = true
+    # Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
+    # Bullet.stacktrace_excludes = [ 'their_gem', 'their_middleware' ]
+    # Bullet.slack = { webhook_url: 'http://some.slack.url', channel: '#default', username: 'notifier' }
+  end
 end
 
 CarrierWave.configure do |config|
