@@ -84,7 +84,7 @@ class Assignment < ActiveRecord::Base
         attributes: attributes,
         associations: [:assignment_score_levels],
         options: {
-          lookups: [:assignment_types],
+          lookups: [:courses, :assignment_types],
           overrides: [
             -> (copy) { copy_files copy }
           ]
