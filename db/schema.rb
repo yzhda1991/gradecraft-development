@@ -222,8 +222,10 @@ ActiveRecord::Schema.define(version: 20180202191149) do
   end
 
   create_table "copy_logs", force: :cascade do |t|
-    t.text    "log"
-    t.integer "course_id"
+    t.text     "log"
+    t.integer  "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "course_analytics_exports", force: :cascade do |t|
