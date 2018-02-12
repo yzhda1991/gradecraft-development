@@ -39,7 +39,7 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
     params = learning_objective_params[:learning_objective_links_attributes].present? ? learning_objective_params_with_links : learning_objective_params
 
     begin
-      @objective.learning_objective_links.destroy_all # not the most performant method but easiest for now
+      @objective.learning_objective_links.destroy_all unless learning_objective_params[:learning_objective_links_attributes].nil?
       @objective.update params
       render "api/learning_objectives/objectives/show", status: 200
     rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
