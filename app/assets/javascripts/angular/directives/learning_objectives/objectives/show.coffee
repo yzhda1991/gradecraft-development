@@ -11,7 +11,8 @@
     vm.termFor = (term) -> LearningObjectivesService.termFor(term)
 
     vm.cumulativeOutcome = (studentId) ->
-      _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: studentId })
+      _studentId = if angular.isDefined(studentId) then studentId else @studentId
+      _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: parseInt(_studentId) })
 
     vm.progress = (studentId) ->
       co = vm.cumulativeOutcome(parseInt(studentId))
@@ -19,7 +20,8 @@
       co.status
 
     vm.observedOutcomes = (studentId) ->
-      co = vm.cumulativeOutcome(studentId)
+      _studentId = if angular.isDefined(studentId) then studentId else @studentId
+      co = vm.cumulativeOutcome(parseInt(_studentId))
       return unless co?
       LearningObjectivesService.observedOutcomesFor(co.id)
 

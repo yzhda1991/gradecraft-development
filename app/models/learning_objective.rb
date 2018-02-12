@@ -20,27 +20,29 @@ class LearningObjective < ActiveRecord::Base
 
   scope :ordered_by_name, -> { order :name }
 
-  def progress(student)
+  def progress(student, include_details=false)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
 
     if course.objectives_award_points?
-      point_progress_for cumulative_outcome
+      point_progress_for cumulative_outcome, include_details
     else
-      grade_outcome_progress_for cumulative_outcome
+      grade_outcome_progress_for cumulative_outcome, include_details
     end
   end
 
-  def point_progress_for(cumulative_outcome)
+  def point_progress_for(cumulative_outcome, include_details)
     earned = earned_assignment_points cumulative_outcome
     return "Not Started" if earned.zero?
-    earned < points_to_completion ? "In Progress" : "Completed"
+    earned < points_to_completion ? in_progress_str(earned, points_to_completion, include_details) : "Completed"
   end
 
-  def grade_outcome_progress_for(cumulative_outcome)
+  def grade_outcome_progress_for(cumulative_outcome, include_details)
     return "Not Started" if cumulative_outcome.nil?
     return "Failed" if failed? cumulative_outcome
 
-    proficient_observed_outcomes(cumulative_outcome).count < count_to_achieve ? "In Progress" : "Completed"
+    outcomes = proficient_observed_outcomes(cumulative_outcome)
+    return "Not Started" if outcomes.empty?
+    outcomes.count < count_to_achieve ? in_progress_str(outcomes.count, count_to_achieve, include_details) : "Completed"
   end
 
   private
@@ -69,5 +71,11 @@ class LearningObjective < ActiveRecord::Base
   def count_to_achieve_or_points
     errors.add(:base, "must have either a count_to_achieve or points_to_completion") \
       if count_to_achieve.nil? && points_to_completion.nil?
+  end
+
+  def in_progress_str(earned, total, include_details)
+    str = "In Progress"
+    return str unless include_details
+    "#{str} (#{earned}/#{total})"
   end
 end
