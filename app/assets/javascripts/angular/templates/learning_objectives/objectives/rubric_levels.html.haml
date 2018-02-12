@@ -5,9 +5,9 @@
 
       .draggable-ellipsis
         %span
-          %i.fa.fa-ellipsis-v{"ng-show"=>"!reordering()"}
+          %i.fa.fa-ellipsis-v{"ng-show"=>"!hasUnsaved()"}
         %span.slim-margin
-          %i.fa.fa-ellipsis-v{"ng-show"=>"!reordering()"}
+          %i.fa.fa-ellipsis-v{"ng-show"=>"!hasUnsaved()"}
 
       %learning-objectives-rubric-level{"data-level"=>"level",
                                         "data-delete-level"=>"deleteLevel(level)"}

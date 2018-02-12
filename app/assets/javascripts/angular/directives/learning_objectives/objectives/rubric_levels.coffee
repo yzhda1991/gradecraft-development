@@ -29,13 +29,12 @@
       scope.addLevel = () ->
         scope.levels.push(LearningObjectivesService.newLevel(scope.loRubricLevelsCtrl.objective.id, scope.levels.length + 1))
 
-      scope.reordering = () ->
-        _.some(scope.levels, (level) ->
-          !LearningObjectivesService.isSaved(level)
-        )
+      scope.hasUnsaved = (levels) ->
+        _levels = if angular.isDefined(levels) then levels else scope.levels
+        _.some(_levels, (level) -> !LearningObjectivesService.isSaved(level))
 
       scope.$watchCollection("levels", (newLevels, oldLevels) ->
-        return if scope.reordering()
+        return if scope.hasUnsaved(newLevels)
         LearningObjectivesService.updateOrder(newLevels, scope.loRubricLevelsCtrl.objective.id) if !_.isEqual(newLevels, oldLevels)
       )
   }
