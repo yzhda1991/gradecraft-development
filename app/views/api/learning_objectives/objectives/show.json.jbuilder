@@ -14,6 +14,7 @@ json.included do
 
     json.attributes do
       json.merge! level.attributes
+      json.readable_flagged_value level.readable_flagged_value
     end
   end
 

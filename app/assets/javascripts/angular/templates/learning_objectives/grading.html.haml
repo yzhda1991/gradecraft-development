@@ -16,8 +16,8 @@
               .level-name {{level.name}}
 
           .level-description
-            .level-flagged-value{"ng-class"=>"level.flagged_value"} {{level.flagged_value}}
-            {{level.description || "No description"}}
+            .level-flagged-value{"ng-class"=>"level.flagged_value"} {{level.readable_flagged_value}}
+            {{level.description}}
 
       .comments-box
         %textarea{"ng-model"=>"loGradingCtrl.outcomeFor(objective.id).comments",
