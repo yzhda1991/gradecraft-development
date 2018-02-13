@@ -1,22 +1,8 @@
 class AuthorizationsController < ApplicationController
-  # include OAuthProvider
 
-  # oauth_provider_param :google_oauth2
-
-  skip_before_action :require_login, only: [:create_for_google]
-  skip_before_action :require_course_membership, only: [:create_for_google]
-  # before_action :require_authorization, only: [:create_for_google]
-  before_action :log_me_in, only: [:create_for_google]
-
-  def create_for_google
-    # rubocop:disable AndOr
-    UserAuthorization.create_by_auth_hash request.env["omniauth.auth"], current_user
-
-    return_to = session[:return_to]
-    session[:return_to] = nil
-    redirect_to return_to, notice: "GradeCraft now has access to your Calendar, please try to add your item again." and return unless return_to.nil?
-    redirect_to root_path
-  end
+  skip_before_action :require_login, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
+  skip_before_action :require_course_membership, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
+  before_action :log_me_in, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
 
   def create
     UserAuthorization.create_by_auth_hash request.env["omniauth.auth"], current_user
