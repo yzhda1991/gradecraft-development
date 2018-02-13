@@ -3,7 +3,7 @@
 # VERSION       1.0
 # ENVIRONMENT    staging
 # ~~~~ Image base ~~~~
-FROM quay.io/gradecraft/secrets:staging
+FROM quay.io/gradecraft/secrets:kt
 MAINTAINER Shekhar Patil <shekhar@venturit.com>
 ENV DOCKER_FIX random
 RUN gem install -v 1.10.6 bundler
