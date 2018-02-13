@@ -7,8 +7,7 @@ class UnlockCondition < ActiveRecord::Base
 
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
-  # TODO: add course validation after rake task is run
-  # validates_presence_of :course
+  validates_presence_of :course
 
   # Returning the name of whatever badge or assignment has been identified as
   # the condition
