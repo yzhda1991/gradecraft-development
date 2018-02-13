@@ -8,11 +8,13 @@ FactoryGirl.define do
     condition_state "Earned"
 
     factory :unlock_condition_for_assignment do
+      association :course
       association :unlockable, factory: :assignment
       unlockable_type "Assignment"
     end
 
     factory :unlock_condition_for_gse do
+      association :course
       association :unlockable, factory: :grade_scheme_element
       unlockable_type "GradeSchemeElement"
     end

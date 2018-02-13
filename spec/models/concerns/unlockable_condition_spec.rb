@@ -9,7 +9,7 @@ describe UnlockableCondition do
 
     it "returns a new unlock state if the goal of unlockables does not meet the number of unlocks" do
       assignment.unlock_conditions.create! condition_id: assignment.id,
-        condition_type: assignment.class, condition_state: "Grade Earned"
+        condition_type: assignment.class, condition_state: "Grade Earned", course: course
       expect(assignment.unlock!(student)).to be_an_instance_of UnlockState
       expect(assignment.unlock_states.last).to_not be_unlocked
     end
@@ -17,7 +17,7 @@ describe UnlockableCondition do
     context "when the number of conditions are met" do
       it "returns the updated unlock state when it is found" do
         condition = assignment.unlock_conditions.create condition_id: assignment.id,
-          condition_type: assignment.class, condition_state: "Earned"
+          condition_type: assignment.class, condition_state: "Earned", course: course
         allow(condition).to receive(:is_complete?).with(student).and_return true
         state = assignment.unlock_states.create(student_id: student.id,
                                              unlocked: false)
@@ -27,7 +27,7 @@ describe UnlockableCondition do
 
       it "returns a new unlock state if it did not exist" do
         condition = assignment.unlock_conditions.create condition_id: assignment.id,
-          condition_type: assignment.class, condition_state: "Submitted"
+          condition_type: assignment.class, condition_state: "Submitted", course: course
         allow(condition).to receive(:is_complete?).with(student).and_return true
         expect(assignment.unlock!(student)).to eq \
           assignment.unlock_states.last
