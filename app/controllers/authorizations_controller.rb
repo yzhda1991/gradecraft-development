@@ -1,8 +1,8 @@
 class AuthorizationsController < ApplicationController
 
-  skip_before_action :require_login, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
-  skip_before_action :require_course_membership, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
-  before_action :log_me_in, if: Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
+  skip_before_action :require_login, if: :is_google?
+  skip_before_action :require_course_membership, if: :is_google?
+  before_action :log_me_in, if: :is_google?
 
   def create
     UserAuthorization.create_by_auth_hash request.env["omniauth.auth"], current_user
@@ -20,5 +20,9 @@ class AuthorizationsController < ApplicationController
     rescue
       redirect_to auth_failure_path
     end
+  end
+
+  def is_google?
+    Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
   end
 end
