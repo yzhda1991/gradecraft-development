@@ -11,6 +11,5 @@
 .clear
 
 .google-login
-  = link_to image_tag("Google.png", width: "200px", alt: "Sign in with Google"), "/auth/google_oauth2/", :method => :post
-
+  = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", class: "login-button", :method => :post
 %button.button-link.small#forgot-password Forgot your password?
