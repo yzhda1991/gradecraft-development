@@ -17,6 +17,11 @@
             .coin-stack
               .coin{'ng-repeat' => 'coin in vm.predictorService.unusedWeightsRange()'}
               .coin-stack-count {{vm.predictorService.unusedWeightsRange().length}}
+        .predictor-section-title-predicted-points{'ng-if'=>'!vm.predictorService.weightsAvailable()'}
+          .predictor-title-right-span
+            Weights are Closed for This Course
+
+
 
     %predictor-section-assignment-types
 

@@ -233,18 +233,16 @@ $card-margin-1 : 3px
       color: $color-orange-1
       left: -10px
       top: 1px
-    &:hover .coin-stack-count
-      visibility: hidden
-  .coin, .coin-non-interactive, .coin-slot
+  .coin, .coin-slot
     float: right
     width: 20px
     height: 20px
     border-radius: 50%
   .coin
     margin: 3px 0 0 -15px
-  .coin-non-interactive, .coin-slot
+  .coin-slot
     margin: 2px 0 0 2px
-  .coin, .coin-non-interactive
+  .coin
     background-color: $color-yellow-1
     border: 2px solid $color-orange-1
     @include transition(all, .5s, ease-out)
@@ -253,6 +251,12 @@ $card-margin-1 : 3px
     margin: 1px 0 0 -2px
   .coin:hover
     background-color: $color-orange-1
+    .coin-stack-count
+      visibility: hidden
+  .coin.coin--non-interactive:hover
+    background-color: $color-yellow-1
+    .coin-stack-count
+      visibility: visible
   .coin:hover .coin-remove-icon
     visibility: visible
   .coin-slot
