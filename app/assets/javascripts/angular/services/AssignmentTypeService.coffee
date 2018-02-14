@@ -64,7 +64,7 @@
       GradeCraftAPI.setTermFor("weights", res.meta.term_for_weights)
       update.weights = res.meta.update_weights
       weights.open = !res.meta.weights_close_at ||
-        Date.parse(res.meta.weights_close_at) >= Date.now()
+        new Date(res.meta.weights_close_at) >= Date.now()
       weights.total_weights = res.meta.total_weights
       weights.weights_close_at = res.meta.weights_close_at
       weights.max_weights_per_assignment_type = res.meta.max_weights_per_assignment_type

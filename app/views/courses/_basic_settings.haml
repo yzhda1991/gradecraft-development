@@ -107,7 +107,7 @@
         .advanced-settings-card
           %a.button-close= glyph(:times)
           = f.input :total_weights, :label => "How many multipliers do #{term_for :students} have to allocate?", input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
-          = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "What date must they make this decision by?"
+          = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:weights_close_at) }, :label => "What date must they make this decision by?"
           = f.input :max_weights_per_assignment_type, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
           = f.input :max_assignment_types_weighted, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }, :label => "Is there a maximum number of assignment types they can weight?"
           = f.input :weight_term, {:label => "What do you want to call these weights/multipliers?"}

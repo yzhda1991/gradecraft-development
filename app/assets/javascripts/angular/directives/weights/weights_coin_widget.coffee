@@ -26,12 +26,11 @@
 
       scope.weightsOpen = ()->
         AssignmentTypeService.weights.open
+
       scope.weightsAvailableForArticle = ()->
         AssignmentTypeService.weightsAvailableForArticle(@article)
 
       scope.hasWeights = ()->
         @article.student_weight > 0
-
-
   }
 ]
