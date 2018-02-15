@@ -23,6 +23,6 @@ class AuthorizationsController < ApplicationController
   end
 
   def is_google?
-    Proc.new { |controller| controller.params[:provider] == "google_oauth2" }
+    self.params[:provider] == "google_oauth2"
   end
 end
