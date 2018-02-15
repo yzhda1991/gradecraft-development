@@ -26,7 +26,7 @@ class CoursesController < ApplicationController
   end
 
   def overview
-    @courses = Course.all
+    @courses = Course.includes(:earned_badges).all
   end
 
   def new
