@@ -56,7 +56,7 @@ describe CourseMembership do
 
     it "does not return an element if it is still locked" do
       badge = create(:badge, course: course)
-      UnlockCondition.create(
+      create(:unlock_condition,
         condition_id: badge.id,
         condition_type: "Badge",
         condition_state: "Earned",
