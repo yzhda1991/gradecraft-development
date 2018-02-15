@@ -22,7 +22,9 @@
               %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
       %tr{"ng-if"=>"loShowCtrl.studentId"}
         %th Progress:
-        %td {{loShowCtrl.progress(loShowCtrl.studentId)}} (Attempts: {{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}})
+        %td
+          {{loShowCtrl.progress(loShowCtrl.studentId)}}
+          %span{"ng-show"=>"loShowCtrl.observedOutcomes(loShowCtrl.studentId).length"} (Attempts: {{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}})
 
   -# Table for all students in the course
   %section{"ng-if"=>"!loShowCtrl.studentId"}
