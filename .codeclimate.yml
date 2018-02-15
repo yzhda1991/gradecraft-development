@@ -45,3 +45,4 @@ exclude_paths:
 - assets/**/*
 - app/mailer_previews/*
 - doc/*
+- app/models/breadcrumb_trail.rb
