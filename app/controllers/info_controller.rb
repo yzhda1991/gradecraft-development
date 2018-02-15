@@ -17,7 +17,7 @@ class InfoController < ApplicationController
     @events = Timeline.new(current_course).events_by_due_date
     render :dashboard, Info::DashboardCoursePlannerPresenter.build({
       student: current_student,
-      assignments: current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions),
+      assignments: current_course.assignments.chronological,
       course: current_course,
       view_context: view_context
     })
