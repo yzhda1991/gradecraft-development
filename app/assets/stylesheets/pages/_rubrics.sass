@@ -71,6 +71,7 @@ $not-saved-color: $color-yellow-1
     font-size: 0.8rem
     cursor: pointer
     position: relative
+    height: 395px
     &:hover
       background-color: lighten($color-grey-6, 5%)
     &.selected
@@ -192,7 +193,7 @@ $not-saved-color: $color-yellow-1
       height: 2rem
       vertical-align: middle
 
-  input
+  input:not([type=submit])
     height: 2rem
     margin-bottom: .5rem
     border: rgba(42, 43, 43, 0)
@@ -271,7 +272,6 @@ $not-saved-color: $color-yellow-1
 
     select
       color: $color-grey-4
-      font-size: 13px
       padding: -4px 2px
 
       &[disabled]
@@ -386,7 +386,6 @@ button.meets-expectations-status.no-expectation
 
   select
     color: $color-grey-2
-    font-size: 13px
     padding: 2rem
 
     &[disabled]
@@ -407,7 +406,7 @@ button.meets-expectations-status.no-expectation
   input.ng-pristine.ng-invalid
     background: $color-white
 
-  input.ng-invalid
+  input.ng-invalid:not(.ng-pristine)
     background: $color-red-invalid
     color: $color-white
 
@@ -432,6 +431,7 @@ ul.level-requirements
 
 .add-level
   vertical-align: bottom
+  margin-right: .5rem
 
 // loading screens for rubric grading view and rubric design view
 .splash, #rubric-grader-splash
@@ -631,6 +631,7 @@ h4.notice
     padding: .25rem
     font-size: .8rem
     min-width: 300px
+    min-height: 100px
 
   h4.notice
     color: $color-green-2

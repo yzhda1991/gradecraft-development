@@ -1,0 +1,64 @@
+%loading-message{'loading'=>'loShowCtrl.loading', 'message'=>"Loading..."}
+
+.show-learning-objective{"ng-if"=>"!loShowCtrl.loading"}
+  %section
+    %h2.subtitle {{loShowCtrl.objective().name}}
+
+    %table.stacktable.info-table
+      %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
+        %th Number of Points to Completion:
+        %td {{loShowCtrl.objective().points_to_completion}}
+      %tr{"ng-if"=>"loShowCtrl.objective().count_to_achieve"}
+        %th Count to Achieve:
+        %td {{loShowCtrl.objective().count_to_achieve}}
+      %tr{"ng-if"=>"loShowCtrl.objective().description"}
+        %th Description:
+        %td {{loShowCtrl.objective().description}}
+      %tr{"ng-if"=>"loShowCtrl.hasLinkedAssignments()"}
+        %th.capitalize Linked {{loShowCtrl.termFor("assignments")}}:
+        %td
+          %ul.no-style
+            %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+              %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+      %tr{"ng-if"=>"loShowCtrl.studentId"}
+        %th Progress:
+        %td
+          {{loShowCtrl.progress(loShowCtrl.studentId)}}
+          %span{"ng-show"=>"loShowCtrl.observedOutcomes(loShowCtrl.studentId).length"} (Attempts: {{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}})
+
+  -# Table for all students in the course
+  %section{"ng-if"=>"!loShowCtrl.studentId"}
+    %h3.subtitle Student Progress
+
+    %table.stacktable
+      %thead
+        %tr
+          %th Student
+          %th Progress
+          %th Attempts
+      %tbody
+        %tr{"ng-repeat"=>"student in loShowCtrl.students"}
+          %td
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"} {{student.name}}
+          %td {{loShowCtrl.progress(student.id)}}
+          %td
+            %ul
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments",
+                  "ng-if"=>"loShowCtrl.gradeExists(student.id, assignment.id)"}
+                %a{"ng-href"=>"{{loShowCtrl.gradePath(student.id, assignment.id)}}"} {{assignment.name}} (View Grade)
+
+  -# Progress for an individual student
+  %section{"ng-if"=>"loShowCtrl.studentId", "ng-if"=>"loShowCtrl.observedOutcomes().length > 0"}
+    %h3.subtitle Attempts
+
+    %table.stacktable
+      %thead
+        %tr
+          %th Assignment
+          %th Assessment
+      %tbody
+        %tr{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes()"}
+          %td
+            %a{"ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, oo.assignment_id)}}"} {{oo.assignment_name}}
+          %td
+            %span.level-flagged-value{"ng-class"=>"oo.flagged_value"} {{oo.readable_flagged_value}}

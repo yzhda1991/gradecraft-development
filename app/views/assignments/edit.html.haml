@@ -1,2 +1,2 @@
 .pageContent
-  %assignment-edit(data-assignment-id="#{@assignment.id}" data-rubric-id="#{@rubric.id}")
+  %assignment-edit(data-assignment-id="#{@assignment.id}" data-rubric-id="#{@rubric.id}" data-course-uses-learning-objectives="#{current_course.uses_learning_objectives?}")

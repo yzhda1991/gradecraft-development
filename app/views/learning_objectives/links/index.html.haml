@@ -1,0 +1,13 @@
+.objectives-index
+  .pageContent
+    %table.dynatable
+      %thead
+        %th Name
+        %th Category
+        %th Progress
+      %tbody
+        - @objectives.each do |o|
+          %tr
+            %td= link_to o.name, learning_objectives_objective_path(o)
+            %td= o.category.try(:name)
+            %td= o.progress(current_student, true)

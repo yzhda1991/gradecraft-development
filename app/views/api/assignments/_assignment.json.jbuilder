@@ -7,6 +7,7 @@ json.attributes do
   json.accepts_submissions_until    assignment.accepts_submissions_until
   json.accepts_text                 assignment.accepts_text
   json.assignment_type_id           assignment.assignment_type_id
+  json.assignment_type_name         assignment.assignment_type.name
   json.description                  assignment.description
   json.due_at                       assignment.due_at
   json.full_points                  assignment.full_points
@@ -30,6 +31,8 @@ json.attributes do
   json.updated_at                   assignment.updated_at
   json.visible_when_locked          assignment.visible_when_locked
   json.has_submitted_submissions    assignment.has_submitted_submissions?
+
+  json.linked_objective_ids assignment.learning_objective_links.map(&:objective_id)
 
   # boolean attributes
   json.visible                    assignment.visible

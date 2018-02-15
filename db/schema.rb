@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120163326) do
+ActiveRecord::Schema.define(version: 20180202191149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -332,6 +332,11 @@ ActiveRecord::Schema.define(version: 20171120163326) do
     t.text     "dashboard_message"
     t.string   "grade_predictor_term",                                    default: "Grade Predictor",            null: false
     t.boolean  "show_grade_predictor",                                    default: true
+    t.integer  "learning_objective_term",                                 default: 0,                            null: false
+    t.boolean  "has_learning_objectives",                                 default: false,                        null: false
+    t.boolean  "objectives_award_points",                                 default: false,                        null: false
+    t.boolean  "always_show_objectives",                                  default: false,                        null: false
+    t.boolean  "allows_learning_objectives",                              default: false,                        null: false
     t.index ["institution_id"], name: "index_courses_on_institution_id", using: :btree
   end
 
@@ -521,6 +526,69 @@ ActiveRecord::Schema.define(version: 20171120163326) do
     t.string  "institution_type"
     t.boolean "has_google_access", default: true,  null: false
     t.index ["name"], name: "index_institutions_on_name", using: :btree
+  end
+
+  create_table "learning_objective_categories", force: :cascade do |t|
+    t.integer  "course_id",                 null: false
+    t.string   "name",                      null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.text     "description"
+  end
+
+  create_table "learning_objective_cumulative_outcomes", force: :cascade do |t|
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "learning_objective_id"
+    t.integer  "user_id"
+    t.index ["learning_objective_id"], name: "index_lo_cumulative_outcomes_on_objective_id", using: :btree
+    t.index ["user_id"], name: "index_learning_objective_cumulative_outcomes_on_user_id", using: :btree
+  end
+
+  create_table "learning_objective_levels", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "objective_id",  null: false
+    t.string   "name",          null: false
+    t.string   "description"
+    t.integer  "flagged_value"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "order"
+  end
+
+  create_table "learning_objective_links", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "objective_id",                     null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.string   "learning_objective_linkable_type"
+    t.integer  "learning_objective_linkable_id"
+    t.index ["learning_objective_linkable_type", "learning_objective_linkable_id"], name: "index_learning_objective_links_on_type_and_id", using: :btree
+  end
+
+  create_table "learning_objective_observed_outcomes", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "objective_level_id",                        null: false
+    t.datetime "assessed_at",                               null: false
+    t.text     "comments"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "learning_objective_assessable_type"
+    t.integer  "learning_objective_assessable_id"
+    t.integer  "learning_objective_cumulative_outcomes_id"
+    t.index ["learning_objective_assessable_type", "learning_objective_assessable_id"], name: "index_learning_objective_observed_outcomes_on_type_and_id", using: :btree
+    t.index ["learning_objective_cumulative_outcomes_id"], name: "index_lo_observed_outcomes_on_cumulative_outcomes_id", using: :btree
+  end
+
+  create_table "learning_objectives", force: :cascade do |t|
+    t.string   "name",                 null: false
+    t.text     "description"
+    t.integer  "count_to_achieve"
+    t.integer  "category_id"
+    t.integer  "course_id",            null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "points_to_completion"
   end
 
   create_table "level_badges", force: :cascade do |t|
@@ -834,6 +902,13 @@ ActiveRecord::Schema.define(version: 20171120163326) do
   add_foreign_key "imported_assignments", "assignments"
   add_foreign_key "imported_grades", "grades"
   add_foreign_key "imported_users", "users"
+  add_foreign_key "learning_objective_categories", "courses"
+  add_foreign_key "learning_objective_cumulative_outcomes", "learning_objectives"
+  add_foreign_key "learning_objective_cumulative_outcomes", "users"
+  add_foreign_key "learning_objective_levels", "learning_objectives", column: "objective_id"
+  add_foreign_key "learning_objective_observed_outcomes", "learning_objective_cumulative_outcomes", column: "learning_objective_cumulative_outcomes_id"
+  add_foreign_key "learning_objectives", "courses"
+  add_foreign_key "learning_objectives", "learning_objective_categories", column: "category_id"
   add_foreign_key "linked_courses", "courses"
   add_foreign_key "secure_tokens", "courses"
   add_foreign_key "secure_tokens", "users"

@@ -1,9 +1,8 @@
 class API::StudentsController < ApplicationController
-  before_action :ensure_staff?, except: [:analytics]
+  before_action :ensure_staff?, only: :student_analytics
   before_action :ensure_student?, only: [:analytics]
 
-  # accessed by the dashboard
-  # PUT api/students
+  # GET api/students
   def index
     students = current_course.students.map do |u|
       { name: u.name, id: u.id, search_string: u.searchable_name }

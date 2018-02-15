@@ -26,7 +26,8 @@ class API::AssignmentsController < ApplicationController
   end
 
   def create
-    @assignment = current_course.assignments.new(assignment_params)
+    @assignment = current_course.assignments.new assignment_params
+
     if @assignment.save
       @assignment.find_or_create_rubric if params[:use_rubric]
       render "api/assignments/show", success: true, status: 201
@@ -42,7 +43,9 @@ class API::AssignmentsController < ApplicationController
   # POST api/assignments/:id
   def update
     @assignment = Assignment.find(params[:id])
-    if @assignment.update_attributes assignment_params
+    create_or_update_learning_objective_links
+
+    if @assignment.update_attributes assignment_params.except(:linked_objective_ids)
       updated_grades
       render "api/assignments/show", success: true, status: 200
     else
@@ -85,6 +88,20 @@ class API::AssignmentsController < ApplicationController
     end
   end
 
+  # Manually create the polymorphic associations and
+  # destroy those that are no longer selected
+  def create_or_update_learning_objective_links
+    links = assignment_params.delete(:linked_objective_ids).map do |objective_id|
+      @assignment.learning_objective_links.find_or_initialize_by \
+        learning_objective_linkable_type: Assignment.name,
+        learning_objective_linkable_id: @assignment.id,
+        objective_id: objective_id,
+        course_id: @assignment.course_id
+    end unless assignment_params[:linked_objective_ids].nil?
+
+    @assignment.learning_objective_links.where.not(id: links.pluck(:id)).destroy_all if @assignment.learning_objective_links.any?
+  end
+
   def assignment_params
     params.require(:assignment).permit(
       :accepts_attachments,
@@ -117,6 +134,7 @@ class API::AssignmentsController < ApplicationController
       :threshold_points,
       :visible,
       :visible_when_locked,
+      linked_objective_ids: [],
 
       # We pass score levels through assignment update for now,
       # planning on replacing them with a single criterion rubric

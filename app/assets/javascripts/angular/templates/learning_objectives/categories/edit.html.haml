@@ -1,0 +1,34 @@
+%loading-message{"loading"=>"loCategoriesEditCtrl.loading", "message"=>"Loading..."}
+
+%form{"name"=>"categoryEditForm",
+      "ng-if"=>"!loCategoriesEditCtrl.loading"}
+  %section.form-section
+    .form-subsection
+      %h3.form-subtitle Category
+      %fieldset
+        .form-item
+          %label
+            Name
+            %input{"ng-model"=>"loCategoriesEditCtrl.category().name",
+                   "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
+                   "required"=>"",
+                   "type"=>"text",
+                   "placeholder"=>"Name (Required)"}
+
+        .form-item
+          %label{"for"=>"description"} Description
+          %textarea#description{"ng-model"=>"loCategoriesEditCtrl.category().description",
+                                "ng-blur"=>"loCategoriesEditCtrl.persistArticle()",
+                                "froala"=>"loCategoriesEditCtrl.froalaOptions"}
+
+  .right
+    %a.button{"type"=>"button",
+              "ng-click"=>"loCategoriesEditCtrl.persistArticle(true)",
+              "ng-disabled"=>"categoryEditForm.$invalid",
+              "ng-class"=>'{ "disabled": categoryEditForm.$invalid }'}
+      %i.fa.fa-save
+      Save Changes
+
+  #last-updated{"ng-if"=>"loCategoriesEditCtrl.lastUpdated() != null"}
+    .italic
+      Last Updated: {{loCategoriesEditCtrl.lastUpdated() | date:"MM/dd/yyyy 'at' h:mma"}}

@@ -179,6 +179,25 @@ en:
       title: "Start a #{ term_for :group }"
     edit:
       title: "Editing #{ @group.name }"
+  learning_objectives:
+    categories:
+      new:
+        title: "Add New Category"
+      edit:
+        title: "Editing #{ @category.name }"
+    links:
+      index:
+        title: "#{term_for(:learning_objectives)} Progress"
+    objectives:
+      index:
+        title: "#{ term_for :learning_objectives }"
+      new:
+        title: "Add New #{ term_for(:learning_objective) }"
+      edit:
+        title: "Editing #{ @objective.name }"
+    outcomes:
+      index:
+        title: "#{ term_for(:learning_objective) } Outcomes"
   rubric:
     design:
       title: "Design Rubric for #{ @assignment.name }"

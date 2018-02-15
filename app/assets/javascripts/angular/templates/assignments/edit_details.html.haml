@@ -76,3 +76,17 @@
             %i.fa.fa-info-circle
             .display-on-hover.hover-style
               Do you want to hide comparative analytics from {{ termFor("students")}} for this {{ termFor("assignment")}}?
+
+  .form-subsection.learning-objective-links(ng-if="hasLearningObjectives()")
+    .title
+      %h3.form-subtitle
+        Linked {{ termFor("learning_objectives") }}
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Should this {{ termFor("assignment") }} be linked to a {{ termFor("learning_objective") }}?
+
+    .learning-objective-checkboxes
+      %label(ng-repeat="lo in learningObjectives()")
+        %input(type="checkbox" name="linked_objective_ids[]" ng-checked="assignment.linked_objective_ids.indexOf(lo.objective_id) > -1" ng-value="lo.objective_id" ng-click="toggleObjectiveSelection(lo.objective_id)")
+          {{ lo.name }}

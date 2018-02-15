@@ -13,11 +13,12 @@
             assignment_id: @grade.assignment.id, course: current_course) }
     %hr.grading-divider
 
-  %grade-edit{'data-assignment-id'=>"#{@grade.assignment.id}",
-              'data-rubric-id'=>"#{@grade.assignment.rubric.try(:id)}",
-              'data-recipient-type'=>"student",
-              'data-recipient-id'=>"#{@grade.student.id}",
-              'data-submit-path'=>"#{@submit_path}",
-              'data-grade-next-path'=>"#{@grade_next_path}",
-              'data-is-active-course'=>"#{current_course.active?}",
-              'data-has-awardable-badges'=>"#{current_course.has_badges?}"}
+  %grade-edit{"data-assignment-id"=>"#{@grade.assignment.id}",
+              "data-rubric-id"=>"#{@grade.assignment.rubric.try(:id)}",
+              "data-recipient-type"=>"student",
+              "data-recipient-id"=>"#{@grade.student.id}",
+              "data-submit-path"=>"#{@submit_path}",
+              "data-grade-next-path"=>"#{@grade_next_path}",
+              "data-is-active-course"=>"#{current_course.active?}",
+              "data-has-awardable-badges"=>"#{current_course.has_badges?}",
+              "data-course-has-learning-objectives"=>"#{current_course.uses_learning_objectives? && @grade.assignment.learning_objectives.any?}"}

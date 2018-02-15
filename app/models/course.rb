@@ -76,6 +76,8 @@ class Course < ActiveRecord::Base
     c.has_many :course_analytics_exports
     c.has_many :events
     c.has_many :providers, as: :providee
+    c.has_many :learning_objective_categories
+    c.has_many :learning_objectives
   end
 
   has_many :users, through: :course_memberships
@@ -101,6 +103,13 @@ class Course < ActiveRecord::Base
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
+  enum learning_objective_term: {
+    "Learning Objectives": 0,
+    "Learning Goals": 1,
+    "Competencies": 2,
+    "Standards": 3
+  }
+
   def copy(copy_type, attributes={})
     if copy_type != "with_students"
       copy_with_associations(attributes.merge(lti_uid: nil, status: true), [])
@@ -112,6 +121,10 @@ class Course < ActiveRecord::Base
         Course.set_callback(:create, :after, :create_admin_memberships)
       end
     end
+  end
+
+  def uses_learning_objectives?
+    allows_learning_objectives? && has_learning_objectives?
   end
 
   def linked?(provider)

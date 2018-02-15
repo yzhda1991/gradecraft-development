@@ -415,6 +415,46 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Import Results')
   end
 
+  def learning_objectives_categories_edit
+    learning_objectives_objectives_index
+    breadcrumb("Edit #{objects[:category].name}")
+  end
+
+  def learning_objectives_objectives_linked_assignments
+    learning_objectives_objectives_index
+    breadcrumb("Linked Assignments")
+  end
+
+  def learning_objectives_objectives_mass_edit
+    learning_objectives_objectives_index
+    breadcrumb("Mass Edit")
+  end
+
+  def learning_objectives_categories_new
+    learning_objectives_objectives_index
+    breadcrumb("Add Category")
+  end
+
+  def learning_objectives_objectives_show
+    learning_objectives_objectives_index
+    breadcrumb("#{objects[:objective].name}")
+  end
+
+  def learning_objectives_objectives_edit
+    learning_objectives_objectives_index
+    breadcrumb("Editing #{objects[:objective].name}")
+  end
+
+  def learning_objectives_objectives_index
+    dashboard
+    breadcrumb(objects[:course].learning_objective_term, learning_objectives_objectives_path)
+  end
+
+  def learning_objectives_objectives_new
+    learning_objectives_objectives_index
+    breadcrumb("Add #{objects[:course].learning_objective_term}")
+  end
+
   def rubrics_index_for_copy
     dashboard
   end

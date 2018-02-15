@@ -7,21 +7,23 @@ Rails.application.routes.draw do
   #2. Announcements
   #3. Assignments, Submissions, Grades
   #4. Assignment Types
-  #5. Badges
-  #6. Challenges
-  #7. Integrations
-  #8. Courses
-  #9. Groups
-  #10. Informational Pages
-  #11. Grade Schemes
-  #12. Teams
-  #13. Users
-  #14. User Auth
-  #15. Uploads
-  #16. Events
-  #17. Predictor
-  #18. Exports
-  #19. Errors
+  #5. Assignment Type Weights
+  #6. Badges
+  #7. Challenges
+  #8. Integrations
+  #9. Courses
+  #10. Groups
+  #11. Informational Pages
+  #12. Grade Schemes
+  #13. Teams
+  #14. Users
+  #15. User Auth
+  #16. Uploads
+  #17. Events
+  #18. Predictor
+  #19. Exports
+  #20. Learning Objectives
+  #21. Errors
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -371,6 +373,9 @@ Rails.application.routes.draw do
         resources :criterion_grades, only: :index
         get "grade", to: 'grades#show'
         put "criterion_grades", to: "criterion_grades#update"
+        resources :learning_objectives, only: [], module: :learning_objectives do
+          put :update_outcome, to: "outcomes#update_outcome"
+        end
       end
       resources :grades, only: [], module: :assignments do
         get :show, on: :collection
@@ -383,6 +388,9 @@ Rails.application.routes.draw do
           member do
             put :update_fields, to: 'criterion_grades#group_update_fields'
           end
+        end
+        resources :learning_objectives, only: [], module: :learning_objectives do
+          put :update_outcome, to: "outcomes#group_update_outcome"
         end
         get 'grades', to: 'grades#group_index'
         get 'criterion_grades', to: 'criterion_grades#group_index'
@@ -476,6 +484,17 @@ Rails.application.routes.draw do
       end
     end
 
+    namespace :learning_objectives do
+      resources :objectives, only: [:index, :show, :create, :update, :destroy] do
+        get "outcomes", to: "outcomes#outcomes_for_objective"
+        resources :levels, only: [:create, :update, :destroy] do
+          put :update_order, on: :collection
+        end
+      end
+      resources :categories, only: [:index, :show, :create, :update, :destroy]
+      resources :outcomes, only: :index
+    end
+
     resources :levels, only: [:create, :update, :destroy]
     resources :level_badges, only: [:create, :destroy]
 
@@ -524,7 +543,17 @@ Rails.application.routes.draw do
     end
   end
 
-  #19. Errors
+  #20. Learning Objectives
+  namespace :learning_objectives do
+    resources :links, only: :index
+    resources :categories, only: [:new, :edit]
+    resources :objectives, only: [:new, :show, :index, :edit] do
+      get :mass_edit, on: :collection
+      resources :outcomes, only: :index
+    end
+  end
+
+  #21. Errors
   resource :errors, only: :show
 
   # root, bro
