@@ -37,7 +37,7 @@
                 %th Grades
                 %th.options Options
             %tbody.sort-assignments
-              - assignments = assignment_type.assignments.ordered.includes(:rubric, :assignment_type)
+              - assignments = assignment_type.assignments.ordered.includes(:rubric, :submissions, :unlock_conditions, :unlock_keys)
               - assignments.each do |assignment|
                 %tr{id: "assignment-#{assignment.id}"}
                   %td.draggable
