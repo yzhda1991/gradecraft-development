@@ -21,7 +21,7 @@ class CoursesController < ApplicationController
   before_action :save_referer, only: [:activate_all_students]
 
   def index
-    @courses = current_user.courses
+    @courses = current_user.courses.includes(:earned_badges)
     @can_create_courses = current_user_is_admin? || (!Rails.env.beta? && current_user_is_staff?)
   end
 
