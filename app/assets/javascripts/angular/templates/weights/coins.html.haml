@@ -8,9 +8,12 @@
       .coin-stack-count {{article.student_weight}}
       %i.coin-remove-icon.fa.fa-fw.fa-times
 
-  .no-coins-slot{{'ng-if' => '! hasWeights() && !weightsAvailableForArticle()'}} no {{termFor("weights")}}
+  .no-coins-slot{{'ng-if' => '!hasWeights() && !weightsAvailableForArticle()'}} no {{termFor("weights")}}
 
 .coins{{'ng-if'=>'!weightsOpen()'}}
-  .coin-stack
-    .coin-non-interactive{{'ng-repeat' => 'coin in usedWeightsRange()'}}
+  .coin-stack{{'ng-if' => 'article.student_weight'}}
+    .coin.coin--non-interactive{{'ng-repeat'=>'coin in coinBackStackRange()'}}
+    .coin.coin--non-interactive
+      .coin-stack-count {{article.student_weight}}
 
+  .no-coins-slot{{'ng-if' => '!article.student_weight'}} no {{termFor("weights")}}

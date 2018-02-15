@@ -1,3 +1,6 @@
+# This directive was explicitly for the /assignment_type_weights index page,
+# which is not currently an active route, and can probably be removed.
+# all student weighting currently is faciliated through the predictor.
 @gradecraft.directive 'assignmentTypeWeights', ['$q', 'AssignmentTypeService', ($q, AssignmentTypeService) ->
   WeightsCtrl = [()->
     vm = this
@@ -32,4 +35,3 @@
     templateUrl: 'weights/assignment_type_weights.html'
   }
 ]
-
