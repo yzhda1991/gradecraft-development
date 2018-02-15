@@ -22,4 +22,14 @@ class UserMailer < ApplicationMailer
     @user = user
     mail(to: @user.email, subject: "Welcome to GradeCraft!")
   end
+
+  def umich_resources_email(user)
+    @user = user
+    mail(to: @user.email, subject: "GradeCraft Resources!")
+  end
+
+  def app_resources_email(user)
+    @user = user
+    mail(to: @user.email, subject: "GradeCraft Resources!")
+  end
 end

@@ -10,6 +10,16 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.activation_needed_course_creation_email user
   end
 
+  def umich_resources_email
+    user = User.last
+    UserMailer.umich_resources_email user
+  end
+
+  def app_resources_email
+    user = User.last
+    UserMailer.app_resources_email user
+  end
+
   def activation_needed_email
     user = User.last
     user.activation_token = "blah"

@@ -857,6 +857,7 @@ ActiveRecord::Schema.define(version: 20180202191149) do
     t.datetime "activation_token_expires_at"
     t.boolean  "admin",                           default: false
     t.string   "time_zone",                       default: "Eastern Time (US & Canada)"
+    t.boolean  "received_resources",              default: false,                        null: false
     t.index ["activation_token"], name: "index_users_on_activation_token", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["first_name"], name: "index_users_on_first_name", using: :btree
