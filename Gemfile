@@ -112,6 +112,7 @@ group :development do
   gem 'foreman'
   gem 'rubystats'
   gem 'bullet'
+  gem 'lol_dba'
 end
 
 group :development, :test do
