@@ -42,7 +42,7 @@ describe API::LearningObjectives::LevelsController do
         level
         another_level = create :learning_objective_level, objective: objective
         put :update_order, params: { objective_id: objective.id, level_ids: [another_level.id, level.id] }, format: :json
-        expect(objective.reload.levels).to eq [another_level, level]
+        expect(objective.reload.levels).to match_array [another_level, level]
       end
     end
   end
