@@ -8,7 +8,7 @@
           %button.button-link.small#show-gradecraft-login.left.uppercase Admin
         - else
           = render partial: "user_sessions/gradecraft"
-          %button.button-link.small{"aria-label": "University of Michigan Login", href: saml_init_path } Login with Umich
+          %a.small.center{"aria-label": "University of Michigan Login", href: saml_init_path } Login with Umich
 
     - if !Rails.env.production?
       = render partial: "passwords/reset_form"
