@@ -34,6 +34,7 @@
           %td
             .right
               %ul.button-bar
+                %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button" if group.nil?
                 %li
                   - if grade.group_id.present?
                     = edit_group_grade_link_to assignment, grade.group, class: "button"
