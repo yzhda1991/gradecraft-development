@@ -118,6 +118,7 @@ class CoursesController < ApplicationController
 
   def publish
     authorize! :update, @course
+    authorize! :publish, @course
     @course.update(published: true)
     redirect_to dashboard_path, flash: {
       success: "This course has been published"

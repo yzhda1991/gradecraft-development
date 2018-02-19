@@ -227,6 +227,13 @@ describe CoursesController do
       end
     end
 
+    describe "PUT publish" do
+      it "does not allow publishing if the environment is app and the course is unpaid" do
+        stub_env "beta"
+        expect{ post :publish, params: { id: course.id } }.to raise_error CanCan::AccessDenied
+      end
+    end
+
     describe "protected routes" do
       it "redirect to root" do
         [

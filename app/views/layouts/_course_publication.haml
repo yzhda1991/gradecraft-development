@@ -1,5 +1,8 @@
 -# Top banner for faculty on all pages until a course is published
 - if !current_course.published
   .unpublished-course-notification
-    This Course is Currently Unpublished
-    %span.publish-button= link_to glyph(:rocket) + "Publish", publish_course_path(current_course), method: :put
+    - if CourseProctor.new(current_course).publishable? current_user
+      This Course is Currently Unpublished
+      %span.publish-button= link_to glyph(:rocket) + "Publish", publish_course_path(current_course), method: :put
+    - else
+      This Course Must Be Paid Before It Can Be Published

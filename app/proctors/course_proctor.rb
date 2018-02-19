@@ -18,6 +18,13 @@ class CourseProctor
     user.is_staff?(course) || user.is_admin?(course)
   end
 
+  # Defines whether the user has the ability to publish the course
+  def publishable?(user)
+    return true unless Rails.env.beta?
+    return true if user.is_admin? @course
+    @course.has_paid?
+  end
+
   def destroyable?(user)
     return false if course.nil? || user.nil?
     user.is_admin?(course)
