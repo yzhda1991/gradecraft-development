@@ -2,8 +2,10 @@ class GradebookExporter
 
   # gradebook spreadsheet export for course
   def gradebook(course)
+    binding.pry
     CSV.generate do |csv|
       csv << gradebook_columns(course)
+      binding.pry
       course.students.order_by_name.each do |student|
         csv << student_data_for(student, course)
       end
@@ -17,7 +19,7 @@ class GradebookExporter
   end
 
   def assignment_name_columns(course)
-    course.assignments.ordered.collect(&:name)
+    course.assignments.order(:assignment_type_id, :id).collect(&:name)
   end
 
   def gradebook_columns(course)
@@ -40,7 +42,7 @@ class GradebookExporter
     student_data << student.earned_badge_score_for_course(course)
 
     # add the grades for the necessary assignments
-    course.assignments.ordered.inject(student_data) do |memo, assignment|
+    course.assignments.order(:assignment_type_id, :id).inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       score = GradeProctor.new(grade).viewable? ? grade.final_points : ""
       memo << score
