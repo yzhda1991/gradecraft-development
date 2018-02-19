@@ -2,10 +2,8 @@ class GradebookExporter
 
   # gradebook spreadsheet export for course
   def gradebook(course)
-    binding.pry
     CSV.generate do |csv|
       csv << gradebook_columns(course)
-      binding.pry
       course.students.order_by_name.each do |student|
         csv << student_data_for(student, course)
       end
