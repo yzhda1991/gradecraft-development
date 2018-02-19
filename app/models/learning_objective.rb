@@ -22,6 +22,7 @@ class LearningObjective < ActiveRecord::Base
 
   def progress(student, include_details=false)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
+    return "Not Started" if cumulative_outcome.nil?
 
     if course.objectives_award_points?
       point_progress_for cumulative_outcome, include_details
@@ -37,7 +38,6 @@ class LearningObjective < ActiveRecord::Base
   end
 
   def grade_outcome_progress_for(cumulative_outcome, include_details)
-    return "Not Started" if cumulative_outcome.nil?
     return "Failed" if failed? cumulative_outcome
 
     outcomes = proficient_observed_outcomes(cumulative_outcome)
