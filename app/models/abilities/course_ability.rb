@@ -8,6 +8,10 @@ module CourseAbility
       CourseProctor.new(course).updatable? user
     end
 
+    can :publish, Course do |course|
+      CourseProctor.new(course).publishable? user
+    end
+
     can :destroy, Course do |course|
       CourseProctor.new(course).destroyable? user
     end
