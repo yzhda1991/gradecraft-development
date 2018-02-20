@@ -3,6 +3,9 @@ require "resque"
 require "resque/throttler"
 require "resque-retry" # retries failed/exceptioned jobs
 require "resque/failure/redis"
+require "resque/server"
+require 'resque-scheduler'
+require 'resque/scheduler/server'
 
 REDIS = Redis.new(:host =>  ENV["REDIS_HOST_IP"], :port => ENV["REDIS_PORT"])
 Resque.redis = REDIS
