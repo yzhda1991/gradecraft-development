@@ -1,0 +1,33 @@
+.button.right{"type"=>"button",
+              "ng-if"=>"!hideBackButton",
+              "ng-click"=>"hasPersistedEvents() || disableEdit()",
+              "ng-disabled"=>"hasPersistedEvents()",
+              "ng-class"=>"{ 'disabled': hasPersistedEvents() }"} Change Setup
+
+%section
+  %h2.form-title Edit Scheduled Events
+
+  %span.italic{"ng-if"=>"lastUpdated() != null"}
+    Last updated at: {{lastUpdated() | date:"MM/dd/yyyy 'at' h:mma"}}
+
+  %without_events{"ng-if"=>"events.length < 1"}
+    %h3.form-subtitle No attendance events present
+
+  %event{"ng-repeat"=>"event in events"}
+    %attendance-event-attribute-card{"data-event"=>"event", "data-event-index"=>"$index"}
+
+.submit-buttons
+  %ul
+    %li
+      .button.right{"type"=>"button",
+                    "ng-if"=>"!hideBackButton",
+                    "ng-click"=>"hasPersistedEvents() || disableEdit()",
+                    "ng-disabled"=>"hasPersistedEvents()",
+                    "ng-class"=>"{ 'disabled': hasPersistedEvents() }"} Change Setup
+    %li
+      .button.right{"type"=>"button",
+                    "ng-disabled"=>"form.$invalid",
+                    "ng-class"=>"{ 'disabled': form.$invalid }",
+                    "ng-click"=>"form.$valid && saveChanges()"}
+        %i.fa.fa-save
+        Submit

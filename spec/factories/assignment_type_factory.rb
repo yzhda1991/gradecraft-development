@@ -7,5 +7,10 @@ FactoryGirl.define do
       has_max_points true
       max_points { Faker::Number.number(5) }
     end
+
+    trait :attendance do
+      attendance true
+      name "Attendance"
+    end
   end
 end

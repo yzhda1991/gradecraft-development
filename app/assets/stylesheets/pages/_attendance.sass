@@ -1,0 +1,66 @@
+@import "../utilities/variables"
+
+.attendance-form
+  input.hasDatepicker
+    margin: 0
+    display: inline
+
+  textarea.event-description
+    width: 100%
+    min-height: 60px
+    resize: vertical
+
+  .attendance-header
+    padding: 0.25em 0
+    margin-bottom: 0.5rem
+    a
+      color: initial
+      &:hover
+        color: $color-blue-3
+        cursor: pointer
+
+  .event-card
+    display: block
+    border: 1px solid $color-grey-5
+    border-left: 3px solid $color-green-3
+    padding: 8px 16px
+    margin: .5rem 0
+    max-width: 750px
+    &.invalid
+      border-left: 3px solid $color-red-1
+
+  .form-item
+    &.slim-margin
+      margin: 0 0 0.5rem 0
+
+  .save-success
+    color: $color-green-3
+
+  .save-failure
+    color: $color-red-1
+
+  .save-pending
+    color: $color-yellow-1
+
+  .day-of-week-label
+    margin-right: 5px
+
+  .time-label
+    margin: 5px
+
+  .points-for-attendance
+    float: left
+    clear: none
+
+  .form-error
+    color: $color-red-1
+    font-style: italic
+
+  ul
+    li
+      &.day-of-week
+        margin-bottom: .5rem
+        list-style-type: none
+      &.error
+        font-weight: bold
+        color: $color-red-1

@@ -123,6 +123,30 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Editing ' + objects[:course].group_term + ' Grade')
   end
 
+  def attendance_index
+    dashboard
+    breadcrumb("Attendance", attendance_index_path)
+  end
+
+  def attendance_mass_edit
+    attendance_index
+    breadcrumb("Edit Attendance Events", mass_edit_attendance_index_path)
+  end
+
+  def attendance_new
+    attendance_index
+    breadcrumb("New Attendance Event", new_attendance_path)
+  end
+
+  def attendance_setup
+    dashboard
+    breadcrumb("Add Attendance Events", setup_attendance_index_path)
+  end
+
+  def auth_failure
+    dashboard
+  end
+
   def badges_index
     dashboard
     breadcrumb(objects[:course].badge_term.pluralize, badges_path)
