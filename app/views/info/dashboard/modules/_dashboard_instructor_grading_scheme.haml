@@ -1,7 +1,7 @@
 .chart-labels
   %span Level
   %span.right # of Students
-- current_course.grade_scheme_elements.order_by_points_desc.each do |element|
+- current_course.grade_scheme_elements.includes(:course).order_by_points_desc.each do |element|
   .progress.bar_magic
     .meter
       .level-name #{element.name} #{points element.lowest_points}

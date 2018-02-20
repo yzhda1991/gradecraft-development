@@ -41,7 +41,7 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def course_planner_assignments
-    assignments.select{ |assignment| course_planner?(assignment) }
+    assignments.includes(:assignment_type).select{ |assignment| course_planner?(assignment) }
   end
 
   def my_planner?(assignment)

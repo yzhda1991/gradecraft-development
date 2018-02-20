@@ -299,7 +299,7 @@ class User < ActiveRecord::Base
   ### BADGES
 
   def earned_badges_for_course(course)
-    earned_badges.where(course: course).student_visible
+    earned_badges.includes(:badge).where(course: course).student_visible
   end
 
   # includes badges not yet visible to students

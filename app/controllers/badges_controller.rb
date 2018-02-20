@@ -9,7 +9,7 @@ class BadgesController < ApplicationController
   def index
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
-      badges: @course.badges.ordered,
+      badges: @course.badges.includes(:unlock_keys, unlock_conditions: :unlockable).ordered,
       student: current_student
     })
   end

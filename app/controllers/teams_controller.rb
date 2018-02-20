@@ -6,7 +6,7 @@ class TeamsController < ApplicationController
   before_action :use_current_course, only: [:index, :show, :new, :edit]
 
   def index
-    @teams = @course.teams.order_by_rank.includes(:earned_badges)
+    @teams = @course.teams.includes(:leaders).order_by_rank
     if current_user_is_student?
       @team = current_student.team_for_course(@course)
     end

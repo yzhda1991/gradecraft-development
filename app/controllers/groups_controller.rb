@@ -6,11 +6,11 @@ class GroupsController < ApplicationController
   before_action :use_current_course
 
   def index
-    groups = @course.groups
+    groups = @course.groups.includes(assignment_groups: :assignment, group_memberships: :student)
     @pending_groups = groups.pending
     @approved_groups = groups.approved
     @rejected_groups = groups.rejected
-    @assignments = @course.assignments.group_assignments
+    @assignments = @course.assignments.includes(:assignment_groups).group_assignments
   end
 
   def show

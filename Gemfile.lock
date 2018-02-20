@@ -94,6 +94,9 @@ GEM
       debug_inspector (>= 0.0.1)
     bson (4.1.1)
     builder (3.2.3)
+    bullet (5.7.2)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11.0)
     byebug (9.0.5)
     cancancan (1.15.0)
     capybara (2.8.1)
@@ -420,6 +423,10 @@ GEM
     logging (2.1.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    lol_dba (2.1.4)
+      actionpack (>= 3.0)
+      activerecord (>= 3.0)
+      railties (>= 3.0)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -432,7 +439,7 @@ GEM
     mime-types-data (3.2016.0521)
     mini_magick (4.5.1)
     mini_portile2 (2.3.0)
-    minitest (5.11.1)
+    minitest (5.11.3)
     mongo (2.3.0)
       bson (~> 4.1)
     mongoid (6.0.0)
@@ -701,12 +708,13 @@ GEM
     tilt (2.0.8)
     timfel-krb5-auth (0.8.3)
     trollop (2.1.2)
-    tzinfo (1.2.4)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.1.0)
     uglifier (3.0.2)
       execjs (>= 0.3.0, < 3)
     underscore-rails (1.8.3)
+    uniform_notifier (1.11.0)
     valid_attribute (2.0.0)
     vegas (0.1.11)
       rack (>= 1.0.0)
@@ -743,6 +751,7 @@ DEPENDENCIES
   aws-sdk (~> 2)
   better_errors
   binding_of_caller
+  bullet
   cancancan
   capybara
   capybara-select2
@@ -772,6 +781,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   light-service
+  lol_dba
   mini_magick
   mongoid (~> 6.0.0)
   multi_json
