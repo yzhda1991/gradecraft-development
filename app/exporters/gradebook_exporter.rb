@@ -17,7 +17,13 @@ class GradebookExporter
   end
 
   def assignment_name_columns(course)
-    course.assignments.order(:assignment_type_id, :id).collect(&:name)
+    assignment_names = []
+    course.assignment_types.ordered.each do |type|
+      type.assignments.ordered.each do |assignment|
+        assignment_names << assignment.name
+      end
+    end
+    assignment_names
   end
 
   def gradebook_columns(course)
