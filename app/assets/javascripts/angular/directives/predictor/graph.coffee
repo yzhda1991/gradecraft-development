@@ -40,7 +40,7 @@
 
       # Don't let the hover boxes with grades info fall off the right side
       scope.gradeLevelPosition = (scale,lowRange,width,padding)->
-        alignWithTickMark = 8
+        alignWithTickMark = 3.5
         position = scale(lowRange)
         textWidth = angular.element(".grade_scheme-label-" + lowRange)[0].getBBox().width
         if position < padding
@@ -63,13 +63,13 @@
                 .on("mouseover", (gse)->
                   d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "visible")
                   d3.select(".grade_scheme-pointer-" + gse.lowest_points)
-                    .attr("transform","scale(4) translate(-.5,-3)")
+                    .attr("transform","scale(4) translate(-1.5,-3)")
                     .attr("fill", "#68A127")
                 )
                 .on("mouseout", (gse)->
                   d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "hidden")
                   d3.select(".grade_scheme-pointer-" + gse.lowest_points)
-                    .attr("transform","scale(2) translate(0,0)")
+                    .attr("transform","scale(2) translate(-1.5,0)")
                     .attr("fill", "black")
                 )
         g.append("path")

@@ -5,7 +5,7 @@ json.data @grade_scheme_elements do |gse|
     json.merge! gse.attributes
     json.name gse.name
     if @student.present?
-      json.locked gse.is_unlockable? && gse.is_unlocked_for_student(@student)
+      json.locked gse.is_unlockable? && !gse.is_unlocked_for_student?(@student)
     end
   end
 end
