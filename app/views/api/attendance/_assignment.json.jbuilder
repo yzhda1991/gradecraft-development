@@ -11,4 +11,5 @@ json.attributes do
   json.name assignment.name
   json.pass_fail assignment.pass_fail
   json.updated_at assignment.updated_at
+  json.media assignment.media.url
 end
