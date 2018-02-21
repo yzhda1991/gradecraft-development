@@ -69,6 +69,13 @@ class Assignment < ActiveRecord::Base
   scope :ordered, -> { order("position ASC") }
   acts_as_list scope: :assignment_type
 
+  scope :super_ordered, -> do
+    joins("INNER JOIN assignment_types ON "\
+      "assignment_types.id = assignments.assignment_type_id")
+      .order("assignment_types.position ASC, position ASC")
+      .references(:assignment_type, :assignment)
+  end
+
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where("assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL") }
 
