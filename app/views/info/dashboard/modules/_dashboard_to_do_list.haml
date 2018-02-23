@@ -13,7 +13,7 @@
     = render partial: "info/dashboard/modules/dashboard_to_do_list_items", locals: { presenter: presenter, assignment_list: presenter.my_planner_assignments, list_class: "my-planner-list" }
   - else
     .planner-subheader
-      %p 
+      %p
         %span.predictions-label Total Predictions
         %span.submissions-label Total Submissions
     = render partial: "info/dashboard/modules/dashboard_instructor_assignment_list", locals: { presenter: presenter, assignment_list: presenter.course_planner_assignments }

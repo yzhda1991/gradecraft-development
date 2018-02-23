@@ -21,7 +21,7 @@ json.data @challenges do |challenge|
     }
   end
 
-  json.relationships do
+  json.course_planner_assignments do
     if @predicted_earned_challenges.present? && @predicted_earned_challenges.where(challenge_id: challenge.id).present?
       json.prediction data: {
         type: "predicted_earned_challenges",

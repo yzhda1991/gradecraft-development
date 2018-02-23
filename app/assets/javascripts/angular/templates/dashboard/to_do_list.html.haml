@@ -1,0 +1,21 @@
+.loading-indicator.center{"ng-if"=>"toDoListCtrl.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+
+.to-do-list{"ng-if"=>"!toDoListCtrl.loading"}
+  .card-header
+    %h2{"ng-if"=>"toDoListCtrl.data.has_due_dates"} {{toDoListCtrl.termFor("assignments")}} Due This Week
+    %h2{"ng-if"=>"!toDoListCtrl.data.has_due_dates"} {{toDoListCtrl.termFor("assignment")}} Planner
+  .card-body#todo-list{"ng-if"=>"!toDoListCtrl.loading"}
+    .planner-filter.clearfix{"role"=>"toolbar", "aria-label"=>"Course Assignments or My Assignments", "ng-if"=>"toDoListCtrl.data.has_current_student"}
+      %button.button-filter.selected#course-planner{"role"=>"button"} Course Planner
+      %button.button-filter#my-planner{"role"=>"button"} My Planner
+
+      %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.dueThisWeekAssignments", "data-assignment-type"=>"course-planner"}
+      %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.plannerAssignments", "data-assignment-type"=>"my-planner"}
+
+    %div{"ng-if"=>"!toDoListCtrl.data.has_current_student"}
+      .planner-subheader
+        %p
+          %span.predictions-label Total Predictions
+          %span.submissions-label Total Submissions
+      %dashboard-instructor-assignment-list{"data-assignments"=>"toDoListCtrl.coursePlannerAssignments"}
