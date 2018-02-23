@@ -69,7 +69,7 @@ class Assignment < ActiveRecord::Base
   scope :ordered, -> { order("position ASC") }
   acts_as_list scope: :assignment_type
 
-  scope :super_ordered, -> do
+  scope :ordered_by_position, -> do
     joins("INNER JOIN assignment_types ON "\
       "assignment_types.id = assignments.assignment_type_id")
       .order("assignment_types.position ASC, position ASC")

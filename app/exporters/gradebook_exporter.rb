@@ -17,7 +17,7 @@ class GradebookExporter
   end
 
   def assignment_name_columns(course)
-    course.assignments.super_ordered.collect(&:name)
+    course.assignments.ordered_by_position.collect(&:name)
   end
 
   def gradebook_columns(course)
@@ -40,7 +40,7 @@ class GradebookExporter
     student_data << student.earned_badge_score_for_course(course)
 
     # add the grades for the necessary assignments
-    course.assignments.super_ordered.inject(student_data) do |memo, assignment|
+    course.assignments.ordered_by_position.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       score = GradeProctor.new(grade).viewable? ? grade.final_points : ""
       memo << score
