@@ -8,5 +8,8 @@
     = label_tag :user_password, "Password", class:"sr-only"
     = f.password_field :password, placeholder: "Password"
     = f.submit "Log in", class: "button login-button", alt: "Log in"
-%button.button-link.small#forgot-password Forgot your password?
 .clear
+
+.google-login
+  = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", class: "login-button", :method => :post
+%button.button-link.small#forgot-password Forgot your password?

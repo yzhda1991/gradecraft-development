@@ -5,9 +5,9 @@ require 'googleauth'
 module GoogleCalendarsHelper
   Calendar = Google::Apis::CalendarV3
 
-  def redirect_if_auth_not_present
+  def redirect_if_auth_not_present(current_user)
     # rubocop:disable AndOr
-    redirect_to "/auth/google_oauth2" and return unless google_auth_present?(current_user)
+    redirect_to "/auth/google_oauth2?prompt=consent" and return unless google_auth_present?(current_user)
   end
 
   def get_google_authorization(current_user)
@@ -93,7 +93,9 @@ module GoogleCalendarsHelper
     begin
       add(current_user, item)
       return {"redirect_to" => item, "message_type" => "notice", "message" => "Item " + item.name + " successfully added to your Google Calendar"}
-    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
+    rescue Signet::AuthorizationError
+      return {"redirect_to" => "/auth/google_oauth2?prompt=consent"}
+    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError
       return {"redirect_to" => item, "message_type" => "alert", "message" => "Google Calendar encountered an Error. Your " + item.class.name + " was NOT copied to your Google calendar."}
     end
   end
@@ -109,7 +111,9 @@ module GoogleCalendarsHelper
       end
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar"} unless item_list.count != item_list_filtered.count
       return {"message_type" => "notice", "message" => "#{item_list_filtered.count} item(s) successfully added to your Google Calendar. #{item_list.count - item_list_filtered.count} item(s) were not added because of missing due date(s)."}
-    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError, Signet::AuthorizationError
+    rescue Signet::AuthorizationError
+      return {"redirect_to" => "/auth/google_oauth2?prompt=consent"}
+    rescue Google::Apis::ServerError, Google::Apis::ClientError, Google::Apis::AuthorizationError
       return {"message_type" => "alert", "message" => "Google Calendar encountered an Error. Your item was NOT copied to your Google calendar."}
     end
   end
@@ -125,6 +129,11 @@ module GoogleCalendarsHelper
     else
       redirect_to hash["redirect_to"], notice: hash["message"] and return
     end
+  end
+
+  def load_from_activation_token
+    return unless current_user.nil? && !params[:id].nil?
+    @user = User.load_from_activation_token(params[:id])
   end
 
 end
