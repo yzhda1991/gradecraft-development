@@ -7,6 +7,7 @@ class Assignment < ActiveRecord::Base
   include UploadsMedia
   include UnlockableCondition
   include Analytics::AssignmentAnalytics
+  include S3Manager::Copying
 
   belongs_to :course
   belongs_to :assignment_type, -> { order("position ASC") }
@@ -87,13 +88,18 @@ class Assignment < ActiveRecord::Base
   # Relies on the course copy method to manage rubrics,
   # so that associated model ids are properly updated.
   def copy(attributes={}, lookup_store=nil)
-    ModelCopier.new(self, lookup_store).copy(
-      attributes: attributes,
-      associations: [
-        :assignment_score_levels,
-        { assignment_files: { assignment_id: :id }}
-      ]
-    )
+    Assignment.acts_as_list_no_update do
+      ModelCopier.new(self, lookup_store).copy(
+        attributes: attributes,
+        associations: [:assignment_score_levels],
+        options: {
+          lookups: [:courses, :assignment_types],
+          overrides: [
+            -> (copy) { copy_files copy }
+          ]
+        }
+      )
+    end
   end
 
   # Copy a specific assignment while prepending 'Copy of' to the name
@@ -321,5 +327,26 @@ class Assignment < ActiveRecord::Base
         { assignment_files: { assignment_id: :id }}
       ]
     )
+  end
+
+  def copy_files(copy)
+    copy.save unless copy.persisted?
+    copy_media(copy) if media.present?
+    copy_assignment_files(copy) if assignment_files.any?
+  end
+
+  # Copy assignment media
+  def copy_media(copy)
+    copy.update(media: nil, remove_media: true)
+    remote_upload(copy, self, "media", media.url)
+  end
+
+  # Copy assignment files
+  def copy_assignment_files(copy)
+    assignment_files.each do |af|
+      next unless exists_remotely?(af, "file")
+      assignment_file = copy.assignment_files.create filename: af[:filename]
+      remote_upload(assignment_file, af, "file", af.url)
+    end
   end
 end
