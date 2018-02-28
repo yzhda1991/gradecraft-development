@@ -79,6 +79,8 @@ class Course < ActiveRecord::Base
     c.has_many :providers, as: :providee
     c.has_many :learning_objective_categories
     c.has_many :learning_objectives
+    c.has_many :unlock_conditions
+    c.has_one  :copy_log
   end
 
   has_many :users, through: :course_memberships
@@ -126,6 +128,12 @@ class Course < ActiveRecord::Base
 
   def uses_learning_objectives?
     allows_learning_objectives? && has_learning_objectives?
+  end
+
+  def save_copy_logs(lookups)
+    copy_log = CopyLog.new(course: self)
+    copy_log.parse_log(lookups.lookup_hash)
+    copy_log.save
   end
 
   def linked?(provider)
@@ -241,6 +249,9 @@ class Course < ActiveRecord::Base
                                  :challenges,
                                  :grade_scheme_elements
                                ] + associations,
+                               cross_references: [
+                                 :unlock_conditions
+                               ],
                                options: {
                                  prepend: { name: "Copy of " },
                                  overrides: [-> (copy) { copy_syllabus copy }]

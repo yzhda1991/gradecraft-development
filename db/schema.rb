@@ -237,6 +237,13 @@ ActiveRecord::Schema.define(version: 20180215211948) do
     t.index ["course_id"], name: "index_challenges_on_course_id", using: :btree
   end
 
+  create_table "copy_logs", force: :cascade do |t|
+    t.text     "log"
+    t.integer  "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "course_analytics_exports", force: :cascade do |t|
     t.integer  "course_id",                             null: false
     t.integer  "owner_id",                              null: false
@@ -856,6 +863,8 @@ ActiveRecord::Schema.define(version: 20180215211948) do
     t.datetime "condition_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "course_id"
+    t.index ["course_id"], name: "index_unlock_conditions_on_course_id", using: :btree
     t.index ["condition_id", "condition_type"], name: "index_unlock_conditions_on_condition_id_and_condition_type", using: :btree
     t.index ["unlockable_id", "unlockable_type"], name: "index_unlock_conditions_on_unlockable_id_and_unlockable_type", using: :btree
   end

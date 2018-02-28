@@ -16,6 +16,10 @@ class ModelCopier
     copied.save
     lookup_store.store(original, copied)
     copy_associations options.delete(:associations) {[]}, attributes
+    # copy associations that cross-reference other models, and need to
+    # be run after all associations have already been copied.
+    copy_associations options.delete(:cross_references) {[]}, attributes
+    copied.save_copy_logs(lookup_store) if copied.respond_to?(:save_copy_logs)
     copied
   end
 
@@ -164,9 +168,14 @@ class ModelCopierLookups
 
       # :courses => :course_id
       id_key = "#{class_type.to_s.singularize}_id".to_sym
+      id_type = "#{class_type.to_s.singularize}_type".to_sym
 
       if original.respond_to?(id_key) && lookup_has_key?(class_type, original.send(id_key))
         h[id_key] = lookup(class_type, original.send(id_key))
+
+      # handle polymorphic relationships
+      elsif original.respond_to?(id_type) && lookup_has_key?(original.send(id_type).underscore.pluralize.to_sym, original.send(id_key))
+        h[id_key] = lookup(original.send(id_type).underscore.pluralize.to_sym, original.send(id_key))
       end
       h
     end

@@ -1,9 +1,14 @@
 class UnlockCondition < ActiveRecord::Base
+  include Copyable
+
+  belongs_to :course
   belongs_to :unlockable, polymorphic: true
   belongs_to :condition, polymorphic: true
 
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
+  # TODO: add course validation after rake task is run
+  # validates_presence_of :course
 
   # Returning the name of whatever badge or assignment has been identified as
   # the condition
@@ -59,6 +64,13 @@ class UnlockCondition < ActiveRecord::Base
       unlocked_count += 1 if self.is_complete?(student)
     end
     return unlocked_count
+  end
+
+  def copy(attributes={}, lookup_store=nil)
+    ModelCopier.new(self, lookup_store).copy(
+      attributes: attributes,
+      options: { lookups: [:courses, :unlockables, :conditions] }
+    )
   end
 
   protected
