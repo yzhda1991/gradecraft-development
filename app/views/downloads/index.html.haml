@@ -26,7 +26,7 @@
           %td First Name, Last Name, Email, Username, #{ term_for :team }, Raw and capped scores for all #{ term_for :assignment_types }
         %tr
           %td= link_to glyph("file-excel-o") + "#{term_for :assignment} Structure", export_structure_assignments_path(id: current_course.id, format: "csv")
-          %td Assignment ID, Name, Point Total, Description, Open At, Due At, Accept Until
+          %td Assignment ID, Name, Point Total, Description, Open At, Due At, Accept Until, Submission Count
         %tr
           %td= link_to glyph("file-excel-o") + "#{term_for :assignment} Submissions", submissions_path(id: current_course.id, format: "csv")
           %td Submission ID, Assignment ID, Assignment Name, Student ID, Group ID, Student Comment, Created At, Updated At, Score, Grader Feedback, Grade Last Updated
