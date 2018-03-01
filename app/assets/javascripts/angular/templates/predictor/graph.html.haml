@@ -23,6 +23,10 @@
       %rect.key{"width"=>"20", "height"=>"20", "mask"=>"url(#mask-stripe)"}
       %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
         Predicted Points that are Locked: {{lockedPointsPredicted() | number}}
+    %g{"ng-if"=>"true",  "id" => "svg-gse-locked-key", "transform" => "translate(300,120)"}
+      %rect.key{"width"=>"20", "height"=>"20"}
+      %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
+        Locked Grade Scheme Element
     %g{"id" => "svg-predicted-grade", "transform" => "translate(10,165)"}
       %text.description
         Predicted Final Outcome:

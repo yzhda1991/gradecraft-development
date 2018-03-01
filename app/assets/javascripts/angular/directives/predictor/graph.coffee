@@ -50,6 +50,20 @@
         else
           return position + alignWithTickMark
 
+      # Indicate Locked Grade Scheme elements by coloring them red
+      scope.pinColor = (gse)->
+        if gse.is_locked
+          "#D1495B" #red for locked GSE
+        else
+          "000000" #black
+
+      scope.pinTextColor = (gse)->
+        if gse.is_locked
+          "#D1495B" #red
+        else
+          "#68A127" #green
+
+
       # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graph
       # Renders D3 object
       scope.renderGradeLevelGraph = ()->
@@ -64,19 +78,20 @@
                   d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "visible")
                   d3.select(".grade_scheme-pointer-" + gse.lowest_points)
                     .attr("transform","scale(4) translate(-1.5,-3)")
-                    .attr("fill", "#68A127")
+                    .attr("fill", (gse)-> scope.pinTextColor(gse))
                 )
                 .on("mouseout", (gse)->
                   d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "hidden")
                   d3.select(".grade_scheme-pointer-" + gse.lowest_points)
                     .attr("transform","scale(2) translate(-1.5,0)")
-                    .attr("fill", "black")
+                    .attr("fill", (gse)-> scope.pinColor(gse))
                 )
         g.append("path")
           .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
           .attr("class",(gse)-> "grade_scheme-pointer-" + gse.lowest_points)
           # move the pins over so the point is on the right value
           .attr("transform","scale(2) translate(-1.5,0)")
+          .attr("fill", (gse)-> scope.pinColor(gse))
         txt = d3.select("#svg-grade-level-text").selectAll('g').data(PredictorService.gradeSchemeElements).enter()
                 .append('g')
                 .attr("class", (gse)->
@@ -93,7 +108,7 @@
               angular.element(".grade_scheme-label-" + gse.lowest_points)[0].getBBox().width + (padding * 2)
             )
           .attr("height", 22)
-          .attr("fill","#68A127")
+          .attr("fill", (gse)-> scope.pinTextColor(gse))
         txt.attr("transform", (gse)->
           "translate(" + scope.gradeLevelPosition(scale,gse.lowest_points,stats.width,padding) + "," + 0 + ")")
         graph = d3.select("svg").append("g")

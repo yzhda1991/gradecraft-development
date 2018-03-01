@@ -160,6 +160,10 @@
     subset = _.where(assignments, {is_locked: true})
     total = AssignmentService.assignmentsSubsetPredictedPoints(subset)
 
+  lockedGradeSchemeElementsPresent = ()->
+    debugger
+    _.where(assignments, {is_locked: true})
+
   # Total points actually earned to date
   allPointsEarned = ()->
     total = 0
