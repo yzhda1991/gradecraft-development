@@ -21,6 +21,7 @@ describe AssignmentType do
 
     it "is only valid with positive max points" do
       subject.max_points = -1000
+      subject.has_max_points = true
       expect(subject).to be_invalid
     end
 

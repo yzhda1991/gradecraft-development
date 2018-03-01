@@ -4,7 +4,7 @@ class AssignmentType < ActiveRecord::Base
 
   acts_as_list scope: :course
 
-  before_save :zero_max_points_if_unused
+  before_validation :zero_max_points_if_unused
 
   belongs_to :course
   has_many :assignments, -> { order("position ASC") }, dependent: :destroy
