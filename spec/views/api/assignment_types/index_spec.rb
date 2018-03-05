@@ -1,12 +1,12 @@
 describe "api/assignment_types/index" do
 
   before(:all) do
-    @course = create(:course,
+    @course = create(:course, :has_multipliers,
       assignment_term: "mission",
       total_weights: 6,
       weights_close_at: Time.now,
       max_weights_per_assignment_type: 4,
-      max_assignment_types_weighted: 2,
+      max_assignment_types_weighted: 2
     )
     assignment_type = create(:assignment_type, course: @course, student_weightable: true, has_max_points: true, max_points: 1234)
     @assignment_types = [assignment_type]
