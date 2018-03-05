@@ -25,7 +25,7 @@ class CourseGradeExporter
       student.score_for_course(course),
       student.grade_letter_for_course(course),
       student.grade_level_for_course(course),
-      student.earned_badges.count,
+      course.earned_badges.where(student_id: student.id).count,
       student.id,
       student.created_at,
       student.last_course_login(course),
