@@ -8,6 +8,17 @@ describe Course do
       allow(Rails).to receive(:env) { "production".inquiry }
       expect { subject.save }.to change(subject, :has_paid)
     end
+
+    it "resets the weights-oriented attributes if multipliers are't being used" do
+      subject.assign_attributes has_multipliers: false,
+        total_weights: 3,
+        max_weights_per_assignment_type: 2,
+        max_assignment_types_weighted: 1
+      subject.run_callbacks :validation
+      expect(subject).to have_attributes(total_weights: nil,
+        max_weights_per_assignment_type: nil,
+        max_assignment_types_weighted: nil)
+    end
   end
 
   describe "validations" do
@@ -565,15 +576,15 @@ describe Course do
   end
 
   describe "#assignment_weight_spent_for_student(student)" do
+    subject { create :course_with_weighting, total_weights: 4 }
+
     it "returns false if the student has not yet spent enough weights" do
-      subject.total_weights = 4
       student = create(:user, courses: [subject], role: :student)
       assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(false)
     end
 
     it "returns true if the student has spent enough weights" do
-      subject.total_weights = 4
       student = create(:user, courses: [subject], role: :student)
       assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
