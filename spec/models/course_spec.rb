@@ -41,8 +41,15 @@ describe Course do
   end
 
   describe "#copy" do
-    let(:course) { create :course }
     subject { course.copy nil }
+    let(:course) { create :course }
+
+    it "throws an exception if validation fails" do
+      result = double(has_errors: true)
+      validator = instance_double("CopyValidator", validate: result)
+      allow(CopyValidator).to receive(:new).and_return validator
+      expect{ subject }.to raise_error InvalidAssociationError
+    end
 
     it "makes a duplicated copy of itself" do
       expect(subject).to_not eq course
@@ -97,8 +104,8 @@ describe Course do
   end
 
   describe "#copy with students" do
-    let!(:student) { create(:course_membership, :student, course: subject).user }
     subject { create :course }
+    let!(:student) { create(:course_membership, :student, course: subject).user }
 
     it "turns off the create_admin_memberships callback" do
       expect_any_instance_of(Course).to_not receive(:create_admin_memberships)

@@ -86,20 +86,26 @@ class CoursesController < ApplicationController
 
   def copy
     authorize! :read, @course
-    duplicated = @course.copy(params[:copy_type])
-    if duplicated.save
-      if !current_user_is_admin? && current_user.role(duplicated).nil?
-        duplicated.course_memberships.create(user: current_user, role: current_role)
+
+    begin
+      duplicated = @course.copy(params[:copy_type])
+
+      if duplicated.save
+        if !current_user_is_admin? && current_user.role(duplicated).nil?
+          duplicated.course_memberships.create(user: current_user, role: current_role)
+        end
+        duplicated.recalculate_student_scores unless duplicated.student_count.zero?
+        session[:course_id] = duplicated.id
+        redirect_to edit_course_path(duplicated.id), flash: {
+          notice: "#{@course.name} successfully copied"
+        }
+      else
+        redirect_to courses_path, flash: {
+          alert: "#{@course.name} was not successfully copied"
+        }
       end
-      duplicated.recalculate_student_scores unless duplicated.student_count.zero?
-      session[:course_id] = duplicated.id
-      redirect_to edit_course_path(duplicated.id), flash: {
-        notice: "#{@course.name} successfully copied"
-      }
-    else
-      redirect_to courses_path, flash: {
-        alert: "#{@course.name} was not successfully copied"
-      }
+    rescue InvalidAssociationError => e
+      redirect_to courses_path, flash: { error: "Failed to copy course.\nOne or more associations were invalid on #{@course.name}" } and return
     end
   end
 

@@ -116,12 +116,16 @@ class Course < ActiveRecord::Base
   }
 
   def copy(copy_type, attributes={})
+    assoc = copy_type != "with_students" ? [] : [:course_memberships, :teams]
+    result = CopyValidator.new.validate self, overrides: assoc
+    raise InvalidAssociationError.new(result) if result.has_errors
+
     if copy_type != "with_students"
-      copy_with_associations(attributes.merge(lti_uid: nil, status: true), [])
+      copy_with_associations(attributes.merge(lti_uid: nil, status: true), assoc)
     else
       begin
         Course.skip_callback(:create, :after, :create_admin_memberships)
-        copy_with_associations(attributes.merge(lti_uid: nil, status: true), [:course_memberships, :teams])
+        copy_with_associations(attributes.merge(lti_uid: nil, status: true), assoc)
       ensure
         Course.set_callback(:create, :after, :create_admin_memberships)
       end

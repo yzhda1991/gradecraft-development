@@ -71,6 +71,12 @@ describe CoursesController do
     end
 
     describe "POST copy" do
+      it "returns an error if there are validation errors" do
+        allow_any_instance_of(Course).to receive(:copy).and_raise InvalidAssociationError, {}
+        post :copy, params: { id: course.id }
+        expect(response).to redirect_to courses_path
+      end
+
       it "creates a duplicate course" do
         expect{ post :copy, params: { id: course.id }}.to change(Course, :count).by(1)
       end
