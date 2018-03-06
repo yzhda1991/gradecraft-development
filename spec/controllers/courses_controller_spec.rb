@@ -74,7 +74,7 @@ describe CoursesController do
       it "returns an error if there are validation errors" do
         allow_any_instance_of(Course).to receive(:copy).and_raise InvalidAssociationError, {}
         post :copy, params: { id: course.id }
-        expect(response).to redirect_to courses_path
+        expect(response).to have_http_status :internal_server_error
       end
 
       it "creates a duplicate course" do

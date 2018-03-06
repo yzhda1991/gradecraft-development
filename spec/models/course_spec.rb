@@ -45,7 +45,7 @@ describe Course do
     let(:course) { create :course }
 
     it "throws an exception if validation fails" do
-      result = double(has_errors: true)
+      result = double(has_errors: true, details: { message: "Blah blah" })
       validator = instance_double("CopyValidator", validate: result)
       allow(CopyValidator).to receive(:new).and_return validator
       expect{ subject }.to raise_error InvalidAssociationError

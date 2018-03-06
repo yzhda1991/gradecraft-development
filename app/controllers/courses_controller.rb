@@ -105,7 +105,7 @@ class CoursesController < ApplicationController
         }
       end
     rescue InvalidAssociationError => e
-      redirect_to courses_path, flash: { error: "Failed to copy course.\nOne or more associations were invalid on #{@course.name}" } and return
+      render json: { message: e.message, details: e.details }, status: :internal_server_error
     end
   end
 
