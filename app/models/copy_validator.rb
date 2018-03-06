@@ -74,7 +74,10 @@ class CopyValidatorResult
   attr_reader :type, :id, :valid, :errors
 
   def initialize(type, id, valid, errors)
-    @type, @id, @valid, @errors = type, id, valid, errors
+    @type = type
+    @id = id
+    @valid = valid
+    @errors = errors
   end
 
   def to_h
