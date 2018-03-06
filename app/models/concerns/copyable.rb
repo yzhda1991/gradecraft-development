@@ -1,3 +1,5 @@
+require_relative "../copy_validator"
+
 module Copyable
   extend ActiveSupport::Concern
 
