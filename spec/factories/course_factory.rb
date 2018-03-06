@@ -8,6 +8,7 @@ FactoryGirl.define do
     published true
 
     factory :course_with_weighting do
+      has_multipliers true
       total_weights 6
       max_weights_per_assignment_type 4
       max_assignment_types_weighted 2
@@ -24,6 +25,10 @@ FactoryGirl.define do
     trait :uses_learning_objectives do
       allows_learning_objectives true
       has_learning_objectives true
+    end
+
+    trait :has_multipliers do
+      has_multipliers true
     end
   end
 end

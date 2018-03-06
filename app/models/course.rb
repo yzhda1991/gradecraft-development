@@ -6,6 +6,8 @@ class Course < ActiveRecord::Base
   include Analytics::CourseAnalytics
   include S3Manager::Copying
 
+  # Callbacks
+  before_validation :reset_weight_fields_if_unused
   before_create :mark_umich_as_paid
   after_create :create_admin_memberships
 
@@ -229,6 +231,16 @@ class Course < ActiveRecord::Base
   end
 
   private
+
+  # If not using multipliers, reset the related columns
+  def reset_weight_fields_if_unused
+    return if self.has_multipliers?
+
+    self.assign_attributes total_weights: nil,
+      weights_close_at: nil,
+      max_weights_per_assignment_type: nil,
+      max_assignment_types_weighted: nil
+  end
 
   def create_admin_memberships
     User.where(admin: true).each do |admin|
