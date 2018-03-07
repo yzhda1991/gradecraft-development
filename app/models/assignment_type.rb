@@ -150,6 +150,16 @@ class AssignmentType < ActiveRecord::Base
     score
   end
 
+  # checks to see if the assignment type has any assignments within it that the
+  # student can see - used to hide assignment type's external list item on the
+  # student index until at least one assignment within it has been made visible
+  # to that student
+  def visible_assignments_for_student?(student)
+    assignments.each do |a|
+      return false unless a.visible_for_student?(student)
+    end.any?
+  end
+
   private
 
   def zero_max_points_if_unused
