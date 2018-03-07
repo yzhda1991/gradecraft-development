@@ -59,7 +59,7 @@ class AssignmentsController < ApplicationController
       assignment = current_course.assignments.find(params[:id])
       duplicated = assignment.copy_with_prepended_name
       redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
-    rescue InvalidAssociationError => e
+    rescue CopyValidationError => e
       render json: { message: e.message, details: e.details }, status: :internal_server_error
     end
   end

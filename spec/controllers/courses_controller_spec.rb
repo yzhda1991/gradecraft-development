@@ -72,7 +72,7 @@ describe CoursesController do
 
     describe "POST copy" do
       it "returns an error if there are validation errors" do
-        allow_any_instance_of(Course).to receive(:copy).and_raise InvalidAssociationError, {}
+        allow_any_instance_of(Course).to receive(:copy).and_raise CopyValidationError, {}
         post :copy, params: { id: course.id }
         expect(response).to have_http_status :internal_server_error
       end

@@ -48,7 +48,7 @@ describe Course do
       result = double(has_errors: true, details: { message: "Blah blah" })
       validator = instance_double("CopyValidator", validate: result)
       allow(CopyValidator).to receive(:new).and_return validator
-      expect{ subject }.to raise_error InvalidAssociationError
+      expect{ subject }.to raise_error CopyValidationError
     end
 
     it "makes a duplicated copy of itself" do

@@ -297,7 +297,7 @@ describe Assignment do
       result = double(has_errors: true, details: { message: "Blah blah" })
       validator = instance_double("CopyValidator", validate: result)
       allow(CopyValidator).to receive(:new).and_return validator
-      expect{ subject }.to raise_error InvalidAssociationError
+      expect{ subject }.to raise_error CopyValidationError
     end
 
     it "prepends the name with 'Copy of'" do

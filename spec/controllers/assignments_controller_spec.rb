@@ -32,7 +32,7 @@ describe AssignmentsController do
 
     describe "POST copy" do
       it "returns an error if there are validation errors" do
-        allow_any_instance_of(Assignment).to receive(:copy_with_prepended_name).and_raise InvalidAssociationError, {}
+        allow_any_instance_of(Assignment).to receive(:copy_with_prepended_name).and_raise CopyValidationError, {}
         post :copy, params: { id: assignment.id }
         expect(response).to have_http_status :internal_server_error
       end

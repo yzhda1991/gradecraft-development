@@ -104,7 +104,7 @@ class CoursesController < ApplicationController
           alert: "#{@course.name} was not successfully copied"
         }
       end
-    rescue InvalidAssociationError => e
+    rescue CopyValidationError => e
       render json: { message: e.message, details: e.details }, status: :internal_server_error
     end
   end

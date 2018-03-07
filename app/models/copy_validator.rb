@@ -38,28 +38,36 @@ class CopyValidator
 
   private
 
+  # Validate a single model and append result
   def validate_model(model)
-    append_result(model_type_as_symbol(model.class.name.pluralize), result_hash(model))
+    errors = model.errors.full_messages unless model.valid?
+    result = CopyValidatorResult.new(model_type_as_symbol(model.class.name), model.id, model.valid?, errors)
+    append_result(model_type_as_symbol(model.class.name.pluralize), result.to_h)
   end
 
+  # Recursively validate associated models
+  def validate_models(models, type)
+    if models.is_a? Enumerable  # e.g. assignments
+      models.each do |am|
+        validate(am, { lookup_key: type })
+      end
+    else  # e.g. rubric
+      validate(models, { lookup_key: type })
+    end
+  end
+
+  # Example: model is a course
+  # For every corresponding association to be copied in the COPY_ASSOCIATIONS hash,
+  # i.e. [:badges, :assignment_types, :rubrics, :challenges, :grade_scheme_elements]
+  # validate all related models, whether one or many
+  # course.badges, course.assignment_types, etc.
   def validate_associations(model, associations)
     associations.each do |a|
       assoc = model.send(a)
       next if assoc.nil?
 
-      if assoc.is_a? Enumerable
-        assoc.each do |am|
-          validate(am, { lookup_key: a })
-        end
-      else
-        validate(assoc, { lookup_key: a })
-      end
+      validate_models assoc, a
     end
-  end
-
-  def result_hash(model)
-    errors = model.errors.full_messages unless model.valid?
-    CopyValidatorResult.new(model_type_as_symbol(model.class.name), model.id, model.valid?, errors).to_h
   end
 
   def append_result(model_name, validation)
@@ -92,7 +100,7 @@ class CopyValidatorResult
   end
 end
 
-class InvalidAssociationError < StandardError
+class CopyValidationError < StandardError
   attr_reader :details
 
   def initialize(details, msg="One or more associations were invalid")
