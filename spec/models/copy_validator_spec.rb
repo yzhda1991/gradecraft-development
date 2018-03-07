@@ -17,6 +17,20 @@ describe CopyValidator do
       expect(result.details[:grade_scheme_elements].length).to eq 3
     end
 
+    it "checks validation on any additional associations" do
+      assignment = assignments.first
+      assignment.update_columns max_group_size: -1
+      create :rubric_with_criteria, assignment: assignment, course: course
+
+      result = subject.validate assignment, lookup_key: :assignments, associations: [:rubric]
+
+      expect(result.has_errors).to eq true
+      expect(result.details[:assignments].length).to eq 1
+      expect(result.details[:rubrics].length).to eq 1
+      expect(result.details[:criteria].length).to eq assignment.rubric.criteria.length
+      expect(result.details[:levels].length).to eq assignment.rubric.criteria.sum(&:levels).length
+    end
+
     it "returns information regarding whether a model is valid or not" do
       assignment_type.update_columns max_points: -1
       assignment_type.valid?

@@ -21,7 +21,7 @@ class CopyValidator
   # model: the model to validate
   # lookup_key: should match the key as specified in COPY_ASSOCIATIONS hash, e.g. criteria as opposed to criterion
   # options: hash containing either
-  #   - lookup_key: a custom key as defined in the COPY_ASSOCIATIONS constant
+  #   - lookup_key: a custom key (symbol) as defined in the COPY_ASSOCIATIONS constant
   #   - associations: any additional associations that are being copied and need validating
   def validate(model, options={})
     lookup_key = options.delete(:lookup_key) || model_type_as_symbol(model.class.name)
@@ -44,8 +44,15 @@ class CopyValidator
 
   def validate_associations(model, associations)
     associations.each do |a|
-      model.send(a).each do |am|
-        validate(am, { lookup_key: a })
+      assoc = model.send(a)
+      next if assoc.nil?
+
+      if assoc.is_a? Enumerable
+        assoc.each do |am|
+          validate(am, { lookup_key: a })
+        end
+      else
+        validate(assoc, { lookup_key: a })
       end
     end
   end
