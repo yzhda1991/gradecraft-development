@@ -1,5 +1,7 @@
 require_relative "../copy_validator"
 
+# NOTE: If at any point we add additional associations for copying, the
+# validation schema needs to be updated in the CopyValidator class
 module Copyable
   extend ActiveSupport::Concern
 
