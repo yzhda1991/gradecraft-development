@@ -105,13 +105,20 @@ class Assignment < ActiveRecord::Base
   # Copy a specific assignment while prepending 'Copy of' to the name
   # Used for copying within the same course
   def copy_with_prepended_name(attributes={})
-    copy_with_associations attributes, {
-      prepend: { name: "Copy of " },
-      overrides: [
-        -> (copy) { copy.rubric = self.rubric.copy if self.rubric.present? },
-        -> (copy) { copy.rubric.course_id = copy.course_id if self.rubric.present? },
-      ]
-    }
+    ModelCopier.new(self).copy(
+      attributes: attributes.merge(position: nil),
+      associations: [:assignment_score_levels],
+      options: {
+        prepend: { name: "Copy of " },
+        overrides: [
+          -> (copy) do
+            copy_files copy
+            copy.rubric = self.rubric.copy if self.rubric.present?
+            copy.rubric.course_id = copy.course_id if self.rubric.present?
+          end
+        ]
+      }
+    )
   end
 
   def to_json(options = {})
@@ -316,17 +323,6 @@ class Assignment < ActiveRecord::Base
 
   def reset_default_for_nil_values
     self.threshold_points = 0 if self.threshold_points.nil?
-  end
-
-  def copy_with_associations(attributes, options)
-    ModelCopier.new(self).copy(
-      options: options,
-      attributes: attributes,
-      associations: [
-        :assignment_score_levels,
-        { assignment_files: { assignment_id: :id }}
-      ]
-    )
   end
 
   def copy_files(copy)
