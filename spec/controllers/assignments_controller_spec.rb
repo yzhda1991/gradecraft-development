@@ -18,7 +18,6 @@ describe AssignmentsController do
     describe "GET settings" do
       it "returns title and assignments" do
         get :settings
-        # TODO: confirm multiple assignments are chronological and alphabetical
         expect(assigns(:assignment_types)).to eq([assignment_type])
         expect(response).to render_template(:settings)
       end
@@ -61,8 +60,6 @@ describe AssignmentsController do
         expect(duplicated.rubric).to_not be_nil
         expect(duplicated.rubric.criteria.first.name).to eq "Rubric 1"
         expect(duplicated.rubric.criteria.first.levels.first.name).to eq "Full Credit"
-        # expect(duplicated.rubric.criteria.first.levels.first.level_badges.count).to \
-        #   eq 1
       end
 
       it "redirects to the edit page for the duplicated assignment" do
