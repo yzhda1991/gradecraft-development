@@ -1,5 +1,5 @@
 describe CopyValidator do
-  subject { described_class.new }
+  let(:subject) { described_class.new }
 
   let(:course) { create :course }
   let!(:assignment_type) { create :assignment_type, course: course }
