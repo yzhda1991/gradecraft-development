@@ -114,7 +114,6 @@ class Assignment < ActiveRecord::Base
           -> (copy) do
             copy_files copy
             copy.rubric = self.rubric.copy if self.rubric.present?
-            copy.rubric.course_id = copy.course_id if self.rubric.present?
           end
         ]
       }
