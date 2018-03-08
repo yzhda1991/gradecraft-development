@@ -2,7 +2,7 @@ class CopyValidator
   # The definitive structure for which associations are copied and should be validated
   # Has to be manually updated for now each time an association is added to the copy
   # process
-  COPY_ASSOCIATIONS ||= {
+  COPY_ASSOCIATIONS = {
     course: [:badges, :assignment_types, :rubrics, :challenges, :grade_scheme_elements],
     assignment_types: [:assignments],
     assignments: [:assignment_score_levels],
@@ -27,7 +27,7 @@ class CopyValidator
     lookup_key = options.delete(:lookup_key) || model_type_as_symbol(model.class.name)
     additional_associations = options.delete(:associations)
 
-    associations = COPY_ASSOCIATIONS[lookup_key]
+    associations = COPY_ASSOCIATIONS[lookup_key].clone
     associations << additional_associations unless additional_associations.blank?
 
     validate_model model
