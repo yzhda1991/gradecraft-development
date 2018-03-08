@@ -1,27 +1,28 @@
 // Display top headers for expandable list of assignments.
 .assignment-index-container{role: "tablist"}
   - presenter.assignment_types.each do |assignment_type|
-    .assignment_type.student{id: "assignment-type-#{assignment_type.id}" }
-      .assignment-type-bar.collapse{role: "tab"}
-        %h2.assignment-type-name= glyph('chevron-circle-right') + "#{assignment_type.try(:name)}"
-        .points-summary
-          // Display the student's points out of assignment total, if there is an assignment max value. Else
-          // display the student's points out of the the current point total for assignment.
-          .points-bar-graph
-            .points-bar-graph-fill{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
-          %span.assignment-type-points #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
+    - if assignment_type.visible_assignments_for_student?(presenter.student)
+      .assignment_type.student{id: "assignment-type-#{assignment_type.id}" }
+        .assignment-type-bar.collapse{role: "tab"}
+          %h2.assignment-type-name= glyph('chevron-circle-right') + "#{assignment_type.try(:name)}"
+          .points-summary
+            // Display the student's points out of assignment total, if there is an assignment max value. Else
+            // display the student's points out of the the current point total for assignment.
+            .points-bar-graph
+              .points-bar-graph-fill{:style => "width: #{(assignment_type.visible_score_for_student(presenter.student)).to_f / (assignment_type.total_points_for_student(presenter.student).to_f).to_f * 100}%;"}
+            %span.assignment-type-points #{ points assignment_type.visible_score_for_student(presenter.student) }/#{ points assignment_type.total_points_for_student(presenter.student) }
 
-      .assignment-type-container{role: "tabpanel"}
-        - if presenter.assignment_type_message?(assignment_type)
-          .assignment-type-message
-            - if assignment_type.description?
-              %h3 #{assignment_type.name} Guidelines
-              %p.description= raw assignment_type.description
-            - if assignment_type.is_capped?
-              .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
-            - if assignment_type.count_only_top_grades?
-              .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
+        .assignment-type-container{role: "tabpanel"}
+          - if presenter.assignment_type_message?(assignment_type)
+            .assignment-type-message
+              - if assignment_type.description?
+                %h3 #{assignment_type.name} Guidelines
+                %p.description= raw assignment_type.description
+              - if assignment_type.is_capped?
+                .italic This #{ (term_for :assignment_type).downcase } is capped at #{ points assignment_type.max_points } points.
+              - if assignment_type.count_only_top_grades?
+                .italic You have completed #{ assignment_type.count_grades_for(current_student) } #{ (term_for :assignments).downcase } in this category. Your top #{ assignment_type.top_grades_counted } grades count towards your course score.
 
-        // Display the assignments for each assignment type
-        .student-assignment-list
-          = render partial: "assignments/index_student/assignment_table", locals: { presenter: presenter, assignment_type: assignment_type }
+          // Display the assignments for each assignment type
+          .student-assignment-list
+            = render partial: "assignments/index_student/assignment_table", locals: { presenter: presenter, assignment_type: assignment_type }
