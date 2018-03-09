@@ -27,7 +27,7 @@ class CopyValidator
     lookup_key = options.delete(:lookup_key) || model_type_as_symbol(model.class.name)
     additional_associations = options.delete(:associations)
 
-    associations = COPY_ASSOCIATIONS[lookup_key].clone
+    associations = COPY_ASSOCIATIONS[lookup_key].try(:clone)
     associations << additional_associations unless additional_associations.blank?
 
     validate_model model
