@@ -105,6 +105,9 @@ class Assignment < ActiveRecord::Base
   # Copy a specific assignment while prepending 'Copy of' to the name
   # Used for copying within the same course
   def copy_with_prepended_name(attributes={})
+    result = CopyValidator.new.validate(self, lookup_key: :assignments, associations: [:rubric])
+    raise CopyValidationError.new(result.details, "Failed to copy #{self.name} due to validation errors") if result.has_errors
+
     ModelCopier.new(self).copy(
       attributes: attributes.merge(position: nil),
       associations: [:assignment_score_levels],

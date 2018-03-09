@@ -18,7 +18,6 @@ describe AssignmentsController do
     describe "GET settings" do
       it "returns title and assignments" do
         get :settings
-        # TODO: confirm multiple assignments are chronological and alphabetical
         expect(assigns(:assignment_types)).to eq([assignment_type])
         expect(response).to render_template(:settings)
       end
@@ -32,6 +31,12 @@ describe AssignmentsController do
     end
 
     describe "POST copy" do
+      it "returns an error if there are validation errors" do
+        allow_any_instance_of(Assignment).to receive(:copy_with_prepended_name).and_raise CopyValidationError, {}
+        post :copy, params: { id: assignment.id }
+        expect(response).to have_http_status :internal_server_error
+      end
+
       it "duplicates an assignment" do
         post :copy, params: { id: assignment.id }
         expect expect(course.assignments.count).to eq(2)
@@ -55,8 +60,6 @@ describe AssignmentsController do
         expect(duplicated.rubric).to_not be_nil
         expect(duplicated.rubric.criteria.first.name).to eq "Rubric 1"
         expect(duplicated.rubric.criteria.first.levels.first.name).to eq "Full Credit"
-        # expect(duplicated.rubric.criteria.first.levels.first.level_badges.count).to \
-        #   eq 1
       end
 
       it "redirects to the edit page for the duplicated assignment" do

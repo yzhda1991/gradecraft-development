@@ -71,6 +71,12 @@ describe CoursesController do
     end
 
     describe "POST copy" do
+      it "returns an error if there are validation errors" do
+        allow_any_instance_of(Course).to receive(:copy).and_raise CopyValidationError, {}
+        post :copy, params: { id: course.id }
+        expect(response).to have_http_status :internal_server_error
+      end
+
       it "creates a duplicate course" do
         expect{ post :copy, params: { id: course.id }}.to change(Course, :count).by(1)
       end

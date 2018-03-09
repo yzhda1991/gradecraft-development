@@ -55,9 +55,13 @@ class AssignmentsController < ApplicationController
   # Duplicate an assignment - important for super repetitive items like
   # attendance and reading reactions
   def copy
-    assignment = current_course.assignments.find(params[:id])
-    duplicated = assignment.copy_with_prepended_name
-    redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
+    begin
+      assignment = current_course.assignments.find(params[:id])
+      duplicated = assignment.copy_with_prepended_name
+      redirect_to edit_assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
+    rescue CopyValidationError => e
+      render json: { message: e.message, details: e.details }, status: :internal_server_error
+    end
   end
 
   def destroy

@@ -293,6 +293,13 @@ describe Assignment do
     let(:assignment) { build :assignment }
     subject { assignment.copy_with_prepended_name }
 
+    it "raises an error if the validation fails" do
+      result = double(has_errors: true, details: { message: "Blah blah" })
+      validator = instance_double("CopyValidator", validate: result)
+      allow(CopyValidator).to receive(:new).and_return validator
+      expect{ subject }.to raise_error CopyValidationError
+    end
+
     it "prepends the name with 'Copy of'" do
       assignment.name = "Table of elements"
       expect(subject.name).to eq "Copy of Table of elements"
@@ -310,7 +317,7 @@ describe Assignment do
 
     it "copies the assignment score levels" do
       assignment.save
-      assignment.assignment_score_levels.create
+      create :assignment_score_level, assignment: assignment
       expect(subject.assignment_score_levels.size).to eq 1
       expect(subject.assignment_score_levels.map(&:assignment_id)).to eq [subject.id]
     end
