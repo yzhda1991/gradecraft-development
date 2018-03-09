@@ -454,7 +454,7 @@ GEM
     newrelic_rpm (4.3.0.335)
     ng-rails-csrf (0.1.0)
     nio4r (1.2.1)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     nokogumbo (1.4.9)
       nokogiri
@@ -630,7 +630,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    ruby-saml (1.4.1)
+    ruby-saml (1.7.2)
       nokogiri (>= 1.5.10)
     ruby_parser (3.10.1)
       sexp_processor (~> 4.9)
@@ -828,7 +828,7 @@ DEPENDENCIES
   rollbar
   rspec-html-matchers
   rspec-rails (~> 3.5.2)
-  ruby-saml (~> 1.4.1)
+  ruby-saml
   rubystats
   s3_direct_upload
   sampler
