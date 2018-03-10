@@ -302,4 +302,17 @@ describe AssignmentType do
       expect(assignment_type.max_points_for_student(student)).to eq(200)
     end
   end
+
+  describe "#visible_assignments_for_student?" do
+    subject { create :assignment_type }
+
+    let(:student) { create :user, courses: [course], role: :student }
+    let!(:invisible_assignment) { create_list :assignment, 2, assignment_type: subject, visible: false }
+
+    before(:each) { invisible_assignment.first.update visible: true }
+
+    it "returns true if there is at least one visible assignment" do
+      expect(subject.visible_assignments_for_student? student).to eq true
+    end
+  end
 end
