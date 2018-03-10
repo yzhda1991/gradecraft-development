@@ -155,9 +155,7 @@ class AssignmentType < ActiveRecord::Base
   # student index until at least one assignment within it has been made visible
   # to that student
   def visible_assignments_for_student?(student)
-    assignments.each do |a|
-      return false unless a.visible_for_student?(student)
-    end.any?
+    assignments.any? { |a| a.visible_for_student? student }
   end
 
   private
