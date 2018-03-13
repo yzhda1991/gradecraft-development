@@ -1,3 +1,4 @@
+-# View only pertains to students
 %ul.todo-list-assignments{"ng-class"=>"toDoListItemsCtrl.assignmentType"}
   %li{"ng-class"=>"assignment.starred ? 'assignment-item starred' : 'assignment-item'",
       "ng-repeat"=>"assignment in toDoListItemsCtrl.assignments"}
@@ -9,7 +10,6 @@
         You have included this {{toDoListItemsCtrl.termFor("assignment")}} in your grade prediction
     %span.strikethrough.assignment-name{"ng-if"=>"assignment.submitted"}
       %a{"ng-href"=>"{{assignment.assignment_path}}"} {{assignment.name}}
-    .small.uppercase {{assignment.assignment_type_name}}
     %span.bold.assignment-name{"ng-if"=>"!assignment.submitted && assignment.name_visible_for_student"}
       %a{"ng-href"=>"{{assignment.grade_path}}"} {{assignment.name}}
     %span.bold.assignment-name{"ng-if"=>"!assignment.submitted && !assignment.name_visible_for_student"}
@@ -23,10 +23,7 @@
       %students-submissions{"data-assignment"=>"assignment"}
         submittable and individual
     .right{"ng-if"=>"assignment.submittable && !assignment.is_individual"}
-      -# = render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
-      -# TODO: group
-      %students-submissions{"data-assignment"=>"assignment", "data-group"=>""}
-        submittable and group
+      %group-submissions{"data-assignment"=>"assignment"}
 
   %li.empty-todo-list{"ng-if"=>"toDoListItemsCtrl.hasAssignments() === false"}
 

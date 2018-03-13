@@ -1,0 +1,9 @@
+%a.button{"ng-href"=>"{{assignment.assignment_path}}",
+          "ng-if"=>"assignment.student_group_submitted",
+          "anchor"=>"tab3"}
+  %i.fa.fa-file-o
+  See Submission
+%a.button{"ng-if"=>"!assignment.student_group_submitted && assignment.student_group.approved",
+          "ng-href"=>"{{assignment.new_group_submission_path}}"}
+  %i.fa.fa-upload
+  Submit

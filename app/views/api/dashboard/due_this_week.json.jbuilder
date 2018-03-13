@@ -38,10 +38,19 @@ json.included do
 
       json.due_at_for_current_timezone assignment.due_at.try(:in_time_zone) { |da| current_user.time_zone }
       json.assignment_type_name assignment.assignment_type.name
+
       json.is_individual assignment.is_individual?
 
       json.predicted_count assignment.predicted_count
       json.submitted_submissions_count @presenter.submitted_submissions_count(assignment)
+
+      if @presenter.student.present?
+        json.grade_path grade_path(Grade.find_or_create(assignment.id, @presenter.student.id))
+        json.name_visible_for_student assignment.name_visible_for_student? @presenter.student
+        json.submitted @presenter.submitted? assignment
+        json.starred @presenter.starred? assignment
+        json.submittable @presenter.submittable? assignment
+      end
 
       json.assignment_path assignment_path(assignment)
     end
@@ -55,16 +64,29 @@ json.included do
     json.attributes do
       json.merge! assignment.attributes
 
-      json.due_at_for_current_timezone assignment.due_at.in_time_zone(current_user.time_zone)
+      json.submittable @presenter.submittable? assignment
+      json.due_at_for_current_timezone assignment.due_at.try(:in_time_zone) { |da| current_user.time_zone }
       json.starred @presenter.starred? assignment
       json.submitted @presenter.submitted? assignment
       json.assignment_type_name assignment.assignment_type.name
-      json.name_visible_for_student assignment.name_visible_for_student? current_student
-      json.submittable assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
+      json.name_visible_for_student assignment.name_visible_for_student? @presenter.student
+      json.submittable @presenter.submittable? assignment
+
       json.is_individual assignment.is_individual?
 
+      if !assignment.individual?
+        - group = @presenter.student.group_for_assignment(assignment)
+
+        if group.present?
+          json.student_group_id group.id
+          json.student_group_submitted group.submission_for_assignment(assignment)
+          json.student_group_approved group.approved?
+          json.new_group_submission_path new_assignment_submission_path(assignment, group_id: group)
+        end
+      end
+
       json.assignment_path assignment_path(assignment)
-      json.grade_path grade_path(Grade.find_or_create(assignment.id, current_student.id))
+      json.grade_path grade_path(Grade.find_or_create(assignment.id, @presenter.student.id))
     end
   end if @presenter.student.present?
 end
