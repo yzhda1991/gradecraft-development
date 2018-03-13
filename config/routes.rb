@@ -462,9 +462,7 @@ Rails.application.routes.draw do
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
 
     resources :dashboard, only: [] do
-      collection do
-        get :due_this_week
-      end
+      get :due_this_week, on: :collection
     end
 
     resources :earned_badges, only: [:create, :destroy]
