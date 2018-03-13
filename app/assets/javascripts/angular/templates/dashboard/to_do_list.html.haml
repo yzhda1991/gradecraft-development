@@ -15,16 +15,16 @@
                                        "ng-click"=>"toDoListCtrl.tab='myPlanner'",
                                        "ng-class"=>"{selected: toDoListCtrl.tab === 'myPlanner'}"} My Planner
 
-    %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.coursePlannerAssignments",
-                                "data-assignment-type"=>"course-planner-list",
-                                "data-data"=>"toDoListCtrl.data",
-                                "ng-show"=>"toDoListCtrl.tab === 'coursePlanner'",
-                                "role"=>"tabPanel"}
-    %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.plannerAssignments",
-                                "data-assignment-type"=>"my-planner-list",
-                                "data-data"=>"toDoListCtrl.data",
-                                "ng-show"=>"toDoListCtrl.tab === 'myPlanner'",
-                                "role"=>"tabPanel"}
+      %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.coursePlannerAssignments",
+                                  "data-assignment-type"=>"course-planner-list",
+                                  "data-data"=>"toDoListCtrl.data",
+                                  "ng-show"=>"toDoListCtrl.tab === 'coursePlanner'",
+                                  "role"=>"tabPanel"}
+      %dashboard-to-do-list-items{"data-assignments"=>"toDoListCtrl.plannerAssignments",
+                                  "data-assignment-type"=>"my-planner-list",
+                                  "data-data"=>"toDoListCtrl.data",
+                                  "ng-show"=>"toDoListCtrl.tab === 'myPlanner'",
+                                  "role"=>"tabPanel"}
 
     %div{"ng-if"=>"!toDoListCtrl.data.has_current_student"}
       .planner-subheader
