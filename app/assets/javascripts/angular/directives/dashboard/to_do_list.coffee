@@ -1,7 +1,8 @@
-@gradecraft.directive 'dashboardToDoList', ['DashboardService', (DashboardService) ->
+@gradecraft.directive "dashboardToDoList", ["DashboardService", (DashboardService) ->
   DashboardToDoListCtrl = [() ->
     vm = this
     vm.loading = true
+    vm.tab = "coursePlanner"
 
     vm.data = DashboardService.dueThisWeekData
     vm.coursePlannerAssignments = DashboardService.dueThisWeekAssignments
@@ -16,12 +17,10 @@
   ]
 
   {
-    # scope:
-    #   provider: '@'
     bindToController: true
     controller: DashboardToDoListCtrl
-    controllerAs: 'toDoListCtrl'
-    restrict: 'EA'
-    templateUrl: 'dashboard/to_do_list.html'
+    controllerAs: "toDoListCtrl"
+    restrict: "EA"
+    templateUrl: "dashboard/to_do_list.html"
   }
 ]
