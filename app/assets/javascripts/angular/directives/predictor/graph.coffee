@@ -18,6 +18,9 @@
       scope.lockedPointsPredicted = ()->
         PredictorService.lockedPointsPredicted()
 
+      scope.lockedGradeSchemeElementsPresent = ()->
+        PredictorService.lockedGradeSchemeElementsPresent()
+
       scope.predictedGradeLevel = ()->
         PredictorService.predictedGradeLevel()
 
@@ -116,8 +119,6 @@
           .attr("transform", ()->
             "translate(" + padding + "," + (65) + ")"
           ).call(d3.axisBottom(scale))
-
-
 
       # Calculetes width for Earned Points (green) bar
       scope.svgEarnedBarWidth = ()->
