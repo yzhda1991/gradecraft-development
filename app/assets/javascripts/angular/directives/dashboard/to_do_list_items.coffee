@@ -1,8 +1,9 @@
-@gradecraft.directive "dashboardToDoListItems", ["DashboardService", (DashboardService) ->
+@gradecraft.directive "dashboardToDoListItems", ["DashboardService", "$sce", (DashboardService, $sce) ->
   DashboardToDoListItemsCtrl = [() ->
     vm = this
     vm.data = DashboardService.dueThisWeekData
     vm.termFor = (term) -> DashboardService.termFor(term)
+    vm.sanitize = (html) -> $sce.trustAsHtml(html)
 
     vm.hasAssignments = () -> _.any(@assignments)
   ]

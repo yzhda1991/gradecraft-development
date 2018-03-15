@@ -19,9 +19,7 @@
     .due-date Due: {{assignment.due_at_for_current_timezone}}
 
     .right{"ng-if"=>"assignment.submittable && assignment.is_individual"}
-      -# = render "students/submissions", assignment: assignment
-      %students-submissions{"data-assignment"=>"assignment"}
-        submittable and individual
+      %div{"ng-bind-html"=>"toDoListItemsCtrl.sanitize(assignment.submission_link)"}
     .right{"ng-if"=>"assignment.submittable && !assignment.is_individual"}
       %group-submissions{"data-assignment"=>"assignment"}
 
@@ -29,9 +27,10 @@
 
     -# Course planner
     %div{"ng-if"=>"toDoListItemsCtrl.assignmentType === 'course-planner-list'"}
-      .empty-state-wrapper{"ng-if"=>"toDoListItemsCtrl.hasDueDates"}
-        %img.empty-state-graphic{"src"=>"/images/no-assignments-due.svg", "alt"=>""}
-      %p.empty-state-text You don't have any {{toDoListItemsCtrl.termFor("assignments")}} due in the next week!
+      %div{"ng-if"=>"toDoListItemsCtrl.hasDueDates"}
+        .empty-state-wrapper
+          %img.empty-state-graphic{"src"=>"/images/no-assignments-due.svg", "alt"=>""}
+        %p.empty-state-text You don't have any {{toDoListItemsCtrl.termFor("assignments")}} due in the next week!
       %p.dashboard-message{"ng-if"=>"!toDoListItemsCtrl.hasDueDates"} This class has flexible {{toDoListItemsCtrl.termFor("assignment")}} due dates. Check your course rules to learn when to turn in certain {{toDoListItemsCtrl.termFor("assignments")}}.
 
     -# My planner
@@ -40,5 +39,5 @@
         %img.empty-state-graphic{"src"=>"/images/no-predicted-assignments.svg", "alt"=>""}
       %p.empty-state-text
         You have not predicted any {{toDoListItemsCtrl.termFor("assignments")}}! Check out the
-        %a{"href"=>"toDoListItemsCtrl.data.predictor_path"} {{toDoListItemsCtrl.termFor("predictor")}}
+        %a{"ng-href"=>"toDoListItemsCtrl.data.predictor_path"} {{toDoListItemsCtrl.termFor("predictor")}}
         to add {{toDoListItemsCtrl.termFor("assignments")}} to this planner.

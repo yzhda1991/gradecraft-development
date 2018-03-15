@@ -7,6 +7,7 @@ json.data do
     json.type "dueThisWeekData"
     json.has_due_dates @presenter.due_dates?
     json.has_current_student @presenter.student.present?
+    json.current_course_active current_course.active?
 
     json.predictor_path predictor_path
   end
@@ -36,7 +37,7 @@ json.included do
     json.attributes do
       json.merge! assignment.attributes
 
-      json.due_at_for_current_timezone assignment.due_at.try(:in_time_zone) { |da| current_user.time_zone }
+      json.due_at_for_current_timezone assignment.due_at.in_time_zone(current_user.time_zone) unless assignment.due_at.nil?
       json.assignment_type_name assignment.assignment_type.name
 
       json.is_individual assignment.is_individual?
@@ -45,6 +46,7 @@ json.included do
       json.submitted_submissions_count @presenter.submitted_submissions_count(assignment)
 
       if @presenter.student.present?
+        json.submission_link submission_link_to(assignment, @presenter.student)
         json.grade_path grade_path(Grade.find_or_create(assignment.id, @presenter.student.id))
         json.name_visible_for_student assignment.name_visible_for_student? @presenter.student
         json.submitted @presenter.submitted? assignment
@@ -65,18 +67,20 @@ json.included do
       json.merge! assignment.attributes
 
       json.submittable @presenter.submittable? assignment
-      json.due_at_for_current_timezone assignment.due_at.try(:in_time_zone) { |da| current_user.time_zone }
+      json.due_at_for_current_timezone assignment.due_at.in_time_zone(current_user.time_zone) unless assignment.due_at.nil?
       json.starred @presenter.starred? assignment
       json.submitted @presenter.submitted? assignment
       json.assignment_type_name assignment.assignment_type.name
       json.name_visible_for_student assignment.name_visible_for_student? @presenter.student
-      json.submittable @presenter.submittable? assignment
 
+      json.submittable @presenter.submittable? assignment
+      json.submission_link submission_link_to(assignment, @presenter.student)
       json.is_individual assignment.is_individual?
 
       if !assignment.individual?
         - group = @presenter.student.group_for_assignment(assignment)
 
+        # TODO: review how much of this is needed
         if group.present?
           json.student_group_id group.id
           json.student_group_submitted group.submission_for_assignment(assignment)
