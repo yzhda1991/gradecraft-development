@@ -6,7 +6,7 @@ describe AssignmentExporter do
   describe "#export(course)" do
     it "generates an empty CSV if there are no assignments" do
       csv = subject.export(course)
-      expect(csv).to eq "Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until,Submissions Total\n"
+      expect(csv).to eq "Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until,Submissions Count\n"
     end
 
     it "generates a csv of assignments if present" do
@@ -21,7 +21,7 @@ describe AssignmentExporter do
       expect(csv[1][4]).to eq assignment.open_at
       expect(csv[1][5]).to eq assignment.due_at
       expect(csv[1][6]).to eq assignment.accepts_submissions_until
-      expect(csv[1][7]).to eq "#{assignment.submissions.count}"
+      expect(csv[1][7]).to eq "#{assignment.submissions.submitted.count}"
     end
   end
 end
