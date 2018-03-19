@@ -69,7 +69,7 @@ module SubmissionsHelper
   # 2. Student belongs to an assignment group and the group is approved
   # 3. The assignment is unlocked for the student or group
   def allows_new_submissions?(assignment, student)
-    return false unless assignment.open? && current_course.active? && assignment.is_unlocked_for_student(student)
+    return false unless assignment.open? && current_course.active? && assignment.is_unlocked_for_student?(student)
     if !assignment.is_individual? # group-graded assignment
       group = student.group_for_assignment assignment
       return false if group.nil? || !group.approved? || !assignment.is_unlocked_for_group?(group)

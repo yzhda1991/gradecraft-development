@@ -34,6 +34,7 @@ json.included do
   json.array! @presenter.course_planner_assignments do |assignment|
     json.id assignment.id
     json.type "course_planner_assignments"
+
     json.attributes do
       json.merge! assignment.attributes
 
@@ -80,7 +81,6 @@ json.included do
       if !assignment.individual?
         - group = @presenter.student.group_for_assignment(assignment)
 
-        # TODO: review how much of this is needed
         if group.present?
           json.student_group_id group.id
           json.student_group_submitted group.submission_for_assignment(assignment)

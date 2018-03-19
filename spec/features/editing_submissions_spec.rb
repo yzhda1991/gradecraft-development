@@ -19,7 +19,7 @@ feature "editing submissions" do
       visit assignment_path(assignment)
 
       within(".pageContent") do
-        click_link "Resubmit"
+        click_link "Resubmit", match: :first
       end
 
       expect(current_path).to eq edit_assignment_submission_path(assignment, submission)

@@ -13,7 +13,7 @@ feature "viewing submissions" do
     scenario "allows an editable submission if it's before the due date" do
       visit assignment_path assignment
 
-      expect(find_link("Edit Submission")).to be_visible
+      expect(find_link("Edit Submission", match: :first)).to be_visible
     end
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
