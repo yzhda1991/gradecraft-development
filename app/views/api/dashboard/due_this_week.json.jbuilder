@@ -78,7 +78,7 @@ json.included do
       json.submission_link submission_link_to(assignment, @presenter.student)
       json.is_individual assignment.is_individual?
 
-      if !assignment.individual?
+      if !assignment.is_individual?
         - group = @presenter.student.group_for_assignment(assignment)
 
         if group.present?
