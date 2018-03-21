@@ -7,6 +7,7 @@ class SubmissionsController < ApplicationController
 
   def show
     @submission = Submission.find(params[:id])
+    @grade = @submission.grade
     presenter = Submissions::ShowPresenter.new(presenter_attrs_with_id)
     authorize! :read, presenter.submission
     render :show, locals: { presenter: presenter }
