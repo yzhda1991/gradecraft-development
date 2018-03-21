@@ -13,7 +13,7 @@
       .ui-tabs-panel#submission.active{role: "tabpanel", "aria-hidden" => false}
         = render partial: "layouts/alerts"
 
-        = render partial: "submissions/assignment_guidelines", locals: { assignment: presenter.assignment }
+        = render partial: "submissions/assignment_guidelines", locals: { assignment: presenter.assignment, group: presenter.group }
 
         = render partial: "submissions/submission_content", locals: { presenter: presenter }
       .ui-tabs-panel#history{role: "tabpanel", "aria-hidden" => false}

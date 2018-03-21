@@ -31,7 +31,7 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to decorative_glyph(:eye) + "See Submission", assignment_submission_path(assignment, submission), class: "button"
+              %li= link_to decorative_glyph(:eye) + "See Submission", assignment_submission_path(assignment, submission, group_id: group.try(:id)), class: "button"
               - if assignment.is_individual?
                 - grade = assignment.grade_for_student student
                 - if grade.present?
