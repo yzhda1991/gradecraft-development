@@ -17,6 +17,9 @@ namespace :users do
       fail "ERROR: username not found (\"#{ENV['username']}\")"
     end
 
+    user.update admin: true
+    puts "Updated admin attribute for future courses"
+
     Course.find_each(batch_size: 500) do |course|
       membership = CourseMembership.find_or_create_by course: course, user: user
       membership.role = 'admin'
