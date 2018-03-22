@@ -10,8 +10,4 @@ class LearningObjectiveCumulativeOutcome < ActiveRecord::Base
     message: "should be unique per learning objective" }
 
   scope :for_user, -> (user_id) { where user_id: user_id }
-
-  def failed?
-    observed_outcomes.any? { |o| o.learning_objective_level.failed? }
-  end
 end
