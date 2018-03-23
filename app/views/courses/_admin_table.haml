@@ -57,6 +57,6 @@
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
               %ul.options-menu.dropdown-content
                 %li= link_to decorative_glyph(:edit) + "Edit", edit_course_path(course)
-                %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), :method => :copy
-                %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), :method => :copy
+                %li= link_to decorative_glyph(:copy) + "Copy", copy_courses_path(id: course.id), data: { disable_with: "Copying..." }, :method => :copy
+                %li= link_to decorative_glyph(:copy) + "Copy + Students", copy_courses_path(id: course.id, copy_type: "with_students"), data: { disable_with: "Copying..." }, :method => :copy
                 %li= link_to glyph(:trash) + "Delete", course, id: "course-id-#{course.id}", data: { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
