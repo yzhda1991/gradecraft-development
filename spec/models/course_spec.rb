@@ -51,6 +51,11 @@ describe Course do
       expect{ subject }.to raise_error CopyValidationError
     end
 
+    it "creates only one copy" do
+      course
+      expect{ subject }.to change(Course, :count).by 1
+    end
+
     it "makes a duplicated copy of itself" do
       expect(subject).to_not eq course
     end
