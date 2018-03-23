@@ -39,10 +39,10 @@ class LearningObjective < ActiveRecord::Base
 
   def grade_outcome_progress_for(cumulative_outcome, include_details)
     outcomes = observed_outcomes(cumulative_outcome)
+    return "Not Started" if outcomes.empty?
     return "Failed" if outcomes.any? { |o| o.learning_objective_level.failed? }
 
     proficient_outcomes = observed_outcomes(cumulative_outcome, true)
-    return "Not Started" if proficient_outcomes.empty?
     proficient_outcomes.count < count_to_achieve ? in_progress_str(proficient_outcomes.count, count_to_achieve, include_details) : "Completed"
   end
 
