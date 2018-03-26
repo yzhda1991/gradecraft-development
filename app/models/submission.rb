@@ -39,6 +39,19 @@ class Submission < ActiveRecord::Base
     .where.not(id: with_grade.where(grades: { instructor_modified: true }))
   end
 
+  # def submission_grade
+  #   if assignment.has_groups?
+  #     group.grade_for_assignment assignment if group.present?
+  #   else
+  #     student.grade_for_assignment assignment if student.present?
+  #   end
+  # end
+
+  # def resubmitted?
+  #   submission_grade && submission_grade.student_visible? &&
+  #   !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
+  # end
+
   scope :resubmitted, -> {
     includes(:grade, :assignment)
     .where("grades.student_visible = true")
@@ -108,10 +121,10 @@ class Submission < ActiveRecord::Base
 
   # this is transitive so that once it is graded again, then
   # it will no longer be resubmitted
-  def resubmitted?
-    submission_grade && submission_grade.student_visible? &&
-    !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
-  end
+  # def resubmitted?
+  #   submission_grade && submission_grade.student_visible? &&
+  #   !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
+  # end
 
   # Getting the name of the student who submitted the work
   def name

@@ -40,7 +40,8 @@ class InfoController < ApplicationController
     grades = current_course.grades.for_active_students.instructor_modified
     submissions = current_course.submissions.submitted.includes(:assignment, :grade, :student, :group, :submission_files)
     @ungraded_submissions_by_assignment = active_individual_and_group_submissions(submissions.ungraded)
-    @resubmissions_by_assignment = active_individual_and_group_submissions(submissions.resubmitted)
+    # @resubmissions_by_assignment = active_individual_and_group_submissions(submissions.resubmitted)
+    @resubmissions_by_assignment = active_individual_and_group_submissions(submissions.resubmission?)
     @in_progress_grades_by_assignment = grades.in_progress
     @ready_for_release_grades_by_assignment = grades.includes(:assignment, :student, :group).ready_for_release
   end

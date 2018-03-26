@@ -1,3 +1,5 @@
+require_relative "../../../services/creates_or_updates_submission"
+
 class API::Assignments::SubmissionsController < ApplicationController
   before_action :ensure_student?
 
@@ -24,7 +26,9 @@ class API::Assignments::SubmissionsController < ApplicationController
     assignment = Assignment.find(params[:assignment_id])
     @submission = assignment.submissions.new merged_submission_params(assignment)
 
-    if @submission.save
+    if @submission.save #Put Service call here
+      binding.pry
+      Services::CreatesOrUpdatesSubmission.create_or_update_submission assignment @submission
       render "api/assignments/submissions/submission", status: 201
     else
       render "api/assignments/submissions/errors", status: 500
@@ -38,7 +42,10 @@ class API::Assignments::SubmissionsController < ApplicationController
     @submission = assignment.submissions.find_by_id(params[:id])
 
     if @submission.present?
-      if @submission.update_attributes submission_params
+      binding.pry
+      if @submission.update_attributes submission_params #Put service call here
+        Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, @submission
+
         render "api/assignments/submissions/submission", status: 200
       else
         render "api/assignments/submissions/errors", status: 500

@@ -127,7 +127,8 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def submission_resubmitted?(submission)
-    submission.nil? ? false : submission.resubmitted?
+    # submission.nil? ? false : submission.resubmitted?
+    submission.nil? ? false : submission.resubmission?
   end
 
   def new_assignment?

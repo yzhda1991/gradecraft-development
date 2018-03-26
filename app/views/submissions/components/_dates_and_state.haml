@@ -1,7 +1,7 @@
 %p
   - if presenter.submission.present? && presenter.submission.submitted_at?
     %span.smallcaps Submitted:
-    %span.submission-date= l presenter.submission.submitted_at.in_time_zone(current_user.time_zone) 
+    %span.submission-date= l presenter.submission.submitted_at.in_time_zone(current_user.time_zone)
 
   // Late alert if submitted after due date
   - if presenter.submission.late?
@@ -9,5 +9,6 @@
       %i.fa.fa-fw.fa-clock-o
       %span.icon-text LATE
 
-  - if presenter.submission.resubmitted?
+  -# - if presenter.submission.resubmitted?
+  - if presenter.submission.resubmission?
     %span.label.alert Resubmitted!

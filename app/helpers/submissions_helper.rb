@@ -2,6 +2,7 @@ module SubmissionsHelper
   def resubmission_count_for(course)
     Rails.cache.fetch(resubmission_count_cache_key(course)) do
       active_individual_and_group_submissions(course.submissions.submitted.resubmitted).count
+      # active_individual_and_group_submissions(course.submissions.submitted.resubmission?).count
     end
   end
 

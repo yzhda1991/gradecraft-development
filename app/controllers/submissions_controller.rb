@@ -1,4 +1,5 @@
 require_relative "../services/deletes_submission_draft_content"
+require_relative "../services/creates_or_updates_submission"
 
 class SubmissionsController < ApplicationController
   before_action :ensure_not_observer?
@@ -27,6 +28,7 @@ class SubmissionsController < ApplicationController
     submission = @assignment.submissions.new(submission_params.merge(submitted_at: DateTime.now))
 
     if submission.save
+      Services::CreatesOrUpdatesSubmission.create_or_update_submission assignment @submission
       submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(@assignment))
       if current_user_is_student?
@@ -47,7 +49,14 @@ class SubmissionsController < ApplicationController
   # GET /assignments/:assignment_id/submissions/:id/edit
   def edit
     presenter = Submissions::EditPresenter.new(presenter_attrs_with_id)
+<<<<<<< HEAD
     ensure_editable? presenter.submission, @assignment or return
+=======
+    ensure_editable presenter.submission, @assignment or return
+    if
+      presenter.submission.resubmission = true
+    end
+>>>>>>> 3899 Simplify Resubmissions initial commit
     authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end
@@ -61,7 +70,7 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) && Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status! unless submission.will_be_resubmitted?
-        
+
         redirect_to = assignment_submission_path @assignment,
           submission,
           @assignment.has_groups? ? { group_id: submission.group_id } : { student_id: submission.student_id }
