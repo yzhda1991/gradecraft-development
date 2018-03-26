@@ -14,7 +14,6 @@ describe CourseGradeExporter do
       @student = create(:user, first_name: "Pinky", last_name: "Alpha")
       @student_2 = create(:user, first_name: "The Brain", last_name: "Zed")
       create(:course_membership, :student, course: course, user: @student, score: 80000, auditing: true)
-      # let!(:team_membership) { create :team_membership, team: team, student: student }
       create(:team_membership, team: team, student: @student)
       create(:team_membership, team: team, student: @student_2)
       @students = course.students
