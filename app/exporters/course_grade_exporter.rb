@@ -13,11 +13,12 @@ class CourseGradeExporter
   private
 
   def baseline_headers
-    ["First Name", "Last Name", "Email", "Username", "Score", "Grade", "Level",
+    ["First Name", "Last Name", "Email", "Username", "Score", "Grade", "Level", "Team",
       "Earned Badge #", "GradeCraft ID", "GradeCraft Account Created", "Last Logged In At", "Auditing" ]
   end
 
   def student_data(student, course)
+    # binding.pry
     [student.first_name,
       student.last_name,
       student.email,
@@ -25,6 +26,7 @@ class CourseGradeExporter
       student.score_for_course(course),
       student.grade_letter_for_course(course),
       student.grade_level_for_course(course),
+      student.team_for_course(course).try(:name),
       student.earned_badges_for_course(course).count,
       student.id,
       student.created_at,

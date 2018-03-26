@@ -12,7 +12,7 @@
       %tbody
         %tr
           %td= link_to glyph("file-excel-o") + "Final Grades", final_grades_path(id: current_course.id, format: "csv")
-          %td First Name, Last Name, Email, Username, Score, Grade, Level, Earned Badge #, GradeCraft ID, Last Logged In, Auditing
+          %td First Name, Last Name, Email, Username, Score, Grade, Level, Team, Earned Badge #, GradeCraft ID, Last Logged In, Auditing
         %tr
           %td= link_to glyph("file-excel-o") + "Full Gradebook", gradebook_file_path(id: current_course.id, format: "csv")
           %td First Name, Last Name, Email, Username, #{ term_for :team }, Final grades for all #{ term_for :assignments }
