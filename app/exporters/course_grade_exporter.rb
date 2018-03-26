@@ -18,7 +18,6 @@ class CourseGradeExporter
   end
 
   def student_data(student, course)
-    # binding.pry
     [student.first_name,
       student.last_name,
       student.email,
