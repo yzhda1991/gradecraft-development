@@ -29,6 +29,14 @@ describe UsersController do
       end
     end
 
+    describe "POST create_external" do
+      it "redirects if the user has not verified with the recaptcha" do
+        allow(controller).to receive(:verify_recaptcha).and_return false
+        post :create_external, params: { user: attributes_for(:user) }
+        expect(response).to redirect_to new_external_users_path
+      end
+    end
+
     describe "POST create" do
       let(:user) { User.unscoped.last }
 

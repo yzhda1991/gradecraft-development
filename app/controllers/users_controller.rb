@@ -59,13 +59,15 @@ class UsersController < ApplicationController
   # email prompting them to activate, and leading them to the next step in the process
   # creating a course
   def create_external
-    @user = User.create(user_params)
-    @user.username = user_params[:email]
+    @user = User.new(user_params.merge(username: user_params[:email]))
+    redirect_to new_external_users_path, flash: { error: "Please verify that you are not a robot" } \
+      and return if !verify_recaptcha(model: @user)
+
     if @user.save
       UserMailer.activation_needed_course_creation_email(@user).deliver_now
       redirect_to root_path, notice: "Your account has been created! Please check your email to activate your account."
     else
-      redirect_to new_external_users_path
+      render :new_external
     end
   end
 
