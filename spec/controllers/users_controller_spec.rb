@@ -1,4 +1,6 @@
 describe UsersController do
+  include UniMock::StubRails
+
   let(:course) { create(:course) }
   let(:professor) { create(:user, courses: [course], role: :professor) }
   let(:student) { create(:user, courses: [course], role: :student) }
@@ -29,8 +31,23 @@ describe UsersController do
       end
     end
 
+    describe "GET new_external" do
+      it "redirects if the app instance is not beta" do
+        stub_env "app"
+        get :new_external
+        expect(response).to redirect_to dashboard_path
+      end
+    end
+
     describe "POST create_external" do
+      it "redirects if the app instance is not beta" do
+        stub_env "app"
+        post :create_external, params: { user: attributes_for(:user) }
+        expect(response).to redirect_to dashboard_path
+      end
+
       it "redirects if the user has not verified with the recaptcha" do
+        stub_env "beta"
         allow(controller).to receive(:verify_recaptcha).and_return false
         post :create_external, params: { user: attributes_for(:user) }
         expect(response).to redirect_to new_external_users_path

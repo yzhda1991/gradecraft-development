@@ -114,6 +114,10 @@ class ApplicationController < ActionController::Base
     redirect_to dashboard_path unless current_course.uses_learning_objectives?
   end
 
+  def ensure_app_environment?
+    redirect_to dashboard_path, alert: "You do not have permission to do that" unless Rails.env.beta?
+  end
+
   def require_course_membership
     redirect_to errors_path(status_code: 401, error_type: "without_course_membership") \
       unless current_user.course_memberships.any?
