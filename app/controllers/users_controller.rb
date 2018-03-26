@@ -4,6 +4,7 @@ require_relative "../services/creates_or_updates_user"
 require_relative "../services/sends_resource_email"
 require 'uri'
 
+# rubocop:disable AndOr
 class UsersController < ApplicationController
   include UsersHelper
 
