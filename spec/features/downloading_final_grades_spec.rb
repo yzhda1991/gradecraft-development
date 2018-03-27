@@ -16,7 +16,7 @@ feature "downloading final grades file" do
 
       expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
-      expect(page).to have_content "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID"
+      expect(page).to have_content "First Name,Last Name,Email,Username,Score,Grade,Level,Team,Earned Badge #,GradeCraft ID"
     end
   end
 end
