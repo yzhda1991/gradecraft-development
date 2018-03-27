@@ -7,6 +7,9 @@ class API::GradeSchemeElementsController < ApplicationController
   # GET /api/grade_scheme_elements
   def index
     assign_for_index
+    if current_user_is_student?
+      @student = current_student
+    end
   end
 
   # POST /api/grade_scheme_elements
