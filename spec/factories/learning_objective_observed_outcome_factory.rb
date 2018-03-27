@@ -5,14 +5,8 @@ FactoryGirl.define do
     assessed_at { Faker::Date.backward(60) }
     comments { Faker::Hipster.sentence }
 
-    factory :learning_objective_observed_outcome_grade do
-      transient do
-        student_visible_grade true
-      end
-
-      grade do
-        create :grade, student_visible: student_visible_grade
-      end
+    factory :student_visible_observed_outcome do
+      association :grade, factory: :student_visible_grade
     end
   end
 end
