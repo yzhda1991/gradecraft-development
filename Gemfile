@@ -63,6 +63,7 @@ gem 'omniauth-kerberos'
 gem 'omniauth-lti', '~> 0.0.2'
 
 gem 'ransack'
+gem 'recaptcha', require: "recaptcha/rails"
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'
