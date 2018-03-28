@@ -1,5 +1,3 @@
-observed_outcomes = @cumulative_outcomes.flat_map { |co| co.observed_outcomes.for_student_visible_grades }
-
 json.data @cumulative_outcomes do |cumulative_outcome|
   json.type "learning_objective_cumulative_outcome"
   json.id cumulative_outcome.id.to_s
@@ -12,7 +10,7 @@ json.data @cumulative_outcomes do |cumulative_outcome|
 
   json.relationships do
     json.observed_outcomes do
-      json.data cumulative_outcome.observed_outcomes do |observed_outcome|
+      json.data @observed_outcomes do |observed_outcome|
         json.type "learning_objective_observed_outcome"
         json.id observed_outcome.id.to_s
       end
@@ -21,7 +19,7 @@ json.data @cumulative_outcomes do |cumulative_outcome|
 end
 
 json.included do
-  json.array! observed_outcomes do |observed_outcome|
+  json.array! @observed_outcomes do |observed_outcome|
     json.type "learning_objective_observed_outcome"
     json.id observed_outcome.id.to_s
 

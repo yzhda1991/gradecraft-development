@@ -4,32 +4,30 @@ class API::LearningObjectives::OutcomesController < ApplicationController
 
   # GET /api/learning_objectives/outcomes
   def index
-    if params[:assignment_id].present?
-      objectives = current_course
-        .assignments
-        .find(params[:assignment_id])
-        .learning_objectives
-        .includes(cumulative_outcomes: :observed_outcomes)
-    else
-      objectives = current_course
-        .learning_objectives
-        .includes(cumulative_outcomes: :observed_outcomes)
-    end
+    @cumulative_outcomes = LearningObjectiveCumulativeOutcome
+      .includes(:observed_outcomes, :learning_objective)
+      .where(learning_objectives: { course_id: current_course.id })
 
-    @cumulative_outcomes = objectives.map(&:cumulative_outcomes).flatten \
-      unless objectives.blank?
+    @observed_outcomes = LearningObjectiveObservedOutcome
+      .where(learning_objective_cumulative_outcomes_id: @cumulative_outcomes.pluck(:id))
+
+    @observed_outcomes = @observed_outcomes.for_student_visible_grades if current_user_is_student?
   end
 
   # GET /api/learning_objectives/objectives/:objective_id/outcomes
+  # Optional: provide subset of outcomes by student_ids
   def outcomes_for_objective
-    @cumulative_outcomes = current_course
-      .learning_objectives
-      .find(params[:objective_id])
-      .cumulative_outcomes
-      .includes(:observed_outcomes)
+    @cumulative_outcomes = LearningObjectiveCumulativeOutcome
+      .includes(:observed_outcomes, :learning_objective)
+      .where(learning_objectives: { id: params[:objective_id], course_id: current_course.id })
 
     @cumulative_outcomes = @cumulative_outcomes
       .where(user_id: params[:student_ids]) unless params[:student_ids].blank?
+
+    @observed_outcomes = LearningObjectiveObservedOutcome
+      .where(learning_objective_cumulative_outcomes_id: @cumulative_outcomes.pluck(:id))
+
+    @observed_outcomes = @observed_outcomes.for_student_visible_grades if current_user_is_student?
 
     render "api/learning_objectives/outcomes/index", status: 200
   end
