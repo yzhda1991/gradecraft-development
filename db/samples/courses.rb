@@ -66,7 +66,9 @@
     twitter_hashtag: nil,
     student_term: "Student",
     year: Date.today.year,
-    status: true
+    status: true,
+    has_learning_objectives: false,
+    allows_learning_objectives: false
   }
 }
 
@@ -343,5 +345,25 @@ Dracula",
     name: "Inactive course",
     semester: "Fall",
     has_teams: true,
+  }
+}
+
+@courses[:with_learning_objectives] = {
+  quotes: {
+    course_created: "“Reach for the sky” ― Woody",
+    grade_sceme_elements_created: "“To infinity and beyond” - Buzz",
+  },
+  grade_levels: ["Rex", "Slinky", "Woody", "Buzz", "Mr. Potato Head", "Mrs. Potato Head",
+    "Barbie", "Sarge", "RC", "Bo Peep", "Etch", "Hamm"].shuffle,
+  attributes: {
+    course_number: "GC107",
+    accepts_submissions: true,
+    name: "Course with Learning Objectives",
+    semester: "Fall",
+    has_teams: true,
+    has_team_challenges: true,
+    teams_visible: true,
+    has_learning_objectives: true,
+    allows_learning_objectives: true
   }
 }
