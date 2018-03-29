@@ -388,6 +388,9 @@ Rails.application.routes.draw do
           put :update_outcome, to: "outcomes#update_outcome"
         end
       end
+      resource :learning_objectives, only: [], module: :learning_objectives do
+        get :outcomes, to: "outcomes#outcomes_for_assignment"
+      end
       resources :grades, only: [], module: :assignments do
         get :show, on: :collection
       end
@@ -508,7 +511,6 @@ Rails.application.routes.draw do
         end
       end
       resources :categories, only: [:index, :show, :create, :update, :destroy]
-      resources :outcomes, only: :index
     end
 
     resources :levels, only: [:create, :update, :destroy]

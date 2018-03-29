@@ -77,8 +77,8 @@
       order: order
     }
 
-  getOutcomes = (assignmentId) ->
-    $http.get("/api/learning_objectives/outcomes").then(
+  getOutcomesForAssignment = (assignmentId) ->
+    $http.get("/api/assignments/#{assignmentId}/learning_objectives/outcomes").then(
       (response) ->
         GradeCraftAPI.loadMany(cumulativeOutcomes, response.data)
         GradeCraftAPI.loadFromIncluded(_observed_outcomes, "learning_objective_observed_outcome", response.data)
@@ -294,7 +294,7 @@
     addCategory: addCategory
     addLevel: addLevel
     newLevel: newLevel
-    getOutcomes: getOutcomes
+    getOutcomesForAssignment: getOutcomesForAssignment
     getObjective: getObjective
     getCategory: getCategory
     getArticles: getArticles

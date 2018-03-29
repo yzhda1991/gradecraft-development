@@ -1,17 +1,20 @@
 class API::LearningObjectives::OutcomesController < ApplicationController
   before_action :ensure_course_uses_objectives?
-  before_action :ensure_staff?, except: [:index, :outcomes_for_objective]
+  before_action :ensure_staff?, except: [:outcomes_for_assignment, :outcomes_for_objective]
 
-  # GET /api/learning_objectives/outcomes
-  def index
+  # GET /api/assignment/:assignment_id/learning_objectives/outcomes
+  def outcomes_for_assignment
     @cumulative_outcomes = LearningObjectiveCumulativeOutcome
-      .includes(:observed_outcomes, :learning_objective)
+      .includes(:observed_outcomes, learning_objective: :assignments)
       .where(learning_objectives: { course_id: current_course.id })
+      .where(learning_objective: { assignments: { id: params[:assignment_id] } })
 
     @observed_outcomes = LearningObjectiveObservedOutcome
       .where(learning_objective_cumulative_outcomes_id: @cumulative_outcomes.pluck(:id))
 
     @observed_outcomes = @observed_outcomes.for_student_visible_grades if current_user_is_student?
+
+    render "api/learning_objectives/outcomes/index", status: 200
   end
 
   # GET /api/learning_objectives/objectives/:objective_id/outcomes

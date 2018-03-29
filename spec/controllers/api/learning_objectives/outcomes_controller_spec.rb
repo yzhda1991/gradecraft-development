@@ -1,6 +1,7 @@
-describe API::LearningObjectives::OutcomesController do
-  let(:course) { build :course, :uses_learning_objectives }
-  let(:learning_objective) { build :learning_objective, course: course }
+describe API::LearningObjectives::OutcomesController, focus: true do
+  let(:course) { create :course, :uses_learning_objectives }
+  let(:learning_objective) { create :learning_objective, :with_linked_assignment, course: course }
+  let(:assignment) { learning_objective.assignments.first }
   let!(:cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective }
   let!(:observed_outcome) { create :learning_objective_observed_outcome, cumulative_outcome: cumulative_outcome }
 
@@ -12,10 +13,9 @@ describe API::LearningObjectives::OutcomesController do
   context "as an instructor" do
     let(:user) { build_stubbed :user, courses: [course], role: :professor }
 
-    describe "#index" do
-
-      it "assigns the outcomes for all objectives in the course" do
-        get :index, format: :json
+    describe "#outcomes_for_assignment" do
+      it "assigns the outcomes for all objectives linked to the assignment" do
+        get :outcomes_for_assignment, params: { assignment_id: assignment.id }, format: :json
         expect(assigns(:cumulative_outcomes)).to match_array [cumulative_outcome]
         expect(assigns(:observed_outcomes)).to match_array [observed_outcome]
       end
@@ -49,9 +49,9 @@ describe API::LearningObjectives::OutcomesController do
   context "as a student" do
     let(:user) { build_stubbed :user, courses: [course], role: :student }
 
-    describe "#index" do
-      it "assigns the visible outcomes for all objectives in the course" do
-        get :index, format: :json
+    describe "#outcomes_for_assignment" do
+      it "assigns the visible outcomes for all objectives linked to the assignment" do
+        get :outcomes_for_assignment, params: { assignment_id: assignment.id }, format: :json
         expect(assigns(:cumulative_outcomes)).to match_array [cumulative_outcome]
         expect(assigns(:observed_outcomes)).to be_empty
       end

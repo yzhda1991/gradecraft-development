@@ -39,7 +39,7 @@
   services = (assignmentId) ->
     promises = [
       LearningObjectivesService.getArticles("objectives", { assignment_id: assignmentId }),
-      LearningObjectivesService.getOutcomes(assignmentId)
+      LearningObjectivesService.getOutcomesForAssignment(assignmentId)
     ]
     $q.all(promises)
 

@@ -17,5 +17,11 @@ FactoryGirl.define do
     trait :categorized do
       association :category, factory: :learning_objective_category
     end
+
+    trait :with_linked_assignment do
+      after(:create) do |lo|
+        lo.assignments << create(:assignment)
+      end
+    end
   end
 end
