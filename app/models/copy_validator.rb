@@ -2,7 +2,7 @@ class CopyValidator
   # The definitive structure for which associations are copied and should be validated
   # Has to be manually updated for now each time an association is added to the copy
   # process
-  COPY_ASSOCIATIONS = {
+  COPY_ASSOCIATIONS ||= {
     course: [:badges, :assignment_types, :rubrics, :challenges, :grade_scheme_elements],
     assignment_types: [:assignments],
     assignments: [:assignment_score_levels],
