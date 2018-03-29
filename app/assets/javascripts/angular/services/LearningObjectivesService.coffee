@@ -78,7 +78,7 @@
     }
 
   getOutcomes = (assignmentId) ->
-    $http.get("/api/learning_objectives/outcomes", { params: { assignment_id: assignmentId } }).then(
+    $http.get("/api/learning_objectives/outcomes").then(
       (response) ->
         GradeCraftAPI.loadMany(cumulativeOutcomes, response.data)
         GradeCraftAPI.loadFromIncluded(_observed_outcomes, "learning_objective_observed_outcome", response.data)

@@ -26,8 +26,11 @@ json.included do
     json.attributes do
       json.merge! observed_outcome.attributes
       json.learning_objective_assessable_id observed_outcome.learning_objective_assessable_id.to_s
-      json.flagged_value observed_outcome.learning_objective_level.flagged_value
-      json.readable_flagged_value observed_outcome.learning_objective_level.readable_flagged_value
+      
+      if observed_outcome.learning_objective_level.present?
+        json.flagged_value observed_outcome.learning_objective_level.flagged_value
+        json.readable_flagged_value observed_outcome.learning_objective_level.readable_flagged_value
+      end
 
       unless observed_outcome.grade.nil?
         json.outcome_visible GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
