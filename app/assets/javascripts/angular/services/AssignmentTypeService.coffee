@@ -4,13 +4,14 @@
 @gradecraft.factory 'AssignmentTypeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   update = {}
-
   assignmentTypes = []
 
   weights = {
     unusedWeights: ()->
       return 0
   }
+
+  assignmentType = () -> assignmentTypes[0]
 
   termFor = (article)->
     GradeCraftAPI.termFor(article)
@@ -55,6 +56,15 @@
 
   #----------------- API Calls ------------------------------------------------#
 
+  getAssignmentType = (id) ->
+    $http.get("/api/assignment_types/#{id}").then(
+      (response) ->
+        GradeCraftAPI.addItem(assignmentTypes, "assignment_types", response.data)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
   getAssignmentTypes = ()->
     $http.get("/api/assignment_types").success((res)->
       _.each(res.data, (assignment_type)->
@@ -98,6 +108,8 @@
 
   return {
       termFor: termFor
+
+      assignmentType: assignmentType
       assignmentTypes: assignmentTypes
       weights: weights
 
@@ -109,6 +121,7 @@
       weightsAvailable: weightsAvailable
       weightsAvailableForArticle: weightsAvailableForArticle
 
+      getAssignmentType: getAssignmentType
       getAssignmentTypes: getAssignmentTypes
       postAssignmentTypeWeight: postAssignmentTypeWeight
   }

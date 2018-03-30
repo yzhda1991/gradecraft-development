@@ -26,6 +26,15 @@ class API::AssignmentTypesController < ApplicationController
       )
   end
 
+  # GET api/assignment_types/:id
+  def show
+    begin
+      @assignment_type = AssignmentType.find params[:id]
+    rescue ActiveRecord::RecordNotFound
+      render json: { message: "Assignment type not found", success: false }, status: :not_found
+    end
+  end
+
   def sort
     sort_position_for "assignment-type"
   end

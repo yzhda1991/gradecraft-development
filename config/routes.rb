@@ -429,7 +429,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :assignment_types, only: :index do
+    resources :assignment_types, only: [:index, :show] do
       resources :assignment_type_weights, only: :create
       post :sort, on: :collection
     end

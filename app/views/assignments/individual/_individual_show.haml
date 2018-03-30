@@ -9,9 +9,8 @@
 
 .progress
 = form_tag release_assignment_grades_path(presenter.assignment), method: :put do
-  %table.dynatable.no-table-header
-    %thead= render partial: "assignments/individual/table_head", locals: { presenter: presenter }
-    %tbody= render partial: "assignments/individual/table_body", locals: { presenter: presenter }
+  %assignment-show-table{"data-assignment-id"=>"#{presenter.assignment.id}",
+                         "data-assignment-type-id"=>"#{presenter.assignment_type.id}"}
 
   - if presenter.has_grades?
     .right
