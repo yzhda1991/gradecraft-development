@@ -5,6 +5,8 @@ describe SubmissionsController do
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:submission) { create(:submission, assignment: assignment, course: course, student: student) }
 
+  before(:each) { allow(controller).to receive(:current_course).and_return course }
+
   context "as a professor" do
 
     before(:each) do
@@ -35,6 +37,7 @@ describe SubmissionsController do
 
       it "returns the submission show page" do
         make_request
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:show)
       end
 
@@ -50,6 +53,7 @@ describe SubmissionsController do
 
       it "returns the submission new page" do
         make_request
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:new)
       end
     end
@@ -58,6 +62,7 @@ describe SubmissionsController do
       it "display the edit form" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return true
         get :edit, params: { assignment_id: assignment.id,  id: submission.id }
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:edit)
       end
 
@@ -69,6 +74,11 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
+      it "assigns the assignment" do
+        post :create, params: { assignment_id: assignment.id, submission: attributes_for(:submission) }
+        expect(assigns(:assignment)).to eq assignment
+      end
+
       it "creates the submission with valid attributes" do
         params = attributes_for(:submission).merge(student_id: student.id)
         expect{ post :create, params: { assignment_id: assignment.id, submission: params }}.to change(Submission,:count).by(1)
@@ -101,6 +111,11 @@ describe SubmissionsController do
 
     describe "POST update" do
       let(:submission_params) { attributes_for(:submission) }
+
+      it "assigns the assignment" do
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
+        expect(assigns(:assignment)).to eq assignment
+      end
 
       it "updates the submission successfully"  do
         submission_params.merge!(assignment_id: assignment.id, text_comment: "Ausgezeichnet")
@@ -135,8 +150,13 @@ describe SubmissionsController do
     describe "GET destroy" do
       let!(:submission) { create(:submission, assignment: assignment, student: student, course: course) }
 
+      it "assigns the assignment" do
+        delete :destroy, params: { id: submission.id, assignment_id: assignment.id }
+        expect(assigns(:assignment)).to eq assignment
+      end
+
       it "destroys the submission" do
-        expect{ get :destroy, params: { id: submission.id, assignment_id: assignment.id } }.to change(Submission,:count).by(-1)
+        expect{ delete :destroy, params: { id: submission.id, assignment_id: assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
   end
@@ -149,6 +169,12 @@ describe SubmissionsController do
     end
 
     describe "GET edit" do
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
+
       it "shows the edit submission form" do
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
@@ -162,6 +188,12 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
+
       it "creates the submission with valid attributes" do
         params = attributes_for(:submission, student_id: student.id)
           .merge(assignment_id: assignment.id)
@@ -196,6 +228,12 @@ describe SubmissionsController do
 
     describe "PUT update" do
       let(:delivery) { double(:email, deliver_now: nil) }
+
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
 
       it "updates the submission successfully"  do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
