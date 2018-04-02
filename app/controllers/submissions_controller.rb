@@ -61,9 +61,11 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) && Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status! unless submission.will_be_resubmitted?
-        path = @assignment.has_groups? ? { group_id: submission.group_id } :
-          { student_id: submission.student_id }
-        redirect_to = assignment_submission_path(@assignment, submission, path)
+        
+        redirect_to = assignment_submission_path @assignment,
+          submission,
+          @assignment.has_groups? ? { group_id: submission.group_id } : { student_id: submission.student_id }
+
         if current_user_is_student?
           send_notification(submission.id, submission_was_draft) if @assignment.is_individual?
           redirect_to = assignment_path(@assignment, anchor: "tabt1")
