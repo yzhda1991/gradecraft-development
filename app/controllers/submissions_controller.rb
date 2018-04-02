@@ -38,6 +38,10 @@ class SubmissionsController < ApplicationController
       # rubocop:disable AndOr
       redirect_to redirect_to, notice: "#{@assignment.name} was successfully submitted." and return
     end
+    # rubocop:disable AndOr
+    redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
+
+    # end
     render :new, Submissions::NewPresenter.build(assignment_id: params[:assignment_id],
                                               submission: submission,
                                               student: submission.student,
@@ -49,14 +53,7 @@ class SubmissionsController < ApplicationController
   # GET /assignments/:assignment_id/submissions/:id/edit
   def edit
     presenter = Submissions::EditPresenter.new(presenter_attrs_with_id)
-<<<<<<< HEAD
     ensure_editable? presenter.submission, @assignment or return
-=======
-    ensure_editable presenter.submission, @assignment or return
-    if
-      presenter.submission.resubmission = true
-    end
->>>>>>> 3899 Simplify Resubmissions initial commit
     authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end

@@ -9,7 +9,8 @@ module Services
         assignment = context[:assignment]
         submission = context[:submission]
 
-        submission.save!
+        context.fail_with_rollback!("The submission is invalid and cannot be saved") \
+          unless submission.save!
 
       end
     end

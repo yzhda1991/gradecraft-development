@@ -29,10 +29,10 @@ class Submission < ActiveRecord::Base
   end
 
   scope :by_active_individual_students, -> do
-    individual
-      .joins(student: :course_memberships)
-      .where(student: { course_memberships: { active: true }})
-  end
+      individual
+        .includes(student: :course_memberships)
+        .where(student: { course_memberships: { active: true }})
+    end
 
   scope :ungraded, -> do
     includes(:assignment, :group, :student)
@@ -52,12 +52,12 @@ class Submission < ActiveRecord::Base
   #   !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
   # end
 
-  scope :resubmitted, -> {
-    includes(:grade, :assignment)
-    .where("grades.student_visible = true")
-    .where("grades.graded_at < submitted_at")
-    .references(:grade, :assignment)
-  }
+  # scope :resubmitted, -> {
+  #   includes(:grade, :assignment)
+  #   .where("grades.student_visible = true")
+  #   .where("grades.graded_at < submitted_at")
+  #   .references(:grade, :assignment)
+  # }
 
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
@@ -67,6 +67,7 @@ class Submission < ActiveRecord::Base
   scope :submitted, -> { where.not(submitted_at: nil) }
   scope :with_group, -> { where "group_id is not null" }
   scope :individual, -> { where(group_id: nil) }
+  scope :resubmitted, -> { where(resubmission: true) }
 
   before_validation :cache_associations
 

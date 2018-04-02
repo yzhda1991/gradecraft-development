@@ -27,8 +27,7 @@ class API::Assignments::SubmissionsController < ApplicationController
     @submission = assignment.submissions.new merged_submission_params(assignment)
 
     if @submission.save #Put Service call here
-      binding.pry
-      Services::CreatesOrUpdatesSubmission.create_or_update_submission assignment @submission
+      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, @submission
       render "api/assignments/submissions/submission", status: 201
     else
       render "api/assignments/submissions/errors", status: 500
@@ -42,7 +41,6 @@ class API::Assignments::SubmissionsController < ApplicationController
     @submission = assignment.submissions.find_by_id(params[:id])
 
     if @submission.present?
-      binding.pry
       if @submission.update_attributes submission_params #Put service call here
         Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, @submission
 

@@ -16,7 +16,7 @@ module Services
       private
 
       def self.find_grade(assignment, submission)
-        return true if Grade.where(assignment_id: assignment.id, student_id: submission.student_id)
+        return true if !Grade.where(assignment_id: assignment.id, student_id: submission.student_id).empty?
         return false
       end
 

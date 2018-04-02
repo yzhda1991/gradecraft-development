@@ -7,7 +7,6 @@ module Services
     extend LightService::Organizer
 
     def self.creates_or_updates_submission(assignment, submission)
-      binding.pry
       with(assignment: assignment, submission: submission)
         .reduce(
           Actions::UpdateSubmissionParams,
