@@ -1,0 +1,157 @@
+%tr{"ng-if"=>"assignmentShowTableBodyCtrl.loading"}
+  %td.center{"colspan"=>"12"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading students...
+
+%tr{"ng-if"=>"!assignmentShowTableBodyCtrl.loading",
+    "ng-repeat"=>"student in assignmentShowTableBodyCtrl.students"}
+  %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().is_unlockable"}
+    %i.fa.fa-unlock{"ng-if"=>"student.assignment_unlocked"}
+    %i.fa.fa-lock{"ng-if"=>"!student.assignment_unlocked"}
+  %td
+    %a{"ng-href"=>"student.student_path"} {{student.first_name}}
+  %td
+    %a{"ng-href"=>"student.student_path"} {{student.last_name}}
+  %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().threshold_points"}
+    %span{"ng-if"=>"student.grade_instructor_modified"} {{student.raw_score}}
+  %td.status-or-score
+    %span{"ng-if"=>"assignmentShowTableBodyCtrl.showPassFailStatus"}
+      {{student.grade_pass_fail_status}}
+    %span{"ng-if"=>"!assignmentShowTableBodyCtrl.assignment().pass_fail && student.grade_instructor_modified"}
+      {{student.grade_final_points}}
+
+  %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignmentType().student_weightable"}
+    %span{"ng-if"=>"student.weighted_assignments && student.grade_instructor_modified"} {{student.grade_score}}
+    %span{"ng-if"=>"!student.weighted_assignments"} "(not yet assigned)"
+
+  %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().has_levels"} {{student.grade_level}}
+
+  %td
+    %span.has-tooltip{"aria-describedby"=>"assignmentShowTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_complete"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This grade has been marked as complete
+
+  %td
+    %span.has-tooltip{"aria-describedby"=>"assignmentShowTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_student_visible"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This grade has been released and is visible by the {{assignmentShowTableBodyCtrl.termFor("student")}}
+
+  %td
+    %span.has-tooltip{"aria-describedby"=>"assignmentShowTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_feedback_read"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This feedback has been marked as read by the {{assignmentShowTableBodyCtrl.termFor("student")}}
+
+    %span.has-tooltip{"aria-describedby"=>"assignmentShowTableBodyCtrl.tooltipDescribedBy('feedback-viewed-tip')",
+                      "ng-if"=>"!student.grade_feedback_read && student.grade_feedback_reviewed"}
+      %i.fa.fa-eye
+      .display-on-hover.hover-style
+        This feedback has been viewed by the {{assignmentShowTableBodyCtrl.termFor("student")}}
+
+  %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().accepts_submissions"}
+    {{student.submission_submitted_at}}
+
+  %td
+    .table-menu
+      %ul
+        %li{"ng-if"=>"student.grade_instructor_modified"}
+          %a.button{"ng-href"=>"student.grade_path"}
+            %i.fa.fa-eye
+            See Grade
+        %li{"ng-if"=>"!student.grade_instructor_modified"}
+
+-# - presenter.students.each do |student|
+-#   - student_submission = student.submission_for_assignment(presenter.assignment)
+-#   - grade = presenter.grade_for_student(student)
+-#   %tr
+-#     -# - if presenter.assignment.is_unlockable?
+-#     -#   %td
+-#     -#     - if presenter.assignment.is_unlocked_for_student?(student)
+-#     -#       %i.fa.fa-unlock
+-#     -#     - else
+-#     -#       %i.fa.fa-lock
+-#     -# %td= link_to student.first_name, student_path(student)
+-#     -# %td= link_to student.last_name, student_path(student)
+-#     -# - if presenter.assignment.threshold_points?
+-#     -#   %td.raw-score
+-#     -#     = points grade.raw_points if grade.instructor_modified?
+-#     -# %td.status-or-score
+-#     -#   - if presenter.assignment.pass_fail?
+-#     -#     = "#{ term_for grade.pass_fail_status }" if grade.instructor_modified? && grade.pass_fail_status.present?
+-#     -#   - else
+-#     -#     = points grade.final_points if grade.instructor_modified?
+-#
+-#     // If the student can weight the assignment type
+-#     -# - if presenter.assignment_type.student_weightable?
+-#     -#   %td
+-#     -#     - if student.weighted_assignments?(current_course)
+-#     -#       = points grade.score if grade.instructor_modified?
+-#     -#     - else
+-#     -#       = "(not yet assigned)"
+-#
+-#     -# - if presenter.assignment.has_levels?
+-#     -#   %td= presenter.assignment.grade_level(grade) if grade
+-#
+-#     -# %td
+-#     -#   - if grade.complete?
+-#     -#     = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+-#     -#       This grade has been marked as complete
+-#
+-# %td
+-#   - if grade.student_visible?
+-#     = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+-#       This grade has been released and is visible by the student
+
+-# %td
+-#   %span
+-#   - if grade.feedback_read?
+-#     = tooltip("feedback-read-tip_#{presenter.assignment.id}", :check) do
+-#       This feedback has been marked as read by the #{term_for :student}
+-#
+-#   - elsif grade.feedback_reviewed?
+-#     = tooltip("feedback-viewed-tip_#{presenter.assignment.id}", :eye) do
+-#       This feedback has been viewed by the #{term_for :student}
+
+-# - if presenter.assignment.accepts_submissions?
+-#   %td
+-#     - unless student_submission.nil?
+-#       = presenter.submission_submitted_date_for(student_submission)
+-#   %td.hidden
+-#     = presenter.submission_submitted_date_for(student_submission).to_formatted_s(:db) if presenter.submission_submitted_date_for(student_submission).present?
+
+%td
+  .table-menu
+    %ul
+      - if grade.instructor_modified?
+        %li= link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"
+      - else
+        - if presenter.assignment.is_unlockable? && !presenter.assignment.is_unlocked_for_student?(student)
+          = active_course_link_to decorative_glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: student.id, assignment_id: presenter.assignment.id), :method => :post, class: "button"
+        - else
+          - team_param = presenter.for_team? ? {team_id: presenter.team.id} : nil
+          = active_course_link_to decorative_glyph(:check) + "Grade", assignment_student_grade_path(presenter.assignment, student, team_param), method: :post, class: "button #{presenter.has_viewable_submission?(student, current_user) ? "danger" : ""}"
+      - if student_submission.present? || grade.instructor_modified.present?
+        %li.dropdown
+          %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+          %ul.options-menu.dropdown-content
+            - if presenter.assignment.accepts_submissions?
+              - if presenter.has_viewable_submission?(student, current_user)
+                /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. */
+                %li= link_to decorative_glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, student_submission.id)
+            - if grade.instructor_modified?
+              %li
+                = edit_grade_link_to grade
+
+              = active_course_link_to decorative_glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure you want to delete #{student.name}'s grade for #{presenter.assignment.name}?", method: :delete }
+
+%td
+  .center
+    - if grade.not_released?
+      %label
+        %span.sr-only Select Grades to Make Student Visible
+        = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"

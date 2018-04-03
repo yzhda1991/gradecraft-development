@@ -1,31 +1,29 @@
-%table.no-table-header
-  %thead
-    %tr
-      %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.is_unlockable"}
-      %th{"scope"=>"col"} First Name
-      %th{"scope"=>"col"} Last Name
-      %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.threshold_points"} Raw Score
+%tr
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.is_unlockable"}
+  %th{"scope"=>"col"} First Name
+  %th{"scope"=>"col"} Last Name
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.threshold_points"} Raw Score
 
-      %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && !assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-        %th{"scope"=>"col"} Score
+  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && !assignmentShowTableHeaderCtrl.assignment.pass_fail"}
+    %th{"scope"=>"col"} Score
 
-      %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-        %th{"scope"=>"col"} Raw Score
-        %th{"scope"=>"col"} {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
+  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
+    %th{"scope"=>"col"} Raw Score
+    %th{"scope"=>"col"} {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
 
-      %template{"ng-if"=>"!assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-        %th{"scope"=>"col"} Grade
+  %template{"ng-if"=>"!assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
+    %th{"scope"=>"col"} Grade
 
-      %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.has_levels"} Level Earned
-      %th{"scope"=>"col"} Graded
-      %th{"scope"=>"col"} Visible to Student
-      %th{"scope"=>"col"} Read?
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.has_levels"} Level Earned
+  %th{"scope"=>"col"} Graded
+  %th{"scope"=>"col"} Visible to Student
+  %th{"scope"=>"col"} Read?
 
-      %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment.accepts_submissions"}
-        %th Submitted
+  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment.accepts_submissions"}
+    %th Submitted
 
-      %th{"style"=>"min-width: 180px"}
+  %th{"style"=>"min-width: 180px"}
 
-      %th{"width"=>"120px"}
-        %button.button.select-all{"role"=>"button", "type"=>"button"} Check
-        %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck
+  %th{"width"=>"120px"}
+    %button.button.select-all{"role"=>"button", "type"=>"button"} Check
+    %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck

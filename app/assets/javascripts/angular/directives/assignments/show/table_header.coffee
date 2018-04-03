@@ -12,7 +12,7 @@
     bindToController: true
     controller: AssignmentShowTableHeaderCtrl
     controllerAs: 'assignmentShowTableHeaderCtrl'
-    restrict: 'EA'
+    restrict: 'A'
     templateUrl: 'assignments/show/table_header.html'
   }
 ]

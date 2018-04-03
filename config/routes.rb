@@ -370,6 +370,9 @@ Rails.application.routes.draw do
 
   #18. API Calls
   namespace :api, defaults: { format: :json } do
+    resources :assignments, only: [], module: :assignments do
+      resources :students, only: [:index]
+    end
 
     resources :assignments, only: [:index, :show, :update, :create] do
       get "analytics"
@@ -525,7 +528,6 @@ Rails.application.routes.draw do
 
     get "students/analytics", to: "students#analytics"
     get "students/:id/analytics", to: "students#student_analytics"
-
 
     resources :students, only: [], module: :students do
       resources :badges, only: :index
