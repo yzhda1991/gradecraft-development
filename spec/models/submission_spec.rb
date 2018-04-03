@@ -169,6 +169,26 @@ describe Submission do
     end
   end
 
+  describe ".resubmitted" do
+    before { Submission.destroy_all }
+
+    it "returns only submissions where resubmitted is true" do
+      submitted_submission = create(:submission, assignment: assignment, student: student)
+      grade = create(:student_visible_grade, assignment: assignment, student: student)
+      grade.graded_at = grade.created_at
+      grade.save!
+      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submitted_submission
+
+      expect(Submission.resubmitted).to eq [submitted_submission]
+    end
+
+    it "returns only submissions where resubmitted is true" do
+      submitted_submission = create(:submission, assignment: assignment, student: student)
+
+      expect(Submission.resubmitted).to eq []
+    end
+  end
+
   describe "#submission_files_attributes=" do
     it "supports multiple file uploads" do
       file_attribute_1 = fixture_file "test_file.txt", "txt"
@@ -343,32 +363,32 @@ describe Submission do
     end
   end
 
-  describe "#resubmitted?" do
-    it "returns false if it has no grade" do
-      expect(submission).to_not be_resubmitted
-    end
-
-    it "returns true if grade was graded before it was submitted" do
-      create :grade, student_visible: true, student: student, submission: submission,
-        assignment: assignment, graded_at: DateTime.now
-      submission.update_attributes submitted_at: DateTime.now
-      expect(submission).to be_resubmitted
-    end
-
-    it "returns false if the grade was graded after it was submitted" do
-      submission.submitted_at = DateTime.now
-      submission.save
-      create :grade, student_visible: true, submission: submission,
-        assignment: submission.assignment, graded_at: DateTime.now
-      expect(submission).to_not be_resubmitted
-    end
-
-    it "returns false if it was not graded" do
-      create :grade, student_visible: true, submission: submission,
-        assignment: submission.assignment
-      expect(submission).to_not be_resubmitted
-    end
-  end
+  # describe "#resubmitted?" do
+  #   it "returns false if it has no grade" do
+  #     expect(submission).to_not be_resubmitted
+  #   end
+  #
+  #   it "returns true if grade was graded before it was submitted" do
+  #     create :grade, student_visible: true, student: student, submission: submission,
+  #       assignment: assignment, graded_at: DateTime.now
+  #     submission.update_attributes submitted_at: DateTime.now
+  #     expect(submission).to be_resubmitted
+  #   end
+  #
+  #   it "returns false if the grade was graded after it was submitted" do
+  #     submission.submitted_at = DateTime.now
+  #     submission.save
+  #     create :grade, student_visible: true, submission: submission,
+  #       assignment: submission.assignment, graded_at: DateTime.now
+  #     expect(submission).to_not be_resubmitted
+  #   end
+  #
+  #   it "returns false if it was not graded" do
+  #     create :grade, student_visible: true, submission: submission,
+  #       assignment: submission.assignment
+  #     expect(submission).to_not be_resubmitted
+  #   end
+  # end
 
   describe "#name" do
     it "returns the student's name" do
