@@ -6,6 +6,15 @@
     vm.assignmentType = AssignmentTypeService.assignmentType
 
     vm.termFor = (term) -> AssignmentService.termFor(term)
+
+    vm.showScore = () ->
+      !vm.assignmentType.student_weightable && !vm.assignment().pass_fail
+
+    vm.showWeightedScore = () ->
+      vm.assignmentType.student_weightable && vm.assignment().pass_fail
+
+    vm.showGrade = () ->
+      !vm.assignmentType.student_weightable && vm.assignment().pass_fail
   ]
 
   {

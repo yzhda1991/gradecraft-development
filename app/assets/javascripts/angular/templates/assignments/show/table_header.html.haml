@@ -1,26 +1,23 @@
 %tr
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.is_unlockable"}
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().is_unlockable"}
   %th{"scope"=>"col"} First Name
   %th{"scope"=>"col"} Last Name
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.threshold_points"} Raw Score
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().threshold_points"} Raw Score
 
-  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && !assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-    %th{"scope"=>"col"} Score
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showScore()"} Score
 
-  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-    %th{"scope"=>"col"} Raw Score
-    %th{"scope"=>"col"} {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()"} Raw Score
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()"}
+    {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
 
-  %template{"ng-if"=>"!assignmentShowTableHeaderCtrl.assignmentType.student_weightable && assignmentShowTableHeaderCtrl.assignment.pass_fail"}
-    %th{"scope"=>"col"} Grade
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showGrade()"} Grade
 
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment.has_levels"} Level Earned
+  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().has_levels"} Level Earned
   %th{"scope"=>"col"} Graded
   %th{"scope"=>"col"} Visible to Student
   %th{"scope"=>"col"} Read?
 
-  %template{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment.accepts_submissions"}
-    %th Submitted
+  %th{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment().accepts_submissions"} Submitted
 
   %th{"style"=>"min-width: 180px"}
 

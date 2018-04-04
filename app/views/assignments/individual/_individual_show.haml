@@ -8,14 +8,15 @@
         = active_course_submit_tag "Delete All Grades", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
 
 .progress
-= form_tag release_assignment_grades_path(presenter.assignment), method: :put do
-  %assignment-show-table{"data-assignment-id"=>"#{presenter.assignment.id}",
-                         "data-assignment-type-id"=>"#{presenter.assignment_type.id}"}
+-# = form_tag release_assignment_grades_path(presenter.assignment), method: :put do
+%assignment-show-table{"data-assignment-id"=>"#{presenter.assignment.id}",
+                       "data-assignment-type-id"=>"#{presenter.assignment_type.id}",
+                       "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
 
-  - if presenter.has_grades?
-    .right
-      %br
-      = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
-        data: { behavior: "selected-individual-grades-command", confirm: "Release Selected Grades to Students?" }
+  -# - if presenter.has_grades?
+  -#   .right
+  -#     %br
+  -#     = active_course_submit_tag "Release Selected Grades", class: "button disabled", disabled: true,
+  -#       data: { behavior: "selected-individual-grades-command", confirm: "Release Selected Grades to Students?" }
 
   .clear

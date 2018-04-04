@@ -1,5 +1,5 @@
-@gradecraft.directive 'assignmentShowTableBody', ['AssignmentService', 'AssignmentTypeService', 'StudentService',
-  (AssignmentService, AssignmentTypeService, StudentService) ->
+@gradecraft.directive 'assignmentShowTableBody', ['AssignmentService', 'AssignmentTypeService', 'StudentService', '$sce',
+  (AssignmentService, AssignmentTypeService, StudentService, $sce) ->
     AssignmentShowTableBodyCtrl = [() ->
       vm = this
       vm.loading = true
@@ -10,7 +10,23 @@
       vm.tooltipDescribedBy = (type="feedback-read-tip")->
         "#{type}_#{vm.assignment().id}"
 
+      vm.manuallyUnlockPath = (studentId) ->
+        "/unlock_states/#{vm.assignment().id}/manually_unlock?student_id=#{studentId}&assignment_id=#{vm.assignment().id}"
+
       vm.termFor = (term) -> StudentService.termFor(term)
+      vm.sanitize = (html) -> $sce.trustAsHtml(html)
+
+      vm.showGradeButton = (student) ->
+        (!vm.assignment().is_unlockable || student.assignment_unlocked) && vm.linksVisible
+
+      vm.showUnlockButton = (student) ->
+        vm.assignment().is_unlockable && !student.assignment_unlocked && vm.linksVisible
+
+      vm.showGradeScore = (student) ->
+        student.weighted_assignments && student.grade_instructor_modified
+
+      vm.showFinalPoints = (student) ->
+        !vm.assignment().pass_fail && student.grade_instructor_modified
 
       vm.showPassFailStatus = (student) ->
         vm.assignment().pass_fail && student.grade_instructor_modified &&
@@ -22,6 +38,8 @@
     ]
 
     {
+      scope:
+        linksVisible: '@'
       bindToController: true
       controller: AssignmentShowTableBodyCtrl
       controllerAs: 'assignmentShowTableBodyCtrl'

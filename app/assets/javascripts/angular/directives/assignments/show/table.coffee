@@ -17,6 +17,7 @@
 
   {
     scope:
+      linksVisible: '@'
       assignmentId: '@'
       assignmentTypeId: '@'
     bindToController: true
