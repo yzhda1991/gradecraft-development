@@ -302,6 +302,13 @@
     criterionGrade.points = level.points
     calculateGradePoints()
 
+  unsetCriterionGrade = (criterionId)->
+    criterionGrade =
+      findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
+    criterionGrade.level_id = null
+    criterionGrade.points = null
+    calculateGradePoints()
+
   _updateCriterionGrade = (criterionId)->
     criterionGrade = findCriterionGrade(criterionId)
     return false unless criterionGrade
@@ -414,6 +421,7 @@
     findCriterionGrade: findCriterionGrade
     addCriterionGrade: addCriterionGrade
     setCriterionGradeLevel: setCriterionGradeLevel
+    unsetCriterionGrade: unsetCriterionGrade
     queueUpdateCriterionGrade: queueUpdateCriterionGrade
 
     postFileUploads: postFileUploads
