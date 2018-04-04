@@ -10,7 +10,8 @@
 
     # Can the badge be awarded or unawarded for this grade?
     vm.badgeIsActionable = (badge)->
-      badge.available_for_student || vm.badgeIsEarnedForGrade(badge)
+      !badge.is_locked &&
+      (badge.available_for_student || vm.badgeIsEarnedForGrade(badge))
 
     # Can the badge be awarded for this grade?
     vm.badgeIsAwardable = (badge)->
