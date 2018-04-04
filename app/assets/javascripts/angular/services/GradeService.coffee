@@ -166,19 +166,13 @@
       "grades", modelGrade.id, _updateGrade, [returnURL, submit], delay
     )
 
-  _confirmMessage = ()->
-    message = "Are you sure you want to submit the grade for this assignment?"
-    if !isRubricGraded
-      return message
-    if _.every(criterionGrades, "level_id")
-      message
-    else
-      message + " You still have criteria without a selected level."
+  _needsConfirmation = ()->
+    isRubricGraded && ! _.every(criterionGrades, "level_id")
 
   # Final "Submit Grade" actions, includes cleanup and redirect, background jobs
   submitGrade = (returnURL=null)->
-    return false unless confirm _confirmMessage()
-
+    if _needsConfirmation()
+      return false unless confirm "Are you sure you want to submit the grade for this assignment?  You still have criteria without a selected level."
     modelGrade.student_visible =  modelGrade.submit_as_student_visible
     modelGrade.complete =  modelGrade.submit_as_complete
 
