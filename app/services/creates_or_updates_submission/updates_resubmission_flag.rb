@@ -16,14 +16,14 @@ module Services
 
       def self.find_individual_grade(assignment, submission)
         if assignment.nil? == false && submission.student_id.nil? == false
-          return true if !Grade.where(assignment_id: assignment.id, student_id: submission.student_id).complete.empty?
+          return true if !Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible.empty?
         end
         return false
       end
 
       def self.find_group_grade(assignment, submission)
         if assignment.nil? == false && submission.group.nil? == false
-          return true if !Grade.for_group(assignment, submission.group).complete.empty?
+          return true if !Grade.for_group(assignment, submission.group).student_visible.empty?
         end
         return false
       end

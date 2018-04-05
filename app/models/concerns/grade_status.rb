@@ -8,7 +8,8 @@ module GradeStatus
     scope :not_released, -> { where(instructor_modified: true, student_visible: false)}
     scope :ready_for_release, -> { where(instructor_modified: true, complete: true, student_visible: false)}
     scope :student_visible, ->  { where(student_visible: true) }
-    scope :complete, -> { where(student_visible: true, complete: true) }
+    # Needs validation to ensure that a grade cannot be complete but invisible to student
+    # scope :complete, -> { where(student_visible: true, complete: true) }
   end
 
   def in_progress?
