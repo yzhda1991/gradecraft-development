@@ -1,8 +1,10 @@
-@gradecraft.directive 'assignmentShowTableBody', ['AssignmentService', 'AssignmentTypeService', 'StudentService', '$sce',
-  (AssignmentService, AssignmentTypeService, StudentService, $sce) ->
+@gradecraft.directive 'assignmentShowTableBody', ['AssignmentService', 'AssignmentTypeService', 'StudentService', 'SortableService', '$sce',
+  (AssignmentService, AssignmentTypeService, StudentService, SortableService, $sce) ->
     AssignmentShowTableBodyCtrl = [() ->
       vm = this
       vm.loading = true
+      vm.sortable = SortableService
+
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
       vm.students = StudentService.students

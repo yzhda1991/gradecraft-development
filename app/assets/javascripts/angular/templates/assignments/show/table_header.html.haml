@@ -1,23 +1,34 @@
 %tr
   %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().is_unlockable"}
-  %th{"scope"=>"col"} First Name
-  %th{"scope"=>"col"} Last Name
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().threshold_points"} Raw Score
 
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showScore()"} Score
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"First Name", "data-sortable-predicate"=>"first_name"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Last Name", "data-sortable-predicate"=>"last_name"}
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().threshold_points",
+                      "data-sortable-header-text"=>"Raw Score", "data-sortable-predicate"=>"raw_score"}
 
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()"} Raw Score
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()"}
-    {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showScore()",
+                      "data-sortable-header-text"=>"Score", "data-sortable-predicate"=>"['grade_pass_fail_status', 'grade_final_points']"}
 
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showGrade()"} Grade
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()",
+                      "data-sortable-header-text"=>"Raw Score", "data-sortable-predicate"=>"grade_score"}
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()",
+      "data-sortable-header-text"=>"{{assignmentShowTableHeaderCtrl.termFor('weight')}}-weighted Score",
+      "data-sortable-predicate"=>"grade_score"}
+    -# TODO: test this
+    -# %a{"ng-click"=>"assignmentShowTableHeaderCtrl.setSort()('grade_score')"}
+    -#   {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
 
-  %th{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().has_levels"} Level Earned
-  %th{"scope"=>"col"} Graded
-  %th{"scope"=>"col"} Visible to Student
-  %th{"scope"=>"col"} Read?
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showGrade()",
+                      "data-sortable-header-text"=>"Grade", "data-sortable-predicate"=>"grade_level"}
 
-  %th{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment().accepts_submissions"} Submitted
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().has_levels",
+                      "data-sortable-header-text"=>"Level Earned", "data-sortable-predicate"=>"grade_level"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Graded", "data-sortable-predicate"=>"grade_complete"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Visible to Student", "data-sortable-predicate"=>"grade_student_visible"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Read?", "data-sortable-predicate"=>"grade_feedback_read"}
+
+  %th.sortable-header{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment().accepts_submissions",
+                      "data-sortable-header-text"=>"Submitted", "data-sortable-predicate"=>"submission_submitted_at"}
 
   %th{"style"=>"min-width: 180px"}
 

@@ -5,7 +5,7 @@
     Loading students...
 
 %tr{"ng-if"=>"!assignmentShowTableBodyCtrl.loading",
-    "ng-repeat"=>"student in assignmentShowTableBodyCtrl.students"}
+    "ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse"}
 
   -# Unlock indicator
   %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().is_unlockable"}
