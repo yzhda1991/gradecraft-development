@@ -2,11 +2,12 @@ describe SubmissionsHelper do
   let(:course) { create :course }
 
   describe "#resubmission_count_for" do
+    let!(:assignment) { create(:assignment) }
     let!(:student) { create(:course_membership, :student, course: course, active: true).user }
-    let!(:grade) { create :student_visible_grade, course: course, student_id: student.id, submission: submission,
+    let!(:grade) { create :student_visible_grade, course: course, student_id: student.id, assignment_id: assignment.id, submission: submission,
                    graded_at: 1.day.ago
                  }
-    let!(:submission) { create :submission, student_id: student.id, course: course, submitted_at: DateTime.now }
+    let!(:submission) { create :submission, student_id: student.id, assignment_id: assignment.id, course: course, resubmission: true, submitted_at: DateTime.now }
 
     it "returns the number of resubmitted submissions" do
       expect(resubmission_count_for(course)).to eq 1
