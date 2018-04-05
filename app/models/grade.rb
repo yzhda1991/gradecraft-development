@@ -57,6 +57,7 @@ class Grade < ActiveRecord::Base
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(score: nil)}
+  scope :for_group, ->(assignment, group) { where(assignment_id: assignment.id, group_id: group.id) }
 
   scope :for_active_students, -> do
     joins("INNER JOIN course_memberships ON "\

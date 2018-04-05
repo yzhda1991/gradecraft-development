@@ -294,9 +294,9 @@ describe Submission do
 
   describe ".resubmitted" do
     it "returns the submissions that have been submitted after they were graded" do
-      grade = create(:student_visible_grade, submission: submission, graded_at: 1.day.ago)
+      grade = create(:student_visible_grade, assignment: assignment, submission: submission, student: student, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
-      submission.save
+      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submission
       expect(Submission.resubmitted).to eq [submission]
     end
 
@@ -323,16 +323,16 @@ describe Submission do
     end
 
     it "returns one submission for a group resubmissions" do
-      submission = build(:group_submission)
+      submission = build(:group_submission, assignment: assignment)
       student1 = create(:user)
       student2 = create(:user)
       group = create(:group, assignments: [submission.assignment])
       group.students << [student1, student2]
-      grade1 = create(:student_visible_grade, submission: submission, student: student1, graded_at: 1.day.ago)
-      grade2 = create(:student_visible_grade, submission: submission, student: student2, graded_at: 1.day.ago)
+      grade1 = create(:student_visible_grade, assignment: assignment, student: student1, group: group, graded_at: 1.day.ago)
+      grade2 = create(:student_visible_grade, assignment: assignment, student: student2, group: group, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.group_id = group.id
-      submission.save
+      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submission
       expect(Submission.resubmitted).to eq [submission]
     end
   end
