@@ -21,7 +21,7 @@ feature "viewing submissions" do
         student: student, raw_points: 10000, student_visible: true,
         graded_at: DateTime.now
       submission.update_attributes link: "http://example.org",
-        submitted_at: DateTime.now
+        submitted_at: DateTime.now, resubmission: true
       visit assignment_path assignment
 
       within ".pageContent" do
@@ -39,7 +39,7 @@ feature "viewing submissions" do
         student: student, raw_points: 10000, student_visible: true,
         graded_at: DateTime.now
       submission.update_attributes link: "http://example.org",
-        submitted_at: DateTime.now
+        submitted_at: DateTime.now, resubmission: true
       visit assignment_submission_path assignment, submission
     end
 
