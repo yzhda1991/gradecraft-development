@@ -27,8 +27,9 @@ class SubmissionsController < ApplicationController
   def create
     submission = @assignment.submissions.new(submission_params.merge(submitted_at: DateTime.now))
 
-    if submission.save
-      Services::CreatesOrUpdatesSubmission.create_or_update_submission assignment @submission
+    result = Services::CreatesOrUpdatesSubmission.creates_or_updates_submission @assignment, submission
+    if result.success?
+
       submission.check_and_set_late_status!
       redirect_to = (session.delete(:return_to) || assignment_path(@assignment))
       if current_user_is_student?
