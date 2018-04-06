@@ -41,7 +41,7 @@ class SubmissionsController < ApplicationController
     # rubocop:disable AndOr
     redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
 
-    # end
+    end
     render :new, Submissions::NewPresenter.build(assignment_id: params[:assignment_id],
                                               submission: submission,
                                               student: submission.student,
