@@ -44,5 +44,9 @@ FactoryGirl.define do
     trait :pass_fail do
       pass_fail true
     end
+
+    trait :closed do
+      open_at Faker::Date.forward(3)
+    end
   end
 end

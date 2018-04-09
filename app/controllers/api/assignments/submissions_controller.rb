@@ -31,6 +31,7 @@ class API::Assignments::SubmissionsController < ApplicationController
     end
   end
 
+  # For updating draft submissions only, does not allow submitting
   # PUT api/assignments/:assignment_id/submissions/:id
   def update
     assignment = Assignment.find(params[:assignment_id])

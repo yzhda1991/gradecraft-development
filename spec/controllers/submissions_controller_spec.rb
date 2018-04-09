@@ -1,55 +1,47 @@
 describe SubmissionsController do
-  let(:course) { create(:course) }
-  let(:assignment) { create(:assignment, course: course) }
-  let(:student) { create(:course_membership, :student, course: course).user }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:submission) { create(:submission, assignment: assignment, course: course, student: student) }
+  let(:course) { build :course }
+  let(:assignment) { create :assignment, course: course }
+  let(:student) { build :user, courses: [course], role: :student }
+  let(:submission) { create :submission, assignment: assignment, course: course, student: student }
+
+  before(:each) { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
+    let(:professor) { build :user, courses: [course], role: :professor }
 
-    before(:each) do
-      login_user(professor)
-    end
+    before(:each) { login_user professor }
 
     describe "GET show" do
-      let(:ability) { Object.new.extend(CanCan::Ability) }
-      let(:make_request) { get :show, params: { id: submission.id, assignment_id: submission.assignment_id }}
-      let(:presenter) { double(presenter_class, submission: submission).as_null_object }
-      let(:presenter_class) { Submissions::ShowPresenter }
-
-      before do
-        allow_any_instance_of(Submissions::ShowPresenter).to receive(:submission)
-          .and_return submission
-      end
+      let(:ability) { instance_double "CanCan::Ability", authorize!: true }
+      let(:make_request) { get :show, params: { id: submission.id, assignment_id: submission.assignment_id } }
+      let(:presenter) { instance_double "Submissions::ShowPresenter", submission: submission }
 
       before(:each) do
-        ability.can :read, submission
         allow_any_instance_of(described_class)
           .to receive_messages(
             current_ability: ability,
             presenter: presenter,
             presenter_attrs_with_id: { some: "attrs", id: 5 }
           )
-        allow(presenter_class).to receive(:new) { presenter }
+        allow(Submissions::ShowPresenter).to receive(:new).and_return presenter
       end
 
       it "returns the submission show page" do
         make_request
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:show)
-      end
-
-      it "builds a show presenter with the presenter attrs" do
-        expect(presenter_class).to receive(:new).with({ some: "attrs", id: 5 })
-        make_request
       end
     end
 
     describe "GET new" do
       let(:make_request) { get :new, params: { assignment_id: submission.assignment_id }}
-      let(:presenter_class) { Submissions::NewPresenter }
+      let(:presenter) { instance_double "Submissions::NewPresenter", submission: submission, render_options: {} }
+
+      before(:each) { allow(Submissions::NewPresenter).to receive(:new).and_return presenter }
 
       it "returns the submission new page" do
         make_request
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:new)
       end
     end
@@ -58,6 +50,7 @@ describe SubmissionsController do
       it "display the edit form" do
         allow_any_instance_of(SubmissionProctor).to receive(:open_for_editing?).and_return true
         get :edit, params: { assignment_id: assignment.id,  id: submission.id }
+        expect(assigns(:assignment)).to eq assignment
         expect(response).to render_template(:edit)
       end
 
@@ -69,6 +62,11 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
+      it "assigns the assignment" do
+        post :create, params: { assignment_id: assignment.id, submission: attributes_for(:submission) }
+        expect(assigns(:assignment)).to eq assignment
+      end
+
       it "creates the submission with valid attributes" do
         params = attributes_for(:submission).merge(student_id: student.id)
         expect{ post :create, params: { assignment_id: assignment.id, submission: params }}.to change(Submission,:count).by(1)
@@ -102,6 +100,11 @@ describe SubmissionsController do
     describe "POST update" do
       let(:submission_params) { attributes_for(:submission) }
 
+      it "assigns the assignment" do
+        post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
+        expect(assigns(:assignment)).to eq assignment
+      end
+
       it "updates the submission successfully"  do
         submission_params.merge!(assignment_id: assignment.id, text_comment: "Ausgezeichnet")
         post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }
@@ -133,10 +136,15 @@ describe SubmissionsController do
     end
 
     describe "GET destroy" do
-      let!(:submission) { create(:submission, assignment: assignment, student: student, course: course) }
+      let!(:submission) { create :submission, assignment: assignment, student: student, course: course }
+
+      it "assigns the assignment" do
+        delete :destroy, params: { id: submission.id, assignment_id: assignment.id }
+        expect(assigns(:assignment)).to eq assignment
+      end
 
       it "destroys the submission" do
-        expect{ get :destroy, params: { id: submission.id, assignment_id: assignment.id } }.to change(Submission,:count).by(-1)
+        expect{ delete :destroy, params: { id: submission.id, assignment_id: assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
   end
@@ -144,11 +152,15 @@ describe SubmissionsController do
   context "as a student" do
     let(:delivery) { double(:email, deliver_now: nil) }
 
-    before do
-      login_user(student)
-    end
+    before { login_user student }
 
     describe "GET edit" do
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
+
       it "shows the edit submission form" do
         get :edit, params: { id: submission.id, assignment_id: assignment.id }
         expect(response).to render_template(:edit)
@@ -162,6 +174,12 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
+
       it "creates the submission with valid attributes" do
         params = attributes_for(:submission, student_id: student.id)
           .merge(assignment_id: assignment.id)
@@ -196,6 +214,12 @@ describe SubmissionsController do
 
     describe "PUT update" do
       let(:delivery) { double(:email, deliver_now: nil) }
+
+      it "redirects if the assignment is closed" do
+        assignment.update open_at: 1.days.from_now
+        get :edit, params: { id: submission.id, assignment_id: assignment.id }
+        expect(response).to redirect_to assignment_path(assignment)
+      end
 
       it "updates the submission successfully"  do
         params = attributes_for(:submission).merge({ assignment_id: assignment.id })
@@ -234,7 +258,7 @@ describe SubmissionsController do
 
       context "with an individual assignment" do
         it "sends a successful email if the submission was a draft" do
-          empty_submission = create(:draft_submission, assignment: assignment, student: student)
+          empty_submission = create :draft_submission, assignment: assignment, student: student
           submission_params = { course_id: course, assignment_id: assignment.id, student_id: student }
           expect(delivery).to receive(:deliver_now)
           expect(NotificationMailer).to \
@@ -253,8 +277,8 @@ describe SubmissionsController do
       end
 
       context "with a group assignment" do
-        let(:group_assignment) { create(:group_assignment, course: course) }
-        let(:group_submission) { create(:group_submission, assignment: group_assignment) }
+        let(:group_assignment) { create :group_assignment, course: course }
+        let(:group_submission) { create :group_submission, assignment: group_assignment }
 
         it "does not send any emails" do
           params = attributes_for(:submission).merge({ assignment_id: group_assignment.id })
@@ -265,13 +289,13 @@ describe SubmissionsController do
       end
     end
 
-    describe "protected routes requiring id in params" do
-      [
-        :show,
-        :destroy
-      ].each do |route|
-        it "#{route} redirects to root" do
-          expect(get route, params: { assignment_id: 1, id: "1" }).to redirect_to(:root)
+    describe "protected routes" do
+      it "redirect with a status 302" do
+        [
+          -> { get :show, params: { assignment_id: 1, id: 1 } },
+          -> { get :destroy, params: { assignment_id: 1, id: 1 } }
+        ].each do |protected_route|
+          expect(protected_route.call).to have_http_status :redirect
         end
       end
     end
@@ -310,36 +334,21 @@ describe SubmissionsController do
   end
 
   context "as an observer" do
-    let(:observer) { create(:user, courses: [course], role: :observer) }
+    let(:observer) { build_stubbed :user, courses: [course], role: :observer }
 
-    before(:each) { login_user(observer) }
+    before(:each) { login_user observer }
 
-    describe "protected routes not requiring id in params" do
-      params = { assignment_id: "1" }
-      routes = [
-        { action: :create, request_method: :post },
-        { action: :new, request_method: :get }
-      ]
-      routes.each do |route|
-        it "#{route[:request_method]} :#{route[:action]} redirects to assignments index" do
-          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
-            redirect_to(assignments_path)
-        end
-      end
-    end
-
-    describe "protected routes requiring id in params" do
-      params = { assignment_id: "1", id: "1" }
-      routes = [
-        { action: :edit, request_method: :get },
-        { action: :show, request_method: :get },
-        { action: :update, request_method: :post },
-        { action: :destroy, request_method: :get }
-      ]
-      routes.each do |route|
-        it "#{route[:request_method]} :#{route[:action]} redirects to redirects to assignments index" do
-          expect(eval("#{route[:request_method]} :#{route[:action]}, params: #{params}")).to \
-            redirect_to(assignments_path)
+    describe "protected routes" do
+      it "redirect with a status 302" do
+        [
+          -> { get :new, params: { assignment_id: 1 } },
+          -> { post :create, params: { assignment_id: 1 } },
+          -> { get :edit, params: { assignment_id: 1, id: 1 } },
+          -> { get :show, params: { assignment_id: 1, id: 1 } },
+          -> { post :update, params: { assignment_id: 1, id: 1 } },
+          -> { get :destroy, params: { assignment_id: 1, id: 1 } }
+        ].each do |protected_route|
+          expect(protected_route.call).to have_http_status :redirect
         end
       end
     end
