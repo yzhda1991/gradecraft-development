@@ -117,7 +117,7 @@ class Course < ActiveRecord::Base
 
   def copy(copy_type, attributes={})
     assoc = copy_type != "with_students" ? [] : [:course_memberships, :teams]
-    result = CopyValidator.new.validate self, overrides: assoc
+    result = CopyValidator.new.validate self, associations: assoc
     raise CopyValidationError.new(result.details, "Failed to copy #{self.name} due to validation errors") if result.has_errors
 
     if copy_type != "with_students"
