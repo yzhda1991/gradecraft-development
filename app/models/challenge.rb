@@ -75,7 +75,6 @@ class Challenge < ActiveRecord::Base
 
   # Copy assignment media
   def copy_media(copy)
-    copy.update(media: nil, remove_media: true)
     remote_upload(copy, self, "media", media.url)
   end
 
