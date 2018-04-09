@@ -67,7 +67,6 @@ class Badge < ActiveRecord::Base
 
   # Copy badge icon
   def copy_icon(copy)
-    copy.update(icon: nil, remove_icon: true)
     remote_upload(copy, self, "icon", icon.url)
   end
 
