@@ -21,39 +21,19 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
   end
 
   def due_dates?
-    assignments.any?{ |assignment| assignment.due_at? }
+    assignments.any? { |assignment| assignment.due_at? }
   end
 
   def grade_for(assignment)
     student.grade_for_assignment(assignment)
   end
 
-  def to_do?(assignment)
-    if student
-      assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
-    else
-      assignment
-    end
-  end
-
-  def course_planner?(assignment)
-    to_do?(assignment) && assignment.soon?
-  end
-
   def course_planner_assignments
-    assignments.includes(:assignment_type).select{ |assignment| course_planner?(assignment) }
-  end
-
-  def my_planner?(assignment)
-    if due_dates?
-      course_planner?(assignment) && starred?(assignment)
-    else
-      to_do?(assignment) && starred?(assignment)
-    end
+    assignments.includes(:assignment_type).select { |assignment| course_planner?(assignment) }
   end
 
   def my_planner_assignments
-    assignments.select{ |assignment| my_planner?(assignment) }
+    assignments.select { |assignment| my_planner?(assignment) }
   end
 
   def submittable?(assignment)
@@ -70,5 +50,27 @@ class Info::DashboardCoursePlannerPresenter < Showtime::Presenter
 
   def submitted_submissions_count(assignment)
     assignment.submissions.submitted.count
+  end
+
+  private
+
+  def to_do?(assignment)
+    if student
+      assignment.visible_for_student?(student) && !GradeProctor.new(grade_for(assignment)).viewable?
+    else
+      assignment
+    end
+  end
+
+  def course_planner?(assignment)
+    to_do?(assignment) && assignment.soon?
+  end
+
+  def my_planner?(assignment)
+    if due_dates?
+      course_planner?(assignment) && starred?(assignment)
+    else
+      to_do?(assignment) && starred?(assignment)
+    end
   end
 end

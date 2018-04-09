@@ -461,6 +461,10 @@ Rails.application.routes.draw do
     get "timeline_events", to: "courses#timeline_events"
     put "course_memberships/confirm_onboarding", to: "course_memberships#confirm_onboarding"
 
+    resources :dashboard, only: [] do
+      get :due_this_week, on: :collection
+    end
+
     resources :earned_badges, only: [:create, :destroy]
     get "courses/:course_id/badges/:badge_id/earned_badges/:id/confirm_earned", to: "earned_badges#confirm_earned",
       as: :earned_badge_confirm
