@@ -1,6 +1,7 @@
 describe Submission do
   let(:course) { build_stubbed(:course) }
   let(:assignment) { create(:assignment) }
+  let(:group_assignment) { create(:assignment) }
   let(:student) { create(:course_membership, :student, course: course, active: true).user }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }
 
@@ -323,16 +324,17 @@ describe Submission do
     end
 
     it "returns one submission for a group resubmissions" do
-      submission = build(:group_submission, assignment: assignment)
+      group_assignment = build(:assignment, grade_scope: "Group")
+      submission = build(:group_submission, assignment: group_assignment)
       student1 = create(:user)
       student2 = create(:user)
       group = create(:group, assignments: [submission.assignment])
       group.students << [student1, student2]
-      grade1 = create(:student_visible_grade, assignment: assignment, student: student1, group: group, graded_at: 1.day.ago)
-      grade2 = create(:student_visible_grade, assignment: assignment, student: student2, group: group, graded_at: 1.day.ago)
+      grade1 = create(:student_visible_grade, assignment: group_assignment, student: student1, group: group, graded_at: 1.day.ago)
+      grade2 = create(:student_visible_grade, assignment: group_assignment, student: student2, group: group, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.group_id = group.id
-      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submission
+      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission group_assignment, submission
       expect(Submission.resubmitted).to eq [submission]
     end
   end
