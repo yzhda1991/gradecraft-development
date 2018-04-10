@@ -1,9 +1,8 @@
-describe API::LearningObjectives::OutcomesController, focus: true do
-  let(:course) { create :course, :uses_learning_objectives }
+describe API::LearningObjectives::OutcomesController do
+  let(:course) { build :course, :uses_learning_objectives }
   let(:learning_objective) { create :learning_objective, :with_linked_assignment, course: course }
+  let!(:observed_outcome) { create :student_visible_observed_outcome, cumulative_outcome: cumulative_outcome }
   let(:assignment) { learning_objective.assignments.first }
-  let!(:cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective }
-  let!(:observed_outcome) { create :learning_objective_observed_outcome, cumulative_outcome: cumulative_outcome }
 
   before(:each) do
     login_user user
@@ -11,13 +10,27 @@ describe API::LearningObjectives::OutcomesController, focus: true do
   end
 
   context "as an instructor" do
+    let!(:cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective }
     let(:user) { build_stubbed :user, courses: [course], role: :professor }
 
     describe "#outcomes_for_assignment" do
-      it "assigns the outcomes for all objectives linked to the assignment" do
-        get :outcomes_for_assignment, params: { assignment_id: assignment.id }, format: :json
-        expect(assigns(:cumulative_outcomes)).to match_array [cumulative_outcome]
-        expect(assigns(:observed_outcomes)).to match_array [observed_outcome]
+      context "when student ids are provided" do
+        it "assigns the outcomes for all objectives linked to the assignment" do
+          get :outcomes_for_assignment, params: { assignment_id: assignment.id }, format: :json
+          expect(assigns(:cumulative_outcomes)).to match_array [cumulative_outcome]
+          expect(assigns(:observed_outcomes)).to match_array [observed_outcome]
+        end
+      end
+
+      context "when no student ids are provided" do
+        let(:student) { build :user }
+        let!(:another_cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective, user: student }
+
+        it "assigns the filtered outcomes by student for all objectives linked to the assignment" do
+          get :outcomes_for_assignment, params: { assignment_id: assignment.id, student_ids: [student.id] }, format: :json
+          expect(assigns(:cumulative_outcomes)).to match_array [another_cumulative_outcome]
+          expect(assigns(:observed_outcomes)).to be_empty
+        end
       end
     end
 
@@ -47,13 +60,14 @@ describe API::LearningObjectives::OutcomesController, focus: true do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
+    let!(:cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective, user: user }
 
     describe "#outcomes_for_assignment" do
-      it "assigns the visible outcomes for all objectives linked to the assignment" do
+      it "assigns the visible outcomes for only the student and objectives linked to the assignment" do
         get :outcomes_for_assignment, params: { assignment_id: assignment.id }, format: :json
         expect(assigns(:cumulative_outcomes)).to match_array [cumulative_outcome]
-        expect(assigns(:observed_outcomes)).to be_empty
+        expect(assigns(:observed_outcomes)).to match_array [observed_outcome]
       end
     end
   end
