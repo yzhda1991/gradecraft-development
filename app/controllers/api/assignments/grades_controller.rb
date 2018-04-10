@@ -21,10 +21,7 @@ class API::Assignments::GradesController < ApplicationController
     grades = assignment.grades
     grades = grades.where(id: params[:grade_ids]) if params[:grade_ids].present?
 
-    grades.update(instructor_modified: true,
-      complete: true,
-      student_visible: true,
-    )
+    grades.update instructor_modified: true, complete: true, student_visible: true
 
     enqueue_grade_update_jobs grades.pluck(:id)
     head :ok
