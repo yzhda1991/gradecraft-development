@@ -1,5 +1,5 @@
-@gradecraft.directive 'assignmentShowTableBody', ['AssignmentService', 'AssignmentTypeService', 'StudentService', 'SortableService', '$sce',
-  (AssignmentService, AssignmentTypeService, StudentService, SortableService, $sce) ->
+@gradecraft.directive "assignmentShowTableBody", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "$sce",
+  (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, SortableService, $sce) ->
     AssignmentShowTableBodyCtrl = [() ->
       vm = this
       vm.loading = true
@@ -8,6 +8,9 @@
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
       vm.students = StudentService.students
+
+      vm.gradesToRelease = GradeReleaseService.gradeIds
+      vm.toggleGradeSelection = (gradeId) -> GradeReleaseService.toggleGradeSelection(gradeId)
 
       vm.tooltipDescribedBy = (type="feedback-read-tip")->
         "#{type}_#{vm.assignment().id}"
@@ -41,11 +44,11 @@
 
     {
       scope:
-        linksVisible: '@'
+        linksVisible: "@"
       bindToController: true
       controller: AssignmentShowTableBodyCtrl
-      controllerAs: 'assignmentShowTableBodyCtrl'
-      restrict: 'A'
-      templateUrl: 'assignments/show/table_body.html'
+      controllerAs: "assignmentShowTableBodyCtrl"
+      restrict: "A"
+      templateUrl: "assignments/show/table_body.html"
     }
 ]

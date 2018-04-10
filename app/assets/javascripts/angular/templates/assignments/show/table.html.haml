@@ -1,5 +1,6 @@
-%loading-message{"data-loading"=>"assignmentShowTableCtrl.loading",
-                 "data-message"=>"Loading Assignment Info..."}
+%h2.center{"ng-if"=>"assignmentShowTableCtrl.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading...
 
 %table.no-table-header{"ng-if"=>"!assignmentShowTableCtrl.loading"}
   %thead{"assignment-show-table-header"=>""}

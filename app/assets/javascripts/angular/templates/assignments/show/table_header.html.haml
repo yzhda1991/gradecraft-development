@@ -12,11 +12,8 @@
   %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()",
                       "data-sortable-header-text"=>"Raw Score", "data-sortable-predicate"=>"grade_score"}
   %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showWeightedScore()",
-      "data-sortable-header-text"=>"{{assignmentShowTableHeaderCtrl.termFor('weight')}}-weighted Score",
-      "data-sortable-predicate"=>"grade_score"}
-    -# TODO: test this
-    -# %a{"ng-click"=>"assignmentShowTableHeaderCtrl.setSort()('grade_score')"}
-    -#   {{assignmentShowTableHeaderCtrl.termFor("weight")}}-weighted Score
+                      "data-sortable-header-text"=>"{{assignmentShowTableHeaderCtrl.termFor('weight')}}-weighted Score",
+                      "data-sortable-predicate"=>"grade_score"}
 
   %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.showGrade()",
                       "data-sortable-header-text"=>"Grade", "data-sortable-predicate"=>"grade_level"}
@@ -27,11 +24,19 @@
   %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Visible to Student", "data-sortable-predicate"=>"grade_student_visible"}
   %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Read?", "data-sortable-predicate"=>"grade_feedback_read"}
 
-  %th.sortable-header{"ng-if"=>"assignmentShowTableHeaderCtrl.assignment().accepts_submissions",
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"assignmentShowTableHeaderCtrl.assignment().accepts_submissions",
                       "data-sortable-header-text"=>"Submitted", "data-sortable-predicate"=>"submission_submitted_at"}
 
-  %th{"style"=>"min-width: 180px"}
+  %th{"scope"=>"col", "style"=>"min-width: 180px"}
 
-  %th{"width"=>"120px"}
-    %button.button.select-all{"role"=>"button", "type"=>"button"} Check
-    %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck
+  %th{"scope"=>"col", "width"=>"120px"}
+    %button.button.select-all{"role"=>"button",
+                              "type"=>"button",
+                              "ng-disabled"=>"!assignmentShowTableHeaderCtrl.hasStudents()",
+                              "ng-class"=>"{ disabled: !assignmentShowTableHeaderCtrl.hasStudents() }",
+                              "ng-click"=>"assignmentShowTableHeaderCtrl.selectGrades(true)"} Check
+    %button.button.select-none{"role"=>"button",
+                               "type"=>"button",
+                               "ng-disabled"=>"!assignmentShowTableHeaderCtrl.hasStudents()",
+                               "ng-class"=>"{ disabled: !assignmentShowTableHeaderCtrl.hasStudents() }",
+                               "ng-click"=>"assignmentShowTableHeaderCtrl.selectGrades(false)"} Uncheck

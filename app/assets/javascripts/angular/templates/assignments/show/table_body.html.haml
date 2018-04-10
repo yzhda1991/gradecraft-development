@@ -126,8 +126,7 @@
     .center
       %label{"ng-if"=>"student.grade_not_released"}
         %span.sr-only Select Grades to Make Student Visible
-        %input{"type"=>"checkbox", "ng-value"=>"student.grade_id"}
-      -# - if grade.not_released?
-      -#   %label
-      -#     %span.sr-only Select Grades to Make Student Visible
-      -#     = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }, id: "grade_id_#{grade.id}"
+        %input{"type"=>"checkbox",
+               "ng-value"=>"student.grade_id",
+               "ng-checked"=>"assignmentShowTableBodyCtrl.gradesToRelease.indexOf(student.grade_id) > -1",
+               "ng-click"=>"assignmentShowTableBodyCtrl.toggleGradeSelection(student.grade_id)"}
