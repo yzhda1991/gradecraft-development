@@ -8,24 +8,17 @@ module Services
       executed do |context|
         assignment = context[:assignment]
         submission = context[:submission]
-        submission.resubmission = true if find_individual_grade(assignment, submission) || find_group_grade(assignment, submission)
-        submission.save
+        submission.update(resubmission: true) if current_grade_exists?(assignment, submission)
       end
 
       private
 
-      def self.find_individual_grade(assignment, submission)
-        if assignment.nil? == false && submission.student_id.nil? == false
-          return true if !Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible.empty?
+      def self.current_grade_exists?(assignment, submission)
+        if assignment.is_individual?
+          Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible.present?
+        else
+          Grade.for_group(assignment, submission.group).student_visible.present?
         end
-        return false
-      end
-
-      def self.find_group_grade(assignment, submission)
-        if assignment.nil? == false && submission.group.nil? == false
-          return true if !Grade.for_group(assignment, submission.group).student_visible.empty?
-        end
-        return false
       end
 
     end
