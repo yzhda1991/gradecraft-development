@@ -395,7 +395,10 @@ Rails.application.routes.draw do
         get :outcomes, to: "outcomes#outcomes_for_assignment"
       end
       resources :grades, only: [], module: :assignments do
-        get :show, on: :collection
+        collection do
+          get :show
+          put :release
+        end
       end
       resource :groups, only: [], module: :assignments do
         resources :grades, only: :index, module: :groups

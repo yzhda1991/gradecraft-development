@@ -1,10 +1,10 @@
 -# Loading indicator
-%tr{"ng-if"=>"assignmentShowTableBodyCtrl.loading"}
+%tr{"ng-if"=>"assignmentShowTableBodyCtrl.loading()"}
   %td.center{"colspan"=>"12"}
     %i.fa.fa-spinner.fa-spin.fa-fw
     Loading students...
 
-%tr{"ng-if"=>"!assignmentShowTableBodyCtrl.loading",
+%tr{"ng-if"=>"!assignmentShowTableBodyCtrl.loading()",
     "ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse"}
 
   -# Unlock indicator

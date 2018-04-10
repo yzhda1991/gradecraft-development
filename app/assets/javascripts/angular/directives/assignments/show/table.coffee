@@ -1,29 +1,44 @@
-@gradecraft.directive 'assignmentShowTable', ['AssignmentService', 'AssignmentTypeService', '$q', (AssignmentService, AssignmentTypeService, $q) ->
-  AssignmentShowTableCtrl = [() ->
-    vm = this
-    vm.loading = true
+@gradecraft.directive "assignmentShowTable", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "$q",
+  (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, $q) ->
+    AssignmentShowTableCtrl = [() ->
+      vm = this
+      vm.loading = true
 
-    services(@assignmentId, @assignmentTypeId).then(() ->
-      vm.loading = false
-    )
-  ]
+      vm.hasSelectedGrades = () -> _.some(GradeReleaseService.gradeIds)
+      vm.hasUnreleasedGrades = () -> _.some(StudentService.students, (student) -> student.grade_id? and student.grade_not_released is true)
 
-  services = (assignmentId, assignmentTypeId) ->
-    promises = [
-      AssignmentService.getAssignment(assignmentId),
-      AssignmentTypeService.getAssignmentType(assignmentTypeId)
+      vm.releaseGrades = () ->
+        return unless vm.hasSelectedGrades()
+        GradeReleaseService.postReleaseGrades(@assignmentId).then(
+          () ->
+            alert("#{GradeReleaseService.gradeIds.length} grade(s) successfully released")
+            GradeReleaseService.clearGradeIds()
+            StudentService.getForAssignment(vm.assignmentId)
+          , () ->
+            alert("An error occurred while attempting to release #{GradeReleaseService.gradeIds.length} grades")
+        )
+
+      services(@assignmentId, @assignmentTypeId).then(() ->
+        vm.loading = false
+      )
     ]
-    $q.all(promises)
 
-  {
-    scope:
-      linksVisible: '@'
-      assignmentId: '@'
-      assignmentTypeId: '@'
-    bindToController: true
-    controller: AssignmentShowTableCtrl
-    controllerAs: 'assignmentShowTableCtrl'
-    restrict: 'EA'
-    templateUrl: 'assignments/show/table.html'
-  }
+    services = (assignmentId, assignmentTypeId) ->
+      promises = [
+        AssignmentService.getAssignment(assignmentId),
+        AssignmentTypeService.getAssignmentType(assignmentTypeId)
+      ]
+      $q.all(promises)
+
+    {
+      scope:
+        linksVisible: "@"
+        assignmentId: "@"
+        assignmentTypeId: "@"
+      bindToController: true
+      controller: AssignmentShowTableCtrl
+      controllerAs: "assignmentShowTableCtrl"
+      restrict: "EA"
+      templateUrl: "assignments/show/table.html"
+    }
 ]

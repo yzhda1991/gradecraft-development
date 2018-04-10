@@ -5,3 +5,13 @@
 %table.no-table-header{"ng-if"=>"!assignmentShowTableCtrl.loading"}
   %thead{"assignment-show-table-header"=>""}
   %tbody{"assignment-show-table-body"=>"", "data-links-visible"=>"{{assignmentShowTableCtrl.linksVisible}}"}
+
+.submit-buttons{"ng-if"=>"assignmentShowTableCtrl.linksVisible && assignmentShowTableCtrl.hasUnreleasedGrades()"}
+  %ul
+    %li
+      .button.submit{"type"=>"button",
+                     "ng-click"=>"assignmentShowTableCtrl.releaseGrades()",
+                     "ng-class"=>"{ disabled: !assignmentShowTableCtrl.hasSelectedGrades() }",
+                     "ng-disabled"=>"!assignmentShowTableCtrl.hasSelectedGrades()"}
+        %i.fa.fa-share-square-o
+        Release Selected Grades

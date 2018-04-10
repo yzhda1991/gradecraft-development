@@ -2,8 +2,13 @@
 
   gradeIds = []
 
-  postReleaseGrades = () ->
-    console.log("releasing...")
+  postReleaseGrades = (assignmentId) ->
+    $http.put("/api/assignments/#{assignmentId}/grades/release", grade_ids: gradeIds).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+      , (error) ->
+        GradeCraftAPI.logResponse(error)
+    )
 
   addGradeIds = (ids...) -> gradeIds.push(ids...)
 

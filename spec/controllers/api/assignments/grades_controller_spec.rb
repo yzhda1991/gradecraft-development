@@ -1,10 +1,8 @@
 describe API::Assignments::GradesController do
   let(:course) { build :course }
-  let(:assignment) { create :assignment }
+  let(:assignment) { create :assignment, course: course }
 
-  before(:each) do
-    login_user user
-  end
+  before(:each) { login_user user }
 
   context "as a professor" do
     let(:user) { build_stubbed :user, courses: [course], role: :professor }
@@ -44,16 +42,48 @@ describe API::Assignments::GradesController do
         end
       end
     end
+
+    describe "#release" do
+      let!(:grades) { create_list :grade, 2, assignment: assignment }
+      let(:grade_updater_job) { instance_double "GradeUpdaterJob", enqueue: true }
+
+      before(:each) { allow(GradeUpdaterJob).to receive(:new).and_return grade_updater_job }
+
+      context "when grade ids are provided" do
+        it "releases only the grades that are specified" do
+          expect(grade_updater_job).to receive(:enqueue).once
+
+          put :release, params: { assignment_id: assignment.id, grade_ids: grades.first.id }, format: :json
+
+          expect(grades.first.reload).to have_attributes instructor_modified: true,
+            student_visible: true, complete: true
+        end
+      end
+
+      context "when grade ids are not provided" do
+        it "releases all grades for the assignment" do
+          expect(grade_updater_job).to receive(:enqueue).twice
+
+          put :release, params: { assignment_id: assignment.id }, format: :json
+
+          expect(grades.each(&:reload)).to all have_attributes instructor_modified: true,
+            student_visible: true, complete: true
+        end
+      end
+    end
   end
 
   context "as a student" do
     let(:user) { build_stubbed :user, courses: [course], role: :student }
 
-    describe "#show" do
-      it "is a protected route" do
-        get :show, params: { assignment_id: assignment.id }, format: :json
-
-        expect(response).to have_http_status 302
+    describe "protected routes" do
+      it "redirect with a status 302" do
+        [
+          -> { get :show, params: { assignment_id: assignment.id }, format: :json },
+          -> { put :release, params: { assignment_id: assignment.id }, format: :json }
+        ].each do |protected_route|
+          expect(protected_route.call).to have_http_status :redirect
+        end
       end
     end
   end

@@ -2,8 +2,8 @@
   (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, SortableService, $sce) ->
     AssignmentShowTableBodyCtrl = [() ->
       vm = this
-      vm.loading = true
       vm.sortable = SortableService
+      vm.loading = StudentService.isLoading
 
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
@@ -37,9 +37,7 @@
         vm.assignment().pass_fail && student.grade_instructor_modified &&
           student.grade_pass_fail_status?
 
-      StudentService.getForAssignment(vm.assignment().id).then(() ->
-        vm.loading = false
-      )
+      StudentService.getForAssignment(vm.assignment().id)
     ]
 
     {
