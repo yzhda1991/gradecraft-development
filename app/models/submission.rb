@@ -39,26 +39,6 @@ class Submission < ActiveRecord::Base
     .where.not(id: with_grade.where(grades: { instructor_modified: true }))
   end
 
-  # def submission_grade
-  #   if assignment.has_groups?
-  #     group.grade_for_assignment assignment if group.present?
-  #   else
-  #     student.grade_for_assignment assignment if student.present?
-  #   end
-  # end
-
-  # def resubmitted?
-  #   submission_grade && submission_grade.student_visible? &&
-  #   !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
-  # end
-
-  # scope :resubmitted, -> {
-  #   includes(:grade, :assignment)
-  #   .where("grades.student_visible = true")
-  #   .where("grades.graded_at < submitted_at")
-  #   .references(:grade, :assignment)
-  # }
-
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }

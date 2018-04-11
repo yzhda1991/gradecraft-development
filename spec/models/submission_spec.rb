@@ -174,11 +174,10 @@ describe Submission do
     before { Submission.destroy_all }
 
     it "returns only submissions where resubmitted is true" do
-      submitted_submission = create(:submission, assignment: assignment, student: student)
+      submitted_submission = create(:submission, assignment: assignment, student: student, resubmission: true)
       grade = create(:student_visible_grade, assignment: assignment, student: student)
       grade.graded_at = grade.created_at
       grade.save!
-      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submitted_submission
 
       expect(Submission.resubmitted).to eq [submitted_submission]
     end
@@ -294,12 +293,6 @@ describe Submission do
   end
 
   describe ".resubmitted" do
-    it "returns the submissions that have been submitted after they were graded" do
-      grade = create(:student_visible_grade, assignment: assignment, submission: submission, student: student, graded_at: 1.day.ago)
-      submission.submitted_at = DateTime.now
-      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission assignment, submission
-      expect(Submission.resubmitted).to eq [submission]
-    end
 
     it "does not return ungraded submissions" do
       create(:grade, submission: submission, graded_at: 1.day.ago)
@@ -325,7 +318,7 @@ describe Submission do
 
     it "returns one submission for a group resubmissions" do
       group_assignment = build(:assignment, grade_scope: "Group")
-      submission = build(:group_submission, assignment: group_assignment)
+      submission = create(:group_submission, assignment: group_assignment, resubmission: true)
       student1 = create(:user)
       student2 = create(:user)
       group = create(:group, assignments: [submission.assignment])
@@ -334,7 +327,6 @@ describe Submission do
       grade2 = create(:student_visible_grade, assignment: group_assignment, student: student2, group: group, graded_at: 1.day.ago)
       submission.submitted_at = DateTime.now
       submission.group_id = group.id
-      Services::CreatesOrUpdatesSubmission.creates_or_updates_submission group_assignment, submission
       expect(Submission.resubmitted).to eq [submission]
     end
   end
@@ -364,33 +356,6 @@ describe Submission do
       expect(submission).to be_will_be_resubmitted
     end
   end
-
-  # describe "#resubmitted?" do
-  #   it "returns false if it has no grade" do
-  #     expect(submission).to_not be_resubmitted
-  #   end
-  #
-  #   it "returns true if grade was graded before it was submitted" do
-  #     create :grade, student_visible: true, student: student, submission: submission,
-  #       assignment: assignment, graded_at: DateTime.now
-  #     submission.update_attributes submitted_at: DateTime.now
-  #     expect(submission).to be_resubmitted
-  #   end
-  #
-  #   it "returns false if the grade was graded after it was submitted" do
-  #     submission.submitted_at = DateTime.now
-  #     submission.save
-  #     create :grade, student_visible: true, submission: submission,
-  #       assignment: submission.assignment, graded_at: DateTime.now
-  #     expect(submission).to_not be_resubmitted
-  #   end
-  #
-  #   it "returns false if it was not graded" do
-  #     create :grade, student_visible: true, submission: submission,
-  #       assignment: submission.assignment
-  #     expect(submission).to_not be_resubmitted
-  #   end
-  # end
 
   describe "#name" do
     it "returns the student's name" do
