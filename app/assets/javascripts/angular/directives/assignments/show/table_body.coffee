@@ -37,7 +37,7 @@
         vm.assignment().pass_fail && student.grade_instructor_modified &&
           student.grade_pass_fail_status?
 
-      StudentService.getForAssignment(vm.assignment().id)
+      StudentService.getBatchedForAssignment(vm.assignment().id)
     ]
 
     {

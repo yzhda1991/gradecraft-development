@@ -12,8 +12,10 @@
         GradeReleaseService.postReleaseGrades(@assignmentId).then(
           () ->
             alert("#{GradeReleaseService.gradeIds.length} grade(s) successfully released")
+            # Refresh the list of students with new release statuses
             GradeReleaseService.clearGradeIds()
-            StudentService.getForAssignment(vm.assignmentId)
+            StudentService.clearStudents()
+            StudentService.getBatchedForAssignment(vm.assignmentId)
           , () ->
             alert("An error occurred while attempting to release #{GradeReleaseService.gradeIds.length} grades")
         )

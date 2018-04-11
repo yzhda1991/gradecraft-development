@@ -1,11 +1,4 @@
--# Loading indicator
-%tr{"ng-if"=>"assignmentShowTableBodyCtrl.loading()"}
-  %td.center{"colspan"=>"12"}
-    %i.fa.fa-spinner.fa-spin.fa-fw
-    Loading students...
-
-%tr{"ng-if"=>"!assignmentShowTableBodyCtrl.loading()",
-    "ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse"}
+%tr{"ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse"}
 
   -# Unlock indicator
   %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().is_unlockable"}
@@ -130,3 +123,8 @@
                "ng-value"=>"student.grade_id",
                "ng-checked"=>"assignmentShowTableBodyCtrl.gradesToRelease.indexOf(student.grade_id) > -1",
                "ng-click"=>"assignmentShowTableBodyCtrl.toggleGradeSelection(student.grade_id)"}
+
+%tr{"ng-if"=>"assignmentShowTableBodyCtrl.loading()"}
+  %td.center{"colspan"=>"12"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading students...

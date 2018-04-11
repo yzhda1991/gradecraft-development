@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class API::Assignments::StudentsController < ApplicationController
   before_action :ensure_staff?
   before_action :find_assignment
@@ -10,6 +11,11 @@ class API::Assignments::StudentsController < ApplicationController
       .students
       .active_students_for_course(current_course, team)
       .order_by_name
+
+    render json: { student_ids: @students.pluck(:id) }, status: :ok \
+      and return if params[:fetch_ids] == "1"
+
+    @students = @students.where(id: params[:student_ids]) if params[:student_ids].present?
   end
 
   private
