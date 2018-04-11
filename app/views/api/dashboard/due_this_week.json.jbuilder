@@ -79,7 +79,7 @@ json.included do
       json.is_individual assignment.is_individual?
 
       if !assignment.is_individual?
-        - group = @presenter.student.group_for_assignment(assignment)
+        group = @presenter.student.group_for_assignment(assignment)
 
         if group.present?
           json.student_group_id group.id

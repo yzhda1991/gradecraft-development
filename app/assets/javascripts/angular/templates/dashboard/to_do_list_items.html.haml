@@ -39,5 +39,5 @@
         %img.empty-state-graphic{"src"=>"/images/no-predicted-assignments.svg", "alt"=>""}
       %p.empty-state-text
         You have not predicted any {{toDoListItemsCtrl.termFor("assignments")}}! Check out the
-        %a{"ng-href"=>"toDoListItemsCtrl.data.predictor_path"} {{toDoListItemsCtrl.termFor("predictor")}}
+        %a{"ng-href"=>"{{toDoListItemsCtrl.data.predictor_path}}"} {{toDoListItemsCtrl.termFor("predictor")}}
         to add {{toDoListItemsCtrl.termFor("assignments")}} to this planner.
