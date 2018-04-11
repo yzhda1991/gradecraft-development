@@ -1,5 +1,3 @@
-require_relative "../../../services/creates_or_updates_submission"
-
 class API::Assignments::SubmissionsController < ApplicationController
   before_action :ensure_student?
 
