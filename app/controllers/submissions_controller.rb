@@ -63,7 +63,10 @@ class SubmissionsController < ApplicationController
 
     submission_was_draft = submission.unsubmitted?
     respond_to do |format|
-      if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) && Services::DeletesSubmissionDraftContent.for(submission).success?
+      submission.update_attributes(submission_params.merge(submitted_at: DateTime.now))
+      result = Services::CreatesOrUpdatesSubmission.creates_or_updates_submission @assignment, submission
+
+      if result.success? && Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status! unless submission.will_be_resubmitted?
 
         redirect_to = assignment_submission_path @assignment,
