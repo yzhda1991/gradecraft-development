@@ -1,35 +1,38 @@
 class API::LearningObjectives::OutcomesController < ApplicationController
   before_action :ensure_course_uses_objectives?
-  before_action :ensure_staff?, except: [:index, :outcomes_for_objective]
+  before_action :ensure_staff?, except: [:outcomes_for_assignment, :outcomes_for_objective]
 
-  # GET /api/learning_objectives/outcomes
-  def index
-    if params[:assignment_id].present?
-      objectives = current_course
-        .assignments
-        .find(params[:assignment_id])
-        .learning_objectives
-        .includes(cumulative_outcomes: :observed_outcomes)
-    else
-      objectives = current_course
-        .learning_objectives
-        .includes(cumulative_outcomes: :observed_outcomes)
-    end
+  # GET /api/assignments/:assignment_id/learning_objectives/outcomes
+  # Optional: Provide params[:student_ids] to filter by subset
+  def outcomes_for_assignment
+    @cumulative_outcomes = LearningObjectiveCumulativeOutcome
+      .includes(:observed_outcomes, learning_objective: :assignments)
+      .where(learning_objectives: { course_id: current_course.id })
+      .where(learning_objective: { assignments: { id: params[:assignment_id] } })
 
-    @cumulative_outcomes = objectives.map(&:cumulative_outcomes).flatten \
-      unless objectives.blank?
+    filter_outcomes_by_students!
+
+    @observed_outcomes = LearningObjectiveObservedOutcome
+      .where(learning_objective_cumulative_outcomes_id: @cumulative_outcomes.pluck(:id))
+
+    @observed_outcomes = @observed_outcomes.for_student_visible_grades if current_user_is_student?
+
+    render "api/learning_objectives/outcomes/index", status: 200
   end
 
   # GET /api/learning_objectives/objectives/:objective_id/outcomes
+  # Optional: Provide params[:student_ids] to filter by subset
   def outcomes_for_objective
-    @cumulative_outcomes = current_course
-      .learning_objectives
-      .find(params[:objective_id])
-      .cumulative_outcomes
-      .includes(:observed_outcomes)
+    @cumulative_outcomes = LearningObjectiveCumulativeOutcome
+      .includes(:observed_outcomes, :learning_objective)
+      .where(learning_objectives: { id: params[:objective_id], course_id: current_course.id })
 
-    @cumulative_outcomes = @cumulative_outcomes
-      .where(user_id: params[:student_ids]) unless params[:student_ids].blank?
+    filter_outcomes_by_students!
+
+    @observed_outcomes = LearningObjectiveObservedOutcome
+      .where(learning_objective_cumulative_outcomes_id: @cumulative_outcomes.pluck(:id))
+
+    @observed_outcomes = @observed_outcomes.for_student_visible_grades if current_user_is_student?
 
     render "api/learning_objectives/outcomes/index", status: 200
   end
@@ -71,6 +74,14 @@ class API::LearningObjectives::OutcomesController < ApplicationController
 
   def learning_objective_outcome_params
     params.require(:learning_objective_outcome).permit(:comments, :objective_level_id)
+  end
+
+  # If the current user is a student, only allow outcomes to be returned for the that person
+  # Otherwise if only a subset of student_ids are provided via params, filter by that
+  def filter_outcomes_by_students!
+    student_ids = current_student.id if current_user_is_student?
+    student_ids ||= params[:student_ids]
+    @cumulative_outcomes = @cumulative_outcomes.where(user_id: student_ids) unless student_ids.blank?
   end
 
   def find_cumulative_outcome_for(user_id)

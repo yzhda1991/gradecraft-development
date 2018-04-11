@@ -3,15 +3,16 @@
     %tr
       %th{"scope"=>"col"} Name
       %th{"scope"=>"col"} Description
-      %th.center{"scope"=>"col"} Count to Achieve
+      %th{"scope"=>"col", "ng-if"=>"!loObjectivesTableCtrl.objectivesAwardPoints"} Count to Achieve
+      %th{"scope"=>"col", "ng-if"=>"loObjectivesTableCtrl.objectivesAwardPoints"} Points to Completion
       %th.options{"scope"=>"col"} Options
-
   %tbody
     %tr{"ng-repeat"=>"objective in loObjectivesTableCtrl.objectives()"}
       %td
         %a{"ng-href"=>"{{loObjectivesTableCtrl.showObjectivePath(objective.id)}}"} {{objective.name}}
       %td {{objective.description}}
-      %td.center {{objective.count_to_achieve}}
+      %td{"ng-if"=>"!loObjectivesTableCtrl.objectivesAwardPoints"} {{objective.count_to_achieve}}
+      %td{"ng-if"=>"loObjectivesTableCtrl.objectivesAwardPoints"} {{objective.points_to_completion}}
       %td
         .button-container.dropdown
           %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}

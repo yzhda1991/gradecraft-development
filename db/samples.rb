@@ -5,6 +5,7 @@ require "./db/samples/assignments.rb"
 require "./db/samples/challenges.rb"
 require "./db/samples/events.rb"
 require "./db/samples/announcements.rb"
+require "./db/samples/learning_objectives.rb"
 
 # ---------------------------- Shared Methods --------------------------------#
 
@@ -722,3 +723,7 @@ end
     s.update_course_score_and_level(c.id)
   end
 end
+
+# ---------------------------- Create Learning Objectives! --------------------------#
+
+create_sample_learning_objectives

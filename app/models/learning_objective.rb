@@ -40,10 +40,18 @@ class LearningObjective < ActiveRecord::Base
   def grade_outcome_progress_for(cumulative_outcome, include_details)
     outcomes = observed_outcomes(cumulative_outcome)
     return "Not Started" if outcomes.empty?
-    return "Failed" if outcomes.any? { |o| o.learning_objective_level.failed? }
+    return "Failed" if outcomes.any? { |o| o.learning_objective_level.try(:failed?) }
 
     proficient_outcomes = observed_outcomes(cumulative_outcome, true)
     proficient_outcomes.count < count_to_achieve ? in_progress_str(proficient_outcomes.count, count_to_achieve, include_details) : "Completed"
+  end
+
+  def observed_outcomes(cumulative_outcome, proficient_only=false)
+    outcomes = cumulative_outcome
+      .observed_outcomes
+      .for_student_visible_grades
+    outcomes.shows_proficiency if proficient_only
+    outcomes
   end
 
   private
@@ -54,14 +62,6 @@ class LearningObjective < ActiveRecord::Base
     end
 
     grades.pluck(:final_points).sum || 0
-  end
-
-  def observed_outcomes(cumulative_outcome, proficient_only=false)
-    outcomes = cumulative_outcome
-      .observed_outcomes
-      .for_student_visible_grades
-    outcomes.shows_proficiency if proficient_only
-    outcomes
   end
 
   # Ensure that objectives have either a count to achieve or a points to completion value

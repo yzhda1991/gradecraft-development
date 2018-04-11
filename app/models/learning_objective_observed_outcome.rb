@@ -8,7 +8,7 @@ class LearningObjectiveObservedOutcome < ActiveRecord::Base
 
   validates_presence_of :assessed_at, :learning_objective_level
 
-  scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true, complete: true }) }
+  scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true }) }
   scope :shows_proficiency, -> do
     includes(:learning_objective_level)
     .where

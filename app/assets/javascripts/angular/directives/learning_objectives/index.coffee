@@ -51,6 +51,7 @@
     scope:
       newCategoryPath: '@'
       deleteCategoryPath: '@'
+      objectivesAwardPoints: "="
     bindToController: true
     controller: LearningObjectivesIndexCtrl
     controllerAs: 'loIndexCtrl'

@@ -22,6 +22,7 @@
   {
     scope:
       category: '='
+      objectivesAwardPoints: '='
     bindToController: true
     controller: LearningObjectivesObjectivesTableCtrl
     controllerAs: 'loObjectivesTableCtrl'

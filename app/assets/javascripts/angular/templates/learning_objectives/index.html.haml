@@ -7,7 +7,7 @@
         %i.fa.fa-fw.fa-chevron-circle-right
         Uncategorized
     .learning-objective-category-container
-      %learning-objectives-objectives-table
+      %learning-objectives-objectives-table{"data-objectives-award-points"=>"loIndexCtrl.objectivesAwardPoints"}
 
   .learning-objective-category{"ng-repeat"=>"category in loIndexCtrl.categories()",
                                "id"=>"assignment-type-{{category.id}}"}
@@ -21,7 +21,8 @@
           %a{"ng-href"=>"{{loIndexCtrl.editCategoryPath(category.id)}}"} [ Edit ]
         %li
           %a{"ng-click"=>"loIndexCtrl.deleteCategory(category)"} [ Delete ]
-      %learning-objectives-objectives-table{"data-category"=>"category"}
+      %learning-objectives-objectives-table{"data-category"=>"category",
+                                            "data-objectives-award-points"=>"loIndexCtrl.objectivesAwardPoints"}
 
   .box.center
     %a{"ng-href"=>"{{loIndexCtrl.newCategoryPath}}"}
