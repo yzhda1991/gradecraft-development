@@ -11,13 +11,13 @@
   termFor = (term) -> GradeCraftAPI.termFor(term)
 
   # fetch student data in batches
-  getBatchedForAssignment = (assignmentId, batchSize=25) ->
-    getForAssignment(assignmentId, true).then(() ->
+  getBatchedForAssignment = (assignmentId, teamId=null, batchSize=25) ->
+    getForAssignment(assignmentId, null, true).then(() ->
       return unless _studentIds.length
 
       promises = []
       _.each(_.chunk(_studentIds, batchSize), (batch) ->
-        promises.push(getForAssignment(assignmentId, false, batch...))
+        promises.push(getForAssignment(assignmentId, teamId, false, batch...))
       )
       $q.all(promises).then(() ->
         _studentIds.length = 0
@@ -30,9 +30,9 @@
   # studentIds (optional): the student ids to fetch data for
   #
   # Specify only the assignmentId to fetch all students at once
-  getForAssignment = (assignmentId, fetchIds=false, studentIds...) ->
+  getForAssignment = (assignmentId, teamId=null, fetchIds=false, studentIds...) ->
     fetch = if fetchIds is true then 1 else 0 # easier to compare a number over a boolean on the server side
-    $http.get("/api/assignments/#{assignmentId}/students", { params: { fetch_ids: fetch, "student_ids[]": studentIds } }).then(
+    $http.get("/api/assignments/#{assignmentId}/students", { params: { team_id: teamId, fetch_ids: fetch, "student_ids[]": studentIds } }).then(
       (response) ->
         if fetchIds is true
           _studentIds = response.data.student_ids

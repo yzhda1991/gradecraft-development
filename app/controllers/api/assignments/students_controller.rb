@@ -5,7 +5,7 @@ class API::Assignments::StudentsController < ApplicationController
 
   # GET /api/assignments/:assignment_id/students
   def index
-    team = current_course.teams.find(params[:team_id]) unless params[:team_id].nil?
+    team = current_course.teams.find(params[:team_id]) unless params[:team_id].blank?
 
     @students = current_course
       .students

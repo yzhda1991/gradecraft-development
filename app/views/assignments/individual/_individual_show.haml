@@ -1,4 +1,4 @@
-= team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
+%team-selector.right{"data-course-id"=>"#{current_course.id}"}
 
 - if presenter.assignment.grades.instructor_modified.any?
   .clear.right

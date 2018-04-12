@@ -32,6 +32,8 @@ json.data @students do |student|
     json.grade_feedback_reviewed grade.feedback_reviewed?
     json.grade_not_released grade.not_released?
 
+    json.team_id student.team.id unless student.team.nil?
+
     # Submission-related
     json.submission_exists submission.present?
     json.submission_submitted_at l submission.submitted_at unless submission.nil?

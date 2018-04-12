@@ -1,4 +1,4 @@
-%tr{"ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse"}
+%tr{"ng-repeat"=>"student in assignmentShowTableBodyCtrl.students | orderBy : assignmentShowTableBodyCtrl.sortable.predicate : assignmentShowTableBodyCtrl.sortable.reverse | filter: { team_id: selectedTeamId() }"}
 
   -# Unlock indicator
   %td{"ng-if"=>"assignmentShowTableBodyCtrl.assignment().is_unlockable"}
