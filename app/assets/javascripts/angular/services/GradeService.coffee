@@ -303,8 +303,7 @@
     calculateGradePoints()
 
   unsetCriterionGrade = (criterionId)->
-    criterionGrade =
-      findCriterionGrade(criterionId) || addCriterionGrade(criterionId)
+    criterionGrade = findCriterionGrade(criterionId)
     criterionGrade.level_id = null
     criterionGrade.points = null
     calculateGradePoints()
