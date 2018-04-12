@@ -62,6 +62,10 @@ class CoursesController < ApplicationController
   end
 
   def edit
+    if @course.id != current_course.id
+      session[:return_to] = edit_course_path @course
+      redirect_to action: :change, id: @course.id and return
+    end
     authorize! :update, @course
   end
 
@@ -162,7 +166,7 @@ class CoursesController < ApplicationController
         record_course_login_event course: course
       end
     end
-    redirect_to root_url
+    redirect_to session[:return_to] || root_url
   end
 
   def recalculate_student_scores

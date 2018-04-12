@@ -186,10 +186,18 @@ describe CoursesController do
     end
 
     describe "GET edit" do
+      let(:another_course) { create :course }
+
       it "edit title" do
         get :edit, params: { id: course.id }
         expect(assigns(:course)).to eq(course)
         expect(response).to render_template(:edit)
+      end
+
+      it "performs a course change if the course to edit is not the current course" do
+        get :edit, params: { id: another_course.id }
+        expect(session[:return_to]).to eq edit_course_path another_course.id
+        expect(response).to redirect_to change_course_path
       end
     end
 
