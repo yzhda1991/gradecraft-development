@@ -27,7 +27,10 @@
         GradeService.queueUpdateCriterionGrade(criterion.id, immediate)
 
       scope.selectLevel = (criterion, level)->
-        GradeService.setCriterionGradeLevel(criterion.id, level)
+        if scope.LevelIsSelected(criterion,level)
+          GradeService.unsetCriterionGrade(criterion.id)
+        else
+          GradeService.setCriterionGradeLevel(criterion.id, level)
         GradeService.queueUpdateCriterionGrade(criterion.id)
 
       scope.LevelIsSelected = (criterion,level)->
