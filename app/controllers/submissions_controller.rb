@@ -28,6 +28,8 @@ class SubmissionsController < ApplicationController
 
     if submission.save
       submission.check_and_set_late_status!
+      grade = find_grade(@assignment, submission)
+      grade.update(submission_id: submission.id) unless grade.nil?
       redirect_to = (session.delete(:return_to) || assignment_path(@assignment))
       if current_user_is_student?
         NotificationMailer.successful_submission(submission.id).deliver_now if @assignment.is_individual?
@@ -61,7 +63,7 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) && Services::DeletesSubmissionDraftContent.for(submission).success?
         submission.check_and_set_late_status! unless submission.will_be_resubmitted?
-        
+
         redirect_to = assignment_submission_path @assignment,
           submission,
           @assignment.has_groups? ? { group_id: submission.group_id } : { student_id: submission.student_id }
@@ -93,6 +95,14 @@ class SubmissionsController < ApplicationController
   end
 
   private
+
+  def find_grade(assignment, submission)
+    if assignment.is_individual?
+      Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible.first
+    else
+      Grade.for_group(assignment, submission.group).student_visible.first
+    end
+  end
 
   def find_assignment
     @assignment = current_course.assignments.find params[:assignment_id]

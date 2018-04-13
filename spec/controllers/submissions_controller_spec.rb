@@ -62,6 +62,7 @@ describe SubmissionsController do
     end
 
     describe "POST create" do
+      let!(:grade) { create :grade, assignment: assignment, student_id: student.id, student_visible: true }
       it "assigns the assignment" do
         post :create, params: { assignment_id: assignment.id, submission: attributes_for(:submission) }
         expect(assigns(:assignment)).to eq assignment
@@ -94,6 +95,12 @@ describe SubmissionsController do
         params = attributes_for(:submission).merge!(student_id: student.id)
         expect_any_instance_of(Submission).to receive(:check_and_set_late_status!)
         post :create, params: { assignment_id: assignment.id, submission: params }
+      end
+
+      it "associates the submission with the grade" do
+        params = attributes_for(:submission).merge!(student_id: student.id)
+        post :create, params: { assignment_id: assignment.id, submission: params }
+        expect(Grade.first.submission_id).to eq (Submission.first.id)
       end
     end
 
