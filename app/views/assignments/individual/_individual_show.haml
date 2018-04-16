@@ -8,6 +8,7 @@
         = active_course_submit_tag "Delete All Grades", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
 
 .progress
+  .clear
   %assignment-show-table{"data-assignment-id"=>"#{presenter.assignment.id}",
                          "data-assignment-type-id"=>"#{presenter.assignment_type.id}",
                          "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}

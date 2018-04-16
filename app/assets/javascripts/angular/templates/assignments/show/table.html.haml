@@ -1,17 +1,25 @@
-%h2.center{"ng-if"=>"assignmentShowTableCtrl.loading"}
-  %i.fa.fa-spinner.fa-spin.fa-fw
-  Loading...
+.simple_form
+  %h2.center{"ng-if"=>"assignmentShowTableCtrl.loading"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading...
 
-%table.no-table-header{"ng-if"=>"!assignmentShowTableCtrl.loading"}
-  %thead{"assignment-show-table-header"=>""}
-  %tbody{"assignment-show-table-body"=>"", "data-links-visible"=>"{{assignmentShowTableCtrl.linksVisible}}"}
+  %label
+    %span.sr-only Search Criteria
+    %input{"type"=>"search",
+           "placeholder"=>"Search",
+           "ng-model"=>"assignmentShowTableCtrl.searchCriteria",
+           "ng-model-options"=>"{ getterSetter: true }"}
 
-.submit-buttons{"ng-if"=>"assignmentShowTableCtrl.linksVisible && assignmentShowTableCtrl.hasUnreleasedGrades()"}
-  %ul
-    %li
-      .button.submit{"type"=>"button",
-                     "ng-click"=>"assignmentShowTableCtrl.releaseGrades()",
-                     "ng-class"=>"{ disabled: !assignmentShowTableCtrl.hasSelectedGrades() }",
-                     "ng-disabled"=>"!assignmentShowTableCtrl.hasSelectedGrades()"}
-        %i.fa.fa-share-square-o
-        Release Selected Grades
+  %table.no-table-header{"ng-if"=>"!assignmentShowTableCtrl.loading"}
+    %thead{"assignment-show-table-header"=>""}
+    %tbody{"assignment-show-table-body"=>"", "data-links-visible"=>"{{assignmentShowTableCtrl.linksVisible}}"}
+
+  .submit-buttons{"ng-if"=>"assignmentShowTableCtrl.linksVisible && assignmentShowTableCtrl.hasUnreleasedGrades()"}
+    %ul
+      %li
+        .button.submit{"type"=>"button",
+                       "ng-click"=>"assignmentShowTableCtrl.releaseGrades()",
+                       "ng-class"=>"{ disabled: !assignmentShowTableCtrl.hasSelectedGrades() }",
+                       "ng-disabled"=>"!assignmentShowTableCtrl.hasSelectedGrades()"}
+          %i.fa.fa-share-square-o
+          Release Selected Grades

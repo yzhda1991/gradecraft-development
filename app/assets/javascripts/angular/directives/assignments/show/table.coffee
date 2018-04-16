@@ -1,8 +1,9 @@
-@gradecraft.directive "assignmentShowTable", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "$q",
-  (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, $q) ->
+@gradecraft.directive "assignmentShowTable", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "$q",
+  (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, SortableService, $q) ->
     AssignmentShowTableCtrl = [() ->
       vm = this
       vm.loading = true
+      vm.searchCriteria = SortableService.filterCriteria
 
       vm.hasSelectedGrades = () -> _.some(GradeReleaseService.gradeIds)
       vm.hasUnreleasedGrades = () -> _.some(StudentService.students, (student) -> student.grade_id? and student.grade_not_released is true)

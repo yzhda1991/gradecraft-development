@@ -12,7 +12,7 @@
       vm.gradesToRelease = GradeReleaseService.gradeIds
       vm.toggleGradeSelection = (gradeId) -> GradeReleaseService.toggleGradeSelection(gradeId)
 
-      vm.tooltipDescribedBy = (type="feedback-read-tip")->
+      vm.tooltipDescribedBy = (type="feedback-read-tip") ->
         "#{type}_#{vm.assignment().id}"
 
       vm.manuallyUnlockPath = (studentId) ->
@@ -37,6 +37,13 @@
         vm.assignment().pass_fail && student.grade_instructor_modified &&
           student.grade_pass_fail_status?
 
+      # Merge team_id and custom search term for filtering table
+      vm.filterCriteria = () ->
+        criteria = {}
+        criteria.$ = SortableService.filterCriteria() if SortableService.filterCriteria()?
+        criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
+        criteria
+
       StudentService.getBatchedForAssignment(vm.assignment().id)
     ]
 
@@ -48,7 +55,5 @@
       controllerAs: "assignmentShowTableBodyCtrl"
       restrict: "A"
       templateUrl: "assignments/show/table_body.html"
-      link: (scope, el, attr) ->
-        scope.selectedTeamId = TeamService.selectedTeamId
     }
 ]
