@@ -3,8 +3,11 @@
   students = []
   _studentIds = []  # for batch loading
   _loading = true
+  _loadingProgress = "Loading students..."
 
   isLoading = (loading) -> if angular.isDefined(loading) then _loading = loading else _loading
+
+  loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
 
   clearStudents = () -> students.length = 0
 
@@ -19,9 +22,11 @@
       _.each(_.chunk(_studentIds, batchSize), (batch) ->
         promises.push(getForAssignment(assignmentId, teamId, false, batch...))
       )
+
       $q.all(promises).then(() ->
         _studentIds.length = 0
         isLoading(false)
+        loadingProgress("Loading students...")
       )
     )
 
@@ -39,6 +44,7 @@
         else
           GradeCraftAPI.loadMany(students, response.data)
           GradeCraftAPI.setTermFor("student", response.data.meta.term_for_student)
+          loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
           isLoading(false) if !studentIds.length
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
@@ -48,6 +54,7 @@
   {
     students: students
     isLoading: isLoading
+    loadingProgress: loadingProgress
     clearStudents: clearStudents
     termFor: termFor
     getBatchedForAssignment: getBatchedForAssignment

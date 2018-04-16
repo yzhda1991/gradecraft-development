@@ -8,6 +8,7 @@
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
       vm.students = StudentService.students
+      vm.progress = StudentService.loadingProgress
 
       vm.gradesToRelease = GradeReleaseService.gradeIds
       vm.toggleGradeSelection = (gradeId) -> GradeReleaseService.toggleGradeSelection(gradeId)

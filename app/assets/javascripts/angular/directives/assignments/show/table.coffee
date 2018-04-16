@@ -21,9 +21,7 @@
             alert("An error occurred while attempting to release #{GradeReleaseService.gradeIds.length} grades")
         )
 
-      services(@assignmentId, @assignmentTypeId).then(() ->
-        vm.loading = false
-      )
+      services(@assignmentId, @assignmentTypeId).then(() -> vm.loading = false)
     ]
 
     services = (assignmentId, assignmentTypeId) ->
