@@ -1,0 +1,71 @@
+%tr{"ng-if"=>"groupTableBodyCtrl.loading"}
+  %td{"colspan"=>"4"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading...
+
+%tr{"ng-repeat"=>"groups in groupTableBodyCtrl.groups"}
+  %td
+
+-# - @assignment.groups.each do |group|
+-#   %tr
+-#     %td= link_to group.name, group
+-#     %td= group.approved
+-#     %td
+-#       .right
+-#         %ul.button-bar
+-#           // Instructors can edit the group - change the assignments they work on,
+-#           // Update their membership, alter their name
+-#           %li= link_to "Review #{term_for :group}", edit_group_path(group), class: "button"
+-#           // If the assignment allows submissions and the group doesn't have one
+-#           // then the instructor can add one
+-#           - if @assignment.accepts_submissions? && !group.submission_for_assignment(@assignment)
+-#             = active_course_link_to "Submit", new_assignment_submission_path(@assignment, group_id: group.id), class: "button"
+-#           - grade = group.students.first.grade_for_assignment(@assignment)
+-#           - if grade.present? && grade.instructor_modified?
+-#             = edit_group_grade_link_to @assignment, group, class: "button"
+-#           - else
+-#             = active_course_link_to decorative_glyph(:edit) + "Grade", grade_assignment_group_path(@assignment, group), class: "button"
+-#     %td
+-#       %table
+-#         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
+-#           %tr
+-#             %th= "#{current_course.student_term}s"
+-#             %th Score
+-#             - if @assignment.assignment_type.student_weightable?
+-#               %th Multiplied Scores
+-#             - if @assignment.has_levels?
+-#               %th Level
+-#             %th Graded
+-#             %th Student Visible
+-#             - if group.grades.not_released.any?
+-#               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+-#                 %button.button.select-all{role: "button", type: "button"}= "Check"
+-#                 %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+-#             %th
+-#         %tbody
+-#           - group.students.order_by_name.each do |student|
+-#             - grade = @assignment.grades.find_by(student_id: student.id)
+-#
+-#             %tr
+-#               %td= link_to student.name, student_path(student)
+-#               %td
+-#                 - if grade.present? && grade.instructor_modified?
+-#                   - if @assignment.pass_fail? && grade.pass_fail_status.present?
+-#                     = term_for grade.pass_fail_status
+-#                   - else
+-#                     = points grade.try(:final_points)
+-#
+-#               - if @assignment.student_weightable?
+-#                 %td
+-#                   - if grade.present?
+-#                     = points grade.score
+-#               - if @assignment.has_levels?
+-#                 %td= @assignment.grade_level(grade) unless grade.nil?
+-#               %td= decorative_glyph(:check) if grade && grade.complete?
+-#               %td= decorative_glyph(:check) if grade && grade.student_visible?
+-#               %td
+-#                 - if grade && grade.not_released?
+-#                   = check_box_tag "grade_ids[]", grade.id
+-#               %td
+-#                 - if grade && grade.instructor_modified?
+-#                   = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"

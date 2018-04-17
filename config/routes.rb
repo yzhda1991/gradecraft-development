@@ -401,7 +401,9 @@ Rails.application.routes.draw do
         end
       end
       resource :groups, only: [], module: :assignments do
-        resources :grades, only: :index, module: :groups
+        resources :grades, only: :index, module: :groups do
+          get :mass_edit, on: :collection
+        end
       end
       resources :groups, only: [] do
         resources :criteria, only: [] do

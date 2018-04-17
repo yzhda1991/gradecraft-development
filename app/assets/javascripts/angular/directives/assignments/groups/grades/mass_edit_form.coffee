@@ -10,7 +10,7 @@
     vm.selectedGradingStyle = AssignmentGradesService.selectedGradingStyle
     vm.termFor = AssignmentGradesService.termFor
 
-    AssignmentGradesService.getGroupAssignmentWithGrades(@assignmentId).finally(() ->
+    AssignmentGradesService.getGroupAssignmentWithMassEditGrades(@assignmentId).finally(() ->
       vm.loading = false
       AssignmentGradesService.setDefaultGradingStyle()
     )

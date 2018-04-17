@@ -1,7 +1,10 @@
-@gradecraft.directive "assignmentShowGroupTableBody", ['GroupService', (GroupService) ->
+@gradecraft.directive "assignmentShowGroupTableBody", ['AssignmentGradesService', (AssignmentGradesService) ->
   AssignmentShowGroupTableBodyCtrl = [() ->
     vm = this
-    vm.loading = false
+    vm.loading = true
+    vm.groupGrades = AssignmentGradesService.groupGrades
+
+    AssignmentGradesService.getGroupGradesForAssignment(@assignmentId).then(() -> vm.loading = false)
   ]
 
   {
