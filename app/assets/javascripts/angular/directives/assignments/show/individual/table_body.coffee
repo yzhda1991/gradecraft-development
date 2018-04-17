@@ -1,6 +1,6 @@
-@gradecraft.directive "assignmentShowTableBody", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "TeamService", "$sce",
+@gradecraft.directive "assignmentShowIndividualTableBody", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "TeamService", "$sce",
   (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, SortableService, TeamService, $sce) ->
-    AssignmentShowTableBodyCtrl = [() ->
+    AssignmentShowIndividualTableBodyCtrl = [() ->
       vm = this
       vm.sortable = SortableService
       vm.loading = StudentService.isLoading
@@ -52,9 +52,9 @@
       scope:
         linksVisible: "@"
       bindToController: true
-      controller: AssignmentShowTableBodyCtrl
-      controllerAs: "assignmentShowTableBodyCtrl"
+      controller: AssignmentShowIndividualTableBodyCtrl
+      controllerAs: "individualTableBodyCtrl"
       restrict: "A"
-      templateUrl: "assignments/show/table_body.html"
+      templateUrl: "assignments/show/individual/table_body.html"
     }
 ]

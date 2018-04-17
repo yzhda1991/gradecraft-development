@@ -1,6 +1,6 @@
-@gradecraft.directive "assignmentShowTableHeader", ["AssignmentService", "AssignmentTypeService", "GradeReleaseService", "StudentService",
+@gradecraft.directive "assignmentShowIndividualTableHeader", ["AssignmentService", "AssignmentTypeService", "GradeReleaseService", "StudentService",
   (AssignmentService, AssignmentTypeService, GradeReleaseService, StudentService) ->
-    AssignmentShowTableHeaderCtrl = [() ->
+    AssignmentShowIndividualTableHeaderCtrl = [() ->
       vm = this
       vm.loading = true
       vm.assignment = AssignmentService.assignment
@@ -31,9 +31,9 @@
 
     {
       bindToController: true
-      controller: AssignmentShowTableHeaderCtrl
-      controllerAs: "assignmentShowTableHeaderCtrl"
+      controller: AssignmentShowIndividualTableHeaderCtrl
+      controllerAs: "individualTableHeaderCtrl"
       restrict: "A"
-      templateUrl: "assignments/show/table_header.html"
+      templateUrl: "assignments/show/individual/table_header.html"
     }
 ]

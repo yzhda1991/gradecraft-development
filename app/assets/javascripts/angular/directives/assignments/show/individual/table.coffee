@@ -1,6 +1,6 @@
-@gradecraft.directive "assignmentShowTable", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "$q",
+@gradecraft.directive "assignmentShowIndividualTable", ["AssignmentService", "AssignmentTypeService", "StudentService", "GradeReleaseService", "SortableService", "$q",
   (AssignmentService, AssignmentTypeService, StudentService, GradeReleaseService, SortableService, $q) ->
-    AssignmentShowTableCtrl = [() ->
+    AssignmentShowIndividualTableCtrl = [() ->
       vm = this
       vm.loading = true
       vm.searchCriteria = SortableService.filterCriteria
@@ -37,9 +37,9 @@
         assignmentId: "@"
         assignmentTypeId: "@"
       bindToController: true
-      controller: AssignmentShowTableCtrl
-      controllerAs: "assignmentShowTableCtrl"
+      controller: AssignmentShowIndividualTableCtrl
+      controllerAs: "individualTableCtrl"
       restrict: "EA"
-      templateUrl: "assignments/show/table.html"
+      templateUrl: "assignments/show/individual/table.html"
     }
 ]
