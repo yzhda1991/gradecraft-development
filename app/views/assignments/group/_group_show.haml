@@ -1,3 +1,6 @@
+%assignment-show-group-table{"data-assignment-id"=>"#{presenter.assignment.id}"}
+
+-# TODO: remove this
 = form_tag release_assignment_grades_path(presenter.assignment), method: :put do
   - if !presenter.groups.present?
     No #{term_for :groups} have been created! You can either have #{term_for :students} self-create their #{term_for :groups}, or you can create them manually #{link_to "here", new_group_path}.
