@@ -1,4 +1,4 @@
-%quick-grade-styling-selector.right.select-menu{"ng-if"=>"vm.gradesByGroup.length > 0"}
+%quick-grade-styling-selector.right.select-menu{"ng-if"=>"vm.groupGrades.length > 0"}
 
 %massGrade
   %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grades..."}
@@ -19,7 +19,7 @@
           %th{"ng-if"=>"!vm.assignment.pass_fail", "scope"=>"col"}
             Earned / Max Points
       %tbody
-        %tr{"ng-repeat"=>"(gbgIndex, gbg) in vm.gradesByGroup"}
+        %tr{"ng-repeat"=>"(gbgIndex, gbg) in vm.groupGrades"}
           %td.align-right
             %input{"type"=>"hidden",
                    "name"=>"assignment[grades_by_group][{{gbgIndex}}][group_id]",
