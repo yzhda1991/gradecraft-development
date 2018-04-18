@@ -61,6 +61,11 @@ class SubmissionsController < ApplicationController
     submission = @assignment.submissions.find(params[:id])
     ensure_editable? submission, @assignment or return
 
+    grades = find_grades(@assignment, submission)
+    grades.each do |grade|
+      grade.update(submission_id: submission.id) unless grade.nil?
+    end
+
     submission_was_draft = submission.unsubmitted?
     respond_to do |format|
       if submission.update_attributes(submission_params.merge(submitted_at: DateTime.now)) && Services::DeletesSubmissionDraftContent.for(submission).success?
