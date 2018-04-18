@@ -1,5 +1,6 @@
 @gradecraft.factory 'AssignmentGradesService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
+  groups = []
   grades = []
   groupGrades = []
   assignment = {}
@@ -37,8 +38,11 @@
   getGroupGradesForAssignment = (assignmentId) ->
     $http.get("/api/assignments/#{assignmentId}/groups/grades/").then(
       (response) ->
+        GradeCraftAPI.loadMany(groups, response.data)
         GradeCraftAPI.loadFromIncluded(groupGrades, "grades", response.data)
-        GradeCraftAPI.setTermFor("groups", response.data.meta.term_for_pass)
+        GradeCraftAPI.setTermFor("group", response.data.meta.group)
+        GradeCraftAPI.setTermFor("groups", response.data.meta.groups)
+        GradeCraftAPI.setTermFor("students", response.data.meta.term_for_students)
       (response) ->
         GradeCraftAPI.logResponse(response)
     )
@@ -54,6 +58,12 @@
     else
       selectedGradingStyle("text")
 
+  gradesForGroup = (group) ->
+    studentIds = group.student_ids
+    grades = []
+    grades.push grade for grade in @groupGrades when grade.student_id in studentIds
+    grades
+
   termFor = (article) ->
     GradeCraftAPI.termFor(article)
 
@@ -63,12 +73,14 @@
     )
 
   {
+    groups: groups
     grades: grades
     groupGrades: groupGrades
     assignment: assignment
     assignmentScoreLevels: assignmentScoreLevels
     selectedGradingStyle: selectedGradingStyle
     setDefaultGradingStyle: setDefaultGradingStyle
+    gradesForGroup: gradesForGroup
     assignmentScoreLevels: assignmentScoreLevels
     getAssignmentWithGrades: getAssignmentWithGrades
     getGroupAssignmentWithMassEditGrades: getGroupAssignmentWithMassEditGrades

@@ -1,24 +1,13 @@
 .simple_form
-  %h2.center
-    %i.fa.fa-spinner.fa-spin.fa-fw
-    Loading...
-
-  -# %label
-  -#   %span.sr-only Search Criteria
-  -#   %input{"type"=>"search",
-  -#          "placeholder"=>"Search",
-  -#          "ng-model"=>"groupTableCtrl.searchCriteria",
-  -#          "ng-model-options"=>"{ getterSetter: true, updateOn: 'change blur' }"}
-
   %table{"ng-if"=>"!groupTableCtrl.loading"}
     %thead
       %tr
-        -# %th{:width => "20%"} #{term_for :group} Name
-        -# TODO: add group term
-        %th{"width"=>"20%"} Name
+        %th{"width"=>"20%"} {{groupTableCtrl.termFor("group")}} Name
         %th Status
         %th
         %th
-    %tbody{"assignment-show-group-table-body"=>""}
+    %tbody{"assignment-show-group-table-body"=>"",
+           "data-assignment-id"=>"{{::groupTableCtrl.assignmentId}}",
+           "data-links-visible"=>"{{::groupTableCtrl.linksVisible}}"}
 
 -# TODO: release grades button, if grades present

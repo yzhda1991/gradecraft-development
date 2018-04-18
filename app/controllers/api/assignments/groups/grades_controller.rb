@@ -7,7 +7,9 @@ class API::Assignments::Groups::GradesController < ApplicationController
   # GET /api/assignments/:assignment_id/groups/grades
   def index
     @groups = @assignment.groups.order_by_name
-    @group_grades = @groups.map { |group| Gradebook.new(@assignment, group.students).grades.first }
+
+    @group_grades = {}
+    @groups.each { |group| @group_grades[group.id] = Gradebook.new(@assignment, group.students.order_by_name).grades }
   end
 
   # GET /api/assignments/:assignment_id/groups/grades/mass_edit

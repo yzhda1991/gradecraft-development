@@ -1,0 +1,82 @@
+.center{"ng-if"=>"groupStudentTableCtrl.loading()"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+
+%table{"ng-if"=>"!groupStudentTableCtrl.loading()"}
+  %thead{"style"=>"background: none !important; color: #000000; margin: 0; padding: 0;"}
+    %tr
+      %th {{groupStudentTableCtrl.termFor("students")}}
+      %th Score
+      %th{"ng-if"=>"groupStudentTableCtrl.assignmentType().student_weightable"} Multiplied Scores
+      %th{"ng-if"=>"groupStudentTableCtrl.assignment().has_levels"} Level
+      %th Graded
+      %th Student Visible
+      %th
+        %div{"ng-if"=>"group.has_unreleased_grades", "width"=>"120px"}
+          %button.button.select-all{"role"=>"button", "type"=>"button"} Check
+          %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck
+      %th
+  %tbody
+    %tr{"ng-repeat"=>"grade in groupStudentTableCtrl.gradesForGroup()"}
+      %td
+        %a{"ng-href"=>"{{grade.student_path}}"} {{grade.student_name}}
+      %td
+        %div{"ng-if"=>"grade.instructor_modified"}
+          %span{"ng-if"=>"groupStudentTableCtrl.showPassFailStatus()"} {{grade.pass_fail_status}}
+          %span{"ng-if"=>"!groupStudentTableCtrl.showPassFailStatus()"} {{grade.final_points}}
+      %td{"ng-if"=>"groupStudentTableCtrl.assignment().student_weightable"}
+        %span {{grade.score}}
+      %td{"ng-if"=>"groupStudentTableCtrl.assignment().has_levels"} {{grade.earned_grade_level}}
+      %td{"ng-if"=>"grade.complete"}
+        %i.fa.fa-check
+      %td{"ng-if"=>"grade.student_visible"}
+        %i.fa.fa-check
+      %td
+        %input{"type"=>"checkbox", "ng-if"=>"grade.graded && grade.not_released"}
+      %td
+        %a.button{"ng-href"=>"{{grade.grade_path}}", "ng-if"=>"grade.graded && grade.instructor_modified"}
+          %i.fa.fa-eye
+          See Grade
+
+    -# TODO: remove
+    -# %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
+    -#           %tr
+    -#             %th= "#{current_course.student_term}s"
+    -#             %th Score
+    -#             - if @assignment.assignment_type.student_weightable?
+    -#               %th Multiplied Scores
+    -#             - if @assignment.has_levels?
+    -#               %th Level
+    -#             %th Graded
+    -#             %th Student Visible
+    -#             - if group.grades.not_released.any?
+    -#               %th{"data-dynatable-no-sort" => "true", :width => "120px" }
+    -#                 %button.button.select-all{role: "button", type: "button"}= "Check"
+    -#                 %button.button.select-none{role: "button", type: "button"}= "Uncheck"
+    -#             %th
+    -#         %tbody
+    -#           - group.students.order_by_name.each do |student|
+    -#             - grade = @assignment.grades.find_by(student_id: student.id)
+    -#
+    -#             %tr
+    -#               %td= link_to student.name, student_path(student)
+    -#               %td
+    -#                 - if grade.present? && grade.instructor_modified?
+    -#                   - if @assignment.pass_fail? && grade.pass_fail_status.present?
+    -#                     = term_for grade.pass_fail_status
+    -#                   - else
+    -#                     = points grade.try(:final_points)
+    -#
+    -#               - if @assignment.student_weightable?
+    -#                 %td
+    -#                   - if grade.present?
+    -#                     = points grade.score
+    -#               - if @assignment.has_levels?
+    -#                 %td= @assignment.grade_level(grade) unless grade.nil?
+    -#               %td= decorative_glyph(:check) if grade && grade.complete?
+    -#               %td= decorative_glyph(:check) if grade && grade.student_visible?
+    -#               %td
+    -#                 - if grade && grade.not_released?
+    -#                   = check_box_tag "grade_ids[]", grade.id
+    -#               %td
+    -#                 - if grade && grade.instructor_modified?
+    -#                   = link_to decorative_glyph(:eye) + "See Grade", grade_path(grade), class: "button"

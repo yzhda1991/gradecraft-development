@@ -3,14 +3,15 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # stores custom terms, default to GC defaults
   _termFor = {
-      assignment_type: "Assignment Type"
-      assignment: "Assignment"
-      pass: "Pass"
-      fail: "Fail"
-      badges: "Badges"
-      challenges: "Challenges"
-      weights: "Multipliers"
-      weight: "Multiplier"
+    assignment_type: "Assignment Type"
+    assignment: "Assignment"
+    pass: "Pass"
+    fail: "Fail"
+    badges: "Badges"
+    challenges: "Challenges"
+    weights: "Multipliers"
+    weight: "Multiplier"
+    group: "Group"
   }
 
   termFor = (article)->

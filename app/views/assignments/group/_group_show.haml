@@ -1,4 +1,4 @@
-%assignment-show-group-table{"data-assignment-id"=>"#{presenter.assignment.id}"}
+%assignment-show-group-table{"data-assignment-id"=>"#{presenter.assignment.id}", "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
 
 -# TODO: remove this
 = form_tag release_assignment_grades_path(presenter.assignment), method: :put do
