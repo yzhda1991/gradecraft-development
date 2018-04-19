@@ -26,7 +26,7 @@
     #tabt1.ui-tabs-panel
       .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
-          = render partial: "assignments/group/group_show", locals: { presenter: presenter }
+          = render partial: "assignments/group/group_show", locals: { assignment_id: presenter.assignment.id }
         - else
           = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
       .ui-tabs-panel.assignment-details-container#tab2{role: "tabpanel", "aria-hidden" => false }
