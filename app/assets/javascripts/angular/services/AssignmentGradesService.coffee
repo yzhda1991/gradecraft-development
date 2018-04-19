@@ -6,6 +6,9 @@
   assignment = {}
   assignmentScoreLevels = []
   _selectedGradingStyle = ""
+  _loading = true
+
+  isLoading = (loading) -> if angular.isDefined(loading) then _loading = loading else _loading
 
   getAssignmentWithGrades = (id, teamId=null) ->
     $http.get("/api/assignments/#{id}/grades", { params: { team_id: teamId } }).then(
@@ -35,7 +38,13 @@
         GradeCraftAPI.logResponse(response)
     )
 
-  getGroupGradesForAssignment = (assignmentId) ->
+  getGroupGradesForAssignment = (assignmentId, clearArrays=false) ->
+    isLoading(true)
+
+    if clearArrays is true
+      groups.length = 0
+      groupGrades.length = 0
+
     $http.get("/api/assignments/#{assignmentId}/groups/grades/").then(
       (response) ->
         GradeCraftAPI.loadMany(groups, response.data)
@@ -43,6 +52,7 @@
         GradeCraftAPI.setTermFor("group", response.data.meta.group)
         GradeCraftAPI.setTermFor("groups", response.data.meta.groups)
         GradeCraftAPI.setTermFor("students", response.data.meta.term_for_students)
+        isLoading(false)
       (response) ->
         GradeCraftAPI.logResponse(response)
     )
@@ -75,6 +85,7 @@
   {
     groups: groups
     grades: grades
+    isLoading: isLoading
     groupGrades: groupGrades
     assignment: assignment
     assignmentScoreLevels: assignmentScoreLevels

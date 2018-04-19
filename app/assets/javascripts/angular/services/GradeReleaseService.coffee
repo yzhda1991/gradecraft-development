@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradeReleaseService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
+@gradecraft.factory "GradeReleaseService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
 
   gradeIds = []
 
@@ -12,7 +12,7 @@
 
   addGradeIds = (ids...) -> gradeIds.push(ids...)
 
-  clearGradeIds = () -> gradeIds.length = 0
+  clearGradeIds = (ids...) -> if ids.length > 0 then _.pull(gradeIds, ids...) else gradeIds.length = 0
 
   hasSelectedGrades = () -> _.some(gradeIds)
 

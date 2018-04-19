@@ -18,11 +18,13 @@
 
       # Select or deselect all grades
       vm.selectGrades = (selectAll) ->
-        GradeReleaseService.clearGradeIds()
+        GradeReleaseService.clearGradeIds(_pluckGradeIds(vm.gradesForGroup())...)
         return if selectAll is false
         gradeIds = _pluckGradedIdsForRelease(vm.gradesForGroup())
         GradeReleaseService.addGradeIds(gradeIds...)
     ]
+
+    _pluckGradeIds = (grades) -> _.pluck(grades, "id")
 
     _pluckGradedIdsForRelease = (grades) ->
       gradeIds = []

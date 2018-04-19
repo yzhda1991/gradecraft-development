@@ -1,9 +1,9 @@
-%tr{"ng-if"=>"groupTableBodyCtrl.loading"}
+%tr{"ng-if"=>"groupTableBodyCtrl.loading()"}
   %td.center{"colspan"=>"4"}
     %i.fa.fa-spinner.fa-spin.fa-fw
     Loading...
 
-%tr{"ng-if"=>"!groupTableBodyCtrl.loading", "ng-repeat"=>"group in groupTableBodyCtrl.groups"}
+%tr{"ng-if"=>"!groupTableBodyCtrl.loading()", "ng-repeat"=>"group in groupTableBodyCtrl.groups | orderBy: groupTableBodyCtrl.sortable.predicate : groupTableBodyCtrl.sortable.reverse"}
   -# Link to group
   %td
     %a{"ng-href"=>"{{group.group_path}}"} {{group.name}}

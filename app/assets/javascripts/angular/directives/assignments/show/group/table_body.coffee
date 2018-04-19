@@ -1,8 +1,10 @@
-@gradecraft.directive "assignmentShowGroupTableBody", ["AssignmentService", "AssignmentTypeService", "AssignmentGradesService", "$sce", "$q",
-  (AssignmentService, AssignmentTypeService, AssignmentGradesService, $sce, $q) ->
+@gradecraft.directive "assignmentShowGroupTableBody", ["AssignmentService", "AssignmentTypeService", "AssignmentGradesService", "SortableService", "$sce", "$q",
+  (AssignmentService, AssignmentTypeService, AssignmentGradesService, SortableService, $sce, $q) ->
     AssignmentShowGroupTableBodyCtrl = [() ->
       vm = this
-      vm.loading = true
+      vm.sortable = SortableService
+
+      vm.loading = AssignmentGradesService.isLoading
       vm.groups = AssignmentGradesService.groups
       vm.groupGrades = AssignmentGradesService.groupGrades
       vm.assignment = AssignmentService.assignment
@@ -21,7 +23,6 @@
         first.instructor_modified is true
 
       services(@assignmentId).then(() ->
-        vm.loading = false
         AssignmentTypeService.getAssignmentType(vm.assignment().assignment_type_id)
       )
     ]
