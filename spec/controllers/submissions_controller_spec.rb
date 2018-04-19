@@ -100,7 +100,8 @@ describe SubmissionsController do
       it "associates the submission with the grade" do
         params = attributes_for(:submission).merge!(student_id: student.id)
         post :create, params: { assignment_id: assignment.id, submission: params }
-        expect(Grade.first.submission_id).to eq (Submission.first.id)
+        expect(Grade.where(student_id:student.id, assignment_id: assignment.id).first.submission_id).to \
+        eq(Submission.where(assignment_id: assignment.id).first.id)
       end
     end
 
