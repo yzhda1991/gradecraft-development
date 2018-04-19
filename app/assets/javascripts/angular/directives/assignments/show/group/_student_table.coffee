@@ -15,7 +15,19 @@
       vm.termFor = (term) -> AssignmentGradesService.termFor(term)
 
       vm.showPassFailStatus = (grade) -> vm.assignment().pass_fail && grade.pass_fail_status?
+
+      # Select or deselect all grades
+      vm.selectGrades = (selectAll) ->
+        GradeReleaseService.clearGradeIds()
+        return if selectAll is false
+        gradeIds = _pluckGradedIdsForRelease(vm.gradesForGroup())
+        GradeReleaseService.addGradeIds(gradeIds...)
     ]
+
+    _pluckGradedIdsForRelease = (grades) ->
+      gradeIds = []
+      (gradeIds.push(grade.id) if grade.graded and grade.not_released is true) for grade in grades
+      gradeIds
 
     {
       scope:

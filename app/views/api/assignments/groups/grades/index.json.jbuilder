@@ -19,7 +19,7 @@ json.data do
       # Fully-formed html for link, generated from LinkHelper class
       json.edit_group_grade_link edit_group_grade_link_to(@assignment, group, class: "button")
 
-      json.has_unreleased_grades group.grades.not_released.any?
+      json.has_unreleased_grades @group_grades[group.id].any? { |g| g.persisted? && g.not_released? }
       json.grade_assignment_path grade_assignment_group_path(@assignment, group)
     end
 

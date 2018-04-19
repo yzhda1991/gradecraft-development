@@ -12,9 +12,13 @@
       %th Graded
       %th Student Visible
       %th
-        %div{"ng-if"=>"group.has_unreleased_grades", "width"=>"120px"}
-          %button.button.select-all{"role"=>"button", "type"=>"button"} Check
-          %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck
+        %div{"ng-if"=>"groupStudentTableCtrl.group.has_unreleased_grades", "width"=>"120px"}
+          %button.button.select-all{"role"=>"button",
+                                    "type"=>"button",
+                                    "ng-click"=>"groupStudentTableCtrl.selectGrades(true)"} Check
+          %button.button.select-none{"role"=>"button",
+                                     "type"=>"button",
+                                     "ng-click"=>"groupStudentTableCtrl.selectGrades(false)"} Uncheck
       %th
 
   %tbody
@@ -32,18 +36,18 @@
 
       %td{"ng-if"=>"groupStudentTableCtrl.assignment().has_levels"} {{grade.earned_grade_level}}
 
-      %td{"ng-if"=>"grade.complete"}
-        %i.fa.fa-check
-
-      %td{"ng-if"=>"grade.student_visible"}
-        %i.fa.fa-check
+      %td
+        %i.fa.fa-check{"ng-if"=>"grade.complete"}
 
       %td
+        %i.fa.fa-check{"ng-if"=>"grade.student_visible"}
+
+      %td.center
         %label{"ng-if"=>"grade.graded && grade.not_released"}
           %span.sr-only Release grade for {{grade.student_name}}
           %input{"type"=>"checkbox",
                  "ng-value"=>"grade.id",
-                 "ng-checked"=>"groupStudentTableCtrl.gradesToRelease.indexOf(student.grade_id) > -1",
+                 "ng-checked"=>"groupStudentTableCtrl.gradesToRelease.indexOf(grade.id) > -1",
                  "ng-click"=>"groupStudentTableCtrl.toggleGradeSelection(grade.id)"}
 
       %td
