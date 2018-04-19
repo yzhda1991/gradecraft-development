@@ -2,6 +2,7 @@
   %i.fa.fa-spinner.fa-spin.fa-fw
 
 %table{"ng-if"=>"!groupStudentTableCtrl.loading()"}
+
   %thead{"style"=>"background: none !important; color: #000000; margin: 0; padding: 0;"}
     %tr
       %th {{groupStudentTableCtrl.termFor("students")}}
@@ -15,23 +16,36 @@
           %button.button.select-all{"role"=>"button", "type"=>"button"} Check
           %button.button.select-none{"role"=>"button", "type"=>"button"} Uncheck
       %th
+
   %tbody
     %tr{"ng-repeat"=>"grade in groupStudentTableCtrl.gradesForGroup()"}
       %td
         %a{"ng-href"=>"{{grade.student_path}}"} {{grade.student_name}}
+
       %td
         %div{"ng-if"=>"grade.instructor_modified"}
           %span{"ng-if"=>"groupStudentTableCtrl.showPassFailStatus()"} {{grade.pass_fail_status}}
           %span{"ng-if"=>"!groupStudentTableCtrl.showPassFailStatus()"} {{grade.final_points}}
+
       %td{"ng-if"=>"groupStudentTableCtrl.assignment().student_weightable"}
         %span {{grade.score}}
+
       %td{"ng-if"=>"groupStudentTableCtrl.assignment().has_levels"} {{grade.earned_grade_level}}
+
       %td{"ng-if"=>"grade.complete"}
         %i.fa.fa-check
+
       %td{"ng-if"=>"grade.student_visible"}
         %i.fa.fa-check
+
       %td
-        %input{"type"=>"checkbox", "ng-if"=>"grade.graded && grade.not_released"}
+        %label{"ng-if"=>"grade.graded && grade.not_released"}
+          %span.sr-only Release grade for {{grade.student_name}}
+          %input{"type"=>"checkbox",
+                 "ng-value"=>"grade.id",
+                 "ng-checked"=>"groupStudentTableCtrl.gradesToRelease.indexOf(student.grade_id) > -1",
+                 "ng-click"=>"groupStudentTableCtrl.toggleGradeSelection(grade.id)"}
+
       %td
         %a.button{"ng-href"=>"{{grade.grade_path}}", "ng-if"=>"grade.graded && grade.instructor_modified"}
           %i.fa.fa-eye

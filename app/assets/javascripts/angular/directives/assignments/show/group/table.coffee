@@ -1,17 +1,24 @@
-@gradecraft.directive "assignmentShowGroupTable", ['AssignmentGradesService', (AssignmentGradesService) ->
-  AssignmentShowGroupTableCtrl = [() ->
-    vm = this
+@gradecraft.directive "assignmentShowGroupTable", ['AssignmentGradesService', "GradeReleaseService",
+  (AssignmentGradesService, GradeReleaseService) ->
+    AssignmentShowGroupTableCtrl = [() ->
+      vm = this
+      vm.hasSelectedGrades = GradeReleaseService.hasSelectedGrades
 
-    vm.termFor = (term) -> AssignmentGradesService.termFor(term)
-  ]
+      vm.termFor = (term) -> AssignmentGradesService.termFor(term)
+      vm.releaseGrades = () -> GradeReleaseService.postReleaseGrades(@assignmentId)
 
-  {
-    scope:
-      linksVisible: "@"
-      assignmentId: "@"
-    bindToController: true
-    controller: AssignmentShowGroupTableCtrl
-    controllerAs: "groupTableCtrl"
-    templateUrl: "assignments/show/group/table.html"
-  }
+      vm.hasUnreleasedGrades = () -> _.some(AssignmentGradesService.groupGrades,
+        (grade) -> grade.graded and grade.not_released is true
+      )
+    ]
+
+    {
+      scope:
+        linksVisible: "@"
+        assignmentId: "@"
+      bindToController: true
+      controller: AssignmentShowGroupTableCtrl
+      controllerAs: "groupTableCtrl"
+      templateUrl: "assignments/show/group/table.html"
+    }
 ]

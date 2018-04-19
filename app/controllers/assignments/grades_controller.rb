@@ -4,26 +4,7 @@ class Assignments::GradesController < ApplicationController
   before_action :ensure_staff?, except: :self_log
   before_action :ensure_student?, only: :self_log
   before_action :find_assignment, only: [:mass_edit, :mass_update, :self_log, :delete_all]
-  before_action :use_current_course, only: [:release, :mass_edit, :mass_update]
-
-  # PUT /assignments/:assignment_id/grades/release
-  # Releases grades for assignment in grade_ids params
-  def release
-    assignment = @course.assignments.find(params[:assignment_id])
-    grades = assignment.grades.find(params[:grade_ids])
-
-    grade_ids = grades.collect do |grade|
-      grade.instructor_modified = true
-      grade.complete = true
-      grade.student_visible = true
-      grade.save
-      grade.id
-    end
-
-    enqueue_multiple_grade_update_jobs(grade_ids)
-
-    redirect_to assignment_path(assignment), notice: "Grades were successfully released!"
-  end
+  before_action :use_current_course, only: [:mass_edit, :mass_update]
 
   # GET /assignments/:assignment_id/grades/export
   # Sends a CSV file to the user with the current grades for all students

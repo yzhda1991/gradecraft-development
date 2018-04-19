@@ -1,10 +1,13 @@
-@gradecraft.directive "assignmentShowGroupStudentTable", ["AssignmentGradesService", "AssignmentService", "AssignmentTypeService",
-  (AssignmentGradesService, AssignmentService, AssignmentTypeService) ->
+@gradecraft.directive "assignmentShowGroupStudentTable", ["AssignmentGradesService", "AssignmentService", "AssignmentTypeService", "GradeReleaseService",
+  (AssignmentGradesService, AssignmentService, AssignmentTypeService, GradeReleaseService) ->
     AssignmentShowGroupStudentTableCtrl = [() ->
       vm = this
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
       vm.students = AssignmentGradesService.students
+
+      vm.gradesToRelease = GradeReleaseService.gradeIds
+      vm.toggleGradeSelection = (gradeId) -> GradeReleaseService.toggleGradeSelection(gradeId)
 
       vm.loading = () -> !AssignmentTypeService.assignmentType()?
 

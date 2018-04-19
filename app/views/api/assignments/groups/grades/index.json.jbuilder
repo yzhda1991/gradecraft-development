@@ -53,7 +53,10 @@ json.included do
       json.graded grade.persisted?
       json.instructor_modified grade.instructor_modified?
 
-      json.grade_path grade_path(grade) if grade.persisted?
+      if grade.persisted?
+        json.id grade.id
+        json.grade_path grade_path(grade)
+      end
 
       unless grade.student.nil?
         json.student_name grade.student.name

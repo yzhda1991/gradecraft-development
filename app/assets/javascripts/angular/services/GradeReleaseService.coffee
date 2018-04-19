@@ -14,6 +14,8 @@
 
   clearGradeIds = () -> gradeIds.length = 0
 
+  hasSelectedGrades = () -> _.some(gradeIds)
+
   toggleGradeSelection = (gradeId) ->
     index = @gradeIds.indexOf(gradeId)
     if index > -1 then @gradeIds.splice(index, 1) else @gradeIds.push(gradeId)
@@ -23,6 +25,7 @@
     postReleaseGrades: postReleaseGrades
     addGradeIds: addGradeIds
     clearGradeIds: clearGradeIds
+    hasSelectedGrades: hasSelectedGrades
     toggleGradeSelection: toggleGradeSelection
   }
 ]
