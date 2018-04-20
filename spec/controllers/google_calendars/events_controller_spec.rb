@@ -75,7 +75,7 @@ describe GoogleCalendars::EventsController, type:[:disable_external_api, :contro
 
   describe "POST add_events" do
     before(:each) do
-      stub_request(:post, "https://www.googleapis.com/batch").
+      stub_request(:post, "https://www.googleapis.com/batch/calendar/v3").
         to_return(:status => 200, :body => "", :headers => {})
     end
     context "with an existing authentication" do
