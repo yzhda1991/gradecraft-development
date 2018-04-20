@@ -12,22 +12,21 @@
   %td {{group.approved}}
 
   -# Assignment, group-related actions
-  %td
-    .right
-      %ul.button-bar
-        %li
-          %a.button{"ng-href"=>"{{group.edit_group_path}}"} Review {{groupTableBodyCtrl.termFor("group")}}
+  %td.center
+    %ul.button-bar
+      %li
+        %a.button{"ng-href"=>"{{group.edit_group_path}}"} Review {{groupTableBodyCtrl.termFor("group")}}
 
-        %li{"ng-if"=>"groupTableBodyCtrl.showSubmitButton(group)"}
-          %a.button{"ng-href"=>"{{groupTableBodyCtrl.new_submission_path}}"} Submit
+      %li{"ng-if"=>"groupTableBodyCtrl.showSubmitButton(group)"}
+        %a.button{"ng-href"=>"{{groupTableBodyCtrl.new_submission_path}}"} Submit
 
-        %li{"ng-if"=>"groupTableBodyCtrl.showEditGroupGradeLink(group)",
-            "ng-bind-html"=>"groupTableBodyCtrl.sanitizeHtml(group.edit_group_grade_link)"}
+      %li{"ng-if"=>"groupTableBodyCtrl.showEditGroupGradeLink(group)",
+          "ng-bind-html"=>"groupTableBodyCtrl.sanitizeHtml(group.edit_group_grade_link)"}
 
-        %li{"ng-if"=>"!groupTableBodyCtrl.showEditGroupGradeLink(group)"}
-          %a.button{"ng-href"=>"{{group.grade_assignment_path}}"}
-            %i.fa.fa-edit
-            Grade
+      %li{"ng-if"=>"!groupTableBodyCtrl.showEditGroupGradeLink(group)"}
+        %a.button{"ng-href"=>"{{group.grade_assignment_path}}"}
+          %i.fa.fa-edit
+          Grade
 
   -# Student grade information
   %td{"assignment-show-group-student-table"=>"", "data-group"=>"group"}
