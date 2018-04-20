@@ -28,10 +28,9 @@ class SubmissionsController < ApplicationController
 
     if submission.save
       submission.check_and_set_late_status!
-      grades = find_grades(@assignment, submission)
-      grades.each do |grade|
-        grade.update(submission_id: submission.id) unless grade.nil?
-      end
+
+      associate_grade_with_submission(@assignment, submission)
+
       redirect_to = (session.delete(:return_to) || assignment_path(@assignment))
       if current_user_is_student?
         NotificationMailer.successful_submission(submission.id).deliver_now if @assignment.is_individual?
@@ -61,10 +60,7 @@ class SubmissionsController < ApplicationController
     submission = @assignment.submissions.find(params[:id])
     ensure_editable? submission, @assignment or return
 
-    grades = find_grades(@assignment, submission)
-    grades.each do |grade|
-      grade.update(submission_id: submission.id) unless grade.nil?
-    end
+    associate_grade_with_submission(@assignment, submission)
 
     submission_was_draft = submission.unsubmitted?
     respond_to do |format|
@@ -103,12 +99,13 @@ class SubmissionsController < ApplicationController
 
   private
 
-  def find_grades(assignment, submission)
+  def associate_grade_with_submission(assignment, submission)
     if assignment.is_individual?
-      Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible
+      grades = Grade.where(assignment_id: assignment.id, student_id: submission.student_id).student_visible
     else
-      Grade.for_group(assignment, submission.group).student_visible
+      grades = Grade.for_group(assignment, submission.group).student_visible
     end
+    grades.update(submission_id: submission.id) unless grades.blank?
   end
 
   def find_assignment
