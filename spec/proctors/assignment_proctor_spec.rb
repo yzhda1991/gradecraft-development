@@ -1,4 +1,4 @@
-describe AssignmentProctor, focus: true do
+describe AssignmentProctor do
   let(:assignment) { build_stubbed :assignment, course: course, visible: false }
   let(:user) { build_stubbed :user }
   let(:course) { build_stubbed :course }
