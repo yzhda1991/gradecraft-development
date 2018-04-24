@@ -18,7 +18,7 @@
         %a.button{"ng-href"=>"{{group.edit_group_path}}"} Review {{groupTableBodyCtrl.termFor("group")}}
 
       %li{"ng-if"=>"groupTableBodyCtrl.showSubmitButton(group)"}
-        %a.button{"ng-href"=>"{{groupTableBodyCtrl.new_submission_path}}"} Submit
+        %a.button{"ng-href"=>"{{group.new_submission_path}}"} Submit
 
       %li{"ng-if"=>"groupTableBodyCtrl.showEditGroupGradeLink(group)",
           "ng-bind-html"=>"groupTableBodyCtrl.sanitizeHtml(group.edit_group_grade_link)"}
