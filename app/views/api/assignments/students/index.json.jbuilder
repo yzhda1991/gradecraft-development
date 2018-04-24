@@ -37,7 +37,7 @@ json.data @students do |student|
     # Submission-related
     json.submission_exists submission.present?
     json.submission_submitted_at l submission.submitted_at unless submission.nil?
-    json.submission_visible Assignments::Presenter.new(assignment: @assignment).has_viewable_submission? student, current_user
+    json.submission_visible @assignment.accepts_submissions? && submission.present? && SubmissionProctor.new(submission).viewable?(current_user)
 
     # Paths
     if grade.persisted?
@@ -51,4 +51,5 @@ end
 
 json.meta do
   json.term_for_student term_for :student
+  json.term_for_weight term_for :weight
 end

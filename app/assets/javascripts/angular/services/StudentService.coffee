@@ -44,6 +44,7 @@
         else
           GradeCraftAPI.loadMany(students, response.data)
           GradeCraftAPI.setTermFor("student", response.data.meta.term_for_student)
+          GradeCraftAPI.setTermFor("weight", response.data.meta.term_for_weight)
           loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
           isLoading(false) if !studentIds.length
         GradeCraftAPI.logResponse(response.data)

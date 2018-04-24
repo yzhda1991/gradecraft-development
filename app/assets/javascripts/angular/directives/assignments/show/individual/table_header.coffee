@@ -10,13 +10,10 @@
       vm.hasStudents = () -> _.any(StudentService.students)
 
       vm.showScore = () ->
-        !vm.assignmentType.student_weightable && !vm.assignment().pass_fail
+        !vm.assignmentType().student_weightable && !vm.assignment().pass_fail
 
       vm.showWeightedScore = () ->
-        vm.assignmentType.student_weightable && vm.assignment().pass_fail
-
-      vm.showGrade = () ->
-        !vm.assignmentType.student_weightable && vm.assignment().pass_fail
+        vm.assignmentType().student_weightable
 
       vm.selectGrades = (select) ->
         gradeIds = _pluckNonNullGradeIds(StudentService.students)

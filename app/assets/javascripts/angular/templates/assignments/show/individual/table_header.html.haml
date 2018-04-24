@@ -15,8 +15,8 @@
                       "data-sortable-header-text"=>"{{individualTableHeaderCtrl.termFor('weight')}}-weighted Score",
                       "data-sortable-predicate"=>"grade_score"}
 
-  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.showGrade()",
-                      "data-sortable-header-text"=>"Grade", "data-sortable-predicate"=>"grade_level"}
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().pass_fail",
+                      "data-sortable-header-text"=>"Grade", "data-sortable-predicate"=>"grade_pass_fail_status"}
 
   %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().has_levels",
                       "data-sortable-header-text"=>"Level Earned", "data-sortable-predicate"=>"grade_level"}

@@ -9,7 +9,8 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
       fail: "Fail"
       badges: "Badges"
       challenges: "Challenges"
-      weights: "Weights"
+      weights: "Multipliers"
+      weight: "Multiplier"
   }
 
   termFor = (article)->

@@ -32,7 +32,7 @@
   -# Weighted scores
   %td{"ng-if"=>"individualTableBodyCtrl.assignmentType().student_weightable"}
     %span{"ng-if"=>"individualTableBodyCtrl.showGradeScore(student)"} {{student.grade_score}}
-    %span{"ng-if"=>"!student.weighted_assignments"} "(not yet assigned)"
+    %span{"ng-if"=>"!student.weighted_assignments"} (not yet assigned)
 
   -# Earned grade level
   %td{"ng-if"=>"individualTableBodyCtrl.assignment().has_levels"} {{student.grade_level}}
