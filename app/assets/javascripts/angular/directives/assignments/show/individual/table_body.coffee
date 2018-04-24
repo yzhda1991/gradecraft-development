@@ -45,7 +45,7 @@
         criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
         criteria
 
-      StudentService.getBatchedForAssignment(vm.assignment().id)
+      StudentService.getBatchedForAssignment(vm.assignment().id).then(() -> SortableService.predicate = "last_name")
     ]
 
     {

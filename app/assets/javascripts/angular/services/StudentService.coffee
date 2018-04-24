@@ -1,4 +1,4 @@
-@gradecraft.factory 'StudentService', ['GradeCraftAPI', '$http', '$q', (GradeCraftAPI, $http, $q) ->
+@gradecraft.factory "StudentService", ["GradeCraftAPI", "$http", "$q", (GradeCraftAPI, $http, $q) ->
 
   students = []
   _studentIds = []  # for batch loading
