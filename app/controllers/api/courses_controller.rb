@@ -1,4 +1,5 @@
 class API::CoursesController < ApplicationController
+  before_action :ensure_staff?, only: :show
   before_action :use_current_course, only: [:analytics, :one_week_analytics]
 
   # accessed by the dashboard
@@ -8,6 +9,11 @@ class API::CoursesController < ApplicationController
       { name: c.formatted_long_name, id: c.id, search_string: c.searchable_name }
     end
     render json: MultiJson.dump(@courses)
+  end
+
+  # GET /api/courses/:id
+  def show
+    @course = Course.includes(:grade_scheme_elements).find params[:id]
   end
 
   # GET api/courses/analytics
