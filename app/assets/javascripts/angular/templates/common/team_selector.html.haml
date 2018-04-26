@@ -1,8 +1,8 @@
-%label{"for"=>"teamSelector", "class"=>"sr-only"}= "Select {{vm.termForTeam}}"
-%select{"ng-model"=>"vm.selectedTeamId",
+%label{"for"=>"teamSelector", "class"=>"sr-only"}= "Select {{teamSelectorCtrl.termForTeam()}}"
+%select{"ng-model"=>"teamSelectorCtrl.selectedTeamId",
         "ng-model-options"=>"{ getterSetter: true }",
-        "ng-disabled"=>"vm.loading",
+        "ng-disabled"=>"teamSelectorCtrl.loading",
         "name"=>"teamSelector"}
-  %option{"value"=>""}= "- Select Section -"
-  %option{"ng-repeat"=>"team in teams", "value"=>"{{team.id}}"}
+  %option{"value"=>""}= "- Select {{teamSelectorCtrl.termForTeam()}} -"
+  %option{"ng-repeat"=>"team in teamSelectorCtrl.teams", "value"=>"{{team.id}}"}
     {{team.name}}

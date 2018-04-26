@@ -1,8 +1,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  %team-selector.right.select-menu{"data-course-id"=>"#{current_course.id}",
-                                   "data-team-term"=>"#{term_for :team}"}
+  %team-selector.right.select-menu{"data-course-id"=>"#{current_course.id}"}
 
   %mass_edit_form{"data-assignment-id"=>"#{@assignment.id}",
                   "data-form-action"=>"#{mass_update_assignment_grades_path(@assignment.id)}",

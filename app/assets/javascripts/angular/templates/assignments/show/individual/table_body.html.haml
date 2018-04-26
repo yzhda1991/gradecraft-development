@@ -1,0 +1,130 @@
+%tr{"ng-if"=>"individualTableBodyCtrl.loading()"}
+  %td.center{"colspan"=>"12"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    {{individualTableBodyCtrl.progress()}}
+
+%tr{"ng-repeat"=>"student in individualTableBodyCtrl.students | orderBy : individualTableBodyCtrl.sortable.predicate : individualTableBodyCtrl.sortable.reverse | filter: individualTableBodyCtrl.filterCriteria()"}
+
+  -# Unlock indicator
+  %td{"ng-if"=>"individualTableBodyCtrl.assignment().is_unlockable"}
+    %i.fa.fa-unlock{"ng-if"=>"student.assignment_unlocked"}
+    %i.fa.fa-lock{"ng-if"=>"!student.assignment_unlocked"}
+
+  -# First name
+  %td
+    %a{"ng-href"=>"{{student.student_path}}"} {{student.first_name}}
+
+  -# Last name
+  %td
+    %a{"ng-href"=>"{{student.student_path}}"} {{student.last_name}}
+
+  -# Raw score
+  %td{"ng-if"=>"individualTableBodyCtrl.assignment().threshold_points"}
+    %span{"ng-if"=>"student.grade_instructor_modified"} {{student.raw_score}}
+
+  -# Pass/fail status or score
+  %td.status-or-score
+    %span{"ng-if"=>"individualTableBodyCtrl.showPassFailStatus"}
+      {{student.grade_pass_fail_status}}
+    %span{"ng-if"=>"individualTableBodyCtrl.showFinalPoints(student)"}
+      {{student.grade_final_points}}
+
+  -# Weighted scores
+  %td{"ng-if"=>"individualTableBodyCtrl.assignmentType().student_weightable"}
+    %span{"ng-if"=>"individualTableBodyCtrl.showGradeScore(student)"} {{student.grade_score}}
+    %span{"ng-if"=>"!student.weighted_assignments"} (not yet assigned)
+
+  -# Earned grade level
+  %td{"ng-if"=>"individualTableBodyCtrl.assignment().has_levels"} {{student.grade_level}}
+
+  -# Grade completion checkmark
+  %td
+    %span.has-tooltip{"aria-describedby"=>"individualTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_complete"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This grade has been marked as complete
+
+  -# Grade visible checkmark
+  %td
+    %span.has-tooltip{"aria-describedby"=>"individualTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_student_visible"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This grade has been released and is visible by the {{individualTableBodyCtrl.termFor("student")}}
+
+  -# Feedback read eye
+  %td
+    %span.has-tooltip{"aria-describedby"=>"individualTableBodyCtrl.tooltipDescribedBy",
+                      "ng-if"=>"student.grade_feedback_read"}
+      %i.fa.fa-check
+      .display-on-hover.hover-style
+        This feedback has been marked as read by the {{individualTableBodyCtrl.termFor("student")}}
+
+    %span.has-tooltip{"aria-describedby"=>"individualTableBodyCtrl.tooltipDescribedBy('feedback-viewed-tip')",
+                      "ng-if"=>"!student.grade_feedback_read && student.grade_feedback_reviewed"}
+      %i.fa.fa-eye
+      .display-on-hover.hover-style
+        This feedback has been viewed by the {{individualTableBodyCtrl.termFor("student")}}
+
+  -# Formatted submit date
+  %td{"ng-if"=>"individualTableBodyCtrl.assignment().accepts_submissions"}
+    {{student.submission_submitted_at}}
+
+  -# Assignment options
+  %td
+    .table-menu
+      %ul
+        %li{"ng-if"=>"student.grade_instructor_modified"}
+          %a.button{"ng-href"=>"{{student.grade_path}}"}
+            %i.fa.fa-eye
+            See Grade
+
+        %li{"ng-if"=>"!student.grade_instructor_modified"}
+          -# Performs a post using some Rails magic and data-method="post" attribute
+          %a.button{"ng-href"=>"{{individualTableBodyCtrl.manuallyUnlockPath(student.id)}}",
+                    "data-method"=>"post",
+                    "rel"=>"nofollow",
+                    "ng-if"=>"individualTableBodyCtrl.showUnlockButton(student)"}
+            %i.fa.fa-unlock-alt
+            Unlock
+          %a.button{"ng-if"=>"individualTableBodyCtrl.showGradeButton(student)",
+                    "data-method"=>"post",
+                    "rel"=>"nofollow",
+                    "ng-href"=>"{{student.assignment_student_grade_path}}",
+                    "ng-class"=>"{ 'danger': student.submission_visible }"}
+            %i.fa.fa-check
+            Grade
+
+        %li.dropdown{"ng-if"=>"student.submission_exists || student.grade_instructor_modified"}
+          %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+            %i.fa.fa-cog
+            %i.fa.fa-caret-down
+
+          %ul.options-menu.dropdown-content
+            %li{"ng-if"=>"individualTableBodyCtrl.assignment().accepts_submissions && student.submission_visible"}
+              %a{"ng-href"=>"{{student.assignment_submission_path}}"}
+                %i.fa.fa-paperclip
+                See Submission
+
+            %li{"ng-if"=>"student.grade_instructor_modified && individualTableBodyCtrl.linksVisible"}
+              %ng-bind-html{"ng-bind-html"=>"individualTableBodyCtrl.sanitize(student.edit_grade_link)"}
+
+            -# Performs a delete using some Rails magic and data-method="delete" attribute
+            %li{"ng-if"=>"student.grade_instructor_modified && individualTableBodyCtrl.linksVisible"}
+              %a{"ng-href"=>"{{student.grade_path}}",
+                 "data-confirm"=>"Are you sure you want to delete {{student.full_name}}'s grade for {{individualTableBodyCtrl.assignment().name}}?",
+                 "data-method"=>"delete",
+                 "rel"=>"nofollow"}
+                %i.fa.fa-trash
+                Delete Grade
+
+  -# Grade release checkbox
+  %td
+    .center
+      %label{"ng-if"=>"student.grade_not_released"}
+        %span.sr-only Select Grades to Make Student Visible
+        %input{"type"=>"checkbox",
+               "ng-value"=>"student.grade_id",
+               "ng-checked"=>"individualTableBodyCtrl.gradesToRelease.indexOf(student.grade_id) > -1",
+               "ng-click"=>"individualTableBodyCtrl.toggleGradeSelection(student.grade_id)"}

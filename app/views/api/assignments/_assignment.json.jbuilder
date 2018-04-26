@@ -43,7 +43,7 @@ json.attributes do
   # boolean flags (for predictor logic)
 
   json.has_info             !assignment.description.blank?
-  json.has_levels           assignment.assignment_score_levels.present?
+  json.has_levels           assignment.has_levels?
   json.has_threshold        assignment.threshold_points && assignment.threshold_points > 0
   json.is_a_condition       assignment.is_a_condition?
   json.is_due_in_future     assignment.due_at.present? && assignment.due_at >= Time.now
@@ -52,6 +52,7 @@ json.attributes do
   json.is_rubric_graded     assignment.grade_with_rubric?
   json.rubric_id assignment.rubric.id if assignment.use_rubric? && assignment.rubric.present?
   json.is_visible           assignment.visible?
+  json.is_unlockable        assignment.is_unlockable?
 
   if @student.present?
     json.has_been_unlocked \
