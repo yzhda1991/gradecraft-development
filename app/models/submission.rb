@@ -30,7 +30,7 @@ class Submission < ActiveRecord::Base
 
   scope :by_active_individual_students, -> do
     individual
-      .joins(student: :course_memberships)
+      .includes(student: :course_memberships)
       .where(student: { course_memberships: { active: true }})
   end
 

@@ -10,7 +10,8 @@ Rails.application.configure do
     :address => "gcmailcatcher",
     :port => 25,
   }
-  config.action_mailer.perform_deliveries = true
+  config.action_mailer.perform_deliveries = false
+  config.action_mailer.raise_delivery_errors = true
 
   config.active_support.deprecation = :notify
   config.assets.compile = ["1", "yes", "true", "on"].include?(ENV["GC_ASSETS_COMPILE"] || "0" )
