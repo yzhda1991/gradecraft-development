@@ -5,9 +5,9 @@ class AssignmentProctor
     @assignment = assignment
   end
 
-  def viewable?(user, course)
-    return true if @assignment.visible?
-    return true if user.is_staff?(course) || user.is_admin?(course)
-    return false
+  def viewable?(user)
+    return true if user.is_staff?(@assignment.course)
+    @assignment.visible_for_student?(user)
   end
+
 end

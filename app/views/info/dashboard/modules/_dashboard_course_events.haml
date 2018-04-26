@@ -30,5 +30,5 @@
                   %li #{ link_to assignment.name, assignment } due at #{ l assignment.due_at.in_time_zone(current_user.time_zone) }
 
   .calendar-access
-    - if presenter.course.institution.try(:has_google_access) && presenter.course.assignments.any? { |a| AssignmentProctor.new(a).viewable?(current_user, presenter.course) }
+    - if presenter.course.institution.try(:has_google_access) && presenter.course.assignments.any? { |a| AssignmentProctor.new(a).viewable?(current_user) }
       = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, :target => "_parent", method: :post, data: { disable_with: "Adding Your Assignments..." }
