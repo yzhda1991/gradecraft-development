@@ -4,12 +4,6 @@ describe AssignmentProctor do
   let(:course) { build_stubbed :course }
   let(:subject) { described_class.new assignment }
 
-  describe "#initialize" do
-    it "sets the given assignment to @assignment" do
-      expect(subject.instance_variable_get :@assignment).to eq assignment
-    end
-  end
-
   describe "#viewable?" do
     context "as an instructor" do
       let(:user) { build_stubbed :user, courses: [course], role: :admin }
