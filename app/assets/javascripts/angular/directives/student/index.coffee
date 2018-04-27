@@ -1,11 +1,14 @@
-@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "$q", (CourseService, StudentService, $q) ->
+@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "$q", (CourseService, StudentService, SortableService, $q) ->
   CoursesStudentsIndexCtrl = [() ->
     vm = this
     vm.loading = true
+    vm.sortable = SortableService
 
     vm.course = CourseService.course
     vm.students = StudentService.students
-
+    vm.studentEarnedBadges = StudentService.earnedBadges
+    
+    vm.earnedBadgesForStudent = (studentId) -> StudentService.earnedBadgesForStudent(studentId)
     vm.termFor = (term) -> StudentService.termFor(term)
 
     vm.courseHasTeams = () -> vm.course().has_teams
@@ -21,7 +24,7 @@
       vm.isStaff && !student.activated && !vm.isUmichEnvironment
 
     vm.flagStudent = (student) -> StudentService.flagStudent(student.flag_user_path)
-
+    
     services(@courseId).then(() -> vm.loading = false)
   ]
 

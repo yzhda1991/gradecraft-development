@@ -1,6 +1,8 @@
 current_rank = 0
 
 json.data @students do |student|
+  student_earned_badges = @earned_badges.student_visible.order_by_created_at.for_student student
+  
   json.id student.id.to_s
   json.type "users"
 
@@ -16,12 +18,16 @@ json.data @students do |student|
     json.search_string student.searchable_name
 
     json.activated student.activated?
+    
+    json.earned_badge_count student_earned_badges.count
 
     json.deleteable !student.grades.where(course_id: @course.id).present? &&
       !student.submissions.where(course_id: @course.id).present?
 
-    json.last_activity_date l student.last_activity_at.in_time_zone(current_user.time_zone) \
-      unless student.last_activity_at.nil?
+    student.last_activity_at.in_time_zone(current_user.time_zone).tap do |last_activity|
+      json.last_activity_date last_activity
+      json.formatted_last_activity_date l last_activity
+    end unless student.last_activity_at.nil?
 
     current_course.course_memberships.find_by(user: student).tap do |membership|
       json.auditing membership.auditing?
@@ -58,24 +64,22 @@ json.data @students do |student|
         json.type "teams"
       end
     end if student.team.present?
-  end
 
-  @earned_badges.student_visible.order_by_created_at.for_student(student).tap do |student_earned_badges|
-    json.relationships do
+    student_earned_badges.tap do |seb|
       json.earned_badges do
         json.data do
-          json.array! student_earned_badges do |earned_badge|
+          json.array! seb do |earned_badge|
             json.id earned_badge.id.to_s
             json.type "earned_badges"
           end
         end
       end
-    end if student_earned_badges.any?
+    end
   end
 end
 
 json.included do
-  json.teams @teams do |team|
+  json.array! @teams do |team|
     json.id team.id.to_s
     json.type "teams"
 
@@ -85,16 +89,17 @@ json.included do
     end
   end if @teams.present?
 
-  json.earned_badges do
-    json.array! @earned_badges do |earned_badge|
-      json.id earned_badge.id.to_s
-      json.type "earned_badges"
 
-      json.attributes do
-        earned_badge.badge.tap do |badge|
-          json.badge_icon_url badge.icon_url
-          json.badge_name badge.name
-        end
+  json.array! @earned_badges do |earned_badge|
+    json.id earned_badge.id.to_s
+    json.type "earned_badges"
+
+    json.attributes do
+      json.student_id earned_badge.student_id.to_s
+
+      earned_badge.badge.tap do |badge|
+        json.badge_icon_url badge.icon_url
+        json.badge_name badge.name
       end
     end
   end

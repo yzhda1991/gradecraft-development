@@ -1,6 +1,9 @@
 @gradecraft.factory "StudentService", ["GradeCraftAPI", "$http", "$q", (GradeCraftAPI, $http, $q) ->
 
   students = []
+  teams = []  # student association
+  earnedBadges = [] # student association
+
   _studentIds = []  # for batch loading
   _loading = true
   _loadingProgress = "Loading students..."
@@ -56,12 +59,16 @@
     $http.get("/api/courses/#{courseId}/students", { params: { team_id: teamId } }).then(
       (response) ->
         GradeCraftAPI.loadMany(students, response.data)
+        GradeCraftAPI.loadFromIncluded(earnedBadges, "earned_badges", response.data)
+        GradeCraftAPI.loadFromIncluded(teams, "teams", response.data)
         GradeCraftAPI.setTermFor("student", response.data.meta.student)
         GradeCraftAPI.setTermFor("students", response.data.meta.students)
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
         GradeCraftAPI.logResponse(response.data)
     )
+
+  earnedBadgesForStudent = (studentId) -> _.filter(earnedBadges, { student_id: studentId })
 
   {
     students: students
@@ -72,5 +79,6 @@
     getBatchedForAssignment: getBatchedForAssignment
     getForAssignment: getForAssignment
     getForCourse: getForCourse
+    earnedBadgesForStudent: earnedBadgesForStudent
   }
 ]
