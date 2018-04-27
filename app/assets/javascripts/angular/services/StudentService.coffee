@@ -52,6 +52,17 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
+  getForCourse = (courseId, teamId=null) ->
+    $http.get("/api/courses/#{courseId}/students", { params: { team_id: teamId } }).then(
+      (response) ->
+        GradeCraftAPI.loadMany(students, response.data)
+        GradeCraftAPI.setTermFor("student", response.data.meta.student)
+        GradeCraftAPI.setTermFor("students", response.data.meta.students)
+        GradeCraftAPI.logResponse(response.data)
+      , (response) ->
+        GradeCraftAPI.logResponse(response.data)
+    )
+
   {
     students: students
     isLoading: isLoading
@@ -60,5 +71,6 @@
     termFor: termFor
     getBatchedForAssignment: getBatchedForAssignment
     getForAssignment: getForAssignment
+    getForCourse: getForCourse
   }
 ]

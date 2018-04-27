@@ -1,0 +1,131 @@
+-# = render partial: "students/table_filter"
+
+%table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
+  %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
+  %thead
+    %tr
+      %th{"scope"=>"col"} Flag
+      %th{"scope"=>"col"} Rank
+      %th{"scope"=>"col"} Avatar
+      %th{"scope"=>"col"} First Name
+      %th{"scope"=>"col"} Last Name
+      %th{"scope"=>"col", "ng-if"=>"coursesStudentsIndexCtrl.displayPseudonyms()"} Pseudonym
+      %th{"scope"=>"col", "ng-if"=>"coursesStudentsIndexCtrl.courseHasTeams()"} {{coursesStudentsIndexCtrl.termFor("team")}}
+      %th{"scope"=>"col", "ng-if"=>"coursesStudentsIndexCtrl.showRole()"} Role
+      %th{"scope"=>"col"} Score
+      %th{"scope"=>"col"} Level
+      %th{"scope"=>"col", "ng-if"=>"coursesStudentsIndexCtrl.courseHasBadges()"} {{coursesStudentsIndexCtrl.termFor("badges")}}
+      %th{"scope"=>"col"} Last Activity
+      %th.options{"scope"=>"col"} Options
+  %tbody
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students track by student.id"}
+
+      -# Flagged user?
+      %td
+        %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
+          %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
+          %span{"ng-class"=>"student.auditing ? 'auditor' : 'graded'"}
+
+      -# Rank
+      %td {{student.rank}}
+
+      -# Avatar
+      %td
+        %img.img-rounded{"ng-if"=>"student.avatar_file_name", "ng-src"=>"{{student.avatar_file_name}}", "width"=>"30"}
+        
+      -# First name
+      %td
+        %a{"ng-href"=>"{{student.student_path}}"} {{student.first_name}}
+
+      -# Last name
+      %td
+        %a{"ng-href"=>"{{student.student_path}}"} {{student.last_name}}
+
+      -# Display name
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.displayPseudonyms()"} {{student.display_name}}
+
+      -# Team
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasTeams()"}
+        -# TODO: team name from included attrs
+        %a{"ng-href"=>"{{student.team_path}}", "ng-if"=>"student.team_path"} {{student.team_name}}
+
+      -# Team role
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.showRole()"} {{student.team_role}}
+
+      -# Points
+      %td {{student.score}}
+
+      -# Earned grade scheme element
+      %td {{student.earned_grade_scheme_element}}
+
+      -# Earned badges
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasBadges()"}
+        %img{"ng-repeat"=>"badge in student.earned_badges",
+             "ng-src"=>"{{badge.icon_url}}",
+             "alt"=>"badge.name",
+             "title"=>"badge.name",
+             "width"=>"20"}
+      
+      -# Last activity
+      %td
+        %span{"ng-if"=>"student.last_activity_date"} {{student.last_activity_date}}
+
+      -# Options
+      %td
+        .button-container.dropdown
+          %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+            %i.fa.fa-cog
+            %i.fa.fa-caret-down
+          %ul.options-menu.dropdown-content
+
+            -# Preview as student
+            %li
+              %a{"ng-href"=>"{{student.preview_path}}"}
+                %i.fa.fa-eye
+                Preview as this student
+
+            -# Email student
+            %li
+              %a{"ng-href"=>"mailto:{{student.email}}"}
+                %i.fa.fa-envelope
+                Email
+
+            -# Edit student
+            %li{"ng-if"=>"::coursesStudentsIndexCtrl.linksVisible"}
+              %a{"ng-href"=>"{{student.edit_path}}"}
+                %i.fa.fa-edit
+                Edit
+
+            -# Deactivate student for course, if active
+            -# TODO: this is a PUT
+            %li{"ng-if"=>"student.activated"}
+              %a{"ng-href"=>"{{student.deactivate_path}}"}
+                %i.fa.fa-user-times
+                Deactivate
+
+            -# Reactivate student for course, if inactive
+            -# TODO: this is a PUT
+            %li{"ng-if"=>"!student.activated_for_course"}
+              %a{"ng-href"=>"{{student.reactivate_path}}"}
+                %i.fa.fa-flash
+                Reactivate
+
+            -# Delete student, if deleteable
+            -# TODO: this is a DELETE; also needs to have a confirmation message
+            %li{"ng-if"=>"student.deleteable"}
+              %a{"ng-href"=>"{{student.membership_path}}"}
+                %i.fa.fa-trash
+                Delete
+
+            -# Manually activate student account, if inactive
+            -# TODO: this is a PUT
+            %li{"ng-if"=>"::coursesStudentsIndexCtrl.showActivateAccount(student)"}
+              %a{"ng-href"=>"{{student.manual_activation_path}}"}
+                %i.fa.fa-check
+                Activate Account
+
+            -# Resend activation email
+            %li{"ng-if"=>"::coursesStudentsIndexCtrl.showResendActivationEmail(student)"}
+              %a{"ng-href"=>"{{student.resend_activation_email_path}}"}
+                %i.fa.fa-envelope
+                Resend Activation Email

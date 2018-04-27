@@ -3,8 +3,11 @@
 
 @gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
+  courses = []
   students = []
   courseCreation = {}
+
+  course = () -> courses[0]
 
   creationChecklist = () ->
     return [] if !courseCreation.checklist
@@ -14,6 +17,17 @@
     GradeCraftAPI.termFor(article)
 
   #------ API Calls -----------------------------------------------------------#
+
+  getCourse = (id) ->
+    $http.get("/api/courses/#{id}").then(
+      (response) ->
+        GradeCraftAPI.addItem(courses, "courses", response.data)
+        GradeCraftAPI.setTermFor("team", response.data.meta.term_for_team)
+        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
 
   getCourseCreation = () ->
     $http.get("/api/course_creation").then(
@@ -47,8 +61,10 @@
     )
 
   {
+    course: course
     students: students
     termFor: termFor
+    getCourse: getCourse
     getCourseCreation: getCourseCreation
     getStudents: getStudents
     updateCourseCreationItem: updateCourseCreationItem

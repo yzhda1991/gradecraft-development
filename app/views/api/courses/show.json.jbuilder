@@ -33,3 +33,8 @@ json.included do
     end
   end
 end
+
+json.meta do
+  json.term_for_team term_for :team
+  json.term_for_badges term_for :badges
+end

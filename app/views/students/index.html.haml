@@ -7,3 +7,9 @@
 
   / Display the table of course students, their leaderboard display, their team affiliation, their score and their grade
   = render partial: "students/students_table", locals: { presenter: presenter }
+
+  %courses-students-index{"data-course-id"=>"#{current_course.id}",
+                          "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                          "data-is-staff"=>"#{current_user_is_staff?}",
+                          "data-is-admin"=>"#{current_user_is_admin?}",
+                          "data-is-umich-environment"=>"#{Rails.env.production?}"}
