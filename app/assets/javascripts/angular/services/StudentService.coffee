@@ -70,6 +70,8 @@
 
   earnedBadgesForStudent = (studentId) -> _.filter(earnedBadges, { student_id: studentId })
 
+  team = (teamId) -> _.find(teams, { id: teamId })
+
   {
     students: students
     isLoading: isLoading
@@ -80,5 +82,6 @@
     getForAssignment: getForAssignment
     getForCourse: getForCourse
     earnedBadgesForStudent: earnedBadgesForStudent
+    team: team
   }
 ]

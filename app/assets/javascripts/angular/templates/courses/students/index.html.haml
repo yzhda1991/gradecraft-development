@@ -60,7 +60,7 @@
       %th.options{"scope"=>"col"} Options
 
   %tbody
-    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy : coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse"}
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria()"}
 
       -# Flagged user?
       %td
@@ -73,8 +73,10 @@
 
       -# Avatar
       %td
-        %img.img-rounded{"ng-if"=>"student.avatar_file_name", "ng-src"=>"{{student.avatar_file_name}}", "width"=>"30"}
-        
+        %img.img-rounded{"ng-if"=>"student.avatar_file_name",
+                         "ng-src"=>"{{student.avatar_file_name}}",
+                         "width"=>"30"}
+
       -# First name
       %td
         %a{"ng-href"=>"{{student.student_path}}"} {{student.first_name}}
@@ -88,8 +90,8 @@
 
       -# Team
       %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasTeams()"}
-        -# TODO: team name from included attrs
-        %a{"ng-href"=>"{{student.team_path}}", "ng-if"=>"student.team_path"} {{student.team_name}}
+        %a{"ng-href"=>"{{coursesStudentsIndexCtrl.team(student.team_id).team_path}}", "ng-if"=>"student.team_id"}
+          {{coursesStudentsIndexCtrl.team(student.team_id).name}}
 
       -# Team role
       %td{"ng-if"=>"coursesStudentsIndexCtrl.showRole()"} {{student.team_role}}
@@ -104,10 +106,10 @@
       %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasBadges()"}
         %img{"ng-repeat"=>"earned_badge in coursesStudentsIndexCtrl.earnedBadgesForStudent(student.id)",
              "ng-src"=>"{{earned_badge.badge_icon_url}}",
-             "alt"=>"{{earned_badge.badge_name}}",
-             "title"=>"{{earned_badge.badge_name}}",
+             "ng-attr-alt"=>"{{earned_badge.badge_name}}",
+             "ng-attr-title"=>"{{earned_badge.badge_name}}",
              "width"=>"20"}
-      
+
       -# Last activity
       %td
         %span{"ng-if"=>"student.last_activity_date"} {{student.formatted_last_activity_date}}
@@ -118,6 +120,7 @@
           %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
             %i.fa.fa-cog
             %i.fa.fa-caret-down
+
           %ul.options-menu.dropdown-content
 
             -# Preview as student

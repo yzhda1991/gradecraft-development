@@ -3,11 +3,13 @@
 .pageContent
   = render "layouts/alerts"
 
-  = team_filter(presenter.teams) if presenter.has_teams?
-
   / Display the table of course students, their leaderboard display, their team affiliation, their score and their grade
-  %courses-students-index{"data-course-id"=>"#{current_course.id}",
-                          "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+  - if @course.has_teams?
+    .clear
+      %team-selector.right.select-menu{"data-course-id"=>"#{@course.id}"}
+
+  %courses-students-index{"data-course-id"=>"#{@course.id}",
+                          "data-links-visible"=>"#{current_user_is_admin? || @course.active?}",
                           "data-is-staff"=>"#{current_user_is_staff?}",
                           "data-is-admin"=>"#{current_user_is_admin?}",
                           "data-is-umich-environment"=>"#{Rails.env.production?}"}

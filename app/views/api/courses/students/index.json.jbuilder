@@ -2,7 +2,8 @@ current_rank = 0
 
 json.data @students do |student|
   student_earned_badges = @earned_badges.student_visible.order_by_created_at.for_student student
-  
+  team = student.team_for_course @course
+
   json.id student.id.to_s
   json.type "users"
 
@@ -18,7 +19,7 @@ json.data @students do |student|
     json.search_string student.searchable_name
 
     json.activated student.activated?
-    
+
     json.earned_badge_count student_earned_badges.count
 
     json.deleteable !student.grades.where(course_id: @course.id).present? &&
@@ -48,11 +49,15 @@ json.data @students do |student|
       json.reactivate_path reactivate_course_membership_path(membership)
     end
 
+    unless team.nil?
+      json.team_id team.id.to_s
+      json.team_name team.name  # redundant, but used for sorting
+    end
+
     json.student_path student_path(student)
     json.edit_path edit_user_path(student)
     json.flag_user_path flag_user_path(student)
     json.preview_path student_preview_path(student)
-    json.team_path team_path(student.team.id) if student.team.present?
     json.manual_activation_path manually_activate_user_path(student)
     json.resend_activation_email_path resend_activation_email_user_path(student)
   end
@@ -60,10 +65,10 @@ json.data @students do |student|
   json.relationships do
     json.teams do
       json.data do
-        json.id student.team.id.to_s
+        json.id team.id.to_s
         json.type "teams"
       end
-    end if student.team.present?
+    end unless team.nil?
 
     student_earned_badges.tap do |seb|
       json.earned_badges do
@@ -86,9 +91,9 @@ json.included do
     json.attributes do
       json.id team.id.to_s
       json.name team.name
+      json.team_path team_path(team.id)
     end
   end if @teams.present?
-
 
   json.array! @earned_badges do |earned_badge|
     json.id earned_badge.id.to_s

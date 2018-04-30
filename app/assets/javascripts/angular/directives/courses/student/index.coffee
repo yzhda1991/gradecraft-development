@@ -1,13 +1,15 @@
-@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "$q", (CourseService, StudentService, SortableService, $q) ->
+@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "TeamService", "$q", (CourseService, StudentService, SortableService, TeamService, $q) ->
   CoursesStudentsIndexCtrl = [() ->
     vm = this
     vm.loading = true
     vm.sortable = SortableService
 
     vm.course = CourseService.course
+
+    vm.team = StudentService.team
     vm.students = StudentService.students
     vm.studentEarnedBadges = StudentService.earnedBadges
-    
+
     vm.earnedBadgesForStudent = (studentId) -> StudentService.earnedBadgesForStudent(studentId)
     vm.termFor = (term) -> StudentService.termFor(term)
 
@@ -17,14 +19,20 @@
     vm.displayPseudonyms = () -> vm.course().has_in_team_leaderboards || vm.course().has_character_names
     vm.showRole = () -> vm.courseHasTeams() && vm.course().has_team_roles
 
-    vm.showActivateAccount = (student) -> 
+    vm.showActivateAccount = (student) ->
       vm.isAdmin && !student.activated
 
     vm.showResendActivationEmail = (student) ->
       vm.isStaff && !student.activated && !vm.isUmichEnvironment
 
     vm.flagStudent = (student) -> StudentService.flagStudent(student.flag_user_path)
-    
+
+    vm.filterCriteria = () ->
+      criteria = {}
+      # criteria.$ = SortableService.filterCriteria() if SortableService.filterCriteria()?
+      criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
+      criteria
+
     services(@courseId).then(() -> vm.loading = false)
   ]
 
