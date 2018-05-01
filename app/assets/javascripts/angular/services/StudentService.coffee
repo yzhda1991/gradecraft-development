@@ -55,8 +55,8 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
-  getForCourse = (courseId, teamId=null) ->
-    $http.get("/api/courses/#{courseId}/students", { params: { team_id: teamId } }).then(
+  getForCourse = (courseId) ->
+    $http.get("/api/courses/#{courseId}/students").then(
       (response) ->
         GradeCraftAPI.loadMany(students, response.data)
         GradeCraftAPI.loadFromIncluded(earnedBadges, "earned_badges", response.data)
