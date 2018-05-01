@@ -14,6 +14,7 @@ json.data @students do |student|
     json.email student.email
     json.first_name student.first_name
     json.last_name student.last_name
+    json.full_name student.name
     json.display_name student.display_name(current_course)
     json.avatar_file_name_url student.avatar_file_name_url
     json.search_string student.searchable_name
@@ -32,6 +33,7 @@ json.data @students do |student|
     end unless student.last_activity_at.nil?
 
     current_course.course_memberships.find_by(user: student).tap do |membership|
+      json.course_membership_id membership.id
       json.auditing membership.auditing?
       json.activated_for_course membership.active?
       json.team_role membership.team_role if current_course.has_team_roles?
@@ -47,10 +49,6 @@ json.data @students do |student|
 
       json.earned_grade_scheme_element (membership.grade_scheme_element ||
         membership.earned_grade_scheme_element).try(:name)
-
-      json.membership_path course_membership_path(membership)
-      json.deactivate_path deactivate_course_membership_path(membership)
-      json.reactivate_path reactivate_course_membership_path(membership)
     end
 
     unless team.nil?
@@ -60,7 +58,6 @@ json.data @students do |student|
 
     json.student_path student_path(student)
     json.edit_path edit_user_path(student)
-    json.flag_user_path flag_user_path(student)
     json.preview_path student_preview_path(student)
     json.manual_activation_path manually_activate_user_path(student)
     json.resend_activation_email_path resend_activation_email_user_path(student)

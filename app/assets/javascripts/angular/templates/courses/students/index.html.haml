@@ -62,8 +62,6 @@
   %tbody
     %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria"}
 
-      -# Flagged user?
-      -# TODO: add back flagging
       %td
         %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
           %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
@@ -142,36 +140,28 @@
                 %i.fa.fa-edit
                 Edit
 
-            -# Deactivate student for course, if active
-            -# TODO: this is a PUT
-            %li{"ng-if"=>"student.activated"}
-              %a{"ng-href"=>"{{student.deactivate_path}}"}
+            %li{"ng-if"=>"student.activated_for_course"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.toggleActivation(student)"}
                 %i.fa.fa-user-times
                 Deactivate
 
-            -# Reactivate student for course, if inactive
-            -# TODO: this is a PUT
             %li{"ng-if"=>"!student.activated_for_course"}
-              %a{"ng-href"=>"{{student.reactivate_path}}"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.toggleActivation(student)"}
                 %i.fa.fa-flash
                 Reactivate
 
-            -# Delete student, if deleteable
-            -# TODO: this is a DELETE; also needs to have a confirmation message
             %li{"ng-if"=>"student.deleteable"}
-              %a{"ng-href"=>"{{student.membership_path}}"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.deleteFromCourse(student)"}
                 %i.fa.fa-trash
                 Delete
 
-            -# Manually activate student account, if inactive
-            -# TODO: this is a PUT
-            %li{"ng-if"=>"::coursesStudentsIndexCtrl.showActivateAccount(student)"}
-              %a{"ng-href"=>"{{student.manual_activation_path}}"}
+            %li{"ng-if"=>"coursesStudentsIndexCtrl.showActivateAccount(student)"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.activateUser(student)"}
                 %i.fa.fa-check
                 Activate Account
 
             -# Resend activation email
-            %li{"ng-if"=>"::coursesStudentsIndexCtrl.showResendActivationEmail(student)"}
+            %li{"ng-if"=>"coursesStudentsIndexCtrl.showResendActivationEmail(student)"}
               %a{"ng-href"=>"{{student.resend_activation_email_path}}"}
                 %i.fa.fa-envelope
                 Resend Activation Email

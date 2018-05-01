@@ -20,26 +20,41 @@ class CourseMembershipsController < ApplicationController
   def deactivate
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update active: false
-      redirect_to students_path, notice: "#{course_membership.user.name} successfully deactivated"
+      respond_to do |format|
+        format.html { redirect_to students_path, notice: "#{course_membership.user.name} successfully deactivated" }
+        format.json { render json: { active: false, success: true }, status: :ok }
+      end
     else
-      redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
+      respond_to do |format|
+        format.html { redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again" }
+        format.json { head :internal_server_error }
+      end
     end
   end
 
   def reactivate
     course_membership = current_course.course_memberships.find(params[:id])
     if course_membership.update active: true
-      redirect_to students_path, notice: "#{course_membership.user.name} successfully reactivated"
+      respond_to do |format|
+        format.html { redirect_to students_path, notice: "#{course_membership.user.name} successfully reactivated" }
+        format.json { render json: { active: true, success: true }, status: :ok }
+      end
     else
-      redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
+      respond_to do |format|
+        format.html { redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again" }
+        format.json { head :internal_server_error }
+      end
     end
   end
 
   def destroy
     course_membership = current_course.course_memberships.find(params[:id])
     Services::CancelsCourseMembership.for_student course_membership
-    redirect_to session[:return_to],
-      notice: "#{course_membership.user.name} was successfully removed from course."
+
+    respond_to do |format|
+      format.html { redirect_to session[:return_to], notice: "#{course_membership.user.name} was successfully removed from course." }
+      format.json { head :ok }
+    end
   end
 
   private

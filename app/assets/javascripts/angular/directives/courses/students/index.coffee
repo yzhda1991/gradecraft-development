@@ -10,6 +10,11 @@
     vm.students = StudentService.students
     vm.studentEarnedBadges = StudentService.earnedBadges
 
+    vm.flagStudent = (student) -> StudentService.flag(student)
+    vm.activateUser = (student) -> StudentService.activate(student)
+    vm.toggleActivation = (student) -> StudentService.toggleActivation(student.course_membership_id, student)
+    vm.deleteFromCourse = (student) -> StudentService.deleteFromCourse(student.course_membership_id, student)
+
     vm.earnedBadgesForStudent = (studentId) -> StudentService.earnedBadgesForStudent(studentId)
     vm.termFor = (term) -> StudentService.termFor(term)
 
@@ -19,13 +24,10 @@
     vm.displayPseudonyms = () -> vm.course().has_in_team_leaderboards || vm.course().has_character_names
     vm.showRole = () -> vm.courseHasTeams() && vm.course().has_team_roles
 
-    vm.showActivateAccount = (student) ->
-      vm.isAdmin && !student.activated
+    vm.showActivateAccount = (student) -> vm.isAdmin && !student.activated
 
     vm.showResendActivationEmail = (student) ->
       vm.isStaff && !student.activated && !vm.isUmichEnvironment
-
-    vm.flagStudent = (student) -> StudentService.flagStudent(student.flag_user_path)
 
     vm.filterCriteria = (student) ->
       filterCriteria = SortableService.filterCriteria()

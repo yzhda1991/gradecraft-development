@@ -1,4 +1,4 @@
-@gradecraft.factory "StudentService", ["GradeCraftAPI", "$http", "$q", (GradeCraftAPI, $http, $q) ->
+@gradecraft.factory "StudentService", ["GradeCraftAPI", "CourseMembershipService", "$http", "$q", (GradeCraftAPI, CourseMembershipService, $http, $q) ->
 
   students = []
   teams = []  # student association
@@ -40,6 +40,7 @@
   # Specify only the assignmentId to fetch all students at once
   getForAssignment = (assignmentId, teamId=null, fetchIds=false, studentIds...) ->
     fetch = if fetchIds is true then 1 else 0 # easier to compare a number over a boolean on the server side
+
     $http.get("/api/assignments/#{assignmentId}/students", { params: { team_id: teamId, fetch_ids: fetch, "student_ids[]": studentIds } }).then(
       (response) ->
         if fetchIds is true
@@ -68,9 +69,43 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
+  activate = (student, notify=true) ->
+    $http.put("/users/#{student.id}/manually_activate").then(
+      (response) ->
+        student.activated = true
+        alert("#{student.name} was successfully activated") if notify is true
+        GradeCraftAPI.logResponse(response.data)
+      , (response) ->
+        GradeCraftAPI.logResponse(response.data)
+    )
+
+  flag = (student) ->
+    $http.post("/users/#{student.id}/flag").then(
+      (response) ->
+        student.flagged = response.data.flagged
+        GradeCraftAPI.logResponse(response.data)
+      , (response) ->
+        alert("An error occurred while attempting to flag the student")
+        GradeCraftAPI.logResponse(response.data)
+    )
+
   earnedBadgesForStudent = (studentId) -> _.filter(earnedBadges, { student_id: studentId })
 
   team = (teamId) -> _.find(teams, { id: teamId })
+
+  #
+  # Course membership-related methods, passed through to CourseMembershipService
+  #
+
+  toggleActivation = (courseMembershipId, student) -> CourseMembershipService.toggleActivation(courseMembershipId, student)
+
+  deleteFromCourse = (courseMembershipId, student) ->
+    CourseMembershipService.destroy(id).then(
+      (success) ->
+        students.splice(students.indexOf(student) , 1)
+        alert("Successfully deleted #{student.name} from the course")
+      , (failure) -> alert("Failed to delete #{student.name} from course")
+    )
 
   {
     students: students
@@ -82,6 +117,11 @@
     getForAssignment: getForAssignment
     getForCourse: getForCourse
     earnedBadgesForStudent: earnedBadgesForStudent
+    activate: activate
+    flag: flag
     team: team
+
+    toggleActivation: toggleActivation
+    deleteFromCourse: deleteFromCourse
   }
 ]
