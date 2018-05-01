@@ -1,5 +1,6 @@
 -# custom sortable filters
-%courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
+.clear
+  %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
 
 %table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
   %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
