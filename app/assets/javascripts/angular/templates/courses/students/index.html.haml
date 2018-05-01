@@ -1,5 +1,5 @@
--# TODO: this
--# = render partial: "students/table_filter"
+-# custom sortable filters
+%courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
 
 %table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
   %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
@@ -60,9 +60,10 @@
       %th.options{"scope"=>"col"} Options
 
   %tbody
-    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria()"}
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria"}
 
       -# Flagged user?
+      -# TODO: add back flagging
       %td
         %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
           %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
@@ -97,7 +98,7 @@
       %td{"ng-if"=>"coursesStudentsIndexCtrl.showRole()"} {{student.team_role}}
 
       -# Points
-      %td {{student.score}}
+      %td {{student.formatted_score}}
 
       -# Earned grade scheme element
       %td {{student.earned_grade_scheme_element}}

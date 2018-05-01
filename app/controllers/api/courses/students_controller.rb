@@ -7,6 +7,7 @@ class API::Courses::StudentsController < ApplicationController
     @teams = @course.teams if @course.has_teams?
     @students = User.students_for_course(@course, params[:team_id]).order_by_high_score @course.id
     @earned_badges = @course.earned_badges.where student_id: @students.pluck(:id)
+    @flagged_users = FlaggedUser.for_course(@course).for_flagger current_user
   end
 
   private

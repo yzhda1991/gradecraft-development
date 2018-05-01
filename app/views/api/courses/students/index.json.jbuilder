@@ -19,6 +19,7 @@ json.data @students do |student|
     json.search_string student.searchable_name
 
     json.activated student.activated?
+    json.flagged @flagged_users.any? { |f| f.flagged_id == student.id }
 
     json.earned_badge_count student_earned_badges.count
 
@@ -32,14 +33,17 @@ json.data @students do |student|
 
     current_course.course_memberships.find_by(user: student).tap do |membership|
       json.auditing membership.auditing?
+      json.activated_for_course membership.active?
       json.team_role membership.team_role if current_course.has_team_roles?
 
       # rank is calculated based on the expectation that the
       # student collection is ordered by their high scores
       json.rank current_rank += 1 if !membership.auditing? && membership.active?
 
-      json.score points(membership.score || 0)
-      json.activated_for_course membership.active?
+      (membership.score || 0).tap do |score|
+        json.score score
+        json.formatted_score points(membership.score || 0)
+      end
 
       json.earned_grade_scheme_element (membership.grade_scheme_element ||
         membership.earned_grade_scheme_element).try(:name)

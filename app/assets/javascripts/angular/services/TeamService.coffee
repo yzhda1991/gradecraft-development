@@ -2,7 +2,7 @@
 
   teams = []
   _teamTerm = "Team"
-  _selectedTeamId = ""
+  _selectedTeamId = undefined
 
   teamTerm = (term) -> if angular.isDefined(term) then _teamTerm = term else _teamTerm
 

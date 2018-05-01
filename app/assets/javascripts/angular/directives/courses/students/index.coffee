@@ -27,11 +27,18 @@
 
     vm.flagStudent = (student) -> StudentService.flagStudent(student.flag_user_path)
 
-    vm.filterCriteria = () ->
-      criteria = {}
-      # criteria.$ = SortableService.filterCriteria() if SortableService.filterCriteria()?
-      criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
-      criteria
+    vm.filterCriteria = (student) ->
+      filterCriteria = SortableService.filterCriteria()
+      selectedTeamId = TeamService.selectedTeamId()
+
+      return true if not filterCriteria? and not selectedTeamId?
+
+      if filterCriteria? and selectedTeamId?
+        filterCriteria(student) && student.team_id == selectedTeamId
+      else if filterCriteria?
+        filterCriteria(student)
+      else
+        student.team_id == selectedTeamId
 
     services(@courseId).then(() -> vm.loading = false)
   ]
