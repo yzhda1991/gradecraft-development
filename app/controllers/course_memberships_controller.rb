@@ -19,7 +19,7 @@ class CourseMembershipsController < ApplicationController
   # All the user's records will remain in tact.
   def deactivate
     course_membership = current_course.course_memberships.find(params[:id])
-    if course_membership.update_attribute(:active, false)
+    if course_membership.update active: false
       redirect_to students_path, notice: "#{course_membership.user.name} successfully deactivated"
     else
       redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
@@ -28,7 +28,7 @@ class CourseMembershipsController < ApplicationController
 
   def reactivate
     course_membership = current_course.course_memberships.find(params[:id])
-    if course_membership.update_attribute(:active, true)
+    if course_membership.update active: true
       redirect_to students_path, notice: "#{course_membership.user.name} successfully reactivated"
     else
       redirect_to students_path, alert: "#{course_membership.user.name} was not updated due to error, please try again"
