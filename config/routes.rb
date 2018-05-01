@@ -81,7 +81,6 @@ Rails.application.routes.draw do
         get :export_earned_levels
         get :mass_edit
         put :mass_update
-        put :release
         post :self_log
         delete :delete_all
       end
@@ -401,7 +400,9 @@ Rails.application.routes.draw do
         end
       end
       resource :groups, only: [], module: :assignments do
-        resources :grades, only: :index, module: :groups
+        resources :grades, only: :index, module: :groups do
+          get :mass_edit, on: :collection
+        end
       end
       resources :groups, only: [] do
         resources :criteria, only: [] do

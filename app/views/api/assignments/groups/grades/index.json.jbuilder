@@ -1,44 +1,73 @@
 json.data do
-  json.type                                 "assignment"
-  json.id                                   @assignment.id
+  json.array! @groups do |group|
+    json.type "groups"
+    json.id group.id
 
-  json.attributes do
-    json.name                               @assignment.name
-    json.pass_fail                          @assignment.pass_fail?
-    json.has_levels                         @assignment.has_levels?
-    json.assignment_score_level_count       @assignment.assignment_score_levels.count if @assignment.has_levels?
-    json.full_points                        @assignment.full_points
+    json.attributes do
+      json.id group.id
+      json.name group.name
+      json.approved group.approved
+
+      json.student_ids group.students.pluck(:student_id)
+
+      json.has_group_submission group.submission_for_assignment(@assignment).present?
+
+      json.group_path group_path(group)
+      json.edit_group_path edit_group_path(group)
+      json.new_submission_path new_assignment_submission_path(@assignment, group_id: group.id)
+
+      # Fully-formed html for link, generated from LinkHelper class
+      json.edit_group_grade_link edit_group_grade_link_to(@assignment, group, class: "button")
+
+      json.has_unreleased_grades @group_grades[group.id].any? { |g| g.persisted? && g.not_released? }
+      json.grade_assignment_path grade_assignment_group_path(@assignment, group)
+    end
+
+    json.relationships do
+      json.grades do
+        json.data @group_grades[group.id] do |grade|
+          json.type "grades"
+          json.id grade.id
+        end
+      end
+    end
   end
 end
 
-# Grades for the assignment by group
 json.included do
-  json.array! @grades_by_group do |gbg|
-    json.type                               "group_grade"
-    json.id                                 gbg[:group].id
+  json.array! @group_grades.values.flatten do |grade|
+    json.type "grades"
+    json.id grade.id
 
     json.attributes do
-      json.group_id                         gbg[:group].id
-      json.group_name                       gbg[:group].name
-      json.raw_points                       gbg[:grade].raw_points
-      json.pass_fail_status                 gbg[:grade].pass_fail_status
-      json.graded                           gbg[:grade].persisted?
+      json.student_id grade.student_id
+      json.score grade.score
+
+      json.complete grade.complete?
+      json.student_visible grade.student_visible?
+      json.not_released grade.not_released?
+
+      json.final_points points(grade.try(:final_points))
+      json.earned_grade_level @assignment.grade_level(grade)
+      json.pass_fail_status term_for(grade.pass_fail_status) unless grade.pass_fail_status.nil?
+      json.graded grade.persisted?
+      json.instructor_modified grade.instructor_modified?
+
+      if grade.persisted?
+        json.id grade.id
+        json.grade_path grade_path(grade)
+      end
+
+      unless grade.student.nil?
+        json.student_name grade.student.name
+        json.student_path student_path(grade.student)
+      end
     end
   end
-
-  json.array! @assignment.assignment_score_levels do |level|
-    json.type                               "assignment_score_level"
-    json.id                                 level.id
-
-    json.attributes do
-      json.name                             level.name
-      json.points                           level.points
-      json.formatted_name                   level.formatted_name
-    end
-  end if @assignment.has_levels?
 end
 
 json.meta do
-  json.term_for_pass                        term_for :pass
-  json.term_for_fail                        term_for :fail
+  json.term_for_group term_for :group
+  json.term_for_groups term_for :groups
+  json.term_for_students current_course.student_term.pluralize
 end

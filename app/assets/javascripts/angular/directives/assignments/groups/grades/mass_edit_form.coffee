@@ -6,11 +6,11 @@
 
     vm.assignment = AssignmentGradesService.assignment
     vm.assignmentScoreLevels = AssignmentGradesService.assignmentScoreLevels
-    vm.gradesByGroup = AssignmentGradesService.gradesByGroup
+    vm.groupGrades = AssignmentGradesService.groupGrades
     vm.selectedGradingStyle = AssignmentGradesService.selectedGradingStyle
     vm.termFor = AssignmentGradesService.termFor
 
-    AssignmentGradesService.getGroupAssignmentWithGrades(@assignmentId).finally(() ->
+    AssignmentGradesService.getGroupAssignmentWithMassEditGrades(@assignmentId).finally(() ->
       vm.loading = false
       AssignmentGradesService.setDefaultGradingStyle()
     )

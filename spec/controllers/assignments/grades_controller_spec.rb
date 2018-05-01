@@ -9,19 +9,6 @@ describe Assignments::GradesController do
   context "as professor" do
     before(:each) { login_user(professor) }
 
-    describe "PUT release" do
-      it "updates the grade to student visible" do
-        put :release, params: { assignment_id: assignment.id, grade_ids: [grade.id]}
-        expect(grade.reload.student_visible).to be_truthy
-      end
-
-      it "updates badges earned on the grade" do
-        earned_badge = create :earned_badge, grade: grade, student_visible: false
-        put :release, params: { assignment_id: assignment.id, grade_ids: [grade.id] }
-        expect(earned_badge.reload.student_visible).to be true
-      end
-    end
-
     describe "GET export" do
       it "returns sample csv data" do
         submission = create(:submission, grade: grade, student: student,
@@ -243,13 +230,6 @@ describe Assignments::GradesController do
           grade = student.grade_for_assignment(assignment)
           expect(grade.raw_points).to eq nil
         end
-      end
-    end
-
-    describe "GET release" do
-      it "redirects back to the root" do
-        expect(put :release, params: { assignment_id: assignment }).to \
-          redirect_to(:root)
       end
     end
 
