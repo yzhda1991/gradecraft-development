@@ -29,7 +29,7 @@
           %td Assignment ID, Name, Assignment Type, Point Total, Description, Open At, Due At, Accept Until, Submissions Count, Grades Count, Created At, Learning Objectives
         %tr
           %td= link_to glyph("file-excel-o") + "#{term_for :assignment} Submissions", submissions_path(id: current_course.id, format: "csv")
-          %td Submission ID, Assignment Type, Assignment ID, Assignment Name, Student Email, Student ID, Team Name, Group Name, Student Comment, Created At, Updated At, Score, Graded By, Grader Feedback, Grade Last Updated
+          %td= "Submission ID, #{term_for(:assignment_type)}, #{term_for(:assignment)} ID, #{term_for(:assignment)} Name, #{term_for(:student)} Email, #{term_for(:student)} ID, #{term_for(:team)} Name, #{term_for(:group)} Name, #{term_for(:student)} Comment, Created At, Updated At, Score, Graded By, Grader Feedback, Grade Last Updated"
         - if current_course.has_badges?
           %tr
             %td
