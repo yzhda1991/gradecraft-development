@@ -12,7 +12,12 @@ class SubmissionExporter
   private
 
   def baseline_headers
-    ["Submission ID", "Assignment Type", "Assignment ID", "Assignment Name", "Student Email", "Student ID", "Group Name", "Team Name", "Student Comment", "Created At", "Updated At", "Score", "Graded By", "Grader Feedback", "Grade Last Updated"]
+    [
+      "Submission ID", "Assignment Type", "Assignment ID", "Assignment Name",
+      "Student Email", "Student ID", "Group Name", "Team Name",
+      "Student Comment", "Created At", "Updated At", "Score", "Graded By",
+      "Grader Feedback", "Grade Last Updated"
+    ]
   end
 
   def find_graded_by_name(graded_by_id)
@@ -22,7 +27,6 @@ class SubmissionExporter
 
   def find_team_name(submission)
     return nil unless submission.student.present?
-    submission.student.team_for_course(submission.course).name
+    submission.student.team_for_course(submission.course).try(:name)
   end
-
 end
