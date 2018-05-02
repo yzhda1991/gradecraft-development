@@ -3,11 +3,16 @@ Rails.application.configure do
   config.action_dispatch.best_standards_support = :builtin
   config.asset_host = ENV["GC_ASSET_HOST"] || "//"
 
-  config.action_mailer.default_url_options = { :host => "localhost:5000" }
-  config.action_mailer.delivery_method = :sendmail
-  config.action_mailer.perform_deliveries = false
-
+  # NOTE: to test emails locally
+  # 1. gem install mailcatcher
+  # 2. run 'mailcatcher' in terminal
+  # 3. visit http://127.0.0.1:1080/
+  config.action_mailer.default_url_options = { host: "localhost:5000" }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { address: '127.0.0.1', port: 1025 }
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+
   config.action_view.raise_on_missing_translations = true
   config.active_support.deprecation = :log
   config.active_record.migration_error = :page_load
