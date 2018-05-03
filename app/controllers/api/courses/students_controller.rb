@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class API::Courses::StudentsController < ApplicationController
   before_action :ensure_staff?
   before_action :find_course
