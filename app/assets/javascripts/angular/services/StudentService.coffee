@@ -78,6 +78,7 @@
             recalculateRanks()
             GradeCraftAPI.setTermFor("student", response.data.meta.student)
             GradeCraftAPI.setTermFor("students", response.data.meta.students)
+            loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
             GradeCraftAPI.logResponse(response.data)
         , (response) ->
           GradeCraftAPI.logResponse(response.data)
