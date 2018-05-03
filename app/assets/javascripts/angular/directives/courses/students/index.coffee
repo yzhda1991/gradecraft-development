@@ -38,17 +38,20 @@
         team = if selectedTeamId? then student.team_id == selectedTeamId else true
         filter && team
 
+      initialize(vm)
+    ]
+
+    initialize = (vm) ->
       SortableService.reverse = true
       SortableService.predicate = "score"
 
-      CourseService.getCourse(@courseId).then(
+      CourseService.getCourse(vm.courseId).then(
         (response) ->
           vm.loading = false
           StudentService.getBatchedForCourse(vm.courseId)
         , (response) ->
           console.error("Failed to load course data")
       )
-    ]
 
     {
       scope:
