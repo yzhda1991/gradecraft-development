@@ -3,7 +3,6 @@
     AssignmentShowIndividualTableBodyCtrl = [() ->
       vm = this
       vm.sortable = SortableService
-      vm.loading = StudentService.isLoading
 
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType

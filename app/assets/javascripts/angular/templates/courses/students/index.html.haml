@@ -68,6 +68,11 @@
       %th.options{"scope"=>"col"} Options
 
   %tbody
+    %tr{"ng-if"=>"coursesStudentsIndexCtrl.batchLoadingProgress()"}
+      %td.center{"colspan"=>"13"}
+        %i.fa.fa-spinner.fa-spin.fa-fw
+        {{coursesStudentsIndexCtrl.batchLoadingProgress()}}
+
     %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria | filter: coursesStudentsIndexCtrl.searchCriteria"}
 
       %td

@@ -8,7 +8,8 @@
     vm.setSortCriteria = (criteriaType) ->
       vm.selectedCriteria = criteriaType
       SortableService.filterCriteria(vm.criteria[criteriaType])
-      _recalculateRanks()
+      StudentService.recalculateRanks()
+      _resetSort()
 
     # comparator functions for table filter
     vm.criteria = {
@@ -27,13 +28,6 @@
       bottom10 = _.takeRight(orderBy(ranked, "rank"), 10)
       vm.bottom10 = _.pluck(bottom10, "id")
   ]
-
-  _recalculateRanks = () ->
-    index = 0
-    StudentService.students = orderBy(StudentService.students, "score", true)
-    setRank = (rank, student) -> student.rank = rank
-    setRank(index += 1, student) for student in StudentService.students when not student.auditing and student.activated_for_course
-    _resetSort()  # reset default sort
 
   _resetSort = () ->
     SortableService.predicate = "rank"

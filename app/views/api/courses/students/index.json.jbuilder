@@ -38,10 +38,6 @@ json.data @students do |student|
       json.activated_for_course membership.active?
       json.team_role membership.team_role if current_course.has_team_roles?
 
-      # rank is calculated based on the expectation that the
-      # student collection is ordered by their high scores
-      json.rank current_rank += 1 if !membership.auditing? && membership.active?
-
       (membership.score || 0).tap do |score|
         json.score score
         json.formatted_score points(membership.score || 0)

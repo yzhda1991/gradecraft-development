@@ -1,127 +1,152 @@
-@gradecraft.factory "StudentService", ["GradeCraftAPI", "CourseMembershipService", "$http", "$q", (GradeCraftAPI, CourseMembershipService, $http, $q) ->
+@gradecraft.factory "StudentService", ["GradeCraftAPI", "CourseMembershipService", "orderByFilter", "$http", "$q",
+  (GradeCraftAPI, CourseMembershipService, orderBy, $http, $q) ->
+    students = []
+    teams = []  # student association
+    earnedBadges = [] # student association
 
-  students = []
-  teams = []  # student association
-  earnedBadges = [] # student association
+    _studentIds = []  # for batch loading
+    _loadingProgress = undefined
 
-  _studentIds = []  # for batch loading
-  _loading = true
-  _loadingProgress = "Loading students..."
+    loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
 
-  isLoading = (loading) -> if angular.isDefined(loading) then _loading = loading else _loading
+    clearStudents = () -> students.length = 0
 
-  loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
+    termFor = (term) -> GradeCraftAPI.termFor(term)
 
-  clearStudents = () -> students.length = 0
-
-  termFor = (term) -> GradeCraftAPI.termFor(term)
-
-  # fetch student data in batches
-  getBatchedForAssignment = (assignmentId, teamId=null, batchSize=25) ->
-    getForAssignment(assignmentId, null, true).then(() ->
-      return unless _studentIds.length
-
-      promises = []
-      _.each(_.chunk(_studentIds, batchSize), (batch) ->
-        promises.push(getForAssignment(assignmentId, teamId, false, batch...))
-      )
-
-      $q.all(promises).then(() ->
-        _studentIds.length = 0
-        isLoading(false)
+    # fetch student data in batches
+    getBatchedForAssignment = (assignmentId, teamId=null, batchSize=25) ->
+      getForAssignment(assignmentId, null, true).then(() ->
+        return unless _studentIds.length
         loadingProgress("Loading students...")
+
+        promises = []
+        _.each(_.chunk(_studentIds, batchSize), (batch) ->
+          promises.push(getForAssignment(assignmentId, teamId, false, batch...))
+        )
+
+        $q.all(promises).then(() ->
+          _studentIds.length = 0
+          loadingProgress(null)
+        )
       )
-    )
 
-  # assignmentId: the id of the assignment to fetch student data for
-  # fetchIds: false to fetch student data; otherwise, true to fetch only their ids
-  # studentIds (optional): the student ids to fetch data for
-  #
-  # Specify only the assignmentId to fetch all students at once
-  getForAssignment = (assignmentId, teamId=null, fetchIds=false, studentIds...) ->
-    fetch = if fetchIds is true then 1 else 0 # easier to compare a number over a boolean on the server side
+    # assignmentId: the id of the assignment to fetch student data for
+    # fetchIds: false to fetch student data; otherwise, true to fetch only their ids
+    # studentIds (optional): the student ids to fetch data for
+    #
+    # Specify only the assignmentId to fetch all students at once
+    getForAssignment = (assignmentId, teamId=null, fetchIds=false, studentIds...) ->
+      $http.get("/api/assignments/#{assignmentId}/students", { params: { team_id: teamId, fetch_ids: _booleanToInt(fetchIds), "student_ids[]": studentIds } }).then(
+        (response) ->
+          if fetchIds is true
+            angular.copy(response.data.student_ids, _studentIds)
+          else
+            GradeCraftAPI.loadMany(students, response.data)
+            GradeCraftAPI.setTermFor("student", response.data.meta.term_for_student)
+            GradeCraftAPI.setTermFor("weight", response.data.meta.term_for_weight)
+            loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
+          GradeCraftAPI.logResponse(response.data)
+        , (response) ->
+          GradeCraftAPI.logResponse(response.data)
+      )
 
-    $http.get("/api/assignments/#{assignmentId}/students", { params: { team_id: teamId, fetch_ids: fetch, "student_ids[]": studentIds } }).then(
-      (response) ->
-        if fetchIds is true
-          _studentIds = response.data.student_ids
-        else
-          GradeCraftAPI.loadMany(students, response.data)
-          GradeCraftAPI.setTermFor("student", response.data.meta.term_for_student)
-          GradeCraftAPI.setTermFor("weight", response.data.meta.term_for_weight)
-          loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
-          isLoading(false) if !studentIds.length
-        GradeCraftAPI.logResponse(response.data)
-      , (response) ->
-        GradeCraftAPI.logResponse(response.data)
-    )
+    getBatchedForCourse = (courseId, batchSize=25) ->
+      getForCourse(courseId, true).then(() ->
+        return unless _studentIds.length
+        loadingProgress("Loading students...")
 
-  getForCourse = (courseId) ->
-    $http.get("/api/courses/#{courseId}/students").then(
-      (response) ->
-        GradeCraftAPI.loadMany(students, response.data)
-        GradeCraftAPI.loadFromIncluded(earnedBadges, "earned_badges", response.data)
-        GradeCraftAPI.loadFromIncluded(teams, "teams", response.data)
-        GradeCraftAPI.setTermFor("student", response.data.meta.student)
-        GradeCraftAPI.setTermFor("students", response.data.meta.students)
-        GradeCraftAPI.logResponse(response.data)
-      , (response) ->
-        GradeCraftAPI.logResponse(response.data)
-    )
+        promises = []
+        _.each(_.chunk(_studentIds, batchSize), (batch) ->
+          promises.push(getForCourse(courseId, false, batch...))
+        )
 
-  activate = (student, notify=true) ->
-    $http.put("/users/#{student.id}/manually_activate").then(
-      (response) ->
-        student.activated = true
-        alert("#{student.name} was successfully activated") if notify is true
-        GradeCraftAPI.logResponse(response.data)
-      , (response) ->
-        GradeCraftAPI.logResponse(response.data)
-    )
+        $q.all(promises).then(() ->
+          _studentIds.length = 0
+          loadingProgress(null)
+        )
+      )
 
-  flag = (student) ->
-    $http.post("/users/#{student.id}/flag").then(
-      (response) ->
-        student.flagged = response.data.flagged
-        GradeCraftAPI.logResponse(response.data)
-      , (response) ->
-        alert("An error occurred while attempting to flag the student")
-        GradeCraftAPI.logResponse(response.data)
-    )
+    getForCourse = (courseId, fetchIds=false, studentIds...) ->
+      $http.get("/api/courses/#{courseId}/students", { params: { fetch_ids: _booleanToInt(fetchIds), "student_ids[]": studentIds } }).then(
+        (response) ->
+          if fetchIds is true
+            angular.copy(response.data.student_ids, _studentIds)
+          else
+            GradeCraftAPI.loadMany(students, response.data)
+            GradeCraftAPI.loadFromIncluded(earnedBadges, "earned_badges", response.data)
+            GradeCraftAPI.loadFromIncluded(teams, "teams", response.data)
+            recalculateRanks()
+            GradeCraftAPI.setTermFor("student", response.data.meta.student)
+            GradeCraftAPI.setTermFor("students", response.data.meta.students)
+            GradeCraftAPI.logResponse(response.data)
+        , (response) ->
+          GradeCraftAPI.logResponse(response.data)
+      )
 
-  earnedBadgesForStudent = (studentId) -> _.filter(earnedBadges, { student_id: studentId })
+    activate = (student, notify=true) ->
+      $http.put("/users/#{student.id}/manually_activate").then(
+        (response) ->
+          student.activated = true
+          alert("#{student.name} was successfully activated") if notify is true
+          GradeCraftAPI.logResponse(response.data)
+        , (response) ->
+          GradeCraftAPI.logResponse(response.data)
+      )
 
-  team = (teamId) -> _.find(teams, { id: teamId })
+    flag = (student) ->
+      $http.post("/users/#{student.id}/flag").then(
+        (response) ->
+          student.flagged = response.data.flagged
+          GradeCraftAPI.logResponse(response.data)
+        , (response) ->
+          alert("An error occurred while attempting to flag the student")
+          GradeCraftAPI.logResponse(response.data)
+      )
 
-  #
-  # Course membership-related methods, passed through to CourseMembershipService
-  #
+    earnedBadgesForStudent = (studentId) -> _.filter(earnedBadges, { student_id: studentId })
 
-  toggleActivation = (courseMembershipId, student) -> CourseMembershipService.toggleActivation(courseMembershipId, student)
+    team = (teamId) -> _.find(teams, { id: teamId })
 
-  deleteFromCourse = (courseMembershipId, student) ->
-    CourseMembershipService.destroy(id).then(
-      (success) ->
-        students.splice(students.indexOf(student) , 1)
-        alert("Successfully deleted #{student.name} from the course")
-      , (failure) -> alert("Failed to delete #{student.name} from course")
-    )
+    #
+    # Course membership-related methods, passed through to CourseMembershipService
+    #
 
-  {
-    students: students
-    isLoading: isLoading
-    loadingProgress: loadingProgress
-    clearStudents: clearStudents
-    termFor: termFor
-    getBatchedForAssignment: getBatchedForAssignment
-    getForAssignment: getForAssignment
-    getForCourse: getForCourse
-    earnedBadgesForStudent: earnedBadgesForStudent
-    activate: activate
-    flag: flag
-    team: team
+    toggleActivation = (courseMembershipId, student) -> CourseMembershipService.toggleActivation(courseMembershipId, student)
 
-    toggleActivation: toggleActivation
-    deleteFromCourse: deleteFromCourse
-  }
+    deleteFromCourse = (courseMembershipId, student) ->
+      CourseMembershipService.destroy(id).then(
+        (success) ->
+          students.splice(students.indexOf(student) , 1)
+          alert("Successfully deleted #{student.name} from the course")
+        , (failure) -> alert("Failed to delete #{student.name} from course")
+      )
+
+    recalculateRanks = () ->
+      index = 0
+      angular.copy(orderBy(students, "score", true), students)
+      setRank = (rank, student) -> student.rank = rank
+      setRank(index += 1, student) for student in students when not student.auditing and student.activated_for_course
+
+    # used for GET params: easier to compare a number versus a stringified boolean on the server side
+    _booleanToInt = (boolean) -> if boolean is true then 1 else 0
+
+    {
+      students: students
+      loadingProgress: loadingProgress
+      clearStudents: clearStudents
+      termFor: termFor
+      getBatchedForAssignment: getBatchedForAssignment
+      getForAssignment: getForAssignment
+      getBatchedForCourse: getBatchedForCourse
+      getForCourse: getForCourse
+      earnedBadgesForStudent: earnedBadgesForStudent
+      recalculateRanks: recalculateRanks
+
+      activate: activate
+      flag: flag
+      team: team
+
+      toggleActivation: toggleActivation
+      deleteFromCourse: deleteFromCourse
+    }
 ]

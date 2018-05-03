@@ -10,6 +10,7 @@
       vm.course = CourseService.course
       vm.students = StudentService.students
       vm.studentEarnedBadges = StudentService.earnedBadges
+      vm.batchLoadingProgress = StudentService.loadingProgress
 
       vm.termFor = (term) -> StudentService.termFor(term)
       vm.flagStudent = (student) -> StudentService.flag(student)
@@ -37,15 +38,17 @@
         team = if selectedTeamId? then student.team_id == selectedTeamId else true
         filter && team
 
-      services(@courseId).then(() -> vm.loading = false)
-    ]
+      SortableService.reverse = true
+      SortableService.predicate = "score"
 
-    services = (courseId) ->
-      promises = [
-        CourseService.getCourse(courseId),
-        StudentService.getForCourse(courseId)
-      ]
-      $q.all(promises)
+      CourseService.getCourse(@courseId).then(
+        (response) ->
+          vm.loading = false
+          StudentService.getBatchedForCourse(vm.courseId)
+        , (response) ->
+          console.error("Failed to load course data")
+      )
+    ]
 
     {
       scope:
