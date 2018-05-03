@@ -44,10 +44,10 @@
         criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
         criteria
 
-      initialize(vm.assignment().id)
+      _initialize(vm.assignment().id)
     ]
 
-    initialize = (assignmentId) ->
+    _initialize = (assignmentId) ->
       SortableService.predicate = "last_name"
       StudentService.getBatchedForAssignment(assignmentId)
 

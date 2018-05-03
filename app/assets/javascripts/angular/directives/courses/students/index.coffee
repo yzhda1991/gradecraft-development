@@ -38,10 +38,10 @@
         team = if selectedTeamId? then student.team_id == selectedTeamId else true
         filter && team
 
-      initialize(vm)
+      _initialize(vm)
     ]
 
-    initialize = (vm) ->
+    _initialize = (vm) ->
       SortableService.reverse = true
       SortableService.predicate = "score"
 
