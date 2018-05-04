@@ -537,6 +537,12 @@ Rails.application.routes.draw do
       resources :badges, only: :index
     end
 
+    resources :submissions, only: [] do
+      collection do
+        get :ungraded
+      end
+    end
+
     resources :unlock_conditions, only: [:create, :update, :destroy]
 
     resources :users, only: [] do
