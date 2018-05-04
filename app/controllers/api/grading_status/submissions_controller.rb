@@ -5,7 +5,7 @@ class API::GradingStatus::SubmissionsController < ApplicationController
   before_action :find_submissions
 
   def ungraded
-    @ungraded_submissions = active_individual_and_group_submissions @submissions.ungraded
+    @submissions = active_individual_and_group_submissions @submissions.ungraded
     render :"api/grading_status/submissions/index", status: 200
   end
 

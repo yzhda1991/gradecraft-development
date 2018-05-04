@@ -22,14 +22,10 @@
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h2.grading-status-name.center.inverse Resubmissions
 
-  - if @ungraded_submissions_by_assignment.present?
-    .collapseSection{id: "ungraded", role: "tablist"}
-      .collapse{role: "tab"}
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Ungraded Submissions
-      .collapse-hidden{role: "tabpanel"}
-        = render partial: "info/submissions_table", locals: { submission_type: "ungraded", submissions_by_assignment: @ungraded_submissions_by_assignment, course: current_course }
+    %grading-status-ungraded-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                         "data-assignment-term"=>"#{term_for :assignment}",
+                                         "data-team-term"=>"#{term_for :team}",
+                                         "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
 
   - if @in_progress_grades_by_assignment.present?
     .collapseSection{id: "in_progress", role: "tablist"}
