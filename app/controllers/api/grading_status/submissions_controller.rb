@@ -1,4 +1,4 @@
-class API::SubmissionsController < ApplicationController
+class API::GradingStatus::SubmissionsController < ApplicationController
   include SubmissionsHelper
 
   before_action :ensure_staff?
@@ -6,6 +6,7 @@ class API::SubmissionsController < ApplicationController
 
   def ungraded
     @ungraded_submissions = active_individual_and_group_submissions @submissions.ungraded
+    render :"api/grading_status/submissions/index", status: 200
   end
 
   private

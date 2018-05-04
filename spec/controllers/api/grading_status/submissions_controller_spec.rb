@@ -1,4 +1,4 @@
-describe API::SubmissionsController do
+describe API::GradingStatus::SubmissionsController do
   let(:course) { build :course }
   let(:student) { create :user, courses: [course], role: :student }
 
