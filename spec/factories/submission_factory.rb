@@ -16,7 +16,7 @@ FactoryGirl.define do
     end
 
     factory :graded_submission do
-      association :grade, factory: :released_grade
+      association :grade, factory: :complete_grade
     end
 
     factory :submission_with_text_comment do
