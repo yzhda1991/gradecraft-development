@@ -18,7 +18,11 @@ class AuthorizationsController < ApplicationController
     begin
       auto_login User.find_by_email(request.env["omniauth.auth"]["info"]["email"]) if current_user.nil?
     rescue
-      redirect_to auth_failure_path
+      redirect_to new_external_users_path(
+        first_name: request.env["omniauth.auth"]["info"]["first_name"],
+        last_name: request.env["omniauth.auth"]["info"]["last_name"],
+        email: request.env["omniauth.auth"]["info"]["email"]),
+        alert: "It doesn't look like you have an account - Feel free to create one right here!" and return
     end
   end
 

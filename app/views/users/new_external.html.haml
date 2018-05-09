@@ -6,9 +6,9 @@
       %h1.bold First, let's create your account:
 
       = simple_form_for @user, url: create_external_users_path, method: :post do |f|
-        .form-item= f.input :first_name
-        .form-item= f.input :last_name
-        .form-item= f.input :email
+        .form-item= f.input :first_name, input_html: { value: @first_name }
+        .form-item= f.input :last_name, input_html: { value: @last_name }
+        .form-item= f.input :email, input_html: { value: @email }
         .form-item= f.input :password, required: true
         .form-item= f.input :password_confirmation, required: true
 
