@@ -34,6 +34,9 @@
   weightsAvailable = ()->
     AssignmentTypeService.weightsAvailable()
 
+  weightsClosed = ()->
+    ! AssignmentTypeService.weights.open
+
   weightedEarnedPoints = (assignmentType)->
     AssignmentTypeService.weightedEarnedPoints(assignmentType)
 
@@ -229,6 +232,7 @@
 
       weights: weights
       weightsAvailable: weightsAvailable
+      weightsClosed: weightsClosed
       unusedWeightsRange: unusedWeightsRange
       weightedEarnedPoints: weightedEarnedPoints
       weightedPoints: weightedPoints
