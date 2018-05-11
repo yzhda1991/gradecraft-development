@@ -208,6 +208,10 @@ class User < ActiveRecord::Base
     name.downcase == another_user.name.downcase
   end
 
+  def onboarded?(course)
+    return course_memberships.where(course: course).first.has_seen_course_onboarding?
+  end
+
   Role.all.each do |role|
     define_method("is_#{role}?") do |course|
       self.role(course) == role
