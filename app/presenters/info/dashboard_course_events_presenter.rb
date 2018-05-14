@@ -19,4 +19,8 @@ class Info::DashboardCourseEventsPresenter < Showtime::Presenter
   def assignments_due_on(event)
     assignments.where('DATE(due_at) = ?', event.due_at.to_date)
   end
+
+  def show_add_assignments_to_google_button?(user)
+    course.institution.try(:has_google_access?) && course.assignments.any? { |a| AssignmentProctor.new(a).viewable?(user) }
+  end
 end
