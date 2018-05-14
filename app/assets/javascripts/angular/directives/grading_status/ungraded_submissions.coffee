@@ -32,6 +32,6 @@
       bindToController: true
       controller: GradingStatusUngradedSubmissionsCtrl
       controllerAs: "gsUngradedCtrl"
-      templateUrl: "grading_status/submissions.html"
+      templateUrl: "grading_status/ungraded_submissions.html"
     }
 ]
