@@ -2,10 +2,7 @@
 
   ungradedSubmissions = []
   inProgressGrades = []
-
-  clearData = () ->
-    ungradedSubmissions.length = 0
-    inProgressGrades.length = 0
+  readyForReleaseGrades = []
 
   getUngradedSubmissions = () ->
     $http.get("/api/grading_status/submissions/ungraded").then(
@@ -18,7 +15,7 @@
     )
 
   getInProgressGrades = (clear=false) ->
-    clearData() if clear is true
+    inProgressGrades.length = 0 if clear is true
 
     $http.get("/api/grading_status/grades/in_progress").then(
       (response) ->
@@ -28,13 +25,26 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
+  getReadyForReleaseGrades = (clear=false) ->
+    readyForReleaseGrades.length = 0 if clear is true
+
+    $http.get("/api/grading_status/grades/ready_for_release").then(
+      (response) ->
+        GradeCraftAPI.loadMany(readyForReleaseGrades, response.data)
+        GradeCraftAPI.logResponse(response.data)
+      , (response) ->
+        GradeCraftAPI.logResponse(response.data)
+    )
+
   termFor = (term) -> GradeCraftAPI.termFor(term)
 
   {
     ungradedSubmissions: ungradedSubmissions
+    readyForReleaseGrades: readyForReleaseGrades
     inProgressGrades: inProgressGrades
     getUngradedSubmissions: getUngradedSubmissions
     getInProgressGrades: getInProgressGrades
+    getReadyForReleaseGrades: getReadyForReleaseGrades
     termFor: termFor
   }
 ]

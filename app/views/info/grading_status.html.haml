@@ -29,19 +29,18 @@
                                          "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
 
     -# In progress grades
-    %grading-status-in-progress-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                       "data-assignment-term"=>"#{term_for :assignment}",
-                                       "data-team-term"=>"#{term_for :team}",
-                                       "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
+    %grading-status-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                           "data-assignment-term"=>"#{term_for :assignment}",
+                           "data-team-term"=>"#{term_for :team}",
+                           "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                           "data-type"=>"InProgress"}
 
-  - if @ready_for_release_grades_by_assignment.present?
-    .collapseSection{id: "unreleased", role: "tablist"}
-      .collapse{role: "tab"}
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Ready For Release Grades
-      .collapse-hidden{role: "tabpanel"}
-        = render partial: "info/grades_table", locals: { grade_type: "unreleased", grades_by_assignment: @ready_for_release_grades_by_assignment, course: current_course }
+    -# Ready for release grades
+    %grading-status-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                           "data-assignment-term"=>"#{term_for :assignment}",
+                           "data-team-term"=>"#{term_for :team}",
+                           "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                           "data-type"=>"ReadyForRelease"}
 
   - if @resubmissions_by_assignment.present?
     .collapseSection{id: "resubmissions", role: "tablist"}

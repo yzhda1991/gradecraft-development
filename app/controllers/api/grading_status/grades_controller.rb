@@ -7,6 +7,13 @@ class API::GradingStatus::GradesController < ApplicationController
     render :"api/grading_status/grades/index", status: :ok
   end
 
+  def ready_for_release
+    @grades = @grades
+      .includes(:assignment, :student, :group)
+      .ready_for_release
+    render :"api/grading_status/grades/index", status: :ok
+  end
+
   private
 
   def find_grades

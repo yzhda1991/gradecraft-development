@@ -1,9 +1,12 @@
-@gradecraft.directive "gradingStatusInProgressGrades", ["GradingStatusService", "GradeReleaseService", "$q", "$sce",
+# Renders grades component for grading status page
+# Shared directive which takes a type of grade
+#   Allowable types: [InProgress, ReadyForRelease]
+@gradecraft.directive "gradingStatusGrades", ["GradingStatusService", "GradeReleaseService", "$q", "$sce",
   (GradingStatusService, GradeReleaseService, $q, $sce) ->
-    GradingStatusInProgressGradesCtrl = [() ->
+    GradingStatusGradesCtrl = [() ->
       vm = this
       vm.loading = true
-      vm.grades = GradingStatusService.inProgressGrades
+      vm.grades = GradingStatusService["#{_lowerFirst(@type)}Grades"]
 
       vm.gradesToRelease = GradeReleaseService.gradeIds
       vm.hasSelectedGrades = GradeReleaseService.hasSelectedGrades
@@ -14,7 +17,7 @@
 
       vm.selectGrades = (select) ->
         gradeIds = _.pluck(vm.grades, "id")
-        GradeReleaseService.clearGradeIds()
+        GradeReleaseService.clearGradeIds(gradeIds...)
         GradeReleaseService.addGradeIds(gradeIds...) if select is true
 
       vm.releaseGrades = () ->
@@ -23,23 +26,26 @@
           () ->
             alert("#{GradeReleaseService.gradeIds.length} grade(s) successfully released")
             GradeReleaseService.clearGradeIds()
-            GradingStatusService.getInProgressGrades(true)
+            GradingStatusService["get#{vm.type}Grades"](true)
           , () ->
             alert("An unexpected error occurred while attempting to release grades")
         )
 
-      GradingStatusService.getInProgressGrades().then(() -> vm.loading = false)
+      GradingStatusService["get#{@type}Grades"]().then(() -> vm.loading = false)
     ]
+
+    _lowerFirst = (str) -> str.charAt(0).toLowerCase() + str.slice(1)
 
     {
       scope:
+        type: "@"
         courseHasTeams: "@"
         assignmentTerm: "@"
         teamTerm: "@"
         linksVisible: "@"
       bindToController: true
-      controller: GradingStatusInProgressGradesCtrl
-      controllerAs: "gsInProgressGradesCtrl"
-      templateUrl: "grading_status/in_progress_grades.html"
+      controller: GradingStatusGradesCtrl
+      controllerAs: "gsGradesCtrl"
+      templateUrl: "grading_status/grades.html"
     }
 ]

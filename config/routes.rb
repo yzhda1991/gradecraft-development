@@ -551,6 +551,7 @@ Rails.application.routes.draw do
       resources :grades, only: [] do
         collection do
           get :in_progress
+          get :ready_for_release
         end
       end
     end
