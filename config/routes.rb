@@ -543,6 +543,11 @@ Rails.application.routes.draw do
           get :ungraded
         end
       end
+      resources :grades, only: [] do
+        collection do
+          get :in_progress
+        end
+      end
     end
 
     resources :unlock_conditions, only: [:create, :update, :destroy]

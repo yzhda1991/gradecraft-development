@@ -1,9 +1,9 @@
-@gradecraft.directive "gradingStatusUngradedSubmissions", ["GradingStatusSubmissionsService", "$sce",
-  (GradingStatusSubmissionsService, $sce) ->
+@gradecraft.directive "gradingStatusUngradedSubmissions", ["GradingStatusService", "$sce",
+  (GradingStatusService, $sce) ->
     GradingStatusUngradedSubmissionsCtrl = [() ->
       vm = this
       vm.loading = true
-      vm.submissions = GradingStatusSubmissionsService.ungraded
+      vm.submissions = GradingStatusService.ungradedSubmissions
 
       vm.sanitize = (html) -> $sce.trustAsHtml(html)
 
@@ -20,7 +20,7 @@
 
       vm.createGrade = (submission) -> console.warn ("Not yet implemented")
 
-      GradingStatusSubmissionsService.getUngraded().then(() -> vm.loading = false)
+      GradingStatusService.getUngradedSubmissions().then(() -> vm.loading = false)
     ]
 
     {
