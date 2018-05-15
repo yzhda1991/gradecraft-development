@@ -61,10 +61,11 @@
                 %li{"ng-if"=>"gsUngradedCtrl.showEditGradeBtn(submission)",
                     "ng-bind-html"=>"gsUngradedCtrl.sanitize(submission.edit_grade_link)"}
 
-                -# TODO: add POST to create grade
                 -# Grade individual assignment
                 %li{"ng-if"=>"gsUngradedCtrl.showCreateGradeBtn(submission)"}
-                  %a.button{"ng-click"=>"gsUngradedCtrl.createGrade(submission)"}
+                  %a.button{"data-method"=>"post",
+                            "rel"=>"nofollow",
+                            "ng-href"=>"{{submission.assignment_student_grade_path}}"}
                     %i.fa.fa-check
                     Grade
 

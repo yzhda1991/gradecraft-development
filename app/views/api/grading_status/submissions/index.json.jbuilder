@@ -40,6 +40,9 @@ json.data @submissions do |submission|
     json.individual_assignment submission.assignment.is_individual?
     json.assignment_path assignment_path assignment
 
+    json.assignment_student_grade_path assignment_student_grade_path(assignment, student) \
+      if assignment.is_individual? && grade.nil?
+
     json.submission_path assignment_submission_path assignment,
       submission, group_id: submission.group.try(:id)
   end
