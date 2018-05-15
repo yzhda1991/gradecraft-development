@@ -6,7 +6,12 @@ class API::GradingStatus::SubmissionsController < ApplicationController
 
   def ungraded
     @submissions = active_individual_and_group_submissions @submissions.ungraded
-    render :"api/grading_status/submissions/index", status: 200
+    render :"api/grading_status/submissions/index", status: :ok
+  end
+
+  def resubmitted
+    @submissions = active_individual_and_group_submissions @submissions.resubmitted
+    render :"api/grading_status/submissions/index", status: :ok
   end
 
   private

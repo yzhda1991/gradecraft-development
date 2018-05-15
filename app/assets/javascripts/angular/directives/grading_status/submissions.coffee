@@ -1,9 +1,12 @@
-@gradecraft.directive "gradingStatusUngradedSubmissions", ["GradingStatusService", "$sce",
+# Renders submissions component for grading status page
+# Shared directive which takes a type of submission
+#   Allowable types: [Resubmitted, Ungraded]
+@gradecraft.directive "gradingStatusSubmissions", ["GradingStatusService", "$sce",
   (GradingStatusService, $sce) ->
-    GradingStatusUngradedSubmissionsCtrl = [() ->
+    GradingStatusSubmissionsCtrl = [() ->
       vm = this
       vm.loading = true
-      vm.submissions = GradingStatusService.ungradedSubmissions
+      vm.submissions = GradingStatusService["#{_lowerFirst(@type)}Submissions"]
 
       vm.sanitize = (html) -> $sce.trustAsHtml(html)
 
@@ -13,18 +16,21 @@
       vm.showCreateGradeBtn = (submission) -> @linksVisible and submission.individual_assignment and not submission.grade_path?
       vm.showGroupGradeBtn = (submission) -> @linksVisible and !submission.individual_assignment
 
-      GradingStatusService.getUngradedSubmissions().then(() -> vm.loading = false)
+      GradingStatusService["get#{@type}Submissions"]().then(() -> vm.loading = false)
     ]
+
+    _lowerFirst = (str) -> str.charAt(0).toLowerCase() + str.slice(1)
 
     {
       scope:
+        type: "@"
         courseHasTeams: "@"
         assignmentTerm: "@"
         teamTerm: "@"
         linksVisible: "@"
       bindToController: true
-      controller: GradingStatusUngradedSubmissionsCtrl
-      controllerAs: "gsUngradedCtrl"
-      templateUrl: "grading_status/ungraded_submissions.html"
+      controller: GradingStatusSubmissionsCtrl
+      controllerAs: "gsSubmissionsCtrl"
+      templateUrl: "grading_status/submissions.html"
     }
 ]

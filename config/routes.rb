@@ -546,6 +546,7 @@ Rails.application.routes.draw do
       resources :submissions, only: [] do
         collection do
           get :ungraded
+          get :resubmitted
         end
       end
       resources :grades, only: [] do

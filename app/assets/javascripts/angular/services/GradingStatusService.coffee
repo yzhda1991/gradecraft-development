@@ -1,5 +1,6 @@
 @gradecraft.factory "GradingStatusService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
 
+  resubmittedSubmissions = []
   ungradedSubmissions = []
   inProgressGrades = []
   readyForReleaseGrades = []
@@ -8,7 +9,15 @@
     $http.get("/api/grading_status/submissions/ungraded").then(
       (response) ->
         GradeCraftAPI.loadMany(ungradedSubmissions, response.data)
-        GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+        GradeCraftAPI.logResponse(response.data)
+      , (response) ->
+        GradeCraftAPI.logResponse(response.data)
+    )
+
+  getResubmittedSubmissions = () ->
+    $http.get("/api/grading_status/submissions/resubmitted").then(
+      (response) ->
+        GradeCraftAPI.loadMany(resubmittedSubmissions, response.data)
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
         GradeCraftAPI.logResponse(response.data)
@@ -16,7 +25,6 @@
 
   getInProgressGrades = (clear=false) ->
     inProgressGrades.length = 0 if clear is true
-
     $http.get("/api/grading_status/grades/in_progress").then(
       (response) ->
         GradeCraftAPI.loadMany(inProgressGrades, response.data)
@@ -27,7 +35,6 @@
 
   getReadyForReleaseGrades = (clear=false) ->
     readyForReleaseGrades.length = 0 if clear is true
-
     $http.get("/api/grading_status/grades/ready_for_release").then(
       (response) ->
         GradeCraftAPI.loadMany(readyForReleaseGrades, response.data)
@@ -39,10 +46,12 @@
   termFor = (term) -> GradeCraftAPI.termFor(term)
 
   {
+    resubmittedSubmissions: resubmittedSubmissions
     ungradedSubmissions: ungradedSubmissions
     readyForReleaseGrades: readyForReleaseGrades
     inProgressGrades: inProgressGrades
     getUngradedSubmissions: getUngradedSubmissions
+    getResubmittedSubmissions: getResubmittedSubmissions
     getInProgressGrades: getInProgressGrades
     getReadyForReleaseGrades: getReadyForReleaseGrades
     termFor: termFor

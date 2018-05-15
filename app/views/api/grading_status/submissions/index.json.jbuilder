@@ -78,7 +78,3 @@ json.data @submissions do |submission|
     end
   end
 end
-
-json.meta do
-  json.term_for_assignment term_for :assignment
-end
