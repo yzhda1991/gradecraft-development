@@ -17,6 +17,7 @@ json.data @grades do |grade|
     end
 
     grade.assignment.tap do |assignment|
+      json.assignment_id assignment.id
       json.assignment_name assignment.name
       json.assignment_has_groups assignment.has_groups?
       json.assignment_path assignment_path(assignment)
@@ -37,37 +38,4 @@ json.data @grades do |grade|
       end
     end
   end
-
-  # json.relationships do
-  #   if assignment.is_individual?
-  #     json.grade do
-  #       json.data do
-  #         assignment.grade_for_student(student).try(:tap) do |grade|
-  #           json.type "grades"
-  #           json.id grade.id.to_s
-  #         end if assignment.is_individual?
-  #       end
-  #     end
-  #
-  #     json.student_team do
-  #       json.data do
-  #         json.type "teams"
-  #         json.id team.id.to_s
-  #       end
-  #     end
-  #   end
-  #
-  #   json.assignment do
-  #     json.data do
-  #       json.type "assignments"
-  #       json.id assignment.id.to_s
-  #     end
-  #   end
-  #
-  #   # TODO: group-graded assignments currently don't show grading buttons?
-  # end
-end
-
-json.meta do
-  json.term_for_assignment term_for :assignment
 end

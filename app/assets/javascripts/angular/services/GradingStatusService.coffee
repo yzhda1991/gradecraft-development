@@ -2,9 +2,10 @@
 
   ungradedSubmissions = []
   inProgressGrades = []
-  # _loadingProgress = "Loading submissions..."
 
-  # loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
+  clearData = () ->
+    ungradedSubmissions.length = 0
+    inProgressGrades.length = 0
 
   getUngradedSubmissions = () ->
     $http.get("/api/grading_status/submissions/ungraded").then(
@@ -16,11 +17,12 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
-  getInProgressGrades = () ->
+  getInProgressGrades = (clear=false) ->
+    clearData() if clear is true
+
     $http.get("/api/grading_status/grades/in_progress").then(
       (response) ->
         GradeCraftAPI.loadMany(inProgressGrades, response.data)
-        GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
         GradeCraftAPI.logResponse(response.data)

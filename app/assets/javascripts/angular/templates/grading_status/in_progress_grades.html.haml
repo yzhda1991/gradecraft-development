@@ -20,8 +20,8 @@
           %th{"scope"=>"col", "width"=>"20%"}
             %span.sr-only Actions
           %th{"data-dynatable-no-sort"=>"true", "width"=>"120px", "ng-if"=>"::gsInProgressGradesCtrl.linksVisible"}
-            %button.button.table-select-all{"role"=>"button", "type"=>"button"} Check
-            %button.button.table-select-none{"role"=>"button", "type"=>"button"} Uncheck
+            %button.button.table-select-all{"role"=>"button", "type"=>"button", "ng-click"=>"gsInProgressGradesCtrl.selectGrades(true)"} Check
+            %button.button.table-select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsInProgressGradesCtrl.selectGrades(false)"} Uncheck
       %tbody
         %tr{"ng-repeat"=>"grade in gsInProgressGradesCtrl.grades"}
           %td
@@ -48,10 +48,17 @@
                   .center
                     %label
                       %span.sr-only Select grade to update status
-                      %input{"type"=>"checkbox"}
+                      %input{"type"=>"checkbox",
+                             "ng-value"=>"grade.id",
+                             "ng-checked"=>"gsInProgressGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
+                             "ng-click"=>"gsInProgressGradesCtrl.toggleGradeSelection(grade.id)"}
 
   .submit-buttons{"ng-if"=>"gsInProgressGradesCtrl.linksVisible"}
-    .right
-      -# TODO: release grades, button disable state
-      -# release_grades_path, method: :put
-      %a.button{"ng-click"=>"gsInProgressGradesCtrl.releaseGrades()"}
+    %ul
+      %li
+        .button.submit{"type"=>"button",
+                       "ng-click"=>"gsInProgressGradesCtrl.releaseGrades()",
+                       "ng-class"=>"{ disabled: !gsInProgressGradesCtrl.hasSelectedGrades() }",
+                       "ng-disabled"=>"!gsInProgressGradesCtrl.hasSelectedGrades()"}
+          %i.fa.fa-share-square-o
+          Release Selected Grades

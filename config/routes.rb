@@ -369,6 +369,11 @@ Rails.application.routes.draw do
 
   #18. API Calls
   namespace :api, defaults: { format: :json } do
+    resource :assignments, only: [], module: :assignments do
+      resources :grades, only: [] do
+        put :release, on: :collection
+      end
+    end
     resources :assignments, only: [], module: :assignments do
       resources :students, only: [:index]
     end
@@ -396,7 +401,7 @@ Rails.application.routes.draw do
       resources :grades, only: [], module: :assignments do
         collection do
           get :show
-          put :release
+          put :release_for_assignment
         end
       end
       resource :groups, only: [], module: :assignments do
