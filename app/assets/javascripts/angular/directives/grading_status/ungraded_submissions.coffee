@@ -18,8 +18,6 @@
       vm.showGroupGradeBtn = (submission) ->
         @linksVisible and !submission.individual_assignment
 
-      vm.createGrade = (submission) -> console.warn ("Not yet implemented")
-
       GradingStatusService.getUngradedSubmissions().then(() -> vm.loading = false)
     ]
 
