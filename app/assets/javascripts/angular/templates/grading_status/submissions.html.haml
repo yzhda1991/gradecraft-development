@@ -6,17 +6,29 @@
   %table.no-table-header
     %thead
       %tr
-        %th{"scope"=>"col"} {{::gsSubmissionsCtrl.assignmentTerm}}
-        %th{"scope"=>"col", "width"=>"7%"} Name
-        %th{"scope"=>"col",
-            "ng-if"=>"::gsSubmissionsCtrl.courseHasTeams",
-            "width"=>"15%"} {{::gsSubmissionsCtrl.teamTerm}}
-        %th{"scope"=>"col"} Date Submitted
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"{{::gsSubmissionsCtrl.assignmentTerm}}",
+                            "data-sortable-predicate"=>"assignment_name"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"name",
+                            "data-sortable-predicate"=>"[student_name, group_name]",
+                            "width"=>"7%"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"{{::gsSubmissionsCtrl.teamTerm}}",
+                            "data-sortable-predicate"=>"team_name",
+                            "ng-if"=>"::gsSubmissionsCtrl.courseHasTeams",
+                            "width"=>"15%"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"Date Submitted",
+                            "data-sortable-predicate"=>"submitted_at"}
+
         %th{"scope"=>"col", "style"=>"min-width: 200px"}
           %span.sr-only Actions
-
     %tbody
-      %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions"}
+      %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions | orderBy: gsSubmissionsCtrl.sortable.predicate : gsSubmissionsCtrl.sortable.reverse"}
         -# Assignment name and path
         %td
           %a{"ng-href"=>"{{submission.assignment_path}}"} {{submission.assignment_name}}
