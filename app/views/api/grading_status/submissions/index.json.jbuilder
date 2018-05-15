@@ -28,7 +28,11 @@ json.data @submissions do |submission|
         json.team_path team_path team
       end
     else
-      json.group_grade_path grade_assignment_group_path assignment, submission.group
+      submission.group.tap do |group|
+        json.group_name group.name
+        json.group_path group_path(group)
+        json.group_grade_path grade_assignment_group_path assignment, group
+      end
     end
 
     submission.submitted_at.in_time_zone(current_user.time_zone).tap do |submitted_at|
@@ -72,8 +76,6 @@ json.data @submissions do |submission|
         json.id assignment.id.to_s
       end
     end
-
-    # TODO: group-graded assignments currently don't show grading buttons?
   end
 end
 

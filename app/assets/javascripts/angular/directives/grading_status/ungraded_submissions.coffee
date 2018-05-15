@@ -7,16 +7,11 @@
 
       vm.sanitize = (html) -> $sce.trustAsHtml(html)
 
-      vm.showSeeGradeBtn = (submission) ->
-        submission.individual_assignment and submission.grade_path?
-
+      vm.showTeamLink = (submission) -> submission.team_path? and submission.team_name?
+      vm.showSeeGradeBtn = (submission) -> submission.individual_assignment and submission.grade_path?
       vm.showEditGradeBtn = (submission) -> @linksVisible and vm.showSeeGradeBtn(submission)
-
-      vm.showCreateGradeBtn = (submission) ->
-        @linksVisible and submission.individual_assignment and not submission.grade_path?
-
-      vm.showGroupGradeBtn = (submission) ->
-        @linksVisible and !submission.individual_assignment
+      vm.showCreateGradeBtn = (submission) -> @linksVisible and submission.individual_assignment and not submission.grade_path?
+      vm.showGroupGradeBtn = (submission) -> @linksVisible and !submission.individual_assignment
 
       GradingStatusService.getUngradedSubmissions().then(() -> vm.loading = false)
     ]

@@ -33,11 +33,11 @@
 
           -# Group name and path, if group-graded
           %td{"ng-if"=>"!submission.individual_assignment"}
-            %a{"ng-href"=>"{{submission.group_name}}"} {{submission.group_path}}
+            %a{"ng-href"=>"{{submission.group_path}}"} {{submission.group_name}}
 
           -# Team name
-          %td{"ng-if"=>"submission.team_name"}
-            %a{"ng-href"=>"{{submission.team_path}}"} {{submission.team_name}}
+          %td{"ng-if"=>"::gsUngradedCtrl.courseHasTeams"}
+            %a{"ng-if"=>"gsUngradedCtrl.showTeamLink(submission)", "ng-href"=>"{{submission.team_path}}"} {{submission.team_name}}
 
           -# Submitted at
           %td {{submission.formatted_submitted_at}}
