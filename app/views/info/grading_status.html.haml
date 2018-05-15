@@ -22,11 +22,18 @@
         .center.bold.inverse.large= resubmission_count_for(current_course)
         %h2.grading-status-name.center.inverse Resubmissions
 
-    -# Ungraded submissions
-    %grading-status-ungraded-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                         "data-assignment-term"=>"#{term_for :assignment}",
-                                         "data-team-term"=>"#{term_for :team}",
-                                         "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}"}
+  -# Ungraded submissions
+  .ungraded-submissions-container{"role"=>"tablist"}
+    .collapse-toggler{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+      %a{"href"=>"#"}
+        %h3
+          %i.fa.fa-chevron-circle-right.fa-fw
+          Ungraded Submissions
+    %grading-status-ungraded-submissions.collapsible{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                                     "data-assignment-term"=>"#{term_for :assignment}",
+                                                     "data-team-term"=>"#{term_for :team}",
+                                                     "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                                     "role"=>"tabpanel"}
 
     -# In progress grades
     %grading-status-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
