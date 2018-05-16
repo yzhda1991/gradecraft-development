@@ -1,4 +1,5 @@
 class InfoController < ApplicationController
+  include GradesHelper
   include SubmissionsHelper
 
   helper_method :sort_column, :sort_direction, :predictions
