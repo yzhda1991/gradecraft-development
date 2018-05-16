@@ -27,8 +27,9 @@
 
         %th{"scope"=>"col", "style"=>"min-width: 200px"}
           %span.sr-only Actions
+          
     %tbody
-      %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions | orderBy: gsSubmissionsCtrl.sortable.predicate : gsSubmissionsCtrl.sortable.reverse"}
+      %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions | orderBy: gsSubmissionsCtrl.sortable.predicate : gsSubmissionsCtrl.sortable.reverse | filter: gsSubmissionsCtrl.searchCriteria()"}
         -# Assignment name and path
         %td
           %a{"ng-href"=>"{{submission.assignment_path}}"} {{submission.assignment_name}}

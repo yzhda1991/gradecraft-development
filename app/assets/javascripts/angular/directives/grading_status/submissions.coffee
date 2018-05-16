@@ -7,6 +7,7 @@
       vm = this
       vm.loading = true
       vm.sortable = SortableService
+      vm.searchCriteria = SortableService.filterCriteria
 
       vm.submissions = GradingStatusService["#{_lowerFirst(@type)}Submissions"]
       vm.sanitize = (html) -> $sce.trustAsHtml(html)

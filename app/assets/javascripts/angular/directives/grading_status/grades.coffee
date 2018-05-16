@@ -7,6 +7,8 @@
       vm = this
       vm.loading = true
       vm.sortable = SortableService
+      vm.searchCriteria = SortableService.filterCriteria
+
       vm.grades = GradingStatusService["#{_lowerFirst(@type)}Grades"]
 
       vm.gradesToRelease = GradeReleaseService.gradeIds

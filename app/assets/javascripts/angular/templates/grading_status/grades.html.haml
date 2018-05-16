@@ -38,7 +38,7 @@
           %button.button.table-select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(false)"} Uncheck
 
     %tbody
-      %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades | orderBy: gsGradesCtrl.sortable.predicate : gsGradesCtrl.sortable.reverse"}
+      %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades | orderBy: gsGradesCtrl.sortable.predicate : gsGradesCtrl.sortable.reverse | filter: gsGradesCtrl.searchCriteria()"}
         %td
           %a{"ng-href"=>"{{grade.assignment_path}}"} {{grade.assignment_name}}
         %td
