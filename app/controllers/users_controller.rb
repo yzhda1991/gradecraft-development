@@ -299,7 +299,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit :username, :email, :admin, :password, :time_zone, :password_confirmation, :activation_token_expires_at, :activation_token,
+    params.require(:user).permit :username, :email, :password, :time_zone, :password_confirmation, :activation_token_expires_at, :activation_token,
       :activation_state, :avatar_file_name, :first_name, :last_name, :user_id,
       :kerberos_uid, :display_name, :current_course_id, :last_activity_at, :reset_password_email_sent_at, :reset_password_token_expires_at, :reset_password_token,
       :last_login_at, :last_logout_at, :team_ids, :course_ids, :remember_me_token_expires_at,
