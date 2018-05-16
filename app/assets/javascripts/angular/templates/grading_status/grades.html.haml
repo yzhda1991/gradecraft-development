@@ -6,18 +6,39 @@
   %table.no-table-header
     %thead
       %tr
-        %th{"scope"=>"col"} {{::gsGradesCtrl.assignmentTerm}}
-        %th{"scope"=>"col", "width"=>"8%"} Name
-        %th{"scope"=>"col", "width"=>"15%", "ng-if"=>"::gsGradesCtrl.courseHasTeams"} {{::gsGradesCtrl.teamTerm}}
-        %th{"scope"=>"col", "width"=>"8%"} Score
-        %th{"scope"=>"col"} Feedback
-        %th{"scope"=>"col", "width"=>"20%"}
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"{{::gsGradesCtrl.assignmentTerm}}",
+                            "data-sortable-predicate"=>"assignment_name"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"Name",
+                            "data-sortable-predicate"=>"[student_name, group_name]",
+                            "width"=>"8%"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"{{::gsGradesCtrl.teamTerm}}",
+                            "data-sortable-predicate"=>"team_name",
+                            "width"=>"15%",
+                            "ng-if"=>"::gsGradesCtrl.courseHasTeams"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"Score",
+                            "data-sortable-predicate"=>"score",
+                            "width"=>"8%"}
+
+        %th.sortable-header{"scope"=>"col",
+                            "data-sortable-header-text"=>"Feedback",
+                            "data-sortable-predicate"=>"feedback"}
+
+        %th{"scope"=>"col","width"=>"20%"}
           %span.sr-only Actions
+
         %th{"data-dynatable-no-sort"=>"true", "width"=>"120px", "ng-if"=>"::gsGradesCtrl.linksVisible"}
           %button.button.table-select-all{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(true)"} Check
           %button.button.table-select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(false)"} Uncheck
+
     %tbody
-      %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades"}
+      %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades | orderBy: gsGradesCtrl.sortable.predicate : gsGradesCtrl.sortable.reverse"}
         %td
           %a{"ng-href"=>"{{grade.assignment_path}}"} {{grade.assignment_name}}
         %td
