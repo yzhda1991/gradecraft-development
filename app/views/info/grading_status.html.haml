@@ -31,7 +31,7 @@
     %section.ungraded-submissions{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
-          %h3
+          %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Ungraded Submissions
       %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
@@ -46,7 +46,7 @@
     %section.in-progress-grades{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
-          %h3
+          %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             In Progress Grades
       %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
@@ -61,7 +61,7 @@
     %section.ready-for-release-grades{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
-          %h3
+          %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Ready for Release Grades
       %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
@@ -76,7 +76,7 @@
     %section.resubmissions{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
-          %h3
+          %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Ungraded Submissions
       %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
