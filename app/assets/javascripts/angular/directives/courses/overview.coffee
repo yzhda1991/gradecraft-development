@@ -3,6 +3,8 @@
     CoursesOverviewCtrl = [() ->
       vm = this
       vm.loading = true
+
+      CourseService.getCourses().then(() -> vm.loading = false)
     ]
 
     {

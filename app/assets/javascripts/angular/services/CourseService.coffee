@@ -1,8 +1,6 @@
-# Manages state of Badges including API calls.
-# Can be used independently, or via another service (see PredictorService)
-
 @gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
+  staff = []
   courses = []
   students = []
   courseCreation = {}
@@ -24,6 +22,18 @@
         GradeCraftAPI.addItem(courses, "courses", response.data)
         GradeCraftAPI.setTermFor("team", response.data.meta.term_for_team)
         GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  getCourses = () ->
+    $http.get("/api/courses").then(
+      (response) ->
+        GradeCraftAPI.loadMany(courses, response.data)
+        # GradeCraftAPI.loadFromIncluded(staff, "users", response.data) # TODO
+        GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+        GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
@@ -61,10 +71,13 @@
     )
 
   {
+    staff: staff
     course: course
+    courses: courses
     students: students
     termFor: termFor
     getCourse: getCourse
+    getCourses: getCourses
     getCourseCreation: getCourseCreation
     getStudents: getStudents
     updateCourseCreationItem: updateCourseCreationItem
