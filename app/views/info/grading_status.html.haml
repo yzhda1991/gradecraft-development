@@ -23,60 +23,65 @@
         %h2.grading-status-name.center.inverse Resubmissions
 
   -# Search input for all four subsections
-  %sortable-search-input.grading-status-search-input
+  - if @has_submissions_or_grades
+    %sortable-search-input.grading-status-search-input
 
   -# Ungraded submissions
-  .ungraded-submissions-container{"role"=>"tablist"}
-    .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
-      %a
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Ungraded Submissions
-    %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                    "data-assignment-term"=>"#{term_for :assignment}",
-                                                    "data-team-term"=>"#{term_for :team}",
-                                                    "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                    "data-type"=>"Ungraded",
-                                                    "role"=>"tabpanel"}
+  - if ungraded_submissions_count_for(current_course).positive?
+    .ungraded-submissions-container{"role"=>"tablist"}
+      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+        %a
+          %h3
+            %i.fa.fa-chevron-circle-right.fa-fw
+            Ungraded Submissions
+      %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                                      "data-assignment-term"=>"#{term_for :assignment}",
+                                                      "data-team-term"=>"#{term_for :team}",
+                                                      "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                                      "data-type"=>"Ungraded",
+                                                      "role"=>"tabpanel"}
 
   -# In progress grades
-  .in-progress-grades-container{"role"=>"tablist"}
-    .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
-      %a
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          In Progress Grades
-    %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                               "data-assignment-term"=>"#{term_for :assignment}",
-                                               "data-team-term"=>"#{term_for :team}",
-                                               "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                               "data-type"=>"InProgress",
-                                               "role"=>"tabpanel"}
+  - if in_progress_grades_count_for(current_course).positive?
+    .in-progress-grades-container{"role"=>"tablist"}
+      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+        %a
+          %h3
+            %i.fa.fa-chevron-circle-right.fa-fw
+            In Progress Grades
+      %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                                 "data-assignment-term"=>"#{term_for :assignment}",
+                                                 "data-team-term"=>"#{term_for :team}",
+                                                 "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                                 "data-type"=>"InProgress",
+                                                 "role"=>"tabpanel"}
 
   -# Ready for release grades
-  .ready-for-release-grades-container{"role"=>"tablist"}
-    .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
-      %a
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Ready for Release Grades
-    %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                               "data-assignment-term"=>"#{term_for :assignment}",
-                                               "data-team-term"=>"#{term_for :team}",
-                                               "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                               "data-type"=>"ReadyForRelease",
-                                               "role"=>"tabpanel"}
+  - if ready_for_release_grades_count_for(current_course).positive?
+    .ready-for-release-grades-container{"role"=>"tablist"}
+      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+        %a
+          %h3
+            %i.fa.fa-chevron-circle-right.fa-fw
+            Ready for Release Grades
+      %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                                 "data-assignment-term"=>"#{term_for :assignment}",
+                                                 "data-team-term"=>"#{term_for :team}",
+                                                 "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                                 "data-type"=>"ReadyForRelease",
+                                                 "role"=>"tabpanel"}
 
   -# Resubmissions
-  .resubmissions-container{"role"=>"tablist"}
-    .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
-      %a
-        %h3
-          %i.fa.fa-chevron-circle-right.fa-fw
-          Ungraded Submissions
-    %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                    "data-assignment-term"=>"#{term_for :assignment}",
-                                                    "data-team-term"=>"#{term_for :team}",
-                                                    "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                    "data-type"=>"Resubmitted",
-                                                    "role"=>"tabpanel"}
+  - if resubmission_count_for(current_course).positive?
+    .resubmissions-container{"role"=>"tablist"}
+      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+        %a
+          %h3
+            %i.fa.fa-chevron-circle-right.fa-fw
+            Ungraded Submissions
+      %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                                      "data-assignment-term"=>"#{term_for :assignment}",
+                                                      "data-team-term"=>"#{term_for :team}",
+                                                      "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                                      "data-type"=>"Resubmitted",
+                                                      "role"=>"tabpanel"}

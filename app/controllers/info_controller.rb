@@ -37,12 +37,10 @@ class InfoController < ApplicationController
 
   # Displaying ungraded submissions, and existing grades by status
   def grading_status
-    grades = current_course.grades.for_active_students.instructor_modified
-    submissions = current_course.submissions.submitted.includes(:assignment, :grade, :student, :group, :submission_files)
-    @ungraded_submissions_by_assignment = active_individual_and_group_submissions(submissions.ungraded)
-    @resubmissions_by_assignment = active_individual_and_group_submissions(submissions.resubmitted)
-    @in_progress_grades_by_assignment = grades.in_progress
-    @ready_for_release_grades_by_assignment = grades.includes(:assignment, :student, :group).ready_for_release
+    @has_submissions_or_grades = ungraded_submissions_count_for(current_course).positive? ||
+      in_progress_grades_count_for(current_course).positive? ||
+      ready_for_release_grades_count_for(current_course).positive? ||
+      resubmission_count_for(current_course).positive?
   end
 
   # Displaying per assignment summary outcome statistics
