@@ -5,7 +5,7 @@ class API::CoursesController < ApplicationController
   # GET api/courses
   def index
     if current_user_is_admin?
-      @courses = Course.includes(:earned_badges).all
+      @courses = Course.includes(:earned_badges, course_memberships: :user).all
     else
       @courses = current_user.courses
     end

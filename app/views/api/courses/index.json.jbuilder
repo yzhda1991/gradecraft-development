@@ -6,15 +6,23 @@ json.data @courses do |course|
     json.id course.id.to_s
 
     json.attributes do
-      json.partial! "api/courses/course_search", course: course
+      json.partial! "api/courses/course_search_attributes", course: course
     end
   end
 end
 
 json.included do
+  json.array! @courses.flat_map(&:staff) do |staff_member|
+    json.type "users"
+    json.id staff_member.id.to_s
 
+    json.attributes do
+      json.name staff_member.name
+    end
+  end
 end
 
 json.meta do
-
+  json.term_for_assignment term_for :assignment
+  json.term_for_assignment_type term_for :assignment_type
 end

@@ -12,7 +12,7 @@
             resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
             itemLabel: function(course) {
-              return course.attributes.name;
+              return course.attributes.formatted_name;
             },
             itemId: function(course) {
               return course.attributes.id;
