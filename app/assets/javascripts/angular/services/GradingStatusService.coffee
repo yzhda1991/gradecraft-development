@@ -43,8 +43,6 @@
         GradeCraftAPI.logResponse(response.data)
     )
 
-  termFor = (term) -> GradeCraftAPI.termFor(term)
-
   {
     resubmittedSubmissions: resubmittedSubmissions
     ungradedSubmissions: ungradedSubmissions
@@ -54,6 +52,5 @@
     getResubmittedSubmissions: getResubmittedSubmissions
     getInProgressGrades: getInProgressGrades
     getReadyForReleaseGrades: getReadyForReleaseGrades
-    termFor: termFor
   }
 ]
