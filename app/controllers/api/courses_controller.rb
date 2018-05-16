@@ -2,13 +2,14 @@ class API::CoursesController < ApplicationController
   before_action :ensure_staff?, only: :show
   before_action :use_current_course, only: [:analytics, :one_week_analytics]
 
-  # accessed by the dashboard
   # GET api/courses
   def index
-    @courses = current_user.courses.map do |c|
-      { name: c.formatted_long_name, id: c.id, search_string: c.searchable_name }
+    if current_user_is_admin?
+      @courses = Course.includes(:earned_badges).all
+    else
+      @courses = current_user.courses
     end
-    render json: MultiJson.dump(@courses)
+    render :"api/courses/index", status: :ok
   end
 
   # GET /api/courses/:id

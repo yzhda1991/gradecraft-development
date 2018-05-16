@@ -1,5 +1,4 @@
 /** Course search utility for admin **/
-
 !function(app, $) {
   $(document).ready(function() {
     if($('.courses-search-query').length) {
@@ -7,22 +6,22 @@
       $.ajax({
         url: target.data('autocompleteurl'),
         dataType: "json",
-        success: function(courses) {
+        success: function(response) {
           target.omniselect({
-            source: courses,
+            source: response.data,
             resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
             itemLabel: function(course) {
-              return course.name;
+              return course.attributes.name;
             },
             itemId: function(course) {
-              return course.id;
+              return course.attributes.id;
             },
             renderItem: function(label) {
               return '<li><a href="#">' + label + '</a></li>';
             },
-            filter: function(item, query) {
-              return item.search_string.match(new RegExp(query, 'i'));
+            filter: function(course, query) {
+              return course.attributes.search_string.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
             window.location = "/courses/" + id + "/change"
