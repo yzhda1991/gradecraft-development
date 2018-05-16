@@ -72,9 +72,9 @@
     .submit-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
       %ul
         %li
-          .button.submit{"type"=>"button",
-                         "ng-click"=>"gsGradesCtrl.releaseGrades()",
-                         "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
-                         "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
+          %a.button{"type"=>"button",
+                    "ng-click"=>"gsGradesCtrl.releaseGrades()",
+                    "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
+                    "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
             %i.fa.fa-share-square-o
             Release Selected Grades
