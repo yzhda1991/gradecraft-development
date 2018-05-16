@@ -1,0 +1,6 @@
+%loading-message{"data-loading"=>"coursesOverviewCtrl.loading", "data-message"=>"Loading courses..."}
+
+%div{"ng-if"=>"!coursesOverviewCtrl.loading"}
+  %table
+    %tr{"ng-repeat"=>"course in coursesOverviewCtrl.courses"}
+    
