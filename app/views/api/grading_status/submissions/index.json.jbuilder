@@ -13,10 +13,8 @@ json.data @submissions do |submission|
     json.id submission.id.to_s
 
     if assignment.is_individual?
-      submission.student.tap do |student|
-        json.student_name student.name
-        json.student_path student_path student
-      end
+      json.student_name student.name
+      json.student_path student_path student
 
       if grade.present?
         json.grade_path grade_path grade
@@ -32,7 +30,7 @@ json.data @submissions do |submission|
         json.group_name group.name
         json.group_path group_path(group)
         json.group_grade_path grade_assignment_group_path assignment, group
-      end
+      end unless submission.group.nil?
     end
 
     submission.submitted_at.in_time_zone(current_user.time_zone).tap do |submitted_at|
@@ -55,19 +53,17 @@ json.data @submissions do |submission|
     if assignment.is_individual?
       json.grade do
         json.data do
-          assignment.grade_for_student(student).try(:tap) do |grade|
-            json.type "grades"
-            json.id grade.id.to_s
-          end if assignment.is_individual?
+          json.type "grades"
+          json.id grade.id.to_s
         end
-      end
+      end if grade.present?
 
       json.student_team do
         json.data do
           json.type "teams"
           json.id team.id.to_s
         end
-      end
+      end if team.present?
     end
 
     json.assignment do
