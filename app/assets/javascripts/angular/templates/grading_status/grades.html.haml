@@ -2,7 +2,7 @@
   %i.fa.fa-spinner.fa-spin.fa-fw
   Loading grades...
 
-%section{"ng-if"=>"!gsGradesCtrl.loading && gsGradesCtrl.grades.length"}
+%div{"ng-if"=>"!gsGradesCtrl.loading && gsGradesCtrl.grades.length"}
   %table.no-table-header
     %thead
       %tr
@@ -68,12 +68,12 @@
                            "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
                            "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
 
-.submit-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
-  %ul
-    %li
-      .button.submit{"type"=>"button",
-                     "ng-click"=>"gsGradesCtrl.releaseGrades()",
-                     "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
-                     "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
-        %i.fa.fa-share-square-o
-        Release Selected Grades
+  .submit-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
+    %ul
+      %li
+        .button.submit{"type"=>"button",
+                       "ng-click"=>"gsGradesCtrl.releaseGrades()",
+                       "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
+                       "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
+          %i.fa.fa-share-square-o
+          Release Selected Grades

@@ -2,7 +2,7 @@
   %i.fa.fa-spinner.fa-spin.fa-fw
   Loading submissions...
 
-%section{"ng-if"=>"!gsSubmissionsCtrl.loading && gsSubmissionsCtrl.submissions.length"}
+%div{"ng-if"=>"!gsSubmissionsCtrl.loading && gsSubmissionsCtrl.submissions.length"}
   %table.no-table-header
     %thead
       %tr
@@ -27,7 +27,7 @@
 
         %th{"scope"=>"col", "style"=>"min-width: 200px"}
           %span.sr-only Actions
-          
+
     %tbody
       %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions | orderBy: gsSubmissionsCtrl.sortable.predicate : gsSubmissionsCtrl.sortable.reverse | filter: gsSubmissionsCtrl.searchCriteria()"}
         -# Assignment name and path

@@ -28,7 +28,7 @@
 
   -# Ungraded submissions
   - if ungraded_submissions_count_for(current_course).positive?
-    .ungraded-submissions-container{"role"=>"tablist"}
+    %section.ungraded-submissions{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
           %h3
@@ -43,7 +43,7 @@
 
   -# In progress grades
   - if in_progress_grades_count_for(current_course).positive?
-    .in-progress-grades-container{"role"=>"tablist"}
+    %section.in-progress-grades{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
           %h3
@@ -58,7 +58,7 @@
 
   -# Ready for release grades
   - if ready_for_release_grades_count_for(current_course).positive?
-    .ready-for-release-grades-container{"role"=>"tablist"}
+    %section.ready-for-release-grades{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
           %h3
@@ -73,7 +73,7 @@
 
   -# Resubmissions
   - if resubmission_count_for(current_course).positive?
-    .resubmissions-container{"role"=>"tablist"}
+    %section.resubmissions{"role"=>"tablist"}
       .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
           %h3
