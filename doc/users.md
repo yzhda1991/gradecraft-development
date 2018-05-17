@@ -59,9 +59,9 @@ Note that, excluding the first four, none of the following attributes are stored
 
 ### Class Methods
 
-In addition to the methods below, there is one for each role a student may have in a course: `students`, `professors`, `gsis` and `admins` — all with the course as an argument. Each of these methods simply calls `with_role_in_course` and returns the result, passing in the method's corresponding role and the course
+In addition to the methods below, there is one for each role a student may have in a course: `students`, `professors`, `gsis` and `admins` — all with the course as an argument. Each of these methods simply calls `with_role_in_courses` and returns the result, passing in the method's corresponding role and the course
 
-  * `with_role_in_course(role, course)` - returns all users in the course with the role passed in. If the role passed in is "staff", all users who are either professors or gsis are returned. Otherwise, all students with the role passed in are returned
+  * `with_role_in_courses(role, course)` - returns all users in the courses with the role passed in. If the role passed in is "staff", all users who are either professors or gsis are returned. Otherwise, all students with the role passed in are returned
   * `students_being_graded(course, team)` - returns the ids of all students in the passed in course whose grades are included in course analysis. Passed in team is set to nil by default
   * `students_by_team(course, team)` - returns all members of the team in the course
   * `unscoped_students_being_graded_for_course(course, team=nil)` - returns a query that selects the id, first name, last name, email, last time updated, and course membership score for all students in the passed in course who are being graded. User query is joined with the course and team memberships

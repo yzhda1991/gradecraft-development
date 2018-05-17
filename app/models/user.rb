@@ -4,18 +4,14 @@ class User < ActiveRecord::Base
   authenticates_with_sorcery!
 
   class << self
-    def with_role_in_course(role, course)
-      if role == "staff"
-        user_ids = CourseMembership.where("course_id=? AND (role=? OR role=?)", course, "professor", "gsi").pluck(:user_id)
-      else
-        user_ids = CourseMembership.where(course: course, role: role).pluck(:user_id)
-      end
-      User.where(id: user_ids)
+    def with_role_in_courses(role, *courses)
+      role = ["professor", "gsi"] if role == "staff"
+      User.includes(:course_memberships).where(course_memberships: { course: courses, role: role })
     end
 
     Role.all.each do |role|
       define_method(role.pluralize) do |course|
-        with_role_in_course(role,course)
+        with_role_in_courses(role,course)
       end
     end
 
