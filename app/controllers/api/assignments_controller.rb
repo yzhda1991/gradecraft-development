@@ -83,6 +83,10 @@ class API::AssignmentsController < ApplicationController
   def updated_grades
     if need_grades_updated
       @assignment.grades.all do |grade|
+        # Quick bugfix, if assignment types are changed
+        # after grades exist, to keep grades in the appropriate AT
+        grade.assignment_type_id = @assignment.assignment_type_id
+        # Run grade callbacks (unlocks etc.)
         grade.save
       end
     end
