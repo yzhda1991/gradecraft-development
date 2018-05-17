@@ -57,4 +57,13 @@ namespace :grades do
       puts "#{grade.id}: status: #{grade.status}, complete: #{grade.complete}, student_visible: #{grade.student_visible}"
     end
   end
+
+  desc "Update existing grades where assignments have a new assignment type" do
+    Grade.find_each(batch_size: 500) do |grade|
+      if grade.assignment_type_id != grade.assignment.assignment_type_id
+        grade.update_attribute(assignment_type_id: grade.assignment.assignment_type_id)
+        puts "#{grade.id}: assignment_type_id: #{grade.assignment_type_id}"
+      end
+    end
+  end
 end
