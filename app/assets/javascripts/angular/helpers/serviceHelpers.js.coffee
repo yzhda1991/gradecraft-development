@@ -51,14 +51,16 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     # attach associated models from included list within
     _.each(options.include, (included)->
       return if !response.included || !item.relationships || !item.relationships[included]
-      child =  _.find(response.included,
-        {id: item.relationships[included].data.id,
-        type: item.relationships[included].data.type}
-      )
-      item.attributes[included] = child.attributes if child
+      predicate = _filterPredicate(item.relationships[included].data)
+
+      if Array.isArray(item.relationships[included].data)
+        relationships = _.filter(response.included, predicate)
+        item.attributes[included] = relationships if relationships?
+      else
+        relationship = _.find(response.included, predicate)
+        item.attributes[included] = relationship.attributes if relationship?
     )
     item.attributes
-
 
   # transfer models from api response data into the model array
   loadMany = (modelArray, response, options={"include":[]})->
@@ -101,7 +103,18 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         article[field] = new Date(article[field]);
     )
 
-  return {
+  # constructs a filter predicate for lodash _.filter, _.find
+  # based on type and id and whether the item has an object
+  # or an array of relationships
+  _filterPredicate = (relationships) ->
+    if Array.isArray(relationships)
+      id: relationships[0].id,
+      type: relationships[0].type
+    else
+      id: relationships.id,
+      type: relationships.type
+
+  {
     termFor: termFor
     setTermFor: setTermFor
     logResponse: logResponse
