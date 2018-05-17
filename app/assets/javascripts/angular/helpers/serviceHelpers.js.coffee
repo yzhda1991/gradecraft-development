@@ -55,7 +55,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
       if Array.isArray(item.relationships[included].data)
         relationships = _.filter(response.included, predicate)
-        item.attributes[included] = relationships if relationships?
+        item.attributes[included] = _.pluck(relationships, "attributes") if relationships?
       else
         relationship = _.find(response.included, predicate)
         item.attributes[included] = relationship.attributes if relationship?
@@ -108,8 +108,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   # or an array of relationships
   _filterPredicate = (relationships) ->
     if Array.isArray(relationships)
-      id: relationships[0].id,
-      type: relationships[0].type
+      (item) => item.id in _.pluck(relationships, "id") && item.type in _.pluck(relationships, "type")
     else
       id: relationships.id,
       type: relationships.type
