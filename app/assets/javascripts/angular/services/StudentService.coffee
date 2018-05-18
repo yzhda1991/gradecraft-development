@@ -50,7 +50,7 @@
           GradeCraftAPI.logResponse(response.data)
       )
 
-    getBatchedForCourse = (courseId, batchSize=25) ->
+    getBatchedForCourse = (courseId, batchSize=50) ->
       getForCourse(courseId, true).then(() ->
         return unless _studentIds.length
         loadingProgress("Loading students...")

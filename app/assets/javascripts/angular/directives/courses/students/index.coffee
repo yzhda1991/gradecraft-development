@@ -42,13 +42,13 @@
     ]
 
     _initialize = (vm) ->
-      SortableService.reverse = true
-      SortableService.predicate = "score"
-
       CourseService.getCourse(vm.courseId).then(
         (response) ->
-          vm.loading = false
-          StudentService.getBatchedForCourse(vm.courseId)
+          StudentService.getBatchedForCourse(vm.courseId).then(() ->
+            SortableService.reverse = true
+            SortableService.predicate = "score"
+            vm.loading = false
+          )
         , (response) ->
           console.error("Failed to load course data")
       )
