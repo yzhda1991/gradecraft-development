@@ -2,7 +2,8 @@
   (CourseService, StudentService, SortableService, TeamService, $q) ->
     CoursesStudentsIndexCtrl = [() ->
       vm = this
-      vm.loading = true
+      vm.loadingCourse = true
+      vm.loadingStudents = true
       vm.searchCriteria = undefined
       vm.sortable = SortableService
 
@@ -44,6 +45,7 @@
     _initialize = (vm) ->
       CourseService.getCourse(vm.courseId).then(
         (response) ->
+          vm.loadingCourse = false
           StudentService.getBatchedForCourse(vm.courseId).then(() ->
             SortableService.reverse = true
             SortableService.predicate = "score"

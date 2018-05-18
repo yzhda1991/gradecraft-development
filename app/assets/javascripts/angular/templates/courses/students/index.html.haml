@@ -1,6 +1,6 @@
 -# custom sortable filters
 .clear
-  %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
+  %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loadingStudents"}
 
 %label
   %span.sr-only Search Criteria
@@ -9,7 +9,7 @@
                       "ng-model"=>"coursesStudentsIndexCtrl.searchCriteria",
                       "ng-model-options"=>"{ updateOn: 'change blur' }"}
 
-%table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loading"}
+%table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loadingCourse"}
   %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
   %thead
     %tr
@@ -74,7 +74,6 @@
         {{coursesStudentsIndexCtrl.batchLoadingProgress()}}
 
     %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria | filter: coursesStudentsIndexCtrl.searchCriteria"}
-
       %td
         %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
           %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
