@@ -57,4 +57,16 @@ namespace :grades do
       puts "#{grade.id}: status: #{grade.status}, complete: #{grade.complete}, student_visible: #{grade.student_visible}"
     end
   end
+
+  desc "Update existing grades where assignments have a new assignment type"
+  task resolve_errant_assignment_types: :environment do
+    resolved = []
+    Grade.includes(assignment: :assignment_type).find_each(batch_size: 2000) do |grade|
+      if grade.assignment_type_id != grade.assignment.assignment_type_id
+        puts "Grade id: #{grade.id} (assignment_type_id #{grade.assignment_type_id} -> #{grade.assignment.assignment_type_id})"
+        resolved << grade.update(assignment_type_id: grade.assignment.assignment_type_id)
+      end
+    end
+    puts "Resolved #{resolved.count} grade(s)"
+  end
 end
