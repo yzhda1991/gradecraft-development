@@ -3,7 +3,6 @@
     CoursesStudentsIndexCtrl = [() ->
       vm = this
       vm.loadingCourse = true
-      vm.loadingStudents = true
       vm.searchCriteria = undefined
       vm.sortable = SortableService
 
@@ -13,6 +12,7 @@
       vm.studentEarnedBadges = StudentService.earnedBadges
       vm.batchLoadingProgress = StudentService.loadingProgress
 
+      vm.anyStudents = () -> _.some(vm.students)
       vm.termFor = (term) -> StudentService.termFor(term)
       vm.flagStudent = (student) -> StudentService.flag(student)
       vm.activateUser = (student) -> StudentService.activate(student)
@@ -49,7 +49,6 @@
           StudentService.getBatchedForCourse(vm.courseId).then(() ->
             SortableService.reverse = true
             SortableService.predicate = "score"
-            vm.loading = false
           )
         , (response) ->
           console.error("Failed to load course data")

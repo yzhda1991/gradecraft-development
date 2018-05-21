@@ -1,6 +1,6 @@
 -# custom sortable filters
 .clear
-  %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loadingStudents"}
+  %courses-students-index-table-filter{"ng-if"=>"coursesStudentsIndexCtrl.anyStudents()"}
 
 %label
   %span.sr-only Search Criteria
