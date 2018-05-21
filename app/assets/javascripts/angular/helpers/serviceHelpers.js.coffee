@@ -44,6 +44,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # Format a single model from JSONAPI response.data section.
   # response is needed in options only if including from "relationships"
+  #
+  # constructs a filter predicate for lodash _.filter, _.find
+  # based on type and id and whether the item has an object
+  # or an array of relationships
   dataItem = (item, response={}, options={"include":[]})->
     # attach JSON API type to attributes ("badges", "assignments", etc.)
     item.attributes.type = item.type
@@ -51,12 +55,20 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     # attach associated models from included list within
     _.each(options.include, (included)->
       return if !response.included || !item.relationships || !item.relationships[included]
-      predicate = _filterPredicate(item.relationships[included].data)
 
       if Array.isArray(item.relationships[included].data)
+        related = {
+          ids: _.pluck(item.relationships[included].data, "id")
+          types: _.pluck(item.relationships[included].data, "type")
+        }
+        predicate = (item) => item.id in related.ids && item.type in related.types
         relationships = _.filter(response.included, predicate)
         item.attributes[included] = _.pluck(relationships, "attributes") if relationships?
       else
+        predicate = {
+          id: relationships.id,
+          type: relationships.type
+        }
         relationship = _.find(response.included, predicate)
         item.attributes[included] = relationship.attributes if relationship?
     )
@@ -102,16 +114,6 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
       if article[field]
         article[field] = new Date(article[field]);
     )
-
-  # constructs a filter predicate for lodash _.filter, _.find
-  # based on type and id and whether the item has an object
-  # or an array of relationships
-  _filterPredicate = (relationships) ->
-    if Array.isArray(relationships)
-      (item) => item.id in _.pluck(relationships, "id") && item.type in _.pluck(relationships, "type")
-    else
-      id: relationships.id,
-      type: relationships.type
 
   {
     termFor: termFor

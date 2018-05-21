@@ -1,6 +1,25 @@
 %loading-message{"data-loading"=>"coursesOverviewCtrl.loading", "data-message"=>"Loading courses..."}
 
 %div{"ng-if"=>"!coursesOverviewCtrl.loading"}
-  %table
-    %tr{"ng-repeat"=>"course in coursesOverviewCtrl.courses"}
-    
+  %table.no-table-header
+    %caption.sr-only Course Overview
+    %thead
+      %tr
+        -# %th.hidden Active
+        -# %th.hidden Published
+        -# %th.hidden Badges
+        -# %th.hidden Sections
+        -# %th.hidden Paid
+        %th{"scope"=>"col"} Course No
+        %th{"scope"=>"col"} Name
+        %th{"scope"=>"col"} Instructor(s)
+        %th{"scope"=>"col"} Semester
+        %th{"scope"=>"col"} Year
+        %th{"scope"=>"col"} Total Points
+        %th{"scope"=>"col"} # of Students
+        -# %th.hidden Calendar Date
+        %th{"scope"=>"col"} Created
+        %th{"scope"=>"col", "style"=>"text-align: right"} Downloads
+        %th.options{"scope"=>"col"} Options
+
+    %tbody.courses-overview-table-body

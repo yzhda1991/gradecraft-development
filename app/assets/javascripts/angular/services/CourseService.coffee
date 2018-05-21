@@ -30,8 +30,7 @@
   getCourses = () ->
     $http.get("/api/courses").then(
       (response) ->
-        GradeCraftAPI.loadMany(courses, response.data)
-        # GradeCraftAPI.loadFromIncluded(staff, "users", response.data) # TODO
+        GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
         GradeCraftAPI.logResponse(response)

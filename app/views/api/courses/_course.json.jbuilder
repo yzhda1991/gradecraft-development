@@ -49,7 +49,7 @@ end
 json.relationships do
   json.staff do
     json.data course.staff do |staff_member|
-      json.type "users"
+      json.type "staff"
       json.id staff_member.id.to_s
     end
   end if course.staff.any?

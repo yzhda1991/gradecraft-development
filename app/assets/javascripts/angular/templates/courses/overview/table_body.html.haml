@@ -1,0 +1,25 @@
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses"}
+  %td {{course.course_number}}
+  %td
+    %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}
+  %td
+    %ul
+      %li{"ng-repeat"=>"staff in course.staff"} {{staff.name}}
+  %td {{course.semester}}
+  %td {{course.year}}
+  %td {{course.formatted_total_points}}
+  %td {{course.student_count}}
+  %td {{course.formatted_created_at}}
+  %td
+    .button-container.dropdown
+      %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Downloads"}
+        %i.fa.fa-cloud-download
+        %i.fa.fa-caret-down
+      %ul.options-menu.dropdown-content
+
+  %td
+    .button-container.dropdown
+      %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+        %i.fa.fa-cog
+        %i.fa.fa-caret-down
+      %ul.options-menu.dropdown-content
