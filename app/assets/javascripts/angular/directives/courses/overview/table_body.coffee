@@ -3,6 +3,8 @@
     CoursesOverviewTableBodyCtrl = [() ->
       vm = this
       vm.courses = CourseService.courses
+
+      vm.termFor = (term) -> CourseService.termFor(term)
     ]
 
     {

@@ -11,8 +11,7 @@
     return [] if !courseCreation.checklist
     return courseCreation.checklist
 
-  termFor = (article) ->
-    GradeCraftAPI.termFor(article)
+  termFor = (article) -> GradeCraftAPI.termFor(article)
 
   #------ API Calls -----------------------------------------------------------#
 
@@ -31,7 +30,9 @@
     $http.get("/api/courses").then(
       (response) ->
         GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
+        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+        GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
         GradeCraftAPI.logResponse(response)
       , (response) ->

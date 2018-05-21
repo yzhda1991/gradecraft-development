@@ -23,6 +23,8 @@ json.included do
 end
 
 json.meta do
+  json.term_for_badges term_for :badges
   json.term_for_assignment term_for :assignment
+  json.term_for_assignments term_for :assignments
   json.term_for_assignment_type term_for :assignment_type
 end
