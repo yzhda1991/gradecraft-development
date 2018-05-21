@@ -24,7 +24,6 @@
 //= require lodash.min
 //= require plotly-latest.min
 //= require date
-//= require rollbar
 
 //= require angular/angular
 //= require angular-resource
@@ -41,7 +40,6 @@
 //= require ./angular/main.js
 //= require ./angular/ui/sortable
 //= require ./angular/vendor/restangular.min
-//= require ./angular/vendor/ng-rollbar.min.js
 //= require ./angular/vendor/angular-aria.js
 //= require_tree ./angular
 
@@ -95,3 +93,7 @@
 //= require d3
 //= require_tree ./behaviors
 //= require utilities
+
+//= require rollbar.js.js
+//= require ng-rollbar
+//= require rollbar_config
