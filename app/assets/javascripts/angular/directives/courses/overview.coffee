@@ -3,6 +3,8 @@
     CoursesOverviewCtrl = [() ->
       vm = this
       vm.loading = true
+      vm.hasCourses = CourseService.hasCourses
+      vm.searchCriteria = SortableService.filterCriteria
 
       CourseService.getCourses().then(() -> vm.loading = false)
     ]

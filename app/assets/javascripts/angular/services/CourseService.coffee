@@ -11,6 +11,8 @@
     return [] if !courseCreation.checklist
     return courseCreation.checklist
 
+  hasCourses = () -> _.some(courses)
+
   termFor = (article) -> GradeCraftAPI.termFor(article)
 
   #------ API Calls -----------------------------------------------------------#
@@ -75,6 +77,7 @@
     course: course
     courses: courses
     students: students
+    hasCourses: hasCourses
     termFor: termFor
     getCourse: getCourse
     getCourses: getCourses

@@ -1,4 +1,4 @@
-%tr{"ng-repeat"=>"course in tableBodyCtrl.courses"}
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses | filter: tableBodyCtrl.filterCriteria()"}
   %td {{course.course_number}}
   %td
     %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}

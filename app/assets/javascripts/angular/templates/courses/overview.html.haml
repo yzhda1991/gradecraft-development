@@ -1,5 +1,13 @@
 %loading-message{"data-loading"=>"coursesOverviewCtrl.loading", "data-message"=>"Loading courses..."}
 
+%label
+  %span.sr-only Search Criteria
+  %input.table-search-input{"type"=>"search",
+                           "placeholder"=>"Search",
+                           "ng-if"=>"coursesOverviewCtrl.hasCourses()",
+                           "ng-model"=>"coursesOverviewCtrl.searchCriteria",
+                           "ng-model-options"=>"{ updateOn: 'change blur', getterSetter: true }"}
+
 %div{"ng-if"=>"!coursesOverviewCtrl.loading"}
   %table.no-table-header
     %caption.sr-only Course Overview

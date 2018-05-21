@@ -1,8 +1,9 @@
-@gradecraft.directive "coursesOverviewTableBody", ["CourseService",
-  (CourseService) ->
+@gradecraft.directive "coursesOverviewTableBody", ["CourseService", "SortableService",
+  (CourseService, SortableService) ->
     CoursesOverviewTableBodyCtrl = [() ->
       vm = this
       vm.courses = CourseService.courses
+      vm.filterCriteria = SortableService.filterCriteria
 
       vm.termFor = (term) -> CourseService.termFor(term)
     ]
