@@ -36,7 +36,7 @@
         selectedTeamId = TeamService.selectedTeamId()
 
         filter = if filterCriteria? then filterCriteria(student) else true
-        team = if selectedTeamId? then student.team_id == selectedTeamId else true
+        team = if _.isEmpty(selectedTeamId) then true else student.team_id == selectedTeamId
         filter && team
 
       _initialize(vm)
