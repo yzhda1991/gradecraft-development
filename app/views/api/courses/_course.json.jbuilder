@@ -28,10 +28,9 @@ json.attributes do
   end
 
   json.edit_course_path edit_course_path course
-  # TODO: these routes that post/delete, ask for confirmation, and disable after click
-  # json.copy_courses_path id: course.id
-  # json.copy_courses_path id: course.id, copy_type: "with_students"
-  # json.course_path course_path course
+  json.copy_courses_path copy_courses_path id: course.id
+  json.copy_courses_with_students_path copy_courses_path id: course.id, copy_type: "with_students"
+  json.course_path course_path course
   json.change_course_path change_course_path course
 
   json.research_gradebook_path research_gradebook_path id: course.id, format: :csv

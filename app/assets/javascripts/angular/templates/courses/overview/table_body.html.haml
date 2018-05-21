@@ -42,3 +42,29 @@
         %i.fa.fa-cog
         %i.fa.fa-caret-down
       %ul.options-menu.dropdown-content
+        %li
+          %a{"ng-href"=>"{{course.edit_course_path}}"}
+            %i.fa.fa-edit
+            Edit
+        %li
+          %a{"ng-href"=>"{{course.copy_courses_path}}",
+             "data-disable-with"=>"Copying...",
+             "data-method"=>"copy",
+             "rel"=>"nofollow"}
+            %i.fa.fa-edit
+            Copy
+        %li
+          %a{"ng-href"=>"{{course.copy_courses_with_students_path}}",
+             "data-disable-with"=>"Copying...",
+             "data-method"=>"copy",
+             "rel"=>"nofollow"}
+            %i.fa.fa-edit
+            Copy + Students
+        %li
+          %a{"ng-href"=>"{{course.course_path}}",
+             "data-disable-with"=>"Deleting...",
+             "data-confirm"=>"This will delete {{course.name}} - are you sure?",
+             "data-method"=>"delete",
+             "rel"=>"nofollow"}
+            %i.fa.fa-trash
+            Delete
