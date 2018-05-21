@@ -33,6 +33,8 @@
 * Redis
 
 ## Installation instructions for development:
+### Option 1
+#### Local Setup
 1. Clone repository
 1. Run `cp config/database.yml.sample config/database.yml` (within the file, replace ```username``` with your current username
 1. Run `cp config/mongoid.yml.sample config/mongoid.yml`
@@ -42,7 +44,13 @@
 1. Optional: run `bundle exec rake db:sample`
 1. Run `foreman start`
 
-### Development Environment with Vagrant
+##### Note: Testing Emails in Development
+1. gem install mailcatcher
+2. run 'mailcatcher' in terminal
+3. visit http://127.0.0.1:1080/
+
+### Option 2 (No longer supported at this time)
+#### Development Environment with Vagrant
 1. Install Vagrant (https://www.vagrantup.com/)
 2. Clone repository
 3. `vagrant up`
