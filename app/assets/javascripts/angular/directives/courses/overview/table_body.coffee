@@ -14,5 +14,7 @@
       controller: CoursesOverviewTableBodyCtrl
       controllerAs: "tableBodyCtrl"
       templateUrl: "courses/overview/table_body.html"
+      scope:
+        searchCriteria: '='
     }
 ]

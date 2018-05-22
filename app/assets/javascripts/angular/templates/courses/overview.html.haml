@@ -1,5 +1,7 @@
 %loading-message{"data-loading"=>"coursesOverviewCtrl.loading", "data-message"=>"Loading courses..."}
 
+%courses-overview-table-filter{"ng-if"=>"coursesOverviewCtrl.hasCourses()"}
+
 %label
   %span.sr-only Search Criteria
   %input.table-search-input{"type"=>"search",
@@ -24,4 +26,4 @@
         %th{"scope"=>"col", "style"=>"text-align: right"} Downloads
         %th.options{"scope"=>"col"} Options
 
-    %tbody.courses-overview-table-body
+    %tbody.courses-overview-table-body{"data-search-criteria"=>"coursesOverviewCtrl.searchCriteria"}
