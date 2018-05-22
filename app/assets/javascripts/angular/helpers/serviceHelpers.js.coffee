@@ -66,8 +66,8 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         item.attributes[included] = _.pluck(relationships, "attributes") if relationships?
       else
         predicate = {
-          id: relationships.id,
-          type: relationships.type
+          id: item.relationships[included].data.id
+          type: item.relationships[included].data.type
         }
         relationship = _.find(response.included, predicate)
         item.attributes[included] = relationship.attributes if relationship?
