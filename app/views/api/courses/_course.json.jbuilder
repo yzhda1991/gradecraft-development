@@ -49,7 +49,7 @@ end
 
 json.relationships do
   json.staff do
-    json.data course.staff do |staff_member|
+    json.data course.staff.order_by_name do |staff_member|
       json.type "staff"
       json.id staff_member.id.to_s
     end

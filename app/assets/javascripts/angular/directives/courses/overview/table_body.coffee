@@ -2,6 +2,7 @@
   (CourseService, SortableService) ->
     CoursesOverviewTableBodyCtrl = [() ->
       vm = this
+      vm.sortable = SortableService
       vm.courses = CourseService.courses
       vm.filterCriteria = SortableService.filterCriteria
 

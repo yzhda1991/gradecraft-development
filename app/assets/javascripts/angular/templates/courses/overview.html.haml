@@ -15,14 +15,14 @@
     %caption.sr-only Course Overview
     %thead
       %tr
-        %th{"scope"=>"col"} Course No
-        %th{"scope"=>"col"} Name
-        %th{"scope"=>"col"} Instructor(s)
-        %th{"scope"=>"col"} Semester
-        %th{"scope"=>"col"} Year
-        %th{"scope"=>"col"} Total Points
-        %th{"scope"=>"col"} # of Students
-        %th{"scope"=>"col"} Created
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Course No", "data-sortable-predicate"=>"course_number"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Name", "data-sortable-predicate"=>"name"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Instructor(s)", "data-sortable-predicate"=>"staff"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Semester", "data-sortable-predicate"=>"semester"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Year", "data-sortable-predicate"=>"year"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Total Points", "data-sortable-predicate"=>"total_points"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"# of Students", "data-sortable-predicate"=>"student_count"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Created", "data-sortable-predicate"=>"created_at"}
         %th{"scope"=>"col", "style"=>"text-align: right"} Downloads
         %th.options{"scope"=>"col"} Options
 
