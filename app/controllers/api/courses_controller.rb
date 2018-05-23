@@ -5,11 +5,15 @@ class API::CoursesController < ApplicationController
   # GET api/courses
   def index
     if current_user_is_admin?
-      @courses = Course.includes(:earned_badges, course_memberships: :user).all
+      @courses = Course.all
+
+      render json: MultiJson.dump(course_ids: @courses.pluck(:id)), status: :ok \
+        and return if params[:fetch_ids] == "1"
+
+      @courses = @courses.where(id: params[:course_ids]) if params[:course_ids].present?
     else
       @courses = current_user.courses
     end
-    render :"api/courses/index", status: :ok
   end
 
   # GET /api/courses/:id

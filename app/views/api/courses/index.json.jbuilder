@@ -1,4 +1,4 @@
-json.data @courses do |course|
+json.data @courses.includes(:earned_badges, course_memberships: :user) do |course|
   if current_user_is_admin?
     json.partial! "api/courses/course", course: course
   else

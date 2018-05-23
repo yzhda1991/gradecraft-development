@@ -1,3 +1,6 @@
+%tr{"ng-if"=>"tableBodyCtrl.loadingProgress()"}
+  %td.center{"colspan"=>"10"} {{tableBodyCtrl.loadingProgress()}}
+
 %tr{"ng-repeat"=>"course in tableBodyCtrl.courses | filter: tableBodyCtrl.searchCriteria | filter: tableBodyCtrl.filterCriteria() | orderBy: tableBodyCtrl.sortable.predicate : tableBodyCtrl.sortable.reverse"}
   %td {{course.course_number}}
   %td

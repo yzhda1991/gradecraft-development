@@ -4,6 +4,7 @@
       vm = this
       vm.sortable = SortableService
       vm.courses = CourseService.courses
+      vm.loadingProgress = CourseService.loadingProgress
       vm.filterCriteria = SortableService.filterCriteria
 
       vm.termFor = (term) -> CourseService.termFor(term)
