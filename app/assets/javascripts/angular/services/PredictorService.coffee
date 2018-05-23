@@ -34,6 +34,9 @@
   weightsAvailable = ()->
     AssignmentTypeService.weightsAvailable()
 
+  weightsClosed = ()->
+    ! AssignmentTypeService.weights.open
+
   weightedEarnedPoints = (assignmentType)->
     AssignmentTypeService.weightedEarnedPoints(assignmentType)
 
@@ -140,8 +143,9 @@
     return true if article.grade.is_excluded
     return true if article.grade.pass_fail_status == "Fail"
     return false if article.grade.pass_fail_status == "Pass"
-    return false if article.grade.score > 0
-    return true if article.grade.score == 0 ||
+    # Using final points, not score, to ignore 0 weighting
+    return false if article.grade.final_points > 0
+    return true if article.grade.final_points == 0 ||
       article.is_closed_without_submission == true ||
       article.is_closed_by_condition == true
     return false
@@ -229,6 +233,7 @@
 
       weights: weights
       weightsAvailable: weightsAvailable
+      weightsClosed: weightsClosed
       unusedWeightsRange: unusedWeightsRange
       weightedEarnedPoints: weightedEarnedPoints
       weightedPoints: weightedPoints
