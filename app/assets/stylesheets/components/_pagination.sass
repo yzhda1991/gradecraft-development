@@ -1,0 +1,31 @@
+@import "../utilities/variables"
+
+.page-selector
+  display: block
+  margin: 1rem 0
+
+.page-selector-input
+  display: inline
+  margin-right: 0.5rem
+
+  input
+    width: 60px
+    display: inline
+
+.page-selector-page
+  margin: 0.15rem
+  border-radius: 0
+  color: $color-blue-2
+  background-color: $color-white
+  border: 1px solid $color-blue-2
+  &.selected
+    background-color: $color-blue-2
+    color: $color-white
+  &:active
+    background-color: $color-blue-2
+  &:disabled
+    border-color: $color-grey-4
+    color: $color-grey-4
+    opacity: 0.7
+    &:hover
+      background-color: darken($color-grey-4, 10%)

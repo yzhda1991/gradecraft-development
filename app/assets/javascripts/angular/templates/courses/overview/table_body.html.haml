@@ -1,7 +1,7 @@
 %tr{"ng-if"=>"tableBodyCtrl.loadingProgress()"}
   %td.center{"colspan"=>"10"} {{tableBodyCtrl.loadingProgress()}}
 
-%tr{"ng-repeat"=>"course in tableBodyCtrl.courses | filter: tableBodyCtrl.searchCriteria | filter: tableBodyCtrl.filterCriteria() | orderBy: tableBodyCtrl.sortable.predicate : tableBodyCtrl.sortable.reverse"}
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses | startFrom: tableBodyCtrl.paginationOptions.currentPage | limitTo: tableBodyCtrl.paginationOptions.pageSize | filter: tableBodyCtrl.searchCriteria | filter: tableBodyCtrl.filterCriteria() | orderBy: tableBodyCtrl.sortable.predicate : tableBodyCtrl.sortable.reverse"}
   %td {{course.course_number}}
   %td
     %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}

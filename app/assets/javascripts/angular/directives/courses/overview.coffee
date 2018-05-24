@@ -2,10 +2,12 @@
   (CourseService, SortableService) ->
     CoursesOverviewCtrl = [() ->
       vm = this
+      vm.loading = true
       vm.searchCriteria = undefined
+      vm.courses = CourseService.courses
       vm.hasCourses = CourseService.hasCourses
 
-      CourseService.getBatchedCourses()
+      CourseService.getBatchedCourses().then(() -> vm.loading = false)
     ]
 
     {
