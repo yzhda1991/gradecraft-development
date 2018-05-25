@@ -1,11 +1,13 @@
-@gradecraft.directive "coursesOverview", ["CourseService", "SortableService",
-  (CourseService, SortableService) ->
+@gradecraft.directive "coursesOverview", ["CourseService", "SortableService", "TableFilterService",
+  (CourseService, SortableService, TableFilterService) ->
     CoursesOverviewCtrl = [() ->
       vm = this
       vm.loading = true
       vm.searchCriteria = undefined
-      vm.courses = CourseService.courses
       vm.hasCourses = CourseService.hasCourses
+      vm.courses = CourseService.filteredCourses
+
+      vm.filterByTerm = () -> TableFilterService.filterByTerm(vm.searchCriteria)
 
       CourseService.getBatchedCourses().then(() -> vm.loading = false)
     ]

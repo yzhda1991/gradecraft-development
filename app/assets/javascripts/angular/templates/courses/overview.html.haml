@@ -6,7 +6,8 @@
                             "placeholder"=>"Search",
                             "ng-if"=>"coursesOverviewCtrl.hasCourses()",
                             "ng-model"=>"coursesOverviewCtrl.searchCriteria",
-                            "ng-model-options"=>"{ updateOn: 'change blur', getterSetter: true }"}
+                            "ng-model-options"=>"{ updateOn: 'change blur', getterSetter: true }",
+                            "ng-change"=>"coursesOverviewCtrl.filterByTerm()"}
 
 %table.no-table-header
   %caption.sr-only Course Overview

@@ -1,118 +1,123 @@
-@gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
+@gradecraft.factory 'CourseService', ['TableFilterService', '$http', 'GradeCraftAPI', '$q',
+  (TableFilterService, $http, GradeCraftAPI, $q) ->
 
-  staff = []
-  courses = []
-  students = []
-  courseCreation = {}
-  _courseIds = []
-  _loadingProgress = undefined
+    staff = []
+    courses = []
+    students = []
+    courseCreation = {}
+    _courseIds = []
+    _loadingProgress = undefined
 
-  course = () -> courses[0]
+    filteredCourses = TableFilterService.filtered
 
-  creationChecklist = () ->
-    return [] if !courseCreation.checklist
-    return courseCreation.checklist
+    course = () -> courses[0]
 
-  hasCourses = () -> _.some(courses)
+    creationChecklist = () ->
+      return [] if !courseCreation.checklist
+      return courseCreation.checklist
 
-  loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
+    hasCourses = () -> _.some(courses)
 
-  termFor = (article) -> GradeCraftAPI.termFor(article)
+    loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
 
-  #------ API Calls -----------------------------------------------------------#
+    termFor = (article) -> GradeCraftAPI.termFor(article)
 
-  getCourse = (id) ->
-    $http.get("/api/courses/#{id}").then(
-      (response) ->
-        GradeCraftAPI.addItem(courses, "courses", response.data)
-        GradeCraftAPI.setTermFor("team", response.data.meta.term_for_team)
-        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
-        GradeCraftAPI.logResponse(response)
-      , (response) ->
-        GradeCraftAPI.logResponse(response)
-    )
+    #------ API Calls -----------------------------------------------------------#
 
-  getCourses = (fetchIds=false, courseIds...) ->
-    fetch = if fetchIds is true then 1 else 0
-    $http.get("/api/courses", { params: { fetch_ids: fetch, "course_ids[]": courseIds } }).then(
-      (response) ->
-        if fetchIds is true
-          _courseIds = response.data.course_ids
-        else
-          GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
+    getCourse = (id) ->
+      $http.get("/api/courses/#{id}").then(
+        (response) ->
+          GradeCraftAPI.addItem(courses, "courses", response.data)
+          GradeCraftAPI.setTermFor("team", response.data.meta.term_for_team)
           GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
-          GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
-          GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignment)
-          GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
-          loadingProgress("Loaded #{courses.length}/#{_courseIds.length} courses")
           GradeCraftAPI.logResponse(response)
-      , (response) ->
-        GradeCraftAPI.logResponse(response)
-    )
-
-  # fetch courses in batches
-  getBatchedCourses = (batchSize=50) ->
-    _loadingProgress = "Loading courses..."
-    getCourses(true).then(() ->
-      return unless _courseIds.length
-
-      promises = []
-      _.each(_.chunk(_courseIds, batchSize), (batch) ->
-        promises.push(getCourses(false, batch...))
+        , (response) ->
+          GradeCraftAPI.logResponse(response)
       )
 
-      $q.all(promises).then(() ->
-        _courseIds.length = 0
-        loadingProgress(null)
+    getCourses = (fetchIds=false, courseIds...) ->
+      fetch = if fetchIds is true then 1 else 0
+      $http.get("/api/courses", { params: { fetch_ids: fetch, "course_ids[]": courseIds } }).then(
+        (response) ->
+          if fetchIds is true
+            _courseIds = response.data.course_ids
+          else
+            GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
+            GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+            GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+            GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignment)
+            GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
+            loadingProgress("Loaded #{courses.length}/#{_courseIds.length} courses")
+            GradeCraftAPI.logResponse(response)
+        , (response) ->
+          GradeCraftAPI.logResponse(response)
       )
-    )
 
-  getCourseCreation = () ->
-    $http.get("/api/course_creation").then(
-      (response) ->
-        GradeCraftAPI.loadItem(courseCreation, "course_creation", response.data)
-        GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignments)
-        GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
-        GradeCraftAPI.setTermFor("teams", response.data.meta.term_for_teams)
-        GradeCraftAPI.logResponse(response)
-      , (response) ->
-        GradeCraftAPI.logResponse(response)
-    )
+    # fetch courses in batches
+    getBatchedCourses = (batchSize=50) ->
+      _loadingProgress = "Loading courses..."
+      getCourses(true).then(() ->
+        return unless _courseIds.length
 
-  # Get all students in the current course
-  getStudents = () ->
-    $http.get("/api/students").then(
-      (response) ->
-        angular.copy(response.data, students)
-        GradeCraftAPI.logResponse(response.data)
-      , (response) ->
-        GradeCraftAPI.logResponse(response.data)
-    )
+        promises = []
+        _.each(_.chunk(_courseIds, batchSize), (batch) ->
+          promises.push(getCourses(false, batch...))
+        )
 
-  updateCourseCreationItem = (item) ->
-    params = {"course_creation" : { "#{item.name}" : item.done }}
-    $http.put("/api/course_creation", params).then(
-      (response) ->
-        GradeCraftAPI.logResponse(response)
-      , (response) ->
-        GradeCraftAPI.logResponse(response)
-    )
+        $q.all(promises).then(() ->
+          TableFilterService.original(courses)
+          _courseIds.length = 0
+          loadingProgress(null)
+        )
+      )
 
-  {
-    staff: staff
-    course: course
-    courses: courses
-    students: students
-    loadingProgress: loadingProgress
-    hasCourses: hasCourses
-    termFor: termFor
-    getCourse: getCourse
-    getCourses: getCourses
-    getBatchedCourses: getBatchedCourses
-    getCourseCreation: getCourseCreation
-    getStudents: getStudents
-    updateCourseCreationItem: updateCourseCreationItem
-    courseCreation: courseCreation
-    creationChecklist: creationChecklist
-  }
+    getCourseCreation = () ->
+      $http.get("/api/course_creation").then(
+        (response) ->
+          GradeCraftAPI.loadItem(courseCreation, "course_creation", response.data)
+          GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignments)
+          GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+          GradeCraftAPI.setTermFor("teams", response.data.meta.term_for_teams)
+          GradeCraftAPI.logResponse(response)
+        , (response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+    # Get all students in the current course
+    getStudents = () ->
+      $http.get("/api/students").then(
+        (response) ->
+          angular.copy(response.data, students)
+          GradeCraftAPI.logResponse(response.data)
+        , (response) ->
+          GradeCraftAPI.logResponse(response.data)
+      )
+
+    updateCourseCreationItem = (item) ->
+      params = {"course_creation" : { "#{item.name}" : item.done }}
+      $http.put("/api/course_creation", params).then(
+        (response) ->
+          GradeCraftAPI.logResponse(response)
+        , (response) ->
+          GradeCraftAPI.logResponse(response)
+      )
+
+    {
+      staff: staff
+      course: course
+      courses: courses
+      students: students
+      filteredCourses: filteredCourses
+      loadingProgress: loadingProgress
+      hasCourses: hasCourses
+      termFor: termFor
+      getCourse: getCourse
+      getCourses: getCourses
+      getBatchedCourses: getBatchedCourses
+      getCourseCreation: getCourseCreation
+      getStudents: getStudents
+      updateCourseCreationItem: updateCourseCreationItem
+      courseCreation: courseCreation
+      creationChecklist: creationChecklist
+    }
 ]

@@ -6,6 +6,7 @@
            "max"=>"{{paginationHelperCtrl.options.maxPages}}",
            "ng-model"=>"paginationHelperCtrl.currentPage",
            "ng-model-options"=>"{ getterSetter: true, updateOn: 'change blur' }"}
+  max pages: "{{paginationHelperCtrl.options.maxPages}}"
 
   %button.page-selector-page{"type"=>"button",
                              "ng-disabled"=>"paginationHelperCtrl.currentPage() === 1",

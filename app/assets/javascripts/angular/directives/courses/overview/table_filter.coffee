@@ -1,4 +1,4 @@
-@gradecraft.directive "coursesOverviewTableFilter", ["SortableService", (SortableService) ->
+@gradecraft.directive "coursesOverviewTableFilter", ["SortableService", "TableFilterService", (SortableService, TableFilterService) ->
   CoursesOverviewTableFilterCtrl = [() ->
     vm = this
     vm.selectedCriteria = "allCourses"
@@ -6,6 +6,7 @@
     vm.setSortCriteria = (criteriaType) ->
       SortableService.filterCriteria(vm.criteria[criteriaType])
       vm.selectedCriteria = criteriaType
+      TableFilterService.filterByExpression(vm.criteria[criteriaType])
 
     vm.criteria = {
       allCourses: (course) => true

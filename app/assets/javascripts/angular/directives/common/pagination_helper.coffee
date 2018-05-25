@@ -25,7 +25,7 @@
       if truncated is true
         [0, 1, 2, '..', vm.options.maxPages - 2, vm.options.maxPages - 1]
       else
-        range = [0..vm.options.maxPages]
+        range = if vm.options.maxPages == 1 then [0] else [0..vm.options.maxPages]
 
     vm.options.pageSize = @pageSize
   ]
@@ -42,6 +42,10 @@
       scope.$watch('paginationHelperCtrl.pageSize', (newValue, oldValue) ->
         return unless newValue?
         pages = _.chunk(scope.paginationHelperCtrl.collection, newValue)
+        PaginationService.setMaxPages(pages.length)
+      )
+      scope.$watch('paginationHelperCtrl.collection()', (newValue, oldValue) ->
+        pages = _.chunk(newValue, scope.paginationHelperCtrl.pageSize)
         PaginationService.setMaxPages(pages.length)
       )
   }
