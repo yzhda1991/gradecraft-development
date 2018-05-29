@@ -2,7 +2,17 @@
 
   gradeIds = []
 
-  postReleaseGrades = (assignmentId) ->
+  # If grade ids are for assorted assignment ids in the course
+  postRelease = () ->
+    $http.put("/api/assignments/grades/release", grade_ids: gradeIds).then(
+      (response) ->
+        GradeCraftAPI.logResponse(response)
+      , (error) ->
+        GradeCraftAPI.logResponse(error)
+    )
+
+  # If the grade ids all belong to a specific assignment in the course
+  postReleaseForAssignment = (assignmentId) ->
     $http.put("/api/assignments/#{assignmentId}/grades/release", grade_ids: gradeIds).then(
       (response) ->
         GradeCraftAPI.logResponse(response)
@@ -22,7 +32,8 @@
 
   {
     gradeIds: gradeIds
-    postReleaseGrades: postReleaseGrades
+    postRelease: postRelease
+    postReleaseForAssignment: postReleaseForAssignment
     addGradeIds: addGradeIds
     clearGradeIds: clearGradeIds
     hasSelectedGrades: hasSelectedGrades

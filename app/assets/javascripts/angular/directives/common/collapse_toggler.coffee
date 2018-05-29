@@ -3,14 +3,17 @@
 # For collapsing a page section
 # see predictor for working example
 # toggles .collapse on sibling div
-
+# Optional: specify data-collapsed-class attr on element to override class
 @gradecraft.directive "collapseToggler", ->
   restrict : 'C',
+  scope:
+    collapsedClass: '@'
   link: (scope, elm, attrs) ->
+    collapsedClass = scope.collapsedClass or "collapsed"
     elm.bind('click', (event)->
       unless angular.element(event.target).is('.coins, .coin-slot, .coin-stack, .coin-remove-icon, .coin-add-icon')
         event.preventDefault()
-        elm.siblings().toggleClass('collapsed')
+        elm.siblings().toggleClass(collapsedClass)
         elm.toggleClass('collapsed')
     )
     return

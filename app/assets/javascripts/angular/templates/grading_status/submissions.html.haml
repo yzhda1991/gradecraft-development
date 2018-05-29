@@ -1,0 +1,84 @@
+.form-subsection
+  %h4.center{"ng-if"=>"gsSubmissionsCtrl.loading"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading submissions...
+
+  %div{"ng-if"=>"!gsSubmissionsCtrl.loading && gsSubmissionsCtrl.submissions.length"}
+    %table.no-table-header
+      %thead
+        %tr
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{::gsSubmissionsCtrl.assignmentTerm}}",
+                              "data-sortable-predicate"=>"assignment_name"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"name",
+                              "data-sortable-predicate"=>"[student_name, group_name]",
+                              "width"=>"7%"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{::gsSubmissionsCtrl.teamTerm}}",
+                              "data-sortable-predicate"=>"team_name",
+                              "ng-if"=>"::gsSubmissionsCtrl.courseHasTeams",
+                              "width"=>"15%"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Date Submitted",
+                              "data-sortable-predicate"=>"submitted_at"}
+
+          %th{"scope"=>"col", "style"=>"min-width: 200px"}
+            %span.sr-only Actions
+
+      %tbody
+        %tr{"ng-repeat"=>"submission in gsSubmissionsCtrl.submissions | orderBy: gsSubmissionsCtrl.sortable.predicate : gsSubmissionsCtrl.sortable.reverse | filter: gsSubmissionsCtrl.searchCriteria()"}
+          -# Assignment name and path
+          %td
+            %a{"ng-href"=>"{{submission.assignment_path}}"} {{submission.assignment_name}}
+
+          -# Student name and path, if individually-graded
+          %td{"ng-if"=>"submission.individual_assignment"}
+            %a{"ng-href"=>"{{submission.student_path}}"} {{submission.student_name}}
+
+          -# Group name and path, if group-graded
+          %td{"ng-if"=>"!submission.individual_assignment"}
+            %a{"ng-href"=>"{{submission.group_path}}"} {{submission.group_name}}
+
+          -# Team name
+          %td{"ng-if"=>"::gsSubmissionsCtrl.courseHasTeams"}
+            %a{"ng-if"=>"gsSubmissionsCtrl.showTeamLink(submission)", "ng-href"=>"{{submission.team_path}}"} {{submission.team_name}}
+
+          -# Submitted at
+          %td {{submission.formatted_submitted_at}}
+
+          %td
+            .right
+              %ul.button-bar
+                -# See submission
+                %li
+                  %a.button{"ng-href"=>"{{submission.submission_path}}"}
+                    %i.fa.fa-eye
+                    See Submission
+
+                -# See existing grade
+                %li{"ng-if"=>"gsSubmissionsCtrl.showSeeGradeBtn(submission)"}
+                  %a.button{"ng-href"=>"{{submission.grade_path}}"}
+                    %i.fa.fa-eye
+                    See Grade
+
+                -# Edit existing grade, asks for confirmation
+                %li{"ng-if"=>"gsSubmissionsCtrl.showEditGradeBtn(submission)",
+                    "ng-bind-html"=>"gsSubmissionsCtrl.sanitize(submission.edit_grade_link)"}
+
+                -# Grade individual assignment
+                %li{"ng-if"=>"gsSubmissionsCtrl.showCreateGradeBtn(submission)"}
+                  %a.button{"data-method"=>"post",
+                            "rel"=>"nofollow",
+                            "ng-href"=>"{{submission.assignment_student_grade_path}}"}
+                    %i.fa.fa-check
+                    Grade
+
+                -# Grade group assignment
+                %li{"ng-if"=>"gsSubmissionsCtrl.showGroupGradeBtn(submission)"}
+                  %a{"ng-href"=>"{{submission.group_grade_path}}"}
+                    %i.fa.fa-check
+                    Grade

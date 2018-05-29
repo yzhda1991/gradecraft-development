@@ -8,7 +8,7 @@
 
       vm.releaseGrades = () ->
         return unless vm.hasSelectedGrades()
-        GradeReleaseService.postReleaseGrades(@assignmentId).then(
+        GradeReleaseService.postReleaseForAssignment(@assignmentId).then(
           () ->
             alert("#{GradeReleaseService.gradeIds.length} grade(s) successfully released")
             GradeReleaseService.clearGradeIds()
