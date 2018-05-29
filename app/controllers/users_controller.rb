@@ -178,7 +178,11 @@ class UsersController < ApplicationController
   def manually_activate
     @user = User.find(params[:id])
     @user.activate!
-    redirect_to session[:return_to] || dashboard_path, notice: "#{@user.first_name} #{@user.last_name} has been activated!" and return
+
+    respond_to do |format|
+      format.html { redirect_to session[:return_to] || dashboard_path, notice: "#{@user.first_name} #{@user.last_name} has been activated!" }
+      format.json { head :ok }
+    end
   end
 
   def activated
@@ -213,7 +217,16 @@ class UsersController < ApplicationController
 
   def flag
     @user = User.find(params[:id])
+
     FlaggedUser.toggle! current_course, current_user, @user.id
+
+    respond_to do |format|
+      format.js
+      format.json do
+        render json: { flagged: FlaggedUser.flagged?(current_course, current_user, @user.id), success: true },
+          status: :ok
+      end
+    end
   end
 
   # We don't allow students to edit their info directly

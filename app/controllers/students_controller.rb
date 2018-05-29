@@ -6,9 +6,6 @@ class StudentsController < ApplicationController
   # Lists all students in the course,
   # broken out by those being graded and auditors
   def index
-    render "index", Students::IndexPresenter.build(course: @course,
-                                                   current_user: current_user,
-                                                   team_id: params[:team_id])
   end
 
   # Displaying student profile to instructors

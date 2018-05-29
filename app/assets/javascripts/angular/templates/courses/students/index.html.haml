@@ -1,0 +1,179 @@
+-# custom sortable filters
+.clear
+  %courses-students-index-table-filter{"ng-if"=>"coursesStudentsIndexCtrl.anyStudents()"}
+
+%label
+  %span.sr-only Search Criteria
+  %input.search-input{"type"=>"search",
+                      "placeholder"=>"Search",
+                      "ng-model"=>"coursesStudentsIndexCtrl.searchCriteria",
+                      "ng-model-options"=>"{ updateOn: 'change blur' }"}
+
+%table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loadingCourse"}
+  %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
+  %thead
+    %tr
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Flag",
+                          "data-sortable-predicate"=>"flagged"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Rank",
+                          "data-sortable-predicate"=>"rank"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Avatar",
+                          "data-sortable-predicate"=>"avatar_file_name"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"First Name",
+                          "data-sortable-predicate"=>"first_name"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Last Name",
+                          "data-sortable-predicate"=>"last_name"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Pseudonym",
+                          "data-sortable-predicate"=>"display_name",
+                          "ng-if"=>"coursesStudentsIndexCtrl.displayPseudonyms()"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"{{coursesStudentsIndexCtrl.termFor('team')}}",
+                          "data-sortable-predicate"=>"team_name",
+                          "ng-if"=>"coursesStudentsIndexCtrl.courseHasTeams()"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Role",
+                          "data-sortable-predicate"=>"team_role",
+                          "ng-if"=>"coursesStudentsIndexCtrl.showRole()"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Score",
+                          "data-sortable-predicate"=>"score"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Level",
+                          "data-sortable-predicate"=>"earned_grade_scheme_element"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"{{coursesStudentsIndexCtrl.termFor('badges')}}",
+                          "data-sortable-predicate"=>"earned_badge_count",
+                          "ng-if"=>"coursesStudentsIndexCtrl.courseHasBadges()"}
+
+      %th.sortable-header{"scope"=>"col",
+                          "data-sortable-header-text"=>"Last Activity",
+                          "data-sortable-predicate"=>"last_activity_date"}
+
+      %th.options{"scope"=>"col"} Options
+
+  %tbody
+    %tr{"ng-if"=>"coursesStudentsIndexCtrl.batchLoadingProgress()"}
+      %td.center{"colspan"=>"13"}
+        %i.fa.fa-spinner.fa-spin.fa-fw
+        {{coursesStudentsIndexCtrl.batchLoadingProgress()}}
+
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria | filter: coursesStudentsIndexCtrl.searchCriteria"}
+      %td
+        %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
+          %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
+          %span{"ng-class"=>"student.auditing ? 'auditor' : 'graded'"}
+
+      -# Rank
+      %td {{student.rank}}
+
+      -# Avatar
+      %td
+        %img.img-rounded{"ng-if"=>"student.avatar_file_name",
+                         "ng-src"=>"{{student.avatar_file_name}}",
+                         "width"=>"30"}
+
+      -# First name
+      %td
+        %a{"ng-href"=>"{{student.student_path}}"} {{student.first_name}}
+
+      -# Last name
+      %td
+        %a{"ng-href"=>"{{student.student_path}}"} {{student.last_name}}
+
+      -# Display name
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.displayPseudonyms()"} {{student.display_name}}
+
+      -# Team
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasTeams()"}
+        %a{"ng-href"=>"{{coursesStudentsIndexCtrl.team(student.team_id).team_path}}", "ng-if"=>"student.team_id"}
+          {{coursesStudentsIndexCtrl.team(student.team_id).name}}
+
+      -# Team role
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.showRole()"} {{student.team_role}}
+
+      -# Points
+      %td {{student.formatted_score}}
+
+      -# Earned grade scheme element
+      %td {{student.earned_grade_scheme_element}}
+
+      -# Earned badges
+      %td{"ng-if"=>"coursesStudentsIndexCtrl.courseHasBadges()"}
+        %img{"ng-repeat"=>"earned_badge in coursesStudentsIndexCtrl.earnedBadgesForStudent(student.id)",
+             "ng-src"=>"{{earned_badge.badge_icon_url}}",
+             "ng-attr-alt"=>"{{earned_badge.badge_name}}",
+             "ng-attr-title"=>"{{earned_badge.badge_name}}",
+             "width"=>"20"}
+
+      -# Last activity
+      %td
+        %span{"ng-if"=>"student.last_activity_date"} {{student.formatted_last_activity_date}}
+
+      -# Options
+      %td
+        .button-container.dropdown
+          %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+            %i.fa.fa-cog
+            %i.fa.fa-caret-down
+
+          %ul.options-menu.dropdown-content
+
+            -# Preview as student
+            %li
+              %a{"ng-href"=>"{{student.preview_path}}"}
+                %i.fa.fa-eye
+                Preview as this student
+
+            -# Email student
+            %li
+              %a{"ng-href"=>"mailto:{{student.email}}"}
+                %i.fa.fa-envelope
+                Email
+
+            -# Edit student
+            %li{"ng-if"=>"::coursesStudentsIndexCtrl.linksVisible"}
+              %a{"ng-href"=>"{{student.edit_path}}"}
+                %i.fa.fa-edit
+                Edit
+
+            %li{"ng-if"=>"student.activated_for_course"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.toggleActivation(student)"}
+                %i.fa.fa-user-times
+                Deactivate
+
+            %li{"ng-if"=>"!student.activated_for_course"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.toggleActivation(student)"}
+                %i.fa.fa-flash
+                Reactivate
+
+            %li{"ng-if"=>"student.deleteable"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.deleteFromCourse(student)"}
+                %i.fa.fa-trash
+                Delete
+
+            %li{"ng-if"=>"coursesStudentsIndexCtrl.showActivateAccount(student)"}
+              %a{"ng-click"=>"coursesStudentsIndexCtrl.activateUser(student)"}
+                %i.fa.fa-check
+                Activate Account
+
+            -# Resend activation email
+            %li{"ng-if"=>"coursesStudentsIndexCtrl.showResendActivationEmail(student)"}
+              %a{"ng-href"=>"{{student.resend_activation_email_path}}"}
+                %i.fa.fa-envelope
+                Resend Activation Email

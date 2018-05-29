@@ -3,7 +3,6 @@
     AssignmentShowIndividualTableBodyCtrl = [() ->
       vm = this
       vm.sortable = SortableService
-      vm.loading = StudentService.isLoading
 
       vm.assignment = AssignmentService.assignment
       vm.assignmentType = AssignmentTypeService.assignmentType
@@ -45,8 +44,12 @@
         criteria.team_id = TeamService.selectedTeamId() if TeamService.selectedTeamId()?
         criteria
 
-      StudentService.getBatchedForAssignment(vm.assignment().id).then(() -> SortableService.predicate = "last_name")
+      _initialize(vm.assignment().id)
     ]
+
+    _initialize = (assignmentId) ->
+      SortableService.predicate = "last_name"
+      StudentService.getBatchedForAssignment(assignmentId)
 
     {
       scope:
