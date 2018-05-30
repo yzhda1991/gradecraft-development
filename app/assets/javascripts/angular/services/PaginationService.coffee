@@ -2,7 +2,7 @@
 
   options = {
     currentPage: 1
-    pageSize: undefined
+    pageSize: 25
     maxPages: undefined
   }
 

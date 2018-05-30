@@ -8,6 +8,11 @@
       return if page == '..'
       PaginationService.changePage(page)
 
+    vm.changePageSize = (size) ->
+      vm.options.pageSize = size
+      pages = _.chunk(vm.collection, size)
+      PaginationService.setMaxPages(pages.length)
+
     vm.atMaxPage = () -> vm.options.currentPage >= vm.options.maxPages
 
     vm.selected = (pageNum) -> vm.options.currentPage == pageNum
@@ -19,26 +24,18 @@
         [1, 2, 3, '..', vm.options.maxPages - 1, vm.options.maxPages]
       else
         range = if vm.options.maxPages == 1 then [1] else [1..vm.options.maxPages]
-
-    vm.options.pageSize = @pageSize
   ]
 
   {
     scope:
-      pageSize: '='
       collection: '='
     bindToController: true
     controller: PaginationHelperCtrl
     controllerAs: 'paginationHelperCtrl'
     templateUrl: 'common/pagination_helper.html'
     link: (scope, elem, attrs) ->
-      scope.$watch('paginationHelperCtrl.pageSize', (newValue, oldValue) ->
-        return unless newValue?
-        pages = _.chunk(scope.paginationHelperCtrl.collection, newValue)
-        PaginationService.setMaxPages(pages.length)
-      )
-      scope.$watch('paginationHelperCtrl.collection()', (newValue, oldValue) ->
-        pages = _.chunk(newValue, scope.paginationHelperCtrl.pageSize)
+      scope.$watch('paginationHelperCtrl.collection', (newValue, oldValue) ->
+        pages = _.chunk(newValue, PaginationService.options.pageSize)
         PaginationService.setMaxPages(pages.length)
       )
   }
