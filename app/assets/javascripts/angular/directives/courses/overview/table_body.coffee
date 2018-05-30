@@ -4,11 +4,12 @@
       vm = this
       vm.sortable = SortableService
 
-      # vm.courses = CourseService.courses
       vm.courses = CourseService.filteredCourses
-      vm.paginationOptions = PaginationService.options
       vm.loadingProgress = CourseService.loadingProgress
       vm.filterCriteria = SortableService.filterCriteria
+
+      vm.paginationOptions = PaginationService.options
+      vm.startFromIndex = PaginationService.startFromIndex
 
       vm.termFor = (term) -> CourseService.termFor(term)
     ]
