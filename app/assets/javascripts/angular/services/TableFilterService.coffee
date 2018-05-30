@@ -1,7 +1,9 @@
-@gradecraft.factory 'TableFilterService', ['$filter', ($filter) ->
+# Extends sort and filter logic to any given collection
+# Maintains a filtered collection for use with PaginationHelper directive,
+#   PaginationService
+@gradecraft.factory 'TableFilterService', ['SortableService', '$filter', (SortableService, $filter) ->
 
-  # the collection to filter on
-  _original = []
+  _original = []  # the collection to filter, sort on
   _filtered = []
 
   predicates = {
@@ -33,7 +35,11 @@
     filtered = _original
     filtered = $filter('filter')(filtered, predicates.searchTerm) if predicates.searchTerm?
     filtered = $filter('filter')(filtered, predicates.customFilter) if predicates.customFilter?
+    filtered = $filter('orderBy')(filtered, SortableService.predicate, SortableService.reverse) if SortableService.predicate?
     _filtered = filtered
+
+  # trigger an update on the collection each time the sort ordering changes
+  SortableService.callback(_updateFiltered)
 
   {
     original: original

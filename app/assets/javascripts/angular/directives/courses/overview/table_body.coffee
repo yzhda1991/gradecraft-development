@@ -1,12 +1,10 @@
-@gradecraft.directive "coursesOverviewTableBody", ["CourseService", "SortableService", "PaginationService", "TableFilterService",
-  (CourseService, SortableService, PaginationService, TableFilterService) ->
+@gradecraft.directive "coursesOverviewTableBody", ["CourseService", "PaginationService", "TableFilterService",
+  (CourseService, PaginationService, TableFilterService) ->
     CoursesOverviewTableBodyCtrl = [() ->
       vm = this
-      vm.sortable = SortableService
 
       vm.courses = CourseService.filteredCourses
       vm.loadingProgress = CourseService.loadingProgress
-      vm.filterCriteria = SortableService.filterCriteria
 
       vm.paginationOptions = PaginationService.options
       vm.startFromIndex = PaginationService.startFromIndex

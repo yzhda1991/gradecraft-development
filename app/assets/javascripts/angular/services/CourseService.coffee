@@ -1,3 +1,7 @@
+# Manages course API calls and associated data
+#
+# Utilizes TableFilterService in the event that there is a need to filter or
+# sort courses that are loaded via getBatchedCourses
 @gradecraft.factory 'CourseService', ['TableFilterService', '$http', 'GradeCraftAPI', '$q',
   (TableFilterService, $http, GradeCraftAPI, $q) ->
 

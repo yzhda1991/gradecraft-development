@@ -1,7 +1,8 @@
 %tr{"ng-if"=>"tableBodyCtrl.loadingProgress()"}
   %td.center{"colspan"=>"10"} {{tableBodyCtrl.loadingProgress()}}
 
-%tr{"ng-repeat"=>"course in tableBodyCtrl.courses() | startFrom: tableBodyCtrl.startFromIndex() | limitTo: tableBodyCtrl.paginationOptions.pageSize | orderBy: tableBodyCtrl.sortable.predicate : tableBodyCtrl.sortable.reverse"}
+-# Client-side pagination
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses() | startFrom: tableBodyCtrl.startFromIndex() | limitTo: tableBodyCtrl.paginationOptions.pageSize"}
   %td {{course.course_number}}
   %td
     %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}
