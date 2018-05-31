@@ -3,20 +3,20 @@
     Page:
     %input{"type"=>"number",
            "min"=>"1",
-           "max"=>"{{paginationHelperCtrl.options.maxPages}}",
+           "max"=>"{{paginationHelperCtrl.options.maxPages || 1}}",
            "ng-model"=>"paginationHelperCtrl.options.currentPage",
            "ng-model-options"=>"{ updateOn: 'change blur' }"}
 
   -# "<<"
   %button.page-selector-button{"type"=>"button",
-                               "ng-disabled"=>"paginationHelperCtrl.options.currentPage === 1",
-                               "ng-class"=>"{ 'disabled': paginationHelperCtrl.options.currentPage === 1 }",
+                               "ng-disabled"=>"!paginationHelperCtrl.hasItems() || paginationHelperCtrl.options.currentPage === 1",
+                               "ng-class"=>"{ 'disabled': !paginationHelperCtrl.hasItems() && paginationHelperCtrl.options.currentPage === 1 }",
                                "ng-click"=>"paginationHelperCtrl.changePage(1)"} <<
 
   -# "<"
   %button.page-selector-button{"type"=>"button",
-                               "ng-disabled"=>"paginationHelperCtrl.options.currentPage === 1",
-                               "ng-class"=>"{ 'disabled': paginationHelperCtrl.options.currentPage === 1 }",
+                               "ng-disabled"=>"!paginationHelperCtrl.hasItems() || paginationHelperCtrl.options.currentPage === 1",
+                               "ng-class"=>"{ 'disabled': !paginationHelperCtrl.hasItems() && paginationHelperCtrl.options.currentPage === 1 }",
                                "ng-click"=>"paginationHelperCtrl.setPageOffset(1, false)"} <
 
   %button.page-selector-button{"ng-if"=>"paginationHelperCtrl.options.maxPages && paginationHelperCtrl.options.maxPages <= 5",
@@ -32,14 +32,14 @@
 
   -# ">"
   %button.page-selector-button{"type"=>"button",
-                               "ng-disabled"=>"paginationHelperCtrl.atMaxPage()",
-                               "ng-class"=>"{ 'disabled': paginationHelperCtrl.atMaxPage() }",
+                               "ng-disabled"=>"!paginationHelperCtrl.hasItems() || paginationHelperCtrl.atMaxPage()",
+                               "ng-class"=>"{ 'disabled': !paginationHelperCtrl.hasItems() && paginationHelperCtrl.atMaxPage() }",
                                "ng-click"=>"paginationHelperCtrl.setPageOffset(1)"} >
 
   -# ">>"
   %button.page-selector-button{"type"=>"button",
-                               "ng-disabled"=>"paginationHelperCtrl.atMaxPage()",
-                               "ng-class"=>"{ 'disabled': paginationHelperCtrl.atMaxPage() }",
+                               "ng-disabled"=>"!paginationHelperCtrl.hasItems() || paginationHelperCtrl.atMaxPage()",
+                               "ng-class"=>"{ 'disabled': !paginationHelperCtrl.hasItems() && paginationHelperCtrl.atMaxPage() }",
                                "ng-click"=>"paginationHelperCtrl.changePage(paginationHelperCtrl.options.maxPages)"} >>
 
   .page-size-buttons

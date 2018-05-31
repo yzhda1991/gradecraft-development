@@ -13,6 +13,7 @@
       pages = _.chunk(vm.collection, size)
       PaginationService.setMaxPages(pages.length)
 
+    vm.hasItems = () -> vm.collection.length > 0
     vm.atMaxPage = () -> vm.options.currentPage >= vm.options.maxPages
 
     vm.selected = (pageNum) -> vm.options.currentPage == pageNum
