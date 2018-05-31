@@ -2,7 +2,7 @@
   %td.center{"colspan"=>"10"} {{tableBodyCtrl.loadingProgress()}}
 
 -# Client-side pagination
-%tr{"ng-repeat"=>"course in tableBodyCtrl.courses() | startFrom: tableBodyCtrl.startFromIndex() | limitTo: tableBodyCtrl.paginationOptions.pageSize"}
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses.filtered | startFrom: tableBodyCtrl.startFromIndex() | limitTo: tableBodyCtrl.paginationOptions.pageSize"}
   %td {{course.course_number}}
   %td
     %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}

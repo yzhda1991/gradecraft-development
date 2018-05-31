@@ -3,8 +3,10 @@
 #   PaginationService
 @gradecraft.factory 'TableFilterService', ['SortableService', '$filter', (SortableService, $filter) ->
 
-  _original = []  # the collection to filter, sort on
-  _filtered = []
+  collections = {
+    original: []
+    filtered: []
+  }
 
   predicates = {
     teamId: undefined
@@ -12,15 +14,9 @@
     customFilter: undefined
   }
 
-  original = (arr) ->
-    if angular.isDefined(arr)
-      angular.copy(arr, _original)
-      angular.copy(_original, _filtered)
-    else
-      _original
-
-  filtered = (arr) ->
-    if angular.isDefined(arr) then angular.copy(arr, _filtered) else _filtered
+  setCollections = (arr) ->
+    angular.copy(arr, collections.original)
+    angular.copy(arr, collections.filtered)
 
   filterByTerm = (term) ->
     predicates.searchTerm = { $: term }
@@ -32,18 +28,18 @@
 
   # updates the filtered collection based on the defined criteria
   _updateFiltered = () ->
-    filtered = _original
+    filtered = collections.original
     filtered = $filter('filter')(filtered, predicates.searchTerm) if predicates.searchTerm?
     filtered = $filter('filter')(filtered, predicates.customFilter) if predicates.customFilter?
     filtered = $filter('orderBy')(filtered, SortableService.predicate, SortableService.reverse) if SortableService.predicate?
-    _filtered = filtered
+    collections.filtered = filtered
 
   # trigger an update on the collection each time the sort ordering changes
   SortableService.callback(_updateFiltered)
 
   {
-    original: original
-    filtered: filtered
+    setCollections: setCollections
+    collections: collections
     predicates: predicates
     filterByTerm: filterByTerm
     filterByExpression: filterByExpression

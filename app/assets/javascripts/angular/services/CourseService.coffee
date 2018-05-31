@@ -12,7 +12,7 @@
     _courseIds = []
     _loadingProgress = undefined
 
-    filteredCourses = TableFilterService.filtered
+    filteredCourses = TableFilterService.collections
 
     course = () -> courses[0]
 
@@ -47,6 +47,7 @@
             _courseIds = response.data.course_ids
           else
             GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
+            TableFilterService.setCollections(courses)
             GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
             GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
             GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignment)
@@ -69,7 +70,6 @@
         )
 
         $q.all(promises).then(() ->
-          TableFilterService.original(courses)
           _courseIds.length = 0
           loadingProgress(null)
         )
