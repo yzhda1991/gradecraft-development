@@ -5,7 +5,8 @@
     - if current_course.published || impersonating?
       .page-header
         %h1.pagetitle= title
-      -# = render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course, current_user: current_student) }
+      - if ! impersonating?
+        = render partial: "info/student_onboarding", locals:  { presenter: Info::DashboardCourseRulesPresenter.new(course: current_course, current_user: current_student) }
       = render partial: "layouts/content"
     - else
       = render partial: "layouts/course_unpublished"

@@ -1,14 +1,13 @@
-.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-label': 'Student Onboarding', 'data-first-load': current_user.course_memberships.where(course: current_course).first.has_seen_course_onboarding? ? 'false' : 'true' }
+.modal-overlay#modal-window{'aria-hidden': 'true', role: 'dialog', 'aria-label': 'Student Onboarding', 'data-first-load': current_user.onboarded?(current_course) ? 'false' : 'true' }
   .modal-wrapper.modal-content#modal-holder{role: "document"}
     .modal-slider.onboarding-slides
       = render partial: "info/student_onboarding/student_onboarding_slide1"
       = render partial: "info/student_onboarding/student_onboarding_slide2"
       = render partial: "info/student_onboarding/student_onboarding_slide3"
       = render partial: "info/student_onboarding/student_onboarding_slide4"
-      = render partial: "info/student_onboarding/student_onboarding_slide5"
-      -# , locals: {presenter: presenter}
+      = render partial: "info/student_onboarding/student_onboarding_slide5", locals: { presenter: presenter }
 
-      -# - if presenter.has_course_specific_features?
-      -#   = render partial: "info/student_onboarding/student_onboarding_slide6", locals: { presenter: presenter }
+      - if presenter.has_course_specific_features?
+        = render partial: "info/student_onboarding/student_onboarding_slide6", locals: { presenter: presenter }
 
     %button.btn-close#modal-close{type: 'submit', 'aria-label': 'close'}= glyph(:times)
