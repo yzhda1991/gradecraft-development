@@ -1,3 +1,4 @@
+# rubocop:disable AndOr
 class API::CoursesController < ApplicationController
   before_action :ensure_staff?, only: :show
   before_action :use_current_course, only: [:analytics, :one_week_analytics]
