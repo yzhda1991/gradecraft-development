@@ -33,24 +33,14 @@
 * Redis
 
 ## Installation instructions for development:
-### Option 1
-#### Local Setup
-1. Clone repository
-1. Run `cp config/database.yml.sample config/database.yml` (within the file, replace ```username``` with your current username
-1. Run `cp config/mongoid.yml.sample config/mongoid.yml`
-1. Run `cp .env.sample .env`
-1. Run `bundle install`
-1. Run `bundle exec rake db:create`
-1. Optional: run `bundle exec rake db:sample`
-1. Run `foreman start`
 
-##### Note: Testing Emails in Development
-1. gem install mailcatcher
-2. run 'mailcatcher' in terminal
-3. visit http://127.0.0.1:1080/
+### (Preferred) Option 1: Local Setup
 
-### Option 2 (No longer supported at this time)
-#### Development Environment with Vagrant
+See details [here](https://github.com/UM-USElab/gradecraft-development/wiki/Installation-Notes).
+
+### Option 2: Vagrant
+**Note that this solution is no longer maintained**
+
 1. Install Vagrant (https://www.vagrantup.com/)
 2. Clone repository
 3. `vagrant up`
@@ -58,16 +48,25 @@
 5. `cd /vagrant`
 6. `foreman start`
 7. Browse to [http://localhost:5000/](http://localhost:5000/)
-    - See db/samples.rb for dev usernames and passwords
+
+See db/samples.rb for dev usernames and passwords
+
+## Testing Emails Locally
+
+1. `gem install mailcatcher`
+2. Run `mailcatcher` in terminal
+3. Visit `http://127.0.0.1:1080`. Emails are routed through to the web interface.
+
+Modify action_mailer config settings in development.rb if needed
 
 ## Linting code
 
 Note: Both rubocop and coffeelint are installed directly on your machine, as they are
-not required for developement, and thus are not specified within the gemfile or node package.
+not required for development, and thus are not specified within the gemfile or node package.
 
 ### To lint ruby:
 
-install rubocop:
+Install rubocop:
 
 `gem install rubocop`
 
@@ -77,7 +76,7 @@ then
 
 ### To lint coffeescript:
 
-install coffeelint:
+Install coffeelint:
 
 `npm install -g coffeelint`
 
@@ -95,7 +94,7 @@ to lint a single file:
 
 ### To lint javascript:
 
-install jslint:
+Install jslint:
 
 `npm install -g eslint`
 
@@ -108,13 +107,13 @@ to lint the javacripts directory:
 To run all of the spec examples, you can run the following (this is also the default rake task):
 
 ```
-bundle exec rake spec
+bundle exec rails spec
 ```
 
 To run all of the spec examples with code coverage, you can run the following:
 
 ```
-bundle exec rake spec:coverage
+bundle exec rails spec:coverage
 ```
 
 ## Contributing
