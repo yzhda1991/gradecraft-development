@@ -12,7 +12,6 @@
       vm.studentEarnedBadges = StudentService.earnedBadges
       vm.batchLoadingProgress = StudentService.loadingProgress
 
-      vm.anyStudents = () -> _.some(vm.students)
       vm.termFor = (term) -> StudentService.termFor(term)
       vm.flagStudent = (student) -> StudentService.flag(student)
       vm.activateUser = (student) -> StudentService.activate(student)
@@ -22,6 +21,7 @@
 
       vm.courseHasTeams = () -> vm.course().has_teams
       vm.courseHasBadges = () -> vm.course().has_badges
+      vm.studentsLoaded = () -> not StudentService.loadingProgress()? and _.some(vm.students)
 
       vm.showRole = () -> vm.courseHasTeams() && vm.course().has_team_roles
       vm.displayPseudonyms = () -> vm.course().has_in_team_leaderboards || vm.course().has_character_names
