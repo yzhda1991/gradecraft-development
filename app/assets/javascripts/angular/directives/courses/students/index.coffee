@@ -48,7 +48,7 @@
           vm.loadingCourse = false
           StudentService.getBatchedForCourse(vm.courseId).then(() ->
             SortableService.reverse = true
-            SortableService.predicate = "score"
+            SortableService.predicate = ["rank", "last_name"]
           )
         , (response) ->
           console.error("Failed to load course data")

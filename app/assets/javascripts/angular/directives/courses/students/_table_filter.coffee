@@ -27,10 +27,10 @@
   ]
 
   _initialize = (vm) ->
+    vm.setSortCriteria("leaderboard")
     ranked = _.filter(StudentService.students, "rank")
     bottom10 = _.takeRight(orderBy(ranked, "rank"), 10)
     vm.bottom10 = _.pluck(bottom10, "id")
-    vm.setSortCriteria("leaderboard")
 
   _resetSort = () ->
     SortableService.predicate = "rank"
