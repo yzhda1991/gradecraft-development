@@ -74,7 +74,6 @@
 //= require image_upload
 //= require student_dashboard
 //= require onboarding
-//= require dynatable_course_index
 //= require public_pages
 //= require statuspages
 //= require earned_badges

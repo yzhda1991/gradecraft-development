@@ -1,0 +1,66 @@
+.table-filter-wrapper
+  .filter-container
+    %p Filter:
+    .filter-buttons
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'allCourses'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('allCourses')"}
+        %i.fa.fa-hand-spock-o
+        All Courses
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'active'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('active')"}
+        %i.fa.fa-hourglass-half
+        Active
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'inactive'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('inactive')"}
+        %i.fa.fa-hourglass-end
+        Inactive
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'published'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('published')"}
+        %i.fa.fa-star
+        Published
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'unpublished'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('unpublished')"}
+        %i.fa.fa-star-half-empty
+        Unpublished
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'badges'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('badges')"}
+        %i.fa.fa-shield
+        Badges
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'sections'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('sections')"}
+        %i.fa.fa-users
+        Sections
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'paid'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('paid')"}
+        %i.fa.fa-dollar
+        Paid
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'unpaid'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('unpaid')"}
+        %i.fa.fa-credit-card
+        Unpaid

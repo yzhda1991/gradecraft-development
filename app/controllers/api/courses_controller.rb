@@ -1,14 +1,20 @@
+# rubocop:disable AndOr
 class API::CoursesController < ApplicationController
   before_action :ensure_staff?, only: :show
   before_action :use_current_course, only: [:analytics, :one_week_analytics]
 
-  # accessed by the dashboard
   # GET api/courses
   def index
-    @courses = current_user.courses.map do |c|
-      { name: c.formatted_long_name, id: c.id, search_string: c.searchable_name }
+    if current_user_is_admin?
+      @courses = Course.all
+
+      render json: MultiJson.dump(course_ids: @courses.pluck(:id)), status: :ok \
+        and return if params[:fetch_ids] == "1"
+
+      @courses = @courses.where(id: params[:course_ids]) if params[:course_ids].present?
+    else
+      @courses = current_user.courses
     end
-    render json: MultiJson.dump(@courses)
   end
 
   # GET /api/courses/:id

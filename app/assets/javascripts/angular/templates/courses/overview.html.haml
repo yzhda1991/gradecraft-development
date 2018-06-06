@@ -1,0 +1,27 @@
+%courses-overview-table-filter{"ng-if"=>"coursesOverviewCtrl.hasCourses()"}
+
+%label
+  %span.sr-only Search Criteria
+  %input.table-search-input{"type"=>"search",
+                            "placeholder"=>"Search",
+                            "ng-if"=>"coursesOverviewCtrl.hasCourses()",
+                            "ng-model"=>"coursesOverviewCtrl.searchCriteria",
+                            "ng-model-options"=>"{ updateOn: 'change blur', getterSetter: true }"}
+
+%div
+  %table.no-table-header
+    %caption.sr-only Course Overview
+    %thead
+      %tr
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Course No", "data-sortable-predicate"=>"course_number"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Name", "data-sortable-predicate"=>"name"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Instructor(s)", "data-sortable-predicate"=>"staff"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Semester", "data-sortable-predicate"=>"semester"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Year", "data-sortable-predicate"=>"year"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Total Points", "data-sortable-predicate"=>"total_points"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"# of Students", "data-sortable-predicate"=>"student_count"}
+        %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Created", "data-sortable-predicate"=>"created_at"}
+        %th{"scope"=>"col", "style"=>"text-align: right"} Downloads
+        %th.options{"scope"=>"col"} Options
+
+    %tbody.courses-overview-table-body{"data-search-criteria"=>"coursesOverviewCtrl.searchCriteria"}

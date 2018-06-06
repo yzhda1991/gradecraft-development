@@ -16,7 +16,7 @@ class Course < ActiveRecord::Base
   # of the current course
   Role.all.each do |role|
     define_method(role.pluralize) do
-      User.with_role_in_course(role, self)
+      User.with_role_in_courses(role, self)
     end
   end
 
@@ -24,7 +24,7 @@ class Course < ActiveRecord::Base
   # Note that this is different from is_staff? which currently
   # includes Admin users
   def staff
-    User.with_role_in_course("staff", self)
+    User.with_role_in_courses("staff", self)
   end
 
   def instructors_of_record

@@ -1,0 +1,73 @@
+%tr{"ng-if"=>"tableBodyCtrl.loadingProgress()"}
+  %td.center{"colspan"=>"10"} {{tableBodyCtrl.loadingProgress()}}
+
+%tr{"ng-repeat"=>"course in tableBodyCtrl.courses | filter: tableBodyCtrl.searchCriteria | filter: tableBodyCtrl.filterCriteria() | orderBy: tableBodyCtrl.sortable.predicate : tableBodyCtrl.sortable.reverse"}
+  %td {{course.course_number}}
+  %td
+    %a{"ng-href"=>"{{course.change_course_path}}"} {{course.name}}
+  %td
+    %ul
+      %li{"ng-repeat"=>"staff in course.staff"} {{staff.name}}
+  %td {{course.semester}}
+  %td {{course.year}}
+  %td {{course.formatted_total_points}}
+  %td {{course.student_count}}
+  %td {{course.formatted_created_at}}
+  %td
+    .button-container.dropdown
+      %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Downloads"}
+        %i.fa.fa-cloud-download
+        %i.fa.fa-caret-down
+      %ul.options-menu.dropdown-content
+        %li
+          %a{"ng-href"=>"{{course.export_earned_badges_path}}"} Awarded Badges
+        %li
+          %a{"ng-href"=>"{{course.research_gradebook_path}}"} Research Grades
+        %li
+          %a{"ng-href"=>"{{course.final_grades_path}}"} Final Grades
+        %li
+          %a.capitalize{"ng-href"=>"{{course.export_structure_assignments_path}}"} {{tableBodyCtrl.termFor("assignment")}} Structure
+        %li
+          %a.capitalize{"ng-href"=>"{{course.submissions_path}}"} {{tableBodyCtrl.termFor("assignment")}} Submissions
+        %li
+          %a.capitalize{"ng-href"=>"{{course.export_all_scores_assignment_types_path}}"} {{tableBodyCtrl.termFor("assignment_type")}} Summaries
+        %li
+          %a{"ng-href"=>"{{course.gradebook_file_path}}"} Full Gradebook
+        %li{"ng-if"=>"course.student_weighted"}
+          %a{"ng-href"=>"{{course.multiplied_gradebook_path}}"} Multipled Gradebook
+        %li
+          %a.capitalize{"ng-href"=>"{{course.export_structure_badges_path}}"} {{tableBodyCtrl.termFor("badges")}}
+        %li
+          %a{"ng-href"=>"{{course.export_structure_grade_scheme_elements_path}}"} Grading Scheme
+  %td
+    .button-container.dropdown
+      %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+        %i.fa.fa-cog
+        %i.fa.fa-caret-down
+      %ul.options-menu.dropdown-content
+        %li
+          %a{"ng-href"=>"{{course.edit_course_path}}"}
+            %i.fa.fa-edit
+            Edit
+        %li
+          %a{"ng-href"=>"{{course.copy_courses_path}}",
+             "data-disable-with"=>"Copying...",
+             "data-method"=>"copy",
+             "rel"=>"nofollow"}
+            %i.fa.fa-edit
+            Copy
+        %li
+          %a{"ng-href"=>"{{course.copy_courses_with_students_path}}",
+             "data-disable-with"=>"Copying...",
+             "data-method"=>"copy",
+             "rel"=>"nofollow"}
+            %i.fa.fa-edit
+            Copy + Students
+        %li
+          %a{"ng-href"=>"{{course.course_path}}",
+             "data-disable-with"=>"Deleting...",
+             "data-confirm"=>"This will delete {{course.name}} - are you sure?",
+             "data-method"=>"delete",
+             "rel"=>"nofollow"}
+            %i.fa.fa-trash
+            Delete

@@ -1,11 +1,11 @@
-# Manages state of Badges including API calls.
-# Can be used independently, or via another service (see PredictorService)
+@gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
 
-@gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
-
+  staff = []
   courses = []
   students = []
   courseCreation = {}
+  _courseIds = []
+  _loadingProgress = undefined
 
   course = () -> courses[0]
 
@@ -13,8 +13,11 @@
     return [] if !courseCreation.checklist
     return courseCreation.checklist
 
-  termFor = (article) ->
-    GradeCraftAPI.termFor(article)
+  hasCourses = () -> _.some(courses)
+
+  loadingProgress = (progress) -> if angular.isDefined(progress) then _loadingProgress = progress else _loadingProgress
+
+  termFor = (article) -> GradeCraftAPI.termFor(article)
 
   #------ API Calls -----------------------------------------------------------#
 
@@ -27,6 +30,41 @@
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
+    )
+
+  getCourses = (fetchIds=false, courseIds...) ->
+    fetch = if fetchIds is true then 1 else 0
+    $http.get("/api/courses", { params: { fetch_ids: fetch, "course_ids[]": courseIds } }).then(
+      (response) ->
+        if fetchIds is true
+          _courseIds = response.data.course_ids
+        else
+          GradeCraftAPI.loadMany(courses, response.data, { "include" : ["staff"] })
+          GradeCraftAPI.setTermFor("badges", response.data.meta.term_for_badges)
+          GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+          GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignment)
+          GradeCraftAPI.setTermFor("assignment_type", response.data.meta.term_for_assignment_type)
+          loadingProgress("Loaded #{courses.length}/#{_courseIds.length} courses")
+          GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  # fetch courses in batches
+  getBatchedCourses = (batchSize=50) ->
+    _loadingProgress = "Loading courses..."
+    getCourses(true).then(() ->
+      return unless _courseIds.length
+
+      promises = []
+      _.each(_.chunk(_courseIds, batchSize), (batch) ->
+        promises.push(getCourses(false, batch...))
+      )
+
+      $q.all(promises).then(() ->
+        _courseIds.length = 0
+        loadingProgress(null)
+      )
     )
 
   getCourseCreation = () ->
@@ -61,10 +99,16 @@
     )
 
   {
+    staff: staff
     course: course
+    courses: courses
     students: students
+    loadingProgress: loadingProgress
+    hasCourses: hasCourses
     termFor: termFor
     getCourse: getCourse
+    getCourses: getCourses
+    getBatchedCourses: getBatchedCourses
     getCourseCreation: getCourseCreation
     getStudents: getStudents
     updateCourseCreationItem: updateCourseCreationItem

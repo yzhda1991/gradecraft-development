@@ -44,6 +44,10 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
 
   # Format a single model from JSONAPI response.data section.
   # response is needed in options only if including from "relationships"
+  #
+  # constructs a filter predicate for lodash _.filter, _.find
+  # based on type and id and whether the item has an object
+  # or an array of relationships
   dataItem = (item, response={}, options={"include":[]})->
     # attach JSON API type to attributes ("badges", "assignments", etc.)
     item.attributes.type = item.type
@@ -51,14 +55,24 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     # attach associated models from included list within
     _.each(options.include, (included)->
       return if !response.included || !item.relationships || !item.relationships[included]
-      child =  _.find(response.included,
-        {id: item.relationships[included].data.id,
-        type: item.relationships[included].data.type}
-      )
-      item.attributes[included] = child.attributes if child
+
+      if Array.isArray(item.relationships[included].data)
+        related = {
+          ids: _.pluck(item.relationships[included].data, "id")
+          types: _.pluck(item.relationships[included].data, "type")
+        }
+        predicate = (item) => item.id in related.ids && item.type in related.types
+        relationships = _.filter(response.included, predicate)
+        item.attributes[included] = _.pluck(relationships, "attributes") if relationships?
+      else
+        predicate = {
+          id: item.relationships[included].data.id
+          type: item.relationships[included].data.type
+        }
+        relationship = _.find(response.included, predicate)
+        item.attributes[included] = relationship.attributes if relationship?
     )
     item.attributes
-
 
   # transfer models from api response data into the model array
   loadMany = (modelArray, response, options={"include":[]})->
@@ -101,7 +115,7 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
         article[field] = new Date(article[field]);
     )
 
-  return {
+  {
     termFor: termFor
     setTermFor: setTermFor
     logResponse: logResponse
