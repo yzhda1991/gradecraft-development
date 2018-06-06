@@ -43,7 +43,6 @@
     ]
 
     _initialize = (vm) ->
-      SortableService.reverse = true
       SortableService.predicate = "rank"
 
       CourseService.getCourse(vm.courseId).then(

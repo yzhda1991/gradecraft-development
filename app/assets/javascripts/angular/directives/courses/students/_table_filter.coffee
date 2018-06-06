@@ -9,7 +9,6 @@
       vm.selectedCriteria = criteriaType
       SortableService.filterCriteria(vm.criteria[criteriaType])
       StudentService.recalculateRanks()
-      _resetSort()
 
     # comparator functions for table filter
     vm.criteria = {
@@ -31,10 +30,6 @@
     ranked = _.filter(StudentService.students, "rank")
     bottom10 = _.takeRight(orderBy(ranked, "rank"), 10)
     vm.bottom10 = _.pluck(bottom10, "id")
-
-  _resetSort = () ->
-    SortableService.predicate = "rank"
-    SortableService.reverse = false
 
   {
     bindToController: true
