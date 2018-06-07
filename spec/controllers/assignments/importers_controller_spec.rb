@@ -35,9 +35,11 @@ describe Assignments::ImportersController do
     describe "GET download" do
       it "returns sample csv data" do
         get :download, params: { importer_provider_id: :csv }, format: :csv
-        expect(response.body).to \
-          include("Assignment Name", "Assignment Type", "Point Total", "Description",
-            "Due Date (mm/dd/yyyy hh:mm:ss am/pm)")
+        expect(response.body).to include(
+          "Assignment ID", "Name", "Assignment Type", "Point Total", "Description",
+          "Assignment Purpose", "Open At", "Due At", "Accepts Submissions", "Accept Until",
+          "Submissions Count", "Grades Count", "Created At", "Required", "Learning Objectives"
+        )
       end
     end
 

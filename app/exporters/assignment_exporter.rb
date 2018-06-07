@@ -4,7 +4,7 @@ class AssignmentExporter
       "Assignment ID", "Name", "Assignment Type", "Point Total", "Description",
       "Assignment Purpose", "Open At", "Due At", "Accepts Submissions", "Accept Until",
       "Submissions Count", "Grades Count", "Created At", "Required", "Learning Objectives"
-    ]
+    ].freeze
 
   def export(course)
     CSV.generate do |csv|
