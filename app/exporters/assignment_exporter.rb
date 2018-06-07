@@ -1,7 +1,14 @@
 class AssignmentExporter
+
+  FORMAT = [
+      "Assignment ID", "Name", "Assignment Type", "Point Total", "Description",
+      "Assignment Purpose", "Open At", "Due At", "Accepts Submissions", "Accept Until",
+      "Submissions Count", "Grades Count", "Created At", "Required", "Learning Objectives"
+    ]
+
   def export(course)
     CSV.generate do |csv|
-      csv << baseline_headers
+      csv << FORMAT
       course.assignments.each do |a|
         csv << [
           a.id, a.name, a.assignment_type.name, a.full_points, a.description,
@@ -11,15 +18,5 @@ class AssignmentExporter
         ]
       end
     end
-  end
-
-  private
-
-  def baseline_headers
-    [
-      "Assignment ID", "Name", "Assignment Type", "Point Total", "Description",
-      "Assignment Purpose", "Open At", "Due At", "Accepts Submissions", "Accept Until",
-      "Submissions Count", "Grades Count", "Created At", "Required", "Learning Objectives"
-    ]
   end
 end

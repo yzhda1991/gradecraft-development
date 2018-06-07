@@ -9,6 +9,16 @@ describe AssignmentExporter do
       expect(csv).to eq "Assignment ID,Name,Assignment Type,Point Total,Description,Assignment Purpose,Open At,Due At,Accepts Submissions,Accept Until,Submissions Count,Grades Count,Created At,Required,Learning Objectives\n"
     end
 
+    it "returns the header list for alignment with import" do
+      expect(AssignmentExporter::FORMAT).to eq(
+        [
+          "Assignment ID", "Name", "Assignment Type", "Point Total", "Description",
+          "Assignment Purpose", "Open At", "Due At", "Accepts Submissions", "Accept Until",
+          "Submissions Count", "Grades Count", "Created At", "Required", "Learning Objectives"
+        ]
+      )
+    end
+
     it "generates a csv of assignments if present" do
       assignment = create(:assignment, course: course)
 
