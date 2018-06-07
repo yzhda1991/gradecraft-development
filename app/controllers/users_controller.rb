@@ -13,10 +13,10 @@ class UsersController < ApplicationController
   before_action :ensure_admin?, only: [:index, :destroy]
   before_action :ensure_app_environment?, only: [:new_external, :create_external]
   before_action :ensure_staff?,
-    except: [:activate, :activated, :activated_external, :activate_set_password, :edit_profile, :update_profile, :new_external, :create_external]
+    except: [:activate, :activated, :activated_external, :activate_set_password, :activate_via_google, :edit_profile, :update_profile, :new_external, :create_via_google, :create_external]
   before_action :save_referer, only: [:manually_activate, :resend_activation_email]
-  skip_before_action :require_login, only: [:activate, :activated, :activate_set_password, :new_external, :create_external, :activated_external]
-  skip_before_action :require_course_membership, only: [:activate, :activate_set_password, :activated, :new_external, :create_external, :activated_external]
+  skip_before_action :require_login, only: [:activate, :activated, :activate_set_password, :activate_via_google, :new_external, :create_via_google, :create_external, :activated_external]
+  skip_before_action :require_course_membership, only: [:activate, :activate_set_password, :activate_via_google, :activated, :new_external, :create_via_google, :create_external, :activated_external]
   before_action :use_current_course, only: [:import, :upload]
 
   def index
@@ -74,6 +74,16 @@ class UsersController < ApplicationController
     else
       render :new_external
     end
+  end
+
+  def create_via_google
+    @user = User.new(username: params[:email], email: params[:email], first_name: params[:first_name], last_name: params[:last_name])
+    if @user.save
+      @user.activate!
+    else
+      render :new_external
+    end
+    redirect_to new_external_courses_path(user_id: @user.id) and return
   end
 
   def edit
@@ -174,6 +184,10 @@ class UsersController < ApplicationController
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+  end
+
+  def activate_via_google
+    redirect_to "/auth/google_oauth2/" and return
   end
 
   def manually_activate

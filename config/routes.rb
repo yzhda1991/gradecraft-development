@@ -284,9 +284,11 @@ Rails.application.routes.draw do
     member do
       get :activate
       get :activate_set_password
+      get :activate_via_google
       get :resend_activation_email
       put :manually_activate
       post :activate_set_password, action: :activated
+      post :activate_via_google, action: :activated
       post :activate, action: :activated_external
       post :flag
     end
@@ -298,6 +300,7 @@ Rails.application.routes.draw do
       post :upload
       get :new_external
       post :create_external
+      post :create_via_google
     end
   end
 
@@ -332,12 +335,14 @@ Rails.application.routes.draw do
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  resources :user_sessions, only: [:new, :create, :destroy] do
+  get :confirmation, to: "user_sessions#confirmation", as: :confirmation
+  get :student_confirmation, to: "user_sessions#student_confirmation", as: :student_confirmation_user_sessions
+  resources :user_sessions, only: [:new, :create, :destroy, :confirmation, :student] do
     collection do
       get :instructors
     end
   end
-  resources :passwords, except: [:new, :destroy, :index, :show]
+  resources :passwords, except: [:new, :destroy, :index, :show, :confirmation]
 
   get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
   get "exit_student_impersonation", to: "user_sessions#exit_student_impersonation"
