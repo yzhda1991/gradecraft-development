@@ -65,7 +65,7 @@ gem 'omniauth-lti', '~> 0.0.2'
 gem 'ransack'
 gem 'recaptcha', require: "recaptcha/rails"
 gem 'pacecar'
-gem 'paper_trail'
+gem 'paper_trail', '~> 5.0'
 gem 'pg'
 gem 'porch'
 gem 'puma'
