@@ -115,7 +115,7 @@
     toggleActivation = (courseMembershipId, student) -> CourseMembershipService.toggleActivation(courseMembershipId, student)
 
     deleteFromCourse = (courseMembershipId, student) ->
-      CourseMembershipService.destroy(id).then(
+      CourseMembershipService.destroy(courseMembershipId).then(
         (success) ->
           students.splice(students.indexOf(student) , 1)
           alert("Successfully deleted #{student.name} from the course")
