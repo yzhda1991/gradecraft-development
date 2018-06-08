@@ -8,9 +8,6 @@ if ENV["COVERAGE"]
     add_filter "config/*"
     add_filter "app/mailer_previews/*"
   end
-
-  require "codeclimate-test-reporter"
-  CodeClimate::TestReporter.start
 end
 
 require File.expand_path("../../config/environment", __FILE__)
