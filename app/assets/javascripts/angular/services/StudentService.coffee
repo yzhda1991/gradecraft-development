@@ -125,7 +125,6 @@
     recalculateRanks = (students) ->
       return unless students.length
       index = 0
-      console.log("recalculating")
       angular.copy(orderBy(students, ["score", "last_name"], true), students)
       setRank = (rank, student) -> student.rank = rank
       setRank(index += 1, student) for student in students when not student.auditing and student.activated_for_course
