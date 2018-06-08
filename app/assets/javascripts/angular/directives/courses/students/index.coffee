@@ -1,14 +1,14 @@
-@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "TeamService", "$q",
-  (CourseService, StudentService, SortableService, TeamService, $q) ->
+@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "TeamService", "$filter",
+  (CourseService, StudentService, SortableService, TeamService, $filter) ->
     CoursesStudentsIndexCtrl = [() ->
       vm = this
       vm.loadingCourse = true
+      vm.loadingStudents = true
       vm.searchCriteria = undefined
       vm.sortable = SortableService
 
       vm.team = StudentService.team
       vm.course = CourseService.course
-      vm.students = StudentService.students
       vm.studentEarnedBadges = StudentService.earnedBadges
       vm.batchLoadingProgress = StudentService.loadingProgress
 
@@ -21,7 +21,6 @@
 
       vm.courseHasTeams = () -> vm.course().has_teams
       vm.courseHasBadges = () -> vm.course().has_badges
-      vm.studentsLoaded = () -> not StudentService.loadingProgress()? and _.some(vm.students)
 
       vm.showRole = () -> vm.courseHasTeams() && vm.course().has_team_roles
       vm.displayPseudonyms = () -> vm.course().has_in_team_leaderboards || vm.course().has_character_names
@@ -30,6 +29,15 @@
 
       vm.showResendActivationEmail = (student) ->
         vm.isStaff && !student.activated && !vm.isUmichEnvironment
+
+      vm.selectedTeamId = TeamService.selectedTeamId
+
+      vm.filtered = StudentService.students
+
+      vm.updateFiltered = (recalculate=true) ->
+        vm.filtered = $filter("filter")(StudentService.students, vm.filterCriteria)
+        vm.filtered = $filter("filter")(vm.filtered, { $: vm.searchCriteria }) if vm.searchCriteria?
+        StudentService.recalculateRanks(vm.filtered) if recalculate is true
 
       vm.filterCriteria = (student) ->
         filterCriteria = SortableService.filterCriteria()
@@ -44,11 +52,12 @@
 
     _initialize = (vm) ->
       SortableService.predicate = "rank"
+      TeamService.callback(vm.updateFiltered)
 
       CourseService.getCourse(vm.courseId).then(
         (response) ->
           vm.loadingCourse = false
-          StudentService.getBatchedForCourse(vm.courseId)
+          StudentService.getBatchedForCourse(vm.courseId).then(() -> vm.loadingStudents = false)
         , (response) ->
           console.error("Failed to load course data")
       )
