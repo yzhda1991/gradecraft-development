@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.5.1'
 
-gem 'rails'
+gem 'rails', '~> 5.0.0'
 gem 'resque'
 gem 'activerecord-import'
 gem 'active_model_serializers'
@@ -72,7 +72,6 @@ gem 'puma'
 gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rdiscount'
-gem 'record_tag_helper'
 gem 'redis', '~> 3.0'
 
 # retry dsl for resque
@@ -100,7 +99,7 @@ gem 'scrypt', '2.0.2'
 
 gem 'select2-rails'
 gem 'simple_form'
-gem 'sorcery'
+gem 'sorcery', '~> 0.9.0'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'whenever'
@@ -154,5 +153,5 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-dragdrop', '1.0.11'
   gem 'rails-assets-ngDraggable', '0.1.8'
   gem 'rails-assets-rollbar.js', '~> 2.4'
-  gem 'rails-assets-ng-rollbar', '~> 2.3' 
+  gem 'rails-assets-ng-rollbar', '~> 2.3'
 end
