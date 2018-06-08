@@ -1,7 +1,7 @@
 -# custom sortable filters
 .clear
   %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loadingStudents",
-                                       "data-collection"=>"coursesStudentsIndexCtrl.filtered",
+                                       "data-collection"=>"coursesStudentsIndexCtrl.filteredStudents",
                                        "data-filter-callback"=>"coursesStudentsIndexCtrl.updateFiltered"}
 
 %label
@@ -76,7 +76,7 @@
         %i.fa.fa-spinner.fa-spin.fa-fw
         {{coursesStudentsIndexCtrl.batchLoadingProgress()}}
 
-    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.filtered | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse track by student.id"}
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.filteredStudents | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse track by student.id"}
       %td
         %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
           %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}
