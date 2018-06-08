@@ -3,13 +3,13 @@
     vm = this
     vm.termFor = StudentService.termFor
 
-    vm.selectedCriteria = "leaderboard"
+    vm.selectedCriteria = undefined
 
     vm.setSortCriteria = (criteriaType) ->
       vm.selectedCriteria = criteriaType
       SortableService.filterCriteria(vm.criteria[criteriaType])
-      StudentService.recalculateRanks()
-      _resetSort()
+      # don't recalculate ranks if selecting top10, bottom10 filters
+      @filterCallback()(criteriaType not in ["top10", "bottom10"]) if @filterCallback?
 
     # comparator functions for table filter
     vm.criteria = {
@@ -27,15 +27,15 @@
   ]
 
   _initialize = (vm) ->
-    ranked = _.filter(StudentService.students, "rank")
+    vm.setSortCriteria("leaderboard")
+    ranked = _.filter(vm.collection, "rank")
     bottom10 = _.takeRight(orderBy(ranked, "rank"), 10)
     vm.bottom10 = _.pluck(bottom10, "id")
 
-  _resetSort = () ->
-    SortableService.predicate = "rank"
-    SortableService.reverse = false
-
   {
+    scope:
+      collection: "="
+      filterCallback: "&"
     bindToController: true
     controller: TableFilterCtrl
     controllerAs: "tableFilterCtrl"

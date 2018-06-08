@@ -1,13 +1,16 @@
 -# custom sortable filters
 .clear
-  %courses-students-index-table-filter{"ng-if"=>"coursesStudentsIndexCtrl.anyStudents()"}
+  %courses-students-index-table-filter{"ng-if"=>"!coursesStudentsIndexCtrl.loadingStudents",
+                                       "data-collection"=>"coursesStudentsIndexCtrl.filteredStudents",
+                                       "data-filter-callback"=>"coursesStudentsIndexCtrl.updateFiltered"}
 
 %label
   %span.sr-only Search Criteria
   %input.search-input{"type"=>"search",
                       "placeholder"=>"Search",
                       "ng-model"=>"coursesStudentsIndexCtrl.searchCriteria",
-                      "ng-model-options"=>"{ updateOn: 'change blur' }"}
+                      "ng-model-options"=>"{ updateOn: 'change blur' }",
+                      "ng-change"=>"coursesStudentsIndexCtrl.updateFiltered()"}
 
 %table#student-index-table.no-table-header{"ng-if"=>"!coursesStudentsIndexCtrl.loadingCourse"}
   %caption.sr-only {{coursesStudentsIndexCtrl.termFor("students")}}
@@ -73,7 +76,7 @@
         %i.fa.fa-spinner.fa-spin.fa-fw
         {{coursesStudentsIndexCtrl.batchLoadingProgress()}}
 
-    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.students | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse | filter: coursesStudentsIndexCtrl.filterCriteria | filter: coursesStudentsIndexCtrl.searchCriteria"}
+    %tr{"ng-repeat"=>"student in coursesStudentsIndexCtrl.filteredStudents | orderBy: coursesStudentsIndexCtrl.sortable.predicate : coursesStudentsIndexCtrl.sortable.reverse track by student.id"}
       %td
         %a.flagged-user-icon{"ng-click"=>"coursesStudentsIndexCtrl.flagStudent(student)"}
           %i.fa.fa-flag.fa-fw{"ng-class"=>"{ flagged: student.flagged }"}

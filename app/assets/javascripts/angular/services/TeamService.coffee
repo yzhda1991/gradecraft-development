@@ -3,10 +3,22 @@
   teams = []
   _teamTerm = "Team"
   _selectedTeamId = undefined
+  _callback = undefined # an optional callback to invoke after the team id changes
+
+  callback = (callback) ->
+    if angular.isDefined(callback)
+      _callback = callback
+    else
+      if not _callback? then null else _callback()
 
   teamTerm = (term) -> if angular.isDefined(term) then _teamTerm = term else _teamTerm
 
-  selectedTeamId = (teamId) -> if angular.isDefined(teamId) then (_selectedTeamId = teamId) else _selectedTeamId
+  selectedTeamId = (teamId) ->
+    if angular.isDefined(teamId)
+      _selectedTeamId = teamId
+      _callback() if callback?
+    else
+      _selectedTeamId
 
   getTeams = (courseId) ->
     $http.get("/api/courses/#{courseId}/teams").then((response) ->
@@ -22,5 +34,6 @@
     teamTerm: teamTerm
     selectedTeamId: selectedTeamId
     getTeams: getTeams
+    callback: callback
   }
 ]

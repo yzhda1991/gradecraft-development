@@ -75,7 +75,7 @@
             GradeCraftAPI.loadMany(students, response.data)
             GradeCraftAPI.loadFromIncluded(earnedBadges, "earned_badges", response.data)
             GradeCraftAPI.loadFromIncluded(teams, "teams", response.data)
-            recalculateRanks()
+            recalculateRanks(students)
             GradeCraftAPI.setTermFor("student", response.data.meta.student)
             GradeCraftAPI.setTermFor("students", response.data.meta.students)
             loadingProgress("Loaded #{students.length}/#{_studentIds.length} students")
@@ -122,9 +122,10 @@
         , (failure) -> alert("Failed to delete #{student.name} from course")
       )
 
-    recalculateRanks = () ->
+    recalculateRanks = (students) ->
+      return unless students.length
       index = 0
-      angular.copy(orderBy(students, "score", true), students)
+      angular.copy(orderBy(students, ["score", "last_name"], true), students)
       setRank = (rank, student) -> student.rank = rank
       setRank(index += 1, student) for student in students when not student.auditing and student.activated_for_course
 
