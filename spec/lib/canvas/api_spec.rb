@@ -64,10 +64,8 @@ describe Canvas::API, type: :disable_external_api do
     end
 
     it "automatically traverses all pages by default" do
-      links = <<-LINKS
-      <https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=2&per_page=10>; rel="next"
-      LINKS
-      headers = { "Link" => links }
+      links = %Q(<https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=2&per_page=10>; rel="next")
+      headers = { "link" => links }
 
       body1 = { name: "This is a course on page 1" }
       first_request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
