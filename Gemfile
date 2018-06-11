@@ -127,7 +127,7 @@ end
 group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
-  gem 'database_cleaner', '~> 1.5.1'
+  gem 'database_cleaner', '~> 1.7'
   gem 'faker'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'capybara-select2'

@@ -141,7 +141,7 @@ GEM
     d3-rails (5.4.0)
       railties (>= 3.1)
     dalli (2.7.8)
-    database_cleaner (1.5.3)
+    database_cleaner (1.7.0)
     db-query-matchers (0.9.0)
       activesupport (>= 4.0, <= 6.0)
       rspec (~> 3.0)
@@ -805,7 +805,7 @@ DEPENDENCIES
   croutons
   d3-rails
   dalli
-  database_cleaner (~> 1.5.1)
+  database_cleaner (~> 1.7)
   db-query-matchers
   dotenv-rails
   factory_girl_rails (~> 4.5.0)
