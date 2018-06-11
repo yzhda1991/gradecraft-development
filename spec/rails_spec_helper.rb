@@ -34,7 +34,7 @@ Dir["./app/models/concerns/*.rb"].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 # ActiveRecord::Migration.maintain_test_schema!
 
-FactoryGirl::SyntaxRunner.send(:include, FileHelpers)
+FactoryBot::SyntaxRunner.send(:include, FileHelpers)
 
 RSpec.configure do |config|
   config.include FileHelpers
@@ -42,8 +42,8 @@ RSpec.configure do |config|
     begin
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
-      FactoryGirl.factories.clear
-      FactoryGirl.find_definitions
+      FactoryBot.factories.clear
+      FactoryBot.find_definitions
       # Enable external API access unless it is explicitly turned off with api_spec_helper
       WebMock.allow_net_connect!
     end
@@ -55,7 +55,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.include ::Rails::Controller::Testing::TestProcess, type: :controller
   config.include ::Rails::Controller::Testing::TemplateAssertions, type: :controller

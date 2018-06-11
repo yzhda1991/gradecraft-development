@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :submission_file do
     association :submission
     filename "test_image.jpg"

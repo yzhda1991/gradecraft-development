@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :group do
     association :course, factory: :course
     text_proposal "how important is it to get this right?"

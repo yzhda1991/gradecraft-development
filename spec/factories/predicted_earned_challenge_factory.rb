@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :predicted_earned_challenge do
     association :challenge
     association :student, factory: :user

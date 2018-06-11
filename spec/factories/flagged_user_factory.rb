@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :flagged_user do
     association :course
     association :flagger, factory: :user

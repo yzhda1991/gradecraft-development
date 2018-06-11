@@ -457,16 +457,16 @@ describe User do
 
     describe "#group_for_assignment(assignment)" do
       it "returns a student's group for a particular assignment if present" do
-        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-        FactoryGirl.create(:group_membership, student: student, group: group)
+        FactoryBot.create(:assignment_group, group: group, assignment: assignment)
+        FactoryBot.create(:group_membership, student: student, group: group)
         expect(student.group_for_assignment(assignment)).to eq(group)
       end
     end
 
     describe "#has_group_for_assignment?" do
       it "returns false for individual assignments" do
-        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-        FactoryGirl.create(:group_membership, student: student, group: group)
+        FactoryBot.create(:assignment_group, group: group, assignment: assignment)
+        FactoryBot.create(:group_membership, student: student, group: group)
         assignment.update(grade_scope: "Individual")
         expect(student.has_group_for_assignment?(assignment)).to be_falsey
       end
@@ -478,8 +478,8 @@ describe User do
 
       it "returns true if the student is in a group" do
         assignment.update(grade_scope: "Group")
-        FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-        FactoryGirl.create(:group_membership, student: student, group: group)
+        FactoryBot.create(:assignment_group, group: group, assignment: assignment)
+        FactoryBot.create(:group_membership, student: student, group: group)
         expect(student.has_group_for_assignment?(assignment)).to be_truthy
       end
     end

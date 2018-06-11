@@ -129,7 +129,7 @@ group :test do
   gem 'codeclimate-test-reporter'
   gem 'database_cleaner', '~> 1.7'
   gem 'faker'
-  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'factory_bot_rails', '~> 4.0'
   gem 'capybara-select2'
   gem 'launchy'
   gem 'rails-controller-testing', require: false

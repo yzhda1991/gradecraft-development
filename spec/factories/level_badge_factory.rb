@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :level_badge do
 
     before(:create) do |lb|

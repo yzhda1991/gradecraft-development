@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge do
     association :course
     name { Faker::Lorem.word }

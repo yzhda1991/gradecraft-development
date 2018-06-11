@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :team_membership do
     association :team
     association :student, factory: :user

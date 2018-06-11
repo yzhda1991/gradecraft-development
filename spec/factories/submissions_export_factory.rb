@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :submissions_export do
     association :course
     association :professor, factory: :user

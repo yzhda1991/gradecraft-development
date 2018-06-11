@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :learning_objective_category do
     association :course
 
