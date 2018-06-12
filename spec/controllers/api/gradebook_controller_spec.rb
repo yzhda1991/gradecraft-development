@@ -1,5 +1,5 @@
 describe API::GradebookController do
-  let(:course) { build_stubbed :course }
+  let(:course) { build :course }
 
   before(:each) do
     login_user user
@@ -7,7 +7,7 @@ describe API::GradebookController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, role: :professor, courses: [course] }
+    let(:user) { create :user, role: :professor, courses: [course] }
 
     describe "#assignments" do
       let!(:assignments) { create_list :assignment, 2, course: course }

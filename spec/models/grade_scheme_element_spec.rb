@@ -1,6 +1,6 @@
 describe GradeSchemeElement do
-  let(:student) { build_stubbed :user }
-  let(:course) { build_stubbed :course }
+  let(:student) { build :user }
+  let(:course) { build :course }
 
   subject { create :grade_scheme_element, lowest_points: 1000, course: course }
 

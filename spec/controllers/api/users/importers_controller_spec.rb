@@ -1,5 +1,5 @@
 describe API::Users::ImportersController, type: [:disable_external_api, :controller] do
-  let(:course) { build_stubbed :course }
+  let(:course) { create :course }
   let(:provider) { :canvas }
   let(:access_token) { "topsecret" }
   let(:assignment) { create :assignment, course: course }
@@ -10,7 +10,7 @@ describe API::Users::ImportersController, type: [:disable_external_api, :control
   end
 
   context "as a professor" do
-    let(:user) { build :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
     let(:syllabus) { instance_double "Syllabus", users: { users: users } }
     let(:users) { [{ name: "Robert W" }, { name: "Joe Q" }] }
     let!(:user_authorization) do
@@ -54,7 +54,7 @@ describe API::Users::ImportersController, type: [:disable_external_api, :control
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "#index" do
       it "is a protected route" do

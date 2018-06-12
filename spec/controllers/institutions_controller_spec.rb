@@ -5,7 +5,7 @@ describe InstitutionsController do
   before(:each) { login_user user }
 
   context "as an admin" do
-    let(:user) { build_stubbed :user, courses: [course], role: :admin }
+    let(:user) { create :user, courses: [course], role: :admin }
 
     describe "GET #index" do
       before(:each) { create_list(:institution, 2) }
@@ -100,7 +100,7 @@ describe InstitutionsController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { build :user, courses: [course], role: :student }
 
     it "redirects protected routes to root" do
       [

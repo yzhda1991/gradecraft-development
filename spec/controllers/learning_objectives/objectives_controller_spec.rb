@@ -7,7 +7,7 @@ describe LearningObjectives::ObjectivesController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET index" do
       it "redirects to dashboard if learning objectives are not enabled for the course" do
@@ -28,7 +28,7 @@ describe LearningObjectives::ObjectivesController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do

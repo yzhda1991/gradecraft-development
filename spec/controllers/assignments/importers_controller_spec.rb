@@ -1,6 +1,6 @@
 describe Assignments::ImportersController do
-  let(:course) { build_stubbed :course }
-  let(:professor) { build :user, courses: [course], role: :professor }
+  let(:course) { build :course }
+  let(:professor) { create :user, courses: [course], role: :professor }
   let(:assignment) { create :assignment, course: course }
   let(:provider) { :canvas }
   let(:course_id) { "COURSE_ID" }
@@ -182,7 +182,7 @@ describe Assignments::ImportersController do
   end
 
   context "as a student" do
-    let(:student) { build :user, courses: [course], role: :student }
+    let(:student) { create :user, courses: [course], role: :student }
 
     before(:each) { login_user student }
 

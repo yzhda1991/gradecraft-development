@@ -10,7 +10,7 @@ describe API::AttendanceController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "#index" do
       it "assigns the assignments" do
@@ -95,7 +95,7 @@ describe API::AttendanceController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { build :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do

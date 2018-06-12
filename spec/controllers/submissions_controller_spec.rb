@@ -1,13 +1,13 @@
 describe SubmissionsController do
   let(:course) { build :course }
   let(:assignment) { create :assignment, course: course }
-  let(:student) { build :user, courses: [course], role: :student }
+  let(:student) { create :user, courses: [course], role: :student }
   let(:submission) { create :submission, assignment: assignment, course: course, student: student }
 
   before(:each) { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
-    let(:professor) { build :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before(:each) { login_user professor }
 
@@ -342,7 +342,7 @@ describe SubmissionsController do
   end
 
   context "as an observer" do
-    let(:observer) { build_stubbed :user, courses: [course], role: :observer }
+    let(:observer) { build :user, courses: [course], role: :observer }
 
     before(:each) { login_user observer }
 

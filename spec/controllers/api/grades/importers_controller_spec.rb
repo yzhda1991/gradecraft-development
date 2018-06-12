@@ -1,5 +1,5 @@
 describe API::Grades::ImportersController, type: [:disable_external_api, :controller] do
-  let(:course) { build_stubbed :course }
+  let(:course) { build :course }
   let(:provider) { :canvas }
   let(:assignment) { create :assignment, course: course }
 
@@ -9,7 +9,7 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
   end
 
   context "as a professor" do
-    let(:user) { build :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
     let(:access_token) { "topsecret" }
     let(:syllabus) { instance_double "Syllabus", grades: { grades: grades }, assignment: provider_assignment }
     let(:grades) { [{ id: 1, score: 100 }, { id: 2, score: 120 }] }
@@ -67,7 +67,7 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "#show" do
       it "is a protected route" do

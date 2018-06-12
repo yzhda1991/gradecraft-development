@@ -21,7 +21,7 @@ describe CourseMembership do
   end
 
   describe ".create_or_update_from_lti" do
-    let(:user) { build_stubbed(:user) }
+    let(:user) { build(:user) }
     let(:course) { create(:course) }
     let(:course_membership) { CourseMembership.unscoped.last }
 

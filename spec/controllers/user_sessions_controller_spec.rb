@@ -36,7 +36,7 @@ describe UserSessionsController do
 
   describe "lti_create" do
     let(:user_create_result) { { user: user } }
-    let(:user) { build_stubbed(:user) }
+    let(:user) { build(:user) }
     let(:course) { create(:course) }
 
     before(:each) do

@@ -1,5 +1,5 @@
 describe LevelsController do
-  let(:course) { build(:course) }
+  let(:course) { create(:course) }
   let(:professor) { create(:user, courses: [course], role: :professor) }
   let(:student) { create(:user, courses: [course], role: :student) }
 

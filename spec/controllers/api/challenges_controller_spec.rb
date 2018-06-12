@@ -1,9 +1,9 @@
 include SessionHelper
 
 describe API::ChallengesController do
-  let(:course) { build_stubbed :course, add_team_score_to_student: true, status: true }
-  let(:student) { build :user, courses: [course], role: :student }
-  let(:professor) { build :user, courses: [course], role: :professor }
+  let(:course) { build :course, add_team_score_to_student: true, status: true }
+  let(:student) { create :user, courses: [course], role: :student }
+  let(:professor) { create :user, courses: [course], role: :professor }
   let!(:challenge) { create :challenge, course: course }
   let!(:team) { create :team, course: course }
   let!(:predicted_earned_challenge) { create :predicted_earned_challenge, student: student, challenge: challenge }

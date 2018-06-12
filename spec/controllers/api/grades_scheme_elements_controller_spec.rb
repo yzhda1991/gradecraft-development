@@ -4,7 +4,7 @@ describe API::GradeSchemeElementsController do
   before(:each) { login_user user }
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "GET index" do
       context "when grade scheme elements exist" do
@@ -45,7 +45,7 @@ describe API::GradeSchemeElementsController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET index" do
       let!(:grade_scheme_element) { create :grade_scheme_element, course: course }

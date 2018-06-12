@@ -1,5 +1,5 @@
 describe Info::DashboardCoursePlannerPresenter do
-  let(:assignment) { build_stubbed(:assignment) }
+  let(:assignment) { build(:assignment) }
   let(:course) { assignment.course }
   let(:student) { build_stubbed(:user) }
 

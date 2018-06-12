@@ -44,7 +44,7 @@ describe Grade do
 
   describe "callbacks" do
     context "with a pass/fail type assignment" do
-      let(:pass_fail_assignment) { build_stubbed :assignment, :pass_fail }
+      let(:pass_fail_assignment) { build :assignment, :pass_fail }
 
       it "sets the grade score to 0" do
         subject = create :grade, assignment: pass_fail_assignment

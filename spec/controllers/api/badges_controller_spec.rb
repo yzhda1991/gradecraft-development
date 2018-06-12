@@ -2,8 +2,8 @@ include SessionHelper
 
 describe API::BadgesController do
   let(:course) { create(:course, status: true) }
-  let(:student) { build(:user, courses: [course], role: :student) }
-  let(:professor) { build(:user, courses: [course], role: :professor) }
+  let(:student) { create(:user, courses: [course], role: :student) }
+  let(:professor) { create(:user, courses: [course], role: :professor) }
   let(:badge) { create(:badge, course: course) }
 
   context "as professor" do

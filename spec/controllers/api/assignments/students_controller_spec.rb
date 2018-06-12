@@ -8,7 +8,7 @@ describe API::Assignments::StudentsController do
   end
 
   context "as an instructor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
     let!(:students) { create_list :user, 3, courses: [course], role: :student }
 
     describe "#index" do
@@ -41,7 +41,7 @@ describe API::Assignments::StudentsController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do
