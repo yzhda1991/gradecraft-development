@@ -2,9 +2,10 @@
 @gradecraft.directive 'userImportForm', ['CanvasImporterService', (CanvasImporterService) ->
   UserImportFormCtrl = ['$scope', ($scope) ->
     vm = this
-
     vm.hasError = false
+    vm.loading = undefined
     vm.formSubmitted = false
+
     vm.users = CanvasImporterService.users
     vm.currentCourseId = CanvasImporterService.currentCourseId
 
@@ -12,8 +13,10 @@
       "/users/importers/#{@provider}/course/#{vm.currentCourseId()}/users/import"
 
     vm.getUsers = () ->
+      vm.loading = true
       CanvasImporterService.getUsers(vm.provider, vm.currentCourseId(), true).then((success) ->
         vm.hasError = false
+        vm.loading = false
       , (error) ->
         vm.hasError = true
       )

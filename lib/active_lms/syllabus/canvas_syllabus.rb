@@ -556,7 +556,7 @@ module ActiveLMS
     def users(course_id, fetch_next=true, options={}, &exception_handler)
       handle_exceptions(exception_handler) do
         users = []
-        params = { include: ["enrollments", "email"] }.merge(options)
+        params = { include: ["enrollments", "email"], per_page: 25 }.merge(options)
         result = client.get_data("/courses/#{course_id}/users", params) do |data, next_url|
           users += data
           return { users: users, page_params: parse_params(next_url, *USERS_API_PARAMS) } if !fetch_next

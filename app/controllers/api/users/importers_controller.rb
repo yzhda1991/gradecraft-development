@@ -14,7 +14,7 @@ class API::Users::ImportersController < ApplicationController
   # GET /api/users/importers/:importer_provider_id/course/:id/users
   def index
     @provider_name = params[:importer_provider_id]
-    @result = syllabus.users(params[:id], true, importer_params.to_h) do
+    @result = syllabus.users(params[:id], false, importer_params.to_h) do
       render json: { message: "There was an issue trying to retrieve the course from #{@provider_name.capitalize}.",
         success: false }, status: 500 and return
     end
