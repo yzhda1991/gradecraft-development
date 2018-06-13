@@ -9,22 +9,15 @@
     vm.assignmentLink = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/assignments"
     vm.formAction = "/assignments/#{@currentAssignmentId}/grades/importers/#{@provider}/courses/#{@courseId}/grades/import"
 
-    vm.selectAllGrades = () ->
-      GradeImporterService.selectAllGrades()
-
-    vm.deselectAllGrades = () ->
-      GradeImporterService.deselectAllGrades()
+    vm.hasError = () -> GradeImporterService.checkHasError()
+    vm.selectAllGrades = () -> GradeImporterService.selectAllGrades()
+    vm.deselectAllGrades = () -> GradeImporterService.deselectAllGrades()
 
     vm.hasSelectedGrades = () ->
-      _.any(GradeImporterService.grades, (grade) ->
-        grade.selected_for_import is true
-      )
+      _.any(GradeImporterService.grades, (grade) -> grade.selected_for_import is true)
 
     vm.termForUserExists = (value) ->
       if value is true then "Yes" else "No"
-
-    vm.hasError = () ->
-      GradeImporterService.checkHasError()
 
     GradeImporterService.getGrades(@currentAssignmentId, @courseId, @provider, @assignmentIds).finally(() ->
       vm.loading = false
