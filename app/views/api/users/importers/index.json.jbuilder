@@ -21,5 +21,5 @@ json.data @result[:users] do |user|
 end
 
 json.meta do
-  json.page_params                            @result[:page_params]
+  json.page_params @result[:page_params]
 end
