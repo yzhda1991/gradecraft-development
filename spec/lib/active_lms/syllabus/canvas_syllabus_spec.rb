@@ -1,6 +1,6 @@
 require "api_spec_helper"
 
-describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
+describe ActiveLMS::CanvasSyllabus, type: :disable_external_api, focus: true do
   let(:access_token) { "BLAH" }
 
   before do
