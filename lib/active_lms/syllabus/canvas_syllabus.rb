@@ -7,6 +7,7 @@ require "canvas"
 # ActiveLMS::Syllabus.
 module ActiveLMS
   GRADE_API_PARAMS = ["assignment_ids[]", "enrollment_state", "workflow_state", "student_ids", "include[]", "per_page"].freeze
+  USERS_API_PARAMS = ["include"].freeze
 
   class CanvasSyllabus
     # Internal: Initializes a CanvasSyllabus
@@ -555,13 +556,12 @@ module ActiveLMS
     def users(course_id, fetch_next=true, options={}, &exception_handler)
       handle_exceptions(exception_handler) do
         users = []
-        params = {
-          include: ["enrollments", "email"]
-        }.merge(options)
-        result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
+        params = { include: ["enrollments", "email"] }.merge(options)
+        result = client.get_data("/courses/#{course_id}/users", params) do |data, next_url|
           users += data
+          return { users: users, page_params: parse_params(next_url, *USERS_API_PARAMS) } if !fetch_next
         end
-        { data: users, has_next_page: result[:has_next_page] }
+        { users: users }
       end
     end
 

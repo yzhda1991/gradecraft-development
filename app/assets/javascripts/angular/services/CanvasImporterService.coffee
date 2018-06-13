@@ -28,10 +28,11 @@
       GradeCraftAPI.logResponse(error)
     )
 
-  getUsers = (provider, courseId) ->
-    _clearUsers()
-    $http.get("/api/users/importers/#{provider}/course/#{_currentCourseId}/users").then((response) ->
+  getUsers = (provider, courseId, clearUsers, options={}) ->
+    _clearUsers() if clearUsers is true
+    $http.get("/api/users/importers/#{provider}/course/#{_currentCourseId}/users", params: options).then((response) ->
       GradeCraftAPI.loadMany(users, response.data)
+      getUsers(provider, courseId, false, _nextPageParams(response)) if _nextPageParams(response)?
       GradeCraftAPI.logResponse(response)
     , (error) ->
       window.location.replace("/auth/#{provider}") if error.status == 401
@@ -65,6 +66,8 @@
 
   _clearUsers = () ->
     users.length = 0
+
+  _nextPageParams = (response) -> response.data.meta.page_params
 
   {
     users: users

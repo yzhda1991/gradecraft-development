@@ -12,7 +12,7 @@
       "/users/importers/#{@provider}/course/#{vm.currentCourseId()}/users/import"
 
     vm.getUsers = () ->
-      CanvasImporterService.getUsers(vm.provider, vm.currentCourseId()).then((success) ->
+      CanvasImporterService.getUsers(vm.provider, vm.currentCourseId(), true).then((success) ->
         vm.hasError = false
       , (error) ->
         vm.hasError = true
