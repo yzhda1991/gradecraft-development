@@ -348,7 +348,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
           .to_return(status: 200, body: body.to_json, headers: {})
 
         result = subject.users(123)
@@ -363,7 +364,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
                          "enrollment_type" => ["student", "teacher"],
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
           .to_return(status: 200, body: body.to_json, headers: {})
 
         result = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
@@ -376,7 +378,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       let(:stub) {
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
       }
       let!(:json_error) { stub.to_raise(JSON::ParserError) }
 
