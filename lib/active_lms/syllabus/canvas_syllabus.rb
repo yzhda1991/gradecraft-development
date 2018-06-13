@@ -376,7 +376,7 @@ module ActiveLMS
                    workflow_state: "graded",
                    student_ids: "all",
                    include: ["assignment", "course", "user", "submission_comments"],
-                   per_page: options.delete(:per_page) || 1 }.merge(options)
+                   per_page: options.delete(:per_page) || 25 }.merge(options)
         client.get_data("/courses/#{course_id}/students/submissions", params) do |data, next_url|
           data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
           if grade_ids.nil?
