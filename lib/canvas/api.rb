@@ -15,8 +15,7 @@ module Canvas
 
     # Fetch data from Canvas
     # Optionally decide whether to automatically traverse additional pages
-    def get_data(path="/", params={}, fetch_next=true)
-      result = {}
+    def get_data(path="/", params={})
       params.merge! access_token: access_token
       next_url = "#{base_uri}#{path}"
       next_url += "?#{params.to_query}" unless params.empty?
@@ -25,12 +24,10 @@ module Canvas
         # attached to the next url in the header
         response = self.class.get(next_url, query: { access_token: access_token })
         raise ResponseError.new(response) unless response.success?
-        yield response.parsed_response if block_given?
         next_url = get_next_url(response)
-        result[:has_next_page] = next_url.present?
-        break if !fetch_next || next_url.nil?
+        yield response.parsed_response, next_url if block_given?
+        break if next_url.nil?
       end
-      result
     end
 
     def set_data(path="/", method=:post, params={})
