@@ -28,60 +28,60 @@
 
   -# Ungraded submissions
   - if ungraded_submissions_count_for(current_course).positive?
-    %section.ungraded-submissions{"role"=>"tablist"}
-      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+    %section.ungraded-submissions.collapseSection{"role"=>"tablist", "id"=>"ungraded"}
+      .collapse{"role"=>"tab"}
         %a
           %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Ungraded Submissions
-      %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                      "data-assignment-term"=>"#{term_for :assignment}",
-                                                      "data-team-term"=>"#{term_for :team}",
-                                                      "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                      "data-type"=>"Ungraded",
-                                                      "role"=>"tabpanel"}
+      %grading-status-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                  "data-assignment-term"=>"#{term_for :assignment}",
+                                  "data-team-term"=>"#{term_for :team}",
+                                  "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                  "data-type"=>"Ungraded",
+                                  "role"=>"tabpanel"}
 
   -# In progress grades
   - if in_progress_grades_count_for(current_course).positive?
-    %section.in-progress-grades{"role"=>"tablist"}
-      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+    %section.in-progress-grades.collapseSection{"role"=>"tablist", "id"=>"inProgress"}
+      .collapsed{"role"=>"tab"}
         %a
           %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             In Progress Grades
-      %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                 "data-assignment-term"=>"#{term_for :assignment}",
-                                                 "data-team-term"=>"#{term_for :team}",
-                                                 "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                 "data-type"=>"InProgress",
-                                                 "role"=>"tabpanel"}
+      %grading-status-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                             "data-assignment-term"=>"#{term_for :assignment}",
+                             "data-team-term"=>"#{term_for :team}",
+                             "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                             "data-type"=>"InProgress",
+                             "role"=>"tabpanel"}
 
   -# Ready for release grades
   - if ready_for_release_grades_count_for(current_course).positive?
-    %section.ready-for-release-grades{"role"=>"tablist"}
-      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+    %section.ready-for-release-grades.collapseSection{"role"=>"tablist", "id"=>"readyForRelease"}
+      .collapsed{"role"=>"tab"}
         %a
           %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Ready for Release Grades
-      %grading-status-grades.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                 "data-assignment-term"=>"#{term_for :assignment}",
-                                                 "data-team-term"=>"#{term_for :team}",
-                                                 "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                 "data-type"=>"ReadyForRelease",
-                                                 "role"=>"tabpanel"}
+      %grading-status-grades{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                             "data-assignment-term"=>"#{term_for :assignment}",
+                             "data-team-term"=>"#{term_for :team}",
+                             "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                             "data-type"=>"ReadyForRelease",
+                             "role"=>"tabpanel"}
 
   -# Resubmissions
   - if resubmission_count_for(current_course).positive?
-    %section.resubmissions{"role"=>"tablist"}
-      .collapse-toggler.collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
+    %section.resubmissions.collapseSection{"role"=>"tablist", "id"=>"resubmissions"}
+      .collapsed{"role"=>"tab", "data-collapsed-class"=>"ng-hide"}
         %a
           %h3.grading-status-header
             %i.fa.fa-chevron-circle-right.fa-fw
             Resubmissions
-      %grading-status-submissions.collapsible.ng-hide{"data-course-has_teams"=>"#{current_course.has_teams?}",
-                                                      "data-assignment-term"=>"#{term_for :assignment}",
-                                                      "data-team-term"=>"#{term_for :team}",
-                                                      "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
-                                                      "data-type"=>"Resubmitted",
-                                                      "role"=>"tabpanel"}
+      %grading-status-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                                  "data-assignment-term"=>"#{term_for :assignment}",
+                                  "data-team-term"=>"#{term_for :team}",
+                                  "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                                  "data-type"=>"Resubmitted",
+                                  "role"=>"tabpanel"}
