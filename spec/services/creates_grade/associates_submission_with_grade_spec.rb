@@ -1,7 +1,7 @@
 describe Services::Actions::AssociatesSubmissionWithGrade do
-  let(:course) { build_stubbed :course }
-  let(:student) { build_stubbed(:course_membership, :student, course: course).user }
-  let(:grade) { build_stubbed :grade, assignment: assignment, student: student }
+  let(:course) { build :course }
+  let(:student) { build(:course_membership, :student, course: course).user }
+  let(:grade) { build :grade, assignment: assignment, student: student }
 
   let(:context) do
     {

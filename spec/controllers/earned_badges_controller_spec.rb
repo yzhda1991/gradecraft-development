@@ -2,12 +2,12 @@ describe EarnedBadgesController do
   let(:course) { build :course }
   let(:professor) { create(:course_membership, :professor, course: course).user }
   let!(:student) { create(:course_membership, :student, course: course).user }
-  let(:observer) { create(:user, courses: [course]) }
+  let(:observer) { create(:user, courses: [course], role: :observer) }
   let(:badge) { create(:badge, course: course) }
   let!(:earned_badge) { create(:earned_badge, badge: badge, student: student) }
   let(:badge_student_awardable)  { create(:badge, course: course, student_awardable: true) }
   let(:other_student) { create(:user, courses: [course], role: :student) }
-  
+
   context "as a professor" do
     before(:each) do
       login_user(professor)

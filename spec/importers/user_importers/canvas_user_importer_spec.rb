@@ -90,7 +90,7 @@ describe CanvasUserImporter do
         end
 
         it "does not create a course membership if one already exists" do
-          build :user, first_name: "Jimmy", last_name: "Page",
+          create :user, first_name: "Jimmy", last_name: "Page",
             email: "jimmy@example.com", username: "jimmy", password: "blah",
             courses: [course], role: :student
 
@@ -120,7 +120,7 @@ describe CanvasUserImporter do
         end
 
         it "updates the course membership if one exists and the role has changed" do
-          user = build :user, first_name: "Jimmy", last_name: "Page",
+          user = create :user, first_name: "Jimmy", last_name: "Page",
             email: "jimmy@example.com", username: "jimmy", password: "blah",
             courses: [course], role: :student
 

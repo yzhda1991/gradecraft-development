@@ -4,7 +4,7 @@ describe UsersController do
   let(:course) { create(:course) }
   let(:professor) { create(:user, courses: [course], role: :professor) }
   let(:student) { create(:user, courses: [course], role: :student) }
-  let(:user) { create(:user, first_name: "Jimmy", courses: [course]) }
+  let(:user) { create(:user, first_name: "Jimmy", courses: [course], role: :observer) }
 
   context "as a professor" do
     before(:each) { login_user(professor) }

@@ -9,7 +9,7 @@ describe API::LearningObjectives::CategoriesController do
   end
 
   context "as an instructor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET index" do
       it "returns all categories for the current course" do
@@ -56,7 +56,7 @@ describe API::LearningObjectives::CategoriesController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { build :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do

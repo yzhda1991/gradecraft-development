@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :user do
     transient do
       courses []
-      role nil
+      role :observer
       activated true
     end
 
