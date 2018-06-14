@@ -10,7 +10,7 @@ describe API::LearningObjectives::LevelsController do
   end
 
   context "as an instructor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "POST create" do
       it "creates the level" do
