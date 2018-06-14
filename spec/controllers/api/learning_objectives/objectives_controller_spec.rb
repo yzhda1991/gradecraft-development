@@ -8,7 +8,7 @@ describe API::LearningObjectives::ObjectivesController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
     let(:learning_objective_params) { attributes_for :learning_objective }
 
     describe "POST create" do
@@ -40,7 +40,7 @@ describe API::LearningObjectives::ObjectivesController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { build :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do

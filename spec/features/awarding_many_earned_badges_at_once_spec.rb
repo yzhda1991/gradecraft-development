@@ -2,8 +2,8 @@ feature "awarding many earned badges at once" do
   context "as a professor" do
     let(:professor) { create :user, courses: [course], role: :professor }
     let!(:badge) { create :badge, name: "Fancy Badge", course: course}
-    let!(:student) { build :user, first_name: "Hermione", last_name: "Granger", courses: [course], role: :student }
-    let!(:student_2) { build :user, first_name: "Ron", last_name: "Weasley", courses: [course], role: :student }
+    let!(:student) { create :user, first_name: "Hermione", last_name: "Granger", courses: [course], role: :student }
+    let!(:student_2) { create :user, first_name: "Ron", last_name: "Weasley", courses: [course], role: :student }
 
     before(:each) do
       login_as professor

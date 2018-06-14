@@ -6,7 +6,7 @@ describe Badges::ImportersController do
   before { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
-    let(:professor) { build :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before { login_user professor }
 
@@ -27,8 +27,6 @@ describe Badges::ImportersController do
     end
 
     describe "POST upload" do
-      render_views
-
       let(:file) { fixture_file "badges.csv", "text/csv" }
       let(:bad_file) { fixture_file "badges.xlsx"}
 
@@ -39,15 +37,16 @@ describe Badges::ImportersController do
         post :upload, params: { badge_id: badge.id, importer_provider_id: :csv, file: file }
 
         expect(response).to render_template :import_results
-        expect(response.body).to include "2 Badges Imported Successfully"
+        expect(assigns(:result).successful.count).to eq 2
       end
 
       context "with students that are not part of the current course" do
-        it "renders any errors that have occured" do
+        it "assigns the number of unsuccessful imports" do
           post :upload, params: { badge_id: badge.id, importer_provider_id: :csv, file: file }
 
-          expect(response.body).to include "7 Badges Not Imported"
-          expect(response.body).to include "Active student not found in course"
+          expect(assigns(:result).unsuccessful.count).to eq 7
+          expect(assigns(:result).unsuccessful.map { |r| r[:errors] }).to \
+            all eq "Active student not found in course"
         end
       end
 
