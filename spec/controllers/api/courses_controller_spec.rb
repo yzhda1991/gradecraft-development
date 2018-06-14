@@ -13,7 +13,7 @@ describe API::CoursesController do
         get :search, format: :json
         body = JSON.parse(response.body)
         expect(body).to include "id" => course.id,
-          "name" => course.formatted_long_name,
+          "formatted_name" => course.formatted_long_name,
           "search_string" => course.searchable_name
       end
     end

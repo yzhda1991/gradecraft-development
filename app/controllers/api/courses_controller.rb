@@ -9,7 +9,7 @@ class API::CoursesController < ApplicationController
     course_attrs = current_user.courses.map do |c|
       {
         id: c.id,
-        name: c.formatted_long_name,
+        formatted_name: c.formatted_long_name,
         search_string: c.searchable_name
       }
     end
