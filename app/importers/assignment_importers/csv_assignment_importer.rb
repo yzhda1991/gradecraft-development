@@ -87,50 +87,6 @@ class CSVAssignmentImporter
   end
 
   # Follows the format outlined in AssignmentExporter::FORMAT
-
-def name
-  remove_smart_quotes(data[0]).strip
-end
-def assignment_type.name
-  remove_smart_quotes(data[0]).strip
-end
-def full_points
-  remove_smart_quotes(data[0]).strip
-end
-def description
-  remove_smart_quotes(data[0]).strip
-end
-def purpose
-  remove_smart_quotes(data[0]).strip
-end
-def open_at
-  remove_smart_quotes(data[0]).strip
-end
-def due_at
-  remove_smart_quotes(data[0]).strip
-end
-def accepts_submissions
-  remove_smart_quotes(data[0]).strip
-end
-def accepts_submissions_until
-  remove_smart_quotes(data[0]).strip
-end
-def submissions.submitted.count
-  remove_smart_quotes(data[0]).strip
-end
-def grades.student_visible.count
-  remove_smart_quotes(data[0]).strip
-end
-def created_at
-  remove_smart_quotes(data[0]).strip
-end
-def required
-  remove_smart_quotes(data[0]).strip
-end
-def learning_objectives
-  remove_smart_quotes(data[0]).strip
-end
-
   class AssignmentRow
     include QuoteHelper
     attr_reader :data
@@ -139,7 +95,7 @@ end
       @data = data
     end
 
-    def assignment_name
+    def name
       remove_smart_quotes(data[0]).strip
     end
 
@@ -147,7 +103,7 @@ end
       remove_smart_quotes(data[1]).strip
     end
 
-    def point_total
+    def full_points
       remove_smart_quotes(data[2]).strip
     end
 
@@ -155,16 +111,28 @@ end
       remove_smart_quotes(data[3]).strip
     end
 
-    def open_date
+    def purpose
       remove_smart_quotes(data[4]).strip
     end
 
-    def due_date
+    def open_at
       remove_smart_quotes(data[5]).strip
     end
 
+    def due_at
+      remove_smart_quotes(data[6]).strip
+    end
+
     def accepts_submissions
-      remove_smart_quotes(data[5]).strip
+      remove_smart_quotes(data[7]).strip
+    end
+
+    def accepts_submissions_until
+      remove_smart_quotes(data[8]).strip
+    end
+
+    def required
+      remove_smart_quotes(data[10]).strip
     end
   end
 end
