@@ -79,6 +79,9 @@ gem 'resque-retry'
 
 # handles deferrence of Resque jobs to a later time
 # ex: Resque.enqueue_in(5.hours, @worker_object)
+#
+# A fix for a long-standing issue will address some of the warnings on start up
+# NOTE: https://github.com/resque/resque-scheduler/issues/600
 gem 'resque-scheduler', require: 'resque/scheduler'
 
 # slightly more mature rate limiter plugin for resque
