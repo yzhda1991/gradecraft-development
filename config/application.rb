@@ -4,6 +4,9 @@ require 'rails/all'
 require "csv"
 require "sanitize"
 
+# Uncomment to debug deprecations in gems
+# ActiveSupport::Deprecation.debug = true
+
 Bundler.require(*Rails.groups)
 
 module GradeCraft

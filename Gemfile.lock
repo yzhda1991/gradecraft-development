@@ -731,10 +731,10 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.3)
       tilt (~> 2.0)
-    sorcery (0.9.1)
+    sorcery (0.12.0)
       bcrypt (~> 3.1)
       oauth (~> 0.4, >= 0.4.4)
-      oauth2 (>= 0.8.0)
+      oauth2 (~> 1.0, >= 0.8.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -883,7 +883,7 @@ DEPENDENCIES
   select2-rails
   simple_form
   simplecov
-  sorcery (~> 0.9.0)
+  sorcery
   uglifier
   underscore-rails
   valid_attribute

@@ -102,7 +102,7 @@ gem 'scrypt', '2.0.2'
 
 gem 'select2-rails'
 gem 'simple_form'
-gem 'sorcery', '~> 0.9.0'
+gem 'sorcery'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'whenever'
