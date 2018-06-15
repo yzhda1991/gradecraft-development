@@ -1,12 +1,13 @@
 # Gradecraft web application Docker image
 #
-# VERSION       1.0
+# VERSION       2.0
 # ENVIRONMENT	production
+
 # ~~~~ Image base ~~~~
 FROM quay.io/gradecraft/secrets:production
-MAINTAINER Shekhar Patil <shekhar@venturit.com>
+MAINTAINER Nagumalli Sundeep <nagumals@umich.edu>
 ENV DOCKER_FIX random
-RUN gem install -v 1.10.6 bundler
+RUN gem install -v 1.16.2 bundler
 RUN mkdir /gradecraft
 WORKDIR /gradecraft/
 ADD Gemfile /gradecraft/Gemfile
