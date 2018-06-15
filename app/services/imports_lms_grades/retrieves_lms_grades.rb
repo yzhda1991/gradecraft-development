@@ -19,9 +19,9 @@ module Services
         context.grades = syllabus.grades(course_id, assignment_ids, grade_ids) do
           context.fail!("An error occurred while attempting to retrieve #{provider} grades", error_code: 500)
           next context
-        end[:data]
+        end[:grades]
 
-        next context if context.failure?
+        next context if context.failure? || context.grades.nil?
         context.user_ids = context.grades.map { |h| h["user_id"] }.compact.uniq
       end
     end
