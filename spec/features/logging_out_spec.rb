@@ -12,7 +12,6 @@ feature "logging out" do
     end
 
     scenario "successfully" do
-
       within("#account-info") do
         click_link "Logout"
       end
@@ -20,7 +19,5 @@ feature "logging out" do
       expect(current_path).to eq root_path
       expect(page).to have_notification_message("notice", "You are now logged out.")
     end
-
   end
-
 end

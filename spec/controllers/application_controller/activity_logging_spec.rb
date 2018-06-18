@@ -9,7 +9,7 @@ RSpec.describe ApplicationController do
       before { allow(subject).to receive(:impersonating?).and_return false }
 
       it "updates the last logout timestamp for the current user" do
-        subject.send :register_logout_time_to_db, subject.current_user
+        subject.send :register_logout_time_to_db
 
         expect(student.last_logout_at).to be_within(1.second).of(DateTime.now)
       end
@@ -22,7 +22,7 @@ RSpec.describe ApplicationController do
       end
 
       it "updates the last logout timestamp for the impersonating agent" do
-        subject.send :register_logout_time_to_db, subject.current_user
+        subject.send :register_logout_time_to_db
 
         expect(instructor.last_logout_at).to be_within(1.second).of(DateTime.now)
       end
