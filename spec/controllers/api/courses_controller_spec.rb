@@ -8,6 +8,16 @@ describe API::CoursesController do
 
     before(:each) { login_user admin }
 
+    describe "GET search" do
+      it "returns a hash of search attributes for the user's courses" do
+        get :search, format: :json
+        body = JSON.parse(response.body)
+        expect(body).to include "id" => course.id,
+          "formatted_name" => course.formatted_long_name,
+          "search_string" => course.searchable_name
+      end
+    end
+
     describe "GET index" do
       let!(:another_course) { create :course }
 

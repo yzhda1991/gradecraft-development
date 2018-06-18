@@ -8,20 +8,20 @@
         dataType: "json",
         success: function(response) {
           target.omniselect({
-            source: response.data,
+            source: response,
             resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
             itemLabel: function(course) {
-              return course.attributes.formatted_name;
+              return course.formatted_name;
             },
             itemId: function(course) {
-              return course.attributes.id;
+              return course.id;
             },
             renderItem: function(label) {
               return '<li><a href="#">' + label + '</a></li>';
             },
             filter: function(course, query) {
-              return course.attributes.search_string.match(new RegExp(query, 'i'));
+              return course.search_string.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
             window.location = "/courses/" + id + "/change"
