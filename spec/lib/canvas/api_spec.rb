@@ -87,45 +87,6 @@ describe Canvas::API, type: :disable_external_api do
       expect(first_request).to have_been_made
       expect(second_request).to have_been_made
     end
-
-    it "fetches only the first page if specified" do
-      links = <<-LINKS
-      <https://canvas.instructure.com/api/v1/courses?page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?page=2&per_page=10>; rel="next"
-      LINKS
-      headers = { "Link" => links }
-
-      body = { name: "This is a course on page 1" }
-      first_request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
-        .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: body.to_json, headers: headers)
-
-      body2 = { name: "This is a course on page 2" }
-      second_request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
-        .with(query: { "page" => "2", "per_page" => "10", "access_token" => access_token })
-        .to_return(status: 200, body: body2.to_json, headers: {})
-
-      grades = []
-      subject.get_data("/courses", {}, false) { |course| grades << course }
-
-      expect(grades.count).to eq 1
-      expect(first_request).to have_been_made
-      expect(second_request).to_not have_been_made
-    end
-
-    it "returns a hash with the result" do
-      links = <<-LINKS
-      <https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=1&per_page=10>; rel="current",<https://canvas.instructure.com/api/v1/courses?enrollment_type=student&page=2&per_page=10>; rel="next"
-      LINKS
-      headers = { "Link" => links }
-
-      body = { name: "This is a course on page 1" }
-      request = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
-        .with(query: { "access_token" => access_token })
-        .to_return(status: 200, body: body.to_json, headers: headers)
-      result = subject.get_data("/courses", {}, false) { |course| [] << course }
-
-      expect(result[:has_next_page]).to eq true
-    end
   end
 
   describe "#set_data" do

@@ -18,9 +18,9 @@ module Services
         context.users = syllabus.users(course_id, true, user_ids: user_ids) do
           context.fail!("An error occurred while attempting to retrieve #{provider} users", error_code: 500)
           next context
-        end[:data]
+        end[:users]
 
-        next context if context.failure?
+        next context if context.failure? || context.users.nil?
       end
     end
   end

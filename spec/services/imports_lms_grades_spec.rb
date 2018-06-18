@@ -10,7 +10,7 @@ describe Services::ImportsLMSGrades do
 
     before do
       # do not call the API
-      allow_any_instance_of(ActiveLMS::Syllabus).to receive(:grades).and_return({ data: [] })
+      allow_any_instance_of(ActiveLMS::Syllabus).to receive(:grades).and_return({ grades: [] })
     end
 
     it "retrieves the grade details from the lms provider" do

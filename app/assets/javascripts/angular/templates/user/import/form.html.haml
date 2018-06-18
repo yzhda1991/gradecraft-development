@@ -2,7 +2,11 @@
 
 %canvas-course-selector{"provider"=>"{{vm.provider}}"}
 
-%without-users{"ng-if"=>"vm.users.length < 1"}
+%h2.loading{"ng-if"=>"vm.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading users...
+
+%without-users{"ng-if"=>"!vm.loading && vm.users.length < 1"}
   %p There are no users to import for this course
 
 %with_users{"ng-if"=>"vm.users.length > 0"}

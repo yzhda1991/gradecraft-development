@@ -11,7 +11,7 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
   context "as a professor" do
     let(:user) { build :user, courses: [course], role: :professor }
     let(:access_token) { "topsecret" }
-    let(:syllabus) { double :syllabus, grades: grades, assignment: provider_assignment }
+    let(:syllabus) { instance_double "Syllabus", grades: { grades: grades }, assignment: provider_assignment }
     let(:grades) { [{ id: 1, score: 100 }, { id: 2, score: 120 }] }
     let(:provider_assignment) { { name: "Pass/Fail" } }
     let!(:user_authorization) do
@@ -36,7 +36,8 @@ describe API::Grades::ImportersController, type: [:disable_external_api, :contro
           format: :json
         expect(assigns :assignment).to eq assignment
         expect(assigns :provider_name).to eq "canvas"
-        expect(assigns :grades).to eq grades
+        expect(assigns :result).to include :grades
+        expect(assigns(:result)[:grades]).to match_array grades
       end
 
       it "renders the template" do

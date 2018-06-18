@@ -6,6 +6,9 @@ require "canvas"
 # This should not be used directly. This is used as a specific adapter for
 # ActiveLMS::Syllabus.
 module ActiveLMS
+  GRADE_API_PARAMS = ["assignment_ids[]", "enrollment_state", "workflow_state", "student_ids", "include[]", "per_page"].freeze
+  USERS_API_PARAMS = ["include"].freeze
+
   class CanvasSyllabus
     # Internal: Initializes a CanvasSyllabus
     #
@@ -374,7 +377,7 @@ module ActiveLMS
                    student_ids: "all",
                    include: ["assignment", "course", "user", "submission_comments"],
                    per_page: options.delete(:per_page) || 25 }.merge(options)
-        result = client.get_data("/courses/#{course_id}/students/submissions", params, fetch_next) do |data|
+        client.get_data("/courses/#{course_id}/students/submissions", params) do |data, next_url|
           data.select! { |grade| !grade["score"].blank? || !grade["submission_comments"].blank? }
           if grade_ids.nil?
             grades += data
@@ -384,8 +387,9 @@ module ActiveLMS
               grades << grade
             end
           end
+          return { grades: grades, page_params: parse_params(next_url, *GRADE_API_PARAMS) } if !fetch_next
         end
-        { data: grades, has_next_page: result[:has_next_page] }
+        { grades: grades }
       end
     end
 
@@ -552,13 +556,12 @@ module ActiveLMS
     def users(course_id, fetch_next=true, options={}, &exception_handler)
       handle_exceptions(exception_handler) do
         users = []
-        params = {
-          include: ["enrollments", "email"]
-        }.merge(options)
-        result = client.get_data("/courses/#{course_id}/users", params, fetch_next) do |data|
+        params = { include: ["enrollments", "email"], per_page: 25 }.merge(options)
+        result = client.get_data("/courses/#{course_id}/users", params) do |data, next_url|
           users += data
+          return { users: users, page_params: parse_params(next_url, *USERS_API_PARAMS) } if !fetch_next
         end
-        { data: users, has_next_page: result[:has_next_page] }
+        { users: users }
       end
     end
 
@@ -574,6 +577,14 @@ module ActiveLMS
       else
         raise e
       end
+    end
+
+    # For pagination with Canvas API
+    # Returns params required for fetching next page for AJAX loading
+    def parse_params(uri, *exceptions)
+      return nil if uri.nil?
+      params = Rack::Utils.parse_query URI(uri).query
+      params.blank? ? params : params.except(*exceptions)
     end
   end
 end

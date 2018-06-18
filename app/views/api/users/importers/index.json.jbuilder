@@ -1,4 +1,4 @@
-json.data @users[:data] do |user|
+json.data @result[:users] do |user|
   gradecraft_user = User.find_by_insensitive_email(user["email"])
   user_exists = lms_user_match?(user["email"], current_course)
   gradecraft_role = lms_user_role(user["enrollments"])
@@ -21,5 +21,5 @@ json.data @users[:data] do |user|
 end
 
 json.meta do
-  json.has_next_page @users[:has_next_page]
+  json.page_params @result[:page_params]
 end

@@ -1,92 +1,85 @@
 %error-message{"visible"=>"vm.hasError()", "message"=>"An unexpected error occurred while loading grades."}
 
-%loading{"ng-if"=>"vm.loading"}
-  %h2
-    %i.fa.fa-spinner.fa-spin.fa-fw
-    Loading {{vm.provider}} grades..
-  %br
+%h2.loading{"ng-if"=>"vm.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading grades...
 
-%loaded{"ng-if"=>"!vm.loading"}
-  %without_grades{"ng-if"=>"!grades || grades.length < 1"}
-    %div
-      There are no grades to import for this
-      %span.lowercase {{termFor("assignment")}}.
-    %div
-      You can
-      %a{"ng-href"=>"{{vm.assignmentLink}}"} modify your assignment selection
-      to find grades to import.
+%without_grades{"ng-if"=>"!vm.loading && grades.length < 1"}
+  %div
+    There are no grades to import for this
+    %span.lowercase {{termFor("assignment")}}.
+  %div
+    You can
+    %a{"ng-href"=>"{{vm.assignmentLink}}"} modify your assignment selection
+    to find grades to import.
 
-  %with_grades{"ng-if"=>"grades && grades.length > 0"}
-    %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8", "ng-submit"=>"vm.formSubmitted = true"}
-      -# Hidden inputs that Rails would normally generate for a form
-      %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
-      %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+%with_grades{"ng-if"=>"grades && grades.length > 0"}
+  %form{"action"=>"{{vm.formAction}}", "method"=>"post", "accept-charset"=>"UTF-8", "ng-submit"=>"vm.formSubmitted = true"}
+    -# Hidden inputs that Rails would normally generate for a form
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
 
-      %input{"type"=>"hidden", "name"=>"assignment_ids[]", "value"=>"{{vm.assignmentIds}}"}
+    %input{"type"=>"hidden", "name"=>"assignment_ids[]", "value"=>"{{vm.assignmentIds}}"}
 
-      .table-header-information
-        %div
-          %strong
-            Selected
-            %span.capitalize {{vm.provider}}
-            {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
-        %div
-          %em Wrong {{termFor("assignment")}}?
-          %a{"ng-href"=>"{{vm.assignmentLink}}"}
-            Switch {{vm.provider}}
-            %span.lowercase {{termFor("assignment")}}
+    .table-header-information
+      %div
+        %strong
+          Selected
+          %span.capitalize {{vm.provider}}
+          {{termFor("assignment")}}: {{termFor("provider_assignment_name")}}
+      %div
+        %em Wrong {{termFor("assignment")}}?
+        %a{"ng-href"=>"{{vm.assignmentLink}}"}
+          Switch {{vm.provider}}
+          %span.lowercase {{termFor("assignment")}}
 
-      %table.no-table-header
-        %thead
-          %tr
-            %th{"scope"=>"col"} Student Name
-            %th{"scope"=>"col"} {{vm.provider}} Score
-            %th{"scope"=>"col"} {{vm.provider}} Feedback
-            %th{"scope"=>"col"} GradeCraft Score
-            %th{"scope"=>"col"} GradeCraft Feedback
-            %th{"scope"=>"col"} User Found?
-            %th
-              %button.button.select-all{"role"=>"button",
-                                        "type"=>"button",
-                                        "ng-click"=>"vm.selectAllGrades()"}= "Check"
-              %button.button.select-none{"role"=>"button",
-                                         "type"=>"button",
-                                         "ng-click"=>"vm.deselectAllGrades()"}= "Uncheck"
-        %tbody
-          %tr{"ng-if"=>"grades.length > 0", "ng-repeat"=>"grade in grades"}
-            %td {{grade.primary_email}}
-            %td {{grade.score}}
-            %td {{grade.feedback}}
-            %td {{grade.gradecraft_score.raw_points}}
-            %td {{grade.gradecraft_score.feedback}}
-            %td
-              %div{"ng-if"=>"grade.user_exists"}
-                {{vm.termForUserExists(grade.user_exists)}}
-              %div{"ng-if"=>"!grade.user_exists"}
-                {{vm.termForUserExists(grade.user_exists)}}
-                %span.has-tooltip
-                  %i.fa.fa-info-circle
-                  .display-on-hover.hover-style
-                    Import grade to create a GradeCraft account for this user
-            %td.center
-              %input{"type"=>"checkbox",
-                     "name"=>"grade_ids[]",
-                     "value"=>"{{grade.id}}",
-                     "ng-model"=>"grade.selected_for_import"}
-                %span.has-tooltip{"ng-style"=>"{'visibility': grade.gradecraft_score.raw_points == null ? 'hidden' : 'visible'}"}
-                  %i.fa.fa-info-circle
-                  .display-on-hover.hover-style
-                    Importing this grade would override the existing grade in GradeCraft with the grade from
-                    %span.capitalize {{vm.provider}}
-          %tr{"ng-if"=>"vm.loading"}
-            %td.center{"colspan"=>"7"}
-              %i.fa.fa-spinner.fa-spin.fa-fw
-              Loading...
+    %table.no-table-header
+      %thead
+        %tr
+          %th{"scope"=>"col"} Student Name
+          %th{"scope"=>"col"} {{vm.provider}} Score
+          %th{"scope"=>"col"} {{vm.provider}} Feedback
+          %th{"scope"=>"col"} GradeCraft Score
+          %th{"scope"=>"col"} GradeCraft Feedback
+          %th{"scope"=>"col"} User Found?
+          %th
+            %button.button.select-all{"role"=>"button",
+                                      "type"=>"button",
+                                      "ng-click"=>"vm.selectAllGrades()"}= "Check"
+            %button.button.select-none{"role"=>"button",
+                                       "type"=>"button",
+                                       "ng-click"=>"vm.deselectAllGrades()"}= "Uncheck"
+      %tbody
+        %tr{"ng-if"=>"grades.length > 0", "ng-repeat"=>"grade in grades"}
+          %td {{grade.primary_email}}
+          %td {{grade.score}}
+          %td {{grade.feedback}}
+          %td {{grade.gradecraft_score.raw_points}}
+          %td {{grade.gradecraft_score.feedback}}
+          %td
+            %div{"ng-if"=>"grade.user_exists"}
+              {{vm.termForUserExists(grade.user_exists)}}
+            %div{"ng-if"=>"!grade.user_exists"}
+              {{vm.termForUserExists(grade.user_exists)}}
+              %span.has-tooltip
+                %i.fa.fa-info-circle
+                .display-on-hover.hover-style
+                  Import grade to create a GradeCraft account for this user
+          %td.center
+            %input{"type"=>"checkbox",
+                   "name"=>"grade_ids[]",
+                   "value"=>"{{grade.id}}",
+                   "ng-model"=>"grade.selected_for_import"}
+              %span.has-tooltip{"ng-style"=>"{'visibility': grade.gradecraft_score.raw_points == null ? 'hidden' : 'visible'}"}
+                %i.fa.fa-info-circle
+                .display-on-hover.hover-style
+                  Importing this grade would override the existing grade in GradeCraft with the grade from
+                  %span.capitalize {{vm.provider}}
 
-      .submit-buttons
-        .right
-          %input{"type"=>"submit",
-                 "class"=>"button",
-                 "ng-disabled"=>"!vm.hasSelectedGrades() || vm.formSubmitted",
-                 "ng-class"=>"{'disabled': !vm.hasSelectedGrades() || vm.formSubmitted}",
-                 "value"=>"Import Selected Grades Into {{vm.assignmentName}}"}
+    .submit-buttons
+      .right
+        %input{"type"=>"submit",
+               "class"=>"button",
+               "ng-disabled"=>"vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted",
+               "ng-class"=>"{'disabled': vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted}",
+               "value"=>"Import Selected Grades Into {{vm.assignmentName}}"}

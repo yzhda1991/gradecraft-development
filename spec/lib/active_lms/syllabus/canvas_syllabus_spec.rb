@@ -219,10 +219,9 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       it "returns a hash containing only grades with scores or feedback" do
         result = subject.grades(123, assignment_ids)
 
-        expect(result[:data].count).to eq 2
-        expect(result[:data]).to include({ "id" => 456, "score" => 87 },
+        expect(result[:grades].count).to eq 2
+        expect(result[:grades]).to include({ "id" => 456, "score" => 87 },
           { "id" => 777, "score" => nil, "submission_comments" => "good jorb!" })
-        expect(result[:has_next_page]).to eq false
       end
 
       it "merges options if provided" do
@@ -237,26 +236,26 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
                          "access_token" => access_token })
           .to_return(status: 200, body: [{ id: 456, score: 87 }].to_json, headers: {})
         result = subject.grades(123, assignment_ids, nil, nil, { per_page: 5, test: true })
-        expect(result[:data].count).to eq 1
+        expect(result[:grades].count).to eq 1
       end
 
       context "for specific ids" do
         it "filters out a single id" do
           result = subject.grades(123, assignment_ids, "456")
 
-          expect(result[:data].first["id"]).to eq 456
+          expect(result[:grades].first["id"]).to eq 456
         end
 
         it "does not duplicate the grades for double grade ids" do
           result = subject.grades(123, assignment_ids, [456, 456])
 
-          expect(result[:data].count).to eq 1
+          expect(result[:grades].count).to eq 1
         end
 
         it "filters out the grade ids" do
           result = subject.grades(123, assignment_ids, [123])
 
-          expect(result[:data]).to be_empty
+          expect(result[:grades]).to be_empty
         end
       end
     end
@@ -349,15 +348,15 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         body = [{ name: "Jimmy Page", id: 1 }, { name: "Robert Plant", id: 2 }]
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
           .to_return(status: 200, body: body.to_json, headers: {})
 
-        users = subject.users(123)
+        result = subject.users(123)
 
-        expect(users[:data].length).to eq 2
-        expect(users[:has_next_page]).to be_falsey
-        expect(users[:data].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
-        expect(users[:data].second).to eq({ "name" => "Robert Plant", "id" => 2 })
+        expect(result[:users].length).to eq 2
+        expect(result[:users].first).to eq({ "name" => "Jimmy Page", "id" => 1 })
+        expect(result[:users].second).to eq({ "name" => "Robert Plant", "id" => 2 })
       end
 
       it "merges options if provided" do
@@ -365,12 +364,13 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
                          "enrollment_type" => ["student", "teacher"],
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
           .to_return(status: 200, body: body.to_json, headers: {})
 
-        users = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
+        result = subject.users(123, false, { "enrollment_type": ["student", "teacher"] })
 
-        expect(users[:data].length).to eq 1
+        expect(result[:users].length).to eq 1
       end
     end
 
@@ -378,7 +378,8 @@ describe ActiveLMS::CanvasSyllabus, type: :disable_external_api do
       let(:stub) {
         stub_request(:get, "https://canvas.instructure.com/api/v1/courses/123/users")
           .with(query: { "access_token" => access_token,
-                         "include" => ["enrollments", "email"] })
+                         "include" => ["enrollments", "email"],
+                         "per_page" => 25 })
       }
       let!(:json_error) { stub.to_raise(JSON::ParserError) }
 
