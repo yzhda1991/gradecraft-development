@@ -1,6 +1,8 @@
 - if presenter.assignment.media.present?
   %img{:src => presenter.assignment.media }
 
+%h2= presenter.assignment.name
+
 %h2 Description
 - if !current_student || presenter.assignment.points_visible_for_student?(current_student)
   - if presenter.assignment.pass_fail?
