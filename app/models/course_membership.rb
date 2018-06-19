@@ -74,6 +74,7 @@ class CourseMembership < ActiveRecord::Base
 
   def earned_grade_scheme_element(grade_scheme_elements=nil)
     elements = grade_scheme_elements || course.grade_scheme_elements.with_lowest_points.order_by_points_asc
+    elements = elements.includes(:unlock_conditions) if elements.any?
     element_earned = nil
 
     elements.sort_by{ |element| element.lowest_points }.each_with_index do |gse, index|
