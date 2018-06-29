@@ -69,7 +69,7 @@ describe API::GradesController do
         get :group_index,
           params: { assignment_id: assignment.id, group_id: group.id },
           format: :json
-        expect(assigns(:student_ids)).to eq(group.students.pluck(:id))
+        expect(assigns(:student_ids)).to match_array group.students.pluck(:id)
         expect(assigns(:grades).length).to eq(group.students.length)
         expect(response).to render_template(:group_index)
       end
