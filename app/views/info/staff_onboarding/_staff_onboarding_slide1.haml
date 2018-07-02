@@ -1,6 +1,6 @@
 .modal-slide
   .modal-slide-top
-    %img.modal-slide-image.centered{src: "/images/staff-onboarding-slide-1.png", alt: "Staff viewing GradeCraft dashboard illustration"}
+    = image_tag "staff-onboarding-slide-1.png", alt: "Staff viewing GradeCraft dashboard illustration", class: "modal-slide-image centered"
   .modal-slide-bottom
     .modal-slide-text
       %h2= "Hey, #{current_user.name}!"

@@ -1,5 +1,5 @@
 .umich-login
-  %img{src: "/images/University_of_Michigan_seal.svg.png", width: "200px"}
+  = image_tag "University_of_Michigan_seal.svg.png", width: "200px"
   %a.um-login.button{"aria-label": "University of Michigan Login", href: saml_init_path }
     = image_tag "UM.png", width: "30", class: "login-logo", "aria-hidden": true
     Log in with U-M

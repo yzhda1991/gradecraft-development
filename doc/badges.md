@@ -30,7 +30,7 @@ When a Badge is destroyed, all of the following belonging to it will be destroye
 
   * `name` - name of the badge. Must be present
   * `description` - description of the badge
-  * `icon` - optional image for the badge. If an image was not set by the instructor, '/public/images/badge.png' is used instead
+  * `icon` - optional image for the badge. If an image was not set by the instructor, 'badge.png' is used instead
   * `visible` - boolean switch controlling whether students can see the badge. Defaults to true
   * `can_earn_multiple_times` - boolean switch controlling whether students may earn the badge multiple times. Defaults to true
   * `full_points` - number of points that the student earns for the badge. When `can_earn_multiple_times` is true, students are given the value of `full_points` for every instance of the badge that they receive. Must either be a number or blank

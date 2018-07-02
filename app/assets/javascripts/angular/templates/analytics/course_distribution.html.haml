@@ -3,7 +3,7 @@
 .card-body
   .empty-state(ng-if="!vm.loading && !vm.courseAverage > 0")
     .empty-state-wrapper
-      %img(src="/images/no-grades-yet.svg" alt="rocketship" class="empty-state-graphic")
+      = image_tag "no-grades-yet.svg", alt: "rocketship", class: "empty-state-graphic"
     %p.empty-state-text No grades have been earned yet!
 
   .box-plot-wrapper(ng-if="vm.courseAverage > 0")

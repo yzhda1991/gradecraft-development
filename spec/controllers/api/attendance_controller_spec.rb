@@ -1,4 +1,4 @@
-describe API::AttendanceController do
+describe API::AttendanceController, focus: true do
   let(:course) { build :course }
   let(:attendance_params) { attributes_for :assignment }
   let(:attendance_event) { create :assignment, assignment_type: assignment_type, course: course }
