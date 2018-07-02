@@ -31,6 +31,12 @@ module GradeCraft
     config.i18n.enforce_available_locales = true
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}').to_s]
 
+    # Leave some pre-Rails 5.0 defaults as they were since they introduce breaking changes,
+    # for now..
+    config.active_record.belongs_to_required_by_default = false
+    config.action_controller.forgery_protection_origin_check = false
+    config.halt_callback_chains_on_return_false = true
+
     config.i18n.default_locale = :en
     config.angular_templates.ignore_prefix  = %w(angular/templates/)
     config.generators do |g|

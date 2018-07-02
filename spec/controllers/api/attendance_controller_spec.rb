@@ -81,7 +81,7 @@ describe API::AttendanceController do
       it "destroys the event" do
         attendance_event
 
-        expect{ delete :destroy, id: attendance_event.id, format: :json }.to \
+        expect{ delete :destroy, params: { id: attendance_event.id }, format: :json }.to \
           change(Assignment, :count).by -1
       end
 
@@ -102,8 +102,8 @@ describe API::AttendanceController do
         [
           -> { get :index, format: :json },
           -> { post :create, format: :json },
-          -> { put :update, format: :json, id: attendance_event.id },
-          -> { delete :destroy, format: :json, id: attendance_event.id }
+          -> { put :update, format: :json, params: { id: attendance_event.id } },
+          -> { delete :destroy, format: :json, params: { id: attendance_event.id } }
         ].each do |protected_route|
           expect(protected_route.call).to have_http_status :redirect
         end
