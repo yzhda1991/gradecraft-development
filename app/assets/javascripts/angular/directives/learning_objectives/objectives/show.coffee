@@ -1,7 +1,8 @@
-@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "$q", (LearningObjectivesService, CourseService, $q) ->
+@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "SortableService", "$q", (LearningObjectivesService, CourseService, SortableService, $q) ->
   LearningObjectivesShowCtrl = [() ->
     vm = this
     vm.loading = true
+    vm.sortable = SortableService
     vm.students = CourseService.students
     vm.objective = LearningObjectivesService.objective
     vm.linkedAssignments = LearningObjectivesService.linkedAssignments

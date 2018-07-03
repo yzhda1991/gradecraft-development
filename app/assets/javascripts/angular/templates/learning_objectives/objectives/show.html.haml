@@ -4,6 +4,7 @@
   %section
     %h2.subtitle {{loShowCtrl.objective().name}}
 
+    %h3.subtitle Overview
     %table.stacktable.info-table
       %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
         %th Number of Points to Completion:
@@ -30,12 +31,18 @@
   %section{"ng-if"=>"!loShowCtrl.studentId"}
     %h3.subtitle Student Progress
 
-    %table.stacktable
+    %table.no-table-header
       %thead
         %tr
-          %th Student
-          %th Progress
-          %th Attempts
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Student",
+                              "data-sortable-predicate"=>"name"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Progress",
+                              "data-sortable-predicate"=>"progress"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Attempts",
+                              "data-sortable-predicate"=>"attempts"}
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
           %td
