@@ -591,15 +591,5 @@ describe User do
       bizarro_grade = create(:grade, student: student, course: course)
       expect(student.earnable_course_badges_for_grade(grade)).not_to include(bizarro_badge)
     end
-
-    it "should see badges for the current course" do
-      EarnedBadge.destroy_all course_id: course[:id]
-      expect(student.earnable_course_badges_for_grade(grade)).to include(badge, single_badge)
-    end
-
-    it "should show course badges that the student has yet to earn", broken: true do
-      EarnedBadge.destroy_all course_id: course[:id]
-      expect(student.earnable_course_badges_for_grade(grade)).to include(badge, single_badge)
-    end
   end
 end
