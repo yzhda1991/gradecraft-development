@@ -215,6 +215,10 @@ Rails.application.routes.draw do
     get :overview, on: :collection
     get :edit_dashboard_message, on: :collection
     put :update_dashboard_message, on: :collection
+
+    resources :multipliers, only: [] do
+      get :export, on: :collection
+    end
   end
 
   resources :course_memberships, only: [:create, :delete, :destroy] do
