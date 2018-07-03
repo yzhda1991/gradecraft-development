@@ -1,4 +1,4 @@
-class Announcement < ActiveRecord::Base
+class Announcement < ApplicationRecord
   belongs_to :author, class_name: "User"
   belongs_to :course
   belongs_to :recipient, class_name: "User"

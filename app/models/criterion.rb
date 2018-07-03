@@ -1,4 +1,4 @@
-class Criterion < ActiveRecord::Base
+class Criterion < ApplicationRecord
   include Copyable
 
   belongs_to :rubric

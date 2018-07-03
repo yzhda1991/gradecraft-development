@@ -3,7 +3,7 @@
 # to handle associated files. It is named FileUpload since "File" is
 # already a ruby class.
 
-class FileUpload < ActiveRecord::Base
+class FileUpload < ApplicationRecord
   include S3Manager::Carrierwave
 
   belongs_to :course

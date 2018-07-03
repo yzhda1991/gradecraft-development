@@ -1,4 +1,4 @@
-class EarnedBadge < ActiveRecord::Base
+class EarnedBadge < ApplicationRecord
 
   before_validation :add_associations
 

@@ -7,7 +7,7 @@
 # Will be able to use a SecureToken to implement polymorphic
 require 'scrypt'
 
-class SecureToken < ActiveRecord::Base
+class SecureToken < ApplicationRecord
 
   belongs_to :target, polymorphic: true
 

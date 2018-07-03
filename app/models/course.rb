@@ -1,6 +1,6 @@
 require_relative "role"
 
-class Course < ActiveRecord::Base
+class Course < ApplicationRecord
   include Copyable
   include UnlockableCondition
   include Analytics::CourseAnalytics

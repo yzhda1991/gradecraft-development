@@ -1,7 +1,7 @@
 require "omniauth-canvas"
 require "omniauth-google-oauth2"
 
-class UserAuthorization < ActiveRecord::Base
+class UserAuthorization < ApplicationRecord
   belongs_to :user
 
   def self.create_by_auth_hash(auth_hash, user)

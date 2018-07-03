@@ -1,4 +1,4 @@
-class AnnouncementState < ActiveRecord::Base
+class AnnouncementState < ApplicationRecord
   belongs_to :announcement
   belongs_to :user
 

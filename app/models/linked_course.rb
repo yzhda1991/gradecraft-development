@@ -1,3 +1,3 @@
-class LinkedCourse < ActiveRecord::Base
+class LinkedCourse < ApplicationRecord
   belongs_to :course
 end

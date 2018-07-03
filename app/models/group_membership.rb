@@ -1,4 +1,4 @@
-class GroupMembership < ActiveRecord::Base
+class GroupMembership < ApplicationRecord
   belongs_to :group
   belongs_to :course
   belongs_to :student, class_name: "User"

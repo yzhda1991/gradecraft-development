@@ -1,4 +1,4 @@
-class Level < ActiveRecord::Base
+class Level < ApplicationRecord
   include Copyable
 
   belongs_to :criterion

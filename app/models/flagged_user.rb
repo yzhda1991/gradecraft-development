@@ -1,4 +1,4 @@
-class FlaggedUser < ActiveRecord::Base
+class FlaggedUser < ApplicationRecord
   belongs_to :course
   belongs_to :flagger, class_name: "User"
   belongs_to :flagged, class_name: "User"

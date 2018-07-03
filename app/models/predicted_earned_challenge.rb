@@ -1,4 +1,4 @@
-class PredictedEarnedChallenge < ActiveRecord::Base
+class PredictedEarnedChallenge < ApplicationRecord
   belongs_to :challenge
   belongs_to :student, class_name: "User"
 

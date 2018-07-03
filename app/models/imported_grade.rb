@@ -1,3 +1,3 @@
-class ImportedGrade < ActiveRecord::Base
+class ImportedGrade < ApplicationRecord
   belongs_to :grade
 end

@@ -1,4 +1,4 @@
-class Challenge < ActiveRecord::Base
+class Challenge < ApplicationRecord
   include Copyable
   include ScoreLevelable
   include UploadsMedia

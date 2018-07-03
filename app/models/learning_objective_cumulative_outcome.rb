@@ -1,4 +1,4 @@
-class LearningObjectiveCumulativeOutcome < ActiveRecord::Base
+class LearningObjectiveCumulativeOutcome < ApplicationRecord
   belongs_to :user
   belongs_to :learning_objective
 

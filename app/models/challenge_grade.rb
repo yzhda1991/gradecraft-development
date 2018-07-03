@@ -1,4 +1,4 @@
-class ChallengeGrade < ActiveRecord::Base
+class ChallengeGrade < ApplicationRecord
   include GradeStatus
 
   belongs_to :challenge

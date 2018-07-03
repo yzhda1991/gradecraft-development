@@ -1,4 +1,4 @@
-class PredictedEarnedBadge < ActiveRecord::Base
+class PredictedEarnedBadge < ApplicationRecord
   belongs_to :badge
   belongs_to :student, class_name: "User"
 

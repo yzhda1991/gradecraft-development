@@ -1,4 +1,4 @@
-class LearningObjectiveLink < ActiveRecord::Base
+class LearningObjectiveLink < ApplicationRecord
   belongs_to :learning_objective, foreign_key: :objective_id
   belongs_to :learning_objective_linkable, polymorphic: true
   belongs_to :course

@@ -1,4 +1,4 @@
-class LearningObjective < ActiveRecord::Base
+class LearningObjective < ApplicationRecord
   belongs_to :course
   belongs_to :category, class_name: "LearningObjectiveCategory", optional: true
 

@@ -1,4 +1,4 @@
-class Grade < ActiveRecord::Base
+class Grade < ApplicationRecord
   include GradeStatus
   include Historical
   include MultipleFileAttributes

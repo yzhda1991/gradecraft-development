@@ -1,4 +1,4 @@
-class AssignmentTypeWeight < ActiveRecord::Base
+class AssignmentTypeWeight < ApplicationRecord
   belongs_to :student, class_name: "User"
   belongs_to :assignment_type
   belongs_to :course

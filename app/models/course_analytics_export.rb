@@ -4,7 +4,7 @@ require "formatter"
 require "analytics/export"
 require_relative "../analytics_exports/export_contexts/course_export_context"
 
-class CourseAnalyticsExport < ActiveRecord::Base
+class CourseAnalyticsExport < ApplicationRecord
   # treat this resource as if it's responsible for managing an object on s3.
   # If this is an active_record descendent than add some callbacks.
   #

@@ -1,4 +1,4 @@
-class TeamMembership < ActiveRecord::Base
+class TeamMembership < ApplicationRecord
   include Copyable
 
   belongs_to :team

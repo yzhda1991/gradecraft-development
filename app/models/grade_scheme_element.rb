@@ -1,5 +1,5 @@
 # Provides the mapping between student's progress and the overall course grade
-class GradeSchemeElement < ActiveRecord::Base
+class GradeSchemeElement < ApplicationRecord
   include Copyable
   include UnlockableCondition
 
