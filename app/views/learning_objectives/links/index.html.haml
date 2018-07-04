@@ -10,4 +10,5 @@
           %tr
             %td= link_to o.name, learning_objectives_objective_path(o)
             %td= o.category.try(:name)
-            %td= o.progress(current_student, true)
+            %td= render partial: "learning_objectives/components/progress_bar",
+              locals: { learning_objective: o, student: current_student }

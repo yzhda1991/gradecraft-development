@@ -24,8 +24,10 @@
       %tr{"ng-if"=>"loShowCtrl.studentId"}
         %th Progress:
         %td
-          {{loShowCtrl.progress(loShowCtrl.studentId)}}
-          %span{"ng-show"=>"loShowCtrl.observedOutcomes(loShowCtrl.studentId).length"} (Attempts: {{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}})
+          .progress-bar
+            .fill{ style: "width: {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}%" }
+          {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}%
+          %span{"ng-show"=>"loShowCtrl.observedOutcomes(loShowCtrl.studentId).length"} ({{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}}/{{loShowCtrl.objective().count_to_achieve}} demonstrations complete)
 
   -# Table for all students in the course
   %section{"ng-if"=>"!loShowCtrl.studentId"}

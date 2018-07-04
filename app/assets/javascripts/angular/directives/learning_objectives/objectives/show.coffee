@@ -20,6 +20,10 @@
       return "Not started" unless co?
       co.status
 
+    vm.percent_complete = (studentId) ->
+      co = vm.cumulativeOutcome(parseInt(studentId))
+      co.percent_complete
+
     vm.observedOutcomes = (studentId) ->
       _studentId = if angular.isDefined(studentId) then studentId else @studentId
       co = vm.cumulativeOutcome(parseInt(_studentId))

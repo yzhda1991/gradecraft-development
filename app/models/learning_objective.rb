@@ -35,6 +35,22 @@ class LearningObjective < ApplicationRecord
     end
   end
 
+  def numeric_progress(student)
+    cumulative_outcome = cumulative_outcomes.for_user(student.id).first
+    return 0 if cumulative_outcome.nil?
+
+    if course.objectives_award_points?
+      earned_assignment_points cumulative_outcome
+    else
+      proficient_outcomes = observed_outcomes(cumulative_outcome)
+      proficient_outcomes.count
+    end
+  end
+
+  def percent_complete(student)
+    ((numeric_progress(student) / count_to_achieve.to_f) * 100).round(2)
+  end
+
   def point_progress_for(cumulative_outcome, include_details)
     earned = earned_assignment_points cumulative_outcome
     return NOT_STARTED_STATUS if earned.zero?
