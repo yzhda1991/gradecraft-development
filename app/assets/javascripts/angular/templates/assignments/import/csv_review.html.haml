@@ -22,6 +22,8 @@
               %th Purpose
               %th Open Date
               %th Due Date
+              %th Accept Submissions Date
+              %th Accept Submissions Until Date
               %th Required
           %tbody
             %tr{"ng-repeat"=>"row in assignmentRows"}
@@ -45,7 +47,7 @@
                        "placeholder"=>"No open date selected"}
                 %a{"ng-if"=>"!row.selected_open_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
                   %i.fa.fa-exclamation
-                  Invalid Due Date**
+                  Invalid Date**
               %td
                 %input{"ng-model"=>"row.selected_due_date",
                        "type"=>"text",
@@ -54,8 +56,22 @@
                        "placeholder"=>"No due date selected"}
                 %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
                   %i.fa.fa-exclamation
-                  Invalid Due Date**
+                  Invalid Date**
+
+              %td {{row.accepts_submissions}}
+
+              %td
+                %input{"ng-model"=>"row.selected_accepts_submissions_until",
+                       "type"=>"text",
+                       "gc-date-time-input"=>"",
+                       "ng-if"=>"row.selected_accepts_submissions_until || row.showDateTimePicker",
+                       "placeholder"=>"No due date selected"}
+                %a{"ng-if"=>"!row.selected_accepts_submissions_until && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                  %i.fa.fa-exclamation
+                  Invalid Date**
+
               %td {{row.required}}
+
 
         .submit-buttons
           %ul

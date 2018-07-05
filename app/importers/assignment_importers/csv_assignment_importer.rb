@@ -33,6 +33,8 @@ class CSVAssignmentImporter
         a.full_points = row[:full_points]
         a.open_at = row[:selected_open_date]
         a.due_at = row[:selected_due_date]
+        a.accepts_submissions = row[:accepts_submissions]
+        a.accepts_submissions_until = row[:selected_accepts_submissions_until]
         a.required = row[:required]
         a.course = course
       end
@@ -46,6 +48,8 @@ class CSVAssignmentImporter
           full_points: assignment.full_points,
           open_at: assignment.open_at,
           due_at: assignment.due_at,
+          accepts_submissions: assignment.accepts_submissions,
+          accepts_submissions_until: assignment.accepts_submissions_until,
           required: assignment.required,
         }
       else

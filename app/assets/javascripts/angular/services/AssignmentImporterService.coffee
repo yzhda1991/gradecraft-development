@@ -37,6 +37,7 @@
     _.each(assignmentRows, (row) ->
       row.selected_due_date = new Date(row.formatted_due_date) if row.formatted_due_date?
       row.selected_open_date = new Date(row.formatted_open_date) if row.formatted_open_date?
+      row.selected_accepts_submissions_until = new Date(row.formatted_accepts_submissions_until) if row.formatted_accepts_submissions_until?
       row.hasInvalidDueDate = !row.selected_due_date?
       true
     )
