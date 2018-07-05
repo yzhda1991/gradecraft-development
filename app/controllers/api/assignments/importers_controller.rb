@@ -34,7 +34,6 @@ class API::Assignments::ImportersController < ApplicationController
       status: 404 and return if File.extname(params[:file].original_filename) != ".csv"
 
     @assignment_rows = CSVAssignmentImporter.new.as_assignment_rows(params[:file].tempfile)
-
     render "api/assignments/importers/upload", status: 200
   end
 
@@ -49,8 +48,11 @@ class API::Assignments::ImportersController < ApplicationController
   private
 
   def assignment_import_params
-    params.require(:assignments).permit assignment_attributes: [:assignment_name, :assignment_type,
-      :selected_assignment_type, :selected_due_date, :point_total, :description]
+    params.require(:assignments).permit assignment_attributes: [
+      :assignment_name, :assignment_type, :selected_assignment_type,
+      :selected_open_date, :selected_due_date,
+      :full_points, :description, :purpose, :required
+    ]
   end
 
   # Ensure that the provided importer provider id allows uploads, downloads and

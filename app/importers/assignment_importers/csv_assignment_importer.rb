@@ -29,8 +29,11 @@ class CSVAssignmentImporter
         a.name = row[:assignment_name]
         a.assignment_type_id = assignment_type_id
         a.description = row[:description]
-        a.full_points = row[:point_total]
+        a.purpose = row[:purpose]
+        a.full_points = row[:full_points]
+        a.open_at = row[:selected_open_date]
         a.due_at = row[:selected_due_date]
+        a.required = row[:required]
         a.course = course
       end
 
@@ -39,8 +42,11 @@ class CSVAssignmentImporter
           name: assignment.name,
           assignment_type_name: assignment.assignment_type.name,
           description: assignment.description,
+          purpose: assignment.purpose,
           full_points: assignment.full_points,
+          open_at: assignment.open_at,
           due_at: assignment.due_at,
+          required: assignment.required,
         }
       else
         append_unsuccessful row.to_h, "Assignment is invalid"
@@ -132,7 +138,7 @@ class CSVAssignmentImporter
     end
 
     def required
-      remove_smart_quotes(data[10]).strip
+      remove_smart_quotes(data[9]).strip
     end
   end
 end

@@ -19,7 +19,10 @@
               %th Assignment Type
               %th Point Total
               %th Description
+              %th Purpose
+              %th Open Date
               %th Due Date
+              %th Required
           %tbody
             %tr{"ng-repeat"=>"row in assignmentRows"}
               %td {{row.assignment_name}}
@@ -31,8 +34,18 @@
                         "ng-if"=>"vm.assignmentTypes.length > 0"}
                   %option{"value"=>"", "ng-if"=>"!row.has_matching_assignment_type_id"} Create new assignment type: {{row.assignment_type}}*
                 %withoutAssignmentTypes{"ng-if"=>"!vm.assignmentTypes.length > 0"} {{row.assignment_type}}
-              %td {{row.point_total | number}}
+              %td {{row.full_points | number}}
               %td {{row.description}}
+              %td {{row.purpose}}
+              %td
+                %input{"ng-model"=>"row.selected_open_date",
+                       "type"=>"text",
+                       "gc-date-time-input"=>"",
+                       "ng-if"=>"row.selected_open_date || row.showDateTimePicker",
+                       "placeholder"=>"No open date selected"}
+                %a{"ng-if"=>"!row.selected_open_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                  %i.fa.fa-exclamation
+                  Invalid Due Date**
               %td
                 %input{"ng-model"=>"row.selected_due_date",
                        "type"=>"text",
@@ -42,6 +55,7 @@
                 %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
                   %i.fa.fa-exclamation
                   Invalid Due Date**
+              %td {{row.required}}
 
         .submit-buttons
           %ul
@@ -72,7 +86,10 @@
             %th Assignment Type
             %th Point Total
             %th Description
+            %th Purpose
+            %th Open Date
             %th Due Date
+            %th Required
         %tbody
           %tr{"ng-if"=>"results.successful.length < 1"}
             %td{"colspan"=>"2"} None
@@ -80,9 +97,12 @@
           %tr{"ng-repeat"=>"successRow in results.successful"}
             %td {{successRow.name}}
             %td {{successRow.assignment_type_name}}
-            %td {{successRow.full_points}}
+            %td {{successRow.full_points | number}}
             %td {{successRow.description}}
+            %td {{successRow.purpose}}
+            %td {{successRow.open_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
             %td {{successRow.due_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+            %td {{successRow.required}}
 
       %br
 
