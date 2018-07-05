@@ -53,7 +53,7 @@ class CSVAssignmentImporter
           required: assignment.required,
         }
       else
-        append_unsuccessful row.to_h, "Assignment is invalid"
+        append_unsuccessful row.to_h, "Assignment is invalid #{assignment.errors.messages}"
       end
     end
 

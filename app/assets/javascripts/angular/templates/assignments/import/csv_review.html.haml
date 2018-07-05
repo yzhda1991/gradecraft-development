@@ -97,30 +97,36 @@
     -# Results from import
     %submitted{"ng-if"=>"vm.submitted"}
       %h2 Successfully Imported
-      %table
-        %thead
-          %tr
-            %th Assignment Name
-            %th Assignment Type
-            %th Point Total
-            %th Description
-            %th Purpose
-            %th Open Date
-            %th Due Date
-            %th Required
-        %tbody
-          %tr{"ng-if"=>"results.successful.length < 1"}
-            %td{"colspan"=>"2"} None
+      .scroll-table
+        .table-wrapper
+          %table
+            %thead
+              %tr
+                %th Assignment Name
+                %th Assignment Type
+                %th Point Total
+                %th Description
+                %th Purpose
+                %th Open Date
+                %th Due Date
+                %th Accept Submissions Date
+                %th Accept Submissions Until Date
+                %th Required
+            %tbody
+              %tr{"ng-if"=>"results.successful.length < 1"}
+                %td{"colspan"=>"2"} None
 
-          %tr{"ng-repeat"=>"successRow in results.successful"}
-            %td {{successRow.name}}
-            %td {{successRow.assignment_type_name}}
-            %td {{successRow.full_points | number}}
-            %td {{successRow.description}}
-            %td {{successRow.purpose}}
-            %td {{successRow.open_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
-            %td {{successRow.due_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
-            %td {{successRow.required}}
+              %tr{"ng-repeat"=>"successRow in results.successful"}
+                %td {{successRow.name}}
+                %td {{successRow.assignment_type_name}}
+                %td {{successRow.full_points | number}}
+                %td {{successRow.description}}
+                %td {{successRow.purpose}}
+                %td {{successRow.open_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.due_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.accepts_submissions}}
+                %td {{successRow.accepts_submissions_until | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.required}}
 
       %br
 
