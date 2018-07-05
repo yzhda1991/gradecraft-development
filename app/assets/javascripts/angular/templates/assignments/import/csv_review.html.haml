@@ -12,65 +12,67 @@
 
       -# Import form
       %form{"name"=>"assignmentReviewForm", "ng-submit"=>"vm.postImportAssignments()", "ng-if"=>"!vm.submitted"}
-        %table
-          %thead
-            %tr
-              %th Name
-              %th Assignment Type
-              %th Point Total
-              %th Description
-              %th Purpose
-              %th Open Date
-              %th Due Date
-              %th Accept Submissions Date
-              %th Accept Submissions Until Date
-              %th Required
-          %tbody
-            %tr{"ng-repeat"=>"row in assignmentRows"}
-              %td {{row.assignment_name}}
-              %td
-                %select{"ng-model"=>"row.selected_assignment_type",
-                        "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
-                        "ng-disabled"=>"vm.loading",
-                        "ng-required"=>"row.has_matching_assignment_type_id == true && row.selected_assignment_type == null",
-                        "ng-if"=>"vm.assignmentTypes.length > 0"}
-                  %option{"value"=>"", "ng-if"=>"!row.has_matching_assignment_type_id"} Create new assignment type: {{row.assignment_type}}*
-                %withoutAssignmentTypes{"ng-if"=>"!vm.assignmentTypes.length > 0"} {{row.assignment_type}}
-              %td {{row.full_points | number}}
-              %td {{row.description}}
-              %td {{row.purpose}}
-              %td
-                %input{"ng-model"=>"row.selected_open_date",
-                       "type"=>"text",
-                       "gc-date-time-input"=>"",
-                       "ng-if"=>"row.selected_open_date || row.showDateTimePicker",
-                       "placeholder"=>"No open date selected"}
-                %a{"ng-if"=>"!row.selected_open_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
-                  %i.fa.fa-exclamation
-                  Invalid Date**
-              %td
-                %input{"ng-model"=>"row.selected_due_date",
-                       "type"=>"text",
-                       "gc-date-time-input"=>"",
-                       "ng-if"=>"row.selected_due_date || row.showDateTimePicker",
-                       "placeholder"=>"No due date selected"}
-                %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
-                  %i.fa.fa-exclamation
-                  Invalid Date**
+        .scroll-table
+          .table-wrapper
+            %table
+              %thead
+                %tr
+                  %th Name
+                  %th Assignment Type
+                  %th Point Total
+                  %th Description
+                  %th Purpose
+                  %th Open Date
+                  %th Due Date
+                  %th Accept Submissions Date
+                  %th Accept Submissions Until Date
+                  %th Required
+              %tbody
+                %tr{"ng-repeat"=>"row in assignmentRows"}
+                  %td {{row.assignment_name}}
+                  %td
+                    %select{"ng-model"=>"row.selected_assignment_type",
+                            "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
+                            "ng-disabled"=>"vm.loading",
+                            "ng-required"=>"row.has_matching_assignment_type_id == true && row.selected_assignment_type == null",
+                            "ng-if"=>"vm.assignmentTypes.length > 0"}
+                      %option{"value"=>"", "ng-if"=>"!row.has_matching_assignment_type_id"} Create new assignment type: {{row.assignment_type}}*
+                    %withoutAssignmentTypes{"ng-if"=>"!vm.assignmentTypes.length > 0"} {{row.assignment_type}}
+                  %td {{row.full_points | number}}
+                  %td {{row.description}}
+                  %td {{row.purpose}}
+                  %td
+                    %input{"ng-model"=>"row.selected_open_date",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_open_date || row.showDateTimePicker",
+                           "placeholder"=>"No open date selected"}
+                    %a{"ng-if"=>"!row.selected_open_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
+                  %td
+                    %input{"ng-model"=>"row.selected_due_date",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_due_date || row.showDateTimePicker",
+                           "placeholder"=>"No due date selected"}
+                    %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
 
-              %td {{row.accepts_submissions}}
+                  %td {{row.accepts_submissions}}
 
-              %td
-                %input{"ng-model"=>"row.selected_accepts_submissions_until",
-                       "type"=>"text",
-                       "gc-date-time-input"=>"",
-                       "ng-if"=>"row.selected_accepts_submissions_until || row.showDateTimePicker",
-                       "placeholder"=>"No due date selected"}
-                %a{"ng-if"=>"!row.selected_accepts_submissions_until && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
-                  %i.fa.fa-exclamation
-                  Invalid Date**
+                  %td
+                    %input{"ng-model"=>"row.selected_accepts_submissions_until",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_accepts_submissions_until || row.showDateTimePicker",
+                           "placeholder"=>"No due date selected"}
+                    %a{"ng-if"=>"!row.selected_accepts_submissions_until && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
 
-              %td {{row.required}}
+                  %td {{row.required}}
 
 
         .submit-buttons
