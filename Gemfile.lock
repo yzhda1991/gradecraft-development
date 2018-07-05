@@ -524,9 +524,11 @@ GEM
       json (>= 1, < 3)
     pacecar (2.0.0)
       activerecord (>= 4.0.0)
-    paper_trail (5.2.3)
-      activerecord (>= 3.0, < 6.0)
+    paper_trail (9.2.0)
+      activerecord (>= 4.2, < 5.3)
+      paper_trail-association_tracking (< 2)
       request_store (~> 1.1)
+    paper_trail-association_tracking (1.0.0)
     pg (1.0.0)
     phantomjs (2.1.1.0)
     polyamorous (1.3.3)
@@ -849,7 +851,7 @@ DEPENDENCIES
   omniauth-kerberos
   omniauth-lti (~> 0.0.2)
   pacecar
-  paper_trail (~> 5.0)
+  paper_trail
   pg
   porch
   pry
