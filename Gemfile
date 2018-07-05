@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.5.1'
 
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.0'
 gem 'resque'
 gem 'activerecord-import'
 gem 'active_model_serializers'
