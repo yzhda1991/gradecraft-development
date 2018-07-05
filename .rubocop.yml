@@ -9,7 +9,6 @@ AllCops:
     - "config/**/*"
     - "spec/**/*"
     - "script/**/*"
-    - "Vagrantfile"
     - "spec/**/*"
     - "lib/**/*"
     - "bin/**/*"
