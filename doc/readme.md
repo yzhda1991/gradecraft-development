@@ -42,16 +42,6 @@
 1. Optional: run `bundle exec rake db:sample`
 1. Run `foreman start`
 
-### Development Environment with Vagrant
-1. Install Vagrant (https://www.vagrantup.com/)
-2. Clone repository
-3. `vagrant up`
-4. `vagrant ssh`
-5. `cd /vagrant`
-6. `foreman start`
-7. Browse to [http://localhost:5000/](http://localhost:5000/)
-    - See db/samples.rb for dev usernames and passwords
-
 ## Linting code
 
 Note: Both rubocop and coffeelint are installed directly on your machine, as they are

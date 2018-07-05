@@ -32,22 +32,98 @@
 * MongoDB
 * Redis
 
-## Installation instructions for development:
+## Installation Notes (last update: 06/12/18) for running locally
 
-### (Preferred) Option 1: Local Setup
+1. Install Homebrew (Optional: `brew update`)
+
+2. Install a Ruby version manager of your choice and set current version to project version (Steps below pertain to [rbenv](https://github.com/rbenv/rbenv))
+
+```
+brew install rbenv
+
+# run command and follow instructions, will likely be the next step where you edit ~/.bash_profile
+rbenv init
+
+# make rbenv start up with terminal
+edit ~/.bash_profile and add eval "$(rbenv init -)"
+
+# optional (rbenv doctor script to check installation)
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+
+# install and set the current version
+rbenv install 2.2.2 (or whatever version Gradecraft is on)
+rbenv local 2.2.2 (or rbenv global 2.2.2 if preferred)
+
+# Restart terminal for changes to fully take into effect and ensure that the command rbenv works
+```
+
+3. Install databases
+
+```
+# --rest argument is deprecated in latest version of MongoDB
+# for now ensure that the installed version of Mongodb is at 3.4
+brew install mongodb@3.4
+brew install redis
+brew install postgresql
+```
+
+4. Ensure access to `/data/db` write directory for MongodDB
+```
+# create the directory, if it does not exist
+mkdir -p /data/db
+sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determine values)
+
+# (optional) mongod command should bring up mongodb; close with ctrl+c before proceeding to step 5
+```
+
+5. Clone the repository
+
+```
+# clone to current directory; change if desired
+git clone https://github.com/UM-USElab/gradecraft-development.git
+```
+
+6. Copy configuration files
+```
+# Note: ensure that you are in the newly cloned /gradecraft-development dir
+cp config/database.yml.sample config/database.yml
+cp config/mongoid.yml.sample config/mongoid.yml
+cp .env.sample .env
+
+# obtain and replace required credentials for .env (AWS, etc.)
+
+# comment out ALL SAML and IDP-related lines
+```
+
+7. Install Bundler
+```
+# install Bundler version specified in Gemfile.lock to avoid conflicts
+gem install bundler -v 1.13.7
+```
+
+8. Install project dependencies
+```
+bundle (or bundle install)
+```
+
+9. Start Postgres database and ensure it is running on port `5432` (Optional: Download and run with [Postgres.app](https://postgresapp.com/) for Mac OS)
+
+10. Create and populate databases with sample data
+
+```
+bundle exec rails db:create
+
+# optional
+bundle exec rails db:sample
+```
+
+11. Done! Run `foreman start` to begin
+
+### Installation Notes
+
+* Don't `sudo gem install`, as it will install gems in a way that does not work properly with `rbenv`. If using `rbenv` as the version manager, you may need to ensure that proper read/write permissions are granted for `/Users/{user}/.rbenv`
 
 See details [here](https://github.com/UM-USElab/gradecraft-development/wiki/Installation-Notes).
-
-### Option 2: Vagrant
-**Note that this solution is no longer maintained**
-
-1. Install Vagrant (https://www.vagrantup.com/)
-2. Clone repository
-3. `vagrant up`
-4. `vagrant ssh`
-5. `cd /vagrant`
-6. `foreman start`
-7. Browse to [http://localhost:5000/](http://localhost:5000/)
 
 See db/samples.rb for dev usernames and passwords
 
