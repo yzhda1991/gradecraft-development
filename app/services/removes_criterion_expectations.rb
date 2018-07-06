@@ -6,7 +6,7 @@ module Services
   class RemovesCriterionExpectations
     extend LightService::Organizer
 
-    def self.update(criterion)
+    def self.call(criterion)
       with(
         criterion: criterion
       )

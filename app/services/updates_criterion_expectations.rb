@@ -6,7 +6,7 @@ module Services
   class UpdatesCriterionExpectations
     extend LightService::Organizer
 
-    def self.update(criterion, level)
+    def self.call(criterion, level)
       with(
         criterion: criterion,
         level: level

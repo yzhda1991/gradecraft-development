@@ -14,7 +14,7 @@ module Services
 
     aliases attributes: :raw_params
 
-    def self.update(grade, grade_params, graded_by_id)
+    def self.call(grade, grade_params, graded_by_id)
       with(grade: grade,
            student: grade.student,
            assignment: grade.assignment,
