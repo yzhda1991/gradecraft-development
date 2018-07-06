@@ -50,7 +50,7 @@ class API::Assignments::ImportersController < ApplicationController
   def assignment_import_params
     params.require(:assignments).permit assignment_attributes: [
       :assignment_name, :assignment_type, :selected_assignment_type,
-      :selected_open_date, :selected_due_date,
+      :selected_open_at, :selected_due_at,
       :accepts_submissions, :selected_accepts_submissions_until,
       :full_points, :description, :purpose, :required
     ]

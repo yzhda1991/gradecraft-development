@@ -42,21 +42,21 @@
                   %td {{row.description}}
                   %td {{row.purpose}}
                   %td
-                    %input{"ng-model"=>"row.selected_open_date",
+                    %input{"ng-model"=>"row.selected_open_at",
                            "type"=>"text",
                            "gc-date-time-input"=>"",
-                           "ng-if"=>"row.selected_open_date || row.showDateTimePicker",
+                           "ng-if"=>"row.selected_open_at || row.showDateTimePicker",
                            "placeholder"=>"No open date selected"}
-                    %a{"ng-if"=>"!row.selected_open_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                    %a{"ng-if"=>"!row.selected_open_at && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
                       %i.fa.fa-exclamation
                       Invalid Date**
                   %td
-                    %input{"ng-model"=>"row.selected_due_date",
+                    %input{"ng-model"=>"row.selected_due_at",
                            "type"=>"text",
                            "gc-date-time-input"=>"",
-                           "ng-if"=>"row.selected_due_date || row.showDateTimePicker",
+                           "ng-if"=>"row.selected_due_at || row.showDateTimePicker",
                            "placeholder"=>"No due date selected"}
-                    %a{"ng-if"=>"!row.selected_due_date && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                    %a{"ng-if"=>"!row.selected_due_at && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
                       %i.fa.fa-exclamation
                       Invalid Date**
 

@@ -35,10 +35,10 @@
   # Converts a Ruby time as number of floating point seconds to a Javascript Time
   _parseDatesAsJavascript = () ->
     _.each(assignmentRows, (row) ->
-      row.selected_due_date = new Date(row.formatted_due_date) if row.formatted_due_date?
-      row.selected_open_date = new Date(row.formatted_open_date) if row.formatted_open_date?
+      row.selected_due_at = new Date(row.formatted_due_at) if row.formatted_due_at?
+      row.selected_open_at = new Date(row.formatted_open_at) if row.formatted_open_at?
       row.selected_accepts_submissions_until = new Date(row.formatted_accepts_submissions_until) if row.formatted_accepts_submissions_until?
-      row.hasInvalidDueDate = !row.selected_due_date?
+      row.hasInvalidDueDate = !row.selected_due_at?
       true
     )
 

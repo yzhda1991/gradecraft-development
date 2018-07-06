@@ -17,11 +17,15 @@ describe CSVAssignmentImporter do
     let(:assignment_rows) do
       subject.as_assignment_rows(file).map do |row|
         {
-          assignment_name: row.assignment_name,
+          name: row.name,
           assignment_type: row.assignment_type,
-          point_total: row.point_total,
+          full_points: row.full_points,
           description: row.description,
-          selected_due_date: row.due_date
+          purpose: row.purpose,
+          selected_open_at: row.open_at,
+          selected_due_at: row.due_at,
+          required: row.required,
+          accepts_submissions: row.accepts_submissions
         }
       end
     end
@@ -42,7 +46,6 @@ describe CSVAssignmentImporter do
 
     it "logs the successful and the unsuccessful rows" do
       subject.import assignment_rows, course
-
       expect(subject.successful.count).to eq 4
       expect(subject.unsuccessful.count).to be_zero
     end
@@ -51,9 +54,13 @@ describe CSVAssignmentImporter do
       subject.import assignment_rows, course
 
       assignment = Assignment.unscoped.last
-      expect(assignment.name).to eq assignment_rows.last[:assignment_name]
+      expect(assignment.name).to eq assignment_rows.last[:name]
       expect(assignment.description).to eq assignment_rows.last[:description]
-      expect(assignment.full_points).to eq assignment_rows.last[:point_total].to_i
+      expect(assignment.accepts_submissions.to_s).to eq assignment_rows.last[:accepts_submissions]
+      expect(assignment.required.to_s).to eq assignment_rows.last[:required]
+      expect(assignment.purpose).to eq assignment_rows.last[:purpose]
+      expect(assignment.full_points).to eq assignment_rows.last[:full_points].to_i
+      expect(assignment.open_at).to_not be_nil
       expect(assignment.due_at).to_not be_nil
       expect(assignment.course).to eq course
     end

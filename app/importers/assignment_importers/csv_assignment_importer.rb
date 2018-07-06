@@ -26,13 +26,13 @@ class CSVAssignmentImporter
       next if assignment_type_id.nil?
 
       assignment = Assignment.create do |a|
-        a.name = row[:assignment_name]
+        a.name = row[:name]
         a.assignment_type_id = assignment_type_id
         a.description = row[:description]
         a.purpose = row[:purpose]
         a.full_points = row[:full_points]
-        a.open_at = row[:selected_open_date]
-        a.due_at = row[:selected_due_date]
+        a.open_at = row[:selected_open_at]
+        a.due_at = row[:selected_due_at]
         a.accepts_submissions = row[:accepts_submissions]
         a.accepts_submissions_until = row[:selected_accepts_submissions_until]
         a.required = row[:required]

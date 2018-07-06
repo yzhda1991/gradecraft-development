@@ -3,7 +3,7 @@ class AssignmentExporter
   # This format is shared with Assignment import views and functions
   FORMAT = [
     "Name", "Assignment Type", "Point Total", "Description",
-    "Assignment Purpose", "Open At", "Due At",
+    "Purpose", "Open At", "Due At",
     "Accepts Submissions", "Accept Until", "Required"
   ]
 
