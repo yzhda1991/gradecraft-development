@@ -117,6 +117,8 @@ Rails.application.configure do
   #                 )
 end
 
+require 'carrierwave/storage/fog'
+
 CarrierWave.configure do |config|
   config.storage = :fog
 end

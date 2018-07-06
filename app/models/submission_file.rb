@@ -6,7 +6,6 @@ class SubmissionFile < ApplicationRecord
   belongs_to :submission, inverse_of: :submission_files
 
   mount_uploader :file, AttachmentUploader
-  process_in_background :file
   has_paper_trail ignore: [:file_missing, :last_confirmed_at]
 
   validates :filename, presence: true, length: { maximum: 50 }

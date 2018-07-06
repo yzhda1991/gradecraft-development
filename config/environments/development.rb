@@ -88,6 +88,8 @@ Rails.application.configure do
   # end
 end
 
+require 'carrierwave/storage/fog'
+
 CarrierWave.configure do |config|
   config.storage = :fog
   config.ignore_integrity_errors = false
