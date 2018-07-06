@@ -39,12 +39,11 @@ class LearningObjective < ApplicationRecord
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
     return 0 if cumulative_outcome.nil?
 
-    if course.objectives_award_points?
-      earned_assignment_points cumulative_outcome
-    else
-      proficient_outcomes = observed_outcomes(cumulative_outcome)
-      proficient_outcomes.count
-    end
+    cumulative_outcome
+      .observed_outcomes
+      .for_student_visible_grades
+      .shows_proficiency
+      .count
   end
 
   def percent_complete(student)

@@ -67,8 +67,12 @@
     %table.stacktable
       %thead
         %tr
-          %th Assignment
-          %th Assessment
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Assignment",
+                              "data-sortable-predicate"=>"assignment"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Assessment",
+                              "data-sortable-predicate"=>"assessment"}
       %tbody
         %tr{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes()"}
           %td
