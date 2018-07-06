@@ -80,7 +80,7 @@ class UsersController < ApplicationController
 
   def create
     if user_exists
-      result = Services::CreatesOrUpdatesUser.create_or_update user_params, current_course,
+      result = Services::CreatesOrUpdatesUser.call user_params, current_course,
         params[:send_welcome] == "1"
       @user = result[:user]
       if result.success?
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
           redirect_to students_path,
             notice: "#{term_for :student} #{@user.name} was successfully created!" and return
         elsif @user.is_staff?(current_course)
-          Services::SendsResourceEmail.send_resource_email @user
+          Services::SendsResourceEmail.call @user
           redirect_to staff_index_path,
             notice: "Staff Member #{@user.name} was successfully created!" and return
         elsif @user.is_observer?(current_course)

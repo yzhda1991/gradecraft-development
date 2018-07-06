@@ -32,7 +32,7 @@ class API::CriterionGradesController < ApplicationController
 
   # PUT api/assignments/:assignment_id/students/:student_id/criterion_grades
   def update
-    result = Services::CreatesGradeUsingRubric.create params, current_user.id
+    result = Services::CreatesGradeUsingRubric.call params, current_user.id
     if result.success?
       @grade = result.grade.reload
       render "api/grades/show", success: true, status: 200

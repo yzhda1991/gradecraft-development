@@ -57,7 +57,7 @@ class Assignments::GradesController < ApplicationController
     params[:assignment][:grades_attributes] = params[:assignment][:grades_attributes].each do |key, value|
       value.merge!(instructor_modified: true, complete: true, student_visible: true)
     end
-    result = Services::CreatesManyGrades.create @assignment.id, current_user.id, assignment_params[:grades_attributes]
+    result = Services::CreatesManyGrades.call @assignment.id, current_user.id, assignment_params[:grades_attributes]
 
     if result.success?
       if !params[:team_id].blank?

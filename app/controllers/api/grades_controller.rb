@@ -19,7 +19,7 @@ class API::GradesController < ApplicationController
   # POST api/grades/:grade_id
   def update
     grade = Grade.find(params[:id])
-    result = Services::UpdatesGrade.update grade, grade_params, current_user.id
+    result = Services::UpdatesGrade.call grade, grade_params, current_user.id
     if result
       # Only send notifications etc. when handling the form submission
       if params[:submit] && grade.reload.student_visible?

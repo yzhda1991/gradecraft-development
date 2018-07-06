@@ -40,7 +40,7 @@ class CanvasUserImporter
   def find_or_create_user(row, course)
     user = User.find_by_insensitive_email row.email if row.email
     user ||= Services::CreatesNewUser
-      .create(row.to_h.merge(internal: false), send_welcome)[:user]
+      .call(row.to_h.merge(internal: false), send_welcome)[:user]
     role_changed = false
 
     if user.valid?

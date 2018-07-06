@@ -33,7 +33,7 @@ class Users::ImportersController < ApplicationController
   def users_import
     @provider_name = params[:importer_provider_id]
 
-    @result = Services::ImportsLMSUsers.import @provider_name,
+    @result = Services::ImportsLMSUsers.call @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:user_ids],
       current_course
 
