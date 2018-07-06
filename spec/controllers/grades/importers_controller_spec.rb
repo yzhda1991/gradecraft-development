@@ -114,7 +114,7 @@ describe Grades::ImportersController do
       end
 
       before do
-        allow(Services::ImportsLMSGrades).to receive(:import).and_return result
+        allow(Services::ImportsLMSGrades).to receive(:call).and_return result
       end
 
       it "links the provider credentials if the provider is canvas" do
@@ -126,7 +126,7 @@ describe Grades::ImportersController do
 
       it "imports the selected grades" do
         expect(Services::ImportsLMSGrades).to \
-          receive(:import).with("canvas", access_token, course_id,
+          receive(:call).with("canvas", access_token, course_id,
                                 assignment_ids, grade_ids, assignment,
                                 professor)
             .and_return result

@@ -121,7 +121,7 @@ describe SubmissionsController do
       end
 
       it "deletes the text comment draft content" do
-        expect(Services::DeletesSubmissionDraftContent).to receive(:for).and_call_original
+        expect(Services::DeletesSubmissionDraftContent).to receive(:call).and_call_original
         post :update, params: { assignment_id: assignment.id, id: submission, submission: submission_params }, format: :json
       end
 

@@ -90,7 +90,7 @@ describe Assignments::GradesController do
 
           it "redirects on failure" do
             allow(Services::CreatesManyGrades).to \
-              receive(:create).and_return double(:result, success?: false, message: "")
+              receive(:call).and_return double(:result, success?: false, message: "")
             put :mass_update, params: { assignment_id: assignment.id,
               assignment: { grades_attributes: grades_attributes }}
             expect(response).to \

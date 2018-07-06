@@ -90,7 +90,7 @@ describe CSVStudentImporter do
         end
 
         it "contains unsuccessful rows if the user cannot be created or updated" do
-          allow(Services::CreatesOrUpdatesUser).to receive(:create_or_update).and_return \
+          allow(Services::CreatesOrUpdatesUser).to receive(:call).and_return \
             double(:result, success?: false, message: "")
           result = subject.import course
           expect(result.unsuccessful.count).to eq 3

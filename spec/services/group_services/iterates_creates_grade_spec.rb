@@ -25,7 +25,7 @@ describe Services::Actions::IteratesCreatesGrade do
   end
 
   it "iterates over the students in the group" do
-    expect(Services::CreatesGrade).to receive(:create).exactly(group.students.length).times.and_call_original
+    expect(Services::CreatesGrade).to receive(:call).exactly(group.students.length).times.and_call_original
     described_class.execute attributes: attributes, group: group, graded_by_id: professor.id
   end
 end

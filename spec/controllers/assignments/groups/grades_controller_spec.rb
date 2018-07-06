@@ -74,7 +74,7 @@ describe Assignments::Groups::GradesController do
 
         it "redirects on failure" do
           allow(Services::CreatesManyGroupGrades).to \
-            receive(:create).and_return double(:result, success?: false, message: "")
+            receive(:call).and_return double(:result, success?: false, message: "")
           put :mass_update, params: { assignment_id: assignment_with_groups.id,
             assignment: { grades_by_group: params }}
           expect(response).to \

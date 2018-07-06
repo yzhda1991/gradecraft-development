@@ -34,7 +34,7 @@ describe Services::Actions::IteratesGradeAttributes do
   end
 
   it "should create grades" do
-    expect(Services::CreatesGrade).to receive(:create).exactly(grade_attributes.length).times.and_call_original
+    expect(Services::CreatesGrade).to receive(:call).exactly(grade_attributes.length).times.and_call_original
     described_class.execute({ graded_by_id: professor.id, assignment_id: assignment.id, grade_attributes: grade_attributes })
   end
 end

@@ -33,7 +33,7 @@ describe Services::Actions::IteratesAssignmentGroupsToCreateGrades do
   end
 
   it "iterates the assignment groups" do
-    expect(Services::CreatesGroupGrades).to receive(:create).exactly(grades_by_group_params[:grades_by_group].length).times.and_call_original
+    expect(Services::CreatesGroupGrades).to receive(:call).exactly(grades_by_group_params[:grades_by_group].length).times.and_call_original
     described_class.execute context
   end
 end
