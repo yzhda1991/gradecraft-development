@@ -50,7 +50,6 @@ gem 'light-service'
 gem 'multi_json'
 gem 'mini_magick'
 gem 'mongoid', '~> 6.0.0'
-# proper name parser
 gem 'namae'
 gem 'ng-rails-csrf'
 gem 'nokogiri'
@@ -137,7 +136,7 @@ group :test do
   gem 'capybara-select2'
   gem 'launchy'
   gem 'rails-controller-testing', require: false
-  gem 'rspec-rails', '~> 3.5.2'
+  gem 'rspec-rails'
   # add spec helpers for testing Resque objects and resque scheduler
   gem 'resque_spec', git: 'https://github.com/leshill/resque_spec.git', branch: 'master'
   gem 'rspec-html-matchers'
