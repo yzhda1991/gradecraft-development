@@ -25,9 +25,8 @@
         %th Progress:
         %td
           .progress-bar
-            .fill{ style: "width: {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}%" }
-          {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}%
-          %span{"ng-show"=>"loShowCtrl.observedOutcomes(loShowCtrl.studentId).length"} ({{loShowCtrl.observedOutcomes(loShowCtrl.studentId).length}}/{{loShowCtrl.objective().count_to_achieve}} demonstrations complete)
+            .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(loShowCtrl.studentId)}} + '%' }"}
+          {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}% complete
 
   -# Table for all students in the course
   %section{"ng-if"=>"!loShowCtrl.studentId"}
@@ -49,7 +48,11 @@
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
           %td
             %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"} {{student.name}}
-          %td {{loShowCtrl.progress(student.id)}}
+          %td
+            %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
+              .progress-bar
+                .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
+              {{loShowCtrl.percent_complete(student.id)}}% complete
           %td
             %ul
               %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments",
@@ -58,6 +61,7 @@
 
   -# Progress for an individual student
   %section{"ng-if"=>"loShowCtrl.studentId", "ng-if"=>"loShowCtrl.observedOutcomes().length > 0"}
+
     %h3.subtitle Attempts
 
     %table.stacktable

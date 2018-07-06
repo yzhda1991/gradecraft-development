@@ -22,7 +22,13 @@
 
     vm.percent_complete = (studentId) ->
       co = vm.cumulativeOutcome(parseInt(studentId))
+      return "Not started" unless co?
       co.percent_complete
+
+    vm.numeric_progress = (studentId) ->
+      co = vm.cumulativeOutcome(parseInt(studentId))
+      return "Not started" unless co?
+      co.numeric_progress
 
     vm.observedOutcomes = (studentId) ->
       _studentId = if angular.isDefined(studentId) then studentId else @studentId
