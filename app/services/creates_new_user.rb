@@ -11,7 +11,7 @@ module Services
   class CreatesNewUser
     extend LightService::Organizer
 
-    def self.create(attributes, send_welcome_email=false)
+    def self.call(attributes, send_welcome_email=false)
       with(attributes: attributes, send_welcome_email: send_welcome_email)
         .reduce(
           Actions::BuildsUser,

@@ -51,7 +51,7 @@ class Assignments::ImportersController < ApplicationController
     @provider_name = params[:importer_provider_id]
     @course_id = params[:id]
 
-    @result = Services::ImportsLMSAssignments.import @provider_name,
+    @result = Services::ImportsLMSAssignments::Import.call @provider_name,
       authorization(@provider_name).access_token, @course_id, params[:assignment_ids],
       @course, params[:assignment_type_id]
 
@@ -73,7 +73,7 @@ class Assignments::ImportersController < ApplicationController
     provider_name = params[:importer_provider_id]
     assignment = Assignment.find(params[:id])
 
-    result = Services::ImportsLMSAssignments.refresh provider_name,
+    result = Services::ImportsLMSAssignments::Refresh.call provider_name,
       authorization(provider_name).access_token, assignment
 
     if result.success?
@@ -90,7 +90,7 @@ class Assignments::ImportersController < ApplicationController
     provider_name = params[:importer_provider_id]
     assignment = Assignment.find(params[:id])
 
-    result = Services::ImportsLMSAssignments.update provider_name,
+    result = Services::ImportsLMSAssignments::Update.call provider_name,
       authorization(provider_name).access_token, assignment
 
     if result.success?

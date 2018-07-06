@@ -17,7 +17,7 @@ describe Assignments::ImportersController do
 
     before do
       login_user professor
-      allow(Services::ImportsLMSAssignments).to receive(:import).and_return result
+      allow(Services::ImportsLMSAssignments::Import).to receive(:call).and_return result
     end
 
     describe "GET show" do
@@ -73,8 +73,8 @@ describe Assignments::ImportersController do
       end
 
       it "imports the selected assignments" do
-        expect(Services::ImportsLMSAssignments).to \
-          receive(:import).with(provider.to_s, access_token, course_id,
+        expect(Services::ImportsLMSAssignments::Import).to \
+          receive(:call).with(provider.to_s, access_token, course_id,
                                 assignment_ids, course, assignment_type.id.to_s)
                           .and_return result
 
@@ -110,15 +110,15 @@ describe Assignments::ImportersController do
       end
 
       it "updates the assignment from the provider details" do
-        expect(Services::ImportsLMSAssignments).to \
-          receive(:refresh).with(provider.to_s, access_token, assignment).and_return result
+        expect(Services::ImportsLMSAssignments::Refresh).to \
+          receive(:call).with(provider.to_s, access_token, assignment).and_return result
 
         post :refresh_assignment, params: { importer_provider_id: provider,
                                             id: assignment.id }
       end
 
       it "redirects back to the assignment show view and displays a notice" do
-        allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
+        allow(Services::ImportsLMSAssignments::Refresh).to receive(:call).and_return result
 
         post :refresh_assignment, params: { importer_provider_id: provider,
                                             id: assignment.id }
@@ -132,7 +132,7 @@ describe Assignments::ImportersController do
         it "redirects back to the assignment show view and displays an alert" do
           allow(result).to receive_messages(success?: false,
                                             message: "This was not imported")
-          allow(Services::ImportsLMSAssignments).to receive(:refresh).and_return result
+          allow(Services::ImportsLMSAssignments::Refresh).to receive(:call).and_return result
 
           post :refresh_assignment, params: { importer_provider_id: provider,
                                               id: assignment.id }
@@ -150,14 +150,14 @@ describe Assignments::ImportersController do
       end
 
       it "updates the canvas assignment from the assignment details" do
-        expect(Services::ImportsLMSAssignments).to \
-          receive(:update).with(provider.to_s, access_token, assignment).and_return result
+        expect(Services::ImportsLMSAssignments::Update).to \
+          receive(:call).with(provider.to_s, access_token, assignment).and_return result
 
         post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
       end
 
       it "redirects back to the assignment show view and displays a notice" do
-        allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
+        allow(Services::ImportsLMSAssignments::Update).to receive(:call).and_return result
 
         post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 
@@ -170,7 +170,7 @@ describe Assignments::ImportersController do
         it "redirects back to the assignment show view and displays an alert" do
           allow(result).to receive_messages(success?: false,
                                             message: "This was not updated")
-          allow(Services::ImportsLMSAssignments).to receive(:update).and_return result
+          allow(Services::ImportsLMSAssignments::Update).to receive(:call).and_return result
 
           post :update_assignment, params: { importer_provider_id: provider, id: assignment.id }
 

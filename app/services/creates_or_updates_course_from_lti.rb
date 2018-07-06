@@ -6,7 +6,7 @@ module Services
   class CreatesOrUpdatesCourseFromLTI
     extend LightService::Organizer
 
-    def self.create_or_update(auth_hash, update_existing=true)
+    def self.call(auth_hash, update_existing=true)
       with(auth_hash: auth_hash, update_existing: update_existing)
         .reduce(
           Actions::ParseCourseAttributesFromAuthHash,

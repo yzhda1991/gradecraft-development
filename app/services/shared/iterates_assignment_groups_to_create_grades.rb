@@ -16,7 +16,7 @@ module Services
         graded_by_id = context[:graded_by_id]
 
         grades_by_group_params[:grades_by_group].each do |index, gbg|
-          result = Services::CreatesGroupGrades.create gbg[:group_id], gbg, assignment_id, graded_by_id
+          result = Services::CreatesGroupGrades.call gbg[:group_id], gbg, assignment_id, graded_by_id
           if result.success?
             context.successful << result[:grade]
           else

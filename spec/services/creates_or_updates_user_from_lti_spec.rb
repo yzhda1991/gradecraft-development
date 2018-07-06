@@ -15,15 +15,15 @@ describe Services::CreatesOrUpdatesUserFromLTI do
     })
   end
 
-  describe ".create_or_update" do
+  describe ".call" do
     it "parses user attributes from the auth hash" do
       expect(Services::Actions::ParseUserAttributesFromAuthHash).to receive(:execute).and_call_original
-      described_class.create_or_update auth_hash
+      described_class.call auth_hash
     end
 
     it "decides if a user gets created or updated" do
       expect(Services::Actions::CreatesOrUpdatesUser).to receive(:execute).and_call_original
-      result = described_class.create_or_update auth_hash
+      result = described_class.call auth_hash
     end
   end
 end

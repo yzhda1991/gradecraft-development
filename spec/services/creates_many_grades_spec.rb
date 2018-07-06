@@ -5,10 +5,10 @@ describe Services::CreatesManyGrades do
   let(:grade_attributes) { { "0" => { instructor_modified: true, student_id: student.id,
       raw_points: 1000, student_visible: true } } }
 
-  describe ".create" do
+  describe ".call" do
     it "iterates grade attributes" do
       expect(Services::Actions::IteratesGradeAttributes).to receive(:execute).and_call_original
-      described_class.create assignment.id, graded_by_id, grade_attributes
+      described_class.call assignment.id, graded_by_id, grade_attributes
     end
   end
 end

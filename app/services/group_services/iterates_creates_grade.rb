@@ -4,7 +4,7 @@ module Services
   module Actions
     class IteratesCreatesGrade
       extend LightService::Action
-      
+
       expects :attributes, :group, :graded_by_id
 
       executed do |context|
@@ -15,7 +15,7 @@ module Services
           params = context[:attributes].deep_dup
           params["student_id"] = student.id
           params["group_id"] = group.id
-          context.add_to_context Services::CreatesGrade.create(params, graded_by_id)
+          context.add_to_context Services::CreatesGrade.call(params, graded_by_id)
         end
       end
     end

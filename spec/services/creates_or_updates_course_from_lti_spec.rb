@@ -14,20 +14,20 @@ describe Services::CreatesOrUpdatesCourseFromLTI do
     })
   end
 
-  describe ".create_or_update" do
+  describe ".call" do
     it "parses course attributes from the auth hash" do
       expect(Services::Actions::ParseCourseAttributesFromAuthHash).to receive(:execute).and_call_original
-      described_class.create_or_update auth_hash
+      described_class.call auth_hash
     end
 
     it "decides if a course gets created or updated" do
       expect(Services::Actions::CreatesOrUpdatesCourseByUID).to receive(:execute).and_call_original
-      result = described_class.create_or_update auth_hash
+      result = described_class.call auth_hash
     end
 
     it "decides if an existing course gets updated if provided" do
       expect(Services::Actions::CreatesOrUpdatesCourseByUID).to receive(:execute).and_call_original
-      result = described_class.create_or_update auth_hash, false
+      result = described_class.call auth_hash, false
     end
   end
 end

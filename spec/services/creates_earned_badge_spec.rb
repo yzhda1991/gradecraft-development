@@ -1,5 +1,5 @@
 describe Services::CreatesEarnedBadge do
-  describe ".award" do
+  describe ".call" do
     let(:course) { create :course }
     let(:badge) { create :badge }
     let(:student) { create(:course_membership, :student, course: course).user}
@@ -31,19 +31,19 @@ describe Services::CreatesEarnedBadge do
     it "creates a new earned badge" do
       expect(Services::Actions::CreatesEarnedBadge).to \
         receive(:execute).and_call_original
-      described_class.award attributes
+      described_class.call attributes
     end
 
     it "recalculates the student's score" do
       expect(Services::Actions::RecalculatesStudentScore).to \
         receive(:execute).and_call_original
-      described_class.award attributes
+      described_class.call attributes
     end
 
     it "notifies the student of the awarded badge" do
       expect(Services::Actions::NotifiesOfEarnedBadge).to \
         receive(:execute).and_call_original
-      described_class.award attributes
+      described_class.call attributes
     end
   end
 end

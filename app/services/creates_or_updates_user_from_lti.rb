@@ -8,7 +8,7 @@ module Services
 
     aliases user_attributes: :attributes
 
-    def self.create_or_update(auth_hash, send_welcome_email=false)
+    def self.call(auth_hash, send_welcome_email=false)
       with(auth_hash: auth_hash, send_welcome_email: send_welcome_email)
         .reduce(
           Actions::ParseUserAttributesFromAuthHash,
