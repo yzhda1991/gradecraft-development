@@ -4,7 +4,7 @@ class BadgeIconUploader < CarrierWave::Uploader::Base
   process resize_and_pad: [150, 150, background = :transparent, gravity = "Center"]
 
   def default_url
-    "/images/" + [version_name, "badge.png"].compact.join("_")
+    ActionController::Base.helpers.asset_path("badge.png")
   end
 
   def store_dir

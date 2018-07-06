@@ -10,6 +10,6 @@
       %tbody
         - @badges.each do |badge|
           %tr
-            %td= image_tag(badge.icon, width: 40, alt: badge.name)
+            %td= image_tag(badge.icon_url, width: 40, alt: badge.name)
             %td= badge.name
             %td= badge.description
