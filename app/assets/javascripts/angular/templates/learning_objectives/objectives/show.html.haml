@@ -16,7 +16,7 @@
         %th Description:
         %td {{loShowCtrl.objective().description}}
       %tr{"ng-if"=>"loShowCtrl.hasLinkedAssignments()"}
-        %th.capitalize Linked {{loShowCtrl.termFor("assignments")}}:
+        %th.capitalize Linked {{loShowCtrl.termFor("assignments")}} ({{loShowCtrl.linkedAssignmentsCount()}}):
         %td
           %ul.no-style
             %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
@@ -32,12 +32,12 @@
   %section{"ng-if"=>"!loShowCtrl.studentId"}
     %h3.subtitle Student Progress
 
-    %table.no-table-header
+    %table
       %thead
         %tr
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Student",
-                              "data-sortable-predicate"=>"name"}
+                              "data-sortable-predicate"=>"last_name"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Progress",
                               "data-sortable-predicate"=>"progress"}
@@ -64,12 +64,12 @@
 
     %h3.subtitle Attempts
 
-    %table.stacktable
+    %table
       %thead
         %tr
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"Assignment",
-                              "data-sortable-predicate"=>"assignment"}
+                              "data-sortable-header-text"=>"a",
+                              "data-sortable-predicate"=>"assignment_name"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Assessment",
                               "data-sortable-predicate"=>"assessment"}

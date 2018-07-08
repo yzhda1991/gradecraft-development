@@ -6,6 +6,8 @@
     vm.students = CourseService.students
     vm.objective = LearningObjectivesService.objective
     vm.linkedAssignments = LearningObjectivesService.linkedAssignments
+    vm.linkedAssignmentsCount = () -> vm.linkedAssignments.length
+
     vm.cumulativeOutcomes = LearningObjectivesService.cumulativeOutcomes
 
     vm.hasLinkedAssignments = () -> _.some(vm.linkedAssignments)

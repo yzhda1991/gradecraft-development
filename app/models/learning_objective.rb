@@ -24,6 +24,10 @@ class LearningObjective < ApplicationRecord
 
   scope :ordered_by_name, -> { order :name }
 
+  def linked_assignments_count
+    learning_objective_links.count
+  end
+
   def progress(student, include_details=false)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
     return NOT_STARTED_STATUS if cumulative_outcome.nil?
