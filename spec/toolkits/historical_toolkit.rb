@@ -29,7 +29,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
     let(:user) { create :user }
 
     before do
-      PaperTrail.whodunnit = user.id
+      PaperTrail.request.whodunnit = user.id
       model.save
     end
 
