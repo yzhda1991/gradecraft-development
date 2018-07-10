@@ -27,7 +27,7 @@ class Challenge < ApplicationRecord
   accepts_nested_attributes_for :challenge_files
 
   scope :with_dates, -> { where("challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL") }
-  scope :visible, -> { where visible: TRUE }
+  scope :visible, -> { where visible: true }
   scope :chronological, -> { order("due_at ASC") }
   scope :alphabetical, -> { order("name ASC") }
 

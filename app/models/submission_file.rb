@@ -45,7 +45,7 @@ class SubmissionFile < ApplicationRecord
   end
 
   def instructor_filename(index=nil)
-    file_number = index.class == Fixnum ? " #{index + 1}" : ""
+    file_number = index.class == Integer ? " #{index + 1}" : ""
     "#{submission.base_filename} - Submission File#{file_number}#{extension}"
   end
 
