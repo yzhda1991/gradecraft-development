@@ -404,7 +404,7 @@ end
   puts_success :assignment_type, assignment_type_name, :assignment_type_created
 end
 
-PaperTrail.whodunnit = nil
+PaperTrail.request.whodunnit = nil
 
 # ---------------------------- Create Assignments!----------------------------#
 
@@ -507,7 +507,7 @@ PaperTrail.whodunnit = nil
 
       if config[:student_submissions]
         @students.each do |student|
-          PaperTrail.whodunnit = student.id
+          PaperTrail.request.whodunnit = student.id
           submission = student.submissions.create! do |s|
             s.assignment = assignment
             s.text_comment = "Wingardium Leviosa"
@@ -550,7 +550,7 @@ PaperTrail.whodunnit = nil
               end
               g.graded_at = DateTime.now
               g.graded_by_id = course_config[:staff_ids].sample
-              PaperTrail.whodunnit = g.graded_by_id
+              PaperTrail.request.whodunnit = g.graded_by_id
             end
             g.assignment = assignment
           end
@@ -605,7 +605,7 @@ PaperTrail.whodunnit = nil
         puts "Generating Resubmissions"
         @students.each do |student|
           if assignment.resubmissions_allowed? && Grade.where(assignment_id: assignment.id, student_id: student.id, course_id: course.id).present?
-            PaperTrail.whodunnit = student.id
+            PaperTrail.request.whodunnit = student.id
             submission = student.submissions.create! do |s|
               s.assignment = assignment
               s.text_comment = "Wingardium Leviosa"

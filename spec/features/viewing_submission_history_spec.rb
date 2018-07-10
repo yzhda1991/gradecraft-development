@@ -16,7 +16,7 @@ feature "viewing submission history" do
 
     scenario "with some history" do
       previous_comment = submission.text_comment
-      PaperTrail.whodunnit = student.id
+      PaperTrail.request.whodunnit = student.id
       submission.update_attributes text_comment: "This is an updated comment"
       visit assignment_submission_path assignment, submission
       find("a", text: "Submission History").click do
@@ -29,7 +29,7 @@ feature "viewing submission history" do
     before { login_as student }
 
     scenario "with some history" do
-      PaperTrail.whodunnit = student.id
+      PaperTrail.request.whodunnit = student.id
       submission.update_attributes link: "http://example.org"
       visit assignment_path assignment
       expect(page).to have_content "You changed the link to \"http://example.org\""
