@@ -18,7 +18,7 @@ Rails.application.configure do
   config.assets.compress = true
   config.assets.css_compressor = :sass
   config.assets.digest = true
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(mangle: false)
   config.cache_classes = true
   config.cache_store = :dalli_store, ENV["MEMCACHED_URL"], { :namespace => "gradecraft_staging", :expires_in => 1.day, :compress => true }
   config.consider_all_requests_local = false
