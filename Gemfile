@@ -92,7 +92,8 @@ gem 'resque-scheduler', require: 'resque/scheduler'
 gem 'resque-throttler', require: 'resque/throttler'
 
 gem 'responders'
-gem 'rollbar'
+# when updating, version MUST be compatible with ng-rollbar and rollbar.js dependencies
+gem 'rollbar', '~> 2.1'
 gem 'sampler'
 gem 'sanitize'
 gem 'sassc-rails'
@@ -155,6 +156,6 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-jquery', '2.1.4'
   gem 'rails-assets-angular-dragdrop', '1.0.11'
   gem 'rails-assets-ngDraggable', '0.1.8'
-  gem 'rails-assets-rollbar.js', '~> 2.4'
-  gem 'rails-assets-ng-rollbar', '~> 2.3'
+  gem 'rails-assets-rollbar.js', '~> 2.4.2'
+  gem 'rails-assets-ng-rollbar', '~> 2.3.10'
 end
