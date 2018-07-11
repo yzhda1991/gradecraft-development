@@ -9,7 +9,7 @@ class AssignmentExporter
 
   # These headers are not used for import
   ADDITIONAL_HEADERS = [
-   "Assignment Id", "Created At", "Submissions Count", "Grades Count", "Learning Objectives"
+    "Assignment Id", "Created At", "Submissions Count", "Grades Count", "Learning Objectives"
   ]
 
   def export(course)

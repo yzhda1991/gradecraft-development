@@ -25,19 +25,7 @@ class CSVAssignmentImporter
       assignment_type_id = find_or_create_assignment_type row, course
       next if assignment_type_id.nil?
 
-      assignment = Assignment.create do |a|
-        a.name = row[:name]
-        a.assignment_type_id = assignment_type_id
-        a.description = row[:description]
-        a.purpose = row[:purpose]
-        a.full_points = row[:full_points]
-        a.open_at = row[:selected_open_at]
-        a.due_at = row[:selected_due_at]
-        a.accepts_submissions = row[:accepts_submissions]
-        a.accepts_submissions_until = row[:selected_accepts_submissions_until]
-        a.required = row[:required]
-        a.course = course
-      end
+      assignment = create_assignment_from_row(row)
 
       if assignment.persisted?
         successful << {
@@ -61,6 +49,22 @@ class CSVAssignmentImporter
   end
 
   private
+
+  def create_assignment_from_row(row)
+    assignment = Assignment.create do |a|
+      a.name = row[:name]
+      a.assignment_type_id = assignment_type_id
+      a.description = row[:description]
+      a.purpose = row[:purpose]
+      a.full_points = row[:full_points]
+      a.open_at = row[:selected_open_at]
+      a.due_at = row[:selected_due_at]
+      a.accepts_submissions = row[:accepts_submissions]
+      a.accepts_submissions_until = row[:selected_accepts_submissions_until]
+      a.required = row[:required]
+      a.course = course
+    end
+  end
 
   def append_unsuccessful(row, error)
     unsuccessful << { data: row.to_s, error: error }
