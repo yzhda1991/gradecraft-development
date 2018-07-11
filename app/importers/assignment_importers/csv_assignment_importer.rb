@@ -22,9 +22,9 @@ class CSVAssignmentImporter
   # course
   def import(assignment_rows, course)
     assignment_rows.each do |row|
-      assignment_type_id = find_or_create_assignment_type row, course
-      next if assignment_type_id.nil?
-
+      row[:assignment_type_id] = find_or_create_assignment_type row, course
+      next unless row[:assignment_type_id].present?
+      row[:course] = course
       assignment = create_assignment_from_row(row)
 
       if assignment.persisted?
@@ -53,7 +53,7 @@ class CSVAssignmentImporter
   def create_assignment_from_row(row)
     assignment = Assignment.create do |a|
       a.name = row[:name]
-      a.assignment_type_id = assignment_type_id
+      a.assignment_type_id = row[:assignment_type_id]
       a.description = row[:description]
       a.purpose = row[:purpose]
       a.full_points = row[:full_points]
@@ -62,7 +62,7 @@ class CSVAssignmentImporter
       a.accepts_submissions = row[:accepts_submissions]
       a.accepts_submissions_until = row[:selected_accepts_submissions_until]
       a.required = row[:required]
-      a.course = course
+      a.course = row[:course]
     end
   end
 
