@@ -21,12 +21,6 @@ GradeCraft::Application.configure do
   config.i18n.fallbacks = true
   config.log_formatter = ::Logger::Formatter.new
   config.log_level = :info
-  # config.logger = ActiveSupport::TaggedLogging.new(
-  #                   RemoteSyslogLogger.new(
-  #                     "logs6.papertrailapp.com",
-  #                     20258,
-  #                     program: "rails-#{ENV["RAILS_ENV"]}")
-  #                 )
   config.public_file_server.enabled = false
   config.session_store :active_record_store, :expire_after => 60.minutes
 end

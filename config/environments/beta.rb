@@ -108,13 +108,6 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   config.session_store :active_record_store, :expire_after => 60.minutes
-
-  # config.logger = ActiveSupport::TaggedLogging.new(
-  #                   RemoteSyslogLogger.new(
-  #                     "logs6.papertrailapp.com",
-  #                     20258,
-  #                     program: "rails-#{ENV["RAILS_ENV"]}")
-  #                 )
 end
 
 require 'carrierwave/storage/fog'
