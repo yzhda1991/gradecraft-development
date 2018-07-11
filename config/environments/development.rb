@@ -37,15 +37,33 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.delivery_method = :smtp
+
   # NOTE: to test emails locally
   # 1. gem install mailcatcher
   # 2. run 'mailcatcher' in terminal
   # 3. visit http://127.0.0.1:1080/
   # 4. set perform_deliveries to true
   config.action_mailer.default_url_options = { host: "localhost:5000" }
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { address: '127.0.0.1', port: 1025 }
   config.action_mailer.perform_deliveries = false
+
+  # NOTE: to send emails via Gmail's SMTP server
+  # 1. IMPORTANT! Set ENV["MAIL_INTERCEPTOR_RECIPIENT"]
+  # 2. Set ENV["GMAIL_SMTP_USERNAME"], ENV["GMAIL_SMTP_PASSWORD"] to match Gmail
+  #   login credentials; e.g. blah@gmail.com, password123
+  # 3. Update mail_interceptor.rb to register the interceptor for
+  #   Rails.env.development
+  # config.action_mailer.default_url_options = { host: "localhost:5000" }
+  # config.action_mailer.smtp_settings = {
+  #   address:              "smtp.gmail.com",
+  #   port:                 587,
+  #   domain:               "localhost:5000",
+  #   user_name:            ENV["GMAIL_SMTP_USERNAME"],
+  #   password:             ENV["GMAIL_SMTP_PASSWORD"],
+  #   authentication:       "plain",
+  #   enable_starttls_auto: true
+  # }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
