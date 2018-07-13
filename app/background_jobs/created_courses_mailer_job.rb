@@ -3,7 +3,7 @@ class CreatedCoursesMailerJob < ResqueApplicationJob
 
   def perform
     csv = CreatedCoursesExporter.new.export
-    NotificationMailer.created_courses_export(csv).deliver_now
+    ExportsMailer.created_courses_export(csv).deliver_now
   end
 end
 

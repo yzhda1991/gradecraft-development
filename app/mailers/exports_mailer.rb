@@ -56,7 +56,7 @@ class ExportsMailer < ApplicationMailer
   def created_courses_export(csv)
     @dates = { today: Date.today.strftime("%B %d, %Y"), last_month: 1.month.ago.strftime("%B %d, %Y") }
     attachments["export.csv"] = csv_attachment(csv)
-    mail(to: ADMIN_EMAIL, subject: "Your monthly course report for #{environment_to_readable_s}") do |format|
+    mail(to: ADMIN_GROUP_EMAIL, subject: "Your monthly course report for #{environment_to_readable_s}") do |format|
       format.text
       format.html
     end
