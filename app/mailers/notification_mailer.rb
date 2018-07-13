@@ -1,6 +1,4 @@
 class NotificationMailer < ApplicationMailer
-  include EnvironmentHelper
-  
   layout "mailers/notification_layout"
 
   def lti_error(user_data, course_data)
@@ -72,14 +70,6 @@ class NotificationMailer < ApplicationMailer
         format.text
         format.html
       end
-    end
-  end
-
-  def created_courses_export(csv)
-    attachments["export.csv"] = { mime_type: "text/csv", content: csv }
-    mail(to: ADMIN_EMAIL, subject: "Your monthly course report for #{environment_to_readable_s}") do |format|
-      format.text
-      format.html
     end
   end
 

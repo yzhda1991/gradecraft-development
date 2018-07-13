@@ -1,4 +1,6 @@
 class ExportsMailer < ApplicationMailer
+  include EnvironmentHelper
+
   layout "mailers/notification_layout"
 
   # the SecureTokenHelper brings in the #secure_downloads_url method which we
@@ -49,6 +51,15 @@ class ExportsMailer < ApplicationMailer
     set_export_ivars(course, user)
     attachments["#{ course.name } Grades - #{ Date.today }.csv"] = csv_attachment(csv_data)
     send_export_email "Gradebook export for #{ course.name } is attached"
+  end
+
+  def created_courses_export(csv)
+    @dates = { today: Date.today.strftime("%B %d, %Y"), last_month: 1.month.ago.strftime("%B %d, %Y") }
+    attachments["export.csv"] = csv_attachment(csv)
+    mail(to: ADMIN_EMAIL, subject: "Your monthly course report for #{environment_to_readable_s}") do |format|
+      format.text
+      format.html
+    end
   end
 
   private
