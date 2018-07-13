@@ -11,6 +11,6 @@ queue_created_courses_mailer_job:
   cron: "0 0 1 * *"
   persist: true
   class: "QueueCreatedCoursesMailerJob"
-  queue: created_courses_mailer
+  queue: created_courses_export
   description: "This job triggers an export of all courses created within the \
     last month and emails it to a list of recipients as a CSV attachment."

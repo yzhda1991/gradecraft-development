@@ -2,6 +2,10 @@ describe CreatedCoursesExporter do
   describe "#export" do
     subject { described_class.new }
 
+    before do
+      Course.destroy_all
+    end
+
     context "when there are courses that were created within the timeframe" do
       let(:past_course) { create :course, course_number: 600, semester: "Spring", year: 2018, name: "Clojure", created_at: 2.months.ago }
       let(:recent_course) { create :course, year: 2018, course_number: 101, semester: "Fall", name: "Python" }
