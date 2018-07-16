@@ -1,16 +1,15 @@
 class MultipliersExporter
-    attr_accessor :students, :assignment_types, :course
+    attr_accessor :course
 
-    def initialize(students, assignment_types, course)
-      @students = students
-      @assignment_types = assignment_types
+    def initialize(course)
       @course = course
     end
 
     def export
+        students = User.students_for_course(@course).order_by_name
         CSV.generate do |csv|
             csv << headers
-            @students.each do |s|
+            students.each do |s|
                 csv << [s.first_name, s.last_name, s.email, s.weight_spent?(@course) ? "Yes" : "No",
                         @course.total_weights - s.total_weight_spent(@course),
                         weighted_assignment_types_multipliers(s).compact].flatten
@@ -25,14 +24,15 @@ class MultipliersExporter
     end
 
     def weighted_assignment_types_names
-        @assignment_types.map do |at|
+        assignment_types = @course.assignment_types.ordered
+        assignment_types.map do |at|
             at.name if at.student_weightable?
         end
-        # debugger
     end
 
     def weighted_assignment_types_multipliers(student)
-        @assignment_types.map do |at|
+        assignment_types = @course.assignment_types.ordered
+        assignment_types.map do |at|
             student.weight_for_assignment_type(at) if at.student_weightable?
         end
     end
