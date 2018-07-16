@@ -15,7 +15,7 @@ describe MultipliersExporter do
             expect(csv).to include("First Name,Last Name,Email,Fully Assigned,Unassigned Number,Charms,History of Wizardry")
         end
 
-        it "creates a csv with a list of all students in the course and show multipliers", focus: true do
+        it "creates a csv with a list of all students in the course and show multipliers" do
             csv = CSV.new(subject.export).read
             expect(csv.length).to eq 3
             expect(csv[1]).to eq ["Loretta","Nhung","loretta.nhung@gmail.com","No","6","0","0"]
