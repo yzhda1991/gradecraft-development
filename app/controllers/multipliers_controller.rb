@@ -3,7 +3,10 @@ class MultipliersController < ApplicationController
     before_action :find_course
 
     def export
-        redirect_to downloads_path, flash: { error: "This course doesn't have multipliers"} and return if !@course.total_weights
+        if !@course.total_weights
+            redirect_to downloads_path, flash: { error: "This course doesn't have multipliers"}
+            return
+        end
 
         respond_to do |format|
             format.csv { send_data MultipliersExporter.new(@course).export(), filename: "#{ @course.name } multipliers - #{ Date.today }.csv" }
