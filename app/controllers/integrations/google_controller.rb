@@ -4,7 +4,7 @@ class Integrations::GoogleController < ApplicationController
 
   skip_before_action :require_login
   skip_before_action :require_course_membership
-  
+
   # TODO: these routes need to be protected by a current OAuth session
   # before_action -> { require_authorization_with(:google_oauth2) }, except: :auth_callback
 
@@ -21,17 +21,17 @@ class Integrations::GoogleController < ApplicationController
     if logged_in?
       create_user_authorization
     else
-      user = User.find_by_email auth_hash["email"]
+      user = User.find_by_email auth_hash["info"]["email"]
       if user.nil?
         session[:google_omniauth_user] = {
-          email: auth_hash["email"],
-          first_name: auth_hash["first_name"],
-          last_name: auth_hash["last_name"]
+          email: auth_hash["info"]["email"],
+          first_name: auth_hash["info"]["first_name"],
+          last_name: auth_hash["info"]["last_name"]
         }
         redirect_to action: :new_user and return
       else
-        create_user_authorization
         auto_login user
+        create_user_authorization
       end
     end
 
@@ -43,7 +43,7 @@ class Integrations::GoogleController < ApplicationController
   private
 
   def auth_hash
-    request.env["omniauth.auth"]["info"]
+    request.env["omniauth.auth"]
   end
 
   def create_user_authorization

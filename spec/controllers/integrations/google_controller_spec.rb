@@ -1,10 +1,10 @@
 describe Integrations::GoogleController, type: [:disable_external_api, :controller] do
   let(:auth_hash) do
-    OmniAuth::AuthHash.new(
+    OmniAuth::AuthHash.new("info" => {
       "first_name" => "Pablo",
       "last_name" => "Picasso",
       "email" => "pablo.picasso@gmail.com"
-    )
+    })
   end
 
   describe "#auth_callback" do
