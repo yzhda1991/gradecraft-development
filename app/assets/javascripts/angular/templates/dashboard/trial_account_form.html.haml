@@ -1,0 +1,22 @@
+.login
+  .login-form-container
+    .login-form
+      .login-block
+        %h1.bold Welcome to GradeCraft!
+        %p It looks like you are trying to log in through Google, but do not yet have an account. Are you trying to login as a Student or an Instructor?
+
+        .form-flex-row
+          %button.button.account-create.left{"ng-click"=>"trialAccountFormCtrl.selected = 'student'",
+                                             "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'instructor' }"} Student
+
+          %a.button.account-create.left{"ng-click"=>"trialAccountFormCtrl.selected = 'instructor'",
+                                        "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'student' }",
+                                        "data-method"=>"post",
+                                        "ng-href"=>"{{::createInstructorPath}}"} Instructor
+
+        .clear
+
+    .student-form{"ng-show"=>"trialAccountFormCtrl.selected === 'student'"}
+      %hr
+      %h2.subtitle Please contact your instructor.
+      %p You will receive an email once they have added you to their course.

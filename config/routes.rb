@@ -184,8 +184,16 @@ Rails.application.routes.draw do
   resources :challenge_grades, except: [:index, :new, :create]
 
   #7. Integrations
-  resources :integrations, only: [:create, :index] do
-    resources :courses, only: [:create, :destroy], module: :integrations
+  resources :integrations, only: [:create, :index], module: :integrations do
+    collection do
+      resource :google, controller: :google, only: [] do
+        collection do
+          get :new_user
+          post :create_user
+        end
+      end
+    end
+    resources :courses, only: [:create, :destroy]
   end
 
   namespace :google_calendars, only: [] do
@@ -284,7 +292,6 @@ Rails.application.routes.draw do
     member do
       get :activate
       get :activate_set_password
-      get :activate_via_google
       get :resend_activation_email
       put :manually_activate
       post :activate_set_password, action: :activated
@@ -300,7 +307,6 @@ Rails.application.routes.draw do
       post :upload
       get :new_external
       post :create_external
-      post :create_via_google
     end
   end
 
@@ -326,21 +332,18 @@ Rails.application.routes.draw do
 
   #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
+  get "auth/google_oauth2/callback", to: "integrations/google#auth_callback"
   get "/auth/:provider/callback", to: "authorizations#create", as: :create_authorization
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
   # Canvas OmniAuth setup
   match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
 
-  # Google Authorizations
-  get "auth/google_oauth2/callback", action: :callback, controller: "integrations/google/authorizations"
-
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  get :confirmation, to: "user_sessions#confirmation", as: :confirmation
   get :student_confirmation, to: "user_sessions#student_confirmation", as: :student_confirmation_user_sessions
-  resources :user_sessions, only: [:new, :create, :destroy, :confirmation, :student] do
+  resources :user_sessions, only: [:new, :create, :destroy, :student] do
     collection do
       get :instructors
     end

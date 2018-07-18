@@ -15,10 +15,6 @@ class UserSessionsController < ApplicationController
     @user = User.new
   end
 
-  def confirmation
-    @user = User.new(username: params[:email], email: params[:email], first_name: params[:first_name], last_name: params[:last_name])
-  end
-
   # sorcery login - users have passwords stored in our db
   def create
     respond_to do |format|
