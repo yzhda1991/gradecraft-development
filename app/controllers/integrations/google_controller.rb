@@ -4,6 +4,8 @@ class Integrations::GoogleController < ApplicationController
 
   skip_before_action :require_login
   skip_before_action :require_course_membership
+  
+  # TODO: these routes need to be protected by a current OAuth session
   # before_action -> { require_authorization_with(:google_oauth2) }, except: :auth_callback
 
   def new_user
@@ -29,7 +31,6 @@ class Integrations::GoogleController < ApplicationController
         redirect_to action: :new_user and return
       else
         create_user_authorization
-        # user.activate! unless user.activated? # TODO: this wherever we ultimately create the user
         auto_login user
       end
     end

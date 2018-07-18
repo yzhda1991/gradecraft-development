@@ -342,13 +342,12 @@ Rails.application.routes.draw do
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  get :student_confirmation, to: "user_sessions#student_confirmation", as: :student_confirmation_user_sessions
   resources :user_sessions, only: [:new, :create, :destroy, :student] do
     collection do
       get :instructors
     end
   end
-  resources :passwords, except: [:new, :destroy, :index, :show, :confirmation]
+  resources :passwords, except: [:new, :destroy, :index, :show]
 
   get "impersonate_student/:student_id", to: "user_sessions#impersonate_student", as: :student_preview
   get "exit_student_impersonation", to: "user_sessions#exit_student_impersonation"
