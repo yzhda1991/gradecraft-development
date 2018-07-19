@@ -4,7 +4,7 @@ module Toolkits
       module SharedExamples
         RSpec.shared_examples "a complete submissions export email body" do
           it "includes the professor's first name" do
-            should include professor.first_name
+            should include_in_mail_body professor.first_name
           end
 
           it "includes the assignment name" do
@@ -16,7 +16,7 @@ module Toolkits
           end
 
           it "includes the course name" do
-            should include course.name
+            should include_in_mail_body course.name
           end
         end
 
@@ -26,7 +26,7 @@ module Toolkits
           end
 
           it "includes the team name" do
-            should include team.name
+            should include_in_mail_body team.name
           end
         end
 

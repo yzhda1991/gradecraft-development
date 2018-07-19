@@ -1,22 +1,22 @@
 RSpec.shared_examples "a complete earned badge email body" do
   it "includes the student's first name" do
-    should include student.first_name
+    should include_in_mail_body student.first_name
   end
 
   it "includes the badge name" do
-    should include earned_badge.badge.name
+    should include_in_mail_body earned_badge.badge.name
   end
 
   it "includes the course's term for 'badge'" do
-    should include course.badge_term
+    should include_in_mail_body course.badge_term
   end
 
   it "includes the badge term for the course" do
-    should include course.badge_term.pluralize.downcase
+    should include_in_mail_body course.badge_term.pluralize.downcase
   end
 
   it "includes the course name" do
-    should include course.name
+    should include_in_mail_body course.name
   end
 end
 

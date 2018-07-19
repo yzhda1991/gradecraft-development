@@ -1,10 +1,10 @@
 RSpec.shared_examples "a complete submission email body" do
   it "includes the student's first name" do
-    should include student.first_name
+    should include_in_mail_body student.first_name
   end
 
   it "includes the assignment name" do
-    should include assignment.name
+    should include_in_mail_body assignment.name
   end
 
   it "includes the submission created_at timestamp" do

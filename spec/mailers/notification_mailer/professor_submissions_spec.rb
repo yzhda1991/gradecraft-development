@@ -1,26 +1,26 @@
 RSpec.shared_examples "a submission email to a professor" do
   it "includes the student's first name" do
-    should include student.first_name
+    should include_in_mail_body student.first_name
   end
 
   it "includes the student's last name" do
-    should include student.last_name
+    should include_in_mail_body student.last_name
   end
 
   it "includes the professor's first name" do
-    should include professor.first_name
+    should include_in_mail_body professor.first_name
   end
 
   it "includes the assignment name" do
-    should include assignment.name
+    should include_in_mail_body assignment.name
   end
 
   it "includes the assignment term for the course" do
-    should include course.assignment_term.downcase
+    should include_in_mail_body course.assignment_term.downcase
   end
 
   it "includes the course name" do
-    should include course.name
+    should include_in_mail_body course.name
   end
 
   it "doesn't include a template" do

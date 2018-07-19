@@ -54,11 +54,11 @@ describe CourseAnalyticsExportsMailer do
       subject { text_part.body }
 
       it "includes the owner's first name" do
-        should include owner.first_name
+        should include_in_mail_body owner.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "doesn't declare a doctype" do
@@ -82,11 +82,11 @@ describe CourseAnalyticsExportsMailer do
       subject { html_part.body }
 
       it "includes the owner's first name" do
-        should include owner.first_name
+        should include_in_mail_body owner.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "declares a doctype" do
@@ -134,11 +134,11 @@ describe CourseAnalyticsExportsMailer do
       subject { text_part.body }
 
       it "includes the owner's first name" do
-        should include owner.first_name
+        should include_in_mail_body owner.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "doesn't declare a doctype" do
@@ -150,11 +150,11 @@ describe CourseAnalyticsExportsMailer do
       subject { html_part.body }
 
       it "includes the owner's first name" do
-        should include owner.first_name
+        should include_in_mail_body owner.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "declares a doctype" do
