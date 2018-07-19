@@ -49,4 +49,28 @@ describe Integrations::GoogleController, type: [:disable_external_api, :controll
       end
     end
   end
+
+  describe "#create_user" do
+    let(:user_attrs) do
+      {
+        "email" => "john.doe@email.com",
+        "first_name" => "John",
+        "last_name" => "Doe"
+      }
+    end
+
+    before(:each) { session[:google_omniauth_user] = user_attrs }
+
+    it "creates a new user from the session params" do
+      expect{ post :create_user }.to change(User, :count).by(1)
+      expect(User.last).to have_attributes user_attrs.merge \
+        "username" => "john.doe@email.com",
+        "activation_state" => "active"
+    end
+
+    it "directs the user to the course creation page on success" do
+      post :create_user
+      expect(response).to redirect_to new_external_courses_path(user_id: User.last.id)
+    end
+  end
 end
