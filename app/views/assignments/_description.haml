@@ -93,7 +93,7 @@
 
 - if presenter.assignment_has_viewable_description?(current_user)
   - if presenter.assignment.assignment_files.present?
-    %h3.uppercase Downloads
+    %h3.uppercase Attachments:
     %ul
       - presenter.assignment.assignment_files.each do |af|
         %li= link_to af.filename, af.url
