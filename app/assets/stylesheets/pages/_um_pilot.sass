@@ -7,25 +7,33 @@
   display: flex
 
 section.pilot
+  margin-top: 45px
   color: $color-black
 
   h1, p
     color: $color-grey-2
     text-align: center
 
-  .instructor-pilot, .student-pilot
-    max-width: 500px
-    margin: 2em auto
+  .student-pilot
+    display: flex
+    max-width: 65%
+    margin: 1rem auto
+    justify-content: center
 
-    .pilot-text
+    .pilot-container
+      border-radius: 3px 0 0 3px
       background-color: $color-white
       padding: 2em
 
-.instructor-pilot
-  border-left: 10px solid $color-green-2
+    .pilot-container + .pilot-container
+      border-left: solid 1px $color-grey-4
 
-.student-pilot
-  border-left: 10px solid $color-blue-3
+      .pilot-form
+        margin: 1rem 0.5rem
+
+    &:last-child .pilot-container
+      border-top-right-radius: 3px
+      border-bottom-right-radius: 3px
 
 @media (max-width: $media-small-max)
   section.pilot

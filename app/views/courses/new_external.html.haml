@@ -2,11 +2,13 @@
 
 %section.pilot
   .student-pilot
-    .pilot-text
-      %h1.bold Create a New Course
+    .pilot-container
+      %h1.pageTitle Create your course!
+
       = simple_form_for @course, url: create_external_courses_path(user_id: @user.id), :method => :post do |f|
-        = f.input :name, label: "Course Name"
-        = f.input :course_number
+        .form-item= f.input :name, label: "Course Name"
+        .form-item= f.input :course_number
+
         .submit-buttons
           %ul
             %li= f.button :submit, "Let's go!", class: "button"
