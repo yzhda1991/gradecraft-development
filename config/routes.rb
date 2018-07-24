@@ -184,13 +184,13 @@ Rails.application.routes.draw do
   resources :challenge_grades, except: [:index, :new, :create]
 
   #7. Integrations
-  resources :integrations, only: [:create, :index], module: :integrations do
+  resources :integrations, only: [:create, :index] do
     collection do
-      resource :google, controller: :google, only: [] do
+      resource :google, controller: :google, only: [], module: :integrations do
         get :new_user, on: :collection
       end
     end
-    resources :courses, only: [:create, :destroy]
+    resources :courses, only: [:create, :destroy], module: :integrations
   end
 
   namespace :google_calendars, only: [] do
