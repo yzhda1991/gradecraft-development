@@ -29,7 +29,7 @@ describe CourseMembershipsController do
   context "as admin" do
     before(:each) {login_user(admin)}
 
-    describe "DELETE #delete_many", focus: true do
+    describe "DELETE #delete_many" do
       it "check admin" do
         delete :delete_many, params: {course_membership_ids: [student.id]}
         expect(response).to have_http_status 200
