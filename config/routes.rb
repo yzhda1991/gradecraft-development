@@ -187,10 +187,7 @@ Rails.application.routes.draw do
   resources :integrations, only: [:create, :index], module: :integrations do
     collection do
       resource :google, controller: :google, only: [] do
-        collection do
-          get :new_user
-          post :create_user
-        end
+        get :new_user, on: :collection
       end
     end
     resources :courses, only: [:create, :destroy]

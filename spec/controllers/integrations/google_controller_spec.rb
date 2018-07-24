@@ -1,10 +1,24 @@
 describe Integrations::GoogleController, type: [:disable_external_api, :controller] do
+  let(:user) { build_stubbed :user }
   let(:auth_hash) do
     OmniAuth::AuthHash.new("info" => {
       "first_name" => "Pablo",
       "last_name" => "Picasso",
       "email" => "pablo.picasso@gmail.com"
     })
+  end
+
+  describe "#new_user" do
+    it "requires that the user be logged in" do
+      get :new_user
+      expect(response).to have_http_status :redirect
+    end
+
+    it "requires external authorization from Google" do
+      allow(controller).to receive(:current_user).and_return user
+      expect(controller).to receive(:require_authorization_with).with(:google_oauth2)
+      get :new_user
+    end
   end
 
   describe "#auth_callback" do
@@ -15,11 +29,7 @@ describe Integrations::GoogleController, type: [:disable_external_api, :controll
       allow(UserAuthorization).to receive(:create_by_auth_hash).and_return true
     end
 
-    xit "requires authorization"
-
     context "when the user is logged in" do
-      let(:user) { build_stubbed :user }
-
       before(:each) { allow(controller).to receive(:current_user).and_return user }
 
       it "creates a new user authorization" do
@@ -35,42 +45,25 @@ describe Integrations::GoogleController, type: [:disable_external_api, :controll
         expect(controller.current_user).to eq user
       end
 
-      it "redirects them to a confirmation page if they do not have an existing account" do
+      it "creates a new account if there is not one that matches the email" do
+        expect{ get :auth_callback }.to change(User, :count).by 1
+        expect(User.last).to have_attributes \
+          "first_name" => "Pablo",
+          "last_name" => "Picasso",
+          "email" => "pablo.picasso@gmail.com",
+          "username" => "pablo.picasso@gmail.com",
+          "activation_state" => "active"
+      end
+
+      it "finds or creates the user and logs them in" do
+        get :auth_callback
+        expect(controller.current_user).to eq User.last
+      end
+
+      it "redirects to the new user page if their account was just created" do
         get :auth_callback
         expect(response).to redirect_to action: :new_user
       end
-
-      it "sets the omniauth info in the session if they do not have an existing account" do
-        get :auth_callback
-        expect(session[:google_omniauth_user]).to include \
-          email: "pablo.picasso@gmail.com",
-          first_name: "Pablo",
-          last_name: "Picasso"
-      end
-    end
-  end
-
-  describe "#create_user" do
-    let(:user_attrs) do
-      {
-        "email" => "john.doe@email.com",
-        "first_name" => "John",
-        "last_name" => "Doe"
-      }
-    end
-
-    before(:each) { session[:google_omniauth_user] = user_attrs }
-
-    it "creates a new user from the session params" do
-      expect{ post :create_user }.to change(User, :count).by(1)
-      expect(User.last).to have_attributes user_attrs.merge \
-        "username" => "john.doe@email.com",
-        "activation_state" => "active"
-    end
-
-    it "directs the user to the course creation page on success" do
-      post :create_user
-      expect(response).to redirect_to new_external_courses_path(user_id: User.last.id)
     end
   end
 end
