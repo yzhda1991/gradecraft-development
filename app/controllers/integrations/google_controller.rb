@@ -6,7 +6,11 @@ class Integrations::GoogleController < ApplicationController
 
   skip_before_action :require_login, only: :auth_callback
   skip_before_action :require_course_membership
-  before_action -> { require_authorization_with(:google_oauth2) }, only: :new_user
+  
+  before_action -> do
+    redirect_path new_user_google_path
+    require_authorization_with(:google_oauth2)
+  end, only: :new_user
 
   def new_user
   end

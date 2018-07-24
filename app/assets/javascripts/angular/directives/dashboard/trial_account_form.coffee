@@ -1,7 +1,7 @@
 @gradecraft.directive "trialAccountForm", [() ->
   {
     scope:
-      createInstructorPath: "@"
+      newExternalCoursesPath: "@"
     controllerAs: "trialAccountFormCtrl"
     templateUrl: "dashboard/trial_account_form.html"
   }

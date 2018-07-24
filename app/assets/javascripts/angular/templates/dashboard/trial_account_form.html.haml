@@ -11,8 +11,7 @@
 
           %a.button.account-create.left{"ng-click"=>"trialAccountFormCtrl.selected = 'instructor'",
                                         "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'student' }",
-                                        "data-method"=>"post",
-                                        "ng-href"=>"{{::createInstructorPath}}"} Instructor
+                                        "ng-href"=>"{{::newExternalCoursesPath}}"} Instructor
 
         .clear
 
