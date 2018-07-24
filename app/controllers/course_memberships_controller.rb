@@ -2,6 +2,7 @@ require_relative "../services/cancels_course_membership"
 
 class CourseMembershipsController < ApplicationController
 
+  before_action :ensure_admin?, only: [:delete_many]
   before_action :ensure_staff?
   before_action :save_referer, only: [:destroy]
 
@@ -55,6 +56,11 @@ class CourseMembershipsController < ApplicationController
       format.html { redirect_to session[:return_to], notice: "#{course_membership.user.name} was successfully removed from course." }
       format.json { head :ok }
     end
+  end
+
+  def delete_many
+    @course_memberships = CourseMembership.new
+    CourseMembership.where(id: params[:course_membership_ids]).destroy_all
   end
 
   private

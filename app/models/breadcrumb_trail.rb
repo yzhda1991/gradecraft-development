@@ -628,4 +628,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def pages_sign_up
   end
+
+  def course_memberships_delete_many
+    dashboard
+    breadcrumb("Mass Delete Memberships", delete_many_course_memberships_path)
+  end
 end

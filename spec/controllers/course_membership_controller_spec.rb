@@ -1,7 +1,7 @@
 describe CourseMembershipsController do
   let(:course) { create :course }
-  let(:student) { create(:course_membership, :student, course: course).user }
-  let(:professor) { create(:course_membership, :professor, course: course).user }
+  let!(:student) { create(:course_membership, :student, course: course).user }
+  let!(:professor) { create(:course_membership, :professor, course: course).user }
   let(:admin) { create(:course_membership, :admin, course: course).user }
 
   context "as professor" do
@@ -22,6 +22,24 @@ describe CourseMembershipsController do
       it "updates the course_membership attribute active to be true" do
         put :reactivate, params: {id: deactive_membership.id}
         expect(deactive_membership.reload.active).to eq true
+      end
+    end
+  end
+
+  context "as admin" do
+    before(:each) {login_user(admin)}
+
+    describe "DELETE #delete_many", focus: true do
+      it "check admin" do
+        delete :delete_many, params: {course_membership_ids: [student.id]}
+        expect(response).to have_http_status 200
+      end
+
+      it "delete course_memberships" do
+        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).length).to eq 2
+        delete :delete_many, params: {course_membership_ids: [student.id]}
+        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).length).to eq 1
+        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).pluck(:id)).to eq [professor.id]
       end
     end
   end
