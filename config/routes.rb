@@ -303,6 +303,7 @@ Rails.application.routes.draw do
       get :search
       post :upload
       get :new_external
+      get :new_external_google
       post :create_external
     end
   end

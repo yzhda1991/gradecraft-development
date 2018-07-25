@@ -3,7 +3,7 @@
 %section.pilot
   .student-pilot
     .pilot-container
-      %h1.pageTitle Create your course!
+      %h1.pageTitle Let's create your course:
 
       = simple_form_for @course, url: create_external_courses_path(user_id: @user.id), :method => :post do |f|
         .form-item= f.input :name, label: "Course Name"

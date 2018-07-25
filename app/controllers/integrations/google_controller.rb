@@ -1,4 +1,3 @@
-# rubocop:disable AndOr
 class Integrations::GoogleController < ApplicationController
   include OAuthProvider
 
@@ -6,7 +5,7 @@ class Integrations::GoogleController < ApplicationController
 
   skip_before_action :require_login, only: :auth_callback
   skip_before_action :require_course_membership
-  
+
   before_action -> do
     redirect_path new_user_google_path
     require_authorization_with(:google_oauth2)
@@ -29,10 +28,7 @@ class Integrations::GoogleController < ApplicationController
     end
 
     create_user_authorization
-    return_to = session[:return_to]
-    session[:return_to] = nil
-    redirect_to action: :new_user and return if new_user
-    redirect_to return_to || root_path
+    redirect_to redirect_path(new_user)
   end
 
   private
@@ -52,5 +48,19 @@ class Integrations::GoogleController < ApplicationController
 
   def create_user_authorization
     UserAuthorization.create_by_auth_hash auth_hash, current_user
+  end
+
+  def redirect_path(is_new_user)
+    return_to = session[:return_to]
+    session[:return_to] = nil
+
+    if session[:request_referer] == "new_external_users_path"
+      session[:request_referer] = nil
+      new_external_courses_path user_id: current_user.id
+    elsif is_new_user
+      new_user_google_path
+    else
+      return_to || root_path
+    end
   end
 end
