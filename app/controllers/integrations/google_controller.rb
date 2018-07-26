@@ -6,6 +6,7 @@ class Integrations::GoogleController < ApplicationController
   skip_before_action :require_login, only: :auth_callback
   skip_before_action :require_course_membership
 
+  before_action :ensure_app_environment?, only: :new_user
   before_action -> do
     redirect_path new_user_google_path
     require_authorization_with(:google_oauth2)
@@ -19,6 +20,8 @@ class Integrations::GoogleController < ApplicationController
       user = User.find_by_email auth_hash["info"]["email"]
 
       if user.nil?
+        redirect_to errors_path(status_code: 401, error_type: "account_not_found") \
+          and return if !Rails.env.beta?
         user = create_new_user
         new_user = true
         user.activate!
