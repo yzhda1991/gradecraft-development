@@ -225,7 +225,7 @@ Rails.application.routes.draw do
 
   resources :course_memberships, only: [:create, :delete, :destroy] do
     collection do
-      get :delete_many
+      get :delete_memberships
       delete :delete_many
     end
     member do

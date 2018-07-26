@@ -32,11 +32,15 @@ describe CourseMembershipsController do
     describe "DELETE #delete_many" do
       it "check admin" do
         delete :delete_many, params: {course_membership_ids: [student.id]}
-        expect(response).to have_http_status 200
+        expect(response).to have_http_status 302
+      end
+
+      it "get flash success message if successfully delete" do
+        delete :delete_many, params: {course_membership_ids: [student.id]}
+        expect(flash[:success]).to match /Delete memberships successfully/
       end
 
       it "delete course_memberships" do
-        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).length).to eq 2
         delete :delete_many, params: {course_membership_ids: [student.id]}
         expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).length).to eq 1
         expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).pluck(:id)).to eq [professor.id]

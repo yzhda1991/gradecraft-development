@@ -59,8 +59,8 @@ class CourseMembershipsController < ApplicationController
   end
 
   def delete_many
-    @course_memberships = CourseMembership.new
     CourseMembership.where(id: params[:course_membership_ids]).destroy_all
+    redirect_to delete_memberships_course_memberships_path, flash: {success: "Delete memberships successfully"}
   end
 
   private
