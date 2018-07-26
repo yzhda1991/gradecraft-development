@@ -24,6 +24,8 @@
             Analytics
 
     #tabt1.ui-tabs-panel
+      %h1.pageTitle= presenter.assignment.name
+
       .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
           = render partial: "assignments/group/group_show", locals: { assignment_id: presenter.assignment.id }

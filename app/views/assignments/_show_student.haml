@@ -20,6 +20,8 @@
           %a{"href" => "#tab5"}= term_for :learning_objectives
 
     #tabt1.ui-tabs-panel
+      %h1.pageTitle= presenter.assignment.name
+
       - if presenter.has_viewable_submission?(current_student, current_user) || presenter.grades_available_for?(current_student)
         .ui-tabs-panel#tab{class: ("active" if presenter.has_viewable_submission?(current_student, current_user) || presenter.grades_available_for?(current_student)), role: "tabpanel", "aria-hidden" => false }
           - if presenter.grades_available_for?(current_student)

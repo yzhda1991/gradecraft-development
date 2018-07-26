@@ -2,6 +2,8 @@
   = render partial: "layouts/alerts"
 
   .assignment-details-container
+    %h1.pageTitle= presenter.assignment.name
+
     %section
       %h2 Description
       = render partial: "assignments/description", locals: { presenter: presenter }
