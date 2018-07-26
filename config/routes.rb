@@ -292,7 +292,6 @@ Rails.application.routes.draw do
       get :resend_activation_email
       put :manually_activate
       post :activate_set_password, action: :activated
-      post :activate_via_google, action: :activated
       post :activate, action: :activated_external
       post :flag
     end
