@@ -1,14 +1,16 @@
 describe CourseMembershipsController do
   let(:course) { create :course }
-  let!(:student) { create(:course_membership, :student, course: course).user }
-  let!(:professor) { create(:course_membership, :professor, course: course).user }
+  let(:student) { create(:course_membership, :student, course: course).user }
+  let(:professor) { create(:course_membership, :professor, course: course).user }
   let(:admin) { create(:course_membership, :admin, course: course).user }
+
+  before(:each) { CourseMembership.destroy_all }
 
   context "as professor" do
     before(:each) { login_user(professor) }
 
     describe "PUT #deactivate" do
-      let(:active_membership) {   create :course_membership, :student, course: course, active: true  }
+      let(:active_membership) { create :course_membership, :student, course: course, active: true }
 
       it "updates the course_membership attribute active to be false" do
         put :deactivate, params: {id: active_membership.id}
@@ -28,6 +30,7 @@ describe CourseMembershipsController do
 
   context "as admin" do
     before(:each) {login_user(admin)}
+    let!(:student_2) { create(:course_membership, :student, course: course).user }
 
     describe "DELETE #delete_many" do
       it "check admin" do
@@ -41,9 +44,9 @@ describe CourseMembershipsController do
       end
 
       it "delete course_memberships" do
-        delete :delete_many, params: {course_membership_ids: [student.id]}
+        delete :delete_many, params: {course_membership_ids: [student.id, professor.id]}
         expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).length).to eq 1
-        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).pluck(:id)).to eq [professor.id]
+        expect(course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).pluck(:id)).to eq [student_2.id]
       end
     end
   end
