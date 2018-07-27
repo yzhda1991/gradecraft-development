@@ -63,8 +63,7 @@
     %h5{ class: "make-lizards" } Admin
     %li= active_course_link_to decorative_glyph(:plus) + "New Course", new_course_path
     %li= link_to_unless_current decorative_glyph(:university) + "Manage Courses", overview_courses_path
-
+    %li= link_to_unless_current decorative_glyph(:trash) + "Manage Course Memberships", course_memberships_path
     %li= link_to_unless_current decorative_glyph(:building) + "All Institutions", institutions_path
     %li= link_to_unless_current decorative_glyph("user-times") + "All Users", users_path
     %li= link_to_unless_current decorative_glyph(:search) + "Search Users", search_users_path
-    %li= link_to_unless_current decorative_glyph(:trash) + "Delete Course Memberships", delete_memberships_course_memberships_path

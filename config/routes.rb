@@ -223,9 +223,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :course_memberships, only: [:create, :delete, :destroy] do
+  resources :course_memberships, only: [:index, :create, :delete, :destroy] do
     collection do
-      get :delete_memberships
       delete :delete_many
     end
     member do

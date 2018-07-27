@@ -222,6 +222,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:challenge].name)
   end
 
+  def course_memberships_index
+    dashboard
+    breadcrumb("Course Memberships", course_memberships_path)
+  end
+
   def courses_index
     dashboard
     breadcrumb('Courses', courses_path)
@@ -627,10 +632,5 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def pages_sign_up
-  end
-
-  def course_memberships_delete_memberships
-    dashboard
-    breadcrumb("Mass Delete Memberships", delete_memberships_course_memberships_path)
   end
 end

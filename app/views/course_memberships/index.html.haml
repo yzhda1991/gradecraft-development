@@ -5,13 +5,13 @@
     %table.dynatable
       %thead
         %tr
-          %th ID
+          %th User ID
           %th First Name
           %th Last Name
           %th Role
           %th Delete?
       %tbody
-        - current_course.users.includes(:course_memberships).where.not(course_memberships: { role: "admin" }).each do |user|
+        - @course_memberships.each do |user|
           %tr
             %td= user.id
             %td= user.first_name

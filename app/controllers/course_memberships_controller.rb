@@ -2,9 +2,17 @@ require_relative "../services/cancels_course_membership"
 
 class CourseMembershipsController < ApplicationController
 
-  before_action :ensure_admin?, only: [:delete_many]
+  before_action :ensure_admin?, only: [:index, :delete_many]
   before_action :ensure_staff?
   before_action :save_referer, only: [:destroy]
+
+  def index
+    @course_memberships = current_course
+      .users
+      .order_by_name
+      .includes(:course_memberships)
+      .where.not(course_memberships: { role: "admin" })
+  end
 
   def create
     @course_membership =
@@ -59,8 +67,9 @@ class CourseMembershipsController < ApplicationController
   end
 
   def delete_many
-    CourseMembership.where(id: params[:course_membership_ids]).destroy_all
-    redirect_to delete_memberships_course_memberships_path, flash: {success: "Delete memberships successfully"}
+    course_memberships = CourseMembership.where(id: params[:course_membership_ids]).destroy_all
+    redirect_to course_memberships_path,
+      flash: { success: "Successfully deleted #{course_memberships.count} course membership(s)" }
   end
 
   private
