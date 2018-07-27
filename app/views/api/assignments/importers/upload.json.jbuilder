@@ -6,7 +6,7 @@ json.data @assignment_rows do |row|
   json.type "assignment_row"
 
   json.attributes do
-    json.assignment_name row.name
+    json.name row.name
     json.assignment_type row.assignment_type
     json.full_points row.full_points
     json.description row.description

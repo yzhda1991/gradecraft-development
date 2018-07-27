@@ -24,12 +24,12 @@
                   %th Purpose
                   %th Open Date
                   %th Due Date
-                  %th Accept Submissions Date
+                  %th Accepts Submissions?
                   %th Accept Submissions Until Date
-                  %th Required
+                  %th Required?
               %tbody
                 %tr{"ng-repeat"=>"row in assignmentRows"}
-                  %td {{row.assignment_name}}
+                  %td {{row.name}}
                   %td
                     %select{"ng-model"=>"row.selected_assignment_type",
                             "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
@@ -74,7 +74,6 @@
 
                   %td {{row.required}}
 
-
         .submit-buttons
           %ul
             %li
@@ -91,7 +90,7 @@
     .right
       %p{"ng-if"=>"vm.newAssignmentTypes().length > 0"}
         * The following assignment types are new and will be created: {{vm.newAssignmentTypes().join(', ')}}
-      %p{"ng-if"=>"vm.hasInvalidDueDates()"}
+      %p{"ng-if"=>"vm.hasInvalidDates()"}
         ** Due date was invalid and will be blank unless one is selected
 
     -# Results from import

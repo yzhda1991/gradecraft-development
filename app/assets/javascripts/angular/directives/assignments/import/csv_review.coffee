@@ -1,5 +1,5 @@
-@gradecraft.directive 'assignmentsImportCsvReview',
-  ['AssignmentTypeService', 'AssignmentImporterService', (AssignmentTypeService, AssignmentImporterService) ->
+@gradecraft.directive 'assignmentsImportCsvReview', ['AssignmentTypeService', 'AssignmentImporterService',
+  (AssignmentTypeService, AssignmentImporterService) ->
     AssignmentsImportCsvReviewCtrl = [()->
       vm = this
       vm.loading = true
@@ -9,7 +9,7 @@
 
       vm.hasInvalidDueDates = () ->
         _.any(AssignmentImporterService.assignmentRows, (row) ->
-          row.hasInvalidDueDate is true
+          row.hasInvalidDate is true
         )?
 
       vm.newAssignmentTypes = () ->
@@ -42,4 +42,4 @@
         scope.assignmentRows = AssignmentImporterService.assignmentRows
         scope.results = AssignmentImporterService.results
     }
-  ]
+]

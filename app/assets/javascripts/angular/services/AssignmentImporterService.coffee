@@ -38,7 +38,7 @@
       row.selected_due_at = new Date(row.formatted_due_at) if row.formatted_due_at?
       row.selected_open_at = new Date(row.formatted_open_at) if row.formatted_open_at?
       row.selected_accepts_submissions_until = new Date(row.formatted_accepts_submissions_until) if row.formatted_accepts_submissions_until?
-      row.hasInvalidDueDate = !row.selected_due_at?
+      row.hasInvalidDate = !row.formatted_due_at? || !row.formatted_open_at? || !row.formatted_accepts_submissions_until?
       true
     )
 
