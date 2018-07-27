@@ -1,8 +1,7 @@
 describe CourseMembershipsController do
   let(:course) { create :course }
-  let!(:student) { create(:course_membership, :student, course: course).user }
-  let!(:professor) { create(:course_membership, :professor, course: course).user }
-  let(:admin) { create(:course_membership, :admin, course: course).user }
+  let(:professor_membership) { create :course_membership, :professor, course: course }
+  let!(:professor) { professor_membership.user }
 
   context "as professor" do
     before(:each) { login_user professor }
@@ -20,7 +19,7 @@ describe CourseMembershipsController do
       let(:deactive_membership) { create :course_membership, :student, course: course, active: false }
 
       it "updates the course_membership attribute active to be true" do
-        put :reactivate, params: {id: deactive_membership.id}
+        put :reactivate, params: { id: deactive_membership.id }
         expect(deactive_membership.reload.active).to eq true
       end
     end
@@ -38,6 +37,9 @@ describe CourseMembershipsController do
   end
 
   context "as admin" do
+    let(:admin) { create :user, courses: [course], role: :admin }
+    let!(:student_membership) { create :course_membership, :student, course: course }
+
     before(:each) { login_user admin }
 
     describe "GET #index" do
@@ -49,12 +51,12 @@ describe CourseMembershipsController do
 
     describe "DELETE #delete_many" do
       it "alerts the user that the deletion was successful" do
-        delete :delete_many, params: { course_membership_ids: [student.id] }
+        delete :delete_many, params: { course_membership_ids: [student_membership.id] }
         expect(flash[:success]).to match "Successfully deleted 1 course membership(s)"
       end
 
       it "delete course_memberships" do
-        expect{ delete :delete_many, params: { course_membership_ids: [student.id] } }.to \
+        expect{ delete :delete_many, params: { course_membership_ids: [student_membership.id] } }.to \
           change(CourseMembership, :count).by -1
       end
     end
