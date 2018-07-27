@@ -34,15 +34,15 @@ class UsersController < ApplicationController
     @user = User.new
     @course_membership = @user.course_memberships.new
     if request.referer.nil?
-      @selected_role = 'observer'
+      @course_membership.role = 'observer'
     else
       case URI(request.referer).path
       when students_path
-        @selected_role = 'student'
+        @course_membership.role = 'student'
       when staff_index_path
-        @selected_role = 'gsi'
+        @course_membership.role = 'gsi'
       else
-        @selected_role = 'observer'
+        @course_membership.role = 'observer'
       end
     end
   end
@@ -86,7 +86,6 @@ class UsersController < ApplicationController
       if result.success?
         if @user.is_student?(current_course)
           redirect_to students_path,
-            # rubocop:disable AndOr
             notice: "#{term_for :student} #{@user.name} was successfully created!" and return
         elsif @user.is_staff?(current_course)
           Services::SendsResourceEmail.send_resource_email @user
@@ -102,12 +101,11 @@ class UsersController < ApplicationController
     end
 
     if @user.course_memberships.where(course_id: current_course.id).first.nil?
-      CourseMembershipBuilder.new(current_user).build_for(@user)
+      @course_membership = @user.course_memberships.new
       render :new
     else
       if @user.is_student?(current_course)
         redirect_to students_path,
-          # rubocop:disable AndOr
           alert: "#{term_for :student} #{params["user"]["first_name"]}
             #{params["user"]["last_name"]} with email #{params["user"]["email"]} already exists for #{current_course.name}!" and return
       elsif @user.is_staff?(current_course)
@@ -143,8 +141,8 @@ class UsersController < ApplicationController
       end
     end
 
-    CourseMembershipBuilder.new(current_user).build_for(@user)
-    render :edit
+    @course_membership = @user.course_memberships.where(course: current_course).first
+    render action: :edit
   end
 
   def destroy
@@ -259,7 +257,6 @@ class UsersController < ApplicationController
   end
 
   # import users for class
-  # rubocop:disable AndOr
   def upload
     if params[:file].blank?
       flash[:notice] = "File missing"

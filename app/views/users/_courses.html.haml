@@ -4,7 +4,7 @@
     = cm.hidden_field :course_id, value: current_course.id
     .form-item
       = cm.label :role, "Select Role"
-      = cm.select :role, available_roles(current_course), selected: @selected_role
+      = cm.select :role, available_roles(current_course)
     - if current_course.has_in_team_leaderboards?
       .form-item
         = cm.label :pseudonym, "Pseudonym"
