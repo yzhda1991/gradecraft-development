@@ -40,12 +40,15 @@ describe CourseMembershipsController do
     let(:admin) { create :user, courses: [course], role: :admin }
     let!(:student_membership) { create :course_membership, :student, course: course }
 
-    before(:each) { login_user admin }
+    before(:each) do
+      login_user admin
+      allow(controller).to receive(:current_course).and_return course
+    end
 
     describe "GET #index" do
-      it "renders the view" do
+      it "assigns the course memberships for the current course" do
         get :index
-        expect(response).to render_template :index
+        expect(assigns(:course_memberships)).to match_array [student_membership.user, professor]
       end
     end
 
