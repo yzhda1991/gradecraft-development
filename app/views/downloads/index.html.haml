@@ -46,6 +46,10 @@
           %td= link_to glyph("file-excel-o") + "Course Analytics", course_analytics_exports_path, method: :post
           %td Event data including pageviews, predictions, and logins
 
+        %tr
+          %td= link_to glyph("file-excel-o") + "Multiplier Choices", export_course_multipliers_path(course_id: current_course, format: "csv")
+          %td First Name, Last Name, Email, Fully Assigned, Unassigned Number, Weightable Assignment Types
+
   - if current_course.assignment_types.present?
     .download_type
       %h2= "#{term_for :assignment_type} Downloads"
