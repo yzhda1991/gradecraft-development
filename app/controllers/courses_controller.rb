@@ -63,8 +63,8 @@ class CoursesController < ApplicationController
 
   def edit
     if @course.id != current_course.id
-      session[:return_to] = edit_course_path @course
-      redirect_to action: :change, id: @course.id and return
+      change_current_course @course.id
+      redirect_to action: :edit, id: @course.id and return
     end
     authorize! :update, @course
   end
@@ -159,14 +159,8 @@ class CoursesController < ApplicationController
 
   # Switch between enrolled courses
   def change
-    if course = current_user.courses.where(id: params[:id]).first
-      authorize! :read, course
-      unless session[:course_id] == course.id
-        session[:course_id] = CourseRouter.change!(current_user, course).id
-        record_course_login_event course: course
-      end
-    end
-    redirect_to session[:return_to] || root_url
+    change_current_course params[:id]
+    redirect_to root_url
   end
 
   def recalculate_student_scores
@@ -229,6 +223,16 @@ class CoursesController < ApplicationController
 
   def find_course
     @course = Course.find(params[:id])
+  end
+
+  def change_current_course(intended_course_id)
+    if course = current_user.courses.where(id: intended_course_id).first
+      authorize! :read, course
+      unless session[:course_id] == course.id
+        session[:course_id] = CourseRouter.change!(current_user, course).id
+        record_course_login_event course: course
+      end
+    end
   end
 
   def add_team_score_to_student_changed?
