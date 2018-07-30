@@ -195,9 +195,10 @@ describe CoursesController do
       end
 
       it "performs a course change if the course to edit is not the current course" do
+        create :course_membership, course: another_course, user: professor, role: :professor
+        expect(CourseRouter).to receive(:change!).with(professor, another_course).and_return(another_course).once
         get :edit, params: { id: another_course.id }
-        expect(session[:return_to]).to eq edit_course_path another_course.id
-        expect(response).to redirect_to change_course_path
+        expect(response).to redirect_to edit_course_path(another_course)
       end
     end
 
