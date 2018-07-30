@@ -1,7 +1,16 @@
+# persist: true to see in resque-web interface (https://github.com/resque/resque-scheduler/issues/541#issuecomment-218894599)
 queue_score_recalculator_job:
   cron: "0 2 * * *"
-  persist: true # to see in resque-web interface (https://github.com/resque/resque-scheduler/issues/541#issuecomment-218894599) 
+  persist: true
   class: "QueueScoreRecalculatorJob"
   queue: nightly_score_recalculator
   description: "This job triggers a score recalculation job for every student \
     belonging to an active course."
+
+queue_created_courses_mailer_job:
+  cron: "0 0 1 * *"
+  persist: true
+  class: "QueueCreatedCoursesMailerJob"
+  queue: created_courses_export
+  description: "This job triggers an export of all courses created within the \
+    last month and emails it to a list of recipients as a CSV attachment."
