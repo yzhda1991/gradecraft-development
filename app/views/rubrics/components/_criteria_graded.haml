@@ -11,8 +11,8 @@
             = glyph("check")
           %span.level-name= level.name
           - if !level.hide_analytics?
-            - unless level.criterion_grades(current_user).empty?
-              %p.graded-students= "#{pluralize(level.criterion_grades(current_user).size, 'student')} earned this level"
+            - unless level.criterion_grades.empty?
+              %p.graded-students= "#{pluralize(level.criterion_grades.size, 'student')} earned this level"
 
     .tab-panel-container{"data-start-index" => find_earned_rubric_grade(criterion, student.id)}
       - criterion.levels.ordered.sorted.each_with_index do |level, lindex|
