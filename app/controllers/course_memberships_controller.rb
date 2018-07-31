@@ -11,7 +11,7 @@ class CourseMembershipsController < ApplicationController
       .users
       .order_by_name
       .includes(:course_memberships)
-      .where.not(course_memberships: { role: "admin" })
+      .where(course_memberships: { role: "student" })
   end
 
   def create
@@ -67,9 +67,11 @@ class CourseMembershipsController < ApplicationController
   end
 
   def delete_many
-    course_memberships = CourseMembership.where(id: params[:course_membership_ids]).destroy_all
+    CourseMembership.where(id: params[:course_membership_ids]).find_in_batches(batch_size: 50) do |b|
+      b.each { |cm| Services::CancelsCourseMembership.for_student cm }
+    end
     redirect_to course_memberships_path,
-      flash: { success: "Successfully deleted #{course_memberships.count} course membership(s)" }
+      flash: { success: "Successfully deleted #{params[:course_membership_ids].count} course membership(s)" }
   end
 
   private

@@ -48,7 +48,7 @@ describe CourseMembershipsController do
     describe "GET #index" do
       it "assigns the course memberships for the current course" do
         get :index
-        expect(assigns(:course_memberships)).to match_array [student_membership.user, professor]
+        expect(assigns(:course_memberships)).to match_array [student_membership.user]
       end
     end
 
