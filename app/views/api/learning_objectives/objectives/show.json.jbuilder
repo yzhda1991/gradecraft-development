@@ -36,7 +36,7 @@ json.included do
 
     json.attributes do
       json.merge! cumulative_outcome.attributes
-      json.user_full_name cumulative_outcome.user.name
+      json.full_name cumulative_outcome.user.name
       json.status cumulative_outcome.learning_objective.progress current_user
     end
   end if @include_outcomes

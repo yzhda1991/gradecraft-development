@@ -37,12 +37,12 @@
         %tr
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Student",
-                              "data-sortable-predicate"=>"last_name"}
+                              "data-sortable-predicate"=>"full_name"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Progress",
-                              "data-sortable-predicate"=>"progress"}
+                              "data-sortable-predicate"=>"status"}
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"Attempts",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}}",
                               "data-sortable-predicate"=>"attempts"}
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
@@ -68,10 +68,10 @@
       %thead
         %tr
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"a",
-                              "data-sortable-predicate"=>"assignment_name"}
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}}",
+                              "data-sortable-predicate"=>"assignments_name"}
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"Assessment",
+                              "data-sortable-header-text"=>"Outcome",
                               "data-sortable-predicate"=>"assessment"}
       %tbody
         %tr{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes()"}
