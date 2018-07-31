@@ -14,21 +14,10 @@ class API::Assignments::GradesController < ApplicationController
     @grades = Gradebook.new(@assignment, students).grades
   end
 
-  # /api/assignments/grades/release
+  # GET /api/assignments/grades/release
+  # Params: grade_ids[]
   def release
     grades = current_course.grades.where(id: params[:grade_ids])
-    return head :not_found if grades.empty?
-
-    release_grades(grades)
-    head :ok
-  end
-
-  # /api/assignments/:assignment_id/grades/release
-  # Optional: params[:grade_ids]
-  def release_for_assignment
-    assignment = current_course.assignments.find params[:assignment_id]
-    grades = assignment.grades
-    grades = grades.where(id: params[:grade_ids]) if params[:grade_ids].present?
     return head :not_found if grades.empty?
 
     release_grades(grades)
