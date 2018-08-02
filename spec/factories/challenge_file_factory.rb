@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge_file do
     challenge
     filename "test_file.rb"

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :grade_scheme_element do
     association :course
     lowest_points 0

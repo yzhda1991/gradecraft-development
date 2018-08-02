@@ -1,5 +1,5 @@
 describe AttendanceController do
-  let(:course) { build :course }
+  let(:course) { create :course }
   let(:assignment_type) { create :assignment_type, :attendance, course: course }
 
   before(:each) do
@@ -8,7 +8,7 @@ describe AttendanceController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET #index" do
       it "redirects to setup when there are no attendance assignments" do
@@ -76,7 +76,7 @@ describe AttendanceController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "GET #index" do
       it "redirects to dashboard if there are no attendance assignments" do

@@ -1,10 +1,10 @@
 describe API::Courses::StudentsController do
-  let!(:course) { build :course }
+  let!(:course) { create :course }
   let(:student) { students.first }
-  let(:students) { build_list :user, 2, courses: [course], role: :student }
+  let(:students) { create_list :user, 2, courses: [course], role: :student }
 
   context "as a professor" do
-    let(:professor) { build :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before(:each) do
       login_user professor

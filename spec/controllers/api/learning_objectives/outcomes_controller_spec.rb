@@ -11,7 +11,7 @@ describe API::LearningObjectives::OutcomesController do
 
   context "as an instructor" do
     let!(:cumulative_outcome) { create :learning_objective_cumulative_outcome, learning_objective: learning_objective }
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "#outcomes_for_assignment" do
       context "when student ids are provided" do

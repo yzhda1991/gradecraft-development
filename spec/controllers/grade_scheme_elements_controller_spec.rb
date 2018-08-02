@@ -10,7 +10,7 @@ describe GradeSchemeElementsController do
   end
 
   context "as professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET index" do
       it "assigns all grade scheme elements" do
@@ -44,7 +44,7 @@ describe GradeSchemeElementsController do
   end
 
   context "as student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :user }
+    let(:user) { create :user, courses: [course], role: :user }
 
     it "redirects protected routes to root" do
       [

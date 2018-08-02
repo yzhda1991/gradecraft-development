@@ -6,7 +6,7 @@ describe API::GradingStatus::SubmissionsController do
   before(:each) { allow(controller).to receive(:current_course).and_return course }
 
   context "as an instructor" do
-    let(:professor) { build_stubbed :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before(:each) { login_user professor }
 

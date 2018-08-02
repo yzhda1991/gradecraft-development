@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :assignment_file do
     association :assignment
     filename "test_file.rb"

@@ -1,7 +1,7 @@
 describe FlaggedUser do
   let(:course) { build :course }
-  let!(:professor) { build :user, courses: [course], role: :professor }
-  let!(:student) { build :user, courses: [course], role: :student }
+  let!(:professor) { create :user, courses: [course], role: :professor }
+  let!(:student) { create :user, courses: [course], role: :student }
 
   context "validations" do
     subject do

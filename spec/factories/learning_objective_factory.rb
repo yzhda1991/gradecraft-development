@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :learning_objective do
     association :course
     count_to_achieve Faker::Number.between(1, 5)

@@ -1,5 +1,5 @@
 describe API::Assignments::GradesController do
-  let(:course) { build :course }
+  let(:course) { create :course }
   let(:assignment) { create :assignment, course: course }
 
   before(:each) do
@@ -8,10 +8,10 @@ describe API::Assignments::GradesController do
   end
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "GET #show" do
-      let(:students) { build_list :user, 3, courses: [course], role: :student }
+      let(:students) { create_list :user, 3, courses: [course], role: :student }
       let!(:grade) { create :grade, student: students.first, assignment: assignment, course: course }
 
       context "when the team id is provided" do
@@ -64,7 +64,7 @@ describe API::Assignments::GradesController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { build :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "redirect with a status 302" do

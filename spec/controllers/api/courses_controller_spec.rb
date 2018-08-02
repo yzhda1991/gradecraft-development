@@ -1,10 +1,10 @@
 describe API::CoursesController do
-  let!(:course) { build :course }
+  let!(:course) { create :course }
   let(:student)  { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
 
   context "as an admin" do
-    let(:admin) { build_stubbed :user, courses: [course], role: :admin }
+    let(:admin) { create :user, courses: [course], role: :admin }
 
     before(:each) { login_user admin }
 

@@ -1,5 +1,5 @@
 describe Submission do
-  let(:course) { build_stubbed(:course) }
+  let(:course) { build(:course) }
   let(:assignment) { create(:assignment) }
   let(:student) { create(:course_membership, :student, course: course, active: true).user }
   let(:submission) { create(:submission, course: course, assignment: assignment, student: student) }

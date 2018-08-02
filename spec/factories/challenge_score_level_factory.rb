@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge_score_level do
     name { Faker::Lorem.word }
     points { Faker::Number.number(5) }

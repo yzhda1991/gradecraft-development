@@ -7,7 +7,7 @@ module Services
 
       executed do |context|
         membership = context[:membership]
-        context.skip_all! unless membership.student?
+        context.skip_remaining! unless membership.student?
         membership.destroy
       end
     end

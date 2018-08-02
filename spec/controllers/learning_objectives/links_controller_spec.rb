@@ -1,6 +1,6 @@
 describe LearningObjectives::LinksController do
   let(:course) { build :course, :uses_learning_objectives }
-  let(:user) { build_stubbed :user, courses: [course], role: :student }
+  let(:user) { create :user, courses: [course], role: :student }
 
   before(:each) do
     login_user user

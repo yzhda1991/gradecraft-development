@@ -4,6 +4,9 @@ require 'rails/all'
 require "csv"
 require "sanitize"
 
+# Uncomment to debug deprecations in gems
+# ActiveSupport::Deprecation.debug = true
+
 Bundler.require(*Rails.groups)
 
 module GradeCraft
@@ -31,7 +34,7 @@ module GradeCraft
         routing_specs: false,
         controller_specs: true,
         request_specs: false
-      g.fixture_replacement :factory_girl, dir: "spec/factories"
+      g.fixture_replacement :factory_bot, dir: "spec/factories"
     end
   end
 end

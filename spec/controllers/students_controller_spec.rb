@@ -1,7 +1,7 @@
 describe StudentsController do
   let(:course) { build(:course) }
   let(:observer) { create(:user, courses: [course], role: :observer) }
-  let(:professor) { build_stubbed(:user, courses: [course], role: :professor) }
+  let(:professor) { create(:user, courses: [course], role: :professor) }
   let(:student) { create(:user, courses: [course], role: :student) }
 
   context "as a professor" do

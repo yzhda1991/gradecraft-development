@@ -8,7 +8,7 @@ describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :c
   let!(:assignment) { create(:assignment, assignment_type: assignment_type, course: course, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
   let!(:no_start_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: DateTime.new(2017,4,1,17,0,0,-4)) }
   let!(:no_end_assignment) { create(:assignment, assignment_type: assignment_type, course: course, open_at: nil, due_at: nil) }
-  let(:student) { build :user, courses: [course], role: :student }
+  let(:student) { create :user, courses: [course], role: :student }
 
   before do
     stub_request(:post, "https://accounts.google.com/o/oauth2/token").
@@ -109,7 +109,4 @@ describe GoogleCalendars::AssignmentsController, type:[:disable_external_api, :c
       end
     end
   end
-
-
-
 end

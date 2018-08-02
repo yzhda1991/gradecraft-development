@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :assignment_type do
     name { Faker::Lorem.word }
     course { create(:course) }

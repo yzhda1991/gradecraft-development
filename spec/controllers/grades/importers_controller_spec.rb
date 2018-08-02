@@ -2,12 +2,12 @@ describe Grades::ImportersController do
   let(:course) { build :course }
   let(:assignment) { create :assignment, course: course }
   let(:grade) { build_stubbed :grade, student: student, assignment: assignment, course: course }
-  let(:student) { build :user, courses: [course], role: :student }
+  let(:student) { create :user, courses: [course], role: :student }
 
   before { allow(controller).to receive(:current_course).and_return course }
 
   context "as a professor" do
-    let(:professor) { build :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before { login_user professor }
 

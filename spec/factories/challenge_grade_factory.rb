@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :challenge_grade do
     association :challenge
     association :team

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :badge do
     association :course
     name { Faker::Internet.domain_word }

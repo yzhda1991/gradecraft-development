@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :earned_badge do
     association :badge
     association :course

@@ -28,7 +28,7 @@ $( "#tabs" ).tabs({
 });
 
  $('.froala').froalaEditor({
-  key: '6Ud1QBRVCDLPAZMBQ==',
+  key: 'RD4H4B12B7iB6E5C3A4I2I3C8B6B5A4C-11NGNe1IODMGYNSFKV==',
   inlineMode: false,
   heightMin: 200,
   toolbarButtons: [

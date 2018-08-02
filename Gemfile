@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.5.1'
 
-gem 'rails'
+gem 'rails', '~> 5.0.0'
 gem 'resque'
 gem 'activerecord-import'
 gem 'active_model_serializers'
@@ -65,14 +65,13 @@ gem 'omniauth-lti', '~> 0.0.2'
 gem 'ransack'
 gem 'recaptcha', require: "recaptcha/rails"
 gem 'pacecar'
-gem 'paper_trail'
+gem 'paper_trail', '~> 5.0'
 gem 'pg'
 gem 'porch'
 gem 'puma'
 gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rdiscount'
-gem 'record_tag_helper'
 gem 'redis', '~> 3.0'
 
 # retry dsl for resque
@@ -80,6 +79,9 @@ gem 'resque-retry'
 
 # handles deferrence of Resque jobs to a later time
 # ex: Resque.enqueue_in(5.hours, @worker_object)
+#
+# A fix for a long-standing issue will address some of the warnings on start up
+# NOTE: https://github.com/resque/resque-scheduler/issues/600
 gem 'resque-scheduler', require: 'resque/scheduler'
 
 # slightly more mature rate limiter plugin for resque
@@ -128,9 +130,9 @@ end
 group :test do
   gem 'capybara'
   gem 'codeclimate-test-reporter'
-  gem 'database_cleaner', '~> 1.5.1'
+  gem 'database_cleaner', '~> 1.7'
   gem 'faker'
-  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'factory_bot_rails', '~> 4.0'
   gem 'capybara-select2'
   gem 'launchy'
   gem 'rails-controller-testing', require: false
@@ -154,5 +156,5 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-angular-dragdrop', '1.0.11'
   gem 'rails-assets-ngDraggable', '0.1.8'
   gem 'rails-assets-rollbar.js', '~> 2.4'
-  gem 'rails-assets-ng-rollbar', '~> 2.3' 
+  gem 'rails-assets-ng-rollbar', '~> 2.3'
 end

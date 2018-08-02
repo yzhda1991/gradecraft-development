@@ -1,11 +1,11 @@
 describe API::GradingStatus::GradesController do
   let(:course) { build :course }
-  let(:student) { build :user, courses: [course], role: :student }
+  let(:student) { create :user, courses: [course], role: :student }
 
   before(:each) { allow(controller).to receive(:current_course).and_return course }
 
   context "as an instructor" do
-    let(:professor) { build_stubbed :user, courses: [course], role: :professor }
+    let(:professor) { create :user, courses: [course], role: :professor }
 
     before(:each) { login_user professor }
 

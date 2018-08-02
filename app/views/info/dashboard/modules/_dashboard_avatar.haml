@@ -1,7 +1,7 @@
 .avatar
   .card-header
     %h2.flagged-state
-      = content_tag_for :span, current_student do
+      %span.user{id: "user_#{current_student.id}"}
         = link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "flagged-user-icon"
       = "#{current_student.first_name}'s Profile"
   .card-body

@@ -6,7 +6,7 @@ describe API::Assignments::Groups::GradesController do
   before(:each) { login_user user }
 
   context "as a professor" do
-    let(:user) { build_stubbed :user, courses: [course], role: :professor }
+    let(:user) { create :user, courses: [course], role: :professor }
 
     describe "#GET index" do
       context "when the assignment is individually graded" do
@@ -48,7 +48,7 @@ describe API::Assignments::Groups::GradesController do
   end
 
   context "as a student" do
-    let(:user) { build_stubbed :user, courses: [course], role: :student }
+    let(:user) { create :user, courses: [course], role: :student }
 
     describe "protected routes" do
       it "returns a redirect status" do

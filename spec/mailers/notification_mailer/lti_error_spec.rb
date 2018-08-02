@@ -6,8 +6,8 @@ describe NotificationMailer do
   let(:html_part) { email.body.parts.detect {|part| part.content_type.match "text/html" }}
 
   describe "#lti_error" do
-    let(:user_data) { FactoryGirl.attributes_for(:user).merge(lti_uid: rand(100)) }
-    let(:course_data) { FactoryGirl.attributes_for(:course).merge(lti_uid: rand(100)) }
+    let(:user_data) { FactoryBot.attributes_for(:user).merge(lti_uid: rand(100)) }
+    let(:course_data) { FactoryBot.attributes_for(:course).merge(lti_uid: rand(100)) }
 
     before(:each) do
       NotificationMailer.lti_error(user_data, course_data).deliver_now

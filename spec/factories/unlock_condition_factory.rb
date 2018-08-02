@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :unlock_condition do
     association :course
     association :unlockable, factory: :badge

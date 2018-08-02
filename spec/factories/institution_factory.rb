@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :institution do
     name { Faker::University.unique.name }
     has_site_license true

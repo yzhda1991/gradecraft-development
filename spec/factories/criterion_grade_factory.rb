@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :criterion_grade do
     association :student, factory: :user
     association :assignment

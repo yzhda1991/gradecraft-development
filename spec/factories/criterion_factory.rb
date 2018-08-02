@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :criterion do
     max_points { Faker::Number.number(5) }
     name { Faker::Lorem.word }

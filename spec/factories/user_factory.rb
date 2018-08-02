@@ -1,8 +1,8 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     transient do
       courses []
-      role nil
+      role :observer
       activated true
     end
 
@@ -12,15 +12,11 @@ FactoryGirl.define do
     email { Faker::Internet.unique.email }
     password { "secret" }
 
-    after :stub, :build do |user, evaluator|
-      # Define course_memberships with an optional role
+    after :create do |user, evaluator|
       evaluator.courses.each do |course|
-        course_membership_attributes = { course: course, user: user }
-        course_membership_attributes.merge! role: evaluator.role unless evaluator.role.nil?
-        create :course_membership, course_membership_attributes
+        create :course_membership, { course: course, user: user, role: evaluator.role }
       end
+      user.activate! unless evaluator.activated == false
     end
-
-    after(:create) { |user, evaluator| user.activate! unless evaluator.activated == false }
   end
 end

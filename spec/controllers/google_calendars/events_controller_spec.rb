@@ -8,7 +8,7 @@ describe GoogleCalendars::EventsController, type:[:disable_external_api, :contro
   let!(:standard_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: Time.now}
   let!(:no_start_event) { create :event, course: course, open_at: nil, due_at: Time.now}
   let!(:no_end_event) { create :event, course: course, open_at: Time.now - (24 * 60 * 60), due_at: nil}
-  let(:student) { build :user, courses: [course], role: :student }
+  let(:student) { create :user, courses: [course], role: :student }
 
   before do
     stub_request(:post, "https://accounts.google.com/o/oauth2/token").

@@ -138,12 +138,12 @@ class ApplicationController < ActionController::Base
   def register_last_ip_address(_user, _credentials)
     return unless Config.register_last_ip_address
     user = impersonating? ? impersonating_agent : current_user
-    user.set_last_ip_addess(request.remote_ip)
+    user.set_last_ip_address(request.remote_ip)
   end
 
-  def register_logout_time_to_db(user)
+  def register_logout_time_to_db
     return unless Config.register_logout_time
-    user = impersonating? ? impersonating_agent : user
+    user = impersonating? ? impersonating_agent : current_user
     user.set_last_logout_at(Time.now.in_time_zone)
   end
 
