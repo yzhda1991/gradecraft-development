@@ -138,7 +138,7 @@ class CSVAssignmentImporter
     end
 
     def accepts_submissions
-      remove_smart_quotes(data[7]).strip
+      remove_smart_quotes(data[7]).strip.try(:to_boolean)
     end
 
     def accepts_submissions_until
@@ -146,7 +146,7 @@ class CSVAssignmentImporter
     end
 
     def required
-      remove_smart_quotes(data[9]).strip
+      remove_smart_quotes(data[9]).strip.try(:to_boolean)
     end
   end
 end

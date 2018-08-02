@@ -5,6 +5,11 @@
       vm.loading = true
       vm.submitted = false
 
+      vm.booleanValues = [
+        { display_string: "No", value: false },
+        { display_string: "Yes", value: true }
+      ]
+
       vm.assignmentTypes = AssignmentTypeService.assignmentTypes
 
       vm.hasInvalidDueDates = () ->

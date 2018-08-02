@@ -60,7 +60,9 @@
                       %i.fa.fa-exclamation
                       Invalid Date**
 
-                  %td {{row.accepts_submissions}}
+                  %td
+                    %select{"ng-model"=>"row.accepts_submissions",
+                            "ng-options"=>"option.value as option.display_string for option in vm.booleanValues"}
 
                   %td
                     %input{"ng-model"=>"row.selected_accepts_submissions_until",
@@ -72,7 +74,9 @@
                       %i.fa.fa-exclamation
                       Invalid Date**
 
-                  %td {{row.required}}
+                  %td
+                    %select{"ng-model"=>"row.required",
+                            "ng-options"=>"option.value as option.display_string for option in vm.booleanValues"}
 
         .submit-buttons
           %ul
