@@ -1,4 +1,4 @@
-class Assignment < ActiveRecord::Base
+class Assignment < ApplicationRecord
   include Copyable
   include Gradable
   include MultipleFileAttributes

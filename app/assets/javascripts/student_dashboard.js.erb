@@ -15,7 +15,9 @@ function setInitialEventSlide(eventJson){
   var events = eventJson.timeline.date;
   var todaysDate = new Date();
   var startIndex = null;
-  var noUpcomingEventsSlide = '<div class="event-slide last-slide"><div class="empty-state-wrapper large"><img src="/images/no-upcoming-events.svg" class="empty-state-graphic" alt="No upcoming events"></div></div>'
+  var noUpcomingEventsPath = "<%= asset_path('no-upcoming-events.svg') %>";
+  var noUpcomingEventsSlide = '<div class="event-slide last-slide"><div class="empty-state-wrapper large"><img src="' +
+    noUpcomingEventsPath + '" class="empty-state-graphic" alt="No upcoming events"></div></div>'
 
   for (var i = 0; i < events.length; i++) {
     var eventEndDate = new Date(events[i].endDate);

@@ -1,3 +1,3 @@
-class ImportedAssignment < ActiveRecord::Base
+class ImportedAssignment < ApplicationRecord
   belongs_to :assignment
 end

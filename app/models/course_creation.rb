@@ -1,4 +1,4 @@
-class CourseCreation < ActiveRecord::Base
+class CourseCreation < ApplicationRecord
   include Rails.application.routes.url_helpers
   belongs_to :course
 

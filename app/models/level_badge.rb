@@ -1,4 +1,4 @@
-class LevelBadge < ActiveRecord::Base
+class LevelBadge < ApplicationRecord
   include Copyable
 
   belongs_to :level

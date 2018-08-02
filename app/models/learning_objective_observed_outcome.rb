@@ -1,4 +1,4 @@
-class LearningObjectiveObservedOutcome < ActiveRecord::Base
+class LearningObjectiveObservedOutcome < ApplicationRecord
   belongs_to :cumulative_outcome, class_name: "LearningObjectiveCumulativeOutcome",
     foreign_key: :learning_objective_cumulative_outcomes_id
   belongs_to :learning_objective_level, foreign_key: :objective_level_id

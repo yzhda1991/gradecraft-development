@@ -12,8 +12,8 @@ describe BadgesHelper do
 
     it "renders the image for the badge" do
       html = helper.sidebar_earned_badge(badge, student)
-      expect(html).to have_tag "img",
-        with: { src: "http://localhost:5000/images/badge.png", class: "earned", alt: "You have earned the badgy badge" }
+      expect(html).to have_tag "img", with: { class: "earned", alt: "You have earned the badgy badge" }
+      expect(html).to have_css "img[src*='/assets/badge']"
     end
 
     it "renders an unlock icon if it's unlocked by the student" do

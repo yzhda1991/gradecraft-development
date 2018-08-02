@@ -1,4 +1,4 @@
-class ChallengeScoreLevel < ActiveRecord::Base
+class ChallengeScoreLevel < ApplicationRecord
   include ScoreLevel
 
   belongs_to :challenge

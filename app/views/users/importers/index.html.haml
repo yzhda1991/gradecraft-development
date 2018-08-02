@@ -4,7 +4,7 @@
   %section
     .card{style: "height: 400px;"}
       .card-cap
-        %img{src: "/images/csv-logo.png", height: "46px"}
+        = image_tag "csv-logo.png", height: "46px"
       .card-block
         %h4.card-title CSV
         .card-text
@@ -16,7 +16,7 @@
     - if current_course.allows_canvas?
       .card{style: "height: 400px;"}
         .card-cap
-          %img{src: "/images/canvas-logo.png"}
+          = image_tag "canvas-logo.png"
         .card-block
           %h4.card-title Canvas LMS
           .card-text

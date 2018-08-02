@@ -1,4 +1,4 @@
-class Rubric < ActiveRecord::Base
+class Rubric < ApplicationRecord
   include Copyable
 
   belongs_to :assignment

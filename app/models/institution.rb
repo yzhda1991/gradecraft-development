@@ -1,4 +1,4 @@
-class Institution < ActiveRecord::Base
+class Institution < ApplicationRecord
   has_many :courses
   has_many :providers, dependent: :destroy, as: :providee
 

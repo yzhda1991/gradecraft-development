@@ -1,4 +1,4 @@
-class AssignmentType < ActiveRecord::Base
+class AssignmentType < ApplicationRecord
   include Copyable
   include UnlockableCondition
 

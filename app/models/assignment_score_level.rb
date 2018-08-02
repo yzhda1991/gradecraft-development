@@ -1,4 +1,4 @@
-class AssignmentScoreLevel < ActiveRecord::Base
+class AssignmentScoreLevel < ApplicationRecord
   include ScoreLevel
 
   belongs_to :assignment

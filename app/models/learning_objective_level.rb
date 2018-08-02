@@ -1,4 +1,4 @@
-class LearningObjectiveLevel < ActiveRecord::Base
+class LearningObjectiveLevel < ApplicationRecord
   enum flagged_value: [:exceeds_proficiency, :proficient, :nearing_proficiency, :not_proficient]
 
   belongs_to :objective, class_name: "LearningObjective", foreign_key: :objective_id

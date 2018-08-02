@@ -1,7 +1,7 @@
 - if current_course.allows_canvas?
   .card.left{style: "height: 350px;"}
     .card-cap
-      %img{src: "/images/canvas-logo.png"}
+      = image_tag "canvas-logo.png"
     .card-block= integration_card_for(:canvas, @course)
 
 .clear

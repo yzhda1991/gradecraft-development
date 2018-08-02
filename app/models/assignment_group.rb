@@ -1,4 +1,4 @@
-class AssignmentGroup < ActiveRecord::Base
+class AssignmentGroup < ApplicationRecord
   belongs_to :assignment
   belongs_to :group
 

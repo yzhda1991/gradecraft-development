@@ -1,4 +1,4 @@
-class UnlockCondition < ActiveRecord::Base
+class UnlockCondition < ApplicationRecord
   include Copyable
 
   belongs_to :course

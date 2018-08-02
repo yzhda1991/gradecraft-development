@@ -1,4 +1,4 @@
-class Submission < ActiveRecord::Base
+class Submission < ApplicationRecord
   include Historical
   include MultipleFileAttributes
   include Sanitizable

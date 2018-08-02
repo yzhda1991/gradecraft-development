@@ -1,4 +1,4 @@
-class Provider < ActiveRecord::Base
+class Provider < ApplicationRecord
   belongs_to :providee, polymorphic: true
 
   validates_associated :providee

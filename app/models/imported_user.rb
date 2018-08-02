@@ -1,3 +1,3 @@
-class ImportedUser < ActiveRecord::Base
+class ImportedUser < ApplicationRecord
   belongs_to :user
 end

@@ -2,7 +2,7 @@ require "s3_manager"
 require "export"
 require "formatter"
 
-class SubmissionsExport < ActiveRecord::Base
+class SubmissionsExport < ApplicationRecord
   # treat this resource as if it's responsible for managing an object on s3
   # Note that if this record is an ActiveRecord::Base descendant then a
   # callback for :rebuild_s3_object_key is added for on: :save

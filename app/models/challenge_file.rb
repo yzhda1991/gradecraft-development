@@ -1,4 +1,4 @@
-class ChallengeFile < ActiveRecord::Base
+class ChallengeFile < ApplicationRecord
   include S3Manager::Carrierwave
 
   belongs_to :challenge, inverse_of: :challenge_files

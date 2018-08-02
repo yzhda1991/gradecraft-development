@@ -1,4 +1,4 @@
-class SubmissionFile < ActiveRecord::Base
+class SubmissionFile < ApplicationRecord
   include S3Manager::Carrierwave
   include S3Manager::Streaming
   include Historical

@@ -1,4 +1,4 @@
-class TeamLeadership < ActiveRecord::Base
+class TeamLeadership < ApplicationRecord
   belongs_to :team
   belongs_to :leader, class_name: "User"
 

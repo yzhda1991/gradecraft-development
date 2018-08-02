@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
   include ActiveModel::Validations
   include Sanitizable
 

@@ -1,4 +1,4 @@
-class Badge < ActiveRecord::Base
+class Badge < ApplicationRecord
   include Copyable
   include UnlockableCondition
   include MultipleFileAttributes

@@ -77,7 +77,7 @@ describe API::CriteriaController do
       let(:level) { criterion.levels.last }
 
       it "sets epxectations for the level in params" do
-        put :set_expectations, criterion_id: criterion.id, level_id: level.id, format: :json
+        put :set_expectations, params: { criterion_id: criterion.id, level_id: level.id }, format: :json
         expect(level.reload.meets_expectations).to be_truthy
         expect(criterion.reload.meets_expectations_level_id).to eq(level.id)
         expect(criterion.reload.meets_expectations_points).to eq(level.points)
@@ -85,7 +85,7 @@ describe API::CriteriaController do
 
       it "removes expectations for all other levels" do
         criterion.levels.first.update_attributes(meets_expectations: true)
-        put :set_expectations, criterion_id: criterion.id, level_id: level.id, format: :json
+        put :set_expectations, params: { criterion_id: criterion.id, level_id: level.id }, format: :json
         expect(criterion.levels.first.reload.meets_expectations).to be_falsey
       end
     end
@@ -93,7 +93,7 @@ describe API::CriteriaController do
     describe "PUT remove_expectations" do
       it "removes expectations on criteria and all levels" do
         criterion.levels.first.update_attributes(meets_expectations: true)
-        put :remove_expectations, criterion_id: criterion.id, format: :json
+        put :remove_expectations, params: { criterion_id: criterion.id }, format: :json
         expect(criterion.levels.pluck(:meets_expectations).uniq).to eq([false])
       end
     end

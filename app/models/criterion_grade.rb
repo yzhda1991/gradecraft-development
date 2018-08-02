@@ -1,4 +1,4 @@
-class CriterionGrade < ActiveRecord::Base
+class CriterionGrade < ApplicationRecord
   belongs_to :criterion
   belongs_to :level
   belongs_to :student, class_name: "User"

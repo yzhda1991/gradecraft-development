@@ -29,14 +29,14 @@
     %div{"ng-if"=>"toDoListItemsCtrl.assignmentType === 'course-planner-list'"}
       %div{"ng-if"=>"toDoListItemsCtrl.hasDueDates"}
         .empty-state-wrapper
-          %img.empty-state-graphic{"src"=>"/images/no-assignments-due.svg", "alt"=>""}
+          = image_tag "no-assignments-due.svg", alt: "", class: "empty-state-graphic"
         %p.empty-state-text You don't have any {{toDoListItemsCtrl.termFor("assignments")}} due in the next week!
       %p.dashboard-message{"ng-if"=>"!toDoListItemsCtrl.hasDueDates"} This class has flexible {{toDoListItemsCtrl.termFor("assignment")}} due dates. Check your course rules to learn when to turn in certain {{toDoListItemsCtrl.termFor("assignments")}}.
 
     -# My planner
     %div{"ng-if"=>"toDoListItemsCtrl.assignmentType === 'my-planner-list'"}
       .empty-state-wrapper
-        %img.empty-state-graphic{"src"=>"/images/no-predicted-assignments.svg", "alt"=>""}
+        = image_tag "no-predicted-assignments.svg", alt: "", class: "empty-state-graphic"
       %p.empty-state-text
         You have not predicted any {{toDoListItemsCtrl.termFor("assignments")}}! Check out the
         %a{"ng-href"=>"{{toDoListItemsCtrl.data.predictor_path}}"} {{toDoListItemsCtrl.termFor("predictor")}}
