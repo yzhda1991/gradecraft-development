@@ -26,7 +26,7 @@ class CSVStudentImporter
           next
         end
 
-        result = Services::CreatesOrUpdatesUser.create_or_update row.to_h.merge(internal: internal_students), course, send_welcome
+        result = Services::CreatesOrUpdatesUser.call row.to_h.merge(internal: internal_students), course, send_welcome
         user = result[:user] if result.success?
 
         unless result.success? && user.valid?
@@ -39,7 +39,7 @@ class CSVStudentImporter
           next
         end
 
-        unless Services::CreatesCourseMembership.create(user, course).success?
+        unless Services::CreatesCourseMembership.call(user, course).success?
           append_unsuccessful row, "Unable to add this user to the course"
           next
         end

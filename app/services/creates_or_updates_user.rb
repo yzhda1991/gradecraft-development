@@ -5,7 +5,7 @@ module Services
   class CreatesOrUpdatesUser
     extend LightService::Organizer
 
-    def self.create_or_update(attributes, course, send_welcome_email=false)
+    def self.call(attributes, course, send_welcome_email=false)
       with(attributes: attributes, course: course, send_welcome_email: send_welcome_email)
         .reduce(
           Actions::CreatesOrUpdatesUser

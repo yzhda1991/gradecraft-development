@@ -6,7 +6,7 @@ module Services
   class ImportsLMSUsers
     extend LightService::Organizer
 
-    def self.import(provider, access_token, course_id, user_ids, course)
+    def self.call(provider, access_token, course_id, user_ids, course)
       with(provider: provider, access_token: access_token,
         course_id: course_id, course: course, user_ids: user_ids).reduce(
           Actions::RetrievesLMSUsersWithRoles,

@@ -29,7 +29,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    result = Services::CreatesEarnedBadge.award earned_badge_params.merge(awarded_by: current_user)
+    result = Services::CreatesEarnedBadge.call earned_badge_params.merge(awarded_by: current_user)
 
     if result.success?
       redirect_to badge_path(result.earned_badge.badge),

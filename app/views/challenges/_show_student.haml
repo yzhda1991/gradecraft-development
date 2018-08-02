@@ -3,7 +3,7 @@
   - if @challenge.challenge_files.present?
     %b Attachments:
     %ul
-      - challenge.challenge_files.each do |cf|
+      - @challenge.challenge_files.each do |cf|
         %li
           = link_to cf.filename, cf.url
 

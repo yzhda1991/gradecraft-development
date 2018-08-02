@@ -64,7 +64,7 @@ class API::CriteriaController < ApplicationController
   def set_expectations
     criterion = Criterion.find(params[:criterion_id])
     level = Level.find(params[:level_id])
-    result = Services::UpdatesCriterionExpectations.update criterion, level
+    result = Services::UpdatesCriterionExpectations.call criterion, level
     if result
       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
       @levels = @criterion.levels.order("points").order("sort_order")
@@ -79,7 +79,7 @@ class API::CriteriaController < ApplicationController
   # PUT api/criteria/:id/remove_expectations
   def remove_expectations
     criterion = Criterion.find(params[:criterion_id])
-    result = Services::RemovesCriterionExpectations.update criterion
+    result = Services::RemovesCriterionExpectations.call criterion
     if result
       @criterion = Criterion.includes(:levels).find(params[:criterion_id])
       @levels = @criterion.levels.order("points").order("sort_order")

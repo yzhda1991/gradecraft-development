@@ -24,7 +24,7 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(mangle: false)
   config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -108,14 +108,9 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   config.session_store :active_record_store, :expire_after => 60.minutes
-
-  # config.logger = ActiveSupport::TaggedLogging.new(
-  #                   RemoteSyslogLogger.new(
-  #                     "logs6.papertrailapp.com",
-  #                     20258,
-  #                     program: "rails-#{ENV["RAILS_ENV"]}")
-  #                 )
 end
+
+require 'carrierwave/storage/fog'
 
 CarrierWave.configure do |config|
   config.storage = :fog

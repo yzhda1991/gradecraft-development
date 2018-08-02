@@ -30,7 +30,7 @@ class API::LevelsController < ApplicationController
   def destroy
     level = Level.find(params[:id])
     if level.meets_expectations
-      result = Services::RemovesCriterionExpectations.update level.criterion
+      result = Services::RemovesCriterionExpectations.call level.criterion
     end
     if level.destroy
       render json: { message: "level successfully deleted", success: true },

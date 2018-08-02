@@ -1,5 +1,7 @@
 require "./lib/collection_merger"
 
+# For use with paper_trail
+# Must add 'has_paper_trail' to the model whenever this module is included
 module Historical
   extend ActiveSupport::Concern
 
@@ -11,10 +13,6 @@ module Historical
       @version = version
       @changeset = @version.changeset.dup
     end
-  end
-
-  included do
-    has_paper_trail
   end
 
   def has_history?

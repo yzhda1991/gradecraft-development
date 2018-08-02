@@ -42,8 +42,8 @@ describe UserSessionsController do
     before(:each) do
       allow(subject).to receive(:auth_hash).and_return params
       allow(user_create_result).to receive(:success?).and_return true
-      allow(Services::CreatesOrUpdatesUserFromLTI).to receive(:create_or_update).with(params).and_return user_create_result
-      allow(Services::CreatesOrUpdatesCourseFromLTI).to receive(:create_or_update).with(params, false).and_return({ course: course })
+      allow(Services::CreatesOrUpdatesUserFromLTI).to receive(:call).with(params).and_return user_create_result
+      allow(Services::CreatesOrUpdatesCourseFromLTI).to receive(:call).with(params, false).and_return({ course: course })
     end
 
     context "when there is no context role" do

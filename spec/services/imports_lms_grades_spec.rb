@@ -1,5 +1,5 @@
 describe Services::ImportsLMSGrades do
-  describe ".import" do
+  describe ".call" do
     let(:access_token) { "TOKEN" }
     let(:assignment) { create :assignment }
     let(:assignment_ids) { ["ASSIGNMENT_1"] }
@@ -17,7 +17,7 @@ describe Services::ImportsLMSGrades do
       expect(Services::Actions::RetrievesLMSGrades).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, assignment_ids,
+      described_class.call provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
 
@@ -25,7 +25,7 @@ describe Services::ImportsLMSGrades do
       expect(Services::Actions::RetrievesLMSUsers).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, assignment_ids,
+      described_class.call provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
 
@@ -33,7 +33,7 @@ describe Services::ImportsLMSGrades do
       expect(Services::Actions::ImportsLMSUsers).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, assignment_ids,
+      described_class.call provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
 
@@ -41,7 +41,7 @@ describe Services::ImportsLMSGrades do
       expect(Services::Actions::ImportsLMSGrades).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, assignment_ids,
+      described_class.call provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
 
@@ -49,7 +49,7 @@ describe Services::ImportsLMSGrades do
       expect(Services::Actions::EnqueuesGradeUpdaterJobs).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, assignment_ids,
+      described_class.call provider, access_token, course_id, assignment_ids,
         grade_ids, assignment, user
     end
   end

@@ -1,7 +1,7 @@
 module UsersHelper
   def cancel_course_memberships(user)
     user.course_memberships.select(&:marked_for_destruction?).map do |cm|
-      Services::CancelsCourseMembership.for_student(cm)
+      Services::CancelsCourseMembership.call(cm)
     end
   end
 

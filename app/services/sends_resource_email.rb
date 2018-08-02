@@ -6,7 +6,7 @@ module Services
   class SendsResourceEmail
     extend LightService::Organizer
 
-    def self.send_resource_email(user)
+    def self.call(user)
       with(user: user)
         .reduce(
           Actions::SendEmail,

@@ -298,7 +298,7 @@ describe UsersController do
 
       it "exists" do
         get :activate, params: { id: student.activation_token }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "redirects to the root url if the token is not correct" do

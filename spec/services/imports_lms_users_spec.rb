@@ -1,7 +1,7 @@
 require "./app/services/imports_lms_users"
 
 describe Services::ImportsLMSUsers do
-  describe ".import" do
+  describe ".call" do
     let(:access_token) { "TOKEN" }
     let(:course_id) { "COURSE_ID" }
     let(:course) { build :course }
@@ -20,14 +20,14 @@ describe Services::ImportsLMSUsers do
       expect(Services::Actions::RetrievesLMSUsersWithRoles).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, user_ids, course
+      described_class.call provider, access_token, course_id, user_ids, course
     end
 
     it "imports the users from the lms provider" do
       expect(Services::Actions::ImportsLMSUsers).to \
         receive(:execute).and_call_original
 
-      described_class.import provider, access_token, course_id, user_ids, course
+      described_class.call provider, access_token, course_id, user_ids, course
     end
   end
 end

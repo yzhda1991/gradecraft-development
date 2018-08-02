@@ -49,7 +49,7 @@ class CourseMembershipsController < ApplicationController
 
   def destroy
     course_membership = current_course.course_memberships.find(params[:id])
-    Services::CancelsCourseMembership.for_student course_membership
+    Services::CancelsCourseMembership.call course_membership
 
     respond_to do |format|
       format.html { redirect_to session[:return_to], notice: "#{course_membership.user.name} was successfully removed from course." }

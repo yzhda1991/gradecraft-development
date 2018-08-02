@@ -5,7 +5,7 @@ module Services
   class CreatesCourseMembership
     extend LightService::Organizer
 
-    def self.create(user, course)
+    def self.call(user, course)
       with(user: user, course: course)
         .reduce(
           Actions::CreatesCourseMembership

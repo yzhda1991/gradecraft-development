@@ -2,7 +2,6 @@ require "csv"
 require "quote_helper"
 
 class CSVBadgeImporter
-  include BadgesHelper
   attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 

@@ -5,7 +5,7 @@ module Services
   class DeletesSubmissionDraftContent
     extend LightService::Organizer
 
-    def self.for(submission)
+    def self.call(submission)
       with(submission: submission)
         .reduce(
           Actions::RemovesTextCommentDraft

@@ -26,21 +26,21 @@ describe Services::Actions::CreatesOrUpdatesUser do
     it "creates the user if one is not found" do
       allow(User).to receive(:find_by_insensitive_email).and_return nil
       allow(User).to receive(:find_by_insensitive_username).and_return nil
-      expect(Services::CreatesNewUser).to receive(:create).and_call_original
-      expect(Services::UpdatesUser).to_not receive(:update)
+      expect(Services::CreatesNewUser).to receive(:call).and_call_original
+      expect(Services::UpdatesUser).to_not receive(:call)
       described_class.execute attributes: attributes, send_welcome_email: false
     end
 
     it "updates the user if one is found" do
       allow(User).to receive(:find_by_insensitive_email).and_return user
-      expect(Services::UpdatesUser).to receive(:update).and_call_original
-      expect(Services::CreatesNewUser).to_not receive(:create)
+      expect(Services::UpdatesUser).to receive(:call).and_call_original
+      expect(Services::CreatesNewUser).to_not receive(:call)
       described_class.execute attributes: attributes, send_welcome_email: false
     end
 
     it "fails if there is no email or username provided" do
-      expect(Services::CreatesNewUser).to_not receive(:create)
-      expect(Services::UpdatesUser).to_not receive(:update)
+      expect(Services::CreatesNewUser).to_not receive(:call)
+      expect(Services::UpdatesUser).to_not receive(:call)
       result = described_class.execute attributes: attributes.except(:email, :username), send_welcome_email: false
       expect(result.success?).to be_falsey
     end
@@ -52,21 +52,21 @@ describe Services::Actions::CreatesOrUpdatesUser do
     it "creates the user if one is not found" do
       allow(User).to receive(:find_by_insensitive_email).and_return nil
       allow(User).to receive(:find_by_insensitive_username).and_return nil
-      expect(Services::CreatesNewUser).to receive(:create).and_call_original
-      expect(Services::UpdatesUserForCourse).to_not receive(:update)
+      expect(Services::CreatesNewUser).to receive(:call).and_call_original
+      expect(Services::UpdatesUserForCourse).to_not receive(:call)
       described_class.execute attributes: attributes, course: course, send_welcome_email: false
     end
 
     it "updates the user if one is found" do
       allow(User).to receive(:find_by_insensitive_email).and_return user
-      expect(Services::UpdatesUserForCourse).to receive(:update).and_call_original
-      expect(Services::CreatesNewUser).to_not receive(:create)
+      expect(Services::UpdatesUserForCourse).to receive(:call).and_call_original
+      expect(Services::CreatesNewUser).to_not receive(:call)
       described_class.execute attributes: attributes, course: course, send_welcome_email: false
     end
 
     it "fails if there is no email or username provided" do
-      expect(Services::CreatesNewUser).to_not receive(:create)
-      expect(Services::UpdatesUserForCourse).to_not receive(:update)
+      expect(Services::CreatesNewUser).to_not receive(:call)
+      expect(Services::UpdatesUserForCourse).to_not receive(:call)
       described_class.execute attributes: attributes.except(:email, :username), course: course, send_welcome_email: false
     end
   end

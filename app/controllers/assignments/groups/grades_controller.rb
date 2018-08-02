@@ -16,7 +16,7 @@ class Assignments::Groups::GradesController < ApplicationController
       value.merge!(instructor_modified: true, complete: true, student_visible: true)
     end
 
-    result = Services::CreatesManyGroupGrades.create @assignment.id,
+    result = Services::CreatesManyGroupGrades.call @assignment.id,
       current_user.id,
       assignment_group_grades_params
 

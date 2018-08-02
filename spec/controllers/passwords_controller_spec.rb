@@ -19,7 +19,7 @@ describe PasswordsController do
 
     it "exists" do
       get :edit, params: { id: user.reset_password_token }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "redirects to the password reset url if the token is not correct" do

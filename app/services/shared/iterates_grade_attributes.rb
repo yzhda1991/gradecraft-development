@@ -16,7 +16,7 @@ module Services
           params = { "grade" => value }
           params.merge! "assignment_id" => context.assignment_id
           params.merge! "student_id" => value[:student_id]
-          result = Services::CreatesGrade.create(params, context.graded_by_id)
+          result = Services::CreatesGrade.call(params, context.graded_by_id)
           if result.success?
             context.successful << result[:grade]
           else

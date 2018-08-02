@@ -21,13 +21,13 @@ module Services
 
         find_and_set_user_context context, email, username
         if context[:user].nil?
-          context.add_to_context Services::CreatesNewUser.create attributes, context.send_welcome_email
+          context.add_to_context Services::CreatesNewUser.call attributes, context.send_welcome_email
         else
           course = context[:course]
           if course.nil?
-            context.add_to_context Services::UpdatesUser.update context[:user], attributes
+            context.add_to_context Services::UpdatesUser.call context[:user], attributes
           else
-            context.add_to_context Services::UpdatesUserForCourse.update context[:user], attributes, course
+            context.add_to_context Services::UpdatesUserForCourse.call context[:user], attributes, course
           end
         end
       end

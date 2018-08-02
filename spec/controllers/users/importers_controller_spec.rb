@@ -20,14 +20,14 @@ describe Users::ImportersController do
       let(:user_ids) { [12, 23] }
 
       before(:each) do
-        allow(Services::ImportsLMSUsers).to receive(:import).and_return result
+        allow(Services::ImportsLMSUsers).to receive(:call).and_return result
       end
 
       context "when successful" do
         let(:result) { double(:result, success?: true, message: "") }
 
         it "imports the lms users" do
-          expect(Services::ImportsLMSUsers).to receive(:import).and_return result
+          expect(Services::ImportsLMSUsers).to receive(:call).and_return result
           post :users_import, params: { id: id, importer_provider_id: provider,
             user_ids: user_ids }
         end

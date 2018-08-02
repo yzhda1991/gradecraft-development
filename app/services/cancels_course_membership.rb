@@ -14,7 +14,7 @@ module Services
   class CancelsCourseMembership
     extend LightService::Organizer
 
-    def self.for_student(membership)
+    def self.call(membership)
       with(membership: membership).reduce(
         Actions::DestroysMembership,
         Actions::DestroysSubmissions,

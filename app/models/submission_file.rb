@@ -6,7 +6,6 @@ class SubmissionFile < ApplicationRecord
   belongs_to :submission, inverse_of: :submission_files
 
   mount_uploader :file, AttachmentUploader
-  process_in_background :file
   has_paper_trail ignore: [:file_missing, :last_confirmed_at]
 
   validates :filename, presence: true, length: { maximum: 50 }
@@ -46,7 +45,7 @@ class SubmissionFile < ApplicationRecord
   end
 
   def instructor_filename(index=nil)
-    file_number = index.class == Fixnum ? " #{index + 1}" : ""
+    file_number = index.class == Integer ? " #{index + 1}" : ""
     "#{submission.base_filename} - Submission File#{file_number}#{extension}"
   end
 

@@ -1,5 +1,5 @@
 include InQueueHelper # pulled from ResqueSpec
- 
+
 describe Course do
   let(:course1) { create(:course) }
   let(:course2) { create(:course) }
@@ -63,7 +63,7 @@ describe Course do
     end
 
     it "should only return an array of ids" do
-      expect(subject.collect(&:class)).to eq([Fixnum, Fixnum])
+      expect(subject.collect(&:class)).to eq([Integer, Integer])
     end
 
     context "user is a student not in the course" do

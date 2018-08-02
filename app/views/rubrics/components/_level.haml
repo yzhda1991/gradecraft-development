@@ -5,12 +5,12 @@
 %section.level{class: ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
   = render partial: "rubrics/components/level_heading", locals: { level: level, student: student, include_grade_info: include_grade_info }
 
-- if !level.level_badges(current_user).empty? && !include_grade_info
+- if !level.level_badges.empty? && !include_grade_info
   %section.badges-earned
     %h6= "#{term_for :badges} Available"
     = render partial: "rubrics/components/level_badges", locals: { level: level }
 
-- if !level.level_badges(current_user).empty? && include_grade_info && level.earned_for?(student.id)
+- if !level.level_badges.empty? && include_grade_info && level.earned_for?(student.id)
   %section.badges-earned
     %h6= "#{term_for :badges} Earned"
     = render partial: "rubrics/components/level_badges", locals: { level: level }

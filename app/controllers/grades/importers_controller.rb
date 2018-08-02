@@ -50,7 +50,7 @@ class Grades::ImportersController < ApplicationController
     @provider_name = params[:importer_provider_id]
     @assignment = Assignment.find params[:assignment_id]
 
-    @result = Services::ImportsLMSGrades.import @provider_name,
+    @result = Services::ImportsLMSGrades.call @provider_name,
       authorization(@provider_name).access_token, params[:id], params[:assignment_ids],
       params[:grade_ids], @assignment, current_user
 
