@@ -10,7 +10,7 @@ describe API::Assignments::GradesController do
   context "as a professor" do
     let(:user) { build_stubbed :user, courses: [course], role: :professor }
 
-    describe "#show" do
+    describe "GET #show" do
       let(:students) { build_list :user, 3, courses: [course], role: :student }
       let!(:grade) { create :grade, student: students.first, assignment: assignment, course: course }
 
@@ -46,7 +46,7 @@ describe API::Assignments::GradesController do
       end
     end
 
-    describe "#release" do
+    describe "PUT #release" do
       let!(:grades) { create_list :in_progress_grade, 2, course: course }
       let(:grade_updater_job) { instance_double "GradeUpdaterJob", enqueue: true }
 
@@ -59,45 +59,6 @@ describe API::Assignments::GradesController do
 
         expect(grades.each(&:reload)).to all have_attributes instructor_modified: true,
           student_visible: true, complete: true
-      end
-    end
-
-    describe "#release_for_assignment" do
-      let!(:grades) { create_list :in_progress_grade, 2, assignment: assignment }
-      let(:grade_updater_job) { instance_double "GradeUpdaterJob", enqueue: true }
-
-      before(:each) { allow(GradeUpdaterJob).to receive(:new).and_return grade_updater_job }
-
-      context "when grade ids are provided" do
-        it "releases only the grades that are specified" do
-          expect(grade_updater_job).to receive(:enqueue).once
-
-          put :release_for_assignment, params: { assignment_id: assignment.id, grade_ids: grades.first.id }, format: :json
-
-          expect(grades.first.reload).to have_attributes instructor_modified: true,
-            student_visible: true, complete: true
-        end
-
-        it "returns a not found status if no grades are found" do
-          put :release_for_assignment, params: { assignment_id: assignment.id, grade_ids: 123456 }, format: :json
-          expect(response).to have_http_status :not_found
-        end
-      end
-
-      context "when grade ids are not provided" do
-        it "releases all grades for the assignment" do
-          expect(grade_updater_job).to receive(:enqueue).twice
-
-          put :release_for_assignment, params: { assignment_id: assignment.id }, format: :json
-
-          expect(grades.each(&:reload)).to all have_attributes instructor_modified: true,
-            student_visible: true, complete: true
-        end
-
-        it "returns a not found status if no grades are found" do
-          put :release, params: { grade_ids: [111, 222] }, format: :json
-          expect(response).to have_http_status :not_found
-        end
       end
     end
   end
