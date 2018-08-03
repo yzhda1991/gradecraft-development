@@ -4,7 +4,10 @@ class API::AttendanceController < ApplicationController
 
   # GET /api/attendance
   def index
-    @assignments = current_course.assignments.with_attendance_type
+    @assignments = current_course
+      .assignments
+      .ordered
+      .with_attendance_type
   end
 
   # POST /api/attendance
@@ -53,7 +56,7 @@ class API::AttendanceController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit :id, :name, :description,
-      :open_at, :due_at, :full_points, :pass_fail, :media
+      :open_at, :due_at, :full_points, :pass_fail, :media, :position
   end
 
   def find_event

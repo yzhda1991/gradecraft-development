@@ -13,7 +13,7 @@
   %without_events{"ng-if"=>"events.length < 1"}
     %h3.form-subtitle No attendance events present
 
-  %event{"ng-repeat"=>"event in events"}
+  %event{"ng-repeat"=>"event in events | orderBy: 'open_at'"}
     %attendance-event-attribute-card{"data-event"=>"event", "data-event-index"=>"$index"}
 
 .submit-buttons
