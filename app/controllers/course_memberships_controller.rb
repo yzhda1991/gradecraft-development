@@ -7,11 +7,11 @@ class CourseMembershipsController < ApplicationController
   before_action :save_referer, only: [:destroy]
 
   def index
-    @course_memberships = current_course
+    @users = current_course
       .users
-      .order_by_name
+      .order("course_memberships.role DESC, last_name, first_name ASC")
       .includes(:course_memberships)
-      .where(course_memberships: { role: "student" })
+      .where.not(course_memberships: { role: "admin" })
   end
 
   def create
@@ -68,7 +68,7 @@ class CourseMembershipsController < ApplicationController
 
   def delete_many
     CourseMembership.where(id: params[:course_membership_ids]).find_in_batches(batch_size: 50) do |b|
-      b.each { |cm| Services::CancelsCourseMembership.for_student cm }
+      b.each { |cm| Services::CancelsCourseMembership.call cm }
     end
     redirect_to course_memberships_path,
       flash: { success: "Successfully deleted #{params[:course_membership_ids].count} course membership(s)" }

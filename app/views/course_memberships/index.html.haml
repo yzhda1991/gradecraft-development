@@ -11,14 +11,14 @@
           %th Role
           %th Delete?
       %tbody
-        - @course_memberships.each do |user|
+        - @users.each do |user|
           %tr
             %td= user.id
             %td= user.first_name
             %td= user.last_name
-            %td= user.role(current_course)
+            %td= user.role(current_course).capitalize
             %td= check_box_tag "course_membership_ids[]", user.course_memberships.where(course_id: current_course.id).first.id
 
     .submit-buttons
       %ul
-        %li= submit_tag "Delete users", class: "button", data: { disable_with: "Deleting...", confirm: "Are you sure you want to delete these users from #{current_course.name}?" }
+        %li= submit_tag "Delete users", class: "button", data: { disable_with: "Deleting...", confirm: "Are you sure you want to delete these user(s) from #{current_course.name}?" }

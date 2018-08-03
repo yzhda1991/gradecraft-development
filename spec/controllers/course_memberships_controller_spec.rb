@@ -48,7 +48,7 @@ describe CourseMembershipsController do
     describe "GET #index" do
       it "assigns the course memberships for the current course" do
         get :index
-        expect(assigns(:course_memberships)).to match_array [student_membership.user]
+        expect(assigns(:users)).to match_array [student_membership.user, professor]
       end
     end
 
@@ -59,7 +59,7 @@ describe CourseMembershipsController do
       end
 
       it "delete course_memberships" do
-        expect{ delete :delete_many, params: { course_membership_ids: [student_membership.id] } }.to \
+        expect{ delete :delete_many, params: { course_membership_ids: [professor_membership.id] } }.to \
           change(CourseMembership, :count).by -1
       end
     end
