@@ -32,7 +32,7 @@
 * MongoDB
 * Redis
 
-## Installation Notes (last update: 06/12/18) for running locally
+## Installation Notes for running locally
 
 1. Install Homebrew (Optional: `brew update`)
 
@@ -51,8 +51,8 @@ edit ~/.bash_profile and add eval "$(rbenv init -)"
 curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 
 # install and set the current version
-rbenv install 2.2.2 (or whatever version Gradecraft is on)
-rbenv local 2.2.2 (or rbenv global 2.2.2 if preferred)
+rbenv install 2.5.1 (or whatever version Gradecraft is on)
+rbenv local 2.5.1 (or rbenv global 2.5.1 if preferred)
 
 # Restart terminal for changes to fully take into effect and ensure that the command rbenv works
 ```
@@ -60,9 +60,7 @@ rbenv local 2.2.2 (or rbenv global 2.2.2 if preferred)
 3. Install databases
 
 ```
-# --rest argument is deprecated in latest version of MongoDB
-# for now ensure that the installed version of Mongodb is at 3.4
-brew install mongodb@3.4
+brew install mongodb
 brew install redis
 brew install postgresql
 ```
