@@ -54,36 +54,46 @@ describe Integrations::GoogleController, type: [:disable_external_api, :controll
     end
 
     context "when the user is not logged in" do
-      it "automatically logs the user in if they have an existing account" do
-        user = create :user, email: "pablo.picasso@gmail.com"
-        get :auth_callback
-        expect(controller.current_user).to eq user
+      context "when the user does not exist" do
+        it "creates a new account if the environment is beta" do
+          expect{ get :auth_callback }.to change(User, :count).by 1
+          expect(User.last).to have_attributes \
+            "first_name" => "Pablo",
+            "last_name" => "Picasso",
+            "email" => "pablo.picasso@gmail.com",
+            "username" => "pablo.picasso@gmail.com",
+            "activation_state" => "pending"
+        end
+
+        it "activates the user if they are inactive and it's specified to activate" do
+          get :auth_callback, session: { "activate_google_user" => true }
+          expect(User.last).to be_activated
+        end
+
+        it "redirects to an error page if the environment is not beta" do
+          stub_env "umich"
+          get :auth_callback
+          expect(response).to redirect_to errors_path(error_type: "account_not_found", status_code: 401)
+        end
+
+        it "redirects to the new user page after create" do
+          get :auth_callback
+          expect(response).to redirect_to action: :new_user
+        end
       end
 
-      it "creates a new account if one does not yet exist and the environment is beta" do
-        expect{ get :auth_callback }.to change(User, :count).by 1
-        expect(User.last).to have_attributes \
-          "first_name" => "Pablo",
-          "last_name" => "Picasso",
-          "email" => "pablo.picasso@gmail.com",
-          "username" => "pablo.picasso@gmail.com",
-          "activation_state" => "active"
-      end
+      context "when the user exists" do
+        it "automatically logs the user in" do
+          user = create :user, email: "pablo.picasso@gmail.com"
+          get :auth_callback
+          expect(controller.current_user).to eq user
+        end
 
-      it "redirects to an error page if the environment is not beta" do
-        stub_env "umich"
-        get :auth_callback
-        expect(response).to redirect_to errors_path(error_type: "account_not_found", status_code: 401)
-      end
-
-      it "finds or creates the user and logs them in" do
-        get :auth_callback
-        expect(controller.current_user).to eq User.last
-      end
-
-      it "redirects to the new user page if their account was just created" do
-        get :auth_callback
-        expect(response).to redirect_to action: :new_user
+        it "activates the user if they are inactive and it's specified to activate" do
+          user = create :user, activated: false, email: "pablo.picasso@gmail.com"
+          get :auth_callback, session: { "activate_google_user" => true }
+          expect(user.reload).to be_activated
+        end
       end
     end
   end

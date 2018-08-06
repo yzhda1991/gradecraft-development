@@ -7,7 +7,7 @@ module Services
 
       executed do |context|
         user = context[:user]
-        user.activate! if user.internal?
+        user.activate! if user.internal? || context[:manually_activate] == true
       end
     end
   end

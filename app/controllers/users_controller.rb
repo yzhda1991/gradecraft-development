@@ -60,7 +60,7 @@ class UsersController < ApplicationController
 
   # create a trial account with Google login
   def new_external_google
-    session[:request_referer] = :new_external_users_path
+    session[:activate_google_user] = true
     redirect_to "/auth/google_oauth2/"
   end
 

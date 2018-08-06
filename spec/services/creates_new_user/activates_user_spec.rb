@@ -10,4 +10,9 @@ describe Services::Actions::ActivatesUser do
     result = described_class.execute user: user
     expect(result[:user]).to be_activated
   end
+
+  it "activates the user if specified" do
+    result = described_class.execute user: user, manually_activate: true
+    expect(result[:user]).to be_activated
+  end
 end
