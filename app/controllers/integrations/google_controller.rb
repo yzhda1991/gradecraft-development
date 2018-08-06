@@ -25,6 +25,8 @@ class Integrations::GoogleController < ApplicationController
     redirect_to new_external_courses_path user_id: current_user.id
   end
 
+  # The Omniauth callback method
+  # /auth/google_oauth2/callback
   def auth_callback
     if !logged_in?
       user = User.find_by_email auth_hash["info"]["email"]
@@ -61,7 +63,6 @@ class Integrations::GoogleController < ApplicationController
 
   def ensure_activated
     Services::ActivatesUser.call(current_user) if !current_user.activated?
-    session[:activate_google_user] = nil
   end
 
   def create_user_authorization
@@ -73,6 +74,7 @@ class Integrations::GoogleController < ApplicationController
     session[:return_to] = nil
 
     if session[:activate_google_user] == true
+      session[:activate_google_user] = nil
       new_external_courses_path user_id: current_user.id
     elsif is_new_user
       new_user_google_path
