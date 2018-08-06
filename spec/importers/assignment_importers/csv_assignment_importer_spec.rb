@@ -56,8 +56,8 @@ describe CSVAssignmentImporter do
       assignment = Assignment.unscoped.last
       expect(assignment.name).to eq assignment_rows.last[:name]
       expect(assignment.description).to eq assignment_rows.last[:description]
-      expect(assignment.accepts_submissions.to_s).to eq assignment_rows.last[:accepts_submissions]
-      expect(assignment.required.to_s).to eq assignment_rows.last[:required]
+      expect(assignment.accepts_submissions).to eq assignment_rows.last[:accepts_submissions]
+      expect(assignment.required).to eq assignment_rows.last[:required]
       expect(assignment.purpose).to eq assignment_rows.last[:purpose]
       expect(assignment.full_points).to eq assignment_rows.last[:full_points].to_i
       expect(assignment.open_at).to_not be_nil
