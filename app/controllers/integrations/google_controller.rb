@@ -1,6 +1,7 @@
 require_relative "../../services/activates_user"
 require_relative "../../services/creates_new_user"
 
+# rubocop:disable AndOr
 class Integrations::GoogleController < ApplicationController
   include OAuthProvider
 
