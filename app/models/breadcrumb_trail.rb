@@ -222,6 +222,11 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb(objects[:challenge].name)
   end
 
+  def course_memberships_index
+    dashboard
+    breadcrumb("Course Memberships", course_memberships_path)
+  end
+
   def courses_index
     dashboard
     breadcrumb('Courses', courses_path)

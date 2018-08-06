@@ -1,0 +1,24 @@
+.pageContent
+  = render "layouts/alerts"
+
+  = form_tag delete_many_course_memberships_path, method: :delete do |f|
+    %table.dynatable
+      %thead
+        %tr
+          %th User ID
+          %th First Name
+          %th Last Name
+          %th Role
+          %th Delete?
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td= user.id
+            %td= user.first_name
+            %td= user.last_name
+            %td= user.role(current_course).capitalize
+            %td= check_box_tag "course_membership_ids[]", user.course_memberships.where(course_id: current_course.id).first.id
+
+    .submit-buttons
+      %ul
+        %li= submit_tag "Delete users", class: "button", data: { disable_with: "Deleting...", confirm: "Are you sure you want to delete these user(s) from #{current_course.name}?" }
