@@ -15,6 +15,7 @@
       (response) ->
         GradeCraftAPI.loadMany(assignmentRows, response.data)
         _parseDatesAsJavascript()
+        _setDefaultBooleanValues()
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
         GradeCraftAPI.logResponse(response)
@@ -40,6 +41,12 @@
       row.selected_accepts_submissions_until = new Date(row.formatted_accepts_submissions_until) if row.formatted_accepts_submissions_until?
       row.hasInvalidDate = !row.formatted_due_at? || !row.formatted_open_at? || !row.formatted_accepts_submissions_until?
       true
+    )
+
+  _setDefaultBooleanValues = () ->
+    _.each(assignmentRows, (row) ->
+      row.accepts_submissions = false if not row.accepts_submissions?
+      row.required = false if not row.required?
     )
 
   _clearArrays = (arrays...) ->
