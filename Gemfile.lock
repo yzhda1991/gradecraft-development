@@ -735,7 +735,7 @@ DEPENDENCIES
   rollbar (~> 2.1)
   rspec-html-matchers
   rspec-rails
-  rubocop
+  rubocop (~> 0.58)
   ruby-saml
   rubystats
   s3_direct_upload
