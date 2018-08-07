@@ -117,6 +117,7 @@ group :development do
   gem 'rubystats'
   gem 'bullet'
   gem 'lol_dba'
+  gem 'rubocop'
 end
 
 group :development, :test do
