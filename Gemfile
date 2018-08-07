@@ -117,6 +117,7 @@ group :development do
   gem 'rubystats'
   gem 'bullet'
   gem 'lol_dba'
+  gem 'rubocop', '~> 0.58', require: false
 end
 
 group :development, :test do
