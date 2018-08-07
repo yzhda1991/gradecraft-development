@@ -2,7 +2,8 @@
 # This is used to easily disable Style/* checks
 AllCops:
   DisabledByDefault: true
-  TargetRubyVersion: 2.5.1
+  TargetRubyVersion: 2.5
+  TargetRailsVersion: 5.2
   Exclude:
     - "db/migrate/*"
     - "db/schema.rb"
