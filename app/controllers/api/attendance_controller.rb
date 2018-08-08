@@ -15,16 +15,14 @@ class API::AttendanceController < ApplicationController
     @attendance_event = current_course.assignments.new \
       assignment_params.merge(assignment_type_id: AssignmentType.attendance_type_for(current_course).id)
 
-    Assignment.acts_as_list_no_update do
-      if @attendance_event.save
-        render "api/attendance/show", status: 201
-      else
-        render json: {
-          message: "Failed to create attendance event",
-          errors: @attendance_event.errors.messages,
-          success: false
-        }, status: 400
-      end
+    if save_attendance_event
+      render "api/attendance/show", status: 201
+    else
+      render json: {
+        message: "Failed to create attendance event",
+        errors: @attendance_event.errors.messages,
+        success: false
+      }, status: 400
     end
   end
 
@@ -63,5 +61,18 @@ class API::AttendanceController < ApplicationController
 
   def find_event
     @attendance_event = current_course.assignments.find params[:id]
+  end
+
+  # If position was provided via the params, disable acts_as_list gem
+  # so that it doesn't override; otherwise, leave it on and it will
+  # automatically assign a position
+  def save_attendance_event
+    if assignment_params[:position].nil?
+      @attendance_event.save
+    else
+      Assignment.acts_as_list_no_update do
+        @attendance_event.save
+      end
+    end
   end
 end
