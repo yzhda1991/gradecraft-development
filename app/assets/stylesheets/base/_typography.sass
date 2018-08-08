@@ -1,17 +1,80 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
-h1, h2, h3, h4, h5
-  text-transform: capitalize
-  margin: 0
-  padding: 0
-  clear: both
-  font-weight: 300
-
 body
-  font-size: 0.9rem
-  line-height: 1.6
-  font-family: 'Open Sans', sans-serif
+  font-family: 'ProximaNova_light', sans-serif
+  font-size: 18px
+  line-height: 1.45em
+  color: $blue_dark
+
+  @media (max-width: $media-650)
+    font-size: 16px
+
+p
+  max-width: 800px
+  margin: 0 0 1em 0
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+
+  b, strong
+    font-family: 'ProximaNova_bold'
+    i, em
+      font-family: 'ProximaNova_bold-italic'
+
+  i, em
+    font-family: 'ProximaNova_light-italic'
+    b, strong
+      font-family: 'ProximaNova_bold-italic'
+
+a
+  text-decoration: none
+  color: $blue-medium_1
+  border-bottom: 2px solid $blue-medium_1
+  cursor: pointer
+  font-family: 'ProximaNova_semibold', sans-serif
+
+  &:hover
+    text-decoration: none
+    border-bottom-color: transparent
+    color: $pink_2
+
+h1
+  font-family: 'KlinicSlab_medium'
+  font-size: 1.25em
+  text-transform: uppercase
+  margin: 1.5em 0
+  letter-spacing: 0.06em
+
+h2
+  font-family: 'KlinicSlab_medium-italic'
+  font-size: 1.25em
+  margin: 1.5em 0 0.9em 0
+  letter-spacing: 0.05em
+
+h3
+  font-family: 'KlinicSlab_medium'
+  font-size: 1em
+  text-transform: uppercase
+  margin: 0 0 0.6em 0
+  letter-spacing: 0.04em
+
+h4
+  font-family: 'ProximaNova_semibold', sans-serif
+  font-size: 1em
+  margin: 0 0 0 0
+
+.lining_figures
+  font-variant-numeric: lining-nums
+
+
+
+// REFACTOR -- may need to refactor below code at some point, TBD __=^o.o^=
+h1, h2, h3, h4, h5
+  // text-transform: capitalize
+  // margin: 0
+  // padding: 0
+  // clear: both
+  // font-weight: 300
 
 .bold
   font-weight: bold !important
@@ -58,23 +121,23 @@ body
 .align-right
   text-align: right
 
-a
-  text-decoration: none
-  color: $color-blue-3
-  &.inherit-color
-    color: inherit
-
-  // AngularJS - Make cursor behave consistently as if it had an href
-  &[ng-click]
-    cursor: pointer
+// a
+//   text-decoration: none
+//   color: $color-blue-3
+//   &.inherit-color
+//     color: inherit
+//
+//   // AngularJS - Make cursor behave consistently as if it had an href
+//   &[ng-click]
+//     cursor: pointer
 
 .assignment_type a, table a, .challenge a, .learning-objective-category a
   text-decoration: none
   color: $color-blue-2
 
-a:hover
-  color: $color-blue-3
-  text-decoration: underline
+// a:hover
+//   color: $color-blue-3
+//   text-decoration: underline
 
 hr
   border: 1px solid $color-grey-3

@@ -1,62 +1,54 @@
 @import "../utilities/variables"
 
-.button, button
-  border-radius: $global-radius
-  text-transform: capitalize
-  text-decoration: none
-  color: $color-white
-  display: inline-block
-  border: none
-  margin: 0
-  padding: .4rem
-  font-size: .7rem
-  line-height: .8rem
-  cursor: pointer
-  background-color: $color-blue-3
-  white-space: nowrap
-  font-weight: 400
-  font-family: 'Open Sans', sans-serif
-  appearance: none
-
-  &:hover
-    background-color: darken($color-blue-3, 10%)
-    color: $color-white
-    text-decoration: none
-
-  &:active
-    background-color: $color-green-2
-
-  &.danger
-    background-color: $color-red-1
-
-  &.secondary
-    background-color: $color-green-2
-
-  &.disabled
-    color: $color-white
-    cursor: default
-    opacity: 0.7
-    &:hover
-      background-color: $color-blue-3
-
-  &.hidden
-    display: none !important
-
-  &.icon-button
-    background: none
-    i
-      pointer-events: none
-
-  &.deselected
-    opacity: 0.5
-    filter: alpha(opacity=50)
-
-    &:hover
-      opacity: 1.0
-      filter: alpha(opacity=100)
-
-  &.submit
-    font-size: 1em
+// .button, button
+//   border-radius: $global-radius
+//   text-transform: capitalize
+//   text-decoration: none
+//   color: $color-white
+//   display: inline-block
+//   border: none
+//   margin: 0
+//   padding: .4rem
+//   font-size: .7rem
+//   line-height: .8rem
+//   cursor: pointer
+//   background-color: $color-blue-3
+//   white-space: nowrap
+//   font-weight: 400
+//   font-family: 'Open Sans', sans-serif
+//   appearance: none
+//
+//   &:hover
+//     background-color: darken($color-blue-3, 10%)
+//     color: $color-white
+//     text-decoration: none
+//
+//   &:active
+//     background-color: $color-green-2
+//
+//   &.danger
+//     background-color: $color-red-1
+//
+//   &.secondary
+//     background-color: $color-green-2
+//
+//   &.disabled
+//     color: $color-white
+//     cursor: default
+//     opacity: 0.7
+//     &:hover
+//       background-color: $color-blue-3
+//
+//   &.hidden
+//     display: none !important
+//
+//   &.icon-button
+//     background: none
+//     i
+//       pointer-events: none
+//
+//   &.submit
+//     font-size: 1em
 
 .submit-buttons
   margin: 1rem 0 .5rem

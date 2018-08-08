@@ -1,5 +1,99 @@
 @import "../utilities/variables"
 
+// Background Colors, typically for divs __=^o.o^=
+.bg-green_mint
+  background-color: $bg-green_mint
+  padding: 1em 5%
+  @media (max-width: $media-650)
+    padding: 0 3%
+
+.bg-green_lime
+  background-color: $bg-green_lime
+  padding: 1em 5%
+  @media (max-width: $media-650)
+    padding: 0 3%
+
+.bg-yellow
+  background-color: $bg-yellow
+  padding: 1em 5%
+  @media (max-width: $media-650)
+    padding: 0 3%
+
+div.content_block
+  padding: 1em 5%
+  @media (max-width: $media-650)
+    padding: 1em 3%
+
+.highlight
+  position: relative
+  padding-top: 2em
+  margin-top: 1em
+
+  h2
+    position: absolute
+    top: 0
+    -webkit-transform: translateY(-200%)
+    transform: translateY(-200%)
+
+// Buttons, both true button's and a.button's
+button, .button
+  background: $blue-medium_1
+  color: white
+  border-radius: $button-radius
+  border: 2px solid $blue-medium_2
+  font-family: 'ProximaNova_semibold', sans-serif
+  font-size: 1em
+  min-width: 150px
+  padding: 0.75em 1em
+  margin: 0.75em 1em 2.5em 0
+  cursor: pointer
+  box-sizing: border-box
+  display: inline-block
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+
+  &:hover
+    background: $blue-medium_2
+    text-decoration: none
+    color: white
+
+  &.secondary
+    background: white
+    color: $blue-medium_1
+
+    &:hover
+      color: $blue_dark
+
+  &.action
+    background: $pink_1
+    border: 2px solid $pink_2
+
+    &:hover
+      background: $pink_2
+      border-bottom-color: $pink_2
+
+  &:disabled, &.disabled
+    background: $grey_1
+    color: $grey_4
+    border: 2px solid $grey_2
+    cursor: not-allowed
+
+    &:hover
+      border-bottom-color: $grey_2
+
+a
+  &.button
+    padding: 0.65em 1em
+
+    &:hover
+      border-bottom-color: $blue-medium_2
+
+  &.stealth_link
+    border-bottom: 0px solid transparent
+
+
+
+// REFACTOR -- may need to refactor below code at some point, TBD __=^o.o^=
 /* some versions of IE don't recognize the main element */
 main
   display: block
