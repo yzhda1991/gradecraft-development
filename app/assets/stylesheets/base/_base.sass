@@ -44,7 +44,7 @@ button, .button
   font-family: 'ProximaNova_semibold', sans-serif
   font-size: 1em
   min-width: 150px
-  padding: 0.75em 1em
+  padding: 0.6em 1em
   margin: 0.75em 1em 2.5em 0
   cursor: pointer
   box-sizing: border-box
@@ -81,15 +81,43 @@ button, .button
     &:hover
       border-bottom-color: $grey_2
 
+  @media (max-width: $media-650)
+    min-width: 100px
+    margin-bottom: 1.5em
+
 a
   &.button
-    padding: 0.65em 1em
+    padding: 0.4em 1em
+    text-align: center
 
     &:hover
       border-bottom-color: $blue-medium_2
 
   &.stealth_link
     border-bottom: 0px solid transparent
+
+.button_block
+  position: relative
+
+  @media (max-width: $media-650)
+    position: static
+
+  .button
+    margin: 0 1em 0 0
+
+    @media (max-width: $media-650)
+      display: block
+      width: fit-content
+      margin: 0 0 1em 0
+
+  & > :last-child
+    margin: 0
+    position: absolute
+    right: 0
+
+    @media (max-width: $media-650)
+      position: static
+      margin: 0
 
 
 

@@ -27,10 +27,13 @@ textarea,
 .form_elem
   position: relative
   max-width: 800px
+  margin: 0 0 2em 0
+  border-bottom: 1px solid transparent
 
   input[type="text"],
   input[type="email"],
-  input[type="number"]
+  input[type="number"],
+  textarea
     background: url('/assets/icon-form_WriteIn.svg') no-repeat center right
     background-size: auto 1.4em
     display: block
@@ -40,7 +43,7 @@ textarea,
     font: 1em/1.45em 'ProximaNova_light', sans-serif
     color: $blue_dark
     padding: 0.5em 0
-    margin: 0 0 3em 0
+    margin: 0 0 0.4em 0
     transition: border-bottom 0.2s
 
     &:focus
@@ -58,12 +61,17 @@ textarea,
 
   label
     position: absolute
-    top: 3.8em
+    bottom: 0
     right: 0
+    transform: translateY(100%)
     text-transform: uppercase
     color: $blue-medium_1
     font: 0.8em/1em 'ProximaNova_semibold', sans-serif
     letter-spacing: 0.04em
+
+  textarea
+    height: 2.7em
+    background-position: bottom 0.5em right
 
 
 

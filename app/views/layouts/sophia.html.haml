@@ -113,14 +113,10 @@
         Let’s try div’s with bg colors!
       %p
         We will also see how the buttons are looking on these different background colors.
-      %a.button.action(tabindex=0)
-        Action anchor button
-      %a.button(tabindex=0)
-        Anchor button
-      %a.button.secondary(tabindex=0)
-        Secondary anchor button
-      %a.button.disabled
-        Disabled anchor button
+      %a.button.action(tabindex=0) Action anchor button
+      %a.button(tabindex=0) Anchor button
+      %a.button.secondary(tabindex=0) Secondary anchor button
+      %a.button.disabled Disabled anchor button
 
     .content_block
       %p
@@ -134,10 +130,25 @@
 
     .content_block
       %h2 Form Elements
-      %p Let’s see how our form elements are looking:
+      %p Let’s see how our form elements are looking! Below are example inputs (type=email, and type=text) that are also unrequired and required.
       .form_elem
         %input{"type"=>"email", "id"=>"user_email", "placeholder"=>"Please enter your email", "required"=>"true"}
         %label{"for"=>"user_email"} My email address
+      .form_elem
+        %input{"type"=>"text", "id"=>"test_text_input", "placeholder"=>"This is a test text input"}
+        %label{"for"=>"test_text_input"} Test text input
+      .form_elem
+        %textarea{"id"=>"test_textarea", "placeholder"=>"This is a test textarea"}
+        %label{"for"=>"test_textarea"} Test textarea
+      .form_elem
+        %textarea{"id"=>"test_textarea_required", "placeholder"=>"This is a test textarea", "required"=>"true"}
+        %label{"for"=>"test_textarea-required"} Test textarea
+
+      %p Below is an example div.button_block, to be used if you want to distance your main call-to-action button (usually a submit, which can’t be undone) from the other buttons. (But it won’t be so on small devices, where screen real estate is diminished.)
+      .button_block
+        %a.button Save a draft
+        %a.button.secondary Cancel
+        %a.button.action Submit
 
   -# = render partial: "layouts/background"
   = render partial: "layouts/google_analytics"
