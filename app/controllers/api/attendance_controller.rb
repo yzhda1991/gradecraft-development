@@ -15,14 +15,16 @@ class API::AttendanceController < ApplicationController
     @attendance_event = current_course.assignments.new \
       assignment_params.merge(assignment_type_id: AssignmentType.attendance_type_for(current_course).id)
 
-    if @attendance_event.save
-      render "api/attendance/show", status: 201
-    else
-      render json: {
-        message: "Failed to create attendance event",
-        errors: @attendance_event.errors.messages,
-        success: false
-      }, status: 400
+    Assignment.acts_as_list_no_update do
+      if @attendance_event.save
+        render "api/attendance/show", status: 201
+      else
+        render json: {
+          message: "Failed to create attendance event",
+          errors: @attendance_event.errors.messages,
+          success: false
+        }, status: 400
+      end
     end
   end
 
