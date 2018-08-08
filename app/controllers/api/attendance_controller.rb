@@ -4,7 +4,10 @@ class API::AttendanceController < ApplicationController
 
   # GET /api/attendance
   def index
-    @assignments = current_course.assignments.with_attendance_type
+    @assignments = current_course
+      .assignments
+      .ordered
+      .with_attendance_type
   end
 
   # POST /api/attendance
@@ -12,7 +15,7 @@ class API::AttendanceController < ApplicationController
     @attendance_event = current_course.assignments.new \
       assignment_params.merge(assignment_type_id: AssignmentType.attendance_type_for(current_course).id)
 
-    if @attendance_event.save
+    if save_attendance_event
       render "api/attendance/show", status: 201
     else
       render json: {
@@ -53,10 +56,23 @@ class API::AttendanceController < ApplicationController
 
   def assignment_params
     params.require(:assignment).permit :id, :name, :description,
-      :open_at, :due_at, :full_points, :pass_fail, :media
+      :open_at, :due_at, :full_points, :pass_fail, :media, :position
   end
 
   def find_event
     @attendance_event = current_course.assignments.find params[:id]
+  end
+
+  # If position was provided via the params, disable acts_as_list gem
+  # so that it doesn't override; otherwise, leave it on and it will
+  # automatically assign a position
+  def save_attendance_event
+    if assignment_params[:position].nil?
+      @attendance_event.save
+    else
+      Assignment.acts_as_list_no_update do
+        @attendance_event.save
+      end
+    end
   end
 end

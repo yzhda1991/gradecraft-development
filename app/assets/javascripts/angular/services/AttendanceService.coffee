@@ -71,6 +71,8 @@
   # Trigger a save for all unsaved events and run all remaining queue events
   # prior to redirecting back to the index page
   saveChanges = () ->
+    events = _.sortBy(events, "open_at")
+    _.each(events, (event, index) -> event.position = index + 1)
     unsaved = _.reject(events, "id")
     promises = if unsaved.length > 0 then _.map(unsaved, (e) -> queuePostAttendanceEvent(e)) else []
     $q.all(promises).then(() -> DebounceQueue.runAllEvents("/attendance"))
@@ -99,6 +101,7 @@
         )
 
         dates.push({
+          position: index
           open_at: openAt
           due_at: dueAt
           full_points: if eventAttributes.has_points then eventAttributes.point_total else null
