@@ -14,3 +14,14 @@ queue_created_courses_mailer_job:
   queue: created_courses_export
   description: "This job triggers an export of all courses created within the \
     last month and emails it to a list of recipients as a CSV attachment."
+
+queue_check_throttled_queues_job:
+  cron: "0 1 * * *"
+  persist: true
+  class: "QueueCheckThrottledQueuesJob"
+  queue: check_throttled_queues
+  description: "This job runs daily and checks if any of the throttled Resque \
+    queues are queue_at_or_over_rate_limit?. If yes, then the next job(s) will \
+    be removed as needed so that the queue does not continue to grow. See \
+    https://github.com/UM-USElab/gradecraft-development/blob/fbe5a46c1835a944c1e05afa25103c27cbae0535/doc/maintenance.md \
+    for additional details regarding this bug."
