@@ -33,12 +33,12 @@
     %hr.grading-divider
 
 - if current_user_is_staff?
+  - group ||= @group
   %section.grade-form-section
-    - if assignment.has_groups?
-      %h2.grade-form-header= "Grade for #{(@group || group).try(:name)}:"
+    - if assignment.has_groups? && group.present?
+      %h2.grade-form-header= "Grade for #{group&.name}:"
       %ul
-        - (@group || group).students.each do |s|
+        - group.students.each do |s|
           %li= link_to s.name, student_path(s)
-    - else
-      - if @grade.present?
-        %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:"
+    - elsif @grade.present?
+      %h2.grade-form-header= "Grade for #{@grade.student.first_name} #{@grade.student.last_name}:"
