@@ -121,8 +121,6 @@ bundle exec rails db:sample
 
 * Don't `sudo gem install`, as it will install gems in a way that does not work properly with `rbenv`. If using `rbenv` as the version manager, you may need to ensure that proper read/write permissions are granted for `/Users/{user}/.rbenv`
 
-See details [here](https://github.com/UM-USElab/gradecraft-development/wiki/Installation-Notes).
-
 See db/samples.rb for dev usernames and passwords
 
 ## Testing Emails Locally
