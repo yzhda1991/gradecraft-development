@@ -16,7 +16,7 @@ class CSVStudentImporter
 
   def import(course=nil)
     if file
-      CSV.foreach(file, headers: true, skip_blanks: true) do |csv|
+      CSV.foreach(file, headers: true, skip_blanks: true, encoding: "iso-8859-1:utf-8") do |csv|
         strip_whitespace csv
         row = UserRow.new csv
 

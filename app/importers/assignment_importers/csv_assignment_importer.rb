@@ -13,7 +13,7 @@ class CSVAssignmentImporter
   def as_assignment_rows(file)
     rows = []
     if !file.blank?
-      CSV.foreach(file, headers: true) { |csv| rows << AssignmentRow.new(csv) }
+      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") { |csv| rows << AssignmentRow.new(csv) }
     end
     rows
   end
