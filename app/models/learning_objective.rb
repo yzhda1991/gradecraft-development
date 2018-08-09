@@ -1,4 +1,8 @@
 class LearningObjective < ApplicationRecord
+  NOT_STARTED_STATUS = "Not Started".freeze
+  IN_PROGRESS_STATUS = "In Progress".freeze
+  COMPLETED_STATUS = "Completed".freeze
+
   belongs_to :course
   belongs_to :category, class_name: "LearningObjectiveCategory", optional: true
 
@@ -22,7 +26,7 @@ class LearningObjective < ApplicationRecord
 
   def progress(student, include_details=false)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
-    return "Not Started" if cumulative_outcome.nil?
+    return NOT_STARTED_STATUS if cumulative_outcome.nil?
 
     if course.objectives_award_points?
       point_progress_for cumulative_outcome, include_details
@@ -33,17 +37,16 @@ class LearningObjective < ApplicationRecord
 
   def point_progress_for(cumulative_outcome, include_details)
     earned = earned_assignment_points cumulative_outcome
-    return "Not Started" if earned.zero?
-    earned < points_to_completion ? in_progress_str(earned, points_to_completion, include_details) : "Completed"
+    return NOT_STARTED_STATUS if earned.zero?
+    earned < points_to_completion ? in_progress_str(earned, points_to_completion, include_details) : COMPLETED_STATUS
   end
 
   def grade_outcome_progress_for(cumulative_outcome, include_details)
     outcomes = observed_outcomes(cumulative_outcome)
-    return "Not Started" if outcomes.empty?
-    return "Failed" if outcomes.any? { |o| o.learning_objective_level.try(:failed?) }
+    return NOT_STARTED_STATUS if outcomes.empty?
 
     proficient_outcomes = observed_outcomes(cumulative_outcome, true)
-    proficient_outcomes.count < count_to_achieve ? in_progress_str(proficient_outcomes.count, count_to_achieve, include_details) : "Completed"
+    proficient_outcomes.count < count_to_achieve ? in_progress_str(proficient_outcomes.count, count_to_achieve, include_details) : COMPLETED_STATUS
   end
 
   def observed_outcomes(cumulative_outcome, proficient_only=false)
@@ -71,8 +74,7 @@ class LearningObjective < ApplicationRecord
   end
 
   def in_progress_str(earned, total, include_details)
-    str = "In Progress"
-    return str unless include_details
-    "#{str} (#{earned}/#{total})"
+    return IN_PROGRESS_STATUS unless include_details
+    "#{IN IN_PROGRESS_STATUS} (#{earned}/#{total})"
   end
 end

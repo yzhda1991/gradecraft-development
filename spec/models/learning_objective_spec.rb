@@ -49,12 +49,6 @@ describe LearningObjective do
           learning_objective_level: learning_objective_level
       end
 
-      it "returns 'Failed' if there are any failed observed outcomes" do
-        observed_outcome
-        learning_objective_level.update flagged_value: :not_proficient
-        expect(learning_objective.progress student).to eq "Failed"
-      end
-
       it "returns 'In Progress' if the count to achieve has not yet been met" do
         observed_outcome
         learning_objective.update count_to_achieve: 2
