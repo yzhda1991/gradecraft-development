@@ -6,11 +6,14 @@ class API::LearningObjectives::ObjectivesController < ApplicationController
   # GET /api/learning_objectives/objectives
   def index
     if params[:assignment_id]
-      assignment = Assignment.find params[:assignment_id]
-      @objectives = assignment.learning_objectives.ordered_by_name
+      objectives = Assignment.find(params[:assignment_id]).learning_objectives
     else
-      @objectives = current_course.learning_objectives.ordered_by_name
+      objectives = current_course.learning_objectives
     end
+
+    @objectives = objectives
+      .includes(:category, :levels, :assignments, :learning_objective_links)
+      .ordered_by_name
   end
 
   # GET /api/learning_objectives/objectives/:id
