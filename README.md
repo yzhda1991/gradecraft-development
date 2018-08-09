@@ -27,7 +27,7 @@
 * Multipliers (students decide assignment weight)
 
 ## Pre-reqs:
-* Ruby 2.2.2
+* Ruby 2.5.1
 * PostgreSQL
 * MongoDB
 * Redis
