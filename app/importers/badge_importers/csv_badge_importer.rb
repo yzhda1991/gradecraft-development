@@ -17,7 +17,7 @@ class CSVBadgeImporter
   def import(badge=nil)
     if file && @current_course
       students = @current_course.students_being_graded
-      CSV.foreach(file, headers: true) do |csv|
+      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") do |csv|
         row = BadgeRow.new csv
 
         student = find_student(row, students)

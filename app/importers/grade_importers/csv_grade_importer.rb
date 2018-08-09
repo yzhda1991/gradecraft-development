@@ -18,7 +18,7 @@ class CSVGradeImporter
   def import(course=nil, assignment=nil)
     if file
       if course && assignment
-        CSV.foreach(file, headers: true) do |csv|
+        CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") do |csv|
           row = GradeRow.new csv
 
           student = find_student row, course.students
