@@ -24,6 +24,9 @@ textarea,
   @media (max-width: $media-small-max)
     width: 100%
 
+
+
+// New form elements, standard cases __=^o.o^=
 .form_elem
   position: relative
   max-width: 800px
@@ -33,6 +36,7 @@ textarea,
   input[type="text"],
   input[type="email"],
   input[type="number"],
+  input[type="password"],
   textarea
     background: url('/assets/icon-form_WriteIn.svg') no-repeat center right
     background-size: auto 1.4em
@@ -53,11 +57,17 @@ textarea,
       & + label
         color: $pink_1
 
+      @media (max-width: $media-small-max)
+        border-bottom: 3px solid $pink_1
+
     &:required + label
       &:after
         content: ' \2022 \0020 required'
         color: $pink_1
         text-transform: lowercase
+
+    @media (max-width: $media-small-max)
+      border-bottom: 3px solid $blue-medium_1
 
   label
     position: absolute
@@ -72,6 +82,61 @@ textarea,
   textarea
     height: 2.7em
     background-position: bottom 0.5em right
+
+.form_options
+  margin: 0.5em 0
+
+  input[type="radio"],
+  input[type="checkbox"]
+    position: absolute
+    opacity: 0
+    z-index: -10
+
+  label
+    border-radius: $button-radius
+    border: 1px solid $blue-medium_2
+    color: $blue-medium_1
+    font: 1em/1.2em 'ProximaNova_semibold', sans-serif
+    position: relative
+    display: block
+    width: 100%
+    max-width: 800px
+    padding: 0.7em 0 0.7em 2.5em
+    box-sizing: border-box
+    cursor: pointer
+    transition: background-color 0.2s
+
+    &:hover
+      color: $pink_1
+
+  input[type="radio"]:checked + label,
+  input[type="checkbox"]:checked + label
+    border: 1px solid $blue_dark
+    color: white
+    font-family: 'ProximaNova_regular', sans-serif
+
+    &:hover
+      color: white
+      cursor: default
+
+  input[type="radio"] + label
+    background: white url('/assets/icon-form_RadioUnchecked.svg') no-repeat top 0.65em left 0.65em
+    background-size: auto 22px
+
+  input[type="radio"]:checked + label
+    background: $blue-medium_2 url('/assets/icon-form_RadioChecked.svg') no-repeat top 0.65em left 0.65em
+    background-size: auto 22px
+
+  input[type="checkbox"] + label
+    background: white url('/assets/icon-form_CheckboxUnchecked.svg') no-repeat top 0.65em left 0.65em
+    background-size: auto 22px
+
+  input[type="checkbox"]:checked + label
+    background: $blue-medium_2 url('/assets/icon-form_CheckboxChecked.svg') no-repeat top 0.65em left 0.65em
+    background-size: auto 22px
+
+    &:hover
+      cursor: pointer
 
 
 
@@ -219,7 +284,7 @@ error
 ul.locked-display li
   list-style: none
 
-.simple_form
+//.simple_form
   label
     font-size: 0.9rem
     text-transform: capitalize
