@@ -39,24 +39,31 @@
                               "data-sortable-header-text"=>"Student",
                               "data-sortable-predicate"=>"full_name"}
           %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Submitted",
+                              "data-sortable-predicate"=>"assignments-submitted"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Graded",
+                              "data-sortable-predicate"=>"assignments-graded"}
+          %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Progress",
                               "data-sortable-predicate"=>"status"}
-          %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}}",
-                              "data-sortable-predicate"=>"attempts"}
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
           %td
             %a{"ng-href"=>"/students/{{student.id}}"} {{student.name}}
           %td
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
+              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
+              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+          %td
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
+              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
+              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+          %td
             %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
               .progress-bar
                 .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
               {{loShowCtrl.percent_complete(student.id)}}% complete
-          %td
-            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
-              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} Assessments: {{loShowCtrl.observedOutcomes(student.id).length}}
-              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
 
 
   -# Progress for an individual student
