@@ -8,16 +8,12 @@
       #rubric-grade-edit.rubric.edit
         .criterion{"ng-repeat"=>"objective in objectives"}
           .criterion-heading
-            %h4.criterion-name {{objective.name}}
+            %h4.criterion-name
+              %a{"ng-href"=>"/learning_objectives/objectives/{{objective.id}}"} {{objective.name}}
             %p.criterion-description {{objective.description}}
             %p
-              Overall Progress:
               .italic
-                {{loGradeOverviewCtrl.statusFor(objective.id)}}
-                %span{"ng-if"=>"loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount > 0"}
-                  (Attempts: {{loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount || 0}})
-                %span{"ng-if"=>"!loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount > 0"}
-                  (Attempts: {{loGradeOverviewCtrl.overallProgress(objective.id).totalOutcomeCount || 0}})
+                
 
           %ul.level-tabs
             %li.level-tab{"ng-repeat"=>"level in loGradeOverviewCtrl.levelsFor(objective)",

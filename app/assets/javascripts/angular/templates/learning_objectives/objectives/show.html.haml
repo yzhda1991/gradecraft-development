@@ -15,7 +15,7 @@
       %tr{"ng-if"=>"loShowCtrl.objective().description"}
         %th Description:
         %td {{loShowCtrl.objective().description}}
-      %tr{"ng-if"=>"loShowCtrl.hasLinkedAssignments()"}
+      %tr{"ng-if"=>"!loShowCtrl.studentId && loShowCtrl.hasLinkedAssignments()"}
         %th.capitalize Linked {{loShowCtrl.termFor("assignments")}} ({{loShowCtrl.linkedAssignmentsCount()}}):
         %td
           %ul.no-style
@@ -47,22 +47,21 @@
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
           %td
-            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"} {{student.name}}
+            %a{"ng-href"=>"/students/{{student.id}}"} {{student.name}}
           %td
             %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
               .progress-bar
                 .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
               {{loShowCtrl.percent_complete(student.id)}}% complete
           %td
-            %ul
-              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments",
-                  "ng-if"=>"loShowCtrl.gradeExists(student.id, assignment.id)"}
-                %a{"ng-href"=>"{{loShowCtrl.gradePath(student.id, assignment.id)}}"} {{assignment.name}} (View Grade)
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
+              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} Assessments: {{loShowCtrl.observedOutcomes(student.id).length}}
+              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+
 
   -# Progress for an individual student
-  %section{"ng-if"=>"loShowCtrl.studentId", "ng-if"=>"loShowCtrl.observedOutcomes().length > 0"}
-
-    %h3.subtitle Attempts
+  %section{"ng-if"=>"loShowCtrl.studentId"}
+    %h3.subtitle {{loShowCtrl.termFor('assignments')}} that meet this {{loShowCtrl.termFor('learning_objective')}}
 
     %table
       %thead
@@ -71,11 +70,22 @@
                               "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}}",
                               "data-sortable-predicate"=>"assignments_name"}
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"Outcome",
+                              "data-sortable-header-text"=>"Submitted?",
+                              "data-sortable-predicate"=>"submission_submitted_at"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Assessment",
                               "data-sortable-predicate"=>"assessment"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Resubmit?",
+                              "data-sortable-predicate"=>"resubmit"}
       %tbody
-        %tr{"ng-repeat"=>"oo in loShowCtrl.observedOutcomes()"}
+        %tr{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
           %td
-            %a{"ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, oo.assignment_id)}}"} {{oo.assignment_name}}
+            %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
           %td
-            %span.level-flagged-value{"ng-class"=>"oo.flagged_value"} {{oo.readable_flagged_value}}
+            {{student.submission_submitted_at}}
+          %td
+            %a{"ng-if"=>"loShowCtrl.gradeExists(loShowCtrl.studentId, assignment.id)",
+              "ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, assignment.id)}}"}
+              %span.level-flagged-value{"ng-class"=>"loShowCtrl.observedOutcomeFor(loShowCtrl.studentId, assignment.id).flagged_value"} {{loShowCtrl.observedOutcomeFor(loShowCtrl.studentId, assignment.id).readable_flagged_value}}
+          %td
