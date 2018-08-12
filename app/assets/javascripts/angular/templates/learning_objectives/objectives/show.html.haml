@@ -6,21 +6,21 @@
 
     %h3.subtitle Overview
     %table.stacktable.info-table
-      %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
-        %th Number of Points to Completion:
-        %td {{loShowCtrl.objective().points_to_completion}}
-      %tr{"ng-if"=>"loShowCtrl.objective().count_to_achieve"}
-        %th Count to Achieve:
-        %td {{loShowCtrl.objective().count_to_achieve}}
       %tr{"ng-if"=>"loShowCtrl.objective().description"}
         %th Description:
         %td {{loShowCtrl.objective().description}}
-      %tr{"ng-if"=>"!loShowCtrl.studentId && loShowCtrl.hasLinkedAssignments()"}
-        %th.capitalize Linked {{loShowCtrl.termFor("assignments")}} ({{loShowCtrl.linkedAssignmentsCount()}}):
-        %td
-          %ul.no-style
-            %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
-              %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+        %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
+          %th Earn to Achieve:
+          %td {{loShowCtrl.objective().points_to_completion}}
+        %tr{"ng-if"=>"loShowCtrl.objective().count_to_achieve"}
+          %th Complete to Achieve:
+          %td {{loShowCtrl.objective().count_to_achieve}} {{loShowCtrl.termFor('assignments')}}
+        %tr{"ng-if"=>"!loShowCtrl.studentId && loShowCtrl.hasLinkedAssignments()"}
+          %th.capitalize Linked {{loShowCtrl.termFor("assignments")}} ({{loShowCtrl.linkedAssignmentsCount()}}):
+          %td
+            %ul.no-style
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+                %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
       %tr{"ng-if"=>"loShowCtrl.studentId"}
         %th Progress:
         %td
@@ -39,10 +39,10 @@
                               "data-sortable-header-text"=>"Student",
                               "data-sortable-predicate"=>"full_name"}
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Submitted",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Completed",
                               "data-sortable-predicate"=>"assignments-submitted"}
           %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Graded",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('learning objectives')}} Graded",
                               "data-sortable-predicate"=>"assignments-graded"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Progress",
@@ -51,24 +51,24 @@
         %tr{"ng-repeat"=>"student in loShowCtrl.students"}
           %td
             %a{"ng-href"=>"/students/{{student.id}}"} {{student.name}}
+          -# need to update this to be the number of submissions + (number of grades - number of grades with submissions) - should include not-student-visible-grades
+          %td
+            %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
+            %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+          %td
+            %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
+            %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
           %td
             %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
-              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
-              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
-          %td
-            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
-              %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
-              %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
-          %td
-            %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
-              .progress-bar
-                .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
-              {{loShowCtrl.percent_complete(student.id)}}% complete
+              %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
+                .progress-bar
+                  .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
+                {{loShowCtrl.percent_complete(student.id)}}% complete
 
 
   -# Progress for an individual student
   %section{"ng-if"=>"loShowCtrl.studentId"}
-    %h3.subtitle {{loShowCtrl.termFor('assignments')}} that meet this {{loShowCtrl.termFor('learning_objective')}}
+    %h2.subtitle {{loShowCtrl.termFor('assignments')}} that meet this {{loShowCtrl.termFor('learning objective')}}
 
     %table
       %thead

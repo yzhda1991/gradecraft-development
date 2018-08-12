@@ -11,9 +11,6 @@
             %h4.criterion-name
               %a{"ng-href"=>"/learning_objectives/objectives/{{objective.id}}"} {{objective.name}}
             %p.criterion-description {{objective.description}}
-            %p
-              .italic
-                
 
           %ul.level-tabs
             %li.level-tab{"ng-repeat"=>"level in loGradeOverviewCtrl.levelsFor(objective)",
