@@ -53,7 +53,7 @@ class LearningObjective < ApplicationRecord
     outcomes = cumulative_outcome
       .observed_outcomes
       .for_student_visible_grades
-    outcomes.shows_proficiency if proficient_only
+    outcomes = outcomes.shows_proficiency if proficient_only
     outcomes
   end
 
@@ -75,6 +75,6 @@ class LearningObjective < ApplicationRecord
 
   def in_progress_str(earned, total, include_details)
     return IN_PROGRESS_STATUS unless include_details
-    "#{IN IN_PROGRESS_STATUS} (#{earned}/#{total})"
+    "#{IN_PROGRESS_STATUS} (Earned #{earned} of #{total} tries)"
   end
 end
