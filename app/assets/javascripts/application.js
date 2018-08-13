@@ -46,6 +46,7 @@
 //= require froala_editor.min.js
 //= require_tree ./angular-froala
 //= require ProximaNovaLicense.min.js
+
 // Include other plugins.
 //= require plugins/align.min.js
 //= require plugins/char_counter.min.js
