@@ -4,9 +4,7 @@ namespace :assignments do
     assignments = Assignment.where(student_logged: true, grade_scope: "Group")
 
     puts "Found #{assignments.length} assignments to fix."
-    assignments.find_in_batches(batch_size: 500) do |ag|
-      ag.update! student_logged: false
-    end
+    assignments.update student_logged: false
     puts "Done!"
   end
 end
