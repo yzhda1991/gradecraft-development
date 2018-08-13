@@ -162,6 +162,13 @@
       .form_options
         %input{name: "test_group_radio", type: "radio", value: "radio3", id: "test_radio_3"}
         %label{for: "test_radio_3"} Single select option 3
+      .form_options
+        %input{name: "test_group_radio1", type: "radio", value: "radio4", id: "test_radio_4", disabled: "disabled"}
+        %label{for: "test_radio_4"} Disabled single select option
+      .form_options
+        %input{name: "test_group_radio1", type: "radio", value: "radio5", id: "test_radio_5", disabled: "disabled", checked: "checked"}
+        %label{for: "test_radio_5"} Disabled &amp; checked single select option
+
       %h2 Checkbox buttons
       %p Multiple selects
       .form_options
@@ -173,6 +180,12 @@
       .form_options
         %input{name: "test_group_checkbox", type: "checkbox", value: "checkbox3", id: "test_checkbox_3"}
         %label{for: "test_checkbox_3"} Multiple select option 3
+      .form_options
+        %input{name: "test_group_checkbox1", type: "checkbox", value: "checkbox4", id: "test_checkbox_4", disabled: "disabled"}
+        %label{for: "test_checkbox_4"} Disabled multiple select option
+      .form_options
+        %input{name: "test_group_checkbox1", type: "checkbox", value: "checkbox5", id: "test_checkbox_5", disabled: "disabled", checked: "checked"}
+        %label{for: "test_checkbox_5"} Disabled &amp; checked multiple select option
 
     .content_block
       %p This is a simple form helper output for a checkbox:

@@ -4,15 +4,16 @@
 #gradecraft-auth
   = form_for User.new, :url => user_sessions_path do |f|
     .form_elem
-      = f.text_field :email, placeholder: "Your email, please", :autocorrect => "off", :autocapitalize => "off", :required=>"true"
+      = f.text_field :email, placeholder: "Your email", :autocorrect => "off", :autocapitalize => "off", :required=>"true"
       = label_tag :user_email, "Email address"
     .form_elem
-      = f.password_field :password, placeholder: "Your password, please", :required=>"true"
+      = f.password_field :password, placeholder: "Your password", :required=>"true"
       = label_tag :user_password, "Password"
     = f.button "Log in", type: "submit", class: "action", alt: "Log in", style: "margin-right: 0"
 .clear
 %p
-  %a Forgot your password?
-%hr
-.google-login
-  = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", :method => :post
+  %a(tabindex=0) Forgot your password?
+
+.google-login.bg-blue
+  = link_to "Sign in with Google", "/auth/google_oauth2/", :tabindex=>"0", :method => :post
+  -# = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", :method => :post

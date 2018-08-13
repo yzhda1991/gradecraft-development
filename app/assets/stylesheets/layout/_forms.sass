@@ -109,34 +109,75 @@ textarea,
     &:hover
       color: $pink_1
 
-  input[type="radio"]:checked + label,
-  input[type="checkbox"]:checked + label
-    border: 1px solid $blue_dark
-    color: white
-    font-family: 'ProximaNova_regular', sans-serif
-
-    &:hover
+  input[type="radio"],
+  input[type="checkbox"]
+    &:checked + label
+      border: 1px solid $blue_dark
       color: white
-      cursor: default
+      font-family: 'ProximaNova_regular', sans-serif
 
-  input[type="radio"] + label
-    background: white url('/assets/icon-form_RadioUnchecked.svg') no-repeat top 0.65em left 0.65em
-    background-size: auto 22px
+      &:hover
+        color: white
+        cursor: default
 
-  input[type="radio"]:checked + label
-    background: $blue-medium_2 url('/assets/icon-form_RadioChecked.svg') no-repeat top 0.65em left 0.65em
-    background-size: auto 22px
+    &:disabled + label
+      color: $grey_4
+      border: 1px solid $grey_2
+      cursor: not-allowed
+      font-family: 'ProximaNova_regular', sans-serif
 
-  input[type="checkbox"] + label
-    background: white url('/assets/icon-form_CheckboxUnchecked.svg') no-repeat top 0.65em left 0.65em
-    background-size: auto 22px
+      &:hover
+        color: $grey_4
+        cursor: not-allowed
 
-  input[type="checkbox"]:checked + label
-    background: $blue-medium_2 url('/assets/icon-form_CheckboxChecked.svg') no-repeat top 0.65em left 0.65em
-    background-size: auto 22px
+  input[type="radio"]
+    & + label
+      background: white url('/assets/icon-form_RadioUnchecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
 
-    &:hover
-      cursor: pointer
+    &:checked + label
+      background: $blue-medium_2 url('/assets/icon-form_RadioChecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+    &:disabled
+      & + label
+        background: $grey_1 url('/assets/icon-form_RadioUncheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+
+      &:checked + label
+        background: $grey_2 url('/assets/icon-form_RadioCheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+        border: 1px solid $grey_4
+
+  input[type="checkbox"]
+    & + label
+      background: white url('/assets/icon-form_CheckboxUnchecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+    &:checked + label
+      background: $blue-medium_2 url('/assets/icon-form_CheckboxChecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+      &:hover
+        cursor: pointer
+
+    &:disabled
+      & + label
+        background: $grey_1 url('/assets/icon-form_CheckboxUncheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+
+      &:checked + label
+        background: $grey_2 url('/assets/icon-form_CheckboxCheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+        border: 1px solid $grey_4
+
+        &:hover
+          cursor: not-allowed
+
+
+    // &:hover
+    //   color: white
+    //   cursor: default
 
 
 
