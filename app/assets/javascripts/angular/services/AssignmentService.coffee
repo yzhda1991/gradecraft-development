@@ -15,6 +15,8 @@
   termFor = (article)->
     GradeCraftAPI.termFor(article)
 
+  isGroupGraded = (assignment) -> assignment.grade_scope == "Group"
+
   # total points for assignment type, updated with assignments
   sumForAssignmentType = (typeId)->
      subset = _.filter(assignments, {assignment_type_id : typeId})
@@ -132,10 +134,9 @@
     )
 
   # Handles incremental updates from the Assignment form
-  _updateAssignment = (id)->
-    assignment = _.find(assignments, {id: id})
+  _updateAssignment = (assignment)->
     if assignment && ValidateDates(assignment).valid
-      $http.put("/api/assignments/#{id}", assignment: assignment).then(
+      $http.put("/api/assignments/#{assignment.id}", assignment: assignment).then(
         (response) ->
           angular.copy(response.data.data.attributes, assignment)
           GradeCraftAPI.formatDates(assignment, ["open_at", "due_at", "accepts_submissions_until"])
@@ -144,10 +145,11 @@
           GradeCraftAPI.logResponse(response)
       )
 
-
   queueUpdateAssignment = (id)->
+    assignment = _.find(assignments, { id: id })
+    assignment.student_logged = false if assignment.grade_scope == "Group"
     DebounceQueue.addEvent(
-      "assignments", id, _updateAssignment, [id]
+      "assignments", id, _updateAssignment, [assignment]
     )
 
   submitAssignment = (id)->
@@ -233,7 +235,7 @@
     assignment = _.find(assignments, {id: id})
     assignment.media = null
     assignment.remove_media = true
-    _updateAssignment(id)
+    _updateAssignment(assignment)
 
   postMediaUpload = (id, files)->
     mediaParams = new FormData()
@@ -303,6 +305,7 @@
       deleteScoreLevel: deleteScoreLevel
       addNewScoreLevel: addNewScoreLevel
       termFor: termFor
+      isGroupGraded: isGroupGraded
       updateAssignmentAttribute: updateAssignmentAttribute
       ValidateDates: ValidateDates
       removeMedia: removeMedia
