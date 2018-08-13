@@ -19,7 +19,7 @@
           Points Threshold
           %input(ng-model="assignment.threshold_points" gc-number-input ng-change="updateAssignment()")
     .form-item
-      %label
+      %label(ng-class="{ 'disabled': isGroupGraded() }")
         %input(type="checkbox" ng-model="assignment.student_logged" ng-disabled="isGroupGraded()" ng-click="updateAssignment()")
           Student Logged
           %span.has-tooltip
