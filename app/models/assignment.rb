@@ -18,6 +18,8 @@ class Assignment < ApplicationRecord
   # has_many :level_badges, through: :criteria
   has_many :criterion_grades, dependent: :destroy
 
+  has_many :submissions_exports, dependent: :destroy
+
   multiple_files :assignment_files
   # Preventing malicious content from being submitted
   # clean_html :description
