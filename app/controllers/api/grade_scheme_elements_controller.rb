@@ -7,9 +7,7 @@ class API::GradeSchemeElementsController < ApplicationController
   # GET /api/grade_scheme_elements
   def index
     assign_for_index
-    if current_user_is_student?
-      @student = current_student
-    end
+    @student = current_student if current_user_is_student?
   end
 
   # POST /api/grade_scheme_elements
@@ -55,13 +53,10 @@ class API::GradeSchemeElementsController < ApplicationController
   def assign_for_index
     @grade_scheme_elements = current_course
       .grade_scheme_elements
-      .order_by_points_desc.select(
-        :id,
-        :lowest_points,
-        :letter,
-        :level)
+      .ordered
+      .select(:id, :lowest_points, :letter, :level)
 
-    if @grade_scheme_elements.present?
+    if @grade_scheme_elements.any?
       @total_points = (@grade_scheme_elements.first.lowest_points).to_i
     else
       @total_points = current_course.total_points
