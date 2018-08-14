@@ -1,11 +1,12 @@
 describe CSVAssignmentImporter do
   subject { described_class.new }
 
+  let(:time_zone) { Time.zone }
   let(:file) { fixture_file "sample_assignments_import.csv", "text/csv" }
 
   describe "#as_assignment_rows" do
     it "returns an array of AssignmentRows" do
-      result = subject.as_assignment_rows file
+      result = subject.as_assignment_rows file, time_zone
 
       expect(result.length).to eq 4
       expect(result).to all be_a_kind_of CSVAssignmentImporter::AssignmentRow
@@ -15,7 +16,7 @@ describe CSVAssignmentImporter do
   describe "#import" do
     let(:course) { create :course }
     let(:assignment_rows) do
-      subject.as_assignment_rows(file).map do |row|
+      subject.as_assignment_rows(file, time_zone).map do |row|
         {
           name: row.name,
           assignment_type: row.assignment_type,

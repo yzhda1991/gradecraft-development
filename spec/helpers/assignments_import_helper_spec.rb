@@ -5,11 +5,6 @@ describe AssignmentsImportHelper do
     let(:invalid_date) { "a" }
     let(:valid_date) { "11/23/2017 10:22:23 PM" }
 
-    it "returns nil if the due date is unparseable" do
-      result = subject.date_to_floating_point_seconds(invalid_date)
-      expect(result).to be_nil
-    end
-
     it "returns the due date in number of seconds since the Unix epoch" do
       result = subject.date_to_floating_point_seconds(valid_date)
       expect(result).to be_a_kind_of Float
@@ -21,17 +16,10 @@ describe AssignmentsImportHelper do
       result = subject.parse_date_to_datetime("a")
       expect(result).to be_nil
     end
-
-    it "returns a datetime with a default time of 11:59:59 pm" do
-      result = subject.parse_date_to_datetime("1/1/2018")
-      expect(result).to eq DateTime.new 2018, 1, 1, 23, 59, 59
-    end
   end
 
   describe "#parsed_assignment_type_id" do
-    let(:assignment_types) do
-      [double(id: 1, name: "Reading"), double(id: 2, name: "Writing")]
-    end
+    let(:assignment_types) { [double(id: 1, name: "Reading"), double(id: 2, name: "Writing")] }
 
     context "when the imported type matches (case-insensitive) an existing type" do
       let(:imported_type) { "reaDing" }
