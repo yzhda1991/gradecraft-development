@@ -2,6 +2,7 @@ require "csv"
 
 class CSVAssignmentImporter
   include AssignmentsImportHelper
+
   attr_reader :successful, :unsuccessful
 
   def initialize
@@ -10,10 +11,10 @@ class CSVAssignmentImporter
   end
 
   # Parses and converts each row in the file to an AssignmentRow
-  def as_assignment_rows(file)
+  def as_assignment_rows(file, time_zone)
     rows = []
     if !file.blank?
-      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") { |csv| rows << AssignmentRow.new(csv) }
+      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") { |csv| rows << AssignmentRow.new(csv, time_zone) }
     end
     rows
   end
@@ -103,10 +104,13 @@ class CSVAssignmentImporter
   # Follows the format outlined in AssignmentExporter::FORMAT
   class AssignmentRow
     include QuoteHelper
-    attr_reader :data
+    include AssignmentsImportHelper
 
-    def initialize(data)
+    attr_reader :data, :time_zone
+
+    def initialize(data, time_zone)
       @data = data
+      @time_zone = time_zone
     end
 
     def name
@@ -130,11 +134,11 @@ class CSVAssignmentImporter
     end
 
     def open_at
-      remove_smart_quotes(data[5]).strip
+      parse_date_to_datetime(remove_smart_quotes(data[5]).strip, @time_zone)
     end
 
     def due_at
-      remove_smart_quotes(data[6]).strip
+      parse_date_to_datetime(remove_smart_quotes(data[6]).strip, @time_zone)
     end
 
     def accepts_submissions
@@ -142,7 +146,7 @@ class CSVAssignmentImporter
     end
 
     def accepts_submissions_until
-      remove_smart_quotes(data[8]).strip
+      parse_date_to_datetime(remove_smart_quotes(data[8]).strip, @time_zone)
     end
 
     def required

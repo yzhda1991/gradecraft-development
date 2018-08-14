@@ -16,6 +16,18 @@ describe AssignmentsImportHelper do
     end
   end
 
+  describe "#parse_date_to_datetime" do
+    it "returns nil if the date is unparseable" do
+      result = subject.parse_date_to_datetime("a")
+      expect(result).to be_nil
+    end
+
+    it "returns a datetime with a default time of 11:59:59 pm" do
+      result = subject.parse_date_to_datetime("1/1/2018")
+      expect(result).to eq DateTime.new 2018, 1, 1, 23, 59, 59
+    end
+  end
+
   describe "#parsed_assignment_type_id" do
     let(:assignment_types) do
       [double(id: 1, name: "Reading"), double(id: 2, name: "Writing")]

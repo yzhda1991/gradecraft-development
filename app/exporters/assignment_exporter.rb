@@ -47,6 +47,6 @@ class AssignmentExporter
 
   def formatted_date(date)
     return nil if date.nil?
-    date.in_time_zone(@user.time_zone).strftime("%d/%m/%Y")
+    date.in_time_zone(@user.time_zone).strftime("%m/%d/%Y")
   end
 end

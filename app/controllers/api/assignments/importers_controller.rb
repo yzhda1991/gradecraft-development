@@ -33,7 +33,7 @@ class API::Assignments::ImportersController < ApplicationController
     render json: { message: "File format must be CSV", success: false },
       status: 404 and return if File.extname(params[:file].original_filename) != ".csv"
 
-    @assignment_rows = CSVAssignmentImporter.new.as_assignment_rows(params[:file].tempfile)
+    @assignment_rows = CSVAssignmentImporter.new.as_assignment_rows(params[:file].tempfile, current_user.time_zone)
     render "api/assignments/importers/upload", status: 200
   end
 
