@@ -8,6 +8,7 @@
     link: (scope, el, attr, ngModelCtrl)->
       scope.termFor = AssignmentService.termFor
       scope.learningObjectives = LearningObjectivesService.objectives
+      scope.isGroupGraded = () -> AssignmentService.isGroupGraded(@assignment)
 
       scope.hasLearningObjectives = () -> _.some(scope.learningObjectives())
 

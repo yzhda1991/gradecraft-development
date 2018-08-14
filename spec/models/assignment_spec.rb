@@ -164,6 +164,13 @@ describe Assignment do
       expect(subject.errors[:base]).to include "Submission accept date must be after due date."
     end
 
+    it "is invalid if student-logged and group-graded" do
+      subject.student_logged = true
+      subject.grade_scope = "Group"
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Assignment cannot be self-logged if group-graded"
+    end
+
     it "requires a numeric for max group size" do
       subject.max_group_size = "a"
       expect(subject).to_not be_valid

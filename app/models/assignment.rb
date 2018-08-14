@@ -61,6 +61,7 @@ class Assignment < ApplicationRecord
   validates_with SubmissionsAcceptedAfterDueValidator
   validates_with PointsUnderCapValidator
   validates_with MaxOverMinValidator
+  validates_with StudentLoggedValidator
 
   scope :group_assignments, -> { where grade_scope: "Group" }
 
