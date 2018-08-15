@@ -85,13 +85,10 @@
                "ng-required"=>"formEntryCtrl.attributes.has_points"}
 
 .submit-buttons
-  %ul
-    %li
-      .button.right{"type"=>"button",
+  %button{"type"=>"button",
                     "ng-disabled"=>"form.$invalid || formEntryCtrl.formErrors.length > 0",
                     "ng-class"=>"{ 'disabled': form.$invalid || formEntryCtrl.formErrors.length > 0 }",
                     "ng-click"=>"form.$valid && formEntryCtrl.formErrors.length < 1 && formEntryCtrl.enableEdit()"} Configure Events
 
-    %li
-      .button.right{"type"=>"button",
+  %button.secondary{"type"=>"button",
                     "ng-click"=>"formEntryCtrl.cancel()"} Cancel
