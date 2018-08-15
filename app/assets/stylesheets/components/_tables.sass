@@ -3,12 +3,18 @@
 table
   clear: both
   border-spacing: 0
-  font-size: .9rem
-  font-weight: 300
+  //font-size: .9rem
+  //font-weight: 300
+  font-size: 1em
   text-align: left
   width: 100%
   background-color: $color-white
   border-collapse: collapse
+
+  button, .button
+    border-width: 1px
+    background: white
+    color: $blue-medium_1
 
   tr:nth-child(even)
     background-color: $color-grey-7
@@ -17,7 +23,9 @@ table
     border-bottom: 1px solid $color-grey-6
 
   td
-    padding: .5rem
+    //padding: .5rem
+    padding: 0.5em 0.25em
+
     &.center
         text-align: center !important
     .button-container.dropdown
@@ -28,17 +36,30 @@ table
       display: inherit
 
   thead
-    background-color: $color-blue-2
-    color: $color-white
+    //background-color: $color-blue-2
+    //color: $color-white
+    background-color: $blue-medium_2
+    color: white
 
     th
-      padding: .5rem
-      font-weight: 300
-      text-transform: uppercase
-      font-size: .8rem
+      //padding: .5rem
+      //font-weight: 300
+      //text-transform: uppercase
+      //font-size: .8rem
+      padding: 0.5em 0.25em
 
-      a, a.active, a.sorted
-        color: $color-white !important
+      a,
+      a.active,
+      a.sorted
+        color: white !important
+        font: 0.9em/1em 'ProximaNova_light', serif
+
+        &:hover
+          text-decoration: none
+
+        span
+          font-size: 0.5em
+          margin-left: 2em
 
       span[tabindex="0"]
         color: $color-white

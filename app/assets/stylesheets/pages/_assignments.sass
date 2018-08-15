@@ -1,17 +1,24 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
+.assignments
+  h2
+    margin: 1em 0.5em
+    font: 1em/1em 'KlinicSlab_medium', serif
+    letter-spacing: 0.06em
+    text-transform: uppercase
+
 .assignment-details-container
   max-width: 960px
   padding-bottom: 2rem
-  font-weight: 300
+  //font-weight: 300
   h2, h3
-    font-weight: 400
+    //font-weight: 400
   h2
-    font-size: 1.25rem
+    //font-size: 1.25rem
   h3
     margin: 1.5rem 0 0 0
-    font-size: 0.9rem
+    //font-size: 0.9rem
   ul
     margin: 0
     padding-left: 1.25rem
@@ -64,19 +71,19 @@
 .assignment-type-message
   padding: 0.5rem
   margin-bottom: 1rem
-  font-weight: 300
+  //font-weight: 300
   @media (max-width: $media-small-max)
     display: none
   h3
-    font-size: 0.9rem
-    font-weight: 400
+    //font-size: 0.9rem
+    //font-weight: 400
   p
     margin: 0.25rem 0
 
 .assignments-loading-message #loading-message
   position: static
 
-// Assignment indexes and assignment review page
+/* Assignment indexes and assignment review page */
 .assignment-type-bar
   margin: 0 0 -1px 0
   border: 1px solid $color-grey-6
@@ -87,10 +94,10 @@
   &.open
     border-bottom: 3px solid $color-blue-2
   a
-    padding: 0.75rem
-    display: block
+    //padding: 0.75rem
+    //display: block
     @media (max-width: $media-medium-max)
-      padding: 0.75rem 0.5rem
+      //padding: 0.75rem 0.5rem
     &:hover
       text-decoration: none
       color: $color-blue-2
@@ -108,20 +115,24 @@
   .assignment-type-name
     @include truncate-text(40%)
     display: inline-block
-    font-size: 1.1rem
+    //font-size: 1.1rem
     @media (max-width: $media-medium-max)
       width: 100%
-      font-size: 1rem
+      //font-size: 1rem
 
   .button
     line-height: inherit
     padding: 0.3rem 0.4rem
 
 .points-summary
+  color: $blue_dark
+  font: 0.9em/1em 'ProximaNova_regular', sans-serif
+  padding: 0 0.5em 0 0
+  cursor: default
   display: inline
   float: right
   @media (max-width: $media-medium-max)
-    font-size: 0.8rem
+    //font-size: 0.8rem
     display: block
     float: none
 
