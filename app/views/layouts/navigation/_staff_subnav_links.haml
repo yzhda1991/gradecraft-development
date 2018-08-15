@@ -1,4 +1,4 @@
-%h5 Overview
+%h3 Overview
 %li= link_to_unless_current decorative_glyph(:home) + "Dashboard", dashboard_path
 %li
   - grading_status_count = grading_status_count_for(current_course)
@@ -19,9 +19,7 @@
 %li= link_to_unless_current decorative_glyph(:bullhorn) + "Announcements", announcements_path
 %li= link_to_unless_current decorative_glyph(:calendar) + "Calendar Events", events_path
 
-%hr
-
-%h5 Coursework
+%h3 Coursework
 %li= link_to_unless_current decorative_glyph('file-text') + "#{term_for :assignments}", assignments_path
 - if current_course.has_badges?
   %li= link_to_unless_current decorative_glyph(:shield) + "#{term_for :badges}", badges_path
@@ -30,9 +28,7 @@
 %li= link_to_unless_current decorative_glyph("calendar-check-o") + "Attendance", attendance_index_path
 %li= link_to_unless_current decorative_glyph(:th) + "Gradebook", gradebook_path
 
-%hr
-
-%h5 Users
+%h3 Users
 %li= link_to_unless_current decorative_glyph(:user) + "#{term_for :students}", students_path
 - if current_course.has_teams?
   %li= link_to_unless_current decorative_glyph(:users) + "#{term_for :teams}", teams_path
@@ -44,9 +40,7 @@
 %li= link_to_unless_current decorative_glyph("user-secret") + "Staff", staff_index_path
 %li= link_to_unless_current decorative_glyph("user-o") + "Observers", observers_path
 
-%hr
-
-%h5 Course Setup
+%h3 Course Setup
 %li= link_to_unless_current decorative_glyph(:cog) + "Course Settings", edit_course_path(current_course)
 - if current_course.uses_learning_objectives?
   %li= link_to_unless_current decorative_glyph("mortar-board") + "#{term_for(:learning_objective).pluralize}", learning_objectives_objectives_path
@@ -58,9 +52,7 @@
 
 - if current_user_is_admin?
   .hide-for-small
-    %hr
-
-    %h5{ class: "make-lizards" } Admin
+    %h3{ class: "make-lizards" } Admin
     %li= active_course_link_to decorative_glyph(:plus) + "New Course", new_course_path
     %li= link_to_unless_current decorative_glyph(:university) + "Manage Courses", overview_courses_path
     %li= link_to_unless_current decorative_glyph(:trash) + "Delete Course Memberships", course_memberships_path

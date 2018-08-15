@@ -39,11 +39,11 @@ textarea,
   input[type="password"],
   textarea
     background: url('/assets/icon-form_WriteIn.svg') no-repeat center right
-    background-size: auto 1.4em
+    background-size: auto 1.1em
     display: block
     width: 100%
     border: 0px solid transparent
-    border-bottom: 4px solid $blue-medium_1
+    border-bottom: 3px solid $blue-medium_1
     font: 1em/1.45em 'ProximaNova_light', sans-serif
     color: $blue_dark
     padding: 0.5em 0
@@ -52,13 +52,13 @@ textarea,
 
     &:focus
       background: $bg-blue url('') no-repeat center right
-      border-bottom: 4px solid $pink_2
+      border-bottom: 3px solid $pink_2
 
       & + label
         color: $pink_1
 
       @media (max-width: $media-small-max)
-        border-bottom: 3px solid $pink_1
+        border-bottom: 2px solid $pink_1
 
     &:required + label
       &:after
@@ -67,7 +67,7 @@ textarea,
         text-transform: lowercase
 
     @media (max-width: $media-small-max)
-      border-bottom: 3px solid $blue-medium_1
+      border-bottom: 2px solid $blue-medium_1
 
   label
     position: absolute

@@ -2,47 +2,35 @@
 
 /** Staff Sidebar **/
 .sidebar-container
-  width: 220px
-  padding: .75rem 1rem
-  background-color: $color-blue-2
-  font-weight: 300
+  width: 240px
+  padding: 0.75em
+  box-sizing: border-box
+  background-color: $bg-blue
 
-  /* Subheadings */
-  h5
-    font-size: .9rem
-    font-weight: 400
-    color: $color-blue-4
-    margin: 0 0 0 0.25rem
+  h3
+    margin: 1em 0 0.3em 0
+    font-size: 0.9em
 
   ul
     margin: 0
     padding: 0
 
-  /* Spacing out the list items*/
   li
-    text-transform: capitalize
     margin: 0
     list-style-type: none
     white-space: nowrap
-    font-weight: 300
-
-    &:not(a)
-      color: $color-yellow-1
+    font-size: 0.9em
+    line-height: 1.6em
+    font-family: 'ProximaNova_regular', sans-serif
+    padding: 0.3em 0
 
     a
-      display: block !important
-      color: $color-white
-      padding: 0.15rem
-      font-weight: 300
-      text-decoration: none
-
-    a:hover, a:focus
-      background-color: $color-blue-3
-      color: $color-white
+      display: block
+      font-family: 'ProximaNova_light', sans-serif
+      border-bottom-width: 0px
 
     span.sidebar-nav
       display: block
-      padding: 2.4px
 
 /* Styling of search fields in sidenav and nav */
 .sidebar,
