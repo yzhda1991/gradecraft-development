@@ -15,6 +15,7 @@
       (response) ->
         GradeCraftAPI.loadMany(assignmentRows, response.data)
         _parseDatesAsJavascript()
+        _setDefaultBooleanValues()
         GradeCraftAPI.logResponse(response.data)
       , (response) ->
         GradeCraftAPI.logResponse(response)
@@ -35,9 +36,17 @@
   # Converts a Ruby time as number of floating point seconds to a Javascript Time
   _parseDatesAsJavascript = () ->
     _.each(assignmentRows, (row) ->
-      row.selected_due_date = new Date(row.formatted_due_date) if row.formatted_due_date?
-      row.hasInvalidDueDate = !row.selected_due_date?
+      row.selected_due_at = new Date(row.formatted_due_at) if row.formatted_due_at?
+      row.selected_open_at = new Date(row.formatted_open_at) if row.formatted_open_at?
+      row.selected_accepts_submissions_until = new Date(row.formatted_accepts_submissions_until) if row.formatted_accepts_submissions_until?
+      row.hasInvalidDate = !row.formatted_due_at? || !row.formatted_open_at? || !row.formatted_accepts_submissions_until?
       true
+    )
+
+  _setDefaultBooleanValues = () ->
+    _.each(assignmentRows, (row) ->
+      row.accepts_submissions = false if not row.accepts_submissions?
+      row.required = false if not row.required?
     )
 
   _clearArrays = (arrays...) ->

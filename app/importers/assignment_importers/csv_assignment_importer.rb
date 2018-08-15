@@ -2,6 +2,7 @@ require "csv"
 
 class CSVAssignmentImporter
   include AssignmentsImportHelper
+
   attr_reader :successful, :unsuccessful
 
   def initialize
@@ -10,10 +11,10 @@ class CSVAssignmentImporter
   end
 
   # Parses and converts each row in the file to an AssignmentRow
-  def as_assignment_rows(file)
+  def as_assignment_rows(file, time_zone)
     rows = []
     if !file.blank?
-      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") { |csv| rows << AssignmentRow.new(csv) }
+      CSV.foreach(file, headers: true, encoding: "iso-8859-1:utf-8") { |csv| rows << AssignmentRow.new(csv, time_zone) }
     end
     rows
   end
@@ -22,28 +23,26 @@ class CSVAssignmentImporter
   # course
   def import(assignment_rows, course)
     assignment_rows.each do |row|
-      assignment_type_id = find_or_create_assignment_type row, course
-      next if assignment_type_id.nil?
-
-      assignment = Assignment.create do |a|
-        a.name = row[:assignment_name]
-        a.assignment_type_id = assignment_type_id
-        a.description = row[:description]
-        a.full_points = row[:point_total]
-        a.due_at = row[:selected_due_date]
-        a.course = course
-      end
+      row[:assignment_type_id] = find_or_create_assignment_type row, course
+      next unless row[:assignment_type_id].present?
+      row[:course] = course
+      assignment = create_assignment_from_row(row)
 
       if assignment.persisted?
         successful << {
           name: assignment.name,
           assignment_type_name: assignment.assignment_type.name,
           description: assignment.description,
+          purpose: assignment.purpose,
           full_points: assignment.full_points,
+          open_at: assignment.open_at,
           due_at: assignment.due_at,
+          accepts_submissions: assignment.accepts_submissions,
+          accepts_submissions_until: assignment.accepts_submissions_until,
+          required: assignment.required,
         }
       else
-        append_unsuccessful row.to_h, "Assignment is invalid"
+        append_unsuccessful row.to_h, "Assignment is invalid #{assignment.errors.messages}"
       end
     end
 
@@ -51,6 +50,22 @@ class CSVAssignmentImporter
   end
 
   private
+
+  def create_assignment_from_row(row)
+    assignment = Assignment.create do |a|
+      a.name = row[:name]
+      a.assignment_type_id = row[:assignment_type_id]
+      a.description = row[:description]
+      a.purpose = row[:purpose]
+      a.full_points = row[:full_points]
+      a.open_at = row[:selected_open_at]
+      a.due_at = row[:selected_due_at]
+      a.accepts_submissions = row[:accepts_submissions]
+      a.accepts_submissions_until = row[:selected_accepts_submissions_until]
+      a.required = row[:required]
+      a.course = row[:course]
+    end
+  end
 
   def append_unsuccessful(row, error)
     unsuccessful << { data: row.to_s, error: error }
@@ -86,15 +101,19 @@ class CSVAssignmentImporter
     parsed_assignment_type_id assignment_types, imported_type
   end
 
+  # Follows the format outlined in AssignmentExporter::FORMAT
   class AssignmentRow
     include QuoteHelper
-    attr_reader :data
+    include AssignmentsImportHelper
 
-    def initialize(data)
+    attr_reader :data, :time_zone
+
+    def initialize(data, time_zone)
       @data = data
+      @time_zone = time_zone
     end
 
-    def assignment_name
+    def name
       remove_smart_quotes(data[0]).strip
     end
 
@@ -102,7 +121,7 @@ class CSVAssignmentImporter
       remove_smart_quotes(data[1]).strip
     end
 
-    def point_total
+    def full_points
       remove_smart_quotes(data[2]).strip
     end
 
@@ -110,8 +129,28 @@ class CSVAssignmentImporter
       remove_smart_quotes(data[3]).strip
     end
 
-    def due_date
+    def purpose
       remove_smart_quotes(data[4]).strip
+    end
+
+    def open_at
+      parse_date_to_datetime(remove_smart_quotes(data[5]).strip, @time_zone)
+    end
+
+    def due_at
+      parse_date_to_datetime(remove_smart_quotes(data[6]).strip, @time_zone)
+    end
+
+    def accepts_submissions
+      remove_smart_quotes(data[7]).strip.try(:to_boolean)
+    end
+
+    def accepts_submissions_until
+      parse_date_to_datetime(remove_smart_quotes(data[8]).strip, @time_zone)
+    end
+
+    def required
+      remove_smart_quotes(data[9]).strip.try(:to_boolean)
     end
   end
 end

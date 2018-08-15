@@ -53,11 +53,11 @@ describe ExportsMailer do
     describe "text part body" do
       subject { email.text_part.body }
       it "includes the professor's first name" do
-        should include professor.first_name
+        should include_in_mail_body professor.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "doesn't include a template" do
@@ -68,11 +68,11 @@ describe ExportsMailer do
     describe "html part body" do
       subject { email.html_part.body }
       it "includes the professor's first name" do
-        should include professor.first_name
+        should include_in_mail_body professor.first_name
       end
 
       it "includes the course name" do
-        should include course.name
+        should include_in_mail_body course.name
       end
 
       it "does include a template" do

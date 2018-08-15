@@ -73,7 +73,7 @@ class AssignmentsController < ApplicationController
   def export_structure
     course = current_user.courses.find_by(id: params[:id])
     respond_to do |format|
-      format.csv { send_data AssignmentExporter.new.export(course), filename: "#{ course.name } #{ (term_for :assignment).titleize } Structure - #{ Date.today }.csv" }
+      format.csv { send_data AssignmentExporter.new(current_user, course).export, filename: "#{ course.name } #{ (term_for :assignment).titleize } Structure - #{ Date.today }.csv" }
     end
   end
 

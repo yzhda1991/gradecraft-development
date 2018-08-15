@@ -15,7 +15,7 @@
 
     %p
       Columns should be in the following order:
-      .italic Assignment Name, Assignment Type, Point Total, Description, Due Date
+      .italic= AssignmentExporter::FORMAT.join(", ")
       .bold= link_to "Download Sample File", assignments_importer_download_path(:csv, format: "csv")
 
     %p

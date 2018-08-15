@@ -14,8 +14,7 @@ feature "downloading assignment structure file" do
       end
 
       expect(page.response_headers["Content-Type"]).to eq("text/csv")
-
-      expect(page).to have_content "Assignment ID,Name,Assignment Type,Point Total,Description,Open At,Due At,Accept Until,Submissions Count,Grades Count,Created At,Learning Objectives"
+      expect(page).to have_content "Name,Assignment Type,Point Total,Description,Purpose,Open At,Due At,Accepts Submissions,Accept Until,Required,Assignment Id,Created At,Submissions Count,Grades Count,Learning Objectives"
     end
   end
 end

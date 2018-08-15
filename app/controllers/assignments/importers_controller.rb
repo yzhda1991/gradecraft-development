@@ -33,7 +33,7 @@ class Assignments::ImportersController < ApplicationController
   def download
     respond_to do |format|
       format.csv do
-        send_data CSV.generate { |csv| csv << csv_headers },
+        send_data CSV.generate { |csv| csv << AssignmentExporter::FORMAT },
         filename: "Sample Assignment File - #{ Date.today }.csv"
       end
     end
@@ -116,10 +116,5 @@ class Assignments::ImportersController < ApplicationController
     @syllabus ||= ActiveLMS::Syllabus.new \
       @provider_name,
       authorization(@provider_name).access_token
-  end
-
-  def csv_headers
-    ["Assignment Name", "Assignment Type", "Point Total", "Description",
-      "Due Date (mm/dd/yyyy hh:mm:ss am/pm)"].freeze
   end
 end

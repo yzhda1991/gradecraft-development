@@ -3,6 +3,16 @@ module Toolkits
     module EmailToolkit
 
       module Definitions
+        require 'rspec/expectations'
+
+        # convert special characters in the mail body back to original
+        # ex: D&#39;Angelo -> D'Angelo
+        RSpec::Matchers.define :include_in_mail_body do |expected|
+          match do |actual|
+            CGI.unescape_html(actual.to_s).include? expected
+          end
+        end
+
         def define_email_context
           let(:email) { ActionMailer::Base.deliveries.last }
           let(:sender) { described_class::SENDER_EMAIL }

@@ -6,13 +6,20 @@ json.data @assignment_rows do |row|
   json.type "assignment_row"
 
   json.attributes do
-    json.assignment_name row.assignment_name
+    json.name row.name
     json.assignment_type row.assignment_type
-    json.point_total row.point_total
+    json.full_points row.full_points
     json.description row.description
-    json.due_date row.due_date
+    json.purpose row.purpose
+    json.open_at row.open_at
+    json.due_at row.due_at
+    json.accepts_submissions row.accepts_submissions
+    json.accepts_submissions_until row.accepts_submissions_until
+    json.required row.required
 
-    json.formatted_due_date date_to_floating_point_seconds(row.due_date)
+    json.formatted_open_at date_to_floating_point_seconds(row.open_at)
+    json.formatted_due_at date_to_floating_point_seconds(row.due_at)
+    json.formatted_accepts_submissions_until date_to_floating_point_seconds(row.accepts_submissions_until)
     json.selected_assignment_type assignment_type_id
     json.has_matching_assignment_type_id assignment_type_id.present?
   end
