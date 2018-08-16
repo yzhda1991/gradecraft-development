@@ -2,7 +2,6 @@
 
 ul.breadcrumbs
   padding: 0 0 0.75rem 0
-  //font-weight: 100
   text-transform: uppercase
   text-decoration: none
   margin: 0
@@ -11,11 +10,7 @@ ul.breadcrumbs
   li
     list-style-type: none
     display: inline
-    color: $color-grey-3
+    color: $grey_3
     &:not(:last-of-type)::after
       content: "/"
       margin: 0 0.2rem
-
-    a:hover, &.active
-        color: $color-blue-3
-        text-decoration: underline

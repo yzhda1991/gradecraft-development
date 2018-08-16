@@ -19,6 +19,6 @@
 
     = render partial: "layouts/media_image_form_item", locals: { f: f, model: @event }
 
-  .submit-buttons
+  .main-buttons
     = f.button :submit, class: "button action"
     = link_to glyph("times-circle") + "Cancel", events_path, class: "button secondary"

@@ -8,6 +8,6 @@
     = f.label :body, "Message"
     = f.text_area :body, class: "froala"
 
-  .submit-buttons
+  .main-buttons
     = f.button :submit, "Send Announcement", class: "action"
     = link_to glyph("times-circle") + "Cancel", announcements_path, class: "button secondary"
