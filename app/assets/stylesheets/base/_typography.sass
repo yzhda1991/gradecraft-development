@@ -53,6 +53,15 @@ h1
   margin: 1.5em 0
   letter-spacing: 0.06em
 
+  &.pagetitle
+    display: inline-block
+    box-sizing: border-box
+    margin-bottom: 0
+    // color: $color-blue-2
+    // font-size: 1.8rem
+    @media (max-width: $media-small-max)
+      // font-size: 1.5rem
+
 h2
   font-family: 'KlinicSlab_medium-italic'
   font-size: 1.25em
@@ -169,15 +178,6 @@ hr
   top: -0.6rem
   text-transform: normal
   background-color: $color-blue-2
-
-/** Page Title **/
-h1.pagetitle
-  display: inline-block
-  box-sizing: border-box
-  color: $color-blue-2
-  font-size: 1.8rem
-  @media (max-width: $media-small-max)
-    font-size: 1.5rem
 
 .student
   h1.pagetitle

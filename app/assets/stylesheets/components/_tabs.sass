@@ -4,10 +4,13 @@
   border: none
 
 .ui-widget
-  font-family: 'Open Sans', sans-serif
+  font: 1em/1.45em 'ProximaNova_light', sans-serif
+  color: $blue_dark
+
   button
-    font-size: 0.7rem
-    font-family: 'Open Sans', sans-serif
+    font-family: 'ProximaNova_semibold', sans-serif
+    background: $blue-medium_1
+    color: white
 
 .ui-widget-content
   .ui-tabs-panel
@@ -21,58 +24,51 @@
 
 .ui-tabs .ui-tabs-nav
   box-sizing: border-box
-  background: $color-white
+  background: white
   padding: 0 1rem
-  border-bottom: 1px solid $color-grey-6
-  margin: 0 -19px
+  border-bottom: 2px solid $blue-medium_2
+  margin: 0 -1em
   overflow-x: auto
   white-space: nowrap
   -webkit-overflow-scrolling: touch
   -ms-overflow-style: -ms-autohiding-scrollbar
+
   &::-webkit-scrollbar
     display: none
+
   @media (max-width: $media-small-max)
     margin: 0 -0.7rem
+
   span
     @media (max-width: $media-small-max)
       display: none
 
-  .ui-state-focus a
   li
+    display: inline-block
+    float: none
+
     a
       padding: 0
+      float: none
+      border: 0px solid transparent
+      border-radius: $button-radius
+      border-bottom-left-radius: 0
+      border-bottom-right-radius: 0
+      display: block
+      padding: 0.5em 1em
+      font-family: 'ProximaNova_regular', sans-serif
+      color: white
+      background-color: $blue-medium_1
 
-  li.ui-state-default
-    background: $color-white
-    border: 0
-    float: none
-    display: inline-block
-    font-weight: 300
-    padding-bottom: 0.5rem
-    margin: 0 1rem -0.25rem 0
+    &.ui-state-active
+      a
+        background-color: $blue-medium_2
+
+    &.ui-state-default
+      border: 0
+
     @media (max-width: $media-small-max)
       margin: 0 0.75rem -0.25rem 0
-    a
-      color: $color-black
-
-      &:hover::after
-        width: 100%
-        background: $color-blue-2
-
-  li.ui-state-default a:after,
-  li.ui-state-active a:after
-    content: ''
-    position: absolute
-    bottom: 0
-    display: block
-    height: 3px
-    width: 0
-    background: transparent
-    transition: width .3s ease, background-color .3s ease
-
-  li.ui-state-active a:after
-    width: 100%
-    background: $color-blue-2
 
 .ui-corner-all
   border-radius: 0
