@@ -1,7 +1,9 @@
 @import "../utilities/variables"
 
 /* amalgamation of old and new button styles __=^o.o^= */
-.button, button
+.button, button,
+.ui-widget button,
+.ui-widget .button
   appearance: none
   margin: 0
   padding: 0.5em
@@ -88,40 +90,42 @@ a
   &.stealth_link
     border-bottom: 0px solid transparent
 
+table
+  button, .button
+    border-width: 1px
+    background: white
+    color: $blue-medium_1
+    padding: 0.35em 0.25em
+
+  th.has_button
+    button, .button
+      background: white
+      color: $blue-medium_1
+      padding: 0.25em 0
+      min-width: 70px
+      margin: 0 -0.2em
+
+      &:hover
+        background: white
+        color: $blue_dark
+
+    .select-all
+      border-bottom-right-radius: 0
+      border-top-right-radius: 0
+
+    .select-none
+      border-bottom-left-radius: 0
+      border-top-left-radius: 0
+
 
 
 .submit-buttons
   button, .button
     font-size: 1em
     margin-right: 1em
-  // margin: 1rem 0 .5rem
-  // position: relative
-  // height: 1rem
-  // font-size: .8rem !important
-  // white-space: nowrap
-
-  // ul
-    float: right
-    margin: 0
-    padding: 0
-    overflow: hidden
-
-    // li
-      float: left
-      padding: 0
-      list-style-type: none
-      border-right: 1px solid darken($color-blue-3, 20%)
-    // li:first-child button
-      padding: 0
-    // li:last-child
-      border-right: 0
-      margin-left: 0rem
-    // input.button, a
-      display: block
-      padding: .5rem .5rem
 
 thead
-  .button
+  // .button
     border: none
     padding: .3rem
     background-color: $color-blue-3

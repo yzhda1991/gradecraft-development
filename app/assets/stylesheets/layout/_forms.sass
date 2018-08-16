@@ -1,6 +1,6 @@
 @import "../utilities/variables"
 
-// base form styling
+/* base form styling */
 label, input
   padding-bottom: 0
 
@@ -21,6 +21,11 @@ textarea,
     border: 1px solid rgba(42, 43, 43, 0.8)
   @media (max-width: $media-small-max)
     width: 100%
+
+/* annoying jquery-ui overrides */
+.ui-widget
+  input, select, textarea
+    font-family: 'ProximaNova_regular', sans-serif
 
 
 
