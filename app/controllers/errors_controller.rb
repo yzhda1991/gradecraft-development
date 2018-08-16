@@ -2,7 +2,7 @@ class ErrorsController < ApplicationController
   skip_before_action :require_login
   skip_before_action :require_course_membership
 
-  layout "sophia"
+  layout "error"
 
   def show
     render status: params[:status_code].blank? ? 500 : params[:status_code],
