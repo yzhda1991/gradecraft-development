@@ -79,15 +79,14 @@
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Submitted?",
                               "data-sortable-predicate"=>"student.submission_submitted_at"}
-          %th.sortable-header{"scope"=>"col",
-                              "data-sortable-header-text"=>"Assessment",
-                              "data-sortable-predicate"=>"assessment"}
+          %th.sortableHeader{"scope"=>"col",
+                             "data-sortable-header-text"=>"Assessment",
+                             "ng-click"=>"loShowCtrl.sortByAssessment()"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Resubmit?",
                               "data-sortable-predicate"=>"resubmit"}
       %tbody
         %tr{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments | orderBy : loShowCtrl.sortable.predicate : loShowCtrl.sortable.reverse"}
-          -# %td earned outcome: {{loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id)}}
           %td
             %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
           %td
@@ -97,3 +96,4 @@
                "ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, assignment.id)}}"}
               %span.level-flagged-value{"ng-class"=>"loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).flagged_value"} {{loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).readable_flagged_value}}
           %td
+            -# TODO: this
