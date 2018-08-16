@@ -201,13 +201,15 @@ fieldset
 select,
 .ui-tabs-panel select
   display: block
-  background-color: $color-white
+  background-color: white
   min-width: 15rem
-  height: 2rem
-  font-size: 11px
-  font-family: 'Open Sans', sans-serif
+  height: 2em
+  border: 1px solid $blue-medium_2
+  font: 1em/1em 'ProximaNova_light', sans-serif
+  cursor: pointer
   &:hover
-    background-color: $color-grey-7
+    background-color: $blue-medium_2
+    color: white
   @media (max-width: $media-small-max)
     width: 100%
   &.multiple
@@ -245,11 +247,6 @@ ul.conditional-options
   padding: 1rem
   margin-bottom: 1rem
 
-.form-title
-
-  //font-style: italic
-  //font-size: 1.1rem
-
 .form-subtitle
   margin: 0.5rem 0
   font-size: 1rem
@@ -262,11 +259,7 @@ ul.conditional-options
 
 .form-hint,
 .hint
-  //font-size: 0.9em
-  //color: $color-grey-3
-  //font-style: italic
   font-family: 'ProximaNova_light-italic', sans-serif
-  //margin: 0
 
 .form-flex-row
   display: flex
