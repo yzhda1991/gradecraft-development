@@ -46,30 +46,26 @@
 
 /* Base styles for dashboard modules */
 .dashboard-module
-  margin-bottom: 1.25rem
+  margin-bottom: 1.5em
   width: 100%
-  border: 1px solid $color-grey-6
-  border-radius: 3px
+  border: 1px solid $grey_1
+
+  h2
+    margin: 0
+    padding: 0.5em
+    background-color: $grey_1
 
   .card-header
-    background-color: $color-grey-7
-    color: $color-grey-2
-    padding: 0.3rem 0.5rem
-    border-bottom: 1px solid $color-grey-6
-
-    h2
-      margin: 0
-      padding: 0
-      font-size: .9rem
-      font-weight: 500
+    a
+      letter-spacing: 0
+      font-size: 0.8em
 
   .card-body
-    padding: 1em
+    padding: 1em 0.5em
 
   .predicted-assignment-summary .name
     font-weight: bold
     width: 15rem
-
 
 /* Styles the assignment planner module */
 .todo .card-body
@@ -78,7 +74,7 @@
 .todo-list-assignments
   margin: 0
   padding-left: 0
-  font-size: .8rem
+  //font-size: .8rem
   max-height: 800px
   overflow-y: auto
 
@@ -131,34 +127,35 @@
 .planner-subheader
   border-bottom: 1px solid $color-grey-7
   text-align: right
-  padding: 0 1rem
-  font-size: 0.65rem
+  padding: 1em 0.5em
 
-  .predictions-label, .submissions-label
-    padding: .25rem
-    margin: .2rem
+  .predictions-label,
+  .submissions-label
+    padding: 0.25em
+    margin: 0.2em
+    font: 0.85em/1em 'ProximaNova_regular', sans-serif
+    text-transform: uppercase
 
   .predictions-label
-    background-color: transparentize($color-blue-4, .8)
+    background-color: $blue
 
   .submissions-label
-    background-color: transparentize($color-green-2, .8)
+    background-color: $teal_bright
 
 .dashboard-message
-  background-color: transparentize($color-blue-4, .8)
+  //background-color: transparentize($color-blue-4, .8)
+  background-color: $bg-yellow
   padding: 2rem
   text-align: center
 
 /* Styles the small version of the grading scheme */
 .student-dashboard, .instructor-dashboard
   .chart-labels
-    margin: 0 0.5rem 0.5rem 0.5rem
-    font-size: 0.75rem
-    border-bottom: 1px solid $color-grey-7
+    margin: 0 0.25em 0.5em 0.25em
   .bar_magic
     border-radius: 5px
     padding: .25rem .5rem
-    font-size: 0.8rem
+    font-size: 0.9em
     position: relative
     width: 100%
     .meter
@@ -170,7 +167,7 @@
     .fill-bar
       position: absolute
       height: 100%
-      background-color: transparentize($color-green-2, 0.6)
+      background-color: transparentize($green_mint, 0.6)
       left: 0
       top: -3
       padding: 0
@@ -328,21 +325,17 @@ ul.assignments-due
 
 /* Styles weekly stats module */
 .weekly-stats-module
-   font-size: 0.8rem
    max-height: 220px
    overflow-y: auto
 
    .module-section
-     margin-bottom: 1rem
+     margin-bottom: 1em
 
    .week-points
-     font-size: 1.25rem
-     font-weight: 600
+     font: 1/25em/1.25em 'ProximaNova_semibold', sans-serif
 
    p
      margin: 0
-     font-size: 0.9rem
-     font-weight: 400
 
    ul
      list-style: none

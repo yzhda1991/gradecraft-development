@@ -225,13 +225,20 @@ ul.conditional-options
   color: $grey_3
 //  opacity: 0.7
 
-.form-section
-  margin-bottom: 1rem
-  padding-bottom: 1rem
-  border: 0
-  border-bottom: 1px dashed $color-green-2
-  select, label
+.simple_form
+  select,
+  label
     text-transform: capitalize
+
+  h2
+    margin: 0 0 0.5em 0
+    text-transform: capitalize
+
+.form-section
+  margin-bottom: 2em
+  padding-bottom: 1em
+  border: 0
+  border-bottom: 1px solid $green_mint
 
 .form-subsection
   background-color: $color-grey-7
@@ -239,8 +246,7 @@ ul.conditional-options
   margin-bottom: 1rem
 
 .form-title
-  margin: 0 0 0.5em 0
-  text-transform: capitalize
+
   //font-style: italic
   //font-size: 1.1rem
 
@@ -254,11 +260,13 @@ ul.conditional-options
   &.no-margin
     margin-bottom: 0
 
-.form-hint, .hint
-  font-size: 80%
-  color: $color-grey-3
-  font-style: italic
-  margin: 0
+.form-hint,
+.hint
+  //font-size: 0.9em
+  //color: $color-grey-3
+  //font-style: italic
+  font-family: 'ProximaNova_light-italic', sans-serif
+  //margin: 0
 
 .form-flex-row
   display: flex

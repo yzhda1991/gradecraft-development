@@ -31,4 +31,4 @@
 
   .calendar-access
     - if presenter.show_add_assignments_to_google_button?(current_user)
-      = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, :target => "_parent", method: :post, data: { disable_with: "Adding Your Assignments..." }
+      = link_to decorative_glyph(:calendar) + "Add All Assignments to Google Calendar", add_assignments_google_calendars_assignments_path, :target => "_parent", method: :post, data: { disable_with: "Adding Your Assignments..." }, class: "function"
