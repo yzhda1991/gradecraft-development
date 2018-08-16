@@ -69,7 +69,6 @@
       - if impersonating?
         You cannot update this information in preview mode
       - else
-        .submit-buttons
-          %ul
-            %li= submit_tag "Update Settings", class: "button"
-            %li= link_to glyph("times-circle") + "Cancel", root_path, class: "button"
+        .main-buttons
+          = submit_tag "Update Settings", class: "button action"
+          = link_to glyph("times-circle") + "Cancel", root_path, class: "button secondary"
