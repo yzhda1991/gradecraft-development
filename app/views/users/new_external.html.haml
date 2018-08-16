@@ -3,7 +3,14 @@
 %section.pilot
   .student-pilot
     .pilot-container
-      %h1.pagetitle First, let's create your account:
+      %h1 First, let’s create your account!
+
+      .login
+        .google-login
+          = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", new_external_google_users_path, class: "login-button"
+
+      %p
+        %span Or
 
       .pilot-form
         = simple_form_for @user, url: create_external_users_path, method: :post do |f|
@@ -18,8 +25,3 @@
           .submit-buttons
             %ul
               %li= submit_tag "Create account", class: "button"
-
-    .pilot-container
-      .login
-        .google-login
-          = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", new_external_google_users_path, class: "login-button"
