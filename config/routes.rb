@@ -3,7 +3,7 @@ require "admin_constraint"
 Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  
+
   mount Resque::Server, at: "/jobs", constraints: AdminConstraint.new
   mount JasmineRails::Engine, at: '/specs', constraints: AdminConstraint.new if defined?(JasmineRails)
 
@@ -263,6 +263,7 @@ Rails.application.routes.draw do
   end
 
   controller :pages do
+    get :style_guide, constraints: AdminConstraint.new
     get :brand_and_style_guidelines
     get :features
     get :our_team, to: "pages#team"

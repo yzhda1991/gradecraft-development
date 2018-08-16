@@ -633,4 +633,7 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def pages_sign_up
   end
+
+  def pages_style_guide
+  end
 end
