@@ -1,6 +1,12 @@
 = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
 %h1 Log in
 
+.google-login
+  = link_to "Sign in with Google", "/auth/google_oauth2/", :tabindex=>"0", :method => :post
+
+%p.divider
+  %span Or
+
 #gradecraft-auth
   = form_for User.new, :url => user_sessions_path do |f|
     .form_elem
@@ -13,7 +19,3 @@
 .clear
 %p
   %a(tabindex=0) Forgot your password?
-
-.google-login.bg-blue
-  = link_to "Sign in with Google", "/auth/google_oauth2/", :tabindex=>"0", :method => :post
-  -# = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", :method => :post

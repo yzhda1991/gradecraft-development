@@ -45,7 +45,18 @@
 
   h1
     display: inline-block
-    font-size: 1.5rem
+    margin: 1em 0
+
+  p.divider
+    border-top: 1px dashed $blue
+    font: 0.9em/0 'KlinicSlab_medium', serif
+    margin: 1.5em 0
+    text-transform: uppercase
+    letter-spacing: 2px
+
+    span
+      background: white
+      padding: 0 0.5em
 
   .alert-bkg
     margin-bottom: 1rem
@@ -117,11 +128,6 @@
     display: inline-block
     vertical-align: text-bottom
     margin-right: 0.25rem
-
-  .divider
-    margin: 2rem 0
-    border-bottom: 1px solid $color-grey-5
-    position: relative
 
   .divider-message
     position: absolute
