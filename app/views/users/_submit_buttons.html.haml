@@ -1,4 +1,3 @@
 .submit-buttons
-  %ul
-    %li= submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", class: "button"
-    %li= link_to glyph("times-circle") + "Cancel", users_path, class: "button"
+  = submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", class: "button action"
+  = link_to glyph("times-circle") + "Cancel", users_path, class: "button secondary"
