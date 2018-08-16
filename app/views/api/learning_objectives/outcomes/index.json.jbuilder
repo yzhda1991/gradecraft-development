@@ -22,6 +22,8 @@ end
 
 json.included do
   json.array! @observed_outcomes do |observed_outcome|
+    return unless GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
+
     json.type "learning_objective_observed_outcome"
     json.id observed_outcome.id.to_s
 
@@ -35,7 +37,6 @@ json.included do
       end
 
       unless observed_outcome.grade.nil?
-        json.outcome_visible GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
         json.grade_id observed_outcome.grade.id
 
         observed_outcome.grade.assignment.tap do |assignment|

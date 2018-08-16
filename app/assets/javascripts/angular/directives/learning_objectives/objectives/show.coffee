@@ -6,56 +6,52 @@
     vm.students = CourseService.students
     vm.objective = LearningObjectivesService.objective
     vm.linkedAssignments = LearningObjectivesService.linkedAssignments
-    vm.linkedAssignmentsCount = () -> vm.linkedAssignments.length
 
-    vm.cumulativeOutcomes = LearningObjectivesService.cumulativeOutcomes
-
-    vm.hasLinkedAssignments = () -> _.some(vm.linkedAssignments)
     vm.termFor = (term) -> LearningObjectivesService.termFor(term)
+
+    vm.earnedOutcome = (studentId, assignmentId) ->
+      LearningObjectivesService.earnedOutcome(parseInt(studentId), assignmentId)
+
+    vm.gradeExists = (assignmentId) -> observedOutcomeFor(parseInt(@studentId), assignmentId)?
 
     vm.cumulativeOutcome = (studentId) ->
       _studentId = if angular.isDefined(studentId) then studentId else @studentId
       _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: parseInt(_studentId) })
 
     vm.progress = (studentId) ->
-      co = vm.cumulativeOutcome(parseInt(studentId))
+      co = vm.cumulativeOutcome(studentId)
       return "Not started" unless co?
       co.status
 
     vm.percent_complete = (studentId) ->
-      co = vm.cumulativeOutcome(parseInt(studentId))
+      co = vm.cumulativeOutcome(studentId)
       return "Not started" unless co?
       co.percent_complete
 
     vm.numeric_progress = (studentId) ->
-      co = vm.cumulativeOutcome(parseInt(studentId))
+      co = vm.cumulativeOutcome(studentId)
       return "Not started" unless co?
       co.numeric_progress
 
+    # TODO: needed?
     vm.observedOutcomes = (studentId) ->
       _studentId = if angular.isDefined(studentId) then studentId else @studentId
-      co = vm.cumulativeOutcome(parseInt(_studentId))
-      return unless co?
-      LearningObjectivesService.observedOutcomesFor(co.id)
-
-    vm.gradeExists = (studentId, assignmentId) ->
-      oo = vm.observedOutcomeFor(studentId, assignmentId)
-      oo? and oo.outcome_visible
+      LearningObjectivesService.observedOutcomesForStudent(_studentId)
 
     vm.gradePath = (studentId, assignmentId) ->
-      oo = vm.observedOutcomeFor(studentId, assignmentId)
+      oo = observedOutcomeFor(parseInt(studentId), assignmentId)
       "/grades/#{oo.grade_id}"
 
     vm.showPath = (studentId) ->
       "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
 
-    vm.observedOutcomeFor = (studentId, assignmentId) ->
-      oo = vm.observedOutcomes(studentId)
-      return unless oo?
-      _.find(oo, { assignment_id: assignmentId })
-
     services(@objectiveId, @studentId).then(() -> vm.loading = false)
   ]
+
+  observedOutcomeFor = (studentId, assignmentId) ->
+    oo = LearningObjectivesService.observedOutcomesForStudent(studentId)
+    return unless oo?
+    _.find(oo, { assignment_id: assignmentId })
 
   services = (objectiveId, studentId) ->
     promises = [LearningObjectivesService.getObjective(objectiveId)]

@@ -9,11 +9,8 @@
     vm.lastUpdated = LearningObjectivesService.lastUpdated
     vm.addObjective = LearningObjectivesService.addObjective
 
-    vm.persistChanges = () ->
-      LearningObjectivesService.runAllEvents(@indexRoute)
-
-    vm.termFor = (term) ->
-      LearningObjectivesService.termFor(term)
+    vm.termFor = (term) -> LearningObjectivesService.termFor(term)
+    vm.persistChanges = () -> DebounceQueue.runAllEvents(@indexRoute)
 
     vm.hasSavedObjectives = () ->
       return false if !_.some(@objectives())

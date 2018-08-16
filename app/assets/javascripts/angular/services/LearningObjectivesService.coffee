@@ -12,21 +12,17 @@
   linkedAssignments = []
   levelFlaggedValues = []
 
-  runAllEvents = (redirectUrl=null) ->
-    DebounceQueue.runAllEvents()  # should this return a $q.all promise to ensure success prior to redirect?
-    window.location.href = redirectUrl if redirectUrl?
+  objective = () -> _objectives[0]
 
-  objective = () ->
-    _objectives[0]
+  category = () -> _categories[0]
 
-  category = () ->
-    _categories[0]
-
-  observedOutcomes = () ->
-    _observed_outcomes
+  observedOutcomes = () -> _observed_outcomes
 
   cumulativeOutcomeFor = (objectiveId) ->
     _.find(cumulativeOutcomes, { learning_objective_id: objectiveId })
+
+  cumulativeOutcomeForStudent = (studentId) ->
+    _.find(cumulativeOutcomes, { user_id: studentId })
 
   observedOutcomesFor = (cumulativeOutcomeId, type=null, id=null) ->
     criteria = { learning_objective_cumulative_outcomes_id: cumulativeOutcomeId }
@@ -37,6 +33,17 @@
       _.find(_observed_outcomes, criteria)
     else
       _.filter(_observed_outcomes, criteria)
+
+  observedOutcomesForStudent = (studentId) ->
+    co = cumulativeOutcomeForStudent(studentId)
+    return unless co?
+    observedOutcomesFor(co.id)
+
+  earnedOutcome = (studentId, assignmentId) ->
+    co = cumulativeOutcomeForStudent(studentId)
+    return unless co?
+    oo = observedOutcomesFor(co.id)
+    _.find(oo, { assignment_id: assignmentId })
 
   levels = (objective) ->
     objectiveLevels = _.filter(_levels, { objective_id: objective.id })
@@ -278,7 +285,6 @@
     )
 
   {
-    runAllEvents: runAllEvents
     levels: levels
     objectives: objectives
     categories: categories
@@ -289,7 +295,10 @@
     cumulativeOutcomes: cumulativeOutcomes
     linkedAssignments: linkedAssignments
     cumulativeOutcomeFor: cumulativeOutcomeFor
+    cumulativeOutcomeForStudent: cumulativeOutcomeForStudent
     observedOutcomesFor: observedOutcomesFor
+    observedOutcomesForStudent: observedOutcomesForStudent
+    earnedOutcome: earnedOutcome
     addObjective: addObjective
     addCategory: addCategory
     addLevel: addLevel
