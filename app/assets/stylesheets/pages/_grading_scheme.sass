@@ -3,7 +3,6 @@
 /* Styling grading scheme level bars*/
 .bar_magic
   background-color: $color-grey-7
-  border-radius: 8px
   box-sizing: border-box
   margin: 3px auto
   padding: .5rem
@@ -14,21 +13,16 @@
       text-align: center
 
 .bar_magic.success
-  background-color: $color-green-2
-  color: $color-white
+  background-color: $teal_bright
 
   .has-tip
     color: $color-white
 
 /* Styling current grading scheme level bar*/
 .bar_magic.current
-  background-color: transparentize($color-green-2, .75)
-  padding: 1rem
+  background-color: $bg-green_lime
+  padding: 1em
   overflow: auto
-
-  .your-rank
-    font-size: 1rem
-    font-weight: bold
 
   .left-points
     margin-left: 4em
@@ -45,15 +39,18 @@ p.predictor-description
 
 /*progress bar on grading scheme display*/
 .striped-bar-container
-  background-color: $color-grey-6
-  border-radius: 25px
-  height: .75rem
-  margin: 1rem 0rem
+  background-color: white
+  border-radius: 0.75em
+  height: 0.75em
+  margin: 1em 0em
+  border: 1px solid $blue
 
 .striped
-  background-image: repeating-linear-gradient(45deg, $color-green-1, $color-green-1 35px, $color-green-2 35px, $color-green-2 70px)
-  border-radius: 25px
-  height: .75rem
+  background-image: repeating-linear-gradient(45deg, $teal_bright, $teal_bright 35px, $green_lime 35px, $green_lime 70px)
+  border-radius: 0.75em
+  height: 0.75em
+  border: 2px solid $blue_dark
+  margin-top: -2px
 
 /* for the grade scheme elements mass edit form */
 .grade-scheme-elements
