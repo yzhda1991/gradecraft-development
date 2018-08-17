@@ -20,10 +20,9 @@
 
 .student-panel
   max-width: 400px
-  margin-top: -1rem
+  margin-top: -2.75em
   height: 100%
   position: relative
-  font-weight: 300
   z-index: 18
   @media (max-width: $media-medium-max)
     display: none
@@ -44,11 +43,6 @@
     z-index: 50
     position: fixed
     width: 400px
-  h2
-    text-transform: uppercase
-    color: $color-grey-2
-    font-size: 0.85rem
-    margin: 1rem 1rem 0.5rem 1rem
 
   img
     display: block
@@ -58,11 +52,11 @@
   .student-panel-content
     overflow-x: auto
     max-height: 100vh
-    padding-bottom: 200px
+    padding: 1em 1em 200px 1em
 
   .student-panel-text-block
-    margin: 0.5rem 1rem
-    font-size: 0.8rem
+    //margin: 0.5em 0
+    //font-size: 0.8rem
 
   .info-hint-pulse
     border: 3px solid $color-blue-4
@@ -81,8 +75,9 @@
     cursor: pointer
     margin-top: 1rem
 
-  .student-panel-article-description
+  // .student-panel-article-description
     color: $color-grey-2
+
     .details-link
       padding: 1rem
       font-size: 0.8rem
@@ -91,15 +86,17 @@
     margin: .5rem 1rem
 
   .student-panel-article-icons
-    font-size: 0.75rem
-    color: $color-grey-3
-    .icon i
+    //font-size: 0.75rem
+    //color: $color-grey-3
+    // .icon i
       color: $color-grey-2
     .icon span
-      text-transform: uppercase
+      // text-transform: uppercase
+      font-family: 'ProximaNova_regular-italic', sans-serif
 
-  .student-panel-article-icon, .condition-icons
-    margin: 0.25rem 1rem
+  .student-panel-article-icon,
+  .condition-icons
+    //margin: 0.25rem 1rem
     display: block
 
   ul.icon-list
@@ -125,16 +122,15 @@
       text-align: left
 
 .student-panel-article-header
-  background-color: $color-blue-3
-  color: white
-  padding: 1.25rem 1rem
-  text-align: center
-  font-weight: 300
+  background-color: $bg-yellow
+  padding: 1.25em 1em
   .article-title
-    font-size: 0.95rem
-    padding-bottom: .5rem
-  .full-points, .due-date, .times-earned
-    font-size: 0.8rem
+    padding-bottom: 0.5em
+
+  .full-points,
+  .due-date,
+  times-earned
+    font: 0.9em/1em 'ProximaNova_regular', sans-serif
     text-transform: uppercase
 
 .student-panel-article-header.status-completed

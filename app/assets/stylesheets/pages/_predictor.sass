@@ -42,13 +42,13 @@ $card-margin-1 : 3px
 // SVG
 
 #predictor-post-graph-spacer
-  height: 170px
+  height: 140px
 
 .predictor-graph
   width: 100%
   max-width: 1099px
   position: fixed
-  top: 80px
+  top: 85px
   background-color: $color-white
   z-index: 5
 
@@ -302,39 +302,41 @@ $card-margin-1 : 3px
 
 .predictor-article-card
   display: block
-  margin-bottom: $predictor-font-size-3
-  background-color: lighten($color-grey-7, 2%)
+  //margin-bottom: $predictor-font-size-3
+  //background-color: lighten($color-grey-7, 2%)
   float: left
   height: 140px
   //default width for largest
   width: $card-width-4
   margin: $card-margin-4
+  border: 1px solid $bg-blue
   select
     margin: 0
   &.focus-article
-    outline: 3px solid $color-blue-3
+    border: 2px solid $blue_dark
     @media (max-width: $media-medium-max)
-      outline: none
+      border: 0px solid transparent
 
 .predictor-article-title
-  background-color: $color-blue-3
-  color: $txt-color-inverse
-  padding: 0.25rem 1.25rem 0.25rem 0.25rem
-  font-size: $predictor-font-size-5
+  background-color: $blue_dark
+  color: white
+  padding: 0.25em 1em 0.25em 0.25em
+  //font-size: $predictor-font-size-5
   position: relative
-  height: 1.6rem
+  font: 0.9em/1em 'ProximaNova_regular', sans-serif
+  min-height: 2.5em
   cursor: pointer
   overflow: hidden
   .info-icon
     position: absolute
     top: 5px
     right: -3px
-    font-size: $predictor-font-size-3
+    //font-size: $predictor-font-size-3
     cursor: pointer
     @media (max-width: $media-medium-max)
       display: none
 
-.predictor-article-title-stripe
+// .predictor-article-title-stripe
   background-color: $color-blue-5
   padding: .2rem
 
