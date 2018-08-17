@@ -1,38 +1,28 @@
 @import "../utilities/variables"
 
 ul.edit-form-tabs-nav
-  margin: 0 0 2em 0
-  padding: 0
+  margin: 0 -1em 2em -1em
+  padding: 0 0 5px 1em
   border-bottom: 2px solid $blue-medium_2
   position: relative
+
   li
     list-style-type: none
-    margin: 0 1rem
+    margin: 0 0.2em 0 0
     display: inline-block
-    font-weight: 300
-    line-height: 0
-    &.active
-      border-bottom: 3px solid $color-blue-2
-      a:after
-        border-bottom 0px
+
     a
-      color: $color-blue-1
-      font-size: 1rem
-      &:hover
-        text-decoration: none
-      &:after
-        content: ''
-        display: block
-        width: 0;
-        height: 1rem
-        transition: width .3s ease
-    &:hover
-      a:after
-        border-bottom: 3px solid $color-blue-2
-        width: 100%
-    &.active:hover
-      a:after
-        border: 0px
+      border-bottom: 0px solid transparent
+      color: white
+      background: $blue-medium_1
+      padding: 0.5em 1em
+      font-family: 'ProximaNova_regular', sans-serif
+      border-top-left-radius: $button-radius
+      border-top-right-radius: $button-radius
+
+    &.active
+      a
+        background: $blue-medium_2
 
 .preview-wrapper
   display: flex
