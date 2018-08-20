@@ -23,7 +23,8 @@
   = link_to decorative_glyph(:calendar) + "Add to Google Calendar", add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent", method: :post, class: "function"
 
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_viewable_submission?(current_student, current_user)
-  = submission_link_to(presenter.assignment)
+  %p
+    = submission_link_to(presenter.assignment)
 
 - if presenter.student_logged?(current_user) && presenter.assignment.is_unlocked_for_student?(current_student)
   = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }

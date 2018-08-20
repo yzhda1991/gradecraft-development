@@ -44,7 +44,6 @@
           .form-item
             = f.input :full_points, data: {autonumeric: true, "m-dec" => "0"}, label: "Total Points Possible", placeholder: "Points possible"
 
-    .submit-buttons
-      %ul
-        %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} Event"
-        %li= link_to glyph("times-circle") + "Cancel", attendance_index_path, class: "button"
+    .main-buttons
+      = f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} Event", class: "action"
+      = link_to glyph("times-circle") + "Cancel", attendance_index_path, class: "button secondary"

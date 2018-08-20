@@ -1,4 +1,4 @@
-.button.right{"type"=>"button",
+.button{"type"=>"button",
               "ng-if"=>"!hideBackButton",
               "ng-click"=>"hasPersistedEvents() || disableEdit()",
               "ng-disabled"=>"hasPersistedEvents()",
@@ -16,18 +16,15 @@
   %event{"ng-repeat"=>"event in events | orderBy: 'open_at'"}
     %attendance-event-attribute-card{"data-event"=>"event", "data-event-index"=>"$index"}
 
-.submit-buttons
-  %ul
-    %li
-      .button.right{"type"=>"button",
-                    "ng-if"=>"!hideBackButton",
-                    "ng-click"=>"hasPersistedEvents() || disableEdit()",
-                    "ng-disabled"=>"hasPersistedEvents()",
-                    "ng-class"=>"{ 'disabled': hasPersistedEvents() }"} Change Setup
-    %li
-      .button.right{"type"=>"button",
-                    "ng-disabled"=>"form.$invalid",
-                    "ng-class"=>"{ 'disabled': form.$invalid }",
-                    "ng-click"=>"form.$valid && saveChanges()"}
-        %i.fa.fa-save
-        Submit
+.main-buttons
+  .button.action{"type"=>"button",
+                "ng-disabled"=>"form.$invalid",
+                "ng-class"=>"{ 'disabled': form.$invalid }",
+                "ng-click"=>"form.$valid && saveChanges()"}
+    %i.fa.fa-save
+    Submit
+  .button{"type"=>"button",
+                "ng-if"=>"!hideBackButton",
+                "ng-click"=>"hasPersistedEvents() || disableEdit()",
+                "ng-disabled"=>"hasPersistedEvents()",
+                "ng-class"=>"{ 'disabled': hasPersistedEvents() }"} Change Setup
