@@ -40,24 +40,25 @@
                               "data-sortable-predicate"=>"name"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Completed",
-                              "data-sortable-predicate"=>"assignments-submitted"}
+                              "data-sortable-predicate"=>"submittedAssignments",
+                              "data-sortable-fn"=>"loShowCtrl.sortBySubmittedAssignments"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"{{loShowCtrl.termFor('learning objectives')}} Graded",
-                              "data-sortable-predicate"=>"assignments-graded"}
+                              "data-sortable-predicate"=>"gradedAssignments",
+                              "data-sortable-fn"=>"loShowCtrl.sortByGradedAssignments"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Progress",
-                              "data-sortable-predicate"=>"status"}
+                              "data-sortable-predicate"=>"percentComplete",
+                              "data-sortable-fn"=>"loShowCtrl.sortByPercentComplete"}
       %tbody
         %tr{"ng-repeat"=>"student in loShowCtrl.students | orderBy : loShowCtrl.sortable.predicate : loShowCtrl.sortable.reverse"}
           %td
             %a{"ng-href"=>"/students/{{student.id}}"} {{student.name}}
-          -# TODO: need to update this to be the number of submissions + (number of grades - number of grades with submissions) - should include not-student-visible-grades
           %td
-            %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
-            %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+            %span{"ng-show"=>"loShowCtrl.submissionsForStudent(student.id).length"}
+              {{loShowCtrl.submissionsForStudent(student.id).length}}
           %td
-            %span{"ng-show"=>"loShowCtrl.observedOutcomes(student.id).length"} {{loShowCtrl.observedOutcomes(student.id).length}}
-            %span {{loGradeOverviewCtrl.statusFor(objective.id)}}
+            %span {{loShowCtrl.observedOutcomes(student.id).length}}
           %td
             %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
               %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
@@ -81,7 +82,7 @@
                               "data-sortable-predicate"=>"student.submission_submitted_at"}
           %th.sortableHeader{"scope"=>"col",
                              "data-sortable-header-text"=>"Assessment",
-                             "ng-click"=>"loShowCtrl.sortByAssessment()"}
+                             "data-sortable-fn"=>"loShowCtrl.sortByAssessment"}
           %th.sortable-header{"scope"=>"col",
                               "data-sortable-header-text"=>"Resubmit?",
                               "data-sortable-predicate"=>"resubmit"}

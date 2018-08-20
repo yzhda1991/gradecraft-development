@@ -48,7 +48,8 @@ class Submission < ApplicationRecord
 
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
-  scope :for_student, ->(student) { where(student_id: student.id) }
+  scope :for_student, ->(student_ids) { where(student_id: student_ids) }
+  scope :for_assignment, -> (assignment_ids) { where(assignment_id: assignment_ids) }
   scope :for_assignment_and_student, ->(assignment_id, student_id) { where(assignment_id: assignment_id, student_id: student_id) }
   scope :for_assignment_and_group, ->(assignment_id, group_id) { where(assignment_id: assignment_id, group_id: group_id) }
   scope :submitted, -> { where.not(submitted_at: nil) }

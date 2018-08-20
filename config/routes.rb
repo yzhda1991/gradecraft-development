@@ -3,7 +3,7 @@ require "admin_constraint"
 Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  
+
   mount Resque::Server, at: "/jobs", constraints: AdminConstraint.new
   mount JasmineRails::Engine, at: '/specs', constraints: AdminConstraint.new if defined?(JasmineRails)
 
@@ -559,6 +559,8 @@ Rails.application.routes.draw do
     resources :students, only: [], module: :students do
       resources :badges, only: :index
     end
+
+    resources :submissions, only: :index
 
     resource :grading_status, only: [], module: :grading_status do
       resources :submissions, only: [] do

@@ -11,17 +11,16 @@
   SortableHeader = [() ->
     vm = this
 
-    vm.setSort = () -> SortableService.setSort(@sortablePredicate)
-    vm.currentPredicate = () -> SortableService.predicate == @sortablePredicate
-
-    vm.icon = () ->
-      if SortableService.reverse is true then "fa-caret-up" else "fa-caret-down"
+    vm.setSort = () -> SortableService.setSort(@sortablePredicate, @sortableFn())
+    vm.currentPredicate = () -> SortableService.isCurrentPredicate(@sortablePredicate)
+    vm.icon = () -> if SortableService.reverse is true then "fa-caret-up" else "fa-caret-down"
   ]
 
   {
     scope:
       sortableHeaderText: '@'  # the text for the header link
       sortablePredicate: '@'  # the predicate(s) to sort on
+      sortableFn: '&'
     restrict: 'C'
     bindToController: true
     controller: SortableHeader

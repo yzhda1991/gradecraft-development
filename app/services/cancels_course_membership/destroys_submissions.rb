@@ -9,7 +9,7 @@ module Services
         membership = context[:membership]
 
         Submission.for_course(membership.course)
-          .for_student(membership.user)
+          .for_student(membership.user.id)
           .destroy_all
       end
     end

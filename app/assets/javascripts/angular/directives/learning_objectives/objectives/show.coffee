@@ -1,5 +1,5 @@
-@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "SortableService", "orderByFilter", "$q",
-  (LearningObjectivesService, CourseService, SortableService, orderBy, $q) ->
+@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "SubmissionService", "SortableService", "orderByFilter", "$q",
+  (LearningObjectivesService, CourseService, SubmissionService, SortableService, orderBy, $q) ->
     LearningObjectivesShowCtrl = [() ->
       vm = this
       vm.loading = true
@@ -9,6 +9,15 @@
       vm.linkedAssignments = LearningObjectivesService.linkedAssignments
 
       vm.termFor = (term) -> LearningObjectivesService.termFor(term)
+
+      vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id).flagged_value
+      vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id).length
+      vm.sortByPercentComplete = (student) -> vm.percent_complete(student.id)
+      vm.sortByGradedAssignments = (student) ->
+        outcomes = vm.observedOutcomes(student.id) || []
+        outcomes.length
+
+      vm.submissionsForStudent = (student_id) -> SubmissionService.forStudent(student_id)
 
       vm.earnedOutcome = (studentId, assignmentId) ->
         LearningObjectivesService.earnedOutcome(parseInt(studentId), assignmentId)
@@ -39,12 +48,6 @@
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
         LearningObjectivesService.observedOutcomesForStudent(_studentId)
 
-      vm.sortByAssessment = () ->
-        vm.linkedAssignments = orderBy(vm.linkedAssignments,
-          (assignment) => vm.earnedOutcome(vm.studentId, assignment.id).flagged_value,
-          vm.sortable.reverse
-        )
-
       vm.gradePath = (studentId, assignmentId) ->
         oo = observedOutcomeFor(parseInt(studentId), assignmentId)
         "/grades/#{oo.grade_id}"
@@ -52,7 +55,10 @@
       vm.showPath = (studentId) ->
         "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
 
-      services(@objectiveId, @studentId).then(() -> vm.loading = false)
+      services(@objectiveId, @studentId).then(() ->
+        SubmissionService.getSubmissions(_.pluck(vm.linkedAssignments, "id"))
+        vm.loading = false
+      )
     ]
 
     observedOutcomeFor = (studentId, assignmentId) ->
