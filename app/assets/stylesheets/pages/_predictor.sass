@@ -4,9 +4,9 @@
 $predictor-font-size-1 : 1.5rem
 $predictor-font-size-2 : 1.25rem
 $predictor-font-size-3 : 1rem
-$predictor-font-size-4 : .85rem
-$predictor-font-size-5 : .75rem
-$predictor-font-size-6: .55rem
+$predictor-font-size-4 : 0.85em
+$predictor-font-size-5 : 0.85em
+$predictor-font-size-6 : 0.85em
 
 // widths and margins for cards
 // Needed to  make x numbers of columns
@@ -108,7 +108,7 @@ $card-margin-1 : 3px
 
 .predictor-article-main-icons
   font-size: 0.9em
-  margin-top: 6px
+  margin: 0
   .icon-text
     margin: 0
     text-transform: uppercase
@@ -346,8 +346,9 @@ $card-margin-1 : 3px
 
 .predictor-article-date
   height: $predictor-font-size-2
-  margin: 5px 0 5px 4px
-  font-size: 0.9em
+  margin: 5px 0 10px 4px
+  font-size: 0.85em
+  line-height: 1em
 
 .predictor-article-main
   padding-top: 5px
@@ -375,7 +376,7 @@ $card-margin-1 : 3px
 
 .article-completed, .pass-fail-prediction
   text-align: center
-  font-size: $predictor-font-size-3
+  margin: 0.25em 0 0 0
 
 .article-completed.excluded
   .grade
@@ -383,6 +384,7 @@ $card-margin-1 : 3px
   .excluded
     color: $color-red-1
     font-size: $predictor-font-size-4
+    line-height: 1em
     text-align: center
 
 .article-predicted .grade
@@ -392,8 +394,9 @@ $card-margin-1 : 3px
     font-size: $predictor-font-size-3
     padding: 15px 10px
   .name
-    font-size: 0.75rem
+    font-size: 0.85em
     margin-top: -15px
+    line-height: 1em
 
 /*  Badge Articles */
 .predictor-article-card.type-badges
