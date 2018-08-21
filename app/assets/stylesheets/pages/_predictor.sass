@@ -104,14 +104,12 @@ $card-margin-1 : 3px
     transform: translate(10px, 165px)
 
 
-// ICONS AND TOOLTIPS
-
+/* ICONS AND TOOLTIPS *
 .predictor-article-main-icons
   font-size: 0.9em
   margin: 0
   display: flex
   justify-content: flex-end
-  background-color: $bg-blue
 
   .icon-text
     margin: 0
@@ -120,12 +118,11 @@ $card-margin-1 : 3px
   .icon
     font-size: 0.9em
     margin: 0 5px
-    
+
     i
       padding: 0
       margin-right: -3px
-    float: right
-    margin: 0 15px 0 -12px
+
     &.is_locked
       margin-left: 0
 
@@ -184,7 +181,6 @@ $card-margin-1 : 3px
     transform: rotate(-90deg)
 
 .predictor-section-title
-  font-size: $predictor-font-size-3
   color: white
   padding: 0 0.5rem
 
@@ -296,55 +292,63 @@ $card-margin-1 : 3px
 
 
 
-// ARTICLES
-
-.collapsable
-  clear: both
-  padding: 0 0 0 0.25rem
+/* ARTICLES */
+/* fixing this flippin' predictor _=^o.o^= */
+.predictor-articles
+  background-color: $bg-blue
+  display: flex
+  flex-wrap: wrap
 
 .predictor-article
-  display: block
+  width: 24%
+  margin: 10px 0.5%
+  background-color: white
 
-.component-slider
-  display: block
+  @media (max-width: 1300px)
+    width: 32%
+
+  @media (max-width: 600px)
+    width: 48%
+    margin: 10px 1%
+
+  @media (max-width: 450px)
+    width: 100%
 
 .predictor-article-card
-  display: block
-  float: left
-  height: 150px
-  //default width for largest
-  width: $card-width-4
-  margin: $card-margin-4
-  border: 1px solid $bg-blue
+  min-height: 150px
+
   select
     margin: 0
+
   &.focus-article
     border: 2px solid $blue_dark
     @media (max-width: $media-medium-max)
       border: 0px solid transparent
 
+.component-slider
+  display: block
+
 .predictor-article-title
   background-color: $blue_dark
   color: white
   padding: 0.25em 1em 0.25em 0.25em
-  //font-size: $predictor-font-size-5
   position: relative
   font: 0.9em/1em 'ProximaNova_regular', sans-serif
   min-height: 2.5em
   cursor: pointer
   overflow: hidden
+
+  @media (max-width: $media-650)
+    font-size: 1em
+
   .info-icon
     position: absolute
     top: 5px
     right: -3px
-    //font-size: $predictor-font-size-3
     cursor: pointer
+
     @media (max-width: $media-medium-max)
       display: none
-
-// .predictor-article-title-stripe
-  background-color: $color-blue-5
-  padding: .2rem
 
 .badge-predicted
   width: 50%
@@ -413,7 +417,6 @@ $card-margin-1 : 3px
     padding-top: 20px
 
 /* Slider Widget */
-
 .predictor-article-card
   .ui-widget-content
     background: $color-grey-6
@@ -461,7 +464,6 @@ $card-margin-1 : 3px
   background-color: $color-red-1
 
 /* Counter widget for Badges */
-
 .predictor-counter-switch
   .switch-wrapper
     float: left
@@ -521,33 +523,25 @@ $card-margin-1 : 3px
 // override default width before media query overrides
 @media (min-width: $media-large-max)
   .mainContainer.staff
-    .predictor-article-card
+    // .predictor-article-card
       width: 32%
       margin: 8px 3px
 
 
 // large
 @media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
-  .predictor-article-card
-    width: $card-width-3
-    margin: $card-margin-3
-  #predictor-main-header, .predictor-section
+  #predictor-main-header,
+  .predictor-section
   .mainContainer.staff
     .predictor-article-card
-      width: $card-width-1
-      margin: $card-margin-1
+      // width: $card-width-1
+      // margin: $card-margin-1
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max + 5rem)
   @include mobile-headers-mixin
   @include mobile-graph-mixin
-  .predictor-article-card
-    width: $card-width-2
-    margin: $card-margin-2
   .mainContainer.staff
-    .predictor-article-card
-      width: $card-width-2
-      margin: $card-margin-2
     .student-panel
       display: none
 
@@ -555,9 +549,6 @@ $card-margin-1 : 3px
 @media (max-width: $media-small-max)
   @include mobile-headers-mixin
   @include mobile-graph-mixin
-  .predictor-article-card
-    width: $card-width-1
-    margin: $card-margin-1
   .collapse-arrow.doubled
     margin: 35px 0 0 0
 
