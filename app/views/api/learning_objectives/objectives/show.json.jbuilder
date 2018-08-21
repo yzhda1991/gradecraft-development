@@ -19,6 +19,8 @@ json.included do
   end
 
   json.array! @objective.assignments do |assignment|
+    next if current_user_is_student? && !assignment.visible_for_student?(current_user)
+    
     json.type "assignments"
     json.id assignment.id.to_s
 

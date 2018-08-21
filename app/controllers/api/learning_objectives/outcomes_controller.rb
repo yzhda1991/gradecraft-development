@@ -79,8 +79,7 @@ class API::LearningObjectives::OutcomesController < ApplicationController
   # If the current user is a student, only allow outcomes to be returned for the that person
   # Otherwise if only a subset of student_ids are provided via params, filter by that
   def filter_outcomes_by_students!
-    student_ids = current_student.id if current_user_is_student?
-    student_ids ||= params[:student_ids]
+    student_ids = current_user_is_student? ? current_student.id : params[:student_ids]
     @cumulative_outcomes = @cumulative_outcomes.where(user_id: student_ids) unless student_ids.blank?
   end
 
