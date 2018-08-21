@@ -99,6 +99,8 @@
       (response) ->
         GradeCraftAPI.loadMany(cumulativeOutcomes, response.data)
         GradeCraftAPI.loadFromIncluded(_observed_outcomes, "learning_objective_observed_outcome", response.data)
+        GradeCraftAPI.setTermFor("students", response.data.meta.term_for_students)
+        GradeCraftAPI.setTermFor("groups", response.data.meta.term_for_groups)
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
@@ -111,6 +113,9 @@
         GradeCraftAPI.loadFromIncluded(_levels, "levels", response.data)
         GradeCraftAPI.loadFromIncluded(linkedAssignments, "assignments", response.data)
         angular.copy(response.data.meta.level_flagged_values, levelFlaggedValues)
+        GradeCraftAPI.setTermFor("learning_objective", response.data.meta.term_for_learning_objective)
+        GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
+        GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignments)
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)

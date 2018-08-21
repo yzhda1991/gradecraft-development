@@ -1,4 +1,4 @@
-%loading-message{'loading'=>'loShowCtrl.loading', 'message'=>"Loading..."}
+%loading-message{"data-loading"=>"loShowCtrl.loading", "data-message"=>"Loading..."}
 
 .show-learning-objective{"ng-if"=>"!loShowCtrl.loading"}
   %section
@@ -69,7 +69,7 @@
 
   -# Progress for an individual student
   %section{"ng-if"=>"loShowCtrl.studentId"}
-    %h2.subtitle {{loShowCtrl.termFor('assignments')}} that meet this {{loShowCtrl.termFor('learning objective')}}
+    %h2.subtitle {{loShowCtrl.termFor('assignments')}} that meet this {{loShowCtrl.termFor('learning_objective')}}
 
     %table
       %thead
@@ -94,6 +94,7 @@
         %tr{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments | orderBy : loShowCtrl.sortable.predicate : loShowCtrl.sortable.reverse"}
           %td
             %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+            %assignment-descriptor-icons{"data-assignment"=>"assignment"}
           %td.center
             %span.has-tooltip{"ng-show"=>"loShowCtrl.submittedAt(assignment.id)"}
               %i.fa.fa-paperclip

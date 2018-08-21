@@ -27,6 +27,16 @@ json.included do
       json.name assignment.name
       json.assignment_id assignment.id
       json.objective_id @objective.id
+
+      json.has_groups assignment.has_groups?
+      json.is_a_condition assignment.is_a_condition?
+
+      if current_user_is_student?
+        json.is_locked !assignment.is_unlocked_for_student?(current_user)
+        json.has_been_unlocked assignment.is_unlockable? && assignment.is_unlocked_for_student?(current_user)
+      end
+
+      json.partial! 'api/assignments/assignment_unlocks', assignment: assignment
     end
   end
 
@@ -43,6 +53,8 @@ json.included do
 end
 
 json.meta do
-  json.term_for_assignment term_for :assignments
+  json.term_for_assignment term_for :assignment
+  json.term_for_assignments term_for :assignments
+  json.term_for_learning_objective term_for :learning_objective
   json.level_flagged_values LearningObjectiveLevel.flagged_values_to_h
 end

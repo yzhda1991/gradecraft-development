@@ -47,3 +47,8 @@ json.included do
     end
   end
 end
+
+json.meta do
+  json.term_for_students term_for :students
+  json.term_for_groups term_for :groups
+end

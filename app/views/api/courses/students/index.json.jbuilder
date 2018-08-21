@@ -1,7 +1,7 @@
 json.data @students do |student|
   student_earned_badges = @earned_badges.student_visible.order_by_created_at.for_student student
   team = student.team_for_course @course
-
+  
   json.id student.id.to_s
   json.type "users"
 
