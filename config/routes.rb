@@ -185,6 +185,14 @@ Rails.application.routes.draw do
 
   #7. Integrations
   resources :integrations, only: [:create, :index] do
+    collection do
+      resource :google, controller: :google, only: [], module: :integrations do
+        collection do
+          get :new_user
+          get :confirm_instructor_role
+        end
+      end
+    end
     resources :courses, only: [:create, :destroy], module: :integrations
   end
 
@@ -297,6 +305,7 @@ Rails.application.routes.draw do
       get :search
       post :upload
       get :new_external
+      get :new_external_google
       post :create_external
     end
   end
@@ -323,7 +332,8 @@ Rails.application.routes.draw do
 
   #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
-  get "/auth/:provider/callback", to: "authorizations#create"
+  get "auth/google_oauth2/callback", to: "integrations/google#auth_callback"
+  get "/auth/:provider/callback", to: "authorizations#create", as: :create_authorization
   get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
   # Canvas OmniAuth setup
@@ -332,7 +342,7 @@ Rails.application.routes.draw do
   get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
-  resources :user_sessions, only: [:new, :create, :destroy] do
+  resources :user_sessions, only: [:new, :create, :destroy, :student] do
     collection do
       get :instructors
     end

@@ -1,7 +1,17 @@
 describe UserSessionsController do
+  include UniMock::StubRails
+
   let(:course) { create :course }
   let(:student) { create(:course_membership, :student, course: course).user }
   let(:professor) { create(:course_membership, :professor, course: course).user }
+
+  describe "GET instructors" do
+    it "requires that the environment is app" do
+      stub_env "beta"
+      get :instructors
+      expect(response).to render_template :instructors
+    end
+  end
 
   describe "POST create" do
     context "user is successfully logged in" do

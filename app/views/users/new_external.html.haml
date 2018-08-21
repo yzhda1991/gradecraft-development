@@ -2,18 +2,26 @@
 
 %section.pilot
   .student-pilot
-    .pilot-text
-      %h1.bold First, let's create your account:
+    .pilot-container
+      %h1 First, let’s create your account!
 
-      = simple_form_for @user, url: create_external_users_path, method: :post do |f|
-        .form-item= f.input :first_name
-        .form-item= f.input :last_name
-        .form-item= f.input :email
-        .form-item= f.input :password, required: true
-        .form-item= f.input :password_confirmation, required: true
+      .login
+        .google-login
+          = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", new_external_google_users_path, class: "login-button"
 
-        .form-item= recaptcha_tags
+      %p
+        %span Or
 
-        .submit-buttons
-          %ul
-            %li= submit_tag "Create account", class: "button"
+      .pilot-form
+        = simple_form_for @user, url: create_external_users_path, method: :post do |f|
+          .form-item= f.input :first_name, placeholder: "First Name"
+          .form-item= f.input :last_name, placeholder: "Last Name"
+          .form-item= f.input :email, placeholder: "Email"
+          .form-item= f.input :password, required: true, placeholder: "Password"
+          .form-item= f.input :password_confirmation, required: true, placeholder: "Password Confirmation"
+
+          .form-item= recaptcha_tags
+
+          .submit-buttons
+            %ul
+              %li= submit_tag "Create account", class: "button"

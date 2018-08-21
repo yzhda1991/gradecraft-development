@@ -2,6 +2,8 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
+  layout "external", only: :new_external
+
   skip_before_action :require_login, only: [:badges, :new_external, :create_external]
   skip_before_action :require_course_membership, only: [:badges, :new_external, :create_external]
   before_action :ensure_staff?, except: [:index, :badges, :change, :new_external, :create_external]
@@ -51,7 +53,7 @@ class CoursesController < ApplicationController
                                         role: "professor")
       session[:course_id] = @course.id
       auto_login @user
-      redirect_to dashboard_path(@course), flash: {
+      redirect_to dashboard_path, flash: {
         notice: "Course #{@course.name} successfully created"
       }
     else

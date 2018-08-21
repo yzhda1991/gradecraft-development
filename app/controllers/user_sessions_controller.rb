@@ -2,6 +2,7 @@
 class UserSessionsController < ApplicationController
 
   before_action :ensure_staff?, only: [:impersonate_student]
+  before_action :ensure_app_environment?, only: :instructors
   skip_before_action :require_login, except: [:index]
   skip_before_action :require_course_membership, except: :index
   skip_before_action :verify_authenticity_token, only: [:lti_create]
@@ -11,7 +12,6 @@ class UserSessionsController < ApplicationController
   end
 
   def instructors
-    redirect_back_or_default and return if Rails.env.production?
     @user = User.new
   end
 
@@ -77,6 +77,10 @@ class UserSessionsController < ApplicationController
   end
 
   private
+
+  def user_params
+    params.require(:user).permit :username, :email, :first_name, :last_name
+  end
 
   def auth_hash
     request.env["omniauth.auth"]
