@@ -22,7 +22,7 @@ end
 
 json.included do
   json.array! @observed_outcomes do |observed_outcome|
-    return unless GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
+    next unless GradeProctor.new(observed_outcome.grade).viewable?(user: current_user)
 
     json.type "learning_objective_observed_outcome"
     json.id observed_outcome.id.to_s

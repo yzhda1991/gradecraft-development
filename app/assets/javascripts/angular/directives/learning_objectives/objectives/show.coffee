@@ -43,7 +43,6 @@
         return "Not started" unless co?
         co.numeric_progress
 
-      # TODO: needed?
       vm.observedOutcomes = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
         LearningObjectivesService.observedOutcomesForStudent(_studentId)
