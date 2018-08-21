@@ -23,4 +23,4 @@
 
   - if current_course.course_rules.present?
     %h3.bold Course Rules
-    = render partial: "courses/course_rules", locals: {course: current_course}
+    %p= raw current_course.course_rules
