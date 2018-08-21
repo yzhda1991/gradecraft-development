@@ -11,11 +11,11 @@
       vm.termFor = (term) -> LearningObjectivesService.termFor(term)
 
       vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id).flagged_value
-      vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id).length
+      vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id)?.length
       vm.sortByPercentComplete = (student) -> vm.percent_complete(student.id)
-      vm.sortByGradedAssignments = (student) ->
-        outcomes = vm.observedOutcomes(student.id) || []
-        outcomes.length
+      vm.sortBySubmittedAt = (assignment) -> vm.submittedAt(assignment.id)
+      vm.sortByResubmitted = (assignment) -> vm.resubmitted(assignment.id)
+      vm.sortByGradedAssignments = (student) -> vm.observedOutcomes(student.id)?.length
 
       vm.submissionsForStudent = (student_id) -> SubmissionService.forStudent(student_id)
 
@@ -55,9 +55,14 @@
       vm.showPath = (studentId) ->
         "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
 
+      vm.submittedAt = (assignmentId) ->
+        SubmissionService.forStudentAndAssignment(parseInt(@studentId), assignmentId)?.submitted_at
+
+      vm.resubmitted = (assignmentId) ->
+        SubmissionService.forStudentAndAssignment(parseInt(@studentId), assignmentId)?.resubmitted
+
       services(@objectiveId, @studentId).then(() ->
-        SubmissionService.getSubmissions(_.pluck(vm.linkedAssignments, "id"))
-        vm.loading = false
+        SubmissionService.getSubmissions(_.pluck(vm.linkedAssignments, "id")).then(() -> vm.loading = false)
       )
     ]
 
