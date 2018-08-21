@@ -109,10 +109,18 @@ $card-margin-1 : 3px
 .predictor-article-main-icons
   font-size: 0.9em
   margin: 0
+  display: flex
+  justify-content: flex-end
+  background-color: $bg-blue
+
   .icon-text
     margin: 0
     text-transform: uppercase
+
   .icon
+    font-size: 0.9em
+    margin: 0 5px
+    
     i
       padding: 0
       margin-right: -3px
@@ -302,10 +310,8 @@ $card-margin-1 : 3px
 
 .predictor-article-card
   display: block
-  //margin-bottom: $predictor-font-size-3
-  //background-color: lighten($color-grey-7, 2%)
   float: left
-  height: 140px
+  height: 150px
   //default width for largest
   width: $card-width-4
   margin: $card-margin-4
