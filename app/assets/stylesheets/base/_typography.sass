@@ -30,7 +30,7 @@ p
 a
   text-decoration: none
   color: $blue-medium_1
-  border-bottom: 1px solid $blue-medium_1
+  border-bottom: 2px solid $blue-medium_1
   cursor: pointer
   font-family: 'ProximaNova_semibold', sans-serif
 
@@ -82,11 +82,6 @@ h4
 
 .lining_figures
   font-variant-numeric: lining-nums
-
-/* annoying jquery-ui overrides */
-.ui-widget
-  font: 1em/1.45em 'ProximaNova_light', sans-serif
-  color: $blue_dark
 
 
 
@@ -144,9 +139,14 @@ h1, h2, h3, h4, h5
   text-align: right
 
 // a
-  // AngularJS - Make cursor behave consistently as if it had an href
-  &[ng-click]
-    cursor: pointer
+//   text-decoration: none
+//   color: $color-blue-3
+//   &.inherit-color
+//     color: inherit
+//
+//   // AngularJS - Make cursor behave consistently as if it had an href
+//   &[ng-click]
+//     cursor: pointer
 
 /* accordion h2 toggle styles __=^o.o^= */
 .assignment-type-bar,
@@ -194,10 +194,10 @@ h2.subtitle
     margin-bottom: 0 !important
     font-weight: normal
 
-h2.subtitle.fail
+h2.fail
   color: $alert-color
 
-h2.subtitle.success
+h2.success
   color: $color-green-3
 
 h3.assignment_name
