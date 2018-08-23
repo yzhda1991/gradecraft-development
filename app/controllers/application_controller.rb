@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   include Omniauth::Lti::Context
   include Croutons::Controller
-  include AuthenticationHelper
   include CustomNamedRoutes
   include CurrentScopes
   include CourseTerms
@@ -35,6 +34,7 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include ImpersonationHelper
+  include AuthenticationHelper
 
   def not_authenticated
     if !request.env["REMOTE_USER"].nil?
