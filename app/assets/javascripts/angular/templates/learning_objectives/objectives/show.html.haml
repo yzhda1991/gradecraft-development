@@ -24,9 +24,12 @@
       %tr{"ng-if"=>"loShowCtrl.studentId"}
         %th Progress:
         %td
-          .progress-bar
-            .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(loShowCtrl.studentId)}} + '%' }"}
-          {{loShowCtrl.percent_complete(loShowCtrl.studentId)}}% complete
+          %span{"ng-if"=>"loShowCtrl.numericProgress(student.id) > 0"}
+            .progress-bar
+              .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(loShowCtrl.studentId)}} + '%' }"}
+            {{loShowCtrl.percentComplete(loShowCtrl.studentId)}}% complete
+          %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"}
+            Not started
 
   -# Table for all students in the course
   %section{"ng-if"=>"!loShowCtrl.studentId"}
@@ -61,10 +64,12 @@
             %span {{loShowCtrl.observedOutcomes(student.id).length}}
           %td
             %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
-              %span{"ng-if"=>"loShowCtrl.numeric_progress(student.id) > 0"}
+              %span{"ng-if"=>"loShowCtrl.numericProgress(student.id) > 0"}
                 .progress-bar
-                  .fill{"ng-style"=>"{'width': {{loShowCtrl.percent_complete(student.id)}} + '%' }"}
-                {{loShowCtrl.percent_complete(student.id)}}% complete
+                  .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(student.id)}} + '%' }"}
+                {{loShowCtrl.percentComplete(student.id)}}% complete
+              %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"}
+                Not started
 
 
   -# Progress for an individual student

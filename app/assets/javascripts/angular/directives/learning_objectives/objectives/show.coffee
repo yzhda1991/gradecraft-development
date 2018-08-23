@@ -12,12 +12,14 @@
 
       vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id).flagged_value
       vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id)?.length
-      vm.sortByPercentComplete = (student) -> vm.percent_complete(student.id)
+      vm.sortByPercentComplete = (student) -> vm.percentComplete(student.id)
       vm.sortBySubmittedAt = (assignment) -> vm.submittedAt(assignment.id)
       vm.sortByResubmitted = (assignment) -> vm.resubmitted(assignment.id)
       vm.sortByGradedAssignments = (student) -> vm.observedOutcomes(student.id)?.length
 
       vm.submissionsForStudent = (student_id) -> SubmissionService.forStudent(student_id)
+      vm.percentComplete = (studentId) -> vm.cumulativeOutcome(studentId)?.percent_complete
+      vm.numericProgress = (studentId) -> vm.cumulativeOutcome(studentId)?.numeric_progress
 
       vm.earnedOutcome = (studentId, assignmentId) ->
         LearningObjectivesService.earnedOutcome(parseInt(studentId), assignmentId)
@@ -32,16 +34,6 @@
         co = vm.cumulativeOutcome(studentId)
         return "Not started" unless co?
         co.status
-
-      vm.percent_complete = (studentId) ->
-        co = vm.cumulativeOutcome(studentId)
-        return "Not started" unless co?
-        co.percent_complete
-
-      vm.numeric_progress = (studentId) ->
-        co = vm.cumulativeOutcome(studentId)
-        return "Not started" unless co?
-        co.numeric_progress
 
       vm.observedOutcomes = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
