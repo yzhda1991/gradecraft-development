@@ -28,8 +28,7 @@
             .progress-bar
               .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(loShowCtrl.studentId)}} + '%' }"}
             {{loShowCtrl.percentComplete(loShowCtrl.studentId)}}% complete
-          %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"}
-            Not started
+          %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
 
   -# Table for all students in the course
   %section{"ng-if"=>"!loShowCtrl.studentId"}
@@ -68,8 +67,7 @@
                 .progress-bar
                   .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(student.id)}} + '%' }"}
                 {{loShowCtrl.percentComplete(student.id)}}% complete
-              %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"}
-                Not started
+              %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
 
 
   -# Progress for an individual student

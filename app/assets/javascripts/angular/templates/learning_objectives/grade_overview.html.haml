@@ -8,7 +8,7 @@
       #rubric-grade-edit.rubric.edit
         .criterion{"ng-repeat"=>"objective in objectives"}
           .criterion-heading
-            %h4.criterion-name
+            %h3.criterion-name
               %a{"ng-href"=>"/learning_objectives/objectives/{{objective.id}}"} {{objective.name}}
             %p.criterion-description {{objective.description}}
 
