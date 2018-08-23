@@ -28,7 +28,7 @@
                     %div.notification-badge.announcement-notification-badge= unread_count
                 .nav-dropdown-card-wrapper.dropdown-content
                   = render partial: "announcements/announcements_dropdown"
-            - if (Rails.env.beta? || Rails.env.development?) && !current_course.has_paid? && current_user_is_staff?
+            - if accessible_to_app_env? && !current_course.has_paid? && current_user_is_staff?
               %li.course-info-btn.dropdown
                 %button.icon-button.nav-button{type: "button"}= decorative_glyph('magic hidden-sm') + "Trial Account"
                 .nav-dropdown-card-wrapper.dropdown-content

@@ -33,7 +33,7 @@ class Integrations::GoogleController < ApplicationController
 
       if user.nil?
         redirect_to errors_path(status_code: 401, error_type: "account_not_found") \
-          and return if !Rails.env.beta?
+          and return unless accessible_to_app_env?
         user = Services::CreatesNewUser.call(user_attributes)[:user]
         new_user = true
       end
