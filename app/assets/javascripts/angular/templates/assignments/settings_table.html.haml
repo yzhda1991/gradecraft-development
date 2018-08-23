@@ -51,13 +51,20 @@
               %assignment-date-picker(assignment="assignment")
 
             %td
-              .right
-                %ul.button-bar
-                  %li
-                    %a.button(href="/assignments/{{assignment.id}}/edit")
-                      %i.fa.fa-fw.fa-edit
-                      Edit
-                  %li
-                    %a.button(href="/assignments/{{assignment.id}}" data-confirm="Are you sure?" data-method="delete")
-                      %i.fa.fa-fw.fa-trash
-                      Delete
+              %a.button(href="/assignments/{{assignment.id}}/edit")
+                %i.fa.fa-fw.fa-edit
+                Edit
+              %a.button(href="/assignments/{{assignment.id}}" data-confirm="Are you sure?" data-method="delete")
+                %i.fa.fa-fw.fa-trash
+                Delete
+
+              -# .right
+              -#   %ul.button-bar
+              -#     %li
+              -#       %a.button(href="/assignments/{{assignment.id}}/edit")
+              -#         %i.fa.fa-fw.fa-edit
+              -#         Edit
+              -#     %li
+              -#       %a.button(href="/assignments/{{assignment.id}}" data-confirm="Are you sure?" data-method="delete")
+              -#         %i.fa.fa-fw.fa-trash
+              -#         Delete

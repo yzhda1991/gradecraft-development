@@ -98,6 +98,12 @@ table,
     color: $blue-medium_1
     padding: 0.35em 0.25em
     font-size: 0.85em
+    display: block
+    width: fit-content
+    margin: 0.5em 0
+
+  a.button
+    border-bottom-color: $blue-medium_1
 
   th.has_button
     button, .button
@@ -119,30 +125,12 @@ table,
       border-bottom-left-radius: 0
       border-top-left-radius: 0
 
-
-
 .main-buttons
   margin: 1em 0
 
   button, .button
     font-size: 1em
     margin-right: 1em
-
-thead
-  // .button
-    border: none
-    padding: .3rem
-    background-color: $color-blue-3
-    &:hover
-      background-color: $color-blue-4
-    &.select-all
-      border-top-right-radius: 0
-      border-bottom-right-radius: 0
-    &.select-none
-      border-top-left-radius: 0
-      border-bottom-left-radius: 0
-      margin-left: -5px
-      border-left: 1px solid $color-blue-4
 
 tbody
   ul.button-bar
@@ -157,9 +145,6 @@ tbody
       padding: 0
       margin-left: -5px
       text-align: left
-
-      .button
-        margin: 0.1em 0
 
 .quick-grade-button
   display: inline-block
