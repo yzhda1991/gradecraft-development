@@ -1,6 +1,6 @@
 - if learning_objective.numeric_progress(student) > 0
   .progress-bar
     .fill{ style: "width: #{learning_objective.percent_complete(student)}%" }
-  %span= "#{learning_objective.percent_complete(student)}%"
+  %span= "#{learning_objective.percent_complete(student)}% complete"
 - else
   .italic Not Yet Started

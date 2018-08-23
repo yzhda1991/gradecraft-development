@@ -10,7 +10,7 @@
 
       vm.termFor = (term) -> LearningObjectivesService.termFor(term)
 
-      vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id).flagged_value
+      vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id)?.flagged_value
       vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id)?.length
       vm.sortByPercentComplete = (student) -> vm.percentComplete(student.id)
       vm.sortBySubmittedAt = (assignment) -> vm.submittedAt(assignment.id)
