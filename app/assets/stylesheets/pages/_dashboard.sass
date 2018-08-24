@@ -29,12 +29,13 @@
 
   .flex-row
     margin-right: 1rem
-    width: 49%
+    min-width: 49%
     @media (max-width: $media-medium-max)
       width: 100%
 
   .stacked-column
-    width: 49%
+    min-width: 48%
+    flex: auto
     @media (max-width: $media-medium-max)
       width: 100%
 
@@ -162,8 +163,8 @@
   .predictions-label,
   .submissions-label
     padding: 0.25em
-    margin: 0.2em
-    font: 0.85em/1em 'ProximaNova_regular', sans-serif
+    margin: 0 0 0 0.2em
+    font: 0.85em/2em 'ProximaNova_regular', sans-serif
     text-transform: uppercase
 
   .predictions-label
