@@ -24,6 +24,10 @@ class LearningObjective < ApplicationRecord
 
   scope :ordered_by_name, -> { order :name }
 
+  def linked_assignments_count
+    learning_objective_links.count
+  end
+
   def progress(student, include_details=false)
     cumulative_outcome = cumulative_outcomes.for_user(student.id).first
     return NOT_STARTED_STATUS if cumulative_outcome.nil?
@@ -33,6 +37,21 @@ class LearningObjective < ApplicationRecord
     else
       grade_outcome_progress_for cumulative_outcome, include_details
     end
+  end
+
+  def numeric_progress(student)
+    cumulative_outcome = cumulative_outcomes.for_user(student.id).first
+    return 0 if cumulative_outcome.nil?
+
+    cumulative_outcome
+      .observed_outcomes
+      .for_student_visible_grades
+      .shows_proficiency
+      .count
+  end
+
+  def percent_complete(student)
+    ((numeric_progress(student) / count_to_achieve.to_f) * 100).round(2)
   end
 
   def point_progress_for(cumulative_outcome, include_details)

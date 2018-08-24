@@ -1,0 +1,25 @@
+%span.has-tooltip{"ng-if"=>"descriptorIconsCtrl.assignment.has_groups"}
+  %i.fa.fa-group
+  .display-on-hover.hover-style
+    This {{descriptorIconsCtrl.termFor("assignment")}} is completed by {{descriptorIconsCtrl.termFor("students")}} in {{descriptorIconsCtrl.termFor("groups")}}
+
+%span.has-tooltip{"ng-if"=>"descriptorIconsCtrl.assignment.is_locked"}
+  %i.fa.fa-lock
+  .display-on-hover.hover-style
+    %ul.icon-list
+      %li{"ng-repeat"=>"condition in descriptorIconsCtrl.assignment.unlock_conditions"}
+        {{condition}}
+
+%span.has-tooltip{"ng-if"=>"descriptorIconsCtrl.assignment.has_been_unlocked"}
+  %i.fa.fa-unlock
+  .display-on-hover.hover-style
+    %ul.icon-list
+      %li{"ng-repeat"=>"condition in descriptorIconsCtrl.assignment.unlocked_conditions"}
+        {{condition}}
+
+%span.has-tooltip{"ng-if"=>"descriptorIconsCtrl.assignment.is_a_condition"}
+  %i.fa.fa-key
+  .display-on-hover.hover-style
+    %ul.icon-list
+      %li{"ng-repeat"=>"key in descriptorIconsCtrl.assignment.unlock_keys"}
+        {{key}}

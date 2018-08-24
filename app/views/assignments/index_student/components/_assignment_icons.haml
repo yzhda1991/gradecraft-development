@@ -32,6 +32,10 @@
       %span.flag
         = tooltip("submitted-assignment-tip_#{assignment.id}", "file-text-o") do
           You have a draft of this #{term_for :assignment} submission. Be sure to submit it before the due date!
+    - elsif presenter.submission_for(assignment).resubmitted?
+      %span.checkmark
+        = tooltip("resubmitted-assignment-tip_#{assignment.id}", :exchange) do
+          You have successfully resubmitted this #{term_for :assignment}
     - else
       %span.checkmark
         = tooltip("submitted-assignment-tip_#{assignment.id}", :paperclip) do
