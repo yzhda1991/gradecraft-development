@@ -1,14 +1,15 @@
 = render partial: "layouts/alerts", locals: { model: @course }
 
-%section.pilot
-  .student-pilot
-    .pilot-container
-      %h1.pageTitle Let's create your course:
+.login
+  .login-form-container
+    %h1 Now, let’s create your course:
 
-      = simple_form_for @course, url: create_external_courses_path(user_id: @user.id), :method => :post do |f|
-        .form-item= f.input :name, label: "Course Name"
-        .form-item= f.input :course_number
+    = simple_form_for @course, url: create_external_courses_path(user_id: @user.id), :method => :post do |f|
+      .form_elem
+        = f.input_field :name, placeholder: "Name of your course", :required=>"true"
+        = label_tag :name, 'Course Name'
+      .form_elem
+        = f.input :course_number, placeholder: "Number of your course", :required=>"true"
+        = label_tag :course_number, 'Course #'
 
-        .submit-buttons
-          %ul
-            %li= f.button :submit, "Let's go!", class: "button"
+      = f.submit "Let’s go!", class: "button action"

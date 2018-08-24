@@ -22,6 +22,6 @@
     .form-item
       = f.association :leaders, as: :check_boxes, :collection => current_course.staff
 
-  .submit-buttons
+  .main-buttons
     = f.submit "#{@team.persisted? ? 'Update' : 'Create'} #{ term_for :team }", class: "button action"
     = link_to glyph("times-circle") + "Cancel", teams_path, class: "button secondary"
