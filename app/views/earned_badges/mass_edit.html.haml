@@ -10,25 +10,21 @@
           %tr
             %th{:width => "50%"} Name
             %th{:width => "15%"} Earned
-            %th{"data-dynatable-no-sort" => "true", :width => "140px" }
-              .center
-                %button.button.select-all{role: "button", type: "button"}
-                  %i.hide-for-small.fa.fa-check-square.fa-fw
-                  = "Check"
-                %button.button.select-none{role: "button", type: "button"}
-                  %i.hide-for-small.fa.fa-square.fa-fw
-                  = "Uncheck"
+            %th.has_button{"data-dynatable-no-sort" => "true", :width => "140px" }
+              %button.button.select-all{role: "button", type: "button"}
+                = "Check"
+              %button.button.select-none{role: "button", type: "button"}
+                = "Uncheck"
         - @earned_badges.each do |earned_badge|
           %tr
             %td= link_to earned_badge.student.name, student_path(earned_badge.student)
             %td
               - earned_badge.student.earned_badges.where(badge_id: @badge).each do |earned_badge|
                 %img{:src => earned_badge.badge.try(:icon), :alt => earned_badge.badge.try(:name), :width => "25", :height => "25"}
-            %td.center
+            %td
               - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(badge_id: @badge).present?
                 %input(type="checkbox" id="student-id-#{earned_badge[:student_id]}" name="student_ids[]" value="#{earned_badge[:student_id]}")
 
-      .submit-buttons
-        %ul
-          %li= active_course_submit_tag "Award Badge", class: "button"
-          %li= link_to glyph("times-circle") + "Cancel", badges_path, class: "button"
+      .main-buttons
+        = active_course_submit_tag "Award Badge", class: "button"
+        = link_to glyph("times-circle") + "Cancel", badges_path, class: "button secondary"
