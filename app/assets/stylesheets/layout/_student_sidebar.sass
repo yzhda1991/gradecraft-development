@@ -13,10 +13,9 @@
   width: auto
   overflow: hidden
   min-height: 100%
-  border-right: 1px solid $color-grey-6
 
 .staff .student-panel
-  margin-top: -2.75rem
+  margin-top: -4.85em
 
 .student-panel
   max-width: 400px
@@ -24,6 +23,7 @@
   height: 100%
   position: relative
   z-index: 18
+  border-left: 1px solid $grey_1
   @media (max-width: $media-medium-max)
     display: none
   .align-box
@@ -43,6 +43,8 @@
     z-index: 50
     position: fixed
     width: 400px
+    height: 100vh
+    overflow-y: scroll
 
   img
     display: block
@@ -51,7 +53,7 @@
 
   .student-panel-content
     overflow-x: auto
-    max-height: 100vh
+    // max-height: 100vh
     padding: 1em 1em 200px 1em
 
   .student-panel-text-block
