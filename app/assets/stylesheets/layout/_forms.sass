@@ -397,10 +397,41 @@ ul.locked-display li
   text-align: right
   display: block
 
-// dynatable pagination
+/* dynatable pagination */
+.dynatable-pagination-links
+  list-style-type: none
+  padding: 0
+  margin: 1.5em 0 0 0
+
+  li
+    display: inline-block
+    margin: 0 0.5em 0 0
+
+    &.dynatable-disabled-page
+      a
+        color: $grey_3
+        cursor: default
+        font-family: 'ProximaNova_regular', sans-serif
+
+  a
+    border-color: transparent
+    display: inline-block
+    min-width: 1em
+    text-align: center
+
+.dynatable-record-count
+  font-size: 0.9em
+
 select.dynatable-per-page-select,
 .team-filter select
   display: inline-block
+
+.dynatable-search
+  display: inline-block
+  margin: 0 1em 1em 0
+
+  input[type="search"]
+    display: inline-block
 
 // select to filter teams
 .team-filter
