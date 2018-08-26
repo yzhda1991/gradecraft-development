@@ -53,6 +53,12 @@ class ExportsMailer < ApplicationMailer
     send_export_email "Gradebook export for #{ course.name } is attached"
   end
 
+  def learning_objectives_outcomes_exporter(course, user, filename, csv_data)
+    set_export_ivars(course, user)
+    attachments["#{ course.name } Learning Objectives Outcomes - #{ Date.today }.csv"] = csv_attachment(csv_data)
+    send_export_email "Learning Objectives Outcomes export for #{ course.name } is attached"
+  end
+
   def created_courses_export(csv)
     @dates = { today: Date.today.strftime("%B %d, %Y"), last_month: 1.month.ago.strftime("%B %d, %Y") }
     attachments["export.csv"] = csv_attachment(csv)
