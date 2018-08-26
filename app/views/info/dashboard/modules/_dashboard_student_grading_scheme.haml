@@ -35,7 +35,6 @@ You have earned
   .progress.bar_magic.current.center.no-level
     %span.your-rank Your rank: Not on the board yet!
 
-
 - if presenter.previous_element.present?
   .progress.bar_magic.success.center
     .meter
@@ -45,7 +44,7 @@ You have earned
       %span=points presenter.previous_element.lowest_points
 
 - if current_course.has_badges?
-  %p= term_for :badges
+  %p.bold= term_for :badges
   %ul.badge-grid
     - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
       %li

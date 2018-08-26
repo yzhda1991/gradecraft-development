@@ -1,0 +1,12 @@
+.card-header
+  %h2
+    = term_for(:learning_objectives)
+.card-body
+  %table
+    - current_course.learning_objectives.each do |o|
+      %tr
+        %td
+          = link_to o.name, learning_objectives_objective_path(o)
+        %td
+          = render partial: "learning_objectives/components/progress_bar",
+        locals: { learning_objective: o, student: current_student }

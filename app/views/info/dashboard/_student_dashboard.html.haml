@@ -9,6 +9,9 @@
       .panel.todo.dashboard-module
         %dashboard-to-do-list
 
+      - if current_course.learning_objectives.present?
+        .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_learning_objectives"
+
       - if current_course.has_multipliers?
         .panel.dashboard-module= render partial: "info/dashboard/modules/dashboard_assignment_weights"
 
