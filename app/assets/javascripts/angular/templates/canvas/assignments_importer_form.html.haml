@@ -41,20 +41,17 @@
                    "ng-model"=>"assignment.selected_for_import",
                    "ng-required"=>"!hasSelectedAssignments()"}
 
-    .submit-buttons
-      .right
-        %p
-          %select{"required"=>"",
-                  "ng-model"=>"vm.selectedAssignmentType",
-                  "value"=>"assignment_type_id",
-                  "ng-disabled"=>"vm.loading",
-                  "name"=>"assignment_type_id"}
-            %option{"value"=>""} Select an assignment type
-            %option{"ng-repeat"=>"type in vm.assignmentTypes", "value"=>"{{type.id}}"}
-              {{type.name}}
-        %p
-          %input{"type"=>"submit",
-                 "class"=>"button",
-                 "ng-disabled"=>"!hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted",
-                 "ng-class"=>"{'disabled': !hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted}",
-                 "value"=>"Import Selected Assignments into {{vm.currentCourseName}}"}
+    .main-buttons
+      %select{"required"=>"",
+              "ng-model"=>"vm.selectedAssignmentType",
+              "value"=>"assignment_type_id",
+              "ng-disabled"=>"vm.loading",
+              "name"=>"assignment_type_id"}
+        %option{"value"=>""} Select an assignment type
+        %option{"ng-repeat"=>"type in vm.assignmentTypes", "value"=>"{{type.id}}"}
+          {{type.name}}
+      %br
+      %input.button.action{"type"=>"submit",
+                           "ng-disabled"=>"!hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted",
+                           "ng-class"=>"{'disabled': !hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted}",
+                           "value"=>"Import Selected Assignments into {{vm.currentCourseName}}"}
