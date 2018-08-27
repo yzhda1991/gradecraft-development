@@ -50,24 +50,23 @@
           %td {{grade.formatted_score}}
           %td {{grade.feedback}}
           %td
-            .right
-              %ul.button-bar
-                %li
-                  %a.button{"ng-if"=>"grade.see_grade_path", "ng-href"=>"{{grade.see_grade_path}}"}
-                    %i.fa.fa-eye
-                    See Grade
-                %li{"ng-if"=>"grade.edit_grade_link",
-                    "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_grade_link)"}
-                %li{"ng-if"=>"grade.edit_group_grade_link",
-                    "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_group_grade_link)"}
-                %td{"ng-if"=>"::gsGradesCtrl.linksVisible"}
-                  .center
-                    %label
-                      %span.sr-only Select grade to update status
-                      %input{"type"=>"checkbox",
-                             "ng-value"=>"grade.id",
-                             "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
-                             "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
+            %ul.button-bar
+              %li
+                %a.button{"ng-if"=>"grade.see_grade_path", "ng-href"=>"{{grade.see_grade_path}}"}
+                  %i.fa.fa-eye
+                  See Grade
+              %li{"ng-if"=>"grade.edit_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_grade_link)"}
+              %li{"ng-if"=>"grade.edit_group_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_group_grade_link)"}
+              %td{"ng-if"=>"::gsGradesCtrl.linksVisible"}
+                .center
+                  %label
+                    %span.sr-only Select grade to update status
+                    %input{"type"=>"checkbox",
+                           "ng-value"=>"grade.id",
+                           "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
+                           "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
 
     .main-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
       %a.button{"type"=>"button",
