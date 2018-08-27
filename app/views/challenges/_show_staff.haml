@@ -8,15 +8,15 @@
           %th Level
         %th Student Visible
         %th
-        %th.center{"data-dynatable-no-sort" => "true" }
+        %th.center.has_button{"data-dynatable-no-sort" => "true" }
           %button.button.select-all{role: "button", type: "button"}= "Check All"
           %button.button.select-none{role: "button", type: "button"}= "Uncheck"
 
-    %h2.subtitle Description
+    %h2 Description
     .challenge-description
       = raw @challenge.description
 
-    %h2.subtitle Scores
+    %h2 Scores
     %tbody
       - @teams.alpha.each do |team|
         - challenge_grade = @challenge.challenge_grades.find_by team: team
