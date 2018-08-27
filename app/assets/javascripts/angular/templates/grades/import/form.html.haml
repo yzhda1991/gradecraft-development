@@ -76,10 +76,8 @@
                   Importing this grade would override the existing grade in GradeCraft with the grade from
                   %span.capitalize {{vm.provider}}
 
-    .submit-buttons
-      .right
-        %input{"type"=>"submit",
-               "class"=>"button",
-               "ng-disabled"=>"vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted",
-               "ng-class"=>"{'disabled': vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted}",
-               "value"=>"Import Selected Grades Into {{vm.assignmentName}}"}
+    .main-buttons
+      %input.button.action{"type"=>"submit",
+                           "ng-disabled"=>"vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted",
+                           "ng-class"=>"{'disabled': vm.loading || !vm.hasSelectedGrades() || vm.formSubmitted}",
+                           "value"=>"Import Selected Grades Into {{vm.assignmentName}}"}

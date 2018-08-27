@@ -37,8 +37,6 @@
             - else
               %td= points assignment.full_points
 
-    .submit-buttons
-      .right
-        %ul
-          %li= submit_tag "Copy Rubric To Assignment", class: "button disabled", disabled: true, data: { behavior: "selected-rubric-command" }
-          %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), class: "button"
+    .main-buttons
+      = submit_tag "Copy Rubric To Assignment", class: "button disabled action", disabled: true, data: { behavior: "selected-rubric-command" }
+      = link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), class: "button secondary"

@@ -28,9 +28,8 @@
           = f.label :email_cont
           = f.search_field :email_cont
 
-        .submit-buttons
-          %ul
-            %li= f.submit "Search", class: :button
+        .main-buttons
+          = f.submit "Search", class: "button action"
 
   - if @users.present?
     .form-subsection

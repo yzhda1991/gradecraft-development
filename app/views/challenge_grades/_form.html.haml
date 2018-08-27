@@ -28,7 +28,7 @@
       = f.text_area :adjustment_points_feedback
 
     .clear
-  .submit-buttons
-    %ul
-      %li= active_course_submit_tag "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"
+
+  .main-buttons
+    = active_course_submit_tag "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}", class: "button action"
+    = link_to glyph("times-circle") + "Cancel", challenges_path, class: "button secondary"
