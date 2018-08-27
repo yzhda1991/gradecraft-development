@@ -24,7 +24,6 @@
       = f.simple_fields_for :providers, Provider.new, class: "form-inline" do |pf|
         = render partial: "institutions/components/provider_fields", locals: { f: pf }
 
-  .submit-buttons
-    %ul
-      %li= submit_tag "#{@institution.persisted? ? "Update" : "Create"} Institution", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", institutions_path, class: "button"
+  .main-buttons
+    = submit_tag "#{@institution.persisted? ? "Update" : "Create"} Institution", class: "button"
+    = link_to glyph("times-circle") + "Cancel", institutions_path, class: "button secondary"

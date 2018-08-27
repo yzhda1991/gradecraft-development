@@ -16,7 +16,6 @@
                 - else
                   = cgf.input :raw_points, label: false, input_html: { data: { autonumeric: true, "m-dec" => "0" }, type: "text" }
 
-      .submit-buttons
-        %ul
-          %li= f.button :submit, "Submit"
-          %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"
+      .main-buttons
+        = f.button :submit, "Submit", class: "action"
+        = link_to glyph("times-circle") + "Cancel", challenges_path, class: "button secondary"
