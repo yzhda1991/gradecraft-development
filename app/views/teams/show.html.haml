@@ -6,7 +6,7 @@
   - if @team.banner.present?
     %img{:src => @team.banner, :height => 150 }
 
-  %h2.subtitle= "#{term_for :student} Roster"
+  %h2= "#{term_for :student} Roster"
 
   %table.dynatable.no-table-header
     %thead
@@ -39,12 +39,11 @@
                   #{badge.try(:name)}
             %th.hidden= student.earned_badges_for_course(current_course).count
           %td
-            .right
-              %ul.button-bar
-                %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
-                = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student), class: "button"
+            %ul.button-bar
+              %li= link_to decorative_glyph(:dashboard) + "Dashboard", student_path(student), class: "button"
+              = active_course_link_to decorative_glyph(:edit) + "Edit", edit_user_path(student), class: "button"
 
-  %h2.subtitle #{term_for :challenge } Grades
+  %h2 #{term_for :challenge } Grades
 
   %table.unfancy_dynatable
     %thead
@@ -59,11 +58,11 @@
           %td= link_to challenge.name, challenge
           %td= points challenge.challenge_grade_for_team(@team).try(:score)
           %td
-            .button-container.dropdown
+            .button-container.dropdown.right
               %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
               %ul.options-menu.dropdown-content
                 - if challenge.challenge_grade_for_team(@team).present?
-                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
+                  = active_course_link_to decorative_glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id)
                   = active_course_link_to decorative_glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), data: { confirm: "Are you sure you want to delete #{@team.name}'s grade for #{challenge.name}?", method: :delete }
                 - else
                   = active_course_link_to decorative_glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id)
