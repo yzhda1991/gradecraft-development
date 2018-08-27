@@ -9,7 +9,7 @@
         = f.input_field :name, placeholder: "Name of your course", :required=>"true"
         = label_tag :name, 'Course Name'
       .form_elem
-        = f.input :course_number, placeholder: "Number of your course", :required=>"true"
+        = f.input_field :course_number, placeholder: "Number of your course", :required=>"true"
         = label_tag :course_number, 'Course #'
 
       = f.submit "Let’s go!", class: "button action"
