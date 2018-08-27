@@ -63,6 +63,16 @@ class ExportsMailerPreview < ActionMailer::Preview
     ExportsMailer.gradebook_export course, user, "gradebook_export", csv_data
   end
 
+  def learning_objectives_outcomes_exporter
+    course = Course.find(7)
+    ExportsMailer.learning_objectives_outcomes_exporter(
+      course,
+      user = User.find(3),
+      csv_data = course.learning_objectives.to_a.to_csv
+    )
+    ExportsMailer.learning_objectives_outcomes_exporter course, user, "learning_objectives_outcomes_exporter", csv_data
+  end
+
   def created_courses_export
     csv_data = CreatedCoursesExporter::BASELINE_HEADERS
     ExportsMailer.created_courses_export csv_data

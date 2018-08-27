@@ -252,6 +252,7 @@ Rails.application.routes.draw do
     get :export_earned_badges
     get :final_grades
     get :gradebook
+    get :learning_objectives_outcomes_file
     get :submissions
     get :grading_status
     get :gradebook_file
