@@ -123,13 +123,10 @@
           %td{"ng-if"=>"!vm.assignment.pass_fail"}
             {{(gbg.raw_points | number) || '-'}} / {{vm.assignment.full_points | number}}
 
-    .submit-buttons
-      %ul
-        %li
-          %input{"type"=>"submit",
-                 "class"=>"button",
-                 "value"=>"Submit Grades"}
-        %li
-          %a{"href"=>"{{vm.formCancelRoute}}", "class"=>"button"}
-            %i.fa.fa-times-circle
-            Cancel
+    .main-buttons
+      %input{"type"=>"submit",
+             "class"=>"button action",
+             "value"=>"Submit Grades"}
+      %a{"href"=>"{{vm.formCancelRoute}}", "class"=>"button secondary"}
+        %i.fa.fa-times-circle
+        Cancel

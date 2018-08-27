@@ -78,18 +78,15 @@
                     %select{"ng-model"=>"row.required",
                             "ng-options"=>"option.value as option.display_string for option in vm.booleanValues"}
 
-        .submit-buttons
-          %ul
-            %li
-              %input{"type"=>"submit",
-                     "class"=>"button",
-                     "value"=>"Import",
-                     "ng-disabled"=>"vm.submitted",
-                     "ng-class"=>'{"disabled": vm.submitted}'}
-            %li
-              %a{"href"=>"{{vm.cancelPath}}", "class"=>"button"}
-                %i.fa.fa-times-circle
-                Cancel
+        .main-buttons
+          %input{"type"=>"submit",
+                 "class"=>"button action",
+                 "value"=>"Import",
+                 "ng-disabled"=>"vm.submitted",
+                 "ng-class"=>'{"disabled": vm.submitted}'}
+          %a{"href"=>"{{vm.cancelPath}}", "class"=>"button secondary"}
+            %i.fa.fa-times-circle
+            Cancel
 
     .right
       %p{"ng-if"=>"vm.newAssignmentTypes().length > 0"}

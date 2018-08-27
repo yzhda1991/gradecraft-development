@@ -50,6 +50,15 @@
       background: $pink_2
       border-bottom-color: $pink_2
 
+    &:disabled, &.disabled
+      background: $grey_1
+      color: $grey_4
+      border: 2px solid $grey_2
+      cursor: not-allowed
+
+      &:hover
+        border-bottom-color: $grey_2
+
   //&:active
     //background-color: $color-green-2
     background: $pink_1

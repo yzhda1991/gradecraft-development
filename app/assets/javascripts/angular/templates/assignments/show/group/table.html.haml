@@ -15,12 +15,10 @@
            "data-assignment-id"=>"{{::groupTableCtrl.assignmentId}}",
            "data-links-visible"=>"{{::groupTableCtrl.linksVisible}}"}
 
-  .submit-buttons{"ng-if"=>"groupTableCtrl.linksVisible && groupTableCtrl.hasUnreleasedGrades()"}
-    %ul
-      %li
-        .button.submit{"type"=>"button",
-                       "ng-click"=>"groupTableCtrl.releaseGrades()",
-                       "ng-class"=>"{ disabled: !groupTableCtrl.hasSelectedGrades() }",
-                       "ng-disabled"=>"!groupTableCtrl.hasSelectedGrades()"}
-          %i.fa.fa-share-square-o
-          Release Selected Grades
+  .main-buttons{"ng-if"=>"groupTableCtrl.linksVisible && groupTableCtrl.hasUnreleasedGrades()"}
+    .button.submit{"type"=>"button",
+                   "ng-click"=>"groupTableCtrl.releaseGrades()",
+                   "ng-class"=>"{ disabled: !groupTableCtrl.hasSelectedGrades() }",
+                   "ng-disabled"=>"!groupTableCtrl.hasSelectedGrades()"}
+      %i.fa.fa-share-square-o
+      Release Selected Grades

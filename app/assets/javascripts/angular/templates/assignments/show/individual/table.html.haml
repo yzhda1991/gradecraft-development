@@ -14,12 +14,10 @@
     %thead{"assignment-show-individual-table-header"=>""}
     %tbody{"assignment-show-individual-table-body"=>"", "data-links-visible"=>"{{individualTableCtrl.linksVisible}}"}
 
-  .submit-buttons{"ng-if"=>"individualTableCtrl.linksVisible && individualTableCtrl.hasUnreleasedGrades()"}
-    %ul
-      %li
-        .button.submit{"type"=>"button",
-                       "ng-click"=>"individualTableCtrl.releaseGrades()",
-                       "ng-class"=>"{ disabled: !individualTableCtrl.hasSelectedGrades() }",
-                       "ng-disabled"=>"!individualTableCtrl.hasSelectedGrades()"}
-          %i.fa.fa-share-square-o
-          Release Selected Grades
+  .main-buttons{"ng-if"=>"individualTableCtrl.linksVisible && individualTableCtrl.hasUnreleasedGrades()"}
+    .button.submit{"type"=>"button",
+                   "ng-click"=>"individualTableCtrl.releaseGrades()",
+                   "ng-class"=>"{ disabled: !individualTableCtrl.hasSelectedGrades() }",
+                   "ng-disabled"=>"!individualTableCtrl.hasSelectedGrades()"}
+      %i.fa.fa-share-square-o
+      Release Selected Grades
