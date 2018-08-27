@@ -23,7 +23,7 @@
         - if current_course.learning_objectives.present?
           %tr
             %td= link_to glyph("file-excel-o") + "Learning Objectives Outcomes", learning_objectives_outcomes_file_path(id: current_course.id, format: "csv")
-            %td First Name, Last Name, Email, Username, #{ term_for :team }, current outcomes for all #{ term_for :learning_objectives }
+            %td First Name, Last Name, Email, Username, #{ term_for :team }, Current Outcomes for All #{ term_for :learning_objectives }
         %tr
           %td
             = link_to glyph("file-excel-o") + "#{(term_for :assignment_type).titleize } Summaries", export_all_scores_assignment_types_path(id: current_course.id, format: "csv")

@@ -80,7 +80,7 @@ class InfoController < ApplicationController
         course_id: course.id,
         filename: "#{ course.name } Learning Objectives Outcomes - #{ Date.today }.csv"
       ).enqueue
-
+      
     flash[:notice]="Your request to export the learning objectives outcomes for \"#{ course.name }\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
   end

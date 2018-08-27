@@ -10,7 +10,7 @@ class LearningObjectivesOutcomesExportPerformer < ResqueJob::Performer
     if @course.present? && @user.present?
       require_success(fetch_csv_messages, max_result_size: 250) do
        fetch_csv_data(@course)
-     end
+      end
 
       require_success(notification_messages, max_result_size: 200) do
         notify_learning_objective_outcomes_exporter # the result of this block determines the outcome
@@ -30,7 +30,7 @@ class LearningObjectivesOutcomesExportPerformer < ResqueJob::Performer
   end
 
   def fetch_csv_data(course)
-    @csv_data = LearningObjectivesOutcomesExporter.new.learning_objective_outcome(course)
+    @csv_data = LearningObjectivesOutcomesExporter.new(course).learning_objective_outcomes
   end
 
   def notify_learning_objectives_outcomes_export
