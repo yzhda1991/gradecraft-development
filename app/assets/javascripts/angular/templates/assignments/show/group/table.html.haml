@@ -16,7 +16,7 @@
            "data-links-visible"=>"{{::groupTableCtrl.linksVisible}}"}
 
   .main-buttons{"ng-if"=>"groupTableCtrl.linksVisible && groupTableCtrl.hasUnreleasedGrades()"}
-    .button.submit{"type"=>"button",
+    .button.action{"type"=>"button",
                    "ng-click"=>"groupTableCtrl.releaseGrades()",
                    "ng-class"=>"{ disabled: !groupTableCtrl.hasSelectedGrades() }",
                    "ng-disabled"=>"!groupTableCtrl.hasSelectedGrades()"}

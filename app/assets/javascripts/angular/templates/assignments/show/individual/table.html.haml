@@ -15,7 +15,7 @@
     %tbody{"assignment-show-individual-table-body"=>"", "data-links-visible"=>"{{individualTableCtrl.linksVisible}}"}
 
   .main-buttons{"ng-if"=>"individualTableCtrl.linksVisible && individualTableCtrl.hasUnreleasedGrades()"}
-    .button.submit{"type"=>"button",
+    .button.action{"type"=>"button",
                    "ng-click"=>"individualTableCtrl.releaseGrades()",
                    "ng-class"=>"{ disabled: !individualTableCtrl.hasSelectedGrades() }",
                    "ng-disabled"=>"!individualTableCtrl.hasSelectedGrades()"}
