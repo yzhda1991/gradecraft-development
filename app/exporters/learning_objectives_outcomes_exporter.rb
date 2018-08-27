@@ -22,7 +22,7 @@ class LearningObjectivesOutcomesExporter
   end
 
   def learning_objective_name_columns
-    @course.learning_objectives.collect(&:name)
+    @course.learning_objectives.pluck(:name)
   end
 
   def learning_objective_outcomes_columns
@@ -30,7 +30,7 @@ class LearningObjectivesOutcomesExporter
   end
 
   def base_student_methods
-    [:first_name, :last_name, :email, :username]
+    [:first_name, :last_name, :email, :username].freeze
   end
 
   def student_data_for(student)

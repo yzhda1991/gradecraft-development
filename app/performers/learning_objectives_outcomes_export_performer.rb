@@ -25,7 +25,7 @@ class LearningObjectivesOutcomesExportPerformer < ResqueJob::Performer
   end
 
   def fetch_course
-    Course.find @attrs[:course_id]
+    Course.includes(:learning_objectives).find @attrs[:course_id]
   end
 
   def fetch_csv_data(course)
