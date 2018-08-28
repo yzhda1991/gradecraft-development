@@ -55,7 +55,6 @@
         .form-hint How would you like to describe this #{term_for :assignment} type on the student dashboard? Are there hints that you can give students that will help them understand how to succeed?
         = f.text_area :description, :label => "Description", class: "froala"
 
-  .submit-buttons
-    %ul
-      %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
-      %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"
+  .main-buttons
+    = f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
+    = link_to glyph("times-circle") + "Cancel", assignments_path, class: "button secondary"

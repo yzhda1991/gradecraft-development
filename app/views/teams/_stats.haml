@@ -27,7 +27,7 @@
         - if current_user_is_staff? && current_course.has_badges?
           %td= points team.badge_count
         %td
-          .button-container.dropdown
+          .button-container.dropdown.right
             %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
             %ul.options-menu.dropdown-content
               = active_course_link_to decorative_glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team)

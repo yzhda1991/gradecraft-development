@@ -32,9 +32,8 @@
         .ui-tabs-panel#tab6{role: "tabpanel", "aria-hidden" => false }
           = render partial: "courses/admin_only", locals: { f: f }
 
-    .submit-buttons
-      %ul
-        %li= f.button :submit, "#{@course.persisted? ? 'Save Settings' : 'Create Course'}", class: "button"
-        %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"
-        - if @course.published?
-          %li= link_to glyph(:rocket) + "Unpublish", unpublish_course_path(@course), method: :put, class: "button"
+    .main-buttons
+      = f.button :submit, "#{@course.persisted? ? 'Save Settings' : 'Create Course'}", class: "button action"
+      = link_to glyph("times-circle") + "Cancel", courses_path, class: "button secondary"
+      - if @course.published?
+        = link_to glyph(:rocket) + "Unpublish", unpublish_course_path(@course), method: :put, class: "button"

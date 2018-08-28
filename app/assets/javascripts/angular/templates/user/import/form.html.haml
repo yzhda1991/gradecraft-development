@@ -23,12 +23,10 @@
     %users-with-changes
     %users-without-changes
 
-    .submit-buttons
-      .right
-        %button{"type"=>"submit",
-                "class"=>"button",
-                "ng-click"=>"vm.importUsers()",
-                'ng-class'=>'{"disabled": !hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted}',
-                "ng-disabled"=>"!hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted"}
-          %i.fa.fa-download
-          Import Users
+    .main-buttons
+      %button.button.action{"type"=>"submit",
+                            "ng-click"=>"vm.importUsers()",
+                            'ng-class'=>'{"disabled": !hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted}',
+                            "ng-disabled"=>"!hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted"}
+        %i.fa.fa-download
+        Import Users

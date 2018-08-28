@@ -21,9 +21,8 @@
       = label_tag "send_welcome", "Send welcome email to new user accounts", { class: "disabled" }
     = file_field_tag "file"
 
-    .submit-buttons
-      %ul
-        %li= submit_tag("Import", class: :button)
+    .main-buttons
+      = submit_tag("Import", class: "button action")
 
   - if current_user_is_admin?
     %h4 K-12 Import: Import as activated accounts with passwords

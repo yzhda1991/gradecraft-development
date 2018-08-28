@@ -3,8 +3,7 @@
 table
   clear: both
   border-spacing: 0
-  font-size: .9rem
-  font-weight: 300
+  font-size: 1em
   text-align: left
   width: 100%
   background-color: $color-white
@@ -17,7 +16,9 @@ table
     border-bottom: 1px solid $color-grey-6
 
   td
-    padding: .5rem
+    //padding: .5rem
+    padding: 0.5em 0.25em
+
     &.center
         text-align: center !important
     .button-container.dropdown
@@ -28,24 +29,36 @@ table
       display: inherit
 
   thead
-    background-color: $color-blue-2
-    color: $color-white
+    background-color: $blue-medium_2
+    color: white
+    text-transform: capitalize
+    font-size: 0.9em
 
     th
-      padding: .5rem
-      font-weight: 300
-      text-transform: uppercase
-      font-size: .8rem
+      padding: 0.5em 0.25em
 
-      a, a.active, a.sorted
-        color: $color-white !important
+      a,
+      a.active,
+      a.sorted
+        color: white !important
+        font: 0.9em/1em 'ProximaNova_light', serif
+
+        &:hover
+          text-decoration: none
+
+        span
+          font-size: 0.5em
+          margin-left: 2em
 
       span[tabindex="0"]
         color: $color-white
 
+      /* table last column "options" _=^o.o^= */
       &.options
-        text-align: right
+        width: 4em
 
+      &.has_button
+        min-width: 150px
 
 .scroll-table
   overflow: hidden
@@ -117,24 +130,10 @@ i.missing_grade
     th.draggable, td.draggable
       display: none
 
-@media (max-width: 1200px)
+@media (max-width: $media-1200)
   table
     th, td
-      padding: .25rem
-      font-size: .7rem
-
-  tbody ul.button-bar li a.button
-    border-radius: $global-radius
-    display: block
-    margin-bottom: .2rem !important
-
-@media (max-width: $media-medium-max)
-  tbody ul.button-bar li a.button
-    font-size: .6rem
-    display: inline-block
-
-  tbody ul.button-bar li:not(:last-of-type) a.button
-    margin-right: .2rem
+      padding: 0.25em
 
 @media (max-width: 800px)
   tbody ul.button-bar li

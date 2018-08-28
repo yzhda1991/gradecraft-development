@@ -29,7 +29,8 @@
 
   = render partial: "groups/proposal_section", locals: { f: f }
 
-  .submit-buttons
-    %ul
-      %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", groups_path, class: "button"
+  %p
+
+  .main-buttons
+    = submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  class: "button action"
+    = link_to glyph("times-circle") + "Cancel", groups_path, class: "button secondary"

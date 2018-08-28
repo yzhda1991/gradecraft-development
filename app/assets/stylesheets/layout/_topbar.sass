@@ -26,25 +26,30 @@ a.site-title
   top: 0 !important
   z-index: 99
   height: 45px !important
+  font-size: 0.9em
+
+  .course-site
+    a
+      font-family: 'ProximaNova_regular', sans-serif
+      border: 0px solid transparent
+      color: white
 
 .logged-out
   .navbar
     background-color: $color-blue-1
 
 .the-nav
-  background-color: $color-blue-1
+  background-color: $blue_dark
   height: 45px
 
   .nav-button
-    font-size: 0.9rem
-    font-weight: 300
-    padding: 0.8rem 0.5rem 0.95rem 0.5rem
+    border: 0px solid transparent
+    margin-top: 0.15em
+
     &.announcement
       position: relative
       i
         padding-right: 0
-    &:hover
-      color: $color-blue-5
 
 ul.subnav.logged-out
   left: -6.25rem
@@ -83,7 +88,6 @@ ul.subnav.logged-out
 .the-nav > .nav > li
   display: inline-block
   margin-bottom: 0
-  font-size: .9rem
 
 .gc-mark
   display: none
@@ -134,7 +138,7 @@ ul.subnav.logged-out
   .nav > li a
     display: block
     padding: .5rem
-    color: $color-white
+    //color: $color-white
     text-decoration: none
     .course_name
       margin-left: .25rem
@@ -160,19 +164,20 @@ ul.subnav.logged-out
     color: $color-white
 
   /* Subnav */
-
   .nav > li > .subnav
     display: none
     position: absolute
+    top: 40px
     right: 0
     z-index: 20
     margin: 0
     padding: 0
-    min-width: 150px
-    font-size: .8rem
-    background: $color-blue-4
-    border-bottom-left-radius: $global-radius
-    border-bottom-right-radius: $global-radius
+    min-width: 160px
+    font-size: 0.9em
+    background: $bg-blue
+    border: 2px solid $blue_dark
+    //border-bottom-left-radius: $global-radius
+    //border-bottom-right-radius: $global-radius
     &.class-info
       min-width: 260px
   .nav > li > .subnav > li
@@ -181,9 +186,10 @@ ul.subnav.logged-out
   .nav > li > .subnav > li.not-a-link
     padding: 6px 10px
   .nav > li > .subnav > li a
-    color: $color-black
+    //color: $color-black
     padding: 6px 10px
     transition: all .2s
+    border: 0px solid transparent
   .nav > li > .subnav > li a:hover
     background: $color-blue-2
     color: $color-white
@@ -331,8 +337,9 @@ ul.subnav.logged-out
   &.announcement-notification-badge
     width: 14px
     line-height: 14px
-    top: 0.3rem
-    font-size: 0.6rem
+    top: 0
+    left: 1.35em
+    font-family: 'ProximaNova_bold', sans-serif
 
 /* Styles the trial dropdown */
 

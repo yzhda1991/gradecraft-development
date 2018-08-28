@@ -1,15 +1,21 @@
 = image_tag "GC.png", width: "30", class: "login-logo", alt: "GradeCraft logo mark"
 %h1 Log in
 
+.google-login
+  = link_to "Sign in with Google", "/auth/google_oauth2/", :tabindex=>"0", :method => :post
+
+%p.divider
+  %span Or
+
 #gradecraft-auth
   = form_for User.new, :url => user_sessions_path do |f|
-    = label_tag :user_email, "Email", class:"sr-only"
-    = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
-    = label_tag :user_password, "Password", class:"sr-only"
-    = f.password_field :password, placeholder: "Password"
-    = f.submit "Log in", class: "button login-button", alt: "Log in"
+    .form_elem
+      = f.text_field :email, placeholder: "Your email", :autocorrect => "off", :autocapitalize => "off", :required=>"true"
+      = label_tag :user_email, "Email address"
+    .form_elem
+      = f.password_field :password, placeholder: "Your password", :required=>"true"
+      = label_tag :user_password, "Password"
+    = f.button "Log in", type: "submit", class: "action", alt: "Log in", style: "margin-right: 0"
 .clear
-
-.google-login
-  = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", "/auth/google_oauth2/", class: "login-button", :method => :post
-%button.button-link.small#forgot-password Forgot your password?
+%p
+  %a#forgot-password(tabindex=0) Forgot your password?

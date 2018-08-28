@@ -1,17 +1,106 @@
 @import "../utilities/variables"
 @import "../utilities/mixins"
 
-h1, h2, h3, h4, h5
-  text-transform: capitalize
-  margin: 0
-  padding: 0
-  clear: both
-  font-weight: 300
+/* jquery ui override >:[ __=^o.o^= */
+.ui-widget
+  font-family: 'ProximaNova_light', sans-serif
+  font-size: 1em
+  color: $blue_dark
 
+/* New typography definitions __=^o.o^= */
 body
-  font-size: 0.9rem
-  line-height: 1.6
-  font-family: 'Open Sans', sans-serif
+  font-family: 'ProximaNova_light', sans-serif
+  font-size: 17px
+  line-height: 1.45em
+  color: $blue_dark
+
+  @media (max-width: $media-650)
+    font-size: 15px
+
+p
+  max-width: 800px
+  margin: 0 0 1em 0
+  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased
+
+  b, strong
+    font-family: 'ProximaNova_bold'
+    i, em
+      font-family: 'ProximaNova_bold-italic'
+
+  i, em
+    font-family: 'ProximaNova_light-italic'
+    b, strong
+      font-family: 'ProximaNova_bold-italic'
+
+a
+  text-decoration: none
+  color: $blue-medium_1
+  border-bottom: 2px solid $blue-medium_1
+  cursor: pointer
+  font-family: 'ProximaNova_semibold', sans-serif
+
+  &:hover
+    text-decoration: none
+    border-bottom-color: transparent
+    color: $pink_2
+
+  &.function
+    color: $pink_1
+    border-bottom: 0px solid transparent
+
+    &:hover
+      color: $pink_2
+
+  &.stealth_link
+    border-bottom: 0px solid transparent
+
+h1
+  font-family: 'KlinicSlab_medium'
+  font-size: 1.25em
+  text-transform: uppercase
+  margin: 1.5em 0
+  letter-spacing: 0.06em
+
+  &.pagetitle
+    display: inline-block
+    box-sizing: border-box
+    margin-bottom: 0
+    // color: $color-blue-2
+    // font-size: 1.8rem
+    @media (max-width: $media-small-max)
+      // font-size: 1.5rem
+
+h2
+  font-family: 'KlinicSlab_medium-italic'
+  font-size: 1.25em
+  margin: 1.5em 0 0.9em 0
+  letter-spacing: 0.05em
+
+h3
+  font-family: 'KlinicSlab_medium'
+  font-size: 1em
+  text-transform: uppercase
+  margin: 0 0 0.6em 0
+  letter-spacing: 0.06em
+
+h4
+  font-family: 'ProximaNova_semibold', sans-serif
+  font-size: 1em
+  margin: 0 0 0 0
+
+.lining_figures
+  font-variant-numeric: lining-nums
+
+
+
+// REFACTOR -- may need to refactor below code at some point, TBD __=^o.o^=
+h1, h2, h3, h4, h5
+  // text-transform: capitalize
+  // margin: 0
+  // padding: 0
+  // clear: both
+  // font-weight: 300
 
 .bold
   font-weight: bold !important
@@ -41,7 +130,7 @@ body
   font-style: italic
 
 .small
-  font-size: 80%
+  font-size: 0.9em
 
 .uppercase
   text-transform: uppercase
@@ -58,23 +147,30 @@ body
 .align-right
   text-align: right
 
-a
-  text-decoration: none
-  color: $color-blue-3
-  &.inherit-color
-    color: inherit
+// a
+//   text-decoration: none
+//   color: $color-blue-3
+//   &.inherit-color
+//     color: inherit
+//
+//   // AngularJS - Make cursor behave consistently as if it had an href
+//   &[ng-click]
+//     cursor: pointer
 
-  // AngularJS - Make cursor behave consistently as if it had an href
-  &[ng-click]
-    cursor: pointer
+/* accordion h2 toggle styles __=^o.o^= */
+.assignment-type-bar,
+learning-objectives-index
+  h2
+    margin: 1em 0.5em
+    font: 1em/1em 'KlinicSlab_medium', serif
+    letter-spacing: 0.06em
+    text-transform: uppercase
 
-.assignment_type a, table a, .challenge a, .learning-objective-category a
-  text-decoration: none
-  color: $color-blue-2
-
-a:hover
-  color: $color-blue-3
-  text-decoration: underline
+.assignment_type a,
+table a,
+.challenge a,
+.learning-objective-category a
+  border-bottom-color: transparent
 
 hr
   border: 1px solid $color-grey-3
@@ -85,15 +181,6 @@ hr
   top: -0.6rem
   text-transform: normal
   background-color: $color-blue-2
-
-/** Page Title **/
-h1.pagetitle
-  display: inline-block
-  box-sizing: border-box
-  color: $color-blue-2
-  font-size: 1.8rem
-  @media (max-width: $media-small-max)
-    font-size: 1.5rem
 
 .student
   h1.pagetitle
@@ -116,10 +203,10 @@ h2.subtitle
     margin-bottom: 0 !important
     font-weight: normal
 
-h2.subtitle.fail
+h2.fail
   color: $alert-color
 
-h2.subtitle.success
+h2.success
   color: $color-green-3
 
 h3.assignment_name
@@ -134,9 +221,12 @@ h3.assignment_name
         display: none
 
 /** Instructor and student-view assignment types accordion **/
-.assignment_type h2, .assignment-type-name, .challenge h2, .learning-objective-category h2
-  font-weight: 400
-  font-size: 1.1rem
+.assignment_type h2,
+.assignment-type-name,
+.challenge h2,
+.learning-objective-category h2
+  //font-weight: 400
+  //font-size: 1.1rem
 
 h5.section-title
   font-size: 1.3rem

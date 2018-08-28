@@ -4,8 +4,8 @@
   .clear.right
     = simple_form_for presenter.assignment, :url => delete_all_assignment_grades_path(assignment_id: presenter.assignment.id), method: :delete do |f|
       = hidden_field_tag :team_id, presenter.team.id unless presenter.team.nil?
-      .submit-buttons
-        = active_course_submit_tag "Delete All Grades", class: "button button-slim", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
+      .main-buttons
+        = active_course_submit_tag "Delete All Grades", class: "button action", data: { confirm: "Are you sure you want to delete all grades for this assignment?" }
 
 .progress.clear
   %assignment-show-individual-table{"data-assignment-id"=>"#{presenter.assignment.id}",

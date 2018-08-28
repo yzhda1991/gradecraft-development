@@ -1,27 +1,32 @@
 = render partial: "layouts/alerts", locals: { model: @user }
 
-%section.pilot
-  .student-pilot
-    .pilot-container
-      %h1 First, let’s create your account!
+.login
+  .login-form-container
+    %h1 First, let’s create your account!
 
-      .login
-        .google-login
-          = link_to image_tag("Google.svg", alt: "Sign in with Google", class: "google-img") + "Sign in with Google", new_external_google_users_path, class: "login-button"
+    .google-login
+      = link_to "Sign up with Google", new_external_google_users_path, :tabindex=>"0"
 
-      %p
-        %span Or
+    %p.divider
+      %span Or
 
-      .pilot-form
-        = simple_form_for @user, url: create_external_users_path, method: :post do |f|
-          .form-item= f.input :first_name, placeholder: "First Name"
-          .form-item= f.input :last_name, placeholder: "Last Name"
-          .form-item= f.input :email, placeholder: "Email"
-          .form-item= f.input :password, required: true, placeholder: "Password"
-          .form-item= f.input :password_confirmation, required: true, placeholder: "Password Confirmation"
+    = simple_form_for @user, url: create_external_users_path, method: :post do |f|
+      .form_elem
+        = f.input_field :first_name, placeholder: "Your First Name", :required=>"true"
+        = label_tag :first_name, 'First name'
+      .form_elem
+        = f.input_field :last_name, placeholder: "Your Last Name", :required=>"true"
+        = label_tag :last_name, 'Last name'
+      .form_elem
+        = f.input_field :email, placeholder: "Your Email", :required=>"true"
+        = label_tag :email, 'Email address'
+      .form_elem
+        = f.input_field :password, required: true, placeholder: "Choose your Password"
+        = label_tag :password, 'Password'
+      .form_elem
+        = f.input_field :password_confirmation, required: true, placeholder: "Confirm your password"
+        = label_tag :password_confirmation, 'Password confirmation'
 
-          .form-item= recaptcha_tags
+      .form-item= recaptcha_tags
 
-          .submit-buttons
-            %ul
-              %li= submit_tag "Create account", class: "button"
+      = f.submit "Create account", class: "button action"

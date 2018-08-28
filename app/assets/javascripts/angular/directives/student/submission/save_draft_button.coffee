@@ -19,5 +19,6 @@
       isActiveCourse: '='
     }
     templateUrl: 'student/submission/save_draft_button.html'
+    replace: true
   }
 ]

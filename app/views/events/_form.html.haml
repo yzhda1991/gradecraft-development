@@ -2,7 +2,7 @@
 
 = simple_form_for(@event) do |f|
   %section.form-section
-    %h2.form-title Basic Settings
+    %h2 Basic Settings
     .form-item
       = f.input :name, "aria-required": "true"
     .form-item
@@ -11,15 +11,14 @@
       = f.input :due_at, as: :string, :input_html => { class: "datetimepicker", :value => @event.try(:due_at) }, :label => "End Date"
 
   %section.form-section
-    %h2.form-title Description
+    %h2 Description
     = f.text_area :description, class: "froala"
 
   %section.form-section
-    %h2.form-title Dashboard Upcoming Events Module Settings
+    %h2 Dashboard Upcoming Events Module Settings
 
     = render partial: "layouts/media_image_form_item", locals: { f: f, model: @event }
 
-  .submit-buttons
-    %ul
-      %li= f.button :submit, class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", events_path, class: "button"
+  .main-buttons
+    = f.button :submit, class: "button action"
+    = link_to glyph("times-circle") + "Cancel", events_path, class: "button secondary"

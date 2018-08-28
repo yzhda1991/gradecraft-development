@@ -264,6 +264,7 @@ Rails.application.routes.draw do
   end
 
   controller :pages do
+    get :style_guide, constraints: AdminConstraint.new
     get :brand_and_style_guidelines
     get :features
     get :our_team, to: "pages#team"

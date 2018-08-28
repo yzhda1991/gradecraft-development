@@ -34,9 +34,9 @@
           %th{"scope"=>"col","width"=>"20%"}
             %span.sr-only Actions
 
-          %th{"data-dynatable-no-sort"=>"true", "width"=>"120px", "ng-if"=>"::gsGradesCtrl.linksVisible"}
-            %button.button.table-select-all{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(true)"} Check
-            %button.button.table-select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(false)"} Uncheck
+          %th.has_button{"data-dynatable-no-sort"=>"true", "width"=>"120px", "ng-if"=>"::gsGradesCtrl.linksVisible"}
+            %button.button.select-all{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(true)"} Check
+            %button.button.select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(false)"} Uncheck
 
       %tbody
         %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades | orderBy: gsGradesCtrl.sortable.predicate : gsGradesCtrl.sortable.reverse | filter: gsGradesCtrl.searchCriteria()"}
@@ -50,31 +50,28 @@
           %td {{grade.formatted_score}}
           %td {{grade.feedback}}
           %td
-            .right
-              %ul.button-bar
-                %li
-                  %a.button{"ng-if"=>"grade.see_grade_path", "ng-href"=>"{{grade.see_grade_path}}"}
-                    %i.fa.fa-eye
-                    See Grade
-                %li{"ng-if"=>"grade.edit_grade_link",
-                    "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_grade_link)"}
-                %li{"ng-if"=>"grade.edit_group_grade_link",
-                    "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_group_grade_link)"}
-                %td{"ng-if"=>"::gsGradesCtrl.linksVisible"}
-                  .center
-                    %label
-                      %span.sr-only Select grade to update status
-                      %input{"type"=>"checkbox",
-                             "ng-value"=>"grade.id",
-                             "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
-                             "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
+            %ul.button-bar
+              %li
+                %a.button{"ng-if"=>"grade.see_grade_path", "ng-href"=>"{{grade.see_grade_path}}"}
+                  %i.fa.fa-eye
+                  See Grade
+              %li{"ng-if"=>"grade.edit_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_grade_link)"}
+              %li{"ng-if"=>"grade.edit_group_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_group_grade_link)"}
+              %td{"ng-if"=>"::gsGradesCtrl.linksVisible"}
+                .center
+                  %label
+                    %span.sr-only Select grade to update status
+                    %input{"type"=>"checkbox",
+                           "ng-value"=>"grade.id",
+                           "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
+                           "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
 
-    .submit-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
-      %ul
-        %li
-          %a.button{"type"=>"button",
-                    "ng-click"=>"gsGradesCtrl.releaseGrades()",
-                    "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
-                    "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
-            %i.fa.fa-share-square-o
-            Release Selected Grades
+    .main-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
+      %a.button{"type"=>"button",
+                "ng-click"=>"gsGradesCtrl.releaseGrades()",
+                "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
+                "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
+        %i.fa.fa-share-square-o
+        Release Selected Grades

@@ -2,9 +2,9 @@
   %h2
     Course Message
     - if current_user_is_staff?
-      .right= link_to glyph(:edit) + "Edit", edit_dashboard_message_courses_path
+      .right= link_to glyph(:edit) + "Edit", edit_dashboard_message_courses_path, class: "function"
 .card-body
   - if current_course.dashboard_message.present?
     %p= raw current_course.dashboard_message
   - elsif current_user_is_staff?
-    %p.italic Use this space to write a message to all students that will appear on their dashboard
+    %p.hint Use this space to write a message to all students that will appear on their dashboard

@@ -27,22 +27,19 @@
 
   .form-card-header
     border-bottom: 1px solid $color-grey-6
-    padding: 0.25rem 1rem
+    padding: 0.25em 0.75em
+    font-family: 'ProximaNova_semibold', sans-serif
     &.enabled
-      background-color: transparentize($color-green-1, 0.7)
+      background-color: $bg-green_lime
 
   .form-card-body
     min-height: 112px
-    padding: 1rem
+    padding: 0.75em
     flex-grow: 1
 
-  .feature-description
-    font-size: 0.8rem
-    font-weight: 300
-
 .advanced-settings-card
-  background-color: $color-grey-7
-  padding: 1rem
+  background-color: $bg-blue
+  padding: 1em
   position: absolute
   width: 100%
   overflow-y: auto
@@ -53,33 +50,19 @@
   display: none
 
 .form-card-advanced-settings
-  background-color: $color-grey-7
-  padding: 0.25rem 1rem
+  padding: 0.25em 0.75em
 
 button.button-advanced-settings
-  font-size: 0.8rem
   display: block
-  cursor: pointer
-  color: $color-grey-3
-  background-color: transparent
   width: 100%
   text-align: left
-  padding: 0
-  line-height: normal
-  &:hover
-    text-decoration: none
-    background-color: transparent
-  &:disabled
-    opacity: 0.3
-    cursor: default
+  padding: 2px
 
 .button-close
   display: block
   text-align: right
-  color: $color-grey-3
-  cursor: pointer
-  &:hover
-    color: $color-grey-3
+  border-bottom: 0px solid transparent
+  margin-bottom: 1em
 
 .simple_form section
   .form-card
@@ -93,8 +76,6 @@ button.button-advanced-settings
     .advanced-settings-card
       label
         text-transform: inherit
-        font-size: 0.75rem
-        font-weight: 300
         width: 85%
       input
         float: none

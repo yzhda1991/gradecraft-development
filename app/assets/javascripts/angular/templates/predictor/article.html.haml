@@ -5,12 +5,10 @@
     .info-icon
       %i.fa.fa-fw.fa-info-circle
 
-  .predictor-article-title-stripe
-
   .predictor-article-date
     .predictor-date{'ng-if' => 'article.is_due_in_future && !articleCompleted()'}
       %i.fa.fa-fw.fa-calendar
-      due: {{article.due_at | date: "EEEE, MMMM d, yyyy"}}
+      due: {{article.due_at | date: "EEE, MMM d, yyyy"}}
 
   .predictor-article-main
 

@@ -14,7 +14,6 @@
       .form-hint Enter a message to the #{term_for :student} regarding their work
       = f.text_area :feedback, class: "froala"
 
-  .submit-buttons
-    %ul
-      %li= active_course_submit_tag "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}", class: "button"
-      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), class: "button"
+  .main-buttons
+    = active_course_submit_tag "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}", class: "button"
+    = link_to glyph("times-circle") + "Cancel", badge_path(@badge), class: "button secondary"

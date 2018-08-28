@@ -4,7 +4,7 @@
 
     - @grade_scheme_elements.each do |element|
       - if current_student.score_for_course(current_course) < element.lowest_points || (current_student.score_for_course(current_course) >= element.lowest_points && ! element.is_unlocked_for_student?(current_student))
-        .progress.bar_magic.center
+        .progress.bar_magic
           .meter
             %i.fa.fa-lock
             %span= element.name
@@ -12,7 +12,7 @@
             - if element.unlock_conditions.present?
               = render partial: "grade_scheme_elements/unlock_icons", locals: { student: current_student, gse: element }
       - elsif current_student.score_for_course(current_course) > element.highest_points && element.is_unlocked_for_student?(current_student)
-        .progress.bar_magic.success.center
+        .progress.bar_magic.success
           .meter
             %i.fa.fa-star
             %span= element.name
@@ -20,8 +20,9 @@
             %span= points element.lowest_points
       - else
         .progress.bar_magic.current.center
-          %span.your-rank Your rank:
-          %span.your-rank= element.name
+          %h2.your-rank
+            Your rank:
+            %span.your-rank= element.name
           .striped-bar-container
             .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
           .left.left-points

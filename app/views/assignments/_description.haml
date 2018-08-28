@@ -4,27 +4,27 @@
 %h2 Description
 - if !current_student || presenter.assignment.points_visible_for_student?(current_student)
   - if presenter.assignment.pass_fail?
-    %p.assignment-description.italic= "#{term_for :pass}/#{term_for :fail} Assignment"
+    %p.assignment-description= "#{term_for :pass}/#{term_for :fail} Assignment"
   - else
-    %p.assignment-description.italic= "#{points presenter.assignment.full_points} points possible"
+    %p.assignment-description= "#{points presenter.assignment.full_points} points possible"
 
   - if presenter.assignment.threshold_points?
-    %p.assignment-description.italic= "#{points presenter.assignment.threshold_points} points threshold"
+    %p.assignment-description= "#{points presenter.assignment.threshold_points} points threshold"
 
 - if current_user_is_student? && !impersonating? && presenter.positive_prediction_for?(presenter.assignment, current_student)
-  %p.assignment-description.italic
+  %p.assignment-description
     My Goal:
     = render partial: "grades/components/prediction", locals: { grade: presenter.prediction(presenter.assignment, current_student)  }
 
-%p.assignment-description.italic= "Opens: #{l presenter.assignment.open_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.open_at?
-%p.assignment-description.italic= "Due: #{l presenter.assignment.due_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.due_at?
+%p.assignment-description= "Opens: #{l presenter.assignment.open_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.open_at?
+%p.assignment-description= "Due: #{l presenter.assignment.due_at.in_time_zone(current_user.time_zone)}" if presenter.assignment.due_at?
 
 - if presenter.course.institution.try(:has_google_access)
-  %p.assignment-description= link_to decorative_glyph(:calendar) + "Add to Google Calendar",
-    add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent",  method: :post
+  = link_to decorative_glyph(:calendar) + "Add to Google Calendar", add_assignment_google_calendars_assignments_path(presenter.assignment), :target => "_parent", method: :post, class: "function"
 
 - if presenter.assignment_accepting_submissions?(current_student) && !presenter.has_viewable_submission?(current_student, current_user)
-  = submission_link_to(presenter.assignment)
+  %p
+    = submission_link_to(presenter.assignment)
 
 - if presenter.student_logged?(current_user) && presenter.assignment.is_unlocked_for_student?(current_student)
   = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }

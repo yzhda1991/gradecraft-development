@@ -13,19 +13,19 @@
   %g{"id" => "svg-keys"}
     %g{"id" => "svg-earned-key", "transform" => "translate(10,90)"}
       %rect.key{"width"=>"20", "height"=>"20"}
-      %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
+      %text.description{"x"=>"22", "y"=>"16"}
         Total Earned: {{allPointsEarned() | number}}
     %g{"id" => "svg-predicted-key", "transform" => "translate(230,90)"}
       %rect.key{"width"=>"20", "height"=>"20"}
-      %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
+      %text.description{"x"=>"22", "y"=>"16"}
         Total Predicted: {{allPointsPredicted() | number}} (left to earn: {{allPointsPredicted() - allPointsEarned() | number}})
     %g{"ng-if"=>"lockedPointsPredicted() > 0",  "id" => "svg-predicted-locked-key", "transform" => "translate(10,120)"}
       %rect.key{"width"=>"20", "height"=>"20", "mask"=>"url(#mask-stripe)"}
-      %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
+      %text.description{"x"=>"22", "y"=>"16"}
         Predicted Points that are Locked: {{lockedPointsPredicted() | number}}
     %g{"ng-if"=>"lockedGradeSchemeElementsPresent()",  "id" => "svg-gse-locked-key", "transform" => "translate(320,120)"}
       %path.key{"d"=>"M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z", "transform"=>"scale(2) translate(5,1)"}
-      %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Open Sans"}
+      %text.description{"x"=>"22", "y"=>"16"}
         Locked Grade Level
     %g{"id" => "svg-predicted-grade", "transform" => "translate(10,165)"}
       %text.description

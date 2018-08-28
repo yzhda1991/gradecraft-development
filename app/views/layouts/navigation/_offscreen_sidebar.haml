@@ -2,8 +2,10 @@
   .sidebar
     .course-site
       %p.course= "#{current_course.course_number} " + "#{current_course.try(:semester)} #{current_course.try(:year)}"
-      %p.course-name= "#{current_course.name} "
-      %a.course-switcher-btn= glyph("caret-down")
+      %a.course-switcher-btn
+        = glyph("caret-down")
+        %p.course-name
+          = "#{current_course.name} "
     .course-list-container
       %ul.course-list
         = render partial: "layouts/navigation/course_list"
@@ -16,14 +18,14 @@
         = render partial: "layouts/navigation/staff_subnav"
       - elsif current_user_is_observer?
         = render partial: "layouts/navigation/observer_profile_tabs"
-      %hr
+      -# %hr
       - if presenter.has_info?
         %a.course-info-btn-mobile
-          %h5 Course Info
+          %h3 Course Info
           = glyph("chevron-down")
         %ul.course-info
           = render partial: "layouts/navigation/class_info"
-        %hr
+        -# %hr
       %ul.account-info
         = render partial: "layouts/navigation/account_info"
-      %hr
+      -# %hr

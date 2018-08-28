@@ -9,9 +9,7 @@
                        'ng-click'=>'vm.addElement()',
                        'ng-if'=>'vm.gradeSchemeElements.length == 0'} Add Your Highest Grade
 
-  .submit-buttons
-    %ul
-      %li
-        .button.right{'type'=>'button',
-                      'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0',
-                      'ng-click'=>'vm.deleteGradeSchemeElements()'} Delete All Elements
+  .main-buttons
+    %button.action{'type'=>'button',
+                  'ng-if'=>'vm.gradeSchemeElements && vm.gradeSchemeElements.length > 0',
+                  'ng-click'=>'vm.deleteGradeSchemeElements()'} Delete All Elements

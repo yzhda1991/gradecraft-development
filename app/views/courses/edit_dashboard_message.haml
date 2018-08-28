@@ -1,11 +1,10 @@
 .pageContent
   = simple_form_for current_course, method: :put, :url => update_dashboard_message_courses_path do |f|
     %section.form-section
-      %h2.form-title Course Message
+      %h2 Course Message
       .form-hint This message will appear for students on the top left hand side of the dashboard. For best display purposes, we recommend it being less than 800 characters in length.
       = f.text_area :dashboard_message, class: "froala"
 
-    .submit-buttons
-      %ul
-        %li= f.button :submit, "Set Dashboard Message", class: "button"
-        %li= link_to glyph("times-circle") + "Cancel", dashboard_path, class: "button"
+    .main-buttons
+      = f.button :submit, "Set Dashboard Message", class: "button action"
+      = link_to glyph("times-circle") + "Cancel", dashboard_path, class: "button secondary"

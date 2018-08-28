@@ -17,28 +17,32 @@ dl
   overflow: hidden
   width: 100%
   max-width: 1500px
-  background-color: $color-blue-2
+  background-color: $bg-blue
   z-index: 20
   @media (max-width: $media-small-max)
     display: none
 
   li
     display: inline
-    font-size: .8rem
-    background-color: $color-blue-2
-    margin: 0 0.05rem 0 0
-    padding: 0.8rem 0
+    font-size: 0.9em
+    background-color: $bg-blue
+    color: $blue_dark
+    margin: 0 0.05em 0 0
+    padding: 0.75em 0
     text-transform: uppercase
+    font-family: 'ProximaNova_semibold', sans-serif
     a
-      padding: 0.8rem 0.5rem
-      color: $color-white
+      padding: 0.8em 0.5em
       text-decoration: none
+      font-family: 'ProximaNova_regular', sans-serif
+      border-bottom: 0px solid transparent
   h5, hr
     display: none
+
   li.active
-    padding: .8rem .5rem !important
+    padding: 0.8em 0.5em
 
   /* Setting the active tab and hover color */
   li.active, li:hover
-    background-color: $color-blue-3
-    color: $color-white
+    background-color: white
+    color: $blue_dark

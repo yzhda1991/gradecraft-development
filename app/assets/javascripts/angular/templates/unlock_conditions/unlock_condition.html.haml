@@ -67,5 +67,5 @@
   %label Completed By Date
   %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
-%button.remove-unlock-condition(ng-click="removeCondition()")
-  %i.fa.fa-fw.fa-times
+%button.delete(ng-click="removeCondition()")
+  X

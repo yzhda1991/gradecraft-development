@@ -258,9 +258,9 @@ $not-saved-color: $color-yellow-1
     margin-bottom: 0.5rem
     display: inline-block
     width: 100%
-    background-color: $color-blue-2
+    background-color: $bg-yellow
     box-sizing: border-box
-    &.criterion-not-saved
+    // &.criterion-not-saved
       background-color: $not-saved-color
 
     input
@@ -271,10 +271,9 @@ $not-saved-color: $color-yellow-1
         z-index: 500
 
     input.ng-valid-required
-      background: $color-blue-4
+      background: $bg-blue
 
     select
-      color: $color-grey-4
       padding: -4px 2px
 
       &[disabled]
@@ -325,15 +324,18 @@ $not-saved-color: $color-yellow-1
 
 button.delete
   font-weight: bold
-  background-color: $color-red-1
+  background-color: $pink_1
   position: absolute
   right: -4px
   top: -6px
   border-radius: 12px
   width: 24px
   height: 24px
+  line-height: 0
+  padding: 0
+  border-color: $pink_2
   &:hover
-    background-color: $color-orange-1
+    background-color: $pink_2
 
 button.meets-expectations-status,
 button.meets-expectations-toggle

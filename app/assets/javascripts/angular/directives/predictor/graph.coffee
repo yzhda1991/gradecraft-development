@@ -104,7 +104,6 @@
           .text( (gse)-> gse.name)
           .attr("y","15")
           .attr("x",padding)
-          .attr("font-family","Open Sans")
           .attr("fill", "#FFFFFF")
         txt.insert("rect",":first-child")
           .attr("width", (gse)->

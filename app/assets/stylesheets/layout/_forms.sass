@@ -1,6 +1,6 @@
 @import "../utilities/variables"
 
-// base form styling
+/* base form styling */
 label, input
   padding-bottom: 0
 
@@ -14,15 +14,175 @@ textarea,
   display: block
   padding: .5rem
   width: 15rem
-  font-size: 11px
-  font-family: sans-serif
-  border-radius: $global-radius
+  font: 1em/1em 'ProximaNova_light', sans-serif
   border: 1px solid rgba(42, 43, 43, 0.2)
   transition: border-color 0.2s
   &:focus
     border: 1px solid rgba(42, 43, 43, 0.8)
   @media (max-width: $media-small-max)
     width: 100%
+
+/* annoying jquery-ui overrides */
+.ui-widget
+  input, select, textarea
+    font-family: 'ProximaNova_regular', sans-serif
+
+
+
+/* New form elements, standard cases __=^o.o^= */
+.form_elem
+  position: relative
+  max-width: 800px
+  margin: 0 0 2em 0
+  border-bottom: 1px solid transparent
+
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  textarea
+    background: url(asset_path("icon-form_WriteIn.svg")) no-repeat center right
+    background-size: auto 1.1em
+    display: block
+    width: 100%
+    border: 0px solid transparent
+    border-bottom: 3px solid $blue-medium_1
+    font: 1em/1.45em 'ProximaNova_light', sans-serif
+    color: $blue_dark
+    padding: 0.5em 0
+    margin: 0 0 0.4em 0
+    transition: border-bottom 0.2s
+
+    &:focus
+      background: $bg-blue url('') no-repeat center right
+      border-bottom: 3px solid $pink_2
+
+      & + label
+        color: $pink_1
+
+      @media (max-width: $media-small-max)
+        border-bottom: 2px solid $pink_1
+
+    &:required + label
+      &:after
+        content: ' \2022 \0020 required'
+        color: $pink_1
+        text-transform: lowercase
+
+    @media (max-width: $media-small-max)
+      border-bottom: 2px solid $blue-medium_1
+
+  label
+    position: absolute
+    bottom: 0
+    right: 0
+    transform: translateY(100%)
+    text-transform: uppercase
+    color: $blue-medium_1
+    font: 0.8em/1em 'ProximaNova_semibold', sans-serif
+    letter-spacing: 0.04em
+
+  textarea
+    height: 2.7em
+    background-position: bottom 0.5em right
+
+.form_options
+  margin: 0.5em 0
+
+  input[type="radio"],
+  input[type="checkbox"]
+    position: absolute
+    opacity: 0
+    z-index: -10
+
+  label
+    border-radius: $button-radius
+    border: 1px solid $blue-medium_2
+    color: $blue-medium_1
+    font: 1em/1.2em 'ProximaNova_semibold', sans-serif
+    position: relative
+    display: block
+    width: 100%
+    max-width: 800px
+    padding: 0.7em 0 0.7em 2.5em
+    box-sizing: border-box
+    cursor: pointer
+    transition: background-color 0.2s
+
+    &:hover
+      color: $pink_1
+
+  input[type="radio"],
+  input[type="checkbox"]
+    &:checked + label
+      border: 1px solid $blue_dark
+      color: white
+      font-family: 'ProximaNova_regular', sans-serif
+
+      &:hover
+        color: white
+        cursor: default
+
+    &:disabled + label
+      color: $grey_4
+      border: 1px solid $grey_2
+      cursor: not-allowed
+      font-family: 'ProximaNova_regular', sans-serif
+
+      &:hover
+        color: $grey_4
+        cursor: not-allowed
+
+  input[type="radio"]
+    & + label
+      background: white url('/assets/icon-form_RadioUnchecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+    &:checked + label
+      background: $blue-medium_2 url('/assets/icon-form_RadioChecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+    &:disabled
+      & + label
+        background: $grey_1 url('/assets/icon-form_RadioUncheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+
+      &:checked + label
+        background: $grey_2 url('/assets/icon-form_RadioCheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+        border: 1px solid $grey_4
+
+  input[type="checkbox"]
+    & + label
+      background: white url('/assets/icon-form_CheckboxUnchecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+    &:checked + label
+      background: $blue-medium_2 url('/assets/icon-form_CheckboxChecked.svg') no-repeat top 0.65em left 0.65em
+      background-size: auto 22px
+
+      &:hover
+        cursor: pointer
+
+    &:disabled
+      & + label
+        background: $grey_1 url('/assets/icon-form_CheckboxUncheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+
+      &:checked + label
+        background: $grey_2 url('/assets/icon-form_CheckboxCheckedDisabled.svg') no-repeat top 0.65em left 0.65em
+        background-size: auto 22px
+        border: 1px solid $grey_4
+
+        &:hover
+          cursor: not-allowed
+
+
+    // &:hover
+    //   color: white
+    //   cursor: default
+
+
 
 input.hasDatepicker
   margin-right: 1rem
@@ -46,13 +206,16 @@ fieldset
 select,
 .ui-tabs-panel select
   display: block
-  background-color: $color-white
+  background-color: white
   min-width: 15rem
-  height: 2rem
-  font-size: 11px
-  font-family: 'Open Sans', sans-serif
+  height: 2em
+  border: 1px solid $blue-medium_2
+  font: 1em/1em 'ProximaNova_light', sans-serif
+  cursor: pointer
+
   &:hover
-    background-color: $color-grey-7
+    background-color: $blue-medium_2
+    color: white
   @media (max-width: $media-small-max)
     width: 100%
   &.multiple
@@ -67,26 +230,27 @@ ul.conditional-options
   display: none
 
 .disabled
-  opacity: 0.5
+  color: $grey_3
+
+.simple_form
+  select,
+  label
+    // text-transform: capitalize
+
+  h2
+    margin: 0 0 0.5em 0
+    text-transform: capitalize
 
 .form-section
-  margin-bottom: 1rem
-  padding-bottom: 1rem
+  margin-bottom: 2em
+  padding-bottom: 1em
   border: 0
-  border-bottom: 1px dashed $color-green-2
-  select, label
-    text-transform: capitalize
+  border-bottom: 1px solid $green_mint
 
 .form-subsection
   background-color: $color-grey-7
   padding: 1rem
   margin-bottom: 1rem
-
-.form-title
-  margin-bottom: 0.5rem
-  text-transform: capitalize
-  font-style: italic
-  font-size: 1.1rem
 
 .form-subtitle
   margin: 0.5rem 0
@@ -98,11 +262,9 @@ ul.conditional-options
   &.no-margin
     margin-bottom: 0
 
-.form-hint, .hint
-  font-size: 80%
-  color: $color-grey-3
-  font-style: italic
-  margin: 0
+.form-hint,
+.hint
+  font-family: 'ProximaNova_light-italic', sans-serif
 
 .form-flex-row
   display: flex
@@ -167,7 +329,7 @@ error
 ul.locked-display li
   list-style: none
 
-.simple_form
+//.simple_form
   label
     font-size: 0.9rem
     text-transform: capitalize
@@ -235,10 +397,41 @@ ul.locked-display li
   text-align: right
   display: block
 
-// dynatable pagination
+/* dynatable pagination */
+.dynatable-pagination-links
+  list-style-type: none
+  padding: 0
+  margin: 1.5em 0 0 0
+
+  li
+    display: inline-block
+    margin: 0 0.5em 0 0
+
+    &.dynatable-disabled-page
+      a
+        color: $grey_3
+        cursor: default
+        font-family: 'ProximaNova_regular', sans-serif
+
+  a
+    border-color: transparent
+    display: inline-block
+    min-width: 1em
+    text-align: center
+
+.dynatable-record-count
+  font-size: 0.9em
+
 select.dynatable-per-page-select,
 .team-filter select
   display: inline-block
+
+.dynatable-search
+  display: inline-block
+  margin: 0 1em 1em 0
+
+  input[type="search"]
+    display: inline-block
 
 // select to filter teams
 .team-filter
