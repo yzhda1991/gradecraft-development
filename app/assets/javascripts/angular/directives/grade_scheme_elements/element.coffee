@@ -1,57 +1,50 @@
 # Renders a single grade scheme element in the grade scheme element mass edit form
 # Note: This directive can exist only as a child of the gradeSchemeElementsMassEditForm
-@gradecraft.directive 'gradeSchemeElement',
-['GradeSchemeElementsService', 'DebounceQueue', '$timeout', (GradeSchemeElementsService, DebounceQueue, $timeout) ->
-  {
-    scope:
-      gradeSchemeElement: '='
-      index: '='
-    require: '^^gradeSchemeElementsMassEditForm'
-    templateUrl: 'grade_scheme_elements/element.html'
-    restrict: 'E'
-    link: (scope, element, attrs, gseForm) ->
-      _validateElements = () ->
-        GradeSchemeElementsService.validateElements()
-        gseForm.updateFormValidity()
+@gradecraft.directive "gradeSchemeElement", ["GradeSchemeElementsService", "$timeout",
+  (GradeSchemeElementsService, $timeout) ->
+    {
+      scope:
+        gradeSchemeElement: "="
+        index: "="
+      require: "^^gradeSchemeElementsMassEditForm"
+      templateUrl: "grade_scheme_elements/element.html"
+      restrict: "E"
+      link: (scope, element, attrs, gseForm) ->
+        scope.status = undefined
 
-      _clearAlert = () ->
-        $timeout(() ->
+        scope.addElement = () ->
+          GradeSchemeElementsService.addElement(@gradeSchemeElement)
+
+        scope.removeElement = () ->
+          GradeSchemeElementsService.removeElement(@gradeSchemeElement)
+          scope.persistChanges(true)
+
+        scope.persistChanges = (isRemoval=false) ->
           scope.status = null
-        , 3000)
+          GradeSchemeElementsService.validateElement(@gradeSchemeElement)
+          gseForm.updateFormValidity()
+          _save(scope, isRemoval)
 
-      _save = (scope, showAlert) ->
-        # Ensure that the current state is still valid
-        _validateElements()
-        return if gseForm.gradeSchemeElementsForm.$invalid
-
-        scope.status = 'saving'
-        GradeSchemeElementsService.postGradeSchemeElements(null, true, showAlert).then(() ->
-          scope.status = 'saved'
-        ).finally(() ->
-          _clearAlert()
+        # If lowest_points changes, reorder the elements accordingly
+        scope.$watch("lowest_points", (newValue, oldValue) ->
+          GradeSchemeElementsService.sortElementsByPoints() if newValue != oldValue
         )
 
-      scope.status = undefined
+        _clearAlert = () ->
+          $timeout(() ->
+            scope.status = null
+          , 3000)
 
-      scope.addElement = () ->
-        GradeSchemeElementsService.addElement(@gradeSchemeElement)
+        _save = (scope, showAlert) ->
+          return if scope.gradeSchemeElement.validationError?
 
-      scope.removeElement = () ->
-        GradeSchemeElementsService.removeElement(@gradeSchemeElement)
-        _validateElements()
-        scope.persistChanges(true) if not @gradeSchemeElement.validationError?
-
-      scope.persistChanges = (isRemoval=false) ->
-        _validateElements()
-        return if gseForm.gradeSchemeElementsForm.$invalid
-
-        DebounceQueue.addEvent(
-          'gradeSchemeElement', 'saveChanges', _save, [scope, isRemoval], 4000
-        )
-
-      # If lowest_points changes, reorder the elements accordingly
-      scope.$watch('lowest_points', (newValue, oldValue) ->
-        GradeSchemeElementsService.sortElementsByPoints() if newValue != oldValue
-      )
-  }
+          scope.status = "saving"
+          GradeSchemeElementsService.postGradeSchemeElement(
+            scope.gradeSchemeElement,
+            () => scope.status = "saved",
+            () => scope.status = "failed"
+          ).finally(() ->
+            _clearAlert()
+          )
+    }
 ]

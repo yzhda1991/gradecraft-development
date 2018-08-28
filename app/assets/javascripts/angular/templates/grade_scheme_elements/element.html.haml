@@ -5,14 +5,16 @@
       %input.letter{'type'=>'text',
                     'name'=>'letter',
                     'ng-model'=>'gradeSchemeElement.letter',
-                    'ng-change'=>"persistChanges()"}
+                    'ng-change'=>"persistChanges()",
+                    'ng-model-options'=>"{ updateOn: 'blur' }"}
 
     %label.gse-label.form-hint
       Level name
       %input.level{'type'=>'text',
                    'name'=>'level',
                    'ng-model'=>'gradeSchemeElement.level',
-                   'ng-change'=>"persistChanges()"}
+                   'ng-change'=>"persistChanges()",
+                   'ng-model-options'=>"{ updateOn: 'blur' }"}
 
     %label.gse-label.form-hint
       Point Threshold
@@ -20,10 +22,10 @@
         'name'=>'point_threshold_{{index}}',
         'ng-model'=>'gradeSchemeElement.lowest_points',
         'ng-change'=>"persistChanges()",
+        'ng-model-options'=>"{ updateOn: 'blur' }",
         'required'=>'',
         'gc-number-input'=>'',
         'allow-negatives'=>'false',
-        'maintain-focus'=>'',
         'maxLength'=>'11'}
 
     %span{'ng-show'=>'status === "saving"'}
@@ -33,6 +35,10 @@
     %span.save-success{'ng-show'=>'status === "saved"'}
       %i.fa.fa-thumbs-o-up
       Changes successfully saved!
+
+    %span.save-failure{'ng-show'=>'status === "failed"'}
+      %i.fa.fa-thumbs-o-up
+      An error occurred while attempting to save.
 
     %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
       %span.error

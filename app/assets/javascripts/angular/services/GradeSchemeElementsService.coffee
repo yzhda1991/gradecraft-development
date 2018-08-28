@@ -2,44 +2,27 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', 'orderByFilter',
   ($http, GradeCraftAPI, orderBy) ->
 
-    _deletedElementIds = []
     gradeSchemeElements = []
     _totalPoints = 0
 
-    totalPoints = () ->
-      _totalPoints
-
-    # Iterate all elements to ensure that there are no direct point conflicts
-    validateElements = () ->
-      has_zero_threshold = false
-      for element, i in gradeSchemeElements
-        _validateElement(element)
-        has_zero_threshold = true if element.lowest_points == 0
-      addZeroThreshold() if not has_zero_threshold
+    totalPoints = () -> _totalPoints
 
     # Remove the current element from the collection and add to deleted_ids array
     removeElement = (currentElement) ->
       if currentElement.lowest_points == 0 && _isOnlyZeroThreshold(currentElement)
         currentElement.validationError = "Lowest level threshold must be 0"
       else
-        _deletedElementIds.push(gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)[0].id)
+        console.log("delete") # TODO
 
     # Add a new element after the selected element, if one was given
     addElement = (currentElement, attributes=null) ->
       if currentElement?
         for element, i in gradeSchemeElements
           if element == currentElement
-            gradeSchemeElements.splice(i + 1, 0, _newElement())
+            gradeSchemeElements.splice(i + 1, 0, newElement())
             return
       else
-        gradeSchemeElements.push(_newElement(attributes))
-
-    # Add new element to represent zero threshold
-    addZeroThreshold = () ->
-      zeroElement = _newElement()
-      zeroElement.level = "Not yet on the board"
-      zeroElement.lowest_points = 0
-      gradeSchemeElements.push(zeroElement)
+        gradeSchemeElements.push(newElement(attributes))
 
     # Sorts the grade scheme elements by their point threshold
     sortElementsByPoints = () ->
@@ -54,24 +37,15 @@
         GradeCraftAPI.logResponse(response)
       )
 
-    # POST grade scheme element updates
-    # Optionally redirects to a specified url
-    postGradeSchemeElements = (redirectUrl=null, validate=true, showAlert=false) ->
-      return if gradeSchemeElements.length < 1 || (validate && !_hasValidPointThresholds())
-
-      data = {
-        grade_scheme_elements_attributes: gradeSchemeElements
-        deleted_ids: _deletedElementIds
-      }
-      $http.put('/api/grade_scheme_elements', data).then(
+    postGradeSchemeElement = (element, successCallback=null, failureCallback=null) ->
+      $http.put("/api/grade_scheme_elements/#{element.id}", grade_scheme_element: element).then(
         (response) ->
-          _clearArray(gradeSchemeElements)
-          GradeCraftAPI.loadMany(gradeSchemeElements, response.data)
+          GradeCraftAPI.loadItem(element, "grade_scheme_elements", response.data)
+          successCallback() if successCallback?
           GradeCraftAPI.logResponse(response)
-          window.location.href = redirectUrl if redirectUrl?
-          alert('Changes were successfully saved') if showAlert is true
         , (error) ->
           alert('An error occurred while saving changes')
+          failureCallback() if failureCallback?
           GradeCraftAPI.logResponse(error)
       )
 
@@ -87,17 +61,8 @@
 
     # Private
 
-    # Ensure that there are no blank point thresholds
-    _hasValidPointThresholds = () ->
-      isValid = true
-      for element in gradeSchemeElements
-        if isNaN(element.lowest_points) || !element.lowest_points?
-          element.validationError = "Point threshold cannot be blank"
-          isValid = false
-      isValid
-
     # Ensures that the current element does not have a point conflict with another
-    _validateElement = (currentElement) ->
+    validateElement = (currentElement) ->
       currentElement.validationError = undefined
 
       if !currentElement.lowest_points?
@@ -118,7 +83,7 @@
       !result
 
     # New empty grade scheme element object
-    _newElement = (attributes=null) ->
+    newElement = (attributes=null) ->
       element = angular.copy({
         letter: null
         level: null
@@ -129,18 +94,15 @@
       ) if attributes?
       element
 
-    _clearArray = (array) ->
-      array.length = 0
-
     {
       gradeSchemeElements: gradeSchemeElements
       removeElement: removeElement
       addElement: addElement
-      addZeroThreshold: addZeroThreshold
-      validateElements: validateElements
+      newElement: newElement
+      validateElement: validateElement
       sortElementsByPoints: sortElementsByPoints
       getGradeSchemeElements: getGradeSchemeElements
-      postGradeSchemeElements: postGradeSchemeElements
+      postGradeSchemeElement: postGradeSchemeElement
       deleteGradeSchemeElements: deleteGradeSchemeElements
       totalPoints: totalPoints
     }
