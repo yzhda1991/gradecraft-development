@@ -54,6 +54,7 @@
         Add a level below
       %button.remove-element.button.alert{'type'=>'button',
                                           'ng-click'=>'removeElement()',
+                                          'ng-disabled'=>'gradeSchemeElement.lowest_points === 0',
                                           'aria-label'=>"Remove Level"}
         Remove
         %i.fa.fa-times
