@@ -12,15 +12,9 @@
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
 
-    vm.save = () ->
-      GradeSchemeElementsService.validateElements()
-      vm.updateFormValidity()
-      return if vm.gradeSchemeElementsForm.$invalid
-      GradeSchemeElementsService.postGradeSchemeElements(null, true, true)
-
-    vm.deleteGradeSchemeElements = () ->
+    vm.deleteAll = () ->
       if confirm "Are you sure you want to delete all grade scheme elements?"
-        GradeSchemeElementsService.deleteGradeSchemeElements('/grade_scheme_elements/')
+        GradeSchemeElementsService.deleteAll('/grade_scheme_elements/')
 
     # For manually triggering form validation by child directives
     vm.updateFormValidity = () ->

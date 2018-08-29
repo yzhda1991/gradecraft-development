@@ -527,7 +527,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :grade_scheme_elements, only: [:index, :update] do
+    resources :grade_scheme_elements, only: [:index, :create, :update, :destroy] do
       resources :unlock_conditions, only: :index
       collection do
         put :update_many

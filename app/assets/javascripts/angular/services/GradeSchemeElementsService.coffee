@@ -12,7 +12,7 @@
       if currentElement.lowest_points == 0 && _isOnlyZeroThreshold(currentElement)
         currentElement.validationError = "Lowest level threshold must be 0"
       else
-        console.log("delete") # TODO
+        _deleteElement(currentElement)
 
     # Add a new element after the selected element, if one was given
     addElement = (currentElement, attributes=null) ->
@@ -37,7 +37,25 @@
         GradeCraftAPI.logResponse(response)
       )
 
-    postGradeSchemeElement = (element, successCallback=null, failureCallback=null) ->
+    createOrUpdate = (element, successCallback=null, failureCallback=null) ->
+      if element.id?
+        updateGradeSchemeElement(element, successCallback, failureCallback)
+      else
+        createGradeSchemeElement(element, successCallback, failureCallback)
+
+    createGradeSchemeElement = (element, successCallback=null, failureCallback=null) ->
+      $http.post("/api/grade_scheme_elements", grade_scheme_element: element).then(
+        (response) ->
+          GradeCraftAPI.loadItem(element, "grade_scheme_elements", response.data)
+          successCallback() if successCallback?
+          GradeCraftAPI.logResponse(response)
+        , (error) ->
+          alert('An error occurred while saving changes')
+          failureCallback() if failureCallback?
+          GradeCraftAPI.logResponse(error)
+      )
+
+    updateGradeSchemeElement = (element, successCallback=null, failureCallback=null) ->
       $http.put("/api/grade_scheme_elements/#{element.id}", grade_scheme_element: element).then(
         (response) ->
           GradeCraftAPI.loadItem(element, "grade_scheme_elements", response.data)
@@ -49,7 +67,7 @@
           GradeCraftAPI.logResponse(error)
       )
 
-    deleteGradeSchemeElements = (redirectUrl=null) ->
+    deleteAll = (redirectUrl=null) ->
       $http.delete('/api/grade_scheme_elements/destroy_all').then(
         (response) ->
           GradeCraftAPI.logResponse(response)
@@ -82,6 +100,17 @@
       )?
       !result
 
+    _deleteElement = (element) ->
+      $http.delete("/api/grade_scheme_elements/#{element.id}").then(
+        (response) ->
+          GradeCraftAPI.deleteItem(gradeSchemeElements, element)
+          alert("Successfully deleted #{element.name || 'grade scheme element'}")
+          GradeCraftAPI.logResponse(response)
+        , (error) ->
+          alert('Failed to delete grade scheme element')
+          GradeCraftAPI.logResponse(error)
+      )
+
     # New empty grade scheme element object
     newElement = (attributes=null) ->
       element = angular.copy({
@@ -101,9 +130,10 @@
       newElement: newElement
       validateElement: validateElement
       sortElementsByPoints: sortElementsByPoints
+      createOrUpdate: createOrUpdate
       getGradeSchemeElements: getGradeSchemeElements
-      postGradeSchemeElement: postGradeSchemeElement
-      deleteGradeSchemeElements: deleteGradeSchemeElements
+      updateGradeSchemeElement: updateGradeSchemeElement
+      deleteAll: deleteAll
       totalPoints: totalPoints
     }
 ]

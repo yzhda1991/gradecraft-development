@@ -12,12 +12,8 @@
       link: (scope, element, attrs, gseForm) ->
         scope.status = undefined
 
-        scope.addElement = () ->
-          GradeSchemeElementsService.addElement(@gradeSchemeElement)
-
-        scope.removeElement = () ->
-          GradeSchemeElementsService.removeElement(@gradeSchemeElement)
-          scope.persistChanges(true)
+        scope.addElement = () -> GradeSchemeElementsService.addElement(@gradeSchemeElement)
+        scope.removeElement = () -> GradeSchemeElementsService.removeElement(@gradeSchemeElement)
 
         scope.persistChanges = (isRemoval=false) ->
           scope.status = null
@@ -39,7 +35,7 @@
           return if scope.gradeSchemeElement.validationError?
 
           scope.status = "saving"
-          GradeSchemeElementsService.postGradeSchemeElement(
+          GradeSchemeElementsService.createOrUpdate(
             scope.gradeSchemeElement,
             () => scope.status = "saved",
             () => scope.status = "failed"
