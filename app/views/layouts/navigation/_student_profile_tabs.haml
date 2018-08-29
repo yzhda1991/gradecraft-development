@@ -1,5 +1,4 @@
 %ul{class: ("#{nav_class}" if local_assigns[:nav_class])}
-  %h5 Navigation
   %li{class: ("active" if current_page?(dashboard_path)) }
     = link_to_unless_current "Dashboard", dashboard_path
   %li{class: ("active" if current_page?(assignments_path)) }
