@@ -152,7 +152,7 @@ end
 source 'https://rails-assets.org' do
   gem 'rails-assets-angular', '1.3.15'
   gem 'rails-assets-angular-resource', '1.3.15'
-  gem 'rails-assets-lodash', '3.7.0'
+  gem 'rails-assets-lodash', '3.10.1'
   gem 'rails-assets-jquery', '2.1.4'
   gem 'rails-assets-angular-dragdrop', '1.0.11'
   gem 'rails-assets-ngDraggable', '0.1.8'
