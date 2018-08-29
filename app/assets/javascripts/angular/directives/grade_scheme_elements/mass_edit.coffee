@@ -1,16 +1,12 @@
 # Main entry point for mass editing grade scheme elements for a course
 # Renders the appropriate form
-@gradecraft.directive 'gradeSchemeElementsMassEditForm',
-['GradeSchemeElementsService', (GradeSchemeElementsService) ->
+@gradecraft.directive 'gradeSchemeElementsMassEditForm', ['GradeSchemeElementsService', (GradeSchemeElementsService) ->
   GradeSchemeElementsCtrl = [() ->
     vm = this
-
     vm.loading = true
     vm.gradeSchemeElements = GradeSchemeElementsService.gradeSchemeElements
 
-    # Add first element
-    vm.addElement = () ->
-      GradeSchemeElementsService.addElement()
+    vm.addElement = () -> GradeSchemeElementsService.addElement()
 
     vm.deleteAll = () ->
       if confirm "Are you sure you want to delete all grade scheme elements?"

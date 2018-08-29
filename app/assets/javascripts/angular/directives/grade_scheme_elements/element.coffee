@@ -21,11 +21,6 @@
           gseForm.updateFormValidity()
           _save(scope, isRemoval)
 
-        # If lowest_points changes, reorder the elements accordingly
-        scope.$watch("lowest_points", (newValue, oldValue) ->
-          GradeSchemeElementsService.sortElementsByPoints() if newValue != oldValue
-        )
-
         _clearAlert = () ->
           $timeout(() ->
             scope.status = null

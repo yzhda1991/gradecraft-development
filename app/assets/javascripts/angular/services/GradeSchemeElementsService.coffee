@@ -24,10 +24,6 @@
       else
         gradeSchemeElements.push(newElement(attributes))
 
-    # Sorts the grade scheme elements by their point threshold
-    sortElementsByPoints = () ->
-      gradeSchemeElements = orderBy(gradeSchemeElements, 'lowest_points', true)
-
     # GET grade scheme elements for the current course
     # Returns a promise
     getGradeSchemeElements = () ->
@@ -77,7 +73,7 @@
           GradeCraftAPI.logResponse(error)
       )
 
-    # Private
+    ## Private
 
     # Ensures that the current element does not have a point conflict with another
     validateElement = (currentElement) ->
@@ -92,6 +88,18 @@
         # Invalid because it is in direct conflict with another level
         if element.lowest_points == currentElement.lowest_points
           currentElement.validationError = "This level has the same point threshold as another level"
+
+    # New empty grade scheme element object
+    newElement = (attributes=null) ->
+      element = angular.copy({
+        letter: null
+        level: null
+        lowest_points: null
+      })
+      angular.forEach(attributes, (value, key) ->
+        element[key] = value
+      ) if attributes?
+      element
 
     # Checks if there are more than one zero threshold elements
     _isOnlyZeroThreshold = (currentElement) ->
@@ -111,25 +119,12 @@
           GradeCraftAPI.logResponse(error)
       )
 
-    # New empty grade scheme element object
-    newElement = (attributes=null) ->
-      element = angular.copy({
-        letter: null
-        level: null
-        lowest_points: null
-      })
-      angular.forEach(attributes, (value, key) ->
-        element[key] = value
-      ) if attributes?
-      element
-
     {
       gradeSchemeElements: gradeSchemeElements
       removeElement: removeElement
       addElement: addElement
       newElement: newElement
       validateElement: validateElement
-      sortElementsByPoints: sortElementsByPoints
       createOrUpdate: createOrUpdate
       getGradeSchemeElements: getGradeSchemeElements
       updateGradeSchemeElement: updateGradeSchemeElement
