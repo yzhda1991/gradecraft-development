@@ -8,7 +8,7 @@
     postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, additionalLevels, redirectUrl=null) ->
       _addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
       _addAdditionalLevels(additionalLevels) if additionalLevels? && additionalLevels > 0
-      _validateElements()
+      GradeSchemeElementsService.ensureHasZeroElement()
       _postGradeSchemeElements(redirectUrl)
 
     _postGradeSchemeElements = (redirectUrl) ->
@@ -39,20 +39,7 @@
         GradeSchemeElementsService.addElement()
       )
       # Make last element the zero threshold
-      _addZeroThreshold()
-
-    _validateElements = () ->
-      has_zero_threshold = false
-      for element, i in GradeSchemeElementsService.gradeSchemeElements
-        GradeSchemeElementsService.validateElement(element)
-        has_zero_threshold = true if element.lowest_points == 0
-      _addZeroThreshold() if not has_zero_threshold
-
-    _addZeroThreshold = () ->
-      zeroElement = GradeSchemeElementsService.newElement()
-      zeroElement.level = "Not yet on the board"
-      zeroElement.lowest_points = 0
-      GradeSchemeElementsService.gradeSchemeElements.push(zeroElement)
+      GradeSchemeElementsService.addZeroElement()
 
     _clearArray = (array) -> array.length = 0
 

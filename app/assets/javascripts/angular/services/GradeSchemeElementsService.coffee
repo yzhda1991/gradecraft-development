@@ -7,12 +7,14 @@
 
     totalPoints = () -> _totalPoints
 
-    # Remove the current element from the collection and add to deleted_ids array
     removeElement = (currentElement) ->
       if currentElement.lowest_points == 0 && _isOnlyZeroThreshold(currentElement)
         currentElement.validationError = "Lowest level threshold must be 0"
       else
-        _deleteElement(currentElement)
+        if currentElement.id?
+          _deleteElement(currentElement)
+        else
+          gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)
 
     # Add a new element after the selected element, if one was given
     addElement = (currentElement, attributes=null) ->
@@ -23,6 +25,10 @@
             return
       else
         gradeSchemeElements.push(newElement(attributes))
+
+    ensureHasZeroElement = () ->
+      hasZeroElement = _.some(gradeSchemeElements, (element) -> element.lowest_points == 0)
+      addZeroElement() if not hasZeroElement
 
     # GET grade scheme elements for the current course
     # Returns a promise
@@ -101,6 +107,12 @@
       ) if attributes?
       element
 
+    addZeroElement = () ->
+      zeroElement = newElement()
+      zeroElement.level = "Not yet on the board"
+      zeroElement.lowest_points = 0
+      gradeSchemeElements.push(zeroElement)
+
     # Checks if there are more than one zero threshold elements
     _isOnlyZeroThreshold = (currentElement) ->
       result = _.find(gradeSchemeElements, (element) ->
@@ -121,9 +133,11 @@
 
     {
       gradeSchemeElements: gradeSchemeElements
+      ensureHasZeroElement: ensureHasZeroElement
       removeElement: removeElement
       addElement: addElement
       newElement: newElement
+      addZeroElement: addZeroElement
       validateElement: validateElement
       createOrUpdate: createOrUpdate
       getGradeSchemeElements: getGradeSchemeElements
