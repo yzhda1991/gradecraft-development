@@ -35,8 +35,10 @@ describe API::GradeSchemeElementsController do
     describe "protected routes" do
       it "redirect to root" do
         [
+          -> { post :create },
+          -> { put :update, params: { id: 1 } },
+          -> { put :mass_update },
           -> { delete :destroy_all },
-          -> { put :update, params: { id: 1 } }
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to :root
         end
@@ -58,31 +60,26 @@ describe API::GradeSchemeElementsController do
       end
     end
 
-    describe "PUT update" do
+    describe "PUT mass_update" do
       let(:grade_scheme_element) { create :grade_scheme_element, course: course }
       let(:params) do
-        { "grade_scheme_elements_attributes" => [{
-          id: grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0,
-          course_id: course.id }, { id: nil,
-          letter: "B", level: "Snail", lowest_points: 100001,
-          course_id: course.id }], "deleted_ids"=>nil }
+        {
+          "grade_scheme_elements_attributes" => [
+            { id: grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0, course_id: course.id },
+            { id: nil, letter: "B", level: "Snail", lowest_points: 100001, course_id: course.id }
+          ]
+        }
       end
 
       it "updates the grade scheme elements" do
-        put :update, params: params, format: :json
+        put :mass_update, params: params, format: :json
         expect(course.reload.grade_scheme_elements.count).to eq 2
         expect(grade_scheme_element.reload.level).to eq "Sea Slug"
       end
 
       it "recalculates scores for all students in the course" do
-        expect{ put :update, params: params, format: :json }.to \
+        expect{ put :mass_update, params: params, format: :json }.to \
           change{ queue(ScoreRecalculatorJob).size }.by course.students.count
-      end
-
-      it "deletes grades scheme elements" do
-        params = { "deleted_ids"=>[grade_scheme_element.id] }
-        expect{ put :update, params: params, format: :json }.to \
-          change{ GradeSchemeElement.count }.by -1
       end
     end
 
