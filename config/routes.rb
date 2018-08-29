@@ -530,7 +530,7 @@ Rails.application.routes.draw do
     resources :grade_scheme_elements, only: [:index, :create, :update, :destroy] do
       resources :unlock_conditions, only: :index
       collection do
-        put :update_many
+        put :mass_update
         delete :destroy_all
       end
     end

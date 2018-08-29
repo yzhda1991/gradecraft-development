@@ -9,12 +9,12 @@
       _addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
       _addAdditionalLevels(additionalLevels) if additionalLevels? && additionalLevels > 0
       _validateElements()
-      _postGradeSchemeElements()
+      _postGradeSchemeElements(redirectUrl)
 
-    _postGradeSchemeElements = () ->
+    _postGradeSchemeElements = (redirectUrl) ->
       return if GradeSchemeElementsService.gradeSchemeElements.length < 1
 
-      $http.put('/api/grade_scheme_elements/update_many', grade_scheme_elements_attributes: GradeSchemeElementsService.gradeSchemeElements).then(
+      $http.put('/api/grade_scheme_elements/mass_update', grade_scheme_elements_attributes: GradeSchemeElementsService.gradeSchemeElements).then(
         (response) ->
           _clearArray(GradeSchemeElementsService.gradeSchemeElements)
           GradeCraftAPI.loadMany(GradeSchemeElementsService.gradeSchemeElements, response.data)

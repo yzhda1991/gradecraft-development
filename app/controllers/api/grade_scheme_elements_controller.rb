@@ -1,9 +1,12 @@
 # The Grade Scheme Elements define the point thresholds earned at which students
 # earn course wide levels and grades
 class API::GradeSchemeElementsController < ApplicationController
+  ALLOWED_GSE_ATTRIBUTES = %i{id letter lowest_points level description course_id}.freeze
+  private_constant :ALLOWED_GSE_ATTRIBUTES
+
   before_action :ensure_staff?, except: :index
   before_action :find_grade_scheme_element, only: [:update, :destroy]
-  before_action :use_current_course, only: :update_many
+  before_action :use_current_course, only: :mass_update
 
   # GET /api/grade_scheme_elements
   def index
@@ -33,21 +36,13 @@ class API::GradeSchemeElementsController < ApplicationController
     end
   end
 
-  # POST /api/grade_scheme_elements
-  def update_many
-    begin
-      GradeSchemeElement.transaction do
-        # @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
-        @course.update! mass_grade_scheme_elements_params
-      end
-
-      @course.students.pluck(:id).each do |id|
-        ScoreRecalculatorJob.new(user_id: id, course_id: @course.id).enqueue
-      end
-
+  # POST /api/grade_scheme_elements/mass_update
+  def mass_update
+    if @course.update! mass_grade_scheme_elements_params
+      @course.recalculate_student_scores
       assign_for_index
       render "api/grade_scheme_elements/index", status: 200
-    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved
+    else
       render json: { message: "Failed to update grade scheme elements", success: false },
         status: :internal_server_error
     end
@@ -66,7 +61,7 @@ class API::GradeSchemeElementsController < ApplicationController
     end
   end
 
-  # DELETE /api/grade_scheme_elements
+  # DELETE /api/grade_scheme_elements/destroy_all
   def destroy_all
     current_course.grade_scheme_elements.destroy_all
 
@@ -82,15 +77,11 @@ class API::GradeSchemeElementsController < ApplicationController
   private
 
   def grade_scheme_element_params
-    params.require(:grade_scheme_element).permit allowed_gse_attributes
+    params.require(:grade_scheme_element).permit ALLOWED_GSE_ATTRIBUTES
   end
 
   def mass_grade_scheme_elements_params
-    params.permit grade_scheme_elements_attributes: allowed_gse_attributes
-  end
-
-  def allowed_gse_attributes
-    [:id, :letter, :lowest_points, :level, :description, :course_id].freeze
+    params.permit grade_scheme_elements_attributes: ALLOWED_GSE_ATTRIBUTES
   end
 
   def find_grade_scheme_element
