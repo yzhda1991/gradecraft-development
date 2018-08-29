@@ -48,7 +48,6 @@ describe GradeSchemeElementsController do
 
     it "redirects protected routes to root" do
       [
-        -> { get :index },
         -> { get :mass_edit },
         -> { get :edit, params: { id: 1 } },
         -> { put :update, params: { id: 1 } },
