@@ -5,7 +5,7 @@
       .login-block
         - if Rails.env.production?
           = render partial: "user_sessions/umich"
-          %button.button-link.small#show-gradecraft-login.left.uppercase Admin
+          %a#show-gradecraft-login.left.uppercase Admin
         - else
           = render partial: "user_sessions/gradecraft"
 
