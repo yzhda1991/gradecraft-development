@@ -12,14 +12,10 @@
         if confirm "Are you sure you want to delete all grade scheme elements?"
           GradeSchemeElementsService.deleteAll('/grade_scheme_elements/')
 
-      # For manually triggering form validation by child directives
-      vm.updateFormValidity = () ->
-        _.each(GradeSchemeElementsService.gradeSchemeElements, (element) ->
-          if vm.gradeSchemeElementsForm["point_threshold_#{element.order}"]?
-            vm.gradeSchemeElementsForm["point_threshold_#{element.order}"].$setValidity('validPointThreshold', !element.validationError?)
-        )
-
-      GradeSchemeElementsService.getGradeSchemeElements().then(() -> vm.loading = false)
+      if GradeSchemeElementsService.gradeSchemeElements.length < 1
+        GradeSchemeElementsService.getGradeSchemeElements().then(() -> vm.loading = false)
+      else
+        vm.loading = false
     ]
 
     {

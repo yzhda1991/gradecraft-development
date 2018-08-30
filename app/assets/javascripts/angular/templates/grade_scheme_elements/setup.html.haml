@@ -1,88 +1,91 @@
-%h2.form-title Add new grading scheme
+%setup{"ng-if"=>"gseSetupCtrl.showSetup"}
+  %h2.form-title Add new grading scheme
 
-%form.grading-scheme-setup{"name"=>"gradeSchemeSetupForm"}
-  %fieldset
-    .form-question
-      %legend Are you using grade letters?
-      %ul
-        %li
-          %label
-            %input{"type"=>"radio",
-                   "ng-model"=>"vm.isUsingGradeLetters",
-                   "ng-value"=>"true",
-                   "name"=>"gradeletters",
-                   "tabindex"=>"0",
-                   "required"=>""} Yes
-        %li
-          %label
-            %input{"type"=>"radio",
-                   "ng-model"=>"vm.isUsingGradeLetters",
-                   "ng-value"=>"false",
-                   "name"=>"gradeletters",
-                   "required"=>""} No
-
-  %additional-questions.form-section{"ng-if"=>"vm.isUsingGradeLetters === false"}
+  %form.grading-scheme-setup{"name"=>"gradeSchemeSetupForm"}
     %fieldset
       .form-question
-        %p How many levels would you like to start with?
-        %label
-          %input{"type"=>"number",
-                 "ng-model"=>"vm.additionalLevels",
-                 "min"=>"1",
-                 "size"=>"8",
-                 "ng-required"=>"!vm.isUsingGradeLetters"}
-
-  %additional-questions.form-section{"ng-if"=>"vm.isUsingGradeLetters"}
-    %fieldset
-      .form-question
-        %legend Are you using +/- grades?
+        %legend Are you using grade letters?
         %ul
           %li
             %label
               %input{"type"=>"radio",
-                     "ng-model"=>"vm.isUsingPlusMinusGrades",
+                     "ng-model"=>"gseSetupCtrl.isUsingGradeLetters",
                      "ng-value"=>"true",
-                     "name"=>"plusminus",
+                     "name"=>"gradeletters",
                      "tabindex"=>"0",
-                     "ng-required"=>"vm.isUsingGradeLetters"} Yes
+                     "required"=>""} Yes
           %li
             %label
               %input{"type"=>"radio",
-                     "ng-model"=>"vm.isUsingPlusMinusGrades",
+                     "ng-model"=>"gseSetupCtrl.isUsingGradeLetters",
                      "ng-value"=>"false",
-                     "name"=>"plusminus",
-                     "ng-required"=>"vm.isUsingGradeLetters"} No
+                     "name"=>"gradeletters",
+                     "required"=>""} No
 
-    %fieldset
-      .form-question
-        %legend Would you like to add levels below 'F'?
-        %ul
-          %li
-            %label
-              %input{"type"=>"radio", "ng-model"=>"vm.addLevelsBelowF",
-                     "ng-value"=>"true",
-                     "name"=>"levelsbelow",
-                     "tabindex"=>"0",
-                     "ng-required"=>"vm.isUsingGradeLetters"} Yes
-          %li
-            %label
-              %input{"type"=>"radio",
-                     "ng-model"=>"vm.addLevelsBelowF",
-                     "ng-value"=>"false",
-                     "name"=>"levelsbelow",
-                     "ng-required"=>"vm.isUsingGradeLetters"} No
+    %additional-questions.form-section{"ng-if"=>"gseSetupCtrl.isUsingGradeLetters === false"}
+      %fieldset
+        .form-question
+          %p How many levels would you like to start with?
+          %label
+            %input{"type"=>"number",
+                   "ng-model"=>"gseSetupCtrl.additionalLevels",
+                   "min"=>"1",
+                   "size"=>"8",
+                   "ng-required"=>"!gseSetupCtrl.isUsingGradeLetters"}
 
-    %additional-questions.form-section{"ng-if"=>"vm.addLevelsBelowF"}
-      .form-question
-        %p How many?
-        %label
-          %input{"type"=>"number",
-                 "ng-model"=>"vm.additionalLevels",
-                 "min"=>"1",
-                 "size"=>"8",
-                 "ng-required"=>"vm.isUsingGradeLetters && vm.addLevelsBelowF"}
+    %additional-questions.form-section{"ng-if"=>"gseSetupCtrl.isUsingGradeLetters"}
+      %fieldset
+        .form-question
+          %legend Are you using +/- grades?
+          %ul
+            %li
+              %label
+                %input{"type"=>"radio",
+                       "ng-model"=>"gseSetupCtrl.isUsingPlusMinusGrades",
+                       "ng-value"=>"true",
+                       "name"=>"plusminus",
+                       "tabindex"=>"0",
+                       "ng-required"=>"gseSetupCtrl.isUsingGradeLetters"} Yes
+            %li
+              %label
+                %input{"type"=>"radio",
+                       "ng-model"=>"gseSetupCtrl.isUsingPlusMinusGrades",
+                       "ng-value"=>"false",
+                       "name"=>"plusminus",
+                       "ng-required"=>"gseSetupCtrl.isUsingGradeLetters"} No
 
-%button.button.right{"type"=>"button",
-                     "ng-disabled"=>"gradeSchemeSetupForm.$invalid",
-                     "ng-class"=>'{"disabled": gradeSchemeSetupForm.$invalid}',
-                     "ng-click"=>"vm.postGradeSchemeElements()"} Get me started!
+      %fieldset
+        .form-question
+          %legend Would you like to add levels below 'F'?
+          %ul
+            %li
+              %label
+                %input{"type"=>"radio", "ng-model"=>"gseSetupCtrl.addLevelsBelowF",
+                       "ng-value"=>"true",
+                       "name"=>"levelsbelow",
+                       "tabindex"=>"0",
+                       "ng-required"=>"gseSetupCtrl.isUsingGradeLetters"} Yes
+            %li
+              %label
+                %input{"type"=>"radio",
+                       "ng-model"=>"gseSetupCtrl.addLevelsBelowF",
+                       "ng-value"=>"false",
+                       "name"=>"levelsbelow",
+                       "ng-required"=>"gseSetupCtrl.isUsingGradeLetters"} No
+
+      %additional-questions.form-section{"ng-if"=>"gseSetupCtrl.addLevelsBelowF"}
+        .form-question
+          %p How many?
+          %label
+            %input{"type"=>"number",
+                   "ng-model"=>"gseSetupCtrl.additionalLevels",
+                   "min"=>"1",
+                   "size"=>"8",
+                   "ng-required"=>"gseSetupCtrl.isUsingGradeLetters && gseSetupCtrl.addLevelsBelowF"}
+
+  %button.button.right{"type"=>"button",
+                       "ng-disabled"=>"gradeSchemeSetupForm.$invalid",
+                       "ng-class"=>'{"disabled": gradeSchemeSetupForm.$invalid}',
+                       "ng-click"=>"gseSetupCtrl.setUpGradeSchemeElements()"} Get me started!
+
+%grade-scheme-elements-mass-edit-form{"ng-if"=>"!gseSetupCtrl.showSetup"}

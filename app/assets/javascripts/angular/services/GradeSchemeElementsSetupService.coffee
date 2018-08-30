@@ -5,25 +5,10 @@
     _standardGradeLetters = ['A', 'B', 'C', 'D', 'F']
 
     # Create the grade scheme elements
-    postGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, additionalLevels, redirectUrl=null) ->
+    setUpGradeSchemeElements = (isUsingGradeLetters, isUsingPlusMinusGrades, additionalLevels, redirectUrl=null) ->
       _addGradeLevels(isUsingPlusMinusGrades) if isUsingGradeLetters
       _addAdditionalLevels(additionalLevels) if additionalLevels? && additionalLevels > 0
       GradeSchemeElementsService.ensureHasZeroElement()
-      _postGradeSchemeElements(redirectUrl)
-
-    _postGradeSchemeElements = (redirectUrl) ->
-      return if GradeSchemeElementsService.gradeSchemeElements.length < 1
-
-      $http.put('/api/grade_scheme_elements/mass_update', grade_scheme_elements_attributes: GradeSchemeElementsService.gradeSchemeElements).then(
-        (response) ->
-          _clearArray(GradeSchemeElementsService.gradeSchemeElements)
-          GradeCraftAPI.loadMany(GradeSchemeElementsService.gradeSchemeElements, response.data)
-          GradeCraftAPI.logResponse(response)
-          window.location.href = redirectUrl if redirectUrl?
-        , (error) ->
-          alert('An error occurred while saving changes')
-          GradeCraftAPI.logResponse(error)
-      )
 
     # Add grade scheme elements with the preset parameters
     _addGradeLevels = (includePlusMinusGrades) ->
@@ -44,6 +29,6 @@
     _clearArray = (array) -> array.length = 0
 
     {
-      postGradeSchemeElements: postGradeSchemeElements
+      setUpGradeSchemeElements: setUpGradeSchemeElements
     }
 ]

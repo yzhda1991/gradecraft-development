@@ -3,25 +3,26 @@
 ['GradeSchemeElementsSetupService', (GradeSchemeElementsSetupService) ->
   GradeSchemeElementsSetupCtrl = [() ->
     vm = this
+    vm.showSetup = true
 
     vm.isUsingGradeLetters = undefined
     vm.isUsingPlusMinusGrades = undefined
     vm.addLevelsBelowF = undefined
     vm.additionalLevels = undefined
 
-    vm.postGradeSchemeElements = () ->
-      GradeSchemeElementsSetupService.postGradeSchemeElements(
+    vm.setUpGradeSchemeElements = () ->
+      GradeSchemeElementsSetupService.setUpGradeSchemeElements(
         vm.isUsingGradeLetters,
         vm.isUsingPlusMinusGrades,
-        vm.additionalLevels,
-        '/grade_scheme_elements/mass_edit'
+        vm.additionalLevels
       )
+      vm.showSetup = false
   ]
 
   {
     bindToController: true
     controller: GradeSchemeElementsSetupCtrl
-    controllerAs: 'vm'
+    controllerAs: 'gseSetupCtrl'
     restrict: 'EA'
     templateUrl: 'grade_scheme_elements/setup.html'
   }

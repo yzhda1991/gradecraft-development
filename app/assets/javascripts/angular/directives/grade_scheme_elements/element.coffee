@@ -19,7 +19,6 @@
           scope.status = null
           GradeSchemeElementsService.validateElement(@gradeSchemeElement)
           GradeSchemeElementsService.ensureHasZeroElement()
-          gseForm.updateFormValidity()
           _save(scope, isRemoval)
 
         _clearAlert = () ->
