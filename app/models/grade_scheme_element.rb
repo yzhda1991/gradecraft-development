@@ -6,10 +6,8 @@ class GradeSchemeElement < ApplicationRecord
   belongs_to :course
 
   validates_presence_of :course
-  validates :lowest_points, length: { maximum: 9 },
-    numericality: { only_integer: true }, allow_nil: true
+  validates :lowest_points, length: { maximum: 9 }, numericality: { only_integer: true }
 
-  scope :with_lowest_points, -> { where.not(lowest_points: nil) }
   scope :for_course, -> (course_id) { where(course_id: course_id) }
   scope :ordered, -> { order({ lowest_points: :desc }, :letter) }
   scope :order_by_points_asc, -> { order lowest_points: :asc }
@@ -23,17 +21,13 @@ class GradeSchemeElement < ApplicationRecord
     course.grade_scheme_elements.all? { |gse| !gse.lowest_points.nil? }
   end
 
-  # By default, return only valid elements with lowest_points not equal to nil
-  def self.next_highest_element_for(element, with_lowest_points_only=true)
+  def self.next_highest_element_for(element)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
-    ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
     ordered_course_elements[ordered_course_elements.find_index(element) + 1] unless ordered_course_elements.empty?
   end
 
-  # By default, return only valid elements with lowest_points not equal to nil
-  def self.next_lowest_element_for(element, with_lowest_points_only=true)
+  def self.next_lowest_element_for(element)
     ordered_course_elements = GradeSchemeElement.for_course(element.course).order_by_points_asc
-    ordered_course_elements = ordered_course_elements.with_lowest_points if with_lowest_points_only
     current_index = ordered_course_elements.find_index(element)
     return nil if current_index == 0
     ordered_course_elements[current_index - 1]

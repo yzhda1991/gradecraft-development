@@ -12,7 +12,7 @@
     = external_link_to "Download the Current Syllabus", current_course.syllabus_url
     %p
 
-  - if current_course.grade_scheme_elements.with_lowest_points.present?
+  - if current_course.grade_scheme_elements.present?
     %h3.bold Grading Scheme
     - if current_user_is_student?
       = render partial: "grade_scheme_elements/index_student", locals: { "@grade_scheme_elements": current_course.grade_scheme_elements.order_by_points_desc }

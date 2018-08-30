@@ -19,11 +19,6 @@ describe GradeSchemeElement do
       expect(subject).to be_invalid
     end
 
-    it "is valid if lowest points is nil" do
-      subject.lowest_points = nil
-      expect(subject).to be_valid
-    end
-
     it "is invalid if lowest points is not numeric" do
       subject.lowest_points = "one"
       expect(subject).to be_invalid
@@ -37,29 +32,15 @@ describe GradeSchemeElement do
 
   describe ".next_highest_element_for" do
     context "when there is a grade scheme element with a higher point threshold" do
-      it "returns the next highest element with lowest points by default" do
+      it "returns the next highest element with lowest points" do
         grade_scheme_element = create :grade_scheme_element, lowest_points: 5000,
           course: course
         expect(GradeSchemeElement.next_highest_element_for(subject)).to \
           eq grade_scheme_element
       end
-
-      it "returns the next highest element with or without lowest points if requested" do
-        grade_scheme_element = create :grade_scheme_element, lowest_points: nil,
-          course: course
-        expect(GradeSchemeElement.next_highest_element_for(subject, false)).to \
-          eq grade_scheme_element
-      end
     end
 
     context "when there is not a grade scheme element with a higher point threshold" do
-      it "returns nil if all elements have a nil point threshold" do
-        GradeSchemeElement.destroy_all
-        elements = create_list(:grade_scheme_element, 2, course: course, lowest_points: nil)
-        subject = elements.first
-        expect(GradeSchemeElement.next_highest_element_for(subject)).to be_nil
-      end
-
       it "returns nil" do
         expect(GradeSchemeElement.next_highest_element_for(subject)).to be_nil
       end
@@ -68,19 +49,11 @@ describe GradeSchemeElement do
 
   describe ".next_lowest_element_for" do
     context "when there is a grade scheme element with a lower point threshold" do
-      it "returns the next lowest element with lowest points by default" do
+      it "returns the next lowest element with lowest points" do
         grade_scheme_element = create :grade_scheme_element, lowest_points: 500,
           course: course
         expect(GradeSchemeElement.next_lowest_element_for(subject)).to \
           eq grade_scheme_element
-      end
-
-      it "returns the next lowest element with or without lowest points if requested" do
-        subject.lowest_points = nil
-        grade_scheme_element = create :grade_scheme_element, lowest_points: nil,
-          course: course
-        expect(GradeSchemeElement.next_lowest_element_for(grade_scheme_element, false)).to \
-          eq subject
       end
     end
 

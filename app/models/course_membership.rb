@@ -68,12 +68,12 @@ class CourseMembership < ApplicationRecord
   end
 
   def check_and_update_student_earned_level
-    course.grade_scheme_elements.with_lowest_points.order_by_points_asc.map { |gse| gse.unlock!(user) }
+    course.grade_scheme_elements.order_by_points_asc.map { |gse| gse.unlock!(user) }
     update_attributes earned_grade_scheme_element_id: earned_grade_scheme_element.try(:id)
   end
 
   def earned_grade_scheme_element(grade_scheme_elements=nil)
-    elements = grade_scheme_elements || course.grade_scheme_elements.with_lowest_points.order_by_points_asc
+    elements = grade_scheme_elements || course.grade_scheme_elements.order_by_points_asc
     elements = elements.includes(:unlock_conditions) if elements.any?
     element_earned = nil
 
