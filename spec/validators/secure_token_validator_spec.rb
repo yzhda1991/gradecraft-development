@@ -24,11 +24,6 @@ describe SecureTokenValidator do
       expect(subject).to receive(:validate_uuid_format)
       result
     end
-
-    it "validates the encrypted key format" do
-      expect(subject).to receive(:validate_encrypted_key_format)
-      result
-    end
   end
 
   describe "validating attributes" do
