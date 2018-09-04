@@ -2,10 +2,13 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', 'orderByFilter',
   ($http, GradeCraftAPI, orderBy) ->
 
-    gradeSchemeElements = []
+    _gradeSchemeElements = []
     _totalPoints = 0
 
+    gradeSchemeElements = () -> _gradeSchemeElements
     totalPoints = () -> _totalPoints
+
+    sortElements = () -> _gradeSchemeElements = orderBy(_gradeSchemeElements, "lowest_points", true)
 
     removeElement = (currentElement) ->
       if currentElement.lowest_points == 0 && _isOnlyZeroThreshold(currentElement)
@@ -14,27 +17,27 @@
         if currentElement.id?
           _deleteElement(currentElement)
         else
-          gradeSchemeElements.splice(gradeSchemeElements.indexOf(currentElement), 1)
+          _gradeSchemeElements.splice(_gradeSchemeElements.indexOf(currentElement), 1)
 
     # Add a new element after the selected element, if one was given
     addElement = (currentElement, attributes=null) ->
       if currentElement?
-        for element, i in gradeSchemeElements
+        for element, i in _gradeSchemeElements
           if element == currentElement
-            gradeSchemeElements.splice(i + 1, 0, newElement())
+            _gradeSchemeElements.splice(i + 1, 0, newElement())
             return
       else
-        gradeSchemeElements.push(newElement(attributes))
+        _gradeSchemeElements.push(newElement(attributes))
 
     ensureHasZeroElement = () ->
-      hasZeroElement = _.some(gradeSchemeElements, (element) -> element.lowest_points == 0)
+      hasZeroElement = _.some(_gradeSchemeElements, (element) -> element.lowest_points == 0)
       addZeroElement() if not hasZeroElement
 
     # GET grade scheme elements for the current course
     # Returns a promise
     getGradeSchemeElements = () ->
       $http.get("/api/grade_scheme_elements").then((response) ->
-        GradeCraftAPI.loadMany(gradeSchemeElements, response.data)
+        GradeCraftAPI.loadMany(_gradeSchemeElements, response.data)
         _totalPoints = response.data.meta.total_points
         GradeCraftAPI.logResponse(response)
       )
@@ -86,7 +89,7 @@
       if !currentElement.lowest_points?
         currentElement.validationError = "Point threshold does not have a value"
 
-      for element in gradeSchemeElements
+      for element in _gradeSchemeElements
         continue if element == currentElement || !element.lowest_points? || isNaN(element.lowest_points)
 
         # Invalid because it is in direct conflict with another level
@@ -109,11 +112,11 @@
       zeroElement = newElement()
       zeroElement.level = "Not yet on the board"
       zeroElement.lowest_points = 0
-      gradeSchemeElements.push(zeroElement)
+      createOrUpdate(zeroElement)
 
     # Checks if there are more than one zero threshold elements
     _isOnlyZeroThreshold = (currentElement) ->
-      result = _.find(gradeSchemeElements, (element) ->
+      result = _.find(_gradeSchemeElements, (element) ->
         currentElement != element && element.lowest_points == 0
       )?
       !result
@@ -121,7 +124,7 @@
     _deleteElement = (element) ->
       $http.delete("/api/grade_scheme_elements/#{element.id}").then(
         (response) ->
-          GradeCraftAPI.deleteItem(gradeSchemeElements, element)
+          GradeCraftAPI.deleteItem(_gradeSchemeElements, element)
           alert("Successfully deleted #{element.name || 'grade scheme element'}")
           GradeCraftAPI.logResponse(response)
         , (error) ->
@@ -131,6 +134,7 @@
 
     {
       gradeSchemeElements: gradeSchemeElements
+      sortElements: sortElements
       ensureHasZeroElement: ensureHasZeroElement
       removeElement: removeElement
       addElement: addElement

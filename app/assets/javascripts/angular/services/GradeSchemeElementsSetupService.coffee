@@ -23,8 +23,6 @@
       _.times(numberOfLevels-1, () ->
         GradeSchemeElementsService.addElement()
       )
-      # Make last element the zero threshold
-      GradeSchemeElementsService.addZeroElement()
 
     _clearArray = (array) -> array.length = 0
 

@@ -1,20 +1,20 @@
 %loading-message{'data-loading'=>'vm.loading', 'data-message'=>"Loading Grade Scheme Elements..."}
 
 .grade-scheme-elements{'ng-if'=>'!vm.loading'}
-  %grade-scheme-element{'ng-repeat'=>'element in gradeSchemeElements',
+  %grade-scheme-element{'ng-repeat'=>'element in vm.gradeSchemeElements()',
                         'data-grade-scheme-element'=>'element'}
 
   %button.secondary{'type'=>'button',
                     'ng-click'=>'vm.addElement()',
-                    'ng-if'=>'gradeSchemeElements.length < 1'}
+                    'ng-if'=>'vm.gradeSchemeElements().length < 1'}
     %i.fa.fa-plus
     Add Your Highest Grade
 
-  .main-buttons{'ng-if'=>'gradeSchemeElements && gradeSchemeElements.length > 0'}
+  .main-buttons{'ng-if'=>'vm.gradeSchemeElements() && vm.gradeSchemeElements().length > 0'}
     %button.action{'ng-click'=>'vm.deleteAll()'}
       %i.fa.fa-trash
       Delete All Elements
 
-    %button.secondary{'ng-click'=>"sortElements()"}
+    %button.secondary{'ng-click'=>"vm.sortElements()"}
       %i.fa.fa-sort
       Sort Elements By Points
