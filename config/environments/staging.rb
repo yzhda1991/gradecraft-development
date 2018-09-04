@@ -26,7 +26,7 @@ Rails.application.configure do
   config.assets.digest = true
   config.assets.js_compressor = Uglifier.new(mangle: false)
   config.cache_classes = true
-  config.cache_store = :dalli_store, ENV["MEMCACHED_URL"], { :namespace => "gradecraft_staging", :expires_in => 1.day, :compress => true }
+  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'], expires_in: 1.day }
   config.consider_all_requests_local = false
   config.eager_load = true
   config.i18n.fallbacks = true

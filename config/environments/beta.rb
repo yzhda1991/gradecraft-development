@@ -60,7 +60,7 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
-  config.cache_store = :dalli_store, ENV["MEMCACHED_URL"], { :namespace => "gradecraft_beta", :expires_in => 1.day, :compress => true }
+  config.cache_store = :redis_cache_store, { url: ENV["REDIS_URL"], namespace: "gradecraft_beta", expires_in: 1.day, compress: true }
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
