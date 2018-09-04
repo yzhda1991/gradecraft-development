@@ -52,7 +52,6 @@
           successCallback() if successCallback?
           GradeCraftAPI.logResponse(response)
         , (error) ->
-          alert('An error occurred while saving changes')
           failureCallback() if failureCallback?
           GradeCraftAPI.logResponse(error)
       )
@@ -64,7 +63,6 @@
           successCallback() if successCallback?
           GradeCraftAPI.logResponse(response)
         , (error) ->
-          alert('An error occurred while saving changes')
           failureCallback() if failureCallback?
           GradeCraftAPI.logResponse(error)
       )
