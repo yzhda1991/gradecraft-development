@@ -71,7 +71,7 @@ gem 'puma'
 gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rdiscount'
-gem 'redis', '~> 3.0'
+gem 'redis', '~> 4.0'
 
 # retry dsl for resque
 gem 'resque-retry'
