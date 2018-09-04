@@ -12,6 +12,12 @@
     vm.addElement = () ->
       GradeSchemeElementsService.addElement()
 
+    vm.save = () ->
+      GradeSchemeElementsService.validateElements()
+      vm.updateFormValidity()
+      return if vm.gradeSchemeElementsForm.$invalid
+      GradeSchemeElementsService.postGradeSchemeElements(null, true, true)
+
     vm.deleteGradeSchemeElements = () ->
       if confirm "Are you sure you want to delete all grade scheme elements?"
         GradeSchemeElementsService.deleteGradeSchemeElements('/grade_scheme_elements/')
