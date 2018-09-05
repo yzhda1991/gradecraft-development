@@ -76,7 +76,7 @@ GEM
       sprockets (>= 3.0, < 5)
       tilt
     angularjs-rails (1.4.8)
-    archive-zip (0.7.0)
+    archive-zip (0.11.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.0)
@@ -642,7 +642,7 @@ DEPENDENCIES
   addressable
   angular-rails-templates
   angularjs-rails (~> 1.4.2)
-  archive-zip (~> 0.7.0)
+  archive-zip (~> 0.11)
   autonumeric-rails
   autoprefixer-rails (~> 8.0)
   aws-sdk (~> 2)

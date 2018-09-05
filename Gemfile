@@ -14,7 +14,7 @@ gem 'angular-rails-templates'
 
 # zip utility for simple creation of zip files, pure ruby implementation
 # without the GC overhead of the Rubyzip library
-gem 'archive-zip', '~> 0.7.0'
+gem 'archive-zip', '~> 0.11'
 
 gem 'autonumeric-rails'
 gem 'autoprefixer-rails', '~> 8.0'
