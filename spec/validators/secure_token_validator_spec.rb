@@ -24,11 +24,6 @@ describe SecureTokenValidator do
       expect(subject).to receive(:validate_uuid_format)
       result
     end
-
-    it "validates the encrypted key format" do
-      expect(subject).to receive(:validate_encrypted_key_format)
-      result
-    end
   end
 
   describe "validating attributes" do
@@ -68,45 +63,6 @@ describe SecureTokenValidator do
         it "inserts an error message into errors[:uuid]" do
           result
           expect(record.errors[:uuid].last).to match "is not valid"
-        end
-
-      end
-    end
-
-    describe "#validate_encrypted_key_format" do
-      let(:result) { subject.validate_encrypted_key_format }
-
-      before(:each) do
-        allow(SecureTokenValidator::Regex).to receive(:encrypted_key) { regex }
-      end
-
-      context "the record's :encrypted_key matches the validator regex" do
-        let(:regex) { /some-hex-key/ }
-
-        it "returns nil" do
-          expect(result).to be_nil
-        end
-
-        it "doesn't add an error message for the encrypted_key" do
-          result
-          expect(record.errors[:encrypted_key]).to be_empty
-        end
-      end
-
-      context "the record's :encrypted_key does not match the validator regex" do
-        let(:regex) { /invalid-encrypted-key-format/ }
-
-        before(:each) do
-          allow(subject.record).to receive(:encrypted_key) { "not-the-encrypted_key-format" }
-        end
-
-        it "returns the encrypted_key errors array" do
-          expect(result).to eq record.errors[:encrypted_key]
-        end
-
-        it "inserts an error message into errors[:encrypted_key]" do
-          result
-          expect(record.errors[:encrypted_key].last).to match "is not valid"
         end
 
       end

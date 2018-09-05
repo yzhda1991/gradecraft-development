@@ -14,7 +14,7 @@ gem 'angular-rails-templates'
 
 # zip utility for simple creation of zip files, pure ruby implementation
 # without the GC overhead of the Rubyzip library
-gem 'archive-zip', '~> 0.7.0'
+gem 'archive-zip', '~> 0.11'
 
 gem 'autonumeric-rails'
 gem 'autoprefixer-rails', '~> 8.0'
@@ -64,7 +64,7 @@ gem 'omniauth-lti', '~> 0.0.2'
 gem 'ransack'
 gem 'recaptcha', require: "recaptcha/rails"
 gem 'pacecar'
-gem 'paper_trail'
+gem 'paper_trail', '~> 9.0'
 gem 'pg'
 gem 'porch'
 gem 'puma'
@@ -98,7 +98,7 @@ gem 'sanitize'
 gem 'sassc-rails'
 
 # secure crypt hashing library stronger than bcrypt or PBDBF2
-gem 'scrypt', '2.0.2'
+gem 'scrypt', '3.0.5'
 
 gem 'select2-rails'
 gem 'simple_form'
@@ -152,10 +152,10 @@ end
 source 'https://rails-assets.org' do
   gem 'rails-assets-angular', '1.3.15'
   gem 'rails-assets-angular-resource', '1.3.15'
-  gem 'rails-assets-lodash', '3.7.0'
+  gem 'rails-assets-lodash', '3.10.1'
   gem 'rails-assets-jquery', '2.1.4'
   gem 'rails-assets-angular-dragdrop', '1.0.11'
   gem 'rails-assets-ngDraggable', '0.1.8'
-  gem 'rails-assets-rollbar.js', '~> 2.3.9'
-  gem 'rails-assets-ng-rollbar', '~> 2.3.10'
+  gem 'rails-assets-rollbar.js', '~> 2.4.5'
+  gem 'rails-assets-ng-rollbar', '~> 2.4.2'
 end

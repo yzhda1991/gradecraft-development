@@ -11,17 +11,4 @@ describe SecureTokenValidator::Regex do
         .to match SecureRandom.urlsafe_base64(190)
     end
   end
-
-  describe ".encrypted_key" do
-    let(:result) { described_class.encrypted_key }
-    let(:hex_key) { SecureRandom.hex 525 } # 1050-character hex key
-
-    it "matches 1050 character hex keys" do
-      expect(result).to match hex_key
-    end
-
-    it "matches 1049 character hex keys" do
-      expect(result).to match hex_key[0..1048]
-    end
-  end
 end

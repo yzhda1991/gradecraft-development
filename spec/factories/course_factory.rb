@@ -2,20 +2,20 @@ FactoryBot.define do
   factory :course do
     name { Faker::Internet.domain_word }
     course_number { Faker::Internet.domain_word }
-    semester "Fall"
-    has_badges false
-    has_paid false
-    published true
+    semester { "Fall" }
+    has_badges { false }
+    has_paid { false }
+    published { true }
 
     factory :course_with_weighting do
-      has_multipliers true
-      total_weights 6
-      max_weights_per_assignment_type 4
-      max_assignment_types_weighted 2
+      has_multipliers { true }
+      total_weights { 6 }
+      max_weights_per_assignment_type { 4 }
+      max_assignment_types_weighted { 2 }
     end
 
     factory :invalid_course do
-      name nil
+      name { nil }
     end
 
     trait :with_institution do
@@ -23,12 +23,12 @@ FactoryBot.define do
     end
 
     trait :uses_learning_objectives do
-      allows_learning_objectives true
-      has_learning_objectives true
+      allows_learning_objectives { true }
+      has_learning_objectives { true }
     end
 
     trait :has_multipliers do
-      has_multipliers true
+      has_multipliers { true }
     end
   end
 end

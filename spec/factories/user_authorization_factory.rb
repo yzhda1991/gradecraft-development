@@ -4,11 +4,11 @@ FactoryBot.define do
     association :user
 
     trait :canvas do
-      provider "canvas"
+      provider { "canvas" }
     end
 
     trait :google do
-      provider "google_oauth2"
+      provider { "google_oauth2" }
     end
   end
 end

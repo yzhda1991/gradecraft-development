@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :user do
     transient do
-      courses []
-      role :observer
-      activated true
+      courses { [] }
+      role { :observer }
+      activated { true }
     end
 
     first_name { Faker::Name.first_name }

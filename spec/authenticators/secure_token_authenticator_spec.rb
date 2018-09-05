@@ -197,7 +197,7 @@ describe SecureTokenAuthenticator do
     end
   end
 
-  describe "checking uuid and secure key formatting" do
+  describe "checking uuid" do
     # use this so sleep calls don't delay rspec
     let(:slowdown_duration) { 1e-10 }
 
@@ -222,38 +222,6 @@ describe SecureTokenAuthenticator do
       context "secure_token_uuid format does not match the regex" do
         it "returns false" do
           allow(subject).to receive(:secure_token_uuid) { "invalid-uuid" }
-          expect(result).to be_falsey
-        end
-
-        it "sleeps" do
-          expect(subject).to receive(:sleep).with slowdown_duration
-          result
-        end
-      end
-    end
-
-    describe "#secure_key_format_valid?" do
-      let(:result) { subject.secure_key_format_valid? }
-
-      before do
-        allow(SecureTokenValidator::Regex).to receive(:secret_key)
-          .and_return /VALID-SECRET-KEY/
-      end
-
-      before do
-        allow(subject).to receive(:sleep) { 0.000000001 } # don't sleep for long
-      end
-
-      context "secure_key format matches the regex" do
-        it "returns true" do
-          allow(subject).to receive(:secret_key) { "VALID-SECRET-KEY" }
-          expect(result).to be_truthy
-        end
-      end
-
-      context "secure_key format does not match the regex" do
-        it "returns false" do
-          allow(subject).to receive(:secret_key) { "invalid-secret-key" }
           expect(result).to be_falsey
         end
 

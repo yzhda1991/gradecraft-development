@@ -11,12 +11,6 @@ class SecureTokenValidator < ActiveModel::Validator
         # regex for testing formatting of 190-bit secure keys, 254 characters
         /\A[a-zA-Z0-9_\-]{254}\z/
       end
-
-      def encrypted_key
-        # regex for testing formatting of 512-bit secure encrypted keys,
-        # 1049 or 1050 characters
-        /\A[a-f0-9\$]{1049,1050}\z/
-      end
     end
   end
 end
