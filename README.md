@@ -96,7 +96,7 @@ cp .env.sample .env
 7. Install Bundler
 ```
 # install Bundler version specified in Gemfile.lock to avoid conflicts
-gem install bundler -v 1.16.2
+gem install bundler -v 1.16.4
 ```
 
 8. Install project dependencies
