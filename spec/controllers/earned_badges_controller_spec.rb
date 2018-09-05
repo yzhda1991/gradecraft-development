@@ -243,6 +243,11 @@ describe EarnedBadgesController do
     end
 
     describe "POST create" do
+      before do
+        allow(Services::Actions::RecalculatesStudentScore).to receive(:execute).and_return true
+        allow(Services::Actions::NotifiesOfEarnedBadge).to receive(:execute).and_return true
+      end
+
       it "creates the earned badge when the badge is student-awardable" do
         expect{ post :create, params: { badge_id: badge_student_awardable.id, earned_badge: {
               badge_id: badge_student_awardable.id,
