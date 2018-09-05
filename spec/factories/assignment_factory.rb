@@ -1,8 +1,9 @@
 FactoryBot.define do
   factory :assignment do
-    name { Faker::Lorem.word }
     association :course
     assignment_type { association :assignment_type, course: course }
+    
+    name { Faker::Lorem.word }
     description { Faker::Lorem.sentence }
     full_points { Faker::Number.number(5) }
     required { false }
@@ -38,7 +39,7 @@ FactoryBot.define do
     end
 
     factory :assignment_with_due_at do
-      due_at Date.today
+      due_at { Date.today }
     end
 
     trait :pass_fail do
@@ -46,7 +47,7 @@ FactoryBot.define do
     end
 
     trait :closed do
-      open_at Faker::Date.forward(3)
+      open_at { Faker::Date.forward(3) }
     end
   end
 end
