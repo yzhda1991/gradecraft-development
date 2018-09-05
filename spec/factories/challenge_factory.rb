@@ -3,7 +3,7 @@ FactoryBot.define do
     association :course
     name { Faker::Lorem.word }
     full_points { rand(200) + 100 }
-    visible true
-    accepts_submissions true
+    visible { true }
+    accepts_submissions { true }
   end
 end

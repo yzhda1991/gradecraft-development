@@ -6,22 +6,22 @@ FactoryBot.define do
     factory :in_progress_grade do
       raw_points { Faker::Number.number(5) }
       score { raw_points }
-      instructor_modified true
-      complete false
+      instructor_modified { true }
+      complete { false }
     end
 
     factory :complete_grade do
       raw_points { Faker::Number.number(5) }
       score { raw_points }
-      instructor_modified true
-      complete true
+      instructor_modified { true }
+      complete { true }
     end
 
     factory :student_visible_grade do
       raw_points { Faker::Number.number(5) }
-      instructor_modified true
-      complete true
-      student_visible true
+      instructor_modified { true }
+      complete { true }
+      student_visible { true }
     end
   end
 end
