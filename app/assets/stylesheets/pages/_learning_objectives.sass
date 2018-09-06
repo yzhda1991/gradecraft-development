@@ -36,7 +36,17 @@
 
   #criterion-box
     .criterion
-      input,
+      input
+        display: inline-block
+        width: 320px
+        margin-right: 1em
+        box-sizing: border-box
+
+        @media (max-width: $media-450)
+          display: block
+          width: 100%
+          margin-right: 0
+
       select,
       textarea
         display: block
@@ -45,7 +55,7 @@
         box-sizing: border-box
 
       textarea
-        min-height: 80px
+        min-height: 3em
         resize: vertical
 
     &.learning-objectives
