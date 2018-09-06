@@ -429,7 +429,7 @@ GEM
       rails-assets-jquery (>= 1.6)
     rails-assets-lodash (3.10.1)
     rails-assets-ng-rollbar (2.4.2)
-    rails-assets-ngDraggable (0.1.8)
+    rails-assets-ngDraggable (0.1.11)
       rails-assets-angular
     rails-assets-rollbar.js (2.4.5)
     rails-controller-testing (1.0.2)
@@ -710,7 +710,7 @@ DEPENDENCIES
   rails-assets-jquery (= 2.1.4)!
   rails-assets-lodash (= 3.10.1)!
   rails-assets-ng-rollbar (~> 2.4.2)!
-  rails-assets-ngDraggable (= 0.1.8)!
+  rails-assets-ngDraggable (= 0.1.11)!
   rails-assets-rollbar.js (~> 2.4.5)!
   rails-controller-testing
   rails_autolink
