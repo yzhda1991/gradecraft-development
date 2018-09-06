@@ -9,7 +9,6 @@
   'ui.router',
   'ng-rails-csrf',
   'ngResource',
-  'ngAnimate',
   'froala',
   'templates',
   'helpers',
