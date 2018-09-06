@@ -9,7 +9,6 @@ gem 'active_model_serializers'
 gem 'activerecord-session_store'
 gem 'acts_as_list'
 gem 'addressable'
-# gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates'
 
 # zip utility for simple creation of zip files, pure ruby implementation
