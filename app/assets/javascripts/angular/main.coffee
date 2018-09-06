@@ -2,7 +2,6 @@
   'ngAnimate',
   'ngDragDrop',
   'ngDraggable',
-  'uiFx',
   'restangular',
   'ui.sortable',
   'puElasticInput',
