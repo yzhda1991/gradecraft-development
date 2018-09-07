@@ -12,7 +12,7 @@ class Analytics::Event
   after_create do |event|
     if aggregates = Analytics.configuration.event_aggregates.stringify_keys[event.event_type]
       aggregates.each do |a|
-        Rails.logger.debug "incrementing aggregate type: #{a}"
+        Rails.logger.debug "Incrementing aggregate type: #{a} for event: #{self.as_document}"
         a.incr(event)
       end
     end
