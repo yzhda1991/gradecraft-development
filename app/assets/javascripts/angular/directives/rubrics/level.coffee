@@ -29,7 +29,6 @@
         scope.isMeetsExpectationsLevel() || !scope.meetsExpectationsSet()
 
       scope.expectationsLabel = ()->
-        return "Full Credit Level" if @level.full_credit
         return "Meets Expectations" if scope.isMeetsExpectationsLevel()
         return "Set As 'Meets Expectations'"
 
