@@ -15,9 +15,8 @@ class Criterion < ApplicationRecord
   after_create :generate_default_levels, if: :add_default_levels?
   # after_save :update_full_credit, if: :add_default_levels?
 
+  validates_presence_of :name, :order
   validates :max_points, presence: true, length: { maximum: 9 }
-  validates :name, presence: true, length: { maximum: 30 }
-  validates :order, presence: true
 
   scope :ordered, -> { order(:order) }
 

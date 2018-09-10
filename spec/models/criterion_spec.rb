@@ -64,7 +64,6 @@ describe Criterion do
   end
 
   describe "#comments_for" do
-
     it "returns comments for student" do
       subject.save
       grade = create :criterion_grade, criterion: subject, comments: "xo"
