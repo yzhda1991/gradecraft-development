@@ -15,7 +15,7 @@
         currentElement.validationError = "Lowest level threshold must be 0"
       else
         if currentElement.id?
-          _deleteElement(currentElement)
+          _deleteElement(currentElement) if confirm("Are you sure you want to delete this grade scheme element?")
         else
           _gradeSchemeElements.splice(_gradeSchemeElements.indexOf(currentElement), 1)
 
