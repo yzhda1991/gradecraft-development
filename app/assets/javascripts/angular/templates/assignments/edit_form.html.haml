@@ -22,7 +22,7 @@
   #tab4(ng-show="isFocusTab('grading')")
     %assignment-edit-grading(data-assignment="assignment" data-rubric-id="rubricId")
 
-  %button.button.right(ng-click="submitAssignment()") Update {{ termFor('assignment')}}
+  %button.action(ng-click="submitAssignment()") Update {{ termFor('assignment')}}
 
 .last-updated(ng-if='assignment.updated_at')
   Last Updated:
