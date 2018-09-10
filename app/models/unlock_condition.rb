@@ -30,18 +30,20 @@ class UnlockCondition < ApplicationRecord
   end
 
   # Human readable sentence to describe what students need to do to unlock this
-  def requirements_description_sentence
+  def requirements_description_sentence(condition_date_timezone=nil)
     if condition_type == "Course"
-      "#{ condition_state_do } #{ condition_value } points in this course"
+      description = "#{ condition_state_do } #{ condition_value } points in this course"
     elsif condition_type == "AssignmentType"
       if condition_state == "Minimum Points Earned"
-        "#{ condition_state_do } #{ condition_value } points in the #{ condition.name } #{unlockable.course.assignment_term} Type"
+        description = "#{ condition_state_do } #{ condition_value } points in the #{ condition.name } #{unlockable.course.assignment_term} Type"
       elsif condition_state == "Assignments Completed"
-        "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
+        description = "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
       end
     else
-      "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
+      description = "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
+    description += " by #{ formatted_condition_date(condition_date_timezone) }" if condition_date.present?
+    description
   end
 
   def requirements_completed_sentence
@@ -132,6 +134,10 @@ class UnlockCondition < ApplicationRecord
     elsif condition_state == "Assignments Completed"
       "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
     end
+  end
+
+  def formatted_condition_date(timezone)
+    timezone.nil? ? condition_date : condition_date.in_time_zone(timezone)
   end
 
   def check_assignment_type_condition(student)

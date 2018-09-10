@@ -587,6 +587,16 @@ describe UnlockCondition do
       expect(unlock_condition.requirements_description_sentence).to \
         eq("Earn a grade for the #{assignment.name} Assignment")
     end
+
+    it "includes a formatted description for the condition by date if provided" do
+      time_zone = "Eastern Time (US & Canada)"
+      unlock_condition = UnlockCondition.new(
+        condition_id: assignment.id, condition_type: "Assignment",
+        condition_state: "Submitted", condition_date: Faker::Date.between(2.days.ago, Date.today)
+      )
+      expect(unlock_condition.requirements_description_sentence(time_zone)).to \
+        eq("Submit the #{assignment.name} Assignment by #{unlock_condition.condition_date.in_time_zone(time_zone)}")
+    end
   end
 
   describe "#key_description_sentence" do
