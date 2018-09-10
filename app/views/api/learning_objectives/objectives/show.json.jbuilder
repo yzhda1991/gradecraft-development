@@ -8,7 +8,7 @@ json.data do
 end
 
 json.included do
-  json.array! @objective.levels do |level|
+  json.array! @objective.levels.ordered do |level|
     json.type "levels"
     json.id level.id.to_s
 
@@ -20,7 +20,7 @@ json.included do
 
   json.array! @objective.assignments do |assignment|
     next if current_user_is_student? && !assignment.visible_for_student?(current_user)
-    
+
     json.type "assignments"
     json.id assignment.id.to_s
 
