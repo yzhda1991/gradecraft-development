@@ -19,6 +19,6 @@
           %td
             - if element.unlock_conditions.present?
               - element.unlock_conditions.each do |uc|
-                .condition= glyph(:lock) + uc.requirements_description_sentence
+                .condition= glyph(:lock) + uc.requirements_description_sentence(current_user.time_zone)
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }

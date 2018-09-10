@@ -3,10 +3,10 @@
     %p Unlock Requirements
     %ul
       - badge.unlock_conditions.each do |condition|
-        %li= condition.requirements_description_sentence
+        %li= condition.requirements_description_sentence(current_user.time_zone)
 - if badge.is_a_condition?
   = tooltip("unlock-key-tip_#{badge.id}", :key) do
     %p Unlock Key
     %ul
       - badge.unlock_keys.each do |key|
-        %li= key.key_description_sentence
+        %li= key.key_description_sentence(current_user.time_zone)

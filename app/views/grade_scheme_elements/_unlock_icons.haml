@@ -2,4 +2,4 @@
   %h3.bold This Level is Locked
   .small.italic In order to unlock it you must:
   - gse.unlock_conditions.each do |condition|
-    .condition= condition.requirements_description_sentence
+    .condition= condition.requirements_description_sentence(current_user.time_zone)

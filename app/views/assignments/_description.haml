@@ -55,7 +55,7 @@
       %ul
         - presenter.assignment.unlock_conditions.each do |condition|
           %li
-            = condition.requirements_completed_sentence
+            = condition.requirements_completed_sentence(current_user.time_zone)
             - if presenter.assignment.has_groups? && @group.present?
               = "(#{condition.count_unlocked_in_group(@group)}/#{@group.students.count} #{term_for :group} members have completed this requirement)"
       - if presenter.assignment.has_groups? && @group.present?
@@ -71,25 +71,25 @@
       %p.italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
       %ul
         - presenter.assignment.unlock_conditions.each do |uc|
-          %li= link_to uc.requirements_description_sentence, uc.condition
+          %li= link_to uc.requirements_description_sentence(current_user.time_zone), uc.condition
 - elsif presenter.assignment.is_unlockable?
   %h3.uppercase #{glyph(:lock)} This #{term_for :assignment} is Locked
   %p.italic To unlock it, #{ term_for :students } must:
   %ul
     - presenter.assignment.unlock_conditions.each do |condition|
       - if !condition.unlockable_type == GradeSchemeElement
-        %li= link_to condition.requirements_description_sentence, condition.unlockable
+        %li= link_to condition.requirements_description_sentence(current_user.time_zone), condition.unlockable
       - else
-        %li= condition.requirements_description_sentence
+        %li= condition.requirements_description_sentence(current_user.time_zone)
 
 - if presenter.assignment.is_a_condition?
   %h3.uppercase #{glyph(:key)} This #{term_for :assignment} is a Key:
   %ul
     - presenter.assignment.unlock_keys.each do |key|
       - if !key.unlockable_type == GradeSchemeElement
-        %li= link_to key.key_description_sentence, key.unlockable
+        %li= link_to key.key_description_sentence(current_user.time_zone), key.unlockable
       - else
-        %li= key.key_description_sentence
+        %li= key.key_description_sentence(current_user.time_zone)
 
 - if presenter.assignment_has_viewable_description?(current_user)
   - if presenter.assignment.assignment_files.present?

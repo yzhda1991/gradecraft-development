@@ -42,18 +42,25 @@ class UnlockCondition < ApplicationRecord
     else
       description = "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
-    description += " by #{ formatted_condition_date(condition_date_timezone) }" if condition_date.present?
+    description += condition_date_sentence(condition_date_timezone) if condition_date.present?
     description
   end
 
-  def requirements_completed_sentence
-    return "#{ condition_state_past } the #{ condition.name } #{ condition_type }" unless condition_type == "Course"
-    return "Earned #{ condition_value } points in this course"
+  def requirements_completed_sentence(condition_date_timezone=nil)
+    if condition_type != "Course"
+      description = "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
+    else
+      description = "Earned #{ condition_value } points in this course"
+    end
+    description += condition_date_sentence(condition_date_timezone) if condition_date.present?
+    description
   end
 
   # Human readable sentence to describe what doing work on this thing unlocks
-  def key_description_sentence
-    "#{ condition_state_doing } unlocks the #{ unlockable.name } #{ unlockable_type }"
+  def key_description_sentence(condition_date_timezone=nil)
+    description = "#{ condition_state_doing }"
+    description += condition_date_sentence(condition_date_timezone) if condition_date.present?
+    description += " unlocks the #{ unlockable.name } #{ unlockable_type }"
   end
 
   # Counting how many students in a group have done the work to unlock an
@@ -136,8 +143,8 @@ class UnlockCondition < ApplicationRecord
     end
   end
 
-  def formatted_condition_date(timezone)
-    timezone.nil? ? condition_date : condition_date.in_time_zone(timezone)
+  def condition_date_sentence(time_zone=nil)
+    " by #{ time_zone.nil? ? condition_date : condition_date.in_time_zone(time_zone) }"
   end
 
   def check_assignment_type_condition(student)
