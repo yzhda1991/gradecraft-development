@@ -15,6 +15,11 @@ describe Criterion do
       subject.order = nil
       expect(subject).to be_invalid
     end
+
+    it "is invalid if the max points value is less than 0" do
+      subject.max_points = -1
+      expect(subject).to be_invalid
+    end
   end
 
   describe "#update_meets_expectations!" do
