@@ -16,7 +16,7 @@
   selectedTeamId = (teamId) ->
     if angular.isDefined(teamId)
       _selectedTeamId = teamId
-      _callback() if callback?
+      callback()
     else
       _selectedTeamId
 
