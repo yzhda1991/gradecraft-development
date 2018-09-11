@@ -1,11 +1,11 @@
 if assignment.unlock_conditions.present?
   unlock_conditions = assignment.unlock_conditions.map do |condition|
-    condition.requirements_description_sentence
+    condition.requirements_description_sentence(current_user.time_zone)
   end
   json.unlock_conditions unlock_conditions
 
   unlocked_conditions = assignment.unlock_conditions.map do |condition|
-    condition.requirements_completed_sentence
+    condition.requirements_completed_sentence(current_user.time_zone)
   end
   json.unlocked_conditions unlocked_conditions
 
@@ -15,7 +15,7 @@ end
 
 if assignment.unlock_keys.present?
   unlock_keys = assignment.unlock_keys.map do |key|
-    key.key_description_sentence
+    key.key_description_sentence(current_user.time_zone)
   end
   json.unlock_keys unlock_keys
 end

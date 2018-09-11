@@ -4,14 +4,13 @@
     .small.italic In order to unlock it you must:
     %ol
       - assignment.unlock_conditions.each do |condition|
-        %li= condition.requirements_description_sentence
+        %li= condition.requirements_description_sentence(current_user.time_zone)
 - if assignment.is_a_condition?
   = tooltip("key-assignment-tip_#{assignment.id}", :key) do
     %p This #{term_for :assignment} is a Key
     %ol
       - assignment.unlock_keys.each do |key|
-        %li= key.key_description_sentence
+        %li= key.key_description_sentence(current_user.time_zone)
 - if assignment.has_groups?
   = tooltip("group-assignment-tip_#{assignment.id}", :group) do
     This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
-

@@ -20,7 +20,7 @@ end
 
 json.included do
   @objectives.each do |o|
-    json.array! o.levels do |level|
+    json.array! o.levels.ordered do |level|
       json.type "levels"
       json.id level.id.to_s
 
