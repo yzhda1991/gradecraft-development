@@ -275,9 +275,10 @@ class UsersController < ApplicationController
     end
 
     @result = CSVStudentImporter.new(params[:file].tempfile,
+                                     current_course,
                                      params[:internal_students] == "1",
                                      params[:send_welcome] == "1")
-      .import(current_course)
+      .import
     render :import_results
   end
 

@@ -3,25 +3,26 @@ require_relative "../../services/creates_new_user"
 require_relative "../../services/creates_course_membership"
 
 class CSVStudentImporter
-  attr_reader :successful, :unsuccessful
+  attr_reader :successful, :unsuccessful, :course
   attr_accessor :file, :internal_students, :send_welcome
 
-  def initialize(file, internal_students=false, send_welcome=false)
+  def initialize(file, course, internal_students=false, send_welcome=false)
     @file = file
+    @course = course
     @internal_students = internal_students
     @send_welcome = send_welcome
     @successful = []
     @unsuccessful = []
   end
 
-  def import(course=nil)
+  def import
     if file
-      CSV.foreach(file, headers: true, skip_blanks: true, encoding: "iso-8859-1:utf-8") do |csv|
-        strip_whitespace csv
-        row = UserRow.new csv
+      CSV.foreach(file, headers: true, skip_blanks: true, encoding: "iso-8859-1:utf-8") do |line|
+        strip_whitespace line
+        row = UserRow.new line
+        team = Team.find_or_create_by(course_id: course.id, name: row.team_name) unless row.team_name.blank?
 
-        team = find_or_create_team row, course
-        if team && !team.valid?
+        if team.present? && !team.valid?
           append_unsuccessful row, team.errors.full_messages.join(", ")
           next
         end
@@ -58,12 +59,6 @@ class CSVStudentImporter
     unsuccessful << { data: row.to_s, errors: errors }
   end
 
-  def find_or_create_team(row, course)
-    return if row.team_name.blank?
-    team = Team.find_by_course_and_name course.id, row.team_name
-    team ||= Team.create course_id: course.id, name: row.team_name
-  end
-
   def check_user(user, team, course)
     if team.nil?
       return false unless !user.course_memberships.where(course_id: course.id).first.nil?
@@ -80,6 +75,10 @@ class CSVStudentImporter
 
   class UserRow
     attr_reader :data
+
+    def initialize(data)
+      @data = data
+    end
 
     def first_name
       data[0]
@@ -103,10 +102,6 @@ class CSVStudentImporter
 
     def password
       data[5]
-    end
-
-    def initialize(data)
-      @data = data
     end
 
     def to_s
