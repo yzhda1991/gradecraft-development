@@ -267,7 +267,7 @@ class UsersController < ApplicationController
   def upload
     if params[:file].blank?
       flash[:notice] = "File missing"
-      redirect_to users_path and return
+      redirect_to action: :import and return
     end
 
     if (File.extname params[:file].original_filename) != ".csv"

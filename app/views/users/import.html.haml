@@ -15,7 +15,7 @@
   = form_tag({action: :upload}, :multipart => true) do
     %div
       = check_box_tag "internal_students", "1", false, { data: { behavior: "toggle-disable", "toggle-disable-target": ".send-welcome *" }}
-      = label_tag "internal_students", "Use UM Authentication for the new user accounts"
+      = label_tag "internal_students", "Activate imported users"
     .send-welcome
       = check_box_tag "send_welcome", "1", false, { disabled: true }
       = label_tag "send_welcome", "Send welcome email to new user accounts", { class: "disabled" }
