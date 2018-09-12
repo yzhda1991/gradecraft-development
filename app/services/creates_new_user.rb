@@ -12,16 +12,22 @@ module Services
     extend LightService::Organizer
 
     def self.call(attributes, send_welcome_email=false)
-      with(attributes: attributes, send_welcome_email: send_welcome_email)
-        .reduce(
-          Actions::BuildsUser,
-          Actions::GeneratesPassword,
-          Actions::GeneratesUsernames,
-          Actions::SavesUser,
-          Actions::ActivatesUser,
-          Actions::SendsActivationNeededEmail,
-          Actions::SendsWelcomeEmail
-        )
+      with(attributes: attributes, send_welcome_email: send_welcome_email, manually_activate: attributes[:password].present?)
+        .reduce(actions)
+    end
+
+    def self.actions
+      [
+        Actions::BuildsUser,
+        reduce_if(-> (context) { context.user.password.blank? }, [
+          Actions::GeneratesPassword
+        ]),
+        Actions::GeneratesUsernames,
+        Actions::SavesUser,
+        Actions::ActivatesUser,
+        Actions::SendsActivationNeededEmail,
+        Actions::SendsWelcomeEmail
+      ]
     end
   end
 end

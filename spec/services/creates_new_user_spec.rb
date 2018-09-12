@@ -18,6 +18,12 @@ describe Services::CreatesNewUser do
       described_class.call params
     end
 
+    it "does not generate a password if a password was provided" do
+      params.merge! password: "password1"
+      expect(Services::Actions::GeneratesPassword).not_to receive(:execute)
+      described_class.call params
+    end
+
     it "updates user usernames and emails" do
       expect(Services::Actions::GeneratesUsernames).to receive(:execute).and_call_original
       described_class.call params
