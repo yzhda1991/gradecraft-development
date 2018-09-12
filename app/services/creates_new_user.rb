@@ -19,9 +19,7 @@ module Services
     def self.actions
       [
         Actions::BuildsUser,
-        reduce_if(-> (context) { context.user.password.blank? }, [
-          Actions::GeneratesPassword
-        ]),
+        reduce_if(-> (context) { context.user.password.blank? }, [Actions::GeneratesPassword]),
         Actions::GeneratesUsernames,
         Actions::SavesUser,
         Actions::ActivatesUser,
