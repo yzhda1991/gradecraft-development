@@ -267,7 +267,7 @@ class UsersController < ApplicationController
   def upload
     if params[:file].blank?
       flash[:notice] = "File missing"
-      redirect_to users_path and return
+      redirect_to action: :import and return
     end
 
     if (File.extname params[:file].original_filename) != ".csv"
@@ -275,9 +275,10 @@ class UsersController < ApplicationController
     end
 
     @result = CSVStudentImporter.new(params[:file].tempfile,
+                                     current_course,
                                      params[:internal_students] == "1",
                                      params[:send_welcome] == "1")
-      .import(current_course)
+      .import
     render :import_results
   end
 

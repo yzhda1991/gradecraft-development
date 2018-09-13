@@ -12,7 +12,7 @@
 
     You can download a sample file #{link_to "here", users_importer_download_path(:csv, format: "csv"), class: "bold"}
 
-  = form_tag({action: :upload}, :multipart => true) do
+  = form_tag({ action: :upload }, multipart: true) do
     %div
       = check_box_tag "internal_students", "1", false, { data: { behavior: "toggle-disable", "toggle-disable-target": ".send-welcome *" }}
       = label_tag "internal_students", "Use UM Authentication for the new user accounts"
