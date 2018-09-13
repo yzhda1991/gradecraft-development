@@ -24,7 +24,7 @@
                 %img{:src => earned_badge.badge.try(:icon), :alt => earned_badge.badge.try(:name), :width => "25", :height => "25"}
             %td
               - if ! @badge.is_unlocked_for_student?(earned_badge.student)
-                = link_to glyph(:lock) + "Unlock", manually_unlock_unlock_state_path(id: @badge.id, student_id: earned_badge.student.id, badge_id: @badge.id), :method => :post, class: "button"
+                = link_to glyph(:unlock) + "Unlock", manually_unlock_unlock_state_path(id: @badge.id, student_id: earned_badge.student.id, badge_id: @badge.id), :method => :post, class: "button"
             %td
               - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(badge_id: @badge).present?
                 %input(type="checkbox" id="student-id-#{earned_badge[:student_id]}" name="student_ids[]" value="#{earned_badge[:student_id]}")
