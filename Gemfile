@@ -155,6 +155,7 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-lodash', '3.10.1'
   gem 'rails-assets-jquery', '2.1.4'
   gem 'rails-assets-angular-dragdrop', '1.0.11'
+  gem 'rails-assets-froala', '2.8.5'
   gem 'rails-assets-ngDraggable', '0.1.11'
   gem 'rails-assets-rollbar.js', '~> 2.4.5'
   gem 'rails-assets-ng-rollbar', '~> 2.4.2'

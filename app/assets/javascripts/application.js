@@ -43,7 +43,7 @@
 //= require ./angular/vendor/angular-aria.js
 //= require_tree ./angular
 
-//= require froala_editor.min.js
+//= require froala
 //= require_tree ./angular-froala
 //= require ProximaNovaLicense.min.js
 
