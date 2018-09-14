@@ -6,6 +6,9 @@ json.data @result[:grades] do |grade|
 
   json.attributes do
     json.id                                   grade["id"].to_s
+
+    json.user_id                              user["login_id"]
+    json.email                                user["email"]
     json.primary_email                        user["primary_email"]
 
     json.score                                grade["score"]

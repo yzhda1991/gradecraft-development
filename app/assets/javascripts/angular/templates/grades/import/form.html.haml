@@ -51,7 +51,7 @@
                                        "ng-click"=>"vm.deselectAllGrades()"}= "Uncheck"
       %tbody
         %tr{"ng-if"=>"grades.length > 0", "ng-repeat"=>"grade in grades"}
-          %td {{grade.primary_email}}
+          %td {{grade.primary_email || grade.email || grade.user_id}}
           %td {{grade.score}}
           %td {{grade.feedback}}
           %td {{grade.gradecraft_score.raw_points}}

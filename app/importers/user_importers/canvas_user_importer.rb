@@ -39,6 +39,7 @@ class CanvasUserImporter
 
   def find_or_create_user(row, course)
     user = User.find_by_insensitive_email row.email if row.email
+    user ||= User.find_by_insensitive_username row.user_id if row.user_id
     user ||= Services::CreatesNewUser
       .call(row.to_h.merge(internal: false), send_welcome)[:user]
     role_changed = false
@@ -80,6 +81,10 @@ class CanvasUserImporter
 
     def email
       data["primary_email"] || data["email"]
+    end
+
+    def user_id
+      data["login_id"]
     end
 
     def role
