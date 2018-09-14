@@ -49,7 +49,8 @@ class CanvasGradeImporter
     canvas_user = syllabus.user(user_id)
     return nil if canvas_user.nil?
 
-    User.find_by_insensitive_email(canvas_user["primary_email"])
+    user = User.find_by_insensitive_email(canvas_user["primary_email"] || canvas_user["email"])
+    user ||= User.find_by_insensitive_username(canvas_user["login_id"])
   end
 
   def link_imported(provider_resource_id, grade)
