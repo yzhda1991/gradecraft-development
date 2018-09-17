@@ -1,6 +1,6 @@
 json.data @result[:users] do |user|
   gradecraft_user = User.find_by_insensitive_email(user["email"])
-  user_exists = lms_user_match?(user["email"], current_course)
+  user_exists = lms_user_match?(user["email"], nil, current_course)
   gradecraft_role = lms_user_role(user["enrollments"])
 
   json.type                                   "imported_user"

@@ -3,8 +3,9 @@ module LMSHelper
     syllabus.user(user_id) || {}
   end
 
-  def lms_user_match?(email, course)
-    user = User.find_by_insensitive_email(email)
+  def lms_user_match?(email, username, course)
+    user = User.find_by_insensitive_email(email) unless email.blank?
+    user ||= User.find_by_insensitive_username(username) unless username.blank?
     user.present? && !user.role(course).nil?
   end
 end

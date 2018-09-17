@@ -15,7 +15,7 @@ json.data @result[:grades] do |grade|
     json.feedback                             concat_submission_comments(grade["submission_comments"])
     json.gradecraft_score                     Grade.for_student_email_and_assignment_id(user["primary_email"],
                                                 @assignment.id) || Grade.new
-    json.user_exists                          lms_user_match?(user["primary_email"], current_course)
+    json.user_exists                          lms_user_match?(user["primary_email"], user["login_id"], current_course)
   end
 end
 
