@@ -22,11 +22,14 @@
           %a.class-analytics-tab{"href" => "#tab4"}
             %span Class
             Analytics
+      - if presenter.course_uses_learning_objectives?
+        %li
+          %a{"href" => "#tab5"}= term_for :learning_objectives
 
     #tabt1.ui-tabs-panel
       %h1.pageTitle= presenter.assignment.name
 
-      .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
+      .ui-tabs-panel#tab.active{ role: "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
           = render partial: "assignments/group/group_show", locals: { assignment_id: presenter.assignment.id }
         - else
@@ -34,13 +37,16 @@
       .ui-tabs-panel.assignment-details-container#tab2{role: "tabpanel", "aria-hidden" => false }
         = render partial: "assignments/description", locals: { presenter: presenter }
       - if presenter.grade_with_rubric?
-        .ui-tabs-panel#tab3{role: "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tab3{ role: "tabpanel", "aria-hidden" => false }
           .tab-container
             = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
       - if presenter.has_persisted_grades?
-        .ui-tabs-panel#tab4{role: "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tab4{ role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
             = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
           - else
             .tab-container
               = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
+      - if presenter.course_uses_learning_objectives?
+        .ui-tabs-panel#tab5{ role: "tabpanel", "aria-hidden" => false }
+          %learning-objective-instructor-overview{"data-assignment-id"=>"#{presenter.assignment.id}"}
