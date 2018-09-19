@@ -111,4 +111,4 @@
           %td
             %a{"ng-if"=>"loShowCtrl.gradeExists(assignment.id)",
                "ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, assignment.id)}}"}
-              %span.level-flagged-value{"ng-class"=>"loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).flagged_value"} {{loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).readable_flagged_value}}
+              %lo-proficiency-indicator{"data-observed-outcome"=>"loShowCtrl.earnedOutcome(assignment.id)"}

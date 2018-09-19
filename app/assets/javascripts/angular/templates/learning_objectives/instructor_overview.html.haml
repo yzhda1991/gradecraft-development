@@ -1,1 +1,21 @@
-Test
+%h2{"ng-if"=>"loInstructorOverviewCtrl.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading...
+
+%div{"ng-if"=>"!loInstructorOverviewCtrl.loading"}
+  %h2 {{loInstructorOverviewCtrl.termFor("learning_objectives")}}
+
+  %table
+    %caption.sr-only Students
+    %thead
+      %tr
+        %th{"scope"=>"col"} First Name
+        %th{"scope"=>"col"} Last Name
+        %th{"scope"=>"col", "ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives()"} {{objective.name}}
+    %tbody
+      %tr{"ng-repeat"=>"student in loInstructorOverviewCtrl.students"}
+        %td {{student.first_name}}
+        %td {{student.last_name}}
+        %td{"ng-repeat"=>"outcome in loInstructorOverviewCtrl.outcomes(student.id)"} {{outcome}}
+        %td{"ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives()"}
+          %lo-proficiency-indicator{"data-observed-outcome"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id)"}

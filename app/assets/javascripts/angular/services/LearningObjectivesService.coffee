@@ -25,8 +25,8 @@
   cumulativeOutcomeFor = (objectiveId) ->
     _.find(cumulativeOutcomes, { learning_objective_id: objectiveId })
 
-  cumulativeOutcomeForStudent = (studentId) ->
-    _.find(cumulativeOutcomes, { user_id: studentId })
+  cumulativeOutcomeForStudent = (objectiveId, studentId) ->
+    _.find(cumulativeOutcomes, { learning_objective_id: objectiveId, user_id: studentId })
 
   observedOutcomesFor = (cumulativeOutcomeId, type=null, id=null) ->
     criteria = { learning_objective_cumulative_outcomes_id: cumulativeOutcomeId }
@@ -38,16 +38,13 @@
     else
       _.filter(_observed_outcomes, criteria)
 
-  observedOutcomesForStudent = (studentId) ->
-    co = cumulativeOutcomeForStudent(studentId)
-    return unless co?
-    observedOutcomesFor(co.id)
+  observedOutcomesForStudent = (objectiveId, studentId) ->
+    co = cumulativeOutcomeForStudent(objectiveId, studentId)
+    if co? then observedOutcomesFor(co.id) else null
 
-  earnedOutcome = (studentId, assignmentId) ->
-    co = cumulativeOutcomeForStudent(studentId)
-    return unless co?
-    oo = observedOutcomesFor(co.id)
-    _.find(oo, { assignment_id: assignmentId })
+  earnedOutcome = (studentId, objectiveId, assignmentId) ->
+    oo = observedOutcomesForStudent(objectiveId, studentId)
+    if oo? then _.find(oo, { assignment_id: assignmentId }) else null
 
   levels = (objective) ->
     objectiveLevels = _.filter(_levels, { objective_id: objective.id })

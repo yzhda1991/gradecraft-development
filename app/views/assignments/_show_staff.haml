@@ -49,4 +49,4 @@
               = render partial: "grades/analytics", locals: { presenter: presenter, analytics_class: "analytics-tab-panel" }
       - if presenter.course_uses_learning_objectives?
         .ui-tabs-panel#tab5{ role: "tabpanel", "aria-hidden" => false }
-          %learning-objective-instructor-overview{"data-assignment-id"=>"#{presenter.assignment.id}"}
+          %learning-objective-instructor-overview{"data-course-id"=>"#{current_course.id}", "data-assignment-id"=>"#{presenter.assignment.id}"}
