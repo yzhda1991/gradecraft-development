@@ -18,4 +18,5 @@
         %td {{student.last_name}}
         %td{"ng-repeat"=>"outcome in loInstructorOverviewCtrl.outcomes(student.id)"} {{outcome}}
         %td{"ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives()"}
-          %lo-proficiency-indicator{"data-observed-outcome"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id)"}
+          %lo-proficiency-indicator{"ng-if"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id) != null",
+                                    "data-observed-outcome"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id)"}

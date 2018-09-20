@@ -24,8 +24,6 @@
       vm.earnedOutcome = (assignmentId) ->
         LearningObjectivesService.earnedOutcome(parseInt(@studentId), parseInt(@objectiveId), assignmentId)
 
-      vm.gradeExists = (assignmentId) -> vm.earnedOutcome(assignmentId)?
-
       vm.cumulativeOutcome = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
         _.find(LearningObjectivesService.cumulativeOutcomes, { user_id: parseInt(_studentId) })
@@ -38,10 +36,6 @@
       vm.observedOutcomes = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
         LearningObjectivesService.observedOutcomesForStudent(_studentId)
-
-      vm.gradePath = (studentId, assignmentId) ->
-        oo = LearningObjectivesService.earnedOutcome(parseInt(studentId), parseInt(@objectiveId), assignmentId)
-        "/grades/#{oo.grade_id}"
 
       vm.showPath = (studentId) ->
         "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
