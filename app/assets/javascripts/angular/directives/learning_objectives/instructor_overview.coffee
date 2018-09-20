@@ -1,8 +1,10 @@
-@gradecraft.directive "learningObjectiveInstructorOverview", ["LearningObjectivesService", "StudentService", "$q",
-  (LearningObjectivesService, StudentService, $q) ->
+@gradecraft.directive "learningObjectiveInstructorOverview", ["LearningObjectivesService", "StudentService", "SortableService", "$q",
+  (LearningObjectivesService, StudentService, SortableService, $q) ->
     LOInstructorOverviewCtrl = [() ->
       vm = this
       vm.loading = true
+
+      vm.sortable = SortableService
       vm.students = StudentService.students # precondition is that the students have been fetched
       vm.objectives = LearningObjectivesService.objectives
 
