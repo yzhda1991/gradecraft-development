@@ -201,7 +201,8 @@ describe UsersController do
     end
 
     describe "GET import" do
-      it "renders the import page" do
+      it "renders the import page if allowed" do
+        stub_env "beta"
         get :import
         expect(response).to render_template(:import)
       end

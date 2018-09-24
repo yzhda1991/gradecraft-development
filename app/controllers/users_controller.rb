@@ -261,6 +261,7 @@ class UsersController < ApplicationController
   end
 
   def import
+    redirect_to users_importers_path unless current_user_is_admin? || accessible_to_app_env?
   end
 
   # import users for class

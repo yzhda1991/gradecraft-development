@@ -2,16 +2,17 @@
   = render partial: "layouts/alerts"
 
   %section
-    .card{style: "height: 400px;"}
-      .card-cap
-        = image_tag "csv-logo.png", height: "46px"
-      .card-block
-        %h4.card-title CSV
-        .card-text
-        %p.card-text
-          Upload a .csv file with user information to import users.
+    - if current_user_is_admin? || accessible_to_app_env?
+      .card{style: "height: 400px;"}
+        .card-cap
+          = image_tag "csv-logo.png", height: "46px"
+        .card-block
+          %h4.card-title CSV
+          .card-text
+          %p.card-text
+            Upload a .csv file with user information to import users.
 
-        = link_to "Import Users from CSV", import_users_path, class: "card-link button"
+          = link_to "Import Users from CSV", import_users_path, class: "card-link button"
 
     - if current_course.allows_canvas?
       .card{style: "height: 400px;"}
