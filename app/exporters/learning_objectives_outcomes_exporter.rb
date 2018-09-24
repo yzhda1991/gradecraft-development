@@ -43,7 +43,7 @@ class LearningObjectivesOutcomesExporter
 
     # add the grades for the necessary assignments
     @course.learning_objectives.inject(student_data) do |memo, learning_objective|
-      outcome = learning_objective.numeric_progress(student)
+      outcome = learning_objective.numeric_progress_for_student(student)
       memo << outcome
       memo
     end

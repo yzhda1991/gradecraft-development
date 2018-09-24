@@ -36,7 +36,10 @@ json.data @students do |student|
 
     # Submission-related
     json.submission_exists submission.present?
-    json.submission_submitted_at l submission.submitted_at unless submission.nil?
+    if submission.present?
+      json.submission_submitted_at submission.submitted_at
+      json.formatted_submission_submitted_at l submission.submitted_at
+    end
     json.submission_visible @assignment.accepts_submissions? && submission.present? && SubmissionProctor.new(submission).viewable?(current_user)
 
     # Paths

@@ -31,9 +31,9 @@ describe LearningObjectivesOutcomesExporter do
 
       expect(csv.length).to eq 3
       expect(csv[1]).to eq [student.first_name, student.last_name, student.email,
-        student.username, student.team_for_course(course), "#{learning_objectives.first.numeric_progress(student)}", "0", "0"]
+        student.username, student.team_for_course(course), "#{learning_objectives.first.numeric_progress_for_student(student)}", "0", "0"]
       expect(csv[2]).to eq [another_student.first_name, another_student.last_name,
-        another_student.email, another_student.username, another_student.team_for_course(course), "#{learning_objectives.first.numeric_progress(another_student)}", "0", "0"]
+        another_student.email, another_student.username, another_student.team_for_course(course), "#{learning_objectives.first.numeric_progress_for_student(another_student)}", "0", "0"]
     end
   end
 end

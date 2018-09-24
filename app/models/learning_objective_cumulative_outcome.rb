@@ -9,5 +9,6 @@ class LearningObjectiveCumulativeOutcome < ApplicationRecord
   validates :user, uniqueness: { scope: :learning_objective,
     message: "should be unique per learning objective" }
 
-  scope :for_user, -> (user_id) { where user_id: user_id }
+  scope :for_user, -> (user_id) { where(user_id: user_id) }
+  scope :for_objective, -> (objective_id) { where(learning_objective_id: objective_id )}
 end
