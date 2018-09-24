@@ -34,9 +34,29 @@
 
 ## Installation Notes for running locally
 
-1. Install Homebrew (Optional: `brew update`)
+1. Clone the repository
 
-2. Install a Ruby version manager of your choice and set current version to project version (Steps below pertain to [rbenv](https://github.com/rbenv/rbenv))
+```
+# clone to current directory; change dir
+git clone https://github.com/UM-USElab/gradecraft-development.git
+cd gradecraft-development
+```
+
+2. Copy configuration files
+```
+# Note: ensure that you are in the newly cloned /gradecraft-development dir
+cp config/database.yml.sample config/database.yml
+cp config/mongoid.yml.sample config/mongoid.yml
+cp .env.sample .env
+
+# obtain and replace required credentials for .env (AWS, etc.)
+
+# comment out ALL SAML and IDP-related lines
+```
+
+3. Install Homebrew (Optional: `brew update`)
+
+4. Install a Ruby version manager of your choice and set current version to project version (Steps below pertain to [rbenv](https://github.com/rbenv/rbenv))
 
 ```
 brew install rbenv
@@ -57,7 +77,7 @@ rbenv local 2.5.1 (or rbenv global 2.5.1 if preferred)
 # Restart terminal for changes to fully take into effect and ensure that the command rbenv works
 ```
 
-3. Install databases
+5. Install databases
 
 ```
 brew install mongodb
@@ -65,32 +85,13 @@ brew install redis
 brew install postgresql
 ```
 
-4. Ensure access to `/data/db` write directory for MongodDB
+6. Ensure access to `/data/db` write directory for MongodDB
 ```
 # create the directory, if it does not exist
-mkdir -p /data/db
+sudo mkdir -p /data/db
 sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determine values)
 
 # (optional) mongod command should bring up mongodb; close with ctrl+c before proceeding to step 5
-```
-
-5. Clone the repository
-
-```
-# clone to current directory; change if desired
-git clone https://github.com/UM-USElab/gradecraft-development.git
-```
-
-6. Copy configuration files
-```
-# Note: ensure that you are in the newly cloned /gradecraft-development dir
-cp config/database.yml.sample config/database.yml
-cp config/mongoid.yml.sample config/mongoid.yml
-cp .env.sample .env
-
-# obtain and replace required credentials for .env (AWS, etc.)
-
-# comment out ALL SAML and IDP-related lines
 ```
 
 7. Install Bundler
