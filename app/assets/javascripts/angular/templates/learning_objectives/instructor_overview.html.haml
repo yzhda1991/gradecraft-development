@@ -15,15 +15,18 @@
         %th.sortable-header{"scope"=>"col",
                             "data-sortable-header-text"=>"Last Name",
                             "data-sortable-predicate"=>"last_name"}
-        %th{"scope"=>"col",
-            "ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives()"}
+        %th.sortable-header{"scope"=>"col",
+                            "ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives() track by objective.id",
+                            "data-sortable-header-text"=>"Progress",
+                            "data-sortable-predicate"=>"progress",
+                            "data-sortable-fn"=>"loInstructorOverviewCtrl.sortByObjectiveProgress(objective)"}
     %tbody
       %tr{"ng-repeat"=>"student in loInstructorOverviewCtrl.students | orderBy: loInstructorOverviewCtrl.sortable.predicate : loInstructorOverviewCtrl.sortable.reverse track by student.id"}
         %td
           %a{"ng-href"=>"{{student.student_path}}"} {{student.first_name}}
         %td
           %a{"ng-href"=>"{{student.student_path}}"} {{student.last_name}}
-        %td{"ng-repeat"=>"outcome in loInstructorOverviewCtrl.outcomes(student.id)"} {{outcome}}
-        %td{"ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives()"}
+        %td{"ng-repeat"=>"outcome in loInstructorOverviewCtrl.outcomes(student.id) track by outcome.id"} {{outcome}}
+        %td{"ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives() track by objective.id"}
           %lo-proficiency-indicator{"ng-if"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id) != null",
                                     "data-observed-outcome"=>"loInstructorOverviewCtrl.outcomeForObjective(student.id, objective.id)"}

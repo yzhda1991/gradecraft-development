@@ -32,6 +32,8 @@ json.included do
       json.learning_objective_assessable_id observed_outcome.learning_objective_assessable_id.to_s
 
       if observed_outcome.learning_objective_level.present?
+        json.flagged_value_as_i LearningObjectiveLevel.flagged_values[observed_outcome.learning_objective_level.flagged_value] \
+          unless observed_outcome.learning_objective_level.flagged_value.nil?
         json.flagged_value observed_outcome.learning_objective_level.flagged_value
         json.readable_flagged_value observed_outcome.learning_objective_level.readable_flagged_value
       end

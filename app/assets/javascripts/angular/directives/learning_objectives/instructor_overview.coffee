@@ -11,6 +11,9 @@
       vm.termFor = (term) -> LearningObjectivesService.termFor(term)
       vm.outcomeForObjective = (studentId, objectiveId) -> LearningObjectivesService.earnedOutcome(studentId, objectiveId, parseInt(@assignmentId))
 
+      vm.sortByObjectiveProgress = (objective) ->
+        (student) -> vm.outcomeForObjective(student.id, objective.id)?.flagged_value_as_i
+
       services(@courseId, @assignmentId).then(() -> vm.loading = false)
     ]
 
