@@ -9,7 +9,7 @@
       = f.text_field :last_name, "aria-required": "true"
     .form-item
       = f.label :email
-      = f.text_field :email, "aria-required": "true"
+      = f.text_field :email, "aria-required": "true", disabled: current_user_is_admin? ? nil : ""
     - if UserProctor.new(@user).can_update_password? current_user, current_course
       .form-item
         = f.label :password

@@ -134,7 +134,7 @@ class UsersController < ApplicationController
       up.delete(:password)
       up.delete(:password_confirmation)
     end
-    @user.assign_attributes up
+    @user.assign_attributes current_user_is_admin? ? up : up.except(:email)
     cancel_course_memberships @user
     if @user.save
       @user.activate! if up[:password].present? && !@user.activated?
