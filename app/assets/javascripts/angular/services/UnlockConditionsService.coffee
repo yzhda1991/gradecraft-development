@@ -6,7 +6,9 @@
   unlockConditions = []
   assignments = []
   assignmentTypes = []
+  learningObjectives = []
   badges = []
+  conditionTypes = []
 
   # generate a unique id to avoid collision on date-pickers
   _uid = 0
@@ -28,6 +30,10 @@
           GradeCraftAPI.setTermFor(term, response.meta["term_for_#{term}"])
       )
 
+  _setConditionTypes = () ->
+    types = if badges.length then ["Assignment Type", "Assignment", "Badge", "Earned Point Value"] else ["Assignment Type", "Assignment", "Earned Point Value"]
+    types.push("Learning Objective") if learningObjectives.length > 0
+    angular.copy(types, conditionTypes)
 
   getUnlockConditions = (id, type) ->
     unlockableId = id
@@ -39,7 +45,9 @@
       GradeCraftAPI.loadMany(unlockConditions, response.data)
       angular.copy(response.data.meta.assignments, assignments)
       angular.copy(response.data.meta.assignment_types, assignmentTypes)
+      angular.copy(response.data.meta.learning_objectives, learningObjectives)
       angular.copy(response.data.meta.badges, badges) if response.data.meta.badges
+      _setConditionTypes()
       _setTermsFor(response.data)
       courseId = response.data.meta.course_id
       setDatepickerIds()
@@ -139,7 +147,9 @@
     termFor: termFor
     assignments: assignments
     assignmentTypes: assignmentTypes
+    learningObjectives: learningObjectives
     badges: badges
+    conditionTypes: conditionTypes
     unlockConditions: unlockConditions
     getUnlockConditions: getUnlockConditions
     addCondition: addCondition

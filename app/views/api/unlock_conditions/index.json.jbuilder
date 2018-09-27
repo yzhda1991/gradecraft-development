@@ -14,6 +14,11 @@ json.meta do
     json.name assignment_type.name
   end
 
+  json.learning_objectives current_course.learning_objectives.each do |objective|
+    json.id objective.id
+    json.name objective.name
+  end if current_course.uses_learning_objectives?
+
   if current_course.has_badges?
     json.badges current_course.badges.each do |badge|
       json.id badge.id
@@ -21,6 +26,7 @@ json.meta do
     end
   end
 
+  json.term_for_learning_objectives term_for :learning_objectives if current_course.uses_learning_objectives?
   json.term_for_assignment_types term_for :assignment_types
   json.term_for_assignment_type term_for :assignment_type
   json.term_for_assignments term_for :assignments
