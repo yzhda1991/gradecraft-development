@@ -67,13 +67,19 @@
   %label Completed By Date
   %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
 
-.unlock-condition-parameters(ng-if="condition.condition_type=='Learning Objective' && learningObjectives.length > 0")
+.unlock-condition-parameters(ng-if="condition.condition_type=='LearningObjective' && learningObjectives.length > 0")
   %label
     {{ termFor("learning_objective") }}
     %span.required-label(ng-if="!condition.condition_id") *required
   %select(ng-model="condition.condition_id" name="condition_id" ng-change="updateCondition()")
     %option(ng-repeat="objective in learningObjectives" ng-selected="objective.id == condition.condition_id" value="{{objective.id}}")
       {{objective.name}}
+  %label
+    State Achieved
+    %span.required-label(ng-if="condition.condition_value == null") *required
+  %select(ng-model="condition.condition_state" ng-change="updateCondition()")
+    %option(ng-repeat="state in learningObjectiveStates" ng-selected="state == condition.condition_state" value="{{state}}")
+      {{state}}
 
 %button.delete(ng-click="removeCondition()")
   X

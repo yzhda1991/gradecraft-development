@@ -27,6 +27,7 @@
         switch type
           when  "Earned Point Value" then "Course"
           when "Assignment Type" then "AssignmentType"
+          when "Learning Objective" then "LearningObjective"
           else type
 
       # in the UnlockConditionService
@@ -51,6 +52,7 @@
       scope.assignmentTypes = UnlockConditionService.assignmentTypes
       scope.learningObjectives = UnlockConditionService.learningObjectives
       scope.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
+      scope.learningObjectiveStates = ["Completed"]
       scope.conditionTypes = UnlockConditionService.conditionTypes
   }
 ]

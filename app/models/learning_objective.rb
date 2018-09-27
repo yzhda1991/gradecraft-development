@@ -1,4 +1,6 @@
 class LearningObjective < ApplicationRecord
+  include UnlockableCondition
+  
   NOT_STARTED_STATUS = "Not Started".freeze
   IN_PROGRESS_STATUS = "In Progress".freeze
   COMPLETED_STATUS = "Completed".freeze
