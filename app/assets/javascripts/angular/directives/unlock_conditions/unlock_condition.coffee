@@ -52,7 +52,7 @@
       scope.assignmentTypes = UnlockConditionService.assignmentTypes
       scope.learningObjectives = UnlockConditionService.learningObjectives
       scope.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
-      scope.learningObjectiveStates = ["Completed"]
+      scope.learningObjectiveStates = ["Achieved"]
       scope.conditionTypes = UnlockConditionService.conditionTypes
   }
 ]

@@ -39,6 +39,8 @@ class UnlockCondition < ApplicationRecord
       elsif condition_state == "Assignments Completed"
         description = "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
       end
+    elsif condition_type == "LearningObjective"
+      description = "#{ condition_state_do } the #{ condition.name } #{unlockable.course.learning_objective_term.singularize}"
     else
       description = "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
@@ -104,8 +106,8 @@ class UnlockCondition < ApplicationRecord
       "Earn"
     elsif condition_state == "Assignments Completed"
       "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
-    elsif condition_state == "Completed"
-      "Complete"
+    elsif condition_state == "Achieved"
+      "Achieve"
     end
   end
 
@@ -124,8 +126,8 @@ class UnlockCondition < ApplicationRecord
       "Earning #{condition_value} points"
     elsif condition_state == "Assignments Completed"
       "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
-    elsif condition_state == "Completed"
-      "Completing"
+    elsif condition_state == "Achieved"
+      "Achieving"
     end
   end
 
@@ -144,8 +146,8 @@ class UnlockCondition < ApplicationRecord
       "Earned #{condition_value} points in"
     elsif condition_state == "Assignments Completed"
       "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
-    elsif condition_state == "Completed"
-      "Completed"
+    elsif condition_state == "Achieved"
+      "Achieved"
     end
   end
 
