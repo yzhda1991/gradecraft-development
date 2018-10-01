@@ -34,7 +34,7 @@ if ($('#leaderboardBarChart').length) {
   });
 
   var tooltips = xValueLabels.map(function (label, index) {
-    return label + '<br>' + yValues[index].toLocaleString();
+    return yValues[index] == null ? label : label + "<br>" + yValues[index].toLocaleString();
   });
 
   var data = [
