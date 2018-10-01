@@ -216,6 +216,10 @@ class UnlockCondition < ApplicationRecord
     submission.submitted_at < condition_date
   end
 
+  def check_learning_objective_condition(student)
+    condition.completed? student
+  end
+
   def check_grade_earned_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
     return false unless grade && grade.final_points.present? && grade.final_points > 0

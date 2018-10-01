@@ -26,6 +26,10 @@ class LearningObjective < ApplicationRecord
 
   scope :ordered_by_name, -> { order :name }
 
+  def completed?(student)
+    progress(student) == COMPLETED_STATUS
+  end
+
   def linked_assignments_count
     learning_objective_links.count
   end
