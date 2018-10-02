@@ -65,12 +65,11 @@ class LearningObjective < ApplicationRecord
 
     if course.objectives_award_points?
       earned_points = earned_assignment_points(cumulative_outcome)
-      return 100 if earned_points >= points_to_completion
       percentage = earned_points.to_f / points_to_completion.to_f
     else
       percentage = numeric_progress_for_outcome(cumulative_outcome).to_f / count_to_achieve.to_f
     end
-    (percentage * 100).round(2)
+    percentage > 1 ? 100 : (percentage * 100).round(2)
   end
 
   def point_progress_for(cumulative_outcome, include_details)
