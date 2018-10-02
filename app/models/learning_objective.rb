@@ -95,6 +95,14 @@ class LearningObjective < ApplicationRecord
     outcomes
   end
 
+  def check_unlockables(student)
+    if self.is_a_condition?
+      self.unlock_keys.map(&:unlockable).each do |unlockable|
+        unlockable.unlock!(student)
+      end
+    end
+  end
+
   private
 
   def earned_assignment_points(cumulative_outcome)

@@ -8,8 +8,6 @@ class LearningObjectiveObservedOutcome < ApplicationRecord
 
   validates_presence_of :assessed_at, :learning_objective_level
 
-  after_save :check_unlockables
-
   scope :for_student_visible_grades, -> { includes(:grade).where(grades: { student_visible: true }) }
   scope :shows_proficiency, -> do
     includes(:learning_objective_level)
@@ -30,13 +28,5 @@ class LearningObjectiveObservedOutcome < ApplicationRecord
       .for_student_visible_grades
       .includes(:learning_objective_level)
       .order("learning_objective_levels.flagged_value")
-  end
-
-  def check_unlockables
-    if self.cumulative_outcome.learning_objective.is_a_condition?
-      self.cumulative_outcome.learning_objective.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.unlock!(grade.student)
-      end
-    end
   end
 end
