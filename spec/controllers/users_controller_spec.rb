@@ -54,35 +54,6 @@ describe UsersController do
       end
     end
 
-    describe "POST create" do
-      let(:user) { User.unscoped.last }
-
-      context "calling create" do
-        before(:each) do
-          post :create, params: { user: { first_name: "Jimmy",
-                                          last_name: "Page",
-                                          username: "jimmy",
-                                          email: "jimmy@example.com" }}
-        end
-
-        it "creates a new user" do
-          expect(user.email).to eq "jimmy@example.com"
-          expect(user.username).to eq "jimmy"
-          expect(user.first_name).to eq "Jimmy"
-          expect(user.last_name).to eq "Page"
-        end
-
-        it "generates a random password for a user" do
-          expect(user.crypted_password).to_not be_blank
-        end
-
-        it "requires the new user to be activated" do
-          expect(user.activation_token).to_not be_blank
-          expect(user.activation_state).to eq "pending"
-        end
-      end
-    end
-
     describe "PUT update" do
       it "updates an existing user" do
         user
@@ -98,10 +69,16 @@ describe UsersController do
         put :update, params: { id: user.id, user: params }
         expect(user.reload.activated?).to be_truthy
       end
+
+      it "does not allow the email to be updated" do
+        user
+        params = { email: "blah@blahblah.com" }
+        put :update, params: { id: user.id, user: params }
+        expect(user.reload.email).to_not eq "blah@blahblah.com"
+      end
     end
 
     context "calling create" do
-
       it "creates a new staff member" do
         post :create, params: { user: { first_name: "Bob",
                   last_name: "Ross",
@@ -201,7 +178,8 @@ describe UsersController do
     end
 
     describe "GET import" do
-      it "renders the import page" do
+      it "renders the import page if allowed" do
+        stub_env "beta"
         get :import
         expect(response).to render_template(:import)
       end
