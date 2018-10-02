@@ -17,7 +17,7 @@
                             "data-sortable-predicate"=>"last_name"}
         %th.sortable-header{"scope"=>"col",
                             "ng-repeat"=>"objective in loInstructorOverviewCtrl.objectives() track by objective.id",
-                            "data-sortable-header-text"=>"Progress",
+                            "data-sortable-header-text"=>"{{objective.name}}",
                             "data-sortable-predicate"=>"progress",
                             "data-sortable-fn"=>"loInstructorOverviewCtrl.sortByObjectiveProgress(objective)"}
     %tbody
