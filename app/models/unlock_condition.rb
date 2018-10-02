@@ -50,7 +50,11 @@ class UnlockCondition < ApplicationRecord
 
   def requirements_completed_sentence(condition_date_timezone=nil)
     if condition_type != "Course"
-      description = "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
+      if condition_type == "LearningObjective"
+        description = "#{ condition_state_past } the #{ condition.name } #{unlockable.course.learning_objective_term.singularize}"
+      else
+        description = "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
+      end
     else
       description = "Earned #{ condition_value } points in this course"
     end
