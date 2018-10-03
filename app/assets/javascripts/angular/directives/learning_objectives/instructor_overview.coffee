@@ -12,7 +12,8 @@
       vm.outcomeForObjective = (studentId, objectiveId) -> LearningObjectivesService.earnedOutcome(studentId, objectiveId, parseInt(@assignmentId))
 
       vm.sortByObjectiveProgress = (objective) ->
-        (student) -> vm.outcomeForObjective(student.id, objective.id)?.flagged_value_as_i
+        vm.currentObjective = objective
+        (student) -> vm.outcomeForObjective(student.id, vm.currentObjective.id)?.flagged_value_as_i
 
       services(@courseId, @assignmentId).then(() -> vm.loading = false)
     ]
