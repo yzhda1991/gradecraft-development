@@ -456,10 +456,6 @@ PaperTrail.request.whodunnit = nil
               full_points += criterion.max_points
               criterion.order = n
               criterion.save
-              LevelBadge.create!(
-                level_id: criterion.levels.first.id,
-                badge_id: course_config[:badges][:visible_level_badge].id
-              ) if course.has_badges
 
               1.upto(5).each do |m|
                 level = criterion.levels.create! do |criterion_level|
@@ -468,8 +464,13 @@ PaperTrail.request.whodunnit = nil
                   criterion_level.description = "Red hair crookshanks bludger Marauder’s Map Prongs sunshine daisies butter mellow Ludo Bagman. Beaters gobbledegook N.E.W.T., Honeydukes eriseD inferi Wormtail. Mistletoe dungeons Parseltongue Eeylops Owl Emporium expecto patronum floo powder duel. Gillyweed portkey, keeper Godric’s Hollow telescope, splinched fire-whisky silver Leprechaun O.W.L. stroke the spine."
                 end
                 if m == 1 && course.has_badges
-                  LevelBadge.create!(level_id: level.id,
+                  LevelBadge.create!(
+                    level_id: level.id,
                     badge_id: course_config[:badges][:invisible_level_badge].id)
+                  LevelBadge.create!(
+                    level_id: level.id,
+                    badge_id: course_config[:badges][:visible_level_badge].id
+                  )
                 end
                 if m == 2
                   criterion.update_meets_expectations!(level, true)
