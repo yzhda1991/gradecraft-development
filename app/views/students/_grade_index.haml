@@ -1,6 +1,7 @@
 %table.dynatable
   %thead
     %tr
+      %th Assignment Type
       %th Assignment
       %th Feedback
       %th Final Score
@@ -12,6 +13,7 @@
   %tbody
     - presenter.grades_for_course.each do |grade|
       %tr
+        %td= link_to grade.assignment_type.name, edit_assignment_type_path(grade.assignment_type.id)
         %td= link_to grade.assignment.name, grade.assignment
         %td= raw grade.feedback
         %td
