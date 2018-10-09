@@ -103,6 +103,10 @@ angular-dragdrop@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/angular-dragdrop/-/angular-dragdrop-1.0.12.tgz#d04fef4d0844dcc90236c59b64096a8d64fe9d4d"
 
+angular-resource@^1.2.32:
+  version "1.2.32"
+  resolved "http://registry.npmjs.org/angular-resource/-/angular-resource-1.2.32.tgz#b23052ff6194a4b7042147c04c7fced701bb5bdc"
+
 angular-ui-router@0.2.13:
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-0.2.13.tgz#ab40c2f9fef9b8626ffdb29a793426c1fedd2f29"

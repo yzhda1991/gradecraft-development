@@ -16,9 +16,11 @@ import "restangular"
 import "angular-animate"
 import "angular-dragdrop"
 import "angular-ui-router"
+import "angular-resource"
 
 import "../src/js/angular/ui/sortable.js"
 import "../src/js/angular/vendor/elastic_input.js"
+import "../src/js/angular/vendor/ng-rails-csrf" // from ng-rails-csrf gem
 import "../src/js/angular/main.coffee"
 
 // function requireAll(r) {
