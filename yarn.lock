@@ -3503,6 +3503,10 @@ next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
+ngdraggable@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/ngdraggable/-/ngdraggable-0.1.10.tgz#8d3883e635abf238e8d5a6ec4798f11d0d973114"
+
 node-forge@0.7.5:
   version "0.7.5"
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"

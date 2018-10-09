@@ -11,6 +11,7 @@
 
 import "jquery";
 import "angular";
+import "ngdraggable"
 import ngAnimate from "angular-animate";
 import ngDragDrop from "angular-dragdrop";
 import "../src/js/angular/main.coffee";
