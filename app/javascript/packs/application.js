@@ -13,9 +13,12 @@ import "jquery";
 import "angular";
 import "ngdraggable"
 import "restangular"
-import ngAnimate from "angular-animate";
-import ngDragDrop from "angular-dragdrop";
-import "../src/js/angular/main.coffee";
+import ngAnimate from "angular-animate"
+import ngDragDrop from "angular-dragdrop"
+
+import "../src/js/angular/ui/sortable.js"
+import "../src/js/angular/vendor/elastic_input.js"
+import "../src/js/angular/main.coffee"
 
 // function requireAll(r) {
 //   r.keys().forEach(r);
