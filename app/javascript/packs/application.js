@@ -11,6 +11,7 @@
 
 import angular from "angular"
 import ngAnimate from "angular-animate";
+import ngDragDrop from "angular-dragdrop";
 import "../src/js/angular/main.coffee";
 
 // function requireAll(r) {
