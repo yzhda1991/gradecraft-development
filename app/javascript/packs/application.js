@@ -10,6 +10,7 @@
 // import "../src/js/your_js_filename";
 
 import angular from "angular"
+import ngAnimate from "angular-animate";
 import "../src/js/angular/main.coffee";
 
 // function requireAll(r) {
