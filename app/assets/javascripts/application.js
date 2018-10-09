@@ -32,12 +32,10 @@
 //= require ngDraggable
 //= require TweenMax.min
 //= require ngFx.min
-//= require angular-ui-router.min
 //= require angular-rails-templates
 //= require ng-rails-csrf
 
 //= require froala_editor.min.js
-//= require_tree ./angular-froala
 //= require ProximaNovaLicense.min.js
 
 // Include other plugins.

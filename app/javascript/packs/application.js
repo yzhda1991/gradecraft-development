@@ -9,6 +9,10 @@
 
 // import "../src/js/your_js_filename";
 
+function requireAll(r) {
+  r.keys().forEach(r);
+}
+
 import "jquery";
 import "angular";
 import "ngdraggable"
@@ -19,13 +23,9 @@ import "angular-ui-router"
 import "angular-resource"
 
 import "../src/js/angular/ui/sortable.js"
-import "../src/js/angular/vendor/elastic_input.js"
-import "../src/js/angular/vendor/ng-rails-csrf" // from ng-rails-csrf gem
+import "../src/js/angular/helpers/angular-froala.js"
+requireAll(require.context("../src/js/angular/helpers", true, /\.(js$|coffee$)/));  // helpers directory
+requireAll(require.context("../src/js/angular/vendor", true, /\.(js$|coffee$)/)); // vendor directory
 import "../src/js/angular/main.coffee"
 
-// function requireAll(r) {
-//   r.keys().forEach(r);
-//   console.log("key: " + key);
-// }
-// requireAll(require.context("../src/", true, /\.(js$|coffee$)/));
 console.log('Hello World from Webpacker')
