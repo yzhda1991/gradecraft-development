@@ -7,4 +7,14 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+// import "../src/js/your_js_filename";
+
+import angular from "angular"
+import "../src/js/angular/main.coffee";
+
+// function requireAll(r) {
+//   r.keys().forEach(r);
+//   console.log("key: " + key);
+// }
+// requireAll(require.context("../src/", true, /\.(js$|coffee$)/));
 console.log('Hello World from Webpacker')

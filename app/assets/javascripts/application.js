@@ -25,11 +25,9 @@
 //= require plotly-latest.min
 //= require date
 
-//= require angular/angular
 //= require angular-resource
 //= require angular-animate
 //= require angular-rails-templates
-//= require_tree ./angular/templates
 //= require angular-dragdrop
 //= require ngDraggable
 //= require TweenMax.min
@@ -37,11 +35,6 @@
 //= require angular-ui-router.min
 //= require angular-rails-templates
 //= require ng-rails-csrf
-//= require ./angular/main.js
-//= require ./angular/ui/sortable
-//= require ./angular/vendor/restangular.min
-//= require ./angular/vendor/angular-aria.js
-//= require_tree ./angular
 
 //= require froala_editor.min.js
 //= require_tree ./angular-froala
