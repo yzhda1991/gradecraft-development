@@ -13,8 +13,9 @@ import "jquery";
 import "angular";
 import "ngdraggable"
 import "restangular"
-import ngAnimate from "angular-animate"
-import ngDragDrop from "angular-dragdrop"
+import "angular-animate"
+import "angular-dragdrop"
+import "angular-ui-router"
 
 import "../src/js/angular/ui/sortable.js"
 import "../src/js/angular/vendor/elastic_input.js"
