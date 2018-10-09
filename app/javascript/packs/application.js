@@ -9,7 +9,8 @@
 
 // import "../src/js/your_js_filename";
 
-import angular from "angular"
+import "jquery";
+import "angular";
 import ngAnimate from "angular-animate";
 import ngDragDrop from "angular-dragdrop";
 import "../src/js/angular/main.coffee";
