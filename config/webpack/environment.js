@@ -8,6 +8,7 @@ environment.plugins.prepend(
   "jquery",
   new webpack.ProvidePlugin({
     $: "jquery",
+    _: "lodash",
     "window.jQuery": "jquery"
   })
 );
