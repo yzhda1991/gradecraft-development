@@ -11,4 +11,9 @@ class UserProctor
     return false unless proxy.is_professor? course
     Rails.env.beta? && course.institution.try(:institution_type) == "K-12"
   end
+
+  def can_update_email?(proxy, course)
+    return true if proxy.is_admin? course
+    !Rails.env.production?
+  end
 end
