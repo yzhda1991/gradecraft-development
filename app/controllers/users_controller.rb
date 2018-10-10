@@ -129,12 +129,13 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    user_proctor = UserProctor.new(@user)
     up = user_params
-    if (up[:password].blank? && up[:password_confirmation].blank?) || !UserProctor.new(@user).can_update_password?(current_user, current_course)
+    if (up[:password].blank? && up[:password_confirmation].blank?) || !user_proctor.can_update_password?(current_user, current_course)
       up.delete(:password)
       up.delete(:password_confirmation)
     end
-    @user.assign_attributes current_user_is_admin? ? up : up.except(:email)
+    @user.assign_attributes user_proctor.can_update_email?(current_course) ? up : up.except(:email)
     cancel_course_memberships @user
     if @user.save
       @user.activate! if up[:password].present? && !@user.activated?

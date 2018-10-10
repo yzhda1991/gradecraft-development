@@ -1,9 +1,11 @@
+include UniMock::StubRails
+
 describe UserProctor do
+  let(:course) { create :course }
   let(:user) { instance_double "User", persisted?: true, kerberos_uid: nil }
   let(:subject) { described_class.new user }
 
   describe "#can_update_password?" do
-    let(:course) { create :course }
     let(:proxy) { create :user, courses: [course], role: :student }
 
     it "returns false if the user has a kerberos password" do
@@ -33,6 +35,22 @@ describe UserProctor do
         course.institution = institution
         expect(subject.can_update_password? proxy, course).to eq true
       end
+    end
+  end
+
+  describe "#can_update_email?" do
+    let(:user) { build :user }
+
+    before(:each) { stub_env "production" }
+
+    it "returns true if the user is an admin for the course" do
+      create :course_membership, :admin, course: course, user: user
+      expect(subject.can_update_email? course).to eq true
+    end
+
+    it "returns true if the environment is not production" do
+      stub_env "beta"
+      expect(subject.can_update_email? course).to eq true
     end
   end
 end
