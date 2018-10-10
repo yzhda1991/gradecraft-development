@@ -39,18 +39,18 @@ describe UserProctor do
   end
 
   describe "#can_update_email?" do
-    let(:user) { build :user }
+    let(:proxy) { build :user }
 
     before(:each) { stub_env "production" }
 
     it "returns true if the user is an admin for the course" do
-      create :course_membership, :admin, course: course, user: user
-      expect(subject.can_update_email? course).to eq true
+      create :course_membership, :admin, course: course, user: proxy
+      expect(subject.can_update_email? proxy, course).to eq true
     end
 
     it "returns true if the environment is not production" do
       stub_env "beta"
-      expect(subject.can_update_email? course).to eq true
+      expect(subject.can_update_email? proxy, course).to eq true
     end
   end
 end

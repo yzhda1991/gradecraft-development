@@ -135,7 +135,7 @@ class UsersController < ApplicationController
       up.delete(:password)
       up.delete(:password_confirmation)
     end
-    @user.assign_attributes user_proctor.can_update_email?(current_course) ? up : up.except(:email)
+    @user.assign_attributes user_proctor.can_update_email?(current_user, current_course) ? up : up.except(:email)
     cancel_course_memberships @user
     if @user.save
       @user.activate! if up[:password].present? && !@user.activated?
