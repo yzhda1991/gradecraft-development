@@ -3549,6 +3549,10 @@ next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
+ng-rollbar@2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/ng-rollbar/-/ng-rollbar-2.4.2.tgz#c7f30d98ce05e46ad6f7e046acd0685c2bfb7a96"
+
 ngdraggable@^0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/ngdraggable/-/ngdraggable-0.1.10.tgz#8d3883e635abf238e8d5a6ec4798f11d0d973114"

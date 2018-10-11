@@ -22,6 +22,7 @@ import "angular-dragdrop"
 import "angular-ui-router"
 import "angular-resource"
 import "rollbar"
+import "ng-rollbar"
 
 import "../src/js/angular/ui/sortable.js"
 import "../src/js/angular/helpers/angular-froala.js"
