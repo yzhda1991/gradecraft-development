@@ -5,6 +5,9 @@ class API::GradingStatus::SubmissionsController < ApplicationController
   before_action :find_submissions
 
   def ungraded
+    if params[:studentId].present?
+      @submissions = @submissions.where(student_id:params[:studentId])
+    end
     @submissions = active_individual_and_group_submissions @submissions.ungraded
     render :"api/grading_status/submissions/index", status: :ok
   end

@@ -25,3 +25,10 @@
 
 .pageContent
   = render partial: "students/grade_index", locals: { presenter: presenter }
+  %grading-status-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                            "data-assignment-term"=>"#{term_for :assignment}",
+                            "data-team-term"=>"#{term_for :team}",
+                            "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                            "data-type"=>"Ungraded",
+                            "data-student-id"=>"#{current_student.id}",
+                            "role"=>"tabpanel"}
