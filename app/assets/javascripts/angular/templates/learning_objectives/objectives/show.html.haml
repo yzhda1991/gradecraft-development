@@ -109,6 +109,5 @@
               .display-on-hover.hover-style
                 You have successfully resubmitted this {{loShowCtrl.termFor('assignment')}}
           %td
-            %a{"ng-if"=>"loShowCtrl.gradeExists(assignment.id)",
-               "ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, assignment.id)}}"}
-              %span.level-flagged-value{"ng-class"=>"loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).flagged_value"} {{loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).readable_flagged_value}}
+            %lo-proficiency-indicator{"ng-if"=>"loShowCtrl.earnedOutcome(assignment.id) != null",
+                                      "data-observed-outcome"=>"loShowCtrl.earnedOutcome(assignment.id)"}

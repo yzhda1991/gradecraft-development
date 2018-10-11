@@ -10,7 +10,7 @@
 
       vm.termFor = (term) -> LearningObjectivesService.termFor(term)
 
-      vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, assignment.id)?.flagged_value
+      vm.sortByAssessment = (assignment) -> vm.earnedOutcome(vm.studentId, @objectiveId, assignment.id)?.flagged_value
       vm.sortBySubmittedAssignments = (student) -> vm.submissionsForStudent(student.id)?.length
       vm.sortByPercentComplete = (student) -> vm.percentComplete(student.id)
       vm.sortBySubmittedAt = (assignment) -> vm.submittedAt(assignment.id)
@@ -21,10 +21,8 @@
       vm.percentComplete = (studentId) -> vm.cumulativeOutcome(studentId)?.percent_complete
       vm.numericProgress = (studentId) -> vm.cumulativeOutcome(studentId)?.numeric_progress
 
-      vm.earnedOutcome = (studentId, assignmentId) ->
-        LearningObjectivesService.earnedOutcome(parseInt(studentId), assignmentId)
-
-      vm.gradeExists = (assignmentId) -> observedOutcomeFor(parseInt(@studentId), assignmentId)?
+      vm.earnedOutcome = (assignmentId) ->
+        LearningObjectivesService.earnedOutcome(parseInt(@studentId), parseInt(@objectiveId), assignmentId)
 
       vm.cumulativeOutcome = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
@@ -39,10 +37,6 @@
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
         LearningObjectivesService.observedOutcomesForStudent(_studentId)
 
-      vm.gradePath = (studentId, assignmentId) ->
-        oo = observedOutcomeFor(parseInt(studentId), assignmentId)
-        "/grades/#{oo.grade_id}"
-
       vm.showPath = (studentId) ->
         "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
 
@@ -56,11 +50,6 @@
         SubmissionService.getSubmissions(_.pluck(vm.linkedAssignments, "id")).then(() -> vm.loading = false)
       )
     ]
-
-    observedOutcomeFor = (studentId, assignmentId) ->
-      oo = LearningObjectivesService.observedOutcomesForStudent(studentId)
-      return unless oo?
-      _.find(oo, { assignment_id: assignmentId })
 
     services = (objectiveId, studentId) ->
       promises = [LearningObjectivesService.getObjective(objectiveId)]
