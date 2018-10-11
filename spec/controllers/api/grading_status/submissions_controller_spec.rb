@@ -19,6 +19,12 @@ describe API::GradingStatus::SubmissionsController do
           submission: graded_submission, student: student
       end
 
+      it "filters by specific student if givien student ID" do
+        student = create :user, courses: [course], role: :student
+        get :ungraded, params: { studentId: student.id } , format: :json
+        expect(assigns(:submissions)).to eq []
+      end
+
       it "assigns the ungraded submissions in the current course" do
         get :ungraded, format: :json
         expect(assigns(:submissions)).to eq [ungraded_submission]
