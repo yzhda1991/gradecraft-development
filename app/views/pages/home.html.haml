@@ -1,2 +1,19 @@
 - content_for :public_class, 'public-with-background'
-= render partial: "user_sessions/form"
+-# = render partial: "user_sessions/form"
+
+-# TODO extract into partial
+#access_gate.content_block
+  .alert-bkg= render "layouts/alerts"
+  %div
+    - if Rails.env.production?
+      = render partial: "user_sessions/umich"
+      %a#show-gradecraft-login.left.uppercase Admin
+    - else
+      = render partial: "user_sessions/gradecraft"
+
+  -# - if !Rails.env.production?
+  -#   = render partial: "passwords/reset_form"
+
+  -# .gradecraft-login{"aria-hidden": "true"}
+  -#   = render partial: "user_sessions/gradecraft"
+  -#   %button.button-link.small#show-umich-login Back to UM login
