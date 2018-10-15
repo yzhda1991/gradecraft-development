@@ -115,3 +115,32 @@
     display: none
     @media (max-width: $media-small-max)
       padding: 0
+
+/* GOOD STUFF! */
+.google_access
+  a
+    background: white url(asset_path("Google_G.svg")) no-repeat left 0.5em center
+    background-size: auto 2.25em
+    padding: 1em 1em 1em 3.5em
+    margin: 0 0 1.5em 0
+    display: inline-block
+    border: 1px solid whitesmoke
+    border-radius: 3px
+    color: #4285f4
+    box-shadow: 0px 2px 3px lightgrey
+
+    &:hover
+      color: $blue-medium_1
+
+#access_gate
+  width: 600px
+  min-height: 100vh
+  padding-top: 5em
+  box-shadow: 3px 1px 5px rgba(0,0,0,0.2)
+  position: relative
+
+  @media (max-width: $media-950)
+    width: 400px
+
+  @media (max-width: $media-650)
+    width: 100%

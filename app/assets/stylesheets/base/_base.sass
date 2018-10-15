@@ -1,5 +1,29 @@
 @import "../utilities/variables"
 
+.wrapper
+  max-width: 1600px
+  margin: 0 auto
+
+  @media (min-width: $media-maximum)
+    border-right: 5px solid $grey_1
+    border-left: 5px solid $grey_1
+    border-bottom: 5px solid $grey_1
+
+  &.modal_on
+    overflow: hidden
+    height: 100vh
+
+  &.access
+    background: $bg-blue_2 url(asset_path('bg-mountains_access.svg')) no-repeat bottom right -200px
+    background-size: auto 90%
+
+    @media (max-width: $media-800)
+      background: $bg-blue_2 url(asset_path('bg-mountains_access.svg')) no-repeat bottom right -200px
+      background-size: auto 80%
+
+    @media (max-width: $media-650)
+      background: $bg-blue_2
+
 /* Background Colors, typically for divs __=^o.o^= */
 .bg-green_mint
   background-color: $bg-green_mint
@@ -25,10 +49,16 @@
   @media (max-width: $media-650)
     padding: 0 3%
 
+.bg-blue_2
+  background-color: $bg-blue_2
+
+
 
 /* Styling Add-on for divs __=^o.o^= */
 div.content_block
+  background-color: white
   padding: 1em 5%
+  box-sizing: border-box
   @media (max-width: $media-650)
     padding: 1em 3%
 
@@ -42,6 +72,7 @@ div.content_block
     top: -0.1em
     -webkit-transform: translateY(-200%)
     transform: translateY(-200%)
+
 
 
 /* Buttons, both true button's and a.button's __=^o.o^= */

@@ -2,14 +2,30 @@
 -# = render partial: "user_sessions/form"
 
 -# TODO extract into partial
-#access_gate.content_block
-  .alert-bkg= render "layouts/alerts"
-  %div
-    - if Rails.env.production?
-      = render partial: "user_sessions/umich"
-      %a#show-gradecraft-login.left.uppercase Admin
-    - else
-      = render partial: "user_sessions/gradecraft"
+.wrapper.access
+  #access_gate.content_block
+    .alert-bkg= render "layouts/alerts"
+    %div
+      - if Rails.env.production?
+        = render partial: "user_sessions/umich"
+        %a#show-gradecraft-login.left.uppercase Admin
+      - else
+        -# = render partial: "user_sessions/gradecraft"
+
+        %h1 Log In
+        .google_access
+          %a Log in with Google
+        %h3 Or:
+        .form_elem
+          <input name="login_email" type="email" placeholder="Your email address" required="required" />
+          <label for="login_email">Email address</label>
+        .form_elem
+          <input name="login_pw" type="password" placeholder="Your password" required="required" />
+          <label for="login_pw">Password</label>
+        %button.action Log in
+        %button.secondary Cancel
+        %p
+          %a Forgot your password?
 
   -# - if !Rails.env.production?
   -#   = render partial: "passwords/reset_form"
