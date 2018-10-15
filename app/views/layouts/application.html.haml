@@ -12,8 +12,8 @@
     = yield(:head)
 
   %body(class="#{body_class}" ng-app="gradecraft")
-    = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
     - if current_user
+      = render partial: "layouts/top_bar", locals: { presenter: Navigation::CourseInfoPresenter.new(course: current_course, student: current_student) }
       %a.nav-flyout-contentmask
       .inner-wrap
         - if current_user_is_staff?
@@ -23,13 +23,12 @@
         - elsif current_user_is_observer?
           = render partial: "layouts/observer"
     - else
-      = render partial: "layouts/public"
+      = yield
     = render partial: "layouts/rollbar"
   = render partial: "layouts/help/zendesk"
   .footer
     = render partial: "layouts/footer"
 
-  = render partial: "layouts/background"
   = render partial: "layouts/google_analytics"
   = javascript_include_tag "application", "data-turbolinks-track" => true
   = yield(:scripts)

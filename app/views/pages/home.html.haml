@@ -1,7 +1,5 @@
 - content_for :public_class, 'public-with-background'
--# = render partial: "user_sessions/form"
 
--# TODO extract into partial
 .wrapper.access
   #access_gate.content_block
     .alert-bkg= render "layouts/alerts"
@@ -10,8 +8,8 @@
         = render partial: "user_sessions/umich"
         %a#show-gradecraft-login.left.uppercase Admin
       - else
-        -# = render partial: "user_sessions/gradecraft"
-
+        = link_to '/index.html', :class => "logo" do
+          = image_tag "logo.svg", :alt => "Return to GradeCraft hompage", :width => "450", :height => "100"
         %h1 Log In
         .google_access
           %a Log in with Google
@@ -23,13 +21,5 @@
           <input name="login_pw" type="password" placeholder="Your password" required="required" />
           <label for="login_pw">Password</label>
         %button.action Log in
-        %button.secondary Cancel
         %p
           %a Forgot your password?
-
-  -# - if !Rails.env.production?
-  -#   = render partial: "passwords/reset_form"
-
-  -# .gradecraft-login{"aria-hidden": "true"}
-  -#   = render partial: "user_sessions/gradecraft"
-  -#   %button.button-link.small#show-umich-login Back to UM login

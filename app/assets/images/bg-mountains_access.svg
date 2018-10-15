@@ -1,0 +1,80 @@
+<svg version="1.1" id="graphics" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="860px" height="680px" viewBox="0 0 860 680" enable-background="new 0 0 860 680" xml:space="preserve">
+    
+<style>
+.cloud_1 {animation: cloudDrift_1 100s linear infinite;}
+.cloud_2 {animation: cloudDrift_2 200s linear infinite;}
+
+.flag {
+    animation: flagBreeze 4s linear infinite;
+    transform-origin: 50% 50%;
+}
+
+.owl .eyes{animation: owlBlink 10s linear infinite;}
+
+@keyframes cloudDrift_1{
+    50% { opacity: 1; transform: translateX(800px);}
+    51% { opacity: 0; }
+    70% { opacity: 0; transform: translateX(-950px); }
+    71% { opacity: 1; }
+    100% { transform: translateX(0px); }
+}
+@keyframes cloudDrift_2{
+    35% { opacity: 1; transform: translateX(900px);}
+    36% { opacity: 0; }
+    50% { opacity: 0; transform: translateX(-900px); }
+    51% { opacity: 1; }
+    100% { transform: translateX(0px); }
+}
+@keyframes flagBreeze{
+    50% { transform: scaleX(0.75); }
+}
+@keyframes owlBlink{
+    50% { opacity: 1; }
+    51% { opacity: 0; }
+    52% { opacity: 1; }
+    55% { opacity: 1; }
+    56% { opacity: 0; }
+    57% { opacity: 1; }
+}
+</style>    
+    
+<rect fill-rule="evenodd" clip-rule="evenodd" fill="#D9F4FF" width="860" height="680"/>
+<path class="cloud_1" fill="#FFFFFF" d="M751.597,55h-137.5c6.902,0,12.5-5.597,12.5-12.5s-5.598-12.5-12.5-12.5h-250c-6.902,0-12.5,5.597-12.5,12.5
+	s5.598,12.5,12.5,12.5h137.5c6.902,0,12.5,5.597,12.5,12.5s-5.598,12.5-12.5,12.5h-44.625c-6.904,0-12.5,5.597-12.5,12.5
+	s5.596,12.5,12.5,12.5h250c6.902,0,12.5-5.597,12.5-12.5s-5.598-12.5-12.5-12.5h44.625c6.902,0,12.5-5.597,12.5-12.5
+	S758.499,55,751.597,55z"/>
+<path class="cloud_2" fill="#FFFFFF" d="M486.972,180h-137.5c6.902,0,12.5-5.597,12.5-12.5s-5.598-12.5-12.5-12.5h-250
+	c-6.903,0-12.5,5.597-12.5,12.5s5.597,12.5,12.5,12.5h137.5c6.904,0,12.5,5.597,12.5,12.5s-5.596,12.5-12.5,12.5h-44.625
+	c-6.902,0-12.5,5.597-12.5,12.5s5.598,12.5,12.5,12.5h250c6.902,0,12.5-5.597,12.5-12.5s-5.598-12.5-12.5-12.5h44.625
+	c6.902,0,12.5-5.597,12.5-12.5S493.874,180,486.972,180z"/>
+<polygon fill="#0E0E51" points="855.028,680 430,255 4.972,680 "/>
+<g class="flag">
+    <path fill="#0E0E51" d="M431.001,223.5c-0.211,0-0.418-0.066-0.592-0.194c-0.258-0.188-0.408-0.487-0.408-0.806v-25
+        c0-0.318,0.15-0.617,0.408-0.806c0.256-0.188,0.586-0.243,0.891-0.149l40,12.5c0.416,0.131,0.701,0.518,0.701,0.955
+        s-0.285,0.824-0.701,0.954l-40,12.5C431.202,223.484,431.101,223.5,431.001,223.5z M432.001,198.86v22.279L467.647,210
+        L432.001,198.86z"/>
+    <polygon fill="#CCF28B" points="431.001,197.5 431.001,210 471.001,210 	"/>
+    <polygon fill="#42E29D" points="471.001,210 431.001,210 431.001,222.5 	"/>
+</g>
+<line fill="none" stroke="#0E0E51" stroke-width="4" stroke-linecap="round" stroke-miterlimit="10" x1="430.001" y1="255" x2="430.001" y2="195"/>
+<g>
+	<polygon fill="#215089" points="357.833,680 557.847,680 557.847,480 	"/>
+	<polygon fill="#2E70BE" points="557.847,480 557.847,480 557.847,680 757.86,680 	"/>
+</g>
+<polygon fill="#F1F2F2" points="430.001,259 349.995,339 430.001,419 510.007,339 "/>
+<polygon fill="#6ECCF6" points="405.354,680 305.348,580 205.341,680 "/>
+<g class="owl">
+	<path fill="#BA0C70" d="M412.384,269.917c0-4.208-3.426-7.632-7.633-7.632c-4.209,0-7.633,3.424-7.633,7.632v13.47
+		c0,0.496,0.402,0.898,0.898,0.898c7.658,0,13.918-6.029,14.328-13.588C412.37,270.441,412.384,270.181,412.384,269.917z"/>
+	<path fill="#FFFFFF" d="M407.708,265.759c-1.633,0-2.957,1.325-2.957,2.96c0-1.635-1.326-2.96-2.961-2.96
+		c-1.633,0-2.959,1.325-2.959,2.96c0,2.61,2.65,5.548,5.92,5.548c3.268,0,5.918-2.938,5.918-5.548
+		C410.669,267.084,409.343,265.759,407.708,265.759z"/>
+	<path fill="#DB2886" d="M405.353,271.046c0,0.652-0.602,1.182-0.602,1.182s-0.604-0.529-0.604-1.182s0.27-1.182,0.604-1.182
+		C405.083,269.864,405.353,270.394,405.353,271.046z"/>
+    <g class="eyes">
+        <circle fill="#DB2886" cx="407.71" cy="268.684" r="1.004"/>
+        <circle fill="#DB2886" cx="401.791" cy="268.684" r="1.005"/>
+    </g>
+</g>
+</svg>
