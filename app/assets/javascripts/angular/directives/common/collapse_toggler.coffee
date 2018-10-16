@@ -15,6 +15,9 @@
         event.preventDefault()
         elm.siblings().toggleClass(collapsedClass)
         elm.toggleClass('collapsed')
+        elm.siblings().each(() ->
+          element = angular.element(this)
+          if element.hasClass(collapsedClass) then element.slideUp(300) else element.slideDown(300))
     )
     return
 
