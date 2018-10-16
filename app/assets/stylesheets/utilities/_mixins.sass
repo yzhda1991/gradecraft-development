@@ -28,7 +28,43 @@
     margin-left: -16px
 
 
-// styles for background scene
+
+/* Media Query Mixins */
+@mixin desktop
+  @media only screen and (max-width: $media-1200)
+    @content
+
+@mixin tablet-xl
+  @media only screen and (max-width: $media-1000)
+    @content
+
+@mixin tablet-l
+  @media only screen and (max-width: $media-950)
+    @content
+
+@mixin tablet
+  @media only screen and (max-width: $media-800)
+    @content
+
+@mixin tablet-portrait
+  @media only screen and (max-width: $media-700)
+    @content
+
+@mixin mobile-xl
+  @media only screen and (max-width: $media-650)
+    @content
+
+@mixin mobile
+  @media only screen and (max-width: $media-490)
+    @content
+
+@mixin desktop-xl
+  @media only screen and (min-width: $media-maximum)
+    @content
+
+
+
+/* styles for background scene */
 @mixin cloud-bubble-mixin($size,$left,$top)
   $main-size: $size * 1px
   $radius-size: $main-size / 2
@@ -71,7 +107,8 @@
     left: $main-size
 
 
-// grade predictor mobile headers
+
+/* grade predictor mobile headers */
 @mixin mobile-headers-mixin
   .predictor-section-title-predicted-points.weightable
     background-color: $color-blue-2
@@ -113,19 +150,23 @@
     #svg-predicted-grade
       transform: translate(10px, 175px)
 
-// mixin for all rubric level form fields
+
+
+/* mixin for all rubric level form fields */
 @mixin rubric-level-input
   background-color: $color-white
   &:hover
     background-color: $color-white
 
 
-// layout
+
+/* layout */
 @mixin rounded-corners($radius)
   border-radius: $radius
 
 
-// animation
+
+/* animation */
 @mixin transition-property($properties)
   transition-property: $properties
 

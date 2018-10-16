@@ -1,120 +1,121 @@
 @import "../utilities/variables"
+@import "../utilities/mixins"
 
-.google-login
-  a
-    background: white url(asset_path("Google_G.svg")) no-repeat left 0.5em center
-    background-size: auto 2.25em
-    padding: 1em 1em 1em 3.5em
-    margin: 1em 0
-    display: inline-block
-    border: 1px solid whitesmoke
-    border-radius: 3px
-    color: #4285f4
-    box-shadow: 0px 2px 3px lightgrey
+// .google-login
+//   a
+//     background: white url(asset_path("Google_G.svg")) no-repeat left 0.5em center
+//     background-size: auto 2.25em
+//     padding: 1em 1em 1em 3.5em
+//     margin: 1em 0
+//     display: inline-block
+//     border: 1px solid whitesmoke
+//     border-radius: 3px
+//     color: #4285f4
+//     box-shadow: 0px 2px 3px lightgrey
+//
+//     &:hover
+//       color: $blue-medium_1
+//   .login-button
+//       border-radius: $global-radius
+//       text-decoration: none
+//       text-align: center
+//       vertical-align: middle
+//       color: $color-white
+//       display: inline-flex
+//       border: none
+//       margin: .50rem
+//       padding: 0px 20px
+//       font-size: .7rem
+//       line-height: 2.8rem
+//       cursor: pointer
+//       background-color: $color-blue-1
+//       white-space: nowrap
+//       font-weight: 400
+//       font-family: 'Open Sans', sans-serif
+//       appearance: none
+//       &:hover
+//         background-color: $color-blue-2
+//
+// .login
+//   margin: 1em 0
+//   text-align: center
+//   @media (max-width: $media-small-max)
+//     padding: 0
+//
+//   h1
+//     display: inline-block
+//     margin: 1em 0
+//
+//   p.divider
+//     border-top: 1px dashed $blue
+//     font: 0.9em/0 'KlinicSlab_medium', serif
+//     margin: 1.5em 0
+//     text-transform: uppercase
+//     letter-spacing: 2px
+//
+//     span
+//       background: white
+//       padding: 0 0.5em
+//
+//   .alert-bkg
+//     margin-bottom: 1rem
+//
+//   .button
+//     min-width: 200px
+//
+//   .form-item
+//     margin: 3em auto
+//
+//   .text-xs-center
+//     text-align: center
+//
+//   .g-recaptcha
+//     display: inline-block
+//
+//   .login-form-container
+//     max-width: 600px
+//     margin: 5em auto 0 auto
+//     background-color: $color-white
+//     box-sizing: border-box
+//     padding: 2rem 3rem
+//     text-align: center
+//     border-radius: 3px
+//     @media (max-width: $media-small-max)
+//       border-radius: 0
+//
+//   .login-block
+//     margin-bottom: 1em
+//
+//   .um-login, .account-create
+//     display: block
+//     background-color: #00274c
+//     width: 100%
+//     padding: 0.75rem
+//     box-sizing: border-box
+//     margin: 1rem auto
+//     width: 200px
+//     font-size: 1rem
+//     font-weight: 300
+//
+//   .login-logo
+//     display: inline-block
+//     vertical-align: text-bottom
+//     margin-right: 0.25rem
+//
+//   .divider-message
+//     position: absolute
+//     padding: 1em
+//     background-color: $color-white
+//     top: -2.5rem
+//     right: 45%
+//
+//   .password-forgot-form, .gradecraft-login
+//     padding: 2rem
+//     display: none
+//     @media (max-width: $media-small-max)
+//       padding: 0
 
-    &:hover
-      color: $blue-medium_1
 
-
-  .login-button
-      border-radius: $global-radius
-      text-decoration: none
-      text-align: center
-      vertical-align: middle
-      color: $color-white
-      display: inline-flex
-      border: none
-      margin: .50rem
-      padding: 0px 20px
-      font-size: .7rem
-      line-height: 2.8rem
-      cursor: pointer
-      background-color: $color-blue-1
-      white-space: nowrap
-      font-weight: 400
-      font-family: 'Open Sans', sans-serif
-      appearance: none
-      &:hover
-        background-color: $color-blue-2
-
-.login
-  margin: 1em 0
-  text-align: center
-  @media (max-width: $media-small-max)
-    padding: 0
-
-  h1
-    display: inline-block
-    margin: 1em 0
-
-  p.divider
-    border-top: 1px dashed $blue
-    font: 0.9em/0 'KlinicSlab_medium', serif
-    margin: 1.5em 0
-    text-transform: uppercase
-    letter-spacing: 2px
-
-    span
-      background: white
-      padding: 0 0.5em
-
-  .alert-bkg
-    margin-bottom: 1rem
-
-  .button
-    min-width: 200px
-
-  .form-item
-    margin: 3em auto
-
-  .text-xs-center
-    text-align: center
-
-  .g-recaptcha
-    display: inline-block
-
-  .login-form-container
-    max-width: 600px
-    margin: 5em auto 0 auto
-    background-color: $color-white
-    box-sizing: border-box
-    padding: 2rem 3rem
-    text-align: center
-    border-radius: 3px
-    @media (max-width: $media-small-max)
-      border-radius: 0
-
-  .login-block
-    margin-bottom: 1em
-
-  .um-login, .account-create
-    display: block
-    background-color: #00274c
-    width: 100%
-    padding: 0.75rem
-    box-sizing: border-box
-    margin: 1rem auto
-    width: 200px
-    font-size: 1rem
-    font-weight: 300
-
-  .login-logo
-    display: inline-block
-    vertical-align: text-bottom
-    margin-right: 0.25rem
-
-  .divider-message
-    position: absolute
-    padding: 1em
-    background-color: $color-white
-    top: -2.5rem
-    right: 45%
-
-  .password-forgot-form, .gradecraft-login
-    padding: 2rem
-    display: none
-    @media (max-width: $media-small-max)
-      padding: 0
 
 /* GOOD STUFF! */
 .google_access
@@ -136,26 +137,35 @@
   width: 600px
   min-height: 100vh
   padding-top: 1em
-  box-shadow: 3px 1px 5px rgba(0,0,0,0.2)
+  box-shadow: 3px 0px 5px rgba(0,0,0,0.2)
   position: relative
 
-  @media (max-width: $media-950)
+  @include tablet-l
     width: 400px
 
-  @media (max-width: $media-650)
+  @include mobile-xl
     width: 100%
+
+  .um-seal
+    display: block
+    width: 200px
+    height: auto
+    margin: 3em auto 0 auto
 
 a.logo
   border-bottom: 0px solid transparent
   display: inline-block
   margin-bottom: 2em
 
+  @include mobile-xl
+    margin-bottom: 1em
+
   img
     display: block
     height: 1.75em
     width: auto
 
-    @media (max-width: $media-650)
+    @include mobile-xl
       height: 1.6em
 
 .wrapper

@@ -3,23 +3,24 @@
 .wrapper.access
   #access_gate.content_block
     .alert-bkg= render "layouts/alerts"
-    %div
-      - if Rails.env.production?
-        = render partial: "user_sessions/umich"
-        %a#show-gradecraft-login.left.uppercase Admin
-      - else
-        = link_to '/index.html', :class => "logo" do
-          = image_tag "logo.svg", :alt => "Return to GradeCraft hompage", :width => "450", :height => "100"
-        %h1 Log In
-        .google_access
-          %a Log in with Google
-        %h3 Or:
-        .form_elem
-          <input name="login_email" type="email" placeholder="Your email address" required="required" />
-          <label for="login_email">Email address</label>
-        .form_elem
-          <input name="login_pw" type="password" placeholder="Your password" required="required" />
-          <label for="login_pw">Password</label>
-        %button.action Log in
-        %p
-          %a Forgot your password?
+    - if Rails.env.development?
+      = render partial: "user_sessions/umich"
+      -# We should wrap the Admin link below in a conditional
+      %br
+      %a#show-gradecraft-login.button Admin access
+    -# - else
+    -#   = link_to 'https://gradecraft.com/', :class => "logo" do
+    -#     = image_tag "logo.svg", :alt => "Return to GradeCraft homepage", :width => "450", :height => "100"
+    -#   %h1 Log In
+    -#   .google_access
+    -#     %a Log in with Google
+    -#   %h3 Or:
+    -#   .form_elem
+    -#     <input name="login_email" type="email" placeholder="Your email address" required="required" />
+    -#     <label for="login_email">Email address</label>
+    -#   .form_elem
+    -#     <input name="login_pw" type="password" placeholder="Your password" required="required" />
+    -#     <label for="login_pw">Password</label>
+    -#   %button.action Log in
+    -#   %p
+    -#     %a Forgot your password?
