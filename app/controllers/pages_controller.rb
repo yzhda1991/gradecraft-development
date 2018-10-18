@@ -7,10 +7,6 @@ class PagesController < ApplicationController
 
   layout "blank", only: :style_guide
 
-  def home
-    redirect_to dashboard_path if current_user
-  end
-
   def style_guide
   end
 

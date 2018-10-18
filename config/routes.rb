@@ -274,6 +274,10 @@ Rails.application.routes.draw do
     get :health_check
   end
 
+  controller :home do
+    get :login
+  end
+
   #11. Grade Schemes
   resources :grade_scheme_elements, only: [:index, :edit, :update] do
     collection do
@@ -342,7 +346,6 @@ Rails.application.routes.draw do
   # Canvas OmniAuth setup
   match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
 
-  get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
   get :reset, to: "user_sessions#new"
   resources :user_sessions, only: [:new, :create, :destroy, :student] do
@@ -634,5 +637,5 @@ Rails.application.routes.draw do
   resource :errors, only: :show
 
   # root, bro
-  root to: "pages#home"
+  root to: "home#index"
 end

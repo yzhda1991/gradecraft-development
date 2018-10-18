@@ -7,10 +7,6 @@ class UserSessionsController < ApplicationController
   skip_before_action :require_course_membership, except: :index
   skip_before_action :verify_authenticity_token, only: [:lti_create]
 
-  def new
-    @user = User.new
-  end
-
   def instructors
     @user = User.new
   end
