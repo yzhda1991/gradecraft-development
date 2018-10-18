@@ -63,7 +63,7 @@ describe UsersController do
       end
 
       it "activates the user if the user is not activated and the password changed" do
-        allow(UserProctor).to receive(:new).and_return instance_double("UserProctor", can_update_password?: true, can_update_email?: true)
+        allow(UserProctor).to receive(:new).and_return instance_double("UserProctor", can_update_password?: true, can_set_email?: true)
         user = create :user, activated: false
         params = { password: "password", password_confirmation: "password" }
         put :update, params: { id: user.id, user: params }
@@ -132,7 +132,7 @@ describe UsersController do
 
       it "deletes the password params if the user is not permitted to change it" do
         user_params = { password: "password", password_confirmation: "password" }
-        allow(UserProctor).to receive(:new).with(user).and_return instance_double("UserProctor", can_update_password?: false, can_update_email?: true)
+        allow(UserProctor).to receive(:new).with(user).and_return instance_double("UserProctor", can_update_password?: false, can_set_email?: true)
         expect{ put :update, params: { id: user.id, user: user_params } }.to_not change { user.reload.crypted_password }
       end
     end
