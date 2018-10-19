@@ -8,4 +8,6 @@
     .form-item
       = f.input :allows_canvas, label: "Allows Canvas?", hint: "Does this course allow integration with Canvas?"
     .form-item
+      = f.input :allows_learning_objectives, label: "Enable Learning Objectives?", hint: "Allow instructors to set up learning objectives for the course?"
+    .form-item
       = f.association :institution, collection: Institution.all, prompt: "Select an institution"
