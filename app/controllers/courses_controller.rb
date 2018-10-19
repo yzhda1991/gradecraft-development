@@ -202,7 +202,8 @@ class CoursesController < ApplicationController
   private
 
   def course_params
-    params.require(:course).permit :course_number, :name, :semester, :year, :has_badges, :has_teams,
+    course_attrs = [
+      :course_number, :name, :semester, :year, :has_badges, :has_teams,
       :has_learning_objectives, :learning_objective_term, :objectives_award_points, :always_show_objectives,
       :team_term, :student_term, :section_leader_term, :group_term, :lti_uid,
       :user_id, :course_id, :course_rules, :dashboard_message, :syllabus, :has_multipliers,
@@ -211,16 +212,22 @@ class CoursesController < ApplicationController
       :assignment_weight_type, :has_submissions, :teams_visible,
       :weight_term, :fail_term, :pass_term, :time_zone,
       :max_weights_per_assignment_type, :assignments,
-      :accepts_submissions, :tagline, :office, :phone, :has_paid,
+      :accepts_submissions, :tagline, :office, :phone,
       :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
       :meeting_times, :assignment_term, :challenge_term, :grade_predictor_term, :badge_term, :gameful_philosophy,
       :team_score_average, :has_team_challenges, :team_leader_term,
       :max_assignment_types_weighted, :full_points, :has_in_team_leaderboards,
-      :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
-      :assignments_attributes, :start_date, :end_date, :allows_canvas, :institution_id,
+      :grade_scheme_elements_attributes, :add_team_score_to_student,
+      :assignments_attributes, :start_date, :end_date,
       unlock_conditions_attributes: [:id, :unlockable_id, :unlockable_type, :condition_id,
         :condition_type, :condition_state, :condition_value, :condition_date, :_destroy],
       instructors_of_record_ids: [], course_memberships_attributes: [:id, :course_id, :user_id, :instructor_of_record]
+    ]
+    if current_user_is_admin?
+      params.require(:course).permit(*course_attrs << [:status, :has_paid, :allows_canvas, :allows_learning_objectives, :institution_id])
+    else
+      params.require(:course).permit(*course_attrs)
+    end
   end
 
   def find_course

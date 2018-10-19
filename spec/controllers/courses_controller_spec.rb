@@ -38,6 +38,26 @@ describe CoursesController do
       end
     end
 
+    describe "PUT update" do
+      let(:institution) { create :institution }
+
+      it "updates admin-only attributes on the course" do
+        course.update status: false, has_paid: false, allows_canvas: false, allows_learning_objectives: false, institution_id: nil
+        params = {
+          id: course.id,
+          course: {
+            status: true,
+            has_paid: true,
+            allows_canvas: true,
+            allows_learning_objectives: true,
+            institution_id: institution.id
+          }
+        }
+        post :update, params: params
+        expect(course.reload).to have_attributes params[:course]
+      end
+    end
+
     describe "POST recalculate_student_scores" do
       it "recalculates student scores" do
         expect_any_instance_of(Course).to receive(:recalculate_student_scores)
@@ -226,6 +246,22 @@ describe CoursesController do
         params = { name: "new name" }
         expect_any_instance_of(Course).to_not receive(:recalculate_student_scores)
         post :update, params: { id: course.id, course: params }
+      end
+
+      it "does not allow updating restricted attributes" do
+        course.update status: false, has_paid: false, allows_canvas: false, allows_learning_objectives: false, institution_id: nil
+        params = {
+          id: course.id,
+          course: {
+            status: true,
+            has_paid: true,
+            allows_canvas: true,
+            allows_learning_objectives: true,
+            institution_id: 1
+          }
+        }
+        post :update, params: params
+        expect(course.reload).not_to have_attributes params[:course]
       end
     end
 
