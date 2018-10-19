@@ -1,11 +1,10 @@
 - content_for :public_class, 'public-with-background'
 
 .wrapper.access
+  .alert-bkg= render "layouts/alerts"
   #access_gate.content_block
-    .alert-bkg= render "layouts/alerts"
     - if Rails.env.production?
       = render partial: "user_sessions/umich"
-      -# %a#show-gradecraft-login.button Admin access
 
     - else
       = link_to 'https://gradecraft.com/', :class => "logo" do
@@ -22,13 +21,5 @@
           = f.password_field :password, placeholder: "Your password", :required=>"true"
           = label_tag :user_password, "Password"
         = f.button "Log in", type: "submit", class: "action", alt: "Log in"
-
-      -# .form_elem
-      -#   <input name="login_email" type="email" placeholder="Your email address" required="required" />
-      -#   <label for="login_email">Email address</label>
-      -# .form_elem
-      -#   <input name="login_pw" type="password" placeholder="Your password" required="required" />
-      -#   <label for="login_pw">Password</label>
-      -# %button.action Log in
       %p
         %a Forgot your password?

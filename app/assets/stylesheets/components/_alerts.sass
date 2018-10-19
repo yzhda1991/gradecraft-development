@@ -1,24 +1,19 @@
 @import "../utilities/variables"
 
 .alert-box
-  padding: .25rem .5rem !important
-  background-color: $color-blue-4
-  color: $color-white
-  border-radius: $global-radius
-  margin-bottom: 1rem
+  padding: 0.5em
+  background-color: $blue-medium_2
+  color: white
+  margin-bottom: 1em
+  position: relative
 
   a.close
-    color: $color-white
-    float: right
-    margin-top: .25rem
-    font-size: 1rem !important
-    font-weight: bold
-    line-height: 1
+    color: white
+    position: absolute
+    top: 0.25em
+    right: 0.5em
+    border-bottom-color: transparent
 
-    &:hover, &:focus
-      color: $color-black
-      text-decoration: none
-      cursor: pointer
   a
     color: $color-blue-5
 

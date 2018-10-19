@@ -1,6 +1,5 @@
-= render partial: "layouts/alerts", locals: { model: @user }
-
 .wrapper.access
+  = render partial: "layouts/alerts", locals: { model: @user }
   .content_block#access_gate
     = link_to 'https://gradecraft.com/', :class => "logo" do
       = image_tag "logo.svg", :alt => "Return to GradeCraft homepage", :width => "450", :height => "100"
