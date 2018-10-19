@@ -1,14 +1,16 @@
 = render partial: "layouts/alerts", locals: { model: @user }
 
-.login
-  .login-form-container
+.wrapper.access
+  .content_block#access_gate
+    = link_to 'https://gradecraft.com/', :class => "logo" do
+      = image_tag "logo.svg", :alt => "Return to GradeCraft homepage", :width => "450", :height => "100"
+
     %h1 First, let’s create your account!
 
-    .google-login
+    .google_access
       = link_to "Sign up with Google", new_external_google_users_path, :tabindex=>"0"
 
-    %p.divider
-      %span Or
+    %h3 Or:
 
     = simple_form_for @user, url: create_external_users_path, method: :post do |f|
       .form_elem
