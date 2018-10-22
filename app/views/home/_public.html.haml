@@ -3,7 +3,7 @@
 
 %h1 Log In
 .google_access
-  %a Log in with Google
+  = link_to "Sign in with Google", "/auth/google_oauth2/", tabindex: "0"
 
 %h3 Or:
 = form_for User.new, url: user_sessions_path do |f|
