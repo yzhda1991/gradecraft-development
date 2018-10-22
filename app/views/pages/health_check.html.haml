@@ -1,2 +1,4 @@
 .pageContent
-  hi
+  = "MongoDB status: '#{@mongo_status}'"
+
+  = "Error: #{@error}" if @error.present?
