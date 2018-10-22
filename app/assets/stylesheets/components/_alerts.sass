@@ -1,34 +1,37 @@
 @import "../utilities/variables"
 
 .alert-box
-  padding: 0.5em
-  background-color: $blue-medium_2
-  color: white
-  margin-bottom: 1em
+  padding: 0.5em 1em 0.5em 0.5em
+  background-color: $blue
+  margin-bottom: 1.5em
   position: relative
+  font-family: 'ProximaNova_regular', sans-serif
 
   a.close
-    color: white
+    color: $blue_dark
     position: absolute
-    top: 0.25em
-    right: 0.5em
+    top: 0
+    right: 0
+    padding: 0.25em
+    font-size: 1.5em
     border-bottom-color: transparent
 
-  a
-    color: $color-blue-5
+  &.alert
+    background-color: $pink_1
+    color: white
 
-.alert-box
+    a.close
+      color: white
+
   &.error
-    background-color: $color-red-1
+    background-color: crimson
+    color: white
+
+    a.close
+      color: white
 
   &.success
-    background-color: $color-green-3
-
-  &.notice
-    background-color: $color-blue-3
-
-  &.alert
-    background-color: $color-orange-1
+    background-color: $green_lime
 
   ul
     margin-bottom: 0
