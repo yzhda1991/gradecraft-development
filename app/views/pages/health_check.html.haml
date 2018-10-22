@@ -1,4 +1,5 @@
 .pageContent
-  = "MongoDB status: '#{@mongo_status}'"
+  %p= "MongoDB status: #{@mongo_status}"
+  %p= "Redis status: #{@redis_status}"
 
-  = "Error: #{@error}" if @error.present?
+  %p= "Error: #{@error}" if @error.present?
