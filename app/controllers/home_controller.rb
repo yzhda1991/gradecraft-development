@@ -8,6 +8,9 @@ class HomeController < ApplicationController
     redirect_to dashboard_path and return if logged_in?
   end
 
+  def reset_password
+  end
+
   def login
   end
 end

@@ -276,6 +276,7 @@ Rails.application.routes.draw do
 
   controller :home do
     get :login
+    get :reset_password
   end
 
   #11. Grade Schemes
@@ -347,7 +348,6 @@ Rails.application.routes.draw do
   match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
 
   get :logout, to: "user_sessions#destroy", as: :logout
-  get :reset, to: "user_sessions#new"
   resources :user_sessions, only: [:new, :create, :destroy, :student] do
     collection do
       get :instructors

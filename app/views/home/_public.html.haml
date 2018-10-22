@@ -15,5 +15,4 @@
     = label_tag :user_password, "Password"
   = f.button "Log in", type: "submit", class: "action", alt: "Log in:"
 %p
-  %a Forgot your password?
-  -# TODO: this
+  = link_to "Forgot your password?", reset_password_path
