@@ -1,0 +1,8 @@
+.wrapper.access
+  .alert-bkg= render "layouts/alerts"
+
+  #access_gate.content_block
+    - if Rails.env.production?
+      = render partial: "home/umich"
+    - else
+      = render partial: "home/public"
