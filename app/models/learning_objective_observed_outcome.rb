@@ -12,7 +12,12 @@ class LearningObjectiveObservedOutcome < ApplicationRecord
   scope :shows_proficiency, -> do
     includes(:learning_objective_level)
     .where
-    .not(learning_objective_levels: { flagged_value: LearningObjectiveLevel.flagged_values[:not_proficient] })
+    .not(learning_objective_levels: { flagged_value: 
+      [
+        LearningObjectiveLevel.flagged_values[:not_proficient], 
+        LearningObjectiveLevel.flagged_values[:nearing_proficiency]
+      ] 
+    })
   end
 
   def self.observed_grade_outcomes_for(student, objective)
