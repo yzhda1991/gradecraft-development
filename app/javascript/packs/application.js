@@ -28,6 +28,8 @@ import "../src/js/angular/ui/sortable.js"
 import "../src/js/angular/helpers/angular-froala.js"
 requireAll(require.context("../src/js/angular/helpers", true, /\.(js$|coffee$)/));  // helpers directory
 requireAll(require.context("../src/js/angular/vendor", true, /\.(js$|coffee$)/)); // vendor directory
-import "../src/js/angular/main.coffee"
+// import "../src/js/angular/main.coffee"
+
+requireAll(require.context("../src/js/angular/directives", true, /\.(js$|coffee$)/));  // helpers directory
 
 console.log('Hello World from Webpacker')

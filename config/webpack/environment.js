@@ -1,6 +1,15 @@
+const path = require("path");
 const { environment } = require('@rails/webpacker')
-const coffee =  require('./loaders/coffee')
+const coffee = require('./loaders/coffee')
 const webpack = require("webpack")
+
+module.exports = {
+  resolve: {
+    alias: {
+      main: path.resolve(__dirname, "./main.coffee")
+    }
+  }
+}
 
 environment.loaders.append('coffee', coffee)
 
@@ -9,7 +18,8 @@ environment.plugins.prepend(
   new webpack.ProvidePlugin({
     $: "jquery",
     _: "lodash",
-    "window.jQuery": "jquery"
+    "window.jQuery": "jquery",
+    "main": "main"
   })
 );
 
