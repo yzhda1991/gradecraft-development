@@ -19,6 +19,7 @@ module UnlockableCondition
                                          unlockable_type: self.class)
     unlock_state.unlocked = unlocked
     unlock_state.save
+    yield unlock_state if block_given?
     unlock_state
   end
 
