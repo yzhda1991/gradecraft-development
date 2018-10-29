@@ -5,8 +5,8 @@
   inProgressGrades = []
   readyForReleaseGrades = []
 
-  getUngradedSubmissions = () ->
-    $http.get("/api/grading_status/submissions/ungraded").then(
+  getUngradedSubmissions = (studentId=null) ->
+    $http.get("/api/grading_status/submissions/ungraded", { params: {studentId:studentId } }).then(
       (response) ->
         GradeCraftAPI.loadMany(ungradedSubmissions, response.data)
         GradeCraftAPI.logResponse(response.data)

@@ -1,39 +1,56 @@
-%table.dynatable
-  %thead
-    %tr
-      %th Assignment Type
-      %th Assignment
-      %th Feedback
-      %th Final Score
-      - if current_course.has_multipliers?
-        %th Score With Weights
-      %th Student Visible
-      %th Last Updated
-      %th.options
-  %tbody
-    - presenter.grades_for_course.each do |grade|
-      %tr
-        %td= link_to grade.assignment_type.name, edit_assignment_type_path(grade.assignment_type.id)
-        %td= link_to grade.assignment.name, grade.assignment
-        %td= raw grade.feedback
-        %td
-          - if grade.assignment.pass_fail?
-            .assignment-info.assignment-pass-fail
-              = render partial: "grades/components/pass_fail", locals: { presenter: presenter, assignment: grade.assignment }
-          - else
-            = "#{points grade.final_points} / #{ points grade.assignment.full_points} points earned"
-        - if current_course.has_multipliers?
-          %td= grade.try(:score)
-        %td= decorative_glyph(:check) if grade.student_visible?
-        %td= l grade.updated_at.in_time_zone(current_user.time_zone)
-        %td
-          .button-container.dropdown
-            %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
-            %ul.options-menu.dropdown-content
-              - if current_user_is_admin? || current_course.active?
-                - if grade.group_id.present?
-                  %li= edit_group_grade_link_to grade.assignment, grade.group
-                - else
-                  %li= edit_grade_link_to grade
-                %li= link_to glyph(:eye) + "See Grade", grade_path(grade)
-                %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure you want to delete #{grade.student.name}'s grade for #{grade.assignment.name}?" }
+%section{"role"=>"tablist"}
+  %a.collapse-toggler
+    %h3
+      %i.fa.fa-chevron-circle-right.fa-fw
+      Submitted Assignments
+  %section
+    %table.dynatable{"role"=>"tab"}
+      %thead
+        %tr
+          %th Assignment
+          %th Feedback
+          %th Final Score
+          - if current_course.has_multipliers?
+            %th Score With Weights
+          %th Student Visible
+          %th Last Updated
+          %th.options
+      %tbody
+        - presenter.grades_for_course.each do |grade|
+          %tr
+            %td= link_to grade.assignment.name, grade.assignment
+            %td= raw grade.feedback
+            %td
+              - if grade.assignment.pass_fail?
+                .assignment-info.assignment-pass-fail
+                  = render partial: "grades/components/pass_fail", locals: { presenter: presenter, assignment: grade.assignment }
+              - else
+                = "#{points grade.final_points} / #{ points grade.assignment.full_points} points earned"
+            - if current_course.has_multipliers?
+              %td= grade.try(:score)
+            %td= decorative_glyph(:check) if grade.student_visible?
+            %td= l grade.updated_at.in_time_zone(current_user.time_zone)
+            %td
+              .button-container.dropdown
+                %button.button-edit.button-options{role: "button", type: "button", "aria-label": "Additional Options"}= decorative_glyph(:cog) + decorative_glyph("caret-down")
+                %ul.options-menu.dropdown-content
+                  - if current_user_is_admin? || current_course.active?
+                    - if grade.group_id.present?
+                      %li= edit_group_grade_link_to grade.assignment, grade.group
+                    - else
+                      %li= edit_grade_link_to grade
+                    %li= link_to glyph(:eye) + "See Grade", grade_path(grade)
+                    %li= link_to glyph(:trash) + "Delete Grade", grade_path(grade), data: { confirm: "Are you sure you want to delete #{grade.student.name}'s grade for #{grade.assignment.name}?" }
+%section.ungraded-submissions.collapseSection{"role"=>"tablist", "id"=>"ungraded"}
+  .collapse{"role"=>"tab"}
+    %a
+      %h3.grading-status-header
+        %i.fa.fa-chevron-circle-right.fa-fw
+        Ungraded Submissions
+  %grading-status-submissions{"data-course-has_teams"=>"#{current_course.has_teams?}",
+                          "data-assignment-term"=>"#{term_for :assignment}",
+                          "data-team-term"=>"#{term_for :team}",
+                          "data-links-visible"=>"#{current_user_is_admin? || current_course.active?}",
+                          "data-type"=>"Ungraded",
+                          "data-student-id"=>"#{current_student.id}",
+                          "role"=>"tabpanel"}

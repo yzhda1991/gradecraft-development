@@ -18,7 +18,7 @@
       vm.showCreateGradeBtn = (submission) -> @linksVisible and submission.individual_assignment and not submission.grade_path?
       vm.showGroupGradeBtn = (submission) -> @linksVisible and !submission.individual_assignment
 
-      GradingStatusService["get#{@type}Submissions"]().then(() -> vm.loading = false)
+      GradingStatusService["get#{@type}Submissions"](vm.studentId).then(() -> vm.loading = false)
     ]
 
     _lowerFirst = (str) -> str.charAt(0).toLowerCase() + str.slice(1)
@@ -30,6 +30,7 @@
         assignmentTerm: "@"
         teamTerm: "@"
         linksVisible: "@"
+        studentId: "@"
       bindToController: true
       controller: GradingStatusSubmissionsCtrl
       controllerAs: "gsSubmissionsCtrl"
