@@ -348,7 +348,7 @@ Rails.application.routes.draw do
   match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
 
   get :logout, to: "user_sessions#destroy", as: :logout
-  resources :user_sessions, only: [:new, :create, :destroy, :student] do
+  resources :user_sessions, only: [:create, :destroy, :student] do
     collection do
       get :instructors
     end

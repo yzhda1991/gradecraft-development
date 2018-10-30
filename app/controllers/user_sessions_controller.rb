@@ -20,11 +20,8 @@ class UserSessionsController < ApplicationController
         format.xml { render xml: @user, status: :created, location: @user }
       else
         @user = User.new
-        format.html do
-          flash.now[:error] = "Email or Password were invalid, login failed.";
-          render action: "new"
-        end
-        format.xml { render xml: @user.errors, status: :unprocessable_entity }
+        format.html { redirect_to root_path, alert: "Your username or password is incorrect. Please try again" }
+        format.xml { render xml: @user.errors, status: :unauthorized }
       end
     end
   end

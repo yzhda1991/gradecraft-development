@@ -8,7 +8,7 @@ class LoginPage
   end
 
   def submit(fields={})
-    within(".gradecraft-login") do
+    within("div#access_gate") do
       fill_in "Email", with: fields[:email] || user.email
       fill_in "Password", with: fields[:password] || user.password
       click_button "Log in"
