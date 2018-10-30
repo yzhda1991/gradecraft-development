@@ -5,7 +5,7 @@ require_relative "../../services/creates_new_user"
 class Integrations::GoogleController < ApplicationController
   include OAuthProvider
 
-  layout "external", only: :new_user
+  layout "public", only: :new_user
 
   skip_before_action :require_login, only: :auth_callback
   skip_before_action :require_course_membership
