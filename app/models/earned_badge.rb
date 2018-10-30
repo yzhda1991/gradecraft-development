@@ -1,4 +1,5 @@
 class EarnedBadge < ApplicationRecord
+  include AutoAwardOnUnlock
 
   before_validation :add_associations
 
@@ -36,7 +37,7 @@ class EarnedBadge < ApplicationRecord
     if self.badge.is_a_condition?
       self.badge.unlock_keys.map(&:unlockable).each do |unlockable|
         unlock_state = unlockable.unlock!(student)
-        auto_award_unlocked_badge! if unlock_state.unlocked? && badge.auto_award_after_unlock?
+        unlock_state { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
       end
     end
   end
@@ -60,14 +61,10 @@ class EarnedBadge < ApplicationRecord
     self.course_id ||= badge.course_id
   end
 
-  def auto_award_unlocked_badge!
-    Services::CreatesEarnedBadge.call({
-      badge_id: unlock_state.unlockable_id,
+  def check_for_auto_awarded_badge(unlock_state)
+    award_badge(unlock_state, {
       student_id: student.id,
-      course_id: course.id,
-      student_visible: true,
-      awarded_by_id: awarded_by_id,
-      feedback: "Auto-awarded by Gradecraft on unlock."
+      course_id: course.id
     })
   end
 end

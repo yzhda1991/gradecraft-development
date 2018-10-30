@@ -11,7 +11,7 @@ module Services
       executed do |context|
         context.earned_badge = EarnedBadge.new context.attributes
 
-        unless EarnedBadgeProctor.new(context.earned_badge).creatable? context.earned_badge.awarded_by
+        if context.earned_badge.awarded_by.present? && EarnedBadgeProctor.new(context.earned_badge).creatable?(context.earned_badge.awarded_by)
           context.fail_with_rollback! "Permission denied"
         end
 

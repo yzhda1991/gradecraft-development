@@ -34,6 +34,11 @@ describe Services::CreatesEarnedBadge do
       described_class.call attributes
     end
 
+    it "creates the badge if no awarded by person is given" do
+      attributes.delete :awarded_by_id
+      expect{ described_class.call attributes }.to change(EarnedBadge, :count).by 1
+    end
+
     it "recalculates the student's score" do
       expect(Services::Actions::RecalculatesStudentScore).to \
         receive(:execute).and_call_original

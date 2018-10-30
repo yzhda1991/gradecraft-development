@@ -7,6 +7,7 @@ class CourseMembership < ApplicationRecord
   include ModelAddons::ImprovedLogging
   include ModelAddons::AdvancedRescue
   include Copyable
+  include AutoAwardOnUnlock
 
   Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }
@@ -97,7 +98,7 @@ class CourseMembership < ApplicationRecord
   def check_unlockables
     if self.course.is_a_condition?
       self.course.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.unlock!(user)
+        unlockable.unlock!(user) { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
       end
     end
   end
@@ -130,5 +131,12 @@ class CourseMembership < ApplicationRecord
 
   def include_team_score?
     course.add_team_score_to_student? && !course.team_score_average
+  end
+
+  def check_for_auto_awarded_badge(unlock_state)
+    award_badge(unlock_state, {
+      student_id: student.id, #user ?? 
+      course_id: course.id
+    })
   end
 end
