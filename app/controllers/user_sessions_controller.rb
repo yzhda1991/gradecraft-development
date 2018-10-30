@@ -29,7 +29,6 @@ class UserSessionsController < ApplicationController
     end
   end
 
-  # rubocop:disable AndOr
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
     result = Services::CreatesOrUpdatesUserFromLTI.call(auth_hash)
@@ -41,8 +40,7 @@ class UserSessionsController < ApplicationController
     if !@user || !@course
       lti_error_notification
       flash[:alert] = t("sessions.create.error")
-      redirect_to auth_failure_path
-      return
+      redirect_to root_path and return
     end
     # TODO: should we rollback user, course creation if the course membership cannot be created?
     if CourseMembership.create_or_update_from_lti(@user, @course, auth_hash)

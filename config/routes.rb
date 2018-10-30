@@ -342,7 +342,7 @@ Rails.application.routes.draw do
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "auth/google_oauth2/callback", to: "integrations/google#auth_callback"
   get "/auth/:provider/callback", to: "authorizations#create", as: :create_authorization
-  get "auth/failure", to: "pages#auth_failure", as: :auth_failure
+  get "auth/failure" => "application#failed_authentication", as: :auth_failure
 
   # Canvas OmniAuth setup
   match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]

@@ -143,10 +143,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb("Add Attendance Events", setup_attendance_index_path)
   end
 
-  def auth_failure
-    dashboard
-  end
-
   def badges_index
     dashboard
     breadcrumb(objects[:course].badge_term.pluralize, badges_path)
@@ -296,6 +292,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   def groups_edit
     groups_index
     breadcrumb('Editing ' + objects[:group].name + ' ' + objects[:course].group_term)
+  end
+
+  def home_health_check
+    dashboard
   end
 
   def info_dashboard
@@ -613,14 +613,6 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
   end
 
   def pages_index
-  end
-
-  def pages_auth_failure
-    dashboard
-  end
-
-  def pages_health_check
-    dashboard
   end
 
   def pages_press
