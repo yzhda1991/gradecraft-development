@@ -36,8 +36,7 @@ class EarnedBadge < ApplicationRecord
   def check_unlockables
     if self.badge.is_a_condition?
       self.badge.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlock_state = unlockable.unlock!(student)
-        unlock_state { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
+        unlockable.unlock!(student) { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
       end
     end
   end
