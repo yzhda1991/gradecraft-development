@@ -1,4 +1,4 @@
-@gradecraft.directive 'gcDateTimeInput', [ "$timeout", "$filter", ($timeout, $filter) ->
+gradecraft.directive 'gcDateTimeInput', [ "$timeout", "$filter", ($timeout, $filter) ->
 
   return {
     restrict: 'A',

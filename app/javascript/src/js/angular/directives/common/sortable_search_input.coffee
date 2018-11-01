@@ -1,6 +1,6 @@
 # Common directive for rendering a basic search input field
 # that sets the sort criteria in the SortableService
-@gradecraft.directive 'sortableSearchInput', ['SortableService', (SortableService) ->
+gradecraft.directive 'sortableSearchInput', ['SortableService', (SortableService) ->
   SortableSearchInputCtrl = [() ->
     vm = this
     vm.searchCriteria = SortableService.filterCriteria

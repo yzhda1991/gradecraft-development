@@ -1,6 +1,6 @@
 # Main entry point for configuring the learning objectives and learning objective
 # categories for the current course
-@gradecraft.directive 'learningObjectivesCategoriesEdit', ['LearningObjectivesService', '$q', (LearningObjectivesService, $q) ->
+gradecraft.directive 'learningObjectivesCategoriesEdit', ['LearningObjectivesService', '$q', (LearningObjectivesService, $q) ->
   LearningObjectivesCategoriesEditCtrl = [()->
     vm = this
     vm.loading = false

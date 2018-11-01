@@ -1,6 +1,6 @@
 # switch for pass/fail grades, alternative to raw_points
 
-@gradecraft.directive 'gradePassFailSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
+gradecraft.directive 'gradePassFailSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
 
   return {
     templateUrl: 'grades/pass_fail_switch.html'

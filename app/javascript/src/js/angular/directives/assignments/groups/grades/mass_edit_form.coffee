@@ -1,5 +1,5 @@
 # A table of assignments with editable group grades
-@gradecraft.directive 'groupMassEditForm', ['AssignmentGradesService', (AssignmentGradesService) ->
+gradecraft.directive 'groupMassEditForm', ['AssignmentGradesService', (AssignmentGradesService) ->
   GroupMassEditFormCtrl = [()->
     vm = this
     vm.loading = true

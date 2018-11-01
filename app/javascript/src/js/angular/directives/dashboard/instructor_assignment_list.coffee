@@ -1,4 +1,4 @@
-@gradecraft.directive "dashboardInstructorAssignmentList", ["DashboardService", (DashboardService) ->
+gradecraft.directive "dashboardInstructorAssignmentList", ["DashboardService", (DashboardService) ->
   DashboardInstructorAssignmentList = [() ->
     vm = this
     vm.termFor = (term) -> DashboardService.termFor(term)

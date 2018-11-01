@@ -1,0 +1,16 @@
+%section.grade-visible(ng-class='{"disabled": isDisabled()}')
+  .grade-switch-sandwich
+    .grade-switch-sandwich-section.long-section
+      .binary-switch-label
+        Visible to Student?
+    .grade-switch-sandwich-section
+      .binary-switch-socket(ng-click='toggleStudentVisible()' ng-class='visibleSwitchState()')
+        .binary-switch-handle
+    .grade-switch-sandwich-section
+      .binary-switch-label
+        {{textForVisibleSwitch()}}
+
+  .release-status-explanation.italic
+    Grade will
+    %span(ng-if="visibleSwitchState() == 'off'") NOT
+    be visible to student when you submit

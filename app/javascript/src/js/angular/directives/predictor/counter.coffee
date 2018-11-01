@@ -6,7 +6,7 @@
 #
 # Disabled minus button at zero or number of times actually earned, whichever greater.
 
-@gradecraft.directive 'predictorCounterSwitch', [ 'PredictorService', (PredictorService)->
+gradecraft.directive 'predictorCounterSwitch', [ 'PredictorService', (PredictorService)->
 
   return {
     scope: {

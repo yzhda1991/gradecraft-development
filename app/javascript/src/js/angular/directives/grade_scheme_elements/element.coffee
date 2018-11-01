@@ -1,6 +1,6 @@
 # Renders a single grade scheme element in the grade scheme element mass edit form
 # Note: This directive can exist only as a child of the gradeSchemeElementsMassEditForm
-@gradecraft.directive 'gradeSchemeElement',
+gradecraft.directive 'gradeSchemeElement',
 ['GradeSchemeElementsService', 'DebounceQueue', '$timeout', (GradeSchemeElementsService, DebounceQueue, $timeout) ->
   {
     scope:

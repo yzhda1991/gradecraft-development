@@ -1,7 +1,7 @@
 # Creates a checklist during course creation for Faculty to check off as they
 # design the course.
 
-@gradecraft.directive 'courseCreationChecklist', ['$q', 'CourseService', ($q, CourseService) ->
+gradecraft.directive 'courseCreationChecklist', ['$q', 'CourseService', ($q, CourseService) ->
   CourseCreationController = [()->
     vmChecklist = this
     vmChecklist.loading = true

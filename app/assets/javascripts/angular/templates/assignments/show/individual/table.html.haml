@@ -1,0 +1,23 @@
+.simple_form
+  %h2.center{"ng-if"=>"individualTableCtrl.loading"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading...
+
+  %label
+    %span.sr-only Search Criteria
+    %input{"type"=>"search",
+           "placeholder"=>"Search",
+           "ng-model"=>"individualTableCtrl.searchCriteria",
+           "ng-model-options"=>"{ getterSetter: true, updateOn: 'change blur' }"}
+
+  %table.no-table-header{"ng-if"=>"!individualTableCtrl.loading"}
+    %thead{"assignment-show-individual-table-header"=>""}
+    %tbody{"assignment-show-individual-table-body"=>"", "data-links-visible"=>"{{individualTableCtrl.linksVisible}}"}
+
+  .main-buttons{"ng-if"=>"individualTableCtrl.linksVisible && individualTableCtrl.hasUnreleasedGrades()"}
+    .button.action{"type"=>"button",
+                   "ng-click"=>"individualTableCtrl.releaseGrades()",
+                   "ng-class"=>"{ disabled: !individualTableCtrl.hasSelectedGrades() }",
+                   "ng-disabled"=>"!individualTableCtrl.hasSelectedGrades()"}
+      %i.fa.fa-share-square-o
+      Release Selected Grades

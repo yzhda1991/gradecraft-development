@@ -1,6 +1,6 @@
 # grade adjustment_points input field
 
-@gradecraft.directive 'gradeAdjustmentPointsInput', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+gradecraft.directive 'gradeAdjustmentPointsInput', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/adjustment_points_input.html'

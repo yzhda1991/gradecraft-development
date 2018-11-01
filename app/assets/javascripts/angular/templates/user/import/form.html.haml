@@ -1,0 +1,32 @@
+%error-message{"visible"=>"vm.hasError", "message"=>"An unexpected error occurred while loading users."}
+
+%canvas-course-selector{"provider"=>"{{vm.provider}}"}
+
+%h2.loading{"ng-if"=>"vm.loading"}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading users...
+
+%without-users{"ng-if"=>"!vm.loading && vm.users.length < 1"}
+  %p There are no users to import for this course
+
+%with_users{"ng-if"=>"vm.users.length > 0"}
+
+  %form{"action"=>"{{vm.formAction()}}",
+        "method"=>"post",
+        "accept-charset"=>"UTF-8",
+        "ng-submit"=>"vm.formSubmitted = true",
+        "name"=>"userImportForm"}
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+
+    %new-users
+    %users-with-changes
+    %users-without-changes
+
+    .main-buttons
+      %button.button.action{"type"=>"submit",
+                            "ng-click"=>"vm.importUsers()",
+                            'ng-class'=>'{"disabled": !hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted}',
+                            "ng-disabled"=>"!hasSelectedUsers() || userImportForm.$invalid || vm.formSubmitted"}
+        %i.fa.fa-download
+        Import Users

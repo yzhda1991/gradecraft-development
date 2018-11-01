@@ -1,6 +1,6 @@
 # Main entry point for configuring the learning objectives and learning objective
 # categories for the current course
-@gradecraft.directive 'learningObjectivesObjectivesDesign', ['LearningObjectivesService', "AssignmentService", '$q', (LearningObjectivesService, AssignmentService, $q) ->
+gradecraft.directive 'learningObjectivesObjectivesDesign', ['LearningObjectivesService', "AssignmentService", '$q', (LearningObjectivesService, AssignmentService, $q) ->
   LearningObjectivesObjectivesDesignCtrl = [() ->
     vm = this
 

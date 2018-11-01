@@ -1,0 +1,30 @@
+.student-panel-wrap
+  #student-main-column.student-flex-col
+
+    %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Predictions..."}
+
+    #predictor-graph-section{'ng-if'=>'!vm.loading'}
+      %predictor-graph.predictor-graph
+      #predictor-post-graph-spacer
+
+    #predictor-main-header.collapse-all-toggler{'ng-class'=>'{"with-weights": vm.predictorService.weightsAvailable()}'}
+      .collapse-arrow.outdent
+      .predictor-section-title
+        .predictor-section-title-predicted-points{'ng-if'=>'vm.predictorService.weightsAvailable()'}
+          .predictor-title-right-span
+            Unused {{vm.predictorService.termFor("weights")}} :
+          .predictor-section-title-weights
+            .coin-stack
+              .coin{'ng-repeat' => 'coin in vm.predictorService.unusedWeightsRange()'}
+              .coin-stack-count {{vm.predictorService.unusedWeightsRange().length}}
+        .predictor-section-title-predicted-points{'ng-if'=>'vm.predictorService.weightsClosed()'}
+          .predictor-title-right-span
+            Weights are Closed for This Course
+
+    %predictor-section-assignment-types
+
+    %predictor-section-badges
+
+    %predictor-section-challenges{'ng-if'=>"vm.predictorService.includeChallenges()"}
+
+  %student-panel.student-panel.predictor-panel.student-flex-col{'context'=>'"predictor"'}

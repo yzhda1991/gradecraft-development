@@ -1,4 +1,4 @@
-@gradecraft.directive 'predictor', ['$q', 'PredictorService', 'StudentPanelService',
+gradecraft.directive 'predictor', ['$q', 'PredictorService', 'StudentPanelService',
   ($q, PredictorService, StudentPanelService) ->
     PredictorCtrl = [()->
       vm = this

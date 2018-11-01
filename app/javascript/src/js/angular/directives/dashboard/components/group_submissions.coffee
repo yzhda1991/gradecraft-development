@@ -1,4 +1,4 @@
-@gradecraft.directive "groupSubmissions", [() ->
+gradecraft.directive "groupSubmissions", [() ->
   {
     scope:
       assignment: "="

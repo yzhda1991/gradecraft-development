@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentScoreLevels', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
+gradecraft.directive 'assignmentScoreLevels', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
 
   return {
     scope: {

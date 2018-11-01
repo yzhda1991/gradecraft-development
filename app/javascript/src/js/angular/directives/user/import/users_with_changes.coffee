@@ -1,5 +1,5 @@
 # Main entry point for rendering users with revised changes when importing from an LMS
-@gradecraft.directive 'usersWithChanges', ['CanvasImporterService', (CanvasImporterService) ->
+gradecraft.directive 'usersWithChanges', ['CanvasImporterService', (CanvasImporterService) ->
   {
     restrict: 'EA'
     templateUrl: 'user/import/users_with_changes.html'

@@ -1,0 +1,145 @@
+%quick-grade-styling-selector.right.select-menu{"ng-if"=>"vm.grades.length > 0"}
+
+%massGrade
+  %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Grades..."}
+
+  %form{"action"=>"{{vm.formAction}}", "method"=>"post", "ng-if"=>"!vm.loading"}
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"_method", "value"=>"put"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+
+    %input{"type"=>"hidden", "name"=>"team_id", "value"=>"{{vm.selectedTeamId()}}", "ng-if"=>"vm.selectedTeamId()"}
+
+    %table
+      %thead
+        %tr
+          %th.align-right{"scope"=>"col"}
+            {{vm.termFor("student")}}
+
+          %th.center
+
+          %th{"ng-if"=>"!vm.assignment.pass_fail",
+              "scope"=>"col"}
+            Earned / Max Points
+      %tbody
+        %tr{"ng-repeat"=>"(gradeIndex, grade) in vm.grades"}
+          %td.align-right
+            %a{"href"=>"/students/{{grade.student_id}}"}
+              {{grade.student_name}}
+
+          -# If assignment is pass/fail type
+          %td.center{"ng-if"=>"vm.assignment.pass_fail"}
+            -# Student id for the grade
+            %input{"type"=>"hidden",
+                   "name"=>"assignment[grades_attributes][{{gradeIndex}}][student_id]",
+                   "value"=>"{{grade.student_id}}"}
+
+            %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_nil"}
+              %input{"type"=>"radio",
+                     "ng-model"=>"grade.pass_fail_status",
+                     "value"=>"nil",
+                     "name"=>"assignment[grades_attributes][{{gradeIndex}}][pass_fail_status]",
+                     "id"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_nil",
+                     "class"=>"radio_inline"}
+              No change
+            %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_pass"}
+              %input{"type"=>"radio",
+                     "ng-model"=>"grade.pass_fail_status",
+                     "value"=>"Pass",
+                     "name"=>"assignment[grades_attributes][{{gradeIndex}}][pass_fail_status]",
+                     "id"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_pass",
+                     "class"=>"radio_inline"}
+              Pass
+            %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_fail"}
+              %input{"type"=>"radio",
+                     "ng-model"=>"grade.pass_fail_status",
+                     "value"=>"Fail",
+                     "name"=>"assignment[grades_attributes][{{gradeIndex}}][pass_fail_status]",
+                     "id"=>"assignment_grades_attributes_{{gradeIndex}}_pass_fail_status_fail",
+                     "class"=>"radio_inline"}
+              Fail
+
+          -# If assignment is not pass/fail type and has levels
+          %td.center{"ng-if"=>"!vm.assignment.pass_fail && vm.assignment.has_levels"}
+            -# Student id for the grade
+            %input{"type"=>"hidden",
+                   "name"=>"assignment[grades_attributes][{{gradeIndex}}][student_id]",
+                   "value"=>"{{grade.student_id}}"}
+            %input{"type"=>"hidden",
+                   "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                   "value"=>"{{grade.raw_points}}"}
+
+            -# If select dropdown style
+            %select{"ng-model"=>"grade.raw_points",
+                    "ng-options"=>"level.points as level.formatted_name for level in vm.assignmentScoreLevels",
+                    "ng-show"=>"vm.selectedGradingStyle() === 'select'"}
+              %option{"value"=>"", "ng-selected"=>"_.isEmpty(grade.raw_points)"}
+
+            -# If radio button style
+            %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_{{level.points}}",
+                   "ng-repeat"=>"level in vm.assignmentScoreLevels",
+                   "ng-if"=>"vm.selectedGradingStyle() === 'radio'"}
+              %input{"type"=>"radio",
+                     "ng-model"=>"grade.raw_points",
+                     "value"=>"{{level.points}}",
+                     "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                     "id"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_{{level.points}}",
+                     "class"=>"radio_inline"}
+                {{level.formatted_name}}
+
+          -# If assignment is not pass/fail type and does not have levels
+          %td.center{"ng-if"=>"!vm.assignment.pass_fail && !vm.assignment.has_levels"}
+            -# Student id for the grade
+            %input{"type"=>"hidden",
+                   "name"=>"assignment[grades_attributes][{{gradeIndex}}][student_id]",
+                   "value"=>"{{grade.student_id}}"}
+
+            %input{"type"=>"hidden",
+                   "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                   "value"=>"{{grade.raw_points}}"}
+
+            -# If radio button style
+            %radio_points{"ng-show"=>"vm.selectedGradingStyle() === 'radio'"}
+              %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_no_grade"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.raw_points",
+                       "value"=>"",
+                       "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                       "id"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_no_grade",
+                       "class"=>"radio_inline"}
+                {{grade.id ? "No change" : "No grade"}}
+              %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_0"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.raw_points",
+                       "value"=>"0",
+                       "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                       "id"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_0",
+                       "class"=>"radio_inline"}
+                0
+              %label{"for"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_full_points"}
+                %input{"type"=>"radio",
+                       "ng-model"=>"grade.raw_points",
+                       "value"=>"{{vm.assignment.full_points}}",
+                       "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]",
+                       "id"=>"assignment_grades_attributes_{{gradeIndex}}_raw_points_full_points",
+                       "class"=>"radio_inline"}
+                Full points
+
+            -# If text style
+            %text_points{"ng-if"=>"vm.selectedGradingStyle() === 'text'"}
+              %input{"type"=>"text",
+                     "gc-number-input"=>"",
+                     "value"=>"grade.raw_points",
+                     "ng-model"=>"grade.raw_points",
+                     "name"=>"assignment[grades_attributes][{{gradeIndex}}][raw_points]"}
+
+          %td{"ng-if"=>"!vm.assignment.pass_fail"}
+            %span= "{{(grade.raw_points | number) || '-'}} / {{vm.assignment.full_points | number}}"
+
+    .main-buttons
+      %input{"type"=>"submit",
+             "class"=>"button",
+             "value"=>"Submit Grades"}
+      %a{"href"=>"{{vm.formCancelRoute}}", "class"=>"button secondary"}
+        %i.fa.fa-times-circle
+        Cancel

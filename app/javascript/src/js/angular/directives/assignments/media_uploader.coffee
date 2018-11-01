@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentMediaUploader', ['AssignmentService', (AssignmentService) ->
+gradecraft.directive 'assignmentMediaUploader', ['AssignmentService', (AssignmentService) ->
 
   return {
     scope: {
@@ -17,7 +17,7 @@
   }
 ]
 
-@gradecraft.directive('mediaUpload', ['$parse', 'AssignmentService', ($parse, AssignmentService)->
+gradecraft.directive('mediaUpload', ['$parse', 'AssignmentService', ($parse, AssignmentService)->
   return {
     restrict: 'A',
     scope: {
@@ -35,7 +35,7 @@
     }
 ])
 
-@gradecraft.directive('assignmentFileUpload', ['$parse', 'AssignmentService', ($parse, AssignmentService)->
+gradecraft.directive('assignmentFileUpload', ['$parse', 'AssignmentService', ($parse, AssignmentService)->
   return {
     restrict: 'A',
     scope: {

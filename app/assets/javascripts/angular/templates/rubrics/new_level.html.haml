@@ -1,0 +1,17 @@
+.level-items(name="levelForm" ng-submit="createLevel()")
+
+  %label
+    %span.sr-only Level Name
+    %input(type="text" ng-model="level.name" placeholder="Level Name" required ng-blur="saveNewLevel()" maxlength=30)
+
+  %label
+    %span.sr-only Level Points
+    %input(type="number" ng-model="level.points" placeholder="Points" min=0 ng-blur="saveNewLevel()" required)
+
+  %ul.level-requirements(ng-if="!requirementsMet()")
+    %li.requirements(ng-repeat="requirement in requirements()")
+      {{ requirement }}
+
+  %button.delete(type="button" ng-click="removeNewLevel()") X
+
+

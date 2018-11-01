@@ -1,7 +1,7 @@
 # bar graph for assignment grades earned
 # includes an individual's grade if supplied
 
-@gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
+gradecraft.directive 'assignmentScoresEarnedAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsScoresEarnedCtrl = [()->
       vm = this
 

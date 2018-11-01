@@ -1,4 +1,4 @@
-@gradecraft.factory "GradingStatusService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
+gradecraft.factory "GradingStatusService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
 
   resubmittedSubmissions = []
   ungradedSubmissions = []

@@ -1,4 +1,4 @@
-@gradecraft.factory 'SubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
+gradecraft.factory 'SubmissionService', ['GradeCraftAPI', '$http', (GradeCraftAPI, $http) ->
   submissions = []
 
   getSubmissions = (assignment_ids=null, student_ids=null) ->

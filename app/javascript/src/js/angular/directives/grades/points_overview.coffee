@@ -1,7 +1,7 @@
 # Hovering synopsis of the grade calculation
 # Not used for group or pass/fail assignments
 
-@gradecraft.directive 'gradePointsOverview', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+gradecraft.directive 'gradePointsOverview', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/points_overview.html'

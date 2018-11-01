@@ -1,6 +1,6 @@
 # Main entry point for rendering the grade import form with data from the
 # the LMS provider
-@gradecraft.directive 'gradeImportForm', ['GradeImporterService', (GradeImporterService) ->
+gradecraft.directive 'gradeImportForm', ['GradeImporterService', (GradeImporterService) ->
   gradeImportFormCtrl = [() ->
     vm = this
     vm.loading = true

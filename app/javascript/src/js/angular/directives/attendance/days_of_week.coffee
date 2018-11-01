@@ -1,4 +1,4 @@
-@gradecraft.directive 'daysOfWeek', ['AttendanceService', (AttendanceService) ->
+gradecraft.directive 'daysOfWeek', ['AttendanceService', (AttendanceService) ->
   DaysOfWeekCtrl = [() ->
     vm = this
 

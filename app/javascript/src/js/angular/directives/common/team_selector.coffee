@@ -1,4 +1,4 @@
-@gradecraft.directive 'teamSelector', ['TeamService', (TeamService) ->
+gradecraft.directive 'teamSelector', ['TeamService', (TeamService) ->
   TeamSelectorCtrl = [() ->
     vm = this
     vm.loading = true

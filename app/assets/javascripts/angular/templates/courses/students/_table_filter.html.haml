@@ -1,0 +1,59 @@
+.table-filter-wrapper
+  .filter-container
+    %p Filter:
+    .filter-buttons
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'allStudents'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('allStudents')"}
+        %i.fa.fa-users
+        All {{tableFilterCtrl.termFor("students")}}
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'activeStudents'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('activeStudents')"}
+        %i.fa.fa-list-ol
+        Active {{tableFilterCtrl.termFor("students")}}
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'leaderboard'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('leaderboard')"}
+        %i.fa.fa-list-ol
+        Leaderboard
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'flaggedStudents'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('flaggedStudents')"}
+        %i.fa.fa-flag
+        Flagged {{tableFilterCtrl.termFor("students")}}
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'top10'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('top10')"}
+        %i.fa.fa-star
+        Top 10
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'bottom10'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('bottom10')"}
+        %i.fa.fa-star-half-empty
+        Bottom 10
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'auditors'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('auditors')"}
+        %i.fa.fa-user-o
+        Auditors
+
+      %button.button-table-action{"role"=>"button",
+                                  "type"=>"button",
+                                  "ng-class"=>"{'selected': tableFilterCtrl.selectedCriteria === 'deactivated'}",
+                                  "ng-click"=>"tableFilterCtrl.setSortCriteria('deactivated')"}
+        %i.fa.fa-user-times
+        Deactivated

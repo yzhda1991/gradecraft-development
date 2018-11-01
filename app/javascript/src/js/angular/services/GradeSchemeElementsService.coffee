@@ -1,5 +1,5 @@
 # Shared logic for creating, editing, and otherwise interacting with GradeSchemeElements
-@gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', 'orderByFilter',
+gradecraft.factory 'GradeSchemeElementsService', ['$http', 'GradeCraftAPI', 'orderByFilter',
   ($http, GradeCraftAPI, orderBy) ->
 
     _deletedElementIds = []

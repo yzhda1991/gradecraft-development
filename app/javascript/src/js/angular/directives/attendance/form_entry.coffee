@@ -1,7 +1,7 @@
 # Initial setup form for creating a new attendance event
 # Requires a parent form, since the submit button state is tied to the state of
 # the inputs
-@gradecraft.directive 'attendanceFormEntry', ['AttendanceService', (AttendanceService) ->
+gradecraft.directive 'attendanceFormEntry', ['AttendanceService', (AttendanceService) ->
   AttendanceFormEntryCtrl = [() ->
     vm = this
 

@@ -1,0 +1,13 @@
+%ul.todo-list-assignments
+  %li.assignment-item{"ng-repeat"=>"assignment in instructorAssignmentList.assignments"}
+    %span.bold.assignment-name
+      %a{"ng-href"=>"{{assignment.assignment_path}}"} {{assignment.name}}
+    .small.uppercase {{assignment.assignment_type_name}}
+    .right.student-stats
+      %p.count.predicted_count {{assignment.predicted_count}}
+      %p.count.submissions-count {{assignment.submitted_submissions_count}}
+    .due-date{"ng-if"=>"assignment.due_at_for_current_timezone"} {{assignment.due_at_for_current_timezone}}
+  %li.dashboard-message{"ng-if"=>"!instructorAssignmentList.hasAssignments()"}
+    No
+    %span.lowercase {{instructorAssignmentList.termFor("assignments")}}
+    are due in the next week!

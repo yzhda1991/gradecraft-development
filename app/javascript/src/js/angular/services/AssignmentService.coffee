@@ -1,7 +1,7 @@
 # Manages state of Assignments including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService, DebounceQueue) ->
+gradecraft.factory 'AssignmentService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'RubricService', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, RubricService, DebounceQueue) ->
 
   assignments = []
   update = {}

@@ -1,4 +1,4 @@
-@gradecraft.factory "GradeReleaseService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
+gradecraft.factory "GradeReleaseService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
 
   gradeIds = []
 

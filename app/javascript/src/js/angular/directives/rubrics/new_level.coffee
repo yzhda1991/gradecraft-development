@@ -1,6 +1,6 @@
 # Interactive container for one level in a criterion
 
-@gradecraft.directive 'rubricNewLevel', ['RubricService', (RubricService) ->
+gradecraft.directive 'rubricNewLevel', ['RubricService', (RubricService) ->
 
   return {
     templateUrl: 'rubrics/new_level.html'

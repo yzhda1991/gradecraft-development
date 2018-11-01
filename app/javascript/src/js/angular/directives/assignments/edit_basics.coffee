@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentEditBasics', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
+gradecraft.directive 'assignmentEditBasics', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
 
   return {
     scope: {

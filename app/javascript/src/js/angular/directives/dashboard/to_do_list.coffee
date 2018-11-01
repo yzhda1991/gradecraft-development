@@ -1,4 +1,4 @@
-@gradecraft.directive "dashboardToDoList", ["DashboardService", (DashboardService) ->
+gradecraft.directive "dashboardToDoList", ["DashboardService", (DashboardService) ->
   DashboardToDoListCtrl = [() ->
     vm = this
     vm.loading = true

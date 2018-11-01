@@ -1,7 +1,7 @@
 # Renders grades component for grading status page
 # Shared directive which takes a type of grade
 #   Allowable types: [InProgress, ReadyForRelease]
-@gradecraft.directive "gradingStatusGrades", ["GradingStatusService", "GradeReleaseService", "SortableService", "$q", "$sce",
+gradecraft.directive "gradingStatusGrades", ["GradingStatusService", "GradeReleaseService", "SortableService", "$q", "$sce",
   (GradingStatusService, GradeReleaseService, SortableService, $q, $sce) ->
     GradingStatusGradesCtrl = [() ->
       vm = this

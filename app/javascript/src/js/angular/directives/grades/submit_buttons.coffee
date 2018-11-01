@@ -1,6 +1,6 @@
 # buttons to submit grade and redirect on success
 
-@gradecraft.directive 'gradeSubmitButtons', ['GradeService', (GradeService) ->
+gradecraft.directive 'gradeSubmitButtons', ['GradeService', (GradeService) ->
 
   return {
     scope: {

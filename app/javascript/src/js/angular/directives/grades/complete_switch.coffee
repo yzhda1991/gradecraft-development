@@ -1,6 +1,6 @@
 # switch for setting grade to Complete or save as draft
 
-@gradecraft.directive 'gradeCompleteSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
+gradecraft.directive 'gradeCompleteSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
 
   return {
     templateUrl: 'grades/complete_switch.html'

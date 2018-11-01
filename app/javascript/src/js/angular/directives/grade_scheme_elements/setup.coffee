@@ -1,5 +1,5 @@
 # Main entry point for rendering and handling the initial GSE setup questions
-@gradecraft.directive 'gradeSchemeElementsSetup',
+gradecraft.directive 'gradeSchemeElementsSetup',
 ['GradeSchemeElementsSetupService', (GradeSchemeElementsSetupService) ->
   GradeSchemeElementsSetupCtrl = [() ->
     vm = this

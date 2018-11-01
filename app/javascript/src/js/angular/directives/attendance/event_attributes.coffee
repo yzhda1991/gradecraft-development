@@ -1,4 +1,4 @@
-@gradecraft.directive 'attendanceEventAttributes', ['AttendanceService', (AttendanceService) ->
+gradecraft.directive 'attendanceEventAttributes', ['AttendanceService', (AttendanceService) ->
   {
     scope:
       disableEdit: '&'

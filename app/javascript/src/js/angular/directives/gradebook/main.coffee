@@ -1,5 +1,5 @@
 # Main entry point for loading gradebook
-@gradecraft.directive 'gradebook', ['GradebookService', '$q', (GradebookService, $q) ->
+gradecraft.directive 'gradebook', ['GradebookService', '$q', (GradebookService, $q) ->
   GradebookCtrl = ['$scope', ($scope) ->
     vm = this
     vm.loading = true

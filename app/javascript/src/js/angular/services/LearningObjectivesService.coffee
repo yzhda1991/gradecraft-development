@@ -1,5 +1,5 @@
 # Service for creating and updating learning objectives for the current course
-@gradecraft.factory 'LearningObjectivesService', ['$http', 'GradeCraftAPI', 'DebounceQueue',
+gradecraft.factory 'LearningObjectivesService', ['$http', 'GradeCraftAPI', 'DebounceQueue',
 ($http, GradeCraftAPI, DebounceQueue) ->
 
   _lastUpdated = undefined

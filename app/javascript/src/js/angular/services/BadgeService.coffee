@@ -1,7 +1,7 @@
 # Manages state of Badges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, DebounceQueue) ->
+gradecraft.factory 'BadgeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', 'DebounceQueue', ($http, GradeCraftAPI, GradeCraftPredictionAPI, DebounceQueue) ->
 
   badges = []
   earnedBadges = []

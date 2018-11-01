@@ -1,4 +1,4 @@
-@gradecraft.directive 'gradeSchemeElementEditUnlocks', ['GradeSchemeElementsService', 'UnlockConditionService', (GradeSchemeElementsService, UnlockConditionService) ->
+gradecraft.directive 'gradeSchemeElementEditUnlocks', ['GradeSchemeElementsService', 'UnlockConditionService', (GradeSchemeElementsService, UnlockConditionService) ->
 
   return {
     scope: {

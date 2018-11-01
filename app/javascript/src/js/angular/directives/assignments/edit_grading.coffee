@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentEditGrading', [() ->
+gradecraft.directive 'assignmentEditGrading', [() ->
   {
     scope:
       assignment: "="

@@ -1,0 +1,114 @@
+%loading-message{"data-loading"=>"loShowCtrl.loading", "data-message"=>"Loading..."}
+
+.show-learning-objective{"ng-if"=>"!loShowCtrl.loading"}
+  %section
+    %h2.subtitle {{loShowCtrl.objective().name}}
+
+    %h3.subtitle Overview
+    %table.stacktable.info-table
+      %tr{"ng-if"=>"loShowCtrl.objective().description"}
+        %th Description:
+        %td {{loShowCtrl.objective().description}}
+        %tr{"ng-if"=>"loShowCtrl.objective().points_to_completion"}
+          %th Earn to Achieve:
+          %td {{loShowCtrl.objective().points_to_completion}}
+        %tr{"ng-if"=>"loShowCtrl.objective().count_to_achieve"}
+          %th Complete to Achieve:
+          %td {{loShowCtrl.objective().count_to_achieve}} {{loShowCtrl.termFor('assignments')}}
+        %tr{"ng-if"=>"!loShowCtrl.studentId && loShowCtrl.linkedAssignments.length > 0"}
+          %th.capitalize Linked {{loShowCtrl.termFor("assignments")}} ({{loShowCtrl.linkedAssignments.length}}):
+          %td
+            %ul.no-style
+              %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
+                %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+      %tr{"ng-if"=>"loShowCtrl.studentId"}
+        %th Progress:
+        %td
+          %span{"ng-if"=>"loShowCtrl.cumulativeOutcome(student.id)"}
+            .progress-bar
+              .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(loShowCtrl.studentId)}} + '%' }"}
+            {{loShowCtrl.percentComplete(loShowCtrl.studentId)}}% complete
+          %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
+
+  -# Table for all students in the course
+  %section{"ng-if"=>"!loShowCtrl.studentId"}
+    %h3.subtitle Student Progress
+
+    %table
+      %thead
+        %tr
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Student",
+                              "data-sortable-predicate"=>"name"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}} Completed",
+                              "data-sortable-predicate"=>"submittedAssignments",
+                              "data-sortable-fn"=>"loShowCtrl.sortBySubmittedAssignments"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('learning objectives')}} Graded",
+                              "data-sortable-predicate"=>"gradedAssignments",
+                              "data-sortable-fn"=>"loShowCtrl.sortByGradedAssignments"}
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Progress",
+                              "data-sortable-predicate"=>"percentComplete",
+                              "data-sortable-fn"=>"loShowCtrl.sortByPercentComplete"}
+      %tbody
+        %tr{"ng-repeat"=>"student in loShowCtrl.students | orderBy : loShowCtrl.sortable.predicate : loShowCtrl.sortable.reverse"}
+          %td
+            %a{"ng-href"=>"/students/{{student.id}}"} {{student.name}}
+          %td
+            %span{"ng-show"=>"loShowCtrl.submissionsForStudent(student.id).length"}
+              {{loShowCtrl.submissionsForStudent(student.id).length}}
+          %td
+            %span {{loShowCtrl.observedOutcomes(student.id).length}}
+          %td
+            %a{"ng-href"=>"{{loShowCtrl.showPath(student.id)}}"}
+              %span{"ng-if"=>"loShowCtrl.cumulativeOutcome(student.id)"}
+                .progress-bar
+                  .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(student.id)}} + '%' }"}
+                {{loShowCtrl.percentComplete(student.id)}}% complete
+              %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
+
+
+  -# Progress for an individual student
+  %section{"ng-if"=>"loShowCtrl.studentId"}
+    %h2.subtitle {{loShowCtrl.termFor('assignments')}} That Meet This {{loShowCtrl.termFor('learning_objective')}}
+
+    %table
+      %thead
+        %tr
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{loShowCtrl.termFor('assignments')}}",
+                              "data-sortable-predicate"=>"name"}
+          %th.center.sortable-header{"scope"=>"col",
+                                     "data-sortable-header-text"=>"Submitted?",
+                                     "data-sortable-predicate"=>"submittedAt",
+                                     "data-sortable-fn"=>"loShowCtrl.sortBySubmittedAt"}
+          %th.center.sortable-header{"scope"=>"col",
+                                     "data-sortable-header-text"=>"Resubmit?",
+                                     "data-sortable-predicate"=>"resubmitted",
+                                     "data-sortable-fn"=>"loShowCtrl.sortByResubmitted"}
+          %th.sortableHeader{"scope"=>"col",
+                             "data-sortable-header-text"=>"Assessment",
+                             "data-sortable-predicate"=>"assessment",
+                             "data-sortable-fn"=>"loShowCtrl.sortByAssessment"}
+
+      %tbody
+        %tr{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments | orderBy : loShowCtrl.sortable.predicate : loShowCtrl.sortable.reverse"}
+          %td
+            %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
+            %assignment-descriptor-icons{"data-assignment"=>"assignment"}
+          %td.center
+            %span.has-tooltip{"ng-show"=>"loShowCtrl.submittedAt(assignment.id)"}
+              %i.fa.fa-paperclip
+              .display-on-hover.hover-style
+                You have successfully submitted this {{loShowCtrl.termFor('assignment')}}
+          %td.center
+            %span.has-tooltip{"ng-show"=>"loShowCtrl.resubmitted(assignment.id)"}
+              %i.fa.fa-exchange
+              .display-on-hover.hover-style
+                You have successfully resubmitted this {{loShowCtrl.termFor('assignment')}}
+          %td
+            %a{"ng-if"=>"loShowCtrl.gradeExists(assignment.id)",
+               "ng-href"=>"{{loShowCtrl.gradePath(loShowCtrl.studentId, assignment.id)}}"}
+              %span.level-flagged-value{"ng-class"=>"loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).flagged_value"} {{loShowCtrl.earnedOutcome(loShowCtrl.studentId, assignment.id).readable_flagged_value}}

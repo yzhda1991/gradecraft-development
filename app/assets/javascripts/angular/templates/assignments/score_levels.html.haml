@@ -1,0 +1,21 @@
+.form-item
+  %h3.form-subtitle Grade Score Levels
+  %p.hint Example: You could create three levels to produce a quick grading scheme for just this {{ TermFor('assignment')}} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
+
+  .form-flex-row(ng-repeat="scoreLevel in assignment.score_levels")
+    .form-item
+      %label
+        Level Name
+        %input(aria-required=true type="text" ng-model="scoreLevel.name" ng-change="updateScoreLevel(scoreLevel)")
+    .form-item
+      %label
+        Points Awarded
+        %input(ng-model="scoreLevel.points" gc-number-input allow-negatives="true" ng-change="updateScoreLevel(scoreLevel)")
+
+    .remove-line-item(ng-click="deleteScoreLevel(scoreLevel)")
+      %i.fa.fa-fw.fa-times
+
+  .box.box-padded(ng-if="!hasNewScoreLevel()")
+    %button.button-link.add-assignment-score-level(ng-click="addNewScoreLevel()")
+      %i.fa.fa-fw.fa-plus(aria-hidden="true")
+      Add level

@@ -2,7 +2,7 @@
 # See usage in templates, example:
 # %loading-message{'loading'=>'loading', 'message'=>"Loading Badges..."}
 
-@gradecraft.directive 'loadingMessage', [()->
+gradecraft.directive 'loadingMessage', [()->
 
   return {
     scope: {

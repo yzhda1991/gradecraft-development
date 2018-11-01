@@ -1,0 +1,24 @@
+.multi-part-icon{'ng-if' => 'article.is_locked'}
+  .icon.is_locked
+    %i.fa.fa-fw.fa-lock
+    %span this {{articleTerm()}} is locked
+  %ul.icon-list
+    %li{'ng-repeat' => 'condition in article.unlock_conditions'}
+      {{condition}}
+
+.multi-part-icon{'ng-if' => 'article.has_been_unlocked'}
+  .icon.is_unlocked
+    %i.fa.fa-fw.fa-unlock
+  %span this {{articleTerm()}} has been unlocked
+  %ul.icon-list
+    %li{'ng-repeat' => 'condition in article.unlocked_conditions'}
+      {{condition}}
+
+.multi-part-icon{'ng-if' => 'article.is_a_condition'}
+  .icon.is_a_condition
+    %i.fa.fa-fw.fa-key
+    %span this {{articleTerm()}} is a key
+  %ul.icon-list
+    %li{'ng-repeat' => 'key in article.unlock_keys'}
+      {{key}}
+

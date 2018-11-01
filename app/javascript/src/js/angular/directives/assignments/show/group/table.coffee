@@ -1,4 +1,4 @@
-@gradecraft.directive "assignmentShowGroupTable", ['AssignmentGradesService', "GradeReleaseService",
+gradecraft.directive "assignmentShowGroupTable", ['AssignmentGradesService', "GradeReleaseService",
   (AssignmentGradesService, GradeReleaseService) ->
     AssignmentShowGroupTableCtrl = [() ->
       vm = this

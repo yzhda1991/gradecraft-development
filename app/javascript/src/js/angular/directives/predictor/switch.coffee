@@ -1,6 +1,6 @@
 # Binary switch for predicting Pass/Fail assignments and badges earnable only once
 
-@gradecraft.directive 'predictorBinarySwitch', [ 'PredictorService', (PredictorService)->
+gradecraft.directive 'predictorBinarySwitch', [ 'PredictorService', (PredictorService)->
 
   return {
     scope: {

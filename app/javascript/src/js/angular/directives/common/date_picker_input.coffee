@@ -1,6 +1,6 @@
 # Date picker component without time
 # Requires datejs (http://www.datejs.com/)
-@gradecraft.directive 'gcDateInput', ['$filter', ($filter) ->
+gradecraft.directive 'gcDateInput', ['$filter', ($filter) ->
   {
     restrict: 'A'
     require: 'ngModel'
@@ -37,7 +37,7 @@
 
 # Time picker component without date
 # Requires datejs (http://www.datejs.com/)
-@gradecraft.directive 'gcTimeInput', ['$filter', ($filter) ->
+gradecraft.directive 'gcTimeInput', ['$filter', ($filter) ->
   {
     restrict: 'A'
     require: 'ngModel'

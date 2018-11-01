@@ -1,0 +1,31 @@
+%section#rubric-grader
+
+  .grade-section-label.collapse-toggler
+    Grade Assignment by Rubric
+
+  -# add .collapse to class list to enable a collapasable rubric
+  -# will require additional styling
+  #rubric-grade-edit.rubric.edit
+    .rubric-hint (click to select the level earned for each criterion)
+    .criterion(ng-repeat="criterion in criteria")
+      .criterion-heading
+        %h4.criterion-name {{criterion.name}} {{(criterion.max_points || 0) | number:0}} Points
+        %p.criterion-description {{criterion.description}}
+
+      %ul.level-tabs
+        %li.level-tab(ng-repeat="level in criterionLevels(criterion)" ng-click="selectLevel(criterion, level)" ng-class="{selected: LevelIsSelected(criterion,level), 'meets-expectations': levelMeetExpectations(criterion, level)}")
+          .level-heading
+            .level-details
+              .level-name {{level.name}}
+              .level-points
+                {{level.points | number:0}} Points
+            %ul.badge-row.design-view
+              %li.level-badge-image(ng-repeat="badge in badgesForLevel(level)")
+                %img(ng-src="{{badge.icon}}" alt="{{badge.name}}")
+
+          .level-description
+            .level-meets-expectations(ng-show="levelMeetExpectations(criterion, level)") Meets Expectations
+            {{level.description}}
+
+      .comments-box
+        %textarea(ng-model="gradeForCriterion(criterion.id).comments" ng-change="queueUpdateCriterionGrade(criterion)" froala="froalaOptions")

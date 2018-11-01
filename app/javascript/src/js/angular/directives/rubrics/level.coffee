@@ -1,6 +1,6 @@
 # Renders container for one level in a criterion
 
-@gradecraft.directive 'rubricLevel', ['RubricService', (RubricService) ->
+gradecraft.directive 'rubricLevel', ['RubricService', (RubricService) ->
 
   return {
     templateUrl: 'rubrics/level.html'

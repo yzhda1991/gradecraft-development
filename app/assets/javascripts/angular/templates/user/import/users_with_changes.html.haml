@@ -1,0 +1,42 @@
+%section.form-section
+  %h2.form-title Users With Changes to Review
+
+  %table.no-table-header
+    %thead
+      %tr
+        %th{"scope"=>"col"} Name
+        %th{"scope"=>"col"} Email
+        %th{"scope"=>"col"} {{vm.provider}} Roles (Enrollment State)
+        %th{"scope"=>"col"} User Exists?
+        %th{"scope"=>"col"} Role Change (Current -> Proposed)
+        %th
+          %button.button.select-all{"role"=>"button",
+                                    "type"=>"button",
+                                    "ng-click"=>"selectChangedUsers()"}= "Check"
+          %button.button.select-none{"role"=>"button",
+                                     "type"=>"button",
+                                     "ng-click"=>"deselectChangedUsers()"}= "Uncheck"
+    %tbody
+      %tr{"ng-if"=>"changedUsers().length < 1"}
+        %td{"colspan"=>"6"} None
+
+      %tr{"ng-if"=>"changedUsers().length > 0", "ng-repeat"=>"user in changedUsers()"}
+        %td {{user.name}}
+        %td {{user.email}}
+        %td
+          %ul
+            %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
+        %td {{termForUserExists(user.user_exists)}}
+        %td
+          %span.capitalize {{user.current_role}} -> {{user.gradecraft_role}}
+          %span.has-tooltip{"ng-style"=>"{'visibility': user.role_changed ? 'visible' : 'hidden'}"}
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              The user's current role in Gradecraft will be overridden with the new role returned by Canvas if
+              selected for import.
+        %td.center
+          %input{"type"=>"checkbox",
+                 "name"=>"user_ids[]",
+                 "value"=>"{{user.id}}",
+                 "ng-model"=>"user.selected_for_import",
+                 "ng-required"=>"!hasSelectedUsers()"}

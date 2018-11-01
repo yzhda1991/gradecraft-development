@@ -1,5 +1,5 @@
 # Entry point for editing an badge
-@gradecraft.directive 'badgeEdit', ['BadgeService', (BadgeService) ->
+gradecraft.directive 'badgeEdit', ['BadgeService', (BadgeService) ->
   BadgeEditCtrl = [()->
     vmBadgeEdit = this
     vmBadgeEdit.loading = true

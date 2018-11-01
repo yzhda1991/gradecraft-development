@@ -1,0 +1,12 @@
+.img-cropper.predictor-crop
+  %img.predictor-badge-icon{'ng-src' => '{{article.icon}}', :alt => '{{article.name}}' }
+
+.article-completed{'ng-if'=>'articleCompleted()'}
+  .value
+    {{pointsDisplay(article)}}
+
+.badge-predicted{'ng-if'=>'!articleCompleted()'}
+
+  %predictor-binary-switch.badge{'ng-if'=>'!article.can_earn_multiple_times','article'=>'article','off-value'=>'0','on-value'=>'article.full_points'}
+
+  %predictor-counter-switch.predictor-counter-switch{'ng-if'=>'article.can_earn_multiple_times', 'article'=>'article'}

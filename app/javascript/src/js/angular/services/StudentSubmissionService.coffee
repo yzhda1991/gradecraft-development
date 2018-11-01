@@ -1,4 +1,4 @@
-@gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
+gradecraft.factory 'StudentSubmissionService', ['GradeCraftAPI', 'DebounceQueue', '$http', (GradeCraftAPI, DebounceQueue, $http) ->
 
   self = this
   submission = {}

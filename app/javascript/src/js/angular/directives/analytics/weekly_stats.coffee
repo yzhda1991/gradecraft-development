@@ -1,5 +1,5 @@
 # box plot for course grade distribution
-@gradecraft.directive 'weeklyStatsAnalytics', ['AnalyticsService', (AnalyticsService) ->
+gradecraft.directive 'weeklyStatsAnalytics', ['AnalyticsService', (AnalyticsService) ->
     weeklyStatsCtrl = [()->
       vmWeeklyStats = this
       vmWeeklyStats.loading = true

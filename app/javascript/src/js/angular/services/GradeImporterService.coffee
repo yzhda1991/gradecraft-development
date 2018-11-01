@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradeImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'GradeImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   grades = []
   hasError = false

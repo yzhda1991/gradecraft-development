@@ -1,5 +1,5 @@
 # Main entry point for LMS user import form
-@gradecraft.directive 'userImportForm', ['CanvasImporterService', (CanvasImporterService) ->
+gradecraft.directive 'userImportForm', ['CanvasImporterService', (CanvasImporterService) ->
   UserImportFormCtrl = ['$scope', ($scope) ->
     vm = this
     vm.hasError = false

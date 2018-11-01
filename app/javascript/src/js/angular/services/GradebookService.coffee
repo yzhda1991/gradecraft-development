@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradebookService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
+gradecraft.factory 'GradebookService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
 
   students = []
   assignments = []

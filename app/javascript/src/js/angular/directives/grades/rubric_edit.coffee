@@ -1,6 +1,6 @@
 # rubric controlled raw_points
 
-@gradecraft.directive 'gradeRubricEdit', ['GradeService', 'RubricService', (GradeService, RubricService) ->
+gradecraft.directive 'gradeRubricEdit', ['GradeService', 'RubricService', (GradeService, RubricService) ->
 
   return {
     templateUrl: 'grades/rubric_edit.html'

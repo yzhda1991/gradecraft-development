@@ -1,4 +1,4 @@
-@gradecraft.directive 'attendanceSetupForm', ['AttendanceService', (AttendanceService) ->
+gradecraft.directive 'attendanceSetupForm', ['AttendanceService', (AttendanceService) ->
   AttendanceSetupFormCtrl = [() ->
     vm = this
     vm.editingEvents = false

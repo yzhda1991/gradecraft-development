@@ -1,4 +1,4 @@
-@gradecraft.factory 'AssignmentGradesService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'AssignmentGradesService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   groups = []
   grades = []

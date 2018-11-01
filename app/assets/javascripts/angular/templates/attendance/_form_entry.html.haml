@@ -1,0 +1,94 @@
+%section.form-section
+  %form-errors{"ng-if"=>"formEntryCtrl.formErrors.length > 0"}
+    %ul
+      %li.error{"ng-repeat"=>"error in formEntryCtrl.formErrors"} {{error}}
+
+  .form-subsection
+    %h2.form-title Class Schedule
+    .form-item
+      %label
+        %h3.form-subtitle Start Date
+
+        %input{"gc-date-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"formEntryCtrl.attributes.startDate",
+               "ng-change"=>"formEntryCtrl.validateForm()",
+               "required"=>"",
+               "name"=>"startDate"}
+
+    .form-item
+      %label
+        %h3.form-subtitle End Date
+
+        %input{"gc-date-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"formEntryCtrl.attributes.endDate",
+               "ng-change"=>"formEntryCtrl.validateForm()",
+               "required"=>"",
+               "name"=>"endDate"}
+
+    .form-item
+      %h3.form-subtitle Class Days
+      %days-of-week
+
+    .form-item{"ng-show"=>"formEntryCtrl.hasSelectedDays()"}
+      %h3.form-subtitle Class Times
+
+      %ul
+        %li.day-of-week{"ng-repeat"=>"day in daysOfWeekCtrl.days", "ng-if"=>"day.selected"}
+          %label
+            {{day.label}}
+            %input{"type"=>"text",
+                   "ng-model"=>"day.startTime",
+                   "ng-change"=>"formEntryCtrl.validateForm()",
+                   "required"=>"",
+                   "gc-time-input"=>"",
+                   "name"=>"{{day.label}}_startTime"}
+          %label
+            to
+            %input{"type"=>"text",
+                   "ng-model"=>"day.endTime",
+                   "ng-change"=>"formEntryCtrl.validateForm()",
+                   "required"=>"",
+                   "gc-time-input"=>"",
+                   "name"=>"{{day.label}}_endTime"}
+
+  .form-subsection
+    %h2.form-title Points
+    %h3.form-subtitle Points for attendance?
+
+    %fieldset
+      %points-for-attendance
+        %input{"type"=>"radio",
+               "ng-value"=>"true",
+               "name"=>"pointsForAttendance",
+               "id"=>"pointsForAttendanceYes",
+               "ng-model"=>"formEntryCtrl.attributes.has_points",
+               "required"=>""}
+        %label{"for"=>"pointsForAttendanceYes"} Yes
+
+        %input{"type"=>"radio",
+               "ng-value"=>"false",
+               "name"=>"pointsForAttendance",
+               "id"=>"pointsForAttendanceNo",
+               "ng-model"=>"formEntryCtrl.attributes.has_points",
+               "required"=>""}
+        %label{"for"=>"pointsForAttendanceNo"} No
+
+    .form-item{"ng-if"=>"formEntryCtrl.attributes.has_points"}
+      %label
+        %h3.form-subtitle How many?
+
+        %input{"type"=>"text",
+               "gc-number-input"=>"",
+               "ng-model"=>"formEntryCtrl.attributes.point_total",
+               "ng-required"=>"formEntryCtrl.attributes.has_points"}
+
+.main-buttons
+  %button{"type"=>"button",
+                    "ng-disabled"=>"form.$invalid || formEntryCtrl.formErrors.length > 0",
+                    "ng-class"=>"{ 'disabled': form.$invalid || formEntryCtrl.formErrors.length > 0 }",
+                    "ng-click"=>"form.$valid && formEntryCtrl.formErrors.length < 1 && formEntryCtrl.enableEdit()"} Configure Events
+
+  %button.secondary{"type"=>"button",
+                    "ng-click"=>"formEntryCtrl.cancel()"} Cancel

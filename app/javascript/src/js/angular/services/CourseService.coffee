@@ -1,4 +1,4 @@
-@gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
+gradecraft.factory 'CourseService', ['$http', 'GradeCraftAPI', '$q', ($http, GradeCraftAPI, $q) ->
 
   staff = []
   courses = []

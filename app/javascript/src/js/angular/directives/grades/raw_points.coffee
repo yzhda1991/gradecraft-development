@@ -1,6 +1,6 @@
 # raw_points (display only) for rubric
 
-@gradecraft.directive 'gradeRawPointsDisplay',
+gradecraft.directive 'gradeRawPointsDisplay',
 ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {

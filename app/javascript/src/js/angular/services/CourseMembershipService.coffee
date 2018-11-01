@@ -1,4 +1,4 @@
-@gradecraft.factory "CourseMembershipService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
+gradecraft.factory "CourseMembershipService", ["GradeCraftAPI", "$http", (GradeCraftAPI, $http) ->
 
   destroy = (id) ->
     $http.delete("/course_memberships/#{id}").then(

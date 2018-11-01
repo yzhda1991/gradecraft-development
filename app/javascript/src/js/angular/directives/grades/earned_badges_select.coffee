@@ -1,4 +1,4 @@
-@gradecraft.directive 'gradeEarnedBadgesSelect', ['GradeService', 'BadgeService', (GradeService, BadgeService) ->
+gradecraft.directive 'gradeEarnedBadgesSelect', ['GradeService', 'BadgeService', (GradeService, BadgeService) ->
   AwardedBadgesCtrl = [()->
     vm = this
     vm.BadgeService = BadgeService

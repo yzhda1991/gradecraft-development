@@ -1,4 +1,4 @@
-@gradecraft.factory 'CanvasImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'CanvasImporterService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   users = []
   courses = []

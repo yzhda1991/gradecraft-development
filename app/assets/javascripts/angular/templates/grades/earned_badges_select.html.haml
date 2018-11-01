@@ -1,0 +1,23 @@
+%a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
+  %h3
+    %i.fa.fa-chevron-circle-right.fa-fw
+    %span Award {{vm.BadgeService.termFor("badges")}}
+
+%section.badge-index-section.collapse.collapsed
+  %label.badge-award-container(for="{{vm.inputId(badge)}}"
+  ng-repeat="badge in vm.BadgeService.badges"
+  ng-class='{"unavailable":!vm.badgeIsActionable(badge), "awardable":vm.badgeIsAwardable(badge), "awarded":vm.badgeIsEarnedForGrade(badge)}'
+  )
+    .badge-award-checkmark
+      %input(id="{{vm.inputId(badge)}}"
+      ng-if="vm.badgeIsActionable(badge)"
+      type="checkbox"
+      ng-checked="vm.badgeIsEarnedForGrade(badge)"
+      ng-click="vm.awardBadge(badge)"
+    )
+    .badge-award-image
+      .img-cropper.small-crop
+        %img(ng-src="{{badge.icon}}" alt="")
+
+    .badge-award-name {{badge.name}}
+.clear

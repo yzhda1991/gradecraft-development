@@ -1,0 +1,11 @@
+%section.predictor-section.collapse-toggler{'ng-if'=>'challenges.length > 0'}
+  .collapse-arrow
+  .predictor-section-title
+    .predictor-section-title-name
+      {{termFor("challenges")}}
+    .predictor-section-title-predicted-points
+      {{challengesPredictedPoints() | number}}
+
+.collapsable.predictor-articles
+  %predictor-article.predictor-article{'ng-repeat' => 'challenge in challenges', 'article'=>'challenge'}
+.clear

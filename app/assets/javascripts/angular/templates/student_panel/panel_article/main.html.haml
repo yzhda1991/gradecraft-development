@@ -1,0 +1,32 @@
+%header.student-panel-article-header{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints()}'}
+  %h2.article-title {{article.name}}
+  .full-points{'ng-if' => 'article.full_points > 0'} full points: {{article.full_points | number}}
+  .due-date{'ng-if' => 'article.due_at'} due: {{article.due_at | date: "EEEE, MMMM d, yyyy"}}
+  .times-earned{'ng-if'=>'article.type === "badges"'} times earned: {{article.earned_badge_count}}
+
+.student-panel-content
+  %section.student-panel-article-main-icons
+    .predictor-article-main-icons
+      .icon.is_required{'ng-if' => 'article.is_required'}
+        %i.fa.fa-fw.fa-asterisk
+        %span.icon-text required
+      .icon.is_late{'ng-if' => 'article.is_late'}
+        %i.fa.fa-fw.fa-clock-o
+        %span.icon-text late
+      .icon.is_locked{'ng-if' => 'article.is_locked'}
+        %i.fa.fa-fw.fa-lock
+        %span.icon-text locked
+
+  %section.student-panel-article-image{'ng-if'=>'article.type === "badges"'}
+    %img{'ng-src'=>'{{article.icon}}', 'ng-class'=>"(article.earned_badge_count <= 0 ? 'unearned' : 'badge-icon')"}
+
+  %section.student-panel-article-description
+    %h3 Description
+    %p.student-panel-text-block{ 'ng-bind-html'=> 'article.description | html' }
+      {{article.description}}
+    %p
+      %a.details-link{'ng-href' => "{{article.type}}/{{article.id}}"} Go to {{articleTerm()}} Details Page
+
+  %section.student-panel-article-icons
+    %student-panel-article-icon.student-panel-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'article'}
+    .condition-icons{'ng-include'=> true, 'src' => "'student_panel/panel_article/condition_icons.html'"}

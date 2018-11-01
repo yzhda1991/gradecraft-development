@@ -1,0 +1,7 @@
+%section.grade-pass-fail
+  .grade-section-label
+    {{textForTitle()}}
+  .binary-switch-socket.inline-switch-socket(ng-click='toggleSwitch()' ng-class='switchState()')
+    .binary-switch-handle
+  .binary-switch-label.inline-switch-label
+    {{textForSwitch()}}

@@ -1,0 +1,77 @@
+.form-subsection
+  %h4.center{"ng-if"=>"gsGradesCtrl.loading"}
+    %i.fa.fa-spinner.fa-spin.fa-fw
+    Loading grades...
+
+  %div{"ng-if"=>"!gsGradesCtrl.loading && gsGradesCtrl.grades.length"}
+    %table.no-table-header
+      %thead
+        %tr
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{::gsGradesCtrl.assignmentTerm}}",
+                              "data-sortable-predicate"=>"assignment_name"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Name",
+                              "data-sortable-predicate"=>"[student_name, group_name]",
+                              "width"=>"8%"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"{{::gsGradesCtrl.teamTerm}}",
+                              "data-sortable-predicate"=>"team_name",
+                              "width"=>"15%",
+                              "ng-if"=>"::gsGradesCtrl.courseHasTeams"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Score",
+                              "data-sortable-predicate"=>"score",
+                              "width"=>"8%"}
+
+          %th.sortable-header{"scope"=>"col",
+                              "data-sortable-header-text"=>"Feedback",
+                              "data-sortable-predicate"=>"feedback"}
+
+          %th{"scope"=>"col","width"=>"20%"}
+            %span.sr-only Actions
+
+          %th.has_button{"data-dynatable-no-sort"=>"true", "width"=>"120px", "ng-if"=>"::gsGradesCtrl.linksVisible"}
+            %button.button.select-all{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(true)"} Check
+            %button.button.select-none{"role"=>"button", "type"=>"button", "ng-click"=>"gsGradesCtrl.selectGrades(false)"} Uncheck
+
+      %tbody
+        %tr{"ng-repeat"=>"grade in gsGradesCtrl.grades | orderBy: gsGradesCtrl.sortable.predicate : gsGradesCtrl.sortable.reverse | filter: gsGradesCtrl.searchCriteria()"}
+          %td
+            %a{"ng-href"=>"{{grade.assignment_path}}"} {{grade.assignment_name}}
+          %td
+            %a{"ng-href"=>"{{grade.student_path}}"} {{grade.student_name}}
+            %a{"ng-if"=>"grade.assignment_has_groups", "ng-href"=>"{{grade.group_path}}"} ({{grade.group_name}})
+          %td{"ng-if"=>"::gsGradesCtrl.courseHasTeams"}
+            %a{"ng-if"=>"gsGradesCtrl.showTeamPath(grade)", "ng-href"=>"{{grade.team_path}}"} {{grade.team_name}}
+          %td {{grade.formatted_score}}
+          %td {{grade.feedback}}
+          %td
+            %ul.button-bar
+              %li
+                %a.button{"ng-if"=>"grade.see_grade_path", "ng-href"=>"{{grade.see_grade_path}}"}
+                  %i.fa.fa-eye
+                  See Grade
+              %li{"ng-if"=>"grade.edit_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_grade_link)"}
+              %li{"ng-if"=>"grade.edit_group_grade_link",
+                  "ng-bind-html"=>"gsGradesCtrl.sanitize(grade.edit_group_grade_link)"}
+              %td{"ng-if"=>"::gsGradesCtrl.linksVisible"}
+                .center
+                  %label
+                    %span.sr-only Select grade to update status
+                    %input{"type"=>"checkbox",
+                           "ng-value"=>"grade.id",
+                           "ng-checked"=>"gsGradesCtrl.gradesToRelease.indexOf(grade.id) > -1",
+                           "ng-click"=>"gsGradesCtrl.toggleGradeSelection(grade.id)"}
+
+    .main-buttons{"ng-if"=>"gsGradesCtrl.linksVisible"}
+      %a.button{"type"=>"button",
+                "ng-click"=>"gsGradesCtrl.releaseGrades()",
+                "ng-class"=>"{ disabled: !gsGradesCtrl.hasSelectedGrades() }",
+                "ng-disabled"=>"!gsGradesCtrl.hasSelectedGrades()"}
+        %i.fa.fa-share-square-o
+        Release Selected Grades

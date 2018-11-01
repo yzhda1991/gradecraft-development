@@ -1,4 +1,4 @@
-@gradecraft.directive 'learningObjectivesRubricObjective', ['LearningObjectivesService', (LearningObjectivesService) ->
+gradecraft.directive 'learningObjectivesRubricObjective', ['LearningObjectivesService', (LearningObjectivesService) ->
   LearningObjectivesRubricObjectiveCtrl = [() ->
     vm = this
     vm.categories = LearningObjectivesService.categories

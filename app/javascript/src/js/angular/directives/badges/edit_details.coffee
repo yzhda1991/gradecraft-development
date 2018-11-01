@@ -1,4 +1,4 @@
-@gradecraft.directive 'badgeEditDetails', ['BadgeService', (BadgeService) ->
+gradecraft.directive 'badgeEditDetails', ['BadgeService', (BadgeService) ->
 
   return {
     scope: {

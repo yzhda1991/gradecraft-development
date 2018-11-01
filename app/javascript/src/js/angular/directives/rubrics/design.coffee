@@ -1,5 +1,5 @@
 # Main entry point for editing rubrics
-@gradecraft.directive "rubricDesign", ["$q", "RubricService", "BadgeService", "$timeout", ($q, RubricService, BadgeService, $timeout) ->
+gradecraft.directive "rubricDesign", ["$q", "RubricService", "BadgeService", "$timeout", ($q, RubricService, BadgeService, $timeout) ->
   RubricDesignCtrl = [() ->
     vm = this
 

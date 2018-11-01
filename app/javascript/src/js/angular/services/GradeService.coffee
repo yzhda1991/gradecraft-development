@@ -1,4 +1,4 @@
-@gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
+gradecraft.service 'GradeService', ['GradeCraftAPI', 'DebounceQueue', '$http',
 (GradeCraftAPI, DebounceQueue, $http) ->
 
   # We bind to modelGrade in the directives, to manage all grades through a

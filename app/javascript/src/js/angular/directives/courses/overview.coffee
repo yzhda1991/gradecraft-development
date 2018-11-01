@@ -1,4 +1,4 @@
-@gradecraft.directive "coursesOverview", ["CourseService", "SortableService",
+gradecraft.directive "coursesOverview", ["CourseService", "SortableService",
   (CourseService, SortableService) ->
     CoursesOverviewCtrl = [() ->
       vm = this

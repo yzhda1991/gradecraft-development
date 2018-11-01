@@ -1,6 +1,6 @@
 # Creates a date time picker that manages due dates on an Assignment.
 
-@gradecraft.directive 'assignmentFullPoints', ['AssignmentService', (AssignmentService) ->
+gradecraft.directive 'assignmentFullPoints', ['AssignmentService', (AssignmentService) ->
 
   return {
     scope: {

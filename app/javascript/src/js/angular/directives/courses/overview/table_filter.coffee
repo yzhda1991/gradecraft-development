@@ -1,4 +1,4 @@
-@gradecraft.directive "coursesOverviewTableFilter", ["SortableService", (SortableService) ->
+gradecraft.directive "coursesOverviewTableFilter", ["SortableService", (SortableService) ->
   CoursesOverviewTableFilterCtrl = [() ->
     vm = this
     vm.selectedCriteria = "allCourses"

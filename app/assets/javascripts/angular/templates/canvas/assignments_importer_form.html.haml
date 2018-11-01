@@ -1,0 +1,57 @@
+%canvas-course-selector{"provider"=>"{{vm.provider}}"}
+
+%h2.form-title Assignments
+.form-item
+  %form{"action"=>"{{vm.formAction()}}",
+        "method"=>"post",
+        "accept-charset"=>"UTF-8",
+        "ng-submit"=>"vm.formSubmitted = true",
+        "name"=>"assignmentImportForm"}
+    %input{"type"=>"hidden", "name"=>"authenticity_token", "value"=>"{{vm.authenticityToken}}"}
+    %input{"type"=>"hidden", "name"=>"utf8", "value"=>"✓"}
+
+    %table.no-table-header
+      %thead
+        %tr
+          %th{"scope"=>"col"} Name
+          %th{"scope"=>"col"} Description
+          %th{"scope"=>"col"} Due
+          %th{"scope"=>"col"} Points
+          %th{"scope"=>"col"}
+            %button.button.select-all{"role"=>"button",
+                                      "type"=>"button",
+                                      "ng-click"=>"vm.setAssignmentsSelected(true)"}= "Check"
+            %button.button.select-none{"role"=>"button",
+                                       "type"=>"button",
+                                       "ng-click"=>"vm.setAssignmentsSelected(false)"}= "Uncheck"
+      %tbody
+        %tr{"ng-if"=>"vm.loading"}
+          %td.center{"colspan"=>"5"}
+            %i.fa.fa-spinner.fa-spin.fa-fw
+            Loading assignments..
+        %tr{"ng-if"=>"!vm.loading", "ng-repeat"=>"assignment in vm.assignments"}
+          %td {{assignment.name}}
+          %td{"ng-bind-html"=>"sanitize(assignment.description)"}
+          %td {{assignment.due_at}}
+          %td {{assignment.points_possible}}
+          %td
+            %input{"type"=>"checkbox",
+                   "name"=>"assignment_ids[]",
+                   "value"=>"{{assignment.id}}",
+                   "ng-model"=>"assignment.selected_for_import",
+                   "ng-required"=>"!hasSelectedAssignments()"}
+
+    .main-buttons
+      %select{"required"=>"",
+              "ng-model"=>"vm.selectedAssignmentType",
+              "value"=>"assignment_type_id",
+              "ng-disabled"=>"vm.loading",
+              "name"=>"assignment_type_id"}
+        %option{"value"=>""} Select an assignment type
+        %option{"ng-repeat"=>"type in vm.assignmentTypes", "value"=>"{{type.id}}"}
+          {{type.name}}
+      %br
+      %input.button.action{"type"=>"submit",
+                           "ng-disabled"=>"!hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted",
+                           "ng-class"=>"{'disabled': !hasSelectedAssignments() || assignmentImportForm.$invalid || vm.formSubmitted}",
+                           "value"=>"Import Selected Assignments into {{vm.currentCourseName}}"}

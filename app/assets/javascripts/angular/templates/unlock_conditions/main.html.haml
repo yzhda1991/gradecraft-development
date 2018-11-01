@@ -1,0 +1,7 @@
+.unlock-conditions
+  .unlock-condition(ng-repeat="condition in vmUnlocks.conditions")
+    %unlock-condition(condition="condition")
+.box.box-padded.add-unlock-condition
+  .add-unlock-button(ng-if="vmUnlocks.canAddNewCondition()" ng-click="vmUnlocks.addCondition()")
+    %i.fa.fa-fw.fa-plus
+    Add a Condition

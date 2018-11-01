@@ -1,0 +1,29 @@
+%section.form-section
+  .form-subsection
+    %h3.form-subtitle Settings
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="badge.visible" ng-click="updateBadge()")
+          Student Visible
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Can {{ termFor("students")}} see this {{ termFor("badge")}}?
+
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="badge.can_earn_multiple_times" ng-click="updateBadge()")
+          Multi-Award
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Can this {{ termFor("badge")}} be given to one {{ termFor("student")}} multiple times through the semester?
+
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="badge.student_awardable" ng-click="updateBadge()")
+          Student-Awardable
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Can this {{ termFor("badge")}} be given by one {{ termFor("student")}} to another {{ termFor("student")}}?

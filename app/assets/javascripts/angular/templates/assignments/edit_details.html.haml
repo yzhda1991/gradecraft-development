@@ -1,0 +1,96 @@
+%section.form-section
+  .form-subsection
+    %h3.form-subtitle Dates
+    %assignment-date-picker(assignment="assignment")
+
+  .form-subsection
+    %h3.form-subtitle Grading Style
+    .form-flex-row
+      .form-item
+        %label
+          %input(type="checkbox" ng-model="assignment.pass_fail" ng-click="updateAssignment()") Pass Fail
+    .form-flex-row(ng-if="!assignment.pass_fail")
+      .form-item
+        %label
+          Total Points Possible
+          %input(ng-model="assignment.full_points" gc-number-input allow-negatives="true" ng-change="updateAssignment()")
+      .form-item
+        %label
+          Points Threshold
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              You can set a minimum score that must be earned to accrue any points. Earning less than the threshold will automatically result in 0 points
+          %input(ng-model="assignment.threshold_points" gc-number-input ng-change="updateAssignment()")
+    .form-item
+      %label(ng-class="{ 'disabled': isGroupGraded() }")
+        %input(type="checkbox" ng-model="assignment.student_logged" ng-disabled="isGroupGraded()" ng-click="updateAssignment()")
+          Student Logged
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Do {{ termFor("students")}} self-report their grade for this {{ termFor("assignment")}}?  If you add grade levels, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
+
+  .form-subsection
+    %h3.form-subtitle Submissions
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.accepts_submissions" ng-click="updateAssignment()")
+          Accepts Submissions
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Will you be using GradeCraft to accept submissions for this {{ termFor("assignment")}}?
+
+      %ul.conditional-options(ng-if="assignment.accepts_submissions")
+        %li
+          %label
+            %input(type="checkbox" ng-model="assignment.accepts_links" ng-click="updateAssignment()") Accepts Links
+        %li
+          %label
+            %input(type="checkbox" ng-model="assignment.accepts_attachments" ng-click="updateAssignment()") Accepts Attachments
+        %li
+          %label
+            %input(type="checkbox" ng-model="assignment.accepts_text" ng-click="updateAssignment()")  Accepts Text
+
+    .form-item(ng-if="assignment.accepts_submissions")
+      %label
+        %input(type="checkbox" ng-model="assignment.resubmissions_allowed" ng-click="updateAssignment()")
+          Resubmissions Allowed
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Can {{ termFor("students")}} resubmit this {{ termFor("assignment")}}?
+
+  .form-subsection
+    %h3.form-subtitle Basic Visibility Settings
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.visible" ng-click="updateAssignment()")
+          Student Visible
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Can {{ termFor("students")}} see this {{ termFor("assignment")}} in their dashboard?
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.hide_analytics" ng-click="updateAssignment()")
+          Hide Analytics
+          %span.has-tooltip
+            %i.fa.fa-info-circle
+            .display-on-hover.hover-style
+              Do you want to hide comparative analytics from {{ termFor("students")}} for this {{ termFor("assignment")}}?
+
+  .form-subsection(ng-if="hasLearningObjectives()")
+    %h3.form-subtitle
+      .form-item
+        Linked {{ termFor("learning_objectives") }}
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Should this {{ termFor("assignment") }} be linked to a {{ termFor("learning_objective") }}?
+
+    .learning-objective-checkboxes
+      %label(ng-repeat="lo in learningObjectives()")
+        %input(type="checkbox" name="linked_objective_ids[]" ng-checked="assignment.linked_objective_ids.indexOf(lo.objective_id) > -1" ng-value="lo.objective_id" ng-click="toggleObjectiveSelection(lo.objective_id)")
+          {{ lo.name }}

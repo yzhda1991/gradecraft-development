@@ -1,0 +1,44 @@
+-# This is the main template for the grading form,
+-# all partials are loaded below.
+
+%loading-message(loading='vm.loading' message="Loading Grade...")
+
+%grade-rubric-edit(ng-if='vm.isRubricGraded()')
+
+%article.grade-form-fields
+  %grade-raw-points-input(ng-if='vm.isStandardGraded()')
+  %grade-score-levels-select(ng-if='vm.isScoreLevelGraded()')
+  %grade-pass-fail-switch(ng-if='vm.isPassFailGraded()')
+  %grade-raw-points(ng-if='vm.isRubricGraded()')
+
+  %label.grade-section-label(for="feedback-upload") {{ vm.feedbackMessage }}
+  %grade-file-uploader
+  %grade-feedback-text-input
+
+%article.grade-form-fields(ng-if='!vm.isPassFailGraded()')
+  %grade-adjustment-points-input(group-grade='vm.isGroupGrade')
+
+%article.grade-form-fields(ng-if='vm.courseHasLearningObjectives')
+  %a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
+    %h3
+      %i.fa.fa-chevron-circle-right.fa-fw
+      Learning objectives
+
+  %section.collapse.collapsed
+    %learning-objectives-grading(data-assignment-id='vm.assignmentId' ng-if='vm.courseHasLearningObjectives')
+
+%article.grade-form-fields(ng-if='!vm.isGroupGrade && vm.hasAwardableBadges')
+  %grade-earned-badges-select(student-id='{{vm.recipientId}}')
+
+.grading-summary
+  %grade-points-overview(ng-if='!vm.loading && !vm.isPassFailGraded() && !vm.isGroupGrade' grade-type='{{vm.isRubricGraded() ? "RUBRIC" : "STANDARD_ASSIGNMENT"}}')
+  %grade-complete-switch
+  %grade-visible-switch
+  .right
+    %grade-submit-buttons(ng-if='vm.isActiveCourse' submit-path='{{vm.submitPath}}' grade-next-path='{{vm.gradeNextPath}}')
+
+.clear
+
+%hr.grading-divider
+%span.italic
+  %grade-last-updated

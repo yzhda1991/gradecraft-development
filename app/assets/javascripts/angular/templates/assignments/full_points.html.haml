@@ -1,0 +1,9 @@
+.assignment-settings--full-points(ng-if="!assignment.pass_fail")
+  %label(for="{{assignment.id}}-full-points")
+    %input( id="{{assignment.id}}-full-points"
+      ng-model="assignment.full_points"
+      gc-number-input
+      allow-negatives="true"
+      ng-change="updateAssignmentPoints()")
+.assignment-settings--full-points(ng-if="assignment.pass_fail")
+  {{termFor("pass")}}/{{termFor("fail")}}

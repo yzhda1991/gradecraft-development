@@ -1,4 +1,4 @@
-@gradecraft.factory "StudentService", ["GradeCraftAPI", "CourseMembershipService", "orderByFilter", "$http", "$q",
+gradecraft.factory "StudentService", ["GradeCraftAPI", "CourseMembershipService", "orderByFilter", "$http", "$q",
   (GradeCraftAPI, CourseMembershipService, orderBy, $http, $q) ->
     students = []
     teams = []  # student association

@@ -1,6 +1,6 @@
 # Main entry point for mass editing grade scheme elements for a course
 # Renders the appropriate form
-@gradecraft.directive 'gradeSchemeElementsMassEditForm',
+gradecraft.directive 'gradeSchemeElementsMassEditForm',
 ['GradeSchemeElementsService', (GradeSchemeElementsService) ->
   GradeSchemeElementsCtrl = [() ->
     vm = this

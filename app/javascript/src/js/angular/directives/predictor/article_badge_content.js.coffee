@@ -1,5 +1,5 @@
 # Fills the Badge details in the "Cards"
-@gradecraft.directive 'predictorArticleBadgeContent', [ 'PredictorService', (PredictorService)->
+gradecraft.directive 'predictorArticleBadgeContent', [ 'PredictorService', (PredictorService)->
 
   return {
     scope: {

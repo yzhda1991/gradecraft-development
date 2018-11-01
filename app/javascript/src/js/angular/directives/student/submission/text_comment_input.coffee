@@ -1,5 +1,5 @@
 # Controls and renders the froala editor, which autosaves and loads Submission draft content
-@gradecraft.directive 'textCommentInput', ['StudentSubmissionService', (StudentSubmissionService) ->
+gradecraft.directive 'textCommentInput', ['StudentSubmissionService', (StudentSubmissionService) ->
 
   TextCommentInputCtrl = ['$scope', ($scope) ->
     vm = this

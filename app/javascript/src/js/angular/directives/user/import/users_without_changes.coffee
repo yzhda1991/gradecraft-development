@@ -1,5 +1,5 @@
 # Main entry point for rendering users without changes when importing from an LMS
-@gradecraft.directive 'usersWithoutChanges', ['CanvasImporterService', (CanvasImporterService) ->
+gradecraft.directive 'usersWithoutChanges', ['CanvasImporterService', (CanvasImporterService) ->
   {
     restrict: 'EA'
     templateUrl: 'user/import/users_without_changes.html'

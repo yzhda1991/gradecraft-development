@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentEditUnlocks', ['AssignmentTypeService', 'AssignmentService', 'UnlockConditionService', (AssignmentTypeService, AssignmentService, UnlockConditionService) ->
+gradecraft.directive 'assignmentEditUnlocks', ['AssignmentTypeService', 'AssignmentService', 'UnlockConditionService', (AssignmentTypeService, AssignmentService, UnlockConditionService) ->
 
   return {
     scope: {

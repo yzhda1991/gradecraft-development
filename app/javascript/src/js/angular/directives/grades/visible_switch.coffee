@@ -1,6 +1,6 @@
 # switch for setting grade to student_visible
 
-@gradecraft.directive 'gradeVisibleSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
+gradecraft.directive 'gradeVisibleSwitch', ['GradeCraftAPI', 'GradeService', (GradeCraftAPI, GradeService) ->
 
   return {
     templateUrl: 'grades/visible_switch.html'

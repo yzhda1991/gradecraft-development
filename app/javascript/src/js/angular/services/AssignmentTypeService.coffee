@@ -1,7 +1,7 @@
 # Manages state of AssignmentsTypes and Weights including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'AssignmentTypeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'AssignmentTypeService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   update = {}
   assignmentTypes = []

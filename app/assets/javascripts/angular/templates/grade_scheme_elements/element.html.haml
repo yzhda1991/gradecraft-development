@@ -1,0 +1,53 @@
+.grade-scheme-row
+  .gse-form-container
+    %label.gse-label.form-hint
+      Grade Letter
+      %input.letter{'type'=>'text',
+                    'name'=>'letter',
+                    'ng-model'=>'gradeSchemeElement.letter',
+                    'ng-change'=>"persistChanges()"}
+
+    %label.gse-label.form-hint
+      Level name
+      %input.level{'type'=>'text',
+                   'name'=>'level',
+                   'ng-model'=>'gradeSchemeElement.level',
+                   'ng-change'=>"persistChanges()"}
+
+    %label.gse-label.form-hint
+      Point Threshold
+      %input.low-range{'type'=>'text',
+        'name'=>'point_threshold_{{index}}',
+        'ng-model'=>'gradeSchemeElement.lowest_points',
+        'ng-change'=>"persistChanges()",
+        'required'=>'',
+        'gc-number-input'=>'',
+        'allow-negatives'=>'false',
+        'maintain-focus'=>'',
+        'maxLength'=>'11'}
+
+    %span{'ng-show'=>'status === "saving"'}
+      %i.fa.fa-spinner.fa-spin.fa-fw
+      Saving changes...
+
+    %span.save-success{'ng-show'=>'status === "saved"'}
+      %i.fa.fa-thumbs-o-up
+      Changes successfully saved!
+
+    %span.validation-error{'ng-show'=>'gradeSchemeElement.validationError'}
+      %span.error
+        %i.fa.fa-exclamation-triangle
+        {{gradeSchemeElement.validationError}}
+
+  .action-button-container
+    %span
+      %button.add-element.button{'type'=>'button',
+                                 'ng-click'=>'addElement()',
+                                 'tabindex'=>'0'}
+        %i.fa.fa-plus
+        Add a level below
+      %button.remove-element.button.alert{'type'=>'button',
+                                          'ng-click'=>'removeElement()',
+                                          'aria-label'=>"Remove Level"}
+        Remove
+        %i.fa.fa-times

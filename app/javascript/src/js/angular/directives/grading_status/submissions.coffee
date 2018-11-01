@@ -1,7 +1,7 @@
 # Renders submissions component for grading status page
 # Shared directive which takes a type of submission
 #   Allowable types: [Resubmitted, Ungraded]
-@gradecraft.directive "gradingStatusSubmissions", ["GradingStatusService", "SortableService", "$sce",
+gradecraft.directive "gradingStatusSubmissions", ["GradingStatusService", "SortableService", "$sce",
   (GradingStatusService, SortableService, $sce) ->
     GradingStatusSubmissionsCtrl = [() ->
       vm = this

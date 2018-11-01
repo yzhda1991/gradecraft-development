@@ -4,7 +4,7 @@
 # example usage:
 #   %tooltip-icon(id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
 #
-@gradecraft.directive 'tooltipIcon', [() ->
+gradecraft.directive 'tooltipIcon', [() ->
   return {
     scope: {
       assignmentId: "@",

@@ -1,0 +1,26 @@
+.level-items(ng-class="{nocredit: level.noCredit, 'level-meets-expectations': satifiesExpectations()}")
+
+  %label
+    %span.sr-only Level Name
+    %input(type="text" ng-model="level.name" placeholder="Level Name" required ng-blur="queueUpdateLevel()")
+
+  %label
+    %span.sr-only Level Points
+    %input(type="number" ng-model="level.points" placeholder="Points" min=0 ng-blur="queueUpdateLevel()" required)
+
+  %label(ng-if="requirementsMet() || levelIsSaved()")
+    %span.sr-only Level Description
+    %textarea(ng-model="level.description" placeholder="Description" value="{{level.description}}" ng-change="queueUpdateLevel()")
+
+  %rubric-level-badges(ng-if="levelIsSaved()" level="level")
+
+  %button.meets-expectations-status(ng-if="levelIsSaved() && showExpectationButton()" type="button" ng-class="{'no-expectation': !meetsExpectationsSet()}") {{expectationsLabel()}}
+  %button.meets-expectations-toggle(ng-if="levelIsSaved()" type="button" ng-class="{'remove': isMeetsExpectationsLevel()}" ng-click="updateMeetsExpectationsLevel()") {{expectationsHoverLabel()}}
+
+  %ul.level-requirements(ng-if="!requirementsMet() && !levelIsSaved()")
+    %li.requirements(ng-repeat="requirement in requirements()")
+      {{ requirement }}
+
+  %button.delete(ng-if="!(level.full_credit || level.no_credit)" type="button" ng-click="deleteLevel()" ng-hide="level.required") X
+
+

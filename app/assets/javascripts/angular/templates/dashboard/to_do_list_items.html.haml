@@ -1,0 +1,43 @@
+-# View only pertains to students
+%ul.todo-list-assignments{"ng-class"=>"toDoListItemsCtrl.assignmentType"}
+  %li{"ng-class"=>"assignment.starred ? 'assignment-item starred' : 'assignment-item'",
+      "ng-repeat"=>"assignment in toDoListItemsCtrl.assignments"}
+    %span.has_tooltip{"tabindex"=>"0",
+                      "aria-describedby"=>"predicted-tip_{{assignment.id}}",
+                      "ng-if"=>"assignment.starred"}
+      %i.fa.fa-flag.fa-fw
+      %span.display-on-hover.hover-style.hover-style-right{"id"=>"predicted-tip_{{assignment.id}}", "role"=>"tooltip"}
+        You have included this {{toDoListItemsCtrl.termFor("assignment")}} in your grade prediction
+    %span.strikethrough.assignment-name{"ng-if"=>"assignment.submitted"}
+      %a{"ng-href"=>"{{assignment.assignment_path}}"} {{assignment.name}}
+    %span.bold.assignment-name{"ng-if"=>"!assignment.submitted && assignment.name_visible_for_student"}
+      %a{"ng-href"=>"{{assignment.grade_path}}"} {{assignment.name}}
+    %span.bold.assignment-name{"ng-if"=>"!assignment.submitted && !assignment.name_visible_for_student"}
+      %span.bold.assignment-name Locked {{toDoListItemsCtrl.termFor("assignment")}}
+      %span.italic You must unlock this {{toDoListItemsCtrl.termFor("assignment")}} to learn more about it
+    .small.uppercase{"ng-if"=>"assignment.due_at"} {{assignment.assignment_type_name}}
+    .due-date Due: {{assignment.due_at_for_current_timezone}}
+
+    .right{"ng-if"=>"assignment.submittable && assignment.is_individual"}
+      %div{"ng-bind-html"=>"toDoListItemsCtrl.sanitize(assignment.submission_link)"}
+    .right{"ng-if"=>"assignment.submittable && !assignment.is_individual"}
+      %group-submissions{"data-assignment"=>"assignment"}
+
+  %li.empty-todo-list{"ng-if"=>"toDoListItemsCtrl.hasAssignments() === false"}
+
+    -# Course planner
+    %div{"ng-if"=>"toDoListItemsCtrl.assignmentType === 'course-planner-list'"}
+      %div{"ng-if"=>"toDoListItemsCtrl.hasDueDates"}
+        .empty-state-wrapper
+          = image_tag "no-assignments-due.svg", alt: "", class: "empty-state-graphic"
+        %p.empty-state-text You don't have any {{toDoListItemsCtrl.termFor("assignments")}} due in the next week!
+      %p.dashboard-message{"ng-if"=>"!toDoListItemsCtrl.hasDueDates"} This class has flexible {{toDoListItemsCtrl.termFor("assignment")}} due dates. Check your course rules to learn when to turn in certain {{toDoListItemsCtrl.termFor("assignments")}}.
+
+    -# My planner
+    %div{"ng-if"=>"toDoListItemsCtrl.assignmentType === 'my-planner-list'"}
+      .empty-state-wrapper
+        = image_tag "no-predicted-assignments.svg", alt: "", class: "empty-state-graphic"
+      %p.empty-state-text
+        You have not predicted any {{toDoListItemsCtrl.termFor("assignments")}}! Check out the
+        %a{"ng-href"=>"{{toDoListItemsCtrl.data.predictor_path}}"} {{toDoListItemsCtrl.termFor("predictor")}}
+        to add {{toDoListItemsCtrl.termFor("assignments")}} to this planner.

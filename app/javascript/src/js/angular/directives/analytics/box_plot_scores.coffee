@@ -1,7 +1,7 @@
 # box plot for score distribution
 # includes an users's score if supplied
 
-@gradecraft.directive 'boxPlotScores', [() ->
+gradecraft.directive 'boxPlotScores', [() ->
     plotGraph = (data, graphId)=>
       scores = data.scores
       userScore = data.user_score

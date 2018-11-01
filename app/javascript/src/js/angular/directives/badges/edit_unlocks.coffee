@@ -1,4 +1,4 @@
-@gradecraft.directive 'badgeEditUnlocks', ['BadgeService', 'UnlockConditionService', (BadgeService, UnlockConditionService) ->
+gradecraft.directive 'badgeEditUnlocks', ['BadgeService', 'UnlockConditionService', (BadgeService, UnlockConditionService) ->
 
   return {
     scope: {

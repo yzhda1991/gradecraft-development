@@ -1,5 +1,5 @@
 # Main entry point for Canvas assignment importer form
-@gradecraft.directive 'canvasAssignmentImporterForm', ['CanvasImporterService', 'AssignmentTypeService', '$sce',
+gradecraft.directive 'canvasAssignmentImporterForm', ['CanvasImporterService', 'AssignmentTypeService', '$sce',
   (CanvasImporterService, AssignmentTypeService, $sce) ->
     CanvasAssignmentImporterCtrl = ['$scope', ($scope) ->
       vm = this

@@ -1,5 +1,5 @@
 # Handles uploading assignment import files
-@gradecraft.directive('assignmentImportUpload', ['$parse', 'AssignmentImporterService',
+gradecraft.directive('assignmentImportUpload', ['$parse', 'AssignmentImporterService',
   ($parse, AssignmentImporterService) ->
     {
       scope:

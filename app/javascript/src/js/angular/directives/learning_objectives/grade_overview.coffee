@@ -1,4 +1,4 @@
-@gradecraft.directive 'learningObjectivesGradeOverview', ['LearningObjectivesService', 'GradeService', '$q', '$sce',
+gradecraft.directive 'learningObjectivesGradeOverview', ['LearningObjectivesService', 'GradeService', '$q', '$sce',
 (LearningObjectivesService, GradeService, $q, $sce) ->
   LearningObjectivesGradeOverviewCtrl = [() ->
     vm = this

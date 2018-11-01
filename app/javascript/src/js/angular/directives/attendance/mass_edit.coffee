@@ -1,4 +1,4 @@
-@gradecraft.directive 'attendanceMassEdit', ['AttendanceService', (AttendanceService) ->
+gradecraft.directive 'attendanceMassEdit', ['AttendanceService', (AttendanceService) ->
   AttendanceMassEditCtrl = [() ->
     vm = this
     vm.loading = true

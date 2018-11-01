@@ -1,6 +1,6 @@
 # Iterates through levels in a criterion
 
-@gradecraft.directive 'courseCreationProgressBar', ['CourseService', (CourseService) ->
+gradecraft.directive 'courseCreationProgressBar', ['CourseService', (CourseService) ->
 
   return {
     templateUrl: 'courses/creation_progress_bar.html'

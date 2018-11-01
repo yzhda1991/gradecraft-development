@@ -1,0 +1,60 @@
+%section.form-section
+  .form-subsection
+    .form-item
+      %label
+        {{termFor("assignment")}} Type
+        %select(ng-model="assignment.assignment_type_id" ng-change="updateAssignment()")
+          %option(ng-repeat="assignmentType in assignmentTypes" ng-selected="assignment.assignment_type_id == assignmentType.id" value="{{assignmentType.id}}") {{assignmentType.name}}
+
+    .form-item
+      %label
+        {{termFor("assignment")}} Name
+        %input(aria-required=true type="text" ng-model="assignment.name" ng-change="updateAssignment()")
+
+    .form-item
+      %label
+        %input(type="checkbox" ng-model="assignment.required" ng-click="updateAssignment()") Required
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            Are ALL {{ termFor("students") }} expected to complete this {{ termFor("assignment") }} to pass the course?
+
+    .form-item
+      %label
+        Individual or Group?
+        %span.has-tooltip(ng-if="assignment.has_submitted_submissions")
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            This option cannot be changed until existing submissions are deleted.
+        %select(ng-model="assignment.grade_scope" ng-change="updateAssignment()" ng-disabled="assignment.has_submitted_submissions")
+          %option(ng-repeat="scope in ['Individual', 'Group']" ng-selected="assignment.grade_scope == scope" value="{{scope}}"  ng-click="updateAssignment()") {{ scope }}
+        .form-hint Do students do this individually or as a group?
+    .form-flex-row(ng-if="assignment.grade_scope == 'Group'")
+      .form-item
+        %label
+          Min {{ termFor("group") }} Size
+          %input(ng-model="assignment.min_group_size" gc-number-input ng-change="updateAssignment()")
+      .form-item
+        %label
+          Max {{ termFor("group") }} Size
+          %input(ng-model="assignment.max_group_size" gc-number-input ng-change="updateAssignment()")
+
+    .form-item
+      %label(for="description-textarea")
+        Assignment Description
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            This will be shown to students on their dashboard, and when they submit their {{ termFor("assignment") }}.
+      %textarea#description-textarea(ng-model="assignment.description" ng-change="updateAssignment()" froala="froalaOptions")
+
+    .form-item
+      %label(for="purpose-textarea")
+        Assignment Purpose
+        %span.has-tooltip
+          %i.fa.fa-info-circle
+          .display-on-hover.hover-style
+            This will be shown to students on their dashboard, and when they submit their {{ termFor("assignment") }}.
+      %textarea#purpose-textarea(ng-model="assignment.purpose" ng-change="updateAssignment()" froala="froalaOptions")
+
+    %assignment-media-uploader(assignment="assignment")

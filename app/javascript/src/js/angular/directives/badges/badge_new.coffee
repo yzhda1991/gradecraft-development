@@ -1,6 +1,6 @@
 # Entry point for a new badge. Once the badge is
 # created, the edit form is disiplayed
-@gradecraft.directive 'badgeNew', ['BadgeService', (BadgeService) ->
+gradecraft.directive 'badgeNew', ['BadgeService', (BadgeService) ->
   BadgeNewCtrl = [()->
     vmBadgeNew = this
     vmBadgeNew.badgeCreated = false

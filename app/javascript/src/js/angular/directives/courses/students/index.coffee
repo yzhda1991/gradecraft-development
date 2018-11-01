@@ -1,4 +1,4 @@
-@gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "TeamService", "$filter",
+gradecraft.directive "coursesStudentsIndex", ["CourseService", "StudentService", "SortableService", "TeamService", "$filter",
   (CourseService, StudentService, SortableService, TeamService, $filter) ->
     CoursesStudentsIndexCtrl = [() ->
       vm = this

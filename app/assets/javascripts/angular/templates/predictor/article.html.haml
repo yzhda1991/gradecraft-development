@@ -1,0 +1,28 @@
+.predictor-article-card{'ng-class'=>'{"status-completed":articleCompleted(), "status-no-points": articleNoPoints(), "focus-article": isFocusArticle()}'}
+
+  .predictor-article-title{'title' => '{{article.name}}', 'ng-click'=>'changeFocusArticle()'}
+    {{ article.name }}
+    .info-icon
+      %i.fa.fa-fw.fa-info-circle
+
+  .predictor-article-date
+    .predictor-date{'ng-if' => 'article.is_due_in_future && !articleCompleted()'}
+      %i.fa.fa-fw.fa-calendar
+      due: {{article.due_at | date: "EEE, MMM d, yyyy"}}
+
+  .predictor-article-main
+
+    %predictor-article-badge-content{'ng-if' => 'article.type=="badges"', 'article'=>'article'}
+    %predictor-article-assignment-content{'ng-if' => 'article.type=="assignments"', 'article'=>'article'}
+    %predictor-article-assignment-content{'ng-if' => 'article.type=="challenges"', 'article'=>'article'}
+
+  .predictor-article-main-icons
+    .icon.is_required{'ng-if' => 'article.is_required'}
+      %i.fa.fa-fw.fa-asterisk
+      %span.icon-text required
+    .icon.is_late{'ng-if' => 'article.is_late'}
+      %i.fa.fa-fw.fa-clock-o
+      %span.icon-text late
+    .icon.is_locked{'ng-if' => 'article.is_locked'}
+      %i.fa.fa-fw.fa-lock
+      %span.icon-text locked

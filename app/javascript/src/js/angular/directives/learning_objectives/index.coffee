@@ -1,6 +1,6 @@
 # Main entry point for viewing all learning objectives and learning objective
 # categories for the current course
-@gradecraft.directive 'learningObjectivesIndex', ['LearningObjectivesService', '$q', (LearningObjectivesService, $q) ->
+gradecraft.directive 'learningObjectivesIndex', ['LearningObjectivesService', '$q', (LearningObjectivesService, $q) ->
   LearningObjectivesIndexCtrl = [()->
     vm = this
     vm.loading = true

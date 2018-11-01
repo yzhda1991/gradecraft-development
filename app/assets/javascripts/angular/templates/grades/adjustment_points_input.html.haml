@@ -1,0 +1,32 @@
+%a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
+  %h3
+    %i.fa.fa-chevron-circle-right.fa-fw
+    %span(ng-if="groupGrade")
+      Adjust a specific student’s grade
+    %span(ng-if="!groupGrade")
+      Adjust final points
+
+%section.grade-adjustments-section.collapse.collapsed(ng-class='{"flex-wrapper": groupGrade}')
+  %div.grade-adjustments(ng-repeat="grade in grades")
+
+    %article.grade-form-fields(ng-class='{"sectional": groupGrade}')
+      %section.grade-adjustment-points
+        %label.grade-section-label(for="adjustment-points-input-{{grade.id}}")
+          Adjustment Points
+          %span(ng-if="groupGrade") for {{grade.student_name}}
+
+        %input( type="text"
+        id="adjustment-points-input-{{grade.id}}"
+        placeholder="Adjust points beyond calculated total"
+        ng-model="grade.adjustment_points"
+        gc-number-input
+        allow-negatives="true"
+        ng-change="queueUpdateGrade()")
+        %p.form-hint.small Include (-) to subtract points
+
+      %section.grade-adjustment-points-feedback(ng-if="groupGrade || (grade.adjustment_points && grade.adjustment_points != 0)")
+        %label.grade-section-label(for="adjustment-points-feedback-{{grade.id}}") Additional Feedback
+        %textarea(id="adjustment-points-feedback-{{grade.id}}" ng-model="grade.adjustment_points_feedback" ng-change="queueUpdateGrade()")
+      .clear
+
+      %grade-final-points(grade="grade")

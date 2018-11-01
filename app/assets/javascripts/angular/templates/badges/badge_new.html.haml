@@ -1,0 +1,12 @@
+%article.badge-form-fields.simple-form(ng-if="!vmBadgeNew.badgeCreated")
+  .form-subsection
+    .form-item
+      %label
+        Name
+        %input(aria-required=true type="text" ng-model="vmBadgeNew.newBadge.name")
+
+    .form-item
+      %label
+        %button.create-button(ng-click="vmBadgeNew.createBadge()") Create
+
+%badge-edit-form(ng-if="vmBadgeNew.badgeCreated" badge="vmBadgeNew.badges[0]")

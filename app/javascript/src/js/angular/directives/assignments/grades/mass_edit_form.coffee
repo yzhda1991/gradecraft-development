@@ -1,5 +1,5 @@
 # A table of assignments with editable grades
-@gradecraft.directive 'massEditForm', ['AssignmentGradesService', 'TeamService', (AssignmentGradesService, TeamService) ->
+gradecraft.directive 'massEditForm', ['AssignmentGradesService', 'TeamService', (AssignmentGradesService, TeamService) ->
   MassEditFormCtrl = ['$scope', ($scope)->
     vm = this
     vm.loading = true

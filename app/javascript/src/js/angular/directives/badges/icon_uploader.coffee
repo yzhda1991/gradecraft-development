@@ -1,4 +1,4 @@
-@gradecraft.directive 'badgeIconUploader', ['BadgeService', (BadgeService) ->
+gradecraft.directive 'badgeIconUploader', ['BadgeService', (BadgeService) ->
 
   return {
     scope: {
@@ -16,7 +16,7 @@
   }
 ]
 
-@gradecraft.directive('badgeIconUpload', ['$parse', 'BadgeService', ($parse, BadgeService)->
+gradecraft.directive('badgeIconUpload', ['$parse', 'BadgeService', ($parse, BadgeService)->
   return {
     restrict: 'A',
     scope: {
@@ -34,7 +34,7 @@
     }
 ])
 
-@gradecraft.directive('badgeFileUpload', ['$parse', 'BadgeService', ($parse, BadgeService)->
+gradecraft.directive('badgeFileUpload', ['$parse', 'BadgeService', ($parse, BadgeService)->
   return {
     restrict: 'A',
     scope: {

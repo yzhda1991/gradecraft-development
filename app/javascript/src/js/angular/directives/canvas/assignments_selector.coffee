@@ -1,5 +1,5 @@
 # Main entry point for Canvas assignment selector
-@gradecraft.directive 'canvasAssignmentsSelector', ['CanvasImporterService', '$sce',
+gradecraft.directive 'canvasAssignmentsSelector', ['CanvasImporterService', '$sce',
   (CanvasImporterService, $sce) ->
     CanvasAssignmentsSelectorCtrl = ['$scope', ($scope) ->
       vm = this

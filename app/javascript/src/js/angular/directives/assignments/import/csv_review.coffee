@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentsImportCsvReview', ['AssignmentTypeService', 'AssignmentImporterService',
+gradecraft.directive 'assignmentsImportCsvReview', ['AssignmentTypeService', 'AssignmentImporterService',
   (AssignmentTypeService, AssignmentImporterService) ->
     AssignmentsImportCsvReviewCtrl = [()->
       vm = this

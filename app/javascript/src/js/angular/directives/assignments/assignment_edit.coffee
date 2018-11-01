@@ -1,5 +1,5 @@
 # Entry point for editing an assignment
-@gradecraft.directive 'assignmentEdit', ['$q', 'AssignmentTypeService', 'AssignmentService', 'LearningObjectivesService', ($q, AssignmentTypeService, AssignmentService, LearningObjectivesService) ->
+gradecraft.directive 'assignmentEdit', ['$q', 'AssignmentTypeService', 'AssignmentService', 'LearningObjectivesService', ($q, AssignmentTypeService, AssignmentService, LearningObjectivesService) ->
   AssignmentEditCtrl = [() ->
     vmAssignmentEdit = this
     vmAssignmentEdit.loading = true

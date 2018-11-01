@@ -1,0 +1,3 @@
+%select(ng-change="selectBadge()" ng-model="selectedBadge" ng-options="badge as badge.name for badge in level.available_badges")
+  %option.default(value="" selected disabled ng-show="availableBadges().length > 0") select a badge to add...
+  %option.default(value="" selected disabled ng-show="availableBadges().length == 0") all available badges selected

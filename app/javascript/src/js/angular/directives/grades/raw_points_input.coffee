@@ -1,6 +1,6 @@
 # standard grade raw_points input field
 
-@gradecraft.directive 'gradeRawPointsInput', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
+gradecraft.directive 'gradeRawPointsInput', ['AssignmentService', 'GradeService', (AssignmentService, GradeService) ->
 
   return {
     templateUrl: 'grades/raw_points_input.html'

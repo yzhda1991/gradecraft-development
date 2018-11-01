@@ -1,7 +1,7 @@
 # Manages state of Challenges including API calls.
 # Can be used independently, or via another service (see PredictorService)
 
-@gradecraft.factory 'ChallengeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
+gradecraft.factory 'ChallengeService', ['$http', 'GradeCraftAPI', 'GradeCraftPredictionAPI', ($http, GradeCraftAPI, GradeCraftPredictionAPI) ->
 
   challenges = []
   update = {}

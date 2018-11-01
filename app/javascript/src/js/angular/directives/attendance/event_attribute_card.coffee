@@ -1,4 +1,4 @@
-@gradecraft.directive 'attendanceEventAttributeCard', ['AttendanceService', '$timeout', (AttendanceService, $timeout) ->
+gradecraft.directive 'attendanceEventAttributeCard', ['AttendanceService', '$timeout', (AttendanceService, $timeout) ->
   {
     scope:
       event: '='

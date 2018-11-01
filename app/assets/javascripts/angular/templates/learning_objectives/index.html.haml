@@ -1,0 +1,30 @@
+%loading-message{"loading"=>"loIndexCtrl.loading", "data-message"=>"Loading..."}
+
+.learning-objective-index-container{"role"=>"tablist", "ng-if"=>"!loIndexCtrl.loading"}
+  .learning-objective-category{"id"=>"assignment-type-0", "ng-if"=>"loIndexCtrl.hasUncategorizedObjectives()"}
+    .learning-objective-category-title.collapse{"role"=>"tab"}
+      %h2.learning-objective-category-name
+        %i.fa.fa-fw.fa-chevron-circle-right
+        Uncategorized
+    .learning-objective-category-container
+      %learning-objectives-objectives-table{"data-objectives-award-points"=>"loIndexCtrl.objectivesAwardPoints"}
+
+  .learning-objective-category{"ng-repeat"=>"category in loIndexCtrl.categories()",
+                               "id"=>"assignment-type-{{category.id}}"}
+    .learning-objective-category-title.collapse{"role"=>"tab"}
+      %h2.learning-objective-category-name
+        %i.fa.fa-fw.fa-chevron-circle-right
+        {{category.name}}
+    .learning-objective-category-container{"role"=>"tabpanel"}
+      %ul.learning-objective-category-action-buttons
+        %li
+          %a{"ng-href"=>"{{loIndexCtrl.editCategoryPath(category.id)}}"} [ Edit ]
+        %li
+          %a{"ng-click"=>"loIndexCtrl.deleteCategory(category)"} [ Delete ]
+      %learning-objectives-objectives-table{"data-category"=>"category",
+                                            "data-objectives-award-points"=>"loIndexCtrl.objectivesAwardPoints"}
+
+  .box.center
+    %a{"ng-href"=>"{{loIndexCtrl.newCategoryPath}}"}
+      %i.fa.fa-plus
+      Add a new {{loIndexCtrl.termFor("learning_objective")}} Category

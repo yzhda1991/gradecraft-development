@@ -1,5 +1,5 @@
 # Main Edit form with tabbed sections
-@gradecraft.directive 'assignmentEditForm', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
+gradecraft.directive 'assignmentEditForm', ['AssignmentTypeService', 'AssignmentService', (AssignmentTypeService, AssignmentService) ->
 
   return {
     scope: {

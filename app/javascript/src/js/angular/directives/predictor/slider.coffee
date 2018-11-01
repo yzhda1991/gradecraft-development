@@ -10,7 +10,7 @@
 # functions to avoid clobbering the updates occuring outside of the slider
 # component.
 
-@gradecraft.directive 'componentSlider', [ '$timeout', 'PredictorService', ($timeout, PredictorService)->
+gradecraft.directive 'componentSlider', [ '$timeout', 'PredictorService', ($timeout, PredictorService)->
 
   return {
     scope: {

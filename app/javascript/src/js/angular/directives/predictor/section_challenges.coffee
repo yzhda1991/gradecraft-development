@@ -1,6 +1,6 @@
 # Iterates over Badges, creating a collapsable section
 
-@gradecraft.directive 'predictorSectionChallenges', [ 'PredictorService', (PredictorService)->
+gradecraft.directive 'predictorSectionChallenges', [ 'PredictorService', (PredictorService)->
 
   return {
     templateUrl: 'predictor/challenges.html'

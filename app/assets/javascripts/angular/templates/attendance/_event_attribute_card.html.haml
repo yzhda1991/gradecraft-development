@@ -1,0 +1,69 @@
+.event-card{"ng-class"=>"{'invalid': event_{{eventIndex}}.$invalid}", "ng-form"=>"event_{{eventIndex}}"}
+  .attendance-header
+    %i.fa.fa-calendar
+    %a{"ng-click"=>"editAssignment()"}
+      {{event.open_at | date:"EEEE, MMMM d yyyy"}}, {{event.open_at | date:"h:mm a"}} - {{event.due_at | date:"h:mm a"}}
+
+    %a.right.stealth_link{"ng-click"=>"deleteEvent()"}
+      %i.fa.fa-times
+
+  .form-item.slim-margin
+    %label
+      Name
+      %input{"type"=>"text",
+             "required"=>"",
+             "placeholder"=>"Title (Required)",
+             "ng-model"=>"event.name",
+             "ng-change"=>"queuePostAttendanceEvent()"}
+
+  Time
+  %span.form-error{"ng-show"=>"formErrors.length > 0"} ({{formErrors[0]}})
+
+  .form-flex-row
+    .form-item.slim-margin
+      %label
+        %span.sr-only Open At
+        %input{"gc-date-time-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"event.open_at",
+               "required"=>"",
+               "ng-change"=>"validateDates()",
+               "name"=>"open_at"}
+    %span.time-label to
+    .form-item.slim-margin
+      %label
+        %span.sr-only Due At
+        %input{"gc-date-time-input"=>"",
+               "type"=>"text",
+               "ng-model"=>"event.due_at",
+               "required"=>"",
+               "ng-change"=>"validateDates()",
+               "name"=>"due_at"}
+
+  .form-item.slim-margin
+    %label
+      Class Description
+      %textarea.event-description{"type"=>"text",
+                                  "placeholder"=>"Class Description",
+                                  "rows"=>"2",
+                                  "ng-model"=>"event.description",
+                                  "ng-change"=>"queuePostAttendanceEvent()"}
+
+  .form-item.slim-margin
+    %label{"ng-if"=>"event.full_points != null"}
+      Total Points Possible
+      %input{"type"=>"text",
+             "required"=>"",
+             "ng-model"=>"event.full_points",
+             "gc-number-input"=>"",
+             "allow-negatives"=>"false",
+             "placeholder"=>"Points",
+             "ng-change"=>"queuePostAttendanceEvent()"}
+
+  %assignment-media-uploader{"assignment"=>"event",
+                             "ng-if"=>"event.id",
+                             "hide-attachments"=>"true",
+                             "ng-cloak"=>""}
+
+  %status-message{"ng-if"=>"event.status",
+                  "ng-class"=>"saveStatusClass()"} {{event.status.message}}

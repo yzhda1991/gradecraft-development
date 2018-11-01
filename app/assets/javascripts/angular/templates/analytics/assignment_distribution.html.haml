@@ -1,0 +1,14 @@
+%h3 Grade Distribution
+
+%box-plot-scores(ng-if="!vm.loading" graph-id="assignment-distribution-graph" data="vm.data")
+#assignment-distribution-graph
+
+.small
+  %b Class Average:
+  {{vm.assignmentAverage | number }} points
+.small
+  %b Low Score:
+  {{vm.assignmentLowScore | number }} points
+.small
+  %b High Score:
+  {{vm.assignmentHighScore | number }} points

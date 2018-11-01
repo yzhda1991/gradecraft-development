@@ -1,6 +1,6 @@
 # Renders container for one criterion in a rubric
 
-@gradecraft.directive 'rubricCriterion', ['RubricService', (RubricService) ->
+gradecraft.directive 'rubricCriterion', ['RubricService', (RubricService) ->
 
   {
     templateUrl: 'rubrics/criterion.html'

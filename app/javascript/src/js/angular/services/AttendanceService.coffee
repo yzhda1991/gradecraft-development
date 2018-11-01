@@ -1,4 +1,4 @@
-@gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", "AssignmentService", "$q",
+gradecraft.factory "AttendanceService", ["$http", "GradeCraftAPI", "DebounceQueue", "AssignmentService", "$q",
 ($http, GradeCraftAPI, DebounceQueue, AssignmentService, $q) ->
 
   _lastUpdated = undefined

@@ -1,4 +1,4 @@
-@gradecraft.directive 'learningObjectivesObjectivesTable', ['LearningObjectivesService', (LearningObjectivesService) ->
+gradecraft.directive 'learningObjectivesObjectivesTable', ['LearningObjectivesService', (LearningObjectivesService) ->
   LearningObjectivesObjectivesTableCtrl = [() ->
     vm = this
     vm.newObjectivePath = if @category? then "/learning_objectives/objectives/new?category_id=#{@category.id}" else "/learning_objectives/objectives/new"

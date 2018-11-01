@@ -1,0 +1,24 @@
+%ng-form.level-items
+  %label
+    %span.sr-only Name
+    %input{"type"=>"text",
+           "ng-model"=>"loRubricLevelCtrl.level.name",
+           "placeholder"=>"Name (Required)",
+           "required"=>"",
+           "ng-blur"=>"loRubricLevelCtrl.persist()"}
+
+  %label{"ng-if"=>"loRubricLevelCtrl.levelIsSaved()"}
+    %span.sr-only Description
+    %textarea{"ng-model"=>"loRubricLevelCtrl.level.description",
+              "placeholder"=>"Description",
+              "ng-blur"=>"loRubricLevelCtrl.persist()"}
+
+  %flagged-value-selector{"ng-if"=>"loRubricLevelCtrl.levelIsSaved()"}
+    %span.sr-only Flagged Value
+    %select.flagged_values{"ng-model"=>"loRubricLevelCtrl.level.flagged_value",
+                           "ng-options"=>"fv.original_key as fv.display_string for fv in loRubricLevelCtrl.flaggedValues",
+                           "ng-blur"=>"loRubricLevelCtrl.persist()",
+                           "required"=>""}
+      %option{"value"=>""} Select a competency level
+
+  %button.delete{"type"=>"button", "ng-click"=>"loRubricLevelCtrl.delete()"} X

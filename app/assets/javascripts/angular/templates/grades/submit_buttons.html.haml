@@ -1,0 +1,3 @@
+%section.grade-submit-buttons
+  %button#submit-grade(ng-click="submitGrade(submitPath)") {{textForButton()}}
+  %button#submit-grade-next(ng-if="gradeNextPath" ng-click="submitGrade(gradeNextPath)") {{textForNextButton()}}

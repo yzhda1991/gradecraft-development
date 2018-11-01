@@ -1,5 +1,5 @@
 # Fills the Assignment details in the Article "Cards"
-@gradecraft.directive 'predictorArticleAssignmentContent', [ 'PredictorService', (PredictorService)->
+gradecraft.directive 'predictorArticleAssignmentContent', [ 'PredictorService', (PredictorService)->
 
   return {
     scope: {

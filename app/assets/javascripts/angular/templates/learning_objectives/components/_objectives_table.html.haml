@@ -1,0 +1,35 @@
+%table
+  %thead
+    %tr
+      %th{"scope"=>"col"} Name
+      %th{"scope"=>"col"} Description
+      %th{"scope"=>"col", "ng-if"=>"!loObjectivesTableCtrl.objectivesAwardPoints"} Count to Achieve
+      %th{"scope"=>"col", "ng-if"=>"loObjectivesTableCtrl.objectivesAwardPoints"} Points to Completion
+      %th.options{"scope"=>"col"} Options
+  %tbody
+    %tr{"ng-repeat"=>"objective in loObjectivesTableCtrl.objectives()"}
+      %td
+        %a{"ng-href"=>"{{loObjectivesTableCtrl.showObjectivePath(objective.id)}}"} {{objective.name}}
+      %td {{objective.description}}
+      %td{"ng-if"=>"!loObjectivesTableCtrl.objectivesAwardPoints"} {{objective.count_to_achieve}}
+      %td{"ng-if"=>"loObjectivesTableCtrl.objectivesAwardPoints"} {{objective.points_to_completion}}
+      %td
+        .button-container.dropdown
+          %button.button-edit.button-options{"role"=>"button", "type"=>"button", "aria-label"=>"Additional Options"}
+            %i.fa.fa-cog
+            %i.fa.fa-caret-down
+          %ul.options-menu.dropdown-content
+            %li
+              %a{"ng-href"=>"{{loObjectivesTableCtrl.editObjectivePath(objective.id)}}"}
+                %i.fa.fa-edit
+                Edit
+            %li
+              %a{"href"=>"", "ng-click"=>"loObjectivesTableCtrl.deleteObjective(objective)"}
+                %i.fa.fa-trash
+                Delete
+    %tr
+      %td{"colspan"=>"4"}
+        .box.center
+          %a{"ng-href"=>"{{loObjectivesTableCtrl.newObjectivePath}}"}
+            %i.fa.fa-plus
+            Add New {{loObjectivesTableCtrl.termFor("learning_objective")}}

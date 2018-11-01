@@ -1,4 +1,4 @@
-@gradecraft.directive 'assignmentPointsBarGraph', ['AssignmentService', 'AssignmentTypeService', 'GradeSchemeElementsService', (AssignmentService, AssignmentTypeService, GradeSchemeElementsService) ->
+gradecraft.directive 'assignmentPointsBarGraph', ['AssignmentService', 'AssignmentTypeService', 'GradeSchemeElementsService', (AssignmentService, AssignmentTypeService, GradeSchemeElementsService) ->
 
   return {
     scope: {

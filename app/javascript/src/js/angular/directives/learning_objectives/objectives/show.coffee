@@ -1,4 +1,4 @@
-@gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "SubmissionService", "SortableService", "orderByFilter", "$q",
+gradecraft.directive "learningObjectivesShow", ["LearningObjectivesService", "CourseService", "SubmissionService", "SortableService", "orderByFilter", "$q",
   (LearningObjectivesService, CourseService, SubmissionService, SortableService, orderBy, $q) ->
     LearningObjectivesShowCtrl = [() ->
       vm = this

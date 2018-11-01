@@ -4,7 +4,7 @@
 # see predictor for working example
 # toggles .collapse on sibling div
 # Optional: specify data-collapsed-class attr on element to override class
-@gradecraft.directive "collapseToggler", ->
+gradecraft.directive "collapseToggler", ->
   restrict : 'C',
   scope:
     collapsedClass: '@'
@@ -23,7 +23,7 @@
 #
 # opens all, or closes all, regardless of their current state
 
-@gradecraft.directive "collapseAllToggler", ->
+gradecraft.directive "collapseAllToggler", ->
   restrict : 'C',
   link: (scope, elm, attrs) ->
     elm.bind('click', ()->

@@ -1,0 +1,8 @@
+.switch-wrapper
+  .switch-socket
+    .switch-up-button{'ng-click'=>'increment()'}
+    .switch-down-button{'ng-class'=>'{"disabled": atMin()}', 'ng-click'=>'decrement()'}
+.time-earned-prediction
+  {{textForSwitch()}}
+.badge-total-prediction
+  {{textForTotal()}}

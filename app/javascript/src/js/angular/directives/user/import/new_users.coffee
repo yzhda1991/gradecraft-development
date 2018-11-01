@@ -1,5 +1,5 @@
 # Main entry point for rendering new users when importing from an LMS
-@gradecraft.directive 'newUsers', ['CanvasImporterService', (CanvasImporterService) ->
+gradecraft.directive 'newUsers', ['CanvasImporterService', (CanvasImporterService) ->
   {
     restrict: 'EA'
     templateUrl: 'user/import/new_users.html'

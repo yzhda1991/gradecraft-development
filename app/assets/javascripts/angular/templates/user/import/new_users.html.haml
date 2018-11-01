@@ -1,0 +1,37 @@
+%section.form-section
+  %h2.form-title New Users
+
+  %table.no-table-header
+    %thead
+      %tr
+        %th{"scope"=>"col"} Name
+        %th{"scope"=>"col"} Email
+        %th{"scope"=>"col"} {{vm.provider}} Roles (Enrollment State)
+        %th{"scope"=>"col"} GradeCraft Role
+        %th{"scope"=>"col"} User Exists?
+        %th
+          %button.button.select-all{"role"=>"button",
+                                    "type"=>"button",
+                                    "ng-click"=>"selectNewUsers()"}= "Check"
+          %button.button.select-none{"role"=>"button",
+                                     "type"=>"button",
+                                     "ng-click"=>"deselectNewUsers()"}= "Uncheck"
+    %tbody
+      %tr{"ng-if"=>"newUsers().length < 1"}
+        %td{"colspan"=>"6"} None
+
+      %tr{"ng-if"=>"newUsers().length > 0", "ng-repeat"=>"user in newUsers()"}
+        %td {{user.name}}
+        %td {{user.email}}
+        %td
+          %ul
+            %li{"ng-repeat"=>"enrollment in user.enrollments"} {{enrollment.role}} ({{enrollment.enrollment_state}})
+        %td
+          %span.capitalize {{user.gradecraft_role}}
+        %td {{termForUserExists(user.user_exists)}}
+        %td.center
+          %input{"type"=>"checkbox",
+                 "name"=>"user_ids[]",
+                 "value"=>"{{user.id}}",
+                 "ng-model"=>"user.selected_for_import",
+                 "ng-required"=>"!hasSelectedUsers()"}

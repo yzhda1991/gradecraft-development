@@ -1,4 +1,4 @@
-@gradecraft.directive "trialAccountForm", [() ->
+gradecraft.directive "trialAccountForm", [() ->
   {
     scope:
       isTrialAccount: "="

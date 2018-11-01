@@ -1,4 +1,4 @@
-@gradecraft.factory 'TeamService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'TeamService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   teams = []
   _teamTerm = "Team"

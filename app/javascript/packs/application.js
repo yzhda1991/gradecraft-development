@@ -13,7 +13,6 @@ function requireAll(r) {
   r.keys().forEach(r);
 }
 
-import "jquery";
 import "angular";
 import "ngdraggable"
 import "restangular"
@@ -26,8 +25,13 @@ import "ng-rollbar"
 
 import "../src/js/angular/ui/sortable.js"
 import "../src/js/angular/helpers/angular-froala.js"
-requireAll(require.context("../src/js/angular/helpers", true, /\.(js$|coffee$)/));  // helpers directory
-requireAll(require.context("../src/js/angular/vendor", true, /\.(js$|coffee$)/)); // vendor directory
-import "../src/js/angular/main.coffee"
+
+import "../main.coffee"
+requireAll(require.context("../src/js/angular/vendor", true, /\.(js$|coffee$)/));
+requireAll(require.context("../src/js/angular/helpers", true, /\.(js$|coffee$)/));
+requireAll(require.context("../src/js/angular/services", true, /\.(js$|coffee$)/));
+// requireAll(require.context("../src/js/angular/directives", true, /\.(js$|coffee$)/));
+
+import "../src/js/angular/directives/analytics/weekly_stats"
 
 console.log('Hello World from Webpacker')

@@ -1,4 +1,4 @@
-@gradecraft.factory 'UnlockConditionService', ['$http', 'DebounceQueue', 'GradeCraftAPI', ($http, DebounceQueue, GradeCraftAPI) ->
+gradecraft.factory 'UnlockConditionService', ['$http', 'DebounceQueue', 'GradeCraftAPI', ($http, DebounceQueue, GradeCraftAPI) ->
 
   unlockableId = null
   unlockableType = null

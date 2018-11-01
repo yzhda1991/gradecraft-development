@@ -1,5 +1,5 @@
 # Main directive for the student side panel
-@gradecraft.directive 'studentPanel', [ 'StudentPanelService', (StudentPanelService)->
+gradecraft.directive 'studentPanel', [ 'StudentPanelService', (StudentPanelService)->
 
   return {
     scope: {

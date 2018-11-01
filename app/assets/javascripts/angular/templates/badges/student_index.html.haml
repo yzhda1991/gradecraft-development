@@ -1,0 +1,16 @@
+.student-panel-wrap
+  #student-main-column.student-flex-col
+
+    %loading-message{'loading'=>'vm.loading', 'message'=>"Loading Badges..."}
+
+    .badge-index-section
+      .badge-icon-container{'ng-repeat'=>'badge in vm.badges', 'ng-class'=>'{"focus-article": vm.isFocusArticle(badge)}'}
+        %a.mobile-click{:href => "badges/{{badge.id}}"}
+        .img-cropper.med-crop
+          %img{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'badge-icon unearned' : 'badge-icon')", 'ng-src'=>'{{badge.icon}}', 'ng-click'=>'vm.changeFocusArticle(badge)'}
+        %p.badge-name {{badge.name}}
+        .gold-stars{'ng-class'=>"(badge.earned_badge_count <= 0 ? 'unearned' : 'earned')"}
+          %i.fa.fa-fw.fa-star
+            .earned-count {{badge.earned_badge_count}}
+
+  %student-panel.student-panel.badge-panel.student-flex-col{'context'=>'"badges"'}

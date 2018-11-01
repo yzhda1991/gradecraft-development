@@ -15,7 +15,7 @@
 # We would have to map all boolean attributes back to those on the server, and
 # also update the predictor service to handle state logic.
 
-@gradecraft.directive 'assignmentSetting', ['AssignmentService', (AssignmentService) ->
+gradecraft.directive 'assignmentSetting', ['AssignmentService', (AssignmentService) ->
 
   return {
     scope: {

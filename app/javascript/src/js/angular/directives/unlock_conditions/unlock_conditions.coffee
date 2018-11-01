@@ -1,4 +1,4 @@
-@gradecraft.directive 'unlockConditions', ['UnlockConditionService', (UnlockConditionService) ->
+gradecraft.directive 'unlockConditions', ['UnlockConditionService', (UnlockConditionService) ->
   unlockConditionsCtrl = [()->
     vmUnlocks = this
     vmUnlocks.loading = true

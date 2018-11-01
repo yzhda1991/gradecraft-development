@@ -1,6 +1,6 @@
 # Takes an Assignment, Badge, or Challenge and presents the detailed information
 # in the student side panel.
-@gradecraft.directive 'studentPanelArticle',
+gradecraft.directive 'studentPanelArticle',
 ['StudentPanelService', "PredictorService", (StudentPanelService, PredictorService)->
 
   return {

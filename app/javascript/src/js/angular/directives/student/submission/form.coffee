@@ -1,7 +1,7 @@
 # Controls the URL on the standard HTML form based on the existence of a submission
 # If there is an autosaved submission, the URL will point to the Create action
 # Otherwise, Update
-@gradecraft.directive 'studentSubmissionForm',
+gradecraft.directive 'studentSubmissionForm',
 ['StudentSubmissionService', (StudentSubmissionService) ->
 
   StudentSubmissionFormCtrl = [() ->

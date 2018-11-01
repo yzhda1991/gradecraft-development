@@ -1,6 +1,6 @@
 # Handles uploading files attached to grades
 
-@gradecraft.directive 'gradeFileUploader', ['GradeService', (GradeService) ->
+gradecraft.directive 'gradeFileUploader', ['GradeService', (GradeService) ->
   UploadCtrl = [()->
     vm = this
     vm.fileUploads = GradeService.fileUploads
@@ -19,7 +19,7 @@
 ]
 
 # adapted from https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
-@gradecraft.directive('fileUpload', ['$parse', 'GradeService', ($parse, GradeService)->
+gradecraft.directive('fileUpload', ['$parse', 'GradeService', ($parse, GradeService)->
   return {
     restrict: 'A',
     link: (scope, element, attrs)->

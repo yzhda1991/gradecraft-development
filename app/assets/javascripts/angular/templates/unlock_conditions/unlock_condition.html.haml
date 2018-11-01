@@ -1,0 +1,71 @@
+.unlock-condition-requirement(ng-class='{"valid" : conditionIsValid(condition)}')
+  %label Requirement
+  %select(ng-model="condition.condition_type" name="condition_type" ng-change="changeConditionType(condition)")
+    %option(ng-repeat="type in conditionTypes" ng-selected="conditionsTypeTranslation(type) == condition.condition_type" value="{{conditionsTypeTranslation(type)}}")
+      {{termFor(type)}}
+
+.unlock-condition-parameters(ng-if="condition.condition_type=='Assignment'")
+  %label
+    {{ termFor("assignment") }}
+    %span.required-label(ng-if="!condition.condition_id") *required
+  %select(ng-model="condition.condition_id" name="condition_id" ng-change="updateCondition()")
+    %option(ng-repeat="assignment in assignments" ng-selected="assignment.id == condition.condition_id" value="{{assignment.id}}")
+      {{assignment.name}}
+  %label
+    State Achieved
+    %span.required-label(ng-if="!condition.condition_state") *required
+  %select(ng-model="condition.condition_state" ng-change="updateCondition()")
+    %option(ng-repeat="state in assignmentStates(condition.condition_id)"  ng-selected="state == condition.condition_state" value="{{state}}")
+      {{state}}
+  %label Minimum Points Earned
+  %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
+  %label Completed By Date
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+
+.unlock-condition-parameters(ng-if="condition.condition_type=='Badge'")
+  %label
+    {{ termFor("badge") }}
+    %span.required-label(ng-if="!condition.condition_id") *required
+  %select(ng-model="condition.condition_id" name="condition_id" ng-change="updateCondition()")
+    %option(ng-repeat="badge in badges" ng-selected="badge.id == condition.condition_id" value="{{badge.id}}")
+      {{badge.name}}
+  %label
+    Number of Times Earned
+    %span.required-label(ng-if="!condition.condition_value") *required
+  %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
+  %label Completed By Date
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+
+.unlock-condition-parameters(ng-if="condition.condition_type=='Course'")
+  %label
+    Minimum Points Earned
+    %span.required-label(ng-if="!condition.condition_value") *required
+  %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
+  %label Completed By Date
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+
+.unlock-condition-parameters(ng-if="condition.condition_type=='AssignmentType'")
+  %label
+    {{ termFor("assignment_type") }}
+    %span.required-label(ng-if="!condition.condition_id") *required
+  %select(ng-model="condition.condition_id" name="condition_id" ng-change="updateCondition()")
+    %option(ng-repeat="assignmentType in assignmentTypes" ng-selected="assignmentType.id == condition.condition_id" value="{{assignmentType.id}}")
+      {{assignmentType.name}}
+  %label
+    State Achieved
+    %span.required-label(ng-if="!condition.condition_state") *required
+  %select(ng-model="condition.condition_state" ng-change="updateCondition()")
+    %option(ng-repeat="state in assignmentTypeStates"  ng-selected="state == condition.condition_state" value="{{state}}")
+      {{state}}
+  %label(ng-if="condition.condition_state == 'Assignments Completed'")
+    Number of {{termFor("assignments")}}
+    %span.required-label(ng-if="condition.condition_value == null") *required
+  %label(ng-if="condition.condition_state != 'Assignments Completed'")
+    Amount
+    %span.required-label(ng-if="condition.condition_value == null") *required
+  %input(ng-model="condition.condition_value" gc-number-input ng-change="updateCondition()")
+  %label Completed By Date
+  %input(id="{{datePickerId(condition)}}" ng-model="condition.condition_date" gc-date-time-input ng-change="updateCondition()")
+
+%button.delete(ng-click="removeCondition()")
+  X

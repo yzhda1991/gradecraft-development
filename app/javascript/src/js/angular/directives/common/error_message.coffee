@@ -2,7 +2,7 @@
 # See usage in templates, example:
 # %error-message{'visible'=>'{{hasError}}', 'message'=>"Unable to load the things"}
 
-@gradecraft.directive 'errorMessage', [()->
+gradecraft.directive 'errorMessage', [()->
   {
     scope:
       visible: '='

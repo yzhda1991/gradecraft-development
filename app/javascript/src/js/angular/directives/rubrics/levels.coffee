@@ -1,6 +1,6 @@
 # Iterates through levels in a criterion
 
-@gradecraft.directive 'rubricCriterionLevels', ['RubricService', (RubricService) ->
+gradecraft.directive 'rubricCriterionLevels', ['RubricService', (RubricService) ->
 
   return {
     templateUrl: 'rubrics/levels.html'

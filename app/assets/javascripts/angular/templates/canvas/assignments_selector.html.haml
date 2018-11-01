@@ -1,0 +1,30 @@
+%canvas-course-selector{"provider"=>"{{vm.provider}}"}
+
+%section.form-section
+  %h2.form-title Assignments
+  .form-item
+    %table.no-table-header
+      %thead
+        %tr
+          %th{"scope"=>"col"} Name
+          %th{"scope"=>"col"} Description
+          %th{"scope"=>"col"} Due
+          %th{"scope"=>"col"} Points
+          %th{"scope"=>"col"}
+      %tbody
+        %tr{"ng-if"=>"vm.loading"}
+          %td.center{"colspan"=>"5"}
+            %i.fa.fa-spinner.fa-spin.fa-fw
+            Loading assignments..
+        %tr{"ng-if"=>"!vm.loading", "ng-repeat"=>"assignment in vm.assignments"}
+          %td {{assignment.name}}
+          %td{"ng-bind-html"=>"sanitize(assignment.description)"}
+          %td {{assignment.due_at}}
+          %td {{assignment.points_possible}}
+          %td
+            .right
+              %ul.button-bar
+                %li
+                  %a{"href"=>"{{vm.pathForAssignment(assignment.id)}}", "class"=>"button"}
+                    %i.fa.fa-download
+                    Import Grades for this assignment

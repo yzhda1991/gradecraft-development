@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', [
+window.gradecraft = angular.module('gradecraft', [
   'ngAnimate',
   'ngDragDrop',
   'ngDraggable',
@@ -15,19 +15,21 @@
   'tandibar/ng-rollbar'
 ])
 
-@gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
+angular.module("templates", [])
 
-@gradecraft.config(['$compileProvider', ($compileProvider)->
+gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
+
+gradecraft.config(['$compileProvider', ($compileProvider)->
   $compileProvider.debugInfoEnabled(false)
 ])
 
-@gradecraft.config(['$ariaProvider', ($ariaProvider)->
+gradecraft.config(['$ariaProvider', ($ariaProvider)->
   $ariaProvider.config({
     ariaRequired: false
   })
 ]);
 
-@gradecraft.config(['RollbarProvider', (RollbarProvider) ->
+gradecraft.config(['RollbarProvider', (RollbarProvider) ->
   _config = angular.element("rollbar-js")[0]
   _token = if _config? then _config.getAttribute("data-client-token") else "POST_CLIENT_ITEM_ACCESS_TOKEN"
   _environment = if _config? then _config.getAttribute("data-environment") else "unknown"
@@ -43,7 +45,7 @@
   })
 ])
 
-@gradecraft.directive "modalDialog", ->
+gradecraft.directive "modalDialog", ->
   restrict: "E"
   scope:
     show: "="
@@ -63,7 +65,7 @@
   template: "..." # See below
 
 INTEGER_REGEXP = /^\-?\d+$/
-@gradecraft.directive "integer", ->
+gradecraft.directive "integer", ->
   require: "ngModel"
   link: (scope, elm, attrs, ctrl) ->
     ctrl.$parsers.unshift (viewValue) ->
@@ -78,7 +80,7 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
 
 FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
-@gradecraft.directive "smartFloat", ->
+gradecraft.directive "smartFloat", ->
   require: "ngModel"
   link: (scope, elm, attrs, ctrl) ->
     ctrl.$parsers.unshift (viewValue) ->
@@ -91,7 +93,7 @@ FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
 
     return
 
-@gradecraft.directive "ngMax", ->
+gradecraft.directive "ngMax", ->
   require: "ngModel"
   link: (scope, elm, attr, ctrl) ->
     ctrl.$parsers.unshift (viewValue) ->
@@ -108,7 +110,7 @@ FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
 
     return
 
-@gradecraft.directive "ngOnscreen", ->
+gradecraft.directive "ngOnscreen", ->
   require: "ngModel"
   link: (scope, elm, attr, ctrl) ->
     ctrl.$parsers.unshift (viewValue) ->
@@ -124,7 +126,7 @@ FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
     return
 
 
-@gradecraft.filter 'list', ['$sce', ($sce)->
+gradecraft.filter 'list', ['$sce', ($sce)->
   (input)->
     if typeof(input) == "string"
       return $sce.trustAsHtml(input)
@@ -132,7 +134,7 @@ FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
       return $sce.trustAsHtml("<ul><li>" + input.join('</li><li>') + "</li></ul>")
 ]
 
-@gradecraft.filter 'html', ['$sce', ($sce)->
+gradecraft.filter 'html', ['$sce', ($sce)->
   (val) ->
     return $sce.trustAsHtml val
 ]

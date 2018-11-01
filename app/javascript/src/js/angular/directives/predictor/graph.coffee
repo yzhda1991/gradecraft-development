@@ -2,7 +2,7 @@
 # Must not render until Grade Scheme Elements are loaded,
 # to position high and low point ranges.
 
-@gradecraft.directive 'predictorGraph', [ '$window', 'PredictorService', 'DebounceQueue',  ($window, PredictorService, DebounceQueue)->
+gradecraft.directive 'predictorGraph', [ '$window', 'PredictorService', 'DebounceQueue',  ($window, PredictorService, DebounceQueue)->
 
   return {
     templateUrl: 'predictor/graph.html'

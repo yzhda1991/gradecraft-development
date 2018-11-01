@@ -1,4 +1,4 @@
-@gradecraft.directive 'gcNumberInput', ['$filter', ($filter) ->
+gradecraft.directive 'gcNumberInput', ['$filter', ($filter) ->
   return {
     scope: {
       allowNegatives: "="

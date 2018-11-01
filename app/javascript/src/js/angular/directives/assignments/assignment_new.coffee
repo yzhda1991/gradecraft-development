@@ -1,6 +1,6 @@
 # Entry point for a new assignment. Once the assignment is
 # created, the edit form is disiplayed
-@gradecraft.directive 'assignmentNew', ['AssignmentTypeService', 'AssignmentService', 'LearningObjectivesService', '$q', (AssignmentTypeService, AssignmentService, LearningObjectivesService, $q) ->
+gradecraft.directive 'assignmentNew', ['AssignmentTypeService', 'AssignmentService', 'LearningObjectivesService', '$q', (AssignmentTypeService, AssignmentService, LearningObjectivesService, $q) ->
   AssignmentNewCtrl = [() ->
     vmAssignmentNew = this
     vmAssignmentNew.loading = true

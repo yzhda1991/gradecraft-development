@@ -1,4 +1,4 @@
-@gradecraft.factory 'AnalyticsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'AnalyticsService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
 
   # We could add an indication if this has already loaded, or is loading,
   # to limit it to one call to the API, and put the directives in waiting pattern.

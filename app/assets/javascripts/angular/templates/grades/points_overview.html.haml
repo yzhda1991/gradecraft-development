@@ -1,0 +1,22 @@
+.points-overview-container(ng-if="gradeType == 'RUBRIC'")
+  #points-overview-floating
+    %h4#points-legend
+      %span.points-assigned(ng-class="{'points-missing': pointsAreLessThanFull(), 'points-satisfied': pointsAreSatisfied(), 'points-overage': pointsAreOver()}") {{ finalPoints() | number:0 }} Points
+
+    %h4.notice(ng-show="!pointsArePresent()") You have not yet allocated any points
+    %h4.notice(ng-show="pointsArePresent()") {{ grade.raw_points | number:0 }} / {{ assignment().full_points | number:0 }} Points Allocated
+
+    %h4.notice(ng-show="pointsAreLessThanFull()") {{ pointsBelowFull() | number:0 }} points {{ pointsRemaining() > 1 ? "s" : "" }} have not been assigned
+    %h4.notice(ng-show="pointsAreSatisfied() || pointsAreOver()") You have allocated all possible points
+    %h4.notice(ng-show="isBelowThreshold()") {{ pointsBelowThreshold() | number:0 }} points below the threshold
+
+    %h4.notice.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}" ng-show="adjustmentPoints() != 0") You have adjusted the total by {{adjustmentPoints()}} points
+
+.lower-points-summary(ng-if="gradeType == 'STANDARD_ASSIGNMENT'")
+  %h2.grade-form-header Points Summary
+  %p(ng-show="pointsArePresent()") Awarded Points: {{ grade.raw_points | number:0 }} / {{ assignment().full_points | number:0 }}
+  %p.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}") Adjusted Points: {{adjustmentPoints()}}
+  %p(ng-show="isBelowThreshold()") Points below the threshold: {{ pointsBelowThreshold() | number:0 }}
+  %hr.grading-divider
+  %p.total-points-score(ng-show="pointsArePresent()") Total Points: {{ finalPoints() | number:0 }} / {{ assignment().full_points | number:0 }}
+

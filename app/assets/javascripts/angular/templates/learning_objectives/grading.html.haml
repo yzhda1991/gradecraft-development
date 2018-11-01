@@ -1,0 +1,25 @@
+%section.objective-overview{"ng-if"=>"loGradingCtrl.objectives().length > 0"}
+  %h3.sr-only {{loGradingCtrl.termFor("learning_objectives")}}
+  #rubric-grade-edit.rubric.edit
+    .rubric-hint (click to select the completed {{loGradingCtrl.termFor("learning_objectives")}})
+    .criterion{"ng-repeat"=>"objective in loGradingCtrl.objectives()"}
+      .criterion-heading
+        %h4.criterion-name {{objective.name}}
+        %p.criterion-description {{objective.description}}
+
+      %ul.level-tabs
+        %li.level-tab{"ng-repeat"=>"level in loGradingCtrl.levelsFor(objective)",
+                      "ng-click"=>"loGradingCtrl.selectLevel(objective.id, level.id)",
+                      "ng-class"=>"{ selected: loGradingCtrl.levelSelected(objective.id, level.id) }"}
+          .level-heading
+            .level-details
+              .level-name {{level.name}}
+
+          .level-description
+            .level-flagged-value{"ng-class"=>"level.flagged_value"} {{level.readable_flagged_value}}
+            {{level.description}}
+
+      .comments-box
+        %textarea{"ng-model"=>"loGradingCtrl.outcomeFor(objective.id).comments",
+                  "ng-blur"=>"loGradingCtrl.queueUpdateObjectiveOutcome(objective.id)",
+                  "froala"=>"loGradingCtrl.froalaOptions"}

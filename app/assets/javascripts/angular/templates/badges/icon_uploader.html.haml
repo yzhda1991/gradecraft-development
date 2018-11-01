@@ -1,0 +1,42 @@
+.form-item
+  %label
+    Icon
+    %input.icon-upload-button(ng-if="badge.default_url"  type="file" badge-icon-upload="iconFile" badge-id="badge.id")
+  .form-hint Badges appear in different sizes in GradeCraft. Recommended size is 150px x 150px or larger.
+  .preview-wrapper
+    .icon-preview.large-preview
+      .img-cropper.large-crop
+        %img(ng-src="{{badge.icon}}")
+      %span.xaxis-label 150px
+      %span.yaxis-label 150px
+    .icon-preview.medium-preview
+      .img-cropper.med-crop
+        %img(ng-src="{{badge.icon}}")
+      %span.xaxis-label 80px
+      %span.yaxis-label 80px
+    .icon-preview.small-preview
+      .img-cropper.small-crop
+        %img(ng-src="{{badge.icon}}")
+      %span.xaxis-label 40px
+      %span.yaxis-label 40px
+      %button.remove-unlock-condition(ng-if="!badge.default_url" ng-click="removeIcon()")
+        %i.fa.fa-fw.fa-times
+
+.form-item
+  %label
+    Attachments
+    %input.file-upload-button(type="file" multiple="true" badge-file-upload="badgeFiles" badge-id="badge.id")
+
+%ul.file-attachments-list(ng-if='fileUploads.length > 0')
+  %li(ng-repeat='file in fileUploads')
+    .file-attachment-list-item
+      .file-attachment-delete-button(ng-if='!file.deleting')
+        .no-hover-state
+          %i.fa.fa-check.fa-fw
+        .hover-state
+          %i.fa.fa-times.fa-fw(ng-click="deleteFile(file)")
+        {{ file.filename }}
+      .file-attachment-delete-button(ng-if='file.deleting')
+        %i.fa.fa-spinner.fa-fw
+        {{ file.filename }}
+

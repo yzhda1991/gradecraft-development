@@ -1,5 +1,5 @@
 # Main Edit form with tabbed sections
-@gradecraft.directive 'badgeEditForm', ['BadgeService', (BadgeService) ->
+gradecraft.directive 'badgeEditForm', ['BadgeService', (BadgeService) ->
 
   return {
     scope: {

@@ -1,6 +1,6 @@
 # Manages state for the student side panel.
 
-@gradecraft.factory 'StudentPanelService', [ 'GradeCraftAPI', (GradeCraftAPI)->
+gradecraft.factory 'StudentPanelService', [ 'GradeCraftAPI', (GradeCraftAPI)->
 
   termFor = (article)->
     GradeCraftAPI.termFor(article)

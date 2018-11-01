@@ -7,7 +7,7 @@
 
 # e.g.
 #   %th.sortable-header{"data-sortable-header-text"=>"First Name", "data-sortable-predicate"=>"first_name"}
-@gradecraft.directive 'sortableHeader', ['SortableService', (SortableService) ->
+gradecraft.directive 'sortableHeader', ['SortableService', (SortableService) ->
   SortableHeader = [() ->
     vm = this
 

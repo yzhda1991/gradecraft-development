@@ -1,4 +1,4 @@
-@gradecraft.directive "learningObjectivesLinkedAssignmentsInput", ["LearningObjectivesService", "AssignmentService", "$timeout", (LearningObjectivesService, AssignmentService, $timeout) ->
+gradecraft.directive "learningObjectivesLinkedAssignmentsInput", ["LearningObjectivesService", "AssignmentService", "$timeout", (LearningObjectivesService, AssignmentService, $timeout) ->
   {
     scope:
       objective: "="

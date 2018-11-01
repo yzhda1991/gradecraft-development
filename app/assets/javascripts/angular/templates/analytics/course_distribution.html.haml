@@ -1,0 +1,26 @@
+.card-header
+  %h2 Points Distribution
+.card-body
+  .empty-state(ng-if="!vm.loading && !vm.courseAverage > 0")
+    .empty-state-wrapper
+      = image_tag "no-grades-yet.svg", alt: "rocketship", class: "empty-state-graphic"
+    %p.empty-state-text No grades have been earned yet!
+
+  .box-plot-wrapper(ng-if="vm.courseAverage > 0")
+    %box-plot-scores(ng-if="!vm.loading" graph-id="course-distribution-graph" data="vm.data")
+    #course-distribution-graph
+
+    .small(ng-if="vm.userScore")
+      %b Your Score:
+      {{vm.userScore | number }} points
+    .small
+      %b Class Average:
+      {{vm.courseAverage | number }} points
+    .small
+      %b Low Score:
+      {{vm.courseLowScore | number }} points
+    .small
+      %b High Score:
+      {{vm.courseHighScore | number }} points
+    .small
+      %a.italic(href="http://www.youtube.com/watch?v=7UK2DK7rblw&feature=youtu.be" title="How do I read this chart?" target="_blank") How do I read this chart?

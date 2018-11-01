@@ -1,0 +1,31 @@
+#predictor-main-header
+  .predictor-section-title
+    .predictor-section-title-predicted-points
+      .predictor-title-right-span
+        Unused {{vm.termFor("weights")}} :
+      .predictor-section-title-weights
+        .coin-stack
+          .coin{'ng-repeat' => 'coin in vm.unusedWeightsRange()'}
+          .coin-stack-count {{vm.unusedWeightsRange().length}}
+
+
+
+%div{'ng-repeat' => 'assignmentType in vm.assignmentTypes'}
+  %section.predictor-section{{'ng-if'=>'assignmentType.student_weightable'}}
+
+    .predictor-section-title{'ng-class'=>'{"status-max-points": vm.assignmentTypeAtMaxPoints(assignmentType)}'}
+      .predictor-section-title-name
+        {{assignmentType.name}}
+      %weighted-total-points.weighted-total-points{{'article'=>'assignmentType'}}
+      .predictor-section-title-predicted-points{{'ng-class'=>'{"weightable":assignmentType.student_weightable}'}}
+
+        .predictor-section-title-weights
+          %weights-coin-widget.weights-coin-widget{{'article'=>'assignmentType'}}
+          .weighted-earned-points{{'article'=>'assignmentType'}}
+
+        .predictor-excess-points{'ng-if'=>'vm.assignmentTypeAtMaxPoints(assignmentType)'}
+          .assignment-type-tooltip.icon
+            %span.has-tooltip
+              %i.fa.fa-fw.fa-exclamation-circle
+              .display-on-hover.hover-style
+                You've predicted {{vm.assignmentTypePointExcess(assignmentType) | number}} more points than you are allowed to earn for this {{vm.termFor("assignmentType")}}!

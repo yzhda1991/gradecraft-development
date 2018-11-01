@@ -1,0 +1,39 @@
+.scroll-table
+  .table-wrapper
+    %table
+      %caption.sr-only Gradebook
+      %thead
+        %tr
+          %th{"scope"=>"col"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('first_name')"} First name
+          %th{"scope"=>"col"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('last_name')"} Last name
+          %th{"scope"=>"col", "ng-repeat"=>"assignment in vm.assignments"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('scores', $index)"} {{assignment.name}}
+          %th{"scope"=>"col", "ng-if"=>"vm.hasBadges"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('badge_score')"} {{vm.termFor("badge")}} Score
+          %th{"scope"=>"col"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('total_score')"} Total Score
+          %th{"scope"=>"col"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('final_grade')"} Final Grade
+          %th{"scope"=>"col"}
+            %a{"href"=>"#!", "ng-click"=>"sortBy('full_name')"} {{vm.termFor("student")}}
+      %tbody
+        %tr{"ng-repeat"=>"student in vm.students | orderBy:propertyName:reverse"}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.first_name}}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.last_name}}
+          %td{"ng-repeat"=>"score in student.scores"}
+            %a{"ng-click"=>"vm.showGrade(score.grade_link)", "ng-if"=>"score.grade_link"} {{score.value}}
+            %span{"ng-if"=>"!score.grade_link"} {{score.value}}
+          %td {{student.badge_score}}
+          %td {{student.total_score}}
+          %td {{student.final_grade}}
+          %td
+            %a{"href"=>"{{student.student_link}}"} {{student.full_name}}
+
+        %tr{"ng-if"=>"vm.loading"}
+          %td{"colspan"=>"{{6 + vm.assignments.length}}"}
+            %i.fa.fa-spinner.fa-spin.fa-fw
+            Loading grades..

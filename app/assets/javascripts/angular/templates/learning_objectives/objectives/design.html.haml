@@ -1,0 +1,36 @@
+%loading-message{"data-loading"=>'loObjectivesDesignCtrl.loading',
+                 "data-message"=>"Loading..."}
+
+%learning-objectives{"ng-if"=>"!loObjectivesDesignCtrl.loading"}
+  .italic
+    %return-link{"ng-if"=>"loObjectivesDesignCtrl.hasSavedObjectives()"}
+      %a{"ng-href"=>"{{loObjectivesDesignCtrl.indexRoute}}", "class"=>"return-link"}
+        %i.fa.fa-angle-double-left
+        Return to {{loObjectivesDesignCtrl.termFor("learning_objectives")}}
+      –
+      %span Changes are saved automatically.
+      #last-updated{"ng-if"=>"loObjectivesDesignCtrl.lastUpdated() != null"}
+        Last Updated: {{loObjectivesDesignCtrl.lastUpdated() | date:"MM/dd/yyyy 'at' h:mma"}}
+
+  #criterion-box.learning-objectives{"ng-form"=>"learningObjectivesDesignForm"}
+    .rubric-container.divider{"ng-repeat"=>"objective in loObjectivesDesignCtrl.objectives()"}
+      %learning-objectives-rubric-objective{"data-objective"=>"objective",
+                                            "data-objectives-award-points"=>"loObjectivesDesignCtrl.objectivesAwardPoints",
+                                            "data-delete-route"=>"loObjectivesDesignCtrl.indexRoute",
+                                            "data-allow-deletion"=>"loObjectivesDesignCtrl.objectiveId || loObjectivesDesignCtrl.loadExisting",
+                                            "ng-form"=>"objective_form_{{$index}}"}
+
+      %learning-objectives-linked-assignments-input{"data-objective"=>"objective", "ng-if"=>"objective.id"}
+
+  .main-buttons
+    %a.button{"type"=>"button",
+              "ng-if"=>"loObjectivesDesignCtrl.loadExisting && !loObjectivesDesignCtrl.objectiveId",
+              "ng-click"=>"loObjectivesDesignCtrl.addObjective()"}
+      %i.fa.fa-plus
+      Add {{loObjectivesDesignCtrl.termFor("learning_objective")}}
+    %a.button{"type"=>"button",
+              "ng-click"=>"learningObjectivesDesignForm.$valid && loObjectivesDesignCtrl.persistChanges()",
+              "ng-disabled"=>"loObjectivesDesignCtrl.objectives().length < 1 || learningObjectivesDesignForm.$invalid",
+              "ng-class"=>'{ "disabled": loObjectivesDesignCtrl.objectives().length < 1 || learningObjectivesDesignForm.$invalid }'}
+      %i.fa.fa-save
+      Save Changes

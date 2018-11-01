@@ -27,7 +27,7 @@ There are several ways we can create a directive, with a controller, with a link
 Here is an example directive with a controller, see below for an analysis of the different parts
 
 ```
-@gradecraft.directive 'myAwesomeGraph', ['$q', 'AwesomeService', ($q, AwesomeService) ->
+gradecraft.directive 'myAwesomeGraph', ['$q', 'AwesomeService', ($q, AwesomeService) ->
 
     awesomeController = [()->
       vm = this
@@ -61,7 +61,7 @@ Here is an example directive with a controller, see below for an analysis of the
 
 First we define the new directive, and list the dependencies.
 
-`@gradecraft.directive 'myAwesomeGraph', ['$q', 'AwesomeService', ($q, AwesomeService) ->`
+`gradecraft.directive 'myAwesomeGraph', ['$q', 'AwesomeService', ($q, AwesomeService) ->`
 
 The strange syntax, with strings followed by values: `'$q', 'AwesomeService', ($q, AwesomeService)` assures us that the names of the variables won't get lost in minification.
 

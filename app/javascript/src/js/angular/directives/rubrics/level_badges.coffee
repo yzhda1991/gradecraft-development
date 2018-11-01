@@ -1,7 +1,7 @@
 # Display ofbadges earned for level
 # Includes modal for awarding earned badges on rubric level
 
-@gradecraft.directive 'rubricLevelBadges', ['RubricService', 'BadgeService', (RubricService, BadgeService) ->
+gradecraft.directive 'rubricLevelBadges', ['RubricService', 'BadgeService', (RubricService, BadgeService) ->
 
   return {
     templateUrl: 'rubrics/level_badges.html'

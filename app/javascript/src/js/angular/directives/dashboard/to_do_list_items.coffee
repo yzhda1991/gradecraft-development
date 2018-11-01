@@ -1,4 +1,4 @@
-@gradecraft.directive "dashboardToDoListItems", ["DashboardService", "$sce", (DashboardService, $sce) ->
+gradecraft.directive "dashboardToDoListItems", ["DashboardService", "$sce", (DashboardService, $sce) ->
   DashboardToDoListItemsCtrl = [() ->
     vm = this
     vm.data = DashboardService.dueThisWeekData

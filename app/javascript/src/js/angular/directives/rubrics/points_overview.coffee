@@ -1,6 +1,6 @@
 # Hovering synopsis of the rubric points assigned
 
-@gradecraft.directive 'rubricPointsOverview', ['RubricService', 'AssignmentService', (RubricService, AssignmentService) ->
+gradecraft.directive 'rubricPointsOverview', ['RubricService', 'AssignmentService', (RubricService, AssignmentService) ->
 
   {
     templateUrl: 'rubrics/points_overview.html'

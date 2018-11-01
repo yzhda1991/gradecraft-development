@@ -1,0 +1,7 @@
+.grade{'id'=>'assignment-{{article.id}}-level'}
+  .value
+    %input.predicted-points{'gc-number-input'=>'', 'ng-change'=>'registerInputChanging()', 'ng-blur'=>'registerInput()', 'ng-model'=>'article.prediction.predicted_points', 'pu-elastic-input'=>""}
+    %span.divider=" / "
+    %span.full-points {{article.full_points | number}}
+  .name
+    {{levelNameForArticleScore(article)}}

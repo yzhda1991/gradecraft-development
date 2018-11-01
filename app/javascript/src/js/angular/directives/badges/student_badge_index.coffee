@@ -1,4 +1,4 @@
-@gradecraft.directive 'studentBadgeIndex', ['$q', 'BadgeService', 'StudentPanelService', ($q, BadgeService, StudentPanelService) ->
+gradecraft.directive 'studentBadgeIndex', ['$q', 'BadgeService', 'StudentPanelService', ($q, BadgeService, StudentPanelService) ->
   BadgeCtrlr = [()->
     vm = this
 

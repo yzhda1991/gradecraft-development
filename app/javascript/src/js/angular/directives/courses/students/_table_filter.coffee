@@ -1,4 +1,4 @@
-@gradecraft.directive "coursesStudentsIndexTableFilter", ["SortableService", "StudentService", "orderByFilter", (SortableService, StudentService, orderBy) ->
+gradecraft.directive "coursesStudentsIndexTableFilter", ["SortableService", "StudentService", "orderByFilter", (SortableService, StudentService, orderBy) ->
   TableFilterCtrl = [() ->
     vm = this
     vm.termFor = StudentService.termFor

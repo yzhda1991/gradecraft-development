@@ -1,0 +1,8 @@
+%label{"for"=>"teamSelector", "class"=>"sr-only"}= "Select {{teamSelectorCtrl.termForTeam()}}"
+%select{"ng-model"=>"teamSelectorCtrl.selectedTeamId",
+        "ng-model-options"=>"{ getterSetter: true }",
+        "ng-disabled"=>"teamSelectorCtrl.loading",
+        "name"=>"teamSelector"}
+  %option{"value"=>"", "ng-selected"=>"_.isEmpty(teamSelectorCtrl.selectedTeamId)"} - Select {{teamSelectorCtrl.termForTeam()}} -
+  %option{"ng-repeat"=>"team in teamSelectorCtrl.teams", "value"=>"{{team.id}}"}
+    {{team.name}}

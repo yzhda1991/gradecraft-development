@@ -1,5 +1,5 @@
 # Manages the coin interface for adding and removing weights from Assignment Types
-@gradecraft.directive 'weightsCoinWidget', [ 'AssignmentTypeService', (AssignmentTypeService)->
+gradecraft.directive 'weightsCoinWidget', [ 'AssignmentTypeService', (AssignmentTypeService)->
 
   return {
     scope: {

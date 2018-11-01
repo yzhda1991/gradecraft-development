@@ -1,4 +1,4 @@
-@gradecraft.factory 'DashboardService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
+gradecraft.factory 'DashboardService', ['$http', 'GradeCraftAPI', ($http, GradeCraftAPI) ->
   dueThisWeekData = {}
   dueThisWeekAssignments = []
   plannerAssignments = []

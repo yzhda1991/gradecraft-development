@@ -1,4 +1,4 @@
-@gradecraft.directive 'unlockCondition', ['UnlockConditionService', (UnlockConditionService) ->
+gradecraft.directive 'unlockCondition', ['UnlockConditionService', (UnlockConditionService) ->
 
   return {
     scope: {

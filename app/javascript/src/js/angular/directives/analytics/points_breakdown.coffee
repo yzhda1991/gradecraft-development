@@ -1,7 +1,7 @@
 # graph of student's points, broken down by assignment type
 # Used on student dashboard
 
-@gradecraft.directive 'pointsBreakdownAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
+gradecraft.directive 'pointsBreakdownAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     pointsBreakdownCtrl = [()->
       vmPtsBreakdown = this
       services(vmPtsBreakdown.studentId).then(()->

@@ -1,6 +1,6 @@
 # Selector for earned badges in modal
 
-@gradecraft.directive 'rubricLevelBadgeSelector', ['RubricService', (RubricService) ->
+gradecraft.directive 'rubricLevelBadgeSelector', ['RubricService', (RubricService) ->
 
   return {
     templateUrl: 'rubrics/level_badge_selector.html'

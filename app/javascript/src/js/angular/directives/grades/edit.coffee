@@ -1,7 +1,7 @@
 # Main entry point for grading (standard/rubric individual/group)
 # Renders appropriate grading form for grade and assignment type
 
-@gradecraft.directive 'gradeEdit', ['$q', 'AssignmentService', 'GradeService', 'RubricService',
+gradecraft.directive 'gradeEdit', ['$q', 'AssignmentService', 'GradeService', 'RubricService',
   ($q, AssignmentService, GradeService, RubricService) ->
     EditGradeCtrl = [() ->
       vm = this

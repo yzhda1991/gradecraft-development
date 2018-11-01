@@ -1,0 +1,8 @@
+%textarea(ng-model="vm.submission.text_comment_draft" ng-change="vm.queueSaveDraftSubmission()" froala ng-if="!vm.loading" name="submission[text_comment]")
+%last-saved-message(ng-if="vm.submission.text_comment_draft && vm.submission.updated_at && !vm.loading")
+  Last saved: {{vm.submission.updated_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+  %br
+  Note: Only a Content/Statement is saved in draft mode
+#loading-submission-draft-message{'ng-if'=>'vm.loading'}
+  %i.fa.fa-spinner.fa-spin.fa-fw
+  Loading submission...

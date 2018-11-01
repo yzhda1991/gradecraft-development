@@ -1,5 +1,5 @@
 # Main entry point for Canvas course selector
-@gradecraft.directive 'canvasCourseSelector', ['CanvasImporterService', (CanvasImporterService) ->
+gradecraft.directive 'canvasCourseSelector', ['CanvasImporterService', (CanvasImporterService) ->
   CanvasCourseSelectorCtrl = [() ->
     vm = this
     vm.loading = true

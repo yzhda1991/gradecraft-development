@@ -1,5 +1,5 @@
 # box plot for course grade distribution
-@gradecraft.directive 'courseDistributionAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
+gradecraft.directive 'courseDistributionAnalytics', ['$q', '$window', 'AnalyticsService', 'DebounceQueue', ($q, $window, AnalyticsService, DebounceQueue) ->
     analyticsDistCtrl = [()->
       vm = this
       vm.loading = true

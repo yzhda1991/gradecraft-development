@@ -9,7 +9,7 @@
 # This Does not handle locked/unlocked icons, which include lists conditions
 # and is managed by /templates/student_panel/panel_article/condition_icons.html.haml
 
-@gradecraft.directive 'studentPanelArticleIcon',
+gradecraft.directive 'studentPanelArticleIcon',
 [ 'StudentPanelService', (StudentPanelService)->
 
   return {

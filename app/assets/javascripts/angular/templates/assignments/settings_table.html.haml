@@ -1,0 +1,59 @@
+%loading-message.assignments-loading-message(loading="vm.loading" message="Loading Assignments...")
+
+.assignment-index-container(role="tablist")
+  .assignment_type(id="assignment-type-settings-{{assignmentType.id}}" ng-repeat="assignmentType in vm.assignmentTypes")
+    .assignment-type-bar.assignment-settings.collapse-toggler{role: "tab"}
+      %a(href="#")
+        %h2.assignment-type-name
+          %i.fa.fa-fw.fa-chevron-circle-right
+          {{assignmentType.name}}
+        .points-summary(ng-if="!vm.loading")
+          %assignment-points-bar-graph(assignment-type="assignmentType")
+
+    .assignment-type-container.collapsable{role: "tabpanel"}
+      %table(ng-if="!vm.loading")
+        %caption.sr-only {{vm.termFor("assignments")}} for {{assignmentType.name}}
+        %thead
+          %tr
+            %th(scope="col") Name
+            %th(scope="col")
+              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="eye" tip-text="Visible to Students")
+            %th(scope="col")
+              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="asterisk" tip-text="Required")
+            %th(scope="col")
+              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="paperclip" tip-text="Accepts Submissions")
+            %th(scope="col")
+              %tooltip-icon(assignment-id="{{assignmentType.id}}" glyph="pencil" tip-text="Logged By Students")
+
+            %th(scope="col") Points
+
+            %th{scope: "col", :style => "width: 280px"} Dates
+            %th{scope: "col", :style => "min-width: 120px"}
+              %span.sr-only Actions
+
+        %tbody
+          %tr(ng-repeat="assignment in vm.assignments | filter:{assignment_type_id: assignmentType.id}:true")
+            %td
+              %label
+                %input(aria-required=true type="text" ng-model="assignment.name" ng-change="vm.updateAssignment(assignment.id)")
+
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="visible" checked="assignment.visible")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="required" checked="assignment.required")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="accepts_submissions" checked="assignment.accepts_submissions")
+            %td
+              %assignment-setting(assignment-id="assignment.id" attribute="student_logged" checked="assignment.student_logged")
+            %td
+              %assignment-full-points(assignment="assignment")
+            %td
+              %assignment-date-picker(assignment="assignment")
+
+            %td
+              %a.button(href="/assignments/{{assignment.id}}/edit")
+                %i.fa.fa-fw.fa-edit
+                Edit
+              %a.button(href="/assignments/{{assignment.id}}" data-confirm="Are you sure?" data-method="delete")
+                %i.fa.fa-fw.fa-trash
+                Delete

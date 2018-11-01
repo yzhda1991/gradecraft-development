@@ -1,4 +1,4 @@
-@gradecraft.factory 'SortableService', [() ->
+gradecraft.factory 'SortableService', [() ->
 
   predicate = undefined  # the predicate(s) to sort on
   reverse = false  # sort reverse

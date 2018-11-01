@@ -1,0 +1,42 @@
+%tr
+  %th{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().is_unlockable"}
+
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"First Name", "data-sortable-predicate"=>"first_name"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Last Name", "data-sortable-predicate"=>"last_name"}
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().threshold_points",
+                      "data-sortable-header-text"=>"Raw Score", "data-sortable-predicate"=>"raw_score"}
+
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.showScore()",
+                      "data-sortable-header-text"=>"Score", "data-sortable-predicate"=>"[grade_pass_fail_status, grade_final_points]"}
+
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.showWeightedScore()",
+                      "data-sortable-header-text"=>"Raw Score", "data-sortable-predicate"=>"grade_score"}
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.showWeightedScore()",
+                      "data-sortable-header-text"=>"{{individualTableHeaderCtrl.termFor('weight')}}-weighted Score",
+                      "data-sortable-predicate"=>"grade_score"}
+
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().pass_fail",
+                      "data-sortable-header-text"=>"Grade", "data-sortable-predicate"=>"grade_pass_fail_status"}
+
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().has_levels",
+                      "data-sortable-header-text"=>"Level Earned", "data-sortable-predicate"=>"grade_level"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Graded", "data-sortable-predicate"=>"grade_complete"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Visible to Student", "data-sortable-predicate"=>"grade_student_visible"}
+  %th.sortable-header{"scope"=>"col", "data-sortable-header-text"=>"Read?", "data-sortable-predicate"=>"grade_feedback_read"}
+
+  %th.sortable-header{"scope"=>"col", "ng-if"=>"individualTableHeaderCtrl.assignment().accepts_submissions",
+                      "data-sortable-header-text"=>"Submitted", "data-sortable-predicate"=>"submission_submitted_at"}
+
+  %th{"scope"=>"col", "style"=>"min-width: 180px"}
+
+  %th.has_button{"scope"=>"col", "width"=>"120px"}
+    %button.button.select-all{"role"=>"button",
+                              "type"=>"button",
+                              "ng-disabled"=>"!individualTableHeaderCtrl.hasStudents()",
+                              "ng-class"=>"{ disabled: !individualTableHeaderCtrl.hasStudents() }",
+                              "ng-click"=>"individualTableHeaderCtrl.selectGrades(true)"} Check
+    %button.button.select-none{"role"=>"button",
+                               "type"=>"button",
+                               "ng-disabled"=>"!individualTableHeaderCtrl.hasStudents()",
+                               "ng-class"=>"{ disabled: !individualTableHeaderCtrl.hasStudents() }",
+                               "ng-click"=>"individualTableHeaderCtrl.selectGrades(false)"} Uncheck

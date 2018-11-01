@@ -1,0 +1,19 @@
+.article-completed{'ng-if' => 'articleCompleted()', 'ng-class'=>'{"excluded" : article.grade.is_excluded}'}
+
+  .grade{'ng-if' => '!article.pass_fail'}
+    %span{'ng-if' => 'article.grade.final_points != null'} {{article.grade.final_points | number}}
+    %span{'ng-if' => 'article.grade.final_points == null'} 0
+
+    %span / {{article.full_points | number}}
+
+  .grade{'ng-if' => 'article.pass_fail'}
+    .no-status{{'ng-if'=>'!article.grade.pass_fail_status'}}
+      {{termFor("pass")}} / {{termFor("fail")}}
+    .status{{'ng-if'=>'article.grade.pass_fail_status'}}
+      {{termFor(article.grade.pass_fail_status)}}
+  .excluded{{'ng-if'=>'article.grade.is_excluded'}}
+    This grade has been excluded
+
+.article-predicted{'ng-if' => '!articleCompleted()'}
+  %component-slider.component-slider{'ng-if' => 'article.pass_fail != true', 'article'=>'article'}
+  %predictor-binary-switch{'ng-if' => 'article.pass_fail == true', 'article'=>'article','off-value'=>'0','on-value'=>'1'}

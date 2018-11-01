@@ -1,6 +1,6 @@
 # Uses the GradeSchemeElementsService to aggregate a list of initialized levels
 # for the initial setup process in a course
-@gradecraft.factory 'GradeSchemeElementsSetupService', ['GradeSchemeElementsService', (GradeSchemeElementsService) ->
+gradecraft.factory 'GradeSchemeElementsSetupService', ['GradeSchemeElementsService', (GradeSchemeElementsService) ->
   standardGradeLetters = ['A', 'B', 'C', 'D', 'F']
 
   # Add grade scheme elements with the preset parameters

@@ -1,0 +1,145 @@
+%input.file-upload-button{"type"=>"file",
+                          "accept"=>"text/csv",
+                          "assignment-import-upload"=>"",
+                          "data-provider"=>"{{vm.provider}}",
+                          "ng-disabled"=>"vm.submitted",
+                          "ng-class"=>'{"disabled": vm.submitted}'}
+
+%assignments-review{"ng-if"=>"assignmentRows.length > 0"}
+  %section
+    %unsubmitted{"ng-if"=>"!vm.submitted"}
+      %h2.subtitle Review {{vm.assignmentsTerm}}
+
+      -# Import form
+      %form{"name"=>"assignmentReviewForm", "ng-submit"=>"vm.postImportAssignments()", "ng-if"=>"!vm.submitted"}
+        .scroll-table
+          .table-wrapper
+            %table
+              %thead
+                %tr
+                  %th Name
+                  %th Assignment Type
+                  %th Point Total
+                  %th Description
+                  %th Purpose
+                  %th Open Date
+                  %th Due Date
+                  %th Accepts Submissions?
+                  %th Accept Submissions Until Date
+                  %th Required?
+              %tbody
+                %tr{"ng-repeat"=>"row in assignmentRows"}
+                  %td {{row.name}}
+                  %td
+                    %select{"ng-model"=>"row.selected_assignment_type",
+                            "ng-options"=>"assignmentType.id as assignmentType.name for assignmentType in vm.assignmentTypes",
+                            "ng-disabled"=>"vm.loading",
+                            "ng-required"=>"row.has_matching_assignment_type_id == true && row.selected_assignment_type == null",
+                            "ng-if"=>"vm.assignmentTypes.length > 0"}
+                      %option{"value"=>"", "ng-if"=>"!row.has_matching_assignment_type_id"} Create new assignment type: {{row.assignment_type}}*
+                    %withoutAssignmentTypes{"ng-if"=>"!vm.assignmentTypes.length > 0"} {{row.assignment_type}}
+                  %td {{row.full_points | number}}
+                  %td {{row.description}}
+                  %td {{row.purpose}}
+                  %td
+                    %input{"ng-model"=>"row.selected_open_at",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_open_at || row.showDateTimePicker",
+                           "placeholder"=>"No open date selected"}
+                    %a{"ng-if"=>"!row.selected_open_at && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
+                  %td
+                    %input{"ng-model"=>"row.selected_due_at",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_due_at || row.showDateTimePicker",
+                           "placeholder"=>"No due date selected"}
+                    %a{"ng-if"=>"!row.selected_due_at && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
+
+                  %td
+                    %select{"ng-model"=>"row.accepts_submissions",
+                            "ng-options"=>"option.value as option.display_string for option in vm.booleanValues"}
+
+                  %td
+                    %input{"ng-model"=>"row.selected_accepts_submissions_until",
+                           "type"=>"text",
+                           "gc-date-time-input"=>"",
+                           "ng-if"=>"row.selected_accepts_submissions_until || row.showDateTimePicker",
+                           "placeholder"=>"No due date selected"}
+                    %a{"ng-if"=>"!row.selected_accepts_submissions_until && !row.showDateTimePicker", "ng-click"=>"row.showDateTimePicker = true"}
+                      %i.fa.fa-exclamation
+                      Invalid Date**
+
+                  %td
+                    %select{"ng-model"=>"row.required",
+                            "ng-options"=>"option.value as option.display_string for option in vm.booleanValues"}
+
+        .main-buttons
+          %input{"type"=>"submit",
+                 "class"=>"button action",
+                 "value"=>"Import",
+                 "ng-disabled"=>"vm.submitted",
+                 "ng-class"=>'{"disabled": vm.submitted}'}
+          %a{"href"=>"{{vm.cancelPath}}", "class"=>"button secondary"}
+            %i.fa.fa-times-circle
+            Cancel
+
+    .right
+      %p{"ng-if"=>"vm.newAssignmentTypes().length > 0"}
+        * The following assignment types are new and will be created: {{vm.newAssignmentTypes().join(', ')}}
+      %p{"ng-if"=>"vm.hasInvalidDates()"}
+        ** Due date was invalid and will be blank unless one is selected
+
+    -# Results from import
+    %submitted{"ng-if"=>"vm.submitted"}
+      %h2 Successfully Imported
+      .scroll-table
+        .table-wrapper
+          %table
+            %thead
+              %tr
+                %th Assignment Name
+                %th Assignment Type
+                %th Point Total
+                %th Description
+                %th Purpose
+                %th Open Date
+                %th Due Date
+                %th Accept Submissions?
+                %th Accept Submissions Until Date
+                %th Required?
+            %tbody
+              %tr{"ng-if"=>"results.successful.length < 1"}
+                %td{"colspan"=>"2"} None
+
+              %tr{"ng-repeat"=>"successRow in results.successful"}
+                %td {{successRow.name}}
+                %td {{successRow.assignment_type_name}}
+                %td {{successRow.full_points | number}}
+                %td {{successRow.description}}
+                %td {{successRow.purpose}}
+                %td {{successRow.open_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.due_at | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.accepts_submissions}}
+                %td {{successRow.accepts_submissions_until | date: "EEEE, MMMM d, yyyy 'at' h:mma Z"}}
+                %td {{successRow.required}}
+
+      %br
+
+      %h2 Not Imported
+      %table
+        %thead
+          %tr
+            %th Data
+            %th Error
+        %tbody
+          %tr{"ng-if"=>"results.unsuccessful.length < 1"}
+            %td{"colspan"=>"2"} None
+
+          %tr{"ng-repeat"=>"errorRow in results.unsuccessful"}
+            %td {{errorRow.data}}
+            %td {{errorRow.error}}
