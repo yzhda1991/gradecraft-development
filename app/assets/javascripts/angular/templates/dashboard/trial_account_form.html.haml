@@ -1,26 +1,19 @@
-.login
-  .login-form-container
-    .login-form
-      .login-block
-        %h1.bold Welcome to GradeCraft!
+.content_block#access_gate
+  %h1 Welcome to GradeCraft!
 
-        %p{"ng-show"=>"isTrialAccount == true"}
-          It looks like you are trying to create a trial account. Are you trying to do so as a Student or an Instructor?
+  %p{"ng-show"=>"isTrialAccount == true"}
+    It looks like you are trying to create a trial account. Are you trying to do so as a Student or an Instructor?
 
-        %p{"ng-show"=>"isTrialAccount == null"}
-          It looks like you are trying to log in through Google, but do not yet have an account. Are you trying to login as a Student or an Instructor?
+  %p{"ng-show"=>"isTrialAccount == null"}
+    It looks like you are trying to log in through Google, but do not yet have an account. Are you trying to login as a Student or an Instructor?
 
-        .form-flex-row
-          %button.button.account-create.left{"ng-click"=>"trialAccountFormCtrl.selected = 'student'",
-                                             "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'instructor' }"} Student
+  %button.button.account-create{"ng-click"=>"trialAccountFormCtrl.selected = 'student'",
+                                "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'instructor' }"} Student
 
-          %a.button.account-create.left{"ng-click"=>"trialAccountFormCtrl.selected = 'instructor'",
-                                        "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'student' }",
-                                        "ng-href"=>"{{::newExternalCoursesPath}}"} Instructor
+  %a.button.account-create{"ng-click"=>"trialAccountFormCtrl.selected = 'instructor'",
+                                "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'student' }",
+                                "ng-href"=>"{{::newExternalCoursesPath}}"} Instructor
 
-        .clear
-
-    .student-form{"ng-show"=>"trialAccountFormCtrl.selected === 'student'"}
-      %hr
-      %h2.subtitle Please contact your instructor.
-      %p You will receive an email once they have added you to their course.
+  .student-form{"ng-show"=>"trialAccountFormCtrl.selected === 'student'"}
+    %h2 Please contact your instructor.
+    %p You will receive an email once they have added you to their course.
