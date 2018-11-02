@@ -144,6 +144,6 @@ class CourseMembership < ApplicationRecord
   end
 
   def send_email_on_unlock
-    NotificationMailer.unlock_condition(self, user, course).deliver_now
+    NotificationMailer.unlocked_condition(self, user, course).deliver_now
   end
 end

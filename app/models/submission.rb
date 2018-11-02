@@ -168,7 +168,10 @@ class Submission < ApplicationRecord
             end
           end
         else
-          unlockable.unlock!(student) { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
+          unlockable.unlock!(student) do |unlock_state|
+            check_for_auto_awarded_badge(unlock_state)
+            send_email_on_unlock
+          end
         end
       end
     end
@@ -227,6 +230,6 @@ class Submission < ApplicationRecord
   end
 
   def send_email_on_unlock
-    NotificationMailer.unlock_condition(self, student, course).deliver_now
+    NotificationMailer.unlocked_condition(self, student, course).deliver_now
   end
 end
