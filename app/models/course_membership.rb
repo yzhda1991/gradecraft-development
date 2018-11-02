@@ -135,7 +135,7 @@ class CourseMembership < ApplicationRecord
 
   def check_for_auto_awarded_badge(unlock_state)
     award_badge(unlock_state, {
-      student_id: student.id, #user ?? 
+      student_id: user.id, 
       course_id: course.id
     })
   end
