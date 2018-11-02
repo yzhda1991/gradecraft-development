@@ -1,0 +1,5 @@
+.pageContent
+  %p= "MongoDB status: #{@mongo_status}"
+  %p= "Redis status: #{@redis_status}"
+
+  %p= "Error: #{@error}" if @error.present?

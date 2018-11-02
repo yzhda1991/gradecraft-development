@@ -271,6 +271,7 @@ Rails.application.routes.draw do
     get :press
     get :research
     get :sign_up
+    get :health_check
   end
 
   #11. Grade Schemes

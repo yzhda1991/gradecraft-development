@@ -619,6 +619,10 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     dashboard
   end
 
+  def pages_health_check
+    dashboard
+  end
+
   def pages_press
   end
 
