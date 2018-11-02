@@ -100,7 +100,7 @@ class CourseMembership < ApplicationRecord
       self.course.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.unlock!(user) do |unlock_state|
           check_for_auto_awarded_badge(unlock_state)
-          # NotificationMailer.unlocked_condition(student, course).deliver_now  # TODO: this
+          send_email_on_unlock
         end
       end
     end
@@ -141,5 +141,9 @@ class CourseMembership < ApplicationRecord
       student_id: user.id,
       course_id: course.id
     })
+  end
+
+  def send_email_on_unlock
+    NotificationMailer.unlock_condition(self, user, course).deliver_now
   end
 end
