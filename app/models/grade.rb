@@ -138,7 +138,7 @@ class Grade < ApplicationRecord
       self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.unlock!(student) do |unlock_state|
           check_for_auto_awarded_badge(unlock_state)
-          send_email_on_unlock
+          send_email_on_unlock(unlockable)
         end
       end
     end
@@ -146,7 +146,7 @@ class Grade < ApplicationRecord
       self.assignment_type.unlock_keys.map(&:unlockable).each do |unlockable|
         unlockable.unlock!(student) do |unlock_state|
           check_for_auto_awarded_badge(unlock_state)
-          send_email_on_unlock
+          send_email_on_unlock(unlockable)
         end
       end
     end
@@ -212,7 +212,7 @@ class Grade < ApplicationRecord
     })
   end
 
-  def send_email_on_unlock
-    NotificationMailer.unlocked_condition(self, student, course).deliver_now
+  def send_email_on_unlock(unlockable)
+    NotificationMailer.unlocked_condition(unlockable, student, course).deliver_now
   end
 end

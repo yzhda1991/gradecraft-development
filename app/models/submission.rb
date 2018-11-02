@@ -164,13 +164,13 @@ class Submission < ApplicationRecord
           self.group.students.each do |student|
             unlockable.unlock!(student) do |unlock_state|
               check_for_auto_awarded_badge(unlock_state)
-              send_email_on_unlock
+              send_email_on_unlock(unlockable)
             end
           end
         else
           unlockable.unlock!(student) do |unlock_state|
             check_for_auto_awarded_badge(unlock_state)
-            send_email_on_unlock
+            send_email_on_unlock(unlockables)
           end
         end
       end
@@ -229,7 +229,7 @@ class Submission < ApplicationRecord
     })
   end
 
-  def send_email_on_unlock
-    NotificationMailer.unlocked_condition(self, student, course).deliver_now
+  def send_email_on_unlock(unlockable)
+    NotificationMailer.unlocked_condition(unlockable, student, course).deliver_now
   end
 end
