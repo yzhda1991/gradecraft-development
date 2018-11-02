@@ -162,7 +162,10 @@ class Submission < ApplicationRecord
         unlockable = condition.unlockable
         if self.assignment.has_groups?
           self.group.students.each do |student|
-            unlockable.unlock!(student) { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
+            unlockable.unlock!(student) do |unlock_state|
+              check_for_auto_awarded_badge(unlock_state)
+              send_email_on_unlock
+            end
           end
         else
           unlockable.unlock!(student) { |unlock_state| check_for_auto_awarded_badge(unlock_state) }
@@ -221,5 +224,9 @@ class Submission < ApplicationRecord
       student_id: student.id,
       course_id: course.id
     })
+  end
+
+  def send_email_on_unlock
+    NotificationMailer.unlock_condition(self, student, course).deliver_now
   end
 end

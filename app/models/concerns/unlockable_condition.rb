@@ -17,7 +17,7 @@ module UnlockableCondition
     unlock_state ||= unlock_states.build(student_id: student.id,
                                          unlockable_id: self.id,
                                          unlockable_type: self.class)
-    if unlock_state.unlocked != unlocked && unlocked == true do
+    if unlock_state.unlocked != unlocked && unlocked == true
       unlock_state.unlocked = true
       unlock_state.save
       yield unlock_state if block_given?

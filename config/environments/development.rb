@@ -46,7 +46,7 @@ Rails.application.configure do
   # 4. set perform_deliveries to true
   config.action_mailer.default_url_options = { host: "localhost:5000" }
   config.action_mailer.smtp_settings = { address: '127.0.0.1', port: 1025 }
-  config.action_mailer.perform_deliveries = false
+  config.action_mailer.perform_deliveries = true
 
   # NOTE: to send emails via Gmail's SMTP server
   # 1. IMPORTANT! Set ENV["MAIL_INTERCEPTOR_RECIPIENT"]
