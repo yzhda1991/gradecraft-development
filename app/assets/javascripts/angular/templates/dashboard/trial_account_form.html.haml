@@ -5,9 +5,11 @@
     It looks like you are trying to create a trial account. Are you trying to do so as a Student or an Instructor?
 
   %p{"ng-show"=>"isTrialAccount == null"}
-    It looks like you are trying to log in through Google, but do not yet have an account. Are you trying to login as a Student or an Instructor?
+    It looks like you are trying to log in through Google, but do not yet have an account.
+  %h2{"ng-show"=>"isTrialAccount == null"}
+    Are you trying to login as a Student or an Instructor?
 
-  %button.button.account-create{"ng-click"=>"trialAccountFormCtrl.selected = 'student'",
+  %button.account-create{"ng-click"=>"trialAccountFormCtrl.selected = 'student'",
                                 "ng-class"=>"{ 'deselected': trialAccountFormCtrl.selected === 'instructor' }"} Student
 
   %a.button.account-create{"ng-click"=>"trialAccountFormCtrl.selected = 'instructor'",

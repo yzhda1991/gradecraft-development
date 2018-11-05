@@ -53,11 +53,8 @@ class ApplicationController < ActionController::Base
   end
 
   def failed_authentication
-    redirect_to root_path, alert: "<p>We're having some trouble logging you in!<\p> \
-      <p>Are you sure you have a GradeCraft account? \
-      Some students log in through their Learning Management System before they can access GradeCraft directly. \
-      You may also want to verify what email address you should be using to log in with your instructor.</p> \
-      <p>Still having problems? Contact us.</p>"
+    redirect_back fallback_location: root_path, alert: "<p>Sorry, but we weren’t able to complete your request. \
+      Please try again, or contact us if you’re still having problems.</p>"
   end
 
   def redirect_back_or_default(path=root_path, options={})

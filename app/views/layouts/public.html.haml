@@ -15,12 +15,10 @@
       = yield
       = render partial: "layouts/rollbar"
 
-    = render partial: "layouts/help/zendesk"
-
-    .footer
+    %footer
       = render partial: "layouts/footer"
+      = render partial: "layouts/help/zendesk"
 
-    = render partial: "layouts/background"
     = render partial: "layouts/google_analytics"
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = yield(:scripts)
