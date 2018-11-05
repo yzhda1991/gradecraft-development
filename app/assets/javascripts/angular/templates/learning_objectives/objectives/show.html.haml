@@ -21,14 +21,10 @@
             %ul.no-style
               %li{"ng-repeat"=>"assignment in loShowCtrl.linkedAssignments"}
                 %a{"ng-href"=>"/assignments/{{assignment.id}}"} {{assignment.name}}
-                %span.has-tooltip{"ng-if"=>"assignment.unlock_conditions.length", "tabindex"=>"0", "aria-describedby"=>"locked-assignment-tip_{{assignment.id}}"}
-                  %span.display-on-hover.hover-style.hover-style-top{"id"=>"locked-assignment-tip_{{assignment.id}}", "role"=>"tooltip"}
-                    %p This {{assignment.term_for}} is Locked
-                    .small.italic In order to unlock it you must:
-                    %ol
-                      %li{"ng-repeat"=>"condition in assignment.unlock_conditions"}
-                        {{condition}}
-                  %i.fa.fa-fw.fa-lock{"aria-hidden": "true"}          
+                %descriptor-icon{"data-icon"=>"lock"}
+                  %ul.icon-list
+                    %li{"ng-repeat"=>"condition in assignment.unlock_conditions"}
+                      {{condition}}
       %tr{"ng-if"=>"loShowCtrl.studentId"}
         %th Progress:
         %td
