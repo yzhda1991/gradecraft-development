@@ -170,7 +170,7 @@ class Submission < ApplicationRecord
         else
           unlockable.unlock!(student) do |unlock_state|
             check_for_auto_awarded_badge(unlock_state)
-            send_email_on_unlock(unlockables)
+            send_email_on_unlock(unlockable)
           end
         end
       end
