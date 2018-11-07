@@ -18,9 +18,8 @@ feature "logging in" do
 
     scenario "with an invalid email and password combination" do
       LoginPage.new(user).submit({ password: "blah" })
-      expect(current_path).to eq user_sessions_path
-      expect(page).to have_error_message "Email or Password were invalid, login failed."
+      expect(current_path).to eq root_path
+      expect(page).to have_content "Your username or password is incorrect. Please try again"
     end
   end
-
 end
