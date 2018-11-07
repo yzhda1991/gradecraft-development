@@ -1,5 +1,6 @@
 require "mongoid"
 
+# rubocop:disable AndOr
 class HomeController < ApplicationController
   skip_before_action :require_login
   skip_before_action :require_course_membership
