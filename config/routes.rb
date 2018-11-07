@@ -67,7 +67,7 @@ Rails.application.routes.draw do
     collection do
       get :feed
       get :settings
-      post "copy" => "assignments#copy"
+      post "copy", to: "assignments#copy"
       get "export_structure"
     end
 
@@ -282,7 +282,7 @@ Rails.application.routes.draw do
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
+    get "users/#{role}/new", to: "users#new", as: "new_#{role.singularize}",
       role: role.singularize
   end
 
@@ -332,10 +332,10 @@ Rails.application.routes.draw do
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "auth/google_oauth2/callback", to: "integrations/google#auth_callback"
   get "/auth/:provider/callback", to: "authorizations#create", as: :create_authorization
-  get "auth/failure" => "application#failed_authentication", as: :auth_failure
+  get "auth/failure", to: "application#failed_authentication", as: :auth_failure
 
   # Canvas OmniAuth setup
-  match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
+  match "/auth/canvas/setup", to: "canvas_session#new", via: [:get, :post]
 
   get :logout, to: "user_sessions#destroy", as: :logout
   resources :user_sessions, only: [:create, :destroy, :student] do
