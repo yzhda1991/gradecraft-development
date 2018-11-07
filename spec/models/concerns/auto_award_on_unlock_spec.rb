@@ -9,7 +9,7 @@ describe AutoAwardOnUnlock do
       creates_earned_badge_service
   end
 
-  describe "#award_badge", focus: true do
+  describe "#award_badge" do
     let(:course) { create :course }
     let(:student) { create :user, role: :student, courses: [course] }
     let(:earned_badge_attr) do
