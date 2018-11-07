@@ -265,17 +265,11 @@ Rails.application.routes.draw do
 
   controller :pages do
     get :style_guide, constraints: AdminConstraint.new
-    get :brand_and_style_guidelines
-    get :features
-    get :our_team, to: "pages#team"
-    get :press
-    get :research
-    get :sign_up
-    get :health_check
   end
 
   controller :home do
     get :reset_password
+    get :health_check
   end
 
   #11. Grade Schemes
