@@ -263,13 +263,10 @@ Rails.application.routes.draw do
     get :syllabus
   end
 
-  controller :pages do
-    get :style_guide, constraints: AdminConstraint.new
-  end
-
   controller :home do
     get :reset_password
     get :health_check
+    get :style_guide, constraints: AdminConstraint.new
   end
 
   #11. Grade Schemes

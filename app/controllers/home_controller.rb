@@ -5,6 +5,8 @@ class HomeController < ApplicationController
   skip_before_action :require_course_membership
   before_action :ensure_admin?, only: :health_check
 
+  layout "blank", only: :style_guide
+
   # root
   # GET /
   def index
@@ -12,6 +14,9 @@ class HomeController < ApplicationController
   end
 
   def reset_password
+  end
+
+  def style_guide
   end
 
   def health_check
