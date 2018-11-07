@@ -611,25 +611,4 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
 
   def passwords_edit
   end
-
-  def pages_index
-  end
-
-  def pages_press
-  end
-
-  def pages_research
-  end
-
-  def pages_team
-  end
-
-  def pages_features
-  end
-
-  def pages_sign_up
-  end
-
-  def pages_style_guide
-  end
 end
