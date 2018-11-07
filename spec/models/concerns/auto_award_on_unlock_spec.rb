@@ -25,15 +25,20 @@ describe AutoAwardOnUnlock do
     end
 
     it "does not award the badge if the unlockable type is not a badge" do
-
+      unlock_state.unlockable_type = "Assignment"
+      expect(subject.award_badge(unlock_state, earned_badge_attr)).to be_nil
     end
 
     it "does not award the badge if the badge does not auto award" do
-
+      unlock_state.unlockable.auto_award_after_unlock = false
+      expect(subject.award_badge(unlock_state, earned_badge_attr)).to be_nil
     end
 
     it "creates an earned badge with auto-awarded feedback" do
-
+      unlock_state.unlocked = true
+      unlock_state.unlockable_type = "Badge"
+      unlock_state.unlockable.auto_award_after_unlock = true
+      expect{ subject.award_badge(unlock_state, earned_badge_attr) }.to change(EarnedBadge, :count).by 1
     end
   end
 end
