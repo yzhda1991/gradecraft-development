@@ -1,4 +1,4 @@
-describe HomeController, focus: true do
+describe HomeController do
   include UniMock::StubRails
 
   describe "#index" do
@@ -9,9 +9,5 @@ describe HomeController, focus: true do
       get :index
       expect(response).to redirect_to dashboard_path
     end
-  end
-
-  describe "#login" do
-
   end
 end

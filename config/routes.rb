@@ -275,7 +275,6 @@ Rails.application.routes.draw do
   end
 
   controller :home do
-    get :login
     get :reset_password
   end
 

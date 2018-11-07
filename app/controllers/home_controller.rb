@@ -10,7 +10,4 @@ class HomeController < ApplicationController
 
   def reset_password
   end
-
-  def login
-  end
 end
