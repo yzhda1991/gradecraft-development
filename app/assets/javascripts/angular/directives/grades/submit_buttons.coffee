@@ -11,6 +11,7 @@
     link: (scope, el, attr)->
       scope.grade = GradeService.modelGrade
       scope.isSubmitted = false
+      
       scope.submitGrade = (returnURL)->
         scope.isSubmitted = true
         GradeService.submitGrade(returnURL)
