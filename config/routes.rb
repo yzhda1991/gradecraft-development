@@ -576,6 +576,7 @@ Rails.application.routes.draw do
     end
 
     resources :unlock_conditions, only: [:create, :update, :destroy]
+    get "courses/:id/unlock_conditions", to: "unlock_conditions#for_course"
 
     resources :users, only: [] do
       collection do

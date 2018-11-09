@@ -1,17 +1,19 @@
-@gradecraft.directive 'unlockSelectorForm', ["CourseService", (CourseService) ->
-  UnlockSelectorFormCtrl = [()->
-    vm = this
-    vm.loading = true
-    vm.selectedCourse = undefined
-    vm.courses = CourseService.courses
+@gradecraft.directive 'unlockSelectorForm', ["CourseService", "UnlockConditionService",
+  (CourseService, UnlockConditionService) ->
+    UnlockSelectorFormCtrl = [() ->
+      vm = this
+      vm.loading = true
+      vm.selectedCourse = undefined
+      vm.courses = CourseService.courses
+      vm.unlockConditions = UnlockConditionService.unlockConditions
 
-    vm.getUnlocks = () -> console.log("TODO")
+      vm.getUnlocks = () -> UnlockConditionService.getUnlockConditionsForCourse(vm.selectedCourse) if vm.selectedCourse?
 
-    CourseService.getCourses().then(() -> vm.loading = false)
-  ]
+      CourseService.getCourses().then(() -> vm.loading = false)
+    ]
 
-  bindToController: true,
-  controller: UnlockSelectorFormCtrl,
-  controllerAs: 'unlockSelectorFormCtrl',
-  templateUrl: 'admin/unlocks/selector_form.html'
+    bindToController: true
+    controller: UnlockSelectorFormCtrl
+    controllerAs: 'unlockSelectorFormCtrl'
+    templateUrl: 'admin/unlocks/selector_form.html'
 ]

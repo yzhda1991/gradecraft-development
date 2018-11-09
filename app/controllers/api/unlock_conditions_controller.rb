@@ -1,6 +1,15 @@
 class API::UnlockConditionsController < ApplicationController
-  before_action :ensure_staff?
-  before_action :use_current_course
+  before_action :ensure_staff?, except: :for_course
+  before_action :ensure_admin?, only: :for_course
+  before_action :use_current_course, except: :for_course
+
+  # GET /api/courses/:id/unlock_conditions
+  def for_course
+    @unlock_conditions = Course
+                          .includes(:unlock_conditions)
+                          .find(params[:id])
+                          .unlock_conditions
+  end
 
   # GET /api/assignments/:assignment_id/unlock_conditions
   # GET /api/badges/:badge_id/unlock_conditions
@@ -68,6 +77,3 @@ class API::UnlockConditionsController < ApplicationController
       :condition_type, :condition_state, :condition_value, :condition_date
   end
 end
-
-
-
