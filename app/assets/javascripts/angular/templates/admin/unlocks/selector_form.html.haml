@@ -1,0 +1,11 @@
+%loading-message{"data-loading"=>"unlockSelectorForm.loading", "data-message"=>"Loading..."}
+
+%section
+  .form-subsection
+    .form-item
+      %label
+        Course
+        %select{"ng-options"=>"course.id as course.name for course in unlockSelectorFormCtrl.courses",
+                "ng-model"=>"unlockSelectorFormCtrl.selectedCourse",
+                "ng-change"=>"unlockSelectorFormCtrl.getUnlocks()",
+                "id"=>"course_name"}
