@@ -9,3 +9,10 @@
                 "ng-model"=>"unlockSelectorFormCtrl.selectedCourse",
                 "ng-change"=>"unlockSelectorFormCtrl.getUnlocks()",
                 "id"=>"course_name"}
+
+  .form-subsection{{"ng-if"=>"unlockSelectorFormCtrl.unlockConditions.length"}}
+    %h2.subtitle Unlock Conditions for {{unlockSelectorFormCtrl.course.name}}
+    .form-item
+      %ul
+        %li{"ng-repeat"=>"uc in unlockSelectorFormCtrl.unlockConditions track by uc.id"}
+          Unlockable type: {{uc.unlockable_type}}

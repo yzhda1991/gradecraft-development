@@ -56,6 +56,15 @@
       GradeCraftAPI.logResponse(error)
     )
 
+  getUnlockConditionsForCourse = (courseId) ->
+    $http.get("/api/courses/#{courseId}/unlock_conditions").then(
+      (response) ->
+        GradeCraftAPI.loadMany(unlockConditions, response.data)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
   addCondition = ()->
     unlockConditions.push(
       "id": null,
@@ -152,6 +161,7 @@
     conditionTypes: conditionTypes
     unlockConditions: unlockConditions
     getUnlockConditions: getUnlockConditions
+    getUnlockConditionsForCourse: getUnlockConditionsForCourse
     addCondition: addCondition
     removeCondition: removeCondition
     queueUpdateCondition: queueUpdateCondition
