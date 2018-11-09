@@ -10,7 +10,10 @@
     templateUrl: 'grades/submit_buttons.html'
     link: (scope, el, attr)->
       scope.grade = GradeService.modelGrade
+      scope.isSubmitted = false
+      
       scope.submitGrade = (returnURL)->
+        scope.isSubmitted = true
         GradeService.submitGrade(returnURL)
 
       scope.textForButton = ()->

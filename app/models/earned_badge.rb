@@ -1,4 +1,5 @@
 class EarnedBadge < ApplicationRecord
+  include AutoAwardOnUnlock
 
   before_validation :add_associations
 
@@ -35,7 +36,10 @@ class EarnedBadge < ApplicationRecord
   def check_unlockables
     if self.badge.is_a_condition?
       self.badge.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.unlock!(student)
+        unlockable.unlock!(student) do |unlock_state|
+          check_for_auto_awarded_badge(unlock_state)
+          send_email_on_unlock(unlockable)
+        end
       end
     end
   end
@@ -57,5 +61,16 @@ class EarnedBadge < ApplicationRecord
 
   def add_associations
     self.course_id ||= badge.course_id
+  end
+
+  def check_for_auto_awarded_badge(unlock_state)
+    award_badge(unlock_state, {
+      student_id: student.id,
+      course_id: course.id
+    })
+  end
+
+  def send_email_on_unlock(unlockable)
+    NotificationMailer.unlocked_condition(unlockable, student, course).deliver_now
   end
 end

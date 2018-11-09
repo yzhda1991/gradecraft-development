@@ -73,6 +73,13 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  def unlocked_condition(unlocked_item, student, course)
+    @unlocked_item = unlocked_item
+    @course = course
+    @student = student
+    send_student_email "#{@course.name} - You've unlocked #{@unlocked_item.name}!"
+  end
+
   private
 
   def send_assignment_email_to_professor(professor, submission_id, subject)

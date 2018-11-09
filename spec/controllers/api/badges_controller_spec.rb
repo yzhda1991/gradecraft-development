@@ -13,7 +13,6 @@ describe API::BadgesController do
       allow(controller).to receive(:current_user).and_return(professor)
     end
 
-
     describe "GET index" do
       it "assigns badges, no student, and no call to update" do
         badge
@@ -40,8 +39,11 @@ describe API::BadgesController do
 
     describe "POST create" do
       it "creates the badge with valid attributes"  do
-        params = attributes_for(:badge)
-        expect{ post :create, params: { badge: { name: "New Badge" }}, format: :json }.to change(Badge,:count).by(1)
+        badge_params = attributes_for(:badge).merge! name: "New Badge", auto_award_after_unlock: true
+        expect{ post :create, params: { badge: badge_params }, format: :json }.to change(Badge, :count).by(1)
+        badge = Badge.last
+        expect(badge.name).to eq "New Badge"
+        expect(badge.auto_award_after_unlock).to eq true
       end
 
       it "does not create new badge with invalid attributes" do
@@ -53,8 +55,10 @@ describe API::BadgesController do
     describe "PUT update" do
       it "updates the badge" do
         badge
-        put :update, params: { id: badge.id, badge: { name: "new name" }}, format: :json
-        expect(badge.reload.name).to eq("new name")
+        put :update, params: { id: badge.id, badge: { name: "new name", auto_award_after_unlock: true }}, format: :json
+        badge.reload
+        expect(badge.name).to eq("new name")
+        expect(badge.auto_award_after_unlock).to eq true
       end
     end
   end
