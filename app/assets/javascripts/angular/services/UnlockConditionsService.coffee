@@ -56,8 +56,18 @@
       GradeCraftAPI.logResponse(error)
     )
 
-  getUnlockConditionsForCourse = (courseId) ->
+  getUnlockConditionsForCourse = (courseId, clearUnlockArray=false) ->
+    unlockConditions.length = 0 if clearUnlockArray is true
     $http.get("/api/courses/#{courseId}/unlock_conditions").then(
+      (response) ->
+        GradeCraftAPI.loadMany(unlockConditions, response.data)
+        GradeCraftAPI.logResponse(response)
+      , (response) ->
+        GradeCraftAPI.logResponse(response)
+    )
+
+  checkUnlockables = (unlockConditionId) ->
+    $http.put("/api/unlock_conditions/#{unlockConditionId}/check_unlocked").then(
       (response) ->
         GradeCraftAPI.loadMany(unlockConditions, response.data)
         GradeCraftAPI.logResponse(response)
