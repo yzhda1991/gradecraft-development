@@ -173,6 +173,7 @@
     getUnlockConditions: getUnlockConditions
     getUnlockConditionsForCourse: getUnlockConditionsForCourse
     addCondition: addCondition
+    checkUnlockables: checkUnlockables
     removeCondition: removeCondition
     queueUpdateCondition: queueUpdateCondition
     changeConditionType: changeConditionType
