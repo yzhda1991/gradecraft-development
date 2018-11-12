@@ -575,7 +575,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :unlock_conditions, only: [:create, :update, :destroy]
+    resources :unlock_conditions, only: [:create, :update, :destroy] do
+      put :check_unlocked
+    end
     get "courses/:id/unlock_conditions", to: "unlock_conditions#for_course"
 
     resources :users, only: [] do
