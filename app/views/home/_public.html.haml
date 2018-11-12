@@ -17,8 +17,9 @@
 %p
   = link_to "Forgot your password?", reset_password_path
 
-%h3{:style => "margin-top: 3em;"} No account?
-%p{:style => "margin-bottom: 2em;"}
-  No worries!
-  = link_to 'Sign up for GradeCraft', 'https://gradecraft.com/sign_up/'
-  to get started!
+- if !Rails.env.production?
+  %h3{style: "margin-top: 3em;"} No account?
+  %p{style: "margin-bottom: 2em;"}
+    No worries!
+    = link_to 'Sign up for GradeCraft', 'https://gradecraft.com/sign_up/'
+    to get started!
