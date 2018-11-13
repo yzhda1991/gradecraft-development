@@ -36,14 +36,14 @@
 
 1. Clone the repository
 
-```
+```sh
 # clone to current directory; change dir
 git clone https://github.com/UM-USElab/gradecraft-development.git
 cd gradecraft-development
 ```
 
 2. Copy configuration files
-```
+```sh
 # Note: ensure that you are in the newly cloned /gradecraft-development dir
 cp config/database.yml.sample config/database.yml
 cp config/mongoid.yml.sample config/mongoid.yml
@@ -58,7 +58,7 @@ cp .env.sample .env
 
 4. Install a Ruby version manager of your choice and set current version to project version (Steps below pertain to [rbenv](https://github.com/rbenv/rbenv))
 
-```
+```sh
 brew install rbenv
 
 # run command and follow instructions, will likely be the next step where you edit ~/.bash_profile
@@ -79,14 +79,14 @@ rbenv local 2.5.1 (or rbenv global 2.5.1 if preferred)
 
 5. Install databases
 
-```
+```sh
 brew install mongodb
 brew install redis
 brew install postgresql
 ```
 
 6. Ensure access to `/data/db` write directory for MongodDB
-```
+```sh
 # create the directory, if it does not exist
 sudo mkdir -p /data/db
 sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determine values)
@@ -95,13 +95,13 @@ sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determi
 ```
 
 7. Install Bundler
-```
+```sh
 # install Bundler version specified in Gemfile.lock to avoid conflicts
 gem install bundler -v 1.16.4
 ```
 
 8. Install project dependencies
-```
+```sh
 bundle (or bundle install)
 ```
 
@@ -109,7 +109,7 @@ bundle (or bundle install)
 
 10. Create and populate databases with sample data
 
-```
+```sh
 bundle exec rails db:create
 
 # optional
@@ -179,13 +179,13 @@ to lint the javacripts directory:
 
 To run all of the spec examples, you can run the following (this is also the default rake task):
 
-```
+```sh
 bundle exec rails spec
 ```
 
 To run all of the spec examples with code coverage, you can run the following:
 
-```
+```sh
 bundle exec rails spec:coverage
 ```
 
