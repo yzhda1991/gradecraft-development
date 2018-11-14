@@ -89,7 +89,7 @@ brew install postgresql
 ```sh
 # create the directory, if it does not exist
 sudo mkdir -p /data/db
-sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determine values)
+sudo chown -R {user} /data/db (replace user; can ls -l to determine value)
 
 # (optional) mongod command should bring up mongodb; close with ctrl+c before proceeding to step 5
 ```
@@ -97,7 +97,7 @@ sudo chown -R {user}:{group} /data/db (replace user, group; can ls -l to determi
 7. Install Bundler
 ```sh
 # install Bundler version specified in Gemfile.lock to avoid conflicts
-gem install bundler -v 1.16.4
+gem install bundler -v 1.17.1
 ```
 
 8. Install project dependencies
