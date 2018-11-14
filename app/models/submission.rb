@@ -2,6 +2,7 @@ class Submission < ApplicationRecord
   include Historical
   include MultipleFileAttributes
   include Sanitizable
+  include AutoAwardOnUnlock
 
   has_paper_trail ignore: [:text_comment_draft]
 
@@ -161,10 +162,16 @@ class Submission < ApplicationRecord
         unlockable = condition.unlockable
         if self.assignment.has_groups?
           self.group.students.each do |student|
-            unlockable.unlock!(student)
+            unlockable.unlock!(student) do |unlock_state|
+              check_for_auto_awarded_badge(unlock_state)
+              send_email_on_unlock(unlockable)
+            end
           end
         else
-          unlockable.unlock!(student)
+          unlockable.unlock!(student) do |unlock_state|
+            check_for_auto_awarded_badge(unlock_state)
+            send_email_on_unlock(unlockable)
+          end
         end
       end
     end
@@ -213,5 +220,16 @@ class Submission < ApplicationRecord
 
   def student_xor_group
     errors.add(:base, "must have either a student_id or group_id, but not both") unless student.nil? ^ group.nil?
+  end
+
+  def check_for_auto_awarded_badge(unlock_state)
+    award_badge(unlock_state, {
+      student_id: student.id,
+      course_id: course.id
+    })
+  end
+
+  def send_email_on_unlock(unlockable)
+    NotificationMailer.unlocked_condition(unlockable, student, course).deliver_now
   end
 end

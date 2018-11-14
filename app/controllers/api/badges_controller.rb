@@ -15,7 +15,8 @@ class API::BadgesController < ApplicationController
       :name,
       :position,
       :visible,
-      :visible_when_locked)
+      :visible_when_locked,
+      :auto_award_after_unlock)
 
     if current_user_is_student?
       @student = current_student
@@ -80,7 +81,8 @@ class API::BadgesController < ApplicationController
       :show_points_when_locked,
       :student_awardable,
       :visible,
-      :visible_when_locked
+      :visible_when_locked,
+      :auto_award_after_unlock
     )
   end
 end

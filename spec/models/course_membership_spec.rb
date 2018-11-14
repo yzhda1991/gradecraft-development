@@ -82,4 +82,24 @@ describe CourseMembership do
       expect(described_class.instructors_of_record).to eq [instructor_membership]
     end
   end
+
+  describe "#check_unlockables" do
+    let(:student) { create :user }
+    let(:course) { create :course }
+    let(:unlock_key) { create :unlock_condition, course: course }
+    let(:delivery) { double(:email, deliver_now: true) }
+
+    subject { create :course_membership, :student, user: student, course: course }
+
+    before(:each) do
+      course.unlock_keys << unlock_key
+      allow(unlock_key.unlockable).to receive(:unlock!).and_yield(build_stubbed :unlock_state)
+    end
+
+    it "sends a notification for the associated user and course" do
+      allow(subject).to receive(:check_for_auto_awarded_badge).and_return true
+      expect(NotificationMailer).to receive(:unlocked_condition).with(unlock_key.unlockable, student, course).and_return(delivery).once
+      subject.check_unlockables
+    end
+  end
 end

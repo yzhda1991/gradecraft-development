@@ -53,9 +53,8 @@ describe UnlockableCondition do
       submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
       unlock_condition_2 = create(:unlock_condition, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
-      locked_badge.unlock!(student)
-      unlock_state = locked_badge.unlock_states.where(student: student).first
-      expect(unlock_state.unlocked).to eq(false)
+      unlock_state = locked_badge.unlock!(student)
+      expect(unlock_state.unlocked).to be_falsey
     end
   end
 

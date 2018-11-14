@@ -14,6 +14,10 @@
       Visibility Settings
     .form-item
       %label
+        %input(type="checkbox" ng-model="badge.auto_award_after_unlock" ng-click="updateBadge()")
+          {{termFor('badge')}} Automatically Awarded After Unlock
+    .form-item
+      %label
         %input(type="checkbox" ng-model="badge.visible_when_locked" ng-click="updateBadge()")
           {{termFor('badge')}} Visible When Locked
 

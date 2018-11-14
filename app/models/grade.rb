@@ -3,6 +3,7 @@ class Grade < ApplicationRecord
   include Historical
   include MultipleFileAttributes
   include Sanitizable
+  include AutoAwardOnUnlock
 
   belongs_to :course, touch: true
   belongs_to :assignment
@@ -135,12 +136,18 @@ class Grade < ApplicationRecord
   def check_unlockables
     if self.assignment.is_a_condition?
       self.assignment.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.unlock!(student)
+        unlockable.unlock!(student) do |unlock_state|
+          check_for_auto_awarded_badge(unlock_state)
+          send_email_on_unlock(unlockable)
+        end
       end
     end
     if self.assignment_type.is_a_condition?
       self.assignment_type.unlock_keys.map(&:unlockable).each do |unlockable|
-        unlockable.unlock!(student)
+        unlockable.unlock!(student) do |unlock_state|
+          check_for_auto_awarded_badge(unlock_state)
+          send_email_on_unlock(unlockable)
+        end
       end
     end
   end
@@ -196,5 +203,16 @@ class Grade < ApplicationRecord
       self.final_points = 0
       self.full_points = 0
     end
+  end
+
+  def check_for_auto_awarded_badge(unlock_state)
+    award_badge(unlock_state, {
+      student_id: student.id,
+      course_id: course.id
+    })
+  end
+
+  def send_email_on_unlock(unlockable)
+    NotificationMailer.unlocked_condition(unlockable, student, course).deliver_now
   end
 end
