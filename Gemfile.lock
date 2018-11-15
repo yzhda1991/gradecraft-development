@@ -431,7 +431,7 @@ GEM
     rails-assets-ng-rollbar (2.4.2)
     rails-assets-ngDraggable (0.1.11)
       rails-assets-angular
-    rails-assets-rollbar.js (2.4.7)
+    rails-assets-rollbar.js (2.5.0)
     rails-controller-testing (1.0.2)
       actionpack (~> 5.x, >= 5.0.1)
       actionview (~> 5.x, >= 5.0.1)
@@ -710,7 +710,7 @@ DEPENDENCIES
   rails-assets-lodash (= 3.10.1)!
   rails-assets-ng-rollbar (~> 2.4.2)!
   rails-assets-ngDraggable (= 0.1.11)!
-  rails-assets-rollbar.js (~> 2.4.5)!
+  rails-assets-rollbar.js (~> 2.5.0)!
   rails-controller-testing
   rails_autolink
   rake-hooks
