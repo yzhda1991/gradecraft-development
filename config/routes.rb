@@ -633,7 +633,7 @@ Rails.application.routes.draw do
 
   # 22. Admin
   namespace :admin, constraints: AdminConstraint.new do
-    resources :tools, only: [] do
+    resources :tools, only: :index do
       collection do
         get :unlocks
       end
