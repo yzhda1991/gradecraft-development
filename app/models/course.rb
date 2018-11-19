@@ -104,6 +104,7 @@ class Course < ApplicationRecord
   validates_format_of :twitter_handle, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
   validates_format_of :phone, with:  /\A^[0-9\+\(]{1,}[0-9\-\.\(\)]{3,15}$\z/, allow_blank: true, message: "must be a valid phone number."
 
+  scope :ordered_by_name, -> { order :name }
   scope :alphabetical, -> { order("course_number ASC") }
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
