@@ -16,8 +16,14 @@ class API::UnlockConditionsController < ApplicationController
   # PUT /api/unlock_conditions/:unlock_condition_id/check_unlocked
   def check_unlocked
     unlock_condition = UnlockCondition.find params[:unlock_condition_id]
-    check_unlocked_for unlock_condition
-    head :ok
+    result = check_unlocked_for unlock_condition
+    response_message =
+      if result.any?
+        "Successfully checked #{result.length} #{result.first.class.name.pluralize.downcase}"
+      else
+        "This unlock condition has no associated conditions to check"
+      end
+    render json: { message: response_message, success: true }, status: 200
   end
 
   # GET /api/assignments/:assignment_id/unlock_conditions

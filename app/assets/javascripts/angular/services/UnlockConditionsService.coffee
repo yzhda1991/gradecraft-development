@@ -69,7 +69,7 @@
   checkUnlockables = (unlockConditionId) ->
     $http.put("/api/unlock_conditions/#{unlockConditionId}/check_unlocked").then(
       (response) ->
-        GradeCraftAPI.loadMany(unlockConditions, response.data)
+        alert(response.data.message)
         GradeCraftAPI.logResponse(response)
       , (response) ->
         GradeCraftAPI.logResponse(response)
