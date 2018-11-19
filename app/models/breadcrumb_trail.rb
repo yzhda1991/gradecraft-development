@@ -4,9 +4,9 @@ class BreadcrumbTrail < Croutons::BreadcrumbTrail
     breadcrumb('Dashboard', dashboard_path)
   end
 
-  def admin_tasks_unlocks
+  def admin_tools_unlocks
     dashboard
-    breadcrumb("Check Unlockables", unlocks_admin_tasks_path)
+    breadcrumb("Check Unlockables", unlocks_admin_tools_path)
   end
 
   def analytics_staff
