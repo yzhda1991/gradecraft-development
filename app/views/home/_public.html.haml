@@ -1,0 +1,25 @@
+= link_to 'https://gradecraft.com/', class: "logo" do
+  = image_tag "logo.svg", alt: "Return to GradeCraft homepage", width: "450", height: "100"
+
+%h1 Log In
+.google_access
+  = link_to "Log in with Google", "/auth/google_oauth2/", tabindex: "0"
+
+%h3 Or:
+= form_for User.new, url: user_sessions_path do |f|
+  .form_elem
+    = f.text_field :email, placeholder: "Your email address", autocorrect: "off", autocapitalize: "off", required: "true"
+    = label_tag :user_email, "Email address"
+  .form_elem
+    = f.password_field :password, placeholder: "Your password", required: "true"
+    = label_tag :user_password, "Password"
+  = f.button "Log in", type: "submit", class: "action", alt: "Log in:", style: "margin-bottom: 1em;"
+%p
+  = link_to "Forgot your password?", reset_password_path
+
+- if !Rails.env.production?
+  %h3{style: "margin-top: 3em;"} No account?
+  %p{style: "margin-bottom: 2em;"}
+    No worries!
+    = link_to 'Sign up for GradeCraft', 'https://gradecraft.com/sign_up/'
+    to get started!

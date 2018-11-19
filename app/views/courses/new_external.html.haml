@@ -1,7 +1,7 @@
-= render partial: "layouts/alerts", locals: { model: @course }
+.wrapper.access
+  = render partial: "layouts/alerts", locals: { model: @course }
 
-.login
-  .login-form-container
+  #access_gate.content_block
     %h1 Now, let’s create your course:
 
     = simple_form_for @course, url: create_external_courses_path(user_id: @user.id), :method => :post do |f|

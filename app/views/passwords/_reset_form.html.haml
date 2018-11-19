@@ -1,8 +1,0 @@
-.password-forgot-form{"aria-hidden": "true"}
-  %h1 Forgot Your Password?
-  %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
-  = form_tag passwords_path, :method => :post, :html => { class: "forgot form-inline"} do
-    %input{:type => "email", name: "email", class: "input", :placeholder => "Email" }
-    %input{name: "commit", :type => "submit", :value => "Request a Password Reset", class: "login-button button"}
-
-  %button.button-link.small#show-login-form Back to log in

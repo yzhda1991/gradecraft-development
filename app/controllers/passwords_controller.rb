@@ -15,7 +15,7 @@ class PasswordsController < ApplicationController
   def edit
     @user = User.load_from_reset_password_token(params[:id])
     @token = params[:id]
-    redirect_to login_path,
+    redirect_to root_path,
       alert: "Invalid or expired password reset token. Please request new password reset instructions." and return unless @user
   end
 
@@ -23,7 +23,7 @@ class PasswordsController < ApplicationController
     @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
 
-    redirect_to login_path,
+    redirect_to root_path,
       alert: "Invalid or expired password reset token. Please request new password reset instructions." and return unless @user
 
     @user.password_confirmation = params[:user][:password_confirmation]
@@ -33,6 +33,6 @@ class PasswordsController < ApplicationController
       redirect_to dashboard_path,
         notice: "Password was successfully updated" and return
     end
-    render :edit, alert: @user.errors.full_messages.first
+    redirect_to edit_password_path, id: @token, alert: @user.errors.full_messages.first
   end
 end

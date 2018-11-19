@@ -67,7 +67,7 @@ Rails.application.routes.draw do
     collection do
       get :feed
       get :settings
-      post "copy" => "assignments#copy"
+      post "copy", to: "assignments#copy"
       get "export_structure"
     end
 
@@ -263,15 +263,11 @@ Rails.application.routes.draw do
     get :syllabus
   end
 
-  controller :pages do
-    get :style_guide, constraints: AdminConstraint.new
-    get :brand_and_style_guidelines
-    get :features
-    get :our_team, to: "pages#team"
-    get :press
-    get :research
-    get :sign_up
+  controller :home do
+    get :login
+    get :reset_password
     get :health_check
+    get :style_guide, constraints: AdminConstraint.new
   end
 
   #11. Grade Schemes
@@ -287,7 +283,7 @@ Rails.application.routes.draw do
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
+    get "users/#{role}/new", to: "users#new", as: "new_#{role.singularize}",
       role: role.singularize
   end
 
@@ -337,15 +333,13 @@ Rails.application.routes.draw do
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "auth/google_oauth2/callback", to: "integrations/google#auth_callback"
   get "/auth/:provider/callback", to: "authorizations#create", as: :create_authorization
-  get "auth/failure", to: "pages#auth_failure", as: :auth_failure
+  get "auth/failure", to: "application#failed_authentication", as: :auth_failure
 
   # Canvas OmniAuth setup
-  match "/auth/canvas/setup" => "canvas_session#new", via: [:get, :post]
+  match "/auth/canvas/setup", to: "canvas_session#new", via: [:get, :post]
 
-  get :login, to: "user_sessions#new", as: :login
   get :logout, to: "user_sessions#destroy", as: :logout
-  get :reset, to: "user_sessions#new"
-  resources :user_sessions, only: [:new, :create, :destroy, :student] do
+  resources :user_sessions, only: [:create, :destroy, :student] do
     collection do
       get :instructors
     end
@@ -634,5 +628,5 @@ Rails.application.routes.draw do
   resource :errors, only: :show
 
   # root, bro
-  root to: "pages#home"
+  root to: "home#index"
 end

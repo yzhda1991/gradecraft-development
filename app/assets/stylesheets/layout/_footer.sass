@@ -1,86 +1,71 @@
 @import "../utilities/variables"
-
-.footer
-  padding: 3rem 2rem
-  background-color: $color-grey-2
-  box-sizing: border-box
-  color: $color-grey-6
-  font-size: 1rem
-  width: 100%
-  flex-shrink: 0
-  display: flex
-  justify-content: space-between
-  @media (max-width: $media-small-max)
-    flex-direction: column-reverse
-    padding: 1rem 1rem
-    font-size: .8rem
-    text-align: center
-
-  ul
-    margin: 0
-    padding: 0
-
-    li
-      display: inline
-      list-style-type: none
-      text-transform: uppercase
-      margin-right: 1rem
-      &:last-of-type
-        margin-right: 0
-      a
-        color: $color-grey-6
-        &:hover
-          color: $color-blue-4
-
-    &.social
-      font-size: 1.25rem
-      text-align: right
-      @media (max-width: $media-small-max)
-        margin-bottom: 0.5rem
-        text-align: center
-
-  .footer-logo
-    display: none
-
-  .michigan, .admin
-    color: $color-grey-4
-    margin-top: 1rem
-
-  .admin a
-    color: $color-grey-4
-
-
-.logged-in .footer
-  padding: 2rem 2rem 4rem
-  max-width: 1500px
-  margin: 0 auto
-  z-index: 50
-  @media (max-width: $media-small-max)
-    padding: 1rem 1rem
-
-  .footer-links
-    display: none
-
-  .footer-logo
-    display: block
-    @media (max-width: $media-small-max)
-      margin: 0 auto
+@import "../utilities/mixins"
 
 .status
-  clear: both
-  //font-size: .8rem
-  margin-top: .5rem
+  position: absolute
+  bottom: 0.75em
+  right: 1em
+  font: 0.8em 'ProximaNova_light', sans-serif
+  letter-spacing: 0.02em
+  text-transform: uppercase
+  color: white
+
 .color-dot
-  border-radius: 99px
+  border-radius: 10px
   display: inline-block
   width: 10px
   height: 10px
   margin-right: 5px
+  background-color: $blue
   &.critical
-    background-color: $color-red-1
+    background-color: orangered
   &.major
-    background-color: $color-orange-1
+    background-color: coral
   &.minor
-    background-color: $color-yellow-1
+    background-color: gold
   &.none
-    background-color: $color-green-3
+    background-color: $teal_bright
+
+footer
+  background-color: $grey_4
+  color: white
+  box-sizing: border-box
+  padding: 2em 5%
+  position: relative
+
+  p
+    text-align: center
+    max-width: 100%
+
+  .social
+    text-align: center
+    margin: 1.5em 0
+
+    @include mobile-xl
+      margin-bottom: 2em
+
+    a
+      display: inline-block
+      margin: 0 1em
+
+      &:last-child
+        margin-left: 0.8em
+
+    img
+      height: 1.5em
+      width: auto
+
+  a
+    color: $blue
+    border-bottom-color: transparent
+
+    &:hover
+      color: white
+
+  @include mobile-xl
+    padding: 1em 3%
+
+/* Zendesk override */
+#launcher
+  position: static !important
+  margin-top: -65px !important

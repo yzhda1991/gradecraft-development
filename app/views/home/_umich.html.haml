@@ -1,0 +1,11 @@
+= link_to 'https://gradecraft.com/', :class => "logo" do
+  = image_tag "logo.svg", :alt => "Return to GradeCraft homepage", :width => "450", :height => "100"
+%h1 U-M Log in
+%p If you are able to login with University of Michigan credentials, please continue:
+
+%a.button.action{"aria-label": "University of Michigan Login", href: saml_init_path }
+  Log in with U-M access
+%p
+  Otherwise, please
+  %a{:href => 'https://gradecraft.com/'} return to the GradeCraft homepage
+= image_tag "University_of_Michigan_seal.png", width: "200px", height: "200px", class: "um-seal"

@@ -5,7 +5,7 @@ feature "logging out" do
     let!(:course_membership) { create :course_membership, :student, user: user }
     let(:user) { create :user, password: password }
 
-    before { visit new_user_session_path }
+    before { visit root_path }
 
     before(:each) do
       LoginPage.new(user).submit({ password: password })
