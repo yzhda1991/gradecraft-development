@@ -18,5 +18,11 @@ FactoryBot.define do
       association :unlockable, factory: :grade_scheme_element
       unlockable_type { "GradeSchemeElement" }
     end
+
+    trait :unlock_condition_for_learning_objective do
+      condition_type { "LearningObjective" }
+      condition_state { "Achieved" }
+      association :condition, factory: :learning_objective
+    end
   end
 end

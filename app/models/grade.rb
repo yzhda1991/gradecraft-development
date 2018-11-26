@@ -150,6 +150,11 @@ class Grade < ApplicationRecord
         end
       end
     end
+    if course.uses_learning_objectives? && student_visible?
+      assignment
+        .learning_objectives
+        .each { |lo| lo.check_unlockables(student) }
+    end
   end
 
   def excluded_by

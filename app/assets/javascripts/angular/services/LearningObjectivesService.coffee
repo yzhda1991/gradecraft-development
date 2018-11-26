@@ -115,6 +115,7 @@
         GradeCraftAPI.loadFromIncluded(linkedAssignments, "assignments", response.data)
         angular.copy(response.data.meta.level_flagged_values, levelFlaggedValues)
         GradeCraftAPI.setTermFor("learning_objective", response.data.meta.term_for_learning_objective)
+        GradeCraftAPI.setTermFor("learning_objectives", response.data.meta.term_for_learning_objectives)
         GradeCraftAPI.setTermFor("assignment", response.data.meta.term_for_assignment)
         GradeCraftAPI.setTermFor("assignments", response.data.meta.term_for_assignments)
         GradeCraftAPI.logResponse(response)

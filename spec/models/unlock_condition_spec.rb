@@ -597,6 +597,26 @@ describe UnlockCondition do
       expect(unlock_condition.requirements_description_sentence(time_zone)).to \
         eq("Submit the #{assignment.name} Assignment by #{unlock_condition.condition_date.in_time_zone(time_zone)}")
     end
+
+    it "returns a description of a learning objective unlock condition" do
+      learning_objective = build_stubbed :learning_objective, name: "Cook Ramen"
+      unlock_condition = build_stubbed :unlock_condition,
+        :unlock_condition_for_learning_objective,
+        condition: learning_objective
+
+      expect(unlock_condition.requirements_description_sentence).to eq \
+        "Achieve the Cook Ramen Learning Objective"
+    end
+
+    it "returns a message of learning objective unlock completion" do
+      learning_objective = build_stubbed :learning_objective, name: "Cook Ramen"
+      unlock_condition = build_stubbed :unlock_condition,
+        :unlock_condition_for_learning_objective,
+        condition: learning_objective
+
+      expect(unlock_condition.requirements_completed_sentence).to eq \
+        "Achieved the Cook Ramen Learning Objective"
+    end
   end
 
   describe "#key_description_sentence" do
