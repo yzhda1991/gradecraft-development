@@ -85,15 +85,15 @@
   assignmentTypeAtMaxPoints = (assignmentType)->
     if assignmentTypePointExcess(assignmentType) > 0
       return true
-    else
+    else 
       return false
 
   #------ ASSIGNMENTS ---------------------------------------------------------#
 
-  assignments = AssignmentService.assignments
-
   getAssignments= ()->
-    AssignmentService.getAssignments()
+    AssignmentService.getAssignments((a) -> a.full_points > 0 || a.pass_fail == true)
+
+  assignments = AssignmentService.assignments
 
   #------ BADGES --------------------------------------------------------------#
 

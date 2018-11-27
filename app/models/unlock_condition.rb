@@ -39,6 +39,8 @@ class UnlockCondition < ApplicationRecord
       elsif condition_state == "Assignments Completed"
         description = "#{ condition_state_do } in the #{ condition.name } #{unlockable.course.assignment_term} Type"
       end
+    elsif condition_type == "LearningObjective"
+      description = "#{ condition_state_do } the #{ condition.name } #{unlockable.course.learning_objective_term.singularize}"
     else
       description = "#{ condition_state_do } the #{ condition.name } #{ condition_type }"
     end
@@ -48,7 +50,11 @@ class UnlockCondition < ApplicationRecord
 
   def requirements_completed_sentence(condition_date_timezone=nil)
     if condition_type != "Course"
-      description = "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
+      if condition_type == "LearningObjective"
+        description = "#{ condition_state_past } the #{ condition.name } #{unlockable.course.learning_objective_term.singularize}"
+      else
+        description = "#{ condition_state_past } the #{ condition.name } #{ condition_type }"
+      end
     else
       description = "Earned #{ condition_value } points in this course"
     end
@@ -104,6 +110,8 @@ class UnlockCondition < ApplicationRecord
       "Earn"
     elsif condition_state == "Assignments Completed"
       "Complete #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
+    elsif condition_state == "Achieved"
+      "Achieve"
     end
   end
 
@@ -122,6 +130,8 @@ class UnlockCondition < ApplicationRecord
       "Earning #{condition_value} points"
     elsif condition_state == "Assignments Completed"
       "Completing #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase}"
+    elsif condition_state == "Achieved"
+      "Achieving"
     end
   end
 
@@ -140,6 +150,8 @@ class UnlockCondition < ApplicationRecord
       "Earned #{condition_value} points in"
     elsif condition_state == "Assignments Completed"
       "Completed #{condition_value} #{unlockable.course.assignment_term.pluralize.downcase} in"
+    elsif condition_state == "Achieved"
+      "Achieved"
     end
   end
 
@@ -206,6 +218,10 @@ class UnlockCondition < ApplicationRecord
 
   def check_if_submitted_by_condition_date(submission)
     submission.submitted_at < condition_date
+  end
+
+  def check_learning_objective_condition(student)
+    condition.completed? student
   end
 
   def check_grade_earned_condition(student)

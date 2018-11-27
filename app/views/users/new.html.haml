@@ -1,12 +1,21 @@
 .pageContent
   = render partial: "layouts/alerts", locals: { model: @user, term: "user" }
 
+  %h3 Please note:
+  %p
+    %b If you’re adding a non-University of Michigan user
+    (who also does not have a friend account with the university) to your course,
+    %b please be sure to inform and send them
+    %a{:href => ""} this log-in link.
+  %p Otherwise they will not be able to enter your course because they don’t have Wolverine Access.
+  %br
+
   #tabs.ui-tabs.ui-widget
     %ul.ui-tabs-nav{role: "tablist"}
       %li
-        %a{ "href" => "#tab1" } New GradeCraft User
+        %a{ "href" => "#tab1" } New User
       %li
-        %a{ "href" => "#tab2" } New UM User
+        %a{ "href" => "#tab2" } New U-M User
 
     #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
       #tab1{ class: ("active" unless @user.internal?) }

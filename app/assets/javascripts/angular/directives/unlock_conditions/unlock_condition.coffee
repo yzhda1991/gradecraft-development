@@ -23,12 +23,11 @@
       scope.changeConditionType = ()->
         UnlockConditionService.changeConditionType(@condition)
 
-      scope.conditionTypes = if UnlockConditionService.badges.length then ["Assignment Type", "Assignment", "Badge", "Earned Point Value"] else ["Assignment Type", "Assignment", "Earned Point Value"]
-
       scope.conditionsTypeTranslation = (type)->
         switch type
           when  "Earned Point Value" then "Course"
           when "Assignment Type" then "AssignmentType"
+          when "Learning Objective" then "LearningObjective"
           else type
 
       # in the UnlockConditionService
@@ -51,8 +50,10 @@
       scope.badges = UnlockConditionService.badges
 
       scope.assignmentTypes = UnlockConditionService.assignmentTypes
+      scope.learningObjectives = UnlockConditionService.learningObjectives
       scope.assignmentTypeStates = ["Assignments Completed", "Minimum Points Earned"]
-
+      scope.learningObjectiveStates = ["Achieved"]
+      scope.conditionTypes = UnlockConditionService.conditionTypes
   }
 ]
 

@@ -76,10 +76,10 @@
     )
 
   # GET index list of assignments including a student's grades and predictions
-  getAssignments = ()->
+  getAssignments = (filterBy)->
     $http.get('/api/assignments').then(
       (response)->
-        GradeCraftAPI.loadMany(assignments, response.data, {"include" : ['prediction','grade']})
+        GradeCraftAPI.loadMany(assignments, response.data, {"include" : ['prediction','grade']}, filterBy)
         _.each(assignments, (assignment)->
           # add null prediction and grades when JSON contains none
           assignment.prediction = { predicted_points: 0 } if !assignment.prediction

@@ -1,4 +1,6 @@
 class LearningObjective < ApplicationRecord
+  include UnlockableCondition
+  
   NOT_STARTED_STATUS = "Not Started".freeze
   IN_PROGRESS_STATUS = "In Progress".freeze
   COMPLETED_STATUS = "Completed".freeze
@@ -23,6 +25,10 @@ class LearningObjective < ApplicationRecord
   validates_with MatchesCourseOnLinkedCategory
 
   scope :ordered_by_name, -> { order :name }
+
+  def completed?(student)
+    progress(student) == COMPLETED_STATUS
+  end
 
   def linked_assignments_count
     learning_objective_links.count
@@ -59,12 +65,11 @@ class LearningObjective < ApplicationRecord
 
     if course.objectives_award_points?
       earned_points = earned_assignment_points(cumulative_outcome)
-      return 100 if earned_points >= points_to_completion
       percentage = earned_points.to_f / points_to_completion.to_f
     else
       percentage = numeric_progress_for_outcome(cumulative_outcome).to_f / count_to_achieve.to_f
     end
-    (percentage * 100).round(2)
+    percentage > 1 ? 100 : (percentage * 100).round(2)
   end
 
   def point_progress_for(cumulative_outcome, include_details)
@@ -87,6 +92,14 @@ class LearningObjective < ApplicationRecord
       .for_student_visible_grades
     outcomes = outcomes.shows_proficiency if proficient_only
     outcomes
+  end
+
+  def check_unlockables(student)
+    if self.is_a_condition?
+      self.unlock_keys.map(&:unlockable).each do |unlockable|
+        unlockable.unlock!(student)
+      end
+    end
   end
 
   private

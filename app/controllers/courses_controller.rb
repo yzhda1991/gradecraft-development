@@ -2,7 +2,7 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  layout "external", only: :new_external
+  layout "public", only: :new_external
 
   skip_before_action :require_login, only: [:badges, :new_external, :create_external]
   skip_before_action :require_course_membership, only: [:badges, :new_external, :create_external]

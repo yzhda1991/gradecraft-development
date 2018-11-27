@@ -27,8 +27,8 @@ class ApplicationController < ActionController::Base
       request.fullpath if !/^www/.match(request.host)
   end
 
-  before_action :require_login, except: [:not_authenticated]
-  before_action :require_course_membership, except: [:not_authenticated]
+  before_action :require_login, except: [:not_authenticated, :failed_authentication]
+  before_action :require_course_membership, except: [:not_authenticated, :failed_authentication]
   before_action :increment_page_views
   before_action :set_paper_trail_whodunnit
 
@@ -50,6 +50,11 @@ class ApplicationController < ActionController::Base
     else
       redirect_to root_path, alert: "Please login first."
     end
+  end
+
+  def failed_authentication
+    redirect_back fallback_location: root_path, alert: "<p>Sorry, but we weren’t able to complete your request. \
+      Please try again, or contact us if you’re still having problems.</p>"
   end
 
   def redirect_back_or_default(path=root_path, options={})

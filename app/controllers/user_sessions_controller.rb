@@ -7,10 +7,6 @@ class UserSessionsController < ApplicationController
   skip_before_action :require_course_membership, except: :index
   skip_before_action :verify_authenticity_token, only: [:lti_create]
 
-  def new
-    @user = User.new
-  end
-
   def instructors
     @user = User.new
   end
@@ -24,16 +20,12 @@ class UserSessionsController < ApplicationController
         format.xml { render xml: @user, status: :created, location: @user }
       else
         @user = User.new
-        format.html do
-          flash.now[:error] = "Email or Password were invalid, login failed.";
-          render action: "new"
-        end
-        format.xml { render xml: @user.errors, status: :unprocessable_entity }
+        format.html { redirect_to root_path, alert: "Your username or password is incorrect. Please try again" }
+        format.xml { render xml: @user.errors, status: :unauthorized }
       end
     end
   end
 
-  # rubocop:disable AndOr
   # lti login - we do not record users passwords, they login via an outside app
   def lti_create
     result = Services::CreatesOrUpdatesUserFromLTI.call(auth_hash)
@@ -45,8 +37,7 @@ class UserSessionsController < ApplicationController
     if !@user || !@course
       lti_error_notification
       flash[:alert] = t("sessions.create.error")
-      redirect_to auth_failure_path
-      return
+      redirect_to root_path and return
     end
     # TODO: should we rollback user, course creation if the course membership cannot be created?
     if CourseMembership.create_or_update_from_lti(@user, @course, auth_hash)

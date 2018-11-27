@@ -1,11 +1,14 @@
-.footer-column.footer-column-1
-  = image_tag "gradecraft_logo.png", :width => "150", :class => "footer-logo"
-  %ul.footer-links
-  .uppercase.small.michigan= "© 2012-#{Date.today.year} Regents of the University of Michigan"
+= render partial: "layouts/status"
 
-.footer-column.footer-column-2
-  %ul.social
-    %li= link_to glyph(:envelope), "mailto:help@gradecraft.com", title: "Email help@gradecraft.com", 'aria-label': "help@gradecraft.com", class: "stealth_link"
-    %li= link_to glyph(:twitter), "https://twitter.com/gradecraft", target: "_blank", title: "GradeCraft on Twitter", 'aria-label': "GradeCraft on Twitter", class: "stealth_link"
-    %li= link_to glyph(:facebook), "https://facebook.com/gradecraft", target: "_blank", title: "GradeCraft on Facebook", 'aria-label': "GradeCraft on Facebook", class: "stealth_link"
-  = render partial: "layouts/status"
+%p
+  Powered by the
+  = link_to "Office of Academic Innovation", "http://ai.umich.edu/", :target => "_blank"
+  %br &copy; 2018 The Regents of the University of Michigan
+
+.social
+  = link_to 'mailto:help@gradecraft.com', 'aria-label': "help@gradecraft.com" do
+    = image_tag "icon-social_email.svg", :alt => "Email help@gradecraft.com", :width => "50", :height => "50", :title => "Email help@gradecraft.com"
+  = link_to 'https://twitter.com/gradecraft', 'aria-label': "GradeCraft on Twitter", 'target': "_blank" do
+    = image_tag "icon-social_twitter.svg", :alt => "GradeCraft on Twitter", :width => "50", :height => "50", :title => "GradeCraft on Twitter"
+  = link_to 'https://facebook.com/gradecraft', 'aria-label': "GradeCraft on Facebook", 'target': "_blank" do
+    = image_tag "icon-social_facebook.svg", :alt => "GradeCraft on Facebook", :width => "50", :height => "50", :title => "GradeCraft on Facebook"

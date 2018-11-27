@@ -1,39 +1,37 @@
 @import "../utilities/variables"
 
 .alert-box
-  padding: .25rem .5rem !important
-  background-color: $color-blue-4
-  color: $color-white
-  border-radius: $global-radius
-  margin-bottom: 1rem
+  padding: 0.5em 1em 0.5em 0.5em
+  background-color: $blue
+  margin-bottom: 1.5em
+  position: relative
+  font-family: 'ProximaNova_regular', sans-serif
 
   a.close
-    color: $color-white
-    float: right
-    margin-top: .25rem
-    font-size: 1rem !important
-    font-weight: bold
-    line-height: 1
-
-    &:hover, &:focus
-      color: $color-black
-      text-decoration: none
-      cursor: pointer
-  a
-    color: $color-blue-5
-
-.alert-box
-  &.error
-    background-color: $color-red-1
-
-  &.success
-    background-color: $color-green-3
-
-  &.notice
-    background-color: $color-blue-3
+    color: $blue_dark
+    position: absolute
+    top: 0
+    right: 0
+    padding: 0.25em
+    font-size: 1.5em
+    border-bottom-color: transparent
 
   &.alert
-    background-color: $color-orange-1
+    background-color: $pink_1
+    color: white
+
+    a.close
+      color: white
+
+  &.error
+    background-color: crimson
+    color: white
+
+    a.close
+      color: white
+
+  &.success
+    background-color: $green_lime
 
   ul
     margin-bottom: 0

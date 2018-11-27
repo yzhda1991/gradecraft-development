@@ -1,11 +1,18 @@
-.login
-  .password-reset.login-form-container
+.wrapper.access
+  = render partial: "layouts/alerts", locals: { model: @user }
+
+  #access_gate.content_block
+    = link_to "https://gradecraft.com/", class: "logo" do
+      = image_tag "logo.svg", alt: "Return to GradeCraft homepage", width: "450", height: "100"
+
     %h1 Reset Your Password
-    %p Enter a new password and a confirmation below to change your current password
-    = simple_form_for @user, :url => password_path(@token) do |f|
+    %p Enter a new password and a confirmation below to change your current password.
+    = simple_form_for @user, url: password_path(@token) do |f|
       = hidden_field_tag :token, @token
-      = f.label :password, class: "sr-only"
-      = f.password_field :password, placeholder: "Password"
-      = f.label :password_confirmation, class: "sr-only"
-      = f.password_field :password_confirmation, placeholder: "Confirm Password"
-      = f.submit "Reset Password", class: "login-button button"
+      .form_elem
+        = f.password_field :password, placeholder: "New Password", required: "true"
+        = f.label :password, "Password"
+      .form_elem
+        = f.password_field :password_confirmation, placeholder: "Confirm new password", required: "true"
+        = f.label :password_confirmation, "Confirm password"
+      = f.submit "Reset your password", class: "button action"
