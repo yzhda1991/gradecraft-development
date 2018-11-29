@@ -30,7 +30,7 @@
         %td
           %span{"ng-if"=>"loShowCtrl.cumulativeOutcome(student.id)"}
             .progress-bar
-              .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(loShowCtrl.studentId)}} + '%' }"}
+              .fill{"ng-style"=>"{'width': {{loShowCtrl.percentComplete(student.id)}} + '%' }"}
             {{loShowCtrl.percentComplete(loShowCtrl.studentId)}}% complete
           %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
 
