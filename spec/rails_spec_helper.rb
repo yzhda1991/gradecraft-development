@@ -49,6 +49,10 @@ RSpec.configure do |config|
     end
   end
 
+  config.before(:each) do
+    allow_any_instance_of(PageviewEventLogger).to receive(:enqueue).and_return true
+  end
+
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do
       example.run
