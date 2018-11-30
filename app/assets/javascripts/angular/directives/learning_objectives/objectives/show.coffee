@@ -35,7 +35,7 @@
 
       vm.observedOutcomes = (studentId) ->
         _studentId = if angular.isDefined(studentId) then studentId else @studentId
-        LearningObjectivesService.observedOutcomesForStudent(_studentId)
+        LearningObjectivesService.observedOutcomesForStudent(parseInt(@objectiveId), _studentId)
 
       vm.showPath = (studentId) ->
         "/learning_objectives/objectives/#{@objectiveId}?student_id=#{studentId}"
