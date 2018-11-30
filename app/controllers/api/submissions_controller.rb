@@ -1,6 +1,7 @@
 class API::SubmissionsController < ApplicationController
   def index
     @submissions = current_user_is_staff? ? current_course.submissions.includes(:grade) : current_student.submissions.includes(:grade)
+    @submissions = @submissions.submitted
     @submissions = @submissions.for_student(params[:student_ids]) \
       if params[:student_ids].present?
     @submissions = @submissions.for_assignment(params[:assignment_ids]) \
