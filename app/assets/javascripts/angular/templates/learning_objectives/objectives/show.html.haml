@@ -35,7 +35,7 @@
           %span{"ng-if"=>"!loShowCtrl.cumulativeOutcome(student.id)"} Not Yet Started
 
   -# Table for all students in the course
-  %section{"ng-if"=>"!loShowCtrl.studentId"}
+  %section{"ng-if"=>"!loShowCtrl.studentId && loShowCtrl.linkedAssignments.length > 0"}
     %h3.subtitle Student Progress
 
     %table
@@ -75,7 +75,7 @@
 
 
   -# Progress for an individual student
-  %section{"ng-if"=>"loShowCtrl.studentId"}
+  %section{"ng-if"=>"loShowCtrl.studentId && loShowCtrl.linkedAssignments.length > 0"}
     %h2.subtitle {{loShowCtrl.termFor('assignments')}} That Meet This {{loShowCtrl.termFor('learning_objective')}}
 
     %table
@@ -115,3 +115,7 @@
           %td
             %lo-proficiency-indicator{"ng-if"=>"loShowCtrl.earnedOutcome(assignment.id) != null",
                                       "data-observed-outcome"=>"loShowCtrl.earnedOutcome(assignment.id)"}
+  
+  %section{"ng-if"=>"loShowCtrl.linkedAssignments.length == 0"}
+    %span
+      There is no linked {{loShowCtrl.termFor('assignment')}} for this {{loShowCtrl.termFor('learning_objective')}}.
