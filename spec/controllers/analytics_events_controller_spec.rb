@@ -81,12 +81,6 @@ describe AnalyticsEventsController, type: :controller do
         subject
       end
 
-      it "should enqueue the new PredictorEventLogger object with fallback" do
-        allow(Lull).to receive(:time_until_next_lull) { 3.hours }
-        expect(event_logger).to receive(:enqueue_in_with_fallback).with(Lull.time_until_next_lull)
-        subject
-      end
-
       it "should not increment page views" do
         expect(controller).not_to receive(:increment_page_views)
         subject

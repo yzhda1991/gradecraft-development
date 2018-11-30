@@ -52,12 +52,6 @@ RSpec.describe ApplicationController do
             .and_return event_logger
           subject
         end
-
-        it "should enqueue the new pageview event in 2 hours" do
-          expect(event_logger).to receive(:enqueue_in_with_fallback)
-            .with(2.hours) { enqueue_response }
-          subject
-        end
       end
 
       context "the request is not html" do
