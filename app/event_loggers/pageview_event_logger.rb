@@ -26,16 +26,16 @@ class PageviewEventLogger < ApplicationEventLogger
     @page = "#{params[:url]}#{params[:tab]}"
   end
 
-  def enqueue(time_until_start)
-    raise "Failed to enqueue pageview event logger job due to exceeded document size; attributes: #{event_attrs}" \
-      if document_exceeded_maximum_size?
-    enqueue_in_with_fallback(time_until_start)
-  end
+  # def enqueue(time_until_start)
+  #   raise "Failed to enqueue pageview event logger job due to exceeded document size; attributes: #{event_attrs}" \
+  #     if document_exceeded_maximum_size?
+  #   enqueue_in_with_fallback(time_until_start)
+  # end
 
-  private
+  # private
 
-  def document_exceeded_maximum_size?
-    client = Mongoid::Clients.default
-    client[:course_pageviews].find({ course_id: 110 }).first.to_bson.length >= 150000
-  end
+  # def document_exceeded_maximum_size?
+  #   client = Mongoid::Clients.default
+  #   client[:course_pageviews].find({ course_id: 110 }).first.to_bson.length >= 150000
+  # end
 end
