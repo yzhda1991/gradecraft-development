@@ -49,7 +49,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
+  config.before(:each, type: :controller) do
     allow(controller).to receive(:increment_page_views).and_return true
     allow(controller).to receive(:set_paper_trail_whodunnit).and_return true
   end
