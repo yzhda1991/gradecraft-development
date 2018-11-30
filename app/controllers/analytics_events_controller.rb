@@ -15,7 +15,7 @@ class AnalyticsEventsController < ApplicationController
     # only run at night during the Lull period
     event_logger = PageviewEventLogger.new(event_session_with_params)
     event_logger.build_page_from_params
-    event_logger.enqueue_in_with_fallback(Lull.time_until_next_lull)
+    event_logger.enqueue(Lull.time_until_next_lull)
 
     render head: :ok, body: nil
   end

@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
   def increment_page_views
     return unless current_user && request.format.html?
     PageviewEventLogger.new(event_session)
-                       .enqueue_in_with_fallback Lull.time_until_next_lull
+                       .enqueue Lull.time_until_next_lull
   end
 
   def time_zone(&block)
