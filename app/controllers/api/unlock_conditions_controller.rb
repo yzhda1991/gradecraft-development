@@ -1,10 +1,34 @@
+include UnlockConditionHelper
+
 class API::UnlockConditionsController < ApplicationController
-  before_action :ensure_staff?
-  before_action :use_current_course
+  before_action :ensure_staff?, except: :for_course
+  before_action :ensure_admin?, only: [:for_course, :check_unlocked]
+  before_action :use_current_course, except: :for_course
+
+  # GET /api/courses/:id/unlock_conditions
+  def for_course
+    @unlock_conditions = Course
+                          .includes(:unlock_conditions)
+                          .find(params[:id])
+                          .unlock_conditions
+  end
+
+  # PUT /api/unlock_conditions/:unlock_condition_id/check_unlocked
+  def check_unlocked
+    unlock_condition = UnlockCondition.find params[:unlock_condition_id]
+    result = check_unlocked_for unlock_condition
+    response_message =
+      if result.any?
+        "Successfully checked #{result.length} #{result.first.class.name.pluralize.downcase}"
+      else
+        "This unlock condition has no associated conditions to check"
+      end
+    render json: { message: response_message, success: true }, status: 200
+  end
 
   # GET /api/assignments/:assignment_id/unlock_conditions
   # GET /api/badges/:badge_id/unlock_conditions
-  # GET  /api/grade_scheme_elements/:grade_scheme_element_id/unlock_conditions
+  # GET /api/grade_scheme_elements/:grade_scheme_element_id/unlock_conditions
   def index
     if params[:assignment_id].present?
       id = params[:assignment_id]
@@ -68,6 +92,3 @@ class API::UnlockConditionsController < ApplicationController
       :condition_type, :condition_state, :condition_value, :condition_date
   end
 end
-
-
-

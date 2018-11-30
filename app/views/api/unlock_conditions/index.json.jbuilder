@@ -27,6 +27,7 @@ json.meta do
   end
 
   json.term_for_learning_objectives term_for :learning_objectives if current_course.uses_learning_objectives?
+  json.term_for_learning_objective term_for :learning_objective if current_course.uses_learning_objectives?
   json.term_for_assignment_types term_for :assignment_types
   json.term_for_assignment_type term_for :assignment_type
   json.term_for_assignments term_for :assignments

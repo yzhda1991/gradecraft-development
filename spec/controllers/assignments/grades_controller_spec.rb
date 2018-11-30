@@ -204,6 +204,16 @@ describe Assignments::GradesController do
           expect(grade.raw_points).to eq assignment.full_points
         end
 
+        it "updates the attributes on the grade" do
+          post :self_log, params: { assignment_id: assignment.id }
+          grade = student.grade_for_assignment(assignment)
+          grade.reload
+          expect(grade.instructor_modified).to eq true
+          expect(grade.student_visible).to eq true
+          expect(grade.complete).to eq true
+          expect(grade.graded_at).to be_within(1.second).of(DateTime.now)
+        end
+
         it "reports errors on failure to save" do
           allow_any_instance_of(Grade).to receive(:save).and_return false
           post :self_log, params: { assignment_id: assignment.id }

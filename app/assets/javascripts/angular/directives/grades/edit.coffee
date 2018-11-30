@@ -9,6 +9,7 @@
       vm.loading = true
       vm.GradeService = GradeService
       vm.AssignmentService = AssignmentService
+      vm.termFor = AssignmentService.termFor
 
       # This can be simplified once group grades can also handle grade file uploads
       vm.feedbackMessage =

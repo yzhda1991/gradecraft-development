@@ -17,6 +17,8 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
   termFor = (article)->
     return if !article
     article = "assignment_type" if article.toLowerCase() == "assignmenttype" || article.toLowerCase() == "assignment type"
+    article = "learning_objective" if article.toLowerCase() == "learningobjective" || article.toLowerCase() == "learning objective"
+    article = "learning_objectives" if article.toLowerCase() == "learningobjectives" || article.toLowerCase() == "learning objectives"
     _termFor[article.toLowerCase()] || article
 
   setTermFor = (article,term)->
@@ -75,10 +77,12 @@ angular.module('helpers').factory('GradeCraftAPI', ()->
     item.attributes
 
   # transfer models from api response data into the model array
-  loadMany = (modelArray, response, options={"include":[]})->
-    _.each(response.data, (item)->
-      modelArray.push(dataItem(item, response, options))
-    )
+  loadMany = (modelArray, response, options={"include":[]}, filter = ()->true) ->
+    _(response.data)
+      .map((item)-> dataItem(item, response, options))
+      .filter(filter)
+      .each((item)-> modelArray.push(item))
+      .value()
 
   # copy to a single model from a response
   loadItem = (model, type, response, options={"include":[]}) ->

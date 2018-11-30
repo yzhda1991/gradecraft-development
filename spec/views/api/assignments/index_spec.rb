@@ -29,11 +29,11 @@ describe "api/assignments/index" do
     expect(json["included"][0]["attributes"]["pass_fail_status"]).to eq("passed")
   end
 
-  it "does not include assignments with no points" do
+  it "does include assignments with no points" do
     @assignment.update(full_points: 0)
     render
     json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(0)
+    expect(json["data"].length).to eq(1)
   end
 
   it "does include pass/fail assignments with no points" do

@@ -1,0 +1,31 @@
+%loading-message{"data-loading"=>"unlockSelectorForm.loading", "data-message"=>"Loading..."}
+
+%section
+  .form-subsection
+    .form-item
+      %label
+        Course
+        %select{"ng-options"=>"course.id as course.name for course in unlockSelectorFormCtrl.courses",
+                "ng-model"=>"unlockSelectorFormCtrl.selectedCourse",
+                "ng-change"=>"unlockSelectorFormCtrl.getUnlocks()",
+                "id"=>"course_name"}
+
+  .form-subsection{"ng-if"=>"unlockSelectorFormCtrl.selectedCourse != null"}
+    %h2.subtitle Unlock Conditions
+    .form-item
+      %h3.form-subtitle{"ng-if"=>"unlockSelectorFormCtrl.unlockConditions.length < 1"} Course does not have unlock conditions
+      %table{"ng-if"=>"unlockSelectorFormCtrl.unlockConditions.length"}
+        %thead
+          %tr
+            %th ID
+            %th Requirement Description
+            %th Unlock Description
+            %th
+        %tbody
+          %tr{"ng-repeat"=>"uc in unlockSelectorFormCtrl.unlockConditions track by uc.id"}
+            %td {{uc.id}}
+            %td {{uc.requirements_description}}
+            %td {{uc.key_description}}
+            %td
+              %button.action{"type"=>"button",
+                             "ng-click"=>"unlockSelectorFormCtrl.checkUnlockables(uc.id)"} Check Unlockables

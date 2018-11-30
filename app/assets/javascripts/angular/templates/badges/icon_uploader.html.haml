@@ -19,7 +19,7 @@
         %img(ng-src="{{badge.icon}}")
       %span.xaxis-label 40px
       %span.yaxis-label 40px
-      %button.remove-unlock-condition(ng-if="!badge.default_url" ng-click="removeIcon()")
+      %button.remove-unlock-condition.action(ng-if="!badge.default_url" ng-click="removeIcon()")
         %i.fa.fa-fw.fa-times
 
 .form-item
@@ -39,4 +39,3 @@
       .file-attachment-delete-button(ng-if='file.deleting')
         %i.fa.fa-spinner.fa-fw
         {{ file.filename }}
-

@@ -607,6 +607,19 @@ describe UnlockCondition do
       expect(unlock_condition.requirements_description_sentence).to eq \
         "Achieve the Cook Ramen Learning Objective"
     end
+<<<<<<< HEAD
+=======
+
+    it "returns a message of learning objective unlock completion" do
+      learning_objective = build_stubbed :learning_objective, name: "Cook Ramen"
+      unlock_condition = build_stubbed :unlock_condition,
+        :unlock_condition_for_learning_objective,
+        condition: learning_objective
+
+      expect(unlock_condition.requirements_completed_sentence).to eq \
+        "Achieved the Cook Ramen Learning Objective"
+    end
+>>>>>>> 680716d329e34e69978310effd34d46ce64cbdc4
   end
 
   describe "#key_description_sentence" do

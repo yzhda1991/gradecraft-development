@@ -107,9 +107,12 @@ class Assignments::GradesController < ApplicationController
         @grade.raw_points = @assignment.full_points
       end
 
-      @grade.instructor_modified = true
-      @grade.complete = true
-      @grade.student_visible = true
+      @grade.assign_attributes(
+        instructor_modified: true,
+        student_visible: true,
+        complete: true,
+        graded_at: DateTime.now
+      )
 
       if @grade.save
         grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)

@@ -77,7 +77,7 @@ class NotificationMailer < ApplicationMailer
     @unlocked_item = unlocked_item
     @course = course
     @student = student
-    send_student_email "#{@course.name} - You've unlocked #{@unlocked_item.name}!"
+    send_student_email "#{@course.course_number} - You've unlocked #{@unlocked_item.name}!"
   end
 
   private

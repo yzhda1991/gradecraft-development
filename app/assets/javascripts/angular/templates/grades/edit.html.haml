@@ -22,7 +22,7 @@
   %a.grade-form-collapsible.collapse-toggler.collapsed(href="#")
     %h3
       %i.fa.fa-chevron-circle-right.fa-fw
-      Learning objectives
+      {{vm.termFor('learning_objectives')}}
 
   %section.collapse.collapsed
     %learning-objectives-grading(data-assignment-id='vm.assignmentId' ng-if='vm.courseHasLearningObjectives')

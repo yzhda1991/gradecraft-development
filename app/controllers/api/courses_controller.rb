@@ -18,7 +18,7 @@ class API::CoursesController < ApplicationController
 
   # GET api/courses
   def index
-    @courses = current_user_is_admin? ? Course.all : current_user.courses
+    @courses = current_user_is_admin? ? Course.all.ordered_by_name : current_user.courses
 
     if current_user_is_admin?
       render json: MultiJson.dump(course_ids: @courses.pluck(:id)), status: :ok \
